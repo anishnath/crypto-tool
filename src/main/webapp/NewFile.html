@@ -1,10 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Hello OpenShift</title>
+    <title>Flexible Layout</title>
+    <style>          
+        nav {
+            width:15%;            
+            border: solid 1px black;
+            float: left;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+        #content {
+            width: 55%;            
+            border: solid 1px black;
+            float: left;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+        aside {
+            width: 20%;            
+            border: solid 1px black;
+            float: left;            
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+    </style>
 </head>
 <body>
-Hello OpenShift
+    <div id="container">
+        <nav>Sub Navigation</nav>
+        <div id="content">Main Content</div>
+        <aside>Aside</aside>
+    </div>
 </body>
-</html>
+</html> 
