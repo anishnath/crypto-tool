@@ -43,7 +43,7 @@ public class StringFunctionality extends HttpServlet {
 
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE" + "</h1>");
+		out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
 	}
 
 	/**
