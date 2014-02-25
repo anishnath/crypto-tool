@@ -122,7 +122,7 @@ public class NetworkFunctionality extends HttpServlet {
 				    
 				} catch (Exception e) {
 					//IGNORE
-					out.println("<b><u> Host Not Reachable </font><br>" + ipaddress);
+					out.println("<b><u> "+e+" </font><br>" + ipaddress);
 				}
 				
 			}

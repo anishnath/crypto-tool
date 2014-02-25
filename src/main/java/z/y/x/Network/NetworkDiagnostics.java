@@ -62,8 +62,7 @@ public class NetworkDiagnostics {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error " + e);
 		}
 		return builder.toString();
 	}
