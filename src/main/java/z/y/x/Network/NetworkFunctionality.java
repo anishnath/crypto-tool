@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingEnumeration;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.InitialDirContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class NetworkFunctionality extends HttpServlet {
+	
+	private final String os = System.getProperty("os.name");
+	private final NetworkDiagnostics networkDiagnostics = new NetworkDiagnostics();
 
 	/**
 	 * 
@@ -32,7 +38,7 @@ public class NetworkFunctionality extends HttpServlet {
 
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
+		out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE TRY AGAIN " + "</h1>");
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -69,16 +75,52 @@ public class NetworkFunctionality extends HttpServlet {
 						addHorizontalLine(out);
 						List<String> commands = new ArrayList<String>();
 					    commands.add("ping");
-					    commands.add("-c"); // On Windows it's Different
+					    if (os.contains("win"))
+					    {
+					    	commands.add("-n"); // Nott TESTED
+					    }else{
+					    	 commands.add("-c"); // On Windows it's Different
+					    }
+					   
 					    commands.add("5");
 					    commands.add(address.getHostAddress());
 					    out.println("<b><u>ping address </b></u>= <font size=\"3\" color=\"red\">"
-								+ doCommand(commands) + "</font><br>");
+								+ networkDiagnostics.doCommand(commands) + "</font><br>");
+					    
+					    // show the Internet Address as name/address
+			            System.out.println(address.getHostName() + "/" + address.getHostAddress());
+			            // get the default initial Directory Context
+			            InitialDirContext iDirC = new InitialDirContext();
+			            // get the DNS records for inetAddress
+			            Attributes attributes = iDirC.getAttributes("dns:/" + address.getHostName());
+			            // get an enumeration of the attributes and print them out
+			            NamingEnumeration attributeEnumeration = attributes.getAll();
+			            System.out.println("-- DNS INFORMATION --");
+			            StringBuilder builder = new StringBuilder();
+			            while (attributeEnumeration.hasMore())
+			            {
+			               // System.out.println("" + attributeEnumeration.next());
+			            	builder.append(attributeEnumeration.next() + "<br>");
+			            	builder.append(System.getProperty("line.separator"));
+			            }
+			            attributeEnumeration.close();
+			            
+			            addHorizontalLine(out);
+			            out.println("<b><u>DNS Information </b></u>= <font size=\"3\" color=\"blue\">"
+								+ builder.toString() + "</font><br>");
+			            
+			            addHorizontalLine(out);
+			            networkDiagnostics.traceRoute(address);
+					}
+					else
+					{
+						 out.println("<b><u> Host Not Reachable </font><br>" + ipaddress);
 					}
 					
 				    
 				} catch (Exception e) {
 					//IGNORE
+					out.println("<b><u> Host Not Reachable </font><br>" + ipaddress);
 				}
 				
 			}
@@ -114,35 +156,7 @@ public class NetworkFunctionality extends HttpServlet {
 	
 
 
-	public static String doCommand(List<String> command) 
-			  throws IOException
-			  {
-			    String s = null;
-
-			    StringBuilder builder = new StringBuilder();
-			    ProcessBuilder pb = new ProcessBuilder(command);
-			    Process process = pb.start();
-
-			    BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			    BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-			    // read the output from the command
-			    System.out.println("Here is the standard output of the command:\n");
-			    while ((s = stdInput.readLine()) != null)
-			    {
-			     builder.append(s);
-			     builder.append("\n");
-			    }
-
-			    // read any errors from the attempted command
-			    System.out.println("Here is the standard error of the command (if any):\n");
-			    while ((s = stdError.readLine()) != null)
-			    {
-			    	builder.append(s);
-			    	 builder.append("\n");
-			    }
-			  return  builder.toString();
-			  }
+	
 	
 	public static void main(String[] args) {
 		System.out.println("10.10.10.10".length());
