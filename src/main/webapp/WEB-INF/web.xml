@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	metadata-complete="false" version="3.0">
-	<servlet>
-		<servlet-name>StringFunctionality</servlet-name>
-		<servlet-class>z.y.x.String.StringFunctionality</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>StringFunctionality</servlet-name>
-		<url-pattern>/StringFunctionality</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>NetworkFunctionality</servlet-name>
-		<servlet-class>z.y.x.Network.NetworkFunctionality</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>NetworkFunctionality</servlet-name>
-		<url-pattern>/NetworkFunctionality</url-pattern>
-	</servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="false" version="3.0">
+  <servlet>
+    <servlet-name>StringFunctionality</servlet-name>
+    <servlet-class>z.y.x.String.StringFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StringFunctionality</servlet-name>
+    <url-pattern>/StringFunctionality</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>NetworkFunctionality</servlet-name>
+    <servlet-class>z.y.x.Network.NetworkFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NetworkFunctionality</servlet-name>
+    <url-pattern>/NetworkFunctionality</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>MDFunctionality</servlet-name>
+    <servlet-class>z.y.x.Security.MDFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MDFunctionality</servlet-name>
+    <url-pattern>/MDFunctionality</url-pattern>
+  </servlet-mapping>
 </web-app>
