@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NetworkDiagnostics {
@@ -11,26 +12,31 @@ public class NetworkDiagnostics {
 
 	public String traceRoute(InetAddress address) {
 		String route = "";
+		List<String> command = new ArrayList<String>();
 		try {
 			Process traceRt;
-			if (os.contains("win"))
-				traceRt = Runtime.getRuntime().exec(
-						"tracert " + address.getHostAddress());
-			else
-				traceRt = Runtime.getRuntime().exec(
-						"traceroute " + address.getHostAddress());
+			if (os.contains("win")) {
+				command.add("tracert");
+			}
+
+			else {
+				command.add("traceroute");
+			}
+			command.add(address.getHostAddress());
+			
 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		return route;
+		return doCommand(command);
 	}
 
 	public static String doCommand(List<String> command)
 
 	{
 		StringBuilder builder = new StringBuilder();
+		System.out.println("Command  " + command.toString());
 		try {
 			String s = null;
 
@@ -42,9 +48,6 @@ public class NetworkDiagnostics {
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(
 					process.getErrorStream()));
 
-			// read the output from the command
-			System.out.println("Here is the standard output of the command:\n"
-					+ command.toString());
 			while ((s = stdInput.readLine()) != null) {
 				builder.append(s + "<br>");
 				builder.append(System.getProperty("line.separator"));
