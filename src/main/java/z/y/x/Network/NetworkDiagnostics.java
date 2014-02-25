@@ -61,7 +61,7 @@ public class NetworkDiagnostics {
 				builder.append(System.getProperty("line.separator"));
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
