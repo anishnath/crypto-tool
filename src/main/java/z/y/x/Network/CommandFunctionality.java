@@ -62,13 +62,21 @@ public class CommandFunctionality extends HttpServlet {
 			if(inputText!=null && !inputText.isEmpty())
 			{
 				inputText = inputText.trim();
+				
+				if(inputText.contains("env"))
+				{
+					 out.println("<b><u>Command </b></u>= "+ inputText +"<br><font size=\"3\" color=\"blue\">"
+								 + "Permission Denied</font><br>");
+					return;
+				}
 				final StringTokenizer token = new StringTokenizer(inputText);
 				while (token.hasMoreElements()) {
 					command.add((String)token.nextElement());
 					
 				}
-				if(command.size()>0)
+				if(command.size()>0 )
 				{
+					
 					//final String output =networkDiagnostics.doCommand(command);
 					addHorizontalLine(out);
 					
