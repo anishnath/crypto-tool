@@ -16,13 +16,21 @@
     <servlet-name>NetworkFunctionality</servlet-name>
     <url-pattern>/NetworkFunctionality</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>MDFunctionality</servlet-name>
     <servlet-class>z.y.x.Security.MDFunctionality</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MDFunctionality</servlet-name>
     <url-pattern>/MDFunctionality</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>CommandFunctionality</servlet-name>
+    <servlet-class>z.y.x.Network.CommandFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CommandFunctionality</servlet-name>
+    <url-pattern>/CommandFunctionality</url-pattern>
   </servlet-mapping>
 </web-app>

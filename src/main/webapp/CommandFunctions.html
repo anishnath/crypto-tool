@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Execute Commands</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<meta name="description" content="Run all the commands online">
+<meta name="keywords" content="ls,rm,netstat">
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $('#executeMethod').click(function (event)
+            {
+ 			$('#form').delay(200).submit()
+            });
+                    
+            $('#form').submit(function (event)
+                    {
+                    //	
+                  $('#output').html('<img src="images/712.GIF"> loading...');
+         			 event.preventDefault();
+                        $.ajax({
+                            type: "POST",
+                            url: "CommandFunctionality", //this is my servlet
+                
+                           data: $("#form").serialize(),
+                            success: function(msg){    
+                            		    $('#output').empty();
+                                     $('#output').append(msg);
+                                     
+                            }
+                        }); 
+                    });
+        });
+   
+    </script>
+</head>
+<body>
+	<div id="loading" style="display: none;">
+		<img src="images/712.GIF" alt="" />Loading!
+	</div>
+	<form id="form" method="POST">
+		<input type="hidden" name="methodName" id="methodName"
+			value="EXECUTECOMMAND">
+		<fieldset name="Execute Command Online">
+			<legend>
+				<B>Execute Command Online</B>
+			</legend>
+			Type Command<input id="inputtext" type="text" name="text" value="" size="50">
+			<input type="button" id="executeMethod" name="executeMethod"
+				value="Click"> <br>
+		</fieldset>
+		<div id="output"></div>
+	</form>
+</body>
+</html>

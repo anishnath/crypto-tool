@@ -32,7 +32,7 @@ public class NetworkDiagnostics {
 		return doCommand(command);
 	}
 
-	public static String doCommand(List<String> command)
+	public  String doCommand(List<String> command)
 
 	{
 		StringBuilder builder = new StringBuilder();

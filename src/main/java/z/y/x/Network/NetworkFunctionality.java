@@ -110,8 +110,8 @@ public class NetworkFunctionality extends HttpServlet {
 								+ builder.toString() + "</font><br>");
 			            
 			            addHorizontalLine(out);
-			            out.println("<b><u>DNS Information </b></u>= <font size=\"3\" color=\"blue\">"
-								+ networkDiagnostics.traceRoute(address)+ "</font><br>");
+			           // out.println("<b><u>DNS Information </b></u>= <font size=\"3\" color=\"blue\">"
+						//		+ networkDiagnostics.traceRoute(address)+ "</font><br>");
 			            ;
 					}
 					else
