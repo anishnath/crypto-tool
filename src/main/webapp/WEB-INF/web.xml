@@ -24,13 +24,21 @@
     <servlet-name>MDFunctionality</servlet-name>
     <url-pattern>/MDFunctionality</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>CommandFunctionality</servlet-name>
     <servlet-class>z.y.x.Network.CommandFunctionality</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CommandFunctionality</servlet-name>
     <url-pattern>/CommandFunctionality</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>RunFunctionality</servlet-name>
+    <servlet-class>z.y.x.f.RunFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RunFunctionality</servlet-name>
+    <url-pattern>/RunFunctionality</url-pattern>
   </servlet-mapping>
 </web-app>
