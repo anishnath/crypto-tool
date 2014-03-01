@@ -41,4 +41,13 @@
     <servlet-name>RunFunctionality</servlet-name>
     <url-pattern>/RunFunctionality</url-pattern>
   </servlet-mapping>
+  
+      <servlet>
+    <servlet-name>ExecuteFunctionality</servlet-name>
+    <servlet-class>z.y.x.f.ExecuteFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExecuteFunctionality</servlet-name>
+    <url-pattern>/ExecuteFunctionality</url-pattern>
+  </servlet-mapping>
 </web-app>
