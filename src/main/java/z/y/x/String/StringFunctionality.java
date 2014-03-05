@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 
+import z.y.x.u.HexUtils;
 import z.y.x.u.StringUtils;
 
 /**
@@ -20,8 +21,9 @@ public class StringFunctionality extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	final String METHOD_CALCULATELENGTH = "calculateLength";
-	
-	final String METHOD_CALCULATE_BASE64="CALCULATE_BASE64";
+	final String METHOD_CALCULATE_HEXSTRING = "CALCULATE_HEXSTRING";
+	final String METHOD_CALCULATE_BASE64 = "CALCULATE_BASE64";
+
 	final String TRIM = "trim";
 	final String IGNORE = "ignore";
 	final String TOLOWERCASE = "toLowerCase";
@@ -58,14 +60,12 @@ public class StringFunctionality extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
-		
-		
+
 		final String methodName = request.getParameter("methodName");
 		PrintWriter out = response.getWriter();
 
 		if (METHOD_CALCULATELENGTH.equalsIgnoreCase(methodName)) {
-			
-			
+
 			final String trim = request.getParameter("trim");
 			final String ignoreWhiteSpace = request.getParameter("ignore");
 
@@ -88,8 +88,8 @@ public class StringFunctionality extends HttpServlet {
 			// Replace
 			final String regex = request.getParameter("regex");
 			final String replacement = request.getParameter("replacement");
-			
-			//SubString
+
+			// SubString
 			final String beginIndex = request.getParameter("beginIndex");
 			final String endIndex = request.getParameter("endIndex");
 			final String lengthOfString = request
@@ -117,10 +117,14 @@ public class StringFunctionality extends HttpServlet {
 
 			if (TRIM.equalsIgnoreCase(trim)) {
 				addHorizontalLine(out);
-				out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>"
+				out.println("<font size=\"6\" color=\"green\">"
+						+ lengthOfString
+						+ "</font>"
 						+ "<b><u>.trim()</u> = <font size=\"4\" color=\"blue\">"
 						+ lengthOfString.trim() + "</font></b><br>");
-				out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>"
+				out.println("<font size=\"6\" color=\"green\">"
+						+ lengthOfString
+						+ "</font>"
 						+ "<b><u>.trim().length()</u> = <font size=\"4\" color=\"blue\">"
 						+ lengthOfString.trim().length() + "</font></b><br>");
 
@@ -128,14 +132,18 @@ public class StringFunctionality extends HttpServlet {
 
 			if (TOLOWERCASE.equalsIgnoreCase(toLowerCase)) {
 				addHorizontalLine(out);
-				out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>"
+				out.println("<font size=\"6\" color=\"green\">"
+						+ lengthOfString
+						+ "</font>"
 						+ "<b><u>.toLowerCase()</u> = <font size=\"4\" color=\"blue\">"
 						+ lengthOfString.toLowerCase() + "</font></b><br>");
 			}
-			
+
 			if (TOUPPERCASE.equalsIgnoreCase(toUpperCase)) {
 				addHorizontalLine(out);
-				out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>"
+				out.println("<font size=\"6\" color=\"green\">"
+						+ lengthOfString
+						+ "</font>"
 						+ "<b><u>.toUpperCase()</u> = <font size=\"4\" color=\"blue\">"
 						+ lengthOfString.toUpperCase() + "</font></b><br>");
 			}
@@ -152,8 +160,9 @@ public class StringFunctionality extends HttpServlet {
 				if (oldChar != null && !oldChar.isEmpty()) {
 					if (newChar != null && !newChar.isEmpty()) {
 						addHorizontalLine(out);
-						out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.replace("
-								+ oldChar + "," + newChar
+						out.println("<font size=\"6\" color=\"green\">"
+								+ lengthOfString + "</font>"
+								+ "<b><u>.replace(" + oldChar + "," + newChar
 								+ ")</u>= <font size=\"4\" color=\"blue\">"
 								+ lengthOfString.replace(oldChar, newChar)
 								+ "</font></b><br>");
@@ -169,8 +178,10 @@ public class StringFunctionality extends HttpServlet {
 				if (regex != null && !regex.isEmpty()) {
 					if (replacement != null) {
 						addHorizontalLine(out);
-						out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.replaceAll("
-								+ regex + "," + replacement
+						out.println("<font size=\"6\" color=\"green\">"
+								+ lengthOfString + "</font>"
+								+ "<b><u>.replaceAll(" + regex + ","
+								+ replacement
 								+ ")</u>= <font size=\"4\" color=\"blue\">"
 								+ lengthOfString.replaceAll(regex, replacement)
 								+ "</font></b><br>");
@@ -179,24 +190,30 @@ public class StringFunctionality extends HttpServlet {
 			} catch (RuntimeException e) {
 				// IGNORE
 			}
-			
-			//Substring
+
+			// Substring
 			try {
 				if (beginIndex != null && !beginIndex.isEmpty()) {
 					addHorizontalLine(out);
 					int intbeginIndex = Integer.valueOf(beginIndex);
-					out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.substring("
+					out.println("<font size=\"6\" color=\"green\">"
+							+ lengthOfString + "</font>" + "<b><u>.substring("
 							+ beginIndex
 							+ ")</u>= <font size=\"4\" color=\"blue\">"
 							+ lengthOfString.substring(intbeginIndex)
 							+ "</font></b><br>");
 					if (endIndex != null && !endIndex.isEmpty()) {
 						int intendIndex = Integer.valueOf(endIndex);
-						out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.substring("
-								+ beginIndex + "," + endIndex
+						out.println("<font size=\"6\" color=\"green\">"
+								+ lengthOfString
+								+ "</font>"
+								+ "<b><u>.substring("
+								+ beginIndex
+								+ ","
+								+ endIndex
 								+ ")</u>= <font size=\"4\" color=\"blue\">"
-								+ lengthOfString.substring(intbeginIndex, intendIndex)
-								+ "</font></b><br>");
+								+ lengthOfString.substring(intbeginIndex,
+										intendIndex) + "</font></b><br>");
 					}
 				}
 			} catch (RuntimeException e1) {
@@ -204,83 +221,127 @@ public class StringFunctionality extends HttpServlet {
 
 			}
 
-			//trimWhitespace
-			final String trimWhitespace = request.getParameter("trimWhitespace");
-			if(trimWhitespace!=null && !trimWhitespace.isEmpty())
-			{
+			// trimWhitespace
+			final String trimWhitespace = request
+					.getParameter("trimWhitespace");
+			if (trimWhitespace != null && !trimWhitespace.isEmpty()) {
 				addHorizontalLine(out);
 				out.println("<b><u>.trimWhitespace("
-						+ lengthOfString 
+						+ lengthOfString
 						+ ")</u>= <font size=\"4\" color=\"blue\">"
-						+ org.springframework.util.StringUtils.trimWhitespace(lengthOfString)
+						+ org.springframework.util.StringUtils
+								.trimWhitespace(lengthOfString)
 						+ "</font></b><br>");
 			}
-			
-			//trimLeadingWhitespace
-			final String trimLeadingWhitespace = request.getParameter("trimLeadingWhitespace");
-			if(trimLeadingWhitespace!=null && !trimLeadingWhitespace.isEmpty())
-			{
+
+			// trimLeadingWhitespace
+			final String trimLeadingWhitespace = request
+					.getParameter("trimLeadingWhitespace");
+			if (trimLeadingWhitespace != null
+					&& !trimLeadingWhitespace.isEmpty()) {
 				addHorizontalLine(out);
 				out.println("<b><u>.trimLeadingWhitespace("
-						+ lengthOfString 
+						+ lengthOfString
 						+ ")</u>= <font size=\"4\" color=\"blue\">"
-						+ org.springframework.util.StringUtils.trimLeadingWhitespace(lengthOfString)
+						+ org.springframework.util.StringUtils
+								.trimLeadingWhitespace(lengthOfString)
 						+ "</font></b><br>");
 			}
-			
+
 			//
-			
-			//trimTrailingWhitespace
-			final String trimTrailingWhitespace = request.getParameter("trimTrailingWhitespace");
-			if(trimTrailingWhitespace!=null && !trimTrailingWhitespace.isEmpty())
-			{
+
+			// trimTrailingWhitespace
+			final String trimTrailingWhitespace = request
+					.getParameter("trimTrailingWhitespace");
+			if (trimTrailingWhitespace != null
+					&& !trimTrailingWhitespace.isEmpty()) {
 				addHorizontalLine(out);
 				out.println("<b><u>.trimTrailingWhitespace("
-						+ lengthOfString 
+						+ lengthOfString
 						+ ")</u>= <font size=\"4\" color=\"blue\">"
-						+ org.springframework.util.StringUtils.trimTrailingWhitespace(lengthOfString)
+						+ org.springframework.util.StringUtils
+								.trimTrailingWhitespace(lengthOfString)
 						+ "</font></b><br>");
 			}
-			
+
 			return;
 
 		}
-		
+
 		if (METHOD_CALCULATE_BASE64.equalsIgnoreCase(methodName)) {
-			 String inputtext = request.getParameter("inputtext");
-			if(inputtext==null || inputtext.isEmpty())
-			{
+			String inputtext = request.getParameter("inputtext");
+			if (inputtext == null || inputtext.isEmpty()) {
 				return;
 			}
 			final String enCodeDecode = request.getParameter("enCodeDecode");
 			final String encoding = request.getParameter("encoding");
-			
-			//System.out.println("encoding " +encoding);
-			//System.out.println("enCodeDecode " +enCodeDecode);
-			if(enCodeDecode!=null && !enCodeDecode.isEmpty())
-			{
+
+			// System.out.println("encoding " +encoding);
+			// System.out.println("enCodeDecode " +enCodeDecode);
+			if (enCodeDecode != null && !enCodeDecode.isEmpty()) {
 				try {
 					inputtext = inputtext.trim();
-					if("encode".equals(enCodeDecode))
-					{
-						byte[]   bytesEncoded = Base64.encodeBase64(inputtext .getBytes(encoding));
-						out.println(new String(bytesEncoded ));
+					if ("encode".equals(enCodeDecode)) {
+						byte[] bytesEncoded = Base64.encodeBase64(inputtext
+								.getBytes(encoding));
+						out.println(new String(bytesEncoded));
 						return;
 					}
-					if("decode".equals(enCodeDecode))
-					{
-						byte[] valueDecoded= Base64.decodeBase64(inputtext.getBytes(encoding) );
-						out.println(new String(valueDecoded ));
+					if ("decode".equals(enCodeDecode)) {
+						byte[] valueDecoded = Base64.decodeBase64(inputtext
+								.getBytes(encoding));
+						out.println(new String(valueDecoded));
 						return;
 					}
 				} catch (Exception e) {
-					out.println("<font size=\"3\" color=\"red\"><b> Problem" + e.getMessage() 
-							
+					out.println("<font size=\"3\" color=\"red\"><b> Problem "
+							+ e.getMessage()
+
 							+ "</font></b><br>");
 				}
 			}
-			
-			
+
+		}
+
+		if (METHOD_CALCULATE_HEXSTRING.equalsIgnoreCase(methodName)) {
+			String inputtext = request.getParameter("inputtext");
+			if (inputtext == null || inputtext.isEmpty()) {
+				return;
+			}
+			final String enCodeDecode = request.getParameter("enCodeDecode");
+			final String encoding = request.getParameter("encoding");
+			String delimiter = request.getParameter("delimiter");
+
+			// System.out.println("encoding " +encoding);
+			// System.out.println("enCodeDecode " +enCodeDecode);
+			if (enCodeDecode != null && !enCodeDecode.isEmpty()) {
+				try {
+					inputtext = inputtext.trim();
+					if ("encode".equals(enCodeDecode)) {
+						if (delimiter != null) {
+							if ("nothing".equals(delimiter)) {
+								delimiter = null;
+							}
+
+						}
+						String s = HexUtils.encodeHex(
+								inputtext.getBytes(encoding), delimiter);
+
+						out.println(s);
+						return;
+					}
+					if ("decode".equals(enCodeDecode)) {
+						byte[] s = HexUtils.decode(inputtext);
+						out.println(new String(s));
+						return;
+					}
+				} catch (Exception e) {
+					out.println(" Problem"
+							+ e.getMessage()
+
+							+ "");
+				}
+			}
 		}
 
 		// Actual logic goes here.
@@ -295,13 +356,16 @@ public class StringFunctionality extends HttpServlet {
 
 				addHorizontalLine(out);
 				if (!isLastIndexOf) {
-					out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.indexOf(" + indexOf
+					out.println("<font size=\"6\" color=\"green\">"
+							+ lengthOfString + "</font>" + "<b><u>.indexOf("
+							+ indexOf
 							+ ")</u> = <font size=\"4\" color=\"blue\">"
 							+ lengthOfString.indexOf(indexOf)
 							+ "</font></b><br>");
 				} else {
-					out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.lastIndexOf("
-							+ indexOf
+					out.println("<font size=\"6\" color=\"green\">"
+							+ lengthOfString + "</font>"
+							+ "<b><u>.lastIndexOf(" + indexOf
 							+ ")</u> =<font size=\"4\" color=\"blue\"> "
 							+ lengthOfString.lastIndexOf(indexOf)
 							+ "</font></b><br>");
@@ -310,14 +374,17 @@ public class StringFunctionality extends HttpServlet {
 				if (fromIndex != null && !fromIndex.isEmpty()) {
 					int fromIn = Integer.valueOf(fromIndex);
 					if (!isLastIndexOf) {
-						out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.indexOf("
-								+ indexOf + "," + fromIndex
+						out.println("<font size=\"6\" color=\"green\">"
+								+ lengthOfString + "</font>"
+								+ "<b><u>.indexOf(" + indexOf + "," + fromIndex
 								+ ")</u> =<font size=\"4\" color=\"blue\"> "
 								+ lengthOfString.indexOf(indexOf, fromIn)
 								+ "</font></b><br>");
 					} else {
-						out.println("<font size=\"6\" color=\"green\">" + lengthOfString + "</font>" + "<b><u>.lastIndexOf("
-								+ indexOf + "," + fromIndex
+						out.println("<font size=\"6\" color=\"green\">"
+								+ lengthOfString + "</font>"
+								+ "<b><u>.lastIndexOf(" + indexOf + ","
+								+ fromIndex
 								+ ")<u> = <font size=\"4\" color=\"blue\">"
 								+ lengthOfString.lastIndexOf(indexOf, fromIn)
 								+ "</font></b><br>");
@@ -335,8 +402,5 @@ public class StringFunctionality extends HttpServlet {
 	private void addHorizontalLine(PrintWriter out) {
 		out.println("<hr>");
 	}
-
-	
-
 
 }

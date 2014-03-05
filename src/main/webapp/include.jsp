@@ -16,6 +16,10 @@
                 <a href="StringFunctions.jsp">String Functions</a>
 
             </li>
+            <li>
+                <a href="HexToStringFunctions.jsp">HexToString/StringToHex Conversion</a>
+
+            </li>
         </ul>
     </li>
     <li><a href="CommandFunctions.jsp">Online Command Line tool</a></li>
