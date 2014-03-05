@@ -19,12 +19,15 @@ public class HexUtils {
 	public static String encodeHex(byte[] by)
 	{
 	      char[]  actual = Hex.encodeHex(by);
-	     return "";
+	     return new String(actual);
 	}
 	
 	public static void main(String[] args) {
 		try {
 			System.out.println(decode("06"));
+			
+			System.out.println(encodeHex("asdasdasds".getBytes()));
+			
 		} catch (DecoderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
