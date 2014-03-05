@@ -24,6 +24,15 @@
     <servlet-name>MDFunctionality</servlet-name>
     <url-pattern>/MDFunctionality</url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>CipherFunctionality</servlet-name>
+    <servlet-class>z.y.x.Security.CipherFunctionality</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CipherFunctionality</servlet-name>
+    <url-pattern>/CipherFunctionality</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>CommandFunctionality</servlet-name>
     <servlet-class>z.y.x.Network.CommandFunctionality</servlet-class>

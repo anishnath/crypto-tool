@@ -3,7 +3,7 @@
         <a href="#">Online Cryptograhy</a>
         <ul>
             <li>
-                <a href="MessageDigest.jsp">Calculate MAC</a>
+                <a href="Base64Functions.jsp">Base64 Encode/Decode</a>
             </li>
             <li><a href="MessageDigest.jsp">Calculate MD5 </a></li>
         </ul>

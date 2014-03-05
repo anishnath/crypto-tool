@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
+
 import z.y.x.u.StringUtils;
 
 /**
@@ -18,6 +20,8 @@ public class StringFunctionality extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	final String METHOD_CALCULATELENGTH = "calculateLength";
+	
+	final String METHOD_CALCULATE_BASE64="CALCULATE_BASE64";
 	final String TRIM = "trim";
 	final String IGNORE = "ignore";
 	final String TOLOWERCASE = "toLowerCase";
@@ -53,38 +57,40 @@ public class StringFunctionality extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		
+		
 		final String methodName = request.getParameter("methodName");
-		final String trim = request.getParameter("trim");
-		final String ignoreWhiteSpace = request.getParameter("ignore");
-
-		final String toUpperCase = request.getParameter("toUpperCase");
-		final String toLowerCase = request.getParameter("toLowerCase");
-
-		// indexOf
-		final String indexOf = request.getParameter("indexOf");
-		final String fromIndex = request.getParameter("indexOffromIndex");
-
-		// LastIndexOf
-		final String lastindexOf = request.getParameter("lastindexOf");
-		final String lastindexOffromIndex = request
-				.getParameter("lastindexOffromIndex");
-
-		// Replace
-		final String oldChar = request.getParameter("oldChar");
-		final String newChar = request.getParameter("newChar");
-
-		// Replace
-		final String regex = request.getParameter("regex");
-		final String replacement = request.getParameter("replacement");
-		
-		//SubString
-		final String beginIndex = request.getParameter("beginIndex");
-		final String endIndex = request.getParameter("endIndex");
-		
-
 		PrintWriter out = response.getWriter();
 
 		if (METHOD_CALCULATELENGTH.equalsIgnoreCase(methodName)) {
+			
+			
+			final String trim = request.getParameter("trim");
+			final String ignoreWhiteSpace = request.getParameter("ignore");
+
+			final String toUpperCase = request.getParameter("toUpperCase");
+			final String toLowerCase = request.getParameter("toLowerCase");
+
+			// indexOf
+			final String indexOf = request.getParameter("indexOf");
+			final String fromIndex = request.getParameter("indexOffromIndex");
+
+			// LastIndexOf
+			final String lastindexOf = request.getParameter("lastindexOf");
+			final String lastindexOffromIndex = request
+					.getParameter("lastindexOffromIndex");
+
+			// Replace
+			final String oldChar = request.getParameter("oldChar");
+			final String newChar = request.getParameter("newChar");
+
+			// Replace
+			final String regex = request.getParameter("regex");
+			final String replacement = request.getParameter("replacement");
+			
+			//SubString
+			final String beginIndex = request.getParameter("beginIndex");
+			final String endIndex = request.getParameter("endIndex");
 			final String lengthOfString = request
 					.getParameter("lengthOfString");
 
@@ -237,6 +243,43 @@ public class StringFunctionality extends HttpServlet {
 			
 			return;
 
+		}
+		
+		if (METHOD_CALCULATE_BASE64.equalsIgnoreCase(methodName)) {
+			 String inputtext = request.getParameter("inputtext");
+			if(inputtext==null || inputtext.isEmpty())
+			{
+				return;
+			}
+			final String enCodeDecode = request.getParameter("enCodeDecode");
+			final String encoding = request.getParameter("encoding");
+			
+			//System.out.println("encoding " +encoding);
+			//System.out.println("enCodeDecode " +enCodeDecode);
+			if(enCodeDecode!=null && !enCodeDecode.isEmpty())
+			{
+				try {
+					inputtext = inputtext.trim();
+					if("encode".equals(enCodeDecode))
+					{
+						byte[]   bytesEncoded = Base64.encodeBase64(inputtext .getBytes(encoding));
+						out.println(new String(bytesEncoded ));
+						return;
+					}
+					if("decode".equals(enCodeDecode))
+					{
+						byte[] valueDecoded= Base64.decodeBase64(inputtext.getBytes(encoding) );
+						out.println(new String(valueDecoded ));
+						return;
+					}
+				} catch (Exception e) {
+					out.println("<font size=\"3\" color=\"red\"><b> Problem" + e.getMessage() 
+							
+							+ "</font></b><br>");
+				}
+			}
+			
+			
 		}
 
 		// Actual logic goes here.
