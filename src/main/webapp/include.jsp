@@ -1,6 +1,6 @@
 <ul class="slimmenu">
     <li>
-        <a href="#">Online Cryptograhy</a>
+        <a href="#">Online Cryptography</a>
         <ul>
             <li>
                 <a href="Base64Functions.jsp">Base64 Encode/Decode</a>
@@ -23,6 +23,19 @@
         </ul>
     </li>
     <li><a href="CommandFunctions.jsp">Online Command Line tool</a></li>
+     <li><a href="UrlEncodeDecodeFunctions.jsp">Online Codecs</a>
+             <ul>
+            <li>
+                <a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a>
+
+            </li>
+            <li>
+                <a href="HexToStringFunctions.jsp">HexToString/StringToHex Conversion</a>
+            </li>
+             <li>
+                <a href="Base64Functions.jsp">Base64 Encode/Decode</a>
+            </li>
+        </ul></li>
 </ul>
 
 <script src="js/jquery.slimmenu.js"></script>

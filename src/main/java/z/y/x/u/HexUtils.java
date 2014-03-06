@@ -1,7 +1,11 @@
 package z.y.x.u;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.net.URLCodec;
 
 /**
  * @since March 2014
@@ -81,6 +85,31 @@ public class HexUtils {
 			
 		}
 		return builder.toString();
+	}
+	
+	
+	public static String enCodeURI(final String url,final String encoding) throws EncoderException, UnsupportedEncodingException
+	{
+		if(url!=null && !url.isEmpty())
+		{
+			URLCodec urlCodec = new URLCodec();
+			 String encoded = urlCodec.encode(url,encoding);			
+			 return encoded;
+		}
+		return "";
+		
+	}
+	
+	public static String deCodeURI(final String uri,final String encoding) throws DecoderException, UnsupportedEncodingException 
+	{
+		if(uri!=null && !uri.isEmpty())
+		{
+			URLCodec urlCodec = new URLCodec();
+			 String decoded = urlCodec.decode(uri,encoding);
+			 return decoded;
+		}
+		return "";
+		
 	}
 	
 	

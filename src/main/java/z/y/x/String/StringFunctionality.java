@@ -23,6 +23,7 @@ public class StringFunctionality extends HttpServlet {
 	final String METHOD_CALCULATELENGTH = "calculateLength";
 	final String METHOD_CALCULATE_HEXSTRING = "CALCULATE_HEXSTRING";
 	final String METHOD_CALCULATE_BASE64 = "CALCULATE_BASE64";
+	final String METHOD_CALCULATE_URLENCODEDECODE = "CALCULATE_URLENCODEDECODE";
 
 	final String TRIM = "trim";
 	final String IGNORE = "ignore";
@@ -333,6 +334,38 @@ public class StringFunctionality extends HttpServlet {
 					if ("decode".equals(enCodeDecode)) {
 						byte[] s = HexUtils.decode(inputtext);
 						out.println(new String(s));
+						return;
+					}
+				} catch (Exception e) {
+					out.println(" Problem "
+							+ e.getMessage()
+
+							+ "");
+				}
+			}
+		}
+		
+		if (METHOD_CALCULATE_URLENCODEDECODE.equalsIgnoreCase(methodName)) {
+			String inputtext = request.getParameter("inputtext");
+			if (inputtext == null || inputtext.isEmpty()) {
+				return;
+			}
+			final String enCodeDecode = request.getParameter("enCodeDecode");
+			final String encoding = request.getParameter("encoding");
+			
+			if (enCodeDecode != null && !enCodeDecode.isEmpty()) {
+				try {
+					inputtext = inputtext.trim();
+					if ("encode".equals(enCodeDecode)) {
+						
+						String s = HexUtils.enCodeURI(inputtext, encoding);
+
+						out.println(s);
+						return;
+					}
+					if ("decode".equals(enCodeDecode)) {
+						String  s = HexUtils.deCodeURI(inputtext,encoding);
+						out.println(s);
 						return;
 					}
 				} catch (Exception e) {

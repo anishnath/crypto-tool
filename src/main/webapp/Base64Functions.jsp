@@ -3,10 +3,9 @@
 <head>
 <title>Online Base64  encode and decode a string</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Base64 is a group of similar binary-to-text encoding schemes that represent binary data in an ASCII string format by translating it into a radix-64 representation. 
-The term Base64 originates from a specific MIME content transfer encoding.">
-<meta name="keywords"
-	content="Radix 64 ,Online Base64 encode and decode a string ">
+  <meta name="description" content="Decode from Base64 or Encode to Base64 - Here, with our simple online tool." />
+  <meta name="keywords" content="base64, decode, encode, online, tool" />
+  <meta name="robots" content="index, follow" />
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
