@@ -63,7 +63,7 @@ public class CommandFunctionality extends HttpServlet {
 			{
 				inputText = inputText.trim();
 				
-				if(inputText.contains("env") || inputText.contains("rm") )
+				if(inputText.contains("env") || inputText.contains("rm") ||  inputText.contains("mv"))
 				{
 					 out.println("<b><u>Command </b></u>= "+ inputText +"<br><font size=\"3\" color=\"blue\">"
 								 + "Permission Denied</font><br>");
