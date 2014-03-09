@@ -1,5 +1,6 @@
 package z.y.x.Security;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -20,24 +21,122 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import z.y.x.u.StringUtils;
 
-public class CipherFunctionality  {
+public class CipherFunctionality extends HttpServlet  {
+	
+	private static final String METHOD_ENCRYPRDECRYPT = "CIPHERBLOCK";
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		// TODO Auto-generated method stub
+
+		// Set response content type
+		response.setContentType("text/html");
+
+		// Actual logic goes here.
+		PrintWriter out = response.getWriter();
+		out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
+
+	}
+
+	
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+
+		final String methodName = request.getParameter("methodName");
+		PrintWriter out = response.getWriter();
+		if (METHOD_ENCRYPRDECRYPT.equalsIgnoreCase(methodName)) {
+			//secretkey
+			//encryptorDecrypt
+			 String secretkey = request.getParameter("secretkey");
+			final String encryptorDecrypt = request.getParameter("encryptorDecrypt");
+			final String plaintext = request.getParameter("plaintext");
+			//plaintext
+			//cipherparameter
+			final String cipherparameter = request.getParameter("cipherparameter");
+			String algo = getAlgo(cipherparameter);
+			if(secretkey!=null && !secretkey.isEmpty())
+			{
+				if(secretkey.trim().length()<24)
+				{
+					if(  "DES".equals(algo)  && secretkey.length()<8)
+					{
+						out.println("<font size=\"2\" color=\"red\"> "+ algo +" key size must be length greater then 8 </font>");
+						return;
+					}
+					if("DES".equals(algo)  && secretkey.length()>=8)
+					{
+						//DO Nthing
+					}
+					else{
+						out.println("<font size=\"2\" color=\"red\">" + algo +" key size must be length greater then 24 </font>");
+						return;
+					}
+					
+				}
+				if(plaintext!=null && !plaintext.isEmpty())
+				{
+					
+					 SecretKey skey =null;
+					if("DES".equals(algo))
+					{
+						 DESKeySpec keySpec;
+						try {
+							keySpec = new DESKeySpec(secretkey.getBytes());
+							 SecretKeyFactory factory = SecretKeyFactory.getInstance("DES");
+						        SecretKey key = factory.generateSecret(keySpec);
+						        addHorizontalLine(out);	
+								out.println("<font size=\"4\" color=\"blue\">["+ encryptorDecrypt + "] ["+ plaintext +"] using Algo [" +cipherparameter + "] </font><font size=\"5\" color=\"green\">" +enCryptDecrypt(plaintext, cipherparameter, encryptorDecrypt, key) +"</font>");
+						} catch (Exception e) {
+							out.println("<font size=\"2\" color=\"red\"> "+ e.getLocalizedMessage() +" </font>");
+							return; 
+						}
+					       
+					}
+					else
+					{
+						secretkey = secretkey.trim();
+						skey = new SecretKeySpec(secretkey.getBytes(), getAlgo(cipherparameter));
+						addHorizontalLine(out);	
+						out.println("<font size=\"4\" color=\"blue\">["+ encryptorDecrypt + "] ["+ plaintext +"] using Algo [" +cipherparameter + "] </font><font size=\"5\" color=\"green\">" +enCryptDecrypt(plaintext, cipherparameter, encryptorDecrypt, skey) +"</font>");
+					}
+					
+				}
+				
+				
+			}
+			else{
+				out.println("<font size=\"2\" color=\"red\"> Secret key is null or empty  </font>");
+						
+			}
+		}
+	}
+	
+	private void addHorizontalLine(PrintWriter out) {
+		out.println("<hr>");
+	}
 
 
-	public void enCryptDecrypt(String inputText, String cipherparameter,
+	public static String enCryptDecrypt(String inputText, String cipherparameter,
 			String encryptOrDecrypt, Key key) {
 		
 		try {
-			System.out.println("Recieved Text = " + inputText
-					+ " cipherparameter =" + cipherparameter
-					+ " encryptOrDecrypt = " + encryptOrDecrypt
-					+ "Key = " + key.getAlgorithm());
-			final String getAlgo = getAlgo(cipherparameter);
-			System.out.println("The Algo " + getAlgo);
 			
-			  
+		  
 			byte []iv;
 			
 			/*
@@ -45,7 +144,10 @@ public class CipherFunctionality  {
 			   the plaintext, a data block called the initialization vector (IV), denoted IV
 			 */
 			//java.security.InvalidAlgorithmParameterException: Parameters missing
-			if("DESede/CBC/PKCS5Padding".equals(cipherparameter))
+			if("DESede/CBC/PKCS5Padding".equals(cipherparameter)
+					|| "DES/CBC/NoPadding".equals(cipherparameter)
+					|| "DES/CBC/PKCS5Padding".equals(cipherparameter)
+					|| "DESede/CBC/NoPadding".equalsIgnoreCase(cipherparameter))
 			{
 				// The INitialVector Must Be 8 bit
 				iv = new byte[]{0, 0, 0, 0, 0, 0, 0, 0};
@@ -56,22 +158,38 @@ public class CipherFunctionality  {
 			}
 			//The InitialVector It's Not Valid for all
 		    IvParameterSpec ivspec = new IvParameterSpec(iv);
-			byte b[] = enCrypt(inputText, cipherparameter, key,ivspec);
-
-			deCrypt(b, cipherparameter, key,ivspec);
-
-
-			System.out.println("==============================");
+		    if("encrypt".equals(encryptOrDecrypt))
+		    {
+		    	byte b[] = enCrypt(inputText, cipherparameter, key,ivspec);
+		    	return new BASE64Encoder().encode(b);
+		    }
+			
+		    if("decrypt".equals(encryptOrDecrypt))
+		    {
+		    		
+		      	byte[] data = new BASE64Decoder().decodeBuffer(inputText);
+		     	return  deCrypt(data, cipherparameter, key,ivspec);
+		    }
+		    
+		    if("Encrypt".equals(encryptOrDecrypt))
+		    {
+		     	byte b[] = enCrypt(inputText, cipherparameter, key,ivspec);
+		     	deCrypt(inputText.getBytes(), cipherparameter, key,ivspec);
+		    }
+	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return e.getMessage();
 		}
+		return "PROBLEM CANNOT PERFORM";
 	}
 
-	private byte[] enCrypt(String inputText, String cipherparameter, Key key, IvParameterSpec ivspec)
+	private static byte[] enCrypt(String inputText, String cipherparameter, Key key, IvParameterSpec ivspec)
 			throws NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+		
+		//System.out.println("Encryting   " + inputText);
 		
 		/**Returns a Cipher object that implements the specified transformation.*/
 		Cipher cipher = Cipher.getInstance(cipherparameter);
@@ -81,7 +199,7 @@ public class CipherFunctionality  {
 		    {
 			 	//javax.crypto.IllegalBlockSizeException: Input length not multiple of 16 bytes
 		    		b1 =inputText.getBytes();
-		    		System.out.println(inputText.getBytes().length);
+		    		//System.out.println(inputText.getBytes().length);
 		    }	 
 		 else {
 			 b1 = inputText.getBytes();
@@ -99,17 +217,17 @@ public class CipherFunctionality  {
 		
 		/** Encrypts or decrypts data in a single-part operation, or finishes a multiple-part operation. */
 		byte[] b = cipher.doFinal(b1);
-		System.out.println("Encrpted ==" + StringUtils.byteToHex(b));
+		//System.out.println("Encrpted ==" + StringUtils.byteToHex(b));
 		return b;
 
 	}
 
-	private void deCrypt(byte inputText[], String cipherparameter, Key key, IvParameterSpec ivspec)
+	private static String deCrypt(byte inputText[], String cipherparameter, Key key, IvParameterSpec ivspec)
 			throws NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 		
-		System.out.println("Decrypting " +  StringUtils.byteToHex(inputText));
+		//System.out.println("Decrypting " +  StringUtils.byteToHex(inputText));
 		
 		/**Returns a Cipher object that implements the specified transformation.*/
 		Cipher cipher = Cipher.getInstance(cipherparameter);
@@ -123,7 +241,7 @@ public class CipherFunctionality  {
 		}
 
 		byte[] b = cipher.doFinal(inputText);
-		System.out.println("Decrypted   " + new String(b));
+		return  new String(b);
 
 	}
 
@@ -145,6 +263,10 @@ public class CipherFunctionality  {
 
 	public static void main(String[] args) throws Exception {
 		
+		/*
+		 * five confidentiality modes of operation for symmetric key block 
+		   cipher algorithms
+		 */
 		//The Electronic Codebook Mode (ECB) -->PADDING (the total 
 											//	(number of bits in the plaintext must be a positive 
 											//   multiple of the block ) 
@@ -177,48 +299,53 @@ public class CipherFunctionality  {
 		generator = KeyGenerator.getInstance(getAlgo("DES/ECB/PKCS5Padding"));
 		generator.init(new SecureRandom());
 		k = generator.generateKey();
-		new CipherFunctionality().enCryptDecrypt("SomeText","DES/ECB/PKCS5Padding", "Encrypt",k);
+		//new CipherFunctionality().enCryptDecrypt("SomeText","DES/ECB/PKCS5Padding", "Encrypt",k);
 		
 		//User Defined Key
 		//Note length Play Important Role Here
 		//2b7e151628aed2a6abf7158809cf4f3c
-		byte[] keyBytes = "2b7e151628aed2a6abf71588".getBytes("UTF-8");
-		System.out.println(keyBytes.length);
+		byte[] keyBytes = "2b7e151628aed2a6abf71589".getBytes();
+		//System.out.println("2b7e151628aed2a6abf71589".length());
 		
 		/*There is no AESKeySpec Sun Only Provide DESKeySpec, DESedeKeySpec, PBEKeySpec*/
 		//Using DESKeySpec
         DESKeySpec keySpec = new DESKeySpec(keyBytes);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("DES");
         SecretKey key = factory.generateSecret(keySpec);
-        new CipherFunctionality().enCryptDecrypt("SomeText","DES/ECB/PKCS5Padding", "Encrypt",key);
+      //  new CipherFunctionality().enCryptDecrypt("SomeText","DES/ECB/PKCS5Padding", "Encrypt",key);
         
 		//Using DESedeKeySpec
         DESedeKeySpec deSedeKeySpec  = new  DESedeKeySpec(keyBytes);
         factory = SecretKeyFactory.getInstance("DESede");
         key = factory.generateSecret(deSedeKeySpec);
-        new CipherFunctionality().enCryptDecrypt("SomeText","DESede/CBC/PKCS5Padding", "Encrypt",key);
+       // new CipherFunctionality().enCryptDecrypt("SomeText","DESede/CBC/PKCS5Padding", "Encrypt",key);
         
 			
 		 //The AES/CBC/PKCS5Padding
 		 SecretKey skey = new SecretKeySpec(keyBytes, "AES");
-		 new CipherFunctionality().enCryptDecrypt("SomeText","AES/CBC/PKCS5Padding", "Encrypt",skey);
+		 String s =  new CipherFunctionality().enCryptDecrypt("SomeText","AES/CBC/PKCS5Padding", "encrypt",skey);
+		 System.out.println(s);
+		 //= new Hex().decode(s.getBytes());
+		 s =  new CipherFunctionality().enCryptDecrypt(s,"AES/CBC/PKCS5Padding", "decrypt",skey);
+		 System.out.println(s);
+		 
 		 
 		 //
 		 //The AES
 		 skey = new SecretKeySpec(keyBytes, "AES");
-		 new CipherFunctionality().enCryptDecrypt("SomeText","AES", "Encrypt",skey);
+		// new CipherFunctionality().enCryptDecrypt("SomeText","AES", "Encrypt",skey);
 		 
 		 //The DESede/CBC/PKCS5Padding
 		 skey = new SecretKeySpec(keyBytes, "DESede");
-		 new CipherFunctionality().enCryptDecrypt("SomeText","DESede/CBC/PKCS5Padding", "Encrypt",skey);
+		 //new CipherFunctionality().enCryptDecrypt("SomeText","DESede/CBC/PKCS5Padding", "Encrypt",skey);
 		 
 		 //The DESede/ECB/NoPadding
 		 skey = new SecretKeySpec(keyBytes, "DESede");
-		 new CipherFunctionality().enCryptDecrypt("SomeText","DESede/ECB/NoPadding", "Encrypt",skey);
+		 //new CipherFunctionality().enCryptDecrypt("SomeText","DESede/ECB/NoPadding", "Encrypt",skey);
 		 
 		//AES/CBC/NoPadding
 		 skey = new SecretKeySpec(keyBytes, "AES");
-		 new CipherFunctionality().enCryptDecrypt("SomeTextISNOTGREATWHYNOTALLCALLM","AES/CBC/NoPadding", "Encrypt",skey);
+		 //new CipherFunctionality().enCryptDecrypt("SomeTextISNOTGREATWHYNOTALLCALLL","AES/CBC/NoPadding", "Encrypt",skey);
 		 
 	}
 

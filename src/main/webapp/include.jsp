@@ -2,10 +2,10 @@
     <li>
         <a href="#">Online Cryptography</a>
         <ul>
-            <li>
-                <a href="Base64Functions.jsp">Base64 Encode/Decode</a>
-            </li>
+
             <li><a href="MessageDigest.jsp">Calculate MD5 </a></li>
+            <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
+            <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
         </ul>
     </li>
     <li><a href="NetworkFunctions.jsp">Online NetworkTool</a></li>
