@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>http://8gwifi.org/</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/MessageDigest.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/Base64Functions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/CipherFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/UrlEncodeDecodeFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/HexToStringFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/StringFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/NetworkFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/CommandFunctions.jsp</loc>
+</url>
+</urlset>
