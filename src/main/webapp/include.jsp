@@ -8,22 +8,7 @@
             <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
         </ul>
     </li>
-    <li><a href="NetworkFunctions.jsp">Online NetworkTool</a></li>
-    <li>
-        <a href="#">Online String Functions</a>
-        <ul>
-            <li>
-                <a href="StringFunctions.jsp">String Functions</a>
-
-            </li>
-            <li>
-                <a href="HexToStringFunctions.jsp">HexToString/StringToHex Conversion</a>
-
-            </li>
-        </ul>
-    </li>
-    <li><a href="CommandFunctions.jsp">Online Command Line tool</a></li>
-     <li><a href="UrlEncodeDecodeFunctions.jsp">Online Codecs</a>
+         <li><a href="UrlEncodeDecodeFunctions.jsp">Online Codecs</a>
              <ul>
             <li>
                 <a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a>
@@ -36,6 +21,23 @@
                 <a href="Base64Functions.jsp">Base64 Encode/Decode</a>
             </li>
         </ul></li>
+            <li>
+        <a href="#">Online String Functions</a>
+        <ul>
+            <li>
+                <a href="StringFunctions.jsp">String Functions</a>
+
+            </li>
+            <li>
+                <a href="HexToStringFunctions.jsp">HexToString/StringToHex Conversion</a>
+
+            </li>
+        </ul>
+    </li>
+    <li><a href="NetworkFunctions.jsp">Online NetworkTool</a></li>
+
+    <li><a href="CommandFunctions.jsp">Online Command Line tool</a></li>
+
 </ul>
 
 <script src="js/jquery.slimmenu.js"></script>
