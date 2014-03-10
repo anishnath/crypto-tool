@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import z.y.x.r.ColorCodeOnStartupFunctionality;
+
 public class ListAlgorithms
 {
     /**
@@ -39,13 +41,17 @@ public class ListAlgorithms
             
             while (it.hasNext())
             {
+            		String getColor = ColorCodeOnStartupFunctionality.getRandomColor();
+            		String color = "<font color="+getColor+">";
+            		//System.out.println("ada" + color);
                 String	name = (String)it.next();
                 builder.append("<tr bordercolor=\"red\"><td>");
                 //System.out.println("            " + name);
                 builder.append("                 ");
+                builder.append(color);
                 builder.append(name);
                // builder.append("\n");
-                builder.append("</tr></td>");
+                builder.append("</font></td></tr>");
                 
                 
             }
