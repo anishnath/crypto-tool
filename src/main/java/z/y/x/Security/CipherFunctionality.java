@@ -7,7 +7,10 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.SecureRandom;
+import java.security.Security;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.crypto.BadPaddingException;
@@ -26,14 +29,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import z.y.x.u.StringUtils;
 
 public class CipherFunctionality extends HttpServlet  {
 	
 	private static final String METHOD_ENCRYPRDECRYPT = "CIPHERBLOCK";
-
+	private static final String METHOD_CIPHERCIPHERCAPABLITY = "CIPHERCAPABLITY";
+	static{
+		Security.addProvider(new BouncyCastleProvider());	
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -124,6 +132,74 @@ public class CipherFunctionality extends HttpServlet  {
 						
 			}
 		}
+		
+		//PROVIDER CAPABLITY
+		if (METHOD_CIPHERCIPHERCAPABLITY.equalsIgnoreCase(methodName)) {
+			
+			final String provider = request.getParameter("cipherparameter");
+			if(provider!=null && !provider.isEmpty())
+			{
+				if(!"NONE".equals(provider))
+				{
+					addHorizontalLine(out);
+					out.print("<font size=\"3\" color=\"blue\">Capabilities of the provider  </font>" + addProviderCapablities(provider) );
+				}
+				else{
+					addHorizontalLine(out);
+				}
+				
+			}
+			
+			final String listalgo = request.getParameter("listalgo");
+			if(listalgo!=null && !listalgo.isEmpty())
+			{
+				if(!"NONE".equals(listalgo))
+				{
+				addHorizontalLine(out);
+				out.println("<font size=\"3\" color=\"blue\">List of Algorithms  </font>" + ListAlgorithms.addToListAlgoSet(listalgo));
+				}
+				else
+				{
+					addHorizontalLine(out);
+				}
+			}
+		}
+		
+	}
+	
+	private static String addProviderCapablities(final String provide) {
+		Provider	 provider = Security.getProvider(provide);
+        StringBuilder builder = new StringBuilder();
+       
+        Iterator  it = provider.keySet().iterator();
+       
+        builder.append("<center><table  border=\"10\">"); 
+        builder.append("<b>"+ provider.getName() + "</b>");
+        while (it.hasNext())
+        {
+            String	entry = (String)it.next();
+            
+            // this indicates the entry refers to another entry
+            
+            if (entry.startsWith("Alg.Alias."))
+            {
+                entry = entry.substring("Alg.Alias.".length());
+            }
+            builder.append("<tr>");
+            String  factoryClass = entry.substring(0, entry.indexOf('.'));
+            String  name = entry.substring(factoryClass.length() + 1);
+            builder.append("<td>");
+            builder.append(factoryClass+" : ");
+            builder.append("</td");
+            
+            builder.append("<td><font color=\"green\">");
+            builder.append(name);
+            builder.append("</font></td>");
+            builder.append("</tr>");
+           // System.out.println(factoryClass + ": " + name);
+        }
+        builder.append("</table>");
+       return builder.toString();
 	}
 	
 	private void addHorizontalLine(PrintWriter out) {
