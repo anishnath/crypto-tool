@@ -99,6 +99,6 @@ Convert Hex to String
 		</div>
 	</form>
 	
-
+<%@ include file="footer.jsp"%>
 </body>
 </html>

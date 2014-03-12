@@ -81,6 +81,6 @@ Base64 encoding schemes are commonly used when there is a need to encode binary 
 		</div>
 	</form>
 	
-
+   <%@ include file="footer.jsp"%>
 </body>
 </html>

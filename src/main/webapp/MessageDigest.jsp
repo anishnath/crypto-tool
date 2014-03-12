@@ -88,6 +88,6 @@
 		<div id="output"></div>
 	</form>
 	
-
+<%@ include file="footer.jsp"%>
 </body>
 </html>

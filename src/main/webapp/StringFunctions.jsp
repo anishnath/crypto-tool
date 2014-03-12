@@ -242,6 +242,6 @@
 			<div id="output"></div>
 		</fieldset>
 	</form>
-
+<%@ include file="footer.jsp"%>
 </body>
 </html>

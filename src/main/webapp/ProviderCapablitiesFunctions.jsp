@@ -146,8 +146,7 @@
 				<!-- <input checked="checked" id="cipherparameter" type="radio" name="cipherparameter" value="AES/CBC/NoPadding">AES/CBC/NoPadding (128) -->
 				<input  id="cipherparameter11" type="radio"
 					name="cipherparameter" value="SUN">SUN
-					<input id="cipherparameter13"
-					type="radio" name="cipherparameter" value="Apple">Apple
+					
 				<input id="cipherparameter" type="radio" name="cipherparameter"
 					value="SunRsaSign">SunRsaSign
 				<input id="cipherparameter1" type="radio" name="cipherparameter"
@@ -195,6 +194,6 @@
 <div id="output"></div>
 	</form>
 
-
+<%@ include file="footer.jsp"%>
 </body>
 </html>
