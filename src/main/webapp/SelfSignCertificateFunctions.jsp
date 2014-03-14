@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Certificate Decoder Decode certificates to view their contents, parser for  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey</title>
-<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-<meta name="keywords" content="certificate viewer, decode certificate, certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey, online parser" />
-<meta name="description" content="Use this Certificate Decoder to decode your certificates in PEM format. This certificate viewer tool will decode certificates so you can easily see their contents. This parser will parse the follwoing  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey" />
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<title>Self-Signed Certificate generate</title>
+<meta name="description" content="Generate a self-signed certificate for your web site." />
+<meta name="keywords" content="self-signed certificate, ssl, server, apache, generator" />
 
 <meta name="robots" content="index,follow" />
 <meta name="googlebot" content="index,follow" />
@@ -61,14 +61,14 @@
                 <legend>Create X509 Certificate Online</legend>
 <table>
 <tr>
-<th align="RIGHT" nowrap> &nbsp;Hostname or your full name  : </th> <td><input type="text" name="Hostname or your full name "  size="40" maxlength="64" /></td> 
+<th align="RIGHT" nowrap> &nbsp;Hostname or your full name  : </th> <td><input type="text" name="hostname"  size="40" maxlength="64" /></td> 
 <td align="LEFT"> (CN) Common Name, usually the web server hostname or your name.</td></tr> 
-<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Organization/Company  : </th> <td><input type="text" name="company "  size="40" maxlength="64" /></td> <td align="LEFT"> (O) For example, 8gWifi Corporation</td></tr>
- <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Department  : </th> <td><input type="text" name="Department "  size="40" maxlength="64" /></td> <td align="LEFT"> (OU) Your division or department.</td></tr>
- <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Email  : </th> <td><input type="text" name="Email "  size="40" maxlength="64" /></td> <td align="LEFT"> (E) Usually specified for an email or SMIME user certificate</td></tr>
- <tr><th align="RIGHT" nowrap>&nbsp;City/Local  : </th> <td><input type="text" name="City "  size="40" maxlength="64" /></td> <td align="LEFT"> (L) For example, Sydney</td></tr>
- <tr><th align="RIGHT" nowrap> &nbsp;State  : </th> <td><input type="text" name="State "  size="40" maxlength="64" /></td> <td align="LEFT"> (ST) For example, California</td></tr> 
-<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Country  : </th> <td><select name="Country " >
+<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Organization/Company  : </th> <td><input type="text" name="company"  size="40" maxlength="64" /></td> <td align="LEFT"> (O) For example, 8gWifi Corporation</td></tr>
+ <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Department  : </th> <td><input type="text" name="department"  size="40" maxlength="64" /></td> <td align="LEFT"> (OU) Your division or department.</td></tr>
+ <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Email  : </th> <td><input type="text" name="email"  size="40" maxlength="64" /></td> <td align="LEFT"> (E) Usually specified for an email or SMIME user certificate</td></tr>
+ <tr><th align="RIGHT" nowrap>&nbsp;City/Local  : </th> <td><input type="text" name="city"  size="40" maxlength="64" /></td> <td align="LEFT"> (L) For example, Sydney</td></tr>
+ <tr><th align="RIGHT" nowrap> &nbsp;State  : </th> <td><input type="text" name="state"  size="40" maxlength="64" /></td> <td align="LEFT"> (ST) For example, California</td></tr> 
+<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Country  : </th> <td><select name="country " >
 <option selected="selected" value="US">United States</option>
 <option value="CA">Canada</option>
 <option value="AF">Afghanistan</option>
@@ -313,8 +313,8 @@
 <td colspan="4">
 <fieldset>
 		<legend>Version</legend>
-		<input checked="checked" type="radio" id="v3" name="version" value="v3">v3
-		<input type="radio" id="v2" name="version" value="v2">v2
+		<input checked="checked" type="radio" id="v3" name="version" value="3">v3
+		<input type="radio" id="v2" name="version" value="2">v2
 		</fieldset>
 </td>
 </tr>
@@ -326,10 +326,35 @@
 		<input type="radio" id="v2" name="bits" value="1024">1024
 		</fieldset>
 </td>
+
 </tr>
+<tr>
+<td colspan="4">
+<fieldset>
+		<legend>Format</legend>
+		<input checked="checked" type="radio" id="v3" name="format" value="OPENSSL">OpenSSL(PEM)
+		<input type="radio" id="v2" name="format" value="NONE">NONE
+		</fieldset>
+</td>
+
+</tr>
+<tr>
+<td>
+<input type="submit" id="submit" name="generate self sign">
+</td>
+</tr>
+<tr>
+<td>Output
+			</td>
+			<td>
+			<textarea rows="20" cols="80" id="output"></textarea>
+			</td>
+			</tr>
+			
 </table>
             </fieldset>
 	</form>
+<%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 </body>
 </html>

@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -189,21 +190,53 @@ public class CipherFunctionality extends HttpServlet  {
 		
 		//X509_CERTIFICATECREATOR
 		if (METHOD_X509_CERTIFICATECREATOR.equalsIgnoreCase(methodName)) {
+			final String hostname =  request.getParameter("hostname");
 			final String company =  request.getParameter("company");
-			final String department =  request.getParameter("Department");
-			final String email =  request.getParameter("Email");
-			final String city =  request.getParameter("City");
-			final String state =  request.getParameter("State");
-			final String country =  request.getParameter("Country");
+			final String department =  request.getParameter("department");
+			final String email =  request.getParameter("email");
+			final String city =  request.getParameter("city");
+			final String state =  request.getParameter("state");
+			final String country =  request.getParameter("country");
 			final int expiry = Integer.valueOf(request.getParameter("expiry"));
 			
-			if(company==null || company.isEmpty())
+			final String format = request.getParameter("format");
+			
+			if(hostname==null || hostname.isEmpty())
 			{
-				addHorizontalLine(out);
-				out.println("<font color=\"red\">Compnay Name is Required</font>");
+				//addHorizontalLine(out);
+				out.println("Compnay Name is Required");
 				return;
 			}
-			CertInfo certInfo = new CertInfo(company, department, email, city, state, country,expiry);
+			CertInfo certInfo = new CertInfo(hostname,company, department, email, city, state, country,expiry);
+			//System.out.println(certInfo);
+			final int bits =  Integer.valueOf(request.getParameter("bits")); 
+			final int  version =  Integer.valueOf(request.getParameter("version")); 
+			
+			try {
+				X509CertificateCreator certificateCreator = new X509CertificateCreator("RSA", version, bits, certInfo);
+				X509Certificate x509Certificate = 	certificateCreator.generateCertificate();
+				if("NONE".equals(format))
+				{
+					out.println(new BASE64Encoder().encode(x509Certificate.getEncoded()));
+				}
+				else{
+					StringBuilder builder = new StringBuilder();
+					builder.append("-----BEGIN CERTIFICATE-----");
+					builder.append("\n");
+					builder.append(new BASE64Encoder().encode(x509Certificate.getEncoded()));
+					builder.append("\n");
+					builder.append("-----END CERTIFICATE-----");
+					out.println(builder.toString());
+				}
+			//	System.out.println(new BASE64Encoder().encode(x509Certificate.getEncoded()));
+				
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			//final String version = 
 			//Department

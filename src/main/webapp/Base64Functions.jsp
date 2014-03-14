@@ -80,7 +80,7 @@ Base64 encoding schemes are commonly used when there is a need to encode binary 
 		</fieldset>
 		</div>
 	</form>
-	
+	<%@ include file="include_security_links.jsp"%>
    <%@ include file="footer.jsp"%>
 </body>
 </html>

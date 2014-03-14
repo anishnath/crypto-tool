@@ -21,30 +21,38 @@ public class X509CertificateCreator extends GenKeyPair {
 	private int version = 3; // Default
 	private CertInfo certInfo;
 	
-	public X509CertificateCreator(int version,final String alg, int bi,CertInfo certIn) {
+	public X509CertificateCreator(final String alg,int version, int bi,CertInfo certIn) throws Exception {
 		super(alg,bi);
 		this.version = version;
 		this.certInfo=certIn;
 
 	}
 	
-	public X509Certificate generateCertificate()
+	public X509Certificate generateCertificate() throws SecurityException, Exception
 	{
 		
-		return null;
+		if(this.version==3)
+		{
+			return generateV3Certificate();
+		}
+		
+		return generateV1Certificate();
 		
 	}
 
 	private  X509Certificate generateV3Certificate()
 			throws SecurityException, Exception {
+		
+		
 		// generate the certificate
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 
 		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-		certGen.setIssuerDN(new X500Principal("CN=Test Certificate"));
+		certGen.setIssuerDN(new X500Principal(this.certInfo.toString()));
+		
 		certGen.setNotBefore(new Date(System.currentTimeMillis() - 50000));
-		certGen.setNotAfter(new Date(System.currentTimeMillis() + 50000));
-		certGen.setSubjectDN(new X500Principal("CN=Test Certificate"));
+		certGen.setNotAfter(new Date(System.currentTimeMillis() + certInfo.getExpiry()));
+		certGen.setSubjectDN(new X500Principal(this.certInfo.toString()));
 		certGen.setPublicKey(getPublicKey());
 		certGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
 
@@ -70,10 +78,10 @@ public class X509CertificateCreator extends GenKeyPair {
 		X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
 
 		certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-		certGen.setIssuerDN(new X500Principal("CN=Test Certificate"));
+		certGen.setIssuerDN(new X500Principal(this.certInfo.toString()));
 		certGen.setNotBefore(new Date(System.currentTimeMillis() - 50000));
-		certGen.setNotAfter(new Date(System.currentTimeMillis() + 50000));
-		certGen.setSubjectDN(new X500Principal("CN=Test Certificate"));
+		certGen.setNotAfter(new Date(System.currentTimeMillis() + certInfo.getExpiry()));
+		certGen.setSubjectDN(new X500Principal(this.certInfo.toString()));
 		certGen.setPublicKey(getPublicKey());
 		certGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
 

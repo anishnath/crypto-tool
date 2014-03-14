@@ -406,12 +406,17 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 			<input type="submit" id="submit" name="convert">
 			</td>
 			</tr>
+			<tr>
+			
+			<td><a href="SelfSignCertificateFunctions.jsp"  >Create Self Sign Certificate</a></td>
+			</tr>
 			</table>
 			
 
 		</fieldset>
 
 	</form>
+<%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 </body>
 </html>

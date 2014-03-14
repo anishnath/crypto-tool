@@ -26,10 +26,11 @@ public class GenKeyPair {
 	private int bits=2048;
 	private KeyPair keyPair;
 
-	public GenKeyPair(String algo, int bits) {
+	public GenKeyPair(String algo, int bits) throws Exception {
 		super();
 		this.algo = algo;
 		this.bits = bits;
+		generateRSAKeyPair();
 		
 	}
 
@@ -81,7 +82,7 @@ public class GenKeyPair {
 			
 			byte[] encodedprivkey = keyPair.getPrivateKey().getEncoded();
 			
-			System.out.println(new BASE64Encoder().encode(encodedprivkey));
+			//System.out.println(new BASE64Encoder().encode(encodedprivkey));
 			
 			int count = 20;// hash iteration count
 			Random random = new Random();

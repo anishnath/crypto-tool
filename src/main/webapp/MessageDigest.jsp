@@ -87,7 +87,7 @@
 		</fieldset>
 		<div id="output"></div>
 	</form>
-	
+<%@ include file="include_security_links.jsp"%>	
 <%@ include file="footer.jsp"%>
 </body>
 </html>
