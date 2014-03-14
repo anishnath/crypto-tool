@@ -410,7 +410,7 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 			</tr>
 			<tr>
 			
-			<td><a href="SelfSignCertificateFunctions.jsp"  >Create Self Sign Certificate</a></td>
+			<td></td>
 			</tr>
 			</table>
 			
