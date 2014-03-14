@@ -30,7 +30,7 @@
 
 		$('#form').submit(function(event) {
 			//	
-			$('#output').html('<img src="images/712.GIF"> loading...');
+			$('#output1').html('<img src="images/712.GIF"> loading...');
 			event.preventDefault();
 			$.ajax({
 				type : "POST",
@@ -39,6 +39,7 @@
 				data : $("#form").serialize(),
 				success : function(msg) {
 					$('#output').empty();
+					$('#output1').empty();
 					$('#output').append(msg);
 
 				}
@@ -347,6 +348,7 @@ UU2iTN4uCR0zmUj0xuuRXGaPv2TJ9fxa
 			<table border="1" style="width:300px">
 			<tr>
 			<td>
+			<div id="output1"></div>
 			<textarea rows="20" cols="80"  name="pem" id="pem">
 			-----BEGIN CERTIFICATE-----
 MIIFtTCCA52gAwIBAgIJAO0cq2lJPZZJMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
