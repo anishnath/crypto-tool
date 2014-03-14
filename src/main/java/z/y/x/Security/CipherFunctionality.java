@@ -38,6 +38,8 @@ public class CipherFunctionality extends HttpServlet  {
 	
 	private static final String METHOD_ENCRYPRDECRYPT = "CIPHERBLOCK";
 	private static final String METHOD_CIPHERCIPHERCAPABLITY = "CIPHERCAPABLITY";
+	private static final String METHOD_PEM_DECODER="PEM_DECODER";
+	private static final String METHOD_X509_CERTIFICATECREATOR="X509_CERTIFICATECREATOR";
 	static{
 		Security.addProvider(new BouncyCastleProvider());	
 	}
@@ -163,6 +165,53 @@ public class CipherFunctionality extends HttpServlet  {
 					addHorizontalLine(out);
 				}
 			}
+		}
+		
+		//METHOD_PEM_DECODER
+		if (METHOD_PEM_DECODER.equalsIgnoreCase(methodName)) {
+			final String pem = request.getParameter("pem");
+			 String certpassword = request.getParameter("certpassword");
+			 
+			 //Had a Default Password
+			 if(certpassword==null)
+			 {
+				 certpassword="";
+			 }
+			 addHorizontalLine(out);
+			 PemParser parser = new PemParser();
+			 try {
+				String message = parser.parsePemFile(pem, certpassword);
+				out.println(message);
+			} catch (Exception e) {
+				out.println(e.getMessage());
+			}
+		}
+		
+		//X509_CERTIFICATECREATOR
+		if (METHOD_X509_CERTIFICATECREATOR.equalsIgnoreCase(methodName)) {
+			final String company =  request.getParameter("company");
+			final String department =  request.getParameter("Department");
+			final String email =  request.getParameter("Email");
+			final String city =  request.getParameter("City");
+			final String state =  request.getParameter("State");
+			final String country =  request.getParameter("Country");
+			final int expiry = Integer.valueOf(request.getParameter("expiry"));
+			
+			if(company==null || company.isEmpty())
+			{
+				addHorizontalLine(out);
+				out.println("<font color=\"red\">Compnay Name is Required</font>");
+				return;
+			}
+			CertInfo certInfo = new CertInfo(company, department, email, city, state, country,expiry);
+			
+			//final String version = 
+			//Department
+			//Email
+			//City
+			//State
+			//Country
+			
 		}
 		
 	}

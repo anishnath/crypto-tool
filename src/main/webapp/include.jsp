@@ -7,6 +7,7 @@
             <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
             <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
             <li><a href="ProviderCapablitiesFunctions.jsp">Get Algorithm Capabilities </a></li>
+            <li><a href="PemParserFunctions.jsp">PEMReader(crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey) </a></li>
         </ul>
     </li>
          <li><a href="UrlEncodeDecodeFunctions.jsp">Online Codecs</a>
