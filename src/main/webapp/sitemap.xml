@@ -4,6 +4,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
 <url>
   <loc>http://8gwifi.org/</loc>
 </url>
@@ -15,6 +16,15 @@
 </url>
 <url>
   <loc>http://8gwifi.org/CipherFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/ProviderCapablitiesFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/PemParserFunctions.jsp</loc>
+</url>
+<url>
+  <loc>http://8gwifi.org/SelfSignCertificateFunctions.jsp</loc>
 </url>
 <url>
   <loc>http://8gwifi.org/UrlEncodeDecodeFunctions.jsp</loc>
