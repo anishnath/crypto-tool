@@ -30,7 +30,7 @@
 
 		$('#form').submit(function(event) {
 			//	
-			$('#output').html('<img src="images/712.GIF"> loading...');
+			$('#output1').html('<img src="images/712.GIF"> loading...');
 			event.preventDefault();
 			$.ajax({
 				type : "POST",
@@ -39,6 +39,7 @@
 				data : $("#form").serialize(),
 				success : function(msg) {
 					$('#output').empty();
+					$('#output1').empty();
 					$('#output').append(msg);
 
 				}
@@ -341,6 +342,7 @@
 <tr>
 <td>
 <input type="submit" id="submit" name="generate self sign">
+<div id="output1"></div>
 </td>
 </tr>
 <tr>
@@ -354,6 +356,7 @@
 </table>
             </fieldset>
 	</form>
+	
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 </body>
