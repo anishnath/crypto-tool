@@ -9,7 +9,7 @@ public class ReverseTheString {
 
 		StringBuilder strb = new StringBuilder();
 		String[] strArray = line.split(" ");
-		System.out.println(strArray.length);
+		//System.out.println(strArray.length);
 		for (int i = strArray.length - 1; i >= 0; i--) {
 			strb.append(strArray[i]).append(" ");
 		}
