@@ -40,6 +40,7 @@
     <li><a href="NetworkFunctions.jsp">Online NetworkTool</a></li>
 
     <li><a href="CommandFunctions.jsp">Online Command Line tool</a></li>
+     <li><a href="contactus.jsp">Contact Us</a></li>
 
 </ul>
 
