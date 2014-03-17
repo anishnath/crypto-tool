@@ -159,22 +159,25 @@
     </script>
 </head>
 <body>
+<div id="page">
 <%@ include file="include.jsp" %> 
+<article id="contentWrapper" role="main">
+			<section id="content">
 	<form id="form" method="POST">
 		<fieldset name="String Functionality">
 			<legend>
 				<B>String Functionality </B>
 			</legend>
-			<label for="lengthOfString">Type Something:</label> <input
-				id="lengthOfString" name="lengthOfString" type="text" value="">
+			<label for="lengthOfString"><b>Type Something:</b></label>
+			<textarea rows="7" cols="70" id="lengthOfString" name="lengthOfString"  ></textarea>
+			<br/>
 			<input id="checkbox1" type="checkbox" name="trim" value="trim"
 				checked="checked">TRIM <input id="checkbox" type="checkbox"
 				name="ignore" value="ignore">trimAllWhiteSpace <input
 				type="hidden" id="methodName" name="methodName"
 				value="calculateLength"> &nbsp; <input id="toLowerCase"
 				type="checkbox" name="toLowerCase" value="toLowerCase">toLowerCase<br>
-			&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
 			<input id="toUpperCase" type="checkbox" name="toUpperCase"
 				value="toUpperCase">toUpperCase 
 			
@@ -243,5 +246,9 @@
 		</fieldset>
 	</form>
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>

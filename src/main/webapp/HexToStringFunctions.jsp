@@ -50,7 +50,9 @@
 </head>
 <body>
 <%@ include file="include.jsp" %> 
-
+<div id="page">
+<article id="contentWrapper" role="main">
+			<section id="content">
 Convert String to Hex with Different Options,<br>
 Convert Hex to String
 <br>
@@ -100,5 +102,9 @@ Convert Hex to String
 	</form>
 	
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>

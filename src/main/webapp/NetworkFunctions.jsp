@@ -68,10 +68,14 @@
     </script>
 </head>
 <body>
+<div id="page">
 <%@ include file="include.jsp" %> 
+
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
+	<article id="contentWrapper" role="main">
+			<section id="content">
 	<form id="form" method="POST">
 	<input type="hidden" name="hiddengetClientIpAddr" id="hiddengetClientIpAddr" value="hiddengetClientIpAddr">
 		<fieldset name="Network Functionality">
@@ -87,7 +91,7 @@
 	<input type="hidden" name="hiddenPingipaddress" id="hiddenPingipaddress" value="hiddenPingipaddress">
 		<fieldset name="Network Functionality">
 			<legend>
-				<B>IP Address </B>
+				<B>PING IP Address </B>
 			</legend>
 			Type IP Address<input id="pingipaddress" type="text" name="ipaddress"
 				value="">
@@ -97,5 +101,9 @@
 		
 	</form>
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>

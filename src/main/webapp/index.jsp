@@ -15,7 +15,15 @@
 
 </head>
 <body>
+<div id="page">
+
 	<%@ include file="include.jsp"%>
+	<article id="contentWrapper" role="main">
+			<section id="content">
     <%@ include file="footer.jsp"%>
+    </section>
+		</article>
+		
+	</div>
 </body>
 </html>

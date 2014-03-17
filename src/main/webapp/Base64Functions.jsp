@@ -40,15 +40,19 @@
     </script>
 </head>
 <body>
+<div id="page">
 <%@ include file="include.jsp" %> 
-<small><a href="http://en.wikipedia.org/wiki/Base-64">From Wiki</a> </small>
+
+	<div id="loading" style="display: none;">
+		<img src="images/712.GIF" alt="" />Loading!
+	</div>
+	<article id="contentWrapper" role="main">
+			<section id="content">
+			<small><a href="http://en.wikipedia.org/wiki/Base-64">From Wiki</a> </small>
 <br>
 Base64 is a group of similar binary-to-text encoding schemes that represent binary data in an ASCII string format by translating it into a radix-64 representation. The term Base64 originates from a specific MIME content transfer encoding.
 Base64 encoding schemes are commonly used when there is a need to encode binary data that needs to be stored and transferred over media that is designed to deal with textual data. This is to ensure that the data remains intact without modification during transport. Base64 is commonly used in a number of applications including email via MIME, and storing complex data in XML.
 <br>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
 	<form id="form" method="POST">
 	<input type="hidden" name="methodName" id="methodName" value="CALCULATE_BASE64">
 	<br>
@@ -82,5 +86,9 @@ Base64 encoding schemes are commonly used when there is a need to encode binary 
 	</form>
 	<%@ include file="include_security_links.jsp"%>
    <%@ include file="footer.jsp"%>
+   </section>
+		</article>
+		
+	</div>
 </body>
 </html>

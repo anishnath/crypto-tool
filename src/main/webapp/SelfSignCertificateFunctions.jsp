@@ -49,12 +49,15 @@
 </script>
 </head>
 <body>
+
+	<div id="page">
 	<%@ include file="include.jsp"%>
 <div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
 	
-
+<article id="contentWrapper" role="main">
+			<section id="content">
 	<form id="form" method="POST">
 		<input type="hidden" name="methodName" id="methodName"
 			value="X509_CERTIFICATECREATOR">
@@ -62,13 +65,13 @@
                 <legend>Create X509 Certificate Online</legend>
 <table>
 <tr>
-<th align="RIGHT" nowrap> &nbsp;Hostname or your full name  : </th> <td><input type="text" name="hostname"  size="40" maxlength="64" /></td> 
-<td align="LEFT"> (CN) Common Name, usually the web server hostname or your name.</td></tr> 
-<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Organization/Company  : </th> <td><input type="text" name="company"  size="40" maxlength="64" /></td> <td align="LEFT"> (O) For example, 8gWifi Corporation</td></tr>
- <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Department  : </th> <td><input type="text" name="department"  size="40" maxlength="64" /></td> <td align="LEFT"> (OU) Your division or department.</td></tr>
- <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Email  : </th> <td><input type="text" name="email"  size="40" maxlength="64" /></td> <td align="LEFT"> (E) Usually specified for an email or SMIME user certificate</td></tr>
- <tr><th align="RIGHT" nowrap>&nbsp;City/Local  : </th> <td><input type="text" name="city"  size="40" maxlength="64" /></td> <td align="LEFT"> (L) For example, Sydney</td></tr>
- <tr><th align="RIGHT" nowrap> &nbsp;State  : </th> <td><input type="text" name="state"  size="40" maxlength="64" /></td> <td align="LEFT"> (ST) For example, California</td></tr> 
+<th align="RIGHT" nowrap> &nbsp;Hostname or your full name  : </th> <td><input type="text" name="hostname"  size="40" maxlength="64" />(CN) Common Name, usually the web server hostname or your name.</td> 
+<td align="LEFT"> </td></tr> 
+<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Organization/Company  : </th> <td><input type="text" name="company"  size="40" maxlength="64" />(O) For example, 8gWifi Corporation</td> <td align="LEFT"> </td></tr>
+ <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Department  : </th> <td><input type="text" name="department"  size="40" maxlength="64" />(OU) Your division or department.</td> <td align="LEFT"> </td></tr>
+ <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Email  : </th> <td><input type="text" name="email"  size="40" maxlength="64" />(E) Usually specified for an email or SMIME user certificate</td> <td align="LEFT"> </td></tr>
+ <tr><th align="RIGHT" nowrap>&nbsp;City/Local  : </th> <td><input type="text" name="city"  size="40" maxlength="64" /> (L) For example, India</td> <td align="LEFT"></td></tr>
+ <tr><th align="RIGHT" nowrap> &nbsp;State  : </th> <td><input type="text" name="state"  size="40" maxlength="64" />(ST) For example, California</td> <td align="LEFT"> </td></tr> 
 <tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Country  : </th> <td><select name="country " >
 <option selected="selected" value="US">United States</option>
 <option value="CA">Canada</option>
@@ -359,5 +362,9 @@
 	
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>

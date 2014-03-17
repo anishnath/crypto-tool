@@ -49,11 +49,14 @@
 </script>
 </head>
 <body>
+<div id="page">
 	<%@ include file="include.jsp"%>
 <div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
-	
+
+<article id="contentWrapper" role="main">
+			<section id="content">	
 
 	<form id="form" method="POST">
 		<input type="hidden" name="methodName" id="methodName"
@@ -344,7 +347,7 @@ UU2iTN4uCR0zmUj0xuuRXGaPv2TJ9fxa
 			<legend>
 				<B>Decode Pem Format  </B>
 			</legend>
-			Enter the text of your Certificate:
+			Enter the text of your Certificate:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                              Output
 			<table border="1" style="width:300px">
 			<tr>
 			<td>
@@ -386,10 +389,9 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 			</textarea>
 			</td>
 			
-			<td>Output
-			</td>
+			
 			<td>
-			<textarea rows="20" cols="80" id="output"></textarea>
+			<textarea rows="20" cols="60" id="output"></textarea>
 			</td>
 			</tr>
 			<tr>
@@ -420,5 +422,9 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 	</form>
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>

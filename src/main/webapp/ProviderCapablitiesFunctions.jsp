@@ -128,10 +128,13 @@
 </script>
 </head>
 <body>
+<div id="page">
 	<%@ include file="include.jsp"%>
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
+	<article id="contentWrapper" role="main">
+			<section id="content">
 	<form id="form" method="POST">
 		<input type="hidden" name="methodName" id="methodName"
 			value="CIPHERCAPABLITY">
@@ -195,5 +198,9 @@
 	</form>
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
+</section>
+		</article>
+		
+	</div>
 </body>
 </html>
