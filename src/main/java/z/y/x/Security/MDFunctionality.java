@@ -116,7 +116,7 @@ public class MDFunctionality extends HttpServlet {
 					sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16)
 							.substring(1));
 				}
-				sb.append( "<font size=\"4\" color=\"pink\">");
+				sb.append( "<font size=\"3\" color=\"blue\">");
 				sb.append("<br>Digest Length=");
 				sb.append(md.getDigestLength());
 				sb.append(System.getProperty("line.separator"));
