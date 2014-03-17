@@ -4,9 +4,10 @@
 <title>Online String functions </title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description"
-	content="Online String functions, String to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth">
+	content="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth">
 <meta name="keywords"
-	content="online string functions,trim,lastIndexOf,indexOf,substring,ignore white space,Miscellaneous String utility methods,Uncapitalize a String, changing the first letter to lower case ,Trim trailing whitespace from the given String,Trim all whitespace from the given String: leading, trailing, and in between characters,Tokenize the given String into a String array via a StringTokenizer,Capitalize a String, changing the first letter to upper case,Delete all occurrences of the given substring.">
+	content="online string functions,trim,lastIndexOf,indexOf,substring,ignore white space,Miscellaneous String utility methods,Uncapitalize a String, changing the first letter to lower case ,Trim trailing whitespace from the given String,Trim all whitespace from the given String: leading, trailing, and in between characters,Tokenize the given String into a String array via a StringTokenizer,Capitalize a String, changing the first letter to upper case,Delete all occurrences of the given substring.
+	pali,largest palindrome from the string,revrese the String,reverse the Line">
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
@@ -137,6 +138,22 @@
          			$('#form').delay(200).submit();
 
                     });
+            $('#palindrome').click(function (event)
+                    {
+                    //	
+         			$('#form').delay(200).submit();
+
+                    });
+
+            $('#reverse').click(function (event)
+                    {
+                    //	
+         			$('#form').delay(200).submit();
+
+                    });
+            
+
+            
 
             $('#form').submit(function (event)
                     {
@@ -189,6 +206,12 @@
 
 			<input id="trimTrailingWhitespace" type="checkbox"
 				name="trimTrailingWhitespace" value="trimTrailingWhitespace">trimTrailingWhitespace
+				
+			<input id="palindrome" type="checkbox"
+				name="palindrome" value="palindrome">palindrome
+				
+			<input id="reverse" type="checkbox"
+				name="reverse" value="reverse">reverse			
 
 			<br> <br>
 			<fieldset name="String IndexOf">

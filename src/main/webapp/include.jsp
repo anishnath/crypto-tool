@@ -19,7 +19,7 @@ function googleTranslateElementInit() {
             <li><a href="HexToStringFunctions.jsp">HexToString Conversion</a></li>
             <li><a href="HexToStringFunctions.jsp">StringToHex Conversion</a></li>
             <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
-			<li><a href="StringFunctions.jsp">Various String Functions</a></li>
+			<span title="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth"><li><a href="StringFunctions.jsp">Various String Functions</a></li></span>
 			
 			</nav>
 

@@ -123,7 +123,7 @@ public class StringFunctionality extends HttpServlet {
 						+ "</font>"
 						+ "<b><u>.trim()</u> = <font size=\"4\" color=\"blue\">"
 						+ lengthOfString.trim() + "</font></b><br>");
-				out.println("<font size=\"6\" color=\"green\">"
+				out.println("<font size=\"3\" color=\"green\">"
 						+ lengthOfString
 						+ "</font>"
 						+ "<b><u>.trim().length()</u> = <font size=\"4\" color=\"blue\">"
@@ -133,7 +133,7 @@ public class StringFunctionality extends HttpServlet {
 
 			if (TOLOWERCASE.equalsIgnoreCase(toLowerCase)) {
 				addHorizontalLine(out);
-				out.println("<font size=\"6\" color=\"green\">"
+				out.println("<font size=\"3\" color=\"green\">"
 						+ lengthOfString
 						+ "</font>"
 						+ "<b><u>.toLowerCase()</u> = <font size=\"4\" color=\"blue\">"
@@ -142,7 +142,7 @@ public class StringFunctionality extends HttpServlet {
 
 			if (TOUPPERCASE.equalsIgnoreCase(toUpperCase)) {
 				addHorizontalLine(out);
-				out.println("<font size=\"6\" color=\"green\">"
+				out.println("<font size=\"3\" color=\"green\">"
 						+ lengthOfString
 						+ "</font>"
 						+ "<b><u>.toUpperCase()</u> = <font size=\"4\" color=\"blue\">"
@@ -161,7 +161,7 @@ public class StringFunctionality extends HttpServlet {
 				if (oldChar != null && !oldChar.isEmpty()) {
 					if (newChar != null && !newChar.isEmpty()) {
 						addHorizontalLine(out);
-						out.println("<font size=\"6\" color=\"green\">"
+						out.println("<font size=\"3\" color=\"green\">"
 								+ lengthOfString + "</font>"
 								+ "<b><u>.replace(" + oldChar + "," + newChar
 								+ ")</u>= <font size=\"4\" color=\"blue\">"
@@ -179,7 +179,7 @@ public class StringFunctionality extends HttpServlet {
 				if (regex != null && !regex.isEmpty()) {
 					if (replacement != null) {
 						addHorizontalLine(out);
-						out.println("<font size=\"6\" color=\"green\">"
+						out.println("<font size=\"3\" color=\"green\">"
 								+ lengthOfString + "</font>"
 								+ "<b><u>.replaceAll(" + regex + ","
 								+ replacement
@@ -197,7 +197,7 @@ public class StringFunctionality extends HttpServlet {
 				if (beginIndex != null && !beginIndex.isEmpty()) {
 					addHorizontalLine(out);
 					int intbeginIndex = Integer.valueOf(beginIndex);
-					out.println("<font size=\"6\" color=\"green\">"
+					out.println("<font size=\"3\" color=\"green\">"
 							+ lengthOfString + "</font>" + "<b><u>.substring("
 							+ beginIndex
 							+ ")</u>= <font size=\"4\" color=\"blue\">"
@@ -205,7 +205,7 @@ public class StringFunctionality extends HttpServlet {
 							+ "</font></b><br>");
 					if (endIndex != null && !endIndex.isEmpty()) {
 						int intendIndex = Integer.valueOf(endIndex);
-						out.println("<font size=\"6\" color=\"green\">"
+						out.println("<font size=\"3\" color=\"green\">"
 								+ lengthOfString
 								+ "</font>"
 								+ "<b><u>.substring("
@@ -262,6 +262,45 @@ public class StringFunctionality extends HttpServlet {
 						+ ")</u>= <font size=\"4\" color=\"blue\">"
 						+ org.springframework.util.StringUtils
 								.trimTrailingWhitespace(lengthOfString)
+						+ "</font></b><br>");
+			}
+			
+			//Palindrome
+			final String palindrome = request
+					.getParameter("palindrome");
+			if (palindrome != null
+					&& !palindrome.isEmpty()) {
+				addHorizontalLine(out);
+				String st = LongestPalindrome.longestPalindrome(lengthOfString);
+				String listOfPalindrome = "";
+				String largestPalindrome="";
+				if(st!=null && st.length()>1 )
+				{
+					listOfPalindrome = st.substring(0,st.indexOf("Longest"));
+					largestPalindrome = st.substring(st.indexOf("Longest"),st.length());
+				}
+				
+				out.println("<b><u>Palindrome("
+						+ lengthOfString
+						+ ")</u>= <font size=\"4\" color=\"blue\">"
+						+ listOfPalindrome + " " + largestPalindrome
+						+ "</font></b><br>");
+			}
+			
+			
+			//reverse
+			
+			
+			final String reverse = request
+					.getParameter("reverse");
+			if (reverse != null
+					&& !reverse.isEmpty()) {
+				addHorizontalLine(out);
+				
+				out.println("<b><u>Reverse("
+						+ lengthOfString
+						+ ")</u>= <font size=\"4\" color=\"blue\">"
+						+  ReverseTheString.reverseTheString(lengthOfString)
 						+ "</font></b><br>");
 			}
 
@@ -389,14 +428,14 @@ public class StringFunctionality extends HttpServlet {
 
 				addHorizontalLine(out);
 				if (!isLastIndexOf) {
-					out.println("<font size=\"6\" color=\"green\">"
+					out.println("<font size=\"3\" color=\"green\">"
 							+ lengthOfString + "</font>" + "<b><u>.indexOf("
 							+ indexOf
 							+ ")</u> = <font size=\"4\" color=\"blue\">"
 							+ lengthOfString.indexOf(indexOf)
 							+ "</font></b><br>");
 				} else {
-					out.println("<font size=\"6\" color=\"green\">"
+					out.println("<font size=\"3\" color=\"green\">"
 							+ lengthOfString + "</font>"
 							+ "<b><u>.lastIndexOf(" + indexOf
 							+ ")</u> =<font size=\"4\" color=\"blue\"> "
@@ -407,14 +446,14 @@ public class StringFunctionality extends HttpServlet {
 				if (fromIndex != null && !fromIndex.isEmpty()) {
 					int fromIn = Integer.valueOf(fromIndex);
 					if (!isLastIndexOf) {
-						out.println("<font size=\"6\" color=\"green\">"
+						out.println("<font size=\"3\" color=\"green\">"
 								+ lengthOfString + "</font>"
 								+ "<b><u>.indexOf(" + indexOf + "," + fromIndex
 								+ ")</u> =<font size=\"4\" color=\"blue\"> "
 								+ lengthOfString.indexOf(indexOf, fromIn)
 								+ "</font></b><br>");
 					} else {
-						out.println("<font size=\"6\" color=\"green\">"
+						out.println("<font size=\"3\" color=\"green\">"
 								+ lengthOfString + "</font>"
 								+ "<b><u>.lastIndexOf(" + indexOf + ","
 								+ fromIndex
