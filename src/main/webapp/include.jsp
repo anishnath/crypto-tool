@@ -12,6 +12,7 @@ function googleTranslateElementInit() {
             <li><a href="ProviderCapablitiesFunctions.jsp">Get Algorithm Capabilities </a></li>
             <li><a href="PemParserFunctions.jsp">PEMReader Decode Certificate </a></li>
             <li><a href="SelfSignCertificateFunctions.jsp">Create a Self Sign Certificate </a></li>
+            <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange </a></li>
             <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>

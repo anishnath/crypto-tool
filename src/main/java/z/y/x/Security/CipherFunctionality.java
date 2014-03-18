@@ -3,6 +3,7 @@ package z.y.x.Security;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -41,6 +42,7 @@ public class CipherFunctionality extends HttpServlet  {
 	private static final String METHOD_CIPHERCIPHERCAPABLITY = "CIPHERCAPABLITY";
 	private static final String METHOD_PEM_DECODER="PEM_DECODER";
 	private static final String METHOD_X509_CERTIFICATECREATOR="X509_CERTIFICATECREATOR";
+	private static final String METHOD_DH="METHOD_DH";
 	static{
 		Security.addProvider(new BouncyCastleProvider());	
 	}
@@ -244,6 +246,40 @@ public class CipherFunctionality extends HttpServlet  {
 			//City
 			//State
 			//Country
+			
+		}
+		
+		//METHOD_DH
+		if (METHOD_DH.equalsIgnoreCase(methodName)) {
+			final String dhparamp =  request.getParameter("dhparamp");
+			final String dhparamq =  request.getParameter("dhparamq");
+			
+			if(dhparamq ==null || dhparamq.trim().length()==0)
+			{
+				addHorizontalLine(out);
+				out.println("DH Paramter cannot be null or empty " );
+				return;
+			}
+			
+			if(dhparamp ==null || dhparamp.trim().length()==0)
+			{
+				addHorizontalLine(out);
+				out.println("DH Paramter cannot be null or empty " );
+				return;
+			}
+			
+			try
+			{
+				BigInteger G = 	new BigInteger(dhparamp,16);
+				BigInteger P =new BigInteger(dhparamq,16);
+				out.print( DH.generateTwoWayDump(G, P) );
+			}catch(Exception ex )
+			{
+				addHorizontalLine(out);
+				out.println(ex.getMessage() );
+				return;
+			}
+			
 			
 		}
 		
