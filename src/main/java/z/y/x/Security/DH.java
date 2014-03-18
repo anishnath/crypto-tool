@@ -37,42 +37,58 @@ public class DH {
 		// builder.append("G="+G + " P=" + P);
 		 //builder.append("\n");
 		 
+		 builder.append("Suppose we have two people wishing to  communicate: Alice and Bob");
+		 builder.append("\n");
+		 builder.append("They do not want Eve :to know their message.");
+		 
+		
 		 DHParameterSpec             dhParams = new DHParameterSpec(G, P);
-		 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DH", "BC");
-		 keyGen.initialize(dhParams,new SecureRandom());
+		 
+		 KeyPairGenerator alicekeyGen = KeyPairGenerator.getInstance("DH", "BC");
+		 alicekeyGen.initialize(dhParams,new SecureRandom());
+		 
+		 KeyPairGenerator bobkeyGen = KeyPairGenerator.getInstance("DH", "BC");
+		 bobkeyGen.initialize(dhParams,new SecureRandom());
 		 
 		 	// set up
-	        KeyAgreement aKeyAgree = KeyAgreement.getInstance("DH", "BC");
-	        KeyPair      aPair = keyGen.generateKeyPair();
+	        KeyAgreement aliceKeyAgree = KeyAgreement.getInstance("DH", "BC");
+	        KeyPair      alicePair = alicekeyGen.generateKeyPair();
 		 
-	        builder.append("--------BEGIN keyPairA---------\n");
-	        toStringKeyPair(builder, aPair);
+	        builder.append("--------BEGIN ALICE KEYPAIR INFORMATION---------\n");
 	        
-	        builder.append("--------END keyPairA---------\n");
+	        toStringKeyPair(builder, alicePair);
+	        
+	        builder.append("--------END ALICE KEYPAIR INFORMATION---------\n");
 		 //new BASE64Encoder().encode(encodedprivkey)
 	        
 	        //builder.append("KeyAgreement bKeyAgree = KeyAgreement.getInstance(\"DH\", \"BC\")\n");
 			//builder.append("KeyPair      bPair = keyGen.generateKeyPair();\n");
 	        builder.append("\n");
 	        builder.append("\n");
-	        builder.append("--------BEGIN keyPairB---------\n");
-	        KeyAgreement bKeyAgree = KeyAgreement.getInstance("DH", "BC");
-	        KeyPair      bPair = keyGen.generateKeyPair();
-	        toStringKeyPair(builder, bPair);
-	        builder.append("--------End keyPairB---------\n");
+	        builder.append("--------BEGIN BOB KEYPAIR INFORMATION---------\n");
+	        KeyAgreement bobKeyAgree = KeyAgreement.getInstance("DH", "BC");
+	        KeyPair      bobPair = bobkeyGen.generateKeyPair();
+	        toStringKeyPair(builder, bobPair);
+	        builder.append("--------End BOB KEYPAIR INFORMATION---------\n");
 	        
 	        // two party agreement
 	       // builder.append("Two party Agreement Starts\n");
 	       // builder.append("aPair.getPrivate()\n");
 	       // builder.append("bPair.getPrivate()\n");
-	        aKeyAgree.init(aPair.getPrivate());
-	        bKeyAgree.init(bPair.getPrivate());
+	        
+	        aliceKeyAgree.init(alicePair.getPrivate());
+	        Key aliceKey =   aliceKeyAgree.doPhase(bobPair.getPublic(), true);
+	        
+	        
+	       
 	        
 	      //  builder.append(" Key aKey =  aKeyAgree.doPhase(bPair.getPublic(), true);\n");
 	       // builder.append(" Key bKey = aKeyAgree.doPhase(bPair.getPublic(), true);\n");
 	       
-	        Key aKey =   aKeyAgree.doPhase(bPair.getPublic(), true);
-	        Key bKey = bKeyAgree.doPhase(aPair.getPublic(), true);
+	       // Key aKey =   aliceKeyAgree.doPhase(bPair.getPublic(), true);
+	        
+	        bobKeyAgree.init(bobPair.getPrivate());
+	        Key bKey = bobKeyAgree.doPhase(alicePair.getPublic(), true);
 	        
 	        
 	      //  builder.append("Generating the KeyBytes\n");
@@ -80,17 +96,18 @@ public class DH {
 	       // builder.append("   byte[] aShared = hash.digest(aKeyAgree.generateSecret());\n");
 	       // builder.append("    byte[] bShared = hash.digest(bKeyAgree.generateSecret());\n");
 //	      generate the key bytes
+	        
 	        MessageDigest	hash = MessageDigest.getInstance("SHA1", "BC");
-	        byte[] aShared = hash.digest(aKeyAgree.generateSecret());
-	        byte[] bShared = hash.digest(bKeyAgree.generateSecret());
+	        byte[] aliceSharedSecret = hash.digest(aliceKeyAgree.generateSecret());
+	        byte[] bobSharedSecret = hash.digest(bobKeyAgree.generateSecret());
 	        
 	        builder.append("\n");
 	        builder.append("\n");
 	        
 	        //String encodeHex = HexUtils.encodeHex(aShared, ":");
 	       // String encodeHex1 = HexUtils.encodeHex(bShared, ":");
-	        builder.append("aSharedSecret  " + new BASE64Encoder().encode(aShared) +"\n");
-	        builder.append("bSharedSecret  " +  new BASE64Encoder().encode(bShared) + "\n");
+	        builder.append("aSharedSecret  " + new BASE64Encoder().encode(aliceSharedSecret) +"\n");
+	        builder.append("bSharedSecret  " +  new BASE64Encoder().encode(bobSharedSecret) + "\n");
 	        
 	        return builder.toString();
 		 
@@ -116,7 +133,7 @@ public class DH {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		//System.out.println(new DH().generateTwoWayDump("2001", "3232"));
+		System.out.println(new DH().generateTwoWayDump(new BigInteger("1234",16), new BigInteger("43243",16)));
 	}
 
 }
