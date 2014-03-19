@@ -7,19 +7,19 @@ function googleTranslateElementInit() {
 </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 			<nav role="navigation">
 			<ul>Cryptography</ul>
-		    <li><a href="MessageDigest.jsp">Generate MessageDigest</a></li>
-            <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
-            <li><a href="ProviderCapablitiesFunctions.jsp">Get Algorithm Capabilities </a></li>
-            <li><a href="PemParserFunctions.jsp">PEMReader Decode Certificate </a></li>
-            <li><a href="SelfSignCertificateFunctions.jsp">Create a Self Sign Certificate </a></li>
-            <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange </a></li>
+		    <li><a href="MessageDigest.jsp"><font size="2px">Generate Message Digest</font></a></li>
+            <li><a href="CipherFunctions.jsp"><font size="2px">Encryption/Decryption </font> </a></li>
+            <li><a href="ProviderCapablitiesFunctions.jsp"><font size="2px">Get Algorithm Capabilities </font></a></li>
+            <li><a href="PemParserFunctions.jsp"><font size="2px">PEMReader Decode Certificate </font></a></li>
+            <li><a href="SelfSignCertificateFunctions.jsp"><font size="2px">Create a Self Sign Certificate </font> </a></li>
+            <li><a href="DHFunctions.jsp"><font size="2px">Diffie-Hellman Key Exchange</font> </a></li>
             <br/>
             <ul>String Functions</ul>
-            <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
-            <li><a href="HexToStringFunctions.jsp">HexToString Conversion</a></li>
-            <li><a href="HexToStringFunctions.jsp">StringToHex Conversion</a></li>
-            <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
-			<span title="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth"><li><a href="StringFunctions.jsp">Various String Functions</a></li></span>
+            <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2px">URL Encoders/Decoders</font></a></li>
+            <li><a href="HexToStringFunctions.jsp"><font size="2px">HexToString Conversion</font></a></li>
+            <li><a href="HexToStringFunctions.jsp"><font size="2px">StringToHex Conversion</font></a></li>
+            <li><a href="Base64Functions.jsp"><font size="2px">Base64 Encode/Decode</font></a></li>
+			<span title="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth"><li><a href="StringFunctions.jsp"><font size="2px">Various String Functions</font></a></li></span>
 			
 			</nav>
 
