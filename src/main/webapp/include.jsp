@@ -7,7 +7,7 @@ function googleTranslateElementInit() {
 </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 			<nav role="navigation">
 			<ul>Cryptography</ul>
-		    <li><a href="MessageDigest.jsp">Calculate MD5 </a></li>
+		    <li><a href="MessageDigest.jsp">Generate MessageDigest</a></li>
             <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
             <li><a href="ProviderCapablitiesFunctions.jsp">Get Algorithm Capabilities </a></li>
             <li><a href="PemParserFunctions.jsp">PEMReader Decode Certificate </a></li>

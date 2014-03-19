@@ -4,12 +4,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.security.Provider.Service;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import z.y.x.r.ColorCodeOnStartupFunctionality;
 
 /**
  * Servlet implementation class MD5Calculator Anish Nath
@@ -17,6 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 public class MDFunctionality extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	
+	static{
+		Security.addProvider(new BouncyCastleProvider());	
+	}
 	private static final String METHOD_CALCULATEMD5 = "CALCULATE_MD";
 
 	/**
@@ -56,7 +68,13 @@ public class MDFunctionality extends HttpServlet {
 		final String inputText = request.getParameter("text");
 		final String algo = request.getParameter("SHA");
 		final String methodName = request.getParameter("methodName");
-		System.out.println("algo" + algo);
+		String provider = request.getParameter("provider");
+		if(!"BC".equalsIgnoreCase(provider))
+		{
+			provider=null;
+		}
+		
+		//System.out.println("algo" + algo);
 		PrintWriter out = response.getWriter();
 		if (METHOD_CALCULATEMD5.equalsIgnoreCase(methodName)) {
 			
@@ -69,7 +87,7 @@ public class MDFunctionality extends HttpServlet {
 				String value = request.getParameter(param);
 				if(!param.equals(METHOD_CALCULATEMD5) || !param.equals("text")) //Pass only the Algo
 				{
-					final String MD = CalcualateMD5(value, inputText);
+					final String MD = CalcualateMD5(value, inputText,provider);
 					if(MD!=null && !MD.isEmpty())
 					{
 						addHorizontalLine(out);
@@ -95,7 +113,7 @@ public class MDFunctionality extends HttpServlet {
 		out.println("<hr>");
 	}
 
-	public static String CalcualateMD5(final String algo, final String inputText) {
+	public static String CalcualateMD5(final String algo, final String inputText,final String provider) {
 		final StringBuffer sb = new StringBuffer();
 		if (algo != null && !algo.isEmpty()) {
 			if(METHOD_CALCULATEMD5.equals(algo))
@@ -103,8 +121,15 @@ public class MDFunctionality extends HttpServlet {
 			if (inputText != null && !inputText.isEmpty()) {
 				MessageDigest md = null;
 				try {
-					md = MessageDigest.getInstance(algo);
-				} catch (NoSuchAlgorithmException e) {
+					if(provider!=null)
+					{
+						md = MessageDigest.getInstance(algo,provider);
+					}
+					else{
+						md = MessageDigest.getInstance(algo);
+					}
+					
+				} catch (Exception e) {
 					//System.out.println(e);
 					return "";
 				}
@@ -116,16 +141,31 @@ public class MDFunctionality extends HttpServlet {
 					sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16)
 							.substring(1));
 				}
-				sb.append( "<font size=\"3\" color=\"blue\">");
+				
+				 
+				 
+				String getColor = ColorCodeOnStartupFunctionality.getRandomColor();
+        			String color = "<font color="+getColor+">";
+				sb.append( color);
 				sb.append("<br>Digest Length=");
 				sb.append(md.getDigestLength());
+				sb.append("</font>"); 
+				getColor = ColorCodeOnStartupFunctionality.getRandomColor();
+    			    color = "<font color="+getColor+">";
+    			    sb.append( color);
 				sb.append(System.getProperty("line.separator"));
 				sb.append("Digest Algo=");
 				sb.append(md.getAlgorithm());
+				sb.append("</font>"); 
+				getColor = ColorCodeOnStartupFunctionality.getRandomColor();
+			    color = "<font color="+getColor+">";
+			    sb.append( color);
 				sb.append(System.getProperty("line.separator"));
 				sb.append("Provider Algo=");
 				sb.append(md.getProvider());
 				sb.append("</font>"); 
+				
+				
 				
 				
 			}

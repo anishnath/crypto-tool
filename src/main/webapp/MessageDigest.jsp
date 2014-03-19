@@ -14,6 +14,11 @@
  			$('#form').delay(200).submit()
             });
 
+            $('#inputtext').keyup(function (event)
+                    {
+         			$('#form').delay(200).submit()
+                    });
+
             $('#MD2').click(function (event)
                     {
          			$('#form').delay(200).submit()
@@ -38,6 +43,16 @@
                     });
 
             $('#SHA-512').click(function (event)
+                    {
+         			$('#form').delay(200).submit()
+                    });
+
+            $('#bc').click(function (event)
+                    {
+         			$('#form').delay(200).submit()
+                    });
+
+            $('#sun').click(function (event)
                     {
          			$('#form').delay(200).submit()
                     });
@@ -78,15 +93,19 @@
 				<B>Get Message Digest Information </B>
 			</legend>
 			Type Something<input id="inputtext" type="text" name="text"
-				value="" >
+				value="" size="100" >
 				<br>
-				<input type="checkbox" id="MD2" value="MD2" name="MD2">MD2
+				<input type="checkbox" checked="checked" id="MD2" value="MD2" name="MD2">MD2
 				<input type="checkbox" id="MD5" value="MD5" name="MD5">MD5
 				<input type="checkbox" id="SHA" value="SHA" name="SHA">SHA
 				<input type="checkbox" id="SHA-1" value="SHA-1" name="SHA-1">SHA-1
 				<input type="checkbox" id="SHA-256" value="SHA-256" name="SHA-256">SHA-256
 				<input type="checkbox" id="SHA-384" value="SHA-384" name="SHA-384">SHA-384
 				<input type="checkbox" id="SHA-512" value="SHA-512" name="SHA-512">SHA-512
+		</fieldset>
+		<fieldset><legend>Choose Provider</legend>
+		<input checked="checked" type="radio" id="bc" name="provider" value="BC">Bouncycastle
+		<input type="radio" id="sun" name="provider" value="SUN">SUN(JDK)
 		</fieldset>
 		<div id="output"></div>
 	</form>

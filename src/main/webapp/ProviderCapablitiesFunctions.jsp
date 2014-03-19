@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>List the available capabilities for ciphers, key agreement, macs, message
+<title>List All Provider And Its Algorithms for ciphers, key agreement, macs, message
   digests, signatures and other objects in the BC provider, </title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
