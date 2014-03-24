@@ -51,7 +51,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 			}
 		}
 
-		doPost(request, response);
+		doPost(request, response); // PUSH
 
 	}
 
