@@ -4,9 +4,9 @@
 	<groupId>mywebapp2</groupId>
 	<artifactId>mywebapp2</artifactId>
 	<packaging>war</packaging>
-	<version>1.0</version>
+	<version>1.0</version> 
 	<name>mywebapp2</name>
-
+<!-- TESTED -->
 	<repositories>
 		<repository>
 			<id>eap</id>
@@ -17,7 +17,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
+		</repository> 
 		<repository>
 			<id>typesafe</id>
 			<name>Typesafe Repository</name>
