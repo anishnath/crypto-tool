@@ -1,5 +1,5 @@
 <header id="sidebar">
-<h1>The Online Tool for Online People</h1>
+<h1>The Online Tool for <br>Online<br> People</br></h1>
 <div id="google_translate_element"></div><script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');

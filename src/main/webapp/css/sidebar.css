@@ -20,7 +20,7 @@
 		left: 300px;
 		margin-left: -300px;
 		position: relative;
-		width: 300px;
+		width: 250px;
 		overflow-y: auto;
 		position: relative;
 		}
@@ -42,7 +42,7 @@
 		}
 	#content {
 		background: #ccc;
-		margin-left: 300px;
+		margin-left: 250px;
 		overflow-y: auto;
 		}
 	#content h1 {
