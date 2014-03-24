@@ -1,6 +1,6 @@
 package z.y.x.Security
 
-class X509CertificatePOJO() {
+class X509CertificatePOJO()  {
 
   
 }
