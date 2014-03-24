@@ -86,7 +86,7 @@ final public class PemParser {
 				throw new Exception("Invalid Input file");
 			}
 
-			System.out.println(obj.getClass());
+			//System.out.println(obj.getClass());
 			if (obj instanceof JDKDSAPrivateKey) {
 				JDKDSAPrivateKey jdkdsaPrivateKey = (JDKDSAPrivateKey) obj;
 				builder.append("The DSA" + jdkdsaPrivateKey);

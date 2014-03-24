@@ -21,10 +21,10 @@
 		<servlet-name>ColorCodeOnStartupFunctionality</servlet-name>
 		<servlet-class>z.y.x.r.ColorCodeOnStartupFunctionality</servlet-class>
 		<load-on-startup>2</load-on-startup>
-		
+
 		<init-param>
-		<param-name>colorcode</param-name>
-		<param-value>colors.code</param-value>
+			<param-name>colorcode</param-name>
+			<param-value>colors.code</param-value>
 		</init-param>
 	</servlet>
 
@@ -62,6 +62,16 @@
 		<servlet-name>CipherFunctionality</servlet-name>
 		<url-pattern>/CipherFunctionality</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>JKSManagementFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.JKSManagementFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JKSManagementFunctionality</servlet-name>
+		<url-pattern>/JKSManagementFunctionality</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>CommandFunctionality</servlet-name>
 		<servlet-class>z.y.x.Network.CommandFunctionality</servlet-class>

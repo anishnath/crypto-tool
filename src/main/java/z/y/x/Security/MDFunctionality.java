@@ -3,12 +3,8 @@ package z.y.x.Security;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.Security;
-import java.security.Provider.Service;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -172,6 +168,40 @@ public class MDFunctionality extends HttpServlet {
 
 		}
 
+		return sb.toString();
+
+	}
+	
+	public static String CalcualateMD5(final String algo, final byte[] inputText,final String provider) {
+		final StringBuffer sb = new StringBuffer();
+		if (algo != null && !algo.isEmpty()) {
+			if(METHOD_CALCULATEMD5.equals(algo))
+				return "";
+			if (inputText != null) {
+				MessageDigest md = null;
+				try {
+					if(provider!=null)
+					{
+						md = MessageDigest.getInstance(algo,provider);
+					}
+					else{
+						md = MessageDigest.getInstance(algo);
+					}
+					
+				} catch (Exception e) {
+					//System.out.println(e);
+					return "";
+				}
+				md.update(inputText);
+				byte[] mdbytes = md.digest();
+				// convert the byte to hex format method 1
+
+				for (int i = 0; i < mdbytes.length; i++) {
+					sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16)
+							.substring(1));
+				}
+			}
+		}
 		return sb.toString();
 
 	}

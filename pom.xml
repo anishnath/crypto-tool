@@ -18,6 +18,11 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+  <id>typesafe</id>
+  <name>Typesafe Repository</name>
+  <url>http://repo.typesafe.com/typesafe/releases/</url>
+</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -38,6 +43,24 @@
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 	</properties>
 	<dependencies>
+	
+<dependency>
+  <groupId>com.typesafe.akka</groupId>
+  <artifactId>akka-actor_2.10</artifactId>
+  <version>2.3.0</version>
+</dependency>
+
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.2</version>
+</dependency>
+
+<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>2.4</version>
+</dependency>
 
 <dependency>
     <groupId>org.scala-lang</groupId>
