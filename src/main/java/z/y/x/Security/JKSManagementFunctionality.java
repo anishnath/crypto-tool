@@ -41,6 +41,16 @@ public class JKSManagementFunctionality extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		if ("yes".equals(request.getParameter("invalidate"))) {
+
+			if(request.getSession()!=null)
+			{
+				request.getSession().invalidate();
+				request.getRequestDispatcher("jks.jsp").forward(request, response);;
+				return;
+			}
+		}
+
 		doPost(request, response);
 
 	}
@@ -48,7 +58,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		//System.out.println("doPost Called");
+		// System.out.println("doPost Called");
 		HttpSession session = request.getSession(true);
 		session.setAttribute("Error", "");
 
@@ -136,7 +146,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 
 		} catch (Exception e) {
 			session.setAttribute("Error", e.getMessage());
-			//e.printStackTrace();
+			// e.printStackTrace();
 			map.remove(md);
 		}
 

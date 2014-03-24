@@ -13,6 +13,7 @@ function googleTranslateElementInit() {
             <li><a href="PemParserFunctions.jsp"><font size="2px">PEMReader Decode Certificate </font></a></li>
             <li><a href="SelfSignCertificateFunctions.jsp"><font size="2px">Create a Self Sign Certificate </font> </a></li>
             <li><a href="DHFunctions.jsp"><font size="2px">Diffie-Hellman Key Exchange</font> </a></li>
+            <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2px">Easy Keystore/trustore viewer</font> </a></li>
             <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2px">URL Encoders/Decoders</font></a></li>
