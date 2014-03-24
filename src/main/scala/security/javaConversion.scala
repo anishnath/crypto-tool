@@ -1,7 +1,6 @@
-package z.y.x.Security;
+package security
+
 import scala.collection.JavaConverters._
-import scala.collection.JavaConversions;
-import scala.collection.mutable.ListBuffer
 
 /**
  * @author ANish

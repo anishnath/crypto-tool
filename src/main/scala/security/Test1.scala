@@ -1,7 +1,6 @@
-package z.y.x.Security
-
-import scala.collection.immutable.List
+package security
 import java.io.IOException
+import security.JKS
 
 object Test1 {
 

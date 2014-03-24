@@ -1,6 +1,4 @@
-package z.y.x.scalaExample
-
-import java.io.IOException
+package security
 
 class login(userName:String,password:String) {
 

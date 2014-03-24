@@ -1,7 +1,18 @@
+package security
+
 import akka.actor.{ Actor, ActorRef, Props }
 import akka.io.{ IO, Tcp }
 import akka.util.ByteString
 import java.net.InetSocketAddress
+import akka.actor.actorRef2Scala
+import akka.io.Tcp.Close
+import akka.io.Tcp.CommandFailed
+import akka.io.Tcp.Connect
+import akka.io.Tcp.Connected
+import akka.io.Tcp.ConnectionClosed
+import akka.io.Tcp.Received
+import akka.io.Tcp.Register
+import akka.io.Tcp.Write
 
 
 

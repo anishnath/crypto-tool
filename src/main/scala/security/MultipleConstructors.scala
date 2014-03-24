@@ -1,4 +1,7 @@
-package z.y.x.scalaExample
+package security
+
+
+import security.Person
 object MultipleConstructors  {
   
   def main(args: Array[String]) {

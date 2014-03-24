@@ -1,4 +1,4 @@
-package z.y.x.Security
+package security
 
 import scala.collection.immutable.List
 import scala.collection.JavaConverters._
