@@ -200,7 +200,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 				ServletOutputStream os       = response.getOutputStream();
 				os.write(builder.toString().getBytes("UTF-8"));
 				
-				return;
+				return; 
 
 			}
 
