@@ -32,7 +32,7 @@ import security.javaConversion;
  */
 public class JKSManagementFunctionality extends HttpServlet {
 
-	static Map<String, byte[]> map = new WeakHashMap<String, byte[]>();
+	static Map<String, byte[]> map = new HashMap<String, byte[]>();
 	/**
 	 * 
 	 */
@@ -116,20 +116,26 @@ public class JKSManagementFunctionality extends HttpServlet {
 				}
 			} // end while
 
+			final String getDetails = (String) requestParameter.get("GetDetails");
 			final String alias = (String) requestParameter.get("aliasname");
 			md = (String) requestParameter.get("md5");
 			final FileItem item = (FileItem) requestParameter.get("upfile");
+			
+			
 			byte[] b = null;
 
-			// Cruel Logic
-			if (alias != null) {
-				b = map.get(md);
-			} else {
+			if(getDetails==null)
+			{
 				b = item.get();
 				final String md5 = MDFunctionality
 						.CalcualateMD5("MD5", b, "BC");
 				map.put(md5, item.get());
 				session.setAttribute("md5", md5);
+				
+			}
+			// Cruel Logic
+			if (getDetails != null) {
+				b = map.get(md);
 			}
 
 			// session.setAttribute("aliasName", alias);

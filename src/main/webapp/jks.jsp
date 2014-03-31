@@ -83,7 +83,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 					Map.Entry pairs = (Map.Entry) it.next();
 					final String Totalaliases = (String) pairs.getKey();
 		%>
-		<fieldset name="Message Digest Functionality">
+		<fieldset name="JKS Functionality">
 			<legend>
 				<B>JKS Aliases (<%=Totalaliases%>) found
 				</B>
@@ -93,15 +93,27 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 				List<String> aliases = (List<String>) pairs.getValue();
 						// System.out.println(pairs.getKey() + " = " + pairs.getValue());
 						it.remove(); // avoids a ConcurrentModificationException
+						 
+						 String aliasName = (String) session.getAttribute("aliasName");
 						for (String element : aliases) {
+							String checked = "";  
+							if(aliasName!=null)
+							{
+								if(aliasName.equals(element))
+								{
+									checked="checked";
+								}
+							}
+							
 			%>
-			<input type="radio" id="<%=element%>" name="aliasname"
+			<input type="radio" id="<%=element%>" <%=checked %> name="aliasname"
 				value="<%=element%>"><%=element%>
 
 			<%
+							
 				}
 			%>
-			<input type="submit" name="GetDetails">
+			<input type="submit" name="GetDetails" value="GetDetails">
 		</fieldset>
 		<%
 			}
@@ -134,7 +146,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD"
 						colspan="2">Certificate Details</th>
 					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Enocoded</th>
+						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Encoded PEM</th>
 
 				</tr>
 				<tr>
@@ -147,8 +159,11 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getVersion()%></td>
 					<td
 						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"
-						rowspan="14"><%=new sun.misc.BASE64Encoder().encode(cert
-								.getEncoded())%></td>
+						rowspan="14">
+						-----BEGIN CERTIFICATE-----<br>
+						<%=new sun.misc.BASE64Encoder().encode(cert
+								.getEncoded())%><br>
+								-----END CERTIFICATE-----</td>
 				</tr>
 				<tr>
 					<td
