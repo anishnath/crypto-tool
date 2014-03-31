@@ -1,7 +1,11 @@
 package z.y.x.Security;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.Key;
+import java.security.cert.Certificate;
+import java.security.interfaces.RSAPrivateCrtKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +15,7 @@ import java.util.WeakHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +52,11 @@ public class JKSManagementFunctionality extends HttpServlet {
 
 		if ("yes".equals(request.getParameter("invalidate"))) {
 
-			if(request.getSession()!=null)
-			{
+			if (request.getSession() != null) {
 				request.getSession().invalidate();
-				request.getRequestDispatcher("jks.jsp").forward(request, response);;
+				request.getRequestDispatcher("jks.jsp").forward(request,
+						response);
+				;
 				return;
 			}
 		}
@@ -116,25 +122,27 @@ public class JKSManagementFunctionality extends HttpServlet {
 				}
 			} // end while
 
-			final String getDetails = (String) requestParameter.get("GetDetails");
+			final String getDetails = (String) requestParameter
+					.get("GetDetails");
 			final String alias = (String) requestParameter.get("aliasname");
 			md = (String) requestParameter.get("md5");
 			final FileItem item = (FileItem) requestParameter.get("upfile");
-			
-			
-			byte[] b = null;
+			final String keyStorePassword = (String) requestParameter
+					.get("storepassword");
 
-			if(getDetails==null)
-			{
+			byte[] b = null;
+			final String export = (String) requestParameter.get("export");
+			// Initial Request
+			if (getDetails == null && export == null) {
 				b = item.get();
 				final String md5 = MDFunctionality
 						.CalcualateMD5("MD5", b, "BC");
 				map.put(md5, item.get());
 				session.setAttribute("md5", md5);
-				
+
 			}
 			// Cruel Logic
-			if (getDetails != null) {
+			if (getDetails != null || export != null) {
 				b = map.get(md);
 			}
 
@@ -145,19 +153,61 @@ public class JKSManagementFunctionality extends HttpServlet {
 				aliasName.add(alias);
 			}
 
+			session.setAttribute("storepassword", keyStorePassword);
 			session.setAttribute("displayAliases",
-					hitKeyStore(b, null, "password"));
+					hitKeyStore(b, null, keyStorePassword));
 			// session.setAttribute("displayAliasesDetails",null);
 			if (aliasName.size() > 0) {
+				
 				session.setAttribute("aliasName", alias);
 				session.setAttribute("displayAliasesDetails",
-						hitKeyStore(b, aliasName, "password"));
+						hitKeyStore(b, aliasName, keyStorePassword));
+			}
+
+			if (export != null) {
+				// Check if Password is Present
+				if (keyStorePassword == null) {
+					throw new Exception("Please Provive KeyStore Password");
+				}
+
+				Map<String, Object> m = aliasExport(b, alias, keyStorePassword);
+				System.out.println(m);
+				Certificate certificate = (Certificate) m.get(alias);
+				StringBuilder builder = new StringBuilder();
+				if (certificate != null) {
+					builder.append("-----BEGIN CERTIFICATE-----\n");
+					String encoded = new sun.misc.BASE64Encoder()
+							.encode(certificate.getEncoded());
+					builder.append(encoded);
+					builder.append( "\n-----END CERTIFICATE-----\n");
+				}
+				Key key  = (Key) m.get("key");
+				
+				if(key!=null)
+				{
+					builder.append("-----BEGIN PRIVATE KEY-----\n" );
+					String encoded = new sun.misc.BASE64Encoder()
+					.encode(key.getEncoded());
+					builder.append(encoded);
+					builder.append("\n-----END PRIVATE KEY-----\n");
+				}
+				
+				response.setContentType("text/html");
+				final String filenameToExport = alias + "export.txt";
+				response.addHeader("Content-Disposition", "attachment; filename="+filenameToExport+"");
+				byte[] buffer = new byte[8192];
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ServletOutputStream os       = response.getOutputStream();
+				os.write(builder.toString().getBytes("UTF-8"));
+				
+				return;
+
 			}
 
 		} catch (Exception e) {
 			session.setAttribute("Error", e.getMessage());
 			// e.printStackTrace();
-			map.remove(md);
+			//map.remove(md);
 		}
 
 		// request.setAttribute("theKeyStore", uu);
@@ -222,6 +272,24 @@ public class JKSManagementFunctionality extends HttpServlet {
 			map = javaConversion.mapAsJavaObject(jks
 					.listByAliases(javaConversion.listAsScalaObject(aliases)));
 		}
+
+		// System.out.println(map);
+		return map;
+
+	}
+
+	private static Map<String, Object> aliasExport(byte[] b,
+			final String aliasName, final String password) throws Exception {
+
+		if (b == null) {
+			throw new Exception("Please provide the KeyStore");
+		}
+		// byte[] b = new byte;
+		JKSViewer jks = new JKS(b, password);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map = javaConversion.mapAsJavaObject(jks.aliasExport(aliasName));
 
 		// System.out.println(map);
 		return map;

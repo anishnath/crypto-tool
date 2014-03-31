@@ -50,7 +50,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
   </tr>
   <tr>
     <td class="tg-031e">Store password</td>
-    <td class="tg-z2zr" colspan="2"><input type="password" name="storepassword" id="storepassword" ></td>
+    <td class="tg-z2zr" colspan="2"><input type="text" value="<%=session.getAttribute("storepassword")%>" name="storepassword" id="storepassword" ></td>
   </tr>
   <tr>
     <td class="tg-031e" colspan="3"><input
@@ -146,7 +146,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD"
 						colspan="2">Certificate Details</th>
 					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Encoded PEM</th>
+						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Encoded PEM  <input type="submit" name="export" value="export"></th>
 
 				</tr>
 				<tr>

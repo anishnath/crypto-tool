@@ -4,6 +4,7 @@ import collection.JavaConversions._
 import scala.collection.JavaConverters._
 import security.JKSViewer
 import security.abstractJKS
+import java.security.KeyStore
 
 /**
  * @author Anish Nath
@@ -36,8 +37,7 @@ class JKS(byte: Array[Byte], val password: String) extends abstractJKS with JKSV
       val alias = en.nextElement();
       if (aliasName.equals(alias)) {
         val cert = store.getCertificate(alias);
-        
-       
+
         //How to check for null or false in Scala concisely?
         cert match {
           case value => {
@@ -109,4 +109,29 @@ class JKS(byte: Array[Byte], val password: String) extends abstractJKS with JKSV
     map;
   }
 
+  @throws[Exception] ("Store Access Exception")
+  def aliasExport(aliasName: String): Map[String, AnyRef] = {
+    var map = Map[String, AnyRef]()
+    val certificate = store.getCertificate(aliasName);
+    val key = store.getKey(aliasName, password.toCharArray())
+    certificate match {
+      case value => {
+        /*
+             * Add a key-value pair to a Map, we can use the operator + as follows
+             */
+        map += aliasName -> certificate;
+
+      }
+    }
+    key match {
+      case value => {
+        /*
+         * Add a key-value pair to a Map, we can use the operator + as follows
+         */
+        map += "key" -> key;
+
+      }
+    }
+    map
+  }
 }
