@@ -3,15 +3,14 @@ package z.y.x.Security;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Key;
 import java.security.cert.Certificate;
-import java.security.interfaces.RSAPrivateCrtKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -60,6 +59,23 @@ public class JKSManagementFunctionality extends HttpServlet {
 				return;
 			}
 		}
+		
+		if ("yes".equals(request.getParameter("mapsize"))) {
+
+			PrintWriter printWriter = response.getWriter();
+			
+			printWriter.println(map.size());
+			
+			return;
+		}
+		
+		if ("yes".equals(request.getParameter("clearMap"))) {
+			
+			map.clear();
+			return;
+			
+		}
+		
 
 		doPost(request, response); // PUSH
 
@@ -92,6 +108,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 					String contentType = item.getContentType();
 					boolean isInMemory = item.isInMemory();
 					long sizeInBytes = item.getSize();
+				
 
 					if (sizeInBytes < maxFileSize) {
 						requestParameter.put(fieldName, item);
@@ -99,6 +116,8 @@ public class JKSManagementFunctionality extends HttpServlet {
 						throw new Exception("File Size is greater then 10MB");
 					}
 
+					System.out.println("contentType  " + contentType);
+					
 					if (sizeInBytes > 0) {
 						// check it's diffrent file or the Same file
 						final String md5 = MDFunctionality.CalcualateMD5("MD5",
@@ -208,6 +227,11 @@ public class JKSManagementFunctionality extends HttpServlet {
 			session.setAttribute("Error", e.getMessage());
 			// e.printStackTrace();
 			//map.remove(md);
+			
+			if("Invalid keystore format".equals(e.getMessage()))
+			{
+				map.remove(md);
+			}
 		}
 
 		// request.setAttribute("theKeyStore", uu);
