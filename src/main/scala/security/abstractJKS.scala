@@ -14,8 +14,5 @@ abstract class abstractJKS {
     val temp = new ByteArrayInputStream(theKeyStore);
     val store = KeyStore.getInstance("JKS");
     store.load(temp, null)
-    
-    
-  
-    
+      
 }

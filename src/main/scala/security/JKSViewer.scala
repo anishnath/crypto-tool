@@ -34,6 +34,15 @@ trait JKSViewer {
       aliases.asJava;
     }
 
+  /**
+   * Export the Certificate Alias
+   */
   def aliasExport(aliasName: String): Map[String, AnyRef]
+  
+  /**
+   * Remove the Certificate from the Keystore
+   */
+  def removeCertificate(aliasName:String) :  Array[Byte]
+
 
 }

@@ -14,10 +14,16 @@ object Test1 {
     //println(t.listAll.for)
 
     try {
-      val source = scala.io.Source.fromFile("/tmp/keytool/keystore.jks", "ISO-8859-1")
+      val source = scala.io.Source.fromFile("/Users/aninath/Documents/junk/keystore1.jks", "ISO-8859-1")
       val byteArray = source.map(_.toByte).toArray
       source.close()
-      val jks = new JKS(byteArray,"password");
+      val jks = new JKS(byteArray,"123456");
+      
+      //println(jks.aliasExport("mydomain1"))
+      
+      jks.removeCertificate("mydomain1")
+      
+      println(jks.aliasExport("mydomain1"))
 
       //val jks = new JKS("/tmp/keytool/keystore.jks","password");
        for (obj <- jks.listAllAliases) println(obj)

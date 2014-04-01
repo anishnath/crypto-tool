@@ -37,26 +37,59 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 		<fieldset>
 		<legend><b>Upload Keystore/Trustore</b></legend>
 		<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;border-color:#aaa;}
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#aab;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#333;background-color:#fff;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f38630;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f39630;}
 .tg .tg-s6z2{text-align:center}
-.tg .tg-z2zr{background-color:#FCFBE3}
+.tg .tg-z2zr{background-color:#FCABE3}
 </style>
 <table class="tg">
   <tr>
     <th class="tg-s6z2">Keystore/trustore file</th>
     <th class="tg-031e" colspan="2"><input type="file" name="upfile"></th>
+
   </tr>
   <tr>
     <td class="tg-031e">Store password</td>
-    <td class="tg-z2zr" colspan="2"><input type="text" value="<%=session.getAttribute("storepassword")%>" name="storepassword" id="storepassword" ></td>
+    <%
+    String value =(String)session.getAttribute("storepassword");
+    if(null==value)
+    {
+    	value="";
+    }
+
+    %>
+    <td class="tg-z2zr" colspan="2"><input type="text" value="<%=value%>" name="storepassword" id="storepassword" ></td>
   </tr>
   <tr>
     <td class="tg-031e" colspan="3"><input
 			type="submit" value="Press"> to upload the file! <input
-			type="hidden" name="md5" value="<%=session.getAttribute("md5")%>"></td>
+			type="hidden" name="md5" value="<%=session.getAttribute("md5")%>">
+			
+			<input
+			type="hidden" name="fileName" value="<%=session.getAttribute("fileName")%>">
+			
+			</td>
   </tr>
+  <%
+  Object obj2 = (Object)session.getAttribute("displayAliases");
+  if(obj2!=null )
+  {
+	  String fileName = (String)session.getAttribute("fileName");
+	  if(fileName==null || fileName.isEmpty())
+	  {
+		  fileName="";
+	  }
+  %>
+  <tr>
+      	<th>Export Keystore	(<%=fileName%>)		
+    <input type="image" src="images/icon_import-export.png" height="20" width="20" border="0" name="exportKeyStore" title="Export the Keystore " value="exportKeyStore" alt="exportKeyStore" />
+    </th>
+  </tr>
+  <%
+  }
+  %>
+  
   <%
   String obj1 = (String)session.getAttribute("Error");
   
@@ -83,7 +116,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 					Map.Entry pairs = (Map.Entry) it.next();
 					final String Totalaliases = (String) pairs.getKey();
 		%>
-		<fieldset name="JKS Functionality">
+		<fieldset class="tg-031e" name="JKS Functionality">
 			<legend>
 				<B>JKS Aliases (<%=Totalaliases%>) found
 				</B>
@@ -113,7 +146,8 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 							
 				}
 			%>
-			<input type="submit" name="GetDetails" value="GetDetails">
+			<input type="image" src="images/icon_view.png" title="get details of the Alias" height="20" width="20" border="0" name="GetDetails" value="GetDetails" alt="GetDetails" />
+			<input type="image" src="images/icon_delete.png" title="delete alias" height="20" width="20" border="0" alt="delete alias" name="deleteAlias" value="deleteAlias" />
 		</fieldset>
 		<%
 			}
@@ -146,7 +180,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD"
 						colspan="2">Certificate Details</th>
 					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Encoded PEM  <input type="submit" name="export" value="export"></th>
+						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Export Encoded PEM <input type="image" src="images/icon_import-export.png" height="20" width="20" border="0" name="export" title="Export PEM" value="export" alt="export" /> </th>
 
 				</tr>
 				<tr>

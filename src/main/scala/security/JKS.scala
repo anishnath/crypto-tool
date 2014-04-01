@@ -5,6 +5,8 @@ import scala.collection.JavaConverters._
 import security.JKSViewer
 import security.abstractJKS
 import java.security.KeyStore
+import java.security.KeyStoreException
+import java.io.FileOutputStream
 
 /**
  * @author Anish Nath
@@ -109,7 +111,7 @@ class JKS(byte: Array[Byte], val password: String) extends abstractJKS with JKSV
     map;
   }
 
-  @throws[Exception] ("Store Access Exception")
+  @throws[Exception]("Store Access Exception")
   def aliasExport(aliasName: String): Map[String, AnyRef] = {
     var map = Map[String, AnyRef]()
     val certificate = store.getCertificate(aliasName);
@@ -133,5 +135,25 @@ class JKS(byte: Array[Byte], val password: String) extends abstractJKS with JKSV
       }
     }
     map
+  }
+
+  @throws[KeyStoreException]("Problem while Deleteing certificate from the keystore")
+  def removeCertificate(aliasName: String):Array[Byte] =
+    {
+      store.deleteEntry(aliasName);
+      buildNewKeyStore
+        
+    }
+  
+  /**
+   * Private Method building New Keystore ? still we have to have private rethink
+   */
+  def buildNewKeyStore():Array[Byte] =
+  {
+    val is = new FileOutputStream("keystore1.jks")
+      store.store(is, password.toCharArray())
+      val source = scala.io.Source.fromFile("keystore1.jks", "ISO-8859-1")
+      val byteArray = source.map(_.toByte).toArray
+      byteArray
   }
 }
