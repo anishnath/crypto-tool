@@ -30,7 +30,7 @@
             $('#form').submit(function (event)
                     {
                     //	
-                  $('#outputtext').html('<img src="images/712.GIF"> loading...');
+                  $('#outputtext1').html('<img src="images/712.GIF"> loading...');
          			 event.preventDefault();
                         $.ajax({
                             type: "POST",
@@ -39,6 +39,7 @@
                            data: $("#form").serialize(),
                             success: function(msg){    
                             		    $('#outputtext').empty();
+                            		    $('#outputtext1').empty();
                                      $('#outputtext').append(msg);
                                      
                             }
@@ -61,6 +62,7 @@
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
+		<div id="outputtext1"> </div>
 	<form id="form" method="POST">
 	<input type="hidden" name="methodName" id="methodName" value="CALCULATE_URLENCODEDECODE">
 	<br>
