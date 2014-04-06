@@ -22,6 +22,9 @@ function googleTranslateElementInit() {
             <li><a href="Base64Functions.jsp"><font size="2px">Base64 Encode/Decode</font></a></li>
 			<span title="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth"><li><a href="StringFunctions.jsp"><font size="2px">Various String Functions</font></a></li></span>
 			
+			 <br/>
+            <ul>Scala By Example</ul>
+             <li><a href="<%=request.getContextPath()+"/TutorialFunctionality"%>"><font size="2px">100 Scala Examples</font></a></li>
 			</nav>
 
 

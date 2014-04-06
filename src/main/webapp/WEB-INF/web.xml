@@ -29,6 +29,16 @@
 	</servlet>
 
 
+<servlet>
+		<servlet-name>TutorialFunctionality</servlet-name>
+		<servlet-class>z.y.x.t.TutorialFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TutorialFunctionality</servlet-name>
+		<url-pattern>/TutorialFunctionality</url-pattern>
+	</servlet-mapping>
+
+
 	<servlet>
 		<servlet-name>StringFunctionality</servlet-name>
 		<servlet-class>z.y.x.String.StringFunctionality</servlet-class>
