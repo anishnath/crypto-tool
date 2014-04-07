@@ -65,5 +65,6 @@
 			}
 		%>
 	</div>
+	<%@ include file="../../addStatsCounter.jsp" %> 
 </body>
 </html>
