@@ -109,6 +109,260 @@
 		</fieldset>
 		<div id="output"></div>
 	</form>
+                <p><strong>SHA-1</strong> - Secure Hash Algorithm produces 160 bit digest if message is less than 2^64 bits.</p>
+                <ul>
+                    <li>It is computationally infeasible to find message from message digest</li>
+                    <li>It is computationally infeasible to find to different messages with same message digest</li>
+                    <li>Padding bits are added to message to make it a multiple of 512</li>
+                </ul>
+                <p><strong>MD5</strong></p>
+                <ul>
+                    <li>Developed by Ronald Rivest in 1991</li>
+                    <li>Produces 128 bit message digest</li>
+                </ul>
+                <p><strong>Hashed Message Authentication Code (HMAC)</strong></p>
+                <ul>
+                    <li>Uses key to generate a Message Authentication Code which is used as a checksum</li>
+                </ul>
+                <p>&nbsp;</p>
+                <div class="page" title="Page 11">
+                    <div class="layoutArea">
+                        <div class="column">
+                            <p>Strengths of the Security Properties of the Approved Hash Algorithms</p>
+                        </div>
+                    </div>
+                    <table style="width: 10px; height: 10px; float: left;" border="1">
+                        <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA-1</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 256</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 384</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 512</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 512/224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>SHA- 512/256</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>Collision Resistance Strength in bits</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>&lt; 80</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>112</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>128</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>192</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>256</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>112</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>128</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>Preimage Resistance Strength in bits</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>160</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>256</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>384</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>512</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>256</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>Second Preimage Resistance Strength in bits</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>105- 160</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>201- 224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>201- 256</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>384</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>394- 512</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>224</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="layoutArea">
+                                    <div class="column">
+                                        <p>256</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
 	<%@ include file="include_security_links.jsp"%>	
 	<%@ include file="footer.jsp"%>
 		</section>

@@ -20,6 +20,22 @@
 	<%@ include file="include.jsp"%>
 	<article id="contentWrapper" role="main">
 			<section id="content">
+				<h1>Cryptography</h1>
+				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
+				<p>In practice encryption can be a function of time, the effort and time required for an unauthorized person is so large it is impractical.&nbsp; By the time it is decrypted it is of little value.</p>
+				<p><strong>Block Cipher</strong> &ndash; Breaks the plaintext into blocks and encrypts each with the same algorithm</p>
+				<p><strong>Cipher</strong> &ndash; Cryptographic transformation operates on the characters or bites</p>
+				<p><strong>Ciphertext</strong> or Cryptogram &ndash; unintelligible message</p>
+				<p><strong>Clustering</strong> &ndash; plaintext message generates identical ciphertext using the same algorithm but different keys</p>
+				<p><strong>Codes</strong> &ndash; A cryptographic transformation that operates at the word or phrase level</p>
+				<p><strong>Cryptanalysis</strong> &ndash; act of obtaining plaintext or key from ciphertext</p>
+				<p><strong>Cryptographic Algorithm</strong> &ndash; Step-by-step procedure used to encipher plaintext and decipher ciphertext</p>
+				<p><strong>Cryptography </strong>&ndash; Art and Science of hiding the meaning of communication</p>
+				<p><strong>Cryptology</strong> &ndash; encompasses cryptography and cryptanalysis</p>
+				<p><strong>Cryptosystem</strong> &ndash; set of transformations from message space to ciphertext space</p>
+				<p><strong>Decipher</strong> - to undo cipherment process</p>
+				<p><strong>Encipher</strong> &ndash; to make a message unintelligible to all except recipient</p>
+				<p><strong>End-to-end encryption</strong> &ndash; Encrypted information that is sent from sender to receiver</p>
     <%@ include file="footer.jsp"%>
     </section>
 		</article>
