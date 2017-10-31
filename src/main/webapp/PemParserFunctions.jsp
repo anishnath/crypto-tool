@@ -420,6 +420,31 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 		</fieldset>
 
 	</form>
+
+				<p><strong>Public Key Infrastructure - (PKI)</strong></p>
+				<p>Integration of digital signatures and certificates.</p>
+				<ul>
+					<li>Digital Certificates</li>
+					<li>Certificate Authorities (CA)</li>
+					<li>Registrations Authorities</li>
+					<li>Policies and procedures</li>
+					<li>Certificate Revocation</li>
+					<li>Non-repudiation support</li>
+					<li>Timestamping</li>
+					<li>Lightweight Directory Access Protocol</li>
+					<li>Security Enabled Applications</li>
+					<li>Cross Certification</li>
+				</ul>
+				<p>Asymmetric key cryptography, also known as public key cryptography, uses a class of algorithms in which Alice has a private key, and Bob (and others) have her public key. The public and private keys are generated at the same time, and data encrypted with one key can be decrypted with the other key. That is, a party can encrypt a message using Alice&rsquo;s public key, then only Alice, the owner of the matching private key, can decrypt the message. Asymmetric algorithms are poorly suited for encrypting large messages because they are relatively slow. Instead, these algorithms are used to achieve authentication, integrity and non-repudiation, and support confidentiality through key management. Asymmetric algorithms are used to perform three operations explained below: digital signatures, key transport, and key agreement.</p>
+				<p><strong>X.509 Public Key Certificates</strong></p>
+				<p>There are ten common fields: six mandatory and four optional. The mandatory fields are: the serial number, the certificate signature algorithm identifier, the certificate issuer name, the certificate validity period, the public key, and the subject name. The subject is the party that controls the corresponding private key. There are four optional fields: the version number, two unique identifiers, and the extensions. These optional fields appear only in version 2 and 3 certificates.</p>
+				<p><strong>Certificate Revocation List</strong></p>
+				<p>Certificates contain an expiration date. Unfortunately, the data in a certificate may become unreliable before the expiration date arrives. Certificate issuers need a mechanism to provide a status update for the certificates they have issued. One mechanism is the X.509 certification revocation list (CRL).</p>
+				<p><strong>Signature Certificate </strong></p>
+				<p>A public key certificate that contains a public key intended for verifying digital signatures rather than encrypting data or performing any other cryptographic functions.</p>
+				<p><strong>Trusted Certificate </strong></p>
+				<p>A certificate that is trusted by the Relying Party on the basis of secure and authenticated delivery. The public keys included in trusted certificates are used to start certification paths. Also known as a "trust anchor".</p>
+				<p>&nbsp;</p>
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 </section>

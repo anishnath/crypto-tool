@@ -117,7 +117,23 @@ primitive root mod p</li>
 </table>
             </fieldset>
 	</form>
-	
+
+
+				<p>&nbsp;</p>
+				<p>Source&nbsp;<a href="https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english">https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english</a></p>
+				<p>Diffie-Hellman is an algorithm used to establish a shared secret between two parties. It is primarily used as a method of exchanging cryptography keys for use in symmetric encryption algorithms like AES.</p>
+				<p>The algorithm in itself is very simple. Let's assume that Alice wants to establish a shared secret with Bob.</p>
+				<ol>
+					<li>Alice and Bob agree on a prime number,&nbsp;<code>p</code>, and a base,&nbsp;<code>g</code>, in advance. For our example, let's assume that&nbsp;<code>p=23</code>&nbsp;and&nbsp;<code>g=5</code>.</li>
+					<li>Alice chooses a secret integer&nbsp;<code>a</code>&nbsp;whose value is 6 and computes&nbsp;<code>A = g^a mod p</code>. In this example, A has the value of 8.</li>
+					<li>Bob chooses a secret integer b whose value is 15 and computes&nbsp;<code>B = g^b mod p</code>. In this example, B has the value of 19.</li>
+					<li>Alice sends&nbsp;<code>A</code>&nbsp;to Bob and Bob sends&nbsp;<code>B</code>&nbsp;to Alice.</li>
+					<li>To obtain the shared secret, Alice computes&nbsp;<code>s = B^a mod p</code>. In this example, Alice obtains the value of&nbsp;<code>s=2</code></li>
+					<li>To obtain the shared secret, Bob computes&nbsp;<code>s = A^b mod p</code>. In this example, Bob obtains the value of&nbsp;<code>s=2</code>.</li>
+				</ol>
+				<p>The algorithm is secure because the values of&nbsp;<code>a</code>&nbsp;and&nbsp;<code>b</code>, which are required to derive&nbsp;<code>s</code>&nbsp;are not transmitted across the wire at all.</p>
+				<p>&nbsp;</p>
+				<p><img src="https://i.stack.imgur.com/n4jBE.png" alt="" width="427" height="641" /></p>
 <%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 </section>
