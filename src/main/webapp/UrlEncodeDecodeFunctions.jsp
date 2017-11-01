@@ -4,7 +4,7 @@
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title> Codecs | URLEncode |  simple URL Encoder</title>
   <meta name="description" content="Encode your URL string with this best easy to use online tool." />
-  <meta name="keywords" content="keyboard, html, codes, html, codes, hash, functions, url, tld, encode, decode, what, is, a, url, ascii, code, html, character, sets, input, type, submit, hidden, reference, reset, select, text, file, upload, enctype, action, form, div, span, script, head, body, structure, web, server, client, style, css, title, tag, tags, img, class, id" /> 
+  <meta name="keywords" content="url, decode, encode, online, tool  keyboard, html, codes, html, codes, hash, functions, url, tld, encode, decode"/>
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
@@ -98,7 +98,25 @@
 		</fieldset>
 		</div>
 	</form>
-	
+
+				<pre class="newpage"><span style="text-decoration: underline;"><strong>Reserved Characters<br /></strong></span>The purpose of reserved characters is to provide a set of delimiting<br />characters that are distinguishable from other data within a URI.<br />reserved = gen-delims / sub-delims <br />gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@" <br />sub-delims = "!" / "$" / "&amp;" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="<br /><br /><span style="text-decoration: underline;"><strong>Percent-Encoding<br /></strong></span>A percent-encoded octet is encoded as a character triplet, consisting of the percent character "%" followed by the two
+hexadecimal digits representing that octet's numeric value for example  the percent-encoding for the binary octet
+"00100000" (ABNF: %x20), which in US-ASCII corresponds to the <strong>space character (SP)</strong></pre>
+<pre class="newpage">Because the percent ("%") character serves as the indicator for percent-encoded octets, it must be percent-encoded as "%25" for that
+octet to be used as data within a URI.<span style="text-decoration: underline;"><strong><br /><br /></strong></span>The reserved character&nbsp;<code>/</code>, for example, if used in the "path" component of a URI, <br />has the special meaning of being a delimiter&nbsp;<em>between</em>&nbsp;path segments. <br />If, according to a given URI scheme,&nbsp;<code>/</code>&nbsp;needs to be&nbsp;<em>in</em>&nbsp;a path segment, <br />then the three characters&nbsp;<code>%2F</code>&nbsp;or&nbsp;<code>%2f</code>&nbsp;must be used in the segment instead of a raw&nbsp;<code>/</code>.<span style="text-decoration: underline;"><br /><br /></span></pre>
+<pre class="newpage">The following are two example URIs and their component parts:
+
+         foo://example.com:8042/over/there?name=ferret#nose
+         \_/   \______________/\_________/ \_________/ \__/
+          |           |            |            |        |
+       scheme     authority       path        query   fragment
+          |   _____________________|__
+         / \ /                        \
+         urn:example:animal:ferret:nose
+</pre>
+				<pre class="newpage"><span style="text-decoration: underline;"><br /><strong><br /><br /></strong></span></pre>
+				<pre class="newpage">&nbsp;</pre>
+
 <%@ include file="footer.jsp"%>
 	
 			</section>

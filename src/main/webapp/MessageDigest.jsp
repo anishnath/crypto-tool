@@ -363,6 +363,58 @@
                     </table>
                 </div>
 
+                <p><strong>List of Hash function and the length</strong></p>
+                <table style="width: 410px;" border="1">
+                    <tbody>
+                    <tr>
+                        <td style="width: 253px;"><strong>Name</strong></td>
+                        <td style="width: 143px;"><strong>Length</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">MD2</td>
+                        <td style="width: 143px;">128 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">MD4</td>
+                        <td style="width: 143px;">128 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">MD5</td>
+                        <td style="width: 143px;">128 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">MD6</td>
+                        <td style="width: 143px;">Up to 512 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-1</td>
+                        <td style="width: 143px;">160 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-224</td>
+                        <td style="width: 143px;">224 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-256</td>
+                        <td style="width: 143px;">256 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-384</td>
+                        <td style="width: 143px;">384 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-512</td>
+                        <td style="width: 143px;">512 bits</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 253px;">SHA-3&nbsp;(originally known as Keccak)</td>
+                        <td style="width: 143px;">arbitrary</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>&nbsp;</p>
+
+                <p>&nbsp;</p>
 	<%@ include file="include_security_links.jsp"%>	
 	<%@ include file="footer.jsp"%>
 		</section>

@@ -9,8 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="keywords"
-	content="online certificate management, keytool generation online" />
+<meta name="keywords" content="java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, ssl convert, ssl check">
 <meta name="language" content="en" />
 <meta name="robots" content="index, follow" />
 <meta name="revisit-after" content="3 month" />
@@ -310,6 +309,86 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 
 	</form>
+
+
+				<h2>Java Keytool Commands</h2>
+				<p>These commands allow you to generate a new Java Keytool keystore file, create a CSR, and import certificates. Any root or intermediate certificates will need to be imported before importing the primary certificate for your domain.</p>
+				<ul>
+					<li><strong>Generate a Java keystore and key pair</strong>
+						<p>keytool -genkey -alias&nbsp;mydomain&nbsp;-keyalg RSA -keystore&nbsp;keystore.jks&nbsp;-keysize 2048</p>
+					</li>
+					<li><strong>Generate a certificate signing request (CSR) for an existing Java keystore</strong>
+						<p>keytool -certreq -alias&nbsp;mydomain&nbsp;-keystore&nbsp;keystore.jks&nbsp;-file 8gwifi.csr</p>
+					</li>
+					<li><strong>Import a root or intermediate CA certificate to an existing Java keystore</strong>
+						<p>keytool -import -trustcacerts -alias root -file 8gwifiCA.crt&nbsp;-keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>Import a signed primary certificate to an existing Java keystore</strong>
+						<p>keytool -import -trustcacerts -alias&nbsp;mydomain&nbsp;-file&nbsp;mydomain.crt&nbsp;-keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>Generate a keystore and self-signed certificate</strong>&nbsp;&nbsp;
+						<p>keytool -genkey -keyalg RSA -alias selfsigned -keystore&nbsp;keystore.jks&nbsp;-storepass&nbsp;password&nbsp;-validity 360 -keysize 2048</p>
+					</li>
+					<li><strong>Check a stand-alone certificate</strong>
+						<p>keytool -printcert -v -file 8gwifi.crt</p>
+					</li>
+					<li><strong>Check which certificates are in a Java keystore</strong>
+						<p>keytool -list -v -keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>Check a particular keystore entry using an alias</strong>
+						<p>keytool -list -v -keystore&nbsp;keystore.jks&nbsp;-alias mydomain</p>
+					</li>
+					<li><strong>Delete a certificate from a Java Keytool keystore</strong>
+						<p>keytool -delete -alias&nbsp;8gwifi -keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>Change a Java keystore password</strong>
+						<p>keytool -storepasswd -new new_storepass -keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>Export a certificate from a keystore</strong>
+						<p>keytool -export -alias&nbsp;mydomain&nbsp;-file&nbsp;mydomain.crt&nbsp;-keystore&nbsp;keystore.jks</p>
+					</li>
+					<li><strong>List Trusted CA Certs</strong>
+						<p>keytool -list -v -keystore $JAVA_HOME/jre/lib/security/cacerts</p>
+					</li>
+					<li><strong>Import New CA into Trusted Certs</strong>
+						<p>keytool -import -trustcacerts -file&nbsp;/path/to/ca/ca.pem&nbsp;-alias&nbsp;CA_ALIAS&nbsp;-keystore $JAVA_HOME/jre/lib/security/cacerts</p>
+					</li>
+					<li></li>
+				</ul>
+				<h2>OpenSSL Commands</h2>
+				<ul>
+					<li><strong>Generate a new private key and Certificate Signing Request</strong>
+						<pre>openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privatekey.key</pre>
+					</li>
+					<li><strong>Generate a self-signed certificate&nbsp;</strong>
+						<pre>openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privatekey.key -out certificate.crt</pre>
+					</li>
+					<li><strong>Generate a certificate signing request (CSR) for an existing private key</strong>
+						<pre>openssl req -out CSR.csr -key privatekey.key -new</pre>
+					</li>
+					<li><strong>Generate a certificate signing request based on an existing certificate</strong>
+						<pre>openssl x509 -x509toreq -in certificate.crt -out CSR.csr -signkey privatekey.key</pre>
+					</li>
+					<li><strong>Remove a passphrase from a private key</strong>
+						<pre>openssl rsa -in privateKey.pem -out newprivatekey.pem</pre>
+					</li>
+					<li><strong>Convert a DER file (.crt .cer .der) to PEM</strong>
+						<pre>openssl x509 -inform der -in certificate.cer -out certificate.pem</pre>
+					</li>
+					<li><strong>Convert a PEM file to DER</strong>
+						<pre>openssl x509 -outform der -in certificate.pem -out certificate.der</pre>
+					</li>
+					<li><strong>Convert a PKCS#12 file (</strong><strong>.pfx .p12</strong><strong>) containing a private key and certificates to PEM</strong>
+						<pre>openssl pkcs12 -in keyStore.pfx -out keystore.pem -nodes</pre>
+						<p>You can add -nocerts to only output the private key or add -nokeys to only output the certificates.</p>
+					</li>
+					<li><strong>Convert a PEM certificate file and a private key to PKCS#12 (.pfx .p12)</strong>
+						<pre>openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile </pre>
+					</li>
+				</ul>
+				<p>&nbsp;</p>
+
+
 	<%@ include file="include_security_links.jsp"%>
 <%@ include file="footer.jsp"%>
 		
