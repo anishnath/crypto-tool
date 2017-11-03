@@ -1,3 +1,1 @@
-<!--
-<%@ include file="footer_disquss.jsp"%>
--->
+<%@ include file="footer_adsense.jsp"%>

@@ -109,6 +109,7 @@
 		</fieldset>
 		<div id="output"></div>
 	</form>
+                <%@ include file="footer.jsp"%>
                 <p><strong>SHA-1</strong> - Secure Hash Algorithm produces 160 bit digest if message is less than 2^64 bits.</p>
                 <ul>
                     <li>It is computationally infeasible to find message from message digest</li>
@@ -416,7 +417,7 @@
 
                 <p>&nbsp;</p>
 	<%@ include file="include_security_links.jsp"%>	
-	<%@ include file="footer.jsp"%>
+
 		</section>
 		</article>
 

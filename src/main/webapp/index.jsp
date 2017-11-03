@@ -19,6 +19,7 @@
 
 	<%@ include file="include.jsp"%>
 	<article id="contentWrapper" role="main">
+		<%@ include file="footer.jsp"%>
 			<section id="content">
 				<h1>Cryptography</h1>
 				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
@@ -36,7 +37,7 @@
 				<p><strong>Decipher</strong> - to undo cipherment process</p>
 				<p><strong>Encipher</strong> &ndash; to make a message unintelligible to all except recipient</p>
 				<p><strong>End-to-end encryption</strong> &ndash; Encrypted information that is sent from sender to receiver</p>
-    <%@ include file="footer.jsp"%>
+
     </section>
 		</article>
 		

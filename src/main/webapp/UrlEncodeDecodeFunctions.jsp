@@ -99,6 +99,7 @@
 		</div>
 	</form>
 
+				<%@ include file="footer.jsp"%>
 				<pre class="newpage"><span style="text-decoration: underline;"><strong>Reserved Characters<br /></strong></span>The purpose of reserved characters is to provide a set of delimiting<br />characters that are distinguishable from other data within a URI.<br />reserved = gen-delims / sub-delims <br />gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@" <br />sub-delims = "!" / "$" / "&amp;" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="<br /><br /><span style="text-decoration: underline;"><strong>Percent-Encoding<br /></strong></span>A percent-encoded octet is encoded as a character triplet, consisting of the percent character "%" followed by the two
 hexadecimal digits representing that octet's numeric value for example  the percent-encoding for the binary octet
 "00100000" (ABNF: %x20), which in US-ASCII corresponds to the <strong>space character (SP)</strong></pre>
@@ -117,7 +118,6 @@ octet to be used as data within a URI.<span style="text-decoration: underline;">
 				<pre class="newpage"><span style="text-decoration: underline;"><br /><strong><br /><br /></strong></span></pre>
 				<pre class="newpage">&nbsp;</pre>
 
-<%@ include file="footer.jsp"%>
 	
 			</section>
 		</article>

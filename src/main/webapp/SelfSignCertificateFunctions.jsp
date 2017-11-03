@@ -360,6 +360,7 @@
             </fieldset>
 	</form>
 
+				<%@ include file="footer.jsp"%>
 				<p><strong>Self-Signed Certificate</strong></p>
 				<p>A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee the authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<strong><span style="text-decoration: underline;">NIST SP 800-57 Part 1 Rev. 3&nbsp;</span></strong></p>
 				<p>&nbsp;&nbsp;A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<span style="text-decoration: underline;"><strong>NIST SP 800-57 Part 3 Rev. 1</strong></span>&nbsp;</p>
@@ -398,7 +399,6 @@
 				<p>&nbsp;</p>
 
 <%@ include file="include_security_links.jsp"%>
-<%@ include file="footer.jsp"%>
 </section>
 		</article>
 		

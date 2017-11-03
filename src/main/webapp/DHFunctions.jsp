@@ -118,7 +118,7 @@ primitive root mod p</li>
             </fieldset>
 	</form>
 
-
+				<%@ include file="footer.jsp"%>
 				<p>&nbsp;</p>
 				<p>Source&nbsp;<a href="https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english">https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english</a></p>
 				<p>Diffie-Hellman is an algorithm used to establish a shared secret between two parties. It is primarily used as a method of exchanging cryptography keys for use in symmetric encryption algorithms like AES.</p>
@@ -135,7 +135,7 @@ primitive root mod p</li>
 				<p>&nbsp;</p>
 				<p><img src="https://i.stack.imgur.com/n4jBE.png" alt="" width="427" height="641" /></p>
 <%@ include file="include_security_links.jsp"%>
-<%@ include file="footer.jsp"%>
+
 </section>
 		</article>
 		

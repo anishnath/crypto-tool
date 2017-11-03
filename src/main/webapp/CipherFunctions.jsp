@@ -176,6 +176,7 @@
 		</fieldset>
 
 	</form>
+				<%@ include file="footer.jsp"%>
 
 				<p><strong>DES &ndash; Data Encryption Standard</strong></p>
 				<ul>
@@ -258,7 +259,7 @@
 
 
 <%@ include file="include_security_links.jsp"%>
-<%@ include file="footer.jsp"%>
+
 		
 			</section>
 		</article>

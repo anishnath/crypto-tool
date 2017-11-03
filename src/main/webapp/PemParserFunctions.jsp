@@ -420,6 +420,7 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 		</fieldset>
 
 	</form>
+				<%@ include file="footer.jsp"%>
 
 				<p><strong>Public Key Infrastructure - (PKI)</strong></p>
 				<p>Integration of digital signatures and certificates.</p>
@@ -446,7 +447,6 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 				<p>A certificate that is trusted by the Relying Party on the basis of secure and authenticated delivery. The public keys included in trusted certificates are used to start certification paths. Also known as a "trust anchor".</p>
 				<p>&nbsp;</p>
 <%@ include file="include_security_links.jsp"%>
-<%@ include file="footer.jsp"%>
 </section>
 		</article>
 		
