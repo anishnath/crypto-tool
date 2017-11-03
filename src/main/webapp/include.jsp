@@ -15,13 +15,15 @@ function googleTranslateElementInit() {
             <li><a href="DHFunctions.jsp"><font size="2px">Diffie-Hellman Key Exchange</font> </a></li>
             <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2px">Easy Keystore/trustore viewer</font> </a></li>
             <br/>
+             <ul>Network Functions</ul>
+              <li><a href="<%=request.getContextPath()+"/SubnetFunctions.jsp"%>"><font size="2px">IP Subnet CIDR Calculator</font></a></li>
+              <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2px">URL Encoders/Decoders</font></a></li>
             <li><a href="HexToStringFunctions.jsp"><font size="2px">HexToString Conversion</font></a></li>
             <li><a href="HexToStringFunctions.jsp"><font size="2px">StringToHex Conversion</font></a></li>
             <li><a href="Base64Functions.jsp"><font size="2px">Base64 Encode/Decode</font></a></li>
 			<span title="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth"><li><a href="StringFunctions.jsp"><font size="2px">Various String Functions</font></a></li></span>
-			
 			 <br/>
             <ul>Scala By Example</ul>
              <li><a href="<%=request.getContextPath()+"/TutorialFunctionality"%>"><font size="2px">100 Scala Examples</font></a></li>

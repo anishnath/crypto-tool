@@ -108,4 +108,14 @@
 		<servlet-name>ExecuteFunctionality</servlet-name>
 		<url-pattern>/ExecuteFunctionality</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SubnetFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.SubnetFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SubnetFunctionality</servlet-name>
+		<url-pattern>/SubnetFunctionality</url-pattern>
+	</servlet-mapping>
+
 </web-app>
