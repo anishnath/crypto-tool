@@ -36,7 +36,7 @@ public class NetworkDiagnostics {
 
 	{
 		StringBuilder builder = new StringBuilder();
-		System.out.println("Command  " + command.toString());
+		//System.out.println("Command  " + command.toString());
 		try {
 			String s = null;
 
@@ -54,8 +54,8 @@ public class NetworkDiagnostics {
 			}
 
 			// read any errors from the attempted command
-			System.out
-					.println("Here is the standard error of the command (if any):\n");
+			//System.out
+			//		.println("Here is the standard error of the command (if any):\n");
 			while ((s = stdError.readLine()) != null) {
 				builder.append(s + "<br>");
 				builder.append(System.getProperty("line.separator"));

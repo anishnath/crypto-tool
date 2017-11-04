@@ -17,6 +17,7 @@ function googleTranslateElementInit() {
             <br/>
              <ul>Network Functions</ul>
               <li><a href="<%=request.getContextPath()+"/SubnetFunctions.jsp"%>"><font size="2px">IP Subnet CIDR Calculator</font></a></li>
+              <li><a href="<%=request.getContextPath()+"/pingfunctions.jsp"%>"><font size="2px">Ping IPv4/Iv6 Address </font></a></li>
               <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2px">URL Encoders/Decoders</font></a></li>
