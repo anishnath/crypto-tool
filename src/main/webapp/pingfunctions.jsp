@@ -43,16 +43,14 @@
 	<article id="contentWrapper" role="main">
 			<section id="content">
 	<form id="form" method="POST">
-		<input type="hidden" name="methodName" id="methodName" value="NETWORKCOMMAND">
+		<input type="hidden" name="methodName" id="methodName" value="NETWORKPINGCOMMAND">
 		<input type="hidden" name="getClientIpAddr" id="methodName" value="true">
 		<fieldset name="Ping v4/v6 Address Online ">
 			<legend>
 				<B>Online Ping IPv4/IPv6 Address </B>
 			</legend>
-			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="" size="100">
-            <br/>
-			<input type="button" id="executeMethod" name="ping"
-				value="Click Ping"> <br>
+			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="" size="60"> <input type="button" id="executeMethod" name="ping"
+				value="Click Ping" size="200"> <br>
 		</fieldset>
 		<div id="output"></div>
 	</form>

@@ -19,7 +19,7 @@ import com.google.common.net.InetAddresses;
 
 public class NetworkFunctionality extends HttpServlet {
 
-    private static final String METHOD_EXECUTECOMMAND = "NETWORKCOMMAND";
+    private static final String METHOD_EXECUTENETWORKPINGCOMMAND = "NETWORKPINGCOMMAND";
     /**
      *
      */
@@ -81,7 +81,7 @@ public class NetworkFunctionality extends HttpServlet {
                     + getClientIpAddr(request) + "</font><br>");
         }
 
-        if (METHOD_EXECUTECOMMAND.equalsIgnoreCase(methodName)) {
+        if (METHOD_EXECUTENETWORKPINGCOMMAND.equalsIgnoreCase(methodName)) {
 
 
             //PING
