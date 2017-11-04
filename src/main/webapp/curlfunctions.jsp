@@ -43,26 +43,23 @@
 	<article id="contentWrapper" role="main">
 			<section id="content">
 	<form id="form" method="POST">
-		<input type="hidden" name="methodName" id="methodName" value="NETWORKPINGCOMMAND">
+		<input type="hidden" name="methodName" id="methodName" value="NETWORKCURLCOMMAND">
 		<input type="hidden" name="getClientIpAddr" id="methodName" value="true">
 		<fieldset name="Ping v4/v6 Address Online ">
 			<legend>
 				<B>Online Ping IPv4/IPv6 Address </B>
 			</legend>
-			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60"> <input type="button" id="executeMethod" name="ping"
+			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="" size="60"> <input type="button" id="executeMethod" name="ping"
 				value="Click Ping" size="200"> <br>
 		</fieldset>
 		<div id="output"></div>
 	</form>
                 <br/>
                 <br/>
-
+	<%@ include file="footer.jsp"%>
                 <br/>
                 <br/>
                 <p>Examples of IP addresses and their byte representations:</p>
-
-                <%@ include file="footer.jsp"%>
-
                 <ul>
                     <li>The IPv4 loopback address,&nbsp;<code>"127.0.0.1"</code>.<br /><code>7f 00 00 01</code></li>
                     <li>The IPv6 loopback address,&nbsp;<code>"::1"</code>.<br /><code>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01</code></li>
