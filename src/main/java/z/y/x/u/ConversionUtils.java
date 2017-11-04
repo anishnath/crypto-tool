@@ -1,6 +1,8 @@
 package z.y.x.u;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
@@ -39,13 +41,31 @@ public class ConversionUtils {
 		}
 		return bin.toString();
 	}
+
+	public static boolean evenOddDate()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date currentdate = new Date();
+		cal.setTime(currentdate);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+
+
+		if(day%2==0){
+			return true;
+		}
+		return  false;
+
+	}
 	
 	public static void main(String[] args) throws UnsupportedEncodingException {
-		System.out.println(stringToBinary("stringToBinary","UTF-8"));
-		System.out.println(stringToBinary("1","UTF-8"));
+
+		System.out.println(evenOddDate());
+
+		//System.out.println(stringToBinary("stringToBinary","UTF-8"));
+		//System.out.println(stringToBinary("1","UTF-8"));
 		
-		System.out.println(binaryToString(stringToBinary("口水雞 hello Ä","UTF-8")));
-		System.out.println(binaryToString(stringToBinary("1","UTF-8")));
+		//System.out.println(binaryToString(stringToBinary("口水雞 hello Ä","UTF-8")));
+		//System.out.println(binaryToString(stringToBinary("1","UTF-8")));
 		
 		
 	}

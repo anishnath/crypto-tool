@@ -1,3 +1,8 @@
+<%@ page import="z.y.x.u.ConversionUtils" %><%
+
+    if (ConversionUtils.evenOddDate())
+    {
+%>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- responsive -->
 <ins class="adsbygoogle"
@@ -8,3 +13,7 @@
 <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+
+<%
+    }
+%>
