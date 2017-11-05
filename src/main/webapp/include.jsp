@@ -1,10 +1,12 @@
 <header id="sidebar">
-<h1>The Online Tool for <br>Online<br> People</br></h1>
+<h1>The Online Tool for <br>Online</br> People</h1>
 <div id="google_translate_element"></div><script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
 }
-</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 			<nav role="navigation">
 			<ul>Cryptography</ul>
 		    <li><a href="MessageDigest.jsp"><font size="2px">Generate Message Digest</font></a></li>
@@ -18,6 +20,7 @@ function googleTranslateElementInit() {
              <ul>Network Functions</ul>
               <li><a href="<%=request.getContextPath()+"/SubnetFunctions.jsp"%>"><font size="2px">IP Subnet CIDR Calculator</font></a></li>
               <li><a href="<%=request.getContextPath()+"/pingfunctions.jsp"%>"><font size="2px">Ping IPv4/Iv6 Address </font></a></li>
+              <li><a href="<%=request.getContextPath()+"/curlfunctions.jsp"%>"><font size="2px">IPv6/Ipv4 Web Test DNS Query</font></a></li>
               <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2px">URL Encoders/Decoders</font></a></li>

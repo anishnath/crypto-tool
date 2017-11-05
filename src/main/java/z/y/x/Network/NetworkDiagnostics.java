@@ -36,7 +36,7 @@ public class NetworkDiagnostics {
 
 	{
 		StringBuilder builder = new StringBuilder();
-		//System.out.println("Command  " + command.toString());
+		System.out.println("Command  " + command.toString());
 		try {
 			String s = null;
 

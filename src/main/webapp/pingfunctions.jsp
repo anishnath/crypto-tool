@@ -49,8 +49,10 @@
 			<legend>
 				<B>Online Ping IPv4/IPv6 Address </B>
 			</legend>
-			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60"> <input type="button" id="executeMethod" name="ping"
+			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60">
+            <input type="button" id="executeMethod" name="ping"
 				value="Click Ping" size="200"> <br>
+            <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
 		</fieldset>
 		<div id="output"></div>
 	</form>
