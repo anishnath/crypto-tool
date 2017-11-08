@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="keywords" content="java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, ssl convert, ssl check">
+<meta name="keywords" content="java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore"/>
 <meta name="language" content="en" />
 <meta name="robots" content="index, follow" />
 <meta name="revisit-after" content="3 month" />
@@ -310,7 +310,11 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 	</form>
 
-
+				<br>
+				<br>
+				<%@ include file="footer.jsp"%>
+				<br>
+				<br>
 				<h2>Java Keytool Commands</h2>
 				<p>These commands allow you to generate a new Java Keytool keystore file, create a CSR, and import certificates. Any root or intermediate certificates will need to be imported before importing the primary certificate for your domain.</p>
 				<ul>
@@ -390,7 +394,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 
 	<%@ include file="include_security_links.jsp"%>
-<%@ include file="footer.jsp"%>
+
 		
 			</section>
 		</article>

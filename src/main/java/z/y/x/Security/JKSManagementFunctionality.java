@@ -198,7 +198,7 @@ public class JKSManagementFunctionality extends HttpServlet {
 
 			if(exportKeyStore!=null && "exportKeyStore".equals(exportKeyStore))
 			{
-				response.setContentType("text/html");
+				response.setContentType("application/octet-stream");
 				final String filenameToExport = "keystore-export.jks";
 				response.addHeader("Content-Disposition",
 						"attachment; filename=" + filenameToExport + "");	
@@ -236,8 +236,8 @@ public class JKSManagementFunctionality extends HttpServlet {
 				
 				**/
 
-				response.setContentType("text/html");
-				final String filenameToExport = alias + "-export.txt";
+				response.setContentType("application/octet-stream");
+				final String filenameToExport = alias + "-export.pem";
 				response.addHeader("Content-Disposition",
 						"attachment; filename=" + filenameToExport + "");
 				byte[] buffer = new byte[8192];

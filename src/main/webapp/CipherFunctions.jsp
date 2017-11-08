@@ -199,8 +199,11 @@
 		</fieldset>
 
 	</form>
+				<br/>
+				<br/>
 				<%@ include file="footer.jsp"%>
-
+				<br/>
+				<br/>
 				<p><strong>DES &ndash; Data Encryption Standard</strong></p>
 				<ul>
 					<li>Derived in 1972 as derivation of Lucifer algorithm developed by Horst Fiestel at IBM</li>
@@ -277,7 +280,6 @@
 					<li>Serpent</li>
 					<li>Blowfish</li>
 				</ul>
-
 
 
 

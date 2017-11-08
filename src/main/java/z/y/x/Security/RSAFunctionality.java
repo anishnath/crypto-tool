@@ -87,7 +87,7 @@ public class RSAFunctionality extends HttpServlet {
         String publiKeyParam = request.getParameter("publickeyparam");
         String privateKeParam = request.getParameter("privatekeyparam");
         final String message = request.getParameter("message");
-        final String algo = request.getParameter("cipherparameter");
+        String algo = request.getParameter("cipherparameter");
         final String methodName = request.getParameter("methodName");
         String keysize = request.getParameter("keysize");
         String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
@@ -105,6 +105,11 @@ public class RSAFunctionality extends HttpServlet {
 
 
         if (METHOD_CALCULATERSA.equalsIgnoreCase(methodName)) {
+
+            if(algo==null || algo.length()==0)
+            {
+                algo="RSA";
+            }
 
 
             if ("encrypt".equals(encryptdecryptparameter)) {

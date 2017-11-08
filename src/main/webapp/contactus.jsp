@@ -14,7 +14,7 @@ Email : zarigatongy@gmail.com
 <br>
 <a href="http://www.youtube.com/user/zarigatongy">Youtube Channel</a>
 <br>
-Do you have your own WebApp Submit it and Part of this Tool 
+Email for any new Service/Suggestion/Improvement
 </section>
 		</article>
 		

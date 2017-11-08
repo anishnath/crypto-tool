@@ -4,7 +4,7 @@
 <title>Online Certificate Decoder Decode certificates to view their contents, parser for  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-<meta name="keywords" content="certificate viewer, decode certificate, certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey, online parser" />
+<meta name="keywords" content="certificate viewer,decode certificate online,certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rsa,publickey, online crl parser,online pem parser,openssl decode certificate,openssl view crl, certificate revocation lists,private key decoder, new csr, pkcs7 format viewer, rsa public key, rsa private key, x.509 certifcate viewer"/>
 <meta name="description" content="Use this Certificate Decoder to decode your certificates in PEM format. This certificate viewer tool will decode certificates so you can easily see their contents. This parser will parse the follwoing  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey" />
 
 <meta name="robots" content="index,follow" />
@@ -420,7 +420,12 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 		</fieldset>
 
 	</form>
+				<br/>
+				<br/>
+				<br/>
 				<%@ include file="footer.jsp"%>
+				<br/>
+				<br/>
 
 				<p><strong>Public Key Infrastructure - (PKI)</strong></p>
 				<p>Integration of digital signatures and certificates.</p>
@@ -449,7 +454,6 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 <%@ include file="include_security_links.jsp"%>
 </section>
 		</article>
-		
 	</div>
 </body>
 </html>
