@@ -118,4 +118,13 @@
 		<url-pattern>/SubnetFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>RSAFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.RSAFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RSAFunctionality</servlet-name>
+		<url-pattern>/RSAFunctionality</url-pattern>
+	</servlet-mapping>
+
 </web-app>

@@ -21,7 +21,8 @@ function googleTranslateElementInit() {
 			<nav role="navigation">
 			<ul>Cryptography</ul>
 		    <li><a href="MessageDigest.jsp"><font size="2px">Generate Message Digest</font></a></li>
-            <li><a href="CipherFunctions.jsp"><font size="2px">Encryption/Decryption </font> </a></li>
+            <li><a href="CipherFunctions.jsp"><font size="2px">Symmetric Encryption/Decryption </font> </a></li>
+            <li><a href="rsafunctions.jsp"><font size="2px">RSA Encryption/Decryption </font> </a></li>
             <li><a href="ProviderCapablitiesFunctions.jsp"><font size="2px">Get Algorithm Capabilities </font></a></li>
             <li><a href="PemParserFunctions.jsp"><font size="2px">PEMReader Decode Certificate </font></a></li>
             <li><a href="SelfSignCertificateFunctions.jsp"><font size="2px">Create a Self Sign Certificate </font> </a></li>

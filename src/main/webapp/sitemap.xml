@@ -6,7 +6,7 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-  <loc>http://8gwifi.org/</loc>
+    <loc>http://8gwifi.org/</loc>
 </url>
 <url>
   <loc>http://8gwifi.org/MessageDigest.jsp</loc>
@@ -49,5 +49,9 @@
 </url>
   <url>
     <loc>http://8gwifi.org/curlfunctions.jsp</loc>
+  </url>
+
+  <url>
+    <loc>http://8gwifi.org/rsafunctions.jsp</loc>
   </url>
 </urlset>

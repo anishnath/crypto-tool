@@ -155,6 +155,18 @@
 					id="cipherparameter12" type="radio" name="cipherparameter"
 					value="DES">DES<br> <input id="cipherparameter13"
 					type="radio" name="cipherparameter" value="DESede">DESede<br>
+				<input id="cipherparameter14" type="radio"
+					   name="cipherparameter" value="Blowfish">Blowfish(64)
+				<br>
+				<input id="cipherparameter15" type="radio"
+					   name="cipherparameter" value="Twofish">Twofish(128)
+				<br>
+				<input id="cipherparameter16" type="radio"
+					   name="cipherparameter" value="IDEA">IDEA (64)
+				<br>
+				<input id="cipherparameter17" type="radio"
+					   name="cipherparameter" value="CAST5">CAST5 (64 Bits Block Siize)
+				<br>
 				<input id="cipherparameter" type="radio" name="cipherparameter"
 					value="AES/CBC/PKCS5Padding">AES/CBC/PKCS5Padding (128)<br>
 				<input id="cipherparameter1" type="radio" name="cipherparameter"
@@ -179,18 +191,7 @@
 				(168)<br> <input id="cipherparameter10" type="radio"
 					name="cipherparameter" value="DESede/ECB/PKCS5Padding">DESede/ECB/PKCS5Padding
 				(168)<br>
-				<input id="cipherparameter14" type="radio"
-					   name="cipherparameter" value="Blowfish">Blowfish(64)
-				<br>
-				<input id="cipherparameter15" type="radio"
-					   name="cipherparameter" value="Twofish">Twofish(128)
-				<br>
-				<input id="cipherparameter16" type="radio"
-					   name="cipherparameter" value="IDEA">IDEA (64)
-				<br>
-				<input id="cipherparameter17" type="radio"
-					   name="cipherparameter" value="CAST5">CAST5 (64 Bits Block Siize)
-				<br>
+
 				<!-- <input  id="cipherparameter" type="radio" name="cipherparameter" value="RSA/ECB/PKCS1Padding">RSA/ECB/PKCS1Padding (1024, 2048)<br>
 				<input  id="cipherparameter" type="radio" name="cipherparameter" value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding (1024, 2048)<br>
 				<input  id="cipherparameter" type="radio" name="cipherparameter" value="RSA/ECB/OAEPWithSHA-256AndMGF1Padding">RSA/ECB/OAEPWithSHA-256AndMGF1Padding (1024, 2048)<br> -->
