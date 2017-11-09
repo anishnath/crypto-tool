@@ -43,7 +43,8 @@ function googleTranslateElementInit() {
 			 <br/>
             <ul>Scala By Example</ul>
              <li><a href="<%=request.getContextPath()+"/TutorialFunctionality"%>"><font size="3px">100 Scala Examples</font></a></li>
-			</nav>
+                <%@ include file="payme.jsp" %>
+            </nav>
 
 
 <br>
