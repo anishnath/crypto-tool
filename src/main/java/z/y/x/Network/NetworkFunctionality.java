@@ -19,6 +19,7 @@ import org.xbill.DNS.*;
 
 import com.google.common.net.InetAddresses;
 import z.y.x.Security.VerifyRecaptcha;
+import z.y.x.u.IPLocation;
 
 public class NetworkFunctionality extends HttpServlet {
 
@@ -97,7 +98,7 @@ public class NetworkFunctionality extends HttpServlet {
         String gRecaptchaResponse = request
                 .getParameter("g-recaptcha-response");
 
-        System.out.println(gRecaptchaResponse);
+        //System.out.println(gRecaptchaResponse);
         boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
        // System.out.println(verify);
@@ -172,6 +173,7 @@ public class NetworkFunctionality extends HttpServlet {
                             //System.out.println("Finished with result: " + result);
                             out.println("<b><u>ICMP Echo Reply </b></u>= "  +  pingommand + " -c5 " +ipaddress + "<br><font size=\"3\" color=\"blue\">"
                                     + result + "</font><br>");
+                            getIpLocation(out, addr);
                         } catch (ExecutionException e) {
                             throw new RuntimeException(e);
 
@@ -324,6 +326,7 @@ public class NetworkFunctionality extends HttpServlet {
                                         }
                                     }
                                 }
+                                getIpLocation(out, addr);
 
                             } catch (ExecutionException e) {
                                 throw new RuntimeException(e);
@@ -348,6 +351,22 @@ public class NetworkFunctionality extends HttpServlet {
                 }
             } else {
                 out.println("<b><u> Invalid IP Address/DNS Name Please Check and try Again  </font><br>" + ipaddress);
+            }
+
+        }
+    }
+
+    private void getIpLocation(PrintWriter out, InetAddress addr) {
+        IPLocation ipLocation = IpLocationDetector.getLocation(addr.getHostAddress());
+        {
+            if (ipLocation != null) {
+                out.println("<b><u>Country</b></u>= <font size=\"3\" color=\"blue\">\"" + ipLocation.getCountry() + "</font><br>");
+                out.println("<b><u>City</b></u>= <font size=\"3\" color=\"blue\">\"" + ipLocation.getCity() + "</font><br>");
+                out.println("<b><u>Location</b></u>= <font size=\"3\" color=\"blue\">\"" + ipLocation.getLoc() + "</font><br>");
+                out.println("<b><u>Region</b></u>= <font size=\"3\" color=\"blue\">\"" + ipLocation.getRegion() + "</font><br>");
+                out.println("<b><u>Organization</b></u>= <font size=\"3\" color=\"blue\">\"" + ipLocation.getOrg() + "</font><br>");
+                addHorizontalLine(out);
+
             }
 
         }

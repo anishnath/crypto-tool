@@ -6,15 +6,6 @@ function googleTranslateElementInit() {
 }
 </script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109251861-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-109251861-1');
-    </script>
 
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -31,8 +22,8 @@ function googleTranslateElementInit() {
             <br/>
              <ul>Network Functions</ul>
               <li><a href="<%=request.getContextPath()+"/SubnetFunctions.jsp"%>"><font size="3px">IP Subnet CIDR Calculator</font></a></li>
-              <li><a href="<%=request.getContextPath()+"/pingfunctions.jsp"%>"><font size="3px">Ping IPv4/Iv6 Address </font></a></li>
-              <li><a href="<%=request.getContextPath()+"/curlfunctions.jsp"%>"><font size="3px">IPv6/Ipv4 Web Test DNS Query</font></a></li>
+              <li><a href="<%=request.getContextPath()+"/pingfunctions.jsp"%>"><font size="3px">Ping/Locate IPv4/Iv6  </font></a></li>
+              <li><a href="<%=request.getContextPath()+"/curlfunctions.jsp"%>"><font size="3px">Site Reachablity Test IPv4/Iv6 DNS Query </font></a></li>
               <br/>
             <ul>String Functions</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="3px">URL Encoders/Decoders</font></a></li>
@@ -41,9 +32,10 @@ function googleTranslateElementInit() {
             <li><a href="Base64Functions.jsp"><font size="3px">Base64 Encode/Decode</font></a></li>
 			<li><a href="StringFunctions.jsp"><font size="3px">Various String Functions</font></a></li></span>
 			 <br/>
-            <ul>Scala By Example</ul>
-             <li><a href="<%=request.getContextPath()+"/TutorialFunctionality"%>"><font size="3px">100 Scala Examples</font></a></li>
+            <ul>Donate </ul>
+             <li>
                 <%@ include file="payme.jsp" %>
+             </li>
             </nav>
 
 

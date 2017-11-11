@@ -3,8 +3,8 @@
 <head>
 <title>Online Ping Ipv4/IpV6 Address Online</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Online IPv6 Ping Tool, check if a host or IP (IPv6) is reachable from the internet " />
-<meta name="keywords" content="IP, IPv6, IPNG, online ping, ttl, test, check, packet, echo, lag, host, count, ttl, mtu,icmp,icmpv6,ping6" />
+<meta name="description" content="Online Ipv4/IPv6 Ping Trace Tool, check if a host or IP (IPv6) is reachable from the internet and know the IP address Location and geolocation " />
+<meta name="keywords" content="IP, IPv6, IPNG, online ping, ttl, test, check, packet, echo, lag, host, count, ttl, mtu,icmp,icmpv6,ping6,ip address, location, geolocation,IP Address Lookup, IP Locator, IP Address Locator, IP Location, IP Lookup" />
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
