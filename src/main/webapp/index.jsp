@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>The Online Tool for Online</title>
+<title>The Online Tool for Online People</title>
 <meta name="msvalidate.01" content="4897507734A2915162632536D0FD3DDA" />
 <meta name="keywords"
 	content="sha-1, online, generator, md5, function, check, checksum,string, programming, functions, encode, decode, converter, online tools,” Developers, MD5, PHP, Javascript, SHA1, Base64, Encoding, Decoding, Text, Binary, Unicode, Html, Entities, String, Date, functions, Password, Encryption, Decryption, Character" />
