@@ -17,6 +17,35 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+
+	<filter>
+		<filter-name>ExpiresFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+		<init-param>
+			<param-name>ExpiresByType image</param-name>
+			<param-value>access plus 10 days</param-value>
+		</init-param>
+		<init-param>
+			<param-name>ExpiresByType text/css</param-name>
+			<param-value>access plus 10 hours</param-value>
+		</init-param>
+		<init-param>
+			<param-name>ExpiresByType application/javascript</param-name>
+			<param-value>access plus 10 minutes</param-value>
+		</init-param>
+		<!-- Let everything else expire immediately -->
+		<init-param>
+			<param-name>ExpiresDefault</param-name>
+			<param-value>access plus 0 seconds</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>ExpiresFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>ColorCodeOnStartupFunctionality</servlet-name>
 		<servlet-class>z.y.x.r.ColorCodeOnStartupFunctionality</servlet-class>
