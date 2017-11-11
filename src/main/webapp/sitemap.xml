@@ -6,52 +6,52 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-    <loc>http://8gwifi.org/</loc>
+    <loc>https://8gwifi.org/</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/MessageDigest.jsp</loc>
+  <loc>https://8gwifi.org/MessageDigest.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/Base64Functions.jsp</loc>
+  <loc>https://8gwifi.org/Base64Functions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/CipherFunctions.jsp</loc>
+  <loc>https://8gwifi.org/CipherFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/ProviderCapablitiesFunctions.jsp</loc>
+  <loc>https://8gwifi.org/ProviderCapablitiesFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/PemParserFunctions.jsp</loc>
+  <loc>https://8gwifi.org/PemParserFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/SelfSignCertificateFunctions.jsp</loc>
+  <loc>https://8gwifi.org/SelfSignCertificateFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/UrlEncodeDecodeFunctions.jsp</loc>
+  <loc>https://8gwifi.org/UrlEncodeDecodeFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/HexToStringFunctions.jsp</loc>
+  <loc>https://8gwifi.org/HexToStringFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/StringFunctions.jsp</loc>
+  <loc>https://8gwifi.org/StringFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/NetworkFunctions.jsp</loc>
+  <loc>https://8gwifi.org/NetworkFunctions.jsp</loc>
 </url>
 <url>
-  <loc>http://8gwifi.org/CommandFunctions.jsp</loc>
+  <loc>https://8gwifi.org/CommandFunctions.jsp</loc>
 </url>
 <url>
-    <loc>http://8gwifi.org/SubnetFunctions.jsp</loc>
+    <loc>https://8gwifi.org/SubnetFunctions.jsp</loc>
 </url>
 <url>
-    <loc>http://8gwifi.org/pingfunctions.jsp</loc>
+    <loc>https://8gwifi.org/pingfunctions.jsp</loc>
 </url>
   <url>
-    <loc>http://8gwifi.org/curlfunctions.jsp</loc>
+    <loc>https://8gwifi.org/curlfunctions.jsp</loc>
   </url>
 
   <url>
-    <loc>http://8gwifi.org/rsafunctions.jsp</loc>
+    <loc>https://8gwifi.org/rsafunctions.jsp</loc>
   </url>
 </urlset>
