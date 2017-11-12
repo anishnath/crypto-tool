@@ -83,11 +83,11 @@ primitive root mod p</li>
 <tr>
 
 <th align="RIGHT" nowrap> &nbsp;DH Parameter G  : </th> 
-<td><input type="text" name="dhparamp" placeholder="153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7"  size="70" maxlength="64" />any  BigInteger Value</td>
+<td><input type="text" name="dhparamp" value="153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7" placeholder="153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7"  size="70" maxlength="64" />any  BigInteger Value</td>
 <tr>
 <tr>
 <th align="RIGHT" nowrap>&nbsp;DH Parameter P  : </th> 
-<td><input type="text" name="dhparamq" placeholder="9494fec095f3b85ee286542b3836fc81a5dd0a0349b4c239dd387" size="70" maxlength="64" />any  BigInteger Value</td>
+<td><input type="text" name="dhparamq" value="9494fec095f3b85ee286542b3836fc81a5dd0a0349b4c239dd387" placeholder="9494fec095f3b85ee286542b3836fc81a5dd0a0349b4c239dd387" size="70" maxlength="64" />any  BigInteger Value</td>
 
 </tr>
 <tr>

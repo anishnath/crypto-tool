@@ -7,7 +7,7 @@ var scJsHost = (("https:" == document.location.protocol) ?
 "https://secure." : "http://www.");
 document.write("<sc"+"ript type='text/javascript' src='" +
 scJsHost+
-"js/counter.js'></"+"script>");
+"statcounter.com/counter/counter.js'></"+"script>");
 </script>
 <noscript><div class="statcounter"><a title="web counter"
 href="http://statcounter.com/free-hit-counter/"
