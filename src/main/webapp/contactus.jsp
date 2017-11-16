@@ -15,6 +15,9 @@ Email : zarigatongy@gmail.com
 <a href="http://www.youtube.com/user/zarigatongy">Youtube Channel</a>
 <br>
 Email for any new Service/Suggestion/Improvement
+				<br/>
+				Support This Initiative<br/>
+				<%@ include file="payme.jsp" %>
 </section>
 		</article>
 		
