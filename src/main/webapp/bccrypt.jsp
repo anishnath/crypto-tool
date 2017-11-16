@@ -130,15 +130,13 @@
 								Workload (Cost Factor)
 								<br/>
 
+
 								<input checked="checked" id="workload1" type="radio"
 									   name="workload" value="10">10<br>
 
 								<input
 										id="workload2" type="radio" name="workload"
 										value="11">11<br>
-
-								<input checked="checked" id="workload3" type="radio"
-									   name="workload" value="11">11<br>
 
 								<input
 										id="workload4" type="radio" name="workload"
@@ -147,6 +145,10 @@
 								<input
 										id="workload5" type="radio" name="workload"
 										value="13">13<br>
+
+								<input
+										id="workload3" type="radio" name="workload"
+										value="14">14<br>
 
 							</td>
 							<td width="40%">
