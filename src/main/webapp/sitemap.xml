@@ -58,4 +58,8 @@
   <url>
     <loc>https://8gwifi.org/pbe.jsp</loc>
   </url>
+
+  <url>
+    <loc>https://8gwifi.org/bccrypt.jsp</loc>
+  </url>
 </urlset>
