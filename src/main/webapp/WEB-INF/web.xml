@@ -4,6 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	metadata-complete="false" version="3.0">
 
+
+	<session-config>
+		<session-timeout>2</session-timeout>
+	</session-config>
+
 	<filter>
 		<filter-name>Set Character Encoding</filter-name>
 		<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
@@ -155,5 +160,25 @@
 		<servlet-name>RSAFunctionality</servlet-name>
 		<url-pattern>/RSAFunctionality</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PBEFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.PBEFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PBEFunctionality</servlet-name>
+		<url-pattern>/PBEFunctionality</url-pattern>
+	</servlet-mapping>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<!-- auth-constraint goes here if you requre authentication -->
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
 
 </web-app>
