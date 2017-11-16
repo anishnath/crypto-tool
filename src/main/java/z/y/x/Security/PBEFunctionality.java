@@ -194,12 +194,12 @@ public class PBEFunctionality extends HttpServlet {
 
 
                 if (METHOD_NAME.equals(methodName)) {
-                    System.out.println(plainText);
-                    System.out.println(rounds);
-                    System.out.println(secret);
-                    System.out.println(algo);
-                    System.out.println(methodName);
-                    System.out.println(encryptdecryptparameter);
+//                    System.out.println(plainText);
+//                    System.out.println(rounds);
+//                    System.out.println(secret);
+//                    System.out.println(algo);
+//                    System.out.println(methodName);
+//                    System.out.println(encryptdecryptparameter);
 
 
                     if ("encrypt".equals(encryptdecryptparameter)) {
