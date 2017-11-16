@@ -13,6 +13,7 @@ function googleTranslateElementInit() {
 			<ul>Cryptography</ul>
 		    <li><a href="MessageDigest.jsp"><font size="3px">Generate Message Digest</font></a></li>
             <li><a href="CipherFunctions.jsp"><font size="3px">Symmetric Key Encrypt/Decrypt </font> </a></li>
+            <li><a href="bccrypt.jsp"><font size="3px">BCrypt Calculator/Tester </font> </a></li>
             <li><a href="pbe.jsp"><font size="3px">PBE Encryption/Decryption </font> </a></li>
             <li><a href="rsafunctions.jsp"><font size="3px">RSA Encryption/Decryption </font> </a></li>
             <li><a href="DHFunctions.jsp"><font size="3px">Diffie-Hellman Key Exchange</font> </a></li>
