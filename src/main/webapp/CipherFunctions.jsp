@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Cipher Algorithms, Encrytion Decryption Online using AES,DES,DESede,Blowfish,Twofish,CAST5,IDEA</title>
+<title>Online Cipher Algorithms, Encryption Decryption using AES,DES,DESede,Blowfish,Twofish,CAST5,IDEA,Rijndael</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 
