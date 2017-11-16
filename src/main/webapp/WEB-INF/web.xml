@@ -170,6 +170,15 @@
 		<url-pattern>/PBEFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>BCCryptFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.BCCryptFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BCCryptFunctionality</servlet-name>
+		<url-pattern>/BCCryptFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
@@ -180,5 +189,7 @@
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
+
+
 
 </web-app>
