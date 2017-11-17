@@ -22,10 +22,10 @@ function googleTranslateElementInit() {
             <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="3px">Easy Keystore/trustore viewer</font> </a></li>
            <li><a href="ProviderCapablitiesFunctions.jsp"><font size="3px">Get Algorithm Capabilities </font></a></li>
              <ul>Network Functions</ul>
-              <li><a href="<%=request.getContextPath()+"/SubnetFunctions.jsp"%>"><font size="3px">IP Subnet CIDR Calculator</font></a></li>
-              <li><a href="<%=request.getContextPath()+"/pingfunctions.jsp"%>"><font size="3px">Ping/Locate IPv4/Iv6  </font></a></li>
-              <li><a href="<%=request.getContextPath()+"/curlfunctions.jsp"%>"><font size="3px">Site Reachablity Test IPv4/Iv6 DNS Query </font></a></li>
-            <ul>String Functions</ul>
+              <li><a href="SubnetFunctions.jsp"><font size="3px">IP Subnet CIDR Calculator</font></a></li>
+              <li><a href="pingfunctions.jsp"><font size="3px">Ping/Locate IPv4/Iv6  </font></a></li>
+              <li><a href="curlfunctions.jsp"><font size="3px">Site Reachablity Test IPv4/Iv6 DNS Query </font></a></li>
+            <ul>Encoders/Decoders</ul>
             <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="3px">URL Encoders/Decoders</font></a></li>
             <li><a href="HexToStringFunctions.jsp"><font size="3px">HexToString Conversion</font></a></li>
             <li><a href="HexToStringFunctions.jsp"><font size="3px">StringToHex Conversion</font></a></li>

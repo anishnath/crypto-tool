@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Message Digest Algorithms</title>
+<title>Online Message Digest Algorithms checker and verifier</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Calculate Online Message Digest Algorithms">
+<meta name="description" content="Calculate or verify  Message Digest Algorithms">
 <meta name="keywords"
-	content="MD2,MD5,SHA-1,SHA-256, SHA-384, and SHA-512">
+	content="Message digest calculate online, ripemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool, digest algorithm online">
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
@@ -46,6 +46,41 @@
                     {
          			$('#form').delay(200).submit()
                     });
+
+            $('#TIGER').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#WHIRLPOOL').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#GOST3411').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#RIPEMD128').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#RIPEMD160').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#RIPEMD256').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#RIPEMD320').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
 
             $('#bc').click(function (event)
                     {
@@ -102,6 +137,13 @@
 				<input type="checkbox" id="SHA-256" value="SHA-256" name="SHA-256">SHA-256
 				<input type="checkbox" id="SHA-384" value="SHA-384" name="SHA-384">SHA-384
 				<input type="checkbox" id="SHA-512" value="SHA-512" name="SHA-512">SHA-512
+                <input type="checkbox" id="TIGER" value="TIGER" name="TIGER">TIGER
+                <input type="checkbox" id="WHIRLPOOL" value="WHIRLPOOL" name="WHIRLPOOL">WHIRLPOOL
+            <input type="checkbox" id="GOST3411" value="GOST3411" name="GOST3411">GOST3411
+            <input type="checkbox" id="RIPEMD128" value="RIPEMD128" name="WHIRLPOOL">RIPEMD128
+            <input type="checkbox" id="RIPEMD160" value="RIPEMD160" name="RIPEMD160">RIPEMD160
+            <input type="checkbox" id="RIPEMD256" value="RIPEMD256" name="WHIRLPOOL">RIPEMD256
+            <input type="checkbox" id="RIPEMD320" value="RIPEMD320" name="RIPEMD320">RIPEMD320
 		</fieldset>
 		<fieldset><legend>Choose Provider</legend>
 		<input checked="checked" type="radio" id="bc" name="provider" value="BC">Bouncycastle
