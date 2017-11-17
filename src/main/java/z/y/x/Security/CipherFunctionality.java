@@ -112,20 +112,20 @@ public class CipherFunctionality extends HttpServlet {
 
                             }
                         } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (NoSuchPaddingException e) {
-                            e.printStackTrace();
+                            out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (BadPaddingException e) {
-                            e.printStackTrace();
+                            out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (IllegalBlockSizeException e) {
-                            e.printStackTrace();
+                            out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
+                            return;
                         } catch (InvalidKeyException e) {
                             if(cipherparameter != null && ( "CAST5".equalsIgnoreCase(cipherparameter.trim())))
                             {
                                 out.println("<font size=\"2\" color=\"red\">" + cipherparameter + " key size MISMATCH SUPPORTED Key sizes 40 to 128 bits </font>");
                                 return;
                             }
-
                         }
                     }
                 } else {
