@@ -36,6 +36,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+/**
+ * @author  Anish Nath
+ * Demo at 8gwifi.org
+ */
+
 public class CipherFunctionality extends HttpServlet {
 
     private static final String METHOD_ENCRYPRDECRYPT = "CIPHERBLOCK";
@@ -85,11 +90,11 @@ public class CipherFunctionality extends HttpServlet {
             String algo = getAlgo(cipherparameter);
 
             //BlowFish Processing
-            if (cipherparameter != null && ( "Blowfish".equalsIgnoreCase(cipherparameter.trim())  ||
+            if (cipherparameter != null && ("Blowfish".equalsIgnoreCase(cipherparameter.trim()) ||
                     "Twofish".equalsIgnoreCase(cipherparameter.trim()) ||
                     "CAST5".equalsIgnoreCase(cipherparameter.trim()) ||
                     "IDEA".equalsIgnoreCase(cipherparameter.trim())
-            )    ) {
+            )) {
                 if (secretkey != null) {
                     if (plaintext != null && !plaintext.trim().isEmpty()) {
                         byte[] keyData = (secretkey).getBytes();
@@ -112,23 +117,28 @@ public class CipherFunctionality extends HttpServlet {
 
                             }
                         } catch (NoSuchAlgorithmException e) {
+                            addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (NoSuchPaddingException e) {
+                            addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (BadPaddingException e) {
+                            addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                         } catch (IllegalBlockSizeException e) {
+                            addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\">" + e.getMessage() + " </font>");
                             return;
                         } catch (InvalidKeyException e) {
-                            if(cipherparameter != null && ( "CAST5".equalsIgnoreCase(cipherparameter.trim())))
-                            {
+                            if (cipherparameter != null && ("CAST5".equalsIgnoreCase(cipherparameter.trim()))) {
+                                addHorizontalLine(out);
                                 out.println("<font size=\"2\" color=\"red\">" + cipherparameter + " key size MISMATCH SUPPORTED Key sizes 40 to 128 bits </font>");
                                 return;
                             }
                         }
                     }
                 } else {
+                    addHorizontalLine(out);
                     out.println("<font size=\"2\" color=\"red\">" + cipherparameter + " key size cannot be EMPTY!!! </font>");
                     return;
                 }
@@ -136,18 +146,20 @@ public class CipherFunctionality extends HttpServlet {
                 return;
             }
 
-            if (secretkey != null && !secretkey.isEmpty()) {
+            if (secretkey != null && !secretkey.trim().isEmpty()) {
                 if (secretkey.trim().length() < 24) {
                     if ("DES".equals(algo) && secretkey.length() < 8) {
-                        out.println("<font size=\"2\" color=\"red\"> " + algo + " key size must be length greater then 8 </font>");
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> " + algo + " key size must be length greater then 8 </font>");
                         return;
                     }
-                    if ("DES".equals(algo) && secretkey.length() >= 8) {
-                        //DO Nthing
-                    } else {
-                        out.println("<font size=\"2\" color=\"red\">" + algo + " key size must be length greater then 24 </font>");
-                        return;
-                    }
+//                    if ("DES".equals(algo) && secretkey.length() >= 8) {
+//                        //DO Nthing
+//                    } else {
+//                        addHorizontalLine(out);
+//                        out.println("<font size=\"4\" color=\"red\">" + algo + " key size must be length greater then 24 </font>");
+//                        return;
+//                    }
 
                 }
                 if (plaintext != null && !plaintext.isEmpty()) {
@@ -162,22 +174,33 @@ public class CipherFunctionality extends HttpServlet {
                             addHorizontalLine(out);
                             out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + enCryptDecrypt(plaintext, cipherparameter, encryptorDecrypt, key) + "</font>");
                         } catch (Exception e) {
-                            out.println("<font size=\"2\" color=\"red\"> " + e.getLocalizedMessage() + " </font>");
+                            addHorizontalLine(out);
+                            out.println("<font size=\"4\" color=\"red\"> " + e.getMessage() + " </font>");
                             return;
                         }
 
                     } else {
+                        try{
                         secretkey = secretkey.trim();
                         skey = new SecretKeySpec(secretkey.getBytes(), getAlgo(cipherparameter));
                         addHorizontalLine(out);
                         out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + enCryptDecrypt(plaintext, cipherparameter, encryptorDecrypt, skey) + "</font>");
+                        } catch (Exception e) {
+                            addHorizontalLine(out);
+                            out.println("<font size=\"4\" color=\"red\"> " + e.getMessage() + " </font>");
+                            return;
+                        }
                     }
-
+                } else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> Message is null or empty  </font>");
+                    return;
                 }
 
-
             } else {
-                out.println("<font size=\"2\" color=\"red\"> Secret key is null or empty  </font>");
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Secret Key is null or empty </font>");
+                return;
 
             }
         }
@@ -353,7 +376,7 @@ public class CipherFunctionality extends HttpServlet {
 
 
     public static String enCryptDecrypt(String inputText, String cipherparameter,
-                                        String encryptOrDecrypt, Key key) {
+                                        String encryptOrDecrypt, Key key) throws Exception {
 
         try {
 
@@ -361,7 +384,7 @@ public class CipherFunctionality extends HttpServlet {
             byte[] iv;
 
 			/*
-			 * The input to the encryption processes of the CBC, CFB, and OFB modes includes, in addition to 
+             * The input to the encryption processes of the CBC, CFB, and OFB modes includes, in addition to
 			   the plaintext, a data block called the initialization vector (IV), denoted IV
 			 */
             //java.security.InvalidAlgorithmParameterException: Parameters missing
@@ -394,8 +417,7 @@ public class CipherFunctionality extends HttpServlet {
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            return e.getMessage();
+           throw  new Exception(e);
         }
         return "PROBLEM CANNOT PERFORM";
     }

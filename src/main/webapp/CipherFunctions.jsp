@@ -97,6 +97,9 @@
 		$('#cipherparameter17').click(function(event) {
 			$('#form').delay(200).submit()
 		});
+		$('#cipherparameter18').click(function(event) {
+			$('#form').delay(200).submit()
+		});
 		$('#decrypt').click(function(event) {
 			$('#form').delay(200).submit()
 		});
@@ -137,7 +140,7 @@
 				<B>Encrypt/Decrypt Message </B>
 			</legend>
 			Plain text Type Something
-			<textarea rows="10" cols="30" name="plaintext" id="plaintext"></textarea>
+			<textarea rows="10" cols="30" name="plaintext" placeholder="Type Something here..." id="plaintext"></textarea>
 			<div id="output"></div>
 
 			<br> SecretKey<input id="secretkey" type="text" name="secretkey"
@@ -169,6 +172,8 @@
 				<br>
 				<input id="cipherparameter" type="radio" name="cipherparameter"
 					value="AES/CBC/PKCS5Padding">AES/CBC/PKCS5Padding (128)<br>
+				<input id="cipherparameter18" type="radio" name="cipherparameter"
+					   value="AES/CBC/NoPadding">AES/CBC/NoPadding(128)<br>
 				<input id="cipherparameter1" type="radio" name="cipherparameter"
 					value="AES/ECB/NoPadding">AES/ECB/NoPadding (128)<br>
 				<input id="cipherparameter2" type="radio" name="cipherparameter"
