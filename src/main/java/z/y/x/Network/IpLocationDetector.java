@@ -35,7 +35,7 @@ public class IpLocationDetector {
                     String url = "http://ipinfo.io/"+ipaddress.trim().toString()+"?token=3eaeb645588723";
                     String url1="http://ipinfo.io/216.58.197.78?token=3eaeb645588723";
                     //System.out.println(url);
-                        HttpGet getRequest = new HttpGet(url1);
+                        HttpGet getRequest = new HttpGet(url);
                         getRequest.addHeader("accept", "application/json");
 
                         HttpResponse response = httpClient.execute(getRequest);
