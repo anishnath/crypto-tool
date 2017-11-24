@@ -110,14 +110,14 @@ public class GenCAFunctionality extends HttpServlet {
             }
 
             CAAuthorityPOJO caAuthorityPOJO = gson.fromJson(content.toString(),CAAuthorityPOJO.class);
-            out.println("<b><u>End Point Certificate (Private Key/Public Key/Certificate)  </b></u> <br>");
+            out.println("<b><u>Certificate Information for [" + p_dns_name + "] (Private Key/Public Key/Certificate)  </b></u> <br>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" +caAuthorityPOJO.getDnsPrivateKey() +  "</textarea>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" +caAuthorityPOJO.getDnsPubliceKey() +  "</textarea>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" +caAuthorityPOJO.getDnsCerts()+  "</textarea>");
 
             addHorizontalLine(out);
 
-            out.println("<b><u>InterMediateCA Infromation (Private Key/Public Key/Certificate)</b></u> <br>");
+            out.println("<b><u>InterMediateCA Information (Private Key/Public Key/Certificate)</b></u> <br>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" +caAuthorityPOJO.getInterCAPrivateKey() +  "</textarea>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" +caAuthorityPOJO.getInterCAPubliceKey() +  "</textarea>");
             out.println( "<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" +caAuthorityPOJO.getInterCACerts() +  "</textarea>");
