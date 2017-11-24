@@ -238,7 +238,7 @@
 						<tr>
 
 							<td>
-								<b>ClearText Message</b><textarea rows="10" cols="40"   name="message" id="message">anish</textarea>
+								<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
 							</td>
 							<td width="50%">
 							<br>
@@ -277,7 +277,7 @@
 									   value="decryprt">
 							</td>
 							<td>
-								Output <textarea rows="20" cols="40" name="output1" id="output"></textarea>
+								Output <textarea rows="20" cols="40" name="output1" placeholder="Output..." id="output"></textarea>
 							</td>
 
 							<td width="70%">
