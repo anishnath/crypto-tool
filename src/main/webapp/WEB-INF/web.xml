@@ -189,6 +189,15 @@
 		<url-pattern>/GenCAFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>PGPFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.PGPFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PGPFunctionality</servlet-name>
+		<url-pattern>/PGPFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
