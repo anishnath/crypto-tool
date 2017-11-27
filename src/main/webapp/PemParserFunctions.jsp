@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Certificate Decoder Decode certificates to view their contents, parser for  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey</title>
+<title>Online Certificate Decode, decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 <meta name="keywords" content="certificate viewer,decode certificate online,certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rsa,publickey, online crl parser,online pem parser,openssl decode certificate,openssl view crl, certificate revocation lists,private key decoder, new csr, pkcs7 format viewer, rsa public key, rsa private key, x.509 certifcate viewer,decrypt private key online,public key decoder,openssl online decrypt,pem file decoder,pem decoder online,decode public key,pem parser,pem decoder,des decode,pem viewer"/>
@@ -52,7 +52,7 @@
 <div id="page">
 	<%@ include file="include.jsp"%>
 <div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
+		<img src="images/712.GIF" alt="loading" />Loading!
 	</div>
 
 <article id="contentWrapper" role="main">
