@@ -12,14 +12,15 @@ function googleTranslateElementInit() {
 			<nav role="navigation">
 			<ul>Cryptography</ul>
 		    <li><a href="MessageDigest.jsp"><font size="3px">Generate Message Digest</font></a></li>
-            <li><a href="CipherFunctions.jsp"><font size="3px">Symmetric Key Encrypt/Decrypt </font> </a></li>
+            <li><a href="CipherFunctions.jsp"><font size="3px">Encryption/Decryption </font> </a></li>
             <li><a href="bccrypt.jsp"><font size="3px">BCrypt Calculator/Tester </font> </a></li>
             <li><a href="pbe.jsp"><font size="3px">PBE Encryption/Decryption </font> </a></li>
+            <li><a href="pgpkeyfunction.jsp"><font size="3px">PGP Key Generation </font> </a></li>
             <li><a href="rsafunctions.jsp"><font size="3px">RSA Encryption/Decryption </font> </a></li>
             <li><a href="DHFunctions.jsp"><font size="3px">Diffie-Hellman Key Exchange</font> </a></li>
             <li><a href="PemParserFunctions.jsp"><font size="3px">PEMReader Decode Certificate </font></a></li>
-            <li><a href="SelfSignCertificateFunctions.jsp"><font size="3px">Create a Self Sign Certificate </font> </a></li>
-            <li><a href="cafunctions.jsp"><font size="3px">Generate certificate authority (CA)</font> </a></li>
+            <li><a href="SelfSignCertificateFunctions.jsp"><font size="3px">Generate Self Sign Certificate </font> </a></li>
+            <li><a href="cafunctions.jsp"><font size="3px">Generate Test CA</font> </a></li>
             <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="3px">Easy Keystore/trustore viewer</font> </a></li>
            <li><a href="ProviderCapablitiesFunctions.jsp"><font size="3px">Get Algorithm Capabilities </font></a></li>
              <ul>Network Functions</ul>
