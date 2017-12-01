@@ -262,40 +262,55 @@ public class PBEFunctionality extends HttpServlet {
                 String rounds = request.getParameter("rounds");
                 String algo = request.getParameter("cipherparameter");
                 int rs = 100;
+
+//                    System.out.println(encryptdecryptparameter);
+//                    System.out.println(message);
+//                    System.out.println(salt);
+//                    System.out.println(rounds);
+//                    System.out.println(algo);
+
+
                 try {
                     rs = Integer.parseInt(rounds);
-                    if (rs > 5001) {
-                        out.println("Currenlty Only Supported upto 5000 round raise feature request");
+                    if (rs > 20001) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Currenlty Only Supported upto 20000 round raise feature request </font>");
                         return;
                     }
                 } catch (NumberFormatException nfe) {
-                    out.println("Valid Number of Rounds required in Integer ");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Valid Number of Rounds required in Integer </font>");
                     return;
                 }
                 String password = request.getParameter("password");
 
                 if (password == null || password.trim().length() == 0) {
-                    out.println("Please provide the password for PBE encryption ");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Please provide the password for PBE encryption </font>");
                     return;
                 }
 
                 if (message == null || message.trim().length() == 0) {
-                    out.println("Please provide the message for PBE encryption ");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Please provide the message for PBE encryption </font>");
                     return;
                 }
 
                 if (salt == null || salt.trim().length() == 0) {
-                    out.println("Minumium Salt length 8 Byte");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Minumium Salt length 8 Byte </font>");
                     return;
                 }
 
                 if (salt != null && salt.trim().length() < 8 ) {
-                    out.println("Salt Must be 8 byte Long ");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Salt Must be 8 byte Long  </font>");
                     return;
                 }
 
                 if (salt != null && salt.trim().length() > 8 ) {
-                    out.println("Salt Must be 8 byte Long ");
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Salt Must be 8 byte Long  </font>");
                     return;
                 }
 
@@ -304,7 +319,8 @@ public class PBEFunctionality extends HttpServlet {
 
                 if ("encrypt".equals(encryptdecryptparameter)) {
                     String sm = PBEUtils.encrypt(message,password,algo,rs,salt);
-                    out.println(sm);
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"green\">"+sm+"</font>");
                     return;
                 }
 
@@ -314,16 +330,20 @@ public class PBEFunctionality extends HttpServlet {
                     boolean isBase64 = org.apache.commons.codec.binary.Base64.isArrayByteBase64(message.getBytes());
                   //  System.out.println("isBase64 -- " + isBase64);
                     if (!isBase64) {
-                        out.println("Please Provide Base64 Encoded value");
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Please Provide Base64 Encoded value  </font>");
                         return;
                     }
 
                     String sm = PBEUtils.decrypt(message, password, algo, rs, salt);
-                    out.println(sm);
+                    //System.out.println(sm);
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"green\">"+sm+"</font>");
                     return;
                 }
                 }catch (Exception ex)
                 {
+                    addHorizontalLine(out);
                     out.println("System Error " + ex.getMessage());
                 }
 
@@ -334,6 +354,9 @@ public class PBEFunctionality extends HttpServlet {
 
             }
 
+    private void addHorizontalLine(PrintWriter out) {
+        out.println("<hr>");
+    }
 
 
 
