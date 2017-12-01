@@ -194,7 +194,7 @@
 				<input type="hidden" name="methodName" id="methodName"
 					   value="PBEMESSAGE">
 
-				<fieldset name="PBE"   >
+				<fieldset name="PBE">
 
 					<legend>
 						<b> PBE Encryption/Decryption </b>
@@ -203,12 +203,12 @@
 					<table border="1" style="width:100pc">
 						<tr>
 							<th>Input </th>
-							<th>Output </th>
+							<th>Ciphers </th>
 							<th>PBE Encryption/Decryption </th>
 						</tr>
 
 						<tr>
-							<td>
+							<td width="10%">
 								<textarea rows="10" cols="30" placeholder="Type Somethng here..." name="message" id="message"></textarea>
 								<br/>
 								Salt <input id="salt" type="text" name="salt"
@@ -220,24 +220,20 @@
 								<br/>
 								Password <input id="password" type="text" name="password"
 												size="30" value="UserSupplied" placeholder="8bits">
+								<br/>
+								Encrypt Message
+								<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
+									   value="encrypt">
+								<br/>
+								Decrypt Message
+								<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
+									   value="decryprt">
+								<br/>
+
+								<br/>
 							</td>
-							<td>
-								Output <textarea rows="10" cols="30" name="output" id="output"></textarea>
-
-
-
-							</td>
-
-							<td width="80%">
-
-								<p><strong>Password Based Encryption (PBE)</strong> is specified in e.g. RFC 2898 which specifies the "PKCS #5: Password-Based Cryptography Specification Version 2.0".</p>
-							</td>
-
-						</tr>
-
-						<tr>
-
-							<td width="25%">
+							<td width="10%">
+								<!-- <textarea rows="10" cols="30" name="output" id="output"></textarea> -->
 
 								Ciphers
 								<br/>
@@ -287,8 +283,35 @@
 								<input id="cipherparameter5" type="radio" name="cipherparameter"
 									   value="PBEWITHSHAAND40BITRC4">PBEWITHSHAAND40BITRC4<br>
 
+
+
+
 							</td>
-							<td width="40%">
+
+							<td width="80%">
+
+								<p><strong>Password Based Encryption (PBE)</strong> is specified in e.g. RFC 2898 which specifies the "PKCS #5: Password-Based Cryptography Specification Version 2.0".</p>
+								<p><strong>How PBE Works?</strong></p>
+
+								<li>A user supplied password which is remembered by the user.</li>
+								<li>A long with that password text, a random number which is called salt is added and hashed.</li>
+								<li>Using this a AES or a DES encryption key is derived and encrypted.</li>
+								<li>The password text is shared between the two parties exchanging the encrypted content in a secure manner.</li>
+								<li>The receiver, uses the same password and salt and decrypts the content.</li>
+
+							</td>
+
+						</tr>
+
+						<tr>
+
+							<td width="20%">
+								<b>Output</b>
+								<div id="output"> </div>
+
+
+							</td>
+							<td width="30%">
 								<input
 										id="cipherparameter6" type="radio" name="cipherparameter"
 										value="PBEWITHMD5AND128BITAES-CBC-OPENSSL">PBEWITHMD5AND128BITAES-CBC-OPENSSL<br>
@@ -348,34 +371,17 @@
 						</tr>
 						<tr>
 							<td>
-								Encrypt Message
-								<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="encrypt">
-								<br/>
-								Decrypt Message
-								<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="decryprt">
-								<br/>
-								<br/>
-
-							</td>
-							<td>
-
-								<br/>
 								<a href="redirect-pbefile.jsp">Click Here for PBE file based ecnryption </a>
 
 							</td>
-
-							<td width="70%">
+							<td>
 								<p><strong>PBKDF2</strong> applies a pseudorandom function to derive keys. The length of the derived key is essentially unbounded.</p>
-								<p><strong>How PBE Works?</strong></p>
-								<ul>
-									<li>A user supplied password which is remembered by the user.</li>
-									<li>A long with that password text, a random number which is called salt is added and hashed.</li>
-									<li>Using this a AES or a DES encryption key is derived and encrypted.</li>
-									<li>The password text is shared between the two parties exchanging the encrypted content in a secure manner.</li>
-									<li>The receiver, uses the same password and salt and decrypts the content.</li>
-								</ul>
+
+
+							</td>
+
+							<td>
+
 							</td>
 
 						</tr>
