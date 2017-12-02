@@ -43,7 +43,7 @@ public class PGPFunctionality extends HttpServlet {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private long maxFileSize = 1024 * 10 * 10;
+    private long maxFileSize = 1024 * 10 * 10 *10;
 
     public PGPFunctionality() {
 
