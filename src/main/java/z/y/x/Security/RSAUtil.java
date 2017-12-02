@@ -11,6 +11,7 @@ import javax.crypto.*;
 import org.bouncycastle.jce.provider.*;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.openssl.PEMWriter;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -25,6 +26,31 @@ public class RSAUtil {
     public RSAUtil()
     {
 
+    }
+
+    public static String toPem(KeyPair keyPair) throws IOException {
+        StringWriter writer = new StringWriter();
+        PEMWriter pemWriter = new PEMWriter(writer);
+        try {
+            pemWriter.writeObject(keyPair);
+            pemWriter.flush();
+            return writer.toString();
+        } finally {
+            pemWriter.close();
+        }
+    }
+
+
+    public static String toPem(PublicKey keyPair) throws IOException {
+        StringWriter writer = new StringWriter();
+        PEMWriter pemWriter = new PEMWriter(writer);
+        try {
+            pemWriter.writeObject(keyPair);
+            pemWriter.flush();
+            return writer.toString();
+        } finally {
+            pemWriter.close();
+        }
     }
 
 

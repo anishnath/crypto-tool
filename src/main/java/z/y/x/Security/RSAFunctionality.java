@@ -1,19 +1,18 @@
 package z.y.x.Security;
 
+import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.provider.JCERSAPublicKey;
+import org.bouncycastle.openssl.PEMReader;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.Security;
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Created by ANish Nath on 11/7/17.
@@ -47,15 +46,15 @@ public class RSAFunctionality extends HttpServlet {
 
 
         String keysize = request.getParameter("keysize");
-        if(keysize!=null&& keysize.trim().length()>0)
-        {
+        if (keysize != null && keysize.trim().length() > 0) {
             try {
                 KeyPair kp = RSAUtil.generateKey(Integer.parseInt(keysize));
-                String pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
-                String privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
+//                String pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
+//                String privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
 
-                request.getSession().setAttribute("pubkey", pubKey);
-                request.getSession().setAttribute("privKey", privKey);
+
+                request.getSession().setAttribute("pubkey", RSAUtil.toPem(kp.getPublic()));
+                request.getSession().setAttribute("privKey", RSAUtil.toPem(kp));
                 request.getSession().setAttribute("keysize", keysize);
                 String nextJSP = "/rsafunctions.jsp";
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
@@ -63,13 +62,12 @@ public class RSAFunctionality extends HttpServlet {
 
 
                 return;
-            }catch (Exception ex )
-            {
+            } catch (Exception ex) {
                 //DO NOTHING
             }
         }
         //System.out.println(keysize);
-       // System.out.println("asdas");
+        // System.out.println("asdas");
 
     }
 
@@ -93,7 +91,7 @@ public class RSAFunctionality extends HttpServlet {
         String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
 
 
-                //
+        //
 
 //        System.out.println("publiKeyParam " + publiKeyParam);
 //        System.out.println("privateKeParam " + privateKeParam);
@@ -106,25 +104,46 @@ public class RSAFunctionality extends HttpServlet {
 
         if (METHOD_CALCULATERSA.equalsIgnoreCase(methodName)) {
 
-            if(algo==null || algo.length()==0)
-            {
-                algo="RSA";
+            if (algo == null || algo.length() == 0) {
+                algo = "RSA";
             }
 
 
             if ("encrypt".equals(encryptdecryptparameter)) {
 
                 if (publiKeyParam != null && publiKeyParam.trim().length() > 0) {
-                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
-                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
+//                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
+//                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
 
                     try {
-                        PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
-                        String encryptedMessage =  RSAUtil.encrypt(message,publicKeyObj,algo);
-                        out.println(encryptedMessage);
+                        byte[] content = publiKeyParam.getBytes();
+                        InputStream is = new ByteArrayInputStream(content);
+                        InputStreamReader isr = new InputStreamReader(is);
+                        BufferedReader br = new BufferedReader(isr);
+                        PEMReader pemReader = new PEMReader(br, null);
+
+                        Object obj = pemReader.readObject();
+
+                        System.out.println(obj.getClass());
+
+                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
+                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
+
+                            // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
+                            String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
+                            out.println(encryptedMessage);
+                        }
+
+                        if (obj instanceof java.security.KeyPair) {
+                            KeyPair kp = (KeyPair) obj;
+                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPublic(), algo);
+                            out.println(encryptedMessage);
+                        }
+
+
                     } catch (Exception e) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e );
+                        out.println("<font size=\"2\" color=\"red\"> " + e);
                     }
 
                 } else {
@@ -132,30 +151,45 @@ public class RSAFunctionality extends HttpServlet {
                     out.println("<font size=\"2\" color=\"red\"> " + algo + " Public Key Can't be EMPTY </font>");
 
                 }
-            }
-            else {
+            } else {
                 if (privateKeParam != null && privateKeParam.trim().length() > 0) {
 
                     boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
-                    if(!isBase64)
-                    {
+                    if (!isBase64) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + "Please Provide Base64 Encoded value" );
+                        out.println("<font size=\"2\" color=\"red\"> " + "Please Provide Base64 Encoded value");
                         return;
                     }
 
-                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
-                    privateKeParam = privateKeParam.replace("-----END PRIVATE KEY-----", "");
+//                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
+//                    privateKeParam = privateKeParam.replace("-----END PRIVATE KEY-----", "");
 
-                    try{
-                        PrivateKey privatekeyObj = RSAUtil.getPrivateKeyFromString(privateKeParam);
-                        String decryptMessage =  RSAUtil.decrypt(message,privatekeyObj,algo);
-                        out.println(decryptMessage);
 
-                    }catch (Exception e)
-                    {
+                    try {
+
+                        byte[] content = privateKeParam.getBytes();
+                        InputStream is = new ByteArrayInputStream(content);
+                        InputStreamReader isr = new InputStreamReader(is);
+                        BufferedReader br = new BufferedReader(isr);
+                        PEMReader pemReader = new PEMReader(br, null);
+
+                        Object obj = pemReader.readObject();
+
+                        System.out.println(obj.getClass());
+
+                        if (obj instanceof java.security.KeyPair) {
+                            KeyPair kp = (KeyPair) obj;
+                            String decryptMessage = RSAUtil.decrypt(message, kp.getPrivate(), algo);
+                            out.println(decryptMessage);
+                        } else {
+                            addHorizontalLine(out);
+                            out.println("<font size=\"2\" color=\"red\"> Invalid Private Key</font>");
+                        }
+
+
+                    } catch (Exception e) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e );
+                        out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
                     }
 
 

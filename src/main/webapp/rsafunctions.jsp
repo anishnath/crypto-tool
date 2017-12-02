@@ -29,8 +29,8 @@
 
 		if (request.getSession().getAttribute("pubkey")==null) {
 			KeyPair kp = RSAUtil.generateKey(1024);
-			pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
-			privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
+			pubKey =RSAUtil.toPem(kp.getPublic());
+			privKey = RSAUtil.toPem(kp);
 			k2=true;
 		}
 		else {
@@ -187,12 +187,12 @@
 				<legend>
 					<b> Key Size </b>
 				</legend>
-				Generate Key Size
-				<form id="form1" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
-					<input <% if(k1) {  %> checked <% } %>
 
-										   id="keysize1"  type="radio" name="keysize"
-										   value="512">512 bit
+				<form id="form1" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
+					<b>Generate Key Size</b>	<input <% if(k1) {  %> checked <% } %>
+
+																	   id="keysize1"  type="radio" name="keysize"
+																	   value="512">512 bit
 					<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
 										   value="1024">1024 bit
 					<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
@@ -221,14 +221,14 @@
 
 						<tr>
 							<td>
-								<textarea rows="10" cols="50"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+								<textarea rows="20" cols="60"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
 							</td>
 							<td>
-								<textarea rows="10" cols="50"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+								<textarea rows="20" cols="60"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
 							</td>
 
 
-							<td width="70%">
+							<td width="80%">
 								<p><strong>The RSA Algorithm</strong></p>
 								<p>The Rivest-Shamir-Adleman (RSA) algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers/>
 							</td>
@@ -241,25 +241,7 @@
 								<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
 							</td>
 							<td width="50%">
-							<br>
-								Ciphers
-								<br/>
-								<input id="cipherparameter1" type="radio" name="cipherparameter"
-									   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
-								<br/>
-								<input id="cipherparameter2" type="radio" name="cipherparameter"
-									   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
-								<br/>
-								<input id="cipherparameter3" type="radio" name="cipherparameter"
-									   value="RSA"  >RSA
-								<br/>
-							<input id="cipherparameter4" type="radio" name="cipherparameter"
-								   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
-							<br/>
-							<input id="cipherparameter5" type="radio" name="cipherparameter"
-								   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
-							<br/>
-
+								<b>output</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="output" id="output"></textarea>
 							</td>
 							<td>
 								Encrypt the message by raising it to the eth power modulo n. The result is a ciphertext message C.<br />To decrypt ciphertext message C, raise it to another power d modulo n<br />The encryption key (e,n) is made public. The decryption key (d,n) is kept private by the user.</p>
@@ -275,9 +257,27 @@
 								Decrypt Message
 								<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
 									   value="decryprt">
+								<br>
+
 							</td>
-							<td>
-								Output <textarea rows="20" cols="40" name="output1" placeholder="Output..." id="output"></textarea>
+							<td width="20%">
+								Ciphers
+								<br/>
+								<input id="cipherparameter1" type="radio" name="cipherparameter"
+									   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
+								<br/>
+								<input id="cipherparameter2" type="radio" name="cipherparameter"
+									   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
+								<br/>
+								<input id="cipherparameter3" type="radio" name="cipherparameter"
+									   checked value="RSA"  >RSA
+								<br/>
+								<input id="cipherparameter4" type="radio" name="cipherparameter"
+									   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
+								<br/>
+								<input id="cipherparameter5" type="radio" name="cipherparameter"
+									   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
+								<br/>
 							</td>
 
 							<td width="70%">
