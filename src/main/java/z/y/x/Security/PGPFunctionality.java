@@ -222,7 +222,7 @@ public class PGPFunctionality extends HttpServlet {
 
                     HttpResponse httpResponse = httpclient.execute(httpPost);
                     String responseString = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
-                    System.out.println(responseString);
+                    //System.out.println(responseString);
                     response.setContentType("text/html");
 
                     session.setAttribute("msg", "<font size=\"4\" color=\"green\"> " + responseString + "</font>");
