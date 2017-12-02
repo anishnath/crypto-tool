@@ -16,6 +16,7 @@ function googleTranslateElementInit() {
             <li><a href="bccrypt.jsp"><font size="3px">BCrypt Calculator/Tester </font> </a></li>
             <li><a href="pbe.jsp"><font size="3px">PBE Encryption/Decryption </font> </a></li>
             <li><a href="pgpkeyfunction.jsp"><font size="3px">PGP Key Generation </font> </a></li>
+            <li><a href="PGPFunctionality?invalidate=yes"><font size="3px">PGP Signature Verifier </font> </a></li>
             <li><a href="rsafunctions.jsp"><font size="3px">RSA Encryption/Decryption </font> </a></li>
             <li><a href="DHFunctions.jsp"><font size="3px">Diffie-Hellman Key Exchange</font> </a></li>
             <li><a href="PemParserFunctions.jsp"><font size="3px">PEMReader Decode Certificate </font></a></li>

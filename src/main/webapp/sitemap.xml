@@ -74,4 +74,13 @@
     <loc>https://8gwifi.org/DHFunctions.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/pgpfileverify.jsp</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/jks.jsp</loc>
+  </url>
+
+
 </urlset>
