@@ -10,4 +10,15 @@
 
  -->
 
+<%
+
+ String pAgent = request.getHeader("User-Agent");
+ if(pAgent!=null && ( pAgent.contains("Android") || ( pAgent.contains("iPhone") ) ))
+ {
+
+%>
+
+Back to Main <a href="mobilelinks.jsp"> Crypto Links </a>
+<%}%>
+<br>
 <b>Any private key value that you enter or we generate is not stored on this site . Also, notice that this tool is provided via an HTTPS URL to ensure that private keys cannot be stolen</b>

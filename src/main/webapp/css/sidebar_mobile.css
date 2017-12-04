@@ -19,10 +19,10 @@ body {
 #sidebar {
 	background: #eee;
 	float: right;
-	right: 300px;
-	margin-right: -300px;
+	right: 0px;
+	margin-right: -0px;
 	position: relative;
-	width: 250px;
+	width: 0px;
 	overflow-x: auto;
 	position: relative;
 }
@@ -48,7 +48,7 @@ body {
 
 #content {
 	background: #cbc;
-	margin-right: 250px;
+	margin-right: 0px;
 	overflow-y: auto;
 }
 

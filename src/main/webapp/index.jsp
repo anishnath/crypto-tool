@@ -40,7 +40,7 @@
 
     </section>
 		</article>
-		
+	<%@ include file="include_security_links.jsp"%>
 	</div>
 </body>
 </html>

@@ -1,3 +1,11 @@
+<%
+
+    String uAgent = request.getHeader("User-Agent");
+    if(uAgent!=null && ( !uAgent.contains("Android") && ( !uAgent.contains("iPhone") ) ))
+    {
+
+%>
+
 <header id="sidebar">
     <h1>The Online Tool for <br>Online</br> People</h1>
     <div id="google_translate_element"></div><script type="text/javascript">
@@ -11,6 +19,8 @@
 
 
     <script src='/js/api.js'></script>
+
+
     <nav role="navigation">
         <ul>Cryptography</ul>
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
@@ -42,7 +52,11 @@
         </li>
         <li><a href="contactus.jsp">Feature Request</a></li>
     </nav>
+    <% }
 
+    else {  %>
+
+    <%}  %>
 
 </header>
 
