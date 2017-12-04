@@ -82,5 +82,10 @@
     <loc>https://8gwifi.org/jks.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/pgpencdec.jsp</loc>
+  </url>
+
+
 
 </urlset>

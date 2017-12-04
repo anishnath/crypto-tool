@@ -25,11 +25,12 @@
         <ul>Cryptography</ul>
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
         <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption </font> </a></li>
-        <li><a href="bccrypt.jsp"><font size="2.5px">BCrypt Calculator/Tester </font> </a></li>
+        <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption </font> </a></li>
         <li><a href="pbe.jsp"><font size="2.5px">PBE Encryption/Decryption </font> </a></li>
+        <li><a href="pgpencdec.jsp"><font size="2.5px">PGP Encryption/Decryption </font> </a></li>
         <li><a href="pgpkeyfunction.jsp"><font size="2.5px">PGP Key Generation </font> </a></li>
         <li><a href="PGPFunctionality?invalidate=yes"><font size="2.5px">PGP Signature Verifier </font> </a></li>
-        <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption </font> </a></li>
+        <li><a href="bccrypt.jsp"><font size="2.5px">BCrypt Calculator/Tester </font> </a></li>
         <li><a href="DHFunctions.jsp"><font size="2.5px">Diffie-Hellman Key Exchange</font> </a></li>
         <li><a href="PemParserFunctions.jsp"><font size="2.5px">PEMReader Decode Certificate </font></a></li>
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>

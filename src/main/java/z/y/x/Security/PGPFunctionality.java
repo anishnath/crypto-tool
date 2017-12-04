@@ -38,12 +38,13 @@ public class PGPFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String GENERATE_PGEP_KEY = "GENERATE_PGEP_KEY";
     private static final String VERIFY_PGP_FILE = "VERIFY_PGP_FILE";
+    private static final String PGP_ENCRYPTION_DECRYPTION = "PGP_ENCRYPTION_DECRYPTION";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private long maxFileSize = 1024 * 10 * 10 *10;
+    private long maxFileSize = 1024 * 10 * 10 * 10;
 
     public PGPFunctionality() {
 
@@ -328,6 +329,169 @@ public class PGPFunctionality extends HttpServlet {
 
                 addHorizontalLine(out);
 
+
+            }
+
+            if (PGP_ENCRYPTION_DECRYPTION.equals(methodName)) {
+
+                final String encryptdecrypt = request.getParameter("encryptdecrypt");
+                if ("encrypt".equals(encryptdecrypt)) {
+                    //p_cmsg
+                    //p_publicKey
+
+                    final String msg = request.getParameter("p_cmsg");
+                    final String publicKey = request.getParameter("p_publicKey");
+
+                    if (msg == null || msg.trim().length() == 0) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Input Message is Null or Empty</font>");
+                        return;
+
+                    }
+
+
+                    if (publicKey == null || publicKey.trim().length() == 0) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> PGP Public Key is Null or EMpty</font>");
+                        return;
+
+                    }
+
+                    if (publicKey.contains("BEGIN PGP PUBLIC KEY BLOCK") && publicKey.contains("END PGP PUBLIC KEY BLOCK")) {
+
+                        Gson gson = new Gson();
+                        HttpClient client = HttpClientBuilder.create().build();
+                        String url1 = "http://localhost/crypto/rest/pgp/pgpencrypt";
+                        HttpPost post = new HttpPost(url1);
+
+
+                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                        urlParameters.add(new BasicNameValuePair("p_msg", msg));
+                        urlParameters.add(new BasicNameValuePair("p_publicKey", publicKey));
+
+                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+
+                        post.addHeader("accept", "application/json");
+
+                        HttpResponse response1 = client.execute(post);
+
+                        if (response1.getStatusLine().getStatusCode() != 200) {
+                            addHorizontalLine(out);
+                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                            return;
+                        }
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+
+                        String d = content.toString().substring(1, content.toString().length() - 1);
+                        d = d.replace("\\n", "<br />");
+
+                        out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
+
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> PGP does not have Valid PGP Public Key it should start with \\n -----BEGIN PGP PUBLIC KEY BLOCK----- \\n and ends with \\n -----END PGP PUBLIC KEY BLOCK----- \\n</font>");
+                        return;
+                    }
+
+                }
+
+                if ("decrypt".equals(encryptdecrypt)) {
+
+                    final String msg = request.getParameter("p_pgpmessage");
+                    final String privateKey = request.getParameter("p_privateKey");
+                    final String passPhrase = request.getParameter("p_passpharse");
+
+
+                    if (msg == null || msg.trim().length() == 0) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> PGP Message is Null or Empty..</font>");
+                        return;
+
+                    }
+                    if (!msg.contains("BEGIN PGP MESSAGE") && !msg.contains("END PGP MESSAGE")) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\">  does not have Valid PGP MESSAGE with \n" +
+                                " -----BEGIN BEGIN PGP MESSAGE----- \n" +
+                                " and ends with \n" +
+                                " -----END PGP MESSAGE----- .</font>".replace("\\n", "<br />"));
+                        return;
+
+                    }
+
+                    if (passPhrase == null || passPhrase.trim().length() == 0) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> does not have a valid Passphase it's empty or null</font>");
+                        return;
+
+                    }
+
+                    if (privateKey == null || privateKey.trim().length() == 0) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> does not have a PGP Private Key it's empty or null</font>");
+                        return;
+
+                    }
+
+                    if (privateKey.contains("BEGIN PGP PRIVATE KEY BLOCK") && privateKey.contains("END PGP PRIVATE KEY BLOCK")) {
+
+                        Gson gson = new Gson();
+                        HttpClient client = HttpClientBuilder.create().build();
+                        String url1 = "http://localhost/crypto/rest/pgp/pgpdecrypt";
+                        HttpPost post = new HttpPost(url1);
+
+
+                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                        urlParameters.add(new BasicNameValuePair("p_msg", msg));
+                        urlParameters.add(new BasicNameValuePair("p_privateKey", privateKey));
+                        urlParameters.add(new BasicNameValuePair("p_passpharse", passPhrase));
+
+                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+
+                        post.addHeader("accept", "application/json");
+
+                        HttpResponse response1 = client.execute(post);
+
+                        if (response1.getStatusLine().getStatusCode() != 200) {
+                            addHorizontalLine(out);
+                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                            return;
+                        }
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        String d = content.toString().substring(1, content.toString().length() - 1);
+                        d = d.replace("\\n", "<br />");
+                        out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
+
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\">  does not have Valid PGP Private Key it should start with \\n -----BEGIN PGP PRIVATE KEY BLOCK----- \\n and ends with \\n -----END PGP PRIVATE KEY BLOCK----- </font>");
+                        return;
+
+                    }
+
+
+                }
 
             }
         }
