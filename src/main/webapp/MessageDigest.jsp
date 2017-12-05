@@ -3,7 +3,7 @@
 <head>
 <title>Online Message Digest Algorithms checker and verifier</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Calculate or verify  Message Digest Algorithms">
+<meta name="description" content="Calculate or verify  Message Digest Algorithms using hash algorithms ipemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool ">
 <meta name="keywords"
 	content="Message digest calculate online, ripemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool, digest algorithm online">
 <%@ include file="include_css.jsp" %> 

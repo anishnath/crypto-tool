@@ -3,7 +3,7 @@
 <head>
 <title>Online String to hex or Hex To String Conversion</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Online String to Hex, Hex To String Conversion">
+<meta name="description" content="Online String to Hex, Hex To String Conversion, Generate Hex String from the givn String, Generate String from the given Hex String">
 <meta name="keywords"
 	content="String to Hex Conversion,expression hex bytes in string ">
 <%@ include file="include_css.jsp" %> 

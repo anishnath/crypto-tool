@@ -6,8 +6,8 @@
 	<title>RSA Encryption Decryption tool, Online RSA key generator </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="rsa encryption decryption online, online rsa key generator,rsa calculate private key online,rsa decryption calculator online,rsa decrypt with public key,rsa encrypt RSA/ECB/PKCS1Padding, rsa decrypt RSA/ECB/PKCS1Padding, RSA/ECB/PKCS1Padding,RSA/None/PKCS1Padding,RSA,RSA/NONE/OAEPWithSHA1AndMGF1Padding,RSA/ECB/OAEPWithSHA-256AndMGF1Padding,RSA/NONE/OAEPWithSHA1AndMGF1Padding,rsa public key decoder,rsa private key decrypt online" />
-	<meta name="description" content="rsa alogorith encryption decryption online " />
+	<meta name="keywords" content="rsa encryption decryption online, online rsa key generator,rsa calculate private key online,rsa decryption calculator online,rsa decrypt with public key,rsa encrypt RSA/ECB/PKCS1Padding, rsa decrypt RSA/ECB/PKCS1Padding, RSA/ECB/PKCS1Padding,RSA/None/PKCS1Padding,RSA,RSA/NONE/OAEPWithSHA1AndMGF1Padding,RSA/ECB/OAEPWithSHA-256AndMGF1Padding,RSA/NONE/OAEPWithSHA1AndMGF1Padding,rsa public key decoder,rsa private key decrypt online, rsa key in pem format" />
+	<meta name="description" content="rsa algorithm encryption decryption online, generate rsa key pairs and perform encryption and decryption using rsa public and private keys " />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />

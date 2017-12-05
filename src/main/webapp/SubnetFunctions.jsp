@@ -4,7 +4,7 @@
 
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <title>Online Subnet Calculator</title>
-<meta name="description" content="Online Subnet calculator " />
+<meta name="description" content="Online Subnet calculator generate IP range from the given subnet mask, cidr calculator of the rfc defined networks " />
 <meta name="keywords" content="Online IP Subnet Calculator, IP Subnet Calculator, Subnet Calculator, subnet mask, free, IP, Subnet, Calculator, supernet, cidr, subnetting, supernetting, network" />
 
 <meta name="robots" content="index,follow" />
