@@ -206,6 +206,7 @@
 	</form>
 				<br/>
 				<br/>
+				<%@ include file="include_security_links.jsp"%>
 				<%@ include file="footer.jsp"%>
 				<br/>
 				<br/>
@@ -285,10 +286,6 @@
 					<li>Serpent</li>
 					<li>Blowfish</li>
 				</ul>
-
-
-
-<%@ include file="include_security_links.jsp"%>
 
 		
 			</section>
