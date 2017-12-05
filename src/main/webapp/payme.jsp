@@ -1,1 +1,1 @@
-<p>For coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$</a>
+<p>For Coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$</a>

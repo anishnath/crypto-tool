@@ -361,7 +361,7 @@
 	</form>
 				<br/>
 				<br/>
-
+				<%@ include file="include_security_links.jsp"%>
 				<%@ include file="footer.jsp"%>
 				<br/>
 				<br/>
@@ -402,7 +402,7 @@
 				</ul>
 				<p>&nbsp;</p>
 
-<%@ include file="include_security_links.jsp"%>
+
 </section>
 		</article>
 		

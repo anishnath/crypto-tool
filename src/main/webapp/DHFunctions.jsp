@@ -117,7 +117,7 @@ primitive root mod p</li>
 </table>
             </fieldset>
 	</form>
-
+				<%@ include file="include_security_links.jsp"%>
 				<%@ include file="footer.jsp"%>
 				<p>&nbsp;</p>
 				<p>Source&nbsp;<a href="https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english">https://security.stackexchange.com/questions/45963/diffie-hellman-key-exchange-in-plain-english</a></p>
@@ -134,7 +134,7 @@ primitive root mod p</li>
 				<p>The algorithm is secure because the values of&nbsp;<code>a</code>&nbsp;and&nbsp;<code>b</code>, which are required to derive&nbsp;<code>s</code>&nbsp;are not transmitted across the wire at all.</p>
 				<p>&nbsp;</p>
 				<p><img src="https://i.stack.imgur.com/n4jBE.png" alt="" width="427" height="641" /></p>
-<%@ include file="include_security_links.jsp"%>
+
 
 </section>
 		</article>
