@@ -459,9 +459,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <p>&nbsp;</p>
-
-                <p>&nbsp;</p>
 	<%@ include file="include_security_links.jsp"%>	
 
 		</section>
