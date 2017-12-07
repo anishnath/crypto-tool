@@ -216,11 +216,8 @@
 		</fieldset>
 
 	</form>
-				<br/>
-				<br/>
 				<%@ include file="include_security_links.jsp"%>
 				<%@ include file="footer.jsp"%>
-				<br/>
 				<br/>
 				<p><strong>DES &ndash; Data Encryption Standard</strong></p>
 				<ul>
