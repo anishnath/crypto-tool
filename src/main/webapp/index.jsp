@@ -73,6 +73,7 @@
 	<article id="contentWrapper" role="main">
 		<%@ include file="footer.jsp"%>
 			<section id="content">
+				<%@ include file="include_security_links.jsp"%>
 				<h1>Cryptography</h1>
 				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
 				<p>In practice encryption can be a function of time, the effort and time required for an unauthorized person is so large it is impractical.&nbsp; By the time it is decrypted it is of little value.</p>
@@ -92,7 +93,7 @@
 
     </section>
 		</article>
-	<%@ include file="include_security_links.jsp"%>
+
 	</div>
 </body>
 </html>
