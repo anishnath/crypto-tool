@@ -24,6 +24,7 @@
     <nav role="navigation">
         <ul>Cryptography</ul>
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
+        <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
         <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption </font> </a></li>
         <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption </font> </a></li>
         <li><a href="pbe.jsp"><font size="2.5px">PBE Encryption/Decryption </font> </a></li>

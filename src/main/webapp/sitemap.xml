@@ -86,6 +86,9 @@
     <loc>https://8gwifi.org/pgpencdec.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/hmacgen.jsp</loc>
+  </url>
 
 
 </urlset>
