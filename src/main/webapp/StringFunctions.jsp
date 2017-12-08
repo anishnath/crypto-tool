@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online String functions </title>
+<title>Online String functions length,indexOf,lastIndexOf,toUpperCase,trimWhitespace,trimLeadingWhitespace,trimTrailingWhitespace,palindrome,reverse,replace,replaceALL</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description"
 	content="Online String palindrome,revrese to UpperCase,Lowercase,trim,replace white characters, substring,indexOf,lastIndexOff,Miscellaneous String utility meth">
 <meta name="keywords"
 	content="online string functions,trim,lastIndexOf,indexOf,substring,ignore white space,Miscellaneous String utility methods,Uncapitalize a String, changing the first letter to lower case ,Trim trailing whitespace from the given String,Trim all whitespace from the given String: leading, trailing, and in between characters,Tokenize the given String into a String array via a StringTokenizer,Capitalize a String, changing the first letter to upper case,Delete all occurrences of the given substring.
-	pali,largest palindrome from the string,revrese the String,reverse the Line">
+	pali,largest palindrome from the string,revrese the String,reverse the Line,length,indexOf,lastIndexOf,toUpperCase,trimWhitespace,trimLeadingWhitespace,trimTrailingWhitespace,palindrome,reverse,replace,replaceALL">
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
