@@ -183,119 +183,120 @@
 
 	<article id="contentWrapper" role="main">
 		<section id="content">
-			<fieldset name="RSA"   >
+			<fieldset name="RSA">
 				<legend>
-					<b> Key Size </b>
+					<b> RSA Encryption/Decryption Functionality </b>
 				</legend>
-
-				<form id="form1" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
-					<b>Generate Key Size</b>	<input <% if(k1) {  %> checked <% } %>
-
-																	   id="keysize1"  type="radio" name="keysize"
-																	   value="512">512 bit
-					<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
-										   value="1024">1024 bit
-					<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
-										   value="2048">2048 bit
-					<input <% if(k4) {  %> checked <% } %> id="keysize4" type="radio" name="keysize"
-										   value="4096">4096 bit
-				</form>
-			</fieldset>
-
-			<form id="form" method="POST">
-				<input type="hidden" name="methodName" id="methodName"
-					   value="CALCULATE_RSA">
-
-				<fieldset name="RSA2"   >
-
+				<fieldset name="RSA Key Size">
 					<legend>
-						<b> RSA Encryption/Decryption Functionality </b>
+						<b> Key Size </b>
 					</legend>
 
-					<table border="1" style="width:100pc">
-						<tr>
-							<th>Public Key </th>
-							<th>Private Key </th>
-							<th>RSA Encryption/Decryption </th>
-						</tr>
+					<form id="form1" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
+						Generate RSA Key Size	<input <% if(k1) {  %> checked <% } %>
 
-						<tr>
-							<td>
-								<textarea rows="20" cols="60"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
-							</td>
-							<td>
-								<textarea rows="20" cols="60"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
-							</td>
-
-
-							<td width="80%">
-								<p><strong>The RSA Algorithm</strong></p>
-								<p>The Rivest-Shamir-Adleman (RSA) algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers/>
-							</td>
-
-						</tr>
-
-						<tr>
-
-							<td>
-								<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
-							</td>
-							<td width="50%">
-								<b>output</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="output" id="output"></textarea>
-							</td>
-							<td>
-								Encrypt the message by raising it to the eth power modulo n. The result is a ciphertext message C.<br />To decrypt ciphertext message C, raise it to another power d modulo n<br />The encryption key (e,n) is made public. The decryption key (d,n) is kept private by the user.</p>
-							</td>
-
-						</tr>
-						<tr>
-							<td>
-								Encrypt Message
-								<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="encrypt">
-								<br/>
-								Decrypt Message
-								<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="decryprt">
-								<br>
-
-							</td>
-							<td width="20%">
-								Ciphers
-								<br/>
-								<input id="cipherparameter1" type="radio" name="cipherparameter"
-									   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
-								<br/>
-								<input id="cipherparameter2" type="radio" name="cipherparameter"
-									   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
-								<br/>
-								<input id="cipherparameter3" type="radio" name="cipherparameter"
-									   checked value="RSA"  >RSA
-								<br/>
-								<input id="cipherparameter4" type="radio" name="cipherparameter"
-									   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
-								<br/>
-								<input id="cipherparameter5" type="radio" name="cipherparameter"
-									   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
-								<br/>
-							</td>
-
-							<td width="70%">
-								<p>RSA encryption usually is only used for messages that fit into one block<br />A 1024-bit RSA key invocation can encrypt a message up to 117 bytes, and results in a 128-byte value</p>
-								<br/>
-								<p>RSA, as defined by PKCS#1, encrypts "messages" of limited size,the maximum size of data which can be encrypted with RSA is 245 bytes. No more</p>
-							</td>
-
-						</tr>
-
-						<tr>
-
-						</tr>
-
-					</table>
-
-
+																		id="keysize1"  type="radio" name="keysize"
+																		value="512">512 bit
+						<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
+											   value="1024">1024 bit
+						<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
+											   value="2048">2048 bit
+						<input <% if(k4) {  %> checked <% } %> id="keysize4" type="radio" name="keysize"
+											   value="4096">4096 bit
+					</form>
 				</fieldset>
+
+
+				<form id="form" method="POST">
+					<input type="hidden" name="methodName" id="methodName"
+						   value="CALCULATE_RSA">
+
+
+
+
+					<fieldset name="RSA2"   >
+
+						<legend>
+							<b> RSA Encryption/Decryption</b>
+						</legend>
+
+						<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
+							   value="encrypt">Encrypt Message
+
+						<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
+							   value="decryprt"> Decrypt Message
+						<br>
+
+						<table border="1" style="width:80pc">
+							<tr>
+								<th>Public Key </th>
+								<th>Private Key </th>
+								<th>RSA Encryption/Decryption </th>
+							</tr>
+
+							<tr>
+								<td>
+									<textarea rows="20" cols="50"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+								</td>
+								<td>
+									<textarea rows="20" cols="50"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+								</td>
+
+
+								<td rowspan="3" width="80%">
+									<p><strong>The RSA Algorithm</strong></p>
+									<p>The Rivest-Shamir-Adleman (RSA) algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers
+									<p>RSA encryption usually is only used for messages that fit into one block<br />A 1024-bit RSA key invocation can encrypt a message up to 117 bytes, and results in a 128-byte value</p>
+									<p>RSA, as defined by PKCS#1, encrypts "messages" of limited size,the maximum size of data which can be encrypted with RSA is 245 bytes. No more</p>
+								</td>
+
+							</tr>
+
+							<tr>
+
+								<td>
+									<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
+								</td>
+								<td width="50%">
+									<b>output</b><div id="output"></div>
+								</td>
+
+
+
+
+							</tr>
+							<tr>
+								<td colspan="2" width="20%">
+									Ciphers
+									<br/>
+									<input id="cipherparameter3" type="radio" name="cipherparameter"
+										   checked value="RSA"  >RSA
+									<br/>
+									<input id="cipherparameter1" type="radio" name="cipherparameter"
+										   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
+									<br/>
+									<input id="cipherparameter2" type="radio" name="cipherparameter"
+										   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
+									<br/>
+									<input id="cipherparameter4" type="radio" name="cipherparameter"
+										   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
+									<br/>
+									<input id="cipherparameter5" type="radio" name="cipherparameter"
+										   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
+									<br/>
+								</td>
+
+
+
+							</tr>
+
+
+
+						</table>
+
+
+					</fieldset>
+			</fieldset>
 
 			</form>
 

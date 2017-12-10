@@ -95,7 +95,7 @@ public class RSAFunctionality extends HttpServlet {
 
 //        System.out.println("publiKeyParam " + publiKeyParam);
 //        System.out.println("privateKeParam " + privateKeParam);
-//        System.out.println("message " + message);
+         // System.out.println("message " + message);
 //        System.out.println("algo " + algo);
 //        System.out.println("keysize " + keysize);
 //        System.out.println("encryptdecryptparameter " + encryptdecryptparameter);
@@ -111,6 +111,13 @@ public class RSAFunctionality extends HttpServlet {
 
             if ("encrypt".equals(encryptdecryptparameter)) {
 
+                if(null == message || message.trim().length()==0){
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
+                    return;
+
+                }
+
                 if (publiKeyParam != null && publiKeyParam.trim().length() > 0) {
 //                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
 //                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
@@ -124,26 +131,30 @@ public class RSAFunctionality extends HttpServlet {
 
                         Object obj = pemReader.readObject();
 
-                        System.out.println(obj.getClass());
+                        System.out.println("Encrypt RSA -- " + obj.getClass());
 
                         if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
                             JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
 
                             // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
                             String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
-                            out.println(encryptedMessage);
+                            addHorizontalLine(out);
+                            out.println( "<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" +encryptedMessage +  "</textarea>");
+                            //out.println(encryptedMessage);
                         }
 
                         if (obj instanceof java.security.KeyPair) {
                             KeyPair kp = (KeyPair) obj;
                             String encryptedMessage = RSAUtil.encrypt(message, kp.getPublic(), algo);
-                            out.println(encryptedMessage);
+                            addHorizontalLine(out);
+                            //out.println(encryptedMessage);
+                            out.println( "<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" +encryptedMessage +  "</textarea>");
                         }
 
 
                     } catch (Exception e) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e);
+                        out.println("<font size=\"4\" color=\"red\"> " + e);
                     }
 
                 } else {
@@ -152,13 +163,26 @@ public class RSAFunctionality extends HttpServlet {
 
                 }
             } else {
+
+                //Assumed Decrypt ...
+               // System.out.println(encryptdecryptparameter);
+                String encrypedmessagetextarea = request.getParameter("encrypedmessagetextarea");
+                //System.out.println("encrypedmessagetextarea ---> " + encrypedmessagetextarea);
+
                 if (privateKeParam != null && privateKeParam.trim().length() > 0) {
 
                     boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
                     if (!isBase64) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + "Please Provide Base64 Encoded value");
+                        out.println("<font size=\"3\" color=\"red\"> " + "Please Provide Base64 Encoded value Failed to Decrypt.. </font>");
                         return;
+                    }
+
+                    if(null == message || message.trim().length()==0){
+                        addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> RSA Encryped Message is Null or EMpty....</font>");
+                        return;
+
                     }
 
 //                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
@@ -175,12 +199,14 @@ public class RSAFunctionality extends HttpServlet {
 
                         Object obj = pemReader.readObject();
 
-                        System.out.println(obj.getClass());
+                        System.out.println("RSA Decrypt-- " + obj.getClass());
 
                         if (obj instanceof java.security.KeyPair) {
                             KeyPair kp = (KeyPair) obj;
                             String decryptMessage = RSAUtil.decrypt(message, kp.getPrivate(), algo);
-                            out.println(decryptMessage);
+                           // out.println(decryptMessage);
+                            addHorizontalLine(out);
+                            out.println( "<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" +decryptMessage +  "</textarea>");
                         } else {
                             addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\"> Invalid Private Key</font>");

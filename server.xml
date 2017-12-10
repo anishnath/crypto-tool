@@ -21,7 +21,7 @@
  -->
 <Server port="8005" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
-  <!-- Security listener. Documentation at /docs/config/listeners.html
+<!-- Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
   <!--APR library loader. Documentation at /docs/apr.html -->
