@@ -74,8 +74,27 @@ public class RSAUtil {
         return cipherText;
     }
 
+    public static byte[] encrypt(byte[] text, PrivateKey key, String cipherAlgo) throws Exception
+    {
+        byte[] cipherText = null;
+
+        Cipher cipher = Cipher.getInstance(cipherAlgo);
+
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        cipherText = cipher.doFinal(text);
+        return cipherText;
+    }
+
 
     public static String encrypt(String text, PublicKey key,String cipherAlgo) throws Exception
+    {
+        String encryptedText;
+        byte[] cipherText = encrypt(text.getBytes("UTF8"),key,cipherAlgo);
+        encryptedText = encodeBASE64(cipherText);
+        return encryptedText;
+    }
+
+    public static String encrypt(String text, PrivateKey key,String cipherAlgo) throws Exception
     {
         String encryptedText;
         byte[] cipherText = encrypt(text.getBytes("UTF8"),key,cipherAlgo);
@@ -97,8 +116,31 @@ public class RSAUtil {
 
     }
 
+    public static byte[] decrypt(byte[] text, PublicKey key,String cipherAlgo) throws Exception
+    {
+        byte[] dectyptedText = null;
+        // decrypt the text using the private key
+        Cipher cipher = Cipher.getInstance(cipherAlgo);
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        dectyptedText = cipher.doFinal(text);
+        return dectyptedText;
+
+    }
+
+
+
 
     public static String decrypt(String text, PrivateKey key,String cipherAlgo) throws Exception
+    {
+        String result;
+        // decrypt the text using the private key
+        byte[] dectyptedText = decrypt(decodeBASE64(text),key,cipherAlgo);
+        result = new String(dectyptedText, "UTF8");
+        return result;
+
+    }
+
+    public static String decrypt(String text, PublicKey key,String cipherAlgo) throws Exception
     {
         String result;
         // decrypt the text using the private key

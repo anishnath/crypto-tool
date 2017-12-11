@@ -145,7 +145,7 @@ public class RSAFunctionality extends HttpServlet {
 
                         if (obj instanceof java.security.KeyPair) {
                             KeyPair kp = (KeyPair) obj;
-                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPublic(), algo);
+                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPrivate(), algo);
                             addHorizontalLine(out);
                             //out.println(encryptedMessage);
                             out.println( "<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" +encryptedMessage +  "</textarea>");
@@ -199,15 +199,26 @@ public class RSAFunctionality extends HttpServlet {
 
                         Object obj = pemReader.readObject();
 
-                        System.out.println("RSA Decrypt-- " + obj.getClass());
-
+                        System.out.println("Decrypt RSA-- " + obj.getClass());
                         if (obj instanceof java.security.KeyPair) {
                             KeyPair kp = (KeyPair) obj;
                             String decryptMessage = RSAUtil.decrypt(message, kp.getPrivate(), algo);
                            // out.println(decryptMessage);
                             addHorizontalLine(out);
                             out.println( "<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" +decryptMessage +  "</textarea>");
-                        } else {
+                        }
+
+                        else if  (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
+
+                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
+                            String decryptMessage = RSAUtil.decrypt(message, jcersaPublicKey, algo);
+
+                            addHorizontalLine(out);
+                            out.println( "<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" +decryptMessage +  "</textarea>");
+
+
+                        }
+                        else {
                             addHorizontalLine(out);
                             out.println("<font size=\"2\" color=\"red\"> Invalid Private Key</font>");
                         }
@@ -221,7 +232,7 @@ public class RSAFunctionality extends HttpServlet {
 
                 } else {
                     addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + " Public Key Can't be EMPTY </font>");
+                    out.println("<font size=\"2\" color=\"red\"> " + algo + "  Key Can't be EMPTY </font>");
                 }
             }
         }
