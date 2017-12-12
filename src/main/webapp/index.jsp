@@ -72,8 +72,10 @@
 
 	<%@ include file="include.jsp"%>
 	<article id="contentWrapper" role="main">
-		<%@ include file="footer.jsp"%>
+
 			<section id="content">
+				<%@ include file="payme.jsp"%>
+				<%@ include file="footer.jsp"%>
 				<%@ include file="include_security_links.jsp"%>
 				<h1>Cryptography</h1>
 				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
