@@ -267,6 +267,7 @@
 
 
 								<td rowspan="3" width="80%">
+									<%@ include file="footer_adsense.jsp"%>
 									<p><strong>The RSA Algorithm</strong></p>
 									<p>The Rivest-Shamir-Adleman (RSA) algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers
 									<p>RSA encryption usually is only used for messages that fit into one block<br />A 1024-bit RSA key invocation can encrypt a message up to 117 bytes, and results in a 128-byte value</p>
