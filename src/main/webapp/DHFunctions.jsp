@@ -101,16 +101,16 @@ primitive root mod p</li>
 
 <tr>
 <td>
-<input type="submit" id="submit" name="generate DH Paramter">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" id="submit" name="generate DH Paramter">
 <div id="output1"></div>
 </td>
 </tr>
 <tr>
-<td>Output
+<td><b>Output</b>
 			</td>
 			<td>
 			
-			<textarea rows="20" cols="80" id="output"></textarea>
+			<div id="output"></div>
 			</td>
 			</tr>
 			

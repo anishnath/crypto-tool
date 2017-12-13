@@ -40,6 +40,7 @@ public class DH {
 		 builder.append("Suppose we have two people wishing to  communicate: Alice and Bob");
 		 builder.append("\n");
 		 builder.append("They do not want Eve :to know their message.");
+		 builder.append("\n");
 		 
 		
 		 DHParameterSpec             dhParams = new DHParameterSpec(G, P);
@@ -53,7 +54,8 @@ public class DH {
 		 	// set up
 	        KeyAgreement aliceKeyAgree = KeyAgreement.getInstance("DH", "BC");
 	        KeyPair      alicePair = alicekeyGen.generateKeyPair();
-		 
+
+		    builder.append("\n");
 	        builder.append("--------BEGIN ALICE KEYPAIR INFORMATION---------\n");
 	        
 	        toStringKeyPair(builder, alicePair);
