@@ -3,7 +3,7 @@
 <head>
 	<title>Online PGP Encryption Decryption tool using pgp public private keys </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-	<meta name="description" content="pgp, encryption, decryption, tool, online, free, simple PGP Online Encrypt and Decrypt. Tool for PGP Encryption and Decryption. PGP Key Generator Tool.">
+	<meta name="description" content="pgp encryption, decryption tool, online free, simple PGP Online Encrypt and Decrypt. Tool for PGP Encryption and Decryption. PGP Key Generator Tool.">
 	<meta name="keywords"  content="pgp, encryption, decryption, tool, online, free encrypt decrypt pgp messages using pgp private key">
 	<%@ include file="include_css.jsp" %>
 	<script type="text/javascript">
