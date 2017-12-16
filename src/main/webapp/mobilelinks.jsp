@@ -15,6 +15,7 @@
         <li><a href="pgpkeyfunction.jsp"><font size="3px">PGP Key Generation </font> </a></li>
         <li><a href="PGPFunctionality?invalidate=yes"><font size="3px">PGP Signature Verifier </font> </a></li>
         <li><a href="rsafunctions.jsp"><font size="3px">RSA Encryption/Decryption </font> </a></li>
+        <li><a href="ecfunctions.jsp"><font size="2.5px">Elliptic Curve Encryption/Decryption </font> </a></li>
         <li><a href="DHFunctions.jsp"><font size="3px">Diffie-Hellman Key Exchange</font> </a></li>
         <li><a href="PemParserFunctions.jsp"><font size="3px">PEMReader Decode Certificate </font></a></li>
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="3px">Generate Self Sign Certificate </font> </a></li>

@@ -25,8 +25,9 @@
         <ul>Cryptography</ul>
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
         <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
-        <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption </font> </a></li>
-        <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption </font> </a></li>
+        <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption</font> </a></li>
+        <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption</font> </a></li>
+        <li><a href="ecfunctions.jsp"><font size="2.5px">Elliptic Curve Encryption/Decryption </font> </a></li>
         <li><a href="pbe.jsp"><font size="2.5px">PBE Encryption/Decryption </font> </a></li>
         <li><a href="pgpencdec.jsp"><font size="2.5px">PGP Encryption/Decryption </font> </a></li>
         <li><a href="pgpkeyfunction.jsp"><font size="2.5px">PGP Key Generation </font> </a></li>
@@ -37,7 +38,6 @@
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>
         <li><a href="cafunctions.jsp"><font size="2.5px">Generate rootCA/InterCA/Certs</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
-        <li><a href="ProviderCapablitiesFunctions.jsp"><font size="2.5px">Get Algorithm Capabilities </font></a></li>
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>
         <li><a href="pingfunctions.jsp"><font size="2.5px">Ping/Locate IPv4/Iv6  </font></a></li>

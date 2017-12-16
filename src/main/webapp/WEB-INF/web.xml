@@ -198,6 +198,15 @@
 		<url-pattern>/PGPFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>ECFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.ECFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ECFunctionality</servlet-name>
+		<url-pattern>/ECFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
