@@ -1,29 +1,20 @@
 package z.y.x.Security;
 
+import org.bouncycastle.asn1.cms.ContentInfo;
+import org.bouncycastle.asn1.util.ASN1Dump;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.*;
+import org.bouncycastle.openssl.PEMReader;
+import org.bouncycastle.openssl.PasswordFinder;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.cert.X509Certificate;
 import java.util.Enumeration;
-
-import org.bouncycastle.asn1.cms.ContentInfo;
-import org.bouncycastle.asn1.util.ASN1Dump;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPrivateCrtKey;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.jce.provider.JDKDSAPrivateKey;
-import org.bouncycastle.jce.provider.X509CRLObject;
-import org.bouncycastle.jce.provider.X509CertificateObject;
-import org.bouncycastle.openssl.PEMReader;
-import org.bouncycastle.openssl.PasswordFinder;
 
 final public class PemParser {
 	
@@ -86,7 +77,7 @@ final public class PemParser {
 				throw new Exception("Invalid Input file");
 			}
 
-			//System.out.println(obj.getClass());
+			//System.out.println("Hello--" + obj.getClass());
 			if (obj instanceof JDKDSAPrivateKey) {
 				JDKDSAPrivateKey jdkdsaPrivateKey = (JDKDSAPrivateKey) obj;
 				builder.append("The DSA" + jdkdsaPrivateKey);
@@ -121,6 +112,8 @@ final public class PemParser {
 				// kp.getPrivate().getEncoded();
 				if (kp != null) {
 
+					//System.out.println("Hello--" +kp.getPrivate().getClass());
+
 					if (kp.getPrivate() instanceof org.bouncycastle.jce.provider.JCERSAPrivateCrtKey) {
 						builder.append("-------BEGINS Private Key Information-----------");
 						builder.append("\n");
@@ -135,7 +128,45 @@ final public class PemParser {
 						builder.append("\n");
 						builder.append("-------ENDS Private Key Information-----------");
 						// return;
-					} else {
+					}
+					else if (kp.getPrivate() instanceof org.bouncycastle.jce.provider.JCEECPrivateKey) {
+						builder.append("-----BEGIN EC PRIVATE KEY-----");
+						builder.append("\n");
+
+						JCEECPrivateKey jceecPrivateKey = (JCEECPrivateKey) kp
+								.getPrivate();
+
+						builder.append("\nAlgo="
+								+ jceecPrivateKey.getAlgorithm()+"\n");
+						builder.append("Format=" + jceecPrivateKey.getFormat()+ "\n");
+						builder.append("\nD="
+								+ jceecPrivateKey.getD() + "\n");
+						Enumeration e = jceecPrivateKey.getBagAttributeKeys();
+
+						while (e.hasMoreElements()) {
+
+							String param = (String) e.nextElement();
+							builder.append("BagAttributeKey " + param + "\n");
+						}
+
+						builder.append("---Curve Information starts ----\n");
+						builder.append("A="+jceecPrivateKey.getParameters().getCurve().getA() +"\n");
+						builder.append("B="+jceecPrivateKey.getParameters().getCurve().getB() +"\n");
+						builder.append("Field Size "+jceecPrivateKey.getParameters().getCurve().getFieldSize() +"\n");
+						builder.append("isInfinity "+jceecPrivateKey.getParameters().getCurve().getInfinity().isInfinity()+"\n");
+
+						builder.append("---Curve Information Ends ----\n");
+
+
+
+						//builder.append("Encoded" + jceecPrivateKey.getEncoded());
+						//builder.append(jceecPrivateKey.toString());
+						builder.append("\n");
+						builder.append("\n-----ENDS EC PRIVATE KEY-----");
+
+
+					}
+					else {
 						builder.append("-------BEGINS Private Key Information-----------");
 						builder.append("\n");
 						JDKDSAPrivateKey jdkdsaPrivateKey = (JDKDSAPrivateKey) kp
