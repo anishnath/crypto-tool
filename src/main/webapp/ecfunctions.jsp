@@ -219,6 +219,25 @@ K-571,brainpoolp512r1,brainpoolp384t1,brainpoolp256r1,brainpoolp512t1,brainpoolp
 				</tr>
 			</table>
 			<%@ include file="include_security_links.jsp"%>
+			<br/>
+			<p><strong><span id="Generating_EC_Keys_and_Parameters">Generating EC Keys and Parameters</span></strong></p>
+			<blockquote>
+				<p>[bash]$ openssl ecparam -list_curves</p>
+				<p>&nbsp; secp256k1 : SECG curve over a 256 bit prime field</p>
+				<p>&nbsp; secp384r1 : NIST/SECG curve over a 384 bit prime field</p>
+				<p>&nbsp; secp521r1 : NIST/SECG curve over a 521 bit prime field</p>
+				<p>&nbsp; prime256v1: X9.62/SECG curve over a 256 bit prime field</p>
+			</blockquote>
+			<p><strong>An EC parameters file can then be generated for any of the built-in named curves as follows:</strong></p>
+			<blockquote>
+				<p>[bash]$ openssl ecparam -name secp256k1 -out secp256k1.pem</p>
+				<p>[bash]$ cat secp256k1.pem</p>
+				<p>-----BEGIN EC PARAMETERS-----</p>
+				<p>BgUrgQQACg==</p>
+				<p>-----END EC PARAMETERS-----</p>
+				<p><strong>&nbsp;To generate a private/public key pair from a pre-eixsting parameters file use the following:</strong><br />[bash]$ openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem<br />[bash]$ cat secp256k1-key.pem<br />-----BEGIN EC PRIVATE KEY-----<br />MHQCAQEEIKRPdj7XMkxO8nehl7iYF9WAnr2Jdvo4OFqceqoBjc8/oAcGBSuBBAAK<br />oUQDQgAE7qXaOiK9jgWezLxemv+lxQ/9/Q68pYCox/y1vD1fhvosggCxIkiNOZrD<br />kHqms0N+huh92A/vfI5FyDZx0+cHww==<br />-----END EC PRIVATE KEY-----</p>
+				<p><strong>Examine the specific details of the parameters associated with a particular named curve</strong><br />[bash]$ openssl ecparam -in secp256k1.pem -text -param_enc explicit -noout<br />Field Type: prime-field<br />Prime:<br /> 00:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:<br /> ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:fe:ff:<br /> ff:fc:2f<br />A: 0<br />B: 7 (0x7)<br />Generator (uncompressed):<br /> 04:79:be:66:7e:f9:dc:bb:ac:55:a0:62:95:ce:87:<br /> 0b:07:02:9b:fc:db:2d:ce:28:d9:59:f2:81:5b:16:<br /> f8:17:98:48:3a:da:77:26:a3:c4:65:5d:a4:fb:fc:<br /> 0e:11:08:a8:fd:17:b4:48:a6:85:54:19:9c:47:d0:<br /> 8f:fb:10:d4:b8<br />Order: <br /> 00:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:<br /> ff:fe:ba:ae:dc:e6:af:48:a0:3b:bf:d2:5e:8c:d0:<br /> 36:41:41<br />Cofactor: 1 (0x1)</p>
+			</blockquote>
 		</section>
 	</article>
 
