@@ -1,6 +1,14 @@
 package z.y.x.Security;
 
+import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.provider.JCERSAPublicKey;
 import org.bouncycastle.openssl.PEMReader;
@@ -13,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.security.KeyPair;
 import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ANish Nath on 11/7/17.
@@ -95,7 +105,7 @@ public class RSAFunctionality extends HttpServlet {
 
 //        System.out.println("publiKeyParam " + publiKeyParam);
 //        System.out.println("privateKeParam " + privateKeParam);
-         // System.out.println("message " + message);
+        // System.out.println("message " + message);
 //        System.out.println("algo " + algo);
 //        System.out.println("keysize " + keysize);
 //        System.out.println("encryptdecryptparameter " + encryptdecryptparameter);
@@ -111,7 +121,7 @@ public class RSAFunctionality extends HttpServlet {
 
             if ("encrypt".equals(encryptdecryptparameter)) {
 
-                if(null == message || message.trim().length()==0){
+                if (null == message || message.trim().length() == 0) {
                     addHorizontalLine(out);
                     out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
                     return;
@@ -133,14 +143,17 @@ public class RSAFunctionality extends HttpServlet {
 
                         System.out.println("Encrypt RSA -- " + obj.getClass());
 
+
                         if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
                             JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
 
                             // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
                             String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
                             addHorizontalLine(out);
-                            out.println( "<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" +encryptedMessage +  "</textarea>");
+                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
+                            return;
                             //out.println(encryptedMessage);
+
                         }
 
                         if (obj instanceof java.security.KeyPair) {
@@ -148,8 +161,60 @@ public class RSAFunctionality extends HttpServlet {
                             String encryptedMessage = RSAUtil.encrypt(message, kp.getPrivate(), algo);
                             addHorizontalLine(out);
                             //out.println(encryptedMessage);
-                            out.println( "<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" +encryptedMessage +  "</textarea>");
+                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
+                            return;
                         }
+
+                        Gson gson = new Gson();
+                        HttpClient client = HttpClientBuilder.create().build();
+                        String url1 = "http://localhost/crypto/rest/rsa/rsaencrypt";
+                        HttpPost post = new HttpPost(url1);
+                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                        urlParameters.add(new BasicNameValuePair("p_msg", message));
+                        urlParameters.add(new BasicNameValuePair("p_key", publiKeyParam));
+                        urlParameters.add(new BasicNameValuePair("p_algo", algo));
+
+                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                        post.addHeader("accept", "application/json");
+
+                        HttpResponse response1 = client.execute(post);
+
+                        if (response1.getStatusLine().getStatusCode() != 200) {
+                            if (response1.getStatusLine().getStatusCode() == 404) {
+                                BufferedReader br1 = new BufferedReader(
+                                        new InputStreamReader(
+                                                (response1.getEntity().getContent())
+                                        )
+                                );
+                                StringBuilder content1 = new StringBuilder();
+                                String line;
+                                while (null != (line = br.readLine())) {
+                                    content1.append(line);
+                                }
+                                addHorizontalLine(out);
+                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
+                                return;
+                            } else {
+                                addHorizontalLine(out);
+                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                                return;
+                            }
+
+                        }
+                        BufferedReader br1 = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content1 = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content1.append(line);
+                        }
+
+                        EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
+                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
+                        return;
 
 
                     } catch (Exception e) {
@@ -165,7 +230,7 @@ public class RSAFunctionality extends HttpServlet {
             } else {
 
                 //Assumed Decrypt ...
-               // System.out.println(encryptdecryptparameter);
+                // System.out.println(encryptdecryptparameter);
                 String encrypedmessagetextarea = request.getParameter("encrypedmessagetextarea");
                 //System.out.println("encrypedmessagetextarea ---> " + encrypedmessagetextarea);
 
@@ -178,7 +243,7 @@ public class RSAFunctionality extends HttpServlet {
                         return;
                     }
 
-                    if(null == message || message.trim().length()==0){
+                    if (null == message || message.trim().length() == 0) {
                         addHorizontalLine(out);
                         out.println("<font size=\"2\" color=\"red\"> RSA Encryped Message is Null or EMpty....</font>");
                         return;
@@ -203,25 +268,74 @@ public class RSAFunctionality extends HttpServlet {
                         if (obj instanceof java.security.KeyPair) {
                             KeyPair kp = (KeyPair) obj;
                             String decryptMessage = RSAUtil.decrypt(message, kp.getPrivate(), algo);
-                           // out.println(decryptMessage);
+                            // out.println(decryptMessage);
                             addHorizontalLine(out);
-                            out.println( "<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" +decryptMessage +  "</textarea>");
+                            out.println("<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" + decryptMessage + "</textarea>");
+                            return;
                         }
 
-                        else if  (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
+                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
 
                             JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
                             String decryptMessage = RSAUtil.decrypt(message, jcersaPublicKey, algo);
 
                             addHorizontalLine(out);
-                            out.println( "<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" +decryptMessage +  "</textarea>");
+                            out.println("<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"10\" cols=\"40\">" + decryptMessage + "</textarea>");
+                            return;
 
 
                         }
-                        else {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\"> Invalid Private Key</font>");
+
+                        Gson gson = new Gson();
+                        HttpClient client = HttpClientBuilder.create().build();
+                        String url1 = "http://localhost/crypto/rest/rsa/rsadecrypt";
+                        HttpPost post = new HttpPost(url1);
+                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                        urlParameters.add(new BasicNameValuePair("p_msg", message));
+                        urlParameters.add(new BasicNameValuePair("p_key", privateKeParam));
+                        urlParameters.add(new BasicNameValuePair("p_algo", algo));
+
+                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                        post.addHeader("accept", "application/json");
+
+                        HttpResponse response1 = client.execute(post);
+
+                        if (response1.getStatusLine().getStatusCode() != 200) {
+                            if (response1.getStatusLine().getStatusCode() == 404) {
+                                BufferedReader br1 = new BufferedReader(
+                                        new InputStreamReader(
+                                                (response1.getEntity().getContent())
+                                        )
+                                );
+                                StringBuilder content1 = new StringBuilder();
+                                String line;
+                                while (null != (line = br.readLine())) {
+                                    content1.append(line);
+                                }
+                                addHorizontalLine(out);
+                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
+                                return;
+                            } else {
+                                addHorizontalLine(out);
+                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                                return;
+                            }
+
                         }
+                        BufferedReader br1 = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content1 = new StringBuilder();
+                        String line;
+                        while (null != (line = br1.readLine())) {
+                            content1.append(line);
+                        }
+
+                        EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
+                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
+                        return;
 
 
                     } catch (Exception e) {
