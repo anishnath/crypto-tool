@@ -77,6 +77,8 @@ final public class PemParser {
 				throw new Exception("Invalid Input file");
 			}
 
+
+
 			//System.out.println("Hello--" + obj.getClass());
 			if (obj instanceof JDKDSAPrivateKey) {
 				JDKDSAPrivateKey jdkdsaPrivateKey = (JDKDSAPrivateKey) obj;
@@ -106,7 +108,16 @@ final public class PemParser {
 			else if (obj instanceof org.bouncycastle.jce.provider.X509CRLObject) {
 				X509CRLObject object = (X509CRLObject) obj;
 				builder.append(object);
-			} else {
+			}
+
+			else if (obj instanceof org.bouncycastle.jce.provider.JCEECPublicKey) {
+				org.bouncycastle.jce.provider.JCEECPublicKey jceecPublicKey = (org.bouncycastle.jce.provider.JCEECPublicKey) obj;
+				builder.append("Algo " + jceecPublicKey.getAlgorithm() +"\n");
+				builder.append("Format " + jceecPublicKey.getFormat() + "\n");
+				builder.append(jceecPublicKey);
+			}
+
+			else {
 				java.security.KeyPair kp = (KeyPair) obj;
 				// builder.append(ASN1Dump.dumpAsString(kp));
 				// kp.getPrivate().getEncoded();
