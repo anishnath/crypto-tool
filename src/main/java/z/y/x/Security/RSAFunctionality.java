@@ -188,7 +188,7 @@ public class RSAFunctionality extends HttpServlet {
                                 );
                                 StringBuilder content1 = new StringBuilder();
                                 String line;
-                                while (null != (line = br.readLine())) {
+                                while (null != (line = br1.readLine())) {
                                     content1.append(line);
                                 }
                                 addHorizontalLine(out);
