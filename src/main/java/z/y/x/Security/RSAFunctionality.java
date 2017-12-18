@@ -144,26 +144,26 @@ public class RSAFunctionality extends HttpServlet {
                         System.out.println("Encrypt RSA -- " + obj.getClass());
 
 
-                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
-                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
-
-                            // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
-                            String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
-                            addHorizontalLine(out);
-                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
-                            return;
-                            //out.println(encryptedMessage);
-
-                        }
-
-                        if (obj instanceof java.security.KeyPair) {
-                            KeyPair kp = (KeyPair) obj;
-                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPrivate(), algo);
-                            addHorizontalLine(out);
-                            //out.println(encryptedMessage);
-                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
-                            return;
-                        }
+//                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
+//                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
+//
+//                            // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
+//                            String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
+//                            addHorizontalLine(out);
+//                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
+//                            return;
+//                            //out.println(encryptedMessage);
+//
+//                        }
+//
+//                        if (obj instanceof java.security.KeyPair) {
+//                            KeyPair kp = (KeyPair) obj;
+//                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPrivate(), algo);
+//                            addHorizontalLine(out);
+//                            //out.println(encryptedMessage);
+//                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
+//                            return;
+//                        }
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
@@ -212,7 +212,11 @@ public class RSAFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
+                        //System.out.println("line-- " + line);
+
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
+                        addHorizontalLine(out);
+                       // System.out.println("encodedMessage-- " + encodedMessage);
                         out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
                         return;
 
@@ -334,6 +338,7 @@ public class RSAFunctionality extends HttpServlet {
                         }
 
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
+                        addHorizontalLine(out);
                         out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
                         return;
 
