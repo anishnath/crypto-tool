@@ -3,7 +3,7 @@
 <head>
 	<title>Online PGP key generation tool pretty good privacy generation online </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-	<meta name="description" content="pgp, encryption, decryption, tool, online, free, simple PGP Online Encrypt and Decrypt. Tool for PGP Encryption and Decryption. PGP Key Generator Tool.">
+	<meta name="description" content="Online PGP key generation tool pretty good privacy generation pgp, encryption, decryption, tool, online, free, simple PGP Online Encrypt and Decrypt. Tool for PGP Encryption and Decryption. PGP Key Generator Tool.">
 	<meta name="keywords"  content="pgp, encryption, decryption, tool, online, free, simple PGP Online Encrypt and Decrypt pgp encryption with blowfish,twofish,aes,cast5,desede">
 	<%@ include file="include_css.jsp" %>
 	<script type="text/javascript">
