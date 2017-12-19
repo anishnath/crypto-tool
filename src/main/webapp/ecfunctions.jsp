@@ -28,7 +28,7 @@
 	<title>Elliptic Curve Encryption Decryption tool Online ecparam key generator </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="elliptic curve encryption and decryption online, elliptic curve, elliptic curve encryption shared secret, ec encryption ,elliptic curve calculator, encryption, cryptography, elliptic curve pem format, openssl commands elliptic curve c2pnb272w1,c2tnb359v1,prime256v1,c2pnb304w1,c2pnb368w1,c2tnb431r1,
+	<meta name="keywords" content="elliptic curve cryptography,elliptic curve cryptography vs rsa,elliptic curve encryption and decryption example,elliptic curve encryption and decryption online, elliptic curve, elliptic curve encryption shared secret, ec encryption ,elliptic curve calculator, encryption, cryptography, elliptic curve pem format, openssl commands elliptic curve c2pnb272w1,c2tnb359v1,prime256v1,c2pnb304w1,c2pnb368w1,c2tnb431r1,
 sect283r1,sect283k1,secp256k1,secp256r1,sect571r1,sect571k1,sect409r1,sect409k1,
 secp521r1,secp384r1,P-521,P-256,P-384,B-409,B-283,B-571,K-409,K-283,
 K-571,brainpoolp512r1,brainpoolp384t1,brainpoolp256r1,brainpoolp512t1,brainpoolp256t1,brainpoolp320r1,brainpoolp384r1,brainpoolp320t1,FRP256v1,sm2p256v1"/>
