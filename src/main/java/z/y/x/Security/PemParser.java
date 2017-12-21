@@ -96,8 +96,6 @@ final public class PemParser {
 
 
 		} catch (Exception e) {
-			e.printStackTrace();
-
 			throw new Exception(e);
 		}
 
