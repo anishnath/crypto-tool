@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Certificate Decode, decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey</title>
+<title>Online Certificate Decode, decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey,ec</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 <meta name="keywords" content="certificate viewer,decode certificate online,certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rsa,publickey, online crl parser,online pem parser,openssl decode certificate,openssl view crl, certificate revocation lists,private key decoder, new csr, pkcs7 format viewer, rsa public key, rsa private key, x.509 certifcate viewer,decrypt private key online,public key decoder,openssl online decrypt,pem file decoder,pem decoder online,decode public key,pem parser,pem decoder,des decode,pem viewer"/>
@@ -352,8 +352,7 @@ UU2iTN4uCR0zmUj0xuuRXGaPv2TJ9fxa
 			<tr>
 			<td>
 			<div id="output1"></div>
-			<textarea rows="20" cols="80"  name="pem" id="pem">
-			-----BEGIN CERTIFICATE-----
+			<textarea rows="20" cols="80"  name="pem" id="pem">-----BEGIN CERTIFICATE-----
 MIIFtTCCA52gAwIBAgIJAO0cq2lJPZZJMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
 aWRnaXRzIFB0eSBMdGQwHhcNMTQwMzEyMTc0NzU5WhcNMTkwMzEyMTc0NzU5WjBF
@@ -391,7 +390,7 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 			
 			
 			<td>
-			<textarea rows="20" cols="60" id="output"></textarea>
+			<div id="output"></div>
 			</td>
 			</tr>
 			<tr>
