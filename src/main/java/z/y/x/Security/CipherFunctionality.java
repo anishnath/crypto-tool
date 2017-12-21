@@ -243,9 +243,13 @@ public class CipherFunctionality extends HttpServlet {
             PemParser parser = new PemParser();
             try {
                 String message = parser.parsePemFile(pem, certpassword);
-                out.println(message);
+                addHorizontalLine(out);
+                // System.out.println("encodedMessage-- " + encodedMessage);
+                out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" readonly=true rows=\"20\" cols=\"80\">" + message + "</textarea>");
+                return;
             } catch (Exception e) {
-                out.println(e.getMessage());
+                addHorizontalLine(out);
+                out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
             }
         }
 
