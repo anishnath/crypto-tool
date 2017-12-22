@@ -94,5 +94,8 @@
     <loc>https://8gwifi.org/ecfunctions.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/signcsr.jsp</loc>
+  </url>
 
 </urlset>
