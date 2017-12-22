@@ -6,16 +6,16 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Online Pem Parser, certificate decoder decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey,ec",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/online_pem_parser.png",
-  "url" : "https://8gwifi.org/PemParserFunctions.jsp",
+  "name" : "Online CSR Signer, sign csr and generate certificate",
+  "image" : "https://github.com/anishnath/crypto-tool/blob/master/online_sign_csr.png",
+  "url" : "https://8gwifi.org/signcsr.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2017-09-25",
+  "datePublished" : "2017-12-21",
   "applicationCategory" : [ "online csr signer","get a digital certificate" ,"online free testing Certificate" ," Certificate Signing Request" , " generate certificate" ],
-  "downloadUrl" : "https://8gwifi.org/PemParserFunctions.jsp",
+  "downloadUrl" : "https://8gwifi.org/signcsr.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "Online sign the csr  and generate x.509 certificate, get a digital certificate from the csr",
   "softwareVersion" : "v1.0"
@@ -101,7 +101,7 @@
 					<input id="decrypt" type="radio"
 						   name="encryptdecrypt" value="useprivatekey">Sign using user Private key
 					<br><b>
-					<table border="1" style="width:100px">
+					<table border="1" style="width:150px">
 						<tr>
 							<td>
 								Enter the CSR<textarea rows="20" cols="80"  name="p_pem" id="p_pem">-----BEGIN CERTIFICATE REQUEST-----
@@ -151,18 +151,19 @@ zSfYMIzf89nypBqIJ5+HqYnrKpyRHCDb48CCeWK9A4UcfbDf3dYNUspFrkVcMFvE
 d3fj0EkCgYAdf1NZqRtoB0srnLiTqQDapYYWckvD+62kWXmNfqF0XyfgVyYDAD/w
 bjBpX6dS1652yFlsZ9HQU1kJs1qMejz0O2XpCY96JFpcv7fJP6hso7AamxfBGusQ
 l5ZqplxkM4pWgzveJvzf70zrJ+rmjVbrErqzCZNYGnfmMcgNqzaFTg==
------END RSA PRIVATE KEY-----</textarea></div>
+-----END RSA PRIVATE KEY-----</textarea></div><div id="output"></div>
 							</td>
 						</tr>
 					</table>
-								<div id="output"></div>
-								<input type="submit" id="submit" name="Sign CSR">
+
+					<input type="submit" id="submit" name="Sign CSR">
 
 				</fieldset>
 			</form>
 			<%@ include file="include_security_links.jsp"%>
 			<%@ include file="footer.jsp"%>
-			Note: We are not Signing Authority
+			Note: We are not Signing Authority </b>
+			<p>Openssl Steps Creating CSR file <br /><strong>Generate the RSA key</strong><br />openssl genrsa -out domain.com.key 2048<br /><strong>Create a CSR</strong><br />openssl req -new -sha256 -key domain.com.key -out domain.com.csr<br /><strong>Verify your CSR</strong><br />openssl req -noout -text -in domain.com.csr</p>
 		</section>
 	</article>
 </div>
