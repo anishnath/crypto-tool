@@ -380,13 +380,17 @@ public class CipherFunctionality extends HttpServlet {
                 certpojo certpojo1 = gson.fromJson(content.toString(), certpojo.class);
 
                 addHorizontalLine(out);
-                out.println("<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>");
+                String msg = "<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>";
+                if(!x)
+                {
+                    msg = "<b><u> Certificate in PEM, in X.509 Decoded Format and RSA Private Key </b></u> <br>";
+                }
+                out.println(msg);
                 out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage() + "</textarea>");
                 out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage2() + "</textarea>");
 
                 if(!x)
                 {
-                    out.println("<b><u> RSA Private Key  </b></u> <br>");
                     out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getPrivatekey() + "</textarea>");
                 }
 
