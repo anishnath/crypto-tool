@@ -1,8 +1,6 @@
 package z.y.x.Security;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -12,7 +10,9 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.crypto.BadPaddingException;
@@ -31,6 +31,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import sun.misc.BASE64Decoder;
@@ -262,42 +270,130 @@ public class CipherFunctionality extends HttpServlet {
             final String city = request.getParameter("city");
             final String state = request.getParameter("state");
             final String country = request.getParameter("country");
+            final String alt_name = request.getParameter("alt_name");
             final int expiry = Integer.valueOf(request.getParameter("expiry"));
+            String p_privateKey = request.getParameter("p_privatekey");
 
             final String format = request.getParameter("format");
 
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = "http://localhost:8082/crypto/rest/certs/genselfsignwithprivkey";
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+
             if (hostname == null || hostname.isEmpty()) {
                 //addHorizontalLine(out);
-                out.println("Compnay Name is Required");
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\">  Host Name is Empty or Null  </font>");
                 return;
             }
-            CertInfo certInfo = new CertInfo(hostname, company, department, email, city, state, country, expiry);
+
+            String encryptdecrypt = request.getParameter("encryptdecrypt");
+
+            boolean x= false;
+
+            if ("useprivatekey".equalsIgnoreCase(encryptdecrypt)) {
+                if (null == p_privateKey || p_privateKey.trim().length() == 0) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\">  RSA Private Key is Empty or NULL   </font>");
+                    return;
+                }
+                p_privateKey = p_privateKey.trim();
+                if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
+                    x=true;
+                    urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
+                    url1 = "http://localhost/crypto/rest/certs/genselfsignwithprivkey";
+                } else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Not a Valid RSA Private   </font>");
+                    return;
+                }
+
+            } else {
+                url1 = "http://localhost/crypto/rest/certs/genselfsign";
+            }
+
+            HttpPost post = new HttpPost(url1);
+
+
+
+            CertInfo certInfo = null;
+            if(alt_name!=null)
+            {
+
+                String[] namesList = alt_name.split(",");
+                certInfo = new CertInfo(hostname, company, department, email, city, state, country,namesList, expiry);
+            }
+            else {
+                certInfo = new CertInfo(hostname, company, department, email, city, state, country, expiry);
+            }
+
+
             //System.out.println(certInfo);
-            final int bits = Integer.valueOf(request.getParameter("bits"));
-            final int version = Integer.valueOf(request.getParameter("version"));
+            //final int bits = Integer.valueOf(request.getParameter("bits"));
+            final String version = request.getParameter("version");
+            urlParameters.add(new BasicNameValuePair("p_version", version));
+
+            String json = certInfo.toString();
+
+            urlParameters.add(new BasicNameValuePair("p_certinfo", json));
 
             try {
-                X509CertificateCreator certificateCreator = new X509CertificateCreator("RSA", version, bits, certInfo);
-                X509Certificate x509Certificate = certificateCreator.generateCertificate();
-                if ("NONE".equals(format)) {
-                    out.println(new BASE64Encoder().encode(x509Certificate.getEncoded()));
-                } else {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("-----BEGIN CERTIFICATE-----");
-                    builder.append("\n");
-                    builder.append(new BASE64Encoder().encode(x509Certificate.getEncoded()));
-                    builder.append("\n");
-                    builder.append("-----END CERTIFICATE-----");
-                    out.println(builder.toString());
-                }
-                //	System.out.println(new BASE64Encoder().encode(x509Certificate.getEncoded()));
+//
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                HttpResponse response1 = client.execute(post);
 
-            } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                certpojo certpojo1 = gson.fromJson(content.toString(), certpojo.class);
+
+                addHorizontalLine(out);
+                out.println("<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>");
+                out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage() + "</textarea>");
+                out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage2() + "</textarea>");
+
+                if(!x)
+                {
+                    out.println("<b><u> RSA Private Key  </b></u> <br>");
+                    out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getPrivatekey() + "</textarea>");
+                }
+
+
+
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
             }
 
             //final String version =
