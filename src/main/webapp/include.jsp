@@ -36,8 +36,9 @@
         <li><a href="DHFunctions.jsp"><font size="2.5px">Diffie-Hellman Key Exchange</font> </a></li>
         <li><a href="PemParserFunctions.jsp"><font size="2.5px">PEMReader Decode Certificate </font></a></li>
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>
-        <li><a href="signcsr.jsp"><font size="2.5px">Sign CSR</font> </a></li>
         <li><a href="cafunctions.jsp"><font size="2.5px">Generate rootCA/InterCA/Certs</font> </a></li>
+        <li><a href="certsverify.jsp"><font size="2.5px">Verify private key against csr,x509</font> </a></li>
+        <li><a href="signcsr.jsp"><font size="2.5px">Sign CSR</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>

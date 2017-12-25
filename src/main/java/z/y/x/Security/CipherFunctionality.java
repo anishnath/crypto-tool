@@ -56,6 +56,7 @@ public class CipherFunctionality extends HttpServlet {
     private static final String METHOD_PEM_DECODER = "PEM_DECODER";
     private static final String METHOD_X509_CERTIFICATECREATOR = "X509_CERTIFICATECREATOR";
     private static final String METHOD_DH = "METHOD_DH";
+    private static final String  METHOD_VERIFY_CERTSCSR = "METHOD_VERIFY_CERTSCSR";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -278,7 +279,7 @@ public class CipherFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost:8082/crypto/rest/certs/genselfsignwithprivkey";
+            String url1 = "http://localhost/crypto/rest/certs/genselfsignwithprivkey";
 
             List<NameValuePair> urlParameters = new ArrayList<>();
 
@@ -408,6 +409,155 @@ public class CipherFunctionality extends HttpServlet {
             //Country
 
         }
+
+        //METHOD_DH
+        if (METHOD_VERIFY_CERTSCSR.equalsIgnoreCase(methodName)) {
+
+            String pem1 = request.getParameter("publickeyparama");
+            String pem2 = request.getParameter("privatekeyparama");
+
+
+            if(null==pem1 || pem1.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Input field 1 is empty or null </font>");
+            }
+
+            pem1 = pem1.trim();
+
+            if(null==pem2 || pem2.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Input field 2 is empty or null </font>");
+                return;
+            }
+
+            pem2 = pem2.trim();
+
+            if(pem1.equals(pem2))
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Input field 1 and field2 is Equal  </font>");
+                return;
+            }
+
+            boolean isValid = false;
+
+            if (pem1.contains("BEGIN RSA PRIVATE KEY") && pem1.contains("END RSA PRIVATE KEY")) {
+                isValid = true;
+            }
+
+            if (pem1.contains("BEGIN CERTIFICATE REQUEST") && pem1.contains("END CERTIFICATE REQUEST")) {
+                isValid = true;
+            }
+
+            if (pem1.contains("BEGIN CERTIFICATE") && pem1.contains("END CERTIFICATE")) {
+                isValid = true;
+            }
+
+            if(!isValid)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Input field 1 is Invalid, provide a Valid CSR or X509 or RSA Private key  </font>");
+                return;
+            }
+
+            if (pem2.contains("BEGIN RSA PRIVATE KEY") && pem2.contains("END RSA PRIVATE KEY")) {
+                isValid = true;
+            }
+
+            if (pem2.contains("BEGIN CERTIFICATE REQUEST") && pem2.contains("END CERTIFICATE REQUEST")) {
+                isValid = true;
+            }
+
+            if (pem2.contains("BEGIN CERTIFICATE") && pem2.contains("END CERTIFICATE")) {
+                isValid = true;
+            }
+
+            if(!isValid)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Input field 2 is Invalid, provide a Valid CSR or X509 or RSA Private key  </font>");
+                return;
+            }
+
+
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = "http://localhost/crypto/rest/certs/verifycsrcrtkey";
+            HttpPost post = new HttpPost(url1);
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("p_pem1", pem1));
+            urlParameters.add(new BasicNameValuePair("p_pem2", pem2));
+
+            try {
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                certpojo certpojo1 = gson.fromJson(content.toString(), certpojo.class);
+
+                addHorizontalLine(out);
+                if (certpojo1!=null)
+                {
+                    if("match".equalsIgnoreCase(certpojo1.getMessage()))
+                    {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"green\"> Key Matched  SHA-1 Input1 Key [ " +certpojo1.getMessage2() + "] SHA1-input2 key ["  +certpojo1.getMessage3() + "]  </font>");
+                        return;
+
+                    }
+                    else
+                    {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> Failed SHA-1 Input1 Key [ " +certpojo1.getMessage2() + "] SHA-2 input2 key ["  +certpojo1.getMessage3() + "]  </font>");
+                        return;
+                    }
+                }
+
+
+
+            }catch (Exception e) {
+                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+            }
+
+
+        }
+
 
         //METHOD_DH
         if (METHOD_DH.equalsIgnoreCase(methodName)) {

@@ -20,6 +20,7 @@
         <li><a href="PemParserFunctions.jsp"><font size="3px">PEMReader Decode Certificate </font></a></li>
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="3px">Generate Self Sign Certificate </font> </a></li>
         <li><a href="signcsr.jsp"><font size="3px">Sign CSR</font> </a></li>
+        <li><a href="certsverify.jsp"><font size="3px">Verify private key against CSR,X509</font> </a></li>
         <li><a href="cafunctions.jsp"><font size="3px">Generate rootCA/InterCA/Certs</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="3px">Easy Keystore/trustore viewer</font> </a></li>
         <li><a href="ProviderCapablitiesFunctions.jsp"><font size="3px">Get Algorithm Capabilities </font></a></li>

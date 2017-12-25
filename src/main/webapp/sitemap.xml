@@ -98,4 +98,9 @@
     <loc>https://8gwifi.org/signcsr.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/certsverify.jsp</loc>
+  </url>
+
+
 </urlset>
