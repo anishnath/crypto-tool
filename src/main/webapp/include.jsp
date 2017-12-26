@@ -18,7 +18,7 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
-    <script src='/js/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 
 
     <nav role="navigation">
