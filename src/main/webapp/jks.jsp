@@ -309,9 +309,7 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 
 	</form>
-
-				<br>
-				<br>
+				<%@ include file="include_security_links.jsp"%>
 				<%@ include file="footer.jsp"%>
 				<br>
 				<br>
@@ -391,9 +389,6 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 					</li>
 				</ul>
 				<p>&nbsp;</p>
-
-
-	<%@ include file="include_security_links.jsp"%>
 
 		
 			</section>
