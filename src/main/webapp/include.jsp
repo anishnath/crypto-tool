@@ -43,13 +43,13 @@
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>
         <li><a href="pingfunctions.jsp"><font size="2.5px">Ping/Locate IPv4/Iv6  </font></a></li>
-        <li><a href="curlfunctions.jsp"><font size="2.5px">Site Reachablity IPv4/IPv6 DNS Query </font></a></li>
+        <li><a href="curlfunctions.jsp"><font size="2.5px">Curl/DNS Query IPv4/IPv6</font></a></li>
         <ul>Encoders/Decoders</ul>
         <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2.5px">URL Encoders/Decoders</font></a></li>
         <li><a href="HexToStringFunctions.jsp"><font size="2.5px">HexToString Conversion</font></a></li>
         <li><a href="HexToStringFunctions.jsp"><font size="2.5px">StringToHex Conversion</font></a></li>
         <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
-        <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li></span>
+        <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
         <ul><a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> </ul>
         <li>
             <%@ include file="payme.jsp" %>
