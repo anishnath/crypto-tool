@@ -17,7 +17,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2017-09-25",
-  "applicationCategory" : [ ""],
+  "applicationCategory" : [ "verify certificate matches private key","verify x509 certificate matches csr","md5 sha1 calculcation of the x.509 certificate, private key and car","openssl commands for certificate verifictaion"],
   "downloadUrl" : "https://8gwifi.org/certsverify.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "check whether a private key matches a certificate or whether a certificate matches a certificate signing request (CSR), check csr matches private key",
@@ -28,7 +28,7 @@
 	<title>Online check whether a private key matches a certificate or whether a certificate matches a certificate signing request (CSR), check csr matches private key</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="certificate matches private key, private key matches, openssl private key csr check, get md5 of csr, private key, x509 , validate certificate against csr, validate csr against private key, validate csr private key against csr, openssl commands for modulus"/>
+	<meta name="keywords" content="certificate matches private key, private key matches, openssl private key csr check, get md5 of csr, private key, x509 , validate certificate against csr, validate csr against private key, validate csr private key against csr, openssl commands for modulus, openssl certs verification"/>
 	<meta name="description" content="check whether a private key matches a certificate or whether a certificate matches private key, check whether a csr matches a certificate matches private key  " />
 
 	<meta name="robots" content="index,follow" />
