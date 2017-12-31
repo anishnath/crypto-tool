@@ -810,7 +810,6 @@
 				<li>Serpent</li>
 				<li>Blowfish</li>
 			</ul>
-			<p>aes,aes/cbc/nopadding,aes/cbc/pkcs5padding,aes/ecb/nopadding,aes/ecb/pkcs5padding,aes_128/cbc/nopadding,aes_128/cfb/nopadding,aes_128/ecb/nopadding,aes_128/gcm/nopadding,aes_128/ofb/nopadding,aes_192/cbc/nopadding,aes_192/cfb/nopadding,aes_192/ecb/nopadding,aes_192/gcm/nopadding,aes_192/ofb/nopadding,aes_256/cbc/nopadding,aes_256/cfb/nopadding,aes_256/ecb/nopadding,aes_256/gcm/nopadding,aes_256/ofb/nopadding,aria,blowfish,blowfish,camellia,cast5,cast6,chacha,des,des/cbc/nopadding,des/cbc/pkcs5padding,des/ecb/nopadding,des/ecb/pkcs5padding,desede,desede,desede/cbc/nopadding,desede/cbc/pkcs5padding,desede/ecb/nopadding,desede/ecb/pkcs5padding,gcm,gost28147,grain128,grainv1,hc128,hc256,idea,noekeon,pbe,rc2,rc5,rc6,rijndael,salsa20,seed,shacal-2,skipjack,sm4,serpent,shacal2,tea,threefish-1024,threefish-256,threefish-512,tnepres,twofish,vmpc,vmpc-ksa3,xtea</p>
 
 		</section>
 	</article>
