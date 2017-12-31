@@ -57,6 +57,7 @@ public class CipherFunctionality extends HttpServlet {
     private static final String METHOD_X509_CERTIFICATECREATOR = "X509_CERTIFICATECREATOR";
     private static final String METHOD_DH = "METHOD_DH";
     private static final String  METHOD_VERIFY_CERTSCSR = "METHOD_VERIFY_CERTSCSR";
+    private static final String METHOD_CIPHERBLOCK_NEW = "CIPHERBLOCK_NEW";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -87,6 +88,102 @@ public class CipherFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
         PrintWriter out = response.getWriter();
+
+        if (METHOD_CIPHERBLOCK_NEW.equalsIgnoreCase(methodName)) {
+
+            String secretkey = request.getParameter("secretkey");
+            final String encryptorDecrypt = request.getParameter("encryptorDecrypt");
+            final String plaintext = request.getParameter("plaintext");
+            //plaintext
+            //cipherparameter
+            final String cipherparameter = request.getParameter("cipherparameternew");
+
+
+            if(null == secretkey || secretkey.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Secret Key is null or empty </font>");
+                return;
+            }
+
+            if(null == plaintext || plaintext.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
+                return;
+            }
+
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = "http://localhost/crypto/rest/encryptdecrypt/encrypt";
+
+            if("decrypt".equalsIgnoreCase(encryptorDecrypt))
+            {
+                 url1 = "http://localhost/crypto/rest/encryptdecrypt/decrypt";
+            }
+
+            HttpPost post = new HttpPost(url1);
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
+            urlParameters.add(new BasicNameValuePair("p_secretkey", secretkey));
+            urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter));
+
+
+            try {
+//
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                EncodedMessage certpojo1 = gson.fromJson(content.toString(), EncodedMessage.class);
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + certpojo1.getMessage() + "</font>");
+                return;
+
+
+
+            } catch (Exception e) {
+                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+            }
+
+
+
+            return;
+
+        }
         if (METHOD_ENCRYPRDECRYPT.equalsIgnoreCase(methodName)) {
             //secretkey
             //encryptorDecrypt
