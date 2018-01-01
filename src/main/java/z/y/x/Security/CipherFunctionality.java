@@ -148,7 +148,14 @@ public class CipherFunctionality extends HttpServlet {
                             content.append(line);
                         }
                         addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(content);
+                        if(cipherparameter.contains("NOPADDING") && content.toString().contains("data not block size aligned"))
+                        {
+                            stringBuilder.append("<br>");
+                            stringBuilder.append("Input Message [" + plaintext +"] is not multiple of 16");
+                        }
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
                         return;
                     } else {
                         addHorizontalLine(out);
