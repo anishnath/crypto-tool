@@ -120,6 +120,27 @@ public class CipherFunctionality extends HttpServlet {
             if("decrypt".equalsIgnoreCase(encryptorDecrypt))
             {
                  url1 = "http://localhost/crypto/rest/encryptdecrypt/decrypt";
+
+                String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+                boolean isValidMessage = false;
+                if (plaintext.matches(pattern)) {
+                    isValidMessage = true;
+                }
+
+                if (!isValidMessage) {
+                    try {
+                        Long.parseLong(plaintext, 16);
+                        isValidMessage = true;
+                    } catch (NumberFormatException ex) {
+                        isValidMessage = false;
+                    }
+                }
+                if (!isValidMessage) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> For Decryption Please Base64 Message whihc is generated during encryption process " + plaintext + "</font>");
+                    return;
+                }
+
             }
 
             HttpPost post = new HttpPost(url1);
