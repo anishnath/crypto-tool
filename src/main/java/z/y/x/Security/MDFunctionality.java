@@ -175,6 +175,16 @@ public class MDFunctionality extends HttpServlet {
             final String inputText = request.getParameter("text");
             final String algo = request.getParameter("SHA");
 
+
+            if(null==inputText || inputText.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Message is null or empty " +
+                        "</font>" +
+                        "  <br>");
+                return;
+            }
+
             final String[] cipherparameter = request.getParameterValues("cipherparameternew");
 
             Gson gson = new Gson();
