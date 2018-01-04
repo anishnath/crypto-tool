@@ -63,7 +63,7 @@ public class MDFunctionality extends HttpServlet {
 
                 } catch (Exception e) {
                     //System.out.println(e);
-                    return "";
+                    return e.getMessage();
                 }
                 md.update(inputText.getBytes());
                 byte[] mdbytes = md.digest();
@@ -175,31 +175,71 @@ public class MDFunctionality extends HttpServlet {
             final String inputText = request.getParameter("text");
             final String algo = request.getParameter("SHA");
 
-            String provider = request.getParameter("provider");
-            if (!"BC".equalsIgnoreCase(provider)) {
-                provider = null;
-            }
+            final String[] cipherparameter = request.getParameterValues("cipherparameternew");
+
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = "http://localhost/crypto/rest/md/generate";
+            HttpPost post = new HttpPost(url1);
 
 
-            Enumeration en = request.getParameterNames();
 
-            while (en.hasMoreElements()) {
-                Object objOri = en.nextElement();
-                String param = (String) objOri;
-                String value = request.getParameter(param);
-                if (!param.equals(METHOD_CALCULATEMD5) || !param.equals("text")) //Pass only the Algo
-                {
-                    final String MD = CalcualateMD5(value, inputText, provider);
-                    if (MD != null && !MD.isEmpty()) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"green\"> Message Digest "
-                                + value + "</font>"
-                                + "<b> = <font size=\"4\" color=\"blue\">"
-                                + MD + "</font></b><br>");
-                    }
+            for(int i=0; i<cipherparameter.length; i++)
+            {
+
+
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_msg", inputText));
+                urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter[i]));
+
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+
+                post.addHeader("accept", "application/json");
+
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request if Problem Persists </font>");
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
                 }
 
+                EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"green\">Message [  " + inputText + "] </font> </br>");
+                out.println("<font size=\"4\" color=\"purple\"> Algo [" + encodedMessage.getMessage() + "]  </font> </br>");
+                out.println("<font size=\"4\" color=\"purple\">Algo  "+  cipherparameter[i]  + " </font> <font size=\"4\" color=\"green\"> Base64 Encoded</font><font size=\"4\" color=\"blue\"> [" + encodedMessage.getBase64Encoded() + "] </font> </br>");
+                out.println("<font size=\"4\" color=\"purple\">Algo "+   cipherparameter[i]  + " </font> <font size=\"4\" color=\"green\"> Hex Encoded </font><font size=\"4\" color=\"blue\">[" + encodedMessage.getHexEncoded() + "] </font> </br>");
+
+
+
+//                final String MD = CalcualateMD5(cipherparameter[i], inputText, "BC");
+//                if (MD != null && !MD.isEmpty()) {
+//                    addHorizontalLine(out);
+//                    out.println("<font size=\"2\" color=\"green\"> Message Digest "
+//                            + cipherparameter[i] + "</font>"
+//                            + "<b> = <font size=\"4\" color=\"blue\">"
+//                            + MD + "</font></b><br>");
+//                }
             }
+
+            return;
+
+
+
 
             // MD2
             // MD5
