@@ -2,6 +2,7 @@ package z.y.x.Security;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -198,7 +199,29 @@ public class CipherFunctionality extends HttpServlet {
 
                 EncodedMessage certpojo1 = gson.fromJson(content.toString(), EncodedMessage.class);
                 addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + certpojo1.getMessage() + "</font>");
+                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + certpojo1.getMessage() + "</font></br>");
+
+                if(!"decrypt".equalsIgnoreCase(encryptorDecrypt))
+                {
+                    if (cipherparameter != null && (cipherparameter.startsWith("AES_") && !cipherparameter.contains("GCM"))) {
+                        ByteBuffer buffer = ByteBuffer.wrap(new BASE64Decoder().decodeBuffer(certpojo1.getMessage()));
+                        byte[] saltBytes = new byte[20];
+                        buffer.get(saltBytes, 0, saltBytes.length);
+                        String salt20bit = new BASE64Encoder().encode(saltBytes);
+                        out.println("</br><font size=\"4\" color=\"blue\">20 bit salt used[  "+  salt20bit + "] </font> </br>");
+                        byte[] ivBytes1 = null;
+
+                        if (!cipherparameter.contains("ECB")) {
+                            ivBytes1 = new byte[16];
+                            buffer.get(ivBytes1, 0, ivBytes1.length);
+                            String iv16bit = new BASE64Encoder().encode(ivBytes1);
+                            out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  iv16bit + "] </font> </br>");
+                        }
+
+                    }
+                }
+
+
                 return;
 
 
