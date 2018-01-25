@@ -123,6 +123,9 @@
 								<%	} %>
 							</select>
 							</td>
+							<td colspan="4">
+								<%@ include file="footer_adsense.jsp"%>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -131,7 +134,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2" rowspan="2">
+							<td>
 								<b>SecretKey</b><input id="secretkey" type="text" name="secretkey"
 													   size="40" placeholder="2b7e151628aed2a6abf71589"
 													   value="2b7e151628aed2a6abf71589">
@@ -141,8 +144,6 @@
 							<td>
 								<input checked="checked"
 									   id="encrypt" type="radio" name="encryptorDecrypt" value="encrypt">Encrypt
-							</td>
-							<td>
 								<input id="decrypt" type="radio" name="encryptorDecrypt"
 									   value="decrypt">Decrypt
 							</td>
