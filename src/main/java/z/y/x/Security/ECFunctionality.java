@@ -139,9 +139,6 @@ public class ECFunctionality extends HttpServlet {
                     out.println("<font size=\"4\" color=\"red\"> For Encryption Public Key of Bob is Needed </font>");
                     return;
                 }
-                if (null == iv || iv.length() == 0) {
-                    iv = null;
-                }
 
                 urlParameters.add(new BasicNameValuePair("p_publicKey", publickeyparamb));
                 urlParameters.add(new BasicNameValuePair("p_privatekey", privateKeParam));
@@ -160,11 +157,6 @@ public class ECFunctionality extends HttpServlet {
                     return;
                 }
 
-                if (null == iv || iv.length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption Intial Vector Needed which is used in Encryption </font>");
-                    return;
-                }
 
                 String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
                 boolean isValidMessage = false;
@@ -191,7 +183,6 @@ public class ECFunctionality extends HttpServlet {
             }
 
             urlParameters.add(new BasicNameValuePair("p_msg", message));
-            urlParameters.add(new BasicNameValuePair("p_iv", iv));
             urlParameters.add(new BasicNameValuePair("p_encryptDecrypt", encryptdecryptparameter));
             post.setEntity(new UrlEncodedFormEntity(urlParameters));
             post.addHeader("accept", "application/json");
@@ -239,9 +230,8 @@ public class ECFunctionality extends HttpServlet {
             }
 
             if ("encrypt".equalsIgnoreCase(encryptdecryptparameter)) {
-                out.println("Base64 Encoded Encrypted Message<font size=\"4\" color=\"green\">  [" + encodedMessage.getBase64Encoded() + "]</font>\n");
-                out.println("Hex Encoded Encrypted Message <font size=\"4\" color=\"green\">  [" + encodedMessage.getHexEncoded() + "]</font>\n");
-                out.println("Intial Vector Used <font size=\"4\" color=\"green\">  [" + encodedMessage.getIntialVector() + "]</font>\n");
+                out.println("Base64 Encoded Encrypted Message<font size=\"4\" color=\"green\">  [" + encodedMessage.getBase64Encoded() + "]</font>\n</br>");
+                out.println("Random 16 bit Intial Vector Used <font size=\"4\" color=\"green\">  [" + encodedMessage.getIntialVector() + "]</font>\n");
                 return;
             }
 

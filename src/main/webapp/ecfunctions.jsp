@@ -153,13 +153,11 @@ K-571,brainpoolp512r1,brainpoolp384t1,brainpoolp256r1,brainpoolp512t1,brainpoolp
 					<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
 						   value="decrypt"> Decrypt Message
 					<br/>
-					<b>Initial vector </b><input type="text" size="32" name="iv" value="73dec0c947c318bf0ee938e89ee4f414">
-					<br/>
 					<%
 						if(sharedSecret!=null && sharedSecret.length()>1)
 						{
 					%>
-					Alice & Bob Shared Secret Formed &nbsp;&nbsp;<b><font color="green"><%=sharedSecret%></font></b>
+					Alice & Bob Shared Secret Formed &nbsp;&nbsp;<b><font color="#b22222"><%=sharedSecret%></font></b>
 					<%}%>
 				</fieldset>
 				<table border="1" style="width:80pc">
