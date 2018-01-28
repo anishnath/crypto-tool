@@ -76,7 +76,7 @@ public class ECFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = "http://localhost/crypto/rest/ec/generatekp/" + ec_param;
+            String url1 = "http://localhost/crypto/rest/ec/generateABkp/" + ec_param;
 
             //System.out.println(url1);
 
