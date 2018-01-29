@@ -141,7 +141,7 @@ public class RSAFunctionality extends HttpServlet {
 
                         Object obj = pemReader.readObject();
 
-                        System.out.println("Encrypt RSA -- " + obj.getClass());
+
 
 
 //                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
