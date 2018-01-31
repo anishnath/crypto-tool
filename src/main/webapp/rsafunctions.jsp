@@ -171,6 +171,11 @@
 			});
 
 			$('#decryptparameter').click(function(event) {
+
+				var text = $('#output').find('textarea[name="encrypedmessagetextarea"]').val();
+				if ( text != null ) {
+					$("#message").val(text);
+				}
 				//
 				// event.preventDefault();
 				$('#form').delay(200).submit()
