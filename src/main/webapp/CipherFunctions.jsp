@@ -71,6 +71,12 @@
 
 
 			$('#decrypt').click(function(event) {
+
+				var text = $('#output').find('textarea[name="encrypedmessagetextarea"]').val();
+				if ( text != null ) {
+					$("#plaintext").val(text);
+				}
+
 				$('#form').delay(200).submit()
 			});
 

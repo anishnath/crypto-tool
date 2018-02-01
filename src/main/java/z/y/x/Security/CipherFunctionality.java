@@ -199,7 +199,7 @@ public class CipherFunctionality extends HttpServlet {
 
                 EncodedMessage certpojo1 = gson.fromJson(content.toString(), EncodedMessage.class);
                 addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "] [" + plaintext + "] using Algo [" + cipherparameter + "] </font><font size=\"5\" color=\"green\">" + certpojo1.getMessage() + "</font></br>");
+                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "]</font> <font size=\"5\" color=\"purple\"> [" + plaintext + "] </font> <font size=\"4\" color=\"blue\"> using Algo [" + cipherparameter + "] </font><br/><textarea name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"30\">" + certpojo1.getMessage() + "</textarea></br>");
 
                 if(!"decrypt".equalsIgnoreCase(encryptorDecrypt))
                 {
