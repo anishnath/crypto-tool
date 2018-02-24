@@ -231,23 +231,14 @@
 						</tr>
 
 
-						<tr>
-
-						</tr>
-
 					</table>
 
 
 				</fieldset>
 
 			</form>
-
-			<table border="0" style="width:500px">
-				<tr>
-					<td><%@ include file="footer.jsp"%></td>
-				</tr>
-			</table>
 			<%@ include file="include_security_links.jsp"%>
+			<%@ include file="footer.jsp"%>
 		</section>
 	</article>
 
