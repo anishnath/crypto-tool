@@ -10,6 +10,7 @@
         <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
         <li><a href="CipherFunctions.jsp"><font size="3px">Encryption/Decryption </font> </a></li>
         <li><a href="bccrypt.jsp"><font size="3px">BCrypt Calculator/Tester </font> </a></li>
+        <li><a href="scrypt.jsp"><font size="3px">SCrypt Calculator/Tester </font> </a></li>
         <li><a href="pbe.jsp"><font size="3px">PBE Encryption/Decryption </font> </a></li>
         <li><a href="pgpencdec.jsp"><font size="2.5px">PGP Encryption/Decryption </font> </a></li>
         <li><a href="pgpkeyfunction.jsp"><font size="3px">PGP Key Generation </font> </a></li>

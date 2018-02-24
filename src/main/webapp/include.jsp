@@ -32,7 +32,8 @@
         <li><a href="pgpencdec.jsp"><font size="2.5px">PGP Encryption/Decryption </font> </a></li>
         <li><a href="pgpkeyfunction.jsp"><font size="2.5px">PGP Key Generation </font> </a></li>
         <li><a href="PGPFunctionality?invalidate=yes"><font size="2.5px">PGP Signature Verifier </font> </a></li>
-        <li><a href="bccrypt.jsp"><font size="2.5px">BCrypt Calculator/Tester </font> </a></li>
+        <li><a href="bccrypt.jsp"><font size="2.5px">BCrypt Password Hash </font> </a></li>
+        <li><a href="scrypt.jsp"><font size="2.5px">SCrypt Password Hash </font> </a></li>
         <li><a href="DHFunctions.jsp"><font size="2.5px">Diffie-Hellman Key Exchange</font> </a></li>
         <li><a href="PemParserFunctions.jsp"><font size="2.5px">PEMReader Decode Certificate </font></a></li>
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>
@@ -50,10 +51,6 @@
         <li><a href="HexToStringFunctions.jsp"><font size="2.5px">StringToHex Conversion</font></a></li>
         <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
         <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
-        <ul><a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> </ul>
-        <li>
-            <%@ include file="payme.jsp" %>
-        </li>
         <li><a href="contactus.jsp">Feature Request</a></li>
     </nav>
     <% }

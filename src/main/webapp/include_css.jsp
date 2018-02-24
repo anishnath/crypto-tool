@@ -34,4 +34,4 @@
 	});
 	</script>
 <script type="text/javascript" src="/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
-For Coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> Coming SOON REST API Support for Integration/Docker Images to running on your Infrastructure , Help <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a>
+For Coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> Coming SOON REST API Support for Integration/Docker Images to running on your Infrastructure , Help <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> or <a href="https://www.linkedin.com/in/anishnath" target="_blank" rel="noopener"> Hire Me </a>

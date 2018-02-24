@@ -106,5 +106,9 @@
     <loc>https://8gwifi.org/meltdown.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/scrypt.jsp</loc>
+  </url>
+
 
 </urlset>
