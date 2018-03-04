@@ -49,7 +49,7 @@ public class PBEFunctionality extends HttpServlet {
     private final String METHOD_NAME = "PBEBLOCK";
     private final String METHOD_NAME_PBE_MESSAGE ="PBEMESSAGE";
 
-    private long maxFileSize = 1024 * 1024 * 10 *10;
+    private long maxFileSize = 1024 * 10 * 10 *10;
 
     public static void main(String[] args) throws ServletException, IOException {
         new PBEFunctionality().doPost(null, null);
