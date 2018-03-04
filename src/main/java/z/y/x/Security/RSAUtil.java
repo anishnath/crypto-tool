@@ -62,6 +62,14 @@ public class RSAUtil {
         return key;
     }
 
+    public static KeyPair generateKey(String algo, int size ) throws NoSuchAlgorithmException
+    {
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algo);
+        keyGen.initialize(size);
+        KeyPair key = keyGen.generateKeyPair();
+        return key;
+    }
+
 
     public static byte[] encrypt(byte[] text, PublicKey key, String cipherAlgo) throws Exception
     {
