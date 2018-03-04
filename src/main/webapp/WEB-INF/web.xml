@@ -207,6 +207,15 @@
 		<url-pattern>/ECFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>DSAFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.DSAFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DSAFunctionality</servlet-name>
+		<url-pattern>/DSAFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
