@@ -217,7 +217,7 @@
 							</td>
 
 							<td width="80%">
-
+								<%@ include file="footer_adsense.jsp"%>
 								<p><strong>Password Based Encryption (PBE)</strong> is specified in e.g. RFC 2898 which specifies the "PKCS #5: Password-Based Cryptography Specification Version 2.0".</p>
 								<p><strong>How PBE Works?</strong></p>
 
