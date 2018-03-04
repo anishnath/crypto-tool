@@ -17,7 +17,7 @@
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2017-09-25",
+  "datePublished" : "2018-03-04",
   "applicationCategory" : [ "dsa key generation", "dsa file verification", "openssl dsa keygen", "openssl sign file verification", "online dsa", "dsa create signature file", "dsa verify signature file", "SHA256withDSA", "NONEwithDSA", "SHA224withDSA", "SHA1withDSA"],
   "downloadUrl" : "https://8gwifi.org/dsafunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
