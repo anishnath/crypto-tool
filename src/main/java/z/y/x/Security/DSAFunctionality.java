@@ -265,7 +265,7 @@ public class DSAFunctionality extends HttpServlet {
 
                             response.setContentType("text/plain");
                             response.setHeader("Content-Disposition",
-                                    "attachment;filename="+ item.getName() + ".sig + ");
+                                    "attachment;filename=" + item.getName() + ".sig");
                             ServletContext ctx = getServletContext();
 
                             int read=0;
@@ -431,7 +431,7 @@ public class DSAFunctionality extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
             session.setAttribute("msg", "<font size=\"2\" color=\"red\"> "+ e.getMessage() +" </font>");
             response.sendRedirect("dsafunctions.jsp");
             return;
