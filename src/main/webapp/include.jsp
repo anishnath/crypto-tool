@@ -41,6 +41,7 @@
         <li><a href="cafunctions.jsp"><font size="2.5px">Generate rootCA/InterCA/Certs</font> </a></li>
         <li><a href="certsverify.jsp"><font size="2.5px">Verify private key against csr,x509</font> </a></li>
         <li><a href="signcsr.jsp"><font size="2.5px">Sign CSR</font> </a></li>
+        <li><a href="sshfunctions.jsp"><font size="2.5px">SSH-Keygen</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>
