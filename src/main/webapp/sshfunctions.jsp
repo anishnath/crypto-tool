@@ -18,16 +18,16 @@
   "applicationCategory" : [ "sshkeygen online", "ssh  keygen rsa,dsa,ecdsa", ""],
   "downloadUrl" : "https://8gwifi.org/sshfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "Generate SSH keys algorithm RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh dsa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096
+  "requirements" : "Generate SSH keys algorithm RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh dsa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows
  ",
   "softwareVersion" : "v1.0"
 }
 </script>
 	<title>Online Generate SSH keys algorithm RSA,DSA,ECDSA </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-	<meta name="description" content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl">
+	<meta name="description" content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows">
 	<meta name="keywords"
-		  content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl
+		  content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows
  ">
 	<%@ include file="include_css.jsp" %>
 	<script type="text/javascript">
