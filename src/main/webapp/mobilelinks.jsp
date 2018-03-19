@@ -9,6 +9,7 @@
         <li><a href="MessageDigest.jsp"><font size="3px">Generate Message Digest</font></a></li>
         <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
         <li><a href="CipherFunctions.jsp"><font size="3px">Encryption/Decryption </font> </a></li>
+        <li><a href="ntrufunctions.jsp"><font size="3px">Lattice Cryptography Encryption </font> </a></li>
         <li><a href="bccrypt.jsp"><font size="3px">BCrypt Calculator/Tester </font> </a></li>
         <li><a href="scrypt.jsp"><font size="3px">SCrypt Calculator/Tester </font> </a></li>
         <li><a href="sshfunctions.jsp"><font size="3px">SSH-keygen </font> </a></li>
