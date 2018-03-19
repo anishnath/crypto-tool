@@ -216,14 +216,14 @@
 		<url-pattern>/DSAFunctionality</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>SSHFunctionality</servlet-name>
-		<servlet-class>z.y.x.Security.SSHFunctionality</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>SSHFunctionality</servlet-name>
-		<url-pattern>/SSHFunctionality</url-pattern>
-	</servlet-mapping>
+	<!--<servlet>-->
+		<!--<servlet-name>SSHFunctionality</servlet-name>-->
+		<!--<servlet-class>z.y.x.Security.SSHFunctionality</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>SSHFunctionality</servlet-name>-->
+		<!--<url-pattern>/SSHFunctionality</url-pattern>-->
+	<!--</servlet-mapping>-->
 
 	<servlet>
 		<servlet-name>NTRUFunctionality</servlet-name>
