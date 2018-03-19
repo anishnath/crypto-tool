@@ -225,6 +225,15 @@
 		<url-pattern>/SSHFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>NTRUFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.NTRUFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NTRUFunctionality</servlet-name>
+		<url-pattern>/NTRUFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
