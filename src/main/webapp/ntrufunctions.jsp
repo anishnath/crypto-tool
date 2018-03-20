@@ -16,7 +16,7 @@
   },
   "datePublished" : "2018-03-19",
   "applicationCategory" : [ "ntru encryption decryption online", "online ntru key generator", "ntru calculate private key online", "ntru generate private key online", "ntru decryption calculator online", "ntru encryption with public key", "EES1087EP2", "EES1087EP2_FAST", "EES1171EP1", "EES1171EP1_FAST", "EES1499EP1",
-			"EES1499EP1_FAST", "APR2011_439", "APR2011_439_FAST", "APR2011_743", "APR2011_743_FAST"],
+			"EES1499EP1_FAST", "APR2011_439", "APR2011_439_FAST", "APR2011_743", "APR2011_743_FAST","example ntru algorithm","ntru implementation","ntru cryptosystem"],
   "downloadUrl" : "https://8gwifi.org/ntrufunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "ntru algorithm encryption decryption online, generate ntru key pairs and perform encryption and decryption using ntru public and private keys ntru encryption decryption online, online ntru generator,ntru generate public private key online,ntru decryption calculator online,ntru decrypt with public key,ntru encrypt,lattice based cryptography explained,lattice based cryptography for beginners,lattice based cryptography implementation ",
