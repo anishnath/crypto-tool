@@ -27,8 +27,8 @@
 	<title>NTRU Encryption Decryption tool, Online NTRU key generator lattice based cryptography implementation </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="lattice based cryptography implementation,ntru encryption decryption online,online ntru key generator,ntru generate private key online,APR2011_743_FAST,APR2011_743,APR2011_439_FAST,ntru generate public private key,lattice based cryptography,ntru encryption example,ntru implementation " />
-	<meta name="description" content="lattice based cryptography implementation,ntru encryption decryption online,online ntru key generator,ntru generate private key online,APR2011_743_FAST,APR2011_743,APR2011_439_FAST,ntru generate public private key,lattice based cryptography,example ntru algorithm,ntru encryption example,ntru implementation " />
+	<meta name="keywords" content="lattice based cryptography implementation,ntru encryption decryption online,online ntru key generator,ntru generate private key online,APR2011_743_FAST,APR2011_743,APR2011_439_FAST,ntru generate public private key,lattice based cryptography,ntru encryption example,ntru implementation,example ntru algorithm,ntru implementation,ntru cryptosystem " />
+	<meta name="description" content="lattice based cryptography implementation,ntru encryption decryption online,online ntru key generator,ntru generate private key online,APR2011_743_FAST,APR2011_743,APR2011_439_FAST,ntru generate public private key,lattice based cryptography,example ntru algorithm,ntru encryption example,ntru implementation,example ntru algorithm,ntru implementation,ntru cryptosystem" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
