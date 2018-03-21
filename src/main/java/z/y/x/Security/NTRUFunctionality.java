@@ -314,7 +314,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost:8082/crypto/rest/ntru/decrypt";
+                        String url1 = "http://localhost/crypto/rest/ntru/decrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
