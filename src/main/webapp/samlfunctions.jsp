@@ -18,7 +18,7 @@
   "applicationCategory" : [ "saml online", "saml, sign, signature, authnrequest, online, tool,saml request, saml response", "saml signature value,saml sign xml message, how to sign saml message, online saml signature"],
   "downloadUrl" : "https://8gwifi.org/samlfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "",
+  "requirements" : "saml sign message,saml request resonse sign message, saml generate signature,online saml signature generation,online saml signature",
   "softwareVersion" : "v1.0"
 }
 </script>
