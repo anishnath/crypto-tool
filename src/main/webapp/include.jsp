@@ -44,6 +44,7 @@
         <li><a href="signcsr.jsp"><font size="2.5px">Sign CSR</font> </a></li>
         <li><a href="sshfunctions.jsp"><font size="2.5px">SSH-Keygen</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
+        <li><a href="samlfunctions.jsp"><font size="2.5px">SAML Sign Message</font> </a></li>
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>
         <li><a href="pingfunctions.jsp"><font size="2.5px">Ping/Locate IPv4/Iv6  </font></a></li>
