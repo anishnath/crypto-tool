@@ -234,6 +234,15 @@
 		<url-pattern>/NTRUFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>SAMLFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.SAMLFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SAMLFunctionality</servlet-name>
+		<url-pattern>/SAMLFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
