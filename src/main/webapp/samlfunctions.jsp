@@ -94,7 +94,7 @@
 					</legend>
 
 
-					<legend>Sample SAML Message /legend>
+					<legend>Sample SAML Message </legend>
 					<select name="ctrTitles" id="ctrTitles">
 						<option value="&#x3C;samlp:AuthnRequest xmlns:samlp=&#x22;urn:oasis:names:tc:SAML:2.0:protocol&#x22; xmlns:saml=&#x22;urn:oasis:names:tc:SAML:2.0:assertion&#x22; ID=&#x22;ONELOGIN_809707f0030a5d00620c9d9df97f627afe9dcc24&#x22; Version=&#x22;2.0&#x22; ProviderName=&#x22;SP test&#x22; IssueInstant=&#x22;2014-07-16T23:52:45Z&#x22; Destination=&#x22;http://idp.example.com/SSOService.php&#x22; ProtocolBinding=&#x22;urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&#x22; AssertionConsumerServiceURL=&#x22;http://sp.example.com/demo1/index.php?acs&#x22;&#x3E;
   &#x3C;saml:Issuer&#x3E;http://sp.example.com/demo1/metadata.php&#x3C;/saml:Issuer&#x3E;
@@ -409,7 +409,8 @@
 								</select>
 							</td>
 							<td rowspan="3" colspan="4">
-								<div id="output"><%@ include file="footer_adsense.jsp"%></div>
+								<%@ include file="footer_adsense.jsp"%>
+								<div id="output"></div>
 							</td>
 						</tr>
 						<tr>
