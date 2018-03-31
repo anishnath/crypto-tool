@@ -27,6 +27,7 @@
         <li><a href="certsverify.jsp"><font size="3px">Verify private key against CSR,X509</font> </a></li>
         <li><a href="cafunctions.jsp"><font size="3px">Generate rootCA/InterCA/Certs</font> </a></li>
         <li><a href="samlfunctions.jsp"><font size="3px">SAML Sign Message</font> </a></li>
+        <li><a href="samlverifysign.jsp"><font size="3px">SAML Verify Signature</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="3px">Easy Keystore/trustore viewer</font> </a></li>
         <li><a href="ProviderCapablitiesFunctions.jsp"><font size="3px">Get Algorithm Capabilities </font></a></li>
         <ul>Network Functions</ul>

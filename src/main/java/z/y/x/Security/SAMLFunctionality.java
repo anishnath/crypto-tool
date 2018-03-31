@@ -31,6 +31,7 @@ import java.util.List;
 public class SAMLFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String METHOD_SIGN_XML = "SIGN_XML";
+    private static final String METHOD_VERIFY_SIGNATURE_OR_DECODE = "VERIFY_SIGNATURE_OR_DECODE";
 
 
     static {
@@ -122,7 +123,7 @@ public class SAMLFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost:8082/crypto/rest/saml/sign";
+                String url1 = "http://localhost/crypto/rest/saml/sign";
 
                 //System.out.println(url1);
 
@@ -208,6 +209,163 @@ public class SAMLFunctionality extends HttpServlet {
             {
                 out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request" + ex +" </font>");
             }
+
+
+        }
+
+        if (METHOD_VERIFY_SIGNATURE_OR_DECODE.equals(methodName)) {
+
+            String verifysignatureparameter = request.getParameter("verifysignatureparameter");
+            String samlmessage = request.getParameter("samlmessage");
+            String x509 = request.getParameter("x509");
+            String cipherparameter = request.getParameter("cipherparameter");
+
+            boolean isValidparam=false;
+
+            if("verifysignature".equals(verifysignatureparameter))
+            {
+
+                isValidparam=true;
+
+                if(null==samlmessage || samlmessage.trim().length()==0 )
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\">Please Input a SAML Message for Verification </font>");
+                    return;
+                }
+
+                if(null==x509 || x509.trim().length()==0 )
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\">x509 certificate required for Verification of SAML Message </font>");
+                    return;
+                }
+
+
+            }
+
+            if("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter) || "samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter))
+            {
+                isValidparam=true;
+                if(null==samlmessage || samlmessage.trim().length()==0 )
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\">Please Input a SAML Message for Verification </font>");
+                    return;
+                }
+            }
+
+            if(!isValidparam)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\">Please Input a required opertaion to perform (samlmessagedecoder or verifysignature )  </font>");
+                return;
+            }
+
+
+            try {
+                Gson gson = new Gson();
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+
+
+
+                String url1 = "http://localhost/crypto/rest/saml/validatesign";
+
+                if ("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter)) {
+                    url1 = "http://localhost/crypto/rest/saml/encode";
+
+                }
+
+                if ("samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter)) {
+                    url1 = "http://localhost/crypto/rest/saml/base64decodedInflated";
+
+                }
+
+
+                HttpPost post = new HttpPost(url1);
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                post.addHeader("accept", "application/json");
+
+                if ("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter) || "samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter)) {
+                    urlParameters.add(new BasicNameValuePair("p_xml", samlmessage));
+
+                }else{
+                    urlParameters.add(new BasicNameValuePair("p_xml", samlmessage));
+                    urlParameters.add(new BasicNameValuePair("p_key", x509));
+                    urlParameters.add(new BasicNameValuePair("p_xpath", cipherparameter));
+                }
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
+
+                HttpResponse response1 = httpClient.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br1 = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content1 = new StringBuilder();
+                        String line;
+                        while (null != (line = br1.readLine())) {
+                            content1.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> " + content1 + "  </font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                if("verifysignature".equals(verifysignatureparameter)) {
+                    if (content != null) {
+                        if (content.toString().contains("Failed")) {
+                            out.println("<font size=\"4\" color=\"red\"> <b><u>  " + content + " </b></u> <br>");
+                        } else {
+                            out.println("<font size=\"4\" color=\"green\"> <b><u>  " + content + " </b></u> <br>");
+                        }
+                    }
+                }
+                else {
+                    if ("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter))
+                    {
+                        out.println("<br/><font size=\"4\" color=\"purple\"> <b><u> SAML ENcoded   </b></u> <br>");
+                    }
+
+                    if ("samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter))
+                    {
+                        out.println("<br/><font size=\"4\" color=\"purple\"> <b><u> base64decodedInflated  </b></u> <br>");
+                    }
+
+                    out.println("<br/><textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + content.toString()+ "</textarea>");
+                }
+
+
+
+
+            }catch (Exception ex)
+            {
+                out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request" + ex +" </font>");
+            }
+
+
+
 
 
         }
