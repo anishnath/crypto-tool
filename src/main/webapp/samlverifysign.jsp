@@ -21,7 +21,7 @@
   "applicationCategory" : [ "validate saml authnrequest,verify saml, verify saml signature, saml assertion validation,saml signature value,base64 encoded saml response,base64 decode,saml base64,base64 deflate, saml decoder"],
   "downloadUrl" : "https://8gwifi.org/samlverifysign.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : " ",
+  "requirements" : "Saml singnature validation, saml assertions, saml enocde decode, base 64 saml message, authn response signature validation,  ",
   "softwareVersion" : "v1.0"
 }
 </script>
@@ -264,14 +264,15 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
 					</tr>
 				</table>
 				<%@ include file="include_security_links.jsp"%>
+
+			<br/>
+			<p class="p1"><strong><span class="s1">Command Line option for base64 Encode/Decode</span></strong></p>
+			<p class="p1"><span class="s1" style="color: #3366ff;">[bash ~]$ echo 8gwifi.org<span class="Apple-converted-space">&nbsp; </span>| base64</span></p>
+			<p class="p1"><span class="s1">OGd3aWZpLm9yZwo=</span></p>
+			<p class="p1"><span class="s1" style="color: #3366ff;">[bash&nbsp; ~]$ echo OGd3aWZpLm9yZwo= | base64 --decode</span></p>
+			<p class="p1"><span class="s1">8gwifi.org</span></p>
 		</section>
 
-		<p class="p1"><strong><span class="s1">Command Line option for base64 Encode/Decode</span></strong></p>
-		<p class="p1"><span class="s1" style="color: #3366ff;">[bash ~]$ echo 8gwifi.org<span class="Apple-converted-space">&nbsp; </span>| base64</span></p>
-		<p class="p1"><span class="s1">OGd3aWZpLm9yZwo=</span></p>
-		<p class="p1">&nbsp;</p>
-		<p class="p1"><span class="s1" style="color: #3366ff;">[bash&nbsp; ~]$ echo OGd3aWZpLm9yZwo= | base64 --decode</span></p>
-		<p class="p1"><span class="s1">8gwifi.org</span></p>
 	</article>
 
 
