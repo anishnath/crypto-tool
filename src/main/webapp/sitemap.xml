@@ -130,4 +130,8 @@
     <loc>https://8gwifi.org/samlverifysign.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/elgamalfunctions.jsp</loc>
+  </url>
+
 </urlset>
