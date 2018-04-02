@@ -243,6 +243,15 @@
 		<url-pattern>/SAMLFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>ELGAMALFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.ELGAMALFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ELGAMALFunctionality</servlet-name>
+		<url-pattern>/ELGAMALFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
