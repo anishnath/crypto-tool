@@ -153,7 +153,7 @@ public class ELGAMALFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost:8082/crypto/rest/elgamal/encrypt";
+                        String url1 = "http://localhost/crypto/rest/elgamal/encrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
@@ -243,7 +243,7 @@ public class ELGAMALFunctionality extends HttpServlet {
                     try {
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost:8082/crypto/rest/elgamal/decrypt";
+                        String url1 = "http://localhost/crypto/rest/elgamal/decrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));

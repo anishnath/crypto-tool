@@ -18,7 +18,7 @@
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2017-09-25",
+  "datePublished" : "2018-04-02",
   "applicationCategory" : [ "elgamal encryption decryption online", "online elgamal key generator", "elgamal calculate private key online", "elgamal generate private key online", "elgamal decryption calculator online", "elgamal decrypt with public key", "elgamal encrypt decrypt elgamal/ECB/PKCS1Padding", "elgamal/ECB/PKCS1Padding", "elgamal/None/PKCS1Padding", "elgamal", "elgamal public and private key","elgamal pkey length"],
   "downloadUrl" : "https://8gwifi.org/elgamalfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
@@ -263,10 +263,10 @@
 
 							<tr>
 								<td>
-									<textarea rows="20" cols="50"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+									<textarea rows="10" cols="40"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
 								</td>
 								<td>
-									<textarea rows="20" cols="50"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+									<textarea rows="10" cols="40"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
 								</td>
 
 
