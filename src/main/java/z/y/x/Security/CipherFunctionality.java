@@ -59,6 +59,7 @@ public class CipherFunctionality extends HttpServlet {
     private static final String METHOD_DH = "METHOD_DH";
     private static final String  METHOD_VERIFY_CERTSCSR = "METHOD_VERIFY_CERTSCSR";
     private static final String METHOD_CIPHERBLOCK_NEW = "CIPHERBLOCK_NEW";
+    private static final String METHOD_ENCRYPTED_PEM_PASSWORD = "ENCRYPTED_PEM_PASSWORD";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -707,6 +708,74 @@ public class CipherFunctionality extends HttpServlet {
         }
 
 
+        if(METHOD_ENCRYPTED_PEM_PASSWORD.equalsIgnoreCase(methodName))
+        {
+            final String pem = request.getParameter("pem");
+            final String certpassword = request.getParameter("certpassword");
+            final String email = request.getParameter("email");
+
+            if(email!=null && email.length()>0)
+            {
+                if(!isValidEmailAddress(email))
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> Email Address is Invalid  </font>");
+                    return;
+                }
+            }
+
+            if(null==pem || pem.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Please provide an Encrypted Pem File </font>");
+                return;
+            }
+
+            if(pem!=null)
+            {
+                if (!pem.contains("ENCRYPTED")) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> Pem file is not encrypted </font>");
+                    return;
+                }
+
+                if (!pem.contains("BEGIN")) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> Pem file is not valid </font>");
+                    return;
+                }
+
+                if (!pem.contains("END")) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> Pem file is not valid </font>");
+                    return;
+                }
+
+                addHorizontalLine(out);
+                PemParser parser = new PemParser();
+                try {
+                    String message = parser.crackPemFile(pem, certpassword,email);
+                    addHorizontalLine(out);
+                    // System.out.println("encodedMessage-- " + encodedMessage);
+                    if(message!=null) {
+                        if(message.contains("Will Email your password once "))
+                        {
+                            out.println("<font size=\"4\" color=\"red\"> Password Not Found[ " + message + " ]</font>");
+                        }
+                        else {
+                            out.println("<font size=\"6\" color=\"green\"> Password Found[ " + message + " ]</font>");
+                           }
+
+                    }
+                    return;
+                } catch (Exception e) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
+                }
+
+            }
+        }
+
         //METHOD_DH
         if (METHOD_DH.equalsIgnoreCase(methodName)) {
             final String dhparamp = request.getParameter("dhparamp");
@@ -772,6 +841,13 @@ public class CipherFunctionality extends HttpServlet {
         }
         builder.append("</table>");
         return builder.toString();
+    }
+
+    public boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 
     private void addHorizontalLine(PrintWriter out) {
