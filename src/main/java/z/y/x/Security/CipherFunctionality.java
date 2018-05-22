@@ -178,7 +178,15 @@ public class CipherFunctionality extends HttpServlet {
                             stringBuilder.append("<br>");
                             stringBuilder.append("Input Message [" + plaintext +"] is not multiple of 16");
                         }
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
+
+                        else if(content.toString().contains("java.security.InvalidKeyException: Wrong algorithm: AES or Rijndael required"))
+                        {
+                            out.println("<font size=\"4\" color=\"red\">Invalid Secret Key Length Try the secret key legnth (16,24,32) </font>");
+                        }
+                        else {
+
+                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
+                        }
                         return;
                     } else {
                         addHorizontalLine(out);
@@ -228,7 +236,7 @@ public class CipherFunctionality extends HttpServlet {
 
 
             } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+                    out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
             }
 
 
