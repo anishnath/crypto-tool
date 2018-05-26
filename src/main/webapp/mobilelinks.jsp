@@ -24,6 +24,7 @@
         <li><a href="DHFunctions.jsp"><font size="3px">Diffie-Hellman Key Exchange</font> </a></li>
         <li><a href="PemParserFunctions.jsp"><font size="3px">PEMReader Decode Certificate </font></a></li>
         <li><a href="pempasswordfinder.jsp"><font size="3px">Encrypted PEM password finder </font></a></li>
+        <li><a href="passwdgen.jsp"><font size="3px">Random password Generator</font></a></li>
 
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="3px">Generate Self Sign Certificate </font> </a></li>
         <li><a href="signcsr.jsp"><font size="3px">Sign CSR</font> </a></li>
