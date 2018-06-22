@@ -44,10 +44,22 @@ public class SubnetFunctionality extends HttpServlet  {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String methodName = request.getParameter("methodName");
-        final String subnetName=request.getParameter("subnet");
+        String subnetName=request.getParameter("subnet");
         final String inCludeAddress=request.getParameter("encoding");
 
+
         PrintWriter out = response.getWriter();
+
+        if(null==subnetName || subnetName.trim().length()==0)
+        {
+            out.println("<font size=\"3\" color=\"red\"> Empty Subnet"
+                    + "</font><br>");
+            return;
+        }
+
+
+        subnetName=subnetName.trim();
+
         final List<String> command = new ArrayList<String>();
         if (METHOD_EXECUTECOMMAND.equalsIgnoreCase(methodName)) {
             boolean inAd=false;
