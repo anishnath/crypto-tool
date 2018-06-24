@@ -142,4 +142,8 @@
     <loc>https://8gwifi.org/passwdgen.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/glance.jsp</loc>
+  </url>
+
 </urlset>
