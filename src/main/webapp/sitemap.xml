@@ -146,4 +146,8 @@
     <loc>https://8gwifi.org/docs/glance.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/openstack-client.jsp</loc>
+  </url>
+
 </urlset>
