@@ -154,4 +154,8 @@
     <loc>https://8gwifi.org/docs/creating-cloud-images.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/debug-guestname-virsh.jsp</loc>
+  </url>
+
 </urlset>
