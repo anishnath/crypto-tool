@@ -150,4 +150,8 @@
     <loc>https://8gwifi.org/docs/openstack-client.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/creating-cloud-images.jsp</loc>
+  </url>
+
 </urlset>
