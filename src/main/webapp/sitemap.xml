@@ -162,5 +162,9 @@
     <loc>https://8gwifi.org/docs/ansible-manage-system-users.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/ansible-sudo-ssh-password.jsp</loc>
+  </url>
+
 
 </urlset>
