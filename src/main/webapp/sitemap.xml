@@ -170,5 +170,9 @@
     <loc>https://8gwifi.org/docs/ansible-roles.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/autofs.jsp</loc>
+  </url>
+
 
 </urlset>
