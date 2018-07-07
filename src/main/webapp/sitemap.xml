@@ -174,5 +174,8 @@
     <loc>https://8gwifi.org/docs/autofs.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/openstack-nfs.jsp</loc>
+  </url>
 
 </urlset>
