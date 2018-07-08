@@ -178,4 +178,8 @@
     <loc>https://8gwifi.org/docs/openstack-nfs.jsp</loc>
   </url>
 
+  <url>
+    <loc>http://8gwifi.org/docs/ansible-kube-install.jsp</loc>
+  </url>
+
 </urlset>
