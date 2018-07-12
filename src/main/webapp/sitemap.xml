@@ -186,5 +186,8 @@
     <loc>https://8gwifi.org/docs/kube-install.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-dash.jsp</loc>
+  </url>
 
 </urlset>
