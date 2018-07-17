@@ -190,4 +190,8 @@
     <loc>https://8gwifi.org/docs/kube-dash.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-pods.jsp</loc>
+  </url>
+
 </urlset>
