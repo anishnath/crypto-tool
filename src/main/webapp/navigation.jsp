@@ -7,12 +7,12 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://www.paypal.me/8gwifi/" target="_blank" rel="noopener">Donate
+              <a class="nav-link" href="https://www.paypal.me/8gwifi/" target="_blank" rel="noopener">For Coffee/Beer Amazon Bills Donate
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="https://8gwifi.org/docs/">Blogs</a>
+              <a class="nav-link" href="https://8gwifi.org/docs/">Tech Blogs</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>

@@ -37,8 +37,9 @@
 	<meta name="resource-type" content="document" />
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<%@ include file="include_css.jsp"%>
+	<%@ include file="header-script.jsp"%>
 
 	<%
 		String pubKey = "";
@@ -194,6 +195,8 @@
 					success : function(msg) {
 						$('#output').empty();
 						$('#output').append(msg);
+						$("#publickeyparam").resizable();
+						$("#privatekeyparam").resizable();
 
 					}
 				});
@@ -202,142 +205,155 @@
 		});
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
+
+
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">RSA Ecryption Decryption</h1>
+<hr>
+
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+
+
+<form id="form1" class="form-horizontal" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
+	<b>Generate RSA Key Size</b>	<input <% if(k1) {  %> checked <% } %>
+
+													id="keysize1"  type="radio" name="keysize"
+													value="512">512 bit
+	<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
+						   value="1024">1024 bit
+	<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
+						   value="2048">2048 bit
+	<input <% if(k4) {  %> checked <% } %> id="keysize4" type="radio" name="keysize"
+						   value="4096">4096 bit
+</form>
+</fieldset>
+
+
+<form id="form" class="form-horizontal" method="POST">
+	<input type="hidden" name="methodName" id="methodName"
+		   value="CALCULATE_RSA">
+
+
+	<div class="radio">
+		<label>
+			<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter" value="encrypt">
+			Encrypt to RSA Encryption
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input id="decryptparameter" type="radio" name="encryptdecryptparameter" value="decryprt">
+			Decrypt RSA Message
+		</label>
 	</div>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
-			<fieldset name="RSA">
-				<legend>
-					<b> RSA Encryption/Decryption Functionality </b>
-				</legend>
-				<fieldset name="RSA Key Size">
-					<legend>
-						<b> Key Size </b>
-					</legend>
+	<table class="table">
+		<tr>
+			<th>Public Key </th>
+			<th>Private Key </th>
+		</tr>
 
-					<form id="form1" method="GET" name="form2" action="RSAFunctionality?q=setNeKey">
-						Generate RSA Key Size	<input <% if(k1) {  %> checked <% } %>
-
-																		id="keysize1"  type="radio" name="keysize"
-																		value="512">512 bit
-						<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
-											   value="1024">1024 bit
-						<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
-											   value="2048">2048 bit
-						<input <% if(k4) {  %> checked <% } %> id="keysize4" type="radio" name="keysize"
-											   value="4096">4096 bit
-					</form>
-				</fieldset>
+		<tr>
+			<td>
+				<textarea class="form-control animated" rows="10"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+			</td>
+			<td>
+				<textarea class="form-control animated" rows="10"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+			</td>
 
 
-				<form id="form" method="POST">
-					<input type="hidden" name="methodName" id="methodName"
-						   value="CALCULATE_RSA">
+		</tr>
 
+		<tr>
 
+			<td>
+				<b>ClearText Message</b><textarea class="form-control" rows="5"  placeholder="Type Something Here..."  name="message" id="message"></textarea>
+			</td>
+			<td width="50%">
+				<b>output</b><div id="output"></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" width="20%">
+				<strong>RSA Ciphers</strong>
+				<br/>
 
+				<div class="radio">
+					<label>
+						<input id="cipherparameter3" type="radio" name="cipherparameter"
+							   checked value="RSA"  >RSA
+					</label>
+				</div>
 
-					<fieldset name="RSA2"   >
+				<div class="radio">
+					<label>
+						<input id="cipherparameter1" type="radio" name="cipherparameter"
+							   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
+					</label>
+				</div>
 
-						<legend>
-							<b> RSA Encryption/Decryption</b>
-						</legend>
+				<div class="radio">
+					<label>
+						<input id="cipherparameter2" type="radio" name="cipherparameter"
+							   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
+					</label>
+				</div>
 
-						<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
-							   value="encrypt">Encrypt Message
+				<div class="radio">
+					<label>
+						<input id="cipherparameter4" type="radio" name="cipherparameter"
+							   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
+					</label>
+				</div>
 
-						<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
-							   value="decryprt"> Decrypt Message
-						<br>
+				<div class="radio">
+					<label>
+						<input id="cipherparameter5" type="radio" name="cipherparameter"
+							   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
+					</label>
+				</div>
 
-						<table border="1" style="width:80pc">
-							<tr>
-								<th>Public Key </th>
-								<th>Private Key </th>
-								<th>RSA Encryption/Decryption </th>
-							</tr>
-
-							<tr>
-								<td>
-									<textarea rows="20" cols="50"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
-								</td>
-								<td>
-									<textarea rows="20" cols="50"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
-								</td>
-
-
-								<td rowspan="3" width="80%">
-									<%@ include file="footer_adsense.jsp"%>
-									<p><strong>The RSA Algorithm</strong></p>
-									<p>The Rivest-Shamir-Adleman (RSA) algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers
-									<p>RSA encryption usually is only used for messages that fit into one block<br />A 1024-bit RSA key invocation can encrypt a message up to 117 bytes, and results in a 128-byte value</p>
-									<p>RSA, as defined by PKCS#1, encrypts "messages" of limited size,the maximum size of data which can be encrypted with RSA is 245 bytes. No more</p>
-								</td>
-
-							</tr>
-
-							<tr>
-
-								<td>
-									<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
-								</td>
-								<td width="50%">
-									<b>output</b><div id="output"></div>
-								</td>
+			</td>
 
 
 
-
-							</tr>
-							<tr>
-								<td colspan="2" width="20%">
-									Ciphers
-									<br/>
-									<input id="cipherparameter3" type="radio" name="cipherparameter"
-										   checked value="RSA"  >RSA
-									<br/>
-									<input id="cipherparameter1" type="radio" name="cipherparameter"
-										   value="RSA/ECB/PKCS1Padding"  >RSA/ECB/PKCS1Padding
-									<br/>
-									<input id="cipherparameter2" type="radio" name="cipherparameter"
-										   value="RSA/None/PKCS1Padding"  >RSA/None/PKCS1Padding
-									<br/>
-									<input id="cipherparameter4" type="radio" name="cipherparameter"
-										   value="RSA/NONE/OAEPWithSHA1AndMGF1Padding"  >RSA/NONE/OAEPWithSHA1AndMGF1Padding
-									<br/>
-									<input id="cipherparameter5" type="radio" name="cipherparameter"
-										   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
-									<br/>
-								</td>
+		</tr>
 
 
 
-							</tr>
+	</table>
 
 
+</form>
 
-						</table>
+<hr>
 
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
 
-					</fieldset>
-			</fieldset>
+<hr>
 
-			</form>
+<h2 class="mt-4" id="thersaalgorithm">The RSA Algorithm</h2>
 
-			<table border="0" style="width:500px">
-				<tr>
-					<td><%@ include file="footer.jsp"%></td>
-				</tr>
-			</table>
-			<%@ include file="include_security_links.jsp"%>
-		</section>
-	</article>
+<p>The <strong>Rivest-Shamir-Adleman (RSA)</strong> algorithm is one of the most popular and secure public-key encryption methods. The algorithm capitalizes on the fact that there is no efficient way to factor very large (100-200 digit) numbers</p>
+
+<p>RSA encryption usually is only used for messages that fit into one block. </p>
+
+<ul>
+	<li><strong><em>A 1024-bit RSA key invocation can encrypt a message up to 117 bytes, and results in a 128-byte value</em></strong>  </li>
+
+	<li><strong><em>A 2048-bit RSA key invocation can encrypt a message up to 245 bytes</em></strong></li>
+</ul>
+
+<p>RSA, as defined by <strong>PKCS#1,</strong> encrypts "messages" of limited <em>size,the maximum size</em> of data which can be encrypted with <strong>RSA is 245 bytes. No more</strong></p>
+
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
