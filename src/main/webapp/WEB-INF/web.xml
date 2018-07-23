@@ -5,6 +5,8 @@
 	metadata-complete="false" version="3.0">
 
 
+
+
 	<session-config>
 		<session-timeout>2</session-timeout>
 	</session-config>
@@ -61,6 +63,21 @@
 			<param-value>colors.code</param-value>
 		</init-param>
 	</servlet>
+
+	<filter>
+		<filter-name>LicenseFilter</filter-name>
+		<filter-class>z.y.x.Security.LicenseFilter</filter-class>
+		<init-param>
+			<param-name>Installed</param-name>
+			<param-value>10/2018</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>LicenseFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 
 
 <servlet>
@@ -251,9 +268,6 @@
 		<servlet-name>ELGAMALFunctionality</servlet-name>
 		<url-pattern>/ELGAMALFunctionality</url-pattern>
 	</servlet-mapping>
-
-
-
 
 
 </web-app>

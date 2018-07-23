@@ -1,4 +1,4 @@
-<meta name="google-translate-customization" content="539d0b0d48e9e59d-6c7b8210e0d6ef34-gcd16ab911e9af611-a"></meta>
+
 <meta name=viewport content="width=device-width, initial-scale=1">
 
 <%
@@ -33,5 +33,4 @@
 		
 	});
 	</script>
-<script type="text/javascript" src="/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
-For Coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a>  <a href="/crypto/rest/application.wadl">REST API Supported for Integration </a> <a href="https://goo.gl/forms/y6xGIfC3kxPTFims2" target="_blank" rel="noopener" >Buy this Software to Run on Your System </a>  , Support <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a> or <a href="https://www.linkedin.com/in/anishnath" target="_blank" rel="noopener"> Hire Me </a>
+<p>8gwifi.org Welcome <b>Rey Carcana</b> </p>

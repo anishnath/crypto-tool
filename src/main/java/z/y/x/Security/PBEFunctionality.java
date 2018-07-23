@@ -310,7 +310,7 @@ public class PBEFunctionality extends HttpServlet {
 
                 try
                 {
-                    String url1 = "http://localhost/crypto/rest/pbe/encrypt";
+                    String url1 = "http://localhost:8080/crypto/rest/pbe/encrypt";
 
                 //System.out.println("encryptdecryptparameter -- " + encryptdecryptparameter);
                 if ("decryprt".equals(encryptdecryptparameter)) {
@@ -335,7 +335,7 @@ public class PBEFunctionality extends HttpServlet {
                         return;
                     }
 
-                    url1 = "http://localhost/crypto/rest/pbe/decrypt";
+                    url1 = "http://localhost:8080/crypto/rest/pbe/decrypt";
 
                 }
 

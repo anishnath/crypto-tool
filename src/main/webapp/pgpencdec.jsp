@@ -164,16 +164,6 @@ kwQlJ1K9Ib85pCTvx16DN7QwQv8=
 			</form>
 			<%@ include file="include_security_links.jsp"%>
 			<%@ include file="footer.jsp"%>
-
-			<br>
-			<br>
-			<br>
-			<br>
-			<p><strong>Pretty Good Privacy or PGP</strong> is a popular program used to encrypt and decrypt email over the Internet, as well as authenticate messages with digital signatures and encrypted stored files.</p>
-			<p><strong>PGP</strong> and similar software follow the <strong>OpenPGP</strong> standard (RFC 4880) for encrypting and decrypting data.</p>
-			<p>When we generate a public-private keypair in P<strong>GP, it gives us the option of selecting DSA or RSA</strong>, This tool generate RSA keys. RSA is an algorithm.PGP is originally a piece of software, now a standard protocol, usually known as OpenPGP.</p>
-			<p><strong>PGP Vs OpenPGP</strong><br />PGP is a proprietary encryption solution, and the rights to its software are owned by Symantec</p>
-
 		</section>
 	</article>
 </div>

@@ -209,7 +209,7 @@ public class DSAFunctionality extends HttpServlet {
 
                             Gson gson = new Gson();
                             HttpClient client = HttpClientBuilder.create().build();
-                            String url1 = "http://localhost/crypto/rest/dsa/sign";
+                            String url1 = "http://localhost:8080/crypto/rest/dsa/sign";
                             HttpPost post = new HttpPost(url1);
 
 
@@ -319,7 +319,7 @@ public class DSAFunctionality extends HttpServlet {
 
                             Gson gson = new Gson();
                             HttpClient client = HttpClientBuilder.create().build();
-                            String url1 = "http://localhost/crypto/rest/dsa/verify";
+                            String url1 = "http://localhost:8080/crypto/rest/dsa/verify";
                             HttpPost post = new HttpPost(url1);
 
 

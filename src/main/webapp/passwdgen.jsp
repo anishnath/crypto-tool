@@ -253,23 +253,6 @@
             <%@ include file="include_security_links.jsp"%>
             <%@ include file="footer.jsp"%>
 
-            <p>Thanks to the&nbsp;<a title="Project Nayuki" href="https://www.nayuki.io/" target="_blank" rel="noopener">Project Nayuki</a>&nbsp;Main contributor which has created a Javascript function which generate a random Password with Entropy. This tool utilize the Project Nayuki Strong Random Password genertor algorith which is completely java script based &nbsp;</p>
-    <p><strong>A strong password</strong> is a random password. By "random". "Entropy" is the name of the mathematical concept by which this randomness can be expressed. Take care that "password entropy" is a property of the process which generated the password, and cannot be measured on the password itself</p>
-    <p><strong>Good passwords / passphrases:</strong></p>
-    <ul>
-    <li>A strong password must be at least 8 characters long.</li>
-    <li>It should not contain any of your personal information&mdash;specifically your real name, user name, or even your company name.</li>
-    <li>It must be very unique from your previously used passwords.</li>
-    <li>It should not contain any word spelled completely.</li>
-    <li>It should contain characters from the four primary categories, including: uppercase letters, lowercase letters, numbers, and characters.</li>
-    <li>should be 8 characters or longer, which forces you to use multiple words or extra symbols.</li>
-    <li>should have upper case, lower case, symbols, and numbers; or at least three of those four groups.</li>
-    <li>should not be a common word and should not be a common phrase.</li>
-    <li>should not contain a date, a name, or other things that can be associated with you.</li>
-    <li>should be created randomly or semi-randomly.</li>
-    <li>should not be a suggestion when you type in the first few characters into Google.</li>
-    </ul>
-
     </section>
     </article>
 

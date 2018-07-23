@@ -7,20 +7,7 @@
 %>
 
 <header id="sidebar">
-    <h1>The Online Tool for <br>Online</br> People</h1>
-    <div id="google_translate_element"></div><script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-    }
-</script>
-
-
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-
-
+    <h1>The Offline Tool for <br>Online</br> People</h1>
     <nav role="navigation">
         <ul>Cryptography</ul>
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>

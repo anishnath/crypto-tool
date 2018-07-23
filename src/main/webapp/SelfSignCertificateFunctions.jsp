@@ -392,44 +392,6 @@
 			</form>
 			<%@ include file="include_security_links.jsp"%>
 			<%@ include file="footer.jsp"%> </b>
-			<p><strong>Self-Signed Certificate</strong></p>
-			<p>A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee the authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<strong><span style="text-decoration: underline;">NIST SP 800-57 Part 1 Rev. 3&nbsp;</span></strong></p>
-			<p>&nbsp;&nbsp;A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<span style="text-decoration: underline;"><strong>NIST SP 800-57 Part 3 Rev. 1</strong></span>&nbsp;</p>
-
-			<h2>OpenSSL Commands</h2>
-			<ul>
-				<li><strong>Generate a new private key and Certificate Signing Request</strong>
-					<pre>openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privatekey.key</pre>
-				</li>
-				<li><strong>Generate a self-signed certificate&nbsp;</strong>
-					<pre>openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privatekey.key -out certificate.crt</pre>
-				</li>
-				<li><strong>Generate a certificate signing request (CSR) for an existing private key</strong>
-					<pre>openssl req -out CSR.csr -key privatekey.key -new</pre>
-				</li>
-				<li><strong>Generate a certificate signing request based on an existing certificate</strong>
-					<pre>openssl x509 -x509toreq -in certificate.crt -out CSR.csr -signkey privatekey.key</pre>
-				</li>
-				<li><strong>Remove a passphrase from a private key</strong>
-					<pre>openssl rsa -in privateKey.pem -out newprivatekey.pem</pre>
-				</li>
-				<li><strong>Convert a DER file (.crt .cer .der) to PEM</strong>
-					<pre>openssl x509 -inform der -in certificate.cer -out certificate.pem</pre>
-				</li>
-				<li><strong>Convert a PEM file to DER</strong>
-					<pre>openssl x509 -outform der -in certificate.pem -out certificate.der</pre>
-				</li>
-				<li><strong>Convert a PKCS#12 file (</strong><strong>.pfx .p12</strong><strong>) containing a private key and certificates to PEM</strong>
-					<pre>openssl pkcs12 -in keyStore.pfx -out keystore.pem -nodes</pre>
-					<p>You can add -nocerts to only output the private key or add -nokeys to only output the certificates.</p>
-				</li>
-				<li><strong>Convert a PEM certificate file and a private key to PKCS#12 (.pfx .p12)</strong>
-					<pre>openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile </pre>
-				</li>
-			</ul>
-			<p>&nbsp;</p>
-
-
 		</section>
 	</article>
 

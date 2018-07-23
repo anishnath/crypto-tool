@@ -10,8 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.openssl.PEMReader;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.security.KeyPair;
+
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +105,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-                String url1 = "http://localhost/crypto/rest/ntru/generatekeypair";
+                String url1 = "http://localhost:8080/ntru/rest/ntru/generatekeypair";
                 HttpPost post = new HttpPost(url1);
                 List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                 urlParameters.add(new BasicNameValuePair("p_password", password));
@@ -215,7 +214,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/ntru/encrypt";
+                        String url1 = "http://localhost:8080/ntru/rest/ntru/encrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
@@ -314,7 +313,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/ntru/decrypt";
+                        String url1 = "http://localhost:8080/ntru/rest/ntru/decrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));

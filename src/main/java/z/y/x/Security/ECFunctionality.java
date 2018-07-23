@@ -76,7 +76,7 @@ public class ECFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = "http://localhost/crypto/rest/ec/generateABkp/" + ec_param;
+            String url1 = "http://localhost:8080/crypto/rest/ec/generateABkp/" + ec_param;
 
             //System.out.println(url1);
 
@@ -122,7 +122,7 @@ public class ECFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/ec/ecencryptdecrypt";
+            String url1 = "http://localhost:8080/crypto/rest/ec/ecencryptdecrypt";
             HttpPost post = new HttpPost(url1);
             List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 

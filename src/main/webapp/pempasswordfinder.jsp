@@ -169,11 +169,6 @@ hello123</textarea>
 
 						</tr>
 						<tr>
-							<td rowspan="2">
-								Email <input type="text" id="email" name="email" size=20 >  Will email the password if doesn't found in the supplied password list
-							</td>
-						</tr>
-						<tr>
 							<td>
 								<input type="submit" id="submit" name="convert">
 							</td>
@@ -195,7 +190,6 @@ hello123</textarea>
 			</form>
 			<%@ include file="include_security_links.jsp"%>
 			<%@ include file="footer.jsp"%>
-			Use this tool to know the password of the encrypted pem file, if you don't know the password or have the password list, provide us a valid email and encrypted pem file, This tool will bruteforce the known password (approx 100GiG) against the encrypted pem file, upto 6 digit it's free of cost, for 8 digit password we may ask for a small donation (Not compusalry to keep our services up and running) if the algo do found the password
 		</section>
 	</article>
 </div>

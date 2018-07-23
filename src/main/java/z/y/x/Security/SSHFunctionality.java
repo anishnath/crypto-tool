@@ -139,7 +139,7 @@ public class SSHFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/ssh/keygen";
+                String url1 = "http://localhost:8080/crypto/rest/ssh/keygen";
 
                 //System.out.println(url1);
 

@@ -107,7 +107,7 @@ final public class PemParser {
 
 			Gson gson = new Gson();
 			HttpClient client = HttpClientBuilder.create().build();
-			String url1 = "http://localhost/crypto/rest/pem/parseencryptedpem";
+			String url1 = "http://localhost:8080/crypto/rest/pem/parseencryptedpem";
 			HttpPost post = new HttpPost(url1);
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("p_pem", data));

@@ -8,7 +8,7 @@ import java.io.*;
 import java.security.*;
 import java.security.spec.*;
 import javax.crypto.*;
-import org.bouncycastle.jce.provider.*;
+
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.openssl.PEMWriter;
@@ -17,9 +17,7 @@ import sun.misc.BASE64Encoder;
 
 public class RSAUtil {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     protected static final String ALGORITHM = "RSA";
 

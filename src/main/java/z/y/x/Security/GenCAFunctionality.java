@@ -91,7 +91,7 @@ public class GenCAFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = "http://localhost/crypto/rest/cacerts/" + p_dns_name;
+            String url1 = "http://localhost:8080/crypto/rest/cacerts/" + p_dns_name;
 
             //System.out.println(url1);
 
@@ -159,7 +159,7 @@ public class GenCAFunctionality extends HttpServlet {
 
                     Gson gson = new Gson();
                     HttpClient client = HttpClientBuilder.create().build();
-                    String url1 = "http://localhost/crypto/rest/certs/signcsrprivkey";
+                    String url1 = "http://localhost:8080/crypto/rest/certs/signcsrprivkey";
                     HttpPost post = new HttpPost(url1);
                     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 

@@ -279,7 +279,7 @@ public class BCCryptFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/scrypt/generatehash";
+            String url1 = "http://localhost:8080/crypto/rest/scrypt/generatehash";
 
 
 
@@ -287,7 +287,7 @@ public class BCCryptFunctionality extends HttpServlet {
 
             if(hash!=null && hash.trim().length()>0) {
                 urlParameters.add(new BasicNameValuePair("p_rawpassphrase", hash));
-                url1 = "http://localhost/crypto/rest/scrypt/verifyhash";
+                url1 = "http://localhost:8080/crypto/rest/scrypt/verifyhash";
             }
             urlParameters.add(new BasicNameValuePair("p_passphrase", password));
             urlParameters.add(new BasicNameValuePair("p_salt", salt));

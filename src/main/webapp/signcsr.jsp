@@ -24,14 +24,6 @@
 	<title>Online CSR Signer, sign csr and generate certificate</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="online csr signer, get a digital certificate, online free testing Certificate, Certificate Signing Request, generate certificate,sign csr using public key, sign csr java bouncycastle, sign csr with your private key, openssl command for generating privatekey, openssl csr sign"/>
-	<meta name="description" content="Online sign the csr  and generate x.509 certificate, get a digital certificate from the csr" />
-
-	<meta name="robots" content="index,follow" />
-	<meta name="googlebot" content="index,follow" />
-	<meta name="resource-type" content="document" />
-	<meta name="classification" content="tools" />
-	<meta name="language" content="en" />
 
 	<%@ include file="include_css.jsp"%>
 	<script type="text/javascript">
@@ -163,7 +155,7 @@ l5ZqplxkM4pWgzveJvzf70zrJ+rmjVbrErqzCZNYGnfmMcgNqzaFTg==
 			<%@ include file="include_security_links.jsp"%>
 			<%@ include file="footer.jsp"%>
 			Note: We are not Signing Authority </b>
-			<p>Openssl Steps Creating CSR file <br /><strong>Generate the RSA key</strong><br />openssl genrsa -out domain.com.key 2048<br /><strong>Create a CSR</strong><br />openssl req -new -sha256 -key domain.com.key -out domain.com.csr<br /><strong>Verify your CSR</strong><br />openssl req -noout -text -in domain.com.csr</p>
+
 		</section>
 	</article>
 </div>

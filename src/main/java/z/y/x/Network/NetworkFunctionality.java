@@ -95,21 +95,7 @@ public class NetworkFunctionality extends HttpServlet {
 
         final String isgetClientIpAddrRequested = request.getParameter("getClientIpAddr");
         final String queryV6 = request.getParameter("queryV6DOmain");
-        String gRecaptchaResponse = request
-                .getParameter("g-recaptcha-response");
 
-        //System.out.println(gRecaptchaResponse);
-        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-
-       // System.out.println(verify);
-
-        if(!verify)
-        {
-            addHorizontalLine(out);
-            out.println("<b><u> Captcha Error Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
-                    + getClientIpAddr(request) + "</font><br>");
-            return;
-        }
 
         final String methodName = request.getParameter("methodName");
 
@@ -173,7 +159,7 @@ public class NetworkFunctionality extends HttpServlet {
                             //System.out.println("Finished with result: " + result);
                             out.println("<b><u>ICMP Echo Reply </b></u>= "  +  pingommand + " -c5 " +ipaddress + "<br><font size=\"3\" color=\"blue\">"
                                     + result + "</font><br>");
-                            getIpLocation(out, addr);
+                            //getIpLocation(out, addr);
                         } catch (ExecutionException e) {
                             throw new RuntimeException(e);
 

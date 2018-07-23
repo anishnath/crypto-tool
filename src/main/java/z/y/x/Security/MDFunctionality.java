@@ -189,7 +189,7 @@ public class MDFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/md/generate";
+            String url1 = "http://localhost:8080/crypto/rest/md/generate";
             HttpPost post = new HttpPost(url1);
 
 
@@ -299,7 +299,7 @@ public class MDFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/hmac/generatehmac";
+                        String url1 = "http://localhost:8080/crypto/rest/hmac/generatehmac";
                         HttpPost post = new HttpPost(url1);
 
 

@@ -123,7 +123,7 @@ public class SAMLFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/saml/sign";
+                String url1 = "http://localhost:8080/crypto/rest/saml/sign";
 
                 //System.out.println(url1);
 
@@ -269,15 +269,15 @@ public class SAMLFunctionality extends HttpServlet {
 
 
 
-                String url1 = "http://localhost/crypto/rest/saml/validatesign";
+                String url1 = "http://localhost:8080/crypto/rest/saml/validatesign";
 
                 if ("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter)) {
-                    url1 = "http://localhost/crypto/rest/saml/encode";
+                    url1 = "http://localhost:8080/crypto/rest/saml/encode";
 
                 }
 
                 if ("samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter)) {
-                    url1 = "http://localhost/crypto/rest/saml/base64decodedInflated";
+                    url1 = "http://localhost:8080/crypto/rest/saml/base64decodedInflated";
 
                 }
 

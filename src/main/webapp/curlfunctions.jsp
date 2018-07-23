@@ -81,7 +81,7 @@
             <input id="port" type="text" name="port" value="443" size="10">
             <input type="button" id="executeMethod" name="ping"
 				value="Submit" size="200"> <br>
-            <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
+
 		</fieldset>
 		<div id="output"></div>
 	</form>

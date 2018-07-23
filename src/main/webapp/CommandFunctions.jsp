@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Execute Commands</title>
-<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<meta name="description" content="Run all the commands online">
-<meta name="keywords" content="ls,rm,netstat">
+
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {

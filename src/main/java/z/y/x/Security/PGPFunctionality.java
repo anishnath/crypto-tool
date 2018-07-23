@@ -195,7 +195,7 @@ public class PGPFunctionality extends HttpServlet {
                     final FileItem item = (FileItem) requestParameter.get("file");
 
                     HttpClient httpclient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://localhost/crypto/rest/pgp/pgpverifyfile");
+                    HttpPost httpPost = new HttpPost("http://localhost:8080/crypto/rest/pgp/pgpverifyfile");
 
                     String path = System.getProperty("java.io.tmpdir");
                     String fullPathSecretKey = path + "/" + UUID.randomUUID().toString();
@@ -288,7 +288,7 @@ public class PGPFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-                String url1 = "http://localhost/crypto/rest/pgp/pgpkeygen";
+                String url1 = "http://localhost:8080/crypto/rest/pgp/pgpkeygen";
                 HttpPost post = new HttpPost(url1);
 
 
@@ -361,7 +361,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/pgp/pgpencrypt";
+                        String url1 = "http://localhost:8080/crypto/rest/pgp/pgpencrypt";
                         HttpPost post = new HttpPost(url1);
 
 
@@ -447,7 +447,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/pgp/pgpdecrypt";
+                        String url1 = "http://localhost:8080/crypto/rest/pgp/pgpdecrypt";
                         HttpPost post = new HttpPost(url1);
 
 
