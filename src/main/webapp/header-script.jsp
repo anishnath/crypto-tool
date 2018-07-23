@@ -9,3 +9,5 @@
 <link rel="stylesheet"  href="css/highlight/default.min.css">
 <script src="css/highlight/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+
+<%@ include file="analytics.jsp"%>
