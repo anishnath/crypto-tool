@@ -158,6 +158,7 @@
 			<hr>
 
 			<%@ include file="cipher-functions-writeups.jsp"%>
+			<%@ include file="footer_adsense.jsp"%>
 
 			<%@ include file="addcomments.jsp"%>
 
