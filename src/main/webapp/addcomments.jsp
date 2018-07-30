@@ -2,7 +2,7 @@
 <div id="disqus_thread"></div>
 <script>
 var disqus_config = function () {
-this.page.url = "https://8gwifi.org/docs/<%=request.getRequestURI() %>";  // Replace PAGE_URL with your page's canonical URL variable
+this.page.url = "https://8gwifi.org/<%=request.getRequestURI() %>";  // Replace PAGE_URL with your page's canonical URL variable
 this.page.identifier = "<%=request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/")+1) %>";
 };
 
