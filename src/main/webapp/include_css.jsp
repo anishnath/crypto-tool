@@ -34,4 +34,5 @@
 	});
 	</script>
 <script type="text/javascript" src="/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
-For Coffee/beer/Amazon Bills and further development of the project : <a href="https://www.paypal.me/8gwifi/1" target="_blank" rel="noopener">Donate 1$ </a>  <a href="/crypto/rest/application.wadl">REST API Supported for Integration </a> <a href="https://goo.gl/forms/y6xGIfC3kxPTFims2" target="_blank" rel="noopener" >Buy this Software to Run on Your System </a>  ,  <a href="https://8gwifi.org/docs/" >Tech Blog </a>   <a href="https://www.linkedin.com/in/anishnath" target="_blank" rel="noopener"> Hire Me </a>
+For Coffee/beer/Amazon Bills further development of the project : <a href="https://leanpub.com/crypto" target="_blank" rel="noopener">Buy My Cryptography CookBook </a>
+(or) <a href="https://leanpub.com/crypto" target="_blank" rel="noopener" >Get this Software Bundle </a>, <a href="/crypto/rest/application.wadl">Use REST API </a>   ,  <a href="https://8gwifi.org/docs/" >Tech Blog </a>  , <a href="https://www.linkedin.com/in/anishnath" target="_blank" rel="noopener"> Hire Me </a>

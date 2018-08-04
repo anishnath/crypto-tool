@@ -7,9 +7,12 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://www.paypal.me/8gwifi/" target="_blank" rel="noopener">For Coffee/Beer Amazon Bills Donate
-                <span class="sr-only">(current)</span>
+              <a class="nav-link" href="https://leanpub.com/crypto/" target="_blank" rel="noopener">For Coffee/Beer Amazon Bill Buy My Crytography CookBook
               </a>
+            </li>
+
+            <li class="nav-item ">
+              <a class="nav-link" href="https://8gwifi.org/docs/st.jsp">Speed Test</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="https://8gwifi.org/docs/">Tech Blogs</a>
@@ -18,7 +21,7 @@
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
             </li>
             <li class="nav-item active">
-              <a href="https://goo.gl/forms/y6xGIfC3kxPTFims2" target="_blank" rel="noopener" >Buy this Software</a>
+              <a href="https://leanpub.com/crypto/" target="_blank" rel="noopener" >Buy this Software</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link"  href="https://www.linkedin.com/in/anishnath">Hire Me!</a>

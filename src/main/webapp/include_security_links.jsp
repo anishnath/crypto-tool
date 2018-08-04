@@ -21,4 +21,5 @@
 Back to Main Page <a href="mobilelinks.jsp"> Crypto Links </a>
 <%}%>
 <br>
-<b>Any private key value that you enter or we generate is not stored on this site, this tool is provided via an HTTPS URL to ensure that private keys cannot be stolen, for extra security <a href="https://goo.gl/forms/y6xGIfC3kxPTFims2" target="_blank" rel="noopener" >run </a> this software on your network, no cloud dependency</b>
+<b>Any private key value that you enter or we generate is not stored on this site, this tool is provided via an HTTPS URL to ensure that private keys cannot be stolen, for extra security <a href="https://goo.gl/forms/y6xGIfC3kxPTFims2" target="_blank" rel="noopener" >run </a> this software on your network, no cloud dependency when purchaasing cryptograpby Cookbook</b></br>
+<p><iframe width='160' height='300' src='https://leanpub.com/crypto/embed' frameborder='0' allowtransparency='true'></iframe></p>
