@@ -210,4 +210,7 @@
     <loc>https://8gwifi.org/docs/nginx-secure.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/pki.jsp</loc>
+  </url>
 </urlset>
