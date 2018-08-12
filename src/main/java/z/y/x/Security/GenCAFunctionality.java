@@ -79,7 +79,7 @@ public class GenCAFunctionality extends HttpServlet {
 
             p_dns_name = p_dns_name.trim();
 
-            Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+            Pattern p = Pattern.compile("[^a-z0-9. ]", Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(p_dns_name);
             boolean b = m.find();
 
