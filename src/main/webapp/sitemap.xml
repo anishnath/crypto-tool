@@ -213,4 +213,8 @@
   <url>
     <loc>https://8gwifi.org/docs/pki.jsp</loc>
   </url>
+
+  <url>
+    <loc>https://8gwifi.org/docs/ocsp.jsp</loc>
+  </url>
 </urlset>
