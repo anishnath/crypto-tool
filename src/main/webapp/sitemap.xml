@@ -217,4 +217,9 @@
   <url>
     <loc>https://8gwifi.org/docs/ocsp.jsp</loc>
   </url>
+
+  <url>
+    <loc>https://8gwifi.org/docs/kube-nginx.jsp</loc>
+  </url>
+
 </urlset>
