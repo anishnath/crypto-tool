@@ -11,7 +11,9 @@
                     <li><a href="#"><font size="2.5px">iptables rule to firewalld geneator</font></a></li>
                     <li><a href="#"><font size="2.5px">htpassword generator</font></a></li>
                     <li><a href="#"><font size="2.5px">File Encryption & decryption</font></a></li>
+                    <li><a href="CipherFunctions.jsp"><font size="2.5px">UI Improvement (currently only two UI is improved)</font></a></li>
                     <li><a href="contactus.jsp">Send Feature Request heret</a></li>
+
                   </ul>
                 </div>
               </div>
