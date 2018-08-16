@@ -12,6 +12,8 @@
 	<!-- Topic Widget -->
 	<%@ include file="related-encoders.jsp"%>
 
+	<%@ include file="related-upcoming.jsp"%>
+
 </div>
 </div>
 
