@@ -226,4 +226,7 @@
     <loc>https://8gwifi.org/docs/kube-ports.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/iptables.jsp</loc>
+  </url>
 </urlset>
