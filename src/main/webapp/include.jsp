@@ -8,14 +8,7 @@
 
 <header id="sidebar">
     <h1>The Online Tool for <br>Online</br> People</h1>
-    <div id="google_translate_element"></div><script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-    }
-</script>
-
-
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element"></div>
 
 
     <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -59,7 +52,21 @@
         <li><a href="HexToStringFunctions.jsp"><font size="2.5px">StringToHex Conversion</font></a></li>
         <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
         <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
-        <li><a href="contactus.jsp">Feature Request</a></li>
+
+
+        <ul> Feature Request Coming Soon!!! </ul>
+            <li><a href="contactus.jsp">Send Feature Request here</a></li>
+            <li><font size="2.5px">Blockchain keygen signature gen & verify  </font></li>
+            <li><font size="2.5px">OPenssl Key Managenet UI</font></li>
+            <li><font size="2.5px">TLS Checker</font></li>
+            <li><font size="2.5px">Live OCSP Query</font></li>
+            <li><font size="2.5px">iptables rule to firewalld geneator</font></li>
+            <li><font size="2.5px">htpassword generator</font></li>
+            <li><font size="2.5px">File Encryption & decryption</font></li>
+            <li><a href="CipherFunctions.jsp"><font size="2.5px">UI Improvement (currently only two UI is improved)</font></a></li>
+
+
+
     </nav>
     <% }
 
