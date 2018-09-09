@@ -37,6 +37,7 @@
         <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>
         <li><a href="cafunctions.jsp"><font size="2.5px">Generate rootCA/InterCA/Certs</font> </a></li>
         <li><a href="certsverify.jsp"><font size="2.5px">Verify private key against csr,x509</font> </a></li>
+        <li><a href="ocsp.jsp"><font size="2.5px">Online OCSP query</font> </a></li>
         <li><a href="signcsr.jsp"><font size="2.5px">Sign CSR</font> </a></li>
         <li><a href="sshfunctions.jsp"><font size="2.5px">SSH-Keygen</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
@@ -59,7 +60,6 @@
             <li><font size="2.5px">Blockchain keygen signature gen & verify  </font></li>
             <li><font size="2.5px">OPenssl Key Managenet UI</font></li>
             <li><font size="2.5px">TLS Checker</font></li>
-            <li><font size="2.5px">Live OCSP Query</font></li>
             <li><font size="2.5px">iptables rule to firewalld geneator</font></li>
             <li><font size="2.5px">htpassword generator</font></li>
             <li><font size="2.5px">File Encryption & decryption</font></li>
