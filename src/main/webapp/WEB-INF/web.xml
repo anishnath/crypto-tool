@@ -252,6 +252,15 @@
 		<url-pattern>/ELGAMALFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>OCSPFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.OCSPFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OCSPFunctionality</servlet-name>
+		<url-pattern>/OCSPFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
