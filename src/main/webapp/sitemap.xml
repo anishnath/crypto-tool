@@ -243,4 +243,7 @@
     <loc>https://8gwifi.org/ocsp.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/window-crypto-random.jsp</loc>
+  </url>
 </urlset>
