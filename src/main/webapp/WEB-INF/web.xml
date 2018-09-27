@@ -261,6 +261,15 @@
 		<url-pattern>/OCSPFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>JWKFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.JWKFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JWKFunctionality</servlet-name>
+		<url-pattern>/JWKFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
