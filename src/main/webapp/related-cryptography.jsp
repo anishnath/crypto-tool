@@ -31,6 +31,7 @@
                     <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="2.5px">Easy Keystore/trustore viewer</font> </a></li>
                     <li><a href="samlfunctions.jsp"><font size="2.5px">SAML Sign Message</font> </a></li>
                     <li><a href="samlverifysign.jsp"><font size="2.5px">SAML Verify Sign / Others</font> </a></li>
+                    <li><a href="jwkfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) Generate</font> </a></li>
                   </ul>
                 </div>
               </div>
