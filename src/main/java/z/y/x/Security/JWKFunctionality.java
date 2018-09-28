@@ -32,6 +32,8 @@ public class JWKFunctionality extends HttpServlet {
 
     private static final String METHOD_CALCULATEJWK = "CALCULATE_JWK";
 
+    private static final String METHOD_CONVERT_JWK = "CONVERT_JWK";
+
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -150,7 +152,163 @@ public class JWKFunctionality extends HttpServlet {
 
                 }
 
+        if (METHOD_CONVERT_JWK.equalsIgnoreCase(methodName)) {
+
+            String param = request.getParameter("param");
+            String input = request.getParameter("input");
+
+
+            if(null==input || input.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Input is Null or EMpty....</font>");
+                return;
+            }
+
+            if("JWK-to-PEM".equalsIgnoreCase(param))
+            {
+                if(input.contains("BEGIN") &&  input.contains("END")  &&  input.contains("RSA") )
+                {
+
+                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertpemtojwk";
+                    generateToPem(out, input,url1); ;
+
+                    return;
+                }
+
+                if (input.contains("kty") && input.contains("{") && input.contains("}"))
+
+                {
+                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertjwktopem";
+                    generateToPem(out, input,url1); ;
+                }
+
+                else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Not a JWK Key Please input a valid JWK Key</font>");
+                    return;
+                }
+
+            }
+
+            if("PEM-to-JWK".equalsIgnoreCase(param))
+            {
+                if(input.contains("BEGIN") &&  input.contains("END")  &&  input.contains("---") )
+                {
+
+                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertpemtojwk";
+                    generateToPem(out, input,url1); ;
+
+                    return;
+                }
+
+                if (input.contains("kty") && input.contains("{") && input.contains("}"))
+
+                {
+                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertjwktopem";
+                    generateToPem(out, input,url1); ;
+                }
+
+                else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Not a ValiD RSA PEM Format</font>");
+                    return;
+                }
+
+            }
+
+
         }
+
+        }
+
+    private void generateToPem(PrintWriter out, String input,String url1) {
+        try {
+
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            //String url1 = "http://localhost:8082/crypto/rest/jwk/convertjwktorsa";
+            HttpPost post = new HttpPost(url1);
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            urlParameters.add(new BasicNameValuePair("p_param", input));
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post.addHeader("accept", "application/json");
+
+            HttpResponse response1 = client.execute(post);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                if (response1.getStatusLine().getStatusCode() == 404) {
+                    BufferedReader br1 = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+                    StringBuilder content1 = new StringBuilder();
+                    String line;
+                    while (null != (line = br1.readLine())) {
+                        content1.append(line);
+                    }
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
+                    return;
+                } else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+
+            }
+            BufferedReader br1 = new BufferedReader(
+                    new InputStreamReader(
+                            (response1.getEntity().getContent())
+                    )
+            );
+            StringBuilder content1 = new StringBuilder();
+            String line;
+            while (null != (line = br1.readLine())) {
+                content1.append(line);
+            }
+
+            //System.out.println("line-- " + line);
+
+
+
+
+            if(url1.contains("convertjwktopem")) {
+
+                jwkpojo jwkpojo = gson.fromJson(content1.toString(), jwkpojo.class);
+                addHorizontalLine(out);
+                // System.out.println("encodedMessage-- " + encodedMessage);
+
+                if(jwkpojo.getPublicKey()!=null) {
+                    out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"rsaprublickey\" id=\"rsaprublickey\" rows=\"4\" cols=\"40\">"  + jwkpojo.getPublicKey() + "</textarea>");
+                }
+
+                if(jwkpojo.getPrivateKey()!=null) {
+                    out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"rsaprivatekey\" id=\"rsaprivatekey\" rows=\"10\" cols=\"40\">"  + jwkpojo.getPrivateKey() + "</textarea>");
+                }
+
+            }
+
+            else{
+
+                out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + content1.toString() + "</textarea>");
+
+            }
+
+
+          //  out.println(j);
+            return;
+
+
+
+        } catch (Exception e) {
+            addHorizontalLine(out);
+            out.println("<font size=\"4\" color=\"red\"> " + e);
+        }
+    }
+
     private void addHorizontalLine(PrintWriter out) {
         out.println("<hr>");
     }
