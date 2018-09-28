@@ -10,7 +10,7 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "jwk kegenerate online",
+  "name" : "jwk to pem convertor, pem to jwk convert online, jwk openssl format pem",
   "image" : "https://8gwifi.org/docs/jwkconvert.png",
   "url" : "https://8gwifi.org/jwkconvertfunctions.jsp",
   "author" : {
@@ -26,7 +26,7 @@
 }
 </script>
 
-	<title>JSON Web Key (JWK), Online JWK key generator </title>
+	<title>jwk to pem convertor, pem to jwk convert online, jwk openssl format pem </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 	<meta name="keywords" content="jwk key to pem convert online, pem to jwk key convert " />
