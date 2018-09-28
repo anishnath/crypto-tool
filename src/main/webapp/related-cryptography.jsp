@@ -32,6 +32,7 @@
                     <li><a href="samlfunctions.jsp"><font size="2.5px">SAML Sign Message</font> </a></li>
                     <li><a href="samlverifysign.jsp"><font size="2.5px">SAML Verify Sign / Others</font> </a></li>
                     <li><a href="jwkfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) Generate</font> </a></li>
+                    <li><a href="jwkconvertfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) to PEM Convert</font> </a></li>
                   </ul>
                 </div>
               </div>

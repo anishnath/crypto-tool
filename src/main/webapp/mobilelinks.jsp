@@ -34,6 +34,8 @@
         <li><a href="samlverifysign.jsp"><font size="3px">SAML Verify Signature</font> </a></li>
         <li><a href="JKSManagementFunctionality?invalidate=yes"><font size="3px">Easy Keystore/trustore viewer</font> </a></li>
         <li><a href="ProviderCapablitiesFunctions.jsp"><font size="3px">Get Algorithm Capabilities </font></a></li>
+        <li><a href="jwkfunctions.jsp"><font size="3px">JSON Web Key (JWK) Generate</font> </a></li>
+        <li><a href="jwkconvertfunctions.jsp"><font size="3px">JWK to PEM convertor</font> </a></li>
         <ul>Network Functions</ul>
         <li><a href="SubnetFunctions.jsp"><font size="3px">IP Subnet CIDR Calculator</font></a></li>
         <li><a href="pingfunctions.jsp"><font size="3px">Ping/Locate IPv4/Iv6  </font></a></li>
