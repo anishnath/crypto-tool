@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://leanpub.com/crypto/" target="_blank" rel="noopener">For Coffee/Beer Amazon Bill Buy My Crytography CookBook
+              <a class="nav-link" href="https://leanpub.com/crypto/" target="_blank" rel="noopener"><small>For Coffee/Beer Amazon Bill Buy Crytography CookBook </small>
               </a>
             </li>
 
