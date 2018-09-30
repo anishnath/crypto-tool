@@ -176,6 +176,18 @@
 	</li>
 </ul>
 
+<h3 class="mt-4"><a id="JWK_to__RSA_fields_0"></a>JWK to  RSA fields</h3>
+<ul>
+	<li>parameter  <code>n</code>: Base64 URL encoded string representing the  <code>modulus</code>  of the RSA Key.</li>
+	<li>parameter  <code>e</code>: Base64 URL encoded string representing the  <code>public exponent</code>  of the RSA Key.</li>
+	<li>parameter  <code>d</code>: Base64 URL encoded string representing the  <code>private exponent</code>  of the RSA Key.</li>
+	<li>parameter  <code>p</code>: Base64 URL encoded string representing the  <code>secret prime factor</code>  of the RSA Key.</li>
+	<li>parameter  <code>q</code>: Base64 URL encoded string representing the  <code>secret prime factor</code>  of the RSA Key.</li>
+	<li>parameter  <code>dp</code>: Base64 URL encoded string representing the  <code>first factor CRT exponent</code>  of the RSA Key.  <code>d mod (p-1)</code></li>
+	<li>parameter  <code>dq</code>: Base64 URL encoded string representing the  <code>second factor CRT exponent</code>of the RSA Key.  <code>d mod (q-1)</code></li>
+	<li>parameter  <code>qi</code>: Base64 URL encoded string representing the  <code>first CRT coefficient</code>  of the RSA Key.  <code>q^-1 mod p</code></li>
+</ul>
+
 <%@ include file="addcomments.jsp"%>
 
 </div>
