@@ -1,7 +1,7 @@
 package z.y.x.Security;
 
 import org.apache.commons.io.IOUtils;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -20,9 +20,7 @@ import java.util.UUID;
  */
 public class PBEUtils {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     public static String encodeBASE64(byte[] bytes) {
         return new BASE64Encoder().encode(bytes);

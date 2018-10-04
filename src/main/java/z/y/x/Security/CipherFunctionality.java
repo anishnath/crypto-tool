@@ -40,7 +40,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -61,9 +61,7 @@ public class CipherFunctionality extends HttpServlet {
     private static final String METHOD_CIPHERBLOCK_NEW = "CIPHERBLOCK_NEW";
     private static final String METHOD_ENCRYPTED_PEM_PASSWORD = "ENCRYPTED_PEM_PASSWORD";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse

@@ -16,7 +16,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import sun.misc.BASE64Encoder;
 
@@ -36,9 +36,7 @@ public class GenKeyPair {
 
 
 
-	static {
-		Security.addProvider(new BouncyCastleProvider());
-	}
+
 
 	public void generateRSAKeyPair()
 			throws Exception {

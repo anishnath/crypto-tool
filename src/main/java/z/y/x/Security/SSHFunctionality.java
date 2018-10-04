@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,9 +35,7 @@ public class SSHFunctionality extends HttpServlet {
     private static final String METHOD_GENERATE_SSHKEYGEN = "GENERATE_SSHKEYGEN";
 
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     public SSHFunctionality() {
 

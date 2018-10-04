@@ -8,7 +8,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,9 +31,7 @@ public class BCCryptFunctionality extends HttpServlet {
     private static final String METHOD_HASH_SCRYPT = "CALCULATE_SCRYPT";
     private static final String METHOD_CHECK_PASSWORD = "METHOD_CHECK_PASSWORD";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     public BCCryptFunctionality() {
 

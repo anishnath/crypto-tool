@@ -7,12 +7,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -33,9 +35,7 @@ public class DSAFunctionality extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String METHOD_CALCULATEDSA = "CALCULATE_DSA";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     private long maxFileSize = 1024 * 10 * 10 * 10;
 
@@ -59,13 +59,38 @@ public class DSAFunctionality extends HttpServlet {
         String keysize = request.getParameter("keysize");
         if (keysize != null && keysize.trim().length() > 0) {
             try {
-                KeyPair kp = RSAUtil.generateKey("DSA",Integer.parseInt(keysize));
-//                String pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
-//                String privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
 
+                Gson gson = new Gson();
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = "http://localhost/crypto/rest/dsa/" + keysize;
 
-                request.getSession().setAttribute("pubkey", RSAUtil.toPem(kp.getPublic()));
-                request.getSession().setAttribute("privKey", RSAUtil.toPem(kp));
+                //System.out.println(url1);
+
+                HttpGet getRequest = new HttpGet(url1);
+                getRequest.addHeader("accept", "application/json");
+
+                HttpResponse response1 = httpClient.execute(getRequest);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                pgppojo pgppojo = gson.fromJson(content.toString(), pgppojo.class);
+
+                request.getSession().setAttribute("pubkey", pgppojo.getPubliceKey());
+                request.getSession().setAttribute("privKey", pgppojo.getPrivateKey());
                 request.getSession().setAttribute("keysize", keysize);
                 String nextJSP = "/dsafunctions.jsp";
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);

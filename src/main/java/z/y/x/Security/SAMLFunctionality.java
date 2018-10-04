@@ -7,7 +7,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -34,9 +34,7 @@ public class SAMLFunctionality extends HttpServlet {
     private static final String METHOD_VERIFY_SIGNATURE_OR_DECODE = "VERIFY_SIGNATURE_OR_DECODE";
 
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     public SAMLFunctionality() {
 

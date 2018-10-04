@@ -9,9 +9,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.openssl.PEMReader;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,9 +32,7 @@ public class NTRUFunctionality extends HttpServlet {
     private static final String METHOD_GENERATE_KEYS = "GENERATE_KEYS";
 
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
 
     /**

@@ -9,9 +9,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.openssl.PEMReader;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,9 +32,6 @@ public class JWKFunctionality extends HttpServlet {
     private static final String METHOD_CONVERT_JWK = "CONVERT_JWK";
 
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
 
     /**

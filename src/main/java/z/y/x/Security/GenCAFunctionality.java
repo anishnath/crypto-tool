@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,9 +35,6 @@ public class GenCAFunctionality extends HttpServlet {
     private static final String METHOD_GENERATE_TEST_CA = "GENERATE_TEST_CA";
     private static final String METHOD_CSR_SIGNER = "CSR_SIGNER";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
     public GenCAFunctionality() {
 

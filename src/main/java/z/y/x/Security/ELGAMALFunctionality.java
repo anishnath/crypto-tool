@@ -6,12 +6,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.openssl.PEMReader;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,9 +32,7 @@ public class ELGAMALFunctionality extends HttpServlet {
     private static final String METHOD_CALCULATERSA = "CALCULATE_ELGAMAL";
 
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
 
     /**
@@ -73,22 +70,47 @@ public class ELGAMALFunctionality extends HttpServlet {
                     keys=160;
                 }
 
-                KeyPair kp = RSAUtil.generateKey("ELGAMAL",keys);
-//                String pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
-//                String privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
+                Gson gson = new Gson();
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = "http://localhost/crypto/rest/elgamal/" + keysize;
+
+                //System.out.println(url1);
+
+                HttpGet getRequest = new HttpGet(url1);
+                getRequest.addHeader("accept", "application/json");
+
+                HttpResponse response1 = httpClient.execute(getRequest);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                elgamlpojo elgamlpojo = gson.fromJson(content.toString(), elgamlpojo.class);
 
 
-                request.getSession().setAttribute("pubkey", RSAUtil.toPem(kp.getPublic()));
+                request.getSession().setAttribute("pubkey", elgamlpojo.getPublicKey());
 
-                String s = new org.apache.commons.net.util.Base64().encodeToString(kp.getPrivate().getEncoded());
+//                String s = new org.apache.commons.net.util.Base64().encodeToString(kp.getPrivate().getEncoded());
+//
+//                StringBuilder builder = new StringBuilder();
+//                builder.append("-----BEGIN PRIVATE KEY-----");
+//                builder.append("\n");
+//                builder.append(s);
+//                builder.append("-----END PRIVATE KEY-----");
 
-                StringBuilder builder = new StringBuilder();
-                builder.append("-----BEGIN PRIVATE KEY-----");
-                builder.append("\n");
-                builder.append(s);
-                builder.append("-----END PRIVATE KEY-----");
-
-                String privKey = builder.toString();
+                String privKey = elgamlpojo.getPrivateKey();
 
                 request.getSession().setAttribute("privKey", privKey);
                 request.getSession().setAttribute("keysize", keysize);

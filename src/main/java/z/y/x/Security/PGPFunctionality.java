@@ -16,7 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,9 +40,7 @@ public class PGPFunctionality extends HttpServlet {
     private static final String VERIFY_PGP_FILE = "VERIFY_PGP_FILE";
     private static final String PGP_ENCRYPTION_DECRYPTION = "PGP_ENCRYPTION_DECRYPTION";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     private long maxFileSize = 1024 * 10 * 10 * 10;
 

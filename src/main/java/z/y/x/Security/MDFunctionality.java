@@ -8,7 +8,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import z.y.x.r.ColorCodeOnStartupFunctionality;
 
 import javax.servlet.ServletException;
@@ -33,9 +33,7 @@ public class MDFunctionality extends HttpServlet {
     private static final String METHOD_CALCULATEMD5 = "CALCULATE_MD";
     private static final String METHOD_GENERATE_HMAC = "GENERATE_HMAC";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     ;
 

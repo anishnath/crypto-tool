@@ -14,7 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -42,9 +42,7 @@ public class PBEFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2920672118396887204L;
     static Map<String, byte[]> map = new HashMap<String, byte[]>();
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     private final String METHOD_NAME = "PBEBLOCK";
     private final String METHOD_NAME_PBE_MESSAGE ="PBEMESSAGE";

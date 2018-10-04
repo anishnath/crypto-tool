@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,9 +37,7 @@ public class ECFunctionality extends HttpServlet {
     private static final String EC_FUNCTION = "EC_FUNCTION";
     private static final String EC_GENERATE_KEYPAIR = "EC_GENERATE_KEYPAIR";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+
 
     public ECFunctionality() {
 

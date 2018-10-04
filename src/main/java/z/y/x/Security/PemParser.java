@@ -8,7 +8,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,9 +19,7 @@ import java.util.List;
 final public class PemParser {
 	
 
-	static {
-		Security.addProvider(new BouncyCastleProvider());
-	}
+
 	
 	
 
