@@ -102,7 +102,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-                String url1 = "http://localhost/crypto/rest/ntru/generatekeypair";
+                String url1 = "http://localhost/ntru/rest/ntru/generatekeypair";
                 HttpPost post = new HttpPost(url1);
                 List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                 urlParameters.add(new BasicNameValuePair("p_password", password));
