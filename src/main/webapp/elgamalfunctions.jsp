@@ -1,6 +1,13 @@
 <%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="java.security.KeyPair" %>
 <%@ page import="org.apache.commons.net.util.Base64" %>
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
+<%@ page import="org.apache.http.client.methods.HttpGet" %>
+<%@ page import="org.apache.http.HttpResponse" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page import="z.y.x.Security.elgamlpojo" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,18 +59,46 @@
 
 
 		if (request.getSession().getAttribute("pubkey")==null) {
-			KeyPair kp = RSAUtil.generateKey("ELGAMAL",160);
-			pubKey =RSAUtil.toPem(kp.getPublic());
+//			KeyPair kp = RSAUtil.generateKey("ELGAMAL",160);
+//			pubKey =RSAUtil.toPem(kp.getPublic());
+//
+//			String s = new Base64().encodeToString(kp.getPrivate().getEncoded());
+//
+//			StringBuilder builder = new StringBuilder();
+//			builder.append("-----BEGIN PRIVATE KEY-----");
+//			builder.append("\n");
+//			builder.append(s);
+//			builder.append("-----END PRIVATE KEY-----");
+//
+//			privKey = builder.toString();
 
-			String s = new Base64().encodeToString(kp.getPrivate().getEncoded());
 
-			StringBuilder builder = new StringBuilder();
-			builder.append("-----BEGIN PRIVATE KEY-----");
-			builder.append("\n");
-			builder.append(s);
-			builder.append("-----END PRIVATE KEY-----");
+			Gson gson = new Gson();
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url1 = "http://localhost/crypto/rest/elgamal/" + 160;
 
-			privKey = builder.toString();
+			//System.out.println(url1);
+
+			HttpGet getRequest = new HttpGet(url1);
+			getRequest.addHeader("accept", "application/json");
+
+			HttpResponse response1 = httpClient.execute(getRequest);
+
+
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(
+							(response1.getEntity().getContent())
+					)
+			);
+
+			StringBuilder content = new StringBuilder();
+			String line;
+			while (null != (line = br.readLine())) {
+				content.append(line);
+			}
+			elgamlpojo elgamlpojo = (elgamlpojo)gson.fromJson(content.toString(), elgamlpojo.class);
+			pubKey = elgamlpojo.getPublicKey();
+			privKey = elgamlpojo.getPrivateKey();
 			k2=true;
 		}
 		else {

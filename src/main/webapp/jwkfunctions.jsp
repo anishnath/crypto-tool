@@ -1,5 +1,3 @@
-<%@ page import="z.y.x.Security.RSAUtil" %>
-<%@ page import="java.security.KeyPair" %>
 <!DOCTYPE html>
 <html>
 <head>

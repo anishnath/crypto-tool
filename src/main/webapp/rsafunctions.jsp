@@ -1,5 +1,12 @@
 <%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="java.security.KeyPair" %>
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
+<%@ page import="org.apache.http.client.methods.HttpGet" %>
+<%@ page import="org.apache.http.HttpResponse" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page import="z.y.x.Security.pgppojo" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,9 +59,37 @@
 
 
 		if (request.getSession().getAttribute("pubkey")==null) {
-			KeyPair kp = RSAUtil.generateKey(1024);
-			pubKey =RSAUtil.toPem(kp.getPublic());
-			privKey = RSAUtil.toPem(kp);
+//			KeyPair kp = RSAUtil.generateKey(1024);
+//			pubKey =RSAUtil.toPem(kp.getPublic());
+//			privKey = RSAUtil.toPem(kp);
+
+			Gson gson = new Gson();
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url1 = "http://localhost/crypto/rest/rsa/" + 1024;
+
+			//System.out.println(url1);
+
+			HttpGet getRequest = new HttpGet(url1);
+			getRequest.addHeader("accept", "application/json");
+
+			HttpResponse response1 = httpClient.execute(getRequest);
+
+
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(
+							(response1.getEntity().getContent())
+					)
+			);
+
+			StringBuilder content = new StringBuilder();
+			String line;
+			while (null != (line = br.readLine())) {
+				content.append(line);
+			}
+			pgppojo pgppojo = (pgppojo) gson.fromJson(content.toString(), pgppojo.class);
+
+			pubKey = pgppojo.getPubliceKey();
+			privKey = pgppojo.getPrivateKey();
 			k2=true;
 		}
 		else {
