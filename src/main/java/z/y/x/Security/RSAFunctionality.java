@@ -6,12 +6,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.JCERSAPublicKey;
-import org.bouncycastle.openssl.PEMReader;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,10 +32,6 @@ public class RSAFunctionality extends HttpServlet {
 
     private static final String METHOD_CALCULATERSA = "CALCULATE_RSA";
 
-
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
 
     /**
@@ -58,13 +54,39 @@ public class RSAFunctionality extends HttpServlet {
         String keysize = request.getParameter("keysize");
         if (keysize != null && keysize.trim().length() > 0) {
             try {
-                KeyPair kp = RSAUtil.generateKey(Integer.parseInt(keysize));
-//                String pubKey = RSAUtil.encodeBASE64(kp.getPublic().getEncoded());
-//                String privKey = RSAUtil.encodeBASE64(kp.getPrivate().getEncoded());
+
+                Gson gson = new Gson();
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = "http://localhost/crypto/rest/rsa/" + keysize;
+
+                //System.out.println(url1);
+
+                HttpGet getRequest = new HttpGet(url1);
+                getRequest.addHeader("accept", "application/json");
+
+                HttpResponse response1 = httpClient.execute(getRequest);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                pgppojo pgppojo = gson.fromJson(content.toString(), pgppojo.class);
 
 
-                request.getSession().setAttribute("pubkey", RSAUtil.toPem(kp.getPublic()));
-                request.getSession().setAttribute("privKey", RSAUtil.toPem(kp));
+                request.getSession().setAttribute("pubkey", pgppojo.getPubliceKey());
+                request.getSession().setAttribute("privKey", pgppojo.getPrivateKey());
                 request.getSession().setAttribute("keysize", keysize);
                 String nextJSP = "/rsafunctions.jsp";
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
@@ -133,37 +155,7 @@ public class RSAFunctionality extends HttpServlet {
 //                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
 
                     try {
-                        byte[] content = publiKeyParam.getBytes();
-                        InputStream is = new ByteArrayInputStream(content);
-                        InputStreamReader isr = new InputStreamReader(is);
-                        BufferedReader br = new BufferedReader(isr);
-                        PEMReader pemReader = new PEMReader(br, null);
 
-                        Object obj = pemReader.readObject();
-
-
-
-
-//                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
-//                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
-//
-//                            // PublicKey publicKeyObj = RSAUtil.getPublicKeyFromString(publiKeyParam);
-//                            String encryptedMessage = RSAUtil.encrypt(message, jcersaPublicKey, algo);
-//                            addHorizontalLine(out);
-//                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
-//                            return;
-//                            //out.println(encryptedMessage);
-//
-//                        }
-//
-//                        if (obj instanceof java.security.KeyPair) {
-//                            KeyPair kp = (KeyPair) obj;
-//                            String encryptedMessage = RSAUtil.encrypt(message, kp.getPrivate(), algo);
-//                            addHorizontalLine(out);
-//                            //out.println(encryptedMessage);
-//                            out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encryptedMessage + "</textarea>");
-//                            return;
-//                        }
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
@@ -264,31 +256,6 @@ public class RSAFunctionality extends HttpServlet {
                         InputStream is = new ByteArrayInputStream(content);
                         InputStreamReader isr = new InputStreamReader(is);
                         BufferedReader br = new BufferedReader(isr);
-                        PEMReader pemReader = new PEMReader(br, null);
-
-                        Object obj = pemReader.readObject();
-
-                        //System.out.println("Decrypt RSA-- " + obj.getClass());
-                        if (obj instanceof java.security.KeyPair) {
-                            KeyPair kp = (KeyPair) obj;
-                            String decryptMessage = RSAUtil.decrypt(message, kp.getPrivate(), algo);
-                            // out.println(decryptMessage);
-                            addHorizontalLine(out);
-                            out.println("<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"5\" cols=\"40\">" + decryptMessage + "</textarea>");
-                            return;
-                        }
-
-                        if (obj instanceof org.bouncycastle.jce.provider.JCERSAPublicKey) {
-
-                            JCERSAPublicKey jcersaPublicKey = (org.bouncycastle.jce.provider.JCERSAPublicKey) obj;
-                            String decryptMessage = RSAUtil.decrypt(message, jcersaPublicKey, algo);
-
-                            addHorizontalLine(out);
-                            out.println("<textarea name=\"decryptedmessagetextarea\" id=\"decryptedmessagetextarea\" rows=\"5\" cols=\"40\">" + decryptMessage + "</textarea>");
-                            return;
-
-
-                        }
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
@@ -313,7 +280,7 @@ public class RSAFunctionality extends HttpServlet {
                                 );
                                 StringBuilder content1 = new StringBuilder();
                                 String line;
-                                while (null != (line = br.readLine())) {
+                                while (null != (line = br1.readLine())) {
                                     content1.append(line);
                                 }
                                 addHorizontalLine(out);
