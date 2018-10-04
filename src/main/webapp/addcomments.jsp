@@ -1,3 +1,4 @@
+<!--
 <div class="col-lg-8">
 <div id="disqus_thread"></div>
 <script>
@@ -18,3 +19,5 @@ s.setAttribute('data-timestamp', +new Date());
 <script id="dsq-count-scr" src="js/disqus/count.js" async></script>
 
  </div>
+
+-->
