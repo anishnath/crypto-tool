@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.RequestDispatcher;
@@ -57,7 +58,7 @@ public class RSAFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/rsa/" + keysize;
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/" + keysize;
 
                 //System.out.println(url1);
 
@@ -154,13 +155,16 @@ public class RSAFunctionality extends HttpServlet {
 //                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
 //                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
 
+
+                    HttpPost post = null;
+
                     try {
 
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/rsa/rsaencrypt";
-                        HttpPost post = new HttpPost(url1);
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "rsa/rsaencrypt";
+                        post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
                         urlParameters.add(new BasicNameValuePair("p_key", publiKeyParam));
@@ -204,6 +208,8 @@ public class RSAFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
+
+
                         //System.out.println("line-- " + line);
 
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
@@ -216,6 +222,11 @@ public class RSAFunctionality extends HttpServlet {
                     } catch (Exception e) {
                         addHorizontalLine(out);
                         out.println("<font size=\"4\" color=\"red\"> " + e);
+                    }finally {
+                        if(post!=null)
+                        {
+                            post.releaseConnection();
+                        }
                     }
 
                 } else {
@@ -259,7 +270,7 @@ public class RSAFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/rsa/rsadecrypt";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/rsadecrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
@@ -304,6 +315,8 @@ public class RSAFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
+
+
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
                         addHorizontalLine(out);
                         out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
@@ -313,6 +326,8 @@ public class RSAFunctionality extends HttpServlet {
                     } catch (Exception e) {
                         addHorizontalLine(out);
                         out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                    }finally {
+
                     }
 
 

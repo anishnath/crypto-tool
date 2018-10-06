@@ -7,6 +7,7 @@
 <%@ page import="java.io.BufferedReader" %>
 <%@ page import="java.io.InputStreamReader" %>
 <%@ page import="z.y.x.Security.pgppojo" %>
+<%@ page import="z.y.x.r.LoadPropertyFileFunctionality" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,7 +66,7 @@
 
 			Gson gson = new Gson();
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url1 = "http://localhost/crypto/rest/rsa/" + 1024;
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/" + 1024;
 
 			//System.out.println(url1);
 

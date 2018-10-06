@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.RequestDispatcher;
@@ -74,7 +75,7 @@ public class ECFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = "http://localhost/crypto/rest/ec/generateABkp/" + ec_param;
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/generateABkp/" + ec_param;
 
             //System.out.println(url1);
 
@@ -120,7 +121,7 @@ public class ECFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/ec/ecencryptdecrypt";
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/ecencryptdecrypt";
             HttpPost post = new HttpPost(url1);
             List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 

@@ -44,6 +44,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 /**
  * @author  Anish Nath
@@ -115,11 +116,11 @@ public class CipherFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/encryptdecrypt/encrypt";
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "encryptdecrypt/encrypt";
 
             if("decrypt".equalsIgnoreCase(encryptorDecrypt))
             {
-                 url1 = "http://localhost/crypto/rest/encryptdecrypt/decrypt";
+                 url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "encryptdecrypt/decrypt";
 
                 String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
                 boolean isValidMessage = false;
@@ -434,7 +435,7 @@ public class CipherFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/certs/genselfsignwithprivkey";
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/genselfsignwithprivkey";
 
             List<NameValuePair> urlParameters = new ArrayList<>();
 
@@ -459,7 +460,7 @@ public class CipherFunctionality extends HttpServlet {
                 if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
                     x=true;
                     urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
-                    url1 = "http://localhost/crypto/rest/certs/genselfsignwithprivkey";
+                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "genselfsignwithprivkey";
                 } else {
                     addHorizontalLine(out);
                     out.println("<font size=\"2\" color=\"red\"> Not a Valid RSA Private   </font>");
@@ -467,7 +468,7 @@ public class CipherFunctionality extends HttpServlet {
                 }
 
             } else {
-                url1 = "http://localhost/crypto/rest/certs/genselfsign";
+                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/genselfsign";
             }
 
             HttpPost post = new HttpPost(url1);
@@ -639,7 +640,7 @@ public class CipherFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/certs/verifycsrcrtkey";
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "certs/verifycsrcrtkey";
             HttpPost post = new HttpPost(url1);
 
             List<NameValuePair> urlParameters = new ArrayList<>();

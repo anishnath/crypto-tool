@@ -17,6 +17,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -308,7 +309,7 @@ public class PBEFunctionality extends HttpServlet {
 
                 try
                 {
-                    String url1 = "http://localhost/crypto/rest/pbe/encrypt";
+                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pbe/encrypt";
 
                 //System.out.println("encryptdecryptparameter -- " + encryptdecryptparameter);
                 if ("decryprt".equals(encryptdecryptparameter)) {
@@ -333,7 +334,7 @@ public class PBEFunctionality extends HttpServlet {
                         return;
                     }
 
-                    url1 = "http://localhost/crypto/rest/pbe/decrypt";
+                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "pbe/decrypt";
 
                 }
 

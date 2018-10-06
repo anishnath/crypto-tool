@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -72,7 +73,7 @@ public class ELGAMALFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/elgamal/" + keysize;
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/" + keysize;
 
                 //System.out.println(url1);
 
@@ -175,7 +176,7 @@ public class ELGAMALFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/elgamal/encrypt";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "elgamal/encrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
@@ -265,7 +266,7 @@ public class ELGAMALFunctionality extends HttpServlet {
                     try {
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/crypto/rest/elgamal/decrypt";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/decrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));

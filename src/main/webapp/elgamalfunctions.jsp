@@ -8,6 +8,7 @@
 <%@ page import="java.io.BufferedReader" %>
 <%@ page import="java.io.InputStreamReader" %>
 <%@ page import="z.y.x.Security.elgamlpojo" %>
+<%@ page import="z.y.x.r.LoadPropertyFileFunctionality" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,7 +76,7 @@
 
 			Gson gson = new Gson();
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url1 = "http://localhost/crypto/rest/elgamal/" + 160;
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/" + 160;
 
 			//System.out.println(url1);
 

@@ -10,6 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -121,7 +122,7 @@ public class SAMLFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/saml/sign";
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "saml/sign";
 
                 //System.out.println(url1);
 
@@ -267,15 +268,15 @@ public class SAMLFunctionality extends HttpServlet {
 
 
 
-                String url1 = "http://localhost/crypto/rest/saml/validatesign";
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "saml/validatesign";
 
                 if ("samlmessagedecoder".equalsIgnoreCase(verifysignatureparameter)) {
-                    url1 = "http://localhost/crypto/rest/saml/encode";
+                    url1 =  LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "saml/encode";
 
                 }
 
                 if ("samlmessagedeflate".equalsIgnoreCase(verifysignatureparameter)) {
-                    url1 = "http://localhost/crypto/rest/saml/base64decodedInflated";
+                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "saml/base64decodedInflated";
 
                 }
 

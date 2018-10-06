@@ -14,6 +14,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.RequestDispatcher;
@@ -62,7 +63,7 @@ public class DSAFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/dsa/" + keysize;
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "dsa/" + keysize;
 
                 //System.out.println(url1);
 
@@ -234,7 +235,7 @@ public class DSAFunctionality extends HttpServlet {
 
                             Gson gson = new Gson();
                             HttpClient client = HttpClientBuilder.create().build();
-                            String url1 = "http://localhost/crypto/rest/dsa/sign";
+                            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "dsa/sign";
                             HttpPost post = new HttpPost(url1);
 
 
@@ -344,7 +345,7 @@ public class DSAFunctionality extends HttpServlet {
 
                             Gson gson = new Gson();
                             HttpClient client = HttpClientBuilder.create().build();
-                            String url1 = "http://localhost/crypto/rest/dsa/verify";
+                            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "dsa/verify";
                             HttpPost post = new HttpPost(url1);
 
 

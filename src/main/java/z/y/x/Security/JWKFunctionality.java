@@ -9,6 +9,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -86,7 +87,7 @@ public class JWKFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost:8080/crypto/rest/jwk/generatekey";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jwk/generatekey";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_param", publiKeyParam));
@@ -173,7 +174,7 @@ public class JWKFunctionality extends HttpServlet {
                 if (input.contains("kty") && input.contains("{") && input.contains("}"))
 
                 {
-                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertjwktopem";
+                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "jwk/convertjwktopem";
                     generateToPem(out, input,url1); ;
                 }
 
@@ -199,7 +200,7 @@ public class JWKFunctionality extends HttpServlet {
                 if (input.contains("kty") && input.contains("{") && input.contains("}"))
 
                 {
-                    String url1 = "http://localhost:8082/crypto/rest/jwk/convertjwktopem";
+                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "jwk/convertjwktopem";
                     generateToPem(out, input,url1); ;
                 }
 

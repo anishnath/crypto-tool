@@ -8,6 +8,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.ServletException;
@@ -277,7 +278,9 @@ public class BCCryptFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
-            String url1 = "http://localhost/crypto/rest/scrypt/generatehash";
+
+
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "scrypt/generatehash";
 
 
 
@@ -285,7 +288,7 @@ public class BCCryptFunctionality extends HttpServlet {
 
             if(hash!=null && hash.trim().length()>0) {
                 urlParameters.add(new BasicNameValuePair("p_rawpassphrase", hash));
-                url1 = "http://localhost/crypto/rest/scrypt/verifyhash";
+                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "scrypt/verifyhash";
             }
             urlParameters.add(new BasicNameValuePair("p_passphrase", password));
             urlParameters.add(new BasicNameValuePair("p_salt", salt));

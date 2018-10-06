@@ -9,6 +9,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.RequestDispatcher;
@@ -102,7 +103,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-                String url1 = "http://localhost/ntru/rest/ntru/generatekeypair";
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("epn") + "ntru/generatekeypair";
                 HttpPost post = new HttpPost(url1);
                 List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                 urlParameters.add(new BasicNameValuePair("p_password", password));
@@ -211,7 +212,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/ntru/rest/ntru/encrypt";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("epn") + "ntru/encrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
@@ -310,7 +311,7 @@ public class NTRUFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = "http://localhost/ntru/rest/ntru/decrypt";
+                        String url1 =  LoadPropertyFileFunctionality.getConfigProperty().get("epn") + "ntru/decrypt";
                         HttpPost post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));

@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.ServletException;
@@ -137,7 +138,7 @@ public class SSHFunctionality extends HttpServlet {
 
                 Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = "http://localhost/crypto/rest/ssh/keygen";
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "ssh/keygen";
 
                 //System.out.println(url1);
 

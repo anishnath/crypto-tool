@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import javax.servlet.ServletException;
@@ -88,7 +89,7 @@ public class GenCAFunctionality extends HttpServlet {
 
             Gson gson = new Gson();
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = "http://localhost/crypto/rest/cacerts/" + p_dns_name;
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "cacerts/" + p_dns_name;
 
             //System.out.println(url1);
 
@@ -156,7 +157,7 @@ public class GenCAFunctionality extends HttpServlet {
 
                     Gson gson = new Gson();
                     HttpClient client = HttpClientBuilder.create().build();
-                    String url1 = "http://localhost/crypto/rest/certs/signcsrprivkey";
+                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/signcsrprivkey";
                     HttpPost post = new HttpPost(url1);
                     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 

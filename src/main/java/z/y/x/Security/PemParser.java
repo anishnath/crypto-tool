@@ -8,6 +8,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 
 import java.io.BufferedReader;
@@ -40,7 +41,7 @@ final public class PemParser {
 
 			Gson gson = new Gson();
 			HttpClient client = HttpClientBuilder.create().build();
-			String url1 = "http://localhost:8082/crypto/rest/pem/crack";
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "pem/crack";
 			HttpPost post = new HttpPost(url1);
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("p_pem", data));
@@ -105,7 +106,7 @@ final public class PemParser {
 
 			Gson gson = new Gson();
 			HttpClient client = HttpClientBuilder.create().build();
-			String url1 = "http://localhost/crypto/rest/pem/parseencryptedpem";
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pem/parseencryptedpem";
 			HttpPost post = new HttpPost(url1);
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("p_pem", data));
