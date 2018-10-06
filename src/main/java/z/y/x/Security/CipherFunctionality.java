@@ -555,6 +555,11 @@ public class CipherFunctionality extends HttpServlet {
 
             } catch (Exception e) {
                 out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+            }finally {
+                if(post!=null)
+                {
+                    post.releaseConnection();
+                }
             }
 
             //final String version =
@@ -709,6 +714,11 @@ public class CipherFunctionality extends HttpServlet {
 
             }catch (Exception e) {
                 out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+            }finally {
+                if(post!=null)
+                {
+                    post.releaseConnection();
+                }
             }
 
 
