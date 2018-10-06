@@ -260,6 +260,7 @@ public class RSAFunctionality extends HttpServlet {
 //                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
 //                    privateKeParam = privateKeParam.replace("-----END PRIVATE KEY-----", "");
 
+                    HttpPost post =null;
 
                     try {
 
@@ -271,7 +272,7 @@ public class RSAFunctionality extends HttpServlet {
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/rsadecrypt";
-                        HttpPost post = new HttpPost(url1);
+                         post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
                         urlParameters.add(new BasicNameValuePair("p_key", privateKeParam));
@@ -327,6 +328,11 @@ public class RSAFunctionality extends HttpServlet {
                         addHorizontalLine(out);
                         out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
                     }finally {
+
+                        if(post!=null)
+                        {
+                            post.releaseConnection();
+                        }
 
                     }
 
