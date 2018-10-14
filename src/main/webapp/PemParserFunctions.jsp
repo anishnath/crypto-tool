@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Pem Parser, certificate decoder decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey,ec",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/online_pem_parser.png",
+  "image" : "https://8gwifi.org/images/site/online_pem_parser.png",
   "url" : "https://8gwifi.org/PemParserFunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -21,70 +21,75 @@
   "softwareVersion" : "v1.0"
 }
 </script>
-<title>Online Certificate Decoder, decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey,ec</title>
-<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+	<title>Online Certificate Decoder, decode crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey,ec</title>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-<meta name="keywords" content="certificate viewer,decode certificate online,certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rsa,publickey, online crl parser,online pem parser,openssl decode certificate,openssl view crl, certificate revocation lists,private key decoder, new csr, pkcs7 format viewer, rsa public key, rsa private key, x.509 certifcate viewer,decrypt private key online,public key decoder,openssl online decrypt,pem file decoder,pem decoder online,decode public key,pem parser,pem decoder,des decode,pem viewer"/>
-<meta name="description" content="Use this Certificate Decoder to decode your certificates in PEM format. This certificate viewer tool will decode certificates so you can easily see their contents. This parser will parse the follwoing  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey" />
+	<meta name="keywords" content="certificate viewer,decode certificate online,certificate decoder,parse crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rsa,publickey, online crl parser,online pem parser,openssl decode certificate,openssl view crl, certificate revocation lists,private key decoder, new csr, pkcs7 format viewer, rsa public key, rsa private key, x.509 certifcate viewer,decrypt private key online,public key decoder,openssl online decrypt,pem file decoder,pem decoder online,decode public key,pem parser,pem decoder,des decode,pem viewer"/>
+	<meta name="description" content="Use this Certificate Decoder to decode your certificates in PEM format. This certificate viewer tool will decode certificates so you can easily see their contents. This parser will parse the follwoing  crl,crt,csr,pem,privatekey,publickey,rsa,dsa,rasa publickey" />
 
-<meta name="robots" content="index,follow" />
-<meta name="googlebot" content="index,follow" />
-<meta name="resource-type" content="document" />
-<meta name="classification" content="tools" />
-<meta name="language" content="en" />
+	<meta name="robots" content="index,follow" />
+	<meta name="googlebot" content="index,follow" />
+	<meta name="resource-type" content="document" />
+	<meta name="classification" content="tools" />
+	<meta name="language" content="en" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<%@ include file="header-script.jsp"%>
+	<script type="text/javascript">
+		$(document).ready(function() {
 
-<%@ include file="include_css.jsp"%>
-<script type="text/javascript">
-	$(document).ready(function() {
 
-
-		$('#ctrTitles').change(function() {
-			   pem = $(this).val();
-			   $("#pem").val(pem);    
+			$('#ctrTitles').change(function() {
+				pem = $(this).val();
+				$("#pem").val(pem);
 			});
-		
 
-		$('#submit').click(function(event) {
-			$('#form').delay(200).submit()
-		});
 
-		$('#form').submit(function(event) {
-			//	
-			$('#output1').html('<img src="images/712.GIF"> loading...');
-			event.preventDefault();
-			$.ajax({
-				type : "POST",
-				url : "CipherFunctionality", //this is my servlet
+			$('#submit').click(function(event) {
+				$('#form').delay(200).submit()
+			});
 
-				data : $("#form").serialize(),
-				success : function(msg) {
-					$('#output').empty();
-					$('#output1').empty();
-					$('#output').append(msg);
+			$('#form').submit(function(event) {
+				//
+				$('#output1').html('<img src="images/712.GIF"> loading...');
+				event.preventDefault();
+				$.ajax({
+					type : "POST",
+					url : "CipherFunctionality", //this is my servlet
 
-				}
+					data : $("#form").serialize(),
+					success : function(msg) {
+						$('#output').empty();
+						$('#output1').empty();
+						$('#output').append(msg);
+
+					}
+				});
 			});
 		});
-	});
-</script>
+	</script>
 </head>
+
+
+<%@ include file="body-script.jsp"%>
+<h1 class="mt-4">PEM Parser</h1>
+
+
 <body>
-<div id="page">
-	<%@ include file="include.jsp"%>
+
 <div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="loading" />Loading!
-	</div>
+	<img src="images/712.GIF" alt="loading" />Loading!
+</div>
 
-<article id="contentWrapper" role="main">
-			<section id="content">	
 
-	<form id="form" method="POST">
-		<input type="hidden" name="methodName" id="methodName"
-			value="PEM_DECODER">
-			<fieldset name="Group1">
-                <legend>Sample PEM File</legend>
-                Sample files:<select name="ctrTitles" id="ctrTitles">
-				<option value="-----BEGIN X509 CRL-----
+
+<form class="form-horizontal" id="form" method="POST">
+	<input type="hidden" name="methodName" id="methodName"
+		   value="PEM_DECODER">
+	<div class="form-group">
+		<label for="pem">Sample files: </label>
+
+		<select name="ctrTitles" id="ctrTitles">
+			<option value="-----BEGIN X509 CRL-----
 MIIBHTCBhzANBgkqhkiG9w0BAQQFADBCMQswCQYDVQQGEwJJRTEPMA0GA1UECBMG
 RHVibGluMQ0wCwYDVQQKEwRJT05BMRMwEQYDVQQDFApDQV9mb3JfQ1JMFw0wNjAy
 MTUxMDQ3NDBaFw0wNjAzMTUxMDQ3NDBaMBQwEgIBAhcNMDYwMjE1MTA0NTA1WjAN
@@ -93,7 +98,7 @@ evswZ39qE3RYueKI563F0mJIax72EA1FzBHLa0go4nit8M/91ld48qoZi7xieZuQ
 9xi6ltx7pbTVvw/oXnGJSziM+HUX3bp08QHgSNDk9N3qRzKLcF4dmkqIQbq/sjnO
 Mg==
 -----END X509 CRL-----">CRL</option>
-                <option value="-----BEGIN CERTIFICATE-----
+			<option value="-----BEGIN CERTIFICATE-----
 MIIFtTCCA52gAwIBAgIJAO0cq2lJPZZJMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
 aWRnaXRzIFB0eSBMdGQwHhcNMTQwMzEyMTc0NzU5WhcNMTkwMzEyMTc0NzU5WjBF
@@ -126,7 +131,7 @@ T74gsJLB6wacN4Ue6zPtIvrK93DABAfRUmrAWmH8+7MJolSC/rabJF3E2CeBTYqZ
 R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 8k2fPbA2QVWJpcnryesCy3qtzwbHSYbshQ==
 -----END CERTIFICATE-----">CRT</option>
-                <option value="-----BEGIN CERTIFICATE REQUEST-----
+			<option value="-----BEGIN CERTIFICATE REQUEST-----
 MIICijCCAXICAQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUx
 ITAfBgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDCCASIwDQYJKoZIhvcN
 AQEBBQADggEPADCCAQoCggEBAJw+rBXgiX/W0ezx/2IrD8AnjzFJbRC6v4afw5uN
@@ -142,7 +147,7 @@ RhcTIyAFeQdsLyhgj4FMfsoMnq+/7fzT+qFbI0ExOyLff4ZnywGiJ2c+aWC8DBTm
 N35QKLGcM0+u1Wme0VC11AxhfrW8bEi7saE28Yc+x2ZIW+XzKFwm+pp6MCrTEAlW
 G0x8oMpILA6XfMiDMDbOxPGUY/6vTSpzI81A/T5O
 -----END CERTIFICATE REQUEST-----">CSR</option>
-                <option value="-----BEGIN NEW CERTIFICATE REQUEST-----
+			<option value="-----BEGIN NEW CERTIFICATE REQUEST-----
 MIICijCCAXICAQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUx
 ITAfBgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDCCASIwDQYJKoZIhvcN
 AQEBBQADggEPADCCAQoCggEBAJw+rBXgiX/W0ezx/2IrD8AnjzFJbRC6v4afw5uN
@@ -158,7 +163,7 @@ RhcTIyAFeQdsLyhgj4FMfsoMnq+/7fzT+qFbI0ExOyLff4ZnywGiJ2c+aWC8DBTm
 N35QKLGcM0+u1Wme0VC11AxhfrW8bEi7saE28Yc+x2ZIW+XzKFwm+pp6MCrTEAlW
 G0x8oMpILA6XfMiDMDbOxPGUY/6vTSpzI81A/T5O
 -----END NEW CERTIFICATE REQUEST-----">NEW CSR</option>
-                <option value="-----BEGIN RSA PRIVATE KEY-----
+			<option value="-----BEGIN RSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: DES-EDE3-CBC,F57524B7B26F4694
 
@@ -188,7 +193,7 @@ s8yejjKm2gSB/KhTe1nJXcTM16Xa4qWXTv11x46FNTZPUWQ7KoI0AzzScn6StBdo
 YCvzqCrla1em/Kakkws7Qu/pVj9R8ndHzoLktOi3l6lwwy5d4L697DyhP+02+eLt
 SBefoVnBNp449CSHW+brvPEyKD3D5CVpTIDfu2y8+nHszfBL22wuO4T+oem5h55A
 -----END RSA PRIVATE KEY-----">PEM</option>
-                <option value="-----BEGIN PKCS7-----
+			<option value="-----BEGIN PKCS7-----
 MIIJnwYJKoZIhvcNAQcCoIIJkDCCCYwCAQExADALBgkqhkiG9w0BBwGggglyMIIF
 tTCCA52gAwIBAgIJAO0cq2lJPZZJMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNVBAYT
 AkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBXaWRn
@@ -242,7 +247,7 @@ heX4Etj2geHI2KO5TO0+qdEESoYVAFqxcgPAlOx6FMnjTujNbABdrSoKVklOVPNS
 dylawwgHrKZW7iAv5zTndZNGdvehuf7r4iyvbYQhRu6CHSFadk3goggB+FQTljfR
 eex+rScBkONIaUU6U8NwoQAxAA==
 -----END PKCS7-----">PKCS7</option>
-                <option value="-----BEGIN PRIVATE KEY-----
+			<option value="-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoknaik3X9AwXf
 1nb/BfHlR4RBcij+Ri2RzxZfdcTuhcIL4XLrgwaz/Skx3R/UjU3eoxneBjcGeA7X
 QX75aXMS2FKrfQEJ6mp9AVQTowPC5VkAp8L8vk/cBrckZFHQsm9bHnLirJ6LYhWK
@@ -270,7 +275,7 @@ GYyAntOQL/nunSbuHoNvC+bBrcUX2BfDkalkzlm/YRJgmqSQ7Ih3fbp4i5NCVtpM
 1dafoyed5UqY0F7Vou7JJE57tlKieKPhQOMTSl2Q5WMvby+owRb0Sx325xQvoslH
 QM9+y6wy6YMdNweC+JkcZVo=
 -----END PRIVATE KEY-----">PRIVATE KEY</option>
-                <option value="-----BEGIN PUBLIC KEY-----
+			<option value="-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnD6sFeCJf9bR7PH/YisP
 wCePMUltELq/hp/Dm409XU/yEbgBTI/wMUnH+2juOTYeCirOB10bc/QrFVhaLV3g
 HWyvSL+Wv0ufdWeZiLXAnICNddiJCQvOU+5seNUoPw4QKvFAQgZLogsjWm2uajJS
@@ -279,7 +284,7 @@ WQjfGwXgctqYytvAHC3v541s9o53J2uWn/pOBJc2058Ad5WyzqPRHzA1gbl+XinK
 s85X5U5PAwJiVCsSyCFkNGwJmmuCPtrHipwZi5ax5jfrb71Plilj2VOXdrR2zU7F
 OQIDAQAB
 -----END PUBLIC KEY-----">PUBLIC KEY</option>
-                <option value="-----BEGIN RSA PRIVATE KEY-----
+			<option value="-----BEGIN RSA PRIVATE KEY-----
 MIIJKQIBAAKCAgEAsgzs6vN2sveHVraXV0zdoVyhWUHWNQ0xnhHTPhjt5ggHmSvr
 UxvUpXfKWCP9gZo59Q7dx0ydjqBsdooXComVP4kGDjulvOHWgvcVmwTsL0bAMqms
 CyyJKM6JWqi8E+CPTOpMBWdapUxvwaSmop8geiTtnX0aV4zGXwsz2mwdogbounQj
@@ -330,7 +335,7 @@ KMkcE4BT8IZIHQ+wIMhmYLAdSQCVVv8x78jN0sZCC0fjqVuyPdYQ8sIc3OHsJZcW
 lzewFW72lfsiB/RxWZ/XwXONXeW5Quf+XwbGGboTofyzTxzsYSwn1U9Kt8iaY8zr
 z7Z5SQCSf2Js9V9lJcodYswWlxrdtoRKA/WgrvQkZhGGAePTUVoO5Lab29M8
 -----END RSA PRIVATE KEY-----">RSA</option>
-                <option value="-----BEGIN RSA PUBLIC KEY-----
+			<option value="-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEA+xGZ/wcz9ugFpP07Nspo6U17l0YhFiFpxxU4pTk3Lifz9R3zsIsu
 ERwta7+fWIfxOo208ett/jhskiVodSEt3QBGh4XBipyWopKwZ93HHaDVZAALi/2A
 +xTBtWdEo7XGUujKDvC2/aZKukfjpOiUI8AhLAfjmlcD/UZ1QPh0mHsglRNCmpCw
@@ -338,7 +343,7 @@ mwSXA9VNmhz+PiB+Dml4WWnKW/VHo2ujTXxq7+efMU4H2fny3Se3KYOsFPFGZ1TN
 QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
 +0uj1CNlNN4JRZlC7xFfqiMbFRU9Z4N6YwIDAQAB
 -----END RSA PUBLIC KEY-----">RSA PUBLIC KEY</option>
-                <option value="-----BEGIN DSA PRIVATE KEY-----
+			<option value="-----BEGIN DSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: DES-EDE3-CBC,7CB02793DCE4E8D4
 
@@ -361,18 +366,12 @@ d/NshTgg0KC6oDsncYhxDgKMEL6vcgv58i4532Wclkbv/NwDWhs8Vb8ZfYc4JVYU
 srRpiOaYRy4e7TD1wUIucxHoXWT1Fxie2kZVz/DFNxRqQVyVSkE4XOV6vrNov1zj
 UU2iTN4uCR0zmUj0xuuRXGaPv2TJ9fxa
 -----END DSA PRIVATE KEY-----">DSA</option>
-            </select><br /><br />
-            </fieldset>
-		<fieldset name="PEM Functionality">
-			<legend>
-				<B>Decode Pem Format  </B>
-			</legend>
-			Enter the text of your Certificate:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                              Output
-			<table border="1" style="width:300px">
-			<tr>
-			<td>
-			<div id="output1"></div>
-			<textarea rows="20" cols="80"  name="pem" id="pem">-----BEGIN CERTIFICATE-----
+		</select></div>
+
+	<div class="form-group">
+		<label for="pem">Decode Pem Format</label>
+		Enter the text of your Certificate
+			<textarea class="form-control" rows="10" name="pem" id="pem">-----BEGIN CERTIFICATE-----
 MIIFtTCCA52gAwIBAgIJAO0cq2lJPZZJMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
 aWRnaXRzIFB0eSBMdGQwHhcNMTQwMzEyMTc0NzU5WhcNMTkwMzEyMTc0NzU5WjBF
@@ -406,68 +405,28 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 8k2fPbA2QVWJpcnryesCy3qtzwbHSYbshQ==
 -----END CERTIFICATE-----
 			</textarea>
-			</td>
-			
-			
-			<td>
-			<div id="output"></div>
-			</td>
-			</tr>
-			<tr>
 
-			</tr>
-			<tr>
-			<td>
-			Cert Password (if any) <input type="text" value="123456" id="certpassword" name="certpassword">
-			</td>
-			<td>
-			
-			</td>
-			</tr>
-			<tr>
-			<td>
-			<input type="submit" id="submit" name="convert">
-			</td>
-			</tr>
-			<tr>
-			
-			<td></td>
-			</tr>
-			</table>
-			
-
-		</fieldset>
-
-	</form>
-				<%@ include file="include_security_links.jsp"%>
-				<%@ include file="footer.jsp"%>
-				<p><strong>Public Key Infrastructure - (PKI)</strong></p>
-				<p>Integration of digital signatures and certificates.</p>
-				<ul>
-					<li>Digital Certificates</li>
-					<li>Certificate Authorities (CA)</li>
-					<li>Registrations Authorities</li>
-					<li>Policies and procedures</li>
-					<li>Certificate Revocation</li>
-					<li>Non-repudiation support</li>
-					<li>Timestamping</li>
-					<li>Lightweight Directory Access Protocol</li>
-					<li>Security Enabled Applications</li>
-					<li>Cross Certification</li>
-				</ul>
-				<p>Asymmetric key cryptography, also known as public key cryptography, uses a class of algorithms in which Alice has a private key, and Bob (and others) have her public key. The public and private keys are generated at the same time, and data encrypted with one key can be decrypted with the other key. That is, a party can encrypt a message using Alice&rsquo;s public key, then only Alice, the owner of the matching private key, can decrypt the message. Asymmetric algorithms are poorly suited for encrypting large messages because they are relatively slow. Instead, these algorithms are used to achieve authentication, integrity and non-repudiation, and support confidentiality through key management. Asymmetric algorithms are used to perform three operations explained below: digital signatures, key transport, and key agreement.</p>
-				<p><strong>X.509 Public Key Certificates</strong></p>
-				<p>There are ten common fields: six mandatory and four optional. The mandatory fields are: the serial number, the certificate signature algorithm identifier, the certificate issuer name, the certificate validity period, the public key, and the subject name. The subject is the party that controls the corresponding private key. There are four optional fields: the version number, two unique identifiers, and the extensions. These optional fields appear only in version 2 and 3 certificates.</p>
-				<p><strong>Certificate Revocation List</strong></p>
-				<p>Certificates contain an expiration date. Unfortunately, the data in a certificate may become unreliable before the expiration date arrives. Certificate issuers need a mechanism to provide a status update for the certificates they have issued. One mechanism is the X.509 certification revocation list (CRL).</p>
-				<p><strong>Signature Certificate </strong></p>
-				<p>A public key certificate that contains a public key intended for verifying digital signatures rather than encrypting data or performing any other cryptographic functions.</p>
-				<p><strong>Trusted Certificate </strong></p>
-				<p>A certificate that is trusted by the Relying Party on the basis of secure and authenticated delivery. The public keys included in trusted certificates are used to start certification paths. Also known as a "trust anchor".</p>
-				<p>&nbsp;</p>
-
-</section>
-		</article>
 	</div>
-</body>
-</html>
+
+	<div class="form-group">
+		<label for="certpassword">Cert Password (if any) </label>
+		<input type="text" class="form-control" value="123456" id="certpassword" name="certpassword">
+	</div>
+
+	<input type="submit" class="btn btn-primary"  id="submit" name="convert">
+	<div id="output1"></div>
+	<div id="output"></div>
+</form>
+<hr>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+<hr>
+
+
+<%@ include file="addcomments.jsp"%>
+
+</div>
+
+<%@ include file="body-close.jsp"%>
