@@ -410,7 +410,7 @@ public class CipherFunctionality extends HttpServlet {
                 String message = parser.parsePemFile(pem, certpassword);
                 addHorizontalLine(out);
                 // System.out.println("encodedMessage-- " + encodedMessage);
-                out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" readonly=true rows=\"20\" cols=\"80\">" + message + "</textarea>");
+                out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
                 return;
             } catch (Exception e) {
                 addHorizontalLine(out);
