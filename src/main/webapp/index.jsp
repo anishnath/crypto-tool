@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<meta name="google-site-verification" content="k5l9OPcSV01yURjfTQ1v1I_6sPq7cSiwdVM76VaJwM8" />
 <title>The Online Tool for Online People</title>
 
@@ -10,7 +11,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Encryption/Decryption  Service, Certificate Vierwers, Test CA Authority , Hex,Base64 Encoders decoders,",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/encryption_decryption.png",
+  "image" : "https://8gwifi.org/images/site/encryption_decryption.png",
   "url" : "https://8gwifi.org",
   "applicationCategory" : [ "SecretKey", "Encrypt",
   "Decrypt",
@@ -51,12 +52,16 @@
          "subnet calculator",
          "ipv6 test enabled website",
          "online ping ipv4 ipv6",
-         "string reveres,palidrome,length and various other string functions"]
+         "string reveres,palidrome,length and various other string functions",
+         "curl online",
+         "ipv6 test online",
+         "jwk to pem convertor",
+         "pem to jwk convertor",
+         "ocsp query"
+         ]
 }
 </script>
-
-
-	<meta name="msvalidate.01" content="4897507734A2915162632536D0FD3DDA" />
+<meta name="msvalidate.01" content="4897507734A2915162632536D0FD3DDA" />
 <meta name="keywords"
 	content="sha-1, online, generator, md5, function, check, checksum,string, programming, functions, encode, decode, converter, online tools,” Developers, MD5, PHP, Javascript, SHA1, Base64, Encoding, Decoding, Text, Binary, Unicode, Html, Entities, String, Date, functions, Password, Encryption, Decryption, Character, pbe encryption,pgp encryption,rsa encryption,keystore online" />
 <meta name="description"
@@ -65,20 +70,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow" />
 <meta name="revisit-after" content="1 month" />
-<%@ include file="include_css.jsp"%>
+<%@ include file="header-script.jsp"%>
 
 </head>
-<body>
-<div id="page">
 
-	<%@ include file="include.jsp"%>
-	<article id="contentWrapper" role="main">
+<%@ include file="body-script.jsp"%>
 
-			<section id="content">
-				<%@ include file="payme.jsp"%>
-				<%@ include file="footer.jsp"%>
-				<%@ include file="include_security_links.jsp"%>
-				<h1>Cryptography</h1>
+				<h1 class="mt-4">Cryptography</h1>
 				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
 				<p>In practice encryption can be a function of time, the effort and time required for an unauthorized person is so large it is impractical.&nbsp; By the time it is decrypted it is of little value.</p>
 				<p><strong>Block Cipher</strong> &ndash; Breaks the plaintext into blocks and encrypts each with the same algorithm</p>
@@ -95,9 +93,10 @@
 				<p><strong>Encipher</strong> &ndash; to make a message unintelligible to all except recipient</p>
 				<p><strong>End-to-end encryption</strong> &ndash; Encrypted information that is sent from sender to receiver</p>
 
-    </section>
-		</article>
 
-	</div>
-</body>
-</html>
+
+<%@ include file="addcomments.jsp"%>
+
+</div>
+
+<%@ include file="body-close.jsp"%>
