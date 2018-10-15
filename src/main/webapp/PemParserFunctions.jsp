@@ -74,7 +74,7 @@
 <h1 class="mt-4">PEM Parser</h1>
 
 
-<body>
+
 
 <div id="loading" style="display: none;">
 	<img src="images/712.GIF" alt="loading" />Loading!
@@ -424,6 +424,68 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 
 <hr>
 
+<%@ include file="footer_adsense.jsp"%>
+
+<ul>
+	<li>PKCS#1 RSAPublicKey  (PEM header:  <code>BEGIN RSA PUBLIC KEY</code>)</li>
+	<li>PKCS#8 EncryptedPrivateKeyInfo  (PEM header:  <code>BEGIN ENCRYPTED PRIVATE KEY</code>)</li>
+	<li>PKCS#8 PrivateKeyInfo (PEM header:  <code>BEGIN PRIVATE KEY</code>)</li>
+	<li>X.509 SubjectPublicKeyInfo  (PEM header:  <code>BEGIN PUBLIC KEY</code>)</li>
+	<li>CSR PEM header : (PEM header:<code>----BEGIN NEW CERTIFICATE REQUEST-----</code>)</li>
+	<li>DSA PrivateKeyInfo (PEM header: (<code>-----BEGIN DSA PRIVATE KEY----</code>)</li>
+</ul>
+<p>RSA Public Key</p>
+<pre><code>-----BEGIN RSA PUBLIC KEY-----
+-----END RSA PUBLIC KEY-----
+</code></pre>
+<p>Encrypted Private Key</p>
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+-----END RSA PRIVATE KEY-----
+</code></pre>
+<p>CRL</p>
+<pre><code>-----BEGIN X509 CRL-----
+-----END X509 CRL-----
+</code></pre>
+<p>CRT</p>
+<pre><code>-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
+</code></pre>
+<p>CSR</p>
+<pre><code>-----BEGIN CERTIFICATE REQUEST-----
+-----END CERTIFICATE REQUEST-----
+</code></pre>
+<p>NEW CSR</p>
+<pre><code>-----BEGIN NEW CERTIFICATE REQUEST-----
+-----END NEW CERTIFICATE REQUEST-----
+</code></pre>
+<p>PEM</p>
+<pre><code>-----END RSA PRIVATE KEY-----
+-----BEGIN RSA PRIVATE KEY-----
+</code></pre>
+<p>PKCS7</p>
+<pre><code>-----BEGIN PKCS7-----
+-----END PKCS7-----
+</code></pre>
+<p>PRIVATE KEY</p>
+<pre><code>-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----
+</code></pre>
+<p>DSA KEY</p>
+<pre><code>-----BEGIN DSA PRIVATE KEY-----
+-----END DSA PRIVATE KEY-----
+</code></pre>
+<p>Elliptic Curve</p>
+<pre><code>-----BEGIN EC PRIVATE KEY-----
+-----BEGIN EC PRIVATE KEY-----
+</code></pre>
+<p>PGP Private Key</p>
+<pre><code>-----BEGIN PGP PRIVATE KEY BLOCK-----
+-----END PGP PRIVATE KEY BLOCK-----
+</code></pre>
+<p>PGP Public Key</p>
+<pre><code>-----BEGIN PGP PUBLIC KEY BLOCK-----
+-----END PGP PUBLIC KEY BLOCK-----</code></pre>
 
 <%@ include file="addcomments.jsp"%>
 
