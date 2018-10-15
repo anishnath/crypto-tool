@@ -215,7 +215,7 @@ public class RSAFunctionality extends HttpServlet {
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
                         addHorizontalLine(out);
                        // System.out.println("encodedMessage-- " + encodedMessage);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
+                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
                         return;
 
 
@@ -320,7 +320,7 @@ public class RSAFunctionality extends HttpServlet {
 
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
                         addHorizontalLine(out);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
+                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
                         return;
 
 
