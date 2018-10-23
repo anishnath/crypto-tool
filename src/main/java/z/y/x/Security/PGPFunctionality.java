@@ -393,9 +393,12 @@ public class PGPFunctionality extends HttpServlet {
                         }
 
                         String d = content.toString().substring(1, content.toString().length() - 1);
-                        d = d.replace("\\n", "<br />");
 
-                        out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
+                        d = d.replace("\\n", "&#10;");
+
+                        //out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
+                        out.println("<font size=\"4\" color=\"green\"> PGP MESSAGE </font>");
+                        out.println("<textarea name=\"comment\" class=\"form-control animated\" readonly rows=\"10\" form=\"X\">" + d + "</textarea>");
 
                     } else {
                         addHorizontalLine(out);
