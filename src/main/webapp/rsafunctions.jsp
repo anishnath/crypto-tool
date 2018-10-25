@@ -267,7 +267,7 @@
 	<input <% if(k4) {  %> checked <% } %> id="keysize4" type="radio" name="keysize"
 						   value="4096">4096 bit
 </form>
-</fieldset>
+
 
 
 <form id="form" class="form-horizontal" method="POST">
@@ -373,6 +373,8 @@
 <%@ include file="thanks.jsp"%>
 
 <hr>
+
+<%@ include file="footer_adsense.jsp"%>
 
 <h2 class="mt-4" id="thersaalgorithm">The RSA Algorithm</h2>
 
