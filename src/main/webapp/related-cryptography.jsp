@@ -11,6 +11,7 @@
                     <li><a href="ntrufunctions.jsp"><font size="2.5px">Lattice Cryptography Encryption</font> </a></li>
                     <li><a href="dsafunctions.jsp"><font size="2.5px">DSA Keygen,Sign File,Verify Sig</font> </a></li>
                     <li><a href="ecfunctions.jsp"><font size="2.5px">Elliptic Curve Encryption/Decryption </font> </a></li>
+                    <li><a href="ecsignverify.jsp"><font size="2.5px">Elliptic Curve Sign/Verify Message</font> </a></li>
                     <li><a href="elgamalfunctions.jsp"><font size="2.5px">ELGAMAL Encryption/Decryption</font> </a></li>
                     <li><a href="pbe.jsp"><font size="2.5px">PBE (PBKDF) Encryption/Decryption </font> </a></li>
                     <li><a href="pgpencdec.jsp"><font size="2.5px">PGP Encryption/Decryption </font> </a></li>
