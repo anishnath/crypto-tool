@@ -178,8 +178,11 @@ public class SSHFunctionality extends HttpServlet {
                 if(sshpojo!=null) {
                     out.println("<font size=\"4\" color=\"green\"> <b><u>SSH-keygen for [" + sshpojo.getAlgo() + "-" + sshpojo.getKeySize() + "]  (PrivateKey/PublicKey) </b></u> <br>");
                     out.println("<font size=\"3\" color=\"red\"> FingerPrint [" + sshpojo.getFingerprint() + "]</font> <br>");
-                    out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + sshpojo.getPrivateKey() + "</textarea>");
-                    out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + sshpojo.getPublicKey() + "</textarea>");
+                    out.println("<p>Private Key</p>");
+                    out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"20\" cols=\"30\" form=\"X\">" + sshpojo.getPrivateKey() + "</textarea>");
+                    out.println("<br>");
+                    out.println("<p>Public Key</p>");
+                    out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"10\" cols=\"30\" form=\"y\">" + sshpojo.getPublicKey() + "</textarea>");
                 }
 
             }catch (Exception ex)

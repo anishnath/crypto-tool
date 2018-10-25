@@ -94,6 +94,8 @@
 				<p><strong>End-to-end encryption</strong> &ndash; Encrypted information that is sent from sender to receiver</p>
 
 
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
 
 <%@ include file="addcomments.jsp"%>
 

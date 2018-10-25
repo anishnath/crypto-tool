@@ -8,14 +8,14 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Generate SSH keys algorithm RSA,DSA,ECDSA",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/ssh.png",
+  "image" : "https://8gwifi.org/images/site/ssh.png",
   "url" : "https://8gwifi.org/sshfunctions.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-03-11",
-  "applicationCategory" : [ "sshkeygen online", "ssh  keygen rsa,dsa,ecdsa", ""],
+  "applicationCategory" : [ "sshkeygen online", "ssh  keygen rsa,dsa,ecdsa", "ssh-keygen", "generate ssh keys" , "ssh authentication"],
   "downloadUrl" : "https://8gwifi.org/sshfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "Generate SSH keys algorithm RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh dsa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows
@@ -29,7 +29,7 @@
 	<meta name="keywords"
 		  content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows
  ">
-	<%@ include file="include_css.jsp" %>
+	<%@ include file="header-script.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -198,21 +198,23 @@
 
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp" %>
+
+<%@ include file="body-script.jsp"%>
+<h1 class="mt-4">Generate SSH Keys Online</h1>
+<hr>
+
+
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
-	<article id="contentWrapper" role="main">
-		<section id="content">
-			<form id="form" method="POST">
+
+			<form class="form-horizontal" id="form" method="POST">
 				<input type="hidden" name="methodName" id="methodName"
 					   value="GENERATE_SSHKEYGEN">
-				<fieldset name="Generate SSH Keygenerate">
-					<legend>
+
+
 						<B>SSH-Keygen Online </B>
-					</legend>
+
 					Algorithm
 
 					<input checked="checked" id="rsa" type="radio"
@@ -268,30 +270,70 @@
 
 					</div>
 
-					Passphrase <input id="passphrase" type="text" name="passphrase" placeholder="for encrypted keys" size="30"
+					Passphrase <input class="form-control" id="passphrase" type="text" name="passphrase" placeholder="for generating encrypted keys" size="30"
 												value="">
-					<input type="button" id="generatessh-keys" name="generatessh-keys" value="Generate-SSH-Keys">
+					<input type="button" class="btn btn-primary" id="generatessh-keys" name="generatessh-keys" value="Generate-SSH-Keys">
 
 					<div id="output"></div>
-				</fieldset>
+
 
 			</form>
-			<%@ include file="include_security_links.jsp"%>
-			<%@ include file="footer.jsp"%>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
 
-			<p><strong>Generate an RSA SSH keypair with a 4096 bit private key</strong><br /><span style="color: #008000;">ssh-keygen -t rsa -b 4096 -C "RSA 4096 bit Keys"</span></p>
-			<p><strong>Generate an DSA SSH keypair with a 2048 bit private key</strong><br /><span style="color: #339966;">ssh-keygen -t dsa -b 1024 -C "DSA 1024 bit Keys"</span><br /><strong>Generate an ECDSA SSH keypair with a 521 bit private key</strong><br /><span style="color: #339966;">ssh-keygen -t ecdsa -b 521 -C "ECDSA 521 bit Keys"</span></p>
-			<p><strong>Generate an ed25519 SSH keypair- this is a new algorithm added in OpenSSH.</strong> <br /><span style="color: #339966;">ssh-keygen -t ed25519</span></p>
-			<p><strong>Extracting the public key from an RSA keypair</strong><br /><span style="color: #339966;">openssl rsa -pubout -in private_key.pem -out public_key.pem</span><br /><strong>Extracting the public key from an DSA keypair</strong><br /><span style="color: #339966;">openssl dsa -pubout -in private_key.pem -out public_key.pem</span></p>
-			<p><strong>Copy the public key to the server</strong><br /><strong><em>The ssh-copy-id command</em> </strong><br /><strong>ssh-copy-id</strong> user@hostname copies the public key of your default identity (use -i identity_file for other identities) to the remote host</p>
-			<p>SSH Running on different port</p>
-			<p><span style="color: #339966;">ssh-copy-id -i "user@hostname -p2222"</span></p>
-			<p>-i switch defaults to ~/.ssh/id_rsa.pub, if you want another key, <span style="text-decoration: underline;">put the path of the key after</span></p>
-			<p><span style="color: #0000ff;"><strong>Converting keys between openssl and openssh</strong><br /><strong>Extract Public key from the certificate</strong> <br /><span style="color: #339966;">openssl x509 -in cert.pem -noout -pubkey &gt;pubkey.pem</span><br /><span style="color: #339966;">cat pubkey.pem</span> <br /><span style="color: #000000; background-color: #cc99ff;">-----BEGIN PUBLIC KEY-----</span><br /><span style="color: #000000; background-color: #cc99ff;">MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0TqlveKKlc2MFvEmuXJi</span><br /><span style="color: #000000; background-color: #cc99ff;">LGBsY1t4ML4uiRADGSZlnc+7Ugv3h+MCjkkwOKiOdsNo8k4KSBIG5GcQfKYOOd17</span><br /><span style="color: #000000; background-color: #cc99ff;">AJvqCL6cGQbaLuqv0a64jeDm8oO8/xN/IM0oKw7rMr/2oAJOgIsfeXPkRxWWic9A</span><br /><span style="color: #000000; background-color: #cc99ff;">VIS++H5Qi2r7bUFX+cqFsyUCAwEAAQ==</span><br /><span style="color: #000000; background-color: #cc99ff;">-----END PUBLIC KEY-----</span><br />Use the following command to convert it to authorized_keys entry<br /><span style="color: #339966;">$ ssh-keygen -i -m PKCS8 -f pubkey.pem</span><br /><span style="color: #000000; background-color: #ccffcc;">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDROqW94oqVzYwW8Sa5cmIsYGxjW3gwvi6JEAMZJmWdz7tSC/eH4wKOSTA4qI52w2jyTgpIEgbkZxB8pg453XvbngfjPMhhAV0XSy3s1wUFGPWlumctOvaowxXf60y7h5zsDTSTHzO5d2agAk6Aix95c+RHFZaJz0BUhL74flCLavttQVf5yoWzJQ==</span><span style="text-decoration: underline;"><br /></span></span></p>
+<h3 class="mt-4">ssh-keygen authentication key generation, management and conversion</h3>
+<p><strong>Generate an RSA SSH keypair with a 4096 bit private key</strong></p>
+<pre><code>ssh-keygen -t rsa -b 4096 -C &quot;RSA 4096 bit Keys&quot;
+</code></pre>
+<p><strong>Generate an DSA SSH keypair with a 2048 bit private key</strong></p>
+<pre><code>ssh-keygen -t dsa -b 1024 -C &quot;DSA 1024 bit Keys&quot;
+</code></pre>
+<p><strong>Generate an ECDSA SSH keypair with a 521 bit private key</strong></p>
+<pre><code>ssh-keygen -t ecdsa -b 521 -C &quot;ECDSA 521 bit Keys&quot;
+</code></pre>
+<p><strong>Generate an ed25519 SSH keypair- this is a new algorithm added in OpenSSH.</strong></p>
+<pre><code>ssh-keygen -t ed25519
+</code></pre>
+<p><strong>Extracting the public key from an RSA keypair</strong></p>
+<pre><code>openssl rsa -pubout -in private_key.pem -out public_key.pem
+</code></pre>
+<p><strong>Extracting the public key from an DSA keypair</strong></p>
+<pre><code>openssl dsa -pubout -in private_key.pem -out public_key.pem
+</code></pre>
+<p><strong>Copy the public key to the server</strong><br>
+	<strong><em>The ssh-copy-id command</em></strong><br>
+	<strong>ssh-copy-id</strong>  user@hostname copies the public key of your default identity (use -i identity_file for other identities) to the remote host</p>
+<p>SSH Running on different port</p>
+<pre><code>ssh-copy-id -i &quot;user@hostname -p2222&quot;
+</code></pre>
+<p>-i switch defaults to ~/.ssh/id_rsa.pub, if you want another key,  put the path of the key after</p>
+<p><strong>Converting keys between openssl and openssh</strong></p>
+<ul>
+	<li>
+		<p>Extract Public key from the certificate</p>
+<pre><code>  openssl x509 -in cert.pem -noout -pubkey &gt;pubkey.pem
+  cat pubkey.pem
+  -----BEGIN PUBLIC KEY-----
+  MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0TqlveKKlc2MFvEmuXJi
+  LGBsY1t4ML4uiRADGSZlnc+7Ugv3h+MCjkkwOKiOdsNo8k4KSBIG5GcQfKYOOd17
+  AJvqCL6cGQbaLuqv0a64jeDm8oO8/xN/IM0oKw7rMr/2oAJOgIsfeXPkRxWWic9A
+  VIS++H5Qi2r7bUFX+cqFsyUCAwEAAQ==
+  -----END PUBLIC KEY-----
+</code></pre>
+	</li>
+	<li>
+		<p>Use the following command to convert it to authorized_keys entry</p>
+	</li>
+</ul>
+<pre><code>    $ ssh-keygen -i -m PKCS8 -f pubkey.pem
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDROqW94oqVzYwW8Sa5cmIsYGxjW3gwvi6JEAMZJmWdz7tSC/eH4wKOSTA4qI52w2jyTgpIEgbkZxB8pg453XvbngfjPMhhAV0XSy3s1wUFGPWlumctOvaowxXf60y7h5zsDTSTHzO5d2agAk6Aix95c+RHFZaJz0BUhL74flCLavttQVf5yoWzJQ==
+</code></pre>
 
 
-		</section>
-	</article>
+
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
+
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
