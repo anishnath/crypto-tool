@@ -19,7 +19,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "RSA Encryption Decryption tool, Online RSA key generator",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/rsaencdec.png",
+  "image" : "https://8gwifi.org/images/site/rsa.png",
   "url" : "https://8gwifi.org/rsafunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -245,7 +245,7 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">RSA Ecryption Decryption</h1>
+<h1 class="mt-4">RSA Encryption Decryption</h1>
 <hr>
 
 
