@@ -153,6 +153,12 @@
 				$('#form').delay(200).submit()
 			});
 
+			$('#signature').keyup(function(event) {
+				//
+				// event.preventDefault();
+				$('#form').delay(200).submit()
+			});
+
 			$('#keysize1').click(function(event) {
 				//
 				// event.preventDefault();
@@ -354,8 +360,7 @@
 		</tr>
 
 		<tr>
-			<td >Provide Signature Value (Base64) <textarea class="form-control" rows="5"  placeholder="Give Signature Valie here in Base64 format"  name="signature" id="signature"></textarea>
-				<input type="submit" class="btn btn-primary" name="Generate RSA Signature" value="submit">
+			<td >Provide Signature Value (Base64) <textarea class="form-control" rows="5"  placeholder="Give Signature Value here in Base64 format for verification along with plaintext value and click on verify Signature"  name="signature" id="signature"></textarea>
 			</td>
 			<td></td>
 		</tr>

@@ -167,6 +167,13 @@ public class RSAFunctionality extends HttpServlet {
 
                 }
 
+                if (null == signature || signature.trim().length() == 0) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Signature is Empty or Null Please Inpur Signature Value in Base64 Format....</font>");
+                    return;
+
+                }
+
                 if (publiKeyParam != null && publiKeyParam.trim().length() > 0) {
 //                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
 //                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
@@ -265,22 +272,6 @@ public class RSAFunctionality extends HttpServlet {
 
                 if (privateKeParam != null && privateKeParam.trim().length() > 0) {
 
-                    boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
-                    if (!isBase64) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"3\" color=\"red\"> " + "Please Provide Base64 Encoded value Failed to Decrypt.. </font>");
-                        return;
-                    }
-
-                    if (null == message || message.trim().length() == 0) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> RSA Encryped Message is Null or EMpty....</font>");
-                        return;
-
-                    }
-
-//                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
-//                    privateKeParam = privateKeParam.replace("-----END PRIVATE KEY-----", "");
 
                     HttpPost post =null;
 
