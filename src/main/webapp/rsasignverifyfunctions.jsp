@@ -474,7 +474,7 @@
 <p><strong>RSA Signature Generation &amp; Verification</strong></p>
 <ul>
 	<li>The <strong>private</strong> key is the only one that can generate a signature that can be verified by the corresponding public key.</li>
-	<li>The <strong>RSA</strong> operation <strong>can’t</strong> handle messages longer than the modulus size. That means that if you have a 2048 bit RSA key, you would be unable to directly sign any messages longer than 256 bytes long. So signing the hash is just as good as signing the original message, without the length restrictions we would have if we didn’t use a hash</li>
+	<li>The <strong>RSA</strong> operation <strong>can't</strong> handle messages longer than the modulus size. That means that if you have a 2048 bit RSA key, you would be unable to directly sign any messages longer than 256 bytes long. So signing the hash is just as good as signing the original message, without the length restrictions we would have if we didn’t use a hash</li>
 	<li><strong>RSASSA-PSS</strong> combines the RSASP1 and RSAVP1 primitives with the EMSA PSS encoding method.</li>
 	<li><strong>RSASSA-PKCS1-v1_5</strong>  : combines the RSASP1 and RSAVP1 primitives with the EMSA-PKCS1-v1_5 encoding method.</li>
 </ul>
