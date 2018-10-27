@@ -315,4 +315,8 @@
     <loc>https://8gwifi.org/ecsignverify.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/rsasignverifyfunctions.jsp</loc>
+  </url>
+
 </urlset>
