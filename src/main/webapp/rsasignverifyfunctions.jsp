@@ -19,7 +19,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "RSA signature generation and verify message online",
-  "image" : "https://8gwifi.org/images/site/rsasignverifyfunctions.png",
+  "image" : "https://8gwifi.org/images/site/rsasig.png",
   "url" : "https://8gwifi.org/rsasignverifyfunctions.jsp",
   "author" : {
     "@type" : "Person",
