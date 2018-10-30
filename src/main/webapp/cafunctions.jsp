@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online generate rootCA/IntermediateCA server certificate",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/rootCA_Intermediate.png",
+  "image" : "https://8gwifi.org/images/site/genca.png",
   "url" : "https://8gwifi.org/cafunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -16,20 +16,21 @@
   },
   "datePublished" : "2017-09-25",
   "applicationCategory" : [ "generate certificate online", "online Test rootCA/IntermediateCA", "Generate Test ca certificate authority"],
-  "downloadUrl" : "https://8gwifi.org/CipherFunctions.jsp",
+  "downloadUrl" : "https://8gwifi.org/cafunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "generate certificate online,what is an intermediate certificate,root certificate vs server certificate,openssl create ca and sign certificate,openssl create intermediate ca,trial certificate online,test ca certificate generate online, generate ca authority,create your own certificate authority,ssl certificate check,digicert ssl checker,openssl create ca and sign certificate,openssl create intermediate ca
  ",
   "softwareVersion" : "v1.0"
 }
 </script>
-	<title>Online Test rootCA/IntermediateCA,Certs Generation </title>
+	<title>Online rootCA/IntermediateCA,Certs Generation </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="description" content="Online generate rootCA/IntermediateCA server certificate, Generate Test ca certificate authority,Create your own certificate authority (for testing)">
 	<meta name="keywords"
 		  content="generate certificate online,what is an intermediate certificate,root certificate vs server certificate,openssl create ca and sign certificate,openssl create intermediate ca,trial certificate online,test ca certificate generate online, generate ca authority,create your own certificate authority,ssl certificate check,digicert ssl checker,openssl create ca and sign certificate,openssl create intermediate ca
  ">
-	<%@ include file="include_css.jsp" %>
+	<%@ include file="header-script.jsp"%>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -61,30 +62,38 @@
 
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp" %>
+
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">Generate your Certificate Authority (rootCA/intCA/Certificate)</h1>
+<hr>
+
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
-	<article id="contentWrapper" role="main">
-		<section id="content">
+
+
+
 			<form id="form" method="POST">
 				<input type="hidden" name="methodName" id="methodName"
 					   value="GENERATE_TEST_CA">
-				<fieldset name="Generate Test CA Certificate">
-					<legend>
 						<B>Generate Test CA Certificate </B>
-					</legend>
-					Provide CN (Hostname)<input id="p_dns_name" type="text" name="p_dns_name"
+
+					Provide CN (Hostname)<input class="form-control animated" id="p_dns_name" type="text" name="p_dns_name"
 												value="">
-					<input type="button" id="generateca" name="generateca" value="Click">
+					<input type="button" class="btn btn-primary" id="generateca" name="generateca" value="Generate CA Authority">
 					<div id="output"></div>
-				</fieldset>
+
 
 			</form>
-			<%@ include file="include_security_links.jsp"%>
-			<%@ include file="footer.jsp"%>
+<hr>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+			<hr>
+
+			<%@ include file="footer_adsense.jsp"%>
 
 			<p><strong>Test CA</strong></p>
 			<p>This application currenlty supports the following Test CA Hierarchy</p>
@@ -100,8 +109,8 @@
 				<li><strong>PKCS#12</strong> evolved from the personal information exchange (PFX) standard and is used to exchange public and private objects in a single file</li>
 			</ol>
 
-		</section>
-	</article>
+<%@ include file="addcomments.jsp"%>
+
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>

@@ -116,23 +116,116 @@ public class GenCAFunctionality extends HttpServlet {
             }
 
             CAAuthorityPOJO caAuthorityPOJO = gson.fromJson(content.toString(), CAAuthorityPOJO.class);
-            out.println("<b><u>Certificate Information for [" + p_dns_name + "] (Private Key/Public Key/Certificate)  </b></u> <br>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + caAuthorityPOJO.getDnsPrivateKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getDnsPubliceKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getDnsCerts() + "</textarea>");
 
-            addHorizontalLine(out);
 
-            out.println("<b><u>InterMediateCA Information (Private Key/Public Key/Certificate)</b></u> <br>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + caAuthorityPOJO.getInterCAPrivateKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getInterCAPubliceKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getInterCACerts() + "</textarea>");
+            out.println("<h4 class=\"mt-4\">Certificate Information for " + p_dns_name + " </h4>");
 
-            addHorizontalLine(out);
-            out.println("<b><u>rootCA Infromation (Private Key/Public Key/Certificate)</b></u> <br>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + caAuthorityPOJO.getRootCAPrivateKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getRootCAPubliceKey() + "</textarea>");
-            out.println("<textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"y\">" + caAuthorityPOJO.getRootCACerts() + "</textarea>");
+            out.println("<hr>");
+
+
+            out.println("<table class=\"table\">");
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th scope=\"col\">Private key</th>");
+            out.println("<th scope=\"col\">Public key</th>");
+            out.println("<th scope=\"col\">Certificate(X.509)</th>");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + caAuthorityPOJO.getDnsPrivateKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment2\" rows=10 form=\"y\">" + caAuthorityPOJO.getDnsPubliceKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment3\" rows=10 form=\"y\">" + caAuthorityPOJO.getDnsCerts() + "</textarea>");
+            out.println("</td>");
+
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
+
+
+
+
+
+            out.println("<hr>");
+
+            out.println("<h4 class=\"mt-4\">Intermediate CA Information</h4>");
+
+            out.println("<table class=\"table\">");
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th scope=\"col\">Private key</th>");
+            out.println("<th scope=\"col\">Public key</th>");
+            out.println("<th scope=\"col\">Certificate(X.509)</th>");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"X\">" + caAuthorityPOJO.getInterCAPrivateKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getInterCAPubliceKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getInterCACerts() + "</textarea>");
+            out.println("</td>");
+
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
+
+
+
+            out.println("<hr>");
+
+            out.println("<h4 class=\"mt-4\">rootCA Information</h4>");
+
+
+
+
+            out.println("<table class=\"table\">");
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th scope=\"col\">Private key</th>");
+            out.println("<th scope=\"col\">Public key</th>");
+            out.println("<th scope=\"col\">Certificate(X.509)</th>");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\"  rows=10 form=\"X\">" + caAuthorityPOJO.getRootCAPrivateKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getRootCAPubliceKey() + "</textarea>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<textarea nclass=\"form-control animated\" readonly=\"true\" ame=\"comments\"  rows=10 form=\"y\">" + caAuthorityPOJO.getRootCACerts() + "</textarea>");
+            out.println("</td>");
+
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
+
+
+
+
+
+
 
         }
 
@@ -224,8 +317,8 @@ public class GenCAFunctionality extends HttpServlet {
                     EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
                     addHorizontalLine(out);
                     out.println("<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>");
-                    out.println("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getMessage() + "</textarea>");
-                    out.println("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getBase64Decoded() + "</textarea>");
+                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getMessage() + "</textarea>");
+                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getBase64Decoded() + "</textarea>");
                     return;
 
                 } else {
