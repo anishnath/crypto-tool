@@ -66,6 +66,13 @@ public class GenCAFunctionality extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
         if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
             String p_dns_name = request.getParameter("p_dns_name");
 

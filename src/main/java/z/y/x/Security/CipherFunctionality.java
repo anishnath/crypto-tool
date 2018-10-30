@@ -90,6 +90,13 @@ public class CipherFunctionality extends HttpServlet {
         final String methodName = request.getParameter("methodName");
         PrintWriter out = response.getWriter();
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
         if (METHOD_CIPHERBLOCK_NEW.equalsIgnoreCase(methodName)) {
 
             String secretkey = request.getParameter("secretkey");

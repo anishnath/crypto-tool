@@ -139,7 +139,7 @@
 
 <hr>
 
-<div class="sharethis-inline-share-buttons"></div>
+
 <%@ include file="thanks.jsp"%>
 
 <hr>

@@ -204,7 +204,7 @@ kwQlJ1K9Ib85pCTvx16DN7QwQv8=
 </form>
 <hr>
 
-<div class="sharethis-inline-share-buttons"></div>
+
 <%@ include file="thanks.jsp"%>
 <hr>
 

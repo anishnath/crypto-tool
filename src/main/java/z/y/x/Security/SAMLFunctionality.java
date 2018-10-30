@@ -66,6 +66,14 @@ public class SAMLFunctionality extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
         if (METHOD_SIGN_XML.equals(methodName)) {
             String algo = request.getParameter("sshalgo");
             String p_relaystate = request.getParameter("p_relaystate");

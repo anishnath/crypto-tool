@@ -51,6 +51,7 @@
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 
+
 	<servlet>
 		<servlet-name>ColorCodeOnStartupFunctionality</servlet-name>
 		<servlet-class>z.y.x.r.ColorCodeOnStartupFunctionality</servlet-class>

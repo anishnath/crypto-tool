@@ -67,6 +67,37 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
 		  System.out.println("API ENDPOINT-- " + prop.getProperty("ep"));
 
 
+		  is =  servletConfig.getServletContext().getResourceAsStream("WEB-INF/8gwifi.lic");
+		  prop.load(is);
+
+
+		  if(prop.getProperty("INSTALLED")!=null)
+		  {
+			  configProperty.put("INSTALLED", prop.getProperty("INSTALLED"));
+		  }
+		  else {
+			  configProperty.put("INSTALLED", "2A7E14F686D5FB64763C6C93A6E206AA");
+		  }
+
+		  if(prop.getProperty("KEY")!=null)
+		  {
+			  configProperty.put("KEY", prop.getProperty("KEY"));
+		  }
+		  else {
+			  configProperty.put("KEY", "C565C0CE4FECF7222DAF4DCA2A57092F");
+		  }
+
+		  if(prop.getProperty("NAME")!=null)
+		  {
+			  configProperty.put("NAME", prop.getProperty("NAME"));
+		  }
+		  else {
+			  configProperty.put("NAME", "User");
+		  }
+
+
+
+
 	} catch (Exception e) {
 
 		  configProperty.put("url", "localhost");
@@ -74,8 +105,10 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
 		  configProperty.put("epn", "http://localhost/ntru/rest/");
 
 
-
 	}
+
+
+
       
 	    
 	  }

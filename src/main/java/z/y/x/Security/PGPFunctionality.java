@@ -250,6 +250,15 @@ public class PGPFunctionality extends HttpServlet {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
 
+
+            if(Utils.vaildate())
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+                return;
+            }
+
+
             if (GENERATE_PGEP_KEY.equals(methodName)) {
                 String p_identity = request.getParameter("p_identity");
                 String p_passpharse = request.getParameter("p_passpharse");

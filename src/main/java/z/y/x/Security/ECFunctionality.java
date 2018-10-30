@@ -125,6 +125,13 @@ public class ECFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(true);
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
 
         if (EC_SIGN_MESSAGEE.equals(methodName)) {
 

@@ -73,6 +73,12 @@ public class JWKFunctionality extends HttpServlet {
         String publiKeyParam = request.getParameter("param");
         final String methodName = request.getParameter("methodName");
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
 
 
         if (METHOD_CALCULATEJWK.equalsIgnoreCase(methodName)) {

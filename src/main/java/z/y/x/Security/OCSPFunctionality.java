@@ -69,6 +69,12 @@ public class OCSPFunctionality extends HttpServlet {
         String pem_2 = request.getParameter("p_pem2");
         String methodName = request.getParameter("methodName");
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
 
         //
 

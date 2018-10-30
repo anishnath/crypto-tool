@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.xbill.DNS.*;
 
 import com.google.common.net.InetAddresses;
+import z.y.x.Security.Utils;
 import z.y.x.Security.VerifyRecaptcha;
 import z.y.x.u.IPLocation;
 
@@ -94,22 +95,21 @@ public class NetworkFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         final String isgetClientIpAddrRequested = request.getParameter("getClientIpAddr");
-        final String queryV6 = request.getParameter("queryV6DOmain");
-        String gRecaptchaResponse = request
-                .getParameter("g-recaptcha-response");
+
 
         //System.out.println(gRecaptchaResponse);
-        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+        //boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
        // System.out.println(verify);
 
-        if(!verify)
+
+
+        if(Utils.vaildate())
         {
-            addHorizontalLine(out);
-            out.println("<b><u> Captcha Error Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
-                    + getClientIpAddr(request) + "</font><br>");
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
             return;
         }
+
 
         final String methodName = request.getParameter("methodName");
 

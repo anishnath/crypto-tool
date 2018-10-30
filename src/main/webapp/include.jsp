@@ -7,7 +7,7 @@
 %>
 
 <header id="sidebar">
-    <h1>The Online Tool for <br>Online</br> People</h1>
+    <h1>The Offline Tool for <br>Online</br> People</h1>
     <div id="google_translate_element"></div>
 
 

@@ -53,6 +53,8 @@ public class RSAFunctionality extends HttpServlet {
         //out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
 
 
+
+
         String keysize = request.getParameter("keysize");
         String pageName=request.getParameter("rsasignverifyfunctions");
         if (keysize != null && keysize.trim().length() > 0) {
@@ -123,6 +125,15 @@ public class RSAFunctionality extends HttpServlet {
 
         //System.out.println("algo" + algo);
         PrintWriter out = response.getWriter();
+
+        //System.out.println("Is Valid -- " +Utils.vaildate());
+
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
 
 
         String publiKeyParam = request.getParameter("publickeyparam");

@@ -267,6 +267,14 @@ public class PBEFunctionality extends HttpServlet {
                 PrintWriter out = response.getWriter();
 
 
+                if(Utils.vaildate())
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+                    return;
+                }
+
+
                 String encryptdecryptparameter=request.getParameter("encryptdecryptparameter");
                 String message = request.getParameter("message");
                 String salt = request.getParameter("salt");

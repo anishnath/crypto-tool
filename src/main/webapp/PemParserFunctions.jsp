@@ -419,7 +419,7 @@ R5M5azDV1CIhIeOTiPA/mq5fL1UrgVbB+IATIsUAQfuWivDyoeu96LB/QswyHAWG
 </form>
 <hr>
 
-<div class="sharethis-inline-share-buttons"></div>
+
 <%@ include file="thanks.jsp"%>
 
 <hr>

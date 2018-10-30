@@ -79,6 +79,14 @@ public class NTRUFunctionality extends HttpServlet {
         String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
 
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
+
         //
 
 //        System.out.println("publiKeyParam " + publiKeyParam);

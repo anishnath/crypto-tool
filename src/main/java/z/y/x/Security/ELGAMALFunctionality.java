@@ -55,6 +55,13 @@ public class ELGAMALFunctionality extends HttpServlet {
 
         String keysize = request.getParameter("keysize");
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
         int keys =160;
         if (keysize != null && keysize.trim().length() > 0) {
             try {
@@ -150,6 +157,12 @@ public class ELGAMALFunctionality extends HttpServlet {
         String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
 
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
 
 
         if (METHOD_CALCULATERSA.equalsIgnoreCase(methodName)) {

@@ -278,7 +278,7 @@
 
 
 			</form>
-<div class="sharethis-inline-share-buttons"></div>
+
 <%@ include file="thanks.jsp"%>
 
 <h3 class="mt-4">ssh-keygen authentication key generation, management and conversion</h3>

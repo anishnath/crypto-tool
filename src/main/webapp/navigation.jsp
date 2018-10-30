@@ -7,13 +7,11 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://leanpub.com/crypto/" target="_blank" rel="noopener"><small>For Coffee/Beer Amazon Bill Buy Crytography CookBook </small>
+              <a class="nav-link" href="https://leanpub.com/crypto/" target="_blank" rel="noopener"><small> <% z.y.x.r.LoadPropertyFileFunctionality.getConfigProperty().get("NAME"); %> </small>
               </a>
             </li>
 
-            <li class="nav-item ">
-              <a class="nav-link" href="https://8gwifi.org/docs/st.jsp">Speed Test</a>
-            </li>
+
             <li class="nav-item active">
               <a class="nav-link" href="https://8gwifi.org/docs/">Tech Blogs</a>
             </li>

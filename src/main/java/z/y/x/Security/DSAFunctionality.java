@@ -57,6 +57,14 @@ public class DSAFunctionality extends HttpServlet {
         //out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
 
 
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
+
         String keysize = request.getParameter("keysize");
         if (keysize != null && keysize.trim().length() > 0) {
             try {

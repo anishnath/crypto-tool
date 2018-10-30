@@ -168,6 +168,15 @@ public class MDFunctionality extends HttpServlet {
 
         //System.out.println("algo" + algo);
         PrintWriter out = response.getWriter();
+
+        if(Utils.vaildate())
+        {
+            addHorizontalLine(out);
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            return;
+        }
+
+
         if (METHOD_CALCULATEMD5.equalsIgnoreCase(methodName)) {
 
 

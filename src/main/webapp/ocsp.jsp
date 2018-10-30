@@ -178,7 +178,7 @@ KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg==
 
 <hr>
 
-<div class="sharethis-inline-share-buttons"></div>
+
 <%@ include file="thanks.jsp"%>
 
 <hr>

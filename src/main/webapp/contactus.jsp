@@ -37,7 +37,7 @@
 <%@ include file="thanks.jsp"%>
 
 <hr>
-<div class="sharethis-inline-share-buttons"></div>
+
 
 <hr>
 
