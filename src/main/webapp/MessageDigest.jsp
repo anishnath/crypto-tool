@@ -28,12 +28,16 @@
     <meta name="description" content="Calculate or verify Message Digest Algorithms using hash algorithms,md2,md4,ripemd128,sha,,sha-224,sha-256,sha-384,sha-512,sha-512/224,sha-512/256,sha3-224,sha3-256,sha3-384,sha3-512,ripemd160,ripemd256,ripemd320,sm3,skein-1024-1024,skein-1024-384,skein-1024-512,skein-256-128,skein-256-160,skein-256-224,skein-256-256,skein-512-128,skein-512-512,tiger,tiger,whirlpool,blake2b-160,blake2b-256,blake2b-384,blake2b-512,dstu7564-256,dstu7564-384,dstu7564-512,gost3411,gost3411-2012-256,gost3411-2012-512,keccak-224,keccak-256,keccak-288,keccak-384,keccak-512 ">
     <meta name="keywords"
           content="Message digest calculate online, ripemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool, digest algorithm online,  md2,md4,ripemd128,sha,sha-1,sha-224,sha-256,sha-384,sha-512,sha-512/224,sha-512/256,sha3-224,sha3-256,sha3-384,sha3-512,ripemd160,ripemd256,ripemd320,sm3,skein-1024-1024,skein-1024-384,skein-1024-512,skein-256-128,skein-256-160,skein-256-224,skein-256-256,skein-512-128,skein-512-160,skein-512-224,skein-512-256,skein-512-384,skein-512-512,tiger,tiger,whirlpool,blake2b-160,blake2b-256,blake2b-384,blake2b-512,dstu7564-256,dstu7564-384,dstu7564-512,gost3411,gost3411-2012-256,gost3411-2012-512,keccak-224,keccak-256,keccak-288,keccak-384,keccak-512">
-    <%@ include file="include_css.jsp" %>
+
+    <%@ include file="header-script.jsp"%>
 
     <%
         String[] validList = { "md2","md4","ripemd128","sha","sha-1","sha-224","sha-256","sha-384","sha-512","sha-512/224","sha-512/256","sha3-224","sha3-256","sha3-384","sha3-512","ripemd160","ripemd256","ripemd320","sm3","skein-1024-1024","skein-1024-384","skein-1024-512","skein-256-128","skein-256-160","skein-256-224","skein-256-256","skein-512-128","skein-512-160","skein-512-224","skein-512-256","skein-512-384","skein-512-512","tiger","tiger","whirlpool","blake2b-160","blake2b-256","blake2b-384","blake2b-512","dstu7564-256","dstu7564-384","dstu7564-512","gost3411","gost3411-2012-256","gost3411-2012-512","keccak-224","keccak-256","keccak-288","keccak-384","keccak-512",
                 "1.2.804.2.1.1.1.1.2.2.1","1.2.804.2.1.1.1.1.2.2.2","1.2.804.2.1.1.1.1.2.2.3","2.16.840.1.101.3.4.2.10","2.16.840.1.101.3.4.2.7","2.16.840.1.101.3.4.2.8","2.16.840.1.101.3.4.2.9","oid.1.2.804.2.1.1.1.1.2.2.1","oid.1.2.804.2.1.1.1.1.2.2.2","oid.1.2.804.2.1.1.1.1.2.2.3","oid.2.16.840.1.101.3.4.2.10","oid.2.16.840.1.101.3.4.2.7","oid.2.16.840.1.101.3.4.2.8","oid.2.16.840.1.101.3.4.2.9"};
     %>
+
+
+
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -75,21 +79,25 @@
 
     </script>
 </head>
-<body>
-<div id="page">
-    <%@ include file="include.jsp" %>
-    <div id="loading" style="display: none;">
-        <img src="images/712.GIF" alt="" />Loading!
-    </div>
-    <article id="contentWrapper" role="main">
-        <section id="content">
+
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">Generate Message Digest</h1>
+<hr>
+
+
+<div id="loading" style="display: none;">
+    <img src="images/712.GIF" alt="" />Loading!
+</div>
+
+
             <form id="form" method="POST">
                 <input type="hidden" name="methodName" id="methodName" value="CALCULATE_MD">
                 <fieldset name="Message Digest Functionality">
                     <legend>
                         <B>Get Message Digest Information </B>
                     </legend>
-                    <b>Input Message</b><input id="inputtext" placeholder="Type your message here to generate Message Digest" type="text" name="text"
+                    <b>Input Message</b><input class="form-control" id="inputtext" placeholder="Type your message here to generate Message Digest" type="text" name="text"
                                                value="" size="100" >
                     <br>
 
@@ -104,34 +112,22 @@
                         <option value="<%=param%>"><%=param%></option>
                         <%}%>
                     </select>
-                </fieldset>
                 <div id="output"></div>
             </form>
-            <%@ include file="footer.jsp"%>
-            <%@ include file="include_security_links.jsp"%>
-            <p><strong>SHA-1</strong> - Secure Hash Algorithm produces 160 bit digest if message is less than 2^64 bits.</p>
-            <ul>
-                <li>It is computationally infeasible to find message from message digest</li>
-                <li>It is computationally infeasible to find to different messages with same message digest</li>
-                <li>Padding bits are added to message to make it a multiple of 512</li>
-            </ul>
-            <p><strong>MD5</strong></p>
-            <ul>
-                <li>Developed by Ronald Rivest in 1991</li>
-                <li>Produces 128 bit message digest</li>
-            </ul>
-            <p><strong>Hashed Message Authentication Code (HMAC)</strong></p>
-            <ul>
-                <li>Uses key to generate a Message Authentication Code which is used as a checksum</li>
-            </ul>
-            <p>&nbsp;</p>
-            <div class="page" title="Page 11">
-                <div class="layoutArea">
-                    <div class="column">
-                        <p>Strengths of the Security Properties of the Approved Hash Algorithms</p>
-                    </div>
-                </div>
-                <table style="width: 10px; height: 10px; float: left;" border="1">
+
+<hr>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+
+<hr>
+            <p>Hashing is not encryption. There is no secret, no key in hashing</p>
+            <p>Hashing is a function from some bit string (usually variable length) to another bit string (usually smaller, and of fixed length</p>
+            <hr>
+
+            <p>Strengths of the Security Properties of the Approved Hash Algorithms</p>
+
+                <table class="table">
                     <tbody>
                     <tr>
                         <td>&nbsp;</td>
@@ -361,10 +357,11 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
+
+            <hr>
 
             <p><strong>List of Hash function and the length</strong></p>
-            <table style="width: 410px;" border="1">
+            <table class="table">
                 <tbody>
                 <tr>
                     <td style="width: 253px;"><strong>Name</strong></td>
@@ -413,9 +410,8 @@
                 </tbody>
             </table>
 
-        </section>
-    </article>
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
