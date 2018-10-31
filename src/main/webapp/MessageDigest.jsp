@@ -8,14 +8,14 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Message Digest Algorithms generator and verifier ",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/messagedigest.png",
+  "image" : "https://8gwifi.org/images/site/hash.png",
   "url" : "https://8gwifi.org/MessageDigest.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
   "datePublished" : "2017-09-25",
-  "applicationCategory" : [ "ripemd128", "ripemd160", "ripemd256", "ripemd320", "SHA", "SHA-1", "SHA-224", "SHA-256", "SHA-512", "TIGER", "whirlpool", "MD2","MD5", "BLAKE2b"],
+  "applicationCategory" : [ "hashing online", "generate message digest online","ripemd128", "ripemd160", "ripemd256", "ripemd320", "SHA", "SHA-1", "SHA-224", "SHA-256", "SHA-512", "TIGER", "whirlpool", "MD2","MD5", "BLAKE2b"],
   "downloadUrl" : "https://8gwifi.org/CipherFunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "Calculate or verify  Message Digest Algorithms using hash algorithms ipemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool ",
