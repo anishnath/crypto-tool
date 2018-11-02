@@ -14,7 +14,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online truststore,keystore viewer online ",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/jks.png",
+  "image" : "https://8gwifi.org/images/site/jks.png",
   "url" : "https://8gwifi.org/jks.jsp",
   "author" : {
     "@type" : "Person",
@@ -24,53 +24,48 @@
   "applicationCategory" : [ "online keytool","keystore viewer online","export keystore certificate in pem","keystore online","truststore online"],
   "downloadUrl" : "https://8gwifi.org/jks.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : "java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore,keytool online,online keytool,keystore online,jks file viewer online",
+  "requirements" : "java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore,keytool online,online keytool,keystore online,jks file viewer online" , "Generate a Java keystore and key pair" , "Generate a certificate signing request (CSR) for an existing Java keystore","Import a root or intermediate CA certificate to an existing Java keystore",
   "softwareVersion" : "v1.0"
 }
 </script>
 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="keywords" content="online keystore viewer,online truststore viwer, java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore,keytool online,online keytool,keystore online,jks file viewer online"/>
+<meta name="robots" content="index,follow" />
+	<meta name="keywords" content="Online keytool, Key and Certificate Management Tool Viewer , keystore viewer, java keystore openssl , java keytool command" />
+<meta name="googlebot" content="index,follow" />
+<meta name="resource-type" content="document" />
+<meta name="classification" content="tools" />
 <meta name="language" content="en" />
-<meta name="robots" content="index, follow" />
-<meta name="revisit-after" content="3 month" />
-<meta name="description"
-	content="keytool is a key and certificate management utility. It allows users to administer their own public/private key pairs and associated certificates for use in self-authentication" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="keytool is a key and certificate management utility. It allows users to administer their own public/private key pairs and associated certificates for use in self-authentication" />
 <title>keytool - Key and Certificate Management Tool Online</title>
-<%@ include file="include_css.jsp"%>
+
+<%@ include file="header-script.jsp"%>
+
 </head>
-<body>
 
-<div id="page">
+<%@ include file="body-script.jsp"%>
 
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
-	
-		<article id="contentWrapper" role="main">
-			<section id="content">
-			Online keytool - Key and Certificate Management Tool
-Manages a keystore (database) of cryptographic keys, X.509 certificate chains, and trusted certificates.
+<h1 class="mt-4">Online keytool Key and Certificate Management Tool Viewer</h1>
+<hr>
+
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+
+<p>Online keytool - Upload keystore view all the aliases and delete aliases, export keystore after deleting aliases. Though your keystore is not stored in our system, <mark>please don't use any production keystore, use only test keystore </mark> alternatively you can <a href="https://leanpub.com/crypto/"> download and install </a> this product on your enviroment for extra security </p>
 	<form id="form" method="POST" enctype="multipart/form-data"
 		action="JKSManagementFunctionality">
-		<fieldset>
-		<legend><b>Upload Keystore/Trustore</b></legend>
-		<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;border-color:#aab;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#333;background-color:#fff;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f39630;}
-.tg .tg-s6z2{text-align:center}
-.tg .tg-z2zr{background-color:#FCABE3}
-</style>
-<table class="tg">
+
+<table class="table table-responsive">
   <tr>
-    <th class="tg-s6z2">Keystore/trustore file</th>
-    <th class="tg-031e" colspan="2"><input type="file" name="upfile"></th>
+    <th>Keystore/trustore file viewer</th>
+    <th  colspan="2"><input type="file" name="upfile"></th>
 
   </tr>
   <tr>
-    <td class="tg-031e">Store password</td>
+    <td class="tg-031e">Key Store password (For deleting Alias)</td>
     <%
     String value =(String)session.getAttribute("storepassword");
     if(null==value)
@@ -79,11 +74,11 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
     }
 
     %>
-    <td class="tg-z2zr" colspan="2"><input type="text" value="<%=value%>" name="storepassword" id="storepassword" ></td>
+    <td colspan="2"><input type="text" value="<%=value%>" name="storepassword" id="storepassword" ></td>
   </tr>
   <tr>
     <td class="tg-031e" colspan="3"><input
-			type="submit" value="Press"> to upload the file! <input
+			type="submit" class="btn btn-group-vertical" value="Upload Keystore to view Aliases"> <input
 			type="hidden" name="md5" value="<%=session.getAttribute("md5")%>">
 			
 			<input
@@ -102,8 +97,9 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 	  }
   %>
   <tr>
-      	<th>Export Keystore	(<%=fileName%>)		
-    <input type="image" src="images/icon_import-export.png" height="20" width="20" border="0" name="exportKeyStore" title="Export the Keystore " value="exportKeyStore" alt="exportKeyStore" />
+      	<th>You are working on (<%=fileName%>)
+			<button type="submit" class="btn btn-light" name="exportKeyStore" value="exportKeyStore">Export Keystore After Delete Aliases</button>
+    <!-- <input type="image" src="images/icon_import-export.png" height="20" width="20" border="0" name="exportKeyStore" title="Export the Keystore " value="exportKeyStore" alt="exportKeyStore" /> -->
     </th>
   </tr>
   <%
@@ -119,11 +115,11 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
   
   %>
   <tr>
-   <td class="tg-031e" colspan="3"><font color="red"><%=obj1 %></font> </td>
+   <td colspan="3"><font color="red"><%=obj1 %></font> </td>
   </tr>
   <% } %>
 </table>
-		</fieldset>
+
 		
 		<%
 			Object obj = session.getAttribute("displayAliases");
@@ -136,11 +132,11 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 					Map.Entry pairs = (Map.Entry) it.next();
 					final String Totalaliases = (String) pairs.getKey();
 		%>
-		<fieldset class="tg-031e" name="JKS Functionality">
-			<legend>
-				<B>JKS Aliases (<%=Totalaliases%>) found
-				</B>
-			</legend>
+
+		<hr>
+
+		<h2 class="mt-4">JKS Entry (<%=Totalaliases%>) found </h2>
+
 
 			<%
 				List<String> aliases = (List<String>) pairs.getValue();
@@ -159,16 +155,19 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 							}
 							
 			%>
-			<input type="radio" id="<%=element%>" <%=checked %> name="aliasname"
-				value="<%=element%>"><%=element%>
+		<label class="radio-inline"><input type="radio" id="<%=element%>" <%=checked %> name="aliasname"
+				value="<%=element%>"><%=element%>  </label>
 
 			<%
 							
 				}
 			%>
-			<input type="image" src="images/icon_view.png" title="get details of the Alias" height="20" width="20" border="0" name="GetDetails" value="GetDetails" alt="GetDetails" />
-			<input type="image" src="images/icon_delete.png" title="delete alias" height="20" width="20" border="0" alt="delete alias" name="deleteAlias" value="deleteAlias" />
-		</fieldset>
+
+			<button type="submit" class="btn btn-primary" name="GetDetails" value="GetDetails">Get Alias Details</button>
+			<button type="submit" class="btn btn-secondary" name="deleteAlias" value="deleteAlias">Delete Alias </button>
+
+			<!--<input type="image" src="images/icon_view.png" title="get details of the Alias" height="20" width="20" border="0" name="GetDetails" value="GetDetails" alt="GetDetails" />
+			<input type="image" src="images/icon_delete.png" title="delete alias" height="20" width="20" border="0" alt="delete alias" name="deleteAlias" value="deleteAlias" />-->
 		<%
 			}
 			}
@@ -188,94 +187,80 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 						sun.security.x509.X509CertImpl cert = (sun.security.x509.X509CertImpl) m
 								.get(aliasName);
-		%>
-		<fieldset>
-			<legend>Alias Details</legend>
-			<table
-				style="border-collapse: collapse; border-spacing: 0; border-color: #bbb">
-				<tr>
-					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Alias</th>
-					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD"
-						colspan="2">Certificate Details</th>
-					<th
-						style="font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #493F3F; background-color: #9DE0AD; text-align: center">Export Encoded PEM <input type="image" src="images/icon_import-export.png" height="20" width="20" border="0" name="export" title="Export PEM" value="export" alt="export" /> </th>
 
+
+		%>
+		<h3 class="mt-4"> Alias Details </h3>
+			<table class="table table-striped">
+				<thead class="thead-dark">
+				<tr>
+					<th
+						>Alias</th>
+					<th colspan="4">Certificate Details</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td rowspan="16"><%=aliasName%></td>
+					<td>version</td>
+					<td><%=cert.getVersion()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB; text-align: right"
-						rowspan="14"><%=aliasName%></td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">version</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getVersion()%></td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"
-						rowspan="14">
-						-----BEGIN CERTIFICATE-----<br>
-						<%=new sun.misc.BASE64Encoder().encode(cert
-								.getEncoded())%><br>
-								-----END CERTIFICATE-----</td>
+					<td>Subject</td>
+					<td><%=cert.getSubjectDN()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Subject</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB; text-align: right"><%=cert.getSubjectDN()%></td>
-				</tr>
-				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Issuer
+					<td>Issuer
 						DN</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getIssuerDN()%></td>
+					<td><%=cert.getIssuerDN()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Signature
-						Algorithm</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB; text-align: right"><%=cert.getSigAlgName()%></td>
+					<td>Signature Algorithm</td>
+					<td><%=cert.getSigAlgName()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Key</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getSigAlgName()%></td>
+					<td>Signature</td>
+					<td><textarea class="form-control" rows="5" readonly><%= org.apache.commons.codec.binary.Hex.encodeHex(cert.getSignature())%></textarea></td>
+				</tr>
+
+				<% if (cert.getPublicKey()!=null ) {
+				%>
+				<tr>
+					<td>Public Key</td>
+					<td><textarea class="form-control" rows="5" readonly><%= org.apache.commons.codec.binary.Hex.encodeHex(cert.getPublicKey().getEncoded())%></textarea></td>
+				</tr>
+
+				<% } %>
+
+
+				<% if (cert.getSerialNumberObject()!=null ) {  %>
+				<tr>
+					<td>Serial Number </td>
+					<td><%= cert.getSerialNumberObject().getNumber()%></td>
+				</tr>
+
+				<% } %>
+
+
+				<tr>
+					<td>BasicConstraints</td>
+					<td><%=cert.getBasicConstraints()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">BasicConstraints</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getBasicConstraints()%></td>
+					<td>BasicConstraintsExtension</td>
+					<td><%=cert.getBasicConstraintsExtension()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">BasicConstraintsExtension
-						exponent</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getBasicConstraintsExtension()%></td>
+					<td>CRLDistributionPointsExtension</td>
+					<td><%=cert.getCRLDistributionPointsExtension()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">CRLDistributionPointsExtension</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getCRLDistributionPointsExtension()%></td>
+					<td>CertificatePoliciesExtensions</td>
+					<td><%=cert.getCertificatePoliciesExtension()%></td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">CertificatePoliciesExtension
-						Extensions</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getCertificatePoliciesExtension()%></td>
-				</tr>
-				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">CriticalExtensionOIDs</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB">
+					<td>CriticalExtensionOIDs</td>
+					<td>
 						<%
 							Set<String> Oids = cert.getCriticalExtensionOIDs();
 										if (Oids != null) {
@@ -289,39 +274,40 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 					</td>
 				</tr>
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">isSelfIssued</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.isSelfIssued(cert)%></td>
+					<td>isSelfIssued</td>
+					<td><%=cert.isSelfIssued(cert)%></td>
 				</tr>
 
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Type</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getName()%></td>
+					<td>Type</td>
+					<td><%=cert.getName()%></td>
 				</tr>
 
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Not
-						After</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getNotAfter()%></td>
+					<td>NotAfter</td>
+					<td><%=cert.getNotAfter()%></td>
 				</tr>
 
 				<tr>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #C2FFD6">Not
-						Before</td>
-					<td
-						style="font-family: Arial, sans-serif; font-size: 14px; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; border-color: #bbb; color: #594F4F; background-color: #E0FFEB"><%=cert.getNotBefore()%></td>
+					<td>NotBefore</td>
+					<td><%=cert.getNotBefore()%></td>
 				</tr>
 
+
+				<tr>
+					<td>Dump </td>
+						<% if (cert.toString()!=null ) {
+				%>
+
+					<td colspan="3"><textarea class="form-control" rows="5" readonly><%= cert.toString()%></textarea></td>
+				</tr>
+
+				<% } %>
+				</tr>
+
+				</tbody>
 			</table>
 
-
-		</fieldset>
 		<%
 			}
 				}
@@ -330,11 +316,19 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 
 
 	</form>
-				<%@ include file="include_security_links.jsp"%>
-				<%@ include file="footer.jsp"%>
-				<br>
-				<br>
-				<h2>Java Keytool Commands</h2>
+
+
+<hr>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+<hr>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h2 class="mt-4" id="thersaalgorithm">Java Keytool Command</h2>
+
 				<p>These commands allow you to generate a new Java Keytool keystore file, create a CSR, and import certificates. Any root or intermediate certificates will need to be imported before importing the primary certificate for your domain.</p>
 				<ul>
 					<li><strong>Generate a Java keystore and key pair</strong>
@@ -411,10 +405,9 @@ Manages a keystore (database) of cryptographic keys, X.509 certificate chains, a
 				</ul>
 				<p>&nbsp;</p>
 
-		
-			</section>
-		</article>
-		
-	</div>
-</body>
-</html>
+
+<%@ include file="addcomments.jsp"%>
+
+</div>
+
+<%@ include file="body-close.jsp"%>
