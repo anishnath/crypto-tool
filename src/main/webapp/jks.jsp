@@ -78,7 +78,7 @@
   </tr>
   <tr>
     <td class="tg-031e" colspan="3"><input
-			type="submit" class="btn btn-group-vertical" value="Upload Keystore to view Aliases"> <input
+			type="submit" class="btn btn-primary" value="Upload Keystore to view Aliases"> <input
 			type="hidden" name="md5" value="<%=session.getAttribute("md5")%>">
 			
 			<input
