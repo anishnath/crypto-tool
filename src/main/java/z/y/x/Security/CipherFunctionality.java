@@ -467,7 +467,7 @@ public class CipherFunctionality extends HttpServlet {
                 if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
                     x=true;
                     urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
-                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "genselfsignwithprivkey";
+                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "certs/genselfsignwithprivkey";
                 } else {
                     addHorizontalLine(out);
                     out.println("<font size=\"2\" color=\"red\"> Not a Valid RSA Private   </font>");
