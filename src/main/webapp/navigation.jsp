@@ -13,7 +13,7 @@
               <a class="nav-link" href="https://8gwifi.org/docs/">Tech Blogs</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
+              <a class="nav-link" href="contactus.jsp">Contact Me</a>
             </li>
           </ul>
         </div>
