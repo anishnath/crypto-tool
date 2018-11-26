@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online generate rootCA/IntermediateCA server certificate",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/rootCA_Intermediate.png",
+  "image" : "https://8gwifi.org/cafunctions.jsp",
   "url" : "https://8gwifi.org/cafunctions.jsp",
   "author" : {
     "@type" : "Person",

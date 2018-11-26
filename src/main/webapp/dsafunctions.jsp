@@ -19,7 +19,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online DSA Kegenerator, Generate Signature file , DSA Signature Verifier",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/dsa.png",
+  "image" : "https://8gwifi.org/dsafunctions.jsp",
   "url" : "https://8gwifi.org/dsafunctions.jsp",
   "author" : {
     "@type" : "Person",

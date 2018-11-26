@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Ping Ipv4/IpV6 Address Onlines",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/ping.png",
+  "image" : "https://8gwifi.org/pingfunctions.jsp",
   "url" : "https://8gwifi.org/pingfunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -72,7 +72,6 @@
 			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60">
             <input type="button" id="executeMethod" name="ping"
 				value="Click Ping" size="200"> <br>
-            <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
 		</fieldset>
 		<div id="output"></div>
 	</form>

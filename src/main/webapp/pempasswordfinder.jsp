@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Encrypted pem passsword finder",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/pempasswordfinder.png",
+  "image" : "https://8gwifi.org/pempasswordfinder.jsp",
   "url" : "https://8gwifi.org/pempasswordfinder.jsp",
   "author" : {
     "@type" : "Person",

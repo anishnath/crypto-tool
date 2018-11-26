@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "SAMl Sign XML",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/saml.png",
+  "image" : "https://8gwifi.org/samlfunctions.jsp",
   "url" : "https://8gwifi.org/samlfunctions.jsp",
   "author" : {
     "@type" : "Person",

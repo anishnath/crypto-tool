@@ -21,7 +21,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Learn DH in Cryptography, Diffie-Hellman Key Exchange",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/dh.png",
+  "image" : "https://8gwifi.org/DHFunctions.jsp",
   "url" : "https://8gwifi.org/DHFunctions.jsp",
   "author" : {
     "@type" : "Person",

@@ -15,7 +15,7 @@
     "@context" : "http://schema.org",
     "@type" : "SoftwareApplication",
     "name" : "Strong Random Password Generator Online with Entropy",
-    "image" : "https://github.com/anishnath/crypto-tool/blob/master/pass.png",
+    "image" : "https://8gwifi.org/passwdgen.jsp",
     "url" : "https://8gwifi.org/passwdgen.jsp",
     "author" : {
     "@type" : "Person",

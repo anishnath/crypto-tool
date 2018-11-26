@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online CSR Signer, sign csr and generate certificate",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/online_sign_csr.png",
+  "image" : "https://8gwifi.org/signcsr.jsp",
   "url" : "https://8gwifi.org/signcsr.jsp",
   "author" : {
     "@type" : "Person",

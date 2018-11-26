@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Self-Signed Certificate generate with altname support",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/self_signed_certificate.png",
+  "image" : "https://8gwifi.org/SelfSignCertificateFunctions.jsp",
   "url" : "https://8gwifi.org/SelfSignCertificateFunctions.jsp",
   "author" : {
     "@type" : "Person",

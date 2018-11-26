@@ -20,7 +20,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "elgamal Encryption Decryption tool, Online elgamal key generator",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/elgamalencdec.png",
+  "image" : "https://8gwifi.org/elgamalfunctions.jsp",
   "url" : "https://8gwifi.org/elgamalfunctions.jsp",
   "author" : {
     "@type" : "Person",

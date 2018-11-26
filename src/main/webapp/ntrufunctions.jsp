@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "ntru Encryption Decryption tool, ntru encryption example,ntru implementation",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/ntru.png",
+  "image" : "https://8gwifi.org/ntrufunctions.jsp",
   "url" : "https://8gwifi.org/ntrufunctions.jsp",
   "author" : {
     "@type" : "Person",

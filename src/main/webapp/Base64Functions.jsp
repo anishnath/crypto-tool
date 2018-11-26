@@ -14,7 +14,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Base64 encode and decode a string",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/base64.png",
+  "image" : "https://8gwifi.org/Base64Functions.jsp",
   "url" : "https://8gwifi.org/Base64Functions.jsp",
   "author" : {
     "@type" : "Person",

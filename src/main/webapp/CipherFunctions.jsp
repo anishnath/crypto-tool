@@ -9,7 +9,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Encrypt/Decrypt Message",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/encryption_decryption.png",
+  "image" : "https://8gwifi.org/CipherFunctions.jsp",
   "url" : "https://8gwifi.org/CipherFunctions.jsp",
   "author" : {
     "@type" : "Person",

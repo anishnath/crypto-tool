@@ -10,7 +10,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Elliptic Curve Encryption Decryption tool Online ecparam key generator",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/Elliptic_Curve_Encryption_Decryption.png",
+  "image" : "https://8gwifi.org/ecfunctions.jsp",
   "url" : "https://8gwifi.org/ecfunctions.jsp",
   "author" : {
     "@type" : "Person",

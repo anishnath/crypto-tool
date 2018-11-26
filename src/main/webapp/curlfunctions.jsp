@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "curl Ipv4/IpV6 website, dns query online",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/curl.png",
+  "image" : "https://8gwifi.org/curlfunctions.jsp",
   "url" : "https://8gwifi.org/curlfunctions.jsp",
   "author" : {
     "@type" : "Person",

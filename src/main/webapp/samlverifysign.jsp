@@ -11,7 +11,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "SAML Signature Verification & Base64 SAML Message",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/samlverify.png",
+  "image" : "https://8gwifi.org/samlverifysign.jsp",
   "url" : "https://8gwifi.org/samlverifysign.jsp",
   "author" : {
     "@type" : "Person",

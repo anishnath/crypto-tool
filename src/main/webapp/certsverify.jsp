@@ -10,7 +10,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online private key CSR x509 validation",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/certs_verify.png",
+  "image" : "https://8gwifi.org/certsverify.jsp",
   "url" : "https://8gwifi.org/certsverify.jsp",
   "author" : {
     "@type" : "Person",
