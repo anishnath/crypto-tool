@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<p>
 <head>
 	<title>BCCrypt Hash Generator, Hash Checker </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
