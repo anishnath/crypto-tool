@@ -109,7 +109,7 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">scrypt hash generator</h1>
+<h1 class="mt-4">scrypt hash generator and verification</h1>
 <hr>
 
 
@@ -212,14 +212,12 @@
 				<h2 class="mt-4" id="thersaalgorithm">Scrypt</h2>
 
 				<p>The scrypt key derivation function was originally developed by Colin Percival and published in 2009 for use in the Tarsnap online backup system and is designed to be far more secure against hardware brute-force attacks than alternative functions such as PBKDF2 or bcrypt.</p>
-				<p>cpuCost(N) - cpu cost of the algorithm (as defined in scrypt this is N). must be power of 2 greater than 1. Default is currently 16,348 or 2^14) <br/>
-				<p>memoryCost(R) - memory cost of the algorithm (as defined in scrypt this is r) Default is currently 8. </p>
-				<p>parallelization(P) - the parallelization of the algorithm (as defined in scrypt this is p) Default is currently 1. Note that the implementation does not currently take advantage of parallelization.</p><br/>
-				<p>keyLength - key length for the algorithm (as defined in scrypt this is dkLen). The default is currently 32. </p>
-				<p>saltLength(S) - salt length (as defined in scrypt this is the length of S). The default is currently 64 <p><br/>
-				<p>The recommended parameters for interactive logins as of 2009 are N=16384,
-				r=8, p=1. They should be increased as memory latency and CPU parallelism
-				increases. Remember to get a good random salt</p>
+				<p><b>cpuCost(N)</b> - cpu cost of the algorithm (as defined in scrypt this is N). must be power of 2 greater than 1. Default is currently 16,348 or 2^14) <br/>
+				<p><b>memoryCost(R)</b> - memory cost of the algorithm (as defined in scrypt this is r) Default is currently 8. </p>
+				<p><b>parallelization(P)</b> - the parallelization of the algorithm (as defined in scrypt this is p) Default is currently 1. Note that the implementation does not currently take advantage of parallelization.</p><br/>
+				<p><b>keyLength</b> - key length for the algorithm (as defined in scrypt this is dkLen). The default is currently 32. </p>
+				<p><b>saltLength(S)</b> - salt length (as defined in scrypt this is the length of S). The default is currently 64 <p><br/>
+				<p>The recommended parameters for interactive logins as of 2009 are <b> N=16384, r=8, p=1. </b> They should be increased as memory latency and CPU parallelism increases. Remember to get a good random salt</p>
 <%@ include file="addcomments.jsp"%>
 
 </div>
