@@ -24,7 +24,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Scrypt Hash Generator, Hash Checker",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/scrypt.png",
+  "image" : "https://8gwifi.org/images/site/scrypt.png",
   "url" : "https://8gwifi.org/scrypt.jsp",
   "author" : {
     "@type" : "Person",
