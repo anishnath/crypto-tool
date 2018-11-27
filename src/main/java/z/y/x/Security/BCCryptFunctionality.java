@@ -138,7 +138,7 @@ public class BCCryptFunctionality extends HttpServlet {
                 }
 
             } else {
-                out.println("<br/><font size=\"4\" color=\"red\"> Invalid BCCrypt Hash </font>");
+                out.println("<br/><font size=\"4\" color=\"red\"> Invalid BCrypt Hash </font>");
                 return;
             }
 
@@ -346,16 +346,16 @@ public class BCCryptFunctionality extends HttpServlet {
                 {
 
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"green\">  Hash Password </font>   <br/>");
-                    out.println("<textarea name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + certpojo1.getBase64Encoded() + "</textarea>");
+                    out.println("<font size=\"5\" color=\"green\"> Scrypt Hash Password of [</font>" + password+ "<font size=\"5\" color=\"green\">]</font>  <br/>");
+                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"20\">" + certpojo1.getBase64Encoded() + "</textarea>");
 
 
                 }
                 else
                 {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"green\"> RAW Hash Password</font>   <br/> <textarea name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + certpojo1.getBase64Encoded() + "</textarea>");
-                    out.println("<font size=\"4\" color=\"green\">  [" + certpojo1.getMessage() +   "]<br/>");
+                    out.println("<font size=\"4\" color=\"blue\">Hash Verification of </font>   <br/> <textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"20\">" + certpojo1.getBase64Encoded() + "</textarea>");
+                    out.println("<font size=\"4\" color=\"blue\">  [" + certpojo1.getMessage() +   "]<br/>");
                 }
 
 
