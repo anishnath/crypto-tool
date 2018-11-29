@@ -340,5 +340,9 @@
     <loc>https://8gwifi.org/docs/alibabacloud.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/pbkdf.jsp</loc>
+  </url>
+
 
 </urlset>
