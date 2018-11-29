@@ -47,6 +47,7 @@ public class PBEFunctionality extends HttpServlet {
 
     private final String METHOD_NAME = "PBEBLOCK";
     private final String METHOD_NAME_PBE_MESSAGE ="PBEMESSAGE";
+    private final String METHOD_NAME_PBKDF2DERIVEKEY ="PBKDFDERIVEKEY";
 
     private long maxFileSize = 1024 * 10 * 10 *10;
 
@@ -446,6 +447,160 @@ public class PBEFunctionality extends HttpServlet {
                 //Validations
 
             }
+
+
+        if(METHOD_NAME_PBKDF2DERIVEKEY.equalsIgnoreCase(mName))
+        {
+
+            PrintWriter out = response.getWriter();
+
+
+            String keylength=request.getParameter("keylength");
+            String salt = request.getParameter("salt");
+            String rounds = request.getParameter("rounds");
+            String algo = request.getParameter("cipherparameter");
+            int rs = 100;
+
+//                    System.out.println(encryptdecryptparameter);
+//                    System.out.println(message);
+//                    System.out.println(salt);
+//                    System.out.println(rounds);
+//                    System.out.println(algo);
+
+
+            try {
+                rs = Integer.parseInt(rounds);
+            } catch (NumberFormatException nfe) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Valid Number of Rounds required in Integer </font>");
+                return;
+            }
+
+            int keyLength =32;
+
+            try {
+                keyLength = Integer.parseInt(keylength);
+
+                if(keyLength>5000)
+                {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Maximum Supported key Length is < 50000 by This site </font>");
+                    return;
+                }
+
+            } catch (NumberFormatException nfe) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Key Length Must be Integer </font>");
+                return;
+            }
+
+
+            String password = request.getParameter("password");
+
+            if (password == null || password.trim().length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Please provide the password to drive key </font>");
+                return;
+            }
+
+
+
+            try
+            {
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pbe/derivekey";
+
+
+
+
+
+                final String[] cipherparameter = request.getParameterValues("cipherparameternew");
+
+                Gson gson = new Gson();
+                HttpClient client = HttpClientBuilder.create().build();
+
+                HttpPost post = new HttpPost(url1);
+
+
+
+                for(int i=0; i<cipherparameter.length; i++)
+                {
+
+
+                    List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                    urlParameters.add(new BasicNameValuePair("p_keylength", keylength));
+                    urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter[i]));
+                    urlParameters.add(new BasicNameValuePair("p_password", password));
+                    urlParameters.add(new BasicNameValuePair("p_rounds", String.valueOf(rs)));
+                    urlParameters.add(new BasicNameValuePair("p_salt", salt));
+
+
+                    post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+
+                    post.addHeader("accept", "application/json");
+
+                    HttpResponse response1 = client.execute(post);
+
+                    if (response1.getStatusLine().getStatusCode() != 200) {
+                        if (response1.getStatusLine().getStatusCode() == 404) {
+                            BufferedReader br = new BufferedReader(
+                                    new InputStreamReader(
+                                            (response1.getEntity().getContent())
+                                    )
+                            );
+                            StringBuilder content = new StringBuilder();
+                            String line;
+                            while (null != (line = br.readLine())) {
+                                content.append(line);
+                            }
+                            addHorizontalLine(out);
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append(content);
+
+                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
+                            return;
+                        } else {
+                            addHorizontalLine(out);
+                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                            return;
+                        }
+                    }
+
+
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
+                    }
+
+                    EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+                    addHorizontalLine(out);
+
+
+                    out.println("<font size=\"4\" color=\"green\">PBKDF2 Derived Key using Algo  "+  cipherparameter[i]  + " </font> </br>");
+                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"3\" cols=\"3\">" + encodedMessage.getBase64Decoded() + "</textarea>");
+                    out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  encodedMessage.getIntialVector() + "] </font> </br>");
+
+
+
+
+                }
+            }catch (Exception ex)
+            {
+                addHorizontalLine(out);
+                out.println("System Error " + ex.getMessage());
+            }
+
+
+            //Validations
+
+        }
 
 
             }
