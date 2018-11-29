@@ -16,7 +16,7 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 
-	<%@ include file="include_css.jsp"%>
+	<%@ include file="header-script.jsp"%>
 
 
 	<%
@@ -41,7 +41,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "PBE Encrypt/Decrypt Message",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/pbe.png",
+  "image" : "https://8gwifi.org/images/site/pbe.png",
   "url" : "https://8gwifi.org/pbe.jsp",
   "author" : {
     "@type" : "Person",
@@ -151,137 +151,94 @@
 		});
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
+<%@ include file="body-script.jsp"%>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
+<h1 class="mt-4">PBE Encryption Decryption</h1>
+<hr>
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+
 
 			<form id="form" method="POST">
+
+				<b>Encrypt Message</b>
+				<input class="form-control"  checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
+					   value="encrypt">
+
+				<b>Decrypt Message</b>
+				<input class="form-control"  id="decryptparameter" type="radio" name="encryptdecryptparameter"
+					   value="decryprt">
+
+
 				<input type="hidden" name="methodName" id="methodName"
 					   value="PBEMESSAGE">
 
-				<fieldset name="PBE">
 
-					<legend>
-						<b> PBE Encryption/Decryption </b>
-					</legend>
-
-					<table border="1" style="width:100pc">
-						<tr>
-							<th>Input </th>
-							<th>Ciphers </th>
-							<th>PBE Encryption/Decryption </th>
-						</tr>
-
-						<tr>
-							<td width="10%">
-								<textarea rows="10" cols="30" placeholder="Type Somethng here..." name="message" id="message"></textarea>
-								<br/>
-								Rounds <input id="rounds" type="text" name="rounds"
-											  size="10" placeholder="1000"
-											  value="1000">
-								<br/>
-								Password <input id="password" type="text" name="password"
-												size="30" value="UserSupplied" placeholder="8bits">
-								<br/>
-								Encrypt Message
-								<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="encrypt">
-								<br/>
-								Decrypt Message
-								<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
-									   value="decryprt">
-								<br/>
-
-								<br/>
-							</td>
-							<td width="10%">
-								<!-- <textarea rows="10" cols="30" name="output" id="output"></textarea> -->
+				<div class="form-group">
+					<label for="password">Input Message</label>
+					<textarea class="form-control" name="message" id="message" cols="10" rows="5"> </textarea>
+				</div>
 
 
-								<select  size="10" multiple name="cipherparameternew" id="cipherparameternew">
-									<option selected value="PBEWITHHMACSHA1ANDAES_128">PBEWITHHMACSHA1ANDAES_128</option>
-									<%
-										for (int i = 0; i < validList.length; i++) {
-											String param = validList[i];
-									%>
-									<option value="<%=param%>"><%=param%></option>
-									<%}%>
-								</select>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" name="password" class="form-control" id="password"  placeholder="8bits">
+				</div>
 
-							</td>
-
-							<td width="80%">
-								<%@ include file="footer_adsense.jsp"%>
-								<p><strong>Password Based Encryption (PBE)</strong> is specified in e.g. RFC 2898 which specifies the "PKCS #5: Password-Based Cryptography Specification Version 2.0".</p>
-								<p><strong>How PBE Works?</strong></p>
-
-								<li>A user supplied password which is remembered by the user.</li>
-								<li>A long with that password text, a random number which is called salt is added and hashed.</li>
-								<li>Using this a AES or a DES encryption key is derived and encrypted.</li>
-								<li>The password text is shared between the two parties exchanging the encrypted content in a secure manner.</li>
-								<li>The receiver, uses the same password and salt and decrypts the content.</li>
-
-							</td>
-
-						</tr>
-
-						<tr>
-
-							<td width="20%" colspan="2">
-								<b>Output</b>
-								<div id="output"> </div>
+				<div class="form-group">
+					<label for="password">Rounds</label>
+					<input type="text" name="rounds" class="form-control" id="rounds" value="1000" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" placeholder="1000">
+				</div>
 
 
-							</td>
-
-							<td>
-								<p><strong>PBKDF1 PBKDF1</strong> applies a hash function, which shall be MD2,MD5,SHA-1 to derive keys. The length of the derived key is bounded by the length of the hash function output, which is 16 octets for MD2 and MD5 and 20 octets for SHA-1. PBKDF1 is compatible with the key derivation process in PKCS #5</p>
-							</td>
-
-						</tr>
-						<tr>
-							<td>
-								<a href="redirect-pbefile.jsp">Click Here for PBE file based ENcryption </a>
-
-							</td>
-							<td>
-								<p><strong>PBKDF2</strong> applies a pseudorandom function to derive keys. The length of the derived key is essentially unbounded.</p>
-
-
-							</td>
-
-							<td>
-
-							</td>
-
-						</tr>
-
-						<tr>
-
-						</tr>
-
-					</table>
-
-
-				</fieldset>
+				<div class="form-group">
+					<label for="cipherparameternew">PBE Ciphers</label>
+				<select class="form-control" size="10" multiple name="cipherparameternew" id="cipherparameternew">
+					<option selected value="PBEWITHHMACSHA1ANDAES_128">PBEWITHHMACSHA1ANDAES_128</option>
+					<%
+						for (int i = 0; i < validList.length; i++) {
+							String param = validList[i];
+					%>
+					<option value="<%=param%>"><%=param%></option>
+					<%}%>
+				</select>
+					</div>
 
 			</form>
 
-			<table border="0" style="width:500px">
-				<tr>
-					<td><%@ include file="footer.jsp"%></td>
-				</tr>
-			</table>
-			<%@ include file="include_security_links.jsp"%>
-		</section>
-	</article>
+<hr>
+
+<div id="output"></div>
+
+
+
+<hr>
+
+<a href="redirect-pbefile.jsp">Click Here for PBE file based ENcryption </a>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+<hr>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h2 class="mt-4" id="thepbealgo">PBE Encryption and Decryption</h2>
+<p><strong>Password Based Encryption (PBE)</strong> is specified in e.g. RFC 2898 which specifies the "PKCS #5: Password-Based Cryptography Specification Version 2.0".</p>
+<p><strong>How PBE Works?</strong></p>
+
+<li>A user supplied password which is remembered by the user.</li>
+<li>A long with that password text, a random number which is called salt is added and hashed.</li>
+<li>Using this a AES or a DES encryption key is derived and encrypted.</li>
+<li>The password text is shared between the two parties exchanging the encrypted content in a secure manner.</li>
+<li>The receiver, uses the same password and salt and decrypts the content.</li>
+
+<p><strong>PBKDF1 PBKDF1</strong> applies a hash function, which shall be MD2,MD5,SHA-1 to derive keys. The length of the derived key is bounded by the length of the hash function output, which is 16 octets for MD2 and MD5 and 20 octets for SHA-1. PBKDF1 is compatible with the key derivation process in PKCS #5</p>
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>

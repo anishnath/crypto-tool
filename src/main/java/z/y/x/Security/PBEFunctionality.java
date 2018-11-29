@@ -330,7 +330,7 @@ public class PBEFunctionality extends HttpServlet {
                     }
                     if (!isValidMessage) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> For Decryption Please Base64 Message which is generated during encryption process [" + message + "]</font>");
+                        out.println("<font size=\"4\" color=\"red\">For Decryption Please input Base64 Message which is generated during encryption process [" + message + "]</font>");
                         return;
                     }
 
@@ -421,7 +421,9 @@ public class PBEFunctionality extends HttpServlet {
                         String salt8bit = new BASE64Encoder().encode(saltBytes);
                         String iv16bit = new BASE64Encoder().encode(ivBytes1);
 
-                        out.println("<font size=\"4\" color=\"red\"> Encrypted Message </font><font size=\"5\" color=\"green\">" + encodedMessage.getMessage() + " </font> </br>");
+                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"3\" cols=\"3\">" + encodedMessage.getMessage() + "</textarea>");
+
+                        //out.println("<font size=\"4\" color=\"red\"> Encrypted Message </font><font size=\"5\" color=\"green\">" + encodedMessage.getMessage() + " </font> </br>");
                         out.println("<font size=\"4\" color=\"blue\">8 bit salt used[  "+  salt8bit + "] </font> </br>");
                         out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  iv16bit + "] </font> </br>");
                     }
