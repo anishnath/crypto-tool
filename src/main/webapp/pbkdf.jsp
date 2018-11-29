@@ -31,7 +31,7 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "PBE Encrypt/Decrypt Message",
+  "name" : "pbkd2 derive key",
   "image" : "https://8gwifi.org/images/site/pbkdf2.png",
   "url" : "https://8gwifi.org/pbe.jsp",
   "author" : {
