@@ -481,10 +481,10 @@ public class PBEFunctionality extends HttpServlet {
             try {
                 keyLength = Integer.parseInt(keylength);
 
-                if(keyLength>5000)
+                if(keyLength>100000)
                 {
                     addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Maximum Supported key Length is < 50000 by This site </font>");
+                    out.println("<font size=\"2\" color=\"red\"> Maximum Supported key Length is < 100000 by This site </font>");
                     return;
                 }
 
