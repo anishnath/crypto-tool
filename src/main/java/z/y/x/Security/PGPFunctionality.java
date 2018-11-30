@@ -323,8 +323,9 @@ public class PGPFunctionality extends HttpServlet {
 
                 pgppojo pgp = gson.fromJson(content.toString(), pgppojo.class);
                 out.println("<b><u>PGP Key Information for Identity  [" + p_identity + "] (Private Key/Public Key)  </b></u> <br>");
-                out.println("<textarea name=\"comment\" rows=\"30\" cols=\"60\" form=\"X\">" + pgp.getPrivateKey() + "</textarea>");
-                out.println("<textarea name=\"comment\" rows=\"30\" cols=\"60\" form=\"y\">" + pgp.getPubliceKey() + "</textarea>");
+                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"20\" cols=\"20\" form=\"X\">" + pgp.getPrivateKey() + "</textarea>");
+                out.println("<hr>");
+                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"y\">" + pgp.getPubliceKey() + "</textarea>");
 
                 addHorizontalLine(out);
 
