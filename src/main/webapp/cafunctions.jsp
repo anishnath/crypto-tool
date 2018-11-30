@@ -95,7 +95,7 @@
 
 			<%@ include file="footer_adsense.jsp"%>
 
-			<p><strong>Test CA</strong></p>
+			<h2 class="mt-4" id="pki"><a href="docs/pki.jsp">Click here to know How PKI Works</a></h2>
 			<p>This application currenlty supports the following Test CA Hierarchy</p>
 			<p><img src="images/rootCA.png" alt="TestCA Authority" /></p>
 			<p><strong>Certificate filename extensions</strong><br />There are several commonly used filename extensions for X.509 certificates.</p>
