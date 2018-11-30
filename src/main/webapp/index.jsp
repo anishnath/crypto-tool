@@ -10,8 +10,8 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Encryption/Decryption  Service, Certificate Vierwers, Test CA Authority , Hex,Base64 Encoders decoders,",
-  "image" : "https://8gwifi.org/images/site/encryption_decryption.png",
+  "name" : "The Best Online Cryptography Playground",
+  "image" : "https://8gwifi.org/images/site/4book.png",
   "url" : "https://8gwifi.org",
   "applicationCategory" : [ "SecretKey", "Encrypt",
   "Decrypt",
@@ -57,7 +57,16 @@
          "ipv6 test online",
          "jwk to pem convertor",
          "pem to jwk convertor",
-         "ocsp query"
+         "ocsp query",
+         "pbkdf2 derive key",
+         "HMAC",
+         "CMAC",
+         "GCM",
+         "RSA",
+         "DSA",
+         "openpgp",
+         "TLS",
+         "PKI"
          ]
 }
 </script>
