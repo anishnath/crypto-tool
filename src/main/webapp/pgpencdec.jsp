@@ -208,7 +208,7 @@ kwQlJ1K9Ib85pCTvx16DN7QwQv8=
 <%@ include file="thanks.jsp"%>
 <hr>
 
-<h2 class="mt-4" id="thersaalgorithm">Pretty Good Privacy</h2>
+	<h2 class="mt-4" id="thersaalgorithm"><a href="docs/gpg.jsp">Pretty Good Privacy</a></h2>
 
 <p><strong>Pretty Good Privacy or PGP</strong> is a popular program used to encrypt and decrypt email over the Internet, as well as authenticate messages with digital signatures and encrypted stored files.</p>
 <p><strong>PGP</strong> and similar software follow the <strong>OpenPGP</strong> standard (RFC 4880) for encrypting and decrypting data.</p>
