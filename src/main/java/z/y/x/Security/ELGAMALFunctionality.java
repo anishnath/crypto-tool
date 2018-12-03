@@ -226,7 +226,7 @@ public class ELGAMALFunctionality extends HttpServlet {
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
                         addHorizontalLine(out);
                        // System.out.println("encodedMessage-- " + encodedMessage);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
+                        out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"10\">" + encodedMessage.getBase64Encoded() + "</textarea>");
                         return;
 
 
@@ -313,7 +313,7 @@ public class ELGAMALFunctionality extends HttpServlet {
 
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
                         addHorizontalLine(out);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
+                        out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"10\">" + encodedMessage.getMessage() + "</textarea>");
                         return;
 
 

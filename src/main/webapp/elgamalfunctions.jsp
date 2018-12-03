@@ -1,6 +1,3 @@
-<%@ page import="z.y.x.Security.RSAUtil" %>
-<%@ page import="java.security.KeyPair" %>
-<%@ page import="org.apache.commons.net.util.Base64" %>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
 <%@ page import="org.apache.http.client.methods.HttpGet" %>
@@ -20,7 +17,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "elgamal Encryption Decryption tool, Online elgamal key generator",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/elgamalencdec.png",
+  "image" : "https://8gwifi.org/images/site/elg.png",
   "url" : "https://8gwifi.org/elgamalfunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -47,7 +44,9 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 
-	<%@ include file="include_css.jsp"%>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<%@ include file="header-script.jsp"%>
 
 	<%
 		String pubKey = "";
@@ -241,23 +240,19 @@
 		});
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
+<%@ include file="body-script.jsp"%>
+<h1 class="mt-4">ELGAMAL Encryption/Decryption</h1>
+<hr>
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
-			<fieldset name="RSA">
-				<legend>
-					<b> ELGAMAL Encryption/Decryption Functionality </b>
-				</legend>
-				<fieldset name="ELGAMALFunctionality Key Size">
-					<legend>
-						<b> Key Size </b>
-					</legend>
+<p>
+
+
+
+
+
 
 					<form id="form1" method="GET" name="form2" action="ELGAMALFunctionality?q=setNeKey">
 						Generate ELGAML Keys<input <% if(k1) {  %> checked <% } %>
@@ -267,113 +262,91 @@
 						<input <% if(k2) {  %> checked <% } %> id="keysize2" type="radio" name="keysize"
 											   value="320">320 bit
 					</form>
-				</fieldset>
+
+<hr>
+
 
 
 				<form id="form" method="POST">
-					<input type="hidden" name="methodName" id="methodName"
-						   value="CALCULATE_ELGAMAL">
+					<input type="hidden" name="methodName" id="methodName"  value="CALCULATE_ELGAMAL">
+
+
+					<div class="radio">
+						<label>
+							<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter" value="encrypt"><b>Encrypt Message</b>
+						</label>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input id="decryptparameter" type="radio" name="encryptdecryptparameter" value="decryprt"><b>Decrypt Message</b>
+						</label>
+					</div>
+
+
+					<div class="form-group">
+						<label for="publickeyparam" class="font-weight-bold">Public Key</label>
+						<textarea class="form-control animated" rows="5" cols="10"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="privatekeyparam" class="font-weight-bold">Private Key</label>
+						<textarea class="form-control animated" rows="5" cols="10"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="message" class="font-weight-bold">ClearText Message</label>
+						<textarea class="form-control animated" rows="5" cols="10" placeholder="Type Something Here..."  name="message" id="message"></textarea>
+					</div>
+
+					<div id="output"></div>
+
+
+					<div class="form-check">
+						<input class="form-check-input"  id="cipherparameter3" type="radio" name="cipherparameter" checked value="ELGAMAL">
+						<label class="form-check-label" for="cipherparameter3">ELGAMAL</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" id="cipherparameter1" type="radio" name="cipherparameter" value="ELGAMAL/ECB/PKCS1PADDING">
+						<label class="form-check-label" for="cipherparameter1">ELGAMAL/ECB/PKCS1PADDING</label>
+
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" id="cipherparameter2" type="radio" name="cipherparameter" value="ELGAMAL/NONE/NOPADDING">
+						<label class="form-check-label" for="cipherparameter2">ELGAMAL/ECB/PKCS1PADDING</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" id="cipherparameter4" type="radio" name="cipherparameter" value="ELGAMAL/PKCS1"  >
+						<label class="form-check-label" for="cipherparameter4">ELGAMAL/PKCS1</label>
+					</div>
+
+				</form>
 
 
 
 
-					<fieldset name="RSA2"   >
-
-						<legend>
-							<b> ELGAMAL Encryption/Decryption</b>
-						</legend>
-
-						<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
-							   value="encrypt">Encrypt Message
-
-						<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
-							   value="decryprt"> Decrypt Message
-						<br>
-
-						<table border="1" style="width:80pc">
-							<tr>
-								<th>Public Key </th>
-								<th>Private Key </th>
-								<th>ELGAMAL Encryption/Decryption </th>
-							</tr>
-
-							<tr>
-								<td>
-									<textarea rows="10" cols="40"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
-								</td>
-								<td>
-									<textarea rows="10" cols="40"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
-								</td>
 
 
-								<td rowspan="3" width="80%">
-									<%@ include file="footer_adsense.jsp"%>
-									<p><strong>The ELGAML Algorithm</strong></p>
-									<p>Elliptic curve cryptography (ECC) is a public-key cryptography system which is based<br />on discrete logarithms structure of elliptic curves over finite fields. ECC is known for smaller key sizes, faster encryption, better security and more efficient implementations for the same security level as compared to other public cryptography systems (like RSA). ECC can be used for encryption (e.g Elgamal), secure key exchange (ECC Diffie-Hellman) and also for authentication and verification of digital signatures</p>
-									<p>1024 bit RSA vs 160 bit elliptic curves are the same security level)</p>
-									<p>ElGamal encryption produces a 2:1 expansion in size from plaintext to ciphertext.</p>
-								</td>
+<hr>
 
-							</tr>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
 
-							<tr>
+<hr>
 
-								<td>
-									<b>ClearText Message</b><textarea rows="10" cols="40" placeholder="Type Something Here..."  name="message" id="message"></textarea>
-								</td>
-								<td width="50%">
-									<b>output</b><div id="output"></div>
-								</td>
+<%@ include file="footer_adsense.jsp"%>
 
+<h2 class="mt-4" id="therelgamallgorithm">The ELGAML Algorithm</h2>
+<p>The ElGamal cryptosystem is usually used in a hybrid cryptosystem. I.e., the message itself is encrypted using a symmetric cryptosystem and ElGamal is then used to encrypt the key used for the symmetric cryptosystem. This is because asymmetric cryptosystems like Elgamal are usually slower than symmetric ones for the same level of security, so it is faster to encrypt the symmetric key (which most of the time is quite small if compared to the size of the message) with Elgamal and the message (which can be arbitrarily large) with a symmetric cipher</p>
+<p>Elliptic curve cryptography (ECC) is a public-key cryptography system which is based<br />on discrete logarithms structure of elliptic curves over finite fields. ECC is known for smaller key sizes, faster encryption, better security and more efficient implementations for the same security level as compared to other public cryptography systems (like RSA). ECC can be used for encryption (e.g Elgamal), secure key exchange (ECC Diffie-Hellman) and also for authentication and verification of digital signatures</p>
+<p>1024 bit RSA vs 160 bit elliptic curves are the same security level)</p>
+<p>ElGamal encryption produces a 2:1 expansion in size from plaintext to ciphertext.</p>
 
-
-
-							</tr>
-							<tr>
-								<td colspan="2" width="20%">
-									Ciphers
-									<br/>
-									<input id="cipherparameter3" type="radio" name="cipherparameter"
-										   checked value="ELGAMAL"  >ELGAMAL
-									<br/>
-									<input id="cipherparameter1" type="radio" name="cipherparameter"
-										   value="ELGAMAL/ECB/PKCS1PADDING"  >ELGAMAL/ECB/PKCS1PADDING
-									<br/>
-									<input id="cipherparameter2" type="radio" name="cipherparameter"
-										   value="ELGAMAL/NONE/NOPADDING"  >ELGAMAL/NONE/NOPADDING
-									<br/>
-									<input id="cipherparameter4" type="radio" name="cipherparameter"
-										   value="ELGAMAL/PKCS1"  >ELGAMAL/PKCS1
-									<br/>
-
-									<br/>
-								</td>
-
-
-
-							</tr>
-
-
-
-						</table>
-
-
-					</fieldset>
-			</fieldset>
-
-			</form>
-
-			<table border="0" style="width:500px">
-				<tr>
-					<td><%@ include file="footer.jsp"%></td>
-				</tr>
-			</table>
-			<%@ include file="include_security_links.jsp"%>
-			<br/>
-			<p>The ElGamal cryptosystem is usually used in a hybrid cryptosystem. I.e., the message itself is encrypted using a symmetric cryptosystem and ElGamal is then used to encrypt the key used for the symmetric cryptosystem. This is because asymmetric cryptosystems like Elgamal are usually slower than symmetric ones for the same level of security, so it is faster to encrypt the symmetric key (which most of the time is quite small if compared to the size of the message) with Elgamal and the message (which can be arbitrarily large) with a symmetric cipher</p>
-		</section>
-	</article>
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
