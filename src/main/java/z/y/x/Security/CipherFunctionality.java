@@ -544,12 +544,14 @@ public class CipherFunctionality extends HttpServlet {
                     msg = "<b><u> Certificate in PEM, in X.509 Decoded Format and RSA Private Key </b></u> <br>";
                 }
                 out.println(msg);
-                out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage() + "</textarea>");
-                out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getMessage2() + "</textarea>");
+                out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"X\">" + certpojo1.getMessage() + "</textarea><hr>");
+                out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"X\">" + certpojo1.getMessage2() + "</textarea><hr>");
 
                 if(!x)
                 {
-                    out.print("<textarea name=\"comment\" readonly=true rows=\"20\" cols=\"40\" form=\"X\">" + certpojo1.getPrivatekey() + "</textarea>");
+
+                    out.print("<p>Private Key </p>");
+                    out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"5\" cols=\"10\" form=\"X\">" + certpojo1.getPrivatekey() + "</textarea>");
                 }
 
 

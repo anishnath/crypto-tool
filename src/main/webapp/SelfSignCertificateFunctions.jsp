@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online Self-Signed Certificate generate with altname support",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/self_signed_certificate.png",
+  "image" : "https://8gwifi.org/images/site/self.png",
   "url" : "https://8gwifi.org/SelfSignCertificateFunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -25,8 +25,8 @@
 
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<title>Online Self-Signed Certificate generate with altname and expiry Support</title>
-	<meta name="description" content="Generate a self-signed certificate for your web site, generate certificate with altname openssl online," />
-	<meta name="keywords" content="self-signed certificate, ssl, server, apache, generator, openssl self sign certificate,keytool self signed certificate, openssl, certificate with altname, generate Expired certificate, create self sign certificate with my private key oniine" />
+	<meta name="description" content="Generate a self-signed certificate for your web site, generate certificate with altname openssl online, x.509 tutorial" />
+	<meta name="keywords" content="self-signed certificate, ssl, server, apache, generator, openssl self sign certificate,keytool self signed certificate, openssl, certificate with altname, generate Expired certificate, create self sign certificate with my private key oniine, openssl commands for generating self sign certificate" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -34,7 +34,9 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 
-	<%@ include file="include_css.jsp"%>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<%@ include file="header-script.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -88,38 +90,88 @@
 		});
 	</script>
 </head>
-<body>
+<%@ include file="body-script.jsp"%>
 
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
+<h1 class="mt-4">Generate X.509 Certificate (Self Signed)</h1>
+<hr>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
 			<form id="form" method="POST">
-				<input type="hidden" name="methodName" id="methodName"
-					   value="X509_CERTIFICATECREATOR">
-				<fieldset name="Group1">
-					<legend><b>Create X509 Certificate Online</b></legend>
-					<legend>Private Key Selection</legend>
-					<input checked="checked" id="encrypt" type="radio"
-						   name="encryptdecrypt" value="usesitekey">Generate New Private Key
-					<input id="decrypt" type="radio"
-						   name="encryptdecrypt" value="useprivatekey">Generate Certificate using user Private key
-					<br>
+				<input type="hidden" name="methodName" id="methodName" value="X509_CERTIFICATECREATOR">
 
-					<table>
-						<tr>
-							<th align="RIGHT" nowrap> &nbsp;<font color="red"> Hostname or your full name  :</font> </th> <td><input type="text" name="hostname"  size="40" maxlength="64" />(CN*) Common Name, usually the web server hostname or your name.</td>
-							<td align="LEFT"> </td></tr>
-						<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Organization/Company  : </th> <td><input type="text" name="company"  size="40" maxlength="64" />(O) For example, 8gWifi Corporation</td> <td align="LEFT"> </td></tr>
-						<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Department  : </th> <td><input type="text" name="department"  size="40" maxlength="64" />(OU) Your division or department.</td> <td align="LEFT"> </td></tr>
-						<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Email  : </th> <td><input type="text" name="email"  size="40" maxlength="64" />(E) Usually specified for an email or SMIME user certificate</td> <td align="LEFT"> </td></tr>
-						<tr><th align="RIGHT" nowrap>&nbsp;City/Local  : </th> <td><input type="text" name="city"  size="40" maxlength="64" /> (L) For example, India</td> <td align="LEFT"></td></tr>
-						<tr><th align="RIGHT" nowrap> &nbsp;State  : </th> <td><input type="text" name="state"  size="40" maxlength="64" />(ST) For example, California</td> <td align="LEFT"> </td></tr>
-						<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Country  : </th> <td><select name="country " >
+					<div class="radio">
+						<label>
+							<input checked="checked" id="encrypt" type="radio" name="encryptdecrypt" value="usesitekey"> <b>Generate New Private Key</b>
+						</label>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input id="decrypt" type="radio" name="encryptdecrypt" value="useprivatekey"><b>Generate Certificate with given Private key </b>
+						</label>
+					</div>
+
+					<div id="descryptmsg"><b>User Private Key</b>
+					<textarea class="form-control" rows="5" cols="5" id="p_privatekey" placeholder="Input your RSA Private Key" name="p_privatekey"></textarea>
+					</div>
+
+					<div class="form-group row">
+						<label for="hostname"  class="font-weight-bold col-sm-2 col-form-label">Hostname <font color="red"> (CN*) </font></label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" id="hostname" name="hostname"   maxlength="64" />
+						</div>
+						<%--<small> <font color="red"> </font> Common Name, usually the web server hostname or your name.</small>--%>
+					</div>
+
+
+				<div class="form-group row">
+					<label for="company"  class="font-weight-bold col-sm-2 col-form-label">Company(C)  :</label>
+					<div class="col-sm-10">
+						<input type="text" id="company" class="form-control" name="company"   maxlength="64" />
+					</div>
+					<%--<small>(OU) Your division or department. </small>--%>
+				</div>
+
+					<div class="form-group row">
+						<label for="department"  class="font-weight-bold col-sm-2 col-form-label">Org (OU)  :</label>
+						<div class="col-sm-10">
+						<input type="text" id="department" class="form-control" name="department"   maxlength="64" />
+						</div>
+						<%--<small>(OU) Your division or department. </small>--%>
+					</div>
+
+					<div class="form-group row">
+						<label for="email"  class="font-weight-bold col-sm-2 col-form-label">Email (E):</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" id="email" name="email"  maxlength="64" />
+						</div>
+						<%--<small> (E) Usually specified for an email or SMIME user certificate </small>--%>
+					</div>
+
+					<div class="form-group row">
+						<label for="email"  class="font-weight-bold col-sm-2 col-form-label">City/Local (L) :</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" id="city" name="city"   maxlength="64" />
+						</div>
+						<%--<small>(L) For example, India </small>--%>
+					</div>
+
+					<div class="form-group row">
+						<label for="state"  class="font-weight-bold col-sm-2 col-form-label">State (ST):</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" id="state" name="state"   maxlength="10" />
+						</div>
+						<%--<small>(ST) For example, California </small>--%>
+					</div>
+
+					<div class="form-group row" >
+						<label for="country"  class="font-weight-bold col-sm-2 col-form-label">Country :</label>
+						<div class="col-sm-10">
+						<select id="country" class="form-control" name="country " >
 							<option selected="selected" value="US">United States</option>
 							<option value="CA">Canada</option>
 							<option value="AF">Afghanistan</option>
@@ -352,87 +404,106 @@
 							<option value="YU">Yugoslavia</option>
 							<option value="ZM">Zambia</option>
 							<option value="ZW">Zimbabwe</option>
-						</select></td></tr>
-						<tr><th align="RIGHT">&nbsp;&nbsp;&nbsp;&nbsp;Expiration  : </th> <td><select name="expiry" >
+						</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="expiry"  id="expiry" class="font-weight-bold">Expiration :</label>
+						<div class="col-sm-10">
+						<select  class="form-control" name="expiry" >
 							<option selected="selected" value="3653">10 Years</option>
 							<option value="1096">3 Years</option>
 							<option value="366">1 Year</option>
 							<option value="30">30 days</option>
 							<option value="1">1 day</option>
 							<option value="-100">Expired 100 days Back</option>
-						</select></td></tr>
-						<tr><th align="RIGHT" nowrap>&nbsp;Alt_Names : </th> <td><input type="text" name="alt_name"  size="40" placeholder="*.google,*.fb.com" maxlength="64" /> Comma Separated Alternative Name</td> <td align="LEFT"></td></tr>
-						<tr>
-							<td colspan="4">
-								<fieldset>
-									<legend><b>x509 Certificate Version</b></legend>
-									<input checked="checked" type="radio" id="v3" name="version" value="3">v3
-									<input type="radio" id="v2" name="version" value="2">v2
-								</fieldset>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="4"><div id="descryptmsg">
-								User Private Key <textarea rows="20" cols="80" id="p_privatekey" placeholder="Input your RSA Private Key" name="p_privatekey"></textarea></div>
-							</td>
+						</select>
+							</div>
+					</div>
 
-						</tr>
-						<tr>
-							<td colspan="4">
-								<div id="output"></div>
-							</td>
-						</tr>
-						<td>
-							<input type="submit" id="submit" name="generate self sign">
-						</td>
-						</tr>
+				<div class="form-group row">
+					<label for="alt_name"  class="font-weight-bold col-sm-2 col-form-label">Alt_Names  :</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="alt_name" name="alt_name"   placeholder="*.google,*.fb.com"  maxlength="64" />
+					</div>
+					<%--<small>Comma Separated Alternative Name </small>--%>
+				</div>
 
-					</table>
-				</fieldset>
+
+
+				<label class="font-weight-bold">x509 Certificate Version</label>
+						<input checked="checked" type="radio" id="v3" name="version" value="3">v3
+						<input  type="radio" id="v2" name="version" value="2">v2
+
+
+
+
+
+
+
+					<input class="btn btn-primary" type="submit" id="submit" name="generate self sign">
 			</form>
-			<%@ include file="include_security_links.jsp"%>
-			<%@ include file="footer.jsp"%> </b>
-			<p><strong>Self-Signed Certificate</strong></p>
-			<p>A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee the authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<strong><span style="text-decoration: underline;">NIST SP 800-57 Part 1 Rev. 3&nbsp;</span></strong></p>
-			<p>&nbsp;&nbsp;A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them.&nbsp;<br />Source(s):&nbsp;<span style="text-decoration: underline;"><strong>NIST SP 800-57 Part 3 Rev. 1</strong></span>&nbsp;</p>
 
-			<h2>OpenSSL Commands</h2>
-			<ul>
-				<li><strong>Generate a new private key and Certificate Signing Request</strong>
-					<pre>openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privatekey.key</pre>
-				</li>
-				<li><strong>Generate a self-signed certificate&nbsp;</strong>
-					<pre>openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privatekey.key -out certificate.crt</pre>
-				</li>
-				<li><strong>Generate a certificate signing request (CSR) for an existing private key</strong>
-					<pre>openssl req -out CSR.csr -key privatekey.key -new</pre>
-				</li>
-				<li><strong>Generate a certificate signing request based on an existing certificate</strong>
-					<pre>openssl x509 -x509toreq -in certificate.crt -out CSR.csr -signkey privatekey.key</pre>
-				</li>
-				<li><strong>Remove a passphrase from a private key</strong>
-					<pre>openssl rsa -in privateKey.pem -out newprivatekey.pem</pre>
-				</li>
-				<li><strong>Convert a DER file (.crt .cer .der) to PEM</strong>
-					<pre>openssl x509 -inform der -in certificate.cer -out certificate.pem</pre>
-				</li>
-				<li><strong>Convert a PEM file to DER</strong>
-					<pre>openssl x509 -outform der -in certificate.pem -out certificate.der</pre>
-				</li>
-				<li><strong>Convert a PKCS#12 file (</strong><strong>.pfx .p12</strong><strong>) containing a private key and certificates to PEM</strong>
-					<pre>openssl pkcs12 -in keyStore.pfx -out keystore.pem -nodes</pre>
-					<p>You can add -nocerts to only output the private key or add -nokeys to only output the certificates.</p>
-				</li>
-				<li><strong>Convert a PEM certificate file and a private key to PKCS#12 (.pfx .p12)</strong>
-					<pre>openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile </pre>
-				</li>
-			</ul>
-			<p>&nbsp;</p>
+<hr>
 
+<div id="output"></div>
 
-		</section>
-	</article>
+<hr>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+<hr>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h2 class="mt-4" id="selfsigncertificate">Self-Signed Certificate</h2>
+
+<p>A public-key certificate whose digital signature may be verified by the public key contained within the certificate. The signature on a self-signed certificate protects the integrity of the data, but does not guarantee the authenticity of the information. The trust of self-signed certificates is based on the secure procedures used to distribute them. Source(s): NIST SP 800-57 Part 1 Rev. 3 </p>
+<h2><a id="OpenSSL_Commands_0"></a>OpenSSL Commands</h2>
+<ul>
+	<li>
+		<p><strong>Generate a new private key and Certificate Signing Request</strong></p>
+		<p>openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privatekey.key</p>
+	</li>
+	<li>
+		<p><strong>Generate a self-signed certificate</strong></p>
+		<p>openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privatekey.key -out certificate.crt</p>
+	</li>
+	<li>
+		<p><strong>Generate a certificate signing request (CSR) for an existing private key</strong></p>
+		<p>openssl req -out CSR.csr -key privatekey.key -new</p>
+	</li>
+	<li>
+		<p><strong>Generate a certificate signing request based on an existing certificate</strong></p>
+		<p>openssl x509 -x509toreq -in certificate.crt -out CSR.csr -signkey privatekey.key</p>
+	</li>
+	<li>
+		<p><strong>Remove a passphrase from a private key</strong></p>
+		<p>openssl rsa -in privateKey.pem -out newprivatekey.pem</p>
+	</li>
+	<li>
+		<p><strong>Convert a DER file (.crt .cer .der) to PEM</strong></p>
+		<p>openssl x509 -inform der -in certificate.cer -out certificate.pem</p>
+	</li>
+	<li>
+		<p><strong>Convert a PEM file to DER</strong></p>
+		<p>openssl x509 -outform der -in certificate.pem -out certificate.der</p>
+	</li>
+	<li>
+		<p><strong>Convert a PKCS#12 file (</strong><strong>.pfx .p12</strong><strong>) containing a private key and certificates to PEM</strong></p>
+		<p>openssl pkcs12 -in keyStore.pfx -out keystore.pem -nodes</p>
+		<p>You can add -nocerts to only output the private key or add -nokeys to only output the certificates.</p>
+	</li>
+	<li>
+		<p><strong>Convert a PEM certificate file and a private key to PKCS#12 (.pfx .p12)</strong></p>
+		<p>openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile</p>
+	</li>
+</ul>
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
+
