@@ -1,5 +1,3 @@
-<%@ page import="z.y.x.Security.RSAUtil" %>
-<%@ page import="java.security.KeyPair" %>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
 <%@ page import="org.apache.http.client.methods.HttpGet" %>
@@ -19,7 +17,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online DSA Kegenerator, Generate Signature file , DSA Signature Verifier",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/dsa.png",
+  "image" : "https://8gwifi.org/images/site/dsa.png",
   "url" : "https://8gwifi.org/dsafunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -38,7 +36,7 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 	<meta name="keywords" content="online dsa key generation,dsa file verification,openssl dsa keygen,openssl sign file verification,online dsa,dsa create signature file,dsa verify signature file,SHA256withDSA,NONEwithDSA,SHA224withDSA,SHA1withDSA"/>
-	<meta name="description" content="Online DSA Algorithm, generate dsa private keys and public keys,dsa file verification,openssl dsa keygen,openssl sign file verification,online dsa,dsa create signature file,dsa verify signature file,SHA256withDSA,NONEwithDSA,SHA224withDSA,SHA1withDSA" />
+	<meta name="description" content="Online DSA Algorithm, generate dsa private keys and public keys,dsa file verification,openssl dsa keygen,openssl sign file verification,online dsa,dsa create signature file,dsa verify signature file,SHA256withDSA,NONEwithDSA,SHA224withDSA,SHA1withDSA, dsa tutorial, openssl dsa parama and key" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -46,7 +44,9 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 
-	<%@ include file="include_css.jsp"%>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<%@ include file="header-script.jsp"%>
 
 	<%
 		String pubKey = "";
@@ -230,23 +230,21 @@
 		});
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
-			<fieldset name="RSA">
-				<legend>
-					<b> DSA Key generation, Sign file, Verify Signature </b>
-				</legend>
-				<fieldset name="RSA Key Size">
-					<legend>
-						<b> Key Size </b>
-					</legend>
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">DSA Key generation, Sign file, Verify Signature</h1>
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+<hr>
+
+
+
+
+
 
 					<form id="form1" method="GET" name="form1"  action="DSAFunctionality?q=setNeKey">
 						Generate DSA Keys <input <% if(k1) {  %> checked <% } %>
@@ -258,7 +256,7 @@
 						<input <% if(k3) {  %> checked <% } %> id="keysize3" type="radio" name="keysize"
 											   value="2048">2048 bit
 					</form>
-				</fieldset>
+
 
 
 				<form id="form2" name="form2" method="POST" action="DSAFunctionality" enctype="multipart/form-data">
@@ -266,145 +264,165 @@
 						   value="CALCULATE_DSA">
 
 
+					<hr>
+
+					<div id="output">
+
+					<%
+
+						String value =(String)session.getAttribute("msg");
+						if(null==value)
+						{
+							value="";
+						}
+
+					%>
+
+					<%=value%>
+					<hr>
+
+				</div>
 
 
-					<fieldset name="RSA2"   >
-
-						<legend>
-							<b> DSA Signer/Verifier</b>
-						</legend>
-
-						<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
+						<input  checked id="encryptparameter" type="radio" name="encryptdecryptparameter"
 							   value="encrypt">Sign File
 
-						<input id="decryptparameter" type="radio" name="encryptdecryptparameter"
+						<input  id="decryptparameter" type="radio" name="encryptdecryptparameter"
 							   value="decryprt">Verify Signature Message
-						<br>
-
-						<table border="1" style="width:80pc">
-							<tr>
-								<th>DSA Public Key </th>
-								<th>DSA Private Key </th>
-								<th>DSA  </th>
-							</tr>
-
-							<tr>
-								<td>
-									<textarea rows="20" cols="50"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
-								</td>
-								<td>
-									<textarea rows="20" cols="50"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
-								</td>
 
 
-								<td rowspan="3" width="80%">
-									<%@ include file="footer_adsense.jsp"%>
-									<p><strong>The DSA Algorithm</strong></p>
+					<div class="form-group row">
+						<label for="publickeyparam"  class="font-weight-bold col-sm-2 col-form-label">Public Key</label>
+						<div class="col-sm-10">
+							<textarea rows="5" class="form-control" cols="10"  name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+						</div>
+					</div>
 
-									<p>DSA stands for "Digital Signature Algorithm" - and is specifically designed to produce digital signatures, not perform encryption.</p>
-									<p>The requirement for public/private keys in this system is for a slightly different purpose - whereas in RSA, a key is needed so anyone can encrypt, in DSA a key is needed so anyone can verify. In RSA, the private key allows decryption; in DSA, the private key allows signature creation.</p>
+					<div class="form-group row">
+						<label for="publickeyparam"  class="font-weight-bold col-sm-2 col-form-label">Private Key</label>
+						<div class="col-sm-10">
+							<textarea rows="5" cols="10" class="form-control"  name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+						</div>
+					</div>
 
-									<p> DSA Private Key is used for generating Signature file  </p>
-									<p> DSA public Key is used for Verifying the Signature.  </p>
-								</td>
+					<div class="form-group row">
+						<label for="upfile"  class="font-weight-bold col-sm-2 col-form-label">file to be Signed </label>
+						<div class="col-sm-10">
+							<input type="file" id="upfile" name="upfile">
+						</div>
+					</div>
+					<p><small> <font color="green">Signature genetaion required private key and file to be signed. Signature file will get downloaded Automatically</font></small></p>
 
-							</tr>
+					<div class="form-group row">
+						<label for="sigfile"  class="font-weight-bold col-sm-2 col-form-label">Signature Verification</label>
+						<div class="col-sm-10">
+							<input type="file" id="sigfile" name="sigfile">
+						</div>
+					</div>
+					<p><small> <font color="green">Signature Verification requires original file,signature file and public key </font></small></p>
 
-							<tr>
-
-								<td>
-									Input file to be Signed (Signature file will get downloaded)
-									<input type="file" id="upfile" name="upfile">
-
-									<div id="descryptmsg">
-										Upload Signature file <input type="file" id="sigfile" name="sigfile">
-										</div>
-
-								</td>
-								<td width="50%">
-									<b>output</b><div id="output">
-
-									<%
-
-										String value =(String)session.getAttribute("msg");
-										if(null==value)
-										{
-											value="";
-										}
-
-									%>
-
-									<%=value%>
+					<div id="descryptmsg">
 
 
-									<input type="submit" value="Submit">
-								</div>
-								</td>
+					</div>
 
 
 
-
-							</tr>
-							<tr>
-								<td colspan="2" width="20%">
-									Ciphers
-									<br/>
-									<input id="cipherparameter3" type="radio" name="cipherparameter"
-										   checked value="SHA256withDSA"  >SHA256withDSA
-									<br/>
-									<input id="cipherparameter1" type="radio" name="cipherparameter"
-										   value="NONEwithDSA">NONEwithDSA
-									<br/>
-									<input id="cipherparameter2" type="radio" name="cipherparameter"
-										   value="SHA224withDSA">SHA224withDSA
-									<br/>
-									<input id="cipherparameter4" type="radio" name="cipherparameter"
-										   value="SHA1withDSA">SHA1withDSA
-									<br/>
-								</td>
-
-							</tr>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="cipherparameter" id="cipherparameter3" value="SHA256withDSA" checked>
+						<label class="form-check-label" for="cipherparameter3">
+							SHA256withDSA
+						</label>
+					</div>
 
 
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="cipherparameter" id="cipherparameter2" value="SHA224withDSA">
+						<label class="form-check-label" for="cipherparameter2">
+							SHA224withDSA
+						</label>
+					</div>
 
-						</table>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="cipherparameter" id="cipherparameter4" value="SHA1withDSA">
+						<label class="form-check-label" for="cipherparameter4">
+							SHA1withDSA
+						</label>
+					</div>
 
-
-					</fieldset>
-			</fieldset>
-
-			</form>
-
-			<table border="0" style="width:500px">
-				<tr>
-					<td><%@ include file="footer.jsp"%></td>
-				</tr>
-			</table>
-			<%@ include file="include_security_links.jsp"%>
-<br/>
-			<br/>
-			<blockquote>
-				<pre><strong>OpenSSL Commands for Generatoing DSA Param, Singing File &amp; verify File</strong><br /><br />openssl dsaparam 2048 &lt; /dev/random &gt; dsa_param.pem<br />openssl gendsa dsa_param.pem -out dsa_priv.pem<br />openssl dsa -in dsa_priv.pem -pubout -out dsa_pub.pem<br /><br /># DSA system now made up of: dsa_param.pem, dsa_pub.pem, dsa_priv.pem<br /><br />echo "foobar" &gt; foo.txt<br />openssl sha1 &lt; foo.txt &gt; foo.txt.sha1<br />openssl dgst -dss1 -sign dsa_priv.pem foo.txt.sha1 &gt; foo.txt.sig<br />openssl dgst -dss1 -verify dsa_pub.pem -signature foo.txt.sig foo.txt.sha1</pre>
-			</blockquote>
-
-
-			<p><br />DSA (Digital Signature Algorithm)<br />DSA is a variant on the ElGamal and Schnorr algorithms creates a 320 bit signature, but with 512-1024 bit security security again rests on difficulty of computing discrete logarithms has been quite widely accepted</p>
-			<p>DSA Key Generation <br />firstly shared global public key values (p,q,g) are chosen:<br />choose a large prime p = 2 power L <br />where L= 512 to 1024 bits and is a multiple of 64 <br />choose q, a 160 bit prime factor of p-1 <br />choose g = h power (p-1)/q <br />for any h1 <br />then each user chooses a private key and computes their public key: <br />choose x compute y = g power x(mod p)</p>
-			<p>DSA key generation is related to, but somewhat more complex than El Gamal. Mostly because of the use of the secondary 160-bit modulus q used to help speed up calculations and reduce the size of the resulting signature.</p>
-			<p>DSA Signature Creation and Verification</p>
-			<p>to sign a message M <br />generate random signature key k, k compute <br />r = (g power k(mod p))(mod q) <br />s = k-1.SHA(M)+ x.r (mod q) <br />send signature (r,s) with message</p>
-			<p>to verify a signature, compute: <br />w = s-1(mod q) <br />u1= (SHA(M).w)(mod q) <br />u2= r.w(mod q) <br />v = (g power u1.y power u2(mod p))(mod q) <br />if v=r then the signature is verified</p>
-
-		</section>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="cipherparameter" id="cipherparameter1" value="NONEwithDSA">
+						<label class="form-check-label" for="cipherparameter1">
+							NONEwithDSA
+						</label>
+					</div>
 
 
 
+					<input class="btn btn-primary" type="submit" value="Submit">
 
+				</form>
 
+<hr>
 
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
 
-	</article>
+<hr>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h2 class="mt-4" id="dsa">DSA</h2>
+<p><strong>DSA</strong> stands for “Digital Signature Algorithm” - and is specifically designed to produce digital signatures, not perform encryption.</p>
+<p><strong>DSA</strong> stands for “Digital Signature Algorithm” - and is specifically designed to produce digital signatures, not perform encryption.</p>
+<ul>
+	<li>The requirement for public/private keys in this system is for a slightly different purpose - whereas in RSA, a key is needed so anyone can encrypt, in DSA a key is needed so anyone can verify. In RSA, the private key allows decryption; in DSA, the private key allows signature creation.</li>
+	<li>DSA <strong>Private</strong> Key is used for generating <strong>Signature</strong> file</li>
+	<li>DSA <strong>public</strong> Key is used for <strong>Verifying</strong> the Signature.</li>
+	<li>DSA is a variant on the ElGamal and Schnorr algorithms creates a 320 bit signature, but with 512-1024 bit security security again rests on difficulty of computing discrete logarithms has been quite widely accepted</li>
+</ul>
+<p><strong>OpenSSL Commands for generating DSA Param, Singing File &amp; verify File</strong></p>
+<pre><code> openssl dsaparam 2048 &lt; /dev/random &gt; dsa_param.pem
+ openssl gendsa dsa_param.pem -out dsa_priv.pem
+ openssl dsa -in dsa_priv.pem -pubout -out dsa_pub.pem
+
+ # DSA system now made up of: dsa_param.pem, dsa_pub.pem, dsa_priv.pem
+
+ echo &quot;foobar&quot; &gt; foo.txt
+ openssl sha1 &lt; foo.txt &gt; foo.txt.sha1
+ openssl dgst -dss1 -sign dsa_priv.pem foo.txt.sha1 &gt; foo.txt.sig
+ openssl dgst -dss1 -verify dsa_pub.pem -signature foo.txt.sig foo.txt.sha1
+</code></pre>
+<h2><a id="DSA_Key_Generation_22"></a>DSA Key Generation</h2>
+<ol>
+	<li>firstly shared global public key values <strong>(p,q,g)</strong> are chosen:</li>
+	<li>choose a large prime p = 2 power L  where L= 512 to 1024 bits and is a multiple of 64</li>
+	<li>choose q, a 160 bit prime factor of p-1</li>
+	<li>choose g = h power (p-1)/q  for any h1  then each user chooses a private key and computes their public key:</li>
+	<li>choose x compute y = g power x(mod p)</li>
+</ol>
+<p>DSA key generation is related to, but somewhat more complex than El Gamal. Mostly because of the use of the secondary 160-bit modulus q used to help speed up calculations and reduce the size of the resulting signature.</p>
+<h2><a id="DSA_Signature_Creation_and_Verification_32"></a>DSA Signature Creation and Verification</h2>
+<p><strong>To sign a message M</strong></p>
+<ol>
+	<li>generate random signature key k, k compute</li>
+</ol>
+<pre><code>    r = (g power k(mod p))(mod q)
+    s = k-1.SHA(M)+ x.r (mod q)
+</code></pre>
+<ol start="2">
+	<li>send signature (r,s) with message</li>
+</ol>
+<p><strong>to verify a signature, compute:</strong></p>
+<ol>
+	<li>w = s-1(mod q)</li>
+	<li>u1= (SHA(M).w)(mod q)</li>
+	<li>u2= r.w(mod q)</li>
+	<li>v = (g power u1.y power u2(mod p))(mod q)<br>
+		if v=r then the signature is verified</li>
+</ol>
+<%@ include file="addcomments.jsp"%>
 
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
