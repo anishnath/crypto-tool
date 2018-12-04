@@ -98,6 +98,11 @@
 <%@ include file="body-script.jsp"%>
 
 <h1 class="mt-4">BCrypt Password hashing and Verification</h1>
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
 <hr>
 
 
