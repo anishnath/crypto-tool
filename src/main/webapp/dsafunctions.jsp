@@ -32,7 +32,7 @@
 }
 </script>
 
-	<title>DSA Generate Keys,DSA Sign file Gneerate, Verify Signature file</title>
+	<title>DSA Generate Keys, Generate Signature and Verify Signature file</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 	<meta name="keywords" content="online dsa key generation,dsa file verification,openssl dsa keygen,openssl sign file verification,online dsa,dsa create signature file,dsa verify signature file,SHA256withDSA,NONEwithDSA,SHA224withDSA,SHA1withDSA"/>
