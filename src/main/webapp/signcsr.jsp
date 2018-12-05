@@ -7,7 +7,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online CSR Signer, sign csr and generate certificate",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/online_sign_csr.png",
+  "image" : "https://8gwifi.org/images/site/signcsr.png",
   "url" : "https://8gwifi.org/signcsr.jsp",
   "author" : {
     "@type" : "Person",
@@ -17,15 +17,15 @@
   "applicationCategory" : [ "online csr signer","get a digital certificate" ,"online free testing Certificate" ," Certificate Signing Request" , " generate certificate" ],
   "downloadUrl" : "https://8gwifi.org/signcsr.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : "Online sign the csr  and generate x.509 certificate, get a digital certificate from the csr",
+  "requirements" : "Online sign the csr  and generate x.509 certificate, get a digital certificate from the csr, add crl ocsp certificate extension in csr",
   "softwareVersion" : "v1.0"
 }
 </script>
 	<title>Online CSR Signer, sign csr and generate certificate</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="online csr signer, get a digital certificate, online free testing Certificate, Certificate Signing Request, generate certificate,sign csr using public key, sign csr java bouncycastle, sign csr with your private key, openssl command for generating privatekey, openssl csr sign"/>
-	<meta name="description" content="Online sign the csr  and generate x.509 certificate, get a digital certificate from the csr" />
+	<meta name="keywords" content="online csr signer, get a digital certificate, online free testing Certificate, Certificate Signing Request, generate certificate,sign csr using public key, sign csr java bouncycastle, sign csr with your private key, openssl command for generating privatekey, openssl csr sign,generate csr add crl,ocsp"/>
+	<meta name="description" content="Online sign the csr and generate x.509 certificate, get a digital certificate from the csr, csr tutorial, openssl csr, generate csr add crl,ocsp" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -33,7 +33,10 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 
-	<%@ include file="include_css.jsp"%>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<%@ include file="header-script.jsp"%>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -79,32 +82,42 @@
 		});
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp"%>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="loading" />Loading!
-	</div>
 
-	<article id="contentWrapper" role="main">
-		<section id="content">
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">Sign CSR</h1>
+<p>Sign CSR file with site intCA key or use your CA private Key, supported with Adding CRL distribution point and OCSP query URL certificate extensions</p>
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+<hr>
+
 
 			<form id="form" method="POST">
-				<input type="hidden" name="methodName" id="methodName"
-					   value="CSR_SIGNER">
-				<fieldset name="CSR Sign Functionality Functionality">
-					<legend>
-						<B>Sign CSR</B>
-					</legend>
-					<input checked="checked" id="encrypt" type="radio"
-						   name="encryptdecrypt" value="usesitekey">Use Site Private Key
-					<input id="decrypt" type="radio"
-						   name="encryptdecrypt" value="useprivatekey">Sign using user Private key
-					<br><b>
-					<table border="1" style="width:150px">
-						<tr>
-							<td>
-								Enter the CSR<textarea rows="20" cols="80"  name="p_pem" id="p_pem">-----BEGIN CERTIFICATE REQUEST-----
+				<input type="hidden" name="methodName" id="methodName" value="CSR_SIGNER">
+
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="encryptdecrypt" id="encrypt" value="usesitekey" checked>
+					<label class="form-check-label" for="encrypt">
+						Use Site Private Key
+					</label>
+				</div>
+
+
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="encryptdecrypt" id="decrypt" value="useprivatekey">
+					<label class="form-check-label" for="decrypt">
+						Use your CA Private key
+					</label>
+				</div>
+
+
+				<div class="form-group row">
+					<label for="p_pem"  class="font-weight-bold col-sm-2 col-form-label">CSR</label>
+					<div class="col-sm-10">
+						<textarea rows="5" cols="10" class="form-control" name="p_pem" id="p_pem">-----BEGIN CERTIFICATE REQUEST-----
 MIICsjCCAZoCAQAwbTELMAkGA1UEBhMCQVMxDjAMBgNVBAgTBWRzZGFzMQ4wDAYD
 VQQHEwVhc2RhczEOMAwGA1UEChMFYXNkYXMxDDAKBgNVBAsTA2FkczEMMAoGA1UE
 AxMDYXNkMRIwEAYJKoZIhvcNAQkBFgNhc2QwggEiMA0GCSqGSIb3DQEBAQUAA4IB
@@ -121,11 +134,14 @@ A1NT//qtbhHl5h4mPcrLYqBrusTgM6i9Zhdjoy1zHLjaRhzFwTfrkaeOQStqtQR4
 EtfvDLu4hobL097fASTgTqfJbUd25cu8V61cI394ZgsqxuYHQfE9FH+3e6VfKA1h
 +FmNMVCIpxYhu8W3gfCEj8P0wqEG2A==
 -----END CERTIFICATE REQUEST-----</textarea>
-							</td>
-							<td>
+					</div>
+				</div>
 
-								<div id="descryptmsg">
-									User Private Key <textarea rows="20" cols="80" id="p_privatekey" name="p_privatekey">-----BEGIN RSA PRIVATE KEY-----
+
+								<div class="form-group row"  id="descryptmsg">
+									<label for="p_privatekey"  class="font-weight-bold col-sm-2 col-form-label">Your Private Key(RSA)</label>
+									<div class="col-sm-10">
+									 <textarea rows="5" cols="10" class="form-control" id="p_privatekey" name="p_privatekey">-----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEA0i5/EgFtW57XT6m2Ysr2DLj37Dw0/7l1c081DJHQDna/ru4D
 8mHEuycUV44Q52EEWNHI5RHYNYDTeHvMpehSF+x4B6M8bw0yrEtzyg8vR9ObMGrR
 n2k/VX3MSM4Repecgmxms39Q0lxlvyd6OcNTh8XnJXwRFt28gm3rbJnQU1RVkNBt
@@ -151,21 +167,56 @@ zSfYMIzf89nypBqIJ5+HqYnrKpyRHCDb48CCeWK9A4UcfbDf3dYNUspFrkVcMFvE
 d3fj0EkCgYAdf1NZqRtoB0srnLiTqQDapYYWckvD+62kWXmNfqF0XyfgVyYDAD/w
 bjBpX6dS1652yFlsZ9HQU1kJs1qMejz0O2XpCY96JFpcv7fJP6hso7AamxfBGusQ
 l5ZqplxkM4pWgzveJvzf70zrJ+rmjVbrErqzCZNYGnfmMcgNqzaFTg==
------END RSA PRIVATE KEY-----</textarea></div><div id="output"></div>
-							</td>
-						</tr>
-					</table>
+-----END RSA PRIVATE KEY-----</textarea></div>
+									</div>
 
-					<input type="submit" id="submit" name="Sign CSR">
+				<div class="form-group row">
+					<label for="crl"  class="font-weight-bold col-sm-2 col-form-label">Add CRL Distrubution Point</label>
+					<div class="col-sm-10">
+						<input type="text" id="crl" class="form-control" name="crl"  placeholder="https://8gwifi.org/crl.pem"  maxlength="64" />
+					</div>
+					<%--<small>(OU) Your division or department. </small>--%>
+				</div>
 
-				</fieldset>
+				<div class="form-group row">
+					<label for="ocsp"  class="font-weight-bold col-sm-2 col-form-label">Add OCSP url</label>
+					<div class="col-sm-10">
+						<input type="text" id="ocsp" class="form-control" name="ocsp" placeholder="https://8gwifi.org/ocsp"  maxlength="64" />
+					</div>
+					<%--<small>(OU) Your division or department. </small>--%>
+				</div>
+
+
+					<input class="btn btn-primary" type="submit" id="submit" name="Sign CSR">
+
 			</form>
-			<%@ include file="include_security_links.jsp"%>
-			<%@ include file="footer.jsp"%>
-			Note: We are not Signing Authority </b>
-			<p>Openssl Steps Creating CSR file <br /><strong>Generate the RSA key</strong><br />openssl genrsa -out domain.com.key 2048<br /><strong>Create a CSR</strong><br />openssl req -new -sha256 -key domain.com.key -out domain.com.csr<br /><strong>Verify your CSR</strong><br />openssl req -noout -text -in domain.com.csr</p>
-		</section>
-	</article>
+<div id="output"></div>
+
+<hr>
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+<hr>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h2 class="mt-4" id="thersaalgorithm">CSR</h2>
+<p>A certification request consists of three parts: “certification request information,” a signature algorithm identifier, and a digital signature on the certification request information.  The certification request information consists of the entity’s distinguished name, the entity’s public key, and a set of attributes providing other information about the entity.</p>
+<p><strong>Openssl Steps Creating CSR file</strong></p>
+<p><strong>Generate the RSA key</strong></p>
+<pre><code>openssl genrsa -out domain.com.key 2048
+</code></pre>
+<p><strong>Create a CSR</strong></p>
+<pre><code>openssl req -new -sha256 -key domain.com.key -out domain.com.csr
+</code></pre>
+<p><strong>Verify your CSR</strong></p>
+<pre><code>openssl req -noout -text -in domain.com.csr
+</code></pre>
+<p><strong>Note:</strong>  For production certificates use public CA</p>
+<%@ include file="addcomments.jsp"%>
+
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
+

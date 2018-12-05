@@ -232,6 +232,8 @@ public class GenCAFunctionality extends HttpServlet {
         if (METHOD_CSR_SIGNER.equals(methodName)) {
 
             String p_pem = request.getParameter("p_pem");
+            String p_crl = request.getParameter("crl");
+            String p_ocsp = request.getParameter("ocsp");
 
 
             if (p_pem == null || p_pem.trim().length() == 0) {
@@ -275,6 +277,8 @@ public class GenCAFunctionality extends HttpServlet {
                     }
 
                     urlParameters.add(new BasicNameValuePair("p_pem", p_pem));
+                    urlParameters.add(new BasicNameValuePair("p_crl", p_crl));
+                    urlParameters.add(new BasicNameValuePair("p_ocsp", p_ocsp));
 
                     post.setEntity(new UrlEncodedFormEntity(urlParameters));
                     post.addHeader("accept", "application/json");
@@ -316,9 +320,10 @@ public class GenCAFunctionality extends HttpServlet {
 
                     EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
                     addHorizontalLine(out);
-                    out.println("<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>");
-                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getMessage() + "</textarea>");
-                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getBase64Decoded() + "</textarea>");
+                    out.println("<p><b><u> Your Certificate in PEM format </b></u> <p>");
+                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"10\" cols=\"20\" form=\"X\">" + encodedMessage.getMessage() + "</textarea><hr>");
+                    out.println("<p>Parse X.509 PEM file<a href=\"https://8gwifi.org/PemParserFunctions.jsp\" target=\"_blank\"> here</a></p>");
+                   // out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getBase64Decoded() + "</textarea>");
                     return;
 
                 } else {
