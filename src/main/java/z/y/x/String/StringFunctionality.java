@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.HexDump;
 import z.y.x.u.HexUtils;
 import z.y.x.u.StringUtils;
 
@@ -24,6 +27,7 @@ public class StringFunctionality extends HttpServlet {
 	final String METHOD_CALCULATE_HEXSTRING = "CALCULATE_HEXSTRING";
 	final String METHOD_CALCULATE_BASE64 = "CALCULATE_BASE64";
 	final String METHOD_CALCULATE_URLENCODEDECODE = "CALCULATE_URLENCODEDECODE";
+	final String METHOD_CALCULATE_BASE64_HEX = "BASE64HEX";
 
 	final String TRIM = "trim";
 	final String IGNORE = "ignore";
@@ -64,6 +68,60 @@ public class StringFunctionality extends HttpServlet {
 
 		final String methodName = request.getParameter("methodName");
 		PrintWriter out = response.getWriter();
+
+
+		if (METHOD_CALCULATE_BASE64_HEX.equalsIgnoreCase(methodName)) {
+
+			final String baseg4hex = request.getParameter("baseg4hex");
+			 String message = request.getParameter("message");
+
+
+
+
+			if(null== message || message.length()==0)
+			{
+				addHorizontalLine(out);
+				out.println("<b><u>Original String Text</b></u>= <font size=\"6\" color=\"red\"> Input base64 Message or Hex String  </font><br>");
+
+				return;
+			}
+
+
+			final String delimiter = request.getParameter("delimiter");
+
+
+
+
+			if("tobase64".equalsIgnoreCase(baseg4hex))
+			{
+				byte[] b = Base64.decodeBase64(message.getBytes());
+				String hex = HexUtils.encodeHex(b,delimiter);
+				addHorizontalLine(out);
+
+				out.println(hex);
+
+				return;
+
+			}
+
+			else {
+
+				try {
+					message = message.replaceAll(":","");
+					message = message.replaceAll(" ","");
+					byte b[] = Hex.decodeHex(message.toCharArray());
+					String base64 = org.apache.commons.net.util.Base64.encodeBase64String(b);
+					addHorizontalLine(out);
+
+					out.println(base64);
+				} catch (DecoderException e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"4\" color=\"red\">"+ e + "</font>");
+				}
+
+			}
+
+		}
 
 		if (METHOD_CALCULATELENGTH.equalsIgnoreCase(methodName)) {
 

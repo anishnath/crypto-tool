@@ -5,8 +5,9 @@
                 <div>
                 <ul>
                     <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2.5px">URL Encoders/Decoders</font></a></li>
-                    <li><a href="HexToStringFunctions.jsp"><font size="2.5px">HexToString Conversion</font></a></li>
-                    <li><a href="HexToStringFunctions.jsp"><font size="2.5px">StringToHex Conversion</font></a></li>
+                    <li><a href="HexToStringFunctions.jsp"><font size="2.5px">Hex To String Conversion</font></a></li>
+                    <li><a href="HexToStringFunctions.jsp"><font size="2.5px">String To Hex Conversion</font></a></li>
+                    <li><a href="base64Hex.jsp"><font size="2.5px">Base64 To Hex (ViceVersa)</font></a></li>
                     <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
                     <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
                     <li><a href="contactus.jsp">Feature Request</a></li>
