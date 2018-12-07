@@ -429,6 +429,8 @@ public class StringFunctionality extends HttpServlet {
 						return;
 					}
 					if ("decode".equals(enCodeDecode)) {
+						inputtext = inputtext.replaceAll(":","");
+						inputtext = inputtext.replaceAll(" ","");
 						byte[] s = HexUtils.decode(inputtext);
 						out.println(new String(s));
 						return;
