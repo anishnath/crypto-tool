@@ -344,5 +344,8 @@
     <loc>https://8gwifi.org/pbkdf.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/base64Hex.jsp</loc>
+  </url>
 
 </urlset>
