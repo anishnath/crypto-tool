@@ -348,4 +348,8 @@
     <loc>https://8gwifi.org/base64Hex.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/CVE-2018-1002105.jsp</loc>
+  </url>
+
 </urlset>
