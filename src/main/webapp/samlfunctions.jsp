@@ -8,7 +8,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "SAMl Sign XML",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/saml.png",
+  "image" : "https://8gwifi.org/images/site/samlsign.png",
   "url" : "https://8gwifi.org/samlfunctions.jsp",
   "author" : {
     "@type" : "Person",
@@ -18,15 +18,17 @@
   "applicationCategory" : [ "saml online", "saml, sign, signature, authnrequest, online, tool,saml request, saml response", "saml signature value,saml sign xml message, how to sign saml message, online saml signature"],
   "downloadUrl" : "https://8gwifi.org/samlfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "saml sign message,saml request resonse sign message, saml generate signature,online saml signature generation,online saml signature",
+  "requirements" : "saml sign message,saml request resonse sign message, saml generate signature,online saml signature generation,online saml signature, AuthNRequest, SAMLResponse, SAML Assertions, SAML Protocols,XML Signature Syntax and Processing, SAML and XML Encryption Syntax and Processing:",
   "softwareVersion" : "v1.0"
 }
 </script>
 	<title>SAMl Sign XML Online</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="description" content="saml signature value,saml sign xml message, how to sign saml message, online saml signature,online tool to sign an AuthNRequest,using private key and X.509 public certificate. Generates a embedded signature (HTTP-POST binding) and a Signature (HTTP-Redirect binding)">
-	<meta name="keywords" content="saml, sign, signature, authnrequest, online, tool,saml request, saml response">
-	<%@ include file="include_css.jsp" %>
+	<meta name="keywords" content="online  saml, sign, signature, authnrequest, online, tool,saml request, saml response, AuthNRequest, SAMLResponse, SAML Assertions, SAML Protocols,XML Signature Syntax and Processing, SAML and XML Encryption Syntax and Processing ">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<%@ include file="header-script.jsp"%>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -77,24 +79,24 @@
 
 	</script>
 </head>
-<body>
-<div id="page">
-	<%@ include file="include.jsp" %>
-	<div id="loading" style="display: none;">
-		<img src="images/712.GIF" alt="" />Loading!
-	</div>
-	<article id="contentWrapper" role="main">
-		<section id="content">
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">SAML Sign Message</h1>
+
+
+<div id="loading" style="display: none;">
+	<img src="images/712.GIF" alt="" />Loading!
+</div>
+
+<hr>
+
 			<form id="form" method="POST">
-				<input type="hidden" name="methodName" id="methodName"
-					   value="SIGN_XML">
-				<fieldset name="SAML Sign Message">
-					<legend>
-						<B>SAML Sign Message </B>
-					</legend>
+				<input type="hidden" name="methodName" id="methodName"  value="SIGN_XML">
 
 
-					<legend>Sample SAML Message </legend>
+				<div class="form-group row">
+					<label for="ctrTitles"  class="font-weight-bold col-sm-2 col-form-label">Sample SAML</label>
+					<div class="col-sm-10">
 					<select name="ctrTitles" id="ctrTitles">
 						<option value="&#x3C;samlp:AuthnRequest xmlns:samlp=&#x22;urn:oasis:names:tc:SAML:2.0:protocol&#x22; xmlns:saml=&#x22;urn:oasis:names:tc:SAML:2.0:assertion&#x22; ID=&#x22;ONELOGIN_809707f0030a5d00620c9d9df97f627afe9dcc24&#x22; Version=&#x22;2.0&#x22; ProviderName=&#x22;SP test&#x22; IssueInstant=&#x22;2014-07-16T23:52:45Z&#x22; Destination=&#x22;http://idp.example.com/SSOService.php&#x22; ProtocolBinding=&#x22;urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&#x22; AssertionConsumerServiceURL=&#x22;http://sp.example.com/demo1/index.php?acs&#x22;&#x3E;
   &#x3C;saml:Issuer&#x3E;http://sp.example.com/demo1/metadata.php&#x3C;/saml:Issuer&#x3E;
@@ -385,169 +387,168 @@
 &#x3C;/samlp:LogoutResponse&#x3E;">Logout Response Embedded Signature</option>
 					</select>
 
-					<table>
-						<tr>
-							<td>XML Signature Algorithm</td>
-							<td>
-								<%
-									final String signatureAlgo[] = {
-											"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512",
-											"http://www.w3.org/2000/09/xmldsig#dsa-sha1",
-											"http://www.w3.org/2009/xmldsig11#dsa-sha256", "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
-											"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="xmlsignaturealgo"  class="font-weight-bold col-sm-2 col-form-label">XML Signature Algorithm</label>
+					<div class="col-sm-10">
+						<%
+							final String signatureAlgo[] = {
+									"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512",
+									"http://www.w3.org/2000/09/xmldsig#dsa-sha1",
+									"http://www.w3.org/2009/xmldsig11#dsa-sha256", "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+									"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"
 
 
-									};
-								%>
-								<select  name="xmlsignaturealgo" id="xmlsignaturealgo">
-									<%
-										for (int i = 0; i < signatureAlgo.length; i++) {
-											String param = signatureAlgo[i];
-									%>
-									<option value="<%=param%>"><%=param%></option>
-									<%}%>
-								</select>
-							</td>
-							<td rowspan="3" colspan="4">
-								<%@ include file="footer_adsense.jsp"%>
-								<div id="output"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>X.509 Certs</td>
-							<td>
-								<textarea  placeholder="-----BEGIN CERTIFICATE-----
-MIIDezCCAmOgAwIBAgIhAI5i3DsgRhWyCDzyxzB2V+n92JNrxm9kfZHUveXrKKqZ
-MA0GCSqGSIb3DQEBBQUAMFAxCTAHBgNVBAYTADEJMAcGA1UECgwAMQkwBwYDVQQL
-DAAxDTALBgNVBAMMBGFkYXMxDzANBgkqhkiG9w0BCQEWADENMAsGA1UEAwwEYWRh
-czAeFw0xODAzMjIxMjQxNDNaFw0yODAzMjIxMjQxNDNaMEExCTAHBgNVBAYTADEJ
-MAcGA1UECgwAMQkwBwYDVQQLDAAxDTALBgNVBAMMBGFkYXMxDzANBgkqhkiG9w0B
-CQEWADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL4XlZqWhEss2jul
-KbsHrYKOWTQMlK0c+CoWJr6xtv5t+/ymPwopSHaZc6w6crGIFu/j7LBnY5WIJdw5
-fz2r7OrEa3vYjPofMR+JkMU5/aHVTx1JFdViEYCC53UkgKZ2l8apVq4+Jq/2L7Oe
-FiLmdVgka88z+niyq0YNKK26cJtP4BQoD25DURo0blj/FzGprBGR4GEL86p1oPX8
-YXECqK+ZlFGWxwVXNW8Eq03aa7oHXFqGj9JMQU+CCXtcdh3c3ZZWGpfy91DZFV2r
-Pe8mTtda+zzzEqEkX8orB+B1a+9wCgqcZ6BtaQB8WbwHJV5M8UNEZ8liBYvnL76R
-1fcuzecCAwEAAaNPME0wHQYDVR0OBBYEFOYAtw+6aoFtFnxInmszUIT4jYrCMB8G
-A1UdIwQYMBaAFOYAtw+6aoFtFnxInmszUIT4jYrCMAsGA1UdEQQEMAKCADANBgkq
-hkiG9w0BAQUFAAOCAQEAAaPYkzmsskvwTK/PvjwI+N5V0ZszUcVGzXS/0cN/fXcN
-Tc3qSwT4zEhZ0M+Q2EjSPU+ZPlAcrqt/SqdWV4cbeVhmSQySAkP/JTqQ8lOTXCgb
-aARGAPH/pScAUGaSdIkYlVZyoG/JTaWOP9Ofb8olFy1GTM2Or40AwPxgwLdPZX6v
-eanFAU1HtBt4qM64evIuEuBTpJsH/oJxa3yf/uW16FAK4+VbKVQmTDcPIeL8cH89
-5h2VukkXv1supEkGR0Me3339mIDClT7ufbT0mW851UOIIZ/ngkG6dEVP43hWCg1F
-0cBP3UiYzjav+NrAq0TuFikLRgKEtndm7Hh7l7quBw==
------END CERTIFICATE-----
-" cols="40" rows="10"  value="" name="p_key" id="p_key"></textarea>
-							</td>
-							<!-- <td>
-							</td> -->
-						</tr>
-						<tr>
+							};
+						%>
+						<select  name="xmlsignaturealgo" id="xmlsignaturealgo">
+							<%
+								for (int i = 0; i < signatureAlgo.length; i++) {
+									String param = signatureAlgo[i];
+							%>
+							<option value="<%=param%>"><%=param%></option>
+							<%}%>
+						</select>
+					</div>
+				</div>
 
-							<td>Private Key</td>
-							<td>
-								<textarea placeholder="-----BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEAvheVmpaESyzaO6Upuwetgo5ZNAyUrRz4KhYmvrG2/m37/KY/
-CilIdplzrDpysYgW7+PssGdjlYgl3Dl/Pavs6sRre9iM+h8xH4mQxTn9odVPHUkV
-1WIRgILndSSApnaXxqlWrj4mr/Yvs54WIuZ1WCRrzzP6eLKrRg0orbpwm0/gFCgP
-bkNRGjRuWP8XMamsEZHgYQvzqnWg9fxhcQKor5mUUZbHBVc1bwSrTdprugdcWoaP
-0kxBT4IJe1x2HdzdllYal/L3UNkVXas97yZO11r7PPMSoSRfyisH4HVr73AKCpxn
-oG1pAHxZvAclXkzxQ0RnyWIFi+cvvpHV9y7N5wIDAQABAoIBAEmuRZAyeFvVKk/F
-MJwsmS4KM/xPRg+ls3FIvcLbioUrJ2miHLw5DTvfNe1TiGJU0CMy0ur7YCe1Koum
-g7HpYn8LHGhYIyjOD1Hclg9Eb5GbZzuAOSTJCuSnmMSYnf8n56OavpzyPTemMo4q
-IAVuE5zTHTCmwpanFmkkL5jLM9uW2d0ewCRMW0jVFqBbtYCwiuXjuGaMnF+9p1bV
-27HhiNnf0tou9LbDCuv9X1RBylVMeda0hejbqBVlUtwrIOvBjA6FQwmiklfR5IVi
-sUrV51GCcTTJpZcX+cUE1ZnXoRsduNFjEzpzVYwDVWmn7iY36g0qdt9HYbFUsBeC
-d/Jwq70CgYEA9QFEPHZ2cEYUhwxXxTKCFyKwjz2Nr7svy4FOQWFcqr3VcrMMeCOz
-VZKUqwHPEsbcQeB8CXCmiWFpZsZcElj2rigV17BIhG0F4zNnmSw4pdeSKnHwH0PS
-3r4Q8d3wZEtXMONY+S8dt4TsO+tV3N66Rc4PSQpXAKQyX6lFviUt0U0CgYEAxp90
-BiHYPXTSFWP67oZ6aO8yR1XXbx6KzNG7J8xltCQT2VydEu07ZDytUjABv1vrHQZK
-G/yfTfja7AHzRctGDolFc2e3thl7SMluFts74dA2/5yme8ZFvVzWtwuh9WNCMWC/
-ei2K+HtgskVHTXHsBsQ3hfR/dnlhoHgIitatwgMCgYEAyltmcY3iWu7262fdYmlK
-GzOyokxTpw4y9qFw8f0pXXh3QEn0BZJu/0GW+vr+feKzbtGrgNyDIDrNpG43A4xp
-CgTfrYrTClVFpJcDfPaSPx+igN4kVp5dH03ajvohH6U+eYl9JiqtH7Nwrji8bTWk
-oh0EcO5SV5xGYs5bZSYuBo0CgYB8EVQfFHsHgHZOCELRRc0myOsmJhfJAFIBOKzo
-YkPRL4v6hWBUVz13EnPNV9Fvn9IQMkKOktFLmjvdmiZEnYHoSJTKTqoxpF8fCzuq
-KU2Rc0c3iblwrVwYueohMrH7HwJU57MTdWlOZ3ryQFYWqSee3mg0U5JfBdkWrIPh
-fdHR0wKBgC7NTs9De3H20UYWA0XGzi2EA/0k145ZJOJoIzxzgEDJkvmvtbdKYWmx
-xRg/sIocUR3Pfvb28PHtBYFD23TgAA/3ee9DTKDRAKRFGSHMMqnLmNN/fsyUau9r
-dRikGbA6Ki49PF1WWhJYR6CnJSGG0KLCd3DED//dtM6xcl7U6h1F
------END RSA PRIVATE KEY-----
-" cols="50" rows="20" value="" name="p_privkey" id="p_privkey"></textarea>
-							</td>
-							<!-- <td>
-							</td> -->
-						</tr>
-						<tr>
-							<td>XML</td>
-							<td>
-								<textarea placeholder="" cols="50" rows="20"  value="" name="p_xml" id="p_xml"></textarea>
 
-							</td>
-							<!-- <td>
-							</td> -->
-						</tr>
-
-					</table>
-					<table>
-						<tr>
-							<td>
-								Relay State <input id="p_relaystate" type="text" name="p_relaystate" placeholder="" size="40" value="">
-								<br/>
-								Private Key Password(if ANy) <input id="passphrase" type="text" name="passphrase" placeholder="for encrypted keys" size="30" value="">
+				<div class="form-group row">
+					<label for="p_xml"  class="font-weight-bold col-sm-2 col-form-label">XML to Sign</label>
+					<div class="col-sm-10">
+						<textarea rows="5" cols="10"  class="form-control" placeholder="" cols="50" rows="20"  value="" name="p_xml" id="p_xml"></textarea>
+					</div>
+				</div>
 
 
 
-							</td>
-							<td>
-								<input type="button" size="10" id="Sign-XML" name="Sign-XML" value="Sign-XML">
-							</td>
-						</tr>
 
-					</table>
+					<div class="form-group row">
+						<label for="p_key"  class="font-weight-bold col-sm-2 col-form-label">X.509 Certs</label>
+						<div class="col-sm-10">
+						<textarea class="form-control" rows="5" cols="10" name="p_key" id="p_key">-----BEGIN CERTIFICATE-----
+MIICwDCCAaigAwIBAgIEZ3cS4zANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApJ
+bnRlcm1lZENBMB4XDTE4MTIwOTE0MTYxN1oXDTI1MTIzMDE4MzAwMFowEDEOMAwG
+A1UEAwwFaGVsbG8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQChGc3k
+67vzhZh44oddqYHRse582kMYnBZS4I8ruQGZwYaaMr4uUYdxw09Mh+VoYF3x3G8Y
+ZqyoJ6Wvf0oVR9/JoerM7aV3PdRDvm3GoturpF0fHLRLbS7fBy/YkR66fIy/iqBZ
+j5FESLSymWiZ1LLcwwWJRgesZRftEE+QQhYccy+/IjKCXiRZgboUieY6Y3qfw01i
+mk55rRROylQE7U34j1AiVPJdHEgFBntVEEGASTBzLXYhiZzAHttf8tEO4l4wZzmQ
+MTvaU8E4Ro2wvLD7mU9P6VPz7g8f5KNGI8oGyKh2cZlwfRXe/NQuKCSA9hLyD7+y
+5prC2X+PjybpQUXFAgMBAAGjHTAbMA4GA1UdDwEB/wQEAwIHgDAJBgNVHRMEAjAA
+MA0GCSqGSIb3DQEBCwUAA4IBAQA5AsCG0e2+5Y7KRqqJCr6u9KfDFIYWXFFAoBam
+bjiqmw1ZcK787jIPmMAVpTTycnZ6GoXXLdorpyDq4FPUKU47GHv0ByzThKBJpYNQ
+EW1fcRdxAnUf23XV/6U51SBbFuF4C2NKpzv6NPiQz8yIZeie3FOCjPGLlfrextqN
+hXBomt5C6HZ6LqG5cN/lvR1z+y8MgcgwBzBHGATYPUfQ7pt22BZ7nncHXCGhO2LB
+dx9hHaM3I2LFaC7YW+nQUrK8YcPnahGTxA7Nu9U1QfCH/3bwRU3iMwOaR/7ntWUn
+GvIBGiHQc2kA27aWPVfuYf+u7sTJ2Qh0syo9+Mqm7QXzcHyK
+-----END CERTIFICATE-----</textarea>
+						</div>
+					</div>
 
-				</fieldset>
+					<div class="form-group row">
+						<label for="p_privkey"  class="font-weight-bold col-sm-2 col-form-label">Private Key</label>
+						<div class="col-sm-10">
+						<textarea rows="5" cols="10" class="form-control" value="" name="p_privkey" id="p_privkey">-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAoRnN5Ou784WYeOKHXamB0bHufNpDGJwWUuCPK7kBmcGGmjK+
+LlGHccNPTIflaGBd8dxvGGasqCelr39KFUffyaHqzO2ldz3UQ75txqLbq6RdHxy0
+S20u3wcv2JEeunyMv4qgWY+RREi0splomdSy3MMFiUYHrGUX7RBPkEIWHHMvvyIy
+gl4kWYG6FInmOmN6n8NNYppOea0UTspUBO1N+I9QIlTyXRxIBQZ7VRBBgEkwcy12
+IYmcwB7bX/LRDuJeMGc5kDE72lPBOEaNsLyw+5lPT+lT8+4PH+SjRiPKBsiodnGZ
+cH0V3vzULigkgPYS8g+/suaawtl/j48m6UFFxQIDAQABAoIBAAZFomn4sYsUFvER
+5LJFUKwQ0NekibsyDH5yhrBtlf3d9ncXZacY/nxz3aj9m3VaVx389ohNKwiq7nzs
+KD622yQW/TS4RdpkGlj+13hFy+adUhDNhclv+USum3LDh548DiDA7Wg/Oikd6YcQ
+iO2ARexpXVRQWSkhkHJm0aosoH6//2T9cM9LAqyvTsOhFf80ecBy2U/um1vu6zb0
+g2i4I03Rm8QD0ty0/xw70A5DD+PG3U50uXnoZThgmUlwDVOxGoIFWAFTlp9VTezJ
+AY+TPxoyzqiS6DTh4BrXDFHhVpLlejC5I3EI2JFSWoysdH2tZ9oBAqlPcrkazrab
+vZWXm8sCgYEA4P1X/PS6QNQAM1Lk6cyMRwaTj2ftjaUHHY+8Btptx3oUzwcYFM43
+Vw6/2khrlEmLDO32ke2ydTsN14/RywWM3QCAQ8xOOpuboHiEfkp3S377OqZft+z+
+pyh47HTy3l/1fMt02D123vfAoQVyBecRwRbt1k9+1g+aYP4pEe/rlzcCgYEAt04s
+J4iKjtIcsluFN8wOY52Kd54TUI3JA/PolvzkW5sh5tTyB36N3tQrnEaslnRSX2MZ
+GWp8FtZN5o/ulGJ8qiklA3GN08B1FFlTKEYiNjxDSyezK1/FnmAnOIFCiJls30tW
+PD2UoImIKjoEtssQw7FoYQ21uU6b/viyQ/8vUOMCgYBH3sXnqSmCIfa6bmVvhgbd
+fW1PpwxMbgYa3Fpc+hONYCMbixGXO9STu8NvcCjlYqTHiZB1Ry/1oNqoHGoQ54H6
+6vkOL0piEGkjVrxEN3dqJ3MLZjA3ab5jGVufdTBL9u1NYxS9Ks05Jn1jMoEc/5Y9
+TxzEk/pZWPygtS/baf+g+wKBgQCG1ioEqpvBky0oxcmo0aGEBU7lzpHGn4VOMwzU
+hBI2kFbPxbSDbsRNNSUfP52UztwI7ox39axx4BJNl3KYFBo/0SQ49D6vlNKKtWpG
+JdDktE+L6RgSv9BOP8yZ8/tNIA7F8lTs2x+JN6HB7gupqpYaXVW6jqsuNHTriWUY
+P44+oQKBgG8g1fE/A2f17B0trZdYGVAc5cwkiZbUjHdxAjD53AGItrtnS3rjQwe0
+TOzBp9BY2Mf/6eDhTNcWSjlAqUNPJ2PdWUbcVfEdEoJGhzQO1tbpePIOUCFvShxB
+ZbT5EXjFautmGROwWOoDrLHBnL2q/befzKbnat33Oe3IKupehqzy
+-----END RSA PRIVATE KEY-----</textarea>
+						</div>
+					</div>
+
+
+
+					<div class="form-group row">
+						<label for="p_relaystate"  class="font-weight-bold col-sm-2 col-form-label">Relay State </label>
+						<div class="col-sm-10">
+							<input class="form-control" id="p_relaystate" type="text" name="p_relaystate" placeholder="" size="40" value="">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="passphrase"  class="font-weight-bold col-sm-2 col-form-label">Private Key Password(if ANy) </label>
+						<div class="col-sm-10">
+							<input id="passphrase" type="text" name="passphrase" placeholder="for encrypted keys" size="30" value="">
+						</div>
+					</div>
+
+					<input class="btn btn-primary" type="button" size="10" id="Sign-XML" name="Sign-XML" value="Sign-XML">
 
 			</form>
-			<%@ include file="include_security_links.jsp"%>
-			<%@ include file="footer.jsp"%>
+			<div id="output"></div>
 
-			<p>Quick Notes</p>
-			<table style="width: 828px; float: left;">
-				<tbody>
-				<tr>
-					<td style="width: 120px;"><strong>AuthNRequest</strong></td>
-					<td style="width: 692px;">The value of the SAMLRequest parameter is the Base64 encoding of a deflated &lt;samlp:AuthnRequest&gt; element.</td>
-				</tr>
-				<tr>
-					<td style="width: 120px;"><strong>SAMLResponse</strong></td>
-					<td style="width: 692px;">&nbsp;The value of the SAMLResponse parameter is the base64 encoding of a &lt;samlp:Response&gt; element.</td>
-				</tr>
-				<tr>
-					<td style="width: 120px;"><strong>SAML Assertions</strong></td>
-					<td style="width: 692px;">SAML assertions are usually made about a subject, represented by the &lt;Subject&gt; element</td>
-				</tr>
-				<tr>
-					<td style="width: 120px;"><strong>SAML Protocols:</strong></td>
-					<td style="width: 692px;">&nbsp;<a href="http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf" target="_blank" rel="noopener">SAML Further reading</a></td>
-				</tr>
-				<tr>
-					<td style="width: 120px;"><strong>XML Signature Syntax and Processing</strong> :</td>
-					<td style="width: 692px;">SAML assertions and SAML protocol request and response messages may be signed, if the signature is based on the SAML authority&rsquo;s publicprivate key pair, non-repudiation of origin,the &lt;ds:Signature&gt; elements found directly within SAML assertions, requests, and responses</td>
-				</tr>
-				<tr>
-					<td style="width: 120px;"><strong>SAML and XML Encryption Syntax and Processing:</strong></td>
-					<td style="width: 692px;">A &lt;SubjectConfirmation&gt; secret can be protected through the use of the &lt;ds:KeyInfo&gt;<br />element within &lt;SubjectConfirmationData&gt;, which permits keys or other secrets to be<br />encrypted.<br />&bull; An entire &lt;Assertion&gt; element may be encrypted<br />&bull; The &lt;BaseID&gt; or &lt;NameID&gt; element may be encrypted<br />&bull; An &lt;Attribute&gt; element may be encrypted</td>
-				</tr>
-				</tbody>
-			</table>
-			<p><strong>SAML usefull Tools</strong></p>
+			<hr>
+
+			<a href="samlverifysign.jsp">Click Here to Verify SAML Signature</a>
+
+			<div class="sharethis-inline-share-buttons"></div>
+			<%@ include file="thanks.jsp"%>
+
+			<hr>
+
+			<%@ include file="footer_adsense.jsp"%>
+
+			<h2 class="mt-4" id="thersaalgorithm">About SAML </h2>
 			<ul>
-				<li><br /><a href="https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/" target="_blank" rel="noopener">Firefox SAML Tracer plugin: decode and view SAML messages</a><br /><a href="https://www.samltool.com/">SAML Developer Tools (Limited to RSA Key Only)</a><br /><a href="http://www.datypic.com/sc/saml2/ss.html">Schema Central: XML schema reference for SAML messages</a></li>
+				<li>
+					<p><strong>AuthNRequest</strong>: The value of the SAMLRequest parameter is the Base64 encoding of a deflated &lt;samlp:AuthnRequest&gt; element.</p>
+				</li>
+				<li>
+					<p><strong>SAMLResponse</strong>: The value of the SAMLResponse parameter is the base64 encoding of a &lt;samlp:Response&gt; element.</p>
+				</li>
+				<li>
+					<p><strong>SAML Assertions</strong> SAML assertions are usually made about a subject, represented by the &lt;Subject&gt; element</p>
+				</li>
+				<li>
+					<p><strong>SAML Protocols:</strong>: <a href="http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf">SAML Further reading</a></p>
+				</li>
+				<li>
+					<p><strong>XML Signature Syntax and Processing</strong>  : SAML assertions and SAML protocol request and response messages may be signed, if the signature is based on the SAML authority’s publicprivate key pair, non-repudiation of origin,the &lt;ds:Signature&gt; elements found directly within SAML assertions, requests, and responses</p>
+				</li>
+				<li>
+					<p><strong>SAML and XML Encryption Syntax and Processing:</strong>: A &lt;SubjectConfirmation&gt; secret can be protected through the use of the &lt;ds:KeyInfo&gt;   element within &lt;SubjectConfirmationData&gt;, which permits keys or other secrets to be   encrypted.</p>
+					<ul>
+						<li>An entire &lt;Assertion&gt; element may be encrypted</li>
+						<li>The &lt;BaseID&gt; or &lt;NameID&gt; element may be encrypted</li>
+						<li>An &lt;Attribute&gt; element may be encrypted</li>
+					</ul>
+				</li>
 			</ul>
+			<p><strong>SAML Useful Tools</strong></p>
+			<ul>
+				<li><a href="https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/">Firefox SAML Tracer plugin: decode and view SAML messages</a></li>
+				<li><a href="https://www.samltool.com/">SAML Developer Tools (Limited to RSA Key Only)</a></li>
+				<li><a href="http://www.datypic.com/sc/saml2/ss.html">Schema Central: XML schema reference for SAML messages</a></li>
+			</ul>
+			<%@ include file="addcomments.jsp"%>
 
-		</section>
-	</article>
 </div>
-</body>
-</html>
+
+<%@ include file="body-close.jsp"%>
+
+

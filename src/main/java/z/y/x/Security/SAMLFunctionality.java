@@ -181,9 +181,9 @@ public class SAMLFunctionality extends HttpServlet {
                 samlpojo sshpojo = gson.fromJson(content.toString(), samlpojo.class);
                 if(sshpojo!=null) {
                     out.println("<font size=\"4\" color=\"green\"> <b><u> Output Signed XML </b></u> <br>");
-                    out.println("<textarea name=\"comment\" rows=\"10\" cols=\"60\" form=\"X\">" + sshpojo.getNode() + "</textarea>");
+                    out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\"  rows=\"10\" cols=\"60\" form=\"X\">" + sshpojo.getNode() + "</textarea>");
                     if(sshpojo.getSignature()!=null) {
-                        out.println("<br/>Signature<br/><textarea name=\"comment\" rows=\"8\" cols=\"60\" form=\"X\">" + sshpojo.getSignature() + "</textarea>");
+                        out.println("<br/>Signature<br/><textarea class=\"form-control\" readonly=\"true\"  name=\"comment\" rows=\"8\" cols=\"60\" form=\"X\">" + sshpojo.getSignature() + "</textarea>");
                         out.println("<br/>");
                         if (p_relaystate != null) {
                             String type = "SAMLRequest";
@@ -194,7 +194,7 @@ public class SAMLFunctionality extends HttpServlet {
                             String msg = type + "=" + "URLEncode(XMLMessage)&RelayState=URLEncode("+p_relaystate+")&SigAlg=URLEncode("+xmlsignaturealgo+")";
                             String signature = "Base64Encode{sign["+msg+"]}";
                             out.println("<br/><font size=\"4\" color=\"purple\"> <b><u> Signature Calculation Logic </b></u> <br>");
-                            out.println("<br/><textarea name=\"comment\" rows=\"5\" cols=\"60\" form=\"X\">" + signature+ "</textarea>");
+                            out.println("<br/><textarea class=\"form-control\" readonly=\"true\" name=\"comment\" rows=\"5\" cols=\"60\" form=\"X\">" + signature+ "</textarea>");
                             out.println();
                             return;
                         }
@@ -352,7 +352,7 @@ public class SAMLFunctionality extends HttpServlet {
                         out.println("<br/><font size=\"4\" color=\"purple\"> <b><u> base64decodedInflated  </b></u> <br>");
                     }
 
-                    out.println("<br/><textarea name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + content.toString()+ "</textarea>");
+                    out.println("<br/><textarea class=\"form-control\" readonly=\"true\" name=\"comment\" rows=\"20\" cols=\"50\" form=\"X\">" + content.toString()+ "</textarea>");
                 }
 
 
