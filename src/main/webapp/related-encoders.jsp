@@ -1,5 +1,5 @@
   <div class="card my-4">
-            <h5 class="card-header">Encoder Services</h5>
+            <h5 class="card-header">Encoder/BeautifierServices</h5>
             <div class="card-body">
               <div class="row">
                 <div>
@@ -10,6 +10,7 @@
                     <li><a href="base64Hex.jsp"><font size="2.5px">Base64 To Hex (ViceVersa)</font></a></li>
                     <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
                     <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
+                    <li><a href="jsonparser.jsp"><font size="2.5px">JSON Beautifier</font></a></li>
                     <li><a href="contactus.jsp">Feature Request</a></li>
                   </ul>
                 </div>
