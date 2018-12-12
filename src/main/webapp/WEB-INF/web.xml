@@ -92,6 +92,16 @@
 		<servlet-name>StringFunctionality</servlet-name>
 		<url-pattern>/StringFunctionality</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>JSONFunctionality</servlet-name>
+		<servlet-class>z.y.x.String.JSONFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JSONFunctionality</servlet-name>
+		<url-pattern>/JSONFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>NetworkFunctionality</servlet-name>
 		<servlet-class>z.y.x.Network.NetworkFunctionality</servlet-class>
