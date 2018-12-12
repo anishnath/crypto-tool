@@ -364,4 +364,8 @@
     <loc>https://8gwifi.org/docs/php-digest.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/jsonparser.jsp</loc>
+  </url>
+
 </urlset>
