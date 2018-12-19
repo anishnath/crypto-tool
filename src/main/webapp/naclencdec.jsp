@@ -1,3 +1,5 @@
+<%@ page import="z.y.x.Security.RSAUtil" %>
+<%@ page import="z.y.x.Security.Utils" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -133,9 +135,14 @@
 					</div>
 				</div>
 
+				<%
+
+					String hex = Utils.toHexEncoded(Utils.getIV(24));
+				%>
+
 				<div class="form-group">
 					<label for="secretkey">Nonce (24 bit) in Hex</label>
-					<input type="text" class="form-control"  name="nonce" id="nonce" placeholder="a23c6e1a4aa987e766ecad497f2f4166fb4117b64adfb8bc" value="a23c6e1a4aa987e766ecad497f2f4166fb4117b64adfb8bc">
+					<input type="text" class="form-control"  name="nonce" id="nonce" placeholder="a23c6e1a4aa987e766ecad497f2f4166fb4117b64adfb8bc" value="<%=hex%>">
 				</div>
 
 				<div class="form-group">
