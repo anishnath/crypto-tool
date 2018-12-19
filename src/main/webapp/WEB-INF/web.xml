@@ -127,6 +127,15 @@
 		<servlet-name>CipherFunctionality</servlet-name>
 		<url-pattern>/CipherFunctionality</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>NaclFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.NaclFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NaclFunctionality</servlet-name>
+		<url-pattern>/NaclFunctionality</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>JKSManagementFunctionality</servlet-name>
