@@ -5,6 +5,7 @@
                 <div>
                 <ul>
                     <li><a href="naclencdec.jsp"><font size="2.5px">Nacl xsalsa20 Encryption & Decryption</font></a></li>
+                    <li><a href="naclaead.jsp"><font size="2.5px">Nacl AEAD Encryption & Decryption</font></a></li>
                     <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
                     <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
                     <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption</font> </a></li>
