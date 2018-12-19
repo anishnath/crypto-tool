@@ -817,7 +817,7 @@ public class CipherFunctionality extends HttpServlet {
                 BigInteger G = new BigInteger(dhparamp, 16);
                 BigInteger P = new BigInteger(dhparamq, 16);
                 addHorizontalLine(out);
-                out.println( "<textarea name=\"comment\" rows=\"40\" cols=\"80\" form=\"X\">" + DH.generateTwoWayDump(G, P) +  "</textarea>");
+                out.println( "<textarea class=\"form-control\" readonly=\"true\"  name=\"comment\" rows=\"40\" cols=\"80\" form=\"X\">" + DH.generateTwoWayDump(G, P) +  "</textarea>");
                 //out.print(DH.generateTwoWayDump(G, P));
             } catch (Exception ex) {
                 addHorizontalLine(out);
