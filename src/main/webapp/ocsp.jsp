@@ -9,8 +9,8 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "Online OCSP tester Check revocation status of your SSL certificate online via OCSP protocol.",
-  "image" : "https://github.com/anishnath/crypto-tool/blob/master/ocsp.png",
-  "url" : "https://8gwifi.org/rsafunctions.jsp",
+  "image" : "https://8gwifi.org/images/site/ocsp.png",
+  "url" : "https://8gwifi.org/ocsp.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
