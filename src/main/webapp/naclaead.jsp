@@ -1,4 +1,3 @@
-<%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="z.y.x.Security.Utils" %>
 <!DOCTYPE html>
 <html>
@@ -170,6 +169,7 @@
 	<li><a href="naclencdec.jsp"><font size="2.5px">Nacl xsalsa20 Encryption & Decryption</font></a></li>
 	<li><a href="naclaead.jsp"><font size="2.5px">Nacl AEAD Encryption & Decryption</font></a></li>
 	<li><a href="naclboxenc.jsp"><font size="2.5px">Nacl Box Encryption & Decryption</font></a></li>
+	<li><a href="naclsealboxenc.jsp"><font size="2.5px">Nacl SealBox Encryption & Decryption</font></a></li>
 </ul>
 			<hr>
 

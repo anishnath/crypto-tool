@@ -404,4 +404,8 @@
     <loc>https://8gwifi.org/naclboxenc.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/naclsealboxenc.jsp</loc>
+  </url>
+
 </urlset>

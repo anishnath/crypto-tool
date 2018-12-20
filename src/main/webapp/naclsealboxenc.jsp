@@ -1,4 +1,3 @@
-<%@ page import="z.y.x.Security.Utils" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,27 +8,27 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Nacl Box Public Key Cryptography",
-  "image" : "https://8gwifi.org/images/site/nacl3.png",
-  "url" : "https://8gwifi.org/naclboxenc.jsp",
+  "name" : "nacl seal box Public Key Cryptography",
+  "image" : "https://8gwifi.org/images/site/nacl4.png",
+  "url" : "https://8gwifi.org/naclsealboxenc.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2018-12-19",
-  "applicationCategory" : [ "nacl box", "nacl crypto_box", "nacl", "nacl box encryption decryption", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl" "aesgcm" ],
-  "downloadUrl" : "https://8gwifi.org/naclboxenc.jsp",
+  "datePublished" : "2018-12-20",
+  "applicationCategory" : [ "nacl seal box", "nacl crypto_box", "nacl", "nacl seal box encryption decryption", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl" "aesgcm" ],
+  "downloadUrl" : "https://8gwifi.org/naclsealboxenc.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "Nacl Box Public Key Cryptography, nacl box tutorial, nacl online, nacl box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly130",
+  "requirements" : "nacl seal box Public Key Cryptography, nacl seal box tutorial, nacl online, nacl seal box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly130",
   "softwareVersion" : "v1.0"
 }
 </script>
 
-	<title>Nacl Box Public Key Cryptography </title>
+	<title>nacl seal box Public Key Cryptography </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="Nacl Box Public Key Cryptography, nacl box tutorial, nacl online, nacl box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly1305" />
-	<meta name="description" content="Nacl Box Public Key Cryptography, nacl box tutorial, nacl online, nacl box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly130" />
+	<meta name="keywords" content="nacl seal box Public Key Cryptography, nacl seal box tutorial, nacl online, nacl seal box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly1305" />
+	<meta name="description" content="nacl seal box Public Key Cryptography, nacl seal box tutorial, nacl online, nacl seal box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly130" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -40,13 +39,6 @@
 
 	<%@ include file="header-script.jsp"%>
 
-	<%
-
-
-		String pubKey = Utils.toHexEncoded(Utils.getIV(32));
-		String privKey = Utils.toHexEncoded(Utils.getIV(32));
-
-	%>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -169,10 +161,10 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Nacl Box Public Key Cryptography</h1>
+<h1 class="mt-4">Nacl SealedBox Public Key Cryptography</h1>
 
-<p>A cryptoplaygroud for NACL Public-key authenticated encryption: crypto_box</p>
-<p>crypto_box is curve25519xsalsa20poly1305, a particular combination of Curve25519, Salsa20, and Poly1305 </p>
+<p>Sealed boxes are designed to anonymously send messages to a recipient given its public key.</p>
+<p>Only the recipient can decrypt these messages, using its private key. While the recipient can verify the integrity of the message, it cannot verify the identity of the sender. </p>
 <hr>
 
 
@@ -187,44 +179,37 @@
 
 
 <form id="form" class="form-horizontal" method="POST">
-	<input type="hidden" name="methodName" id="methodName" value="NACL_BOX_ENCRYPT">
+	<input type="hidden" name="methodName" id="methodName" value="NACL_SEALBOX_ENCRYPT">
 
 
 	<div class="radio">
 		<label>
 			<input checked id="encryptparameter" type="radio" name="encryptdecryptparameter" value="encrypt">
-			Nacl Box Encrypt
+			Nacl Seal Box Encrypt
 		</label>
 	</div>
 	<div class="radio">
 		<label>
 			<input id="decryptparameter" type="radio" name="encryptdecryptparameter" value="decrypt">
-			Nacl Box Decrypt
+			Nacl Seal Box Decrypt
 		</label>
 	</div>
 
-	<%
 
-		String hex = Utils.toHexEncoded(Utils.getIV(24));
-	%>
 
-	<div class="form-group">
-		<label for="nonce">Public Nonce (24 bit) in Hex(48)</label>
-		<input type="text" class="form-control"  name="nonce" id="nonce" placeholder="a23c6e1a4aa987e766ecad497f2f4166fb4117b64adfb8bc" value="<%=hex%>">
-	</div>
 
 	<table class="table">
 		<tr>
-			<th>Public Key (Alice) 32 bit Hex </th>
+			<th>Public Key (Bob) 32 bit Hex </th>
 			<th>Private Key (Bob) 32 bit Hex</th>
 		</tr>
 
 		<tr>
 			<td>
-				<textarea class="form-control animated" rows="5"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+				<textarea class="form-control animated" rows="3"   name="publickeyparam" id="publickeyparam">2bfb3554e563470f076d91b2dfbc58944ac0aea4d0ee9ec80ce2df22398bb545</textarea>
 			</td>
 			<td>
-				<textarea class="form-control animated" rows="5"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+				<textarea class="form-control animated" rows="3"   name="privatekeyparam" id="privatekeyparam">6cf6a2fb7faf47aa2cbd090ba2f2cfd81cce75ed7fa41f4dc88bd7d3a2374643</textarea>
 			</td>
 
 
@@ -248,7 +233,7 @@
 <ul>
 	<li><a href="naclencdec.jsp"><font size="2.5px">Nacl xsalsa20 Encryption & Decryption</font></a></li>
 	<li><a href="naclaead.jsp"><font size="2.5px">Nacl AEAD Encryption & Decryption</font></a></li>
-	<li><a href="naclboxenc.jsp"><font size="2.5px">Nacl Box Encryption & Decryption</font></a></li>
+	<li><a href="naclboxenc.jsp"><font size="2.5px">nacl seal box Encryption & Decryption</font></a></li>
 	<li><a href="naclsealboxenc.jsp"><font size="2.5px">Nacl SealBox Encryption & Decryption</font></a></li>
 </ul>
 
@@ -263,9 +248,11 @@
 
 <h2 class="mt-4" id="naclbox1">Public-key authenticated encryption: crypto_box</h2>
 
-<p>The crypto_box_keypair function randomly generates a secret key and a corresponding public key. It puts the secret key into sk and returns the public key</p>
-<p>The crypto_box function encrypts and authenticates a message m using the sender's secret key sk, the receiver's public key pk, and a nonce n. The crypto_box function returns the resulting ciphertext c</p>
-<p>The crypto_box_open function verifies and decrypts a ciphertext c using the receiver's secret key sk, the sender's public key pk, and a nonce n. The crypto_box_open function returns the resulting plaintext m.</p>
+<p>Sealed boxes leverage the crypto_box construction (X25519, XSalsa20-Poly1305). </p>
+
+<p>The premise of <strong>boxes</strong> is that Alice and Bob know each other and write to each other. Alice can use a box to send a message to Bob. On receipt of the box, Bob knows (a) it came from Alice, and (b) nobody else could have read or tampered with it.
+
+</p><p>	The premise of sealed boxes is that Bob has an anonymous dropbox. Alice can use a sealed box to send a message to Bob. On receipt of the box, Bob knows nobody but the sender could have read or tampered with it. But he knows nothing about who the sender was—it could have been Alice, or Charlie, or Dominique.</p>
 <hr>
 
 <h2 class="mt-4" id="naclbox12">How to perform NAcl Cryptography </h2>

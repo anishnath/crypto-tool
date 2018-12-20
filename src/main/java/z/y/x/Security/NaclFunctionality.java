@@ -41,6 +41,7 @@ public class NaclFunctionality extends HttpServlet {
     private static final String METHOD_CIPHERBLOCK_NEW = "NACL_crypto_stream_xsalsa20_xor";
     private static final String METHOD_CIPHERBLOCK_AEAD = "AEAD_MESSAGE";
     private static final String METHOD_CIPHERBLOCK_BOX = "NACL_BOX_ENCRYPT";
+    private static final String METHOD_CIPHERBLOCK_SEALBOX ="NACL_SEALBOX_ENCRYPT";
 
 
 
@@ -419,6 +420,146 @@ public class NaclFunctionality extends HttpServlet {
             urlParameters.add(new BasicNameValuePair("p_nonce", nonce));
             urlParameters.add(new BasicNameValuePair("p_key", privatekeyparam));
             urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
+
+
+            try {
+//
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        addHorizontalLine(out);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(content);
+
+
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
+
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+
+                addHorizontalLine(out);
+
+
+                String msg = "Encrypted Message in Hex";
+
+                if("decrypt".equalsIgnoreCase(encryptorDecrypt))
+                {
+                    msg = "Decrypted Message";
+                }
+
+                out.println( "<font size=\"4\" color=\"blue\">  " +msg + "  </font><br/><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + content.toString() + "</textarea></br>");
+
+                return;
+
+
+            } catch (Exception e) {
+                out.println("<font size=\"4\" color=\"red\"> " + e + " </font>");
+            }
+
+
+            return;
+
+        }
+
+
+
+        if (METHOD_CIPHERBLOCK_SEALBOX.equalsIgnoreCase(methodName)) {
+
+
+            final String encryptorDecrypt = request.getParameter("encryptdecryptparameter");
+            final String plaintext = request.getParameter("message");
+            final String publickeyparam = request.getParameter("publickeyparam");
+            final String privatekeyparam = request.getParameter("privatekeyparam");
+
+
+
+            if (null == publickeyparam || publickeyparam.trim().length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Public Key is Empty </font>");
+                return;
+            }
+
+            if(publickeyparam!=null && publickeyparam.length() !=64 )
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Public Key length should be 32 in Hex (64) </font>");
+                return;
+            }
+
+            if(null == privatekeyparam || privatekeyparam.trim().length() == 0 )
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Private Key is EMpty</font>");
+                return;
+            }
+
+            if(privatekeyparam!=null && privatekeyparam.length() !=64 )
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Private Key length should be 32 in Hex (64) </font>");
+                return;
+            }
+
+            if (null == plaintext || plaintext.trim().length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
+                return;
+            }
+
+
+
+
+            Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/encrypt";
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+
+            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/decrypt";
+                urlParameters.add(new BasicNameValuePair("p_key", privatekeyparam));
+                urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
+
+            }
+            else {
+                urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
+            }
+
+            HttpPost post = new HttpPost(url1);
+
+
+            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
+
+
 
 
             try {
