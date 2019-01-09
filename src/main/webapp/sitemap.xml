@@ -412,4 +412,8 @@
     <loc>https://8gwifi.org/docs/linux-mount.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/prometheus-dashboard.jsp</loc>
+  </url>
+
 </urlset>
