@@ -416,4 +416,8 @@
     <loc>https://8gwifi.org/docs/prometheus-dashboard.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-mysql.jsp</loc>
+  </url>
+
 </urlset>
