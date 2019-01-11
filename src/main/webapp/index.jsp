@@ -71,6 +71,7 @@
 }
 </script>
 <meta name="msvalidate.01" content="4897507734A2915162632536D0FD3DDA" />
+<meta name="yandex-verification" content="f3eeb4546e0ec52a" />
 <meta name="keywords"
 	content="sha-1, online, generator, md5, function, check, checksum,string, programming, functions, encode, decode, converter, online tools,” Developers, MD5, PHP, Javascript, SHA1, Base64, Encoding, Decoding, Text, Binary, Unicode, Html, Entities, String, Date, functions, Password, Encryption, Decryption, Character, pbe encryption,pgp encryption,rsa encryption,keystore online" />
 <meta name="description"
