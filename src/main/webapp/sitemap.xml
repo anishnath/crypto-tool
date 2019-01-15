@@ -424,4 +424,8 @@
     <loc>https://8gwifi.org/docs/kube-jenkins.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-mariadb.jsp</loc>
+  </url>
+
 </urlset>
