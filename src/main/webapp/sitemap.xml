@@ -428,4 +428,8 @@
     <loc>https://8gwifi.org/docs/kube-mariadb.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-wordpress.jsp</loc>
+  </url>
+
 </urlset>
