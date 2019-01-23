@@ -440,4 +440,8 @@
     <loc>https://8gwifi.org/docs/kube-debug.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-traefik2.jsp</loc>
+  </url>
+
 </urlset>
