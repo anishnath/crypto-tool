@@ -444,4 +444,8 @@
     <loc>https://8gwifi.org/docs/kube-traefik2.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/ssh.jsp</loc>
+  </url>
+
 </urlset>
