@@ -31,9 +31,10 @@
 </ul>
 <h2><a id="First_Download_the_required_tar_file_11"></a>First Download the required tar file</h2>
 
-Download the installer <a href="https://www.dropbox.com/sh/6qvk2j1jzsqghe2/AAC8mJ3gGHl-fBPmKfscTW-3a?dl=0">here </a>
+Download the installer <a href="https://sourceforge.net/projects/cryptography-playgroud/">https://sourceforge.net/projects/cryptography-playgroud/ </a>
 
 <h2><a id="Follow_the_Instruction_13"></a>Follow the Instruction</h2>
+<pre><code class="language-console">wget https://downloads.sourceforge.net/project/cryptography-playgroud/crypto-installer.tar </code></pre>
 <pre><code class="language-console">test2@ubuntu:~/crypto-installer$ tar xvf crypto-installer.tar;cd crypto-installer
 test2@ubuntu:~/crypto-installer$ ls -ltr
 total 50384
