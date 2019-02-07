@@ -456,4 +456,8 @@
     <loc>https://8gwifi.org/docs/kube-namespaces.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-rbac.jsp</loc>
+  </url>
+
 </urlset>
