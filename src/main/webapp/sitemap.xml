@@ -464,4 +464,8 @@
     <loc>https://8gwifi.org/docs/kube-auth.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/apache-tls-conf.jsp</loc>
+  </url>
+
 </urlset>
