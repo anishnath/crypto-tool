@@ -4,6 +4,11 @@
 </div>
 
 <div class="card my-4">
+    <h5 class="card-header">Kubernetes for DevOps</h5>
+    <p> <iframe width='160' height='400' src='https://leanpub.com/kube/embed' frameborder='0' allowtransparency='true'></iframe></p>
+</div>
+
+<div class="card my-4">
     <h5 class="card-header">Cryptography for Python Developers</h5>
         <p><iframe width='160' height='400' src='https://leanpub.com/cryptop/embed' frameborder='0' allowtransparency='true'></iframe></p>
 </div>
@@ -25,7 +30,6 @@
                 <div>
                 <ul>
                     <li><a href="#"><font size="2.5px">Remove add passwowrd to PEM files</font></a></li>
-                    <li><a href="#"><font size="2.5px">Nacl Cryptography</font></a></li>
                     <li><a href="#"><font size="2.5px">Blockchain keygen signature gen & verify  </font></a></li>
                     <li><a href="#"><font size="2.5px">OPenssl Key Managenet UI</font></a></li>
                     <li><a href="#"><font size="2.5px">TLS Checker</font></a></li>
