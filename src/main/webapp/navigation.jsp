@@ -2,12 +2,11 @@
       <div class="container">
         <a class="navbar-brand" href="#">8gwifi.org - Crypto Playground <a href="https://twitter.com/anish2good?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow Me for Updates</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://leanpub.com/b/cryptob" target="_blank" rel="noopener"><small>For Coffee/Beer Amazon Bill Buy Crytography CookBook </small>
+              <a class="nav-link" href="https://leanpub.com/b/cryptob" target="_blank" rel="noopener"><small>Grab 4 Crytography CookBook Just $9 </small>
               </a>
             </li>
             <li class="nav-item active">
@@ -17,7 +16,7 @@
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
             </li>
             <li class="nav-item active">
-              <a href="download.jsp">Download this Software</a>
+              <a  class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLScuanqAZnacXSOviEZVgiArXkAz8pifb4Q1TWp0iTC4IlkXNA/viewform">Download this Software</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link"  href="https://www.linkedin.com/in/anishnath">Hire Me!</a>
