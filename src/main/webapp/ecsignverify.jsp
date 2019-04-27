@@ -298,8 +298,8 @@
 
 	<table class="table">
 		<tr>
-			<th>Public Key </th>
 			<th>Private Key </th>
+			<th>Public Key </th>
 		</tr>
 
 		<tr>
@@ -323,14 +323,14 @@
 		</tr>
 
 		<tr>
-			<td >Provide Signature Value (Base64) <input type="text" id="signature" size="40" name="signature">
-			<input type="submit" class="btn btn-primary" name="Generate EC" value="submit">
+			<td colspan="2">Provide Signature Value (Base64) <input class="form-control"  type="text" id="signature" size="100" name="signature">
+
 			</td>
-			<td></td>
 		</tr>
 
 	</table>
 
+	<input type="submit" class="btn btn-primary" name="Generate EC" value="submit">
 
 </form>
 
