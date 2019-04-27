@@ -304,10 +304,10 @@
 
 		<tr>
 			<td>
-				<textarea class="form-control animated" rows="10"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+				<textarea class="form-control animated" rows="8"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
 			</td>
 			<td>
-				<textarea class="form-control animated" rows="10"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+				<textarea class="form-control animated" rows="8"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
 			</td>
 
 
