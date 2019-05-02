@@ -42,7 +42,7 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 	<meta name="keywords" content="elliptic curve, ecdsa generate key perform signature generation validation java, ecdsa, ecdsa sign message, ecdsa verify message, ec generate curve, bitcoin" />
-	<meta name="description" content="online elliptic curve key generation with curve name, ecdsa generate key perform signature generation validation, ecdsa sign message, ecdsa verify message, ec generate curve sect283r1,sect283k1,secp256k1,secp256r1,sect571r1,sect571k1,sect409r1,sect409k1, ecdsa bitcoin tutorial" />
+	<meta name="description" content="online elliptic curve key generation with curve name, openssl ecdsa generate key perform signature generation validation, ecdsa sign message, ecdsa verify message, ec generate curve sect283r1,sect283k1,secp256k1,secp256r1,sect571r1,sect571k1,sect409r1,sect409k1, ecdsa bitcoin tutorial" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -252,25 +252,25 @@
 <form id="form1" action="ECFunctionality" method="POST">
 	<input type="hidden" name="methodName" id="methodName"  value="EC_GENERATE_KEYPAIR_ECDSA">
 
-		<p>
-			<b> Elliptic Curve Generate Keys</b>
-		</p>
+	<p>
+		<b> Elliptic Curve Generate Keys</b>
+	</p>
 
-		Choose ECParam<select name="ecparam" id="ecparam">
-		<option value="secp256k1">secp256k1</option>
-		<%
-			String[] validList = { "c2pnb272w1", "c2tnb359v1", "prime256v1", "c2pnb304w1", "c2pnb368w1", "c2tnb431r1",
-					"sect283r1", "sect283k1", "secp256r1", "sect571r1", "sect571k1", "sect409r1", "sect409k1",
-					"secp521r1", "secp384r1", "P-521", "P-256", "P-384", "B-409", "B-283", "B-571", "K-409", "K-283",
-					"K-571", "brainpoolp512r1", "brainpoolp384t1", "brainpoolp256r1", "brainpoolp512t1", "brainpoolp256t1",
-					"brainpoolp320r1", "brainpoolp384r1", "brainpoolp320t1", "FRP256v1", "sm2p256v1" };
-			for (int i = 0; i < validList.length; i++) {
-				String param = validList[i];
-		%>
-		<option value="<%=param%>"> <%=param%></option>
-		<%	} %>
-	</select> <input type="submit" class="btn btn-primary" name="Generate EC" value="submit">
-		<br>
+	Choose ECParam<select name="ecparam" id="ecparam">
+	<option value="secp256k1">secp256k1</option>
+	<%
+		String[] validList = { "c2pnb272w1", "c2tnb359v1", "prime256v1", "c2pnb304w1", "c2pnb368w1", "c2tnb431r1",
+				"sect283r1", "sect283k1", "secp256r1", "sect571r1", "sect571k1", "sect409r1", "sect409k1",
+				"secp521r1", "secp384r1", "P-521", "P-256", "P-384", "B-409", "B-283", "B-571", "K-409", "K-283",
+				"K-571", "brainpoolp512r1", "brainpoolp384t1", "brainpoolp256r1", "brainpoolp512t1", "brainpoolp256t1",
+				"brainpoolp320r1", "brainpoolp384r1", "brainpoolp320t1", "FRP256v1", "sm2p256v1" };
+		for (int i = 0; i < validList.length; i++) {
+			String param = validList[i];
+	%>
+	<option value="<%=param%>"> <%=param%></option>
+	<%	} %>
+</select> <input type="submit" class="btn btn-primary" name="Generate EC" value="submit">
+	<br>
 </form>
 
 
@@ -304,10 +304,10 @@
 
 		<tr>
 			<td>
-				<textarea class="form-control animated" rows="8"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
+				<textarea class="form-control animated" rows="5"   name="publickeyparam" id="publickeyparam"><%= pubKey %></textarea>
 			</td>
 			<td>
-				<textarea class="form-control animated" rows="8"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
+				<textarea class="form-control animated" rows="5"   name="privatekeyparam" id="privatekeyparam"><%= privKey %></textarea>
 			</td>
 
 
@@ -323,7 +323,8 @@
 		</tr>
 
 		<tr>
-			<td colspan="2">Provide Signature Value (Base64) <input class="form-control"  type="text" id="signature" size="100" name="signature">
+			<td colspan="2">For Signature Verification provide signature digest in (Base64)
+				<textarea class="form-control animated" rows="3"   name="signature" id="signature"></textarea>
 
 			</td>
 		</tr>
@@ -347,7 +348,7 @@
 
 <p><strong>Elliptic Curve Digital Signature Algorithm</strong>  or  <strong>ECDSA</strong>  is a cryptographic algorithm used by Bitcoin to ensure that funds can only be spent by their rightful owners.</p>
 <p>This tool is capable of generating key the the curve</p>
-<pre><code>&quot;c2pnb272w1&quot;, &quot;c2tnb359v1&quot;, &quot;prime256v1&quot;, &quot;c2pnb304w1&quot;, &quot;c2pnb368w1&quot;, &quot;c2tnb431r1&quot;,
+<pre><code class="html">&quot;c2pnb272w1&quot;, &quot;c2tnb359v1&quot;, &quot;prime256v1&quot;, &quot;c2pnb304w1&quot;, &quot;c2pnb368w1&quot;, &quot;c2tnb431r1&quot;,
   &quot;sect283r1&quot;, &quot;sect283k1&quot;, &quot;secp256r1&quot;, &quot;sect571r1&quot;, &quot;sect571k1&quot;, &quot;sect409r1&quot;, &quot;sect409k1&quot;,
   &quot;secp521r1&quot;, &quot;secp384r1&quot;, &quot;P-521&quot;, &quot;P-256&quot;, &quot;P-384&quot;, &quot;B-409&quot;, &quot;B-283&quot;, &quot;B-571&quot;, &quot;K-409&quot;, &quot;K-283&quot;,
   &quot;K-571&quot;, &quot;brainpoolp512r1&quot;, &quot;brainpoolp384t1&quot;, &quot;brainpoolp256r1&quot;, &quot;brainpoolp512t1&quot;, &quot;brainpoolp256t1&quot;,
@@ -361,21 +362,21 @@
 	<li><strong>signature</strong>: A number that proves that a signing operation took place.</li>
 </ul>
 <p><strong>Openssl Generating EC Keys and Parameters</strong></p>
-<pre><code>$ openssl ecparam -list_curves
+<pre><code class="html">$ openssl ecparam -list_curves
 secp256k1 : SECG curve over a 256 bit prime field
 secp384r1 : NIST/SECG curve over a 384 bit prime field
 secp521r1 : NIST/SECG curve over a 521 bit prime field
 prime256v1: X9.62/SECG curve over a 256 bit prime field
 </code></pre>
 <p><strong>An EC parameters file can then be generated for any of the built-in named curves as follows:</strong></p>
-<pre><code>$ openssl ecparam -name secp256k1 -out secp256k1.pem
+<pre><code class="html">$ openssl ecparam -name secp256k1 -out secp256k1.pem
 $ cat secp256k1.pem
  -----BEGIN EC PARAMETERS-----
  BgUrgQQACg==
  -----END EC PARAMETERS-----
 </code></pre>
 <p><strong>To generate a private/public key pair from a pre-eixsting parameters file use the following:</strong></p>
-<pre><code>$ openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem
+<pre><code class="html">$ openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem
 $ cat secp256k1-key.pem
  -----BEGIN EC PRIVATE KEY-----
  MHQCAQEEIKRPdj7XMkxO8nehl7iYF9WAnr2Jdvo4OFqceqoBjc8/oAcGBSuBBAAK
@@ -384,7 +385,7 @@ $ cat secp256k1-key.pem
  -----END EC PRIVATE KEY-----
 </code></pre>
 <p><strong>Examine the specific details of the parameters associated with a particular named curve</strong></p>
-<pre><code>$ openssl ecparam -in secp256k1.pem -text -param_enc explicit -noout
+<pre><code class="html">$ openssl ecparam -in secp256k1.pem -text -param_enc explicit -noout
 Field Type: prime-field
  Prime:
  00:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:ff:
@@ -403,6 +404,50 @@ Field Type: prime-field
  ff:fe:ba:ae:dc:e6:af:48:a0:3b:bf:d2:5e:8c:d0:
  36:41:41
  Cofactor: 1 (0x1)</code></pre>
+
+<h2><a id="openssl_ec_sign_verify_example_0"></a>openssl ec sign verify example</h2>
+<p>Generate curve paramters</p>
+<pre><code class="html"> openssl ecparam -name secp256k1 -out secp256k1.pem
+
+-----BEGIN EC PARAMETERS-----
+BgUrgQQACg==
+-----END EC PARAMETERS-----
+</code></pre>
+<p>Generate a private key</p>
+<pre><code class="html">openssl ecparam -in secp256k1.pem -genkey -noout -out key1.pem
+
+-----BEGIN EC PRIVATE KEY-----
+MHQCAQEEIEdN+5FYnj+vdNTeQTJypsrDL2WzD+mE4+sDxCG92T0/oAcGBSuBBAAK
+oUQDQgAEj6L+Igws0+epgD13PpErSuddGlXfXrMyjQ/79Z8m10xFeklYy/CwD7yR
+XDX/KEqvJ6iQBkIzsQrue0akNh/p+A==
+-----END EC PRIVATE KEY-----
+</code></pre>
+<p>Generate the associated public key</p>
+<pre><code class="html">openssl ec -in key1.pem -pubout &gt; pubkey1.pem
+cat pub1.pem
+
+-----BEGIN PUBLIC KEY-----
+MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEj6L+Igws0+epgD13PpErSuddGlXfXrMy
+jQ/79Z8m10xFeklYy/CwD7yRXDX/KEqvJ6iQBkIzsQrue0akNh/p+A==
+-----END PUBLIC KEY-----
+</code></pre>
+<p>That's the data</p>
+<pre><code class="html">echo -n hello 8gwifi.org &gt; data
+
+hello 8gwifi.org
+</code></pre>
+<p>Generate the (binary) signature and convert it to base64</p>
+<pre><code class="html">openssl dgst -sha256 -sign key1.pem data &gt; sig1
+base64 sig1 &gt; sig1b64
+cat sig1b64
+
+MEUCIHiBfZmjK1R92CifJ9rki3t66oh+hnZQik3oEtngSJoFAiEAv8jD44JMqlGQ+UGPQqJMymXOTkXacsP+KClyBnX0voQ=
+</code></pre>
+<p>Verify the signature (from base64)</p>
+<pre><code class="html">base64 -d sig1b64  &gt; sig1d
+openssl dgst -sha256 -verify pubkey1.pem -signature sig1d data
+
+Verified OK</code></pre>
 
 <%@ include file="addcomments.jsp"%>
 
