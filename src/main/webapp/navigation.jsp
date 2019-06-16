@@ -16,7 +16,7 @@
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
             </li>
             <li class="nav-item active">
-              <a  class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLScuanqAZnacXSOviEZVgiArXkAz8pifb4Q1TWp0iTC4IlkXNA/viewform">Download this Software</a>
+              <a  class="nav-link" href="download.jsp">Download this Software</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link"  href="https://www.linkedin.com/in/anishnath">Hire Me!</a>
