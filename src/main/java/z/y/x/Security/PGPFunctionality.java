@@ -77,6 +77,9 @@ public class PGPFunctionality extends HttpServlet {
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
+
+
+
         // TODO Auto-generated method stub
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -92,6 +95,16 @@ public class PGPFunctionality extends HttpServlet {
                     getDiskFileFactory(request));
 
             String fName = "";
+
+
+            if(Utils.vaildate())
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License <p>\n" +
+                        "<a href=\"mailto:zarigatongy@gmail.com?Subject=Crypto License Required\" target=\"_top\">zarigatongy@gmail.com</a>\n" +
+                        "</p>\n </font>");
+                return;
+            }
 
             boolean error = false;
             StringBuilder strbg = new StringBuilder();

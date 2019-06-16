@@ -93,7 +93,9 @@ public class CipherFunctionality extends HttpServlet {
         if(Utils.vaildate())
         {
             addHorizontalLine(out);
-            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License </font>");
+            out.println("<font size=\"2\" color=\"red\"> License Expired Request Fresh License <p>\n" +
+                    "<a href=\"mailto:zarigatongy@gmail.com?Subject=Crypto License Required\" target=\"_top\">zarigatongy@gmail.com</a>\n" +
+                    "</p>\n </font>");
             return;
         }
 
