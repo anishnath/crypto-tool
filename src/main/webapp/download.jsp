@@ -25,52 +25,15 @@
 <p>Thanks for showing interest in the product, here is the instruction to download and run in your environment.</p>
 <h2><a id="Prerequisite_4"></a>Prerequisite</h2>
 <ul>
-	<li>JDK 1.8+ Installed</li>
-	<li><strong>port 8080 is open</strong></li>
-	<li>Any Linux Environment</li>
+	<li>Docker Installed</li>
 </ul>
-<h2><a id="First_Download_the_required_tar_file_11"></a>First Download the required tar file</h2>
-
-Download the installer <a href="https://sourceforge.net/projects/cryptography-playgroud/">https://sourceforge.net/projects/cryptography-playgroud/ </a>
 
 <h2><a id="Follow_the_Instruction_13"></a>Follow the Instruction</h2>
-<pre><code class="language-console">wget https://downloads.sourceforge.net/project/cryptography-playgroud/crypto-installer.tar </code></pre>
-<pre><code class="language-console">test2@ubuntu:~/crypto-installer$ tar xvf crypto-installer.tar;cd crypto-installer
-test2@ubuntu:~/crypto-installer$ ls -ltr
-total 50384
--rw-rw-r-- 1 test2 test2  9094712 Jul  2 23:00 apache-tomcat-7.0.90.tar.gz
--rw-r--r-- 1 test2 test2 20263718 Jul 23 10:03 ROOT.war
--rw-r--r-- 1 test2 test2  8007628 Jul 23 10:03 ntru.war
--rw-r--r-- 1 test2 test2 14213029 Jul 23 10:03 crypto.war
--rw-rw-r-- 1 test2 test2      909 Jul 23 10:50 art
--rwxrwxr-x 1 test2 test2     1418 Jul 23 11:16 bootstart.sh
-test2@ubuntu:~/crypto-installer$ ./bootstart.sh
+<pre><code class="language-console">docker run -p 8080:8080 anishnath/crypto:latest</code></pre>
 
-###               #   ##  #     ###                  #          #           #        #  #
- # #                  #         #                     #          #           #        #  #
- ##    ### # #  #  # ###   #   #      ### #  #  #### ###  ###    #  ###  ## ###  ### #  #   ##  ###
-###   #  # # ###  #   #   #    #      #   # #   ## # #   #  #   #   # #  #  #   #  # #  #  # #  #
-# #  #  #  ## ##  #  #    #    #     #     ##   #  # #   #  #   #  ## #   # #   # #  #  #  ### #
-###   ###  ## #   #  #    #     ###  #     #    ###  ##  ###    #  #  # ##  ##  ###  #  #  ### #
-        #            #                     #   #
-     ###             #                     #   #
-                                          #
-
-Welcome to 8gwifi Crypto Installer
-
-Bootstarping this will take a Minute or two
-
-Using CATALINA_BASE:   /home/test2/crypto-installer/8gwifi
-Using CATALINA_HOME:   /home/test2/crypto-installer/8gwifi
-Using CATALINA_TMPDIR: /home/test2/crypto-installer/8gwifi/temp
-Using JRE_HOME:        /usr
-Using CLASSPATH:       /home/test2/crypto-installer/8gwifi/bin/bootstrap.jar:/home/test2/crypto-installer/8gwifi/bin/tomcat-juli.jar
-Tomcat started.
-{&quot;base64Encoded&quot;:&quot;Q9+zT4vKVvdQUW5I9TeklA6qJdBkLA8wSIqORPbTEVviWnklEA\u003d\u003d&quot;,&quot;intialVector&quot;:&quot;43dfb34f8bca56f750516e48f537a494&quot;}echo Bootstraping complet\n8gwifi installed sucessfully\n
-</code></pre>
 <h2><a id="URL_to_Browse_50"></a>URL to Browse</h2>
 <p>Browse the url</p>
-<p><code>http://&lt;your-ipaddress&gt;:8080</code></p>
+<p><code>http://&lt;localhost&gt;:8080</code></p>
 <h2><a id="Email_me_for_any_Support_56"></a>Email me for any Support</h2>
 <p><a href="mailto:zarigatongy@gmail.com">zarigatongy@gmail.com</a></p>
 
