@@ -484,4 +484,8 @@
     <loc>https://8gwifi.org/docs/linux-detectos.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/ansible-windows.jsp</loc>
+  </url>
+
 </urlset>
