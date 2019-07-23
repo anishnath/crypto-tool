@@ -8,7 +8,8 @@
                     <li><a href="naclaead.jsp"><font size="2.5px">Nacl AEAD Encryption & Decryption</font></a></li>
                     <li><a href="naclboxenc.jsp"><font size="2.5px">Nacl Box Encryption & Decryption</font></a></li>
                     <li><a href="naclsealboxenc.jsp"><font size="2.5px">Nacl SealBox Encryption & Decryption</font></a></li>
-                    <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
+                    <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest(Text)</font></a></li>
+                    <li><a href="mdfile.jsp"><font size="2.5px">Generate Message Digest(File)</font></a></li>
                     <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
                     <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption</font> </a></li>
                     <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption</font> </a></li>

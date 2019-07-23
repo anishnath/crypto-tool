@@ -488,4 +488,8 @@
     <loc>https://8gwifi.org/docs/ansible-windows.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/mdfile.jsp</loc>
+  </url>
+
 </urlset>
