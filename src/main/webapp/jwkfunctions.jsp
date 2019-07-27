@@ -16,7 +16,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-09-27",
-  "applicationCategory" : [ ""].
+  "applicationCategory" : [ "Generate JSON Web key", "Generate JWK RSA KEY", "jwk ec curve key generation"],
   "downloadUrl" : "https://8gwifi.org/jwkfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "jwk key generate online, jwk rsa key generation, jwk ec curve key generation, P-256,P-384,P-521, jwk Octet Key Pair genertae online, jwk Octet Sequence keys*",
