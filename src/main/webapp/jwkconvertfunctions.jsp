@@ -17,7 +17,7 @@
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "applicationCategory" : [ "jwk", "openssl", "pem" , "jwt"].
+  "applicationCategory" : [ "jwk", "openssl", "pem" , "jwt"],
   "datePublished" : "2018-09-28",
   "downloadUrl" : "https://8gwifi.org/jwkfunctions.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
