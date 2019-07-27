@@ -22,7 +22,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2017-09-25",
-  "applicationCategory" : [ "online hmac generate" , "generate hmac online" "hmac generate" , "sha hmac" , " hmac tutorial" , "hmac openssl" , "hmac verify sign example" "hmac TIGER  SHA-1  SHA-224  SHA-256  RC2  IDEA  PBEWithHmacSHA1  PBE-SHA384  PBE-SHA256  PBE-SHA512  RIPEMD128  RIPEMD160  SKIPJACK" ],
+  "applicationCategory" : [ "online hmac generate" , "generate hmac online", "hmac generate" , "sha hmac" , " hmac tutorial" , "hmac openssl" , "hmac verify sign example", "hmac TIGER  SHA-1  SHA-224  SHA-256  RC2  IDEA  PBEWithHmacSHA1  PBE-SHA384  PBE-SHA256  PBE-SHA512  RIPEMD128  RIPEMD160  SKIPJACK" ],
   "downloadUrl" : "https://8gwifi.org/hmacgen.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "hmac generate using TIGER  SHA-1  SHA-224  SHA-256  RC2  IDEA  PBEWithHmacSHA1  PBE-SHA384  PBE-SHA256  PBE-SHA512  RIPEMD128  RIPEMD160  SKIPJACK",

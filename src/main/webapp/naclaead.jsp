@@ -17,7 +17,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-19",
-  "applicationCategory" : [ "nacl", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl" "aesgcm" ],
+  "applicationCategory" : [ "nacl", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl", "aesgcm" ],
   "downloadUrl" : "https://8gwifi.org/naclencdec.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : ""Nacl xsalsa20 Encryption & Decryption online, nacl encryption decryption online, eccrypt online, libsodium encryption online, secret box encryption secret box crypto_stream",

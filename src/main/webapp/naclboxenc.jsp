@@ -17,7 +17,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-19",
-  "applicationCategory" : [ "nacl box", "nacl crypto_box", "nacl", "nacl box encryption decryption", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl" "aesgcm" ],
+  "applicationCategory" : [ "nacl box", "nacl crypto_box", "nacl", "nacl box encryption decryption", "libsodium", "cryptography", "eccrypt", "crypto_stream_aes128ctr", "crypto_stream_salsa208", "nacl online", "libsodium online", "Cryptography in NaCl", "aesgcm" ],
   "downloadUrl" : "https://8gwifi.org/naclboxenc.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "Nacl Box Public Key Cryptography, nacl box tutorial, nacl online, nacl box encryption decryptio, nacl generate keys, nacl tutorial crypto_box,curve25519,xsalsa20,poly130",
