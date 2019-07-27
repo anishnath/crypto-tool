@@ -22,7 +22,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-11-30",
-  "applicationCategory" : [ "pgp key generate online","pgp key in openssl format", "pgp key in pem format" ,"generate aes pgp keys", "openpgp keys online"]
+  "applicationCategory" : [ "pgp key generate online","pgp key in openssl format", "pgp key in pem format" ,"generate aes pgp keys", "openpgp keys online"],
   "downloadUrl" : "https://8gwifi.org/pgpkeyfunction.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "generate pgp keys, openpgpg keys, gpg keys, pgp public and private keys, adding entity to pgp keys, ",
