@@ -23,7 +23,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-07",
-  "applicationCategory" : [ "base64 convert hex", "hex convert base64", "online conversion"]
+  "applicationCategory" : [ "base64 convert hex", "hex convert base64", "online conversion"],
   "downloadUrl" : "https://8gwifi.org/base64Hex.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "base64 to hex conversion, hex to base64 convert ",
