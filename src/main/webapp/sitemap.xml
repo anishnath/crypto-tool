@@ -492,4 +492,8 @@
     <loc>https://8gwifi.org/mdfile.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/docker-privaterepo.jsp</loc>
+  </url>
+
 </urlset>
