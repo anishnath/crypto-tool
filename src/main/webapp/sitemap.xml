@@ -496,4 +496,8 @@
     <loc>https://8gwifi.org/docs/docker-privaterepo.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-java.jsp</loc>
+  </url>
+
 </urlset>
