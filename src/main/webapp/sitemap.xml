@@ -500,4 +500,10 @@
     <loc>https://8gwifi.org/docs/kube-java.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/docker-install.jsp</loc>
+  </url>
+
+
+
 </urlset>
