@@ -138,7 +138,7 @@ public class CipherFunctionality extends HttpServlet {
                 }
                 if (!isValidMessage) {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption Please Base64 Message whihc is generated during encryption process " + plaintext + "</font>");
+                    out.println("<font size=\"4\" color=\"red\"> For Decryption Please Base64 Message which is generated during encryption process " + plaintext + "</font>");
                     return;
                 }
 
@@ -207,7 +207,7 @@ public class CipherFunctionality extends HttpServlet {
 
                 EncodedMessage certpojo1 = gson.fromJson(content.toString(), EncodedMessage.class);
                 addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "]</font> <font size=\"5\" color=\"purple\"> [" + plaintext + "] </font> <font size=\"4\" color=\"blue\"> using Algo [" + cipherparameter + "] </font><br/><textarea name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"30\">" + certpojo1.getMessage() + "</textarea></br>");
+                out.println("<p><font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "]</font> </p><p><font size=\"5\" color=\"purple\"> [" + plaintext + "] </font></p><p> <font size=\"4\" color=\"blue\"> using Algo [" + cipherparameter + "] </font></p><p><textarea class=\"form-control\" name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + certpojo1.getMessage() + "</textarea></br></p>");
 
                 if(!"decrypt".equalsIgnoreCase(encryptorDecrypt))
                 {
