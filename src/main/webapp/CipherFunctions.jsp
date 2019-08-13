@@ -1,3 +1,6 @@
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="sun.misc.BASE64Encoder" %>
+<%@ page import="sun.misc.BASE64Decoder" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -198,8 +201,17 @@
         {
 
 			text = text.replace(" ","+");
+			pass = pass.replace(" ","+");
+
+
+			pass = new String(new BASE64Decoder().decodeBuffer(pass));
+
+
             if("decrypt".equalsIgnoreCase(mode.trim()))
             {
+
+
+
     %>
 
 					document.getElementById("plaintext").value = '<%=text%>'
