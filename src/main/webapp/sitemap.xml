@@ -504,6 +504,9 @@
     <loc>https://8gwifi.org/docs/docker-install.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-lets.jsp</loc>
+  </url>
 
 
 </urlset>
