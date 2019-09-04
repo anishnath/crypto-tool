@@ -508,5 +508,9 @@
     <loc>https://8gwifi.org/docs/kube-lets.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/kube-externalname.jsp</loc>
+  </url>
+
 
 </urlset>
