@@ -6,7 +6,8 @@
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description" content="meltdown spectre vendor Update Speculative Execution Exploit Performance Impacts - Describing the performance impacts to security patches for CVE-2017-5754 CVE-2017-5753 and CVE-2017-5715, cpu performance issue, XEN, QEMU,VMware,rhel,mozilla,chrome,aws,cloud,azure,digitalocean,antivirus,trendmocro" />
 <meta name="keywords" content="Meltdown,Spectre Vendor Patches,XEN, QEMU,VMware,rhel,mozilla,chrome,aws,cloud,azure,digitalocean,antivirus,trendmocro,windows,andorid,minipli patches,Apple" />
-<%@ include file="include_css.jsp" %> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%@ include file="include_css.jsp" %>
 <script type="text/javascript">
         $(document).ready(function() {
             $('#executeMethod').click(function (event)
