@@ -25,7 +25,8 @@
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description" content="Online check if a host or IP (Ipv4/IPv6) is reachable from the internet  Tests for DNS AAAA records, IPv6-addressable nameservers, glue, IPv6 connectivity (port 80), and several other elements. Trace the IP address Location, curl online" />
 <meta name="keywords" content="curl online, curl ipv6 online, dns Query Online,IP, IPv6, website ipv6 test,DNS,AAAA record, ipv6 web test,DNS Testing, ICMP,ICMPv6,dns query online,ip address, location, geolocation,IP Address Lookup, IP Locator, IP Address Locator, IP Location, IP Lookup, online curl " />
-<%@ include file="include_css.jsp" %>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%@ include file="include_css.jsp" %>
 
 <script type="text/javascript">
         $(document).ready(function() {
