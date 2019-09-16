@@ -6,6 +6,7 @@
 <meta name="description" content="free online tool compute a HMAC using your desired algorithm PBEWithHmacSHA1,PBEWithHmacSHA384,PBEWithHmacSHA256,PBEWithHmacSHA512,HmacSHA1,HmacSHA384,HmacSHA224,HmacSHA256,HmacMD5,HmacPBESHA1,HMACRIPEMD128,IDEAMAC,RC2MAC,HMACRIPEMD160,DES,DESEDEMAC,SKIPJACKMAC,HMACTIGER,tiger "/>
 <meta name="keywords"
 	content="online hmac generate, hmac online, hmac PBEWithHmacSHA1,PBEWithHmacSHA384,PBEWithHmacSHA256,PBEWithHmacSHA512,HmacSHA1,HmacSHA384,HmacSHA224,HmacSHA256,HmacMD5,HmacPBESHA1,HMACRIPEMD128,IDEAMAC,RC2MAC,HMACRIPEMD160,DES,DESEDEMAC,SKIPJACKMAC,HMACTIGER,tiger, ripemd128 ripemd160 ripemd256 ripemd320 sha sha-1 sha-224 sha-256 sha-384 sha-512 tiger whirlpool, digest algorithm online">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
 
 
