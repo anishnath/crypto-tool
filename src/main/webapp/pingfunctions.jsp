@@ -25,7 +25,8 @@
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description" content="Online Ipv4/IPv6 Ping Trace Tool, check if a host or IP (IPv6) is reachable from the internet and know the IP address Location and geolocation " />
 <meta name="keywords" content="ping online,ping6 online,curl online,IP, IPv6, IPNG, online ping, ttl, test, check, packet, echo, lag, host, count, ttl, mtu,icmp,icmpv6,ping6,ip address, location, geolocation,IP Address Lookup, IP Locator, IP Address Locator, IP Location, IP Lookup" />
-<%@ include file="include_css.jsp" %> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%@ include file="include_css.jsp" %>
 <script type="text/javascript">
         $(document).ready(function() {
             $('#executeMethod').click(function (event)
