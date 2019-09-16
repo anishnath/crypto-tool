@@ -29,6 +29,7 @@
 	<meta name="keywords"
 		  content="generate certificate online,what is an intermediate certificate,root certificate vs server certificate,openssl create ca and sign certificate,openssl create intermediate ca,trial certificate online,test ca certificate generate online, generate ca authority,create your own certificate authority,ssl certificate check,digicert ssl checker,openssl create ca and sign certificate,openssl create intermediate ca
  ">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<%@ include file="header-script.jsp"%>
 
 	<script type="text/javascript">
