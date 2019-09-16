@@ -39,6 +39,7 @@ K-571,brainpoolp512r1,brainpoolp384t1,brainpoolp256r1,brainpoolp512t1,brainpoolp
 	<meta name="resource-type" content="document" />
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="include_css.jsp"%>
 
