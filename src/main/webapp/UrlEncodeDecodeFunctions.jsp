@@ -5,6 +5,7 @@
   <title> Codecs | URLEncode |  simple URL Encoder</title>
   <meta name="description" content="Encode your URL string with this best easy to use online tool." />
   <meta name="keywords" content="url, decode, encode, online, tool  keyboard, html, codes, html, codes, hash, functions, url, tld, encode, decode"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <%@ include file="include_css.jsp" %> 
 <script type="text/javascript">
         $(document).ready(function() {
