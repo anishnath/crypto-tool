@@ -1,9 +1,4 @@
 <div class="card my-4">
-    <h5 class="card-header">Online Terminals</h5>
-    <a href="https://0cloud0.com/playground" target="_blank"><img class="img-fluid rounded" src="images/site/terminal.png"  alt="Online Terminals"></a>
-</div>
-
-<div class="card my-4">
     <h5 class="card-header">For Coffee/ Beer/ Amazon Bill and further development of the project Support by Purchasing, The Modern Cryptography CookBook for Just  <a href="http://leanpub.com/crypto/c/NPsT3TZmqrNS" target="_blank" rel="noopener">  $9  Coupon Price </a></h5>
     <p><iframe class="embed-responsive-item" width='160' height='400' src='https://leanpub.com/crypto/embed' frameborder='0' allowtransparency='true'></iframe></p>
 </div>
