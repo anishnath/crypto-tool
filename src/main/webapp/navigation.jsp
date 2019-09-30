@@ -6,7 +6,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://leanpub.com/b/cryptob" target="_blank" rel="noopener"><small>4 Cryptography book Just $9 </small>
+              <a class="nav-link" href="https://0cloud0.com/playground" target="_blank" rel="noopener">Online Linux Terminal
               </a>
             </li>
             <li class="nav-item active">
