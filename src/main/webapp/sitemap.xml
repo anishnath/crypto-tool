@@ -515,5 +515,8 @@
     <loc>https://8gwifi.org/docs/docker-baseimage.jsp</loc>
   </url>
 
+  <url>
+    <loc>https://8gwifi.org/docs/curl.jsp</loc>
+  </url>
 
 </urlset>
