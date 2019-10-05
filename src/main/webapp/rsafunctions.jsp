@@ -207,6 +207,12 @@
 				$('#form').delay(200).submit()
 			});
 
+			$('#cipherparameter6').click(function(event) {
+				//
+				// event.preventDefault();
+				$('#form').delay(200).submit()
+			});
+
 			$('#encryptparameter').click(function(event) {
 				//
 				// event.preventDefault();
@@ -357,6 +363,13 @@
 					<label>
 						<input id="cipherparameter5" type="radio" name="cipherparameter"
 							   value="RSA/ECB/OAEPWithSHA-1AndMGF1Padding">RSA/ECB/OAEPWithSHA-1AndMGF1Padding
+					</label>
+				</div>
+
+				<div class="radio">
+					<label>
+						<input id="cipherparameter6" type="radio" name="cipherparameter"
+							   value="RSA/ECB/OAEPWithSHA-256AndMGF1Padding">RSA/ECB/OAEPWithSHA-256AndMGF1Padding
 					</label>
 				</div>
 
