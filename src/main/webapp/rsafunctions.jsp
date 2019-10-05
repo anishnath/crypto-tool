@@ -201,6 +201,12 @@
 				$('#form').delay(200).submit()
 			});
 
+			$('#cipherparameter5').click(function(event) {
+				//
+				// event.preventDefault();
+				$('#form').delay(200).submit()
+			});
+
 			$('#encryptparameter').click(function(event) {
 				//
 				// event.preventDefault();
