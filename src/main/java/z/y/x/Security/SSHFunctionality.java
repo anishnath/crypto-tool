@@ -3,12 +3,9 @@ package z.y.x.Security;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import z.y.x.r.LoadPropertyFileFunctionality;
 
@@ -21,11 +18,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 /**
  * Created by aninath on 11/16/17.
@@ -176,7 +171,7 @@ public class SSHFunctionality extends HttpServlet {
 
                 sshpojo sshpojo = gson.fromJson(content.toString(), sshpojo.class);
                 if(sshpojo!=null) {
-                    out.println("<font size=\"4\" color=\"green\"> <b><u>SSH-keygen for [" + sshpojo.getAlgo() + "-" + sshpojo.getKeySize() + "]  (PrivateKey/PublicKey) </b></u> <br>");
+                    out.println("<font size=\"4\" color=\"blue\"> <b><u>SSH-keygen for [" + sshpojo.getAlgo() + "-" + sshpojo.getKeySize() + "]  (PrivateKey/PublicKey) </b></u> <br>");
                     out.println("<font size=\"3\" color=\"red\"> FingerPrint [" + sshpojo.getFingerprint() + "]</font> <br>");
                     out.println("<p>Private Key</p>");
                     out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"20\" cols=\"30\" form=\"X\">" + sshpojo.getPrivateKey() + "</textarea>");
