@@ -15,12 +15,29 @@
 	<meta name="language" content="en" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<%@ include file="header-script.jsp"%>
+	<script src="js/jquery.min.js"></script>
+
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="css/blog-post.css" rel="stylesheet">
+
+	<link rel="stylesheet"  href="css/highlight/default.min.css">
+	<script src="css/highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<%@ include file="analytics.jsp"%>
 
 
 </head>
 
-<%@ include file="body-script.jsp"%>
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<body>
+
 <h1 class="mt-4">Contact Us/ Feature Request</h1>
 
 <p>For feature request and other support reach out to me </p>
@@ -34,19 +51,16 @@
 <hr>
 
 
-<%@ include file="thanks.jsp"%>
-
-<hr>
-<div class="sharethis-inline-share-buttons"></div>
 
 <hr>
 
 
-<%@ include file="footer_adsense.jsp"%>
+<hr>
 
-<%@ include file="addcomments.jsp"%>
+
 
 </div>
 
-<%@ include file="body-close.jsp"%>
+</body>
+</html>
 

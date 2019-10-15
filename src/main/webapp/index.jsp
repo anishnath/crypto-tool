@@ -23,12 +23,26 @@
   "softwareVersion" : "v1.0"
 }
 </script>
-	<title>Online Generate SSH keys algorithm RSA,DSA,ECDSA </title>
+	<title>Generate SSH keys algorithm RSA,DSA,ECDSA </title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="description" content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows">
 	<meta name="keywords" content="Generate SSH keys RSA,DSA,ECDSA ssh-keygen online, generate rsa ssh keys, generate ecdsa keys, generate dsa keys, ssh sa key size 512,576,640,704,768,832,896,960,1024,2048, ssh ecdsa keysize 256,384,521, ssh rsa key size 1024,2046,4096,ssh-keygen example, openssl ssh keypair example, generate ssh keypair using openssl,ssh-rsa key generator,generate ssh2 key online,generate ssh key ubuntu,ssh-keygen options,ssh-keygen filename,putty key generator,ssh-keygen windows">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<%@ include file="header-script.jsp"%>
+
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="css/blog-post.css" rel="stylesheet">
+
+	<link rel="stylesheet"  href="css/highlight/default.min.css">
+	<script src="css/highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<%@ include file="analytics.jsp"%>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 
@@ -198,89 +212,102 @@
 	</script>
 </head>
 
-<%@ include file="body-script.jsp"%>
-<h1 class="mt-4">Generate SSH Keys Online</h1>
-<hr>
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<body>
 
 
-<div id="loading" style="display: none;">
-	<img src="images/712.GIF" alt="" />Loading!
-</div>
+<div class="container">
+	<div class="row">
 
-<form class="form-horizontal" id="form" method="POST">
-	<input type="hidden" name="methodName" id="methodName"
-		   value="GENERATE_SSHKEYGEN">
+		<div class="col-lg-8">
 
+			<img class="img-fluid rounded" src="images/logo-with-slogan.aac0611a.png" alt="Referefce 8gwifi.org">
 
-	<B>SSH-Keygen Online </B>
-
-	Algorithm
-
-	<input checked="checked" id="rsa" type="radio"
-		   name="sshalgo" value="RSA">RSA
-	<input id="dsa" type="radio"
-		   name="sshalgo" value="DSA">DSA
-	<input  id="ecdsa" type="radio"
-			name="sshalgo" value="ECDSA">ECDSA
-
-	<div id="rsakeysize">
-		<b>RSA Key Size</b>
-		<input  id="rsa1024" type="radio"
-				name="sshkeysize" value="1024">1024
-		<input id="rsa2048" type="radio"
-			   name="sshkeysize" value="2048">2048
-		<input checked id="rsa4096" type="radio"
-			   name="sshkeysize" value="4096">4096
-	</div>
-
-	<div id="ecdsakeysize">
-		<b>ECDSA Key Size </b>
-		<input  id="ecdsa256" type="radio"
-				name="sshkeysize" value="256">256
-		<input id="ecdsa384" type="radio"
-			   name="sshkeysize" value="384">384
-		<input checked="checked" id="ecdsa512" type="radio"
-			   name="sshkeysize" value="521">521
-
-	</div>
-
-	<div id="dsakeysize">
-		<b>DSA Key Size</b>
-		<input id="dsa512" type="radio"
-			   name="sshkeysize" value="512">512
-		<input id="dsa576" type="radio"
-			   name="sshkeysize" value="576">576
-		<input id="dsa640" type="radio"
-			   name="sshkeysize" value="640">640
-		<input id="dsa704" type="radio"
-			   name="sshkeysize" value="704">704
-		<input id="dsa768" type="radio"
-			   name="sshkeysize" value="768">768
-		<input id="dsa832" type="radio"
-			   name="sshkeysize" value="832">832
-		<input id="dsa896" type="radio"
-			   name="sshkeysize" value="896">896
-		<input id="dsa960" type="radio"
-			   name="sshkeysize" value="960">960
-		<input id="dsa1024" type="radio"
-			   name="sshkeysize" value="1024">1024
-		<input checked id="dsa2048" type="radio"
-			   name="sshkeysize" value="2048" >2048
-
-	</div>
-
-	Passphrase <input class="form-control" id="passphrase" type="text" name="passphrase" placeholder="for generating encrypted keys" size="30"
-					  value="">
-	<input type="button" class="btn btn-primary" id="generatessh-keys" name="generatessh-keys" value="Generate-SSH-Keys">
-
-	<div id="output"></div>
+			<h1 class="mt-4">Generate SSH Keys </h1>
+			<hr>
 
 
-</form>
+			<div id="loading" style="display: none;">
+				<img src="images/712.GIF" alt="" />Loading!
+			</div>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+			<form class="form-horizontal" id="form" method="POST">
+				<input type="hidden" name="methodName" id="methodName"
+					   value="GENERATE_SSHKEYGEN">
 
-</div>
 
-<%@ include file="body-close.jsp"%>
+				<B>SSH-Keygen Online </B>
+
+				Algorithm
+
+				<input checked="checked" id="rsa" type="radio"
+					   name="sshalgo" value="RSA">RSA
+				<input id="dsa" type="radio"
+					   name="sshalgo" value="DSA">DSA
+				<input  id="ecdsa" type="radio"
+						name="sshalgo" value="ECDSA">ECDSA
+
+				<div id="rsakeysize">
+					<b>RSA Key Size</b>
+					<input  id="rsa1024" type="radio"
+							name="sshkeysize" value="1024">1024
+					<input id="rsa2048" type="radio"
+						   name="sshkeysize" value="2048">2048
+					<input checked id="rsa4096" type="radio"
+						   name="sshkeysize" value="4096">4096
+				</div>
+
+				<div id="ecdsakeysize">
+					<b>ECDSA Key Size </b>
+					<input  id="ecdsa256" type="radio"
+							name="sshkeysize" value="256">256
+					<input id="ecdsa384" type="radio"
+						   name="sshkeysize" value="384">384
+					<input checked="checked" id="ecdsa512" type="radio"
+						   name="sshkeysize" value="521">521
+
+				</div>
+
+				<div id="dsakeysize">
+					<b>DSA Key Size</b>
+					<input id="dsa512" type="radio"
+						   name="sshkeysize" value="512">512
+					<input id="dsa576" type="radio"
+						   name="sshkeysize" value="576">576
+					<input id="dsa640" type="radio"
+						   name="sshkeysize" value="640">640
+					<input id="dsa704" type="radio"
+						   name="sshkeysize" value="704">704
+					<input id="dsa768" type="radio"
+						   name="sshkeysize" value="768">768
+					<input id="dsa832" type="radio"
+						   name="sshkeysize" value="832">832
+					<input id="dsa896" type="radio"
+						   name="sshkeysize" value="896">896
+					<input id="dsa960" type="radio"
+						   name="sshkeysize" value="960">960
+					<input id="dsa1024" type="radio"
+						   name="sshkeysize" value="1024">1024
+					<input checked id="dsa2048" type="radio"
+						   name="sshkeysize" value="2048" >2048
+
+				</div>
+
+				Passphrase <input class="form-control" id="passphrase" type="text" name="passphrase" placeholder="for generating encrypted keys" size="30"
+								  value="">
+				<input type="button" class="btn btn-primary" id="generatessh-keys" name="generatessh-keys" value="Generate-SSH-Keys">
+
+				<div id="output"></div>
+
+
+			</form>
+
+
+
+		</div>
+
+</body>
+</html>
