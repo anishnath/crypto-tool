@@ -1,5 +1,5 @@
 url=localhost
-port=8082
+port=8080
 scheme=http://
 ep=http://localhost/crypto/rest/
 epn=http://localhost/ntru/rest/
