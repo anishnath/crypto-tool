@@ -4,6 +4,7 @@
               <div class="row">
                 <div>
                 <ul>
+                    <li><a href="diff.jsp"><font size="2.5px">Compare text differences</font></a></li>
                     <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2.5px">URL Encoders/Decoders</font></a></li>
                     <li><a href="HexToStringFunctions.jsp"><font size="2.5px">Hex To String Conversion</font></a></li>
                     <li><a href="HexToStringFunctions.jsp"><font size="2.5px">String To Hex Conversion</font></a></li>

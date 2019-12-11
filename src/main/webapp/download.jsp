@@ -29,7 +29,7 @@
 </ul>
 
 <h2><a id="Follow_the_Instruction_13"></a>Follow the Instruction</h2>
-<pre><code class="language-console">docker run -p 8080:8080 anishnath/crypto:latest</code></pre>
+<pre><code class="language-console">docker run -d -p 8080:8080 anishnath/crypto:latest</code></pre>
 
 <h2><a id="URL_to_Browse_50"></a>URL to Browse</h2>
 <p>Browse the url</p>
