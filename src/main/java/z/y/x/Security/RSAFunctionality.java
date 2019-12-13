@@ -385,7 +385,7 @@ public class RSAFunctionality extends HttpServlet {
 
                         Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "rsa/rsaencrypt";
+                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "rsa/encrypt";
                         post = new HttpPost(url1);
                         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                         urlParameters.add(new BasicNameValuePair("p_msg", message));
