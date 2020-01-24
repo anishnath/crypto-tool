@@ -213,6 +213,31 @@
 
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
+<hr>
+<h3 class="code-line" data-line-start=0 data-line-end=1 ><a id="JWS_0"></a>JWS</h3>
+
+<p class="has-line-data" data-line-start="1" data-line-end="2">JSON Web Signature (JWS) represents content secured with <strong>digital signatures</strong> or Message Authentication Codes (MACs) using JSON based data structures</p>
+<p class="has-line-data" data-line-start="3" data-line-end="4"><strong>JWS HMAC Algo</strong></p>
+<ul>
+    <li class="has-line-data" data-line-start="5" data-line-end="6">HS256 - HMAC with SHA-256, requires 256+ bit secret</li>
+    <li class="has-line-data" data-line-start="6" data-line-end="7">HS384 - HMAC with SHA-384, requires 384+ bit secret</li>
+    <li class="has-line-data" data-line-start="7" data-line-end="9">HS512 - HMAC with SHA-512, requires 512+ bit secret</li>
+</ul>
+<p class="has-line-data" data-line-start="9" data-line-end="10"><strong>JWS RSA Algo</strong></p>
+<ul>
+    <li class="has-line-data" data-line-start="11" data-line-end="12">RS256 - RSA PKCS#1 signature with SHA-256</li>
+    <li class="has-line-data" data-line-start="12" data-line-end="13">RS384 - RSA PKCS#1 signature with SHA-384</li>
+    <li class="has-line-data" data-line-start="13" data-line-end="14">RS512 - RSA PKCS#1 signature with SHA-512</li>
+    <li class="has-line-data" data-line-start="14" data-line-end="15">PS256 - RSA PSS signature with SHA-256</li>
+    <li class="has-line-data" data-line-start="15" data-line-end="16">PS384 - RSA PSS signature with SHA-384</li>
+    <li class="has-line-data" data-line-start="16" data-line-end="18">PS512 - RSA PSS signature with SHA-512</li>
+</ul>
+<p class="has-line-data" data-line-start="18" data-line-end="19"><strong>JWS Elliptic Curve (EC) Algo</strong></p>
+<ul>
+    <li class="has-line-data" data-line-start="20" data-line-end="21">ES256 - EC P-256 DSA with SHA-256</li>
+    <li class="has-line-data" data-line-start="21" data-line-end="22">ES384 - EC P-384 DSA with SHA-384</li>
+    <li class="has-line-data" data-line-start="22" data-line-end="23">ES512 - EC P-521 DSA with SHA-512</li>
+</ul>
 
 
 <%@ include file="addcomments.jsp"%>
