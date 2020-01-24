@@ -300,6 +300,15 @@
 		<url-pattern>/JWKFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>JWSFunctionality</servlet-name>
+		<servlet-class>z.y.x.Security.JWSFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JWSFunctionality</servlet-name>
+		<url-pattern>/JWSFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
