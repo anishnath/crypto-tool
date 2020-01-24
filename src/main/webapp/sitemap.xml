@@ -548,4 +548,7 @@
   <url>
     <loc>https://8gwifi.org/hexdump.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/jwsgen.jsp</loc>
+  </url>
 </urlset>
