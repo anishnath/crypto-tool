@@ -14,18 +14,18 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Online hmac generate using algorithms TIGER  SHA-1  SHA-224  SHA-256  RC2  IDEA  PBEWithHmacSHA1  PBE-SHA384  PBE-SHA256  PBE-SHA512  RIPEMD128  RIPEMD160  SKIPJACK  ",
+  "name" : "online jws key generator, jws mac key, jws rsa key generator, jws ec key generator",
   "image" : "https://8gwifi.org/images/site/jwsgen.png",
   "url" : "https://8gwifi.org/jwsgen.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2017-09-25",
+  "datePublished" : "2020-01-24",
   "applicationCategory" : [ "online jws generate" , "generate jws online", "jws online" , "jws signature" , "jws rsa key" , "jws mac key"],
-  "downloadUrl" : "https://8gwifi.org/hmacgen.jsp",
+  "downloadUrl" : "https://8gwifi.org/jwsgen.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "Generate JWS key using alogrithms HS256,H354,H512,RS256,RS512,RS384,PS256,PS356,PS512,ES256,ES384,ES512 ",
+  "requirements" : "Generate JWS key, sign payload using alogrithms HS256,H354,H512,RS256,RS512,RS384,PS256,PS356,PS512,ES256,ES384,ES512 ",
   "softwareVersion" : "v1.0"
 }
 </script>
@@ -118,7 +118,7 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Generate JWS key and Signed Payload</h1>
+<h1 class="mt-4">Generate JWS key and Sign Payload</h1>
 <p>This tool will help you to signed the payload and generate the serialiazed JWS Key using Algorithms HMAC,RSA and EC</p>
 <hr>
 
