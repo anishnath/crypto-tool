@@ -28,6 +28,7 @@
                     <li><a href="scrypt.jsp"><font size="2.5px">SCrypt Password Hash </font> </a></li>
                     <li><a href="DHFunctions.jsp"><font size="2.5px">Diffie-Hellman Key Exchange</font> </a></li>
                     <li><a href="PemParserFunctions.jsp"><font size="2.5px">PEMReader Decode Certificate </font></a></li>
+                    <li><a href="pempublic.jsp"><font size="2.5px">Extract Public key from Private Key</font></a></li>
                     <li><a href="pempasswordfinder.jsp"><font size="2.5px">Encrypted PEM password finder</font></a></li>
                     <li><a href="passwdgen.jsp"><font size="2.5px">Strong Random Passwd Generator</font> </a></li>
                     <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>

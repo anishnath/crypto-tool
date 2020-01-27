@@ -61,6 +61,7 @@ public class CipherFunctionality extends HttpServlet {
     private static final String  METHOD_VERIFY_CERTSCSR = "METHOD_VERIFY_CERTSCSR";
     private static final String METHOD_CIPHERBLOCK_NEW = "CIPHERBLOCK_NEW";
     private static final String METHOD_ENCRYPTED_PEM_PASSWORD = "ENCRYPTED_PEM_PASSWORD";
+    private static final String METHOD_EXTRACT_PUBLICKEY = "EXTRACT_PUBLICKEY";
 
 
 
@@ -89,6 +90,40 @@ public class CipherFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
         PrintWriter out = response.getWriter();
+
+        if (METHOD_EXTRACT_PUBLICKEY.equalsIgnoreCase(methodName)) {
+
+            final String password = request.getParameter("password");
+            final String pem = request.getParameter("pem");
+
+            if(null == pem || pem.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> PEM file is null or empty </font>");
+                return;
+            }
+
+            if (!pem.contains("PRIVATE KEY")) {
+
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> PEM file is not Valid </font>");
+                return;
+            }
+
+            PemParser parser = new PemParser();
+            try {
+                String message = parser.extractPublicKey(pem, password);
+                addHorizontalLine(out);
+                // System.out.println("encodedMessage-- " + encodedMessage);
+                out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
+                return;
+            } catch (Exception e) {
+                addHorizontalLine(out);
+                out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
+            }
+
+
+        }
 
         if (METHOD_CIPHERBLOCK_NEW.equalsIgnoreCase(methodName)) {
 
