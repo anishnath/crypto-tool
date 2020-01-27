@@ -30,6 +30,7 @@ public class JWSFunctionality extends HttpServlet {
     private static final String METHOD_GENERATE_JSONKEY = "GENERATE_JSONKEY";
 
     private static final String METHOD_SIGN_JSON = "SIGN_JSON";
+    private static final String METHOD_PARSE_JWS = "PARSE_JWS";
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +60,123 @@ public class JWSFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
+        if (METHOD_PARSE_JWS.equalsIgnoreCase(methodName)) {
+
+            String serialized = request.getParameter("serialized");
+
+            if (serialized == null || serialized.length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Null or EMpty....</font>");
+                return;
+            }
+
+            final String t =serialized.trim();
+
+            final int dot1 = t.indexOf(".");
+            if (dot1 == -1) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                return;
+            }
+
+            final int dot2 = t.indexOf(".", dot1 + 1);
+            if (dot2 == -1) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                return;
+            }
+
+            try {
+
+                Gson gson = new Gson();
+                HttpClient client = HttpClientBuilder.create().build();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/parse";
+                HttpPost post = new HttpPost(url1);
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_serialzed", serialized));
+
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
+
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br1 = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content1 = new StringBuilder();
+                        String line;
+                        while (null != (line = br1.readLine())) {
+                            content1.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                jwspojo jwspojo = gson.fromJson(content.toString(), jwspojo.class);
+
+                if(jwspojo.getHeader()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Header</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getHeader() + "</textarea>");
+                }
+
+
+                if(jwspojo.getPayload()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Payload</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPayload() + "</textarea>");
+                }
+
+                if(jwspojo.getSignature()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Singature</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getSignature() + "</textarea>");
+                }
+
+
+                if(jwspojo.getState()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">State</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getState() + "</textarea>");
+                }
+
+
+                return;
+
+
+
+            }catch (Exception e) {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> " + e);
+            }
+
+
+
+        }
 
         if (METHOD_GENERATE_JSONKEY.equalsIgnoreCase(methodName)) {
             String algo = request.getParameter("algo");
