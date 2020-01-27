@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Online JWS JSON Parser</title>
+    <title>Online JWS JSON Singature Verfication</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <meta name="description" content="JWS JSON parser online "/>
-    <meta name="keywords" content="online jws parser, decode the JWS object, online jws decoder, jws payload, jws serialization, JWS tutorial"/>
+    <meta name="keywords" content="online jws parser, jws signature verification, decode the JWS object, online jws decoder, jws payload, jws serialization, JWS tutorial"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
 
@@ -14,16 +14,16 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Online JWS JSON Parser, Decode the JWSObject",
-  "image" : "https://8gwifi.org/images/site/jwsparse.png",
-  "url" : "https://8gwifi.org/jwsparse.jsp",
+  "name" : "Online JWS JSON Singature Verfication",
+  "image" : "https://8gwifi.org/images/site/jwsverify.png",
+  "url" : "https://8gwifi.org/jwsverify.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
   "datePublished" : "2020-01-24",
-  "applicationCategory" : [ "online jws parser" , "jws json decoder", "jws online" , "jws signature" , "jws rsa key" , "jws mac key" ,"jws tutorial"],
-  "downloadUrl" : "https://8gwifi.org/jwsparse.jsp",
+  "applicationCategory" : [ "online jws signature validation" , "jws json decoder", "jws online" , "jws signature" , "jws rsa key" , "jws mac key" ,"jws tutorial"],
+  "downloadUrl" : "https://8gwifi.org/jwsverify.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "Parse jws json object ",
   "softwareVersion" : "v1.0"
@@ -64,8 +64,8 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Parse JWS </h1>
-<p>This tool will help you to Parse JWS Object and determine the JWS Header, Payload and Signature</p>
+<h1 class="mt-4">Verify JWS </h1>
+<p>This tool will help you to Verify the JWS Object</p>
 <hr>
 
 <div id="loading" style="display: none;">
@@ -75,19 +75,36 @@
 
 
 <form id="form" method="POST">
-    <input type="hidden" name="methodName" id="methodName" value="PARSE_JWS">
+    <input type="hidden" name="methodName" id="methodName" value="VERIFY_JWS">
 
 
     <fieldset class="form-group">
         <div class="row">
 
             <div class="col-sm-10">
-                <label for="serialized">JWS Serialzied Object</label>
-    <textarea class="form-control" name="serialized" id="serialized" rows="5">eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.9tFLrurxXWKBDh317ly24fP03We-uzSZtPf7Yqy_oSw</textarea>
+                <label for="serialized">JWS Signature Verification</label>
+                <textarea class="form-control" name="serialized" id="serialized" rows="5">eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.9tFLrurxXWKBDh317ly24fP03We-uzSZtPf7Yqy_oSw</textarea>
+            </div>
+
+            <div id="sharedsecret1" class="col-sm-10">
+                <label for="sharedsecret">Shared Secret</label>
+                <input type="sharedsecret" class="form-control" name="sharedsecret" id="sharedsecret" aria-describedby="sharedsecret" value="03234110-bf8e-455b-9b5b-fae990d5dc9" placeholder="Enter 32 bit Key">
+                <small id="sharedsecret2" class="form-text text-muted">This is your MAC Key use this field if the JWS is signed with MAC key</small>
             </div>
 
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Parse JWS</button>
+                <label for="serialized">PublicKey</label>
+                <textarea class="form-control" name="serialized" id="publickey" placeholder="-----BEGIN PUBLIC KEY-----
+MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQAUv/w4x8pgm9U7J6CC/aRRG6JxJrj
+xCWUaQn4PcN36vO4Mqug6IlC8q/kZoG6KMzW/J0GssPLQTs/Cd3RXG6VUREBoYwe
+JZ0AOxbDAExxJj74lGcp3m84uK2Mue6yl/+ORNJgyDc1Rk8CxWHfQeajABqA1CQ0
+AWKRJt9SsNI5wK5nq0A=
+-----END PUBLIC KEY-----" rows="5"></textarea>
+                <small id="publickey1" class="form-text text-muted">Use this field if the JWS Signed with EC or RSA Publick key</small>
+            </div>
+
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Verify JWS</button>
             </div>
 
         </div>
@@ -103,12 +120,11 @@
 <hr>
 <p> Related Tool </p>
 <ul>
-<li><a href="jwkfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) Generate</font> </a></li>
-<li><a href="jwkconvertfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) to PEM Convert</font> </a></li>
-<li><a href="jwsparse.jsp"><font size="2.5px">JWS Parser</font> </a></li>
-<li><a href="jwsgen.jsp"><font size="2.5px">JWS Generate Key Sign Data</font> </a></li>
-<li><a href="jwssign.jsp"><font size="2.5px">JWS Sign Data with custom key</font> </a></li>
-<li><a href="jwsverify.jsp"><font size="2.5px">JWS Signature Verification</font> </a></li>
+    <li><a href="jwkfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) Generate</font> </a></li>
+    <li><a href="jwkconvertfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) to PEM Convert</font> </a></li>
+    <li><a href="jwsparse.jsp"><font size="2.5px">JWS Parser</font> </a></li>
+    <li><a href="jwsgen.jsp"><font size="2.5px">JWS Generate Key Sign Data</font> </a></li>
+    <li><a href="jwssign.jsp"><font size="2.5px">JWS Sign Data with custom key</font> </a></li>
 </ul>
 
 <hr>

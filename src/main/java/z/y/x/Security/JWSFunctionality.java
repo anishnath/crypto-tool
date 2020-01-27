@@ -31,6 +31,7 @@ public class JWSFunctionality extends HttpServlet {
 
     private static final String METHOD_SIGN_JSON = "SIGN_JSON";
     private static final String METHOD_PARSE_JWS = "PARSE_JWS";
+    private static final String METHOD_VERIFY_JWS = "VERIFY_JWS";
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +60,108 @@ public class JWSFunctionality extends HttpServlet {
 
 
         final String methodName = request.getParameter("methodName");
+
+        if (METHOD_VERIFY_JWS.equalsIgnoreCase(methodName)) {
+
+            String serialized = request.getParameter("serialized");
+            String publickey = request.getParameter("publickey");
+            String sharedsecret = request.getParameter("sharedsecret");
+
+            if (serialized == null || serialized.length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Null or EMpty....</font>");
+                return;
+            }
+
+            final String t =serialized.trim();
+
+            final int dot1 = t.indexOf(".");
+            if (dot1 == -1) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                return;
+            }
+
+            final int dot2 = t.indexOf(".", dot1 + 1);
+            if (dot2 == -1) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                return;
+            }
+
+            try {
+
+                Gson gson = new Gson();
+                HttpClient client = HttpClientBuilder.create().build();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/verify";
+                HttpPost post = new HttpPost(url1);
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_sharedsecret", sharedsecret));
+                urlParameters.add(new BasicNameValuePair("p_serialized", serialized));
+                urlParameters.add(new BasicNameValuePair("p_publickey", publickey));
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
+
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br1 = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content1 = new StringBuilder();
+                        String line;
+                        while (null != (line = br1.readLine())) {
+                            content1.append(line);
+                        }
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
+                        return;
+                    } else {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        return;
+                    }
+
+                }
+                BufferedReader br1 = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content1 = new StringBuilder();
+                String line;
+                while (null != (line = br1.readLine())) {
+                    content1.append(line);
+                }
+
+                //System.out.println("line-- " + line);
+
+
+                addHorizontalLine(out);
+                // System.out.println("encodedMessage-- " + encodedMessage);
+                String message = content1.toString();
+                if("VALID".equalsIgnoreCase(message))
+                {
+                    out.println("<font size=\"4\" color=\"green\"> SIGNATURE VALID </font>");
+                }
+                else{
+                    out.println("<font size=\"4\" color=\"red\"> SIGNATURE INVALID </font>");
+                }
+
+                //out.println("<textarea class=\"form-control\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + content1.toString() + "</textarea>");
+                return;
+
+
+            } catch (Exception e) {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> " + e);
+            }
+
+        }
 
         if (METHOD_PARSE_JWS.equalsIgnoreCase(methodName)) {
 

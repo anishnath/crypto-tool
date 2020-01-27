@@ -44,6 +44,7 @@
                     <li><a href="jwsparse.jsp"><font size="2.5px">JWS Parser</font> </a></li>
                     <li><a href="jwsgen.jsp"><font size="2.5px">JWS Generate Key Sign Data</font> </a></li>
                     <li><a href="jwssign.jsp"><font size="2.5px">JWS Sign Data with custom key</font> </a></li>
+                    <li><a href="jwsverify.jsp"><font size="2.5px">JWS Signature Verification</font> </a></li>
                   </ul>
                 </div>
               </div>
