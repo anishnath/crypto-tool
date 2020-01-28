@@ -241,10 +241,18 @@ public class JWSFunctionality extends HttpServlet {
 
                 jwspojo jwspojo = gson.fromJson(content.toString(), jwspojo.class);
 
+
+
                 if(jwspojo.getHeader()!=null)
                 {
                     out.println("<h4 class=\"mt-4\">Header</h4>");
                     out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getHeader() + "</textarea>");
+                }
+
+                if(jwspojo.getJwtid()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">JWTID </h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getJwtid() + "</textarea>");
                 }
 
 
@@ -266,6 +274,70 @@ public class JWSFunctionality extends HttpServlet {
                     out.println("<h4 class=\"mt-4\">State</h4>");
                     out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getState() + "</textarea>");
                 }
+
+                if(jwspojo.getEncryptedKey()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">EncryptedKey</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getEncryptedKey() + "</textarea>");
+                }
+
+                if(jwspojo.getIv()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">IV</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIv() + "</textarea>");
+                }
+
+                if(jwspojo.getCipherText()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">CipherText</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + jwspojo.getCipherText() + "</textarea>");
+                }
+
+                if(jwspojo.getAuthTag()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Auth TAG</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getAuthTag() + "</textarea>");
+                }
+
+                if(jwspojo.getIssuer()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Issuer</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIssuer() + "</textarea>");
+                }
+
+                if(jwspojo.getSubject()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Subject</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getSubject() + "</textarea>");
+                }
+
+                if(jwspojo.getAudienceSize()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Audience Size</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getAudienceSize() + "</textarea>");
+                }
+
+                if(jwspojo.getExpirationTime()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Expiration Time </h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getExpirationTime() + "</textarea>");
+                }
+
+                if(jwspojo.getNotBeforeTime()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">NotBefore Time </h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getNotBeforeTime() + "</textarea>");
+                }
+
+                if(jwspojo.getIssueTime()!=null)
+                {
+                    out.println("<h4 class=\"mt-4\">Issue Time </h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIssueTime() + "</textarea>");
+                }
+
+
+
+
 
 
                 return;
