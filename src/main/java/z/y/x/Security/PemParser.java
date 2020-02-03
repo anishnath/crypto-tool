@@ -161,6 +161,76 @@ final public class PemParser {
 
 	}
 
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public  EncodedMessage parsePemFile2(final String data,final String password) throws Exception {
+
+		try {
+
+			if(data==null || data.isEmpty())
+			{
+				throw new Exception("Input PEM Data is Missing");
+			}
+
+			Gson gson = new Gson();
+			HttpClient client = HttpClientBuilder.create().build();
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pem/parseencryptedpem";
+			HttpPost post = new HttpPost(url1);
+			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("p_pem", data));
+			urlParameters.add(new BasicNameValuePair("p_password", password));
+
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			post.addHeader("accept", "application/json");
+
+			HttpResponse response1 = client.execute(post);
+
+			if (response1.getStatusLine().getStatusCode() != 200) {
+				if (response1.getStatusLine().getStatusCode() == 404) {
+					BufferedReader br1 = new BufferedReader(
+							new InputStreamReader(
+									(response1.getEntity().getContent())
+							)
+					);
+					StringBuilder content1 = new StringBuilder();
+					String line;
+					while (null != (line = br1.readLine())) {
+						content1.append(line);
+					}
+					throw new Exception(content1.toString());
+
+				} else {
+					throw new Exception("SYSTEM Error Please Try Later If Problem Persist raise the feature request ");
+
+				}
+
+			}
+			BufferedReader br1 = new BufferedReader(
+					new InputStreamReader(
+							(response1.getEntity().getContent())
+					)
+			);
+			StringBuilder content1 = new StringBuilder();
+			String line;
+			while (null != (line = br1.readLine())) {
+				content1.append(line);
+			}
+
+			//System.out.println("line-- " + content1);
+
+			EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
+
+			return encodedMessage;
+
+
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+
+	}
+
 	public  String extractPublicKey(final String data,final String password) throws Exception {
 
 		try {

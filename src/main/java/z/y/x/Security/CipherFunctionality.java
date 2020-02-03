@@ -11,10 +11,7 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -479,11 +476,476 @@ public class CipherFunctionality extends HttpServlet {
             addHorizontalLine(out);
             PemParser parser = new PemParser();
             try {
-                String message = parser.parsePemFile(pem, certpassword);
+                EncodedMessage message = parser.parsePemFile2(pem, certpassword);
                 addHorizontalLine(out);
                 // System.out.println("encodedMessage-- " + encodedMessage);
-                out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
-                return;
+                Gson gson = new Gson();
+
+                if(message.getX509()!=null)
+                {
+
+                    x509pojo x509pojo =  gson.fromJson(message.getX509().toString(), x509pojo.class);
+
+                    if(x509pojo.getIsSelfSigned()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">"+x509pojo.getIsSelfSigned()+"</h4>");
+                    }
+
+                    if(x509pojo.getType()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Type</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getType() + "</textarea>");
+                    }
+
+                    if(x509pojo.getVersion()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Version</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getVersion() + "</textarea>");
+                    }
+
+
+
+                    if(x509pojo.getSerialNumber()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Serial Number</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + x509pojo.getSerialNumber() + "</textarea>");
+                    }
+
+                    if(x509pojo.getNotBefore()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Not Before</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getNotBefore() + "</textarea>");
+                    }
+
+                    if(x509pojo.getNotAfter()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Not After</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getNotAfter() + "</textarea>");
+                    }
+                    if(x509pojo.getSubjectDN()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Subject DN</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getSubjectDN() + "</textarea>");
+                    }
+
+                    if(x509pojo.getIssuerDN()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Issuer DN</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getIssuerDN() + "</textarea>");
+                    }
+
+                    if(x509pojo.getSubjectAlternativeNames()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">SANS</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + x509pojo.getSubjectAlternativeNames() + "</textarea>");
+
+                    }
+
+
+
+
+                    if(x509pojo.getSigAlgName()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Signature Algo</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getSigAlgName() + "</textarea>");
+                    }
+
+                    if(x509pojo.getSignature()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Signature</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + x509pojo.getSignature() + "</textarea>");
+                    }
+
+                    if(x509pojo.getEncoded()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">Encoded</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + x509pojo.getEncoded() + "</textarea>");
+                    }
+
+                    if(x509pojo.getMd5()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">MD5</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getMd5() + "</textarea>");
+
+                    }
+
+                    if(x509pojo.getSha1()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-1</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + x509pojo.getSha1() + "</textarea>");
+
+                    }
+
+                    if(x509pojo.getSha256()!=null)
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-256</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + x509pojo.getSha256() + "</textarea>");
+
+                    }
+
+                    if(x509pojo.getCrticalExtensions()!=null && x509pojo.getCrticalExtensions().length()>0)
+                    {
+                        out.println("<h4 class=\"mt-4\">Critical Extensions</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + x509pojo.getCrticalExtensions() + "</textarea>");
+
+                    }
+
+                    if(x509pojo.getNoncrticalExtensions()!=null && x509pojo.getNoncrticalExtensions().length()>0 )
+                    {
+                        out.println("<h4 class=\"mt-4\">Non Critical Extensions</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + x509pojo.getNoncrticalExtensions() + "</textarea>");
+
+                    }
+
+
+                    return;
+
+
+                }
+
+                else if(message.getRsapojo()!=null)
+                {
+
+                    rsapojo rsapojo =  gson.fromJson(message.getRsapojo().toString(), rsapojo.class);
+
+                    if(rsapojo.getKeySize()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Private-Key:</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getKeySize() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getAlgo()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Algo</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getAlgo() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getFormat()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Format</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getFormat() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getFingerprint()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Fingerprint</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getFingerprint() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getType()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Type</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getType() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getModulus()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Modulus</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + rsapojo.getModulus() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getPublicexponent()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Public Exponent</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getPublicexponent() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getPrivateexponent()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Private Exponent</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + rsapojo.getPrivateexponent() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getPrimeP()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Prime P</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=8  form=\"X\">" + rsapojo.getPrimeP() + "</textarea>");
+
+                    }
+
+
+                    if(rsapojo.getPrimeQ()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Prime Q</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=8  form=\"X\">" + rsapojo.getPrimeQ() + "</textarea>");
+
+                    }
+
+
+                    if(rsapojo.getPrimeExponentP()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Prime Exponent P</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=8  form=\"X\">" + rsapojo.getPrimeExponentP() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getPrimeExponentQ()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Prime Exponent Q</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=8  form=\"X\">" + rsapojo.getPrimeExponentQ() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getCrtCoefficient()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Coefficient</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + rsapojo.getCrtCoefficient() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getEncoded()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Encoded</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + rsapojo.getEncoded() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getMd5()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">MD5</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getMd5() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getSha1()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-1</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + rsapojo.getSha1() + "</textarea>");
+
+                    }
+
+                    if(rsapojo.getSha256()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-256</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + rsapojo.getSha256() + "</textarea>");
+
+                    }
+
+
+
+                    return;
+
+                }
+
+                else if(message.getEckeypojo()!=null)
+                {
+
+                    eckeypojo eckeypojo =  gson.fromJson(message.getEckeypojo().toString(), eckeypojo.class);
+
+                    if(eckeypojo.getKeySize()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Private-Key(Size)</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getKeySize() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getAlgo()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Algo</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getAlgo() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getFormat()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Format</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getFormat() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getCurveName()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Curve Name</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getCurveName() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getPrivateKey()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Priv</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + eckeypojo.getPrivateKey() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getPublicKey()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Pub</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + eckeypojo.getPublicKey() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getAffineX()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Affine X</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + eckeypojo.getAffineX() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getAffineY()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Affine Y</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + eckeypojo.getAffineY() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getCofactor()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Cofactor</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getCofactor() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getOrder()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Order</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + eckeypojo.getOrder() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getMd5()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">MD5</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getMd5() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getSha1()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-1</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + eckeypojo.getSha1() + "</textarea>");
+
+                    }
+
+                    if(eckeypojo.getSha256()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-256</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + eckeypojo.getSha256() + "</textarea>");
+
+                    }
+
+                }
+
+                else if(message.getDsapojo()!=null)
+                {
+
+                    dsapojo dsapojo =  gson.fromJson(message.getDsapojo().toString(), dsapojo.class);
+
+                    if(dsapojo.getKeySize()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Private-Key(Size)</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + dsapojo.getKeySize() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getAlgo()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Algo</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + dsapojo.getAlgo() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getFormat()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Format</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + dsapojo.getFormat() + "</textarea>");
+
+                    }
+
+
+
+
+
+                    if(dsapojo.getG()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">G</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getG() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getP()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">P</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getP() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getQ()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Q</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getQ() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getX()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">X</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getX() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getY()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Y</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getY() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getPub()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Pub</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=5  form=\"X\">" + dsapojo.getPub() + "</textarea>");
+
+                    }
+
+
+                    if(dsapojo.getEncoded()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">Priv</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=5  form=\"X\">" + dsapojo.getEncoded() + "</textarea>");
+
+                    }
+
+
+                    if(dsapojo.getMd5()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">MD5</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + dsapojo.getMd5() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getSha1()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-1</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + dsapojo.getSha1() + "</textarea>");
+
+                    }
+
+                    if(dsapojo.getSha256()!=null )
+                    {
+                        out.println("<h4 class=\"mt-4\">SHA-256</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + dsapojo.getSha256() + "</textarea>");
+
+                    }
+
+
+
+
+                }
+
+                else{
+                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message.getMessage() + "</textarea>");
+                    return;
+                }
+
+
             } catch (Exception e) {
                 addHorizontalLine(out);
                 out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
