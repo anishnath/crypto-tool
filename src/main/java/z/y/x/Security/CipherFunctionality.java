@@ -476,9 +476,11 @@ public class CipherFunctionality extends HttpServlet {
             addHorizontalLine(out);
             PemParser parser = new PemParser();
             try {
-                EncodedMessage message = parser.parsePemFile2(pem, certpassword);
+                String message = parser.parsePemFile(pem, certpassword);
                 addHorizontalLine(out);
                 // System.out.println("encodedMessage-- " + encodedMessage);
+
+               /**
                 Gson gson = new Gson();
 
                 if(message.getX509()!=null)
@@ -941,9 +943,11 @@ public class CipherFunctionality extends HttpServlet {
                 }
 
                 else{
-                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message.getMessage() + "</textarea>");
+
+                **/
+                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
                     return;
-                }
+                //}
 
 
             } catch (Exception e) {
