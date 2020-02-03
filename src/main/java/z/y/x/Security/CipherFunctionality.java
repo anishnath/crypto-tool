@@ -476,11 +476,11 @@ public class CipherFunctionality extends HttpServlet {
             addHorizontalLine(out);
             PemParser parser = new PemParser();
             try {
-                String message = parser.parsePemFile(pem, certpassword);
+                EncodedMessage message = parser.parsePemFile2(pem, certpassword);
                 addHorizontalLine(out);
                 // System.out.println("encodedMessage-- " + encodedMessage);
 
-               /**
+
                 Gson gson = new Gson();
 
                 if(message.getX509()!=null)
@@ -882,14 +882,14 @@ public class CipherFunctionality extends HttpServlet {
                     if(dsapojo.getQ()!=null )
                     {
                         out.println("<h4 class=\"mt-4\">Q</h4>");
-                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getQ() + "</textarea>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + dsapojo.getQ() + "</textarea>");
 
                     }
 
                     if(dsapojo.getX()!=null )
                     {
                         out.println("<h4 class=\"mt-4\">X</h4>");
-                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=6  form=\"X\">" + dsapojo.getX() + "</textarea>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + dsapojo.getX() + "</textarea>");
 
                     }
 
@@ -944,10 +944,10 @@ public class CipherFunctionality extends HttpServlet {
 
                 else{
 
-                **/
-                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
+
+                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message.getMessage() + "</textarea>");
                     return;
-                //}
+                }
 
 
             } catch (Exception e) {

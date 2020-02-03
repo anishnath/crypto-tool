@@ -176,7 +176,8 @@ final public class PemParser {
 
 			Gson gson = new Gson();
 			HttpClient client = HttpClientBuilder.create().build();
-			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pem/parseencryptedpem";
+			String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pem/parsepemv2";
+			//url1="https://8gwifi.org/crypto/rest/pem/parsepemv2";
 			HttpPost post = new HttpPost(url1);
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("p_pem", data));
