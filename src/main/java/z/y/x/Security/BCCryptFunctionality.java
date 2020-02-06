@@ -31,6 +31,7 @@ public class BCCryptFunctionality extends HttpServlet {
     private static final String METHOD_HASH_BCCRYPT = "CALCULATE_BCCRYPT";
     private static final String METHOD_HASH_SCRYPT = "CALCULATE_SCRYPT";
     private static final String METHOD_CHECK_PASSWORD = "METHOD_CHECK_PASSWORD";
+    private static final String METHOD_HTPASSWORD_GENERATE = "HTPASSWORD_GENERATE";
 
 
 
@@ -61,6 +62,77 @@ public class BCCryptFunctionality extends HttpServlet {
 
 
         PrintWriter out = response.getWriter();
+
+        if (METHOD_HTPASSWORD_GENERATE.equals(methodName)) {
+            final String password = request.getParameter("password");
+            final String username = request.getParameter("username");
+            String passwordhash = request.getParameter("hash");
+
+            if (password == null || password.trim().length() == 0) {
+                out.println("<font size=\"2\" color=\"red\"> Password is Empty </font>");
+                return;
+            }
+
+            String[] algo =  new String[]{"bcrypt","apr1","md5","sha256","sha512","crypt"};
+            String[] verifyAlgo =  new String[]{"bcrypt","apr1","md5","sha256","sha512"};
+
+            boolean isValid =false;
+
+
+
+            if (passwordhash != null && passwordhash.trim().length() > 0) {
+
+                for (int i=0; i<verifyAlgo.length;i++) {
+                    if (passwordhash != null && passwordhash.trim().length() > 0) {
+                        try {
+
+                            passwordhash = passwordhash.substring(passwordhash.indexOf(":")+1,passwordhash.length());
+
+                            isValid  = HtPasswordUtil.validatePassword(password,passwordhash,verifyAlgo[i]);
+
+                            System.out.println(passwordhash);
+                            System.out.println(isValid);
+
+                            if(isValid)
+                            {
+                                out.println("<br/><p> Hash Verification <font size=\"4\" color=\"blue\"> [" +passwordhash+"] </font> Passed for the password  <font size=\"4\" color=\"green\">["+password+"] </font> With Algo <font size=\"4\" color=\"green\"> ["+verifyAlgo[i]+"] </font></p>");
+                                break;
+                            }
+
+                        } catch (Exception e) {
+                           // out.println("<br/><font size=\"2\" color=\"red\"> Invalid password Hash </font>");
+                            //return;
+                        }
+                    }
+                }
+
+                if(!isValid)
+                {
+                    out.println("<br/><font size=\"3\" color=\"red\"> Hash Verification Fail </font>");
+                }
+            }
+
+            for (int i=0; i<algo.length;i++)
+            {
+
+
+                out.println("<h4 class=\"mt-4\">"+algo[i].toUpperCase()+"</h4>");
+                String htpassword = HtPasswordUtil.createPassword(password,algo[i]);
+                if(username!=null && username.trim().length()>0) {
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">"+username+":"+htpassword +"</textarea>");
+                }else{
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">"+htpassword +"</textarea>");
+                }
+
+
+            }
+
+
+
+            return;
+
+
+        }
 
         if (METHOD_HASH_BCCRYPT.equals(methodName)) {
             final String password = request.getParameter("password");

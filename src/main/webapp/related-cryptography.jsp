@@ -26,6 +26,7 @@
                     <li><a href="PGPFunctionality?invalidate=yes"><font size="2.5px">PGP Signature Verifier </font> </a></li>
                     <li><a href="bccrypt.jsp"><font size="2.5px">BCrypt Password Hash </font> </a></li>
                     <li><a href="scrypt.jsp"><font size="2.5px">SCrypt Password Hash </font> </a></li>
+                    <li><a href="htpasswd.jsp"><font size="2.5px">.htpasswd Generator</font> </a></li>
                     <li><a href="DHFunctions.jsp"><font size="2.5px">Diffie-Hellman Key Exchange</font> </a></li>
                     <li><a href="PemParserFunctions.jsp"><font size="2.5px">PEMReader Decode Certificate </font></a></li>
                     <li><a href="pempublic.jsp"><font size="2.5px">Extract Public key from Private Key</font></a></li>
