@@ -90,8 +90,7 @@ public class BCCryptFunctionality extends HttpServlet {
 
                             isValid  = HtPasswordUtil.validatePassword(password,passwordhash,verifyAlgo[i]);
 
-                            System.out.println(passwordhash);
-                            System.out.println(isValid);
+
 
                             if(isValid)
                             {
