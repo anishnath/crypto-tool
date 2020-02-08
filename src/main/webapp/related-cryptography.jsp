@@ -33,6 +33,7 @@
                     <li><a href="pemconvert.jsp"><font size="2.5px">PKCS#8 PKCS#1 RSA,DSA,EC Converter</font></a></li>
                     <li><a href="pempasswordfinder.jsp"><font size="2.5px">Encrypted PEM password finder</font></a></li>
                     <li><a href="passwdgen.jsp"><font size="2.5px">Strong Random Passwd Generator</font> </a></li>
+                    <li><a href="uuid.jsp"><font size="2.5px">UUID/GUID Generator</font> </a></li>
                     <li><a href="SelfSignCertificateFunctions.jsp"><font size="2.5px">Generate Self Sign Certificate </font> </a></li>
                     <li><a href="cafunctions.jsp"><font size="2.5px">Generate rootCA/InterCA/Certs</font> </a></li>
                     <li><a href="certsverify.jsp"><font size="2.5px">Verify private key against csr,x509</font> </a></li>

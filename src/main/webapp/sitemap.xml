@@ -572,5 +572,8 @@
   <url>
     <loc>https://8gwifi.org/htpasswd.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/uuid.jsp</loc>
+  </url>
 
 </urlset>
