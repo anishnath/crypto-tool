@@ -69,7 +69,7 @@
 
 
 <div class="col-sm-10">
-    <label for="serialized">Type you text and QR code will be genrated </label>
+    <label for="text">Type you text and QR code will be genrated </label>
     <input id="text" type="text" placeholder="Type your text here" value="8gwifi.org"  class="form-control" >
 </div>
 
@@ -95,7 +95,7 @@
         qrcode.makeCode(elText.value);
     }
 
-    makeCode();
+
 
     $("#text").
     on("blur", function () {
