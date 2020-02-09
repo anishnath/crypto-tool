@@ -1,9 +1,10 @@
   <div class="card my-4">
-            <h5 class="card-header">Encoder/BeautifierServices</h5>
+            <h5 class="card-header">Encoder/Beautifier Services</h5>
             <div class="card-body">
               <div class="row">
                 <div>
                 <ul>
+                    <li><a href="qrcodegen.jsp"><font size="2.5px">QR Code generate</font></a></li>
                     <li><a href="hexdump.jsp"><font size="2.5px">Online Hexdump Generate</font></a></li>
                     <li><a href="diff.jsp"><font size="2.5px">Compare text differences</font></a></li>
                     <li><a href="UrlEncodeDecodeFunctions.jsp"><font size="2.5px">URL Encoders/Decoders</font></a></li>
