@@ -87,7 +87,7 @@
         var elText = document.getElementById("text");
 
         if (!elText.value) {
-            alert("Input a text To Generate the QR Code");
+            //alert("Input a text To Generate the QR Code");
             elText.focus();
             return;
         }
