@@ -4,9 +4,9 @@
               <div class="row">
                 <div>
                 <ul>
-                    <li><a href="SubnetFunctions.jsp"><font size="2.5px">IP Subnet CIDR Calculator</font></a></li>
-                    <li><a href="pingfunctions.jsp"><font size="2.5px">Ping/Locate IPv4/Iv6  </font></a></li>
-                    <li><a href="curlfunctions.jsp"><font size="2.5px">Curl/DNS Query IPv4/IPv6</font></a></li>
+                    <li><a href="SubnetFunctions.jsp">IP Subnet CIDR Calculator</a></li>
+                    <li><a href="pingfunctions.jsp">Ping/Locate IPv4/Iv6  </a></li>
+                    <li><a href="curlfunctions.jsp">Curl/DNS Query IPv4/IPv6</a></li>
                   </ul>
                 </div>
               </div>
