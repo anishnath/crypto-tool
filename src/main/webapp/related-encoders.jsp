@@ -12,6 +12,7 @@
                     <li><a href="HexToStringFunctions.jsp"><font size="2.5px">String To Hex Conversion</font></a></li>
                     <li><a href="base64Hex.jsp"><font size="2.5px">Base64 To Hex (ViceVersa)</font></a></li>
                     <li><a href="Base64Functions.jsp"><font size="2.5px">Base64 Encode/Decode</font></a></li>
+                    <li><a href="base64image.jsp"><font size="2.5px">Base64 Image Converter(data:image/png)</font></a></li>
                     <li><a href="StringFunctions.jsp"><font size="2.5px">Various String Functions</font></a></li>
                     <li><a href="jsonparser.jsp"><font size="2.5px">JSON Beautifier</font></a></li>
                     <li><a href="contactus.jsp">Feature Request</a></li>
