@@ -4,7 +4,7 @@
               <div class="row">
                 <div>
                 <ul>
-                    <li><a href="kube.jsp">Kubertes Spec Generate(Pods/Deployment/Service)</a></li>
+                    <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
                     <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                     <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
                     <li><a href="diff.jsp">Compare text differences</a></li>
@@ -15,7 +15,7 @@
                     <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
                     <li><a href="base64image.jsp">Base64 Image Converter(data:image/png)</a></li>
                     <li><a href="StringFunctions.jsp">Various String Functions</a></li>
-                    <li><a href="jsonparser.jsp">JSON Beautifier</a></li>
+                    <li><a href="jsonparser.jsp">JSON Beautifier and JSON-2-YAML</a></li>
                     <li><a href="contactus.jsp">Feature Request</a></li>
                   </ul>
                 </div>
