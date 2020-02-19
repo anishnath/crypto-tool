@@ -581,5 +581,7 @@
   <url>
     <loc>https://8gwifi.org/base64image.jsp</loc>
   </url>
-
+  <url>
+    <loc>https://8gwifi.org/kube.jsp</loc>
+  </url>
 </urlset>

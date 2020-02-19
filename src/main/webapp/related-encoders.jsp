@@ -1,10 +1,11 @@
   <div class="card my-4">
-            <h5 class="card-header">Encoder/Beautifier Services</h5>
+            <h5 class="card-header">Miscellaneous Services</h5>
             <div class="card-body">
               <div class="row">
                 <div>
                 <ul>
-                    <li><a href="qrcodegen.jsp">QR Code generate</a></li>
+                    <li><a href="kube.jsp">Kubertes Spec Generate(Pods/Deployment/Service)</a></li>
+                    <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                     <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
                     <li><a href="diff.jsp">Compare text differences</a></li>
                     <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
