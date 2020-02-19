@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>kubernetes pods,deployments,service generator</title>
+	<title>kubernetes pods,deployments,service yaml json generator</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="description" content="Online generate kubernetes pods,deployments,service generator in YAML and JSON file">
 	<meta name="keywords" content="kubernetes pods config generator online">
@@ -16,7 +16,7 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "kubernetes pods,deployment.service generator",
-  "image" : "https://8gwifi.org/images/site//kube.png",
+  "image" : "https://8gwifi.org/images/site/kube.png",
   "url" : "https://8gwifi.org/kube.jsp",
   "author" : {
     "@type" : "Person",
@@ -24,7 +24,7 @@
   },
   "datePublished" : "2020-02-19",
   "applicationCategory" : [ "kubernetes config genarator", "kubernetes pod yaml generate", "kubenrtes pod json generate"],
-  "downloadUrl" : "https://8gwifi.org/base64image.jsp",
+  "downloadUrl" : "https://8gwifi.org/kube.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "kubernetes deployment, pods config generator online" ",
   "softwareVersion" : "v1.0"
@@ -70,7 +70,7 @@
 
 
 
-<h1 class="mt-4">Kubernetes Config Builder (Pods/Deployments/Service)</h1>
+<h1 class="mt-4">Kubernetes YAML/JSON Generator (Pods/Deployments/Service)</h1>
 <p>Use this tool to generate kubernetes Pods output in YAML and JSON</p>
 
 <div id="loading" style="display: none;">
