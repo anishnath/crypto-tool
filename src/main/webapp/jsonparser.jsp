@@ -14,18 +14,18 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-12",
-  "applicationCategory" : [ "online json beautify","code formatter" ,"json beautify online" ,"json validate online" , "json validation and beautifier online" ],
+  "applicationCategory" : [ "online json beautify","code formatter" ,"json beautify online" ,"json validate online" , "json validation and beautifier online" , "json to yaml" ],
   "downloadUrl" : "https://8gwifi.org/jsonparser.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "json validate online, beuatify json online",
   "softwareVersion" : "v1.0"
 }
 </script>
-	<title>JSON validate and beautify Online</title>
+	<title>JSON validate and beautify Online and covenrt to YAML</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="JSON Beautifier Online, validate json online"/>
-	<meta name="description" content="JSON Beautifier Online, validate json online" />
+	<meta name="keywords" content="JSON Beautifier Online, validate json online, convert JSON to YAML"/>
+	<meta name="description" content="JSON Beautifier Online, validate json online, covnert json to yaml" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -86,7 +86,7 @@
 <%@ include file="body-script.jsp"%>
 
 <h1 class="mt-4">JSON Parser and beautifier</h1>
-<p>Input JSON file to beautify it</p>
+<p>Input JSON file to beautify it and get result in YAML and JSON both</p>
 
 <div id="loading" style="display: none;">
 	<img src="images/712.GIF" alt="" />Loading!

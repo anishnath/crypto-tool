@@ -1,5 +1,9 @@
 package z.y.x.String;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.simple.JSONObject;
@@ -88,7 +92,13 @@ public class JSONFunctionality extends HttpServlet {
 			String prettyJson = gson.toJson(json);
 
 			addHorizontalLine(out);
+			out.println("<h4 class=\"mt-4\">JSON</h4>");
 			out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
+
+
+			out.println("<h4 class=\"mt-4\">Equivalent YAML</h4>");
+			out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=15  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+
 			return;
 
 			// Actual logic goes here.
@@ -101,6 +111,14 @@ public class JSONFunctionality extends HttpServlet {
 
 	private void addHorizontalLine(PrintWriter out) {
 		out.println("<hr>");
+	}
+
+	public String asYaml(String jsonString) throws JsonProcessingException, IOException {
+		// parse JSON
+		JsonNode jsonNodeTree = new ObjectMapper().readTree(jsonString);
+		// save it as YAML
+		String jsonAsYaml = new YAMLMapper().writeValueAsString(jsonNodeTree);
+		return jsonAsYaml;
 	}
 
 }
