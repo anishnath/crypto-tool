@@ -85,7 +85,7 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">JSON Parser and beautifier</h1>
+<h1 class="mt-4">JSON Parser and beautifier (JSON-TO-YAML)</h1>
 <p>Input JSON file to beautify it and get result in YAML and JSON both</p>
 
 <div id="loading" style="display: none;">
