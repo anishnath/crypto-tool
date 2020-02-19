@@ -309,6 +309,15 @@
 		<url-pattern>/JWSFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>KubeFunctionality</servlet-name>
+		<servlet-class>z.y.x.kube.KubeFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>KubeFunctionality</servlet-name>
+		<url-pattern>/KubeFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
