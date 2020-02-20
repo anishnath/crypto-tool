@@ -16,6 +16,7 @@
                     <li><a href="base64image.jsp">Base64 Image Converter(data:image/png)</a></li>
                     <li><a href="StringFunctions.jsp">Various String Functions</a></li>
                     <li><a href="jsonparser.jsp">JSON Beautifier and JSON-2-YAML</a></li>
+                    <li><a href="yamlparser.jsp">YAML-2-JSON</a></li>
                     <li><a href="contactus.jsp">Feature Request</a></li>
                   </ul>
                 </div>
