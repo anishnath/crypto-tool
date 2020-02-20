@@ -3,14 +3,15 @@ package z.y.x.String;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 
 import javax.json.stream.JsonParser;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * Servlet implementation class JSONFunctionality
@@ -30,6 +32,7 @@ public class JSONFunctionality extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	final String METHOD_FORMATJSON = "formatjson";
+	final String METHOD_YAML_TO_JSON = "yaml_to_json";
 
 	/**
 	 * Default constructor.
@@ -67,39 +70,116 @@ public class JSONFunctionality extends HttpServlet {
 		final String methodName = request.getParameter("methodName");
 		PrintWriter out = response.getWriter();
 
+		if (METHOD_YAML_TO_JSON.equalsIgnoreCase(methodName)) {
 
-		if (METHOD_FORMATJSON.equalsIgnoreCase(methodName)) {
+			final String yamlString = request.getParameter("input");
+			final String style = request.getParameter("style");
 
-			final String jsonString = request.getParameter("input");
+			if(null == yamlString || yamlString.trim().length()==0)
+			{
+
+				out.println("<font size=\"3\" color=\"red\"><b> Please Input YAML Data </font></b><br>");
+				return;
+			}
 
 
-			JSONParser parser = new JSONParser();
+			//DumperOptions options = new DumperOptions();
+			//options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			//options.set
+			//options.setPrettyFlow(true);
 
-			JSONObject json = null;
 			try {
-				json = (JSONObject) parser.parse(jsonString);
-			} catch (ParseException e) {
+
+				Yaml yaml = new Yaml();
+				Map<String,Object> map= (Map<String, Object>) yaml.load(yamlString);
+				JSONObject jsonObject=new JSONObject(map);
+
+
+				String jsonString=jsonObject.toString();
+
+				JSONParser parser = new JSONParser();
+				JSONObject json = null;
+				try {
+					json = (JSONObject) parser.parse(jsonString);
+				} catch (ParseException e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"3\" color=\"red\"><b> Problem "
+							+ e
+
+							+ "</font></b><br>");
+					return;
+				}
+
+
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				String prettyJson = gson.toJson(json);
+
+				addHorizontalLine(out);
+				out.println("<h4 class=\"mt-4\">JSON</h4>");
+				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
+
+
+				return;
+
+			}catch (Exception ex) {
 				addHorizontalLine(out);
 				out.println("<font size=\"3\" color=\"red\"><b> Problem "
-						+ e
+						+ ex
 
 						+ "</font></b><br>");
 				return;
 			}
 
 
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			String prettyJson = gson.toJson(json);
-
-			addHorizontalLine(out);
-			out.println("<h4 class=\"mt-4\">JSON</h4>");
-			out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
 
 
-			out.println("<h4 class=\"mt-4\">Equivalent YAML</h4>");
-			out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=15  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+		}
 
-			return;
+
+		if (METHOD_FORMATJSON.equalsIgnoreCase(methodName)) {
+
+			final String jsonString = request.getParameter("input");
+
+			if(null == jsonString || jsonString.trim().length()==0)
+			{
+				out.println("<font size=\"3\" color=\"red\"><b> Please Input json String </font></b><br>");
+				return;
+			}
+
+
+				JSONParser parser = new JSONParser();
+
+				JSONObject json = null;
+				try {
+					json = (JSONObject) parser.parse(jsonString);
+				} catch (ParseException e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"3\" color=\"red\"><b> Problem "
+							+ e
+
+							+ "</font></b><br>");
+					return;
+				}
+
+
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				String prettyJson = gson.toJson(json);
+
+				addHorizontalLine(out);
+				out.println("<h4 class=\"mt-4\">JSON</h4>");
+				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
+
+
+				out.println("<h4 class=\"mt-4\">Equivalent YAML</h4>");
+				out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=15  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+
+				return;
+
+
+
+
+
+
 
 			// Actual logic goes here.
 
@@ -111,6 +191,14 @@ public class JSONFunctionality extends HttpServlet {
 
 	private void addHorizontalLine(PrintWriter out) {
 		out.println("<hr>");
+	}
+
+	String convertYamlToJson(String yaml) throws  Exception {
+		ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+		Object obj = yamlReader.readValue(yaml, Object.class);
+
+		ObjectMapper jsonWriter = new ObjectMapper();
+		return jsonWriter.writeValueAsString(obj);
 	}
 
 	public String asYaml(String jsonString) throws JsonProcessingException, IOException {
