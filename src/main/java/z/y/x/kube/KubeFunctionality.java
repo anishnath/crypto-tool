@@ -115,7 +115,7 @@ public class KubeFunctionality extends HttpServlet {
             String runAsUser = request.getParameter("runAsUser");
 
             String deploy = request.getParameter("deployment");
-            System.out.println("deployment " + deploy);
+          //  System.out.println("deployment " + deploy);
 
 
 
