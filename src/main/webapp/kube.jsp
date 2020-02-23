@@ -43,6 +43,14 @@
 
 			});
 
+			$('#generatedeployment').click(function (event)
+			{
+				//
+				$('#deployment').val('deployment')
+				$('#form').delay(200).submit()
+
+			});
+
 
 			$('#form').submit(function (event)
 			{
@@ -82,6 +90,7 @@
 <form id="form" method="POST">
 
 	<input type="hidden" name="methodName" id="methodName"  value="POD_GENERATE">
+	<input type="hidden" name="deployment" id="deployment"  value="pod">
 
 	<h4>Configure Metadata </h4>
 	<hr>
@@ -347,6 +356,7 @@
 
 
 	<input type="button" class="btn btn-primary" id="generatesshpods" name="generata spec" value="Generate POD SPEC">
+	<input type="button" class="btn btn-primary" id="generatedeployment" name="generata spec with Deployment" value="Generate Deployment">
 </form>
 
 <hr>

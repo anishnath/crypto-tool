@@ -30,6 +30,9 @@ import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
+import z.y.x.kube.deployment.Deployment;
+import z.y.x.kube.deployment.selector;
+import z.y.x.kube.deployment.template;
 
 /**
  * Created by aninath on 11/16/17.
@@ -110,6 +113,10 @@ public class KubeFunctionality extends HttpServlet {
             String runAsGroup = request.getParameter("runAsGroup");
             String runAsNonRoot = request.getParameter("runAsNonRoot");
             String runAsUser = request.getParameter("runAsUser");
+
+            String deploy = request.getParameter("deployment");
+            System.out.println("deployment " + deploy);
+
 
 
 //            System.out.println("annotation " + annotation);
@@ -526,38 +533,123 @@ public class KubeFunctionality extends HttpServlet {
 
            // System.out.println(output);
 
-            out.println("<h4 class=\"mt-4\">YAML</h4>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=13  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
-                    "EOF</textarea>");
+            if("pod".equalsIgnoreCase(deploy)) {
 
-            try{
+                out.println("<h4 class=\"mt-4\">YAML</h4>");
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=37  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
+                        "EOF</textarea>");
 
-                out.println("<h4 class=\"mt-4\">JSON</h4>");
-
-                JSONParser parser = new JSONParser();
-
-                JSONObject json = null;
                 try {
-                    json = (JSONObject) parser.parse(convertYamlToJson(output));
-                } catch (ParseException e) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"3\" color=\"red\"><b> Problem invalid JSON ["
-                            + e
 
-                            + "]</font></b><br>");
-                    return;
+                    out.println("<h4 class=\"mt-4\">JSON</h4>");
+
+                    JSONParser parser = new JSONParser();
+
+                    JSONObject json = null;
+                    try {
+                        json = (JSONObject) parser.parse(convertYamlToJson(output));
+                    } catch (ParseException e) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"3\" color=\"red\"><b> Problem invalid JSON ["
+                                + e
+
+                                + "]</font></b><br>");
+                        return;
+                    }
+
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String prettyJson = gson.toJson(json);
+
+
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=43  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+
+                } catch (Exception ex) {
+
+                }
+            }
+
+            if("deployment".equalsIgnoreCase(deploy))
+            {
+                Deployment deployment = new Deployment();
+                z.y.x.kube.deployment.spec specd = new z.y.x.kube.deployment.spec();
+                selector selector = new selector();
+                template template = new template();
+
+                metadata = new metadata();
+
+
+                metadata.setName(name);
+                metadata.setNamespace(namespace);
+
+
+
+
+                if (annotation != null && annotation.trim().length() > 0) {
+                    metadata.setAnnotations(getMapValue(annotation));
                 }
 
 
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String prettyJson = gson.toJson(json);
+
+                if (label != null && label.trim().length() > 0) {
+                   // metadata.setLabels(getMapValue(label));
+                    selector.setMatchLabels(getMapValue(label));
+                    deployment.setMetadata(metadata);
+                    metadata = new metadata();
+                    metadata.setLabels(getMapValue(label));
+                    template.setMetadata(metadata);
+
+                }
 
 
 
-                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=13  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+                specd.setSelector(selector);
+                template.setSpec(spec);
 
-            }catch (Exception ex)
-            {
+                specd.setTemplate(template);
+
+                deployment.setSpec(specd);
+
+                output = yaml.dump(deployment);
+
+                output = output.replaceAll("!!z.y.x.kube.deployment.Deployment","---");
+
+               // System.out.println(output);
+
+
+                out.println("<h4 class=\"mt-4\">YAML</h4>");
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=37  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
+                        "EOF</textarea>");
+
+                try {
+
+                    out.println("<h4 class=\"mt-4\">JSON</h4>");
+
+                    JSONParser parser = new JSONParser();
+
+                    JSONObject json = null;
+                    try {
+                        json = (JSONObject) parser.parse(convertYamlToJson(output));
+                    } catch (ParseException e) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"3\" color=\"red\"><b> Problem invalid JSON ["
+                                + e
+
+                                + "]</font></b><br>");
+                        return;
+                    }
+
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String prettyJson = gson.toJson(json);
+
+
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=43  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+
+                } catch (Exception ex) {
+
+                }
+
 
             }
 
