@@ -536,7 +536,7 @@ public class KubeFunctionality extends HttpServlet {
             if("pod".equalsIgnoreCase(deploy)) {
 
                 out.println("<h4 class=\"mt-4\">YAML</h4>");
-                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=37  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
                         "EOF</textarea>");
 
                 try {
@@ -562,7 +562,7 @@ public class KubeFunctionality extends HttpServlet {
                     String prettyJson = gson.toJson(json);
 
 
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=43  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=35  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
 
                 } catch (Exception ex) {
 
@@ -618,7 +618,7 @@ public class KubeFunctionality extends HttpServlet {
 
 
                 out.println("<h4 class=\"mt-4\">YAML</h4>");
-                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=37  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
                         "EOF</textarea>");
 
                 try {
@@ -644,7 +644,7 @@ public class KubeFunctionality extends HttpServlet {
                     String prettyJson = gson.toJson(json);
 
 
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=43  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=35  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
 
                 } catch (Exception ex) {
 
