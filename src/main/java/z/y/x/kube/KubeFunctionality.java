@@ -33,6 +33,7 @@ import org.yaml.snakeyaml.resolver.Resolver;
 import z.y.x.kube.deployment.Deployment;
 import z.y.x.kube.deployment.selector;
 import z.y.x.kube.deployment.template;
+import z.y.x.kube.service.Service;
 
 /**
  * Created by aninath on 11/16/17.
@@ -41,6 +42,7 @@ public class KubeFunctionality extends HttpServlet {
 
     private static final long serialVersionUID = 2L;
     private static final String METHOD_POD_GENERATE = "POD_GENERATE";
+    private static final String METHOD_SERVICE_GENERATE = "SERVICE_GENERATE";
 
 
 
@@ -74,6 +76,272 @@ public class KubeFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
+
+        if (METHOD_SERVICE_GENERATE.equals(methodName)) {
+
+            String name = request.getParameter("name");
+            String namespace = request.getParameter("namespace");
+            String type = request.getParameter("type");
+            String label = request.getParameter("label");
+            String clusterIP = request.getParameter("clusterIP");
+            String loadBalancerIP = request.getParameter("loadBalancerIP");
+            String externalName = request.getParameter("externalName");
+
+
+            String portname = request.getParameter("portname");
+            String port = request.getParameter("port");
+            String targetPort = request.getParameter("targetPort");
+            String nodePort = request.getParameter("nodePort");
+            String protocol = request.getParameter("protocol");
+            String portname1 = request.getParameter("portname1");
+            String port1 = request.getParameter("port1");
+            String targetPort1 = request.getParameter("targetPort1");
+            String nodePort1 = request.getParameter("nodePort1");
+            String protocol1 = request.getParameter("protocol1");
+
+            String externalIPs = request.getParameter("externalIPs");
+            String sessionAffinity = request.getParameter("sessionAffinity");
+
+            if (name == null || name.trim().length() == 0) {
+                name="demo";
+            }
+
+            name=name.trim().toLowerCase();
+
+            if (namespace == null || namespace.trim().length() == 0) {
+                namespace="default";
+            }
+
+            if (type == null || type.trim().length() == 0) {
+                type="ClusterIP";
+            }
+
+
+            Representer representer = new Representer() {
+                @Override
+                protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue,Tag customTag) {
+                    // if value of property is null, ignore it.
+                    //System.out.println(property.getName());
+
+                    if (propertyValue == null || propertyValue == ""  ) {
+                        return null;
+                    }
+
+                    else if ("nodePort".equals(property.getName()) || "healthCheckNodePort".equals(property.getName()))
+                    {
+                        if (propertyValue !=null)
+                        {
+                            if(0==java.lang.Integer.parseInt(propertyValue.toString()))
+                            {
+                                return null;
+                            }
+                        }
+                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+                    }
+
+                    else {
+                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+                    }
+                }
+            };
+
+            DumperOptions options = new DumperOptions();
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+            //options.set
+            options.setPrettyFlow(true);
+
+            Yaml yaml = new Yaml(representer,options);
+
+            Service rv = new Service();
+            z.y.x.kube.service.spec srvspec = new z.y.x.kube.service.spec();
+            List<z.y.x.kube.service.ports> srvportsList  = new ArrayList<>();
+            z.y.x.kube.service.ports srvports= new z.y.x.kube.service.ports();
+
+
+            metadata metadata = new metadata();
+            metadata.setName(name);
+            metadata.setNamespace(namespace);
+
+
+            if (label != null && label.trim().length() > 0) {
+                srvspec.setSelector(getMapValue(label));
+            }
+
+            metadata.setAnnotations(getMapValue("generated=by 8gwifi.org"));
+
+
+            srvspec.setType(type);
+
+            if(externalIPs!=null && externalIPs.trim().length()>0)
+            {
+                srvspec.setExternalIPs(getArrayString(externalIPs));
+            }
+
+            if(clusterIP!=null && clusterIP.trim().length()>0)
+            {
+                srvspec.setClusterIP(clusterIP);
+            }
+
+            if (sessionAffinity == null || sessionAffinity.trim().length() == 0) {
+                sessionAffinity="None";
+
+            }
+
+            srvspec.setSessionAffinity(sessionAffinity);
+
+            if("ExternalName".equalsIgnoreCase(srvspec.getType()))
+            {
+                if (externalName == null || externalName.trim().length() == 0) {
+                    externalName="replace-my.external-service.name";
+
+                }
+                srvspec.setExternalName(externalName);
+                srvspec.setSelector(null);
+            }
+            else {
+
+                boolean addports=false;
+
+                if(portname!=null && portname.trim().length()>0)
+                {
+                    addports=true;
+                    srvports.setName(portname);
+                }
+
+                if(port!=null && port.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setPort(Integer.valueOf(port));
+                    }catch (Exception ex) {}
+                }
+
+                if(targetPort!=null && targetPort.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setTargetPort(Integer.valueOf(targetPort));
+                    }catch (Exception ex) {}
+                }
+
+                if(nodePort!=null && nodePort.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setTargetPort(Integer.valueOf(nodePort));
+                    }catch (Exception ex) {}
+                }
+
+                if(addports)
+                {
+                    srvports.setProtocol(protocol);
+                    srvportsList.add(srvports);
+                }
+
+                srvports= new z.y.x.kube.service.ports();
+                addports = false;
+
+                if(portname1!=null && portname1.trim().length()>0)
+                {
+                    addports=true;
+                    srvports.setName(portname1);
+                }
+
+                if(port1!=null && port1.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setPort(Integer.valueOf(port1));
+                    }catch (Exception ex) {}
+                }
+
+                if(targetPort1!=null && targetPort1.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setTargetPort(Integer.valueOf(targetPort1));
+                    }catch (Exception ex) {}
+                }
+
+                if(nodePort1!=null && nodePort1.trim().length()>0)
+                {
+                    addports=true;
+                    try {
+                        srvports.setTargetPort(Integer.valueOf(nodePort1));
+                    }catch (Exception ex) {}
+                }
+
+                if(addports)
+                {
+                    srvports.setProtocol(protocol1);
+                    srvportsList.add(srvports);
+                }
+
+                if(srvportsList.size()>0)
+                {
+                    srvspec.setPorts(srvportsList);
+                }
+
+                if(loadBalancerIP!=null && loadBalancerIP.trim().length()>0)
+                {
+                    srvspec.setLoadBalancerIP(loadBalancerIP);
+                }
+
+                if("None".equalsIgnoreCase(srvspec.getClusterIP()))
+                {
+                    if("NodePort".equalsIgnoreCase(srvspec.getType()) || "LoadBalancer".equalsIgnoreCase(srvspec.getType()) )
+                    {
+                        srvspec.setClusterIP(null);
+                    }
+                }
+            }
+
+            rv.setMetadata(metadata);
+            rv.setSpec(srvspec);
+
+
+            String output = yaml.dump(rv);
+
+            output = output.replaceAll("!!z.y.x.kube.service.Service","---");
+
+            //System.out.println(output);
+
+
+
+                out.println("<h4 class=\"mt-4\">YAML</h4>");
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=25  form=\"X\">cat <<EOF | kubectl apply -f -\n" + output + "\n" +
+                        "EOF</textarea>");
+
+                try {
+
+                    out.println("<h4 class=\"mt-4\">JSON</h4>");
+
+                    JSONParser parser = new JSONParser();
+
+                    JSONObject json = null;
+                    try {
+                        json = (JSONObject) parser.parse(convertYamlToJson(output));
+                    } catch (ParseException e) {
+                        addHorizontalLine(out);
+                        out.println("<font size=\"3\" color=\"red\"><b> Problem invalid JSON ["
+                                + e
+
+                                + "]</font></b><br>");
+                        return;
+                    }
+
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String prettyJson = gson.toJson(json);
+
+
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=35  form=\"X\"> cat <<EOF | kubectl apply -f -\n " + prettyJson + "\nEOF</textarea>");
+
+                } catch (Exception ex) {
+
+                }
+
+        }
 
         if (METHOD_POD_GENERATE.equals(methodName)) {
 
@@ -185,7 +453,11 @@ public class KubeFunctionality extends HttpServlet {
 
 
             if (annotation != null && annotation.trim().length() > 0) {
+                annotation = annotation + ",generated=by 8gwifi.org";
                 metadata.setAnnotations(getMapValue(annotation));
+            }
+            else {
+                metadata.setAnnotations(getMapValue("generated=by 8gwifi.org"));
             }
 
 
@@ -700,7 +972,11 @@ public class KubeFunctionality extends HttpServlet {
         for(String pair : items)
         {
             String[] entry = pair.split("=");
-            map.put(entry[0].trim(), entry[1].trim());
+            if(entry.length==2) {
+                map.put(entry[0].trim(), entry[1].trim());
+            }else if (entry.length<2) {
+                map.put(entry[0].trim(), entry[0].trim());
+            }
         }
         return map;
 
