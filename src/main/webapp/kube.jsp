@@ -35,6 +35,103 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 
+			$('#form').show();
+			$('#service').hide();
+			$('#nport').hide();
+			$('#nport1').hide();
+			$('#lip').hide();
+			$('#exName').hide();
+			$('#portmap').show();
+			$('#portmap1').show();
+
+			$('#selectkubeobject').change(function (event)
+			{
+				var x = $( "#selectkubeobject" ).val();
+				if(x==1)
+				{
+					$('#form').show();
+					$('#service').hide();
+				}
+				if(x==2)
+				{
+					$('#form').hide();
+					$('#service').show();
+				}
+
+
+			});
+
+			$('#type').change(function (event)
+			{
+
+				var x = $( "#type" ).val();
+				if("NodePort" === x)
+				{
+					$('#nport').show();
+					$('#nport1').show();
+					$('#exshow').show();
+					$('#lip').hide();
+					$('#cip').show();
+					$('#exName').hide();
+					$('#portmap').show();
+					$('#portmap1').show();
+					$('#showexternalIPs').show();
+
+				}
+				else if ("LoadBalancer" ===x)
+				{
+					$('#nport').show();
+					$('#nport1').show();
+					$('#exshow').show();
+					$('#lip').show();
+					$('#cip').show();
+					$('#exName').hide();
+					$('#portmap').show();
+					$('#portmap1').show();
+					$('#showexternalIPs').show();
+				}
+				else if ("ClusterIP" ===x)
+				{
+					$('#nport').show();
+					$('#nport1').show();
+					$('#exshow').show();
+					$('#lip').hide();
+					$('#cip').show();
+					$('#exName').hide();
+					$('#portmap').show();
+					$('#portmap1').show();
+					$('#showexternalIPs').show();
+				}
+				else if ("ExternalName" ===x)
+				{
+					$('#exshow').hide();
+					$('#nport').hide();
+					$('#nport1').hide();
+					$('#exshow').show();
+					$('#lip').hide();
+					$('#cip').hide();
+					$('#exName').show();
+					$('#portmap').hide();
+					$('#portmap1').hide();
+					$('#showexternalIPs').hide();
+				}
+				else{
+					$('#nport').hide();
+					$('#nport1').hide();
+					$('#lip').hide();
+				}
+
+			});
+
+
+
+			$('#generateservice').click(function (event)
+			{
+				//
+				$('#service').delay(200).submit()
+
+			});
+
 
 			$('#generatesshpods').click(function (event)
 			{
@@ -68,6 +165,23 @@
 					}
 				});
 			});
+
+			$('#service').submit(function (event)
+			{
+				//
+				$('#output').html('<img src="images/712.GIF"> loading...');
+				event.preventDefault();
+				$.ajax({
+					type: "POST",
+					url: "KubeFunctionality", //this is my servlet
+					data: $("#service").serialize(),
+					success: function(msg){
+						$('#output').empty();
+						$('#output').append(msg);
+
+					}
+				});
+			});
 		});
 
 	</script>
@@ -86,6 +200,160 @@
 </div>
 
 <hr>
+
+<form id="showoptions">
+	<div class="form-group">
+		<label for="selectkubeobject">Build Kubernetes Object</label>
+		<select class="form-control" id="selectkubeobject">
+			<option value="1">Pods/Deployment</option>
+			<option value="2">Service</option>
+		</select>
+	</div>
+</form>
+
+
+<form id="service" method="POST">
+	<h4>Configure Service </h4>
+	<hr>
+	<div class="form-row">
+
+		<div class="form-group col-md-6">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="service Name in Lowercase">
+			<small>Service Name must be unique within a namespace</small>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="namespace">Namespace</label>
+			<input type="text" class="form-control" value="default" id="namespace" name="namespace">
+			<small>An empty namespace is equivalent to the "default"  </small>
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-4">
+			<label for="type">Service Type</label>
+			<select class="form-control" name="type" id="type">
+				<option value="ClusterIP" selected>ClusterIP</option>
+				<option value="NodePort">NodePort</option>
+				<option value="LoadBalancer">LoadBalancer</option>
+				<option value="ExternalName">ExternalName</option>
+			</select>
+		</div>
+
+		<div class="form-group col-md-8">
+			<label for="label">Labels</label>
+			<input type="text" class="form-control" value="app=nginx,env=staging" name="label" id="label" placeholder="app=nginx,env=staging">
+			<small>Format app=nginx,env=staging</small>
+		</div>
+
+	</div>
+
+	<div id="exshow" class="form-row">
+
+		<div id="cip" class="form-group col-md-6">
+			<label for="clusterIP">clusterIP</label>
+			<input type="text" class="form-control" id="clusterIP" value="" name="clusterIP" placeholder="">
+			<small>Valid values "None", empty string (""), or a valid IP .</small>
+		</div>
+
+		<div  id="lip" class="form-group col-md-6">
+			<label for="loadBalancerIP">loadBalancerIP</label>
+			<input type="text" class="form-control" id="loadBalancerIP" name="loadBalancerIP" placeholder="192.168.1.1">
+			<small> LoadBalancer will get created with the IP specified in this field.</small>
+		</div>
+
+
+		<div  id="exName" class="form-group col-md-6">
+			<label for="externalName">externalName</label>
+			<input type="text" class="form-control" id="externalName" name="externalName" placeholder="my.service.example.com">
+			<small>external reference CNAME </small>
+		</div>
+
+	</div>
+
+	<div id="portmap" class="form-row">
+		<div class="form-group col-md-3">
+			<label for="port">PORT-Name</label>
+			<input type="text" class="form-control" placeholder="http" value="http" id="portname" name="portname">
+		</div>
+		<div class="form-group col-md-2">
+			<label for="port">PORT</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="80" value="80" id="port" name="port">
+		</div>
+		<div class="form-group col-md-3">
+			<label for="targetPort">TargetPort</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="80" value="80" name="targetPort" id="targetPort">
+		</div>
+
+		<div id="nport" class="form-group col-md-2">
+			<label for="targetPort">Node Port</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="32745" value="" name="nodePort" id="nodePort">
+		</div>
+
+		<div class="form-group col-md-2">
+			<label for="protocol">Protocol</label>
+			<select class="form-control" name="protocol" id="protocol">
+				<option value="TCP" selected>TCP</option>
+				<option value="UDP">UDP</option>
+				<option value="SCTP">SCTP</option>
+			</select>
+		</div>
+
+
+	</div>
+	<div id="portmap1" class="form-row">
+		<div class="form-group col-md-3">
+			<label for="port">PORT-Name</label>
+			<input type="text" class="form-control" placeholder="https" value="" id="portname1" name="portname1">
+		</div>
+		<div class="form-group col-md-2">
+			<label for="env2">PORT</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="443" value="" id="port1" name="port1">
+		</div>
+		<div class="form-group col-md-3">
+			<label for="v2">TargetPort</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="8443" value="" name="targetPort1" id="targetPort1">
+		</div>
+
+		<div id="nport1" class="form-group col-md-2">
+			<label for="targetPort">Node Port</label>
+			<input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="32746" value="" name="nodePort1" id="nodePort1">
+		</div>
+
+		<div class="form-group col-md-2">
+			<label for="protocol">Protocol</label>
+			<select class="form-control" name="protocol1" id="protocol1">
+				<option value="TCP" >TCP</option>
+				<option value="UDP">UDP</option>
+				<option value="SCTP">SCTP</option>
+			</select>
+		</div>
+
+	</div>
+
+	<div id="showexternalIPs"  class="form-row">
+		<div class="form-group col-md-8" >
+			<label for="externalIPs">externalIPs</label>
+			<input type="text" class="form-control" placeholder="104.27.177.30,104.27.177.30" value="" name="externalIPs" id="externalIPs">
+			<small>List of external Ip's leave Blank if not managed by external</small>
+		</div>
+
+		<div class="form-group col-md-2">
+			<label for="sessionAffinity">sessionAffinity</label>
+			<select class="form-control" name="sessionAffinity" id="sessionAffinity">
+				<option value="None" selected >None</option>
+				<option value="ClientIP">ClientIP</option>
+			</select>
+		</div>
+
+	</div>
+
+	<hr>
+
+
+	<input type="hidden" name="methodName" id="methodName"  value="SERVICE_GENERATE">
+	<input type="button" class="btn btn-primary" id="generateservice" name="generata Service" value="Generate Service Spec">
+</form>
 
 <form id="form" method="POST">
 
