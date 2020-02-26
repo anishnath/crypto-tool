@@ -199,6 +199,8 @@
 	<img src="images/712.GIF" alt="" />Loading!
 </div>
 
+<%@ include file="footer_adsense.jsp"%>
+
 <hr>
 
 <form id="showoptions">
