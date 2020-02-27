@@ -240,23 +240,151 @@
     <input type="button" class="btn btn-primary" id="generatedc" name="Generate docker Compose" value="Generate docker-compose.yml">
 </form>
 
-<div id="output"></div>
-
 <hr>
-<p> Related Tool </p>
 
-<ul>
-    <li><a href="jwkfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) Generate</font> </a></li>
-    <li><a href="jwkconvertfunctions.jsp"><font size="2.5px">JSON Web Key (JWK) to PEM Convert</font> </a></li>
-    <li><a href="jwsparse.jsp"><font size="2.5px">JWS Parser</font> </a></li>
-    <li><a href="jwsgen.jsp"><font size="2.5px">JWS Generate Key Sign Data</font> </a></li>
-    <li><a href="jwssign.jsp"><font size="2.5px">JWS Sign Data with custom key</font> </a></li>
-    <li><a href="jwsverify.jsp"><font size="2.5px">JWS Signature Verification</font> </a></li>
-</ul>
+<div id="output"></div>
 
 <hr>
 
 <div class="sharethis-inline-share-buttons"></div>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<hr>
+<h2 class="mt-4">Try Other Convertor</h2>
+<div class="row">
+    <div>
+        <ul>
+            <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
+            <li><a href="jsonparser.jsp">JSON-2-YAML Convertor</a></li>
+            <li><a href="yamlparser.jsp">YAML-2-JSON Convertor</a></li>
+            <li><a href="qrcodegen.jsp">QR Code generate</a></li>
+            <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
+            <li><a href="diff.jsp">Compare text differences</a></li>
+            <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
+            <li><a href="HexToStringFunctions.jsp">Hex To String Conversion</a></li>
+            <li><a href="HexToStringFunctions.jsp">String To Hex Conversion</a></li>
+            <li><a href="base64Hex.jsp">Base64 To Hex (ViceVersa)</a></li>
+            <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
+            <li><a href="base64image.jsp">Base64 Image Converter(data:image/png)</a></li>
+            <li><a href="StringFunctions.jsp">Various String Functions</a></li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+<h2 class="mt-4">Kubernetes Topic </h2>
+<div>
+    <ul>
+        <li>
+            <a href="docs/ansible-kube-install.jsp">kubernetes install on using ansible</a>
+        </li>
+        <li>
+            <a href="docs/kube-install.jsp">kube install on in centos7/ubuntu7</a>
+        </li>
+        <li>
+            <a href="docs/kube-dash.jsp">kubernetes Dashbaord Setup</a>
+        </li>
+        <li>
+            <a href="docs/kube-pods.jsp">Pod,Cluster,Deploy,ReplicaSet Light Dive</a>
+        </li>
+        <li>
+            <a href="docs/kube-nginx.jsp">kubernetes secure nginx deployment</a>
+        </li>
+        <li>
+            <a href="docs/kube-ports.jsp">kubernetes Port, Targetport and NodePort</a>
+        </li>
+        <li>
+            <a href="docs/kube-namespaces.jsp">kubernetes Namespace</a>
+        </li>
+        <li>
+            <a href="docs/kube-auth.jsp">kubenetes Auth,Authorization,Admission</a>
+        </li>
+        <li>
+            <a href="docs/kube-rbac.jsp">kubernetes Role-Based Access Control</a>
+        </li>
+        <li>
+            <a href="docs/CVE-2018-1002105.jsp">Kubernetes Privilege Escalation Vulnerability</a>
+        </li>
+        <li>
+            <a href="docs/prometheus-dashboard.jsp">Prometheus Dashboard Access</a>
+        </li>
+        <li>
+            <a href="docs/kube-mysql.jsp">Kubernetes mysql installation</a>
+        </li>
+        <li>
+            <a href="docs/kube-jenkins.jsp">Kubernetes Jenkins installation</a>
+        </li>
+        <li>
+            <a href="docs/podman-jenkins.jsp">Podman Jenkins installation</a>
+        </li>
+        <li>
+            <a href="docs/kube-mariadb.jsp">Kubernetes mariadb installation</a>
+        </li>
+        <li>
+            <a href="docs/kube-wordpress.jsp">Kubernetes wordpress installation</a>
+        </li>
+        <li>
+            <a href="docs/kube-drupal.jsp">Kubernetes drupal installation</a>
+        </li>
+        <li>
+            <a href="docs/kube-traefik.jsp">Kubernetes traefik installation</a>
+        </li>
+
+        <li>
+            <a href="docs/kube-traefik2.jsp">Kubernetes Ingress traefik </a>
+        </li>
+
+        <li>
+            <a href="docs/kube-debug.jsp">kubernetes service external ip pending ?</a>
+        </li>
+
+        <li>
+            <a href="docs/kube-Istio.jsp">Service Mesh With Istio</a>
+        </li>
+
+        <li>
+            <a href="docs/kube-externalname.jsp">Access SVC in Another Namespaces</a>
+        </li>
+
+        <li>
+            <a href="docs/kube-java.jsp">kubernetes Java client example</a>
+        </li>
+
+        <li>
+            <a href="docs/kube-lets.jsp">kubernetes letsencrypt deploy wild card certificate</a>
+        </li>
+
+        <li>
+            <a href="docs/docker-install.jsp">Right Way to Install Docker</a>
+        </li>
+
+        <li>
+            <a href="docs/docker-privaterepo.jsp">Docker Private repo with SSL and AUTH</a>
+        </li>
+
+        <li>
+            <a href="docs/docker-baseimage.jsp">Creating Docker Base Image</a>
+        </li>
+
+        <li>
+            <a href="docs/containers.jsp">Container Runtime (RUNC,RKT,CRI-O,Conatinerd) </a>
+        </li>
+
+        <li>
+            <a href="docs/podman-install.jsp">Podman Install on Ubuntu/Debian</a>
+        </li>
+    </ul>
+</div>
+
+
+
+<hr>
+
+
+<hr>
+
+
 <%@ include file="thanks.jsp"%>
 <hr>
 

@@ -644,6 +644,7 @@
 <div class="row">
 	<div>
 		<ul>
+			<li><a href="dc.jsp">docker compose file generator</a></li>
 			<li><a href="jsonparser.jsp">JSON-2-YAML Convertor</a></li>
 			<li><a href="yamlparser.jsp">YAML-2-JSON Convertor</a></li>
 			<li><a href="qrcodegen.jsp">QR Code generate</a></li>
