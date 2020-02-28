@@ -281,6 +281,7 @@ public class DockerFunctionality extends HttpServlet {
                 }
                 else{
                     m1.put("condition", restart_policy);
+                    deploy.setRestart_policy(m1);
                 }
             }
 
