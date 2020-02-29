@@ -6,6 +6,7 @@
                 <ul>
                     <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
                     <li><a href="dc.jsp">Docker Compose file Generator</a></li>
+                    <li><a href="dc1.jsp">docker run to Docker Compose Conversion</a></li>
                     <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                     <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
                     <li><a href="diff.jsp">Compare text differences</a></li>
