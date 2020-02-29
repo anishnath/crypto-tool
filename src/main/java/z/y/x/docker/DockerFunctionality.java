@@ -40,6 +40,7 @@ public class DockerFunctionality extends HttpServlet {
 
     private static final long serialVersionUID = 2L;
     private static final String METHOD_GENERATE_DC = "GENERATE_DC";
+    private static final String METHOD_GENERATE_DC_FROM_DOCKER_RUN = "GENERATE_DC_FROM_DOCKER_RUN";
 
 
 
@@ -73,6 +74,31 @@ public class DockerFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
+
+        if (METHOD_GENERATE_DC_FROM_DOCKER_RUN.equals(methodName)) {
+
+            String dockerrun = request.getParameter("dockerrun");
+
+            if(null == dockerrun || dockerrun.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Paste your Docker run </font>");
+                return;
+            }
+
+            Docker docker = new Docker();
+            String output =  docker.genDockerCompose(dockerrun);
+
+            out.println("<h5 class=\"mt-4\">docker-compose.yml</h5>");
+            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">" + output +
+                    "</textarea>");
+
+            return;
+
+
+
+
+        }
 
         if (METHOD_GENERATE_DC.equals(methodName)) {
 

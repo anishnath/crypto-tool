@@ -9,43 +9,31 @@ public class DockerCompose {
 	
 	
 	private Map<String,String> volumes;
-	private Map<String,String> networks;
-	
-	
-	
-
-	public Map<String, String> getVolumes() {
-		return volumes;
-	}
-
-	public void setVolumes(Map<String, String> volumes) {
-		this.volumes = volumes;
-	}
-
-	public Map<String, String> getNetworks() {
-		return networks;
-	}
-
-	public void setNetworks(Map<String, String> networks) {
-		this.networks = networks;
-	}
-
+	private Map<String,Object> networks;
 	public String getVersion() {
 		return version;
 	}
-
 	public void setVersion(String version) {
 		this.version = version;
 	}
-
 	public Map<String, services> getServices() {
 		return services;
 	}
-
 	public void setServices(Map<String, services> services) {
 		this.services = services;
 	}
-
+	public Map<String, String> getVolumes() {
+		return volumes;
+	}
+	public void setVolumes(Map<String, String> volumes) {
+		this.volumes = volumes;
+	}
+	public Map<String, Object> getNetworks() {
+		return networks;
+	}
+	public void setNetworks(Map<String, Object> networks) {
+		this.networks = networks;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,7 +44,6 @@ public class DockerCompose {
 		result = prime * result + ((volumes == null) ? 0 : volumes.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -88,7 +75,6 @@ public class DockerCompose {
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		return "DockerCompose [" + (version != null ? "version=" + version + ", " : "")
@@ -96,6 +82,9 @@ public class DockerCompose {
 				+ (volumes != null ? "volumes=" + volumes + ", " : "")
 				+ (networks != null ? "networks=" + networks : "") + "]";
 	}
+	
+	
+	
 
 	
 	

@@ -16,6 +16,10 @@ public class DockerComposeGen {
 	
 	public static void main(String[] args) {
 		
+		String s = "db-data:${DOCKER_MOUNT_PATH:-/root/scdf}";
+		
+		System.out.println(s.substring(0,s.indexOf(":")));
+		
 		Representer representer = new Representer() {
 		    @Override
 		    protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue,Tag customTag) {
@@ -34,9 +38,12 @@ public class DockerComposeGen {
 		    }
 		};
 		
+		representer.addClassTag(ipam.class, Tag.MAP);
+		
 		DumperOptions options = new DumperOptions();
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 		//options.set
+		options.setCanonical(false);
 		options.setPrettyFlow(true);
 		
 		Yaml yaml = new Yaml(representer,options);
@@ -122,13 +129,50 @@ public class DockerComposeGen {
 		services.setDeploy(deploy);
 		services.setImage("mysql:5.7.25");
 		
+		logging logging = new logging();
+		Map<String,String> logMap = new HashMap<>();
+		logMap.put("max-size", "200k");
+		logMap.put("max-file", "10");
+		
+		logging.setOptions(logMap);
+		
+		services.setLogging(logging);
+		
+		nofile nofile = new nofile();
+		nofile.setHard(65535);
+		nofile.setSoft(65535);
+		
+		ulimits ulimits = new ulimits();
+		ulimits.setNofile(nofile);
+		
+		ulimits.setNproc(4000);
+		
+		//services.setUlimits(ulimits);
+		
+		
 		Map<String,services> mapServices = new HashMap<>();
 		mapServices.put("mysql", services);
 		dockerCompose.setServices(mapServices);
 		
-		Map<String,String> networkMap = new HashMap<>();
+		Map<String,Object> networkMap = new HashMap<>();
 		networkMap.put("frontend", null);
 		networkMap.put("backend", null);
+		
+		
+		config config = new config();
+		
+		config.setSubnet("172.16.238.0/24");
+		config[] configarr = new config[]{config};
+		ipam ipam = new ipam();
+		ipam.setConfig(configarr);
+		
+		Map<String,Object> test = new HashMap<>();
+		test.put("ipam", ipam);
+		
+		networkMap.put("frontend", test);
+		//networkMap.put("ipam", ipam);
+		
+		
 		
 		dockerCompose.setNetworks(networkMap);
 		

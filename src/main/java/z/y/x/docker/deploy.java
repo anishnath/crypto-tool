@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class deploy {
 	
-	int replicas=1;
+	int replicas;
 	private Map<String,Object> update_config;
 	private Map<String,Object> restart_policy;
 	//private Map<String,String[]> placement;
