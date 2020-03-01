@@ -762,6 +762,20 @@ public class Docker {
 		            return null;
 		        }
 
+				else if ("init".equals(property.getName()))
+				{
+
+					if (propertyValue !=null)
+					{
+						if(!Boolean.valueOf(propertyValue.toString()))
+						{
+							return null;
+						}
+					}
+					return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+				}
+
 		        else {
 		            return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
 		        }
