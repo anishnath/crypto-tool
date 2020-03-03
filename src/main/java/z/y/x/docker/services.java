@@ -6,7 +6,7 @@ import java.util.Map;
 public class services {
 	
 	private String image;
-	private String command;
+	private String[] command;
 	private deploy deploy;
 	private String container_name;
 	private Map<String,String> environment;
@@ -47,6 +47,13 @@ public class services {
 	
 	
 	
+	
+	public String[] getCommand() {
+		return command;
+	}
+	public void setCommand(String[] command) {
+		this.command = command;
+	}
 	public String getPid() {
 		return pid;
 	}
@@ -137,12 +144,7 @@ public class services {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public String getCommand() {
-		return command;
-	}
-	public void setCommand(String command) {
-		this.command = command;
-	}
+
 	public deploy getDeploy() {
 		return deploy;
 	}
@@ -269,7 +271,7 @@ public class services {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(cap_add);
 		result = prime * result + Arrays.hashCode(cap_drop);
-		result = prime * result + ((command == null) ? 0 : command.hashCode());
+		result = prime * result + Arrays.hashCode(command);
 		result = prime * result + ((container_name == null) ? 0 : container_name.hashCode());
 		result = prime * result + Arrays.hashCode(depends_on);
 		result = prime * result + ((deploy == null) ? 0 : deploy.hashCode());
@@ -318,10 +320,7 @@ public class services {
 			return false;
 		if (!Arrays.equals(cap_drop, other.cap_drop))
 			return false;
-		if (command == null) {
-			if (other.command != null)
-				return false;
-		} else if (!command.equals(other.command))
+		if (!Arrays.equals(command, other.command))
 			return false;
 		if (container_name == null) {
 			if (other.container_name != null)
@@ -439,7 +438,7 @@ public class services {
 	@Override
 	public String toString() {
 		return "services [" + (image != null ? "image=" + image + ", " : "")
-				+ (command != null ? "command=" + command + ", " : "")
+				+ (command != null ? "command=" + Arrays.toString(command) + ", " : "")
 				+ (deploy != null ? "deploy=" + deploy + ", " : "")
 				+ (container_name != null ? "container_name=" + container_name + ", " : "")
 				+ (environment != null ? "environment=" + environment + ", " : "")

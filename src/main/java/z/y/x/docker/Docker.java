@@ -23,6 +23,7 @@ public class Docker {
 		commandMap.put("--blkio-weight-device", "--blkio-weight-device");
 		commandMap.put("--cap-add", "--cap-add");
 		commandMap.put("--cap-drop", "--cap-drop");
+		commandMap.put("-it", "-it");
 		commandMap.put("-a", "-a");
 		commandMap.put("-c", "-c");
 		commandMap.put("-d", "-d");
@@ -126,7 +127,7 @@ public class Docker {
 	}
 
 	private String image;
-	private String command;
+	private String[] command;
 	private deploy deploy;
 	private String container_name;
 	private Map<String,String> environment;
@@ -257,7 +258,7 @@ public class Docker {
 
 		String imageName = dockerarr[dockerarr.length-1];
 
-		services.setImage(imageName);
+		//services.setImage(imageName);
 
 		for (int i = 0; i < dockerarr.length-1; i++) {
 
@@ -754,6 +755,104 @@ public class Docker {
 
 		}
 
+
+		String array[] = dockercommand.split(" ");
+		boolean flag = false;
+		int j = array.length - 1;
+		for (int i = array.length - 1; i > 0; i--) {
+			String temp = array[i];
+
+			if (temp != null && temp.trim().length() > 0) {
+				temp = temp.trim();
+				if (temp.contains("=")) {
+					String[] temparr = temp.split("=");
+					temp = temparr[0];
+					flag = true;
+				}
+
+				if (commandMap.get(temp) == null) {
+					j--;
+					if (j > 0) {
+						if (commandMap.get(array[j]) != null) {
+							break;
+						}
+
+					}
+
+				}
+			}
+		}
+
+		//System.out.println("J " + j + " Array Lenght " + array.length);
+
+		String[] trimmedArray = new String[array.length];
+		int i =0;
+		for (  j=j ; j < array.length; j++) {
+
+			if(array[j]!=null && array[j].trim().length()>0)
+			{
+				if(commandMap.get(array[j])==null)
+				{
+					trimmedArray[i] = array[j];
+					i++;
+				}
+
+			}
+		}
+
+		//System.out.println("Flag "  + flag);
+
+		int p =0;
+		boolean imageSet=false;
+		for (int k = 0; k < trimmedArray.length; k++) {
+
+			if(trimmedArray[k]!=null && trimmedArray[k].trim().length()>0)
+			{
+				//System.out.println("Trimmerd Array " + trimmedArray[k] );
+				if(flag)
+				{
+					int k1 = k+1;
+					if(k1<trimmedArray.length)
+					{
+
+						//System.out.println("Image Name1 " +  trimmedArray[k1]);
+						services.setImage(trimmedArray[k1]);
+						flag=false;
+						//imageSet = true;
+					}
+					else {
+						System.out.println("Image Name2 " +  trimmedArray[k]);
+						services.setImage(trimmedArray[k]);
+						flag=false;
+						//imageSet = true;
+					}
+				}
+				else {
+					if(!imageSet)
+					{
+						System.out.println("Image Name3 " +  trimmedArray[k]);
+						services.setImage(trimmedArray[k]);
+						//imageSet=true;
+					}else{
+
+						//System.out.println("Arguments " +  trimmedArray[k]);
+						addCommands(trimmedArray[k]);
+						services.setCommand(this.command);
+					}
+
+				}
+
+
+			}
+
+
+		}
+
+		trimmedArray = null;
+		array = null;
+
+
+
 		Representer representer = new Representer() {
 		    @Override
 		    protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue,Tag customTag) {
@@ -866,6 +965,27 @@ public class Docker {
 	            	labels.put(entry[0].trim(), entry[0].trim());
 	            }
 	        }
+		}
+	}
+
+	private void addCommands(String value)
+	{
+		if(value!=null && value.length()>0)
+		{
+
+			if(command==null)
+			{
+				command = new String[1];
+			}
+
+			if(null == command[0])
+			{
+				command[0] = value;
+			}
+			else{
+				command = addX(command.length, command, value);
+			}
+
 		}
 	}
 
