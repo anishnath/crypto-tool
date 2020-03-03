@@ -833,7 +833,7 @@ public class Docker {
 						//imageSet = true;
 					}
 					else {
-						System.out.println("Image Name2 " +  trimmedArray[k]);
+						//System.out.println("Image Name2 " +  trimmedArray[k]);
 						services.setImage(trimmedArray[k]);
 						flag=false;
 						//imageSet = true;
@@ -842,7 +842,7 @@ public class Docker {
 				else {
 					if(!imageSet)
 					{
-						System.out.println("Image Name3 " +  trimmedArray[k]);
+						//System.out.println("Image Name3 " +  trimmedArray[k]);
 						services.setImage(trimmedArray[k]);
 						//imageSet=true;
 					}else{
