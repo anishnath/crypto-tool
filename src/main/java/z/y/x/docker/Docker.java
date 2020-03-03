@@ -379,7 +379,8 @@ public class Docker {
 						if("--cidfile".equals(commandMap.get(temp)) )
 						{
 
-							services.setCidfile(value);
+							//There is No CID file
+							//services.setCidfile(value);
 						}
 
 						if("--user".equals(commandMap.get(temp)) || "-u".equals(commandMap.get(temp)) )
