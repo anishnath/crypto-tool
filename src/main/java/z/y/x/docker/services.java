@@ -41,6 +41,7 @@ public class services {
 	private boolean tty;
 	private boolean init;
 	private String pid;
+	private String cidfile;
 	
 	
 	
@@ -48,6 +49,14 @@ public class services {
 	
 	
 	
+	
+	
+	public String getCidfile() {
+		return cidfile;
+	}
+	public void setCidfile(String cidfile) {
+		this.cidfile = cidfile;
+	}
 	public String[] getCommand() {
 		return command;
 	}
@@ -271,6 +280,7 @@ public class services {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(cap_add);
 		result = prime * result + Arrays.hashCode(cap_drop);
+		result = prime * result + ((cidfile == null) ? 0 : cidfile.hashCode());
 		result = prime * result + Arrays.hashCode(command);
 		result = prime * result + ((container_name == null) ? 0 : container_name.hashCode());
 		result = prime * result + Arrays.hashCode(depends_on);
@@ -319,6 +329,11 @@ public class services {
 		if (!Arrays.equals(cap_add, other.cap_add))
 			return false;
 		if (!Arrays.equals(cap_drop, other.cap_drop))
+			return false;
+		if (cidfile == null) {
+			if (other.cidfile != null)
+				return false;
+		} else if (!cidfile.equals(other.cidfile))
 			return false;
 		if (!Arrays.equals(command, other.command))
 			return false;
@@ -468,6 +483,6 @@ public class services {
 				+ (healthcheck != null ? "healthcheck=" + healthcheck + ", " : "")
 				+ (logging != null ? "logging=" + logging + ", " : "")
 				+ (ulimits != null ? "ulimits=" + ulimits + ", " : "") + "tty=" + tty + ", init=" + init + ", "
-				+ (pid != null ? "pid=" + pid : "") + "]";
+				+ (pid != null ? "pid=" + pid + ", " : "") + (cidfile != null ? "cidfile=" + cidfile : "") + "]";
 	}
 }
