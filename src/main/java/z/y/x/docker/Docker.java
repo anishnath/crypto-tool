@@ -376,6 +376,12 @@ public class Docker {
 							services.setDomainname(value);
 						}
 
+						if("--cidfile".equals(commandMap.get(temp)) )
+						{
+
+							services.setCidfile(value);
+						}
+
 						if("--user".equals(commandMap.get(temp)) || "-u".equals(commandMap.get(temp)) )
 						{
 
@@ -596,6 +602,12 @@ public class Docker {
 									{
 
 										services.setDomainname(value);
+									}
+
+									if("--cidfile".equals(commandMap.get(temp)) )
+									{
+
+										services.setCidfile(value);
 									}
 
 									if("--user".equals(commandMap.get(temp)) || "-u".equals(commandMap.get(temp)) )
