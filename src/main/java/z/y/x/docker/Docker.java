@@ -770,7 +770,7 @@ public class Docker {
 
 
 		String array[] = dockercommand.split(" ");
-		boolean flag = false;
+
 		int j = array.length - 1;
 		for (int i = array.length - 1; i > 0; i--) {
 			String temp = array[i];
@@ -780,7 +780,6 @@ public class Docker {
 				if (temp.contains("=")) {
 					String[] temparr = temp.split("=");
 					temp = temparr[0];
-					flag = true;
 				}
 
 				if (commandMap.get(temp) == null) {
@@ -796,11 +795,9 @@ public class Docker {
 			}
 		}
 
-		//System.out.println("J " + j + " Array Lenght " + array.length);
-
 		String[] trimmedArray = new String[array.length];
 		int i =0;
-		for (  j=j ; j < array.length; j++) {
+		for ( j = j; j < array.length; j++) {
 
 			if(array[j]!=null && array[j].trim().length()>0)
 			{
@@ -809,60 +806,45 @@ public class Docker {
 					trimmedArray[i] = array[j];
 					i++;
 				}
-
 			}
+
 		}
 
-		//System.out.println("Flag "  + flag);
+		String whatatIndex0 = trimmedArray[0];
 
-		int p =0;
-		boolean imageSet=false;
-		for (int k = 0; k < trimmedArray.length; k++) {
+		//System.out.println("whatatIndex0 "  + whatatIndex0);
 
-			if(trimmedArray[k]!=null && trimmedArray[k].trim().length()>0)
+		boolean invalidIndex = false;
+		if(whatatIndex0!=null )
+		{
+			if(whatatIndex0.contains("/tmp")  || whatatIndex0.contains("=") || whatatIndex0.contains("--") )
 			{
-				//System.out.println("Trimmerd Array " + trimmedArray[k] );
-				if(flag)
-				{
-					int k1 = k+1;
-					if(k1<trimmedArray.length)
-					{
-
-						//System.out.println("Image Name1 " +  trimmedArray[k1]);
-						services.setImage(trimmedArray[k1]);
-						flag=false;
-						//imageSet = true;
-					}
-					else {
-						//System.out.println("Image Name2 " +  trimmedArray[k]);
-						services.setImage(trimmedArray[k]);
-						flag=false;
-						//imageSet = true;
-					}
-				}
-				else {
-					if(!imageSet)
-					{
-						//System.out.println("Image Name3 " +  trimmedArray[k]);
-						services.setImage(trimmedArray[k]);
-						//imageSet=true;
-					}else{
-
-						//System.out.println("Arguments " +  trimmedArray[k]);
-						addCommands(trimmedArray[k]);
-						services.setCommand(this.command);
-					}
-
-				}
-
-
+				invalidIndex = true;
 			}
-
-
 		}
 
-		trimmedArray = null;
-		array = null;
+		int k = 0 ;
+		if(invalidIndex)
+		{
+			k=1;
+		}
+
+		if(k<trimmedArray.length)
+		{
+			//System.out.println("Image Name " + trimmedArray[k]);
+			services.setImage(trimmedArray[k]);
+		}
+
+		for (int k2 = k+1; k2 < trimmedArray.length; k2++) {
+			String commandsArgs = trimmedArray[k2];
+			if(commandsArgs!=null)
+			{
+				//System.out.println("Arguments " + commandsArgs);
+				addCommands(commandsArgs);
+				services.setCommand(this.command);
+			}
+		}
+
 
 
 
@@ -874,7 +856,10 @@ public class Docker {
 		            return null;
 		        }
 
-				else if ("init".equals(property.getName()))
+				else if ("init".equals(property.getName())
+						|| "tty".equals(property.getName())
+						|| "privileged".equals(property.getName())
+						)
 				{
 
 					if (propertyValue !=null)
