@@ -1,6 +1,6 @@
 package z.y.x.docker;
 
-class reservations {
+public class reservations {
 	private String cpus;
 	private String memory;
 	public String getCpus() {
