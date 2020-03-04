@@ -40,6 +40,7 @@ public class services {
 	private ulimits ulimits;
 	private boolean tty;
 	private boolean init;
+	private boolean stdin_open;
 	private String pid;
 	private String cidfile;
 	
@@ -51,6 +52,12 @@ public class services {
 	
 	
 	
+	public boolean isStdin_open() {
+		return stdin_open;
+	}
+	public void setStdin_open(boolean stdin_open) {
+		this.stdin_open = stdin_open;
+	}
 	public String getCidfile() {
 		return cidfile;
 	}
@@ -309,6 +316,7 @@ public class services {
 		result = prime * result + Arrays.hashCode(ports);
 		result = prime * result + (privileged ? 1231 : 1237);
 		result = prime * result + Arrays.hashCode(security_opt);
+		result = prime * result + (stdin_open ? 1231 : 1237);
 		result = prime * result + Arrays.hashCode(tmpfs);
 		result = prime * result + (tty ? 1231 : 1237);
 		result = prime * result + ((ulimits == null) ? 0 : ulimits.hashCode());
@@ -427,6 +435,8 @@ public class services {
 			return false;
 		if (!Arrays.equals(security_opt, other.security_opt))
 			return false;
+		if (stdin_open != other.stdin_open)
+			return false;
 		if (!Arrays.equals(tmpfs, other.tmpfs))
 			return false;
 		if (tty != other.tty)
@@ -482,7 +492,8 @@ public class services {
 				+ (mac_address != null ? "mac_address=" + mac_address + ", " : "") + "privileged=" + privileged + ", "
 				+ (healthcheck != null ? "healthcheck=" + healthcheck + ", " : "")
 				+ (logging != null ? "logging=" + logging + ", " : "")
-				+ (ulimits != null ? "ulimits=" + ulimits + ", " : "") + "tty=" + tty + ", init=" + init + ", "
-				+ (pid != null ? "pid=" + pid + ", " : "") + (cidfile != null ? "cidfile=" + cidfile : "") + "]";
+				+ (ulimits != null ? "ulimits=" + ulimits + ", " : "") + "tty=" + tty + ", init=" + init
+				+ ", stdin_open=" + stdin_open + ", " + (pid != null ? "pid=" + pid + ", " : "")
+				+ (cidfile != null ? "cidfile=" + cidfile : "") + "]";
 	}
 }

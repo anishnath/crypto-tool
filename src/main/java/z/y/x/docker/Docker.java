@@ -24,6 +24,7 @@ public class Docker {
 		commandMap.put("--cap-add", "--cap-add");
 		commandMap.put("--cap-drop", "--cap-drop");
 		commandMap.put("-it", "-it");
+		commandMap.put("-ti", "-ti");
 		commandMap.put("-a", "-a");
 		commandMap.put("-c", "-c");
 		commandMap.put("-d", "-d");
@@ -267,10 +268,7 @@ public class Docker {
 			//System.out.println(temp);
 
 			if ("docker".equals(temp)
-					|| "-i".equals(temp)
-					|| "-it".equals(temp)
 					|| "-a".equals(temp)
-					|| "-t".equals(temp)
 					|| "--attach".equals(temp)
 					|| "-d".equals(temp)
 					|| "run".equals(temp)
@@ -284,8 +282,21 @@ public class Docker {
 				continue;
 			}
 
-			if("--tty".equals(temp))
+			if("--tty".equals(temp) || "-t".equals(temp))
 			{
+				services.setTty(true);
+				continue;
+			}
+
+			if("--interactive".equals(temp) || "-i".equals(temp))
+			{
+				services.setStdin_open(true);
+				continue;
+			}
+
+			if( "-it".equals(temp) || "-ti".equals(temp))
+			{
+				services.setStdin_open(true);
 				services.setTty(true);
 				continue;
 			}
@@ -859,6 +870,7 @@ public class Docker {
 				else if ("init".equals(property.getName())
 						|| "tty".equals(property.getName())
 						|| "privileged".equals(property.getName())
+						|| "stdin_open".equals(property.getName())
 						)
 				{
 
@@ -1328,7 +1340,7 @@ public class Docker {
 
 			//System.out.println("Ulimit -- " + value);
 
-			if(value.contains("="))
+			if(value.contains("=") &&  value.contains("nofile"))
 			{
 				String[] tmp = value.split("=");
 				if(tmp.length==2)
@@ -1358,6 +1370,18 @@ public class Docker {
 
 
 				}
+			}
+			else if (value.contains("=") &&  value.contains("nproc"))
+			{
+				String[] tmp = value.split("=");
+				if(tmp.length==2)
+				{
+					try {
+						ulimits.setNproc(Integer.valueOf(tmp[1]));
+					}catch (NumberFormatException e) {
+					}
+				}
+
 			}
 
 		}
