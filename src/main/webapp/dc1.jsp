@@ -101,9 +101,10 @@
 <div class="row">
     <div>
         <ul>
-            <li><a href="dc.jsp">Docker Compose Generator</a></li>
-            <li><a href="dc1.jsp">docker run to Docker Compose Conversion</a></li>
             <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
+            <li><a href="dc.jsp">Docker Compose file Generator</a></li>
+            <li><a href="dc2.jsp">Docker Compose to Docker run Convert</a></li>
+            <li><a href="dc1.jsp">Docker run to Docker Compose Convert</a></li>
             <li><a href="jsonparser.jsp">JSON-2-YAML Convertor</a></li>
             <li><a href="yamlparser.jsp">YAML-2-JSON Convertor</a></li>
             <li><a href="qrcodegen.jsp">QR Code generate</a></li>

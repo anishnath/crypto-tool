@@ -80,53 +80,98 @@
     <div class="form-row">
         <div class="form-group">
             <label for="dockerrun">Paste your Docker Compose file</label>
-            <textarea class="form-control" name="dockerrun" id="dockerrun" cols="100" rows="20">version: '2'
-
+            <textarea class="form-control" name="dockerrun" id="dockerrun" cols="100" rows="20">version: "3.7"
 services:
+
   redis:
-    restart: always
-    image: sameersbn/redis:4.0.9-2
-    command:
-    - --loglevel warning
-    volumes:
-    - redis-data:/var/lib/redis:Z
-
-  postgresql:
-    restart: always
-    image: sameersbn/postgresql:10-2
-    volumes:
-    - postgresql-data:/var/lib/postgresql:Z
-    environment:
-    - DB_USER=gitlab
-    - DB_PASS=password
-    - DB_NAME=gitlabhq_production
-    - DB_EXTENSION=pg_trgm
-
-  gitlab:
-    restart: always
-    image: sameersbn/gitlab:12.7.6
-    depends_on:
-    - redis
-    - postgresql
+    image: redis:alpine
     ports:
-    - "10080:80"
-    - "10022:22"
-    volumes:
-    - gitlab-data:/home/git/data:Z
-    environment:
-    - DEBUG=false
+      - "6379"
+    networks:
+      - frontend
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
-    - DB_ADAPTER=postgresql
-    - DB_HOST=postgresql
-    - DB_PORT=5432
-    - DB_USER=gitlab
-    - DB_PASS=password
-    - DB_NAME=gitlabhq_production
+  db:
+    image: postgres:9.4
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  vote:
+    image: dockersamples/examplevotingapp_vote:before
+    ports:
+      - "5000:80"
+    networks:
+      - frontend
+    depends_on:
+      - redis
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  result:
+    image: dockersamples/examplevotingapp_result:before
+    ports:
+      - "5001:80"
+    networks:
+      - backend
+    depends_on:
+      - db
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  worker:
+    image: dockersamples/examplevotingapp_worker
+    networks:
+      - frontend
+      - backend
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels: [APP=VOTING]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints: [node.role == manager]
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  frontend:
+  backend:
 
 volumes:
-  redis-data:
-  postgresql-data:
-  gitlab-data:</textarea>
+  db-data:</textarea>
         </div>
     </div>
     <input type="button" class="btn btn-primary" id="generatedc" name="Generate docker RUN" value="Generate docker run">

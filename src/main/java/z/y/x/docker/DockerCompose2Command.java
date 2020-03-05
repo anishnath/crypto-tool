@@ -33,9 +33,37 @@ public class DockerCompose2Command {
 				if (propertyValue == null || propertyValue == "") {
 					return null;
 				} else if ("init".equals(property.getName()) || "tty".equals(property.getName())
-						|| "privileged".equals(property.getName()) || "stdin_open".equals(property.getName())) {
+						|| "privileged".equals(property.getName()) 
+						|| "stdin_open".equals(property.getName())
+						|| "oom_kill_disable".equals(property.getName())
+						) {
 					if (propertyValue != null) {
 						if (!Boolean.valueOf(propertyValue.toString())) {
+							return null;
+						}
+					}
+					return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+				}
+
+				else if ("cpu_count".equals(property.getName())
+						|| "cpu_percent".equals(property.getName())
+						|| "cpu_quota".equals(property.getName())
+						|| "cpu_shares".equals(property.getName())
+						|| "cpus".equals(property.getName())
+						|| "oom_score_adj".equals(property.getName())
+						)
+
+				{
+					if (propertyValue !=null)
+					{
+						try {
+							int tmp = Integer.valueOf(propertyValue.toString());
+							if(tmp==0)
+							{
+								return null;
+							}
+						}catch (NumberFormatException ne) {
 							return null;
 						}
 					}
@@ -169,6 +197,106 @@ public class DockerCompose2Command {
 						builder.append(" ");
 						builder.append(services.getContainer_name());
 						builder.append(" ");
+					}
+					
+					if(services.getCpus()!=0.0)
+					{
+						builder.append("--cpus");
+						builder.append(" ");
+						builder.append(services.getCpus());
+						builder.append(" ");
+					}
+					if(services.getCpu_shares()!=0)
+					{
+						builder.append("--cpu-shares");
+						builder.append(" ");
+						builder.append(services.getCpu_shares());
+						builder.append(" ");
+					}
+					
+					if(services.getCpu_quota()!=0)
+					{
+						builder.append("--cpu-quota");
+						builder.append(" ");
+						builder.append(services.getCpu_quota());
+						builder.append(" ");
+					}
+					
+					if(services.getCpu_period()!=null)
+					{
+						builder.append("--cpu-period");
+						builder.append(" ");
+						builder.append(services.getCpu_period());
+						builder.append(" ");
+					}
+					
+					if(services.getCpuset()!=null)
+					{
+						builder.append("--cpuset-cpus");
+						builder.append(" ");
+						builder.append(services.getCpuset());
+						builder.append(" ");
+					}
+					
+					if(services.getMem_limit()!=null)
+					{
+						builder.append("--memory");
+						builder.append(" ");
+						builder.append(services.getMem_limit());
+						builder.append(" ");
+					}
+					
+					if(services.getMemswap_limit()!=null)
+					{
+						builder.append("--memory-swap");
+						builder.append(" ");
+						builder.append(services.getMemswap_limit());
+						builder.append(" ");
+					}
+					
+					if(services.getMem_reservation()!=null)
+					{
+						builder.append("--memory-reservation");
+						builder.append(" ");
+						builder.append(services.getMem_reservation());
+						builder.append(" ");
+					}
+					
+					if(services.getOom_score_adj()!=0)
+					{
+						builder.append("--oom-score-adj");
+						builder.append(" ");
+						builder.append(services.getOom_score_adj());
+						builder.append(" ");	
+					}
+					
+					if(services.isOom_kill_disable())
+					{
+						builder.append("--oom-kill-disable");
+						builder.append(" ");
+						builder.append(true);
+						builder.append(" ");	
+					}
+					
+					if(services.getShm_size()!=null)
+					{
+						builder.append("--shm-size");
+						builder.append(" ");
+						builder.append(services.getShm_size());
+						builder.append(" ");	
+					}
+					
+					if(services.getSysctls()!=null)
+					{
+						Map<String, String> envMap = services.getSysctls();
+						Iterator it = envMap.entrySet().iterator();
+						while (it.hasNext()) {
+							builder.append("--sysctl");
+							builder.append(" ");
+							Map.Entry pair = (Map.Entry) it.next();
+							builder.append(pair.getKey() + "=" + pair.getValue());
+							builder.append(" ");
+						}
 					}
 
 					if (services.getDns() != null) {
@@ -450,7 +578,7 @@ public class DockerCompose2Command {
 			}
 
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			// System.out.println("I got Exception");
 		}
 
@@ -468,9 +596,37 @@ public class DockerCompose2Command {
 						if (propertyValue == null || propertyValue == "") {
 							return null;
 						} else if ("init".equals(property.getName()) || "tty".equals(property.getName())
-								|| "privileged".equals(property.getName()) || "stdin_open".equals(property.getName())) {
+								|| "privileged".equals(property.getName()) 
+								|| "stdin_open".equals(property.getName())
+								|| "oom_kill_disable".equals(property.getName())
+								) {
 							if (propertyValue != null) {
 								if (!Boolean.valueOf(propertyValue.toString())) {
+									return null;
+								}
+							}
+							return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+						}
+
+						else if ("cpu_count".equals(property.getName())
+								|| "cpu_percent".equals(property.getName())
+								|| "cpu_quota".equals(property.getName())
+								|| "cpu_shares".equals(property.getName())
+								|| "cpus".equals(property.getName())
+								|| "oom_score_adj".equals(property.getName())
+								)
+
+						{
+							if (propertyValue !=null)
+							{
+								try {
+									int tmp = Integer.valueOf(propertyValue.toString());
+									if(tmp==0)
+									{
+										return null;
+									}
+								}catch (NumberFormatException ne) {
 									return null;
 								}
 							}
@@ -600,6 +756,105 @@ public class DockerCompose2Command {
 							builder.append(" ");
 							builder.append(services.getContainer_name());
 							builder.append(" ");
+						}
+						
+						if(services.getCpus()!=0.0)
+						{
+							builder.append("--cpus");
+							builder.append(" ");
+							builder.append(services.getCpus());
+							builder.append(" ");
+						}
+						if(services.getCpu_shares()!=0)
+						{
+							builder.append("--cpu-shares");
+							builder.append(" ");
+							builder.append(services.getCpu_shares());
+							builder.append(" ");
+						}
+						
+						if(services.getCpu_quota()!=0)
+						{
+							builder.append("--cpu-quota");
+							builder.append(" ");
+							builder.append(services.getCpu_quota());
+							builder.append(" ");
+						}
+						
+						if(services.getCpu_period()!=null)
+						{
+							builder.append("--cpu-period");
+							builder.append(" ");
+							builder.append(services.getCpu_period());
+							builder.append(" ");
+						}
+						
+						if(services.getCpuset()!=null)
+						{
+							builder.append("--cpuset-cpus");
+							builder.append(" ");
+							builder.append(services.getCpuset());
+							builder.append(" ");
+						}
+						
+						if(services.getMem_limit()!=null)
+						{
+							builder.append("--memory");
+							builder.append(" ");
+							builder.append(services.getMem_limit());
+							builder.append(" ");
+						}
+						
+						if(services.getMemswap_limit()!=null)
+						{
+							builder.append("--memory-swap");
+							builder.append(" ");
+							builder.append(services.getMemswap_limit());
+							builder.append(" ");
+						}
+						
+						if(services.getMem_reservation()!=null)
+						{
+							builder.append("--memory-reservation");
+							builder.append(" ");
+							builder.append(services.getMem_reservation());
+							builder.append(" ");
+						}
+						
+						if(services.getOom_score_adj()!=0)
+						{
+							builder.append("--oom-score-adj");
+							builder.append(" ");
+							builder.append(services.getOom_score_adj());
+							builder.append(" ");	
+						}
+						
+						if(services.isOom_kill_disable())
+						{
+							builder.append("--oom-kill-disable");
+							builder.append(" ");
+							builder.append(true);
+							builder.append(" ");	
+						}
+						
+						if(services.getShm_size()!=null)
+						{
+							builder.append("--shm-size");
+							builder.append(" ");
+							builder.append(services.getShm_size());
+							builder.append(" ");	
+						}
+						
+						if(services.getSysctls()!=null)
+						{
+							List<String> envMap = services.getSysctls();
+							for (Iterator iterator = envMap.iterator(); iterator.hasNext();) {
+								String string = (String) iterator.next();
+								builder.append("--sysctl");
+								builder.append(" ");
+								builder.append(string);
+								builder.append(" ");
+							}
 						}
 
 						if (services.getDns() != null) {

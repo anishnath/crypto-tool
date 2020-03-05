@@ -186,6 +186,7 @@ public class DockerFunctionality extends HttpServlet {
                             || "tty".equals(property.getName())
                             || "privileged".equals(property.getName())
                             || "stdin_open".equals(property.getName())
+                            || "oom_kill_disable".equals(property.getName())
                             )
                     {
 
@@ -193,6 +194,31 @@ public class DockerFunctionality extends HttpServlet {
                         {
                             if(!Boolean.valueOf(propertyValue.toString()))
                             {
+                                return null;
+                            }
+                        }
+                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+                    }
+
+                    else if ("cpu_count".equals(property.getName())
+                            || "cpu_percent".equals(property.getName())
+                            || "cpu_quota".equals(property.getName())
+                            || "cpu_shares".equals(property.getName())
+                            || "cpus".equals(property.getName())
+                            || "oom_score_adj".equals(property.getName())
+                            )
+
+                    {
+                        if (propertyValue !=null)
+                        {
+                            try {
+                                int tmp = Integer.valueOf(propertyValue.toString());
+                                if(tmp==0)
+                                {
+                                    return null;
+                                }
+                            }catch (NumberFormatException ne) {
                                 return null;
                             }
                         }
