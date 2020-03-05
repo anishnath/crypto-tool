@@ -92,11 +92,19 @@ public class DockerFunctionality extends HttpServlet {
             try {
                 String output = dockerCompose2Command.getDockerCommand(dockerrun);
 
-                out.println("<h5 class=\"mt-4\">Generated docker command </h5>");
-                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + output +
-                        "</textarea>");
+                if(output!=null && output.trim().length()>0) {
 
-                return;
+                    out.println("<h5 class=\"mt-4\">Generated docker command </h5>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + output +
+                            "</textarea>");
+
+                    return;
+                }
+                else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> The Docker Compose file is Not Valid</font>");
+                    return;
+                }
 
             }catch (Exception ex)
             {
