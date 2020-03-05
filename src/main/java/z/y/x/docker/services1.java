@@ -1,17 +1,19 @@
 package z.y.x.docker;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-public class services {
+public class services1 {
 	
+	private String restart;
 	private String image;
-	private String[] command;
+	private String command;
 	private deploy deploy;
 	private String container_name;
-	private Map<String,String> environment;
+	private List<String> environment;
 	private String[] env_file;
-	private Map<String,String> labels;
+	private List<String> labels;
 	private int[] expose;
 	private String[] ports;
 	private String[] dns;
@@ -24,9 +26,9 @@ public class services {
 	private String[] devices;
 	private String[] extra_hosts; 
 	private String[] tmpfs;
-	private String[] cap_add;
-	private String[] cap_drop;
-	private String[] networks;
+	private List<String> cap_add;
+	private List<String> cap_drop;
+	private Map<String,Object> networks;
 	private String[] security_opt;
 	private String user;
 	private String working_dir;
@@ -35,7 +37,7 @@ public class services {
 	private String ipc;
 	private String mac_address;
 	private boolean privileged = false;
-	private healthcheck healthcheck;
+	private healthcheck1 healthcheck;
 	private logging logging;
 	private ulimits ulimits;
 	private boolean tty;
@@ -45,16 +47,24 @@ public class services {
 	private String cidfile;
 	private String cgroup_parent;
 	private String stop_signal;
+	
+	
+	public String getRestart() {
+		return restart;
+	}
+	public void setRestart(String restart) {
+		this.restart = restart;
+	}
 	public String getImage() {
 		return image;
 	}
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public String[] getCommand() {
+	public String getCommand() {
 		return command;
 	}
-	public void setCommand(String[] command) {
+	public void setCommand(String command) {
 		this.command = command;
 	}
 	public deploy getDeploy() {
@@ -69,10 +79,10 @@ public class services {
 	public void setContainer_name(String container_name) {
 		this.container_name = container_name;
 	}
-	public Map<String, String> getEnvironment() {
+	public List<String> getEnvironment() {
 		return environment;
 	}
-	public void setEnvironment(Map<String, String> environment) {
+	public void setEnvironment(List<String> environment) {
 		this.environment = environment;
 	}
 	public String[] getEnv_file() {
@@ -81,10 +91,10 @@ public class services {
 	public void setEnv_file(String[] env_file) {
 		this.env_file = env_file;
 	}
-	public Map<String, String> getLabels() {
+	public List<String> getLabels() {
 		return labels;
 	}
-	public void setLabels(Map<String, String> labels) {
+	public void setLabels(List<String> labels) {
 		this.labels = labels;
 	}
 	public int[] getExpose() {
@@ -159,22 +169,22 @@ public class services {
 	public void setTmpfs(String[] tmpfs) {
 		this.tmpfs = tmpfs;
 	}
-	public String[] getCap_add() {
+	public List<String> getCap_add() {
 		return cap_add;
 	}
-	public void setCap_add(String[] cap_add) {
+	public void setCap_add(List<String> cap_add) {
 		this.cap_add = cap_add;
 	}
-	public String[] getCap_drop() {
+	public List<String> getCap_drop() {
 		return cap_drop;
 	}
-	public void setCap_drop(String[] cap_drop) {
+	public void setCap_drop(List<String> cap_drop) {
 		this.cap_drop = cap_drop;
 	}
-	public String[] getNetworks() {
+	public Map<String, Object> getNetworks() {
 		return networks;
 	}
-	public void setNetworks(String[] networks) {
+	public void setNetworks(Map<String, Object> networks) {
 		this.networks = networks;
 	}
 	public String[] getSecurity_opt() {
@@ -225,10 +235,10 @@ public class services {
 	public void setPrivileged(boolean privileged) {
 		this.privileged = privileged;
 	}
-	public healthcheck getHealthcheck() {
+	public healthcheck1 getHealthcheck() {
 		return healthcheck;
 	}
-	public void setHealthcheck(healthcheck healthcheck) {
+	public void setHealthcheck(healthcheck1 healthcheck) {
 		this.healthcheck = healthcheck;
 	}
 	public logging getLogging() {
@@ -289,11 +299,11 @@ public class services {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(cap_add);
-		result = prime * result + Arrays.hashCode(cap_drop);
+		result = prime * result + ((cap_add == null) ? 0 : cap_add.hashCode());
+		result = prime * result + ((cap_drop == null) ? 0 : cap_drop.hashCode());
 		result = prime * result + ((cgroup_parent == null) ? 0 : cgroup_parent.hashCode());
 		result = prime * result + ((cidfile == null) ? 0 : cidfile.hashCode());
-		result = prime * result + Arrays.hashCode(command);
+		result = prime * result + ((command == null) ? 0 : command.hashCode());
 		result = prime * result + ((container_name == null) ? 0 : container_name.hashCode());
 		result = prime * result + Arrays.hashCode(depends_on);
 		result = prime * result + ((deploy == null) ? 0 : deploy.hashCode());
@@ -316,10 +326,11 @@ public class services {
 		result = prime * result + Arrays.hashCode(links);
 		result = prime * result + ((logging == null) ? 0 : logging.hashCode());
 		result = prime * result + ((mac_address == null) ? 0 : mac_address.hashCode());
-		result = prime * result + Arrays.hashCode(networks);
+		result = prime * result + ((networks == null) ? 0 : networks.hashCode());
 		result = prime * result + ((pid == null) ? 0 : pid.hashCode());
 		result = prime * result + Arrays.hashCode(ports);
 		result = prime * result + (privileged ? 1231 : 1237);
+		result = prime * result + ((restart == null) ? 0 : restart.hashCode());
 		result = prime * result + Arrays.hashCode(security_opt);
 		result = prime * result + (stdin_open ? 1231 : 1237);
 		result = prime * result + ((stop_signal == null) ? 0 : stop_signal.hashCode());
@@ -339,10 +350,16 @@ public class services {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		services other = (services) obj;
-		if (!Arrays.equals(cap_add, other.cap_add))
+		services1 other = (services1) obj;
+		if (cap_add == null) {
+			if (other.cap_add != null)
+				return false;
+		} else if (!cap_add.equals(other.cap_add))
 			return false;
-		if (!Arrays.equals(cap_drop, other.cap_drop))
+		if (cap_drop == null) {
+			if (other.cap_drop != null)
+				return false;
+		} else if (!cap_drop.equals(other.cap_drop))
 			return false;
 		if (cgroup_parent == null) {
 			if (other.cgroup_parent != null)
@@ -354,7 +371,10 @@ public class services {
 				return false;
 		} else if (!cidfile.equals(other.cidfile))
 			return false;
-		if (!Arrays.equals(command, other.command))
+		if (command == null) {
+			if (other.command != null)
+				return false;
+		} else if (!command.equals(other.command))
 			return false;
 		if (container_name == null) {
 			if (other.container_name != null)
@@ -433,7 +453,10 @@ public class services {
 				return false;
 		} else if (!mac_address.equals(other.mac_address))
 			return false;
-		if (!Arrays.equals(networks, other.networks))
+		if (networks == null) {
+			if (other.networks != null)
+				return false;
+		} else if (!networks.equals(other.networks))
 			return false;
 		if (pid == null) {
 			if (other.pid != null)
@@ -443,6 +466,11 @@ public class services {
 		if (!Arrays.equals(ports, other.ports))
 			return false;
 		if (privileged != other.privileged)
+			return false;
+		if (restart == null) {
+			if (other.restart != null)
+				return false;
+		} else if (!restart.equals(other.restart))
 			return false;
 		if (!Arrays.equals(security_opt, other.security_opt))
 			return false;
@@ -478,7 +506,7 @@ public class services {
 	}
 	@Override
 	public String toString() {
-		return "services [image=" + image + ", command=" + Arrays.toString(command) + ", deploy=" + deploy
+		return "services1 [restart=" + restart + ", image=" + image + ", command=" + command + ", deploy=" + deploy
 				+ ", container_name=" + container_name + ", environment=" + environment + ", env_file="
 				+ Arrays.toString(env_file) + ", labels=" + labels + ", expose=" + Arrays.toString(expose) + ", ports="
 				+ Arrays.toString(ports) + ", dns=" + Arrays.toString(dns) + ", dns_search="
@@ -486,14 +514,12 @@ public class services {
 				+ Arrays.toString(links) + ", depends_on=" + Arrays.toString(depends_on) + ", entrypoint="
 				+ Arrays.toString(entrypoint) + ", volumes=" + Arrays.toString(volumes) + ", devices="
 				+ Arrays.toString(devices) + ", extra_hosts=" + Arrays.toString(extra_hosts) + ", tmpfs="
-				+ Arrays.toString(tmpfs) + ", cap_add=" + Arrays.toString(cap_add) + ", cap_drop="
-				+ Arrays.toString(cap_drop) + ", networks=" + Arrays.toString(networks) + ", security_opt="
-				+ Arrays.toString(security_opt) + ", user=" + user + ", working_dir=" + working_dir + ", domainname="
-				+ domainname + ", hostname=" + hostname + ", ipc=" + ipc + ", mac_address=" + mac_address
-				+ ", privileged=" + privileged + ", healthcheck=" + healthcheck + ", logging=" + logging + ", ulimits="
-				+ ulimits + ", tty=" + tty + ", init=" + init + ", stdin_open=" + stdin_open + ", pid=" + pid
-				+ ", cidfile=" + cidfile + ", cgroup_parent=" + cgroup_parent + ", stop_signal=" + stop_signal + "]";
+				+ Arrays.toString(tmpfs) + ", cap_add=" + cap_add + ", cap_drop=" + cap_drop + ", networks=" + networks
+				+ ", security_opt=" + Arrays.toString(security_opt) + ", user=" + user + ", working_dir=" + working_dir
+				+ ", domainname=" + domainname + ", hostname=" + hostname + ", ipc=" + ipc + ", mac_address="
+				+ mac_address + ", privileged=" + privileged + ", healthcheck=" + healthcheck + ", logging=" + logging
+				+ ", ulimits=" + ulimits + ", tty=" + tty + ", init=" + init + ", stdin_open=" + stdin_open + ", pid="
+				+ pid + ", cidfile=" + cidfile + ", cgroup_parent=" + cgroup_parent + ", stop_signal=" + stop_signal
+				+ "]";
 	}
-	
-	
 }

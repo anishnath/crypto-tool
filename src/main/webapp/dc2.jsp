@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>docker run command to docker compose</title>
+    <title>generate docker command from docker compose</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <meta name="description" content="convert docker command to docker compose, generate docker compose file from docker command, docker compose example "/>
-    <meta name="keywords" content="online docker command to docker compose, docker compose from docker run command, docker compose example"/>
+    <meta name="description" content="convert docker compose to docker command, docker compose convert to docker run command, docker compose example "/>
+    <meta name="keywords" content="online docker compose file to docker run command, docker compose to docker run,docker compose convert to docker run command,docker-compose.yaml file to docker command conversion "/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
 
@@ -15,15 +15,15 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "docker compose generator",
-  "image" : "https://8gwifi.org/images/site/dc1.png",
-  "url" : "https://8gwifi.org/dc1.jsp",
+  "image" : "https://8gwifi.org/images/site/dc2.png",
+  "url" : "https://8gwifi.org/dc2.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2020-02-26",
-  "applicationCategory" : [ "docker compose  convert from docker run command" , "generate docker compose file from docker run", "docker-compose.yaml file generate online"],
-  "downloadUrl" : "https://8gwifi.org/dc1.jsp",
+  "datePublished" : "2020-03-05",
+  "applicationCategory" : [ "docker compose convert to docker run command" , "generate docker run command from docker compose file", "docker-compose.yaml file to docker command conversion"],
+  "downloadUrl" : "https://8gwifi.org/dc2.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "convert docker run command to docker compose",
   "softwareVersion" : "v1.0"
@@ -64,8 +64,8 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Docker compose file from Docker run </h1>
-<p>This tool will help to convert docker run command to docker compose file</p>
+<h1 class="mt-4">Docker run command from Docker docker compose file </h1>
+<p>This tool will help to convert docker compose file to equivalent docker run options</p>
 <hr>
 
 <div id="loading" style="display: none;">
@@ -75,15 +75,61 @@
 <%@ include file="footer_adsense.jsp"%>
 
 <form id="form" method="POST">
-    <input type="hidden" name="methodName" id="methodName" value="GENERATE_DC_FROM_DOCKER_RUN">
+    <input type="hidden" name="methodName" id="methodName" value="GENERATE_DC_RUN_2_DC">
 
     <div class="form-row">
         <div class="form-group">
-            <label for="dockerrun">Paste your Docker run</label>
-            <textarea class="form-control" name="dockerrun" id="dockerrun" cols="100" rows="8">docker run -p 80:80 --tty --init --security-opt seccomp:unconfined --mac-address 02:42:ac:11:65:43 --ulimit nofile=1024:1024  --network network  -h containerhostname --name nginxc --cap-drop NET_ADMIN  --cap-drop SYS_ADMIN --cap-add ALL  --tmpfs /run --privileged --restart on-failure --device /dev/sdc:/dev/xvdc -l my-label --label com.example.foo=bar -e MYVAR1 --env MYVAR2=foo --env-file ./env.list --add-host somehost:162.242.195.82 --dns 10.0.0.10  --dns=1.1.1.1 -v /var/run/docker.sock:/tmp/docker.sock -v .:/opt --restart always --log-opt max-size=1g nginx</textarea>
+            <label for="dockerrun">Paste your Docker Compose file</label>
+            <textarea class="form-control" name="dockerrun" id="dockerrun" cols="100" rows="20">version: '2'
+
+services:
+  redis:
+    restart: always
+    image: sameersbn/redis:4.0.9-2
+    command:
+    - --loglevel warning
+    volumes:
+    - redis-data:/var/lib/redis:Z
+
+  postgresql:
+    restart: always
+    image: sameersbn/postgresql:10-2
+    volumes:
+    - postgresql-data:/var/lib/postgresql:Z
+    environment:
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
+    - DB_EXTENSION=pg_trgm
+
+  gitlab:
+    restart: always
+    image: sameersbn/gitlab:12.7.6
+    depends_on:
+    - redis
+    - postgresql
+    ports:
+    - "10080:80"
+    - "10022:22"
+    volumes:
+    - gitlab-data:/home/git/data:Z
+    environment:
+    - DEBUG=false
+
+    - DB_ADAPTER=postgresql
+    - DB_HOST=postgresql
+    - DB_PORT=5432
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
+
+volumes:
+  redis-data:
+  postgresql-data:
+  gitlab-data:</textarea>
         </div>
     </div>
-    <input type="button" class="btn btn-primary" id="generatedc" name="Generate docker Compose" value="Generate docker-compose.yml">
+    <input type="button" class="btn btn-primary" id="generatedc" name="Generate docker RUN" value="Generate docker run">
 </form>
 
 <hr>
@@ -102,7 +148,8 @@
     <div>
         <ul>
             <li><a href="dc.jsp">Docker Compose Generator</a></li>
-            <li><a href="dc1.jsp">docker run to Docker Compose Conversion</a></li>
+            <li><a href="dc1.jsp">Docker run to Docker Compose Conversion</a></li>
+            <li><a href="dc2.jsp">Docker Compose to docker run Conversion</a></li>
             <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
             <li><a href="jsonparser.jsp">JSON-2-YAML Convertor</a></li>
             <li><a href="yamlparser.jsp">YAML-2-JSON Convertor</a></li>

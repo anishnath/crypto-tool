@@ -41,6 +41,7 @@ public class DockerFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String METHOD_GENERATE_DC = "GENERATE_DC";
     private static final String METHOD_GENERATE_DC_FROM_DOCKER_RUN = "GENERATE_DC_FROM_DOCKER_RUN";
+    private static final String METHOD_GENERATE_DC_RUN_2_DC = "GENERATE_DC_RUN_2_DC";
 
 
 
@@ -74,6 +75,37 @@ public class DockerFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
+
+        if (METHOD_GENERATE_DC_RUN_2_DC.equals(methodName)) {
+
+            String dockerrun = request.getParameter("dockerrun");
+
+            if(null == dockerrun || dockerrun.trim().length()==0)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\"> Paste your Docker Compose File</font>");
+                return;
+            }
+
+            DockerCompose2Command dockerCompose2Command = new DockerCompose2Command();
+
+            try {
+                String output = dockerCompose2Command.getDockerCommand(dockerrun);
+
+                out.println("<h5 class=\"mt-4\">Generated docker command </h5>");
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + output +
+                        "</textarea>");
+
+                return;
+
+            }catch (Exception ex)
+            {
+                addHorizontalLine(out);
+                out.println("<font size=\"4\" color=\"red\">" + ex.getMessage() + "</font>");
+                return;
+            }
+
+        }
 
         if (METHOD_GENERATE_DC_FROM_DOCKER_RUN.equals(methodName)) {
 
