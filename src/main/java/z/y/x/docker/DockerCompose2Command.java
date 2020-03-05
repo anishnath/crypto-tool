@@ -378,16 +378,20 @@ public class DockerCompose2Command {
 					if (services.getDeploy() != null) {
 						deploy deploy = services.getDeploy();
 						Map<String, Object> deployMap = deploy.getRestart_policy();
-						Iterator it = deployMap.entrySet().iterator();
-						while (it.hasNext()) {
-							Map.Entry pair = (Map.Entry) it.next();
-							if (pair.getKey() != null && "condition".equals(pair.getKey())) {
-								builder.append("--restart");
-								builder.append(" ");
-								builder.append(pair.getValue());
-								builder.append(" ");
+						if(deployMap!=null)
+						{
+							Iterator it = deployMap.entrySet().iterator();
+							while (it.hasNext()) {
+								Map.Entry pair = (Map.Entry) it.next();
+								if (pair.getKey() != null && "condition".equals(pair.getKey())) {
+									builder.append("--restart");
+									builder.append(" ");
+									builder.append(pair.getValue());
+									builder.append(" ");
+								}
 							}
 						}
+
 					}
 
 					if (services.getLinks() != null) {
@@ -446,6 +450,7 @@ public class DockerCompose2Command {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			// System.out.println("I got Exception");
 		}
 
@@ -952,7 +957,7 @@ public class DockerCompose2Command {
 
 	public static void main(String[] args) throws Exception {
 
-		InputStream inputStream = DockerCompose2Command.class.getResourceAsStream("./full.yml");
+		InputStream inputStream = DockerCompose2Command.class.getResourceAsStream("./file3.yml");
 		String testYAML = convertInputStreamToString(inputStream);
 		// System.out.println(testYAML);
 		DockerCompose2Command test2 = new DockerCompose2Command();
