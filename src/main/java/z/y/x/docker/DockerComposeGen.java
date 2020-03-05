@@ -26,11 +26,29 @@ public class DockerComposeGen {
 		        // if value of property is null, ignore it.
 		    	
 		    	
-		    	System.out.println(property.getName());
+		    	//System.out.println(property.getName());
 		    	
 		        if (propertyValue == null || propertyValue == ""  ) {
 		            return null;
-		        }   
+		        }
+
+				else if ("init".equals(property.getName())
+						|| "tty".equals(property.getName())
+						|| "privileged".equals(property.getName())
+						|| "stdin_open".equals(property.getName())
+						)
+				{
+
+					if (propertyValue !=null)
+					{
+						if(!Boolean.valueOf(propertyValue.toString()))
+						{
+							return null;
+						}
+					}
+					return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+				}
 		        
 		        else {
 		            return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);

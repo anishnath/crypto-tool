@@ -150,6 +150,25 @@ public class DockerFunctionality extends HttpServlet {
                         return null;
                     }
 
+                    else if ("init".equals(property.getName())
+                            || "tty".equals(property.getName())
+                            || "privileged".equals(property.getName())
+                            || "stdin_open".equals(property.getName())
+                            )
+                    {
+
+                        if (propertyValue !=null)
+                        {
+                            if(!Boolean.valueOf(propertyValue.toString()))
+                            {
+                                return null;
+                            }
+                        }
+                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+
+                    }
+
+
                     else {
                         return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
                     }
@@ -307,6 +326,7 @@ public class DockerFunctionality extends HttpServlet {
                 }
                 else{
                     m1.put("condition", restart_policy);
+                    deploy.setReplicas(1);
                     deploy.setRestart_policy(m1);
                 }
             }
