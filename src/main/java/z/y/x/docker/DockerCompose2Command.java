@@ -450,7 +450,7 @@ public class DockerCompose2Command {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			// System.out.println("I got Exception");
 		}
 
