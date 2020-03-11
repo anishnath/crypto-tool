@@ -461,25 +461,9 @@ public class KubeFunctionality extends HttpServlet {
                 containerName=name;
             }
 
-            Representer representer = new Representer() {
-                @Override
-                protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue,Tag customTag) {
-                    // if value of property is null, ignore it.
-                    if (propertyValue == null || propertyValue == ""  ) {
-                        return null;
-                    }
-                    else {
-                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
-                    }
-                }
-            };
 
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            //options.set
-            options.setPrettyFlow(true);
 
-            Yaml yaml = new Yaml(representer,options);
+            Yaml yaml = new Compose2Kube().getYaml();
 
 
 
