@@ -1,5 +1,4 @@
 package z.y.x.kube;
-
 import java.util.Map;
 
 public class labels {

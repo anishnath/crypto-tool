@@ -30,6 +30,7 @@ import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
+import z.y.x.docker.Docker;
 import z.y.x.kube.deployment.Deployment;
 import z.y.x.kube.deployment.selector;
 import z.y.x.kube.deployment.template;
@@ -43,6 +44,7 @@ public class KubeFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String METHOD_POD_GENERATE = "POD_GENERATE";
     private static final String METHOD_SERVICE_GENERATE = "SERVICE_GENERATE";
+    private static final String METHOD_CONFIG_GENERATE = "CONFIG_GENERATE";
 
 
 
@@ -76,6 +78,76 @@ public class KubeFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
+
+        if (METHOD_CONFIG_GENERATE.equals(methodName)) {
+            String dockerstuff = request.getParameter("dockerstuff");
+            String addSecurityContextOn = request.getParameter("addSecurityContextOn");
+            String generateroption = request.getParameter("generateroption");
+
+            if (dockerstuff == null || dockerstuff.trim().length() == 0) {
+                out.println("<font size=\"2\" color=\"red\"> Please give docker compose file or Docur run Command</font>");
+                return;
+            }
+
+            boolean onPod=false;
+
+            if(addSecurityContextOn!=null && "pod".equalsIgnoreCase(addSecurityContextOn))
+            {
+                onPod = true;
+            }
+
+            boolean podGen =true;
+            boolean deployGen=false;
+            boolean repliGen=false;
+            boolean statefulGen=false;
+
+            if(generateroption!=null)
+            {
+
+                if("deployGen".equalsIgnoreCase(generateroption))
+                {
+                    deployGen=true;
+                    podGen=false;
+                    repliGen=false;
+                    statefulGen=false;
+                }
+
+                if("repliGen".equalsIgnoreCase(generateroption))
+                {
+                    deployGen=false;
+                    podGen=false;
+                    repliGen=true;
+                    statefulGen=false;
+                }
+
+                if("statefulGen".equalsIgnoreCase(generateroption))
+                {
+                    deployGen=false;
+                    podGen=false;
+                    repliGen=false;
+                    statefulGen=true;
+                }
+            }
+
+            if(dockerstuff.startsWith("docker run"))
+            {
+                Docker docker = new Docker();
+                dockerstuff =  docker.genDockerCompose(dockerstuff);
+            }
+
+            try{
+                Compose2Kube compose2Kube = new Compose2Kube();
+                String output = compose2Kube.getKube(dockerstuff,onPod,podGen,deployGen,repliGen,statefulGen);
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=35  form=\"X\"> " + output +"</textarea>");
+            }catch (Exception ex)
+            {
+                out.println("<font size=\"2\" color=\"red\"> " + ex + "</font>");
+                return;
+            }
+
+
+
+        }
 
         if (METHOD_SERVICE_GENERATE.equals(methodName)) {
 
@@ -117,40 +189,7 @@ public class KubeFunctionality extends HttpServlet {
             }
 
 
-            Representer representer = new Representer() {
-                @Override
-                protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue,Tag customTag) {
-                    // if value of property is null, ignore it.
-                    //System.out.println(property.getName());
-
-                    if (propertyValue == null || propertyValue == ""  ) {
-                        return null;
-                    }
-
-                    else if ("nodePort".equals(property.getName()) || "healthCheckNodePort".equals(property.getName()))
-                    {
-                        if (propertyValue !=null)
-                        {
-                            if(0==java.lang.Integer.parseInt(propertyValue.toString()))
-                            {
-                                return null;
-                            }
-                        }
-                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
-                    }
-
-                    else {
-                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
-                    }
-                }
-            };
-
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            //options.set
-            options.setPrettyFlow(true);
-
-            Yaml yaml = new Yaml(representer,options);
+            Yaml yaml = new Compose2Kube().getYaml();
 
             Service rv = new Service();
             z.y.x.kube.service.spec srvspec = new z.y.x.kube.service.spec();
@@ -488,12 +527,12 @@ public class KubeFunctionality extends HttpServlet {
 
             if(containerargs!=null && containerargs.trim().length()>0)
             {
-                c1.setArgs(getArrayString(containerargs));
+                c1.setArgs(getListtring(containerargs));
             }
 
             if(containercommand!=null && containercommand.trim().length()>0)
             {
-                c1.setCommand(getArrayString(containercommand));
+                c1.setCommand(getListtring(containercommand));
             }
 
             List<ports> portslist = new ArrayList<>();
@@ -719,7 +758,7 @@ public class KubeFunctionality extends HttpServlet {
             {
                 optionslist.add(options2);
                 dnsConfig.setOptions(optionslist);
-                c1.setDnsConfig(dnsConfig);
+                spec.setDnsConfig(dnsConfig);
             }
 
 
@@ -964,6 +1003,13 @@ public class KubeFunctionality extends HttpServlet {
 
     }
 
+    private List<String> getListtring(String data)
+    {
+        String [] items = data.split("\\s*,\\s*");
+        return new ArrayList<>(Arrays.asList(data));
+
+    }
+
     private Map<String,String> getMapValue(String data)
     {
         String [] items = data.split("\\s*,\\s*");
@@ -981,6 +1027,5 @@ public class KubeFunctionality extends HttpServlet {
         return map;
 
     }
-
 }
 

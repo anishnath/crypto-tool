@@ -1,13 +1,13 @@
 package z.y.x.kube;
-import java.util.List;
-import java.util.Map;
 
-public class Pod {
-	
-	private String apiVersion;
-	private String kind="Pod";
+
+
+public class StatefulSet {
+
+	private String apiVersion="apps/v1";
+	private String kind="StatefulSet";
 	private metadata metadata;
-	private spec  spec;
+	private StatefulSetSpec spec;
 	public String getApiVersion() {
 		return apiVersion;
 	}
@@ -26,10 +26,10 @@ public class Pod {
 	public void setMetadata(metadata metadata) {
 		this.metadata = metadata;
 	}
-	public spec getSpec() {
+	public StatefulSetSpec getSpec() {
 		return spec;
 	}
-	public void setSpec(spec spec) {
+	public void setSpec(StatefulSetSpec spec) {
 		this.spec = spec;
 	}
 	@Override
@@ -50,7 +50,7 @@ public class Pod {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pod other = (Pod) obj;
+		StatefulSet other = (StatefulSet) obj;
 		if (apiVersion == null) {
 			if (other.apiVersion != null)
 				return false;
@@ -75,12 +75,9 @@ public class Pod {
 	}
 	@Override
 	public String toString() {
-		return "Pod [" + (apiVersion != null ? "apiVersion=" + apiVersion + ", " : "")
-				+ (kind != null ? "kind=" + kind + ", " : "") + (metadata != null ? "metadata=" + metadata + ", " : "")
-				+ (spec != null ? "spec=" + spec : "") + "]";
+		return "StatefulSet [apiVersion=" + apiVersion + ", kind=" + kind + ", metadata=" + metadata + ", spec=" + spec
+				+ "]";
 	}
-	
-	
 	
 	
 }

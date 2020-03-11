@@ -1,13 +1,14 @@
-package z.y.x.kube;
-import java.util.List;
-import java.util.Map;
+package z.y.x.kube.replication;
 
-public class Pod {
-	
-	private String apiVersion;
-	private String kind="Pod";
+
+import z.y.x.kube.metadata;
+
+public class Replication {
+
+	private String apiVersion="v1";
+	private String kind ="ReplicationController";
 	private metadata metadata;
-	private spec  spec;
+	private ReplicationControllerSpec spec;
 	public String getApiVersion() {
 		return apiVersion;
 	}
@@ -26,10 +27,10 @@ public class Pod {
 	public void setMetadata(metadata metadata) {
 		this.metadata = metadata;
 	}
-	public spec getSpec() {
+	public ReplicationControllerSpec getSpec() {
 		return spec;
 	}
-	public void setSpec(spec spec) {
+	public void setSpec(ReplicationControllerSpec spec) {
 		this.spec = spec;
 	}
 	@Override
@@ -50,7 +51,7 @@ public class Pod {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pod other = (Pod) obj;
+		Replication other = (Replication) obj;
 		if (apiVersion == null) {
 			if (other.apiVersion != null)
 				return false;
@@ -75,12 +76,9 @@ public class Pod {
 	}
 	@Override
 	public String toString() {
-		return "Pod [" + (apiVersion != null ? "apiVersion=" + apiVersion + ", " : "")
-				+ (kind != null ? "kind=" + kind + ", " : "") + (metadata != null ? "metadata=" + metadata + ", " : "")
-				+ (spec != null ? "spec=" + spec : "") + "]";
+		return "Replication [apiVersion=" + apiVersion + ", kind=" + kind + ", metadata=" + metadata + ", spec=" + spec
+				+ "]";
 	}
-	
-	
 	
 	
 }
