@@ -892,7 +892,7 @@ public class Docker {
 
         if (k < trimmedArray.length) {
             //System.out.println("Image Name " + trimmedArray[k]);
-            services.setImage(trimmedArray[k]);
+            services.setImage(trimmedArray[k].trim());
         }
 
         for (int k2 = k + 1; k2 < trimmedArray.length; k2++) {
