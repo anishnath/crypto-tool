@@ -880,7 +880,7 @@ public class Docker {
 
         boolean invalidIndex = false;
         if (whatatIndex0 != null) {
-            if (whatatIndex0.contains("/tmp") || whatatIndex0.contains("=") || whatatIndex0.contains("--")) {
+            if (whatatIndex0.contains("/tmp") || whatatIndex0.contains("=") || whatatIndex0.contains("--") || whatatIndex0.contains(":")) {
                 invalidIndex = true;
             }
         }
