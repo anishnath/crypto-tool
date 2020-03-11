@@ -65,7 +65,7 @@
 <%@ include file="body-script.jsp"%>
 
 <h1 class="mt-4">Translate a Docker Compose File to Kubernetes Resources</h1>
-<p>This tool will help to convert docker compose file to equivalent kubernetes resourses</p>
+<p>This tool will help to convert docker compose file or docker run command to equivalent kubernetes resources</p>
 <hr>
 
 <div id="loading" style="display: none;">
