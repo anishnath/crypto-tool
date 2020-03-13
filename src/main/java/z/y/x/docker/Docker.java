@@ -1,7 +1,11 @@
 package z.y.x.docker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -248,7 +252,16 @@ public class Docker {
 
         //System.out.println(arr);
 
-        String dockerarr[] = dockercommand.split(" ");
+        List<String> list = new ArrayList<>();
+        //Matcher m = Pattern.compile("([^\']\\S*|\'.+?\')\\s*").matcher(dockercommand);
+        Pattern regex = Pattern.compile("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
+        Matcher regexMatcher = regex.matcher(dockercommand);
+        while (regexMatcher.find())
+            list.add(regexMatcher.group());
+
+
+        String dockerarr[] = list.toArray(new String[list.size()]);
+
 
 
         String imageName = dockerarr[dockerarr.length - 1];
@@ -1399,12 +1412,19 @@ public class Docker {
             if ("test".equals(dataType)) {
                 if (healthCMD == null) {
                     healthCMD = new String[1];
+                    healthCMD[0] = value;
                 }
 
                 if (null == healthCMD[0]) {
                     healthCMD[0] = value;
                 } else {
-                    healthCMD = addX(healthCMD.length, healthCMD, value);
+                    if(value!=null)
+                    {
+                        String valuearr[] = value.split(" ");
+                        for (int i = 0; i < valuearr.length; i++) {
+                            healthCMD = addX(healthCMD.length, healthCMD, valuearr[i].replace("'", ""));
+                        }
+                    }
                 }
                 healthcheck.setTest(healthCMD);
             }
