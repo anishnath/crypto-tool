@@ -897,7 +897,7 @@ public class Compose2Kube {
 
 						statefulSet.setSpec(setSpec);
 						finalString.append("#This is StatefulSet Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						String output = yaml.dump(statefulSet);
 						// System.out.println(output);
 						finalString.append(output);
@@ -907,7 +907,7 @@ public class Compose2Kube {
 
 					if (podGen) {
 						finalString.append("#This is Pod Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						String output = yaml.dump(pod);
 						// System.out.println(output);
 						finalString.append(output);
@@ -932,7 +932,7 @@ public class Compose2Kube {
 						replication.setSpec(controllerSpec);
 						String output = yaml.dump(replication);
 						finalString.append("\n#This is Replication Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						finalString.append(output);
 
 					}
@@ -955,7 +955,7 @@ public class Compose2Kube {
 						deployment.setSpec(specd);
 						String output = yaml.dump(deployment);
 						finalString.append("\n#This is Deployment Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						finalString.append(output);
 					}
 
@@ -1743,7 +1743,7 @@ public class Compose2Kube {
 
 						statefulSet.setSpec(setSpec);
 						finalString.append("#This is StatefulSet Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						String output = yaml.dump(statefulSet);
 						// System.out.println(output);
 						finalString.append(output);
@@ -1753,7 +1753,7 @@ public class Compose2Kube {
 
 					if (podGen) {
 						finalString.append("#This is Pod Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						String output = yaml.dump(pod);
 						// System.out.println(output);
 						finalString.append(output);
@@ -1778,7 +1778,7 @@ public class Compose2Kube {
 						replication.setSpec(controllerSpec);
 						String output = yaml.dump(replication);
 						finalString.append("\n#This is Replication Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						finalString.append(output);
 
 					}
@@ -1801,7 +1801,7 @@ public class Compose2Kube {
 						deployment.setSpec(specd);
 						String output = yaml.dump(deployment);
 						finalString.append("\n#This is Deployment Configuration Kube definition\n");
-						finalString.append("___\n");
+						finalString.append("---\n");
 						finalString.append(output);
 					}
 
