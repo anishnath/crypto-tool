@@ -858,9 +858,12 @@ public class Compose2Kube {
 						StatefulSetSpec setSpec = new StatefulSetSpec();
 						setSpec.setPodManagementPolicy("OrderedReady");
 						setSpec.setReplicas(replica);
-
+						template template = new template();
 						metadata metadep = new metadata();
 						metadep.setLabels(getDummyLabel(value));
+						template.setMetadata(metadep);
+						template.setSpec(spec);
+						setSpec.setTemplate(template);
 						selector selector = new selector();
 						selector.setMatchLabels(getDummyLabel(value));
 						setSpec.setSelector(selector);
@@ -1705,8 +1708,12 @@ public class Compose2Kube {
 						setSpec.setPodManagementPolicy("OrderedReady");
 						setSpec.setReplicas(replica);
 
+						template template = new template();
 						metadata metadep = new metadata();
 						metadep.setLabels(getDummyLabel(value));
+						template.setMetadata(metadep);
+						template.setSpec(spec);
+						setSpec.setTemplate(template);
 						selector selector = new selector();
 						selector.setMatchLabels(getDummyLabel(value));
 						setSpec.setSelector(selector);
