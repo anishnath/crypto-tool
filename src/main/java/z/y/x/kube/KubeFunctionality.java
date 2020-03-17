@@ -45,6 +45,7 @@ public class KubeFunctionality extends HttpServlet {
     private static final String METHOD_POD_GENERATE = "POD_GENERATE";
     private static final String METHOD_SERVICE_GENERATE = "SERVICE_GENERATE";
     private static final String METHOD_CONFIG_GENERATE = "CONFIG_GENERATE";
+    private static final String METHOD_KUBE_2_COMPOSE = "KUBE_2_COMPOSE";
 
 
 
@@ -78,6 +79,27 @@ public class KubeFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
+
+        if (METHOD_KUBE_2_COMPOSE.equals(methodName)) {
+
+            String kubestuff = request.getParameter("kubestuff");
+            if (kubestuff == null || kubestuff.trim().length() == 0) {
+                out.println("<font size=\"2\" color=\"red\"> Please input Kube Pod/Deployment/StetfuleSet File</font>");
+                return;
+            }
+
+            try{
+                Kube2Compose kube2compose = new Kube2Compose();
+                String output = kube2compose.getCompose(kubestuff);
+                out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=35  form=\"X\"> " + output +"</textarea>");
+            }catch (Exception ex)
+            {
+                out.println("<font size=\"2\" color=\"red\"> " + ex + "</font>");
+                return;
+            }
+
+
+        }
 
         if (METHOD_CONFIG_GENERATE.equals(methodName)) {
             String dockerstuff = request.getParameter("dockerstuff");

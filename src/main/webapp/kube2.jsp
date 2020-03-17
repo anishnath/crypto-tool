@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>generate docker command from docker compose</title>
+    <title>translate kubernetes resourses to docker compose </title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <meta name="description" content="convert docker compose to docker command, docker compose convert to docker run command, docker compose example "/>
-    <meta name="keywords" content="online docker compose file to docker run command, docker compose to docker run,docker compose convert to docker run command,docker-compose.yaml file to docker command conversion "/>
+    <meta name="description" content="generate docker compose file from kubernetes pods,deployment,statefulset,replication controller"/>
+    <meta name="keywords" content="kubernetes pods to docker compose, convert kubernetes deployment to docker compose">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
 
@@ -15,17 +15,17 @@
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "docker compose generator",
-  "image" : "https://8gwifi.org/images/site/dc2.png",
-  "url" : "https://8gwifi.org/dc2.jsp",
+  "image" : "https://8gwifi.org/images/site/kube2.png",
+  "url" : "https://8gwifi.org/kube2.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2020-03-05",
-  "applicationCategory" : [ "docker compose convert to docker run command" , "generate docker run command from docker compose file", "docker-compose.yaml file to docker command conversion"],
-  "downloadUrl" : "https://8gwifi.org/dc2.jsp",
+  "datePublished" : "2020-03-17",
+  "applicationCategory" : [ "kubernetes to docker compose" , "pods to docker compose" , "kubernetes deployment to docker compose"],
+  "downloadUrl" : "https://8gwifi.org/kube2.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "convert docker run command to docker compose",
+  "requirements" : "convert kubernetes resources to docker compose file",
   "softwareVersion" : "v1.0"
 }
 </script>
@@ -48,7 +48,7 @@
                 event.preventDefault();
                 $.ajax({
                     type: "POST",
-                    url: "DockerFunctionality", //this is my servlet
+                    url: "KubeFunctionality", //this is my servlet
 
                     data: $("#form").serialize(),
                     success: function(msg){
@@ -64,8 +64,8 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Docker run command from Docker docker compose file </h1>
-<p>This tool will help to convert docker compose file to equivalent docker run options</p>
+<h1 class="mt-4">Translate Kubernetes Resources to Docker Compose</h1>
+<p>This tool will help to convert the kubernetes pod,deployment,statefulset,replication controller to Docker Compose file</p>
 <hr>
 
 <div id="loading" style="display: none;">
@@ -75,106 +75,190 @@
 <%@ include file="footer_adsense.jsp"%>
 
 <form id="form" method="POST">
-    <input type="hidden" name="methodName" id="methodName" value="GENERATE_DC_RUN_2_DC">
+    <input type="hidden" name="methodName" id="methodName" value="KUBE_2_COMPOSE">
+
+
 
     <div class="form-row">
         <div class="form-group">
-            <label for="dockerrun">Paste your Docker Compose file</label>
-            <textarea class="form-control" name="dockerrun" id="dockerrun" cols="100" rows="20">version: "3.7"
-services:
-
-  redis:
-    image: redis:alpine
+            <label for="kubestuff">Paste your Docker Compose file</label>
+            <textarea class="form-control" name="kubestuff" id="kubestuff" cols="100" rows="20">
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    generated: by 8gwifi.org
+  labels:
+    app: nginx
+    env: staging
+  name: demo
+  namespace: default
+spec:
+  containers:
+  - image: nginx
+    imagePullPolicy: IfNotPresent
+    name: demo
     ports:
-      - "6379"
-    networks:
-      - frontend
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+    - containerPort: 80
+      name: http
+      protocol: TCP
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 0
 
-  db:
-    image: postgres:9.4
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - backend
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-  vote:
-    image: dockersamples/examplevotingapp_vote:before
-    ports:
-      - "5000:80"
-    networks:
-      - frontend
-    depends_on:
-      - redis
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 2
-      restart_policy:
-        condition: on-failure
-
-  result:
-    image: dockersamples/examplevotingapp_result:before
-    ports:
-      - "5001:80"
-    networks:
-      - backend
-    depends_on:
-      - db
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-
-  worker:
-    image: dockersamples/examplevotingapp_worker
-    networks:
-      - frontend
-      - backend
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels: [APP=VOTING]
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 120s
-      placement:
-        constraints: [node.role == manager]
-
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8080:8080"
-    stop_grace_period: 1m30s
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-networks:
-  frontend:
-  backend:
-
-volumes:
-  db-data:</textarea>
+#This is Deployment Configuration Kube definition
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    com.example.empty-label: com.example.empty-label
+    generated.by: 8gwifi.org
+    com.example.number: '42'
+    com.example.description: Accounting webapp
+  labels:
+    app: demo.25
+  name: deployment.name.84
+  namespace: default
+spec:
+  replicas: 6
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: demo.25
+  template:
+    metadata:
+      labels:
+        app: demo.25
+      namespace: default
+    spec:
+      containers:
+      - command:
+        - /code/entrypoint.sh
+        - -p
+        - '3000'
+        env:
+        - name: RACK_ENV
+          value: development
+        - name: SHOW
+          value: 'true'
+        - name: SESSION_SECRET
+        - name: BAZ
+          value: '3'
+        envFrom:
+          configMapRef:
+            name: env_file_from_configmap_4
+        image: redis
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - echo
+            - '"hello world"'
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: my-web-container
+        ports:
+        - containerPort: 3000
+          name: portname.0
+          protocol: tcp
+        - containerPort: 8000
+          name: portname.2
+          protocol: tcp
+        - containerPort: 22
+          name: portname.4
+          protocol: tcp
+        securityContext:
+          capabilities:
+            add:
+            - ALL
+            drop:
+            - NET_ADMIN
+            - SYS_ADMIN
+          privileged: true
+          runAsGroup: 1000
+          runAsUser: 1000
+          seLinuxOptions:
+            level: s0:c100,c200
+            type: svirt_apache_t
+        stdin: true
+        tty: true
+        volumeDevices:
+        - devicePath: /dev/ttyUSB0
+          name: mydevice0
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: pvo.0
+        - mountPath: /var/lib/mysql
+          name: pvo.1
+        - mountPath: /code
+          name: pvo.2
+        - mountPath: /var/www/html
+          name: pvo.3
+        - mountPath: /etc/configs/
+          name: pvo.4
+          readOnly: true
+        - mountPath: /var/lib/mysql
+          name: pvo.5
+        - mountPath: /run
+          name: pvotmpfs_0
+        - mountPath: /tmp
+          name: pvotmpfs_1
+        workingDir: /code
+      dnsConfig:
+        nameservers:
+        - 8.8.8.8
+        - 9.9.9.9
+        searches:
+        - dc1.example.com
+        - dc2.example.com
+      hostAliases:
+      - hostnames:
+        - somehost
+        ip: 162.242.195.82
+      - hostnames:
+        - otherhost
+        ip: 50.31.209.229
+      hostPID: true
+      hostname: foo
+      nodeSelector:
+        node: foo
+      restartPolicy: OnFailure
+      subdomain: foo.com
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: pvo.1
+        persistentVolumeClaim:
+          claimName: claimname.0
+      - name: pvo.2
+        persistentVolumeClaim:
+          claimName: claimname.1
+      - name: pvo.3
+        persistentVolumeClaim:
+          claimName: claimname.2
+      - name: pvo.4
+        persistentVolumeClaim:
+          claimName: claimname.3
+      - name: pvo.5
+        persistentVolumeClaim:
+          claimName: claimname.4
+      - hostPath:
+          path: /dev/ttyUSB0
+        name: mydevice0
+      - emptyDir:
+          medium: Memory
+        name: pvotmpfs_0
+      - emptyDir:
+          medium: Memory
+        name: pvotmpfs_1
+</textarea>
         </div>
     </div>
-    <input type="button" class="btn btn-primary" id="generatedc" name="Generate docker RUN" value="Generate docker run">
+    <input type="button" class="btn btn-primary" id="generatedc" name="Generate Kubernetes Resources" value="Generate Docker Compose">
 </form>
 
 <hr>
@@ -192,10 +276,10 @@ volumes:
 <div class="row">
     <div>
         <ul>
+            <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
             <li><a href="dc.jsp">Docker Compose Generator</a></li>
             <li><a href="dc1.jsp">Docker run to Docker Compose Conversion</a></li>
             <li><a href="dc2.jsp">Docker Compose to docker run Conversion</a></li>
-            <li><a href="kube.jsp">Kubertes Spec Generate(Pods/svc)</a></li>
             <li><a href="kube1.jsp">Docker Compose to Kubernetes conversion</a></li>
             <li><a href="kube2.jsp">Kubernetes to Docker compose conversion</a></li>
             <li><a href="jsonparser.jsp">JSON-2-YAML Convertor</a></li>
