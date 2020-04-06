@@ -94,7 +94,7 @@ public class BCCryptFunctionality extends HttpServlet {
 
                             if(isValid)
                             {
-                                out.println("<br/><p> Hash Verification <font size=\"4\" color=\"blue\"> [" +passwordhash+"] </font> Passed for the password  <font size=\"4\" color=\"green\">["+password+"] </font> With Algo <font size=\"4\" color=\"green\"> ["+verifyAlgo[i]+"] </font></p>");
+                                out.println("<br/><p> Hash Verification <font size=\"4\" color=\"blue\"> " +passwordhash+"</font>   Passed for the password  <font size=\"4\" color=\"green\">["+password+"] </font> With Algo <font size=\"4\" color=\"green\"> ["+verifyAlgo[i]+"] </font></p>");
                                 break;
                             }
 
@@ -154,8 +154,8 @@ public class BCCryptFunctionality extends HttpServlet {
                 rs = 5;
             }
             String hashpassword = JBCryptUtil.hashPassword(password, rs);
-            out.println("<font size=\"4\" color=\"green\"> Hash Password ["
-                    + hashpassword + "]</font><br/>");
+            out.println(" Hash Password <font size=\"4\" color=\"green\"><code> "
+                    + hashpassword + "</code></font><br/>");
             addHorizontalLine(out);
 
             StringBuilder builder = new StringBuilder();
