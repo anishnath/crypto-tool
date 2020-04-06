@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.json.XML;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,6 +34,7 @@ public class JSONFunctionality extends HttpServlet {
 
 	final String METHOD_FORMATJSON = "formatjson";
 	final String METHOD_YAML_TO_JSON = "yaml_to_json";
+	final String METHOD_XML_TO_JSON = "xml_to_json";
 
 	/**
 	 * Default constructor.
@@ -69,6 +71,52 @@ public class JSONFunctionality extends HttpServlet {
 
 		final String methodName = request.getParameter("methodName");
 		PrintWriter out = response.getWriter();
+
+		if (METHOD_XML_TO_JSON.equalsIgnoreCase(methodName)) {
+
+			final String xmlString = request.getParameter("input");
+			final String style = request.getParameter("style");
+
+			if(null == xmlString || xmlString.trim().length()==0)
+			{
+
+				out.println("<font size=\"3\" color=\"red\"><b> Please Input XML Data </font></b><br>");
+				return;
+			}
+
+			try {
+				org.json.JSONObject soapDatainJsonObject = XML.toJSONObject(xmlString);
+				//System.out.println(soapDatainJsonObject);
+
+				JSONParser parser = new JSONParser();
+				JSONObject json = (JSONObject) parser.parse(soapDatainJsonObject.toString());
+
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				String prettyJson = gson.toJson(json);
+
+				addHorizontalLine(out);
+				out.println("<h4 class=\"mt-4\">JSON</h4>");
+				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
+
+
+				out.println("<h4 class=\"mt-4\">Equivalent YAML</h4>");
+				out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=15  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+
+				return;
+
+			}
+				catch (Exception e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"3\" color=\"red\"><b> Problem "
+							+ e
+
+							+ "</font></b><br>");
+					return;
+				}
+
+
+
+		}
 
 		if (METHOD_YAML_TO_JSON.equalsIgnoreCase(methodName)) {
 

@@ -602,4 +602,7 @@
   <url>
     <loc>https://8gwifi.org/kube2.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/xml2json.jsp</loc>
+  </url>
 </urlset>

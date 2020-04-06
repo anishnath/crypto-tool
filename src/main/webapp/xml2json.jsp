@@ -6,26 +6,26 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Online json beautifier, beautify json online",
-  "image" : "https://8gwifi.org/images/site/jsonb.png",
-  "url" : "https://8gwifi.org/jsonparser.jsp",
+  "name" : "Online yaml to json convertor",
+  "image" : "https://8gwifi.org/images/site/xml2json.png",
+  "url" : "https://8gwifi.org/xml2json.jsp",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath"
   },
-  "datePublished" : "2018-12-12",
-  "applicationCategory" : [ "online json beautify","code formatter" ,"json beautify online" ,"json validate online" , "json validation and beautifier online" , "json to yaml" ],
-  "downloadUrl" : "https://8gwifi.org/jsonparser.jsp",
+  "datePublished" : "2020-04-06",
+  "applicationCategory" : [ "convert xml to json","convert xml to yaml" ,"xml convertor and parser parser"],
+  "downloadUrl" : "https://8gwifi.org/xml2json.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : "json validate online, beuatify json online",
+  "requirements" : "xml to json,yaml convertor online",
   "softwareVersion" : "v1.0"
 }
 </script>
-	<title>JSON validate and beautify Online and covenrt to YAML</title>
+	<title>xml to json,yaml convertor online</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="JSON Beautifier Online, validate json online, convert JSON to YAML"/>
-	<meta name="description" content="JSON Beautifier Online, validate json online, covnert json to yaml" />
+	<meta name="keywords" content="xml to json, xml to yaml, online xml to json, convert xml to json nad yaml, xml parser "/>
+	<meta name="description" content="xml to json, xml to yaml, online xml to json, convert xml to json nad yaml, xml parser" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -85,8 +85,8 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">JSON Parser and beautifier (JSON-TO-YAML)</h1>
-<p>Input JSON file to beautify it and get result in YAML and JSON both</p>
+<h1 class="mt-4">XML to JSON/YAML Convertor</h1>
+<p>Input XML data and get JSON/YAML output</p>
 
 <div id="loading" style="display: none;">
 	<img src="images/712.GIF" alt="" />Loading!
@@ -96,16 +96,16 @@
 
 
 			<form id="form" method="POST">
-				<input type="hidden" name="methodName" id="methodName" value="formatjson">
+				<input type="hidden" name="methodName" id="methodName" value="xml_to_json">
 
 
 				<div class="form-group row">
-					<label for="input"  class="font-weight-bold col-sm-2 col-form-label">JSON</label>
+					<label for="input"  class="font-weight-bold col-sm-2 col-form-label">XML</label>
 					<div class="col-sm-10">
-						<textarea rows="10" cols="10" class="form-control" name="input" id="input">{"employees":{"employee":[{"id":"1","firstName":"Tom","lastName":"Cruise","photo":"https://pbs.twimg.com/profile_images/735509975649378305/B81JwLT7.jpg"},{"id":"2","firstName":"Maria","lastName":"Sharapova","photo":"https://pbs.twimg.com/profile_images/3424509849/bfa1b9121afc39d1dcdb53cfc423bf12.jpeg"},{"id":"3","firstName":"James","lastName":"Bond","photo":"https://pbs.twimg.com/profile_images/664886718559076352/M00cOLrh.jpg"}]}}</textarea>
+						<textarea rows="10" cols="10" class="form-control" name="input" id="input"><samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="_ONELOGIN103428909abec424fa58327f79474984" Version="2.0" IssueInstant="2014-11-13T11:39:34Z" ForceAuthn="false" IsPassive="false" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" AssertionConsumerServiceURL="http://example.com/acs">    <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">        http://idp.example.com/metadata    </saml:Issuer>    <samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" SPNameQualifier="example.com" AllowCreate="true" ></samlp:NameIDPolicy>    <samlp:RequestedAuthnContext xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Comparison="exact">        <saml:AuthnContextClassRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">            urn:oasis:names:tc:SAML:2.0:ac:classes:Password        </saml:AuthnContextClassRef>    </samlp:RequestedAuthnContext></samlp:AuthnRequest></textarea>
 					</div>
 				</div>
-					<input class="btn btn-primary" type="submit" id="submit" name="Validate and Beautify JSON">
+					<input class="btn btn-primary" type="submit" id="submit" name="YAML2JSON">
 
 			</form>
 <div id="output"></div>
@@ -120,7 +120,6 @@
 		</ul>
 	</div>
 </div>
-
 <hr>
 
 <div class="sharethis-inline-share-buttons"></div>
