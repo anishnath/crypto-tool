@@ -288,6 +288,7 @@
 
 </form>
 
+<hr>
 <%@ include file="footer_adsense.jsp"%>
 
 <div id="output"></div>
