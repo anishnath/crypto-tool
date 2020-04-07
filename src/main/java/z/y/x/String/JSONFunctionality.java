@@ -149,6 +149,26 @@ public class JSONFunctionality extends HttpServlet {
 				JSONObject json = null;
 				try {
 					json = (JSONObject) parser.parse(jsonString);
+
+
+
+					//System.out.println(xml);
+
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String prettyJson = gson.toJson(json);
+
+					addHorizontalLine(out);
+					out.println("<h4 class=\"mt-4\">JSON</h4>");
+					out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + prettyJson + "</textarea>");
+
+					String xml = getXMLString(jsonString);
+
+					addHorizontalLine(out);
+					out.println("<h4 class=\"mt-4\">XML</h4>");
+					out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + xml + "</textarea>");
+
+
+
 				} catch (ParseException e) {
 					addHorizontalLine(out);
 					out.println("<font size=\"3\" color=\"red\"><b> Problem "
@@ -158,13 +178,6 @@ public class JSONFunctionality extends HttpServlet {
 					return;
 				}
 
-
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				String prettyJson = gson.toJson(json);
-
-				addHorizontalLine(out);
-				out.println("<h4 class=\"mt-4\">JSON</h4>");
-				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
 
 
 				return;
@@ -214,12 +227,22 @@ public class JSONFunctionality extends HttpServlet {
 				String prettyJson = gson.toJson(json);
 
 				addHorizontalLine(out);
-				out.println("<h4 class=\"mt-4\">JSON</h4>");
-				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"15\" cols=\"40\">" + prettyJson + "</textarea>");
+				out.println("<h4 class=\"mt-4\">JSON(Beautify)</h4>");
+				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + prettyJson + "</textarea>");
 
+
+				addHorizontalLine(out);
 
 				out.println("<h4 class=\"mt-4\">Equivalent YAML</h4>");
-				out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=15  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+				out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + asYaml(prettyJson) + "</textarea>");
+
+				addHorizontalLine(out);
+
+				String xml = getXMLString(jsonString);
+
+				addHorizontalLine(out);
+				out.println("<h4 class=\"mt-4\">Equivalent XML</h4>");
+				out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"40\">" + xml + "</textarea>");
 
 				return;
 
@@ -235,6 +258,10 @@ public class JSONFunctionality extends HttpServlet {
 
 	}
 
+	private String getXMLString(String jsonString) {
+		org.json.JSONObject jsonObj = new org.json.JSONObject(jsonString);
+		return XML.toString(jsonObj);
+	}
 
 
 	private void addHorizontalLine(PrintWriter out) {

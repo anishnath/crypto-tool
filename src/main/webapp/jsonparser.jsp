@@ -6,7 +6,7 @@
 {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
-  "name" : "Online json beautifier, beautify json online",
+  "name" : "Online json beautifier, json to yaml, json to xml",
   "image" : "https://8gwifi.org/images/site/jsonb.png",
   "url" : "https://8gwifi.org/jsonparser.jsp",
   "author" : {
@@ -14,18 +14,18 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-12",
-  "applicationCategory" : [ "online json beautify","code formatter" ,"json beautify online" ,"json validate online" , "json validation and beautifier online" , "json to yaml" ],
+  "applicationCategory" : [ "json to yaml", "json to xml" , "online json beautify","code formatter" ,"json beautify online" ,"json validate online" , "json validation and beautifier online" , "json to yaml" ],
   "downloadUrl" : "https://8gwifi.org/jsonparser.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : "json validate online, beuatify json online",
+  "requirements" : "json validate online, beuatify json online, json to xml, json to yaml convertor",
   "softwareVersion" : "v1.0"
 }
 </script>
-	<title>JSON validate and beautify Online and covenrt to YAML</title>
+	<title>JSON validate and beautify Online and convert json to YAML, json to xml</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="JSON Beautifier Online, validate json online, convert JSON to YAML"/>
-	<meta name="description" content="JSON Beautifier Online, validate json online, covnert json to yaml" />
+	<meta name="keywords" content="JSON Beautifier Online, validate json online, convert JSON to YAML, convert json to xml"/>
+	<meta name="description" content="JSON Beautifier Online, validate json online, covnert json to yaml, convert json to xml" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -85,8 +85,8 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">JSON Parser and beautifier (JSON-TO-YAML)</h1>
-<p>Input JSON file to beautify it and get result in YAML and JSON both</p>
+<h1 class="mt-4">JSON-TO-YAML/XML)</h1>
+<p>Input JSON file to beautify it and get result in YAML and XML both</p>
 
 <div id="loading" style="display: none;">
 	<img src="images/712.GIF" alt="" />Loading!
@@ -114,9 +114,9 @@
 <div class="row">
 	<div>
 		<ul>
-			<li><a href="jsonparser.jsp">JSON-2-YAML</a></li>
-			<li><a href="yamlparser.jsp">YAML-2-JSON</a></li>
+			<li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
 			<li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
+			<li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
 		</ul>
 	</div>
 </div>

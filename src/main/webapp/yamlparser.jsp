@@ -14,7 +14,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2018-12-12",
-  "applicationCategory" : [ "online yaml to json","convert yaml to json" ,"yaml parser"],
+  "applicationCategory" : [ "online yaml to json", "yaml to xml", "convert yaml to json" ,"yaml parser"],
   "downloadUrl" : "https://8gwifi.org/yamlparser.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "yaml to json convertor online",
@@ -24,8 +24,8 @@
 	<title>yaml to json convertor online</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
-	<meta name="keywords" content="yaml to json, online yaml to json, convert yaml to json, yaml parser "/>
-	<meta name="description" content="yaml to json convertor online, yaml parser" />
+	<meta name="keywords" content="yaml to json, yaml to xml, online yaml to json, convert yaml to json, yaml parser "/>
+	<meta name="description" content="yaml to json convertor online, yaml parser, yaml to xml conversion" />
 
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
@@ -85,8 +85,8 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">YAML-TO-JSON CONVERTOR</h1>
-<p>Input YAML data and get JSON output</p>
+<h1 class="mt-4">YAML-TO-JSON/XML CONVERTOR</h1>
+<p>Input YAML data and get JSON/XML output</p>
 
 <div id="loading" style="display: none;">
 	<img src="images/712.GIF" alt="" />Loading!
@@ -126,8 +126,8 @@ metadata:
 <div class="row">
 	<div>
 		<ul>
-			<li><a href="jsonparser.jsp">JSON-2-YAML</a></li>
-			<li><a href="yamlparser.jsp">YAML-2-JSON</a></li>
+			<li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
+			<li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
 			<li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
 		</ul>
 	</div>
