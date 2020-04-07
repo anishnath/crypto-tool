@@ -335,10 +335,12 @@ public class MDFunctionality extends HttpServlet {
                         EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
 
                         addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"purple\">Base64 Encoded HMAC Value using algo [" + value + "]  </font><font size=\"4\" color=\"green\"> "
-                                + encodedMessage.getBase64Encoded() + "</font></br>");
-                        out.println("<font size=\"4\" color=\"purple\"> Hex Encoded HMAC Value using algo [" + value + "]  </font><font size=\"4\" color=\"green\">"
-                                + encodedMessage.getHexEncoded() + "</font></br>");
+                        out.println("<h4 class=\"mt-4\">Base64 Encoded HMAC Value using algo [" + value + "]</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + encodedMessage.getBase64Encoded() + "</textarea>");
+
+                        out.println("<h4 class=\"mt-4\">Hex Encoded HMAC Value using algo [" + value + "]</h4>");
+                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + encodedMessage.getHexEncoded() + "</textarea>");
+
 
 
 //					final String MD = CalcualateMD5(value, inputText,provider);
@@ -370,7 +372,7 @@ public class MDFunctionality extends HttpServlet {
         PBEWithHmacSHA1, PBEWithHmacSHA384, PBEWithHmacSHA256,
         PBEWithHmacSHA512,
         HmacSHA1, HmacSHA384, HmacSHA224,
-        HmacSHA256, HmacMD5, HMACRIPEMD128, RC2MAC, IDEAMAC, HMACRIPEMD160, SKIPJACKMAC, HMACTIGER;
-    }
+        HmacSHA256, HmacSHA512, HmacMD5, HMACRIPEMD128, RC2MAC, RC5MAC, IDEAMAC, HMACRIPEMD160, SKIPJACKMAC, HMACTIGER,DES,DESEDEMAC,HMACMD5,HMACMD4,HMACMD2,SKIPJACKMACCFB8,IDEAMACCFB8;
+    };
 
 }

@@ -82,6 +82,11 @@
                 $('#form').delay(200).submit()
             });
 
+            $('#HmacSHA512').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
             $('#HmacMD5').click(function (event)
             {
                 $('#form').delay(200).submit()
@@ -98,6 +103,11 @@
             });
 
             $('#RC2MAC').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#RC5MAC').click(function (event)
             {
                 $('#form').delay(200).submit()
             });
@@ -121,6 +131,41 @@
                     {
          			$('#form').delay(200).submit()
                     });
+
+            $('#DES').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#DESEDEMAC').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#HMACMD5').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#HMACMD4').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#HMACMD2').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#IDEAMACCFB8').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
+
+            $('#SKIPJACKMACCFB8').click(function (event)
+            {
+                $('#form').delay(200).submit()
+            });
             
             $('#form').submit(function (event)
                     {
@@ -165,25 +210,37 @@
             Key<input class="form-control"  id="passphrase" type="text" name="passphrase" value="" placeholder="Type secret key Here..." size="100" >
         </fieldset>
         <fieldset><legend>Choose Algo</legend>
-            <input type="checkbox" checked="checked" id="HMACTIGER" value="HMACTIGER" name="HMACTIGER">TIGER
-            <input type="checkbox" id="HmacSHA1" value="HmacSHA1" name="HmacSHA1">SHA-1
+
+            <input type="checkbox" checked="checked"  id="HmacSHA1" value="HmacSHA1" name="HmacSHA1">SHA-1
             <input type="checkbox" id="HmacSHA224" value="HmacSHA224" name="HmacSHA224">SHA-224
             <input type="checkbox" id="HmacSHA256" value="HmacSHA256" name="HmacSHA256">SHA-256
+            <input type="checkbox" id="HmacSHA512" value="HmacSHA512" name="HmacSHA512">SHA-512
+            <input type="checkbox" id="HMACTIGER" value="HMACTIGER" name="HMACTIGER">TIGER
             <input type="checkbox" id="RC2MAC" value="RC2MAC" name="RC2MAC">RC2
+            <input type="checkbox" id="RC5MAC" value="RC5MAC" name="RC2MAC">RC5
             <input type="checkbox" id="IDEAMAC" value="IDEAMAC" name="IDEAMAC">IDEA
-            <input type="checkbox"  id="PBEWithHmacSHA1" value="PBEWithHmacSHA1" name="MD2">PBEWithHmacSHA1
+            <input type="checkbox" id="IDEAMACCFB8" value="IDEAMACCFB8" name="IDEAMACCFB8">IDEA/CFB8
+            <input type="checkbox" id="PBEWithHmacSHA1" value="PBEWithHmacSHA1" name="MD2">PBEWithHmacSHA1
             <input type="checkbox" id="PBEWithHmacSHA384" value="PBEWithHmacSHA384" name="PBEWithHmacSHA384">PBE-SHA384
             <input type="checkbox" id="PBEWithHmacSHA256" value="PBEWithHmacSHA256" name="PBEWithHmacSHA256">PBE-SHA256
             <input type="checkbox" id="PBEWithHmacSHA512" value="PBEWithHmacSHA512" name="PBEWithHmacSHA512">PBE-SHA512
             <input type="checkbox" id="HMACRIPEMD128" value="HMACRIPEMD128" name="HMACRIPEMD128">RIPEMD128
             <input type="checkbox" id="HMACRIPEMD160" value="HMACRIPEMD160" name="HMACRIPEMD160">RIPEMD160
             <input type="checkbox" id="SKIPJACKMAC" value="SKIPJACKMAC" name="SKIPJACKMAC">SKIPJACK
+            <input type="checkbox" id="SKIPJACKMACCFB8" value="SKIPJACKMACCFB8" name="SKIPJACKMACCFB8">SKIPJACK/CFB8
+            <input type="checkbox" id="DES" value="DES" name="DES">DES
+            <input type="checkbox" id="DESEDEMAC" value="DESEDEMAC" name="DESEDEMAC">DESEDEMAC
+            <input type="checkbox" id="HMACMD5" value="HMACMD5" name="HMACMD5">HMACMD5
+            <input type="checkbox" id="HMACMD4" value="HMACMD4" name="HMACMD4">HMACMD4
+            <input type="checkbox" id="HMACMD2" value="HMACMD2" name="HMACMD2">HMACMD2
 		</fieldset>
 		<div id="output"></div>
 	</form>
 
 
 <hr>
+
+<%@ include file="footer_adsense.jsp"%>
 
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
