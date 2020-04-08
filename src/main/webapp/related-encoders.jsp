@@ -4,12 +4,6 @@
               <div class="row">
                 <div>
                 <ul>
-                    <li><a href="kube.jsp">Kubernetes Spec Generate(Pods/svc)</a></li>
-                    <li><a href="kube1.jsp">Docker to Kubernetes Conversion</a></li>
-                    <li><a href="kube2.jsp">Kubernetes to Docker Compose Conversion</a></li>
-                    <li><a href="dc.jsp">Docker Compose file Generator</a></li>
-                    <li><a href="dc1.jsp">Docker run to Docker Compose Convert</a></li>
-                    <li><a href="dc2.jsp">Docker Compose to Docker run Convert</a></li>
                     <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                     <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
                     <li><a href="diff.jsp">Compare text differences</a></li>
