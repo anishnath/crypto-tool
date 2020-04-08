@@ -153,7 +153,7 @@
 <p>This tool will help you to generate Uniform Resource Name namespace for
     UUIDs (Universally Unique IDentifier), also known as GUIDs (Globally
     Unique IDentifier).  A UUID is 128 bits long, and requires no central
-    registration process</p>
+    registration process </p>
 <hr>
 
 <div id="loading" style="display: none;">
@@ -171,7 +171,7 @@
 
         <div class="form-group">
             <input class="form-check-input" type="radio" name="rfc" id="rfc" checked value="rfc">
-            <label class="form-check-label" for="exampleRadios1">
+            <label class="form-check-label" for="rfc">
                 RFC4122 version 4
             </label>
         </div>
