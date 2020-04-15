@@ -19,21 +19,21 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-	<script type="text/javascript">
-		var sc_project=9638240;
-		var sc_invisible=1;
-		var sc_security="c4db7f3d";
-	</script>
-	<script type="text/javascript" src="js/statcounter/counter/counter.js" async></script>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="js/gtag/js?id=UA-109251861-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+	<%--<script type="text/javascript">--%>
+		<%--var sc_project=9638240;--%>
+		<%--var sc_invisible=1;--%>
+		<%--var sc_security="c4db7f3d";--%>
+	<%--</script>--%>
+	<%--<script type="text/javascript" src="js/statcounter/counter/counter.js" async></script>--%>
+	<%--<!-- Global site tag (gtag.js) - Google Analytics -->--%>
+	<%--<script async src="js/gtag/js?id=UA-109251861-1"></script>--%>
+	<%--<script>--%>
+		<%--window.dataLayer = window.dataLayer || [];--%>
+		<%--function gtag(){dataLayer.push(arguments);}--%>
+		<%--gtag('js', new Date());--%>
 
-		gtag('config', 'UA-109251861-1');
-	</script>
+		<%--gtag('config', 'UA-109251861-1');--%>
+	<%--</script>--%>
 
 </head>
 
@@ -62,6 +62,8 @@
 			<center> <h1 class="mt-4">COVID-19 DashBaord</h1> </center>
 			<hr>
 
+			<%@ include file="footer_adsense.jsp"%>
+			<hr>
 
 			<div class="row">
 				<div class="col-sm" id="chart_div"></div>
@@ -1834,7 +1836,7 @@
 
 		</div>
 
-		<%@ include file="thanks.jsp"%>
+
 		<hr>
 
 		<%@ include file="addcomments.jsp"%>
