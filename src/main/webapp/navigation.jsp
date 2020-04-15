@@ -6,7 +6,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="https://0cloud0.com/playground" target="_blank" rel="noopener">Online Linux Terminal
+              <a class="nav-link" href="covid.jsp" target="_blank" rel="noopener">COVID-19 Analytics
               </a>
             </li>
             <li class="nav-item active">
