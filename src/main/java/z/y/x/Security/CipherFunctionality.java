@@ -24,6 +24,7 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -60,6 +63,8 @@ public class CipherFunctionality extends HttpServlet {
     private static final String METHOD_ENCRYPTED_PEM_PASSWORD = "ENCRYPTED_PEM_PASSWORD";
     private static final String METHOD_EXTRACT_PUBLICKEY = "EXTRACT_PUBLICKEY";
     private static final String METHOD_CONVERT_PKCS8 = "CONVERT_PKCS8";
+    private static final String FERNET_GENERATE_KEYPAIR = "FERNET_GENERATE_KEYPAIR";
+    private static final String FERNET_ENCRYPT_DECRYPT_MESSAGEE ="FERNET_ENCRYPT_DECRYPT_MESSAGEE";
 
 
 
@@ -88,6 +93,229 @@ public class CipherFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
         PrintWriter out = response.getWriter();
+        
+        if(FERNET_ENCRYPT_DECRYPT_MESSAGEE.equalsIgnoreCase(methodName))
+        {
+        	String privatekeyparam = request.getParameter("privatekeyparam");
+            String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
+            final String message = request.getParameter("message");
+            
+            if (null == message || message.trim().length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
+                return;
+
+            }
+            
+            Gson gson = new Gson();
+            
+            if ("encrypt".equals(encryptdecryptparameter)) {
+            	
+                HttpPost post =null;
+
+                try {
+                    HttpClient client = HttpClientBuilder.create().build();
+                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "fernet/encrypt";
+                    post = new HttpPost(url1);
+                    List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                    urlParameters.add(new BasicNameValuePair("p_msg", message));
+                    urlParameters.add(new BasicNameValuePair("p_secretkey", privatekeyparam));
+                    post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                    //post.addHeader("accept", "application/json");
+
+                    HttpResponse response1 = client.execute(post);
+
+                    if (response1.getStatusLine().getStatusCode() != 200) {
+                        if (response1.getStatusLine().getStatusCode() == 404) {
+                            BufferedReader br1 = new BufferedReader(
+                                    new InputStreamReader(
+                                            (response1.getEntity().getContent())
+                                    )
+                            );
+                            StringBuilder content1 = new StringBuilder();
+                            String line;
+                            while (null != (line = br1.readLine())) {
+                                content1.append(line);
+                            }
+                            addHorizontalLine(out);
+                            out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font></p>");
+                            return;
+                        } else {
+                            addHorizontalLine(out);
+                            out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
+                            return;
+                        }
+
+                    }
+                    BufferedReader br1 = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+                    StringBuilder content1 = new StringBuilder();
+                    String line;
+                    while (null != (line = br1.readLine())) {
+                        content1.append(line);
+                    }
+                    fernetpojo fernetpojo = gson.fromJson(content1.toString(), fernetpojo.class);
+                    addHorizontalLine(out);
+                    out.println("<h4 class=\"mt-4\">Fernet Token</h4>");
+                    out.println("<p><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + fernetpojo.getSerialize() + "</textarea></p>");
+                    
+                    out.println("<h4 class=\"mt-4\">Version</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + fernetpojo.getVersion() + "</textarea>");
+                    
+                    out.println("<h4 class=\"mt-4\">Initial Vector</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + fernetpojo.getIv() + "</textarea>");
+                    
+                    out.println("<h4 class=\"mt-4\">Time Stamp</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + fernetpojo.getTimestapmp() + "</textarea>");
+                    
+                    out.println("<h4 class=\"mt-4\">Key</h4>");
+                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + fernetpojo.getKey() + "</textarea>");
+                    
+                    
+                    return;
+
+
+                } catch (Exception e) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                }finally {
+
+                    if(post!=null)
+                    {
+                        post.releaseConnection();
+                    }
+
+                }
+            	
+            }
+            
+            if ("decrypt".equals(encryptdecryptparameter)) {
+            	
+            	 if (null == privatekeyparam || privatekeyparam.trim().length() == 0) {
+                     addHorizontalLine(out);
+                     out.println("<font size=\"2\" color=\"red\"> Fernet Key is Null or EMpty....</font>");
+                     return;
+                 }
+            	 
+            	  HttpPost post =null;
+
+                  try {
+                      HttpClient client = HttpClientBuilder.create().build();
+                      String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "fernet/decrypt";
+                      post = new HttpPost(url1);
+                      List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                      urlParameters.add(new BasicNameValuePair("p_ftoken", message));
+                      urlParameters.add(new BasicNameValuePair("p_secretkey", privatekeyparam));
+                      post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                      //post.addHeader("accept", "application/json");
+
+                      HttpResponse response1 = client.execute(post);
+
+                      if (response1.getStatusLine().getStatusCode() != 200) {
+                          if (response1.getStatusLine().getStatusCode() == 404) {
+                              BufferedReader br1 = new BufferedReader(
+                                      new InputStreamReader(
+                                              (response1.getEntity().getContent())
+                                      )
+                              );
+                              StringBuilder content1 = new StringBuilder();
+                              String line;
+                              while (null != (line = br1.readLine())) {
+                                  content1.append(line);
+                              }
+                              addHorizontalLine(out);
+                              out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font></p>");
+                              return;
+                          } else {
+                              addHorizontalLine(out);
+                              out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
+                              return;
+                          }
+
+                      }
+                      BufferedReader br1 = new BufferedReader(
+                              new InputStreamReader(
+                                      (response1.getEntity().getContent())
+                              )
+                      );
+                      StringBuilder content1 = new StringBuilder();
+                      String line;
+                      while (null != (line = br1.readLine())) {
+                          content1.append(line);
+                      }
+                      fernetpojo fernetpojo = gson.fromJson(content1.toString(), fernetpojo.class);
+                      addHorizontalLine(out);
+                      out.println("<p><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + fernetpojo.getMsg() + "</textarea></p>"); 
+                      return;
+
+
+                  } catch (Exception e) {
+                      addHorizontalLine(out);
+                      out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                  }finally {
+
+                      if(post!=null)
+                      {
+                          post.releaseConnection();
+                      }
+
+                  }
+
+            	
+            }
+            
+        	
+        }
+        
+        if(FERNET_GENERATE_KEYPAIR.equalsIgnoreCase(methodName))
+        {
+        	 try {
+                 Gson gson = new Gson();
+                 DefaultHttpClient httpClient = new DefaultHttpClient();
+                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "fernet/genkey";
+
+                 //System.out.println(url1);
+
+                 HttpGet getRequest = new HttpGet(url1);
+                 getRequest.addHeader("accept", "application/json");
+
+                 HttpResponse response1 = httpClient.execute(getRequest);
+
+                 if (response1.getStatusLine().getStatusCode() != 200) {
+                     addHorizontalLine(out);
+                     out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                     return;
+                 }
+                 BufferedReader br = new BufferedReader(
+                         new InputStreamReader(
+                                 (response1.getEntity().getContent())
+                         )
+                 );
+
+                 StringBuilder content = new StringBuilder();
+                 String line;
+                 while (null != (line = br.readLine())) {
+                     content.append(line);
+                 }
+                 fernetpojo fernetpojo = gson.fromJson(content.toString(), fernetpojo.class);
+                 request.getSession().setAttribute("key", fernetpojo.getKey());
+                 String nextJSP = "/fernet.jsp";
+                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+                 dispatcher.forward(request, response);
+                 httpClient.close();
+                 return;
+             
+        		 
+        	 }catch (Exception ex) {
+
+                 addHorizontalLine(out);
+                 out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the Issuer over comment </font>");
+                 return;
+             }
+        }
 
         if (METHOD_CONVERT_PKCS8.equalsIgnoreCase(methodName)) {
 
