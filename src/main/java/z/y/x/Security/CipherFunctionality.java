@@ -193,7 +193,6 @@ public class CipherFunctionality extends HttpServlet {
             }
             
             if ("decrypt".equals(encryptdecryptparameter)) {
-            	
             	 if (null == privatekeyparam || privatekeyparam.trim().length() == 0) {
                      addHorizontalLine(out);
                      out.println("<font size=\"2\" color=\"red\"> Fernet Key is Null or EMpty....</font>");
