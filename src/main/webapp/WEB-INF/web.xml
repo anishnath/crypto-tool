@@ -326,6 +326,15 @@
 		<servlet-name>DockerFunctionality</servlet-name>
 		<url-pattern>/DockerFunctionality</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AWSFunctionality</servlet-name>
+		<servlet-class>z.y.x.aws.AWSFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AWSFunctionality</servlet-name>
+		<url-pattern>/AWSFunctionality</url-pattern>
+	</servlet-mapping>
 
 	<security-constraint>
 		<web-resource-collection>
