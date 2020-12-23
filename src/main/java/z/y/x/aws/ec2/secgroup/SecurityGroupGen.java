@@ -36,8 +36,8 @@ public class SecurityGroupGen {
 			
 			String[] sgGroups = new String[] {"sg-066769eeff28400c7","sg-00225257dcaaac4ff"};
 
-			String securityGroup = awsTest.getSecurityGroup("AKIAZVMJVSTHGBN5PZUO",
-					"9QHIJX8HqzDjyrKXNUt3KZ//6DkvqsUvv8WvztU3", "us-west-2",sgGroups);
+			String securityGroup = awsTest.getSecurityGroup("AKIAIOSFODNN7EXAMPLE",
+					"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "us-west-2",sgGroups);
 
 			System.out.println(securityGroup);
 		} catch (Exception e) {
