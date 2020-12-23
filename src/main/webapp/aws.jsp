@@ -122,12 +122,12 @@
 		      <option value="security_group" >Security Group</option>
 		      <option value="ec2" >EC2</option>
     </select>
-    <small>Working to bring this feature to all AWS Resources keep checkin in</small>
+    <small>Working to bring this feature to all AWS Resources keep check in</small>
         </div>
         
          <div class="form-group col-md-12">
-            <label for="image">Filter</label>
-            <input type="text" class="form-control form-control-sm" id="filter" name=""filter"" placeholder="Give the AWS resources Id's you waana Filter">
+            <label for="filter">Filter</label>
+            <input type="text" class="form-control form-control-sm" id="filter" name="filter" placeholder="Give the AWS resources Id's you waana Filter">
             <small>AWS Resources needs to be filter mentions the Id's only in comma separated Value</small>
         </div>
         
