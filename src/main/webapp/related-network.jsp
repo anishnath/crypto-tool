@@ -10,6 +10,7 @@
                     <li><a href="dc.jsp">Docker Compose file Generator</a></li>
                     <li><a href="dc1.jsp">Docker run to Docker Compose Convert</a></li>
                     <li><a href="dc2.jsp">Docker Compose to Docker run Convert</a></li>
+                    <li><a href="aws.jsp">Ansible Generator(AWS)</a></li>
                 </ul>
             </div>
         </div>
