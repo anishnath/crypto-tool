@@ -616,5 +616,8 @@
   </url>
   <url>
     <loc>https://8gwifi.org/docs/gen-learning.jsp</loc>
-  </url>    
+  </url>
+  <url>
+    <loc>https://8gwifi.org/aws.jsp</loc>
+  </url>
 </urlset>
