@@ -83,7 +83,7 @@ public class SecurityGroupGen {
 			Ec2Group ec2Group = new Ec2Group();
 			ec2Group.setName(securityGroup2.getGroupName());
 			ec2Group.setDescription(securityGroup2.getDescription());
-			ec2Group.setRegion(Regions.AP_SOUTHEAST_1.getName());
+			ec2Group.setRegion(region);
 			ec2Group.setVpc_id(securityGroup2.getVpcId());
 
 			java.util.List<com.amazonaws.services.ec2.model.Tag> listTags = securityGroup2.getTags();
