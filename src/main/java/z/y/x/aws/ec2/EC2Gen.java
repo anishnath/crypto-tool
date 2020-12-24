@@ -88,7 +88,7 @@ public class EC2Gen {
 				if (instance.getPublicIpAddress() != null && instance.getPublicIpAddress().length() > 2) {
 					awsEc2Pojo.setAssign_public_ip(true);
 				}
-				System.out.println(instance.getPublicIpAddress());
+				//System.out.println(instance.getPublicIpAddress());
 				Map<String, String> tagMap = new HashMap<String, String>();
 				java.util.List<com.amazonaws.services.ec2.model.Tag> listTags = instance.getTags();
 				for (iterator2 = listTags.iterator(); iterator2.hasNext();) {
