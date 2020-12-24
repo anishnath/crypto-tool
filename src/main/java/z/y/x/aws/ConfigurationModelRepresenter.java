@@ -12,6 +12,8 @@ import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
+
+
 /**
  * Custom implementation of {@link Representer} and {@link Comparator} to keep
  * the needed order of javabean properties of model classes, thus generating the
@@ -29,7 +31,7 @@ public class ConfigurationModelRepresenter extends Representer {
 			Tag customTag) {
 		if (propertyValue == null || propertyValue == "") {
 			return null;
-		} else if ("rules_egress".equals(property.getName()) || "rules".equals(property.getName()) ) {
+		} else if ("rules_egress".equals(property.getName()) || "rules".equals(property.getName()) || "volumes".equals(property.getName() )) {
 			List list = (java.util.ArrayList)propertyValue;
 			if(list.size()==0)
 			{
