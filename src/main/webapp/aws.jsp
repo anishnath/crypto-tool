@@ -91,7 +91,7 @@
             <label for="container_name">AWS_DEFAULT_REGION</label>
             <select class="form-control" name="region" id="region">
 			      <option value="us-west-2" >us-west-2</option>
-			     <option value="us-west-1" >us-west-2</option>
+			     <option value="us-west-1" >us-west-1</option>
 			     <option value="us-east-1" >us-east-1</option>
 			     <option value="us-east-2" >us-east-2</option>
 			     <option value="us-gov-east-1" >us-gov-east-1</option>
@@ -121,6 +121,7 @@
             <select class="form-control" name="aws_resource" id="exampleFormControlSelect1">
 		      <option value="security_group" >Security Group</option>
 		      <option value="ec2" >EC2</option>
+		      <option value="vpc" >VPC</option>
     </select>
     <small>Working to bring this feature to all AWS Resources keep check in</small>
         </div>
@@ -128,7 +129,7 @@
          <div class="form-group col-md-12">
             <label for="filter">Filter</label>
             <input type="text" class="form-control form-control-sm" id="filter" name="filter" placeholder="Give the AWS resources Id's you waana Filter">
-            <small>AWS Resources needs to be filter mentions the Id's only in comma separated Value</small>
+            <small>AWS Resources needs to be filter mentions the Id's only in comma separated Value for e.g  sg-aed1,sg-deoa or i-098277,i-0929s92</small>
         </div>
         
     </div>
