@@ -9,6 +9,7 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2Client;
+import com.amazonaws.services.route53.AmazonRoute53Client;
 
 /**
  * 
@@ -30,5 +31,20 @@ public class EC2Client {
 		configuration.setProtocol(Protocol.HTTPS);
 		return client;
 	}
+	
+	public AmazonRoute53Client getRoute53Client(String accessKey, String secretKey, String region) throws Exception {
+		AWSCredentialsProvider provider;
+		if (accessKey != null && secretKey != null) {
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			provider = new StaticCredentialsProvider(credentials);
+		} else {
+			provider = new DefaultAWSCredentialsProviderChain();
+		}
+		AmazonRoute53Client client = new AmazonRoute53Client(provider).withRegion(Regions.fromName(region));
+		ClientConfiguration configuration = new ClientConfiguration();
+		configuration.setProtocol(Protocol.HTTPS);
+		return client;
+	}
+
 
 }

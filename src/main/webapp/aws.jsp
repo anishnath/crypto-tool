@@ -121,6 +121,7 @@
             <select class="form-control" name="aws_resource" id="exampleFormControlSelect1">
 		      <option value="security_group" >Security Group</option>
 		      <option value="ec2" >EC2</option>
+		      <option value="route53" >Route53</option>
 		      <option value="vpc" >VPC</option>
     </select>
     <small>Working to bring this feature to all AWS Resources keep check in</small>
