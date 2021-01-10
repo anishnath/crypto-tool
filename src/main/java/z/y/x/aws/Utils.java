@@ -15,6 +15,11 @@ import z.y.x.aws.ec2.secgroup.Rule;
 import z.y.x.aws.ec2.secgroup.RulesEgress;
 import z.y.x.aws.ec2.secgroup.Task;
 
+/**
+ * 
+ * @author anishnath
+ *
+ */
 public class Utils {
 	
 	public static Yaml getYAML()
@@ -42,6 +47,11 @@ public class Utils {
 		customRepresenter.addClassTag(z.y.x.aws.vpc.AmazonAwsEc2VpcNet.class, Tag.MAP);
 		customRepresenter.addClassTag(z.y.x.aws.vpc.AWSVPCWrapper.class, Tag.MAP);
 		customRepresenter.addClassTag(z.y.x.aws.vpc.Task.class, Tag.MAP);
+		
+		//Add Subnet
+		customRepresenter.addClassTag(z.y.x.aws.vpc.subnet.AmazonAwsSubnet.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.vpc.subnet.AWSSubnetWrapper.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.vpc.subnet.Task.class, Tag.MAP);
 		
 		Yaml yaml = new Yaml(customRepresenter, options);
 		
