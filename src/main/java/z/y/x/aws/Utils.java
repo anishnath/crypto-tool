@@ -38,6 +38,11 @@ public class Utils {
 		customRepresenter.addClassTag(z.y.x.aws.ec2.Task.class, Tag.MAP);
 		customRepresenter.getPropertyUtils().setSkipMissingProperties(true);
 		
+		//Add VPC
+		customRepresenter.addClassTag(z.y.x.aws.vpc.AmazonAwsEc2VpcNet.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.vpc.AWSVPCWrapper.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.vpc.Task.class, Tag.MAP);
+		
 		Yaml yaml = new Yaml(customRepresenter, options);
 		
 		return yaml;
