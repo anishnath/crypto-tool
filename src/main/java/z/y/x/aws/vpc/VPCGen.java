@@ -82,7 +82,7 @@ public class VPCGen {
 
 		//s = s.replaceAll("amazonawsec2_vpc_net", "ec2_vpc_net");
 
-		System.out.println(s);
+		//System.out.println(s);
 		return s;
 
 		
