@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import z.y.x.aws.ec2.EC2Gen;
 import z.y.x.aws.ec2.secgroup.SecurityGroupGen;
 import z.y.x.aws.route53.Route53Gen;
+import z.y.x.aws.vpc.VPCGen;
 
 public class AWSFunctionality extends HttpServlet {
 
@@ -111,6 +112,24 @@ public class AWSFunctionality extends HttpServlet {
 				
 				try {
 					String ansible = route53Gen.getRoute53(accessKey, secretKey, region, zoneid);
+					out.println("<h5 class=\"mt-4\">Ansible </h5>");
+					out.println(
+							"<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">"
+									+ ansible + "</textarea>");
+					return;
+				} catch (Exception e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"4\" color=\"red\"> " + e.getMessage() + " </font>");
+					return;
+				}
+				
+			}
+			
+			else if("vpc".equals(aws_resource)) {
+				
+				VPCGen vpcGen = new VPCGen();
+				try {
+					String ansible = vpcGen.getVPC(accessKey, secretKey, region, groupIds);
 					out.println("<h5 class=\"mt-4\">Ansible </h5>");
 					out.println(
 							"<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">"
