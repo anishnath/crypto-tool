@@ -42,7 +42,7 @@ public class VPCGen {
 					AmazonAwsEc2VpcNet amazonAwsEc2VpcNet = new AmazonAwsEc2VpcNet();
 					Map<String, String> tags = new HashMap<>();
 					Vpc vpc = (Vpc) iterator.next();
-					System.out.println(vpc);
+					//System.out.println(vpc);
 					amazonAwsEc2VpcNet.setCidr_block(vpc.getCidrBlock());
 					amazonAwsEc2VpcNet.setTenancy(vpc.getInstanceTenancy());
 					List<Tag> tagList = vpc.getTags();
