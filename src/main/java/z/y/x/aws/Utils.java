@@ -53,6 +53,13 @@ public class Utils {
 		customRepresenter.addClassTag(z.y.x.aws.vpc.subnet.AWSSubnetWrapper.class, Tag.MAP);
 		customRepresenter.addClassTag(z.y.x.aws.vpc.subnet.Task.class, Tag.MAP);
 		
+		//Add IAM
+		customRepresenter.addClassTag(z.y.x.aws.iam.group.IamGroup.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.iam.group.Task.class, Tag.MAP);
+		customRepresenter.addClassTag(z.y.x.aws.iam.group.IAMWrapper.class, Tag.MAP);
+		
+		
+		
 		Yaml yaml = new Yaml(customRepresenter, options);
 		
 		return yaml;

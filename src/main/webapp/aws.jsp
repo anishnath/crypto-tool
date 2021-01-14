@@ -124,6 +124,7 @@
 		      <option value="route53" >Route53</option>
 		      <option value="vpc" >VPC</option>
 		      <option value="subnet">Subnet</option>
+		      <option value="iam-group">IAM(Groups)</option>
     </select>
     <small>Working to bring this feature to all AWS Resources keep check in</small>
         </div>

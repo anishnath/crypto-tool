@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import z.y.x.aws.ec2.EC2Gen;
 import z.y.x.aws.ec2.secgroup.SecurityGroupGen;
+import z.y.x.aws.iam.IAMGen;
 import z.y.x.aws.route53.Route53Gen;
 import z.y.x.aws.vpc.VPCGen;
 import z.y.x.aws.vpc.subnet.SubnetGen;
@@ -149,6 +150,22 @@ public class AWSFunctionality extends HttpServlet {
 				SubnetGen subGen = new SubnetGen();
 				try {
 					String ansible = subGen.getSubnet(accessKey, secretKey, region, groupIds);
+					out.println("<h5 class=\"mt-4\">Ansible </h5>");
+					out.println(
+							"<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">"
+									+ ansible + "</textarea>");
+					return;
+				} catch (Exception e) {
+					addHorizontalLine(out);
+					out.println("<font size=\"4\" color=\"red\"> " + e.getMessage() + " </font>");
+					return;
+				}
+				
+			}
+			else if("iam-group".equals(aws_resource)) {
+				IAMGen iamGen = new IAMGen();
+				try {
+					String ansible = iamGen.getIAM(accessKey, secretKey, region, groupIds);
 					out.println("<h5 class=\"mt-4\">Ansible </h5>");
 					out.println(
 							"<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">"
