@@ -620,4 +620,7 @@
   <url>
     <loc>https://8gwifi.org/aws.jsp</loc>
   </url>
+   <url>
+    <loc>https://8gwifi.org/aws-smtp.jsp</loc>
+  </url>
 </urlset>

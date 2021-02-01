@@ -3,10 +3,13 @@ package z.y.x.aws;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import z.y.x.aws.ec2.EC2Gen;
 import z.y.x.aws.ec2.secgroup.SecurityGroupGen;
@@ -19,6 +22,7 @@ public class AWSFunctionality extends HttpServlet {
 
 	private static final long serialVersionUID = 2L;
 	private static final String METHOD_GENERATE_AWS_CONFIG = "GENERATE_AWS_CONFIG";
+	private static final String METHOD_SES_CREDENTIALS = "SES_CREDENTIALS";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -34,6 +38,47 @@ public class AWSFunctionality extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		// System.out.println("methodName" + methodName);
+		
+		if (METHOD_SES_CREDENTIALS.equals(methodName)) {
+			String secretKey = request.getParameter("secret_key");
+
+			final String MESSAGE = "SendRawEmail"; 
+			final byte VERSION =  0x02;
+			
+			if (null == secretKey || secretKey.trim().length() == 0) {
+				addHorizontalLine(out);
+				out.println("<font size=\"4\" color=\"red\"> AWS_SECRET_KEY can't be null </font>");
+				return;
+			}
+			
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+			try {
+                // Get an HMAC-SHA256 Mac instance and initialize it with the AWS secret access key.
+                Mac mac = Mac.getInstance("HmacSHA256");
+                mac.init(secretKeySpec);
+
+                // Compute the HMAC signature on the input data bytes.
+                byte[] rawSignature = mac.doFinal(MESSAGE.getBytes());
+
+                // Prepend the version number to the signature.
+                byte[] rawSignatureWithVersion = new byte[rawSignature.length + 1];               
+                byte[] versionArray = {VERSION};                
+                System.arraycopy(versionArray, 0, rawSignatureWithVersion, 0, 1);
+                System.arraycopy(rawSignature, 0, rawSignatureWithVersion, 1, rawSignature.length);
+
+                // To get the final SMTP password, convert the HMAC signature to base 64.
+                String smtpPassword = DatatypeConverter.printBase64Binary(rawSignatureWithVersion);       
+                out.println("<h5 class=\"mt-4\">SMTP password </h5>");
+				out.println(
+						"<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">"
+								+ smtpPassword + "</textarea>");
+				return;
+         } catch (Exception ex) {
+        	 addHorizontalLine(out);
+				out.println("<font size=\"4\" color=\"red\"> " + ex.getMessage() + " </font>");
+				return;
+         }          
+		}
 
 		if (METHOD_GENERATE_AWS_CONFIG.equals(methodName)) {
 
