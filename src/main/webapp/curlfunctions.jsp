@@ -26,8 +26,8 @@
 <meta name="description" content="Online check if a host or IP (Ipv4/IPv6) is reachable from the internet  Tests for DNS AAAA records, IPv6-addressable nameservers, glue, IPv6 connectivity (port 80), and several other elements. Trace the IP address Location, curl online" />
 <meta name="keywords" content="curl online, curl ipv6 online, dns Query Online,IP, IPv6, website ipv6 test,DNS,AAAA record, ipv6 web test,DNS Testing, ICMP,ICMPv6,dns query online,ip address, location, geolocation,IP Address Lookup, IP Locator, IP Address Locator, IP Location, IP Lookup, online curl " />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%@ include file="include_css.jsp" %>
-
+<%@ include file="header-script.jsp"%>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <script type="text/javascript">
         $(document).ready(function() {
             $('#executeMethod').click(function (event)
@@ -57,44 +57,64 @@
 
     </script>
 </head>
-<body>
-<div id="page">
-<%@ include file="include.jsp" %> 
+<%@ include file="body-script.jsp"%>
+
+<%@ include file="footer_adsense.jsp"%>
+
+<h1 class="mt-4">Website IPv6/Ipv4 accessibility</h1>
+<hr>
+
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
-	<article id="contentWrapper" role="main">
-			<section id="content">
+
 	<form id="form" method="POST">
 
 		<input type="hidden" name="methodName" id="methodName" value="NETWORKCURLCOMMAND">
 		<input type="hidden" name="getClientIpAddr" id="methodName" value="true">
-		<fieldset name="Ping v4/v6 Address Online ">
-			<legend>
-				<B>Website IPv6 accessibility</B>
-			</legend>
-			WebSite Test(Ipv6/Ipv4)
-            Scheme<select name="scheme" id="scheme">
+		
+		<div class="form-group row">
+    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-lg">Scheme</label>
+    <div class="col-sm-2">
+      <select class="custom-select" name="scheme" id="scheme">
             <option value="https">https</option>
             <option value="http">http</option>
             </select>
-            <input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60">
-            <input id="port" type="text" name="port" value="443" size="10">
-            <input type="button" id="executeMethod" name="ping"
-				value="Submit" size="200"> <br>
-            <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
-		</fieldset>
-		<div id="output"></div>
-	</form>
-                <br/>
-                <br/>
-	<%@ include file="footer.jsp"%>
-                <br/>
-                <br/>
-
-		</section>
-		</article>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="colFormLabel" class="col-sm-2 col-form-label-lg">URL</label>
+    <div class="col-sm-10">
+     <input id="ipaddress" class="form-control"  type="text" name="ipaddress" value="ipv6.google.com" size="60">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">PORT</label>
+    <div class="col-sm-10">
+      <input id="port" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" type="text" name="port" value="443" size="10">
+    </div>
+  </div>
 		
-	</div>
-</body>
-</html>
+<div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
+<input type="button"  class="btn btn-primary" id="executeMethod" name="ping" value="Submit" size="200"> <br>
+</form>
+	
+<div id="output"></div>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+
+<div id="output"></div>
+
+<hr>
+
+
+
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+
+
+<%@ include file="addcomments.jsp"%>
+
+</div>
+
+<%@ include file="body-close.jsp"%>

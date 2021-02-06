@@ -25,8 +25,9 @@
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <meta name="description" content="Online Ipv4/IPv6 Ping Trace Tool, check if a host or IP (IPv6) is reachable from the internet and know the IP address Location and geolocation " />
 <meta name="keywords" content="ping online,ping6 online,curl online,IP, IPv6, IPNG, online ping, ttl, test, check, packet, echo, lag, host, count, ttl, mtu,icmp,icmpv6,ping6,ip address, location, geolocation,IP Address Lookup, IP Locator, IP Address Locator, IP Location, IP Lookup" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%@ include file="include_css.jsp" %>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<%@ include file="header-script.jsp"%>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <script type="text/javascript">
         $(document).ready(function() {
             $('#executeMethod').click(function (event)
@@ -55,44 +56,44 @@
    
     </script>
 </head>
-<body>
-<div id="page">
-<%@ include file="include.jsp" %> 
+<%@ include file="body-script.jsp"%>
+
+<h1 class="mt-4">Online Ping IPv4/IPv6 Address</h1>
+<hr>
+
+
+
 	<div id="loading" style="display: none;">
 		<img src="images/712.GIF" alt="" />Loading!
 	</div>
-	<article id="contentWrapper" role="main">
-			<section id="content">
+
 	<form id="form" method="POST">
 		<input type="hidden" name="methodName" id="methodName" value="NETWORKPINGCOMMAND">
 		<input type="hidden" name="getClientIpAddr" id="methodName" value="true">
-		<fieldset name="Ping v4/v6 Address Online ">
-			<legend>
-				<B>Online Ping IPv4/IPv6 Address </B>
-			</legend>
-			Give an Ipv4 or Ipv6 Address<input id="ipaddress" type="text" name="ipaddress" value="ipv6.google.com" size="60">
+		 <div class="form-group">
+    <label for="ipaddress">Give an Ipv4 or Ipv6 Address</label>
+			<input id="ipaddress" class="form-control" type="text" name="ipaddress" value="ipv6.google.com" size="60">
+			</div>
             <input type="button" id="executeMethod" name="ping"
-				value="Click Ping" size="200"> <br>
+				value="Ping" class="btn btn-primary" size="200"> <br>
             <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
-		</fieldset>
 		<div id="output"></div>
 	</form>
-                <br/>
-                <br/>
+<div id="output"></div>
 
-                <br/>
-                <br/>
-                <p>Examples of IP addresses and their byte representations:</p>
-
-                <%@ include file="footer.jsp"%>
-
-                <ul>
+<hr>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<%@ include file="addcomments.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<h3>Ipv4/v6 Address Type</h3>
+<ul>
                     <li>The IPv4 loopback address,&nbsp;<code>"127.0.0.1"</code>.<br /><code>7f 00 00 01</code></li>
                     <li>The IPv6 loopback address,&nbsp;<code>"::1"</code>.<br /><code>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01</code></li>
                     <li>From the IPv6 reserved documentation prefix (<code>2001:db8::/32</code>),&nbsp;<code>"2001:db8::1"</code>.<br /><code>20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 01</code></li>
                     <li>An IPv6 "IPv4 compatible" (or "compat") address,&nbsp;<code>"::192.168.0.1"</code>.<br /><code>00 00 00 00 00 00 00 00 00 00 00 00 c0 a8 00 01</code></li>
                     <li>An IPv6 "IPv4 mapped" address,&nbsp;<code>"::ffff:192.168.0.1"</code>.<br /><code>00 00 00 00 00 00 00 00 00 00 ff ff c0 a8 00 01</code></li>
-                    <li><code></code><code></code></li>
                 </ul>
                 <p>The related ping utility is implemented using the ICMP echo request and echo reply messages, other ICMP Message and Type for Refrences</p>
                 <table id="table-icmp-parameters-types" class="sortable">
@@ -253,9 +254,6 @@
                     </tr>
                     </tbody>
                 </table>
-		</section>
-		</article>
-		
-	</div>
-</body>
-</html>
+</div>
+
+<%@ include file="body-close.jsp"%>	
