@@ -81,6 +81,8 @@ public class NetworkFunctionality extends HttpServlet {
         // Set response content type
         response.setContentType("text/html");
 
+
+
         // Actual logic goes here.
         PrintWriter out = response.getWriter();
         out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE TRY AGAIN " + "</h1>");
@@ -153,7 +155,7 @@ public class NetworkFunctionality extends HttpServlet {
                         } else {
                             commands.add("-c"); // On Windows it's Different
                         }
-                        commands.add("5");
+                        commands.add("3");
                         commands.add(s1);
                         //final String output =networkDiagnostics.doCommand(command);
                         addHorizontalLine(out);
