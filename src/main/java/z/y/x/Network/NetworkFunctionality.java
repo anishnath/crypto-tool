@@ -15,16 +15,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.xbill.DNS.*;
+import org.xbill.DNS.DNSSEC.DNSSECException;
 
 import com.google.common.net.InetAddresses;
 import z.y.x.Security.VerifyRecaptcha;
+import z.y.x.u.HexUtils;
 import z.y.x.u.IPLocation;
 
+/**
+ * 
+ * @author anishnath
+ *
+ */
 public class NetworkFunctionality extends HttpServlet {
 
     private static final String METHOD_EXECUTENETWORKPINGCOMMAND = "NETWORKPINGCOMMAND";
     private static final String METHOD_EXECUTENETWORKCURLCOMMAND = "NETWORKCURLCOMMAND";
+    private static final String METHOD_EXECUTENETWORKDNSCOMMAND = "NETWORKDNSCOMMAND";
     /**
      *
      */
@@ -99,21 +109,24 @@ public class NetworkFunctionality extends HttpServlet {
         final String queryV6 = request.getParameter("queryV6DOmain");
         String gRecaptchaResponse = request
                 .getParameter("g-recaptcha-response");
+        
+        final String methodName = request.getParameter("methodName");
 
         //System.out.println(gRecaptchaResponse);
         boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
        // System.out.println(verify);
 
-        if(!verify)
+        if(!verify && !METHOD_EXECUTENETWORKDNSCOMMAND.equalsIgnoreCase(methodName))
         {
+        	
             addHorizontalLine(out);
             out.println("<b><u> Captcha Error Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
-                    + getClientIpAddr(request) + "</font><br>");
+                    + getClientIpAddr(request) + " Please refresh the page and re-submit the cpatcha </font><br>");
             return;
         }
 
-        final String methodName = request.getParameter("methodName");
+        
 
         if (isgetClientIpAddrRequested != null && !isgetClientIpAddrRequested.isEmpty()) {
             addHorizontalLine(out);
@@ -121,6 +134,593 @@ public class NetworkFunctionality extends HttpServlet {
                     + getClientIpAddr(request) + "</font><br>");
         }
 
+        if (METHOD_EXECUTENETWORKDNSCOMMAND.equalsIgnoreCase(methodName)) {
+        	
+        	String ipaddress = request.getParameter("ipaddress");
+        	
+        	if (null == ipaddress || ipaddress.trim().length()==0) {
+        		out.println("<b><u> Invalid IP Address/DNS Name Please Check and try Again  </font><br>" + ipaddress);
+        		return;
+        	}
+        	 ipaddress = ipaddress.trim();
+        	 
+        	 StringBuilder builder = new StringBuilder();
+        	 
+        	 Record []  record = new Lookup(ipaddress, Type.A).run();
+             if(record!=null) {
+            	 
+            	 
+            	 
+            	 builder.append( "<table class=\"table table-striped\"> "+
+            	  "<thead> "+
+            	   " <tr> "+
+            	   "   <th scope=\"col\">Type</th>"+
+            	   "   <th scope=\"col\">Domain Name</th>"+
+            	   "   <th scope=\"col\">IP Address</th>"+
+            	   "   <th scope=\"col\">	TTL</th>"+
+            	   "  </tr> "+
+            	  "  </thead>  <tbody> ");
+            	 
+                 for (int i = 0; i < record.length; i++) {
+                     ARecord aaaaRecorda = (ARecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 //System.out.println(aaaaRecorda.toString());
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">A</th> ");
+                    	 builder.append( " <td>"+ipaddress+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getAddress().getHostAddress()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL() +" </td>");
+                    	 builder.append( " </tr>");
+                        
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+                 //addHorizontalLine(out);
+             }
+             
+             record = new Lookup(ipaddress, Type.AAAA).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Domain Name</th>"+
+                   	   "   <th scope=\"col\">IP Address</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 AAAARecord aaaaRecorda = (AAAARecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	// System.out.println(aaaaRecorda.toString());
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">AAAA</th> ");
+                    	 builder.append( " <td>"+ipaddress+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getAddress().getHostAddress()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                         //addHorizontalLine(out);
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.MX).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Target</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 MXRecord aaaaRecorda = (MXRecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">MX</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTarget()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             
+             
+            
+             
+             record = new Lookup(ipaddress, Type.CERT).run(); 
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Algorithm</th>"+
+                       "   <th scope=\"col\">CertType</th>"+
+                       "   <th scope=\"col\">DClass</th>"+
+                       "   <th scope=\"col\">Cert</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 CERTRecord aaaaRecorda = (CERTRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	// System.out.println(aaaaRecorda);
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">CERT</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getAlgorithm()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getCertType()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getDClass()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getCert()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+                 
+             }
+             
+             record = new Lookup(ipaddress, Type.CNAME).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Target</th>"+
+                       "   <th scope=\"col\">DClass</th>"+
+                   	   "   <th scope=\"col\">TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 CNAMERecord aaaaRecorda = (CNAMERecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">CNAME</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTarget()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getDClass()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.NS).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 NSRecord aaaaRecorda = (NSRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">NS</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+            
+             
+
+             record = new Lookup(ipaddress, Type.TXT).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 TXTRecord aaaaRecorda = (TXTRecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">TXT</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+StringUtils.join(aaaaRecorda.getStrings(),",")+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+
+             
+             
+             record = new Lookup(ipaddress, Type.DS).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Algorithm</th>"+
+                       "   <th scope=\"col\">DigestID</th>"+
+                       "   <th scope=\"col\">Footprint</th>"+
+                       "   <th scope=\"col\">Digest</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 DSRecord aaaaRecorda = (DSRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">DS</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getAlgorithm()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getDigestID()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getFootprint()+"</td>");
+                    	 builder.append( " <td><code>"+HexUtils.encodeHex(aaaaRecorda.getDigest(), ":")+"</code></td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.DNSKEY).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Algorithm</th>"+
+                       "   <th scope=\"col\">PublicKey</th>"+
+                       "   <th scope=\"col\">Flags</th>"+
+                       "   <th scope=\"col\">Footprint</th>"+
+                       "   <th scope=\"col\">Protocol</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 DNSKEYRecord aaaaRecorda = (DNSKEYRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">DNSKEY</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getAlgorithm()+"</td>");
+                    	 try {
+ 							builder.append( " <td><code>"+HexUtils.encodeHex(aaaaRecorda.getPublicKey().getEncoded(), ":")+"</code></td>");
+ 						} catch (DNSSECException e) {
+ 							// TODO Auto-generated catch block
+ 							e.printStackTrace();
+ 						}
+                    	 builder.append( " <td>"+aaaaRecorda.getFlags()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getFootprint()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getProtocol()+"</td>");
+                    	
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.LOC).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 LOCRecord aaaaRecorda = (LOCRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">LOC</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+
+             record = new Lookup(ipaddress, Type.NAPTR).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 NAPTRRecord aaaaRecorda = (NAPTRRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">NAPTR</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+     
+             
+             record = new Lookup(ipaddress, Type.PTR).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 PTRRecord aaaaRecorda = (PTRRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">PTR</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.CAA).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 CAARecord aaaaRecorda = (CAARecord) record[i];
+                     if (aaaaRecorda != null) {
+                        // out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">CAA</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getValue()+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+
+             
+             record = new Lookup(ipaddress, Type.SPF).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 SPFRecord aaaaRecorda = (SPFRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	// out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">SPF</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+StringUtils.join(aaaaRecorda.getStrings(),",")+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.SRV).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 SRVRecord aaaaRecorda = (SRVRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	// out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">SRV</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.SMIMEA).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 SMIMEARecord aaaaRecorda = (SMIMEARecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	// out.println("<b><u>A Record </b></u>= <font size=\"3\" color=\"blue\">\"" + aaaaRecorda.toString() + "</font><br>");
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">SMIMEA</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.SSHFP).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 SSHFPRecord aaaaRecorda = (SSHFPRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">SSHFP</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             record = new Lookup(ipaddress, Type.TLSA).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 TLSARecord aaaaRecorda = (TLSARecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">TLSA</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             
+             
+             record = new Lookup(ipaddress, Type.URI).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 for (int i = 0; i < record.length; i++) {
+                	 URIRecord aaaaRecorda = (URIRecord) record[i];
+                     if (aaaaRecorda != null) {
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">URI</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td>"+aaaaRecorda+"</td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+             }
+             
+             
+             
+        	 
+        	
+        }
+        
         if (METHOD_EXECUTENETWORKPINGCOMMAND.equalsIgnoreCase(methodName)) {
 
 
@@ -171,7 +771,7 @@ public class NetworkFunctionality extends HttpServlet {
                         Future<Object> task = executorService.submit(callable);
                         try {
                             // ok, wait for 15 seconds max
-                            result = task.get(15, TimeUnit.SECONDS);
+                            result = task.get(8, TimeUnit.SECONDS);
                             //System.out.println("Finished with result: " + result);
                             out.println("<b><u>ICMP Echo Reply </b></u>= "  +  pingommand + " -c5 " +ipaddress + "<br><font size=\"3\" color=\"blue\">"
                                     + result + "</font><br>");
@@ -274,7 +874,7 @@ public class NetworkFunctionality extends HttpServlet {
                             Future<Object> task = executorService.submit(callable);
                             try {
                                 // ok, wait for 15 seconds max
-                                result = task.get(15, TimeUnit.SECONDS);
+                                result = task.get(8, TimeUnit.SECONDS);
                                 //System.out.println("Finished with result: " + result);
                                 out.println("<b><u>SCHEME</b>["+scheme+"] <b>IPAddress </b> </u>[" + addr.getHostAddress() + "] port[" + port + "]<br><font size=\"3\" color=\"blue\">"+
                                        "</font><br>");
