@@ -494,7 +494,7 @@ public class NetworkFunctionality extends HttpServlet {
                     	 builder.append( " <tr> ");
                     	 builder.append( " <th scope=\"row\">TXT</th> ");
                     	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
-                    	 builder.append( " <td>"+StringUtils.join(aaaaRecorda.getStrings(),",")+"</td>");
+                    	 builder.append( " <td><code>"+StringUtils.join(aaaaRecorda.getStrings(),",")+"</code></td>");
                     	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
                     	 builder.append( " </tr>");
                      }
