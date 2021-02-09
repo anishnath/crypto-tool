@@ -79,6 +79,15 @@
 	</form>
 <div id="output"></div>
 
+<h2 class="mt-4">Try Other Convertor</h2>
+<div class="row">
+    <div>
+        <ul>
+            <li><a href="dmarc.jsp">DMARC Record Lookup</a></li>
+        </ul>
+    </div>
+</div>
+
 <hr>
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>

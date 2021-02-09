@@ -8,6 +8,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -35,6 +36,7 @@ public class NetworkFunctionality extends HttpServlet {
     private static final String METHOD_EXECUTENETWORKPINGCOMMAND = "NETWORKPINGCOMMAND";
     private static final String METHOD_EXECUTENETWORKCURLCOMMAND = "NETWORKCURLCOMMAND";
     private static final String METHOD_EXECUTENETWORKDNSCOMMAND = "NETWORKDNSCOMMAND";
+    private static final String METHOD_EXECUTENETWORKDNSCOMMAND_DMARC = "NETWORKDNSCOMMANDDMARC";
     /**
      *
      */
@@ -112,6 +114,143 @@ public class NetworkFunctionality extends HttpServlet {
         
         final String methodName = request.getParameter("methodName");
 
+       
+        
+        if (METHOD_EXECUTENETWORKDNSCOMMAND_DMARC.equalsIgnoreCase(methodName)) {
+        	
+        	String ipaddress = request.getParameter("ipaddress");
+        	if (null == ipaddress || ipaddress.trim().length()==0) {
+        		out.println("<b><u> Invalid DNS Name or hostname Please Check and try Again  </font><br>" + ipaddress);
+        		return;
+        	}
+        	 ipaddress = ipaddress.trim();
+        	 ipaddress = "_dmarc."+ipaddress;
+        	 StringBuilder builder = new StringBuilder();
+        	 Record []  record = new Lookup(ipaddress, Type.A).run();
+        	 
+        	 record = new Lookup(ipaddress, Type.TXT).run();
+             if(record!=null) {
+            	 builder = new StringBuilder();
+            	 out.println("<br><h3>DNS Record\n" + 
+                  		"</h3>");
+            	 builder.append( "<table class=\"table table-striped\"> "+
+                   	  "<thead> "+
+                   	   " <tr> "+
+                   	   "   <th scope=\"col\">Type</th>"+
+                   	   "   <th scope=\"col\">Name</th>"+
+                   	   "   <th scope=\"col\">Value</th>"+
+                   	   "   <th scope=\"col\">	TTL</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+            	 List<String> dmarccList = new ArrayList<>();
+                 for (int i = 0; i < record.length; i++) {
+                	 TXTRecord aaaaRecorda = (TXTRecord) record[i];
+                     if (aaaaRecorda != null) {
+                        
+                    	 builder.append( " <tr> ");
+                    	 builder.append( " <th scope=\"row\">TXT</th> ");
+                    	 builder.append( " <td>"+aaaaRecorda.getName()+"</td> ");
+                    	 builder.append( " <td><code>"+StringUtils.join(aaaaRecorda.getStrings(),",")+"</code></td>");
+                    	 builder.append( " <td>"+aaaaRecorda.getTTL()  +" </td>");
+                    	 builder.append( " </tr>");
+                    	 dmarccList.addAll(aaaaRecorda.getStrings());
+                     }
+                 }
+                 builder.append( "</tbody></table>");
+                 out.println(builder.toString());
+                 
+                 out.println("<hr>");
+                 out.println("<h3>Declared tags\n" + 
+                 		"</h3>");
+                 
+                 builder = new StringBuilder();
+            	 builder.append( "<div class=\"table-responsive\"><table class=\"table table-striped\"> "+
+                   	  "<thead class=\"thead-dark\"> "+
+                   	   " <tr> "+
+                   	   "   <th style=\"width: 2%\">Tag</th>"+
+                   	   "   <th style=\"width: 20%\">Value</th>"+
+                   	   "   <th style=\"width: 70%\">Explanation</th>"+
+                   	   "  </tr> "+
+                   	  "  </thead>  <tbody> ");
+                 
+                 for (Iterator iterator = dmarccList.iterator(); iterator.hasNext();) {
+					String string = (String) iterator.next();
+					String[] arrOfStr = string.split(";"); 
+					for (int i = 0; i < arrOfStr.length; i++) {
+						String tmp = arrOfStr[i];
+						//System.out.println("i " + i + " " +tmp);
+						String[] tmpArr = tmp.split("=");
+						if(tmpArr.length==2)
+						{
+							
+							 builder.append( " <tr> ");
+							 builder.append( " <td style=\"width: 2%\" ><p>"+tmpArr[0]+"</p></td> ");
+							 builder.append( " <td style=\"width: 20%\"><code>"+tmpArr[1]+"</code></td> ");
+							 
+							 
+							 if("v".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( " <td style=\"width: 70%\" >DMARC protocol version.</td> ");	 
+							 }
+							 else if("p".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Requested Mail Receiver policy. Indicates the policy to be enacted by the Receiver at the request of the Domain Owner. This policy be set to 'none', 'quarantine', or 'reject'. 'none' is used to collect the DMARC report and gain insight into the current emailflows and their status</p></td> ");	 
+							 }
+							 else if("rua".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Addresses to which aggregate feedback is to be sen. DMARC requires a list of URIs of the form 'mailto:test@example.com'</p></td> ");	 
+							 }
+							 else if("ruf".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Addresses to which message-specific failure information is to be reported . DMARC requires a list of URIs of the form 'mailto:test@example.com'</p></td> ");	 
+							 }
+							 else if("ri".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Interval requested between aggregate reports </p></td> ");	 
+							 }
+							 else if("sp".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Requested Mail Receiver policy for all subdomains. It applies only to subdomains of the domain queried and not to the domain itself </p></td> ");	 
+							 }
+							 else if("rf".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Format to be used for message-specific failure reports</p></td> ");	 
+							 }
+							 else if("pct".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Percentage of messages from the Domain Owner's mail stream to which the DMARC policy is to be applied</p></td> ");	 
+							 }
+							 else if("aspf".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Indicates whether strict or relaxed SPF Identifier Alignment mode is required by the Domain Owner Valid values <br>"
+								 		+ "<b>r:</b> relaxed mode "
+								 		+ "<br><b>s:</b> strict mode</p></td> ");	 
+							 }
+							 else if("fo".equalsIgnoreCase(tmpArr[0].trim()))
+							 {
+								 builder.append( "<td style=\"width: 70%\"><p>Failure reporting options  \n"
+								 		+ "\n <br>  <b>0:</b> Generate a DMARC failure report if all underlying authentication mechanisms fail to produce an aligned \"pass\" result \n"
+								 		+ " <br><b>1:</b> Generate a DMARC failure report if any underlying authentication mechanism produced something other than an aligned \"pass\" result. \n"
+								 		+ " <br><b>d:</b> Generate a DKIM failure report if the message had a signature that failed evaluation, regardless of its alignment \n"
+								 		+ " <br><b>s:</b> Generate an SPF failure report if the message failed SPF evaluation, regardless of its alignment </p></td> ");	 
+							 }
+							 else {
+								 builder.append( "<td style=\"width: 70%\"><p></p></td> ");	 
+							 }
+							 builder.append( "</tr>");
+						}
+					}
+
+				}
+                 builder.append( "</tbody></table></div>");
+                 out.println(builder.toString());
+             }
+             else {
+            	 out.println("<h4>No DMARC Record found for  " + ipaddress + "</h4>");
+             }
+        	 return;
+        }
+        
         //System.out.println(gRecaptchaResponse);
         boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
 
@@ -133,13 +272,14 @@ public class NetworkFunctionality extends HttpServlet {
             out.println("<b><u> Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
                     + getClientIpAddr(request) + "</font><br>");
         }
+        
 
         if (METHOD_EXECUTENETWORKDNSCOMMAND.equalsIgnoreCase(methodName)) {
         	
         	String ipaddress = request.getParameter("ipaddress");
         	
         	if (null == ipaddress || ipaddress.trim().length()==0) {
-        		out.println("<b><u> Invalid IP Address/DNS Name Please Check and try Again  </font><br>" + ipaddress);
+        		out.println("<b><u> Invalid DNS Name or hostname Please Check and try Again  </font><br>" + ipaddress);
         		return;
         	}
         	 ipaddress = ipaddress.trim();

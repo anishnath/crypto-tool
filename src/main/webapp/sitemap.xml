@@ -623,7 +623,10 @@
    <url>
     <loc>https://8gwifi.org/aws-smtp.jsp</loc>
   </url>
-     <url>
+  <url>
     <loc>https://8gwifi.org/dns.jsp</loc>
+  </url>
+   <url>
+    <loc>https://8gwifi.org/dmarc.jsp</loc>
   </url>
 </urlset>

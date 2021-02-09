@@ -28,6 +28,7 @@
                     <li><a href="pingfunctions.jsp">Ping/Locate IPv4/Iv6  </a></li>
                     <li><a href="curlfunctions.jsp">Curl IPv4/IPv6</a></li>
                     <li><a href="dns.jsp">DNS lookup</a></li>
+                    <li><a href="dmarc.jsp">DMARC Record lookup</a></li>
                   </ul>
                 </div>
               </div>
