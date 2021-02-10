@@ -31,6 +31,7 @@
                     <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange </a></li>
                     <li><a href="PemParserFunctions.jsp">PEMReader Decode Certificate </a></li>
                     <li><a href="pempublic.jsp">Extract Public key from Private Key</a></li>
+                    <li><a href="certs.jsp">Extract Certs from URL</a></li>
                     <li><a href="pemconvert.jsp">PKCS#8 PKCS#1 RSA,DSA,EC Converter</a></li>
                     <li><a href="pempasswordfinder.jsp">Encrypted PEM password finder</a></li>
                     <li><a href="passwdgen.jsp">Strong Random Passwd Generator </a></li>

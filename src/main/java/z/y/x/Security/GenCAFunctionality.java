@@ -21,8 +21,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +37,7 @@ public class GenCAFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String METHOD_GENERATE_TEST_CA = "GENERATE_TEST_CA";
     private static final String METHOD_CSR_SIGNER = "CSR_SIGNER";
+    private static final String METHOD_CERTS_COMMAND= "CERTS_COMMAND";
 
 
     public GenCAFunctionality() {
@@ -65,6 +68,96 @@ public class GenCAFunctionality extends HttpServlet {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        
+        if (METHOD_CERTS_COMMAND.equals(methodName)) {
+        	String port = request.getParameter("port");
+        	String ipaddress = request.getParameter("ipaddress");
+        	
+        	if (ipaddress == null || ipaddress.trim().length() == 0) {
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> Please provide the URL to connect</font>");
+                return;
+            }
+        	
+        	ipaddress = ipaddress.trim();
+        	
+        	if(ipaddress.indexOf("http://")==0)
+        	{
+        		 addHorizontalLine(out);
+                 out.println("<font size=\"2\" color=\"red\"> Only https URL </font>");
+                 return;
+        	}
+        	
+        	if(ipaddress.indexOf("https://")==0)
+        	{
+        		System.out.println(ipaddress.substring("https://".length()));
+        		ipaddress = ipaddress.substring("https://".length());
+        	}
+        	
+//        	URL url = new URL("https://"+ipaddress);
+//        	System.out.println(url.getHost());
+        	
+        	System.out.println(ipaddress);
+        	
+        	Gson gson = new Gson();
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/webcerts";
+            HttpPost post = new HttpPost(url1);
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();            
+            urlParameters.add(new BasicNameValuePair("p_url", ipaddress));
+            urlParameters.add(new BasicNameValuePair("p_port", port));
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post.addHeader("accept", "application/json");
+
+            HttpResponse response1 = client.execute(post);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                if (response1.getStatusLine().getStatusCode() == 404) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
+                    }
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                    return;
+                } else {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+
+            }
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(
+                            (response1.getEntity().getContent())
+                    )
+            );
+            StringBuilder content = new StringBuilder();
+            String line;
+            while (null != (line = br.readLine())) {
+                content.append(line);
+            }
+            
+            List<String> listMessage = gson.fromJson(content.toString(), List.class);
+            
+            //System.out.println(listMessage);
+            int i = 1;
+            for (Iterator iterator = listMessage.iterator(); iterator.hasNext();) {
+				String string = (String) iterator.next();
+				out.println("<br><p>Certificate#"+i+"<br><textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=13  form=\"X\">" + string + "</textarea></p><br/>");
+				i++;
+			}
+            out.println("<a href=\"PemParserFunctions.jsp\" target=\"_blank\">Use PEM Parser to Parse for Extra Information</a>");
+        	return;
+        	
+        	
+        }
 
         if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
             String p_dns_name = request.getParameter("p_dns_name");
