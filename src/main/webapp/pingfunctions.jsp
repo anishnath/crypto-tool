@@ -76,7 +76,6 @@
 			</div>
             <input type="button" id="executeMethod" name="ping"
 				value="Ping" class="btn btn-primary" size="200"> <br>
-            <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
 		<div id="output"></div>
 	</form>
 <div id="output"></div>

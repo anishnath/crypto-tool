@@ -164,7 +164,7 @@ gze0MEL/
 =5jHf
 -----END PGP PRIVATE KEY BLOCK-----"></textarea>
 		<br/>
-		<b>Passphrase</b><input id="p_passpharse" class="form-control" type="text" name="p_passpharse"
+		<b>Passphrase</b><input id="p_passpharse" class="form-control" type="password" name="p_passpharse"
 								value="" placeholder="anish">
 		<br/>
 		<input type="button" class="btn btn-primary"  id="decryptbutton" name="decryptbutton" value="Decrypt PGP Message">

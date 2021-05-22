@@ -110,8 +110,8 @@ public class NetworkFunctionality extends HttpServlet {
 
         final String isgetClientIpAddrRequested = request.getParameter("getClientIpAddr");
         final String queryV6 = request.getParameter("queryV6DOmain");
-        String gRecaptchaResponse = request
-                .getParameter("g-recaptcha-response");
+//        String gRecaptchaResponse = request
+//                .getParameter("g-recaptcha-response");
         
         final String methodName = request.getParameter("methodName");
 
@@ -253,18 +253,18 @@ public class NetworkFunctionality extends HttpServlet {
         }
         
         //System.out.println(gRecaptchaResponse);
-        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-
-       // System.out.println(verify);
-
-        if(!verify && !METHOD_EXECUTENETWORKDNSCOMMAND.equalsIgnoreCase(methodName))
-        {
-        	
-            addHorizontalLine(out);
-            out.println("<b><u> Captcha Error Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
-                    + getClientIpAddr(request) + " Please refresh the page and re-submit the cpatcha </font><br>");
-            return;
-        }
+//        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+//
+//       // System.out.println(verify);
+//
+//        if(!verify && !METHOD_EXECUTENETWORKDNSCOMMAND.equalsIgnoreCase(methodName))
+//        {
+//        	
+//            addHorizontalLine(out);
+//            out.println("<b><u> Captcha Error Client Ip Address </b></u>= <font size=\"3\" color=\"blue\">"
+//                    + getClientIpAddr(request) + " Please refresh the page and re-submit the cpatcha </font><br>");
+//            return;
+//        }
 
         
 

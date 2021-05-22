@@ -95,7 +95,7 @@
     </div>
   </div>
 		
-<div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div>
+<!-- <div class="g-recaptcha" data-sitekey="6LcmQzcUAAAAAITMYW2Iavbh7Y70Z1PM33ClDUkI"></div> -->
 <input type="button"  class="btn btn-primary" id="executeMethod" name="ping" value="Submit" size="200"> <br>
 </form>
 	
