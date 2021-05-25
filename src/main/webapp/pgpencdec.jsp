@@ -42,6 +42,7 @@
 
 			$('#encryptmsg').show();
 			$('#descryptmsg').hide();
+			$('#sendemail').hide();
 
 			$('#encrypt').click(function (event)
 			{
@@ -50,19 +51,52 @@
 				$('#descryptmsg').hide();
 
 			});
+			
+			
+			$('#sendemail').click(function(event) {
+
+				var text = $('#output').find('textarea[name="comment"]').val();
+				//alert(text)
+				if ( text != null ) {
+					$("#pgp_message").val(text);
+				}
+				
+				if(text==undefined)
+				{
+					alert("Encrypt the message first ")
+					return
+				}
+				
+				var email=prompt("Please enter your email address");
+				var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				if(email.match(validRegex))
+				{
+					$("#methodName").val("PGP_SEND_ENCRYPTION_EMAIL");
+					$("#email").val(email);
+					$('#form').delay(200).submit()
+					$("#methodName").val("PGP_ENCRYPTION_DECRYPTION");
+				}
+				else{
+					alert("Invalid Email Address")
+				}
+			});
+			
+			
 
 			$('#decrypt').click(function (event)
 			{
 				//
 				$('#encryptmsg').hide();
 				$('#descryptmsg').show();
+				$('#sendemail').hide();
 
 			});
 
 			$('#decryptbutton').click(function(event) {
+				$('#sendemail').hide();
 				$('#form').delay(200).submit()
 			});
-
+			
 
 			$('#p_cmsg').keyup(function(event) {
 				//
@@ -89,6 +123,7 @@
 					success: function(msg){
 						$('#output').empty();
 						$('#output').append(msg);
+						$('#sendemail').show();
 
 					}
 				});
@@ -112,7 +147,9 @@
 	<input type="hidden" name="methodName" id="methodName"
 		   value="PGP_ENCRYPTION_DECRYPTION">
 
-
+    <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>" >
+    <input type="hidden" id="email" name="email" value="">
+    <input type="hidden" id="pgp_message" name="pgp_message" value="">
 	<p><strong>Encrypt/Decrypt PGP Message</strong></p>
 
 	<div class="radio">
@@ -165,7 +202,7 @@ gze0MEL/
 -----END PGP PRIVATE KEY BLOCK-----"></textarea>
 		<br/>
 		<b>Passphrase</b><input id="p_passpharse" class="form-control" type="password" name="p_passpharse"
-								value="" placeholder="anish">
+								value="" placeholder="">
 		<br/>
 		<input type="button" class="btn btn-primary"  id="decryptbutton" name="decryptbutton" value="Decrypt PGP Message">
 	</div>
@@ -199,7 +236,10 @@ kwQlJ1K9Ib85pCTvx16DN7QwQv8=
 	</div>
 	<div id="output"></div>
 	</b>
-
+<hr>
+<div>
+<input type="button" class="btn btn-primary"  id="sendemail" name="sendemail" value="Send Email">
+</div>
 
 </form>
 <hr>

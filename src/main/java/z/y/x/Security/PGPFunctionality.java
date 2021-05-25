@@ -40,6 +40,7 @@ public class PGPFunctionality extends HttpServlet {
     private static final String GENERATE_PGEP_KEY = "GENERATE_PGEP_KEY";
     private static final String VERIFY_PGP_FILE = "VERIFY_PGP_FILE";
     private static final String PGP_ENCRYPTION_DECRYPTION = "PGP_ENCRYPTION_DECRYPTION";
+    private static final String PGP_SEND_ENCRYPTION_EMAIL = "PGP_SEND_ENCRYPTION_EMAIL";
 
 
 
@@ -250,6 +251,53 @@ public class PGPFunctionality extends HttpServlet {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
 
+            if (PGP_SEND_ENCRYPTION_EMAIL.equals(methodName)) {
+            	String j_session_id = request.getParameter("j_csrf");
+            	String email = request.getParameter("email");
+            	String pgp_message = request.getParameter("pgp_message");
+            	String p_cmsg = request.getParameter("p_cmsg");
+            	
+            	String sessionId = request.getSession().getId();
+            	
+            	if(!sessionId.equalsIgnoreCase(j_session_id))
+            	{
+            		addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Invalid CSRF token Please refresh the page and Try again....</font>");
+                    return;
+            	}
+            	
+            	
+//            	System.out.println(j_session_id);
+//            	System.out.println(email);
+//            	System.out.println(pgp_message);
+            	
+            	SendEmail sendEmail = new SendEmail();
+            	
+            	if(sendEmail.isValidEmail(email))
+            	{
+            		
+            		new Thread(new Runnable() {
+            			  public void run() {
+            			    SendEmail sendEmail = new SendEmail();
+            			    	try {
+									sendEmail.sendEmail("Result of PGP Encryption", pgp_message , email, "pgpencdec.jsp");
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+            			    }
+            			}).start();	
+					out.println("<font size=\"2\" color=\"green\"> Email Send Successfully.</font>");
+	                return;
+            	}
+            	else {
+            		addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Invalid Email ...</font>");
+                    return;
+            	}
+            	
+            }
+            
             if (GENERATE_PGEP_KEY.equals(methodName)) {
                 String p_identity = request.getParameter("p_identity");
                 String p_passpharse = request.getParameter("p_passpharse");
