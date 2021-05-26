@@ -67,15 +67,15 @@ public class SendEmail {
 		for (int i = 0; i < arr.length; i++) {
 			String temp = arr[i];
 			builder.append(temp);
-			builder.append("</br>");
+			builder.append("<br>");
 		}
 		
 		builder.append("<hr>");
 		
-		builder.append("</br>");
+		builder.append("<br>");
 		builder.append("Input Message</br>");
 		builder.append("<pre>" + body2 +  "</pre>");
-		builder.append("</br>");
+		builder.append("<br>");
 		
 		body = builder.toString();
 		
@@ -102,7 +102,7 @@ public class SendEmail {
 		for (int i = 0; i < arr.length; i++) {
 			String temp = arr[i];
 			builder.append(temp);
-			builder.append("</br>");
+			builder.append("<br>");
 		}
 		
 		body = builder.toString();
@@ -139,7 +139,7 @@ public class SendEmail {
         
         
         
-        msg.setContent(BODY,"text/html");
+        msg.setContent(BODY,"text/html; charset=UTF-8");
         
         // Add a configuration set header. Comment or delete the 
         // next line if you are not using a configuration set
