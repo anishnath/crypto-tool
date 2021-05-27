@@ -57,6 +57,50 @@ public class SendEmail {
 		
 	}
 	
+	public void sendEmail(String subject, String body1, String body_h, String body2, String body_h2, String body3, String body_h3, String body4, String body_h4, final String email_to,String url) throws Exception
+	{
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<b>"+body_h+"</b>");
+		builder.append("<br>");
+		String arr[]=body1.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h2+"</b>");
+		builder.append("<br>");
+		arr=body2.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h3+"</b>");
+		builder.append("<br>");
+		arr=body3.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h4+"</b>");
+		builder.append("<br>");
+		arr=body4.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		
+		sendEmail(subject, builder.toString(), email_to, url);
+		
+	}
+	
 	public void sendEmail(String subject, String body, String body2, final String email_to,String url) throws Exception
 	{
 	

@@ -36,9 +36,28 @@
 			$('#genkeypair').click(function (event)
 			{
 				//
+				$("#email").val('');
 				$('#form').delay(200).submit()
 
 			});
+			
+			$('#genkeypairemail').click(function (event)
+			{
+				var email=prompt("Please enter your email address");
+				var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				if(email.match(validRegex))
+				{	
+					$("#email").val(email);
+					$('#form').delay(200).submit()
+					alert("A new PGP key Pair is delivered to your email...")
+					$("#email").val('');
+				}
+				else{
+					alert("Invalid Email Address")
+				}
+			});
+			
+			
 
 			$('#form').submit(function (event)
 			{
@@ -73,9 +92,11 @@
 </div>
 
 			<form id="form" method="POST" enctype="application/x-www-form-urlencoded">
+			
+			
 				<input type="hidden" name="methodName" id="methodName" value="GENERATE_PGEP_KEY">
-
-
+				   <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>" >
+    			   <input type="hidden" id="email" name="email" value="">
 				<div class="form-group">
 					<label for="p_identity">Identity</label>
 					<input class="form-control" id="p_identity" type="text" name="p_identity" value="" placeholder="Type The Identity...">
@@ -106,6 +127,7 @@
 					<input id="keysize3" type="radio" name="p_keysize" value="4096">4096 (Performance Suffer )
 				</div>
 					<input class="btn btn-primary"  type="button" id="genkeypair" name="genkeypair" value="Generate Keypair">
+					<input class="btn btn-secondary"  type="button" id="genkeypairemail" name="genkeypairemail" value="Email Key Pair">
 
 
 

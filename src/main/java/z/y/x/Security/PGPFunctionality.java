@@ -303,6 +303,9 @@ public class PGPFunctionality extends HttpServlet {
                 String p_passpharse = request.getParameter("p_passpharse");
                 String cipherparameter = request.getParameter("cipherparameter");
                 String p_keysize = request.getParameter("p_keysize");
+                
+                String j_session_id = request.getParameter("j_csrf");
+            	String email = request.getParameter("email");
 
 
                 if (p_identity == null || p_identity.trim().length() == 0) {
@@ -376,6 +379,54 @@ public class PGPFunctionality extends HttpServlet {
                 out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"y\">" + pgp.getPubliceKey() + "</textarea>");
 
                 addHorizontalLine(out);
+                
+                String sessionId = request.getSession().getId();
+            	
+                if(email!=null && email.length()>0)
+                {
+                	if(!sessionId.equalsIgnoreCase(j_session_id))
+                	{
+                		addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Invalid CSRF token can't send email. Please refresh the page and Try again....</font>");
+                        return;
+                	}
+                	
+                	SendEmail sendEmail = new SendEmail();
+                	
+                	final String id = p_identity;
+                	final String pw = p_passpharse;
+                	final String privKey = pgp.getPrivateKey();
+                	final String pubKey =  pgp.getPubliceKey();
+                	
+                	
+                	if(sendEmail.isValidEmail(email))
+                	{
+                		
+                		new Thread(new Runnable() {
+                			  public void run() {
+                			    SendEmail sendEmail = new SendEmail();
+                			    	try {
+    									sendEmail.sendEmail("Yours PGP Keys ", id , "Identity" , pw , "Password" , privKey , "PGP Private Key" , pubKey , "PGP PublicKey",  email, "pgpkeyfunction.jsp");
+    								} catch (Exception e) {
+    									// TODO Auto-generated catch block
+    									e.printStackTrace();
+    								}
+                			    }
+                			}).start();	
+    					out.println("<font size=\"2\" color=\"green\"> Email Send Successfully.</font>");
+    	                return;
+                	}
+                	else {
+                		addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Invalid Email ...</font>");
+                        return;
+                	}
+                	
+                	
+                }
+                
+            	
+                
 
 
             }
