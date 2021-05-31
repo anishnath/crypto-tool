@@ -175,6 +175,22 @@
 				$('#form').delay(200).submit()
 
 			});
+			
+			$('#genkeypairemail').click(function (event)
+					{
+						var email=prompt("Please enter your email address");
+						var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+						if(email.match(validRegex))
+						{	
+							$("#email").val(email);
+							$('#form').delay(200).submit()
+							alert("A new SSH key Pair is delivered to your email...")
+							$("#email").val('');
+						}
+						else{
+							alert("Invalid Email Address")
+						}
+					});
 
 			$('#form').submit(function (event)
 			{
@@ -189,6 +205,7 @@
 					success: function(msg){
 						$('#output').empty();
 						$('#output').append(msg);
+						$("#email").val('');
 
 					}
 				});
@@ -211,6 +228,8 @@
 				<input type="hidden" name="methodName" id="methodName"
 					   value="GENERATE_SSHKEYGEN">
 
+				   <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>" >
+    			   <input type="hidden" id="email" name="email" value="">
 
 						<B>SSH-Keygen Online </B>
 
@@ -271,7 +290,9 @@
 
 					Passphrase <input class="form-control" id="passphrase" type="text" name="passphrase" placeholder="for generating encrypted keys" size="30"
 												value="">
+												</br>
 					<input type="button" class="btn btn-primary" id="generatessh-keys" name="generatessh-keys" value="Generate-SSH-Keys">
+					<input type="button" class="btn btn-secondary" id="genkeypairemail" name="genkeypairemail" value="Email-SSH-Keys">
 
 					<div id="output"></div>
 

@@ -184,6 +184,56 @@ public class SSHFunctionality extends HttpServlet {
                     out.println("<p>Public Key</p>");
                     out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"10\" cols=\"30\" form=\"y\">" + sshpojo.getPublicKey() + "</textarea>");
                 }
+                
+                String sessionId = request.getSession().getId();
+                String email = request.getParameter("email");
+                String j_session_id = request.getParameter("j_csrf");
+                
+                if(email!=null && email.length()>0)
+                {
+                	if(!sessionId.equalsIgnoreCase(j_session_id))
+                	{
+                		addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Invalid CSRF token can't send email. Please refresh the page and Try again....</font>");
+                        return;
+                	}
+                	
+                	SendEmail sendEmail = new SendEmail();
+                	final String pw = passphrase;
+                	final String privKey = sshpojo.getPrivateKey();
+                	final String pubKey =  sshpojo.getPublicKey();
+                	
+                	
+                	if(sendEmail.isValidEmail(email))
+                	{
+                		
+                		new Thread(new Runnable() {
+                			  public void run() {
+                			    SendEmail sendEmail = new SendEmail();
+                			    	try {
+                			    		if(pw!=null && pw.length()>1)
+                			    		{
+                			    			sendEmail.sendEmail("Your's SSH Key's ", pw , "Password" , privKey , "SSH Private Key" , pubKey , "PublicKey (authorized_keys)",  email, "sshfunctions.jsp");
+                			    		}
+                			    		else {
+                			    			sendEmail.sendEmail("Your's SSH Key's ", privKey , "Private Key" , pubKey , "PublicKey (authorized_keys)",  email, "sshfunctions.jsp");
+                			    		}
+    									
+    								} catch (Exception e) {
+    									// TODO Auto-generated catch block
+    									e.printStackTrace();
+    								}
+                			    }
+                			}).start();	
+    					out.println("<font size=\"2\" color=\"green\"> Email Send Successfully.</font>");
+    	                return;
+                	}
+                	else {
+                		addHorizontalLine(out);
+                        out.println("<font size=\"2\" color=\"red\"> Invalid Email ...</font>");
+                        return;
+                	}
+                }
 
             }catch (Exception ex)
             {

@@ -101,6 +101,68 @@ public class SendEmail {
 		
 	}
 	
+	public void sendEmail(String subject, String body1, String body_h, String body2, String body_h2, String body3, String body_h3, final String email_to,String url) throws Exception
+	{
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<b>"+body_h+"</b>");
+		builder.append("<br>");
+		String arr[]=body1.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h2+"</b>");
+		builder.append("<br>");
+		arr=body2.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h3+"</b>");
+		builder.append("<br>");
+		arr=body3.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		sendEmail(subject, builder.toString(), email_to, url);
+		
+	}
+	
+	public void sendEmail(String subject, String body1, String body_h, String body2, String body_h2, final String email_to,String url) throws Exception
+	{
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<b>"+body_h+"</b>");
+		builder.append("<br>");
+		String arr[]=body1.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		builder.append("<b>"+body_h2+"</b>");
+		builder.append("<br>");
+		arr=body2.split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			String temp = arr[i];
+			builder.append(temp);
+			builder.append("<br>");
+		}
+		builder.append("<br>");
+		sendEmail(subject, builder.toString(), email_to, url);
+		
+	}
+	
+	
 	public void sendEmail(String subject, String body, String body2, final String email_to,String url) throws Exception
 	{
 	
@@ -158,7 +220,7 @@ public class SendEmail {
 	    	    "<h1>"+subject+"</h1>",
 	    	    "<code>" + body + "</code>",
 	    	    "<p>This email was sent by 8gwifi.org using the ", 
-	    	    " <a href='https://8gwifi.org/"+url+"'>PGPEncryption</a>."
+	    	    " <a href='https://8gwifi.org/"+url+"'>"+url+"</a>."
 	    	    );
 		
 		sendEmail(subject, email_to, BODY);
