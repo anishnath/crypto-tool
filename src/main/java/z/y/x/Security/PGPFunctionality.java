@@ -41,6 +41,7 @@ public class PGPFunctionality extends HttpServlet {
     private static final String VERIFY_PGP_FILE = "VERIFY_PGP_FILE";
     private static final String PGP_ENCRYPTION_DECRYPTION = "PGP_ENCRYPTION_DECRYPTION";
     private static final String PGP_SEND_ENCRYPTION_EMAIL = "PGP_SEND_ENCRYPTION_EMAIL";
+    private static final String PGP_DUMP = "PGP_DUMP";
 
 
 
@@ -246,7 +247,11 @@ public class PGPFunctionality extends HttpServlet {
             }
 
 
-        } else {
+        } 
+        
+    
+        
+        else {
             final String methodName = request.getParameter("methodName");
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
@@ -297,6 +302,91 @@ public class PGPFunctionality extends HttpServlet {
             	}
             	
             }
+            
+            if (PGP_DUMP.equalsIgnoreCase(methodName)) {
+            	String msg = request.getParameter("p_dump");
+            	if (msg == null || msg.trim().length() == 0) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Please input either PGP Public/Private Key pair</font>");
+                    return;
+                }
+            	
+            	msg = msg.trim();
+            	
+            	boolean isValid=false;
+        		
+        		if(msg.contains("BEGIN PGP MESSAGE") && msg.contains("END PGP MESSAGE"))
+        		{
+        			isValid=true;
+        		}
+        		
+        		if(!isValid)
+        		{
+        			if (msg.contains("BEGIN PGP PRIVATE KEY BLOCK") && msg.contains("END PGP PRIVATE KEY BLOCK")) 
+        			{
+        				isValid=true;
+        			}
+        		}
+        		
+        		if(!isValid)
+        		{
+        			if (msg.contains("BEGIN PGP PUBLIC KEY BLOCK") && msg.contains("END PGP PUBLIC KEY BLOCK"))  
+        			{
+        				isValid=true;
+        			}
+        		}
+        		
+        		if(!isValid) {
+        			addHorizontalLine(out);
+                    out.println("<font size=\"2\" color=\"red\"> Please input either PGP Public/Private Key pair</font>");
+                    return;
+        		}
+        		
+        		Gson gson = new Gson();
+                HttpClient client = HttpClientBuilder.create().build();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "pgp/pgpdump";
+                HttpPost post = new HttpPost(url1);
+
+
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_msg", msg));
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
+                HttpResponse response1 = client.execute(post);
+
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    addHorizontalLine(out);
+                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                
+                String s =content.toString();
+                s = new String(s.getBytes("UTF-8"));
+                s= s.replace("\\n", "&#13;&#10;");
+                s=s.replace("\\t", "&#32;&#32;");
+                s=s.replace("\"", "");
+                //System.out.println(s);
+                
+                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"20\" cols=\"20\" form=\"X\">" + s + "</textarea>");
+                out.println("<hr>");
+                addHorizontalLine(out);
+                return;
+            	
+            	
+            }
+            //PGP_DUMP
+            
             
             if (GENERATE_PGEP_KEY.equals(methodName)) {
                 String p_identity = request.getParameter("p_identity");

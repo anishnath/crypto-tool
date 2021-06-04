@@ -25,6 +25,7 @@
                     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
                     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
                     <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
+                    <li><a href="pgpdump.jsp">PGPKeyDumper</a></li>
                     <li><a href="bccrypt.jsp">BCrypt Password Hash  </a></li>
                     <li><a href="scrypt.jsp">SCrypt Password Hash  </a></li>
                     <li><a href="htpasswd.jsp">.htpasswd Generator </a></li>
