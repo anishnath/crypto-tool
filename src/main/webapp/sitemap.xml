@@ -632,7 +632,10 @@
      <url>
     <loc>https://8gwifi.org/certs.jsp</loc>
   </url>
-       <url>
+  <url>
     <loc>https://8gwifi.org/pgpdump.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/72.jsp</loc>
   </url>
 </urlset>
