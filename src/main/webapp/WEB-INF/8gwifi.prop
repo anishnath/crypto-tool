@@ -3,3 +3,5 @@ port=8082
 scheme=http://
 ep=http://localhost/crypto/rest/
 epn=http://localhost/ntru/rest/
+blockchain=http://localhost:1888/
+sqlite=/Users/anish/crypto-tool/sqlite.db
