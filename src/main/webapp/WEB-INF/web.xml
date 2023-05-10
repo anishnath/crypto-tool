@@ -136,7 +136,7 @@
 		<servlet-name>NaclFunctionality</servlet-name>
 		<url-pattern>/NaclFunctionality</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>JKSManagementFunctionality</servlet-name>
 		<servlet-class>z.y.x.Security.JKSManagementFunctionality</servlet-class>
@@ -145,7 +145,7 @@
 		<servlet-name>JKSManagementFunctionality</servlet-name>
 		<url-pattern>/JKSManagementFunctionality</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CommandFunctionality</servlet-name>
 		<servlet-class>z.y.x.Network.CommandFunctionality</servlet-class>
@@ -326,7 +326,7 @@
 		<servlet-name>DockerFunctionality</servlet-name>
 		<url-pattern>/DockerFunctionality</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AWSFunctionality</servlet-name>
 		<servlet-class>z.y.x.aws.AWSFunctionality</servlet-class>
@@ -334,6 +334,15 @@
 	<servlet-mapping>
 		<servlet-name>AWSFunctionality</servlet-name>
 		<url-pattern>/AWSFunctionality</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ETHFunctionality</servlet-name>
+		<servlet-class>z.y.x.blockchain.ETHFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ETHFunctionality</servlet-name>
+		<url-pattern>/ETHFunctionality</url-pattern>
 	</servlet-mapping>
 
 	<security-constraint>
