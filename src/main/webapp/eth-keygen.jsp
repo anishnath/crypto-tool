@@ -7,7 +7,7 @@
             "@context" : "http://schema.org",
             "@type" : "SoftwareApplication",
             "name" : "Online libp2p/devp2p Node Key Generator",
-            "image" : "https://8gwifi.org/images/site/libp2p.png",
+            "image" : "https://8gwifi.org/images/site/libp2p.jpg",
             "url" : "https://8gwifi.org/eth-keygen.jsp",
             "author" : {
                 "@type" : "Person",
@@ -146,9 +146,9 @@
             <label for="keyType">Algorithm:</label>
             <select class="form-select" name="keyType" id="keyType" >
                 <option value="1">Ed25519</option>
-                <option value="2">Secp256k1</option>
+                <option value="2" selected>Secp256k1</option>
                 <option value="3">EDCSA</option>
-                <option value="0" selected>RSA</option>
+                <option value="0">RSA</option>
             </select>
         </div>
 
