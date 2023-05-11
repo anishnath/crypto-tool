@@ -150,10 +150,7 @@ public class ETHFunctionality extends HttpServlet {
 
 			if ("libp2p".equals(keytype)) {
 
-				System.out.println(seed);
-				System.out.println(seedValue);
-				System.out.println(marshal_protobuf);
-				System.out.println(keyTypeP2P);
+
 
 				if ("enabled".equals(marshal_protobuf)) {
 					marshal_protobuf = "true";
@@ -178,8 +175,8 @@ public class ETHFunctionality extends HttpServlet {
 							+ Integer.valueOf(seedValue) + ",\n" + "    \"marshal_protobuf\": "
 							+ Boolean.valueOf(marshal_protobuf) + ",\n" + "    \"keyType\": " + Integer.valueOf(keyTypeP2P) + "\n"
 							+ "}";
-					
-					System.out.println(payload);
+
+//					System.out.println(payload);
 
 					String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("blockchain")
 							+ "generateLibp2pNodeKey";
