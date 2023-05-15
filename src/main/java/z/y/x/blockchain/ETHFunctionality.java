@@ -137,6 +137,10 @@ public class ETHFunctionality extends HttpServlet {
 								"<p><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"10\" cols=\"90\">"
 										+ result + "</textarea></p>");
 
+						if (postRequest != null ){
+							postRequest.releaseConnection();
+						}
+
 					} catch (Exception e) {
 						addHorizontalLine(out);
 						out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");

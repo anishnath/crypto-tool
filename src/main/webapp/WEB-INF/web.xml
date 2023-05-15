@@ -345,6 +345,15 @@
 		<url-pattern>/ETHFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>WalletFunctionality</servlet-name>
+		<servlet-class>z.y.x.blockchain.WalletFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WalletFunctionality</servlet-name>
+		<url-pattern>/WalletFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
