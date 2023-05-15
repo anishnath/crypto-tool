@@ -5,6 +5,7 @@
             <div>
                 <ul>
                     <li><a href="eth-keygen.jsp">libp2p/devp2p Node Key Generate</a></li>
+                    <li><a href="hdwallet.jsp">HD Wallet Generator</a></li>
                 </ul>
             </div>
         </div>
