@@ -644,4 +644,13 @@
   <url>
     <loc>https://8gwifi.org/hdwallet.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/emi.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/cinterest.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/cinterest2.jsp</loc>
+  </url>
 </urlset>

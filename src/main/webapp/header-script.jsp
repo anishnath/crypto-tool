@@ -11,3 +11,4 @@
 <script>hljs.initHighlightingOnLoad();</script>
 
 <%@ include file="analytics.jsp"%>
+<%@ include file="setupad.jsp"%>

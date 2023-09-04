@@ -23,3 +23,17 @@
               </div>
             </div>
           </div>
+  <div class="card my-4">
+            <h5 class="card-header">Finance</h5>
+            <div class="card-body">
+              <div class="row">
+                <div>
+                <ul>
+                    <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
+                    <li><a href="cinterest2.jsp">Compound Interest Calculator (Compare Rates) </a></li>
+                    <li><a href="cinterest.jsp">Compound Interest Calculator (Simple)</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>          
