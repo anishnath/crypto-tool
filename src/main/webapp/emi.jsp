@@ -217,6 +217,17 @@
         // Initial calculation when the page loads
         calculateEMI();
     </script>
+    
+    <div>
+                <h5 class="card-header">Try Other calculator</h5>
+                <ul>
+                    <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
+                    <li><a href="cinterest2.jsp">Compound Interest Calculator (Compare Rates) </a></li>
+                    <li><a href="cinterest.jsp">Compound Interest Calculator (Simple)</a></li>
+                    <li><a href="stock-calc.jsp">Stock Profit Calculator</a></li>
+                  </ul>
+                </div>    
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>

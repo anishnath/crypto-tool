@@ -163,6 +163,16 @@
         // Initial chart rendering
         calculateCompoundInterest();
     </script>
+    
+    <div>
+                <h5 class="card-header">Try Other calculator</h5>
+                <ul>
+                    <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
+                    <li><a href="cinterest2.jsp">Compound Interest Calculator (Compare Rates) </a></li>
+                    <li><a href="cinterest.jsp">Compound Interest Calculator (Simple)</a></li>
+                    <li><a href="stock-calc.jsp">Stock Profit Calculator</a></li>
+                  </ul>
+                </div>    
 <hr>
 
 <p>Compound interest is a powerful financial concept that allows your savings to grow over time. It works by earning interest on both the initial amount you deposit (the principal) and the interest that accumulates. This means that over time, your savings can grow significantly, especially with higher interest rates and longer investment periods.</p>

@@ -32,6 +32,7 @@
                     <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
                     <li><a href="cinterest2.jsp">Compound Interest Calculator (Compare Rates) </a></li>
                     <li><a href="cinterest.jsp">Compound Interest Calculator (Simple)</a></li>
+                    <li><a href="stock-calc.jsp">Stock Profit Calculator</a></li>
                   </ul>
                 </div>
               </div>
