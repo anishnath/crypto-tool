@@ -23,7 +23,7 @@ s.setAttribute('data-timestamp', +new Date());
 -->
 
 
-<div id="fb-root"></div>
+<%-- <div id="fb-root"></div>
 <script>(function(d, s, id) {
  var js, fjs = d.getElementsByTagName(s)[0];
  if (d.getElementById(id)) return;
@@ -32,4 +32,4 @@ s.setAttribute('data-timestamp', +new Date());
  fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-<div class="fb-comments" data-href="https://8gwifi.org/<%=request.getRequestURI() %>" data-numposts="5"></div>
+<div class="fb-comments" data-href="https://8gwifi.org/<%=request.getRequestURI() %>" data-numposts="5"></div> --%>
