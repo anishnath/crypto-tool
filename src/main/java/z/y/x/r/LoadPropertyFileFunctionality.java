@@ -80,6 +80,7 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
 		  System.out.println("API URL-- " + prop.getProperty("url"));
 		  System.out.println("API ENDPOINT-- " + prop.getProperty("ep"));
 		  System.out.println("API BLOCKCHAIN-- " + prop.getProperty("blockchain"));
+		  System.out.println("API DB_URL-- " + prop.getProperty("sqlite"));
 
 
 	} catch (Exception e) {

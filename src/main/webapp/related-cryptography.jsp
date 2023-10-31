@@ -4,10 +4,7 @@
               <div class="row">
                 <div>
                 <ul>
-                    <li><a href="naclencdec.jsp">Nacl xsalsa20 Encryption & Decryption</a></li>
-                    <li><a href="naclaead.jsp">Nacl AEAD Encryption & Decryption</a></li>
-                    <li><a href="naclboxenc.jsp">Nacl Box Encryption & Decryption</a></li>
-                    <li><a href="naclsealboxenc.jsp">Nacl SealBox Encryption & Decryption</a></li>
+                	<li><a href="short.jsp">URL Shortner</a></li>
                     <li><a href="MessageDigest.jsp">Generate Message Digest(Text)</a></li>
                     <li><a href="mdfile.jsp">Generate Message Digest(File)</a></li>
                     <li><a href="hmacgen.jsp">Generate HMAC</a></li>
@@ -52,6 +49,10 @@
                     <li><a href="jwsgen.jsp">JWS Generate Key Sign Data </a></li>
                     <li><a href="jwssign.jsp">JWS Sign Data with custom key </a></li>
                     <li><a href="jwsverify.jsp">JWS Signature Verification </a></li>
+                    <li><a href="naclencdec.jsp">Nacl xsalsa20 Encryption & Decryption</a></li>
+                    <li><a href="naclaead.jsp">Nacl AEAD Encryption & Decryption</a></li>
+                    <li><a href="naclboxenc.jsp">Nacl Box Encryption & Decryption</a></li>
+                    <li><a href="naclsealboxenc.jsp">Nacl SealBox Encryption & Decryption</a></li>
                   </ul>
                 </div>
               </div>
