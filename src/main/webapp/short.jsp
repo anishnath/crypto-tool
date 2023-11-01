@@ -35,10 +35,7 @@
 <h1 class="mb-4">URL Shortener - Shorten and Share Your Links Instantly</h1>
 <hr>
 
-    <div class="container mt-5">
-    
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
+
                 <form id="urlForm">
                     <div class="form-group">
                         <label for="originalUrl">Enter URL:</label>
@@ -53,14 +50,8 @@
                     <button type="submit" class="btn btn-primary">Shorten or View Analytics</button>
                 </form>
                 <div id="table-container"></div> 
-            </div>
-        </div>
-    </div>
+           
 
-    <!-- Bootstrap JS and jQuery (optional) -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
     <script>
@@ -107,11 +98,6 @@
             var group = document.getElementById("group").value;
             var j_csrf = document.getElementById("j_csrf").value;
             
-            if (!isValidURL(originalUrl)) {
-                // Display an alert box for invalid URL
-                alert("URL Invalid");
-                return;
-            }
             
             fetch("s", {
                 method: "POST",
@@ -129,6 +115,7 @@
             	var lurls = data.lurls
             	var currentUrl = window.location.href;
             	var shortenedUrl = currentUrl.replace("short.jsp", data.shortUrl);
+            	document.getElementById("group").value  = data.group
             	                
                 
                 // Header properties

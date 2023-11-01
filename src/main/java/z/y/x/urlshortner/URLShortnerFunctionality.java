@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+
 
 import com.google.gson.Gson;
 
@@ -58,7 +61,7 @@ public class URLShortnerFunctionality extends HttpServlet {
 
 		String shortCode = request.getPathInfo().substring(1); // Extract short code from the URL
 
-		System.out.println("shortCode--" + shortCode);
+		
 		String originalUrl = getOriginalUrl(shortCode);
 
 		if (originalUrl != null) {
@@ -81,28 +84,56 @@ public class URLShortnerFunctionality extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String originalUrl = request.getParameter("url");
-		
 		String group = request.getParameter("group");
+		
+	    String sessionId = request.getSession().getId();
+			String j_session_id = request.getParameter("j_csrf");
+			
+			if(!sessionId.equalsIgnoreCase(j_session_id))
+			{
+				
+				RequestDispatcher dispatcher = request.getRequestDispatcher("short.jsp");
+			    dispatcher.forward(request, response);
+				return;
+			}
+		
+		if (originalUrl == null || originalUrl.isEmpty()) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("short.jsp");
+		    dispatcher.forward(request, response);
+			return;
+        }
+		
+		originalUrl = originalUrl.trim();
+		
+		Pattern pattern = Pattern.compile("(https?://[^/]+)(?:/[^/]+)*?/s/([A-Za-z0-9-]+)");
+
+
+		String shortCode =null;
+        Matcher matcher = pattern.matcher(originalUrl);
+        if (matcher.find()) {
+            String domain = matcher.group(1);
+            shortCode = matcher.group(2);
+            // Do something with the extracted domain and short code
+           
+            group = getGroupName(shortCode);
+            
+            
+        }
+		
 
         // If no group is specified, create a default group
         if (group == null || group.isEmpty()) {
             group =  generateShortCode();
         }
         
-        String sessionId = request.getSession().getId();
-		String j_session_id = request.getParameter("j_csrf");
-		
-		if(!sessionId.equalsIgnoreCase(j_session_id))
+   
+
+		if (null == shortCode || shortCode.length() == 0)
 		{
-			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("short.jsp");
-		    dispatcher.forward(request, response);
-			return;
+			shortCode = getShortCode(originalUrl,group);
 		}
 
-		System.out.println(originalUrl);
-
-		String shortCode = getShortCode(originalUrl,group);
+		
 		
 
 		String shortenedUrl = "s/" + shortCode;
@@ -187,6 +218,45 @@ public class URLShortnerFunctionality extends HttpServlet {
 		}
 
 		return shortCode;
+	}
+	
+	
+	private String getGroupName(String short_code) {
+		String groupName = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+			// Check if the URL is already in the database
+			connection = ConnectionFactory.getConnection();
+			String query = "SELECT group_name FROM url_shortener WHERE short_code = ? ";
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, short_code);
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				// If the URL is already in the database, return the existing short code
+				groupName = resultSet.getString("group_name");
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Handle the exception properly in a real application
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (connection != null)
+					ConnectionFactory.closeConnection(connection);
+			} catch (SQLException e) {
+				e.printStackTrace(); // Handle the exception properly in a real application
+			}
+		}
+
+		return groupName;
 	}
 
 	private String getOriginalUrl(String shortCode) {
