@@ -113,7 +113,7 @@
             	
             	
             	var lurls = data.lurls
-            	var currentUrl = window.location.href;
+            	var currentUrl = window.location.href.split('#')[0];
             	var shortenedUrl = currentUrl.replace("short.jsp", data.shortUrl);
             	document.getElementById("group").value  = data.group
             	                
@@ -184,8 +184,8 @@
                 // This Logic conatins more url 
                 var container = document.getElementById('table-container');
                 
-                var heading = document.createElement('h4');
-                heading.textContent = 'URLs belong to this Group [' + data.group + "]";
+                var heading = document.createElement('p');
+                heading.textContent = 'Others URLs belong to this Group [' + data.group + "]";
                 container.appendChild(heading);
                 
                 var table = document.createElement('table');
@@ -217,7 +217,7 @@
                     shortenedUrl =  currentUrl.replace("short.jsp", "s/" + item.shortCode);
                     console.log(shortenedUrl)
                  // Add shortened URL as a link with target blank
-                    cell3.innerHTML = '<a href="' + shortenedUrl + '" target="_blank">' + item.shortCode + '</a>';
+                    cell3.innerHTML = '<a href="' + shortenedUrl + '" target="_blank">' + shortenedUrl + '</a>';
 
                     
                  // Generate QR code for shortenedUrl and add it to the row
