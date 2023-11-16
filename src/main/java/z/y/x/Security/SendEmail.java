@@ -1,17 +1,18 @@
 package z.y.x.Security;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Properties;
+import z.y.x.r.LoadPropertyFileFunctionality;
+import z.y.x.urlshortner.ConnectionFactory;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
 
 
 /**
@@ -20,6 +21,9 @@ import javax.mail.internet.MimeMessage;
  *
  */
 public class SendEmail {
+
+	private static final String DB_URL = "jdbc:sqlite:"
+			+ LoadPropertyFileFunctionality.getConfigProperty().get("sqlite");
 
 	   // Replace sender@example.com with your "From" address.
     // This address must be verified.
@@ -160,6 +164,7 @@ public class SendEmail {
 		builder.append("<br>");
 		sendEmail(subject, builder.toString(), email_to, url);
 
+
 	}
 
 
@@ -228,6 +233,7 @@ public class SendEmail {
 	    	    );
 
 		sendEmail(subject, email_to, BODY);
+		collectEMAIL(email_to, url);
     }
 
 	public void sendRawHtml(String subject , String body , String email_to, String url) throws Exception
@@ -243,6 +249,7 @@ public class SendEmail {
 		);
 
 		sendEmail(subject, email_to, BODY);
+		collectEMAIL(email_to, url);
 	}
 
 	private void sendEmail(String subject, final String email_to, String BODY)
@@ -301,4 +308,33 @@ public class SendEmail {
         }
 	}
 
+	private void  collectEMAIL(String email_to, String url) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			// Check if the URL is already in the database
+			connection = ConnectionFactory.getConnection();
+			String query = "INSERT INTO email_collect (email_to, url) VALUES (?, ?)";
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, email_to);
+			preparedStatement.setString(2, url);
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (connection != null)
+					ConnectionFactory.closeConnection(connection);
+			} catch (SQLException e) {
+				e.printStackTrace(); // Handle the exception properly in a real application
+			}
+		}
+	}
 }
+
+
