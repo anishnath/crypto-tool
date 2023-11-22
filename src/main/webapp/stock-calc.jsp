@@ -52,9 +52,10 @@
                 <thead>
                     <tr>
                         <th>Scenario</th>
-                        <th>Purchase Price</th>
-                        <th>Sale Price</th>
                         <th>Shares</th>
+                        <th>Purchase Price</th>
+                        <th>Total Invested</th>
+                        <th>Sale Price</th>
                         <th>Profit/Loss</th>
                     </tr>
                 </thead>
@@ -99,6 +100,7 @@
         const purchasePrice = purchasePrices[i];
         const salePrice = salePrices[i];
         const share = shares[i];
+        const total_price = share * purchasePrice
 
         if (isNaN(purchasePrice) || isNaN(salePrice) || isNaN(share)) {
             continue; // Skip invalid data
@@ -106,10 +108,16 @@
 
         const profit = (salePrice - purchasePrice) * share;
         const scenario = `Scenario ${i + 1}`;
+        
+        const profitColor = profit < 0 ? 'red' : 'green';
 
         // Add row to the table
         const row = document.createElement('tr');
-        row.innerHTML = "<td>scenario</td><td>"+purchasePrice.toFixed(2)+"</td><td>"+salePrice.toFixed(2)+"</td><td>"+share+"</td><td>"+profit.toFixed(2)+"</td>";
+        
+        //row.innerHTML = "<td>stock-"+i+"</td><td>"+share+"</td><td>"+purchasePrice.toFixed(2)+"</td><td>"+total_price.toFixed(2)+"</td><td>"+salePrice.toFixed(2)+"</td><td>"+profit.toFixed(2)+"</td>";
+        
+        row.innerHTML = "<td>stock-" + i + "</td><td>" + share + "</td><td>" + purchasePrice.toFixed(2) + "</td><td>" + total_price.toFixed(2) + "</td><td>" + salePrice.toFixed(2) + "</td><td style='color:" + profitColor + "'>" + profit.toFixed(2) + "</td>";
+
         resultsTable.appendChild(row);
 
         // Collect data for the chart
@@ -123,6 +131,12 @@
     // Update the total profit/loss element
     const totalProfitLossElement = document.getElementById('totalProfitLoss');
     totalProfitLossElement.textContent = totalProfitLoss.toFixed(2);
+    
+ // Set color based on totalProfitLoss value
+    const totalProfitLossColor = totalProfitLoss < 0 ? 'red' : 'green';
+    totalProfitLossElement.style.fontWeight = 'bold';
+    totalProfitLossElement.style.backgroundColor = 'yellow';
+    totalProfitLossElement.style.color = totalProfitLossColor;
 
     // Destroy the existing chart if it exists
     if (chartInstance) {
