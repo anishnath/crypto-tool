@@ -101,6 +101,10 @@ y7fbaOEccnpRpnXpgKqgX/pI7YP0Q6QIE/3TpH1kwg==
 		</form>
 <hr>
 
+<div id="fileTableContainer">
+        <!-- Table will be added dynamically here -->
+    </div>
+
  <div class="card my-4">
      <h5 class="card-header">Other PGP Tools</h5>
      <ul>
