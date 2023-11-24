@@ -252,7 +252,13 @@
         <groupId>org.xerial</groupId>
         <artifactId>sqlite-jdbc</artifactId>
         <version>3.34.0</version>
-  </dependency>		
+  </dependency>
+  
+  	<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.20.109</version>
+		</dependency>
 		
 	</dependencies>
 

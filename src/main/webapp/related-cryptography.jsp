@@ -1,4 +1,33 @@
  <div class="card my-4">
+     <h5 class="card-header">PGP  </h5>
+     <ul>
+	     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
+	     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
+	     <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
+	     <li><a href="pgpdump.jsp">PGPKeyDumper</a></li>
+	     <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+     </ul>
+ </div>
+ <div class="card my-4">
+    <h5 class="card-header">DevOps/Container Tools</h5>
+    <div class="card-body">
+        <div class="row">
+            <div>
+                <ul>
+                    <li><a href="kube.jsp">Kubernetes Spec Generate(Pods/svc)</a></li>
+                    <li><a href="kube1.jsp">Docker to Kubernetes Conversion</a></li>
+                    <li><a href="kube2.jsp">Kubernetes to Docker Compose Conversion</a></li>
+                    <li><a href="dc.jsp">Docker Compose file Generator</a></li>
+                    <li><a href="dc1.jsp">Docker run to Docker Compose Convert</a></li>
+                    <li><a href="dc2.jsp">Docker Compose to Docker run Convert</a></li>
+                    <li><a href="aws.jsp">Ansible Generator(AWS)</a></li>
+                    <li><a href="aws-smtp.jsp">AWS SMTP password Generator</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+ <div class="card my-4">
             <h5 class="card-header">Cryptopgraphy Services</h5>
             <div class="card-body">
               <div class="row">
@@ -19,10 +48,6 @@
                     <li><a href="elgamalfunctions.jsp">ELGAMAL Encryption/Decryption </a></li>
                     <li><a href="pbkdf.jsp">PBKDF2 Derivekey  </a></li>
                     <li><a href="pbe.jsp">PBE (PBKDF) Encryption/Decryption  </a></li>
-                    <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
-                    <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
-                    <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
-                    <li><a href="pgpdump.jsp">PGPKeyDumper</a></li>
                     <li><a href="bccrypt.jsp">BCrypt Password Hash  </a></li>
                     <li><a href="scrypt.jsp">SCrypt Password Hash  </a></li>
                     <li><a href="htpasswd.jsp">.htpasswd Generator </a></li>
@@ -58,7 +83,3 @@
               </div>
             </div>
           </div>
-<!--  <div class="card my-4">
-     <h5 class="card-header">Online Terminals </h5>
-     <a href="https://0cloud0.com/playground" target="_blank"><img class="img-fluid rounded" src="images/site/terminal.png"  alt="Online Terminals"></a>
- </div> -->

@@ -6,17 +6,10 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="covid.jsp" target="_blank" rel="noopener">COVID-19 Analytics
-              </a>
-            </li>
-            <li class="nav-item active">
               <a class="nav-link" href="https://8gwifi.org/docs/">Tech Blogs</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
-            </li>
-            <li class="nav-item active">
-              <a  class="nav-link" href="download.jsp">Download Software</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link"  href="https://www.linkedin.com/in/anishnath">Hire Me!</a>

@@ -362,6 +362,24 @@
 		<servlet-name>URLShortnerFunctionality</servlet-name>
 		<url-pattern>/s/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>S3Functionality</servlet-name>
+		<servlet-class>z.y.x.aws.s3.S3Functionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>S3Functionality</servlet-name>
+		<url-pattern>/presign</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>S3DownloadFunctionality</servlet-name>
+		<servlet-class>z.y.x.aws.s3.S3DownloadFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>S3DownloadFunctionality</servlet-name>
+		<url-pattern>/d/*</url-pattern>
+	</servlet-mapping>
 
 	<security-constraint>
 		<web-resource-collection>
