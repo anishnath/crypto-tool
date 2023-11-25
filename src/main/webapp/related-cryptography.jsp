@@ -4,8 +4,9 @@
 	     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
 	     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
 	     <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
-	     <li><a href="pgpdump.jsp">PGPKeyDumper</a></li>
-	     <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+	     <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
+	     <li><a href="pgp-send.jsp">PGP Send Encrypt files</a></li>
+	     <li><a href="pgp-file-decrypt.jsp">PGP file Decrypt files</a></li>
      </ul>
  </div>
  <div class="card my-4">
