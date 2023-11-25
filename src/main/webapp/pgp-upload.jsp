@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
-	
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- Meta Tags for SEO -->
 <meta name="description"
@@ -29,7 +29,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/openpgp/4.10.10/openpgp.min.js"></script>
 	<script src="js/pgp-upload.js"></script>
-	
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
 
 <!-- JSON-LD for SEO -->
@@ -107,14 +107,14 @@ y7fbaOEccnpRpnXpgKqgX/pI7YP0Q6QIE/3TpH1kwg==
 
  <div class="card my-4">
      <h5 class="card-header">Other PGP Tools</h5>
-     <ul>
-	     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
-	     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
-	     <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
-	     <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
-	     <li><a href="pgp-upload.jsp">PGP Encrypt files</a></li>
-	     <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
-     </ul>
+	 <ul>
+		 <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
+		 <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
+		 <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
+		 <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
+		 <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+		 <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
+	 </ul>
  </div>
 
 <%@ include file="footer_adsense.jsp"%>

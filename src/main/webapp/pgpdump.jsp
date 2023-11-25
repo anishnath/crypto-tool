@@ -140,6 +140,18 @@ kwQlJ1K9Ib85pCTvx16DN7QwQv8=
 <%@ include file="thanks.jsp"%>
 <hr>
 
+ <div class="card my-4">
+     <h5 class="card-header">Other PGP Tools</h5>
+     <ul>
+         <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
+         <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
+         <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
+         <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
+         <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+         <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
+     </ul>
+ </div>
+
 	<h2 class="mt-4" id="thersaalgorithm"><a href="docs/gpg.jsp">Pretty Good Privacy</a></h2>
 
 <p><strong>Pretty Good Privacy or PGP</strong> is a popular program used to encrypt and decrypt email over the Internet, as well as authenticate messages with digital signatures and encrypted stored files.</p>

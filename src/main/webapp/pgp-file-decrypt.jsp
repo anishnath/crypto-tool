@@ -6,8 +6,8 @@
     <meta name="description" content="Decrypt PGP files and verify signatures using openpgp.js. A web-based tool for PGP encryption and decryption.">
     <title>Decrypt PGP filesn</title>
     <!-- Include Bootstrap CSS -->
-    
-    
+
+
       <!-- JSON-LD Script for Metadata -->
     <script type="application/ld+json">
         {
@@ -63,7 +63,7 @@
             reader.onload = async function (event) {
                 // Get the encrypted data from the file
                 var encryptedData = event.target.result;
-                
+
              // Check if the data contains PGP message delimiters
                 if (!encryptedData.includes('-----BEGIN PGP MESSAGE-----') || !encryptedData.includes('-----END PGP MESSAGE-----')) {
                     resultArea.innerHTML = '<div class="alert alert-danger" role="alert">Error: Misformed armored text. The file should contain PGP message delimiters.</div>';
@@ -75,7 +75,7 @@
 
                 // Decrypt the private key with the passphrase
                 try {
-                	
+
                     await privateKeyObj.decrypt(passphrase);
                 } catch (error) {
                     resultArea.innerHTML = '<div class="alert alert-danger" role="alert">Error decrypting the private key: ' + error.message + '</div>';
@@ -97,7 +97,7 @@
             reader.readAsText(file);
         }
 
-        
+
         function toggleDownloadButton() {
             var resultArea = document.getElementById('resultArea');
             var downloadButton = document.getElementById('downloadButton');
@@ -109,7 +109,7 @@
                 downloadButton.style.display = 'none';
             }
         }
-        
+
         function downloadResult() {
             var resultArea = document.getElementById('resultArea');
             var resultData = resultArea.innerText;
@@ -127,9 +127,9 @@
             link.download = originalFileName;
             link.click();
         }
-        
+
     </script>
-        
+
 </head>
 <%@ include file="body-script.jsp"%>
     <div class="container mt-5">
@@ -248,12 +248,12 @@ wHmN4SLiX+1uWCu8L9PY8Q1/zNhgeVPIddDygZ9zQo6xueiwEI4PdoIZ
         </form>
 
         <div class="mt-4" id="resultArea"></div>
-        
+
         <button type="button" class="btn btn-success mt-3" id="downloadButton" style="display: none;" onclick="downloadResult()">Download File</button>
     </div>
-    
+
      <!-- Add download button only when file is present -->
-    
+
 
     <!-- Include openpgp.js -->
 
@@ -266,12 +266,12 @@ wHmN4SLiX+1uWCu8L9PY8Q1/zNhgeVPIddDygZ9zQo6xueiwEI4PdoIZ
  <div class="card my-4">
      <h5 class="card-header">Other PGP Tools</h5>
      <ul>
-	     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
-	     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
-	     <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
-	     <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
-	     <li><a href="pgp-upload.jsp">PGP Encrypt files</a></li>
-	     <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
+         <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
+         <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
+         <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier  </a></li>
+         <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
+         <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+         <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
      </ul>
  </div>
 
