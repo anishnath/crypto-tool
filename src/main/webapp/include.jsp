@@ -19,6 +19,7 @@
         <li><a href="MessageDigest.jsp"><font size="2.5px">Generate Message Digest</font></a></li>
         <li><a href="hmacgen.jsp"><font size="2.5px">Generate HMAC</font></a></li>
         <li><a href="CipherFunctions.jsp"><font size="2.5px">Encryption/Decryption</font> </a></li>
+        <li><a href="file-encrypt.jsp"><font size="2.5px">File Encryption/Decryption</font> </a></li>
         <li><a href="rsafunctions.jsp"><font size="2.5px">RSA Encryption/Decryption</font> </a></li>
         <li><a href="ntrufunctions.jsp"><font size="2.5px">Lattice Cryptography Encryption</font> </a></li>
         <li><a href="dsafunctions.jsp"><font size="2.5px">DSA Keygen,Sign File,Verify Sig</font> </a></li>

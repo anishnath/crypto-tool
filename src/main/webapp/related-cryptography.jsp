@@ -39,6 +39,7 @@
                     <li><a href="mdfile.jsp">Generate Message Digest(File)</a></li>
                     <li><a href="hmacgen.jsp">Generate HMAC</a></li>
                     <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
+                    <li><a href="file-encrypt.jsp">Encryption/Decryption (File)</a></li>
                     <li><a href="fernet.jsp">Fernet Encryption/Decryption </a></li>
                     <li><a href="rsafunctions.jsp">RSA Encryption/Decryption </a></li>
                     <li><a href="rsasignverifyfunctions.jsp">RSA Signature/Verification </a></li>

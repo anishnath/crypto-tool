@@ -667,5 +667,8 @@
   </url>
   <url>
     <loc>https://8gwifi.org/pgp-file-decrypt.jsp</loc>
-  </url> 
+  </url>
+    <url>
+    <loc>https://8gwifi.org/file-encrypt.jsp</loc>
+  </url>
 </urlset>
