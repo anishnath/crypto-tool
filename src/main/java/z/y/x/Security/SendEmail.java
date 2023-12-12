@@ -195,9 +195,9 @@ public class SendEmail {
 	    	    System.getProperty("line.separator"),
 	    	    "<h1>"+subject+"</h1>",
 	    	    "<code>" + body + "</code>",
-	    	    "<p>This email was sent by 8gwifi.org using the ",
+	    	    "<hr><p>This email was sent by 8gwifi.org using the ",
 	    	    " <a href='https://8gwifi.org/"+url+"'>PGPEncryption</a>.",
-	    	    "<p>For Support/Donation Please buy my 9 books at <a href='https://leanpub.com/b/9book'>$9 from Leanpub</a> this will help me pay the Infra costs and bring more tools </p>",
+	    	    "<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
 				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
 	    	    );
 
@@ -226,9 +226,9 @@ public class SendEmail {
 	    	    System.getProperty("line.separator"),
 	    	    "<h1>"+subject+"</h1>",
 	    	    "<code>" + body + "</code>",
-	    	    "<p>This email was sent by 8gwifi.org using the ",
+	    	    "<hr><p>This email was sent by 8gwifi.org using the ",
 	    	    " <a href='https://8gwifi.org/"+url+"'>"+url+"</a></p>",
-	    	    "<p>For Support/Donation Please buy my 9 books at <a href='https://leanpub.com/b/9book'>$9 from Leanpub</a> this will help me pay the Infra costs and bring more tools </p>",
+	    	    "<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
 				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
 	    	    );
 
@@ -242,9 +242,9 @@ public class SendEmail {
 				System.getProperty("line.separator"),
 				"<h1>"+subject+"</h1>",
 				body  ,
-				"<p>This email was sent by 8gwifi.org using the ",
+				"<hr><p>This email was sent by 8gwifi.org using the ",
 				" <a href='https://8gwifi.org/"+url+"'>"+url+"</a></p>",
-				"<p>For Support/Donation Please buy my 9 books at <a href='https://leanpub.com/b/9book'>$9 from Leanpub</a> this will help me pay the Infra costs and bring more tools </p>",
+				"<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
 				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
 		);
 
