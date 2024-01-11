@@ -29,29 +29,29 @@
     <div class="container">
         <h1 class="mt-4">Stock Profit Calculator</h1>
         <p>Calculate the profit or loss on your stock investment.</p>
-        
+
         <div class="form-group">
             <label for="purchasePrice">Purchase Price (comma-separated values):</label>
             <input type="text" class="form-control" id="purchasePrice" value="100,110,120" placeholder="Enter purchase prices">
         </div>
         <div class="form-group">
             <label for="salePrice">Sale Price (comma-separated values):</label>
-            <input type="text" class="form-control" id="salePrice" value="120,130,140" placeholder="Enter sale prices">
+            <input type="text" class="form-control" id="salePrice" value="90,130,110" placeholder="Enter sale prices">
         </div>
         <div class="form-group">
             <label for="shares">Number of Shares (comma-separated values):</label>
-            <input type="text" class="form-control" id="shares" value="10,15,20" placeholder="Enter shares">
+            <input type="text" class="form-control" id="shares" value="10,15,10" placeholder="Enter shares">
         </div>
         <div class="form-group">
             <button class="btn btn-primary" id="calculateButton">Calculate</button>
         </div>
-        
+
         <div class="mt-4">
             <h2>Results</h2>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Scenario</th>
+                        <th>Stocks</th>
                         <th>Shares</th>
                         <th>Purchase Price</th>
                         <th>Total Invested</th>
@@ -64,7 +64,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="mt-4">
             <h2>Total Profit/Loss</h2>
             <p id="totalProfitLoss">$0.00</p>
@@ -95,6 +95,7 @@
     const profitData = [];
     const labels = [];
     let totalProfitLoss = 0; // Initialize total profit/loss
+    let totalInvestment = 0; // Initialize total investment
 
     for (let i = 0; i < purchasePrices.length; i++) {
         const purchasePrice = purchasePrices[i];
@@ -108,15 +109,18 @@
 
         const profit = (salePrice - purchasePrice) * share;
         const scenario = `Scenario ${i + 1}`;
-        
+
         const profitColor = profit < 0 ? 'red' : 'green';
+
+        const profitPercentage = ((salePrice - purchasePrice) / purchasePrice) * 100; // Calculate percentage gain or loss
+        const profitPercentageColor = profitPercentage < 0 ? 'red' : 'green';
 
         // Add row to the table
         const row = document.createElement('tr');
-        
+
         //row.innerHTML = "<td>stock-"+i+"</td><td>"+share+"</td><td>"+purchasePrice.toFixed(2)+"</td><td>"+total_price.toFixed(2)+"</td><td>"+salePrice.toFixed(2)+"</td><td>"+profit.toFixed(2)+"</td>";
-        
-        row.innerHTML = "<td>stock-" + i + "</td><td>" + share + "</td><td>" + purchasePrice.toFixed(2) + "</td><td>" + total_price.toFixed(2) + "</td><td>" + salePrice.toFixed(2) + "</td><td style='color:" + profitColor + "'>" + profit.toFixed(2) + "</td>";
+
+        row.innerHTML = "<td>stock-" + i + "</td><td>" + share + "</td><td>" + purchasePrice.toFixed(2) + "</td><td>" + total_price.toFixed(2) + "</td><td>" + salePrice.toFixed(2) + "</td><td style='color:" + profitColor + ";'>" + profit.toFixed(2) + " (" + profitPercentage.toFixed(2) + "%)</td>";
 
         resultsTable.appendChild(row);
 
@@ -126,12 +130,19 @@
 
         // Update total profit/loss
         totalProfitLoss += profit;
+        totalInvestment += total_price;
     }
+
+    // Calculate overall percentage gain or loss
+    const totalProfitPercentage = ((totalProfitLoss / totalInvestment) * 100) || 0;
 
     // Update the total profit/loss element
     const totalProfitLossElement = document.getElementById('totalProfitLoss');
-    totalProfitLossElement.textContent = totalProfitLoss.toFixed(2);
-    
+    //totalProfitLossElement.textContent = totalProfitLoss.toFixed(2);
+    totalProfitLossElement.textContent = totalProfitLoss.toFixed(2) + " (" + totalProfitPercentage.toFixed(2) + "%)";
+
+
+
  // Set color based on totalProfitLoss value
     const totalProfitLossColor = totalProfitLoss < 0 ? 'red' : 'green';
     totalProfitLossElement.style.fontWeight = 'bold';
@@ -194,7 +205,7 @@
         // Initial chart rendering
         calculateProfit();
     </script>
-    
+
 
                 <div>
                 <h5 class="card-header">Try Other calculator</h5>
@@ -204,7 +215,7 @@
                     <li><a href="cinterest.jsp">Compound Interest Calculator (Simple)</a></li>
                     <li><a href="cinterest.jsp">Stock Profit Calculator</a></li>
                   </ul>
-                </div>    
+                </div>
 
 <p>Whether you are an experienced trader or new to the world of stock markets, our Stock Profit Calculator is a valuable tool to help you calculate your profits for each trade.</p>
 
