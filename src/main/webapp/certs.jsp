@@ -14,7 +14,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2017-12-25",
-  "applicationCategory" : [ "extract ssl certificate from url", "openssl extract ssl certificate", "get ssl certificate from website"]
+  "applicationCategory" : [ "extract ssl certificate from url", "openssl extract ssl certificate", "get ssl certificate from website"],
   "downloadUrl" : "https://8gwifi.org/certs.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
   "requirements" : "Extract ssl certificate from given url",
@@ -33,23 +33,23 @@
             {
  			$('#form').delay(200).submit()
             });
-                    
+
             $('#form').submit(function (event)
                     {
-                    //	
+                    //
                   $('#output').html('<img src="images/712.GIF"> loading...');
          			 event.preventDefault();
                         $.ajax({
                             type: "POST",
                             url: "GenCAFunctionality", //this is my servlet
-                
+
                            data: $("#form").serialize(),
-                            success: function(msg){    
+                            success: function(msg){
                             		    $('#output').empty();
                                      $('#output').append(msg);
-                                     
+
                             }
-                        }); 
+                        });
                     });
         });
 
@@ -86,7 +86,7 @@
   </div>
 <input type="button"  class="btn btn-primary" id="executeMethod" name="ping" value="Submit" size="200"> <br>
 </form>
-	
+
 <div id="output"></div>
 <hr>
 <%@ include file="footer_adsense.jsp"%>

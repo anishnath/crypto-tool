@@ -29,7 +29,7 @@
     "name" : "Anish Nath"
   },
   "datePublished" : "2021-06-04",
-  "applicationCategory" : [ "dump pgp packet", "pgpdump online", "pgp dump public keys", "pgpdump private keys"]
+  "applicationCategory" : [ "dump pgp packet", "pgpdump online", "pgp dump public keys", "pgpdump private keys"],
   "downloadUrl" : "https://8gwifi.org/pgpdump.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
   "requirements" : "pgpdump, pgpdump of private keys, parse pgp packet, parse pgp private keys, parse pgp public keys,pgpdump online, find keyid of pgp message",
@@ -41,7 +41,7 @@
 		$(document).ready(function() {
 
 			$('#encryptmsg').show();
-			
+
 			$('#pgpdump').click(function (event)
 			{
 				//

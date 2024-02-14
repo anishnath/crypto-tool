@@ -25,7 +25,7 @@
   "applicationCategory" : [ "aws access key to smtp" , "smptp password from access key", "acesss key to smtp password"],
   "downloadUrl" : "https://8gwifi.org/dc.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,AWS",
-  "requirements" : "smtp password from aws access keys" ",
+  "requirements" : "smtp password from aws access keys",
   "softwareVersion" : "v1.0"
 }
 </script>
@@ -132,7 +132,7 @@
 <h2 class="mt-4">Kubernetes Topic </h2>
 <div>
     <ul>
-     	
+
         <li>
             <a href="docs/ansible-kube-install.jsp">kubernetes install on using ansible</a>
         </li>
