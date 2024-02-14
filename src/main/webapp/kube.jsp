@@ -26,7 +26,7 @@
   "applicationCategory" : [ "kubernetes config genarator", "kubernetes pod yaml generate", "kubenrtes pod json generate"],
   "downloadUrl" : "https://8gwifi.org/kube.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu",
-  "requirements" : "kubernetes deployment, pods config generator online" ",
+  "requirements" : "kubernetes deployment, pods config generator online",
   "softwareVersion" : "v1.0"
 }
 </script>
