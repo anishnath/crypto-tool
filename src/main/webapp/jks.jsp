@@ -24,7 +24,7 @@
   "applicationCategory" : [ "online keytool","keystore viewer online","export keystore certificate in pem","keystore online","truststore online"],
   "downloadUrl" : "https://8gwifi.org/jks.jsp",
   "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-  "requirements" : "java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore,keytool online,online keytool,keystore online,jks file viewer online" , "Generate a Java keystore and key pair" , "Generate a certificate signing request (CSR) for an existing Java keystore","Import a root or intermediate CA certificate to an existing Java keystore",
+  "requirements" : "java keystore, java keytool, keytool keystore, common keytool commands, java create jks, online keystore,openssl, openssl commands, common openssl commands, export pem from keytstore,export certificate in pem format trusstore,keytool online,online keytool,keystore online,jks file viewer online , Generate a Java keystore and key pair , Generate a certificate signing request (CSR) for an existing Java keystore,Import a root or intermediate CA certificate to an existing Java keystore",
   "softwareVersion" : "v1.0"
 }
 </script>
@@ -80,10 +80,10 @@
     <td class="tg-031e" colspan="3"><input
 			type="submit" class="btn btn-primary" value="Upload Keystore to view Aliases"> <input
 			type="hidden" name="md5" value="<%=session.getAttribute("md5")%>">
-			
+
 			<input
 			type="hidden" name="fileName" value="<%=session.getAttribute("fileName")%>">
-			
+
 			</td>
   </tr>
   <%
@@ -105,14 +105,14 @@
   <%
   }
   %>
-  
+
   <%
   String obj1 = (String)session.getAttribute("Error");
-  
+
   if(obj1!=null && !obj1
 		  .isEmpty())
   {
-  
+
   %>
   <tr>
    <td colspan="3"><font color="red"><%=obj1 %></font> </td>
@@ -120,7 +120,7 @@
   <% } %>
 </table>
 
-		
+
 		<%
 			Object obj = session.getAttribute("displayAliases");
 			//System.out.println(obj);
@@ -142,10 +142,10 @@
 				List<String> aliases = (List<String>) pairs.getValue();
 						// System.out.println(pairs.getKey() + " = " + pairs.getValue());
 						it.remove(); // avoids a ConcurrentModificationException
-						 
+
 						 String aliasName = (String) session.getAttribute("aliasName");
 						for (String element : aliases) {
-							String checked = "";  
+							String checked = "";
 							if(aliasName!=null)
 							{
 								if(aliasName.equals(element))
@@ -153,13 +153,13 @@
 									checked="checked";
 								}
 							}
-							
+
 			%>
 		<label class="radio-inline"><input type="radio" id="<%=element%>" <%=checked %> name="aliasname"
 				value="<%=element%>"><%=element%>  </label>
 
 			<%
-							
+
 				}
 			%>
 
