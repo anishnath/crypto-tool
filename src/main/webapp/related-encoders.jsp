@@ -4,6 +4,7 @@
               <div class="row">
                 <div>
                 <ul>
+                    <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
                 	<li><a href="short.jsp">URL Shortner</a></li>
                     <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                     <li><a href="hexdump.jsp">Online Hexdump Generate</a></li>
@@ -39,4 +40,4 @@
                 </div>
               </div>
             </div>
-          </div>          
+          </div>

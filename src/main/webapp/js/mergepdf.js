@@ -146,11 +146,15 @@ async function mergePDFs() {
     document.getElementById('mergeBtn').style.display = 'none';
 
     // Dynamically create and show a Download button
+    // Create the Download button
     const downloadBtn = document.createElement('button');
+    downloadBtn.id = 'downloadPdfBtn'; // Assign an ID to the button for potential removal
     downloadBtn.className = 'btn btn-primary mt-3';
     downloadBtn.textContent = 'Download Merged PDF';
     downloadBtn.onclick = () => downloadMergedPDF(mergedPdfBytes, "merged.pdf");
-    document.querySelector('.container').appendChild(downloadBtn);
+
+    // Find the dedicated div and append the button to it
+    document.getElementById('downloadButtonContainer').appendChild(downloadBtn);
     //downloadMergedPDF(mergedPdfBytes, "merged.pdf");
 }
 
@@ -159,9 +163,9 @@ function downloadMergedPDF(pdfBytes, fileName) {
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
-    document.body.appendChild(link); // Append link to body to make it work in Firefox
+    // document.body.appendChild(link); // Append link to body to make it work in Firefox
     link.click();
-    document.body.removeChild(link); // Clean up
+    // document.body.removeChild(link); // Clean up
 }
 
 
