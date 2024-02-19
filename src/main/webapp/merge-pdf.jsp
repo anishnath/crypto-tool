@@ -14,7 +14,6 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="author" content="8gwifi.org"/>
     <meta name="keywords" content="Merge PDF, split PDF, combine PDF, extract PDF, compress PDF, convert PDF, Word to PDF, Excel to PDF, Powerpoint to PDF, PDF to JPG, JPG to PDF"/>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
 
@@ -55,11 +54,23 @@
     <!-- Initially not included Download button -->
 <hr>
 <div class="sharethis-inline-share-buttons"></div>
+
+<h2 class="mt-4">Try Other PDF Tool</h2>
+<div class="row">
+    <div>
+        <ul>
+            <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
+            <li><a href="watermark-pdf.jsp">Add watermark into a PDF</a></li>
+        </ul>
+    </div>
+</div>
+
 <%@ include file="thanks.jsp"%>
 
 <hr>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
 <script src="../js/mergepdf.js"></script>
+
 
 <hr>
 <%@ include file="footer_adsense.jsp"%>
