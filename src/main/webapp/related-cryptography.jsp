@@ -29,11 +29,12 @@
     </div>
 </div>
  <div class="card my-4">
-            <h5 class="card-header">Cryptopgraphy Services</h5>
+            <h5 class="card-header">Cryptography Services</h5>
             <div class="card-body">
               <div class="row">
                 <div>
                 <ul>
+                    <li><a href="share-file.jsp">Transfer files securely</a></li>
                 	<li><a href="short.jsp">URL Shortner</a></li>
                     <li><a href="MessageDigest.jsp">Generate Message Digest(Text)</a></li>
                     <li><a href="mdfile.jsp">Generate Message Digest(File)</a></li>

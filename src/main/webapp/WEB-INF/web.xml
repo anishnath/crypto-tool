@@ -353,7 +353,7 @@
 		<servlet-name>WalletFunctionality</servlet-name>
 		<url-pattern>/WalletFunctionality</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>URLShortnerFunctionality</servlet-name>
 		<servlet-class>z.y.x.urlshortner.URLShortnerFunctionality</servlet-class>
@@ -362,7 +362,7 @@
 		<servlet-name>URLShortnerFunctionality</servlet-name>
 		<url-pattern>/s/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>S3Functionality</servlet-name>
 		<servlet-class>z.y.x.aws.s3.S3Functionality</servlet-class>
@@ -371,7 +371,7 @@
 		<servlet-name>S3Functionality</servlet-name>
 		<url-pattern>/presign</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>S3DownloadFunctionality</servlet-name>
 		<servlet-class>z.y.x.aws.s3.S3DownloadFunctionality</servlet-class>
@@ -379,6 +379,15 @@
 	<servlet-mapping>
 		<servlet-name>S3DownloadFunctionality</servlet-name>
 		<url-pattern>/d/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>S3EncryptedDownloadFunctionality</servlet-name>
+		<servlet-class>z.y.x.aws.s3.S3EncryptedDownloadFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>S3EncryptedDownloadFunctionality</servlet-name>
+		<url-pattern>/e/*</url-pattern>
 	</servlet-mapping>
 
 	<security-constraint>
