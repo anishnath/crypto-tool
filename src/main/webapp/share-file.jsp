@@ -55,8 +55,10 @@
         <div id="fileTableContainer">
             <!-- Table will be added dynamically here -->
         </div>
-
+        <div class="form-group">
         <button id="sendEncryptedFileButton" onclick="javascript:encryptfile();" class="btn btn-primary" disabled>Send Encrypted File</button>
+        <button id="btnRefresh" class="btn btn-secondary" onClick="javascript:location.reload();">Refresh Page</button>
+        </div>
     </div>
 
 <%@ include file="thanks.jsp"%>

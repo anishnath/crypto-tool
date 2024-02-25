@@ -86,10 +86,12 @@ public class S3Functionality2 extends HttpServlet {
 		S3UrlShortner s3UrlShortner = new S3UrlShortner();
 		String code = s3UrlShortner.getShortCode(fileName, email);
 
+
 		SendEmail sendEmail = new SendEmail();
 
 //    	String path = request.getContextPath() + "d/" + code;
-		String path = request.getRequestURL().toString().replace("presign", "/e/" + code);
+		String path = request.getRequestURL().toString().replace("presign2", "/e/" + code);
+
 
 		String msg = "" + "        <table>" + "            <thead>" + "                <tr>"
 				+ "                    <th scope=\"col\">File Name</th>"
