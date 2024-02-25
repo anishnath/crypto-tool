@@ -88,16 +88,17 @@ y7fbaOEccnpRpnXpgKqgX/pI7YP0Q6QIE/3TpH1kwg==
 -----END PGP PUBLIC KEY BLOCK-----</textarea>
 			</div>
 
+			<div>
+				<button type="button" class="btn btn-primary" onclick="uploadFile()">Transfer</button>
+			</div>
+
 			<!-- Progress Bar -->
 			<div class="progress mt-3">
 				<div id="progressBar" class="progress-bar" role="progressbar"
 					style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
 					aria-valuemax="100"></div>
 			</div>
-			<div>
-			</div>
 
-			<button type="button" class="btn btn-primary" onclick="uploadFile()">Transfer</button>
 		</form>
 <hr>
 

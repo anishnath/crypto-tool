@@ -201,7 +201,7 @@
 
     async function getPresignedUrl(fileName, file) {
         var contentType = file.type;
-        var servletUrl = 'presign?fileName=' + encodeURIComponent(fileName) +
+        var servletUrl = 'presign2?fileName=' + encodeURIComponent(fileName) +
             '&file_size=' + encodeURIComponent(file.size) +
             '&contentType=' + encodeURIComponent(contentType) +
             '&type=upload';
@@ -266,7 +266,7 @@
 
     function sendEmail(email, fileName) {
         var emailXhr = new XMLHttpRequest();
-        var emailEndpoint = 'presign';  // Replace with your actual email sending endpoint
+        var emailEndpoint = 'presign2';  // Replace with your actual email sending endpoint
 
         emailXhr.open('POST', emailEndpoint, true);
         emailXhr.setRequestHeader('Content-Type', 'application/json');

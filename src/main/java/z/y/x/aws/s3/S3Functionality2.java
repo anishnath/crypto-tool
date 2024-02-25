@@ -1,21 +1,19 @@
 package z.y.x.aws.s3;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import z.y.x.Security.SendEmail;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import z.y.x.Security.SendEmail;
-
-public class S3Functionality extends HttpServlet {
+public class S3Functionality2 extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 	private static final String BUCKET_NAME = "f81821f2";
 
@@ -81,6 +79,7 @@ public class S3Functionality extends HttpServlet {
 		// Extract email and fileName from JSON
 		String email = jsonNode.get("email").asText();
 		String fileName = jsonNode.get("fileName").asText();
+		String cameFrom = jsonNode.get("cameFrom").asText();
 
 		// Print or process the extracted data
 
@@ -99,13 +98,24 @@ public class S3Functionality extends HttpServlet {
 				+ fileName + "</td>" + "                    <td><a href=" + path + " target=\"_blank\">" + path
 				+ "</a></td>" + "                </tr>" + "            </tbody>" + "        </table><p> All files will be deleted after 24 hours</p>";
 
+		String headerMessage = "Your Encrypted file "+fileName+ "";
+		String pageName = "share-file.jsp";
+
 		if (sendEmail.isValidEmail(email)) {
 
+			if (cameFrom != null && cameFrom.trim().length() > 0) {
+
+				headerMessage = "Your Encrypted file "+fileName+ "";
+				pageName = "share-file.jsp";
+			}
+
+			String finalHeaderMessage = headerMessage;
+			String finalPageName = pageName;
 			new Thread(new Runnable() {
 				public void run() {
 					SendEmail sendEmail = new SendEmail();
 					try {
-						sendEmail.sendEmail("Your PGP file "+fileName+ "", msg, email, "pgp-download.jsp");
+						sendEmail.sendEmail(finalHeaderMessage, msg, email, finalPageName);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

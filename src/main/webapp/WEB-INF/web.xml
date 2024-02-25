@@ -390,6 +390,15 @@
 		<url-pattern>/e/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>S3Functionality2</servlet-name>
+		<servlet-class>z.y.x.aws.s3.S3Functionality2</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>S3Functionality2</servlet-name>
+		<url-pattern>/presign2</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>

@@ -54,9 +54,9 @@
             <p class="text-success">File <strong><%=file_name %></strong>
             <div class="button-container">
                 <button onclick="decryptFile('<%= presignedUrl %>', '<%= file_name %>' )">Decrypt and Download</button>
+                <button><a id="downloadLink" href="<%= presignedUrl %>"  download>Download Encrypted Version</a></button>
                 <div id="loadingSpinner"></div>
             </div>
-<%--                <button onclick="decryptFile('<%= presignedUrl %>', '<%= file_name %>' )">Decrypt and Download</button>--%>
             </p>
 
             <%
