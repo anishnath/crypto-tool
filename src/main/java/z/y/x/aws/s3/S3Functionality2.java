@@ -89,7 +89,7 @@ public class S3Functionality2 extends HttpServlet {
 		SendEmail sendEmail = new SendEmail();
 
 //    	String path = request.getContextPath() + "d/" + code;
-		String path = request.getRequestURL().toString().replace("presign", "/d/" + code);
+		String path = request.getRequestURL().toString().replace("presign", "/e/" + code);
 
 		String msg = "" + "        <table>" + "            <thead>" + "                <tr>"
 				+ "                    <th scope=\"col\">File Name</th>"
