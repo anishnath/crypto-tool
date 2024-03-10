@@ -63,7 +63,7 @@
                     <div id="decryptionFields" style="display: none;">
                         <div>
                         <label for="pgpPassword">PGP Password:</label>
-                        <input type="password" id="pgpPassword" value="anish" placeholder="Enter PGP Password">
+                        <input type="password" id="pgpPassword" value="" placeholder="Enter PGP Password">
                         </div>
                         <div>
                         <label for="pgpKeyFile">PGP Key File (*.asc extension):</label>
