@@ -69,6 +69,16 @@
         </div>
     </div>
 </div>
+<h2 class="mt-4">Other File sharing Service</h2>
+<div class="row">
+    <div>
+        <ul>
+            <li><a href="pgp-upload.jsp">Send Encrypted file using PGP</a></li>
+            <li><a href="pgp-file-decrypt.jsp">PGP File decryption</a></li>
+            <li><a href="share-file.jsp">Send Encrypted files</a></li>
+        </ul>
+    </div>
+</div>
 
 <script>
     function showLoadingSpinner() {

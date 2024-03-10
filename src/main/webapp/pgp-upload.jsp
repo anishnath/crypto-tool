@@ -76,15 +76,16 @@
 				<label for="pgpKeys">PGP Public Keys:</label>
 				<textarea class="form-control" id="pgpKeys" name="pgpKeys" rows="7"
 					required>-----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: OpenPGP.js v.1.20130420
-Comment: http://openpgpjs.org
+Version: BCPG v1.58
 
-xk0EZV3hRAECAI43BulffttgzC/AtpEGn5EPEba69gMnt5GPKA5HD5gNpBeM
-cA8L0CE5+W9nMfPJP8hUrMeA5XcEviM7flokQ/cAEQEAAc0kVGVzdCBNY1Rl
-c3Rpbmd0b24gPHRlc3RAZXhhbXBsZS5jb20+wlwEEAEIABAFAmVd4UUJEFVc
-CPa/aFjwAACpYwH6A75+CuSushJAgScjMl3VjxJ5dk5kOA0CQhb29JGuQ88R
-y7fbaOEccnpRpnXpgKqgX/pI7YP0Q6QIE/3TpH1kwg==
-=cdvp
+mI0EZe2QiQEEAKiZnLZkugOZhU7Lw5K7ZezGVeGAV4rO/RdxE0eruHOm6g87V2pQ
++1zA6CPojk3yyaHabjUNvtYWqD9g2Vk595v2iG/OxZ5/6qzpXUDIeS2z/etT3k8i
+dzZH01/K21JW3NIpSrVBB3m7osfAT/VTi7PISf05ZhgQ1wHAnCIuAEIFABEBAAG0
+BWFuaXNoiJwEEAECAAYFAmXtkIkACgkQlusdronXgTRWSgP+Ju4B0XJUR3yVUMsj
+utiHUBgzAcfdHBjcmQgBxGjpWwPCx8PzIem11OrDfzDmDynetTzyOLgZOmpEsgdY
+mnvy6YZuJS2ukOPgmYH+AlhIKR3DyYtNXK7W/Jw1L7da4vq+4BzyRrMOEGeCqdlF
+9zztSwQCfIL1UvpHoPMPP+5pR8c=
+=ku/w
 -----END PGP PUBLIC KEY BLOCK-----</textarea>
 			</div>
 
@@ -133,5 +134,3 @@ y7fbaOEccnpRpnXpgKqgX/pI7YP0Q6QIE/3TpH1kwg==
 </div class="row">
 
 <%@ include file="body-close.jsp"%>
-
-
