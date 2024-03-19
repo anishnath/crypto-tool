@@ -56,6 +56,12 @@
             data: {shortcode: '<%= shortcode %>'},
             success: function (response) {
                 $("#decryptedText").val('Loading....');
+                try {
+                    var jsonResponse = JSON.parse(response);
+                } catch (e) {
+                    $("#decryptedText").val('The given code is expired or invalid');
+                    throw new Error('Invalid response');
+                }
                 var jsonResponse = JSON.parse(response);
                 var presignedUrl = jsonResponse.presignedUrl;
                 // Check if the filename contains 'ENC'
@@ -74,13 +80,12 @@
                         fetchPresignedUrlContent(presignedUrl, password);
                     });// fetchPresignedUrlContent( presignedUrl, password);
                 } else {
-
+                    fetchPresignedUrlContentNonEncrypted(presignedUrl)
                 }
             },
             error: function (error) {
                 console.error("Error:", error.responseText);
-                // Handle the error, display a message, or redirect to an error page
-                $("#presignedUrlResult").html("<p>Error fetching presigned URL.</p>");
+                $("#decryptedText").val('The given code is expired or invalid');
             }
         });
 
