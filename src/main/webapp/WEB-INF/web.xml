@@ -399,6 +399,19 @@
 		<url-pattern>/presign2</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>PasteBinFunctionality</servlet-name>
+		<servlet-class>z.y.x.aws.s3.PasteBinFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PasteBinFunctionality</servlet-name>
+		<url-pattern>/pastebin</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PasteBinFunctionality</servlet-name>
+		<url-pattern>/p/*</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>

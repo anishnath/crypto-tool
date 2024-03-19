@@ -1,5 +1,15 @@
- <div class="card my-4">
-     <h5 class="card-header">PGP  </h5>
+<div class="card my-4">
+    <h5 class="card-header">Sharing Services</h5>
+    <ul>
+        <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+        <li><a href="securebin.jsp">Share Secret Content</a></li>
+        <li><a href="share-file.jsp">Transfer files securely</a></li>
+        <li><a href="short.jsp">URL Shortner</a></li>
+    </ul>
+</div>
+
+<div class="card my-4">
+     <h5 class="card-header">PGP</h5>
      <ul>
 	     <li><a href="pgpencdec.jsp">PGP Encryption/Decryption  </a></li>
 	     <li><a href="pgpkeyfunction.jsp">PGP Key Generation  </a></li>
