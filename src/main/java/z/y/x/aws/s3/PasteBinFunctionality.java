@@ -61,6 +61,8 @@ public class PasteBinFunctionality extends HttpServlet {
         String isEncrypted = request.getParameter("isEncrypted");
         String email = request.getParameter("email");
         String sendEmail = request.getParameter("sendEmail");
+        String password = request.getParameter("password");
+        String from = request.getParameter("from");
 
 
         if (email == null || email.length() == 0) {
@@ -98,17 +100,19 @@ public class PasteBinFunctionality extends HttpServlet {
 
             S3UrlShortner s3UrlShortner = new S3UrlShortner();
             String shortcode = request.getParameter("shortcode");
+            String headerMessage = "Your Encrypted Content Msg Code "+shortcode+ "";
 
             String fileName = s3UrlShortner.getfileName(shortcode);
             if (fileName != null) {
 
-                System.out.println("fileName " + fileName);
+
 
                 S3PresignedUrlGenerator presignedUrlGenerator = new S3PresignedUrlGenerator();
                 boolean isFileExist = presignedUrlGenerator.isObjectExist(BUCKET_NAME, fileName);
                 if (isFileExist) {
                     String path = request.getRequestURL().toString().replace("pastebin", "securebind.jsp?q=" + shortcode);;
                     System.out.println("path " + path);
+                    String pageName = "securebin.jsp";
 
                     String msg = "<table>" +
                             "<thead>" +
@@ -125,9 +129,45 @@ public class PasteBinFunctionality extends HttpServlet {
                             "<p>This file is password protected if you don't have the password it's impossible to decrypt it. The server don't store passwords for security reason</p>" +
                             "<p>This content will get deleted after 12 hour. </p>";
 
+                    if (from!=null && from.length() > 0 ){
 
-                    String headerMessage = "Your Encrypted Content Msg Code "+shortcode+ "";
-                    String pageName = "securebin.jsp";
+                        pageName = "pastebin.jsp";
+
+                        if (password!=null && password.length() > 0) {
+                            msg = "<table>" +
+                                    "<thead>" +
+                                    "<tr>" +
+                                    "<th scope=\"col\">Secret Content View URL</th>" +
+                                    "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>" +
+                                    "<tr>" +
+                                    "<td><a href=\"" + path + "\" target=\"_blank\">" + path + "</a></td>" +
+                                    "<td> & password : <code>" + password + "</code></td>" +
+                                    "</tr>" +
+                                    "</tbody>" +
+                                    "</table>" +
+                                    "<p>This file is password protected if you don't have the password it's impossible to decrypt it. The server don't store passwords for security reason</p>" +
+                                    "<p>This content will get deleted after 12 hour. </p>";
+                        } else {
+                            headerMessage = "Your Content Msg Code "+shortcode+ "";
+                            msg = "<table>" +
+                                    "<thead>" +
+                                    "<tr>" +
+                                    "<th scope=\"col\">Secret Content View URL</th>" +
+                                    "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>" +
+                                    "<tr>" +
+                                    "<td><a href=\"" + path + "\" target=\"_blank\">" + path + "</a></td>" +
+                                    "</tr>" +
+                                    "</tbody>" +
+                                    "</table>" +
+                                    "<p>This content will get deleted after 12 hour. </p>";
+                        }
+
+                    }
+
 
                     SendEmail sendEmail1 = new SendEmail();
 
@@ -136,11 +176,12 @@ public class PasteBinFunctionality extends HttpServlet {
                         String finalHeaderMessage = headerMessage;
                         String finalPageName = pageName;
                         String finalEmail = email;
+                        String finalMsg = msg;
                         new Thread(new Runnable() {
                             public void run() {
                                 SendEmail sendEmail = new SendEmail();
                                 try {
-                                    sendEmail.sendEmail(finalHeaderMessage, msg, finalEmail, finalPageName);
+                                    sendEmail.sendEmail(finalHeaderMessage, finalMsg, finalEmail, finalPageName);
                                 } catch (Exception e) {
                                     // TODO Auto-generated catch block
                                     e.printStackTrace();

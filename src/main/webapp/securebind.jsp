@@ -106,7 +106,8 @@
                     // Convert ArrayBuffer to string
                     var text = new TextDecoder().decode(buffer);
                     $("#decryptedText").val('Loading..........');
-                    $("#decryptedText").val(text);
+                    console.log(text)
+                    $("#decryptedText").val(atob(text));
                     $("#decryptedText").prop("readonly", true);
                     // $("#decryptedText").attr("cols", decryptedText.length);
                     $("#decryptedText").attr("rows", Math.max(5, decryptedText.length / 50));
