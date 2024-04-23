@@ -35,7 +35,7 @@
         <div class="form-group">
             <label for="email">Email:</label>
             <textarea class="form-control"  id="email" rows="1" placeholder="Enter email"></textarea>
-            <small>Will Email the link to the recipient Note: password will not email as this is End-2-End Encryption Complete Zero trust</small>
+            <small>Will Email the link to the recipient</small>
         </div>
 
         <div class="form-group">
