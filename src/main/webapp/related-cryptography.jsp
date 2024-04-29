@@ -5,7 +5,7 @@
         <li><a href="securebin.jsp">Share Secret Content</a></li>
         <li><a href="pastebin.jsp">TextBin Share Content</a></li>
         <li><a href="share-file.jsp">Transfer files securely</a></li>
-        <li><a href="short.jsp">URL Shortner</a></li>
+<%--        <li><a href="short.jsp">URL Shortner</a></li>--%>
     </ul>
 </div>
 
