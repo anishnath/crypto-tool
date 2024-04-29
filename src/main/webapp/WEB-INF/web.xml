@@ -354,14 +354,14 @@
 		<url-pattern>/WalletFunctionality</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>URLShortnerFunctionality</servlet-name>
-		<servlet-class>z.y.x.urlshortner.URLShortnerFunctionality</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>URLShortnerFunctionality</servlet-name>
-		<url-pattern>/s/*</url-pattern>
-	</servlet-mapping>
+<!--	<servlet>-->
+<!--		<servlet-name>URLShortnerFunctionality</servlet-name>-->
+<!--		<servlet-class>z.y.x.urlshortner.URLShortnerFunctionality</servlet-class>-->
+<!--	</servlet>-->
+<!--	<servlet-mapping>-->
+<!--		<servlet-name>URLShortnerFunctionality</servlet-name>-->
+<!--		<url-pattern>/s/*</url-pattern>-->
+<!--	</servlet-mapping>-->
 
 	<servlet>
 		<servlet-name>S3Functionality</servlet-name>
