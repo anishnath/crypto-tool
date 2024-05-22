@@ -686,4 +686,7 @@
   <url>
     <loc>https://8gwifi.org/pastebin.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/websocket-client.jsp</loc>
+  </url>
 </urlset>
