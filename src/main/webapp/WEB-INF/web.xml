@@ -84,14 +84,14 @@
 	</servlet-mapping>
 
 
-<!--	<servlet>-->
-<!--		<servlet-name>StringFunctionality</servlet-name>-->
-<!--		<servlet-class>z.y.x.String.StringFunctionality</servlet-class>-->
-<!--	</servlet>-->
-<!--	<servlet-mapping>-->
-<!--		<servlet-name>StringFunctionality</servlet-name>-->
-<!--		<url-pattern>/StringFunctionality</url-pattern>-->
-<!--	</servlet-mapping>-->
+	<servlet>
+		<servlet-name>StringFunctionality</servlet-name>
+		<servlet-class>z.y.x.String.StringFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StringFunctionality</servlet-name>
+		<url-pattern>/StringFunctionality</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>JSONFunctionality</servlet-name>
