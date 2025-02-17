@@ -18,6 +18,7 @@
                     <li><a href="base64image.jsp">Base64 Image Converter(data:image/png)</a></li>
                     <li><a href="StringFunctions.jsp">Various String Functions</a></li>
                     <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
+                    <li><a href="csv-2-json.jsp">CSV-2-JSON</a></li>
                     <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
                     <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
                     <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
