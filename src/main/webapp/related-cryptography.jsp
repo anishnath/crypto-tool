@@ -47,7 +47,6 @@
                 <div>
                 <ul>
                     <li><a href="share-file.jsp">Transfer files securely</a></li>
-                	<li><a href="short.jsp">URL Shortner</a></li>
                     <li><a href="MessageDigest.jsp">Generate Message Digest(Text)</a></li>
                     <li><a href="mdfile.jsp">Generate Message Digest(File)</a></li>
                     <li><a href="hmacgen.jsp">Generate HMAC</a></li>
