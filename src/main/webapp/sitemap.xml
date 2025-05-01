@@ -695,4 +695,7 @@
   <url>
     <loc>https://8gwifi.org/csv-2-json.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/temp-email.jsp</loc>
+  </url>
 </urlset>
