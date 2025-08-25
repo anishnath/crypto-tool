@@ -25,6 +25,7 @@
                     <li><a href="dmarc.jsp">DMARC Record lookup</a></li>
                     <li><a href="subdomain.jsp">Subdomain Finder</a> </li>
                     <li><a href="portscan.jsp">Port Scanner</a></li>
+                    <li><a href="whois.jsp">Whois Lookup</a></li>
                   </ul>
                 </div>
               </div>

@@ -704,4 +704,7 @@
   <url>
       <loc>https://8gwifi.org/portscan.jsp</loc>
   </url>
+    <url>
+        <loc>https://8gwifi.org/whois.jsp</loc>
+    </url>
 </urlset>
