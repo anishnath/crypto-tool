@@ -11,6 +11,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="/crypto/rest/application.wadl">REST API</a>
             </li>
+              <li class="nav-item active">
+                  <a class="nav-link" target="_blank" href="https://procmail.xyz">Temp Email</a>
+              </li>
             <li class="nav-item active">
               <a class="nav-link"  href="https://www.linkedin.com/in/anishnath">Hire Me!</a>
             </li>

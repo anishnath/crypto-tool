@@ -421,6 +421,15 @@
         <url-pattern>/SubdomainFunctionality</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>PortScanFunctionality</servlet-name>
+        <servlet-class>z.y.x.portscan.PortScanFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PortScanFunctionality</servlet-name>
+        <url-pattern>/PortScanFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
