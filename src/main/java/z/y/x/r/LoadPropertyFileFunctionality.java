@@ -74,6 +74,13 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
 		  else{
 			  configProperty.put("blockchain", "http://localhost:1888/");
 		  }
+          if(prop.getProperty("api")!=null)
+          {
+                configProperty.put("api", prop.getProperty("api"));
+          }
+          else{
+                configProperty.put("api", "http://localhost:8080/");
+          }
 
 
 		  System.out.println("API PORT-- " + prop.getProperty("port"));
@@ -81,6 +88,7 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
 		  System.out.println("API ENDPOINT-- " + prop.getProperty("ep"));
 		  System.out.println("API BLOCKCHAIN-- " + prop.getProperty("blockchain"));
 		  System.out.println("API DB_URL-- " + prop.getProperty("sqlite"));
+          System.out.println("API DNS-- " + prop.getProperty("api"));
 
 
 	} catch (Exception e) {
