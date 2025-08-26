@@ -27,6 +27,7 @@
                     <li><a href="portscan.jsp">Port Scanner</a></li>
                     <li><a href="whois.jsp">Whois Lookup</a></li>
                     <li><a href="revdns.jsp">Reverse DNS Lookup</a></li>
+                    <li><a href="dnsresolver.jsp">DNS Resolver Tool</a></li>
                   </ul>
                 </div>
               </div>
