@@ -51,6 +51,7 @@
                     <li><a href="MessageDigest.jsp">Generate Message Digest(Text)</a></li>
                     <li><a href="mdfile.jsp">Generate Message Digest(File)</a></li>
                     <li><a href="hmacgen.jsp">Generate HMAC</a></li>
+                    <li><a href="sslscan.jsp">SSL scanner</a></li>
                     <li><a href="CipherFunctions.jsp">Encryption/Decryption </a></li>
                     <li><a href="file-encrypt.jsp">Encryption/Decryption (File)</a></li>
                     <li><a href="fernet.jsp">Fernet Encryption/Decryption </a></li>

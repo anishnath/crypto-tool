@@ -439,6 +439,15 @@
 		<url-pattern>/WhoisFunctionality</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+        <servlet-name>SSLScannerFunctionality</servlet-name>
+        <servlet-class>z.y.x.ssl.SSLScannerFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SSLScannerFunctionality</servlet-name>
+        <url-pattern>/SSLScannerFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
