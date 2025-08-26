@@ -710,4 +710,7 @@
     <url>
         <loc>https://8gwifi.org/sslscan.jsp</loc>
     </url>
+    <url>
+        <loc>https://8gwifi.org/revdns.jsp</loc>
+    </url>
 </urlset>

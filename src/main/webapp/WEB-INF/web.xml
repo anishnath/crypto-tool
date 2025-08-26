@@ -448,6 +448,15 @@
         <url-pattern>/SSLScannerFunctionality</url-pattern>
     </servlet-mapping>
 
+	<servlet>
+		<servlet-name>RevDnsFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.RevDnsFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RevDnsFunctionality</servlet-name>
+		<url-pattern>/RevDnsFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>

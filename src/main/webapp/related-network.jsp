@@ -26,6 +26,7 @@
                     <li><a href="subdomain.jsp">Subdomain Finder</a> </li>
                     <li><a href="portscan.jsp">Port Scanner</a></li>
                     <li><a href="whois.jsp">Whois Lookup</a></li>
+                    <li><a href="revdns.jsp">Reverse DNS Lookup</a></li>
                   </ul>
                 </div>
               </div>
