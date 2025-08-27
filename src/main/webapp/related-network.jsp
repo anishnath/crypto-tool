@@ -28,6 +28,7 @@
                     <li><a href="whois.jsp">Whois Lookup</a></li>
                     <li><a href="revdns.jsp">Reverse DNS Lookup</a></li>
                     <li><a href="dnsresolver.jsp">DNS Resolver Tool</a></li>
+                    <li><a href="mtr.jsp">Traceroute Mtr Tool</a> </li>
                   </ul>
                 </div>
               </div>

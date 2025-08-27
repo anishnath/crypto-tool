@@ -466,6 +466,15 @@
 		<url-pattern>/DnsResolverFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>MTRFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.MTRFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MTRFunctionality</servlet-name>
+		<url-pattern>/MTRFunctionality/*</url-pattern>
+	</servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
