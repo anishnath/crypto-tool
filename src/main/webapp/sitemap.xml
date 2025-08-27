@@ -719,4 +719,7 @@
     <url>
         <loc>https://8gwifi.org/mtr.jsp</loc>
     </url>
+    <url>
+        <loc>https://8gwifi.org/socket-io-client.jsp</loc>
+    </url>
 </urlset>

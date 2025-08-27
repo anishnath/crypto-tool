@@ -29,6 +29,8 @@
                     <li><a href="revdns.jsp">Reverse DNS Lookup</a></li>
                     <li><a href="dnsresolver.jsp">DNS Resolver Tool</a></li>
                     <li><a href="mtr.jsp">Traceroute Mtr Tool</a> </li>
+                    <li><a href="socket-io-client.jsp">Socket.IO Client Tester</a></li>
+                    <li><a href="websocket-client.jsp">WebSocket Client Tester</a></li>
                   </ul>
                 </div>
               </div>

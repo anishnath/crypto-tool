@@ -15,7 +15,104 @@
 	<meta name="language" content="en" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+	<!-- Open Graph Meta Tags for Social Media -->
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="SSL Scanner Tool - SSL/TLS Security Scanner" />
+	<meta property="og:description" content="Comprehensive online SSL/TLS scanner tool to check SSL certificates, security protocols, cipher suites, and vulnerabilities for any domain with real-time scanning and detailed reports." />
+	<meta property="og:url" content="https://8gwifi.org/sslscan.jsp" />
+	<meta property="og:site_name" content="8gwifi.org" />
+	<meta property="og:image" content="https://8gwifi.org/images/site/ssl-scanner.png" />
+	
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="SSL Scanner Tool - SSL/TLS Security Scanner" />
+	<meta name="twitter:description" content="Comprehensive online SSL/TLS scanner tool to check SSL certificates, security protocols, and vulnerabilities for any domain." />
+	<meta name="twitter:image" content="https://8gwifi.org/images/site/ssl-scanner.png" />
+	
+	<!-- Additional SEO Meta Tags -->
+	<meta name="author" content="8gwifi.org" />
+	<meta name="copyright" content="8gwifi.org" />
+	<meta name="coverage" content="Worldwide" />
+	<meta name="distribution" content="Global" />
+	<meta name="rating" content="General" />
+	<meta name="revisit-after" content="7 days" />
+	<meta name="target" content="all" />
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="MobileOptimized" content="width" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "SSL Scanner Tool",
+		"description": "Comprehensive online SSL/TLS security scanner tool for checking SSL certificates, security protocols, cipher suites, and identifying vulnerabilities in domain security configurations with real-time scanning capabilities and detailed PDF reports.",
+		"url": "https://8gwifi.org/sslscan.jsp",
+		"applicationCategory": "SecurityTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5. Supports Server-Sent Events (SSE).",
+		"featureList": [
+			"Real-time SSL/TLS scanning with live progress updates",
+			"Comprehensive certificate analysis and validation",
+			"Security protocol testing (TLS 1.0, 1.1, 1.2, 1.3)",
+			"Cipher suite strength assessment and recommendations",
+			"Vulnerability detection and security risk analysis",
+			"Certificate chain validation and trust verification",
+			"OCSP stapling and certificate transparency checking",
+			"Detailed security configuration analysis",
+			"PDF report generation with comprehensive findings",
+			"Multiple scan types (basic, comprehensive, full audit)",
+			"Real-time status monitoring and error reporting",
+			"Cross-platform compatibility and mobile optimization"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "ssl scanner, tls scanner, ssl checker, certificate scanner, security scanner, ssl test, tls test, ssl vulnerability scanner, certificate validation, security audit tool, ssl configuration checker, tls security testing, ssl certificate analyzer, security protocol tester, cipher suite analyzer, ssl security assessment, tls compliance checker, ssl certificate chain validator, security configuration analyzer, ssl vulnerability detection, tls security scanner",
+		"about": {
+			"@type": "Thing",
+			"name": "SSL/TLS Security Scanning",
+			"description": "SSL Scanner Tool provides comprehensive security analysis for SSL/TLS configurations, enabling security professionals, developers, and administrators to identify vulnerabilities, validate certificates, and ensure compliance with security best practices."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Security Professionals, DevOps Engineers, System Administrators, Web Developers, Network Administrators, Security Auditors, Compliance Officers, IT Security Teams, Penetration Testers, Security Consultants"
+		},
+		"softwareVersion": "v3.0",
+		"applicationSubCategory": "SSL/TLS Security Scanner",
+		"screenshot": "https://8gwifi.org/images/site/ssl-scanner.png",
+		"downloadUrl": "https://8gwifi.org/sslscan.jsp",
+		"installUrl": "https://8gwifi.org/sslscan.jsp",
+		"softwareHelp": "https://8gwifi.org/sslscan.jsp#usage",
+		"mainEntity": {
+			"@type": "WebPage",
+			"name": "SSL/TLS Security Scanning Guide",
+			"description": "Complete guide to SSL/TLS security scanning, certificate validation, and vulnerability detection for enhanced domain security."
+		},
+		"potentialAction": {
+			"@type": "UseAction",
+			"target": "https://8gwifi.org/sslscan.jsp",
+			"actionStatus": "PotentialActionStatus",
+			"description": "Scan SSL/TLS security configuration for any domain"
+		}
+	}
+	</script>
 	
 	<!-- jsPDF library for PDF generation -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -109,7 +206,7 @@
 					} else {
 						addOutput(event.data);
 					}
-				});
+        });
 
         eventSource.addEventListener('fallback_completed', function(event) {
             addOutput('✅ ' + event.data);
@@ -612,6 +709,291 @@
 <h2 class="mt-4" id="sslscanning">SSL/TLS Scanning</h2>
 
 <p><strong>SSL/TLS scanning</strong> provides certificate details, protocol support, cipher information, and vulnerability indicators. Full scan includes per-test results and raw tool output.</p>
+
+<hr>
+
+<h2 class="mt-4" id="sslscanner">SSL Scanner Tool Overview</h2>
+
+<p><strong>SSL Scanner Tool</strong> is a comprehensive online security assessment tool designed to analyze SSL/TLS configurations, validate certificates, and identify potential security vulnerabilities in domain configurations. This enterprise-grade scanner provides real-time analysis with detailed reporting capabilities.</p>
+
+<p>This tool is essential for:</p>
+<ul>
+    <li><strong><em>Security professionals</em></strong> conducting security audits and assessments</li>
+    <li><strong><em>DevOps engineers</em></strong> ensuring secure deployment configurations</li>
+    <li><strong><em>System administrators</em></strong> monitoring and maintaining security standards</li>
+    <li><strong><em>Web developers</em></strong> validating SSL/TLS implementations</li>
+    <li><strong><em>Compliance officers</em></strong> ensuring regulatory security requirements</li>
+</ul>
+
+<hr>
+
+<h2 class="mt-4" id="features">Key Features & Capabilities</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Certificate Analysis</h5>
+        <ul>
+            <li><strong>Certificate Validation:</strong> Complete certificate chain verification</li>
+            <li><strong>Expiry Monitoring:</strong> Certificate validity period checking</li>
+            <li><strong>Issuer Verification:</strong> Certificate authority (CA) validation</li>
+            <li><strong>Subject Analysis:</strong> Domain and organization information</li>
+            <li><strong>Trust Chain:</strong> Certificate trust path validation</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Security Protocol Testing</h5>
+        <ul>
+            <li><strong>TLS Version Support:</strong> TLS 1.0, 1.1, 1.2, 1.3 compatibility</li>
+            <li><strong>Protocol Security:</strong> Weak protocol detection</li>
+            <li><strong>Cipher Suite Analysis:</strong> Encryption strength assessment</li>
+            <li><strong>Key Exchange:</strong> Key exchange mechanism validation</li>
+            <li><strong>Forward Secrecy:</strong> Perfect forward secrecy checking</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <h5>Vulnerability Detection</h5>
+        <ul>
+            <li><strong>Common Vulnerabilities:</strong> Heartbleed, BEAST, POODLE detection</li>
+            <li><strong>Weak Ciphers:</strong> Identification of deprecated algorithms</li>
+            <li><strong>Configuration Issues:</strong> Security misconfigurations</li>
+            <li><strong>Compliance Checking:</strong> PCI DSS, HIPAA compliance validation</li>
+            <li><strong>Security Headers:</strong> HSTS, CSP header analysis</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Advanced Features</h5>
+        <ul>
+            <li><strong>Real-time Scanning:</strong> Live progress monitoring with SSE</li>
+            <li><strong>Multiple Scan Types:</strong> Quick, Basic, and Full audit modes</li>
+            <li><strong>PDF Reports:</strong> Comprehensive downloadable security reports</li>
+            <li><strong>Cross-platform:</strong> Works on all devices and browsers</li>
+            <li><strong>No Installation:</strong> Web-based tool accessible anywhere</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="usage">How to Use SSL Scanner</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>1. Domain Input</h5>
+        <ol>
+            <li>Enter the domain name you want to scan (e.g., <code>example.com</code>)</li>
+            <li>Do not include <code>http://</code> or <code>https://</code> protocols</li>
+            <li>Ensure the domain is accessible and has SSL/TLS enabled</li>
+            <li>Click "Start SSL Scan" to begin the security assessment</li>
+        </ol>
+    </div>
+    <div class="col-md-6">
+        <h5>2. Scan Type Selection</h5>
+        <ol>
+            <li><strong>Quick Scan:</strong> Fast basic certificate validation (30 seconds)</li>
+            <li><strong>Basic Scan:</strong> Comprehensive security analysis (2-3 minutes)</li>
+            <li><strong>Full Scan:</strong> Complete security audit with all tests (5-10 minutes)</li>
+            <li>Monitor real-time progress and live output during scanning</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <h5>3. Results Analysis</h5>
+        <ol>
+            <li>Review the scan summary and certificate details</li>
+            <li>Analyze security configuration and protocol support</li>
+            <li>Check for vulnerabilities and security recommendations</li>
+            <li>Download the comprehensive PDF report for detailed analysis</li>
+        </ol>
+    </div>
+    <div class="col-md-6">
+        <h5>4. Action Items</h5>
+        <ol>
+            <li>Address any critical security vulnerabilities identified</li>
+            <li>Update weak cipher suites and deprecated protocols</li>
+            <li>Implement recommended security headers and configurations</li>
+            <li>Schedule regular security scans for ongoing monitoring</li>
+        </ol>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="scan-types">Scan Types Explained</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Scan Type</th>
+            <th>Duration</th>
+            <th>Tests Performed</th>
+            <th>Use Case</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Quick Scan</strong></td>
+            <td>30 seconds</td>
+            <td>Basic certificate validation, protocol support</td>
+            <td>Quick health checks, development testing</td>
+        </tr>
+        <tr>
+            <td><strong>Basic Scan</strong></td>
+            <td>2-3 minutes</td>
+            <td>Certificate analysis, security protocols, cipher suites</td>
+            <td>Regular security monitoring, compliance checks</td>
+        </tr>
+        <tr>
+            <td><strong>Full Scan</strong></td>
+            <td>5-10 minutes</td>
+            <td>Complete security audit, vulnerability testing, detailed analysis</td>
+            <td>Security audits, penetration testing, compliance validation</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2 class="mt-4" id="security-standards">Security Standards & Compliance</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Industry Standards</h5>
+        <ul>
+            <li><strong>PCI DSS:</strong> Payment Card Industry Data Security Standard</li>
+            <li><strong>HIPAA:</strong> Health Insurance Portability and Accountability Act</li>
+            <li><strong>SOX:</strong> Sarbanes-Oxley Act compliance requirements</li>
+            <li><strong>GDPR:</strong> General Data Protection Regulation security</li>
+            <li><strong>ISO 27001:</strong> Information Security Management Systems</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Security Best Practices</h5>
+        <ul>
+            <li><strong>TLS 1.2+:</strong> Minimum recommended TLS version</li>
+            <li><strong>Strong Ciphers:</strong> AES-256, ChaCha20 encryption</li>
+            <li><strong>Forward Secrecy:</strong> Perfect forward secrecy implementation</li>
+            <li><strong>Security Headers:</strong> HSTS, CSP, X-Frame-Options</li>
+            <li><strong>Certificate Transparency:</strong> CT log monitoring</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="common-vulnerabilities">Common SSL/TLS Vulnerabilities</h2>
+
+<div class="alert alert-warning">
+    <h6><strong>Critical Security Issues to Watch For:</strong></h6>
+    <ul class="mb-0">
+        <li><strong>Weak Cipher Suites:</strong> RC4, DES, 3DES, MD5, SHA1 algorithms</li>
+        <li><strong>Deprecated Protocols:</strong> SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1</li>
+        <li><strong>Certificate Issues:</strong> Expired certificates, weak key sizes, improper validation</li>
+        <li><strong>Configuration Problems:</strong> Missing security headers, weak key exchange</li>
+        <li><strong>Known Vulnerabilities:</strong> Heartbleed, BEAST, POODLE, FREAK attacks</li>
+    </ul>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="best-practices">SSL/TLS Security Best Practices</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Certificate Management</h5>
+        <ul>
+            <li><strong>Auto-renewal:</strong> Implement automatic certificate renewal</li>
+            <li><strong>Key Rotation:</strong> Regular private key rotation</li>
+            <li><strong>Monitoring:</strong> Certificate expiry monitoring and alerts</li>
+            <li><strong>Validation:</strong> Proper certificate validation procedures</li>
+            <li><strong>Backup:</strong> Secure certificate and key backup</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Configuration Security</h5>
+        <ul>
+            <li><strong>Protocol Support:</strong> Enable only TLS 1.2 and 1.3</li>
+            <li><strong>Cipher Selection:</strong> Use strong, modern cipher suites</li>
+            <li><strong>Security Headers:</strong> Implement comprehensive security headers</li>
+            <li><strong>OCSP Stapling:</strong> Enable OCSP stapling for performance</li>
+            <li><strong>HSTS:</strong> Implement HTTP Strict Transport Security</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="reporting">Comprehensive Reporting</h2>
+
+<p>The SSL Scanner Tool generates detailed security reports that include:</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Executive Summary</h5>
+        <ul>
+            <li><strong>Overall Security Score:</strong> Numerical security rating</li>
+            <li><strong>Risk Assessment:</strong> High, medium, low risk categorization</li>
+            <li><strong>Compliance Status:</strong> Industry standard compliance</li>
+            <li><strong>Recommendations:</strong> Priority-based action items</li>
+            <li><strong>Scan Metadata:</strong> Timestamp, duration, scan type</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Technical Details</h5>
+        <ul>
+            <li><strong>Certificate Chain:</strong> Complete certificate validation</li>
+            <li><strong>Protocol Analysis:</strong> TLS version support and security</li>
+            <li><strong>Cipher Suite Details:</strong> Encryption algorithm analysis</li>
+            <li><strong>Vulnerability Scan:</strong> Known security issue detection</li>
+            <li><strong>Configuration Review:</strong> Security header and setting analysis</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="use-cases">Professional Use Cases</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Security Auditing</h5>
+        <ul>
+            <li><strong>Penetration Testing:</strong> Pre and post-testing validation</li>
+            <li><strong>Compliance Audits:</strong> Regulatory requirement validation</li>
+            <li><strong>Security Assessments:</strong> Comprehensive security reviews</li>
+            <li><strong>Vendor Evaluation:</strong> Third-party security assessment</li>
+            <li><strong>Incident Response:</strong> Security incident investigation</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Operational Security</h5>
+        <ul>
+            <li><strong>Continuous Monitoring:</strong> Regular security health checks</li>
+            <li><strong>Change Management:</strong> Post-deployment security validation</li>
+            <li><strong>Performance Optimization:</strong> SSL/TLS performance analysis</li>
+            <li><strong>Capacity Planning:</strong> Security infrastructure planning</li>
+            <li><strong>Training & Education:</strong> Security awareness programs</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+<h2 class="mt-4" id="technical-details">Technical Implementation Details</h2>
+
+<p><strong>SSL Scanner Tool</strong> utilizes advanced security testing methodologies and industry-standard tools to provide comprehensive SSL/TLS analysis:</p>
+
+<ul>
+    <li><strong><em>Server-Sent Events (SSE):</em></strong> Real-time progress updates and live output streaming</li>
+    <li><strong><em>Multiple Scan Engines:</em></strong> Integration with industry-leading security testing tools</li>
+    <li><strong><em>Comprehensive Testing:</em></strong> Coverage of all major SSL/TLS security aspects</li>
+    <li><strong><em>Real-time Analysis:</em></strong> Live security assessment with immediate feedback</li>
+    <li><strong><em>PDF Generation:</strong> Professional-grade security reports for documentation</li>
+</ul>
 
 <hr>
 
