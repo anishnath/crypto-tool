@@ -106,11 +106,11 @@
                 <div class="form-group">
                     <label>Server URL</label>
                     <input type="text" id="serverUrl" class="form-control" 
-						   placeholder="Enter Socket.IO server URL" 
-						   value="http://localhost:3000" required>
+						   placeholder="https://yourdomain.com or wss://yourdomain.com" 
+						   value="" required>
 					<small class="form-text text-muted">
-						<strong>Development:</strong> Use <code>http://localhost:3000</code> for local testing. 
-						<strong>Production:</strong> Use your deployed server URL (e.g., <code>https://yourdomain.com</code>).
+						<strong>Production:</strong> Use your deployed Socket.IO server URL (e.g., <code>https://yourdomain.com</code>).
+						<strong>Development:</strong> Use your local development server (e.g., <code>http://localhost:8080</code>).
 					</small>
                 </div>
             </div>
@@ -284,7 +284,7 @@
     <div class="col-md-6">
         <h5>1. Connection Setup</h5>
         <ol>
-            <li>Enter your Socket.IO server URL (e.g., <code>https://example.com:3000</code>)</li>
+            <li>Enter your Socket.IO server URL (e.g., <code>https://api.yourdomain.com</code>)</li>
             <li>Select the appropriate client version</li>
             <li>Configure transport options (WebSocket/Polling)</li>
             <li>Set namespace and path if needed</li>
@@ -318,7 +318,7 @@
     <tr>
         <td><strong>Development Testing</strong></td>
         <td>Test Socket.IO servers during development</td>
-        <td>Connect to <code>localhost:3000</code> and test events</td>
+        <td>Connect to your development server and test events</td>
     </tr>
     <tr>
         <td><strong>Production Debugging</strong></td>
@@ -378,6 +378,43 @@
 
 <hr>
 
+<h2 class="mt-4" id="production-best-practices">Production Deployment Best Practices</h2>
+
+<p><strong>For Production Use</strong>, always use proper domain names and SSL certificates to ensure secure, reliable WebSocket connections.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Domain Configuration</h5>
+        <ul>
+            <li><strong>Use Real Domains:</strong> <code>https://yourdomain.com</code> instead of localhost</li>
+            <li><strong>SSL Certificates:</strong> Always use HTTPS/WSS for production</li>
+            <li><strong>Subdomain Strategy:</strong> Consider <code>socket.yourdomain.com</code> for WebSocket services</li>
+            <li><strong>CDN Integration:</strong> Use CDN for improved global performance</li>
+            <li><strong>DNS Configuration:</strong> Proper A/AAAA records for your domain</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Security Considerations</h5>
+        <ul>
+            <li><strong>CORS Configuration:</strong> Allow only trusted domains</li>
+            <li><strong>Authentication:</strong> Implement proper user authentication</li>
+            <li><strong>Rate Limiting:</strong> Prevent abuse and DDoS attacks</li>
+            <li><strong>Input Validation:</strong> Sanitize all incoming data</li>
+            <li><strong>Monitoring:</strong> Track connection health and errors</li>
+        </ul>
+    </div>
+</div>
+
+<h5>Recommended Production URLs:</h5>
+<ul>
+    <li><code>https://api.yourdomain.com</code> - Main API endpoint</li>
+    <li><code>wss://socket.yourdomain.com</code> - Dedicated WebSocket server</li>
+    <li><code>https://realtime.yourdomain.com</code> - Real-time services</li>
+    <li><code>https://chat.yourdomain.com</code> - Chat application server</li>
+</ul>
+
+<hr>
+
 <h2 class="mt-4" id="troubleshooting">Troubleshooting Connection Issues</h2>
 
 <div class="alert alert-info">
@@ -385,7 +422,7 @@
     <ul class="mb-0">
         <li><strong>CORS Errors:</strong> Ensure your Socket.IO server allows connections from 8gwifi.org</li>
         <li><strong>Mixed Content:</strong> Use WSS:// for HTTPS sites, WS:// for HTTP sites</li>
-        <li><strong>Localhost Issues:</strong> Localhost only works in development, not in production</li>
+        <li><strong>Localhost Issues:</strong> Localhost connections only work in development environments</li>
         <li><strong>Server Accessibility:</strong> Verify your server is accessible from the internet</li>
         <li><strong>Firewall/Proxy:</strong> Check if corporate firewalls are blocking WebSocket connections</li>
     </ul>
@@ -402,11 +439,11 @@
 
 <h5>Test Servers for Development:</h5>
 <ul>
-    <li><code>http://localhost:3000</code> - Your local development server</li>
-    <li><code>http://127.0.0.1:3000</code> - Alternative localhost format</li>
     <li><code>https://socket.io</code> - Official Socket.IO demo server</li>
     <li><code>wss://echo.websocket.org</code> - WebSocket echo server</li>
     <li><code>wss://ws.postman-echo.com/raw</code> - Postman WebSocket echo</li>
+    <li><code>https://yourdomain.com</code> - Your production Socket.IO server</li>
+    <li><code>https://api.yourdomain.com</code> - Your production API server</li>
 </ul>
 
 <h5>URL Format Examples:</h5>
@@ -414,17 +451,18 @@
     <div class="col-md-6">
         <h6>Development (Local):</h6>
         <ul>
-            <li><code>http://localhost:3000</code></li>
-            <li><code>http://127.0.0.1:3000</code></li>
-            <li><code>http://localhost:8080</code></li>
+            <li><code>http://localhost:8080</code> - Local development server</li>
+            <li><code>http://127.0.0.1:8080</code> - Alternative localhost format</li>
+            <li><code>http://dev.yourdomain.com</code> - Development subdomain</li>
         </ul>
     </div>
     <div class="col-md-6">
         <h6>Production (Deployed):</h6>
         <ul>
-            <li><code>https://yourdomain.com</code></li>
-            <li><code>wss://yourdomain.com</code></li>
-            <li><code>https://api.yourdomain.com</code></li>
+            <li><code>https://yourdomain.com</code> - Main production domain</li>
+            <li><code>wss://yourdomain.com</code> - Secure WebSocket connection</li>
+            <li><code>https://api.yourdomain.com</code> - Production API server</li>
+            <li><code>https://socket.yourdomain.com</code> - Dedicated Socket.IO server</li>
         </ul>
     </div>
 </div>
@@ -519,8 +557,8 @@ function connect() {
     // Check for localhost vs production
     var isLocalhost = url.includes('localhost') || url.includes('127.0.0.1');
     if (isLocalhost && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-        logLine('warning', '⚠️ Warning: Trying to connect to localhost from production. This will likely fail due to CORS restrictions.');
-        logLine('warning', '   Use your production server URL instead.');
+        logLine('info', 'ℹ️ Connecting to localhost from production. Ensure your local server is accessible.');
+        logLine('info', '   For production use, consider using your deployed domain instead.');
     }
 
     logLine('debug', 'Connection parameters:', {
