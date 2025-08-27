@@ -14,6 +14,52 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "DNS Resolver Tool",
+		"description": "Advanced DNS resolver tool with multi-resolver support. Query multiple DNS servers simultaneously for A, AAAA, MX, NS, TXT, and CNAME records with consensus analysis.",
+		"url": "https://8gwifi.org/dnsresolver.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"Multi-resolver DNS lookup",
+			"Multiple record types (A, AAAA, MX, NS, TXT, CNAME)",
+			"Consensus analysis",
+			"Resolver comparison",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "dns resolver, multi-resolver dns, dns lookup tool, dns records, a record, mx record, ns record, txt record, cname record, network tools",
+		"about": {
+			"@type": "Thing",
+			"name": "DNS Resolution",
+			"description": "Multi-resolver DNS lookup provides comprehensive domain resolution by querying multiple DNS servers simultaneously for accurate and reliable results."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Network Administrators, DNS Engineers, Security Researchers, System Administrators"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -124,6 +170,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">DNS Resolver Tool</h1>
 <hr>

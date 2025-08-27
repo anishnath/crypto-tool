@@ -14,6 +14,52 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "Reverse DNS Lookup Tool",
+		"description": "Online reverse DNS (PTR) lookup tool to find hostnames associated with IP addresses. Convert IP addresses to domain names and verify DNS configurations.",
+		"url": "https://8gwifi.org/revdns.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"Reverse DNS lookup",
+			"PTR record resolution",
+			"IP to hostname conversion",
+			"Bulk IP processing",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "reverse dns, ptr lookup, ip to hostname, dns reverse lookup, network tools, dns resolution, ptr records",
+		"about": {
+			"@type": "Thing",
+			"name": "DNS Resolution",
+			"description": "Reverse DNS lookup converts IP addresses to hostnames using PTR (Pointer) records, essential for network troubleshooting and security analysis."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Network Administrators, Security Researchers, System Administrators, IT Professionals"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -78,6 +124,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">Reverse DNS (PTR) Lookup</h1>
 <hr>

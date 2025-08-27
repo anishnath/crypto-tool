@@ -16,6 +16,53 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "MTR Traceroute Tool",
+		"description": "Advanced MTR (My TraceRoute) tool for network path analysis. Continuous monitoring of network paths with packet loss and latency statistics.",
+		"url": "https://8gwifi.org/mtr.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"Network path tracing",
+			"Packet loss analysis",
+			"Latency statistics",
+			"Continuous monitoring",
+			"Hop-by-hop analysis",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "mtr traceroute, network path analysis, packet loss, latency analysis, network diagnostics, traceroute tool, network tools",
+		"about": {
+			"@type": "Thing",
+			"name": "Network Diagnostics",
+			"description": "MTR combines the functionality of traceroute and ping to provide continuous monitoring of network paths with detailed statistics on packet loss and latency."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Network Administrators, Network Engineers, System Administrators, IT Professionals"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -123,6 +170,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">MTR Traceroute Tool</h1>
 <hr>

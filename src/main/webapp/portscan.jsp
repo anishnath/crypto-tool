@@ -16,6 +16,52 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "Port Scanner Tool",
+		"description": "Online port scanner tool to check open ports on any host or IP address. Quick scan, top ports, custom ports, and full port scanning capabilities.",
+		"url": "https://8gwifi.org/portscan.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"Port scanning",
+			"Multiple scan types (quick, top, custom, full)",
+			"Security validation",
+			"Real-time results",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "port scanner, port scanning, online port scanner, network scanner, port checker, open ports, network security, vulnerability assessment",
+		"about": {
+			"@type": "Thing",
+			"name": "Network Security",
+			"description": "Port scanning is a technique used to identify open ports and services on target hosts for security assessment and network administration."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Security Researchers, Network Administrators, Penetration Testers, System Administrators"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -141,6 +187,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">Port Scanner Tool</h1>
 <hr>

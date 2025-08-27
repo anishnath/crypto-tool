@@ -16,6 +16,53 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "WHOIS Lookup Tool",
+		"description": "Online WHOIS lookup tool to find domain registration and ownership information. Get detailed domain details including registrar, creation date, expiration, and name servers.",
+		"url": "https://8gwifi.org/whois.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"WHOIS lookup",
+			"Domain registration information",
+			"Registrar details",
+			"Creation and expiration dates",
+			"Name server information",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "whois lookup, domain lookup, domain information, registrar lookup, domain ownership, domain registration, network tools",
+		"about": {
+			"@type": "Thing",
+			"name": "Domain Information",
+			"description": "WHOIS lookup provides detailed information about domain registrations including ownership, technical contacts, and registration dates."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Domain Owners, Network Administrators, Security Researchers, Legal Professionals"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -114,6 +161,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">WHOIS Lookup Tool</h1>
 <hr>

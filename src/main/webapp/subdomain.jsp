@@ -16,6 +16,52 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "Subdomain Enumeration Tool",
+		"description": "Online subdomain enumeration tool to discover subdomains for any domain. Find all subdomains using various sources like certificate transparency logs.",
+		"url": "https://8gwifi.org/subdomain.jsp",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"Subdomain discovery",
+			"Certificate transparency log scanning",
+			"Multiple source enumeration",
+			"Real-time results",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "subdomain enumeration, subdomain finder, online subdomain tool, domain enumeration, subdomain discovery, certificate transparency, network reconnaissance",
+		"about": {
+			"@type": "Thing",
+			"name": "Network Security",
+			"description": "Subdomain enumeration is a technique used to discover subdomains of a target domain for security research and network administration."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Security Researchers, Network Administrators, Penetration Testers"
+		}
+	}
+	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -98,6 +144,9 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">Subdomain Enumeration Tool</h1>
 <hr>

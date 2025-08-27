@@ -26,7 +26,54 @@
 <meta name="description" content="Online this free dns lookup tool provides a report on DNS records for a specified domain or hostname dns lookup, domain lookup, reverse DNS lookup, DNS tools, DNS checker" />
 <meta name="keywords" content="dns lookup, domain lookup, reverse DNS lookup, dns tools, dns checker" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<%@ include file="header-script.jsp"%>
+	<%@ include file="header-script.jsp"%>
+	
+	<!-- JSON-LD Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "DNS Lookup Tool",
+		"description": "Basic DNS lookup tool to query A, AAAA, MX, NS, TXT, and CNAME records for any domain. Simple and fast domain name resolution.",
+		"url": "https://8gwifi.org/dns.jsp",
+        "image" : "https://8gwifi.org/images/site/dns.png",
+		"applicationCategory": "NetworkTool",
+		"operatingSystem": "Web Browser",
+		"browserRequirements": "Requires JavaScript. Requires HTML5.",
+		"featureList": [
+			"DNS record lookup",
+			"Multiple record types",
+			"Fast resolution",
+			"Simple interface",
+			"JSON API support"
+		],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"creator": {
+			"@type": "Organization",
+			"name": "8gwifi.org",
+			"url": "https://8gwifi.org"
+		},
+		"keywords": "dns lookup, dns records, domain resolution, a record, mx record, ns record, txt record, cname record, network tools, domain lookup",
+		"about": {
+			"@type": "Thing",
+			"name": "DNS Resolution",
+			"description": "DNS lookup resolves domain names to IP addresses and retrieves various DNS records essential for network connectivity and domain management."
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Network Administrators, Web Developers, System Administrators, IT Professionals"
+		}
+	}
+	</script>
 <script type="text/javascript">
         $(document).ready(function() {
             $('#executeMethod').click(function (event)
@@ -56,6 +103,9 @@
     </script>
 </head>
 <%@ include file="body-script.jsp"%>
+
+<!-- Compact Network Tools Navigation Bar -->
+<%@ include file="network-tools-navbar.jsp"%>
 
 <h1 class="mt-4">DNS Lookup Tool</h1>
 <p>The DNS Lookup provides a report on DNS records for a specified domain or hostname</p>
