@@ -377,9 +377,9 @@ function buildClientCdn(version) {
     return null;
 }
 
-function loadClient(version, customUrl) {
+function loadClient(version) {
     return new Promise(function(resolve, reject) {
-        var url = (customUrl && customUrl.trim().length > 0) ? customUrl.trim() : buildClientCdn(version);
+        var url = buildClientCdn(version);
         if (!url) return reject('Unsupported version: ' + version);
         if (loadedVersion === version && window.io) return resolve();
         if (currentScript) {
@@ -421,7 +421,6 @@ function connect() {
     var reconnection = document.getElementById('reconnection').value === 'true';
     var q = parseQueryParams(document.getElementById('queryParams').value);
     var version = document.getElementById('clientVersion').value;
-    var customUrl = document.getElementById('customClientUrl').value;
 
     if (!url) { alert('Please enter server URL'); return; }
 
@@ -437,7 +436,7 @@ function connect() {
         version: version
     });
 
-    loadClient(version, customUrl)
+    loadClient(version)
         .then(function(){
             var target = url + (ns ? ns : '');
             var opts = {
