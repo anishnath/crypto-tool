@@ -105,7 +105,13 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Server URL</label>
-                    <input type="text" class="form-control" id="serverUrl" placeholder="https://example.com:3000">
+                    <input type="text" id="serverUrl" class="form-control" 
+						   placeholder="Enter Socket.IO server URL" 
+						   value="http://localhost:3000" required>
+					<small class="form-text text-muted">
+						<strong>Development:</strong> Use <code>http://localhost:3000</code> for local testing. 
+						<strong>Production:</strong> Use your deployed server URL (e.g., <code>https://yourdomain.com</code>).
+					</small>
                 </div>
             </div>
             <div class="col-md-6">
@@ -334,16 +340,93 @@
 
 <hr>
 
-<h2 class="mt-4" id="troubleshooting">Troubleshooting</h2>
+<h2 class="mt-4" id="message-logging">Message Logging & Event Handling</h2>
+
+<p><strong>Message Logging</strong> automatically captures and displays all messages received from the Socket.IO server. The tool provides comprehensive logging for both built-in events and custom events.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Automatically Logged Events</h5>
+        <ul>
+            <li><strong>📨 message:</strong> Standard message events</li>
+            <li><strong>💬 chat message:</strong> Chat application messages</li>
+            <li><strong>🔔 notification:</strong> Server notifications</li>
+            <li><strong>🔄 update:</strong> Data updates</li>
+            <li><strong>📊 data:</strong> General data events</li>
+            <li><strong>📡 Custom Events:</strong> Any events you add listeners for</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h5>Logging Features</h5>
+        <ul>
+            <li><strong>Real-time Display:</strong> Messages appear instantly in the log</li>
+            <li><strong>Event Categorization:</strong> Different icons for different event types</li>
+            <li><strong>Data Formatting:</strong> JSON data is properly formatted</li>
+            <li><strong>Auto-scroll:</strong> Log automatically scrolls to show new messages</li>
+            <li><strong>Console Logging:</strong> Detailed logs in browser console</li>
+        </ul>
+    </div>
+</div>
+
+<h5>How to Monitor Messages:</h5>
+<ol>
+    <li><strong>Connect</strong> to your Socket.IO server</li>
+    <li><strong>Watch the Logs</strong> section for incoming messages</li>
+    <li><strong>Add Custom Listeners</strong> for specific events you want to monitor</li>
+    <li><strong>Check Browser Console</strong> for detailed debugging information</li>
+</ol>
+
+<hr>
+
+<h2 class="mt-4" id="troubleshooting">Troubleshooting Connection Issues</h2>
 
 <div class="alert alert-info">
-    <h6><strong>Common Connection Issues:</strong></h6>
+    <h6><strong>Common Connection Problems & Solutions:</strong></h6>
     <ul class="mb-0">
-        <li><strong>CORS Errors:</strong> Ensure your server allows connections from this domain</li>
-        <li><strong>Transport Issues:</strong> Try switching between WebSocket and Polling</li>
-        <li><strong>Path Mismatch:</strong> Verify the Socket.IO path matches your server configuration</li>
-        <li><strong>Version Compatibility:</strong> Use the client version that matches your server</li>
+        <li><strong>CORS Errors:</strong> Ensure your Socket.IO server allows connections from 8gwifi.org</li>
+        <li><strong>Mixed Content:</strong> Use WSS:// for HTTPS sites, WS:// for HTTP sites</li>
+        <li><strong>Localhost Issues:</strong> Localhost only works in development, not in production</li>
+        <li><strong>Server Accessibility:</strong> Verify your server is accessible from the internet</li>
+        <li><strong>Firewall/Proxy:</strong> Check if corporate firewalls are blocking WebSocket connections</li>
     </ul>
+</div>
+
+<h5>Production Deployment Checklist:</h5>
+<ol>
+    <li><strong>Server URL:</strong> Use your production domain (e.g., <code>wss://yourdomain.com</code>)</li>
+    <li><strong>CORS Configuration:</strong> Allow <code>https://8gwifi.org</code> in your server's CORS settings</li>
+    <li><strong>SSL Certificate:</strong> Ensure your production server has valid SSL certificates</li>
+    <li><strong>Network Access:</strong> Verify your server is accessible from external networks</li>
+    <li><strong>Socket.IO Version:</strong> Match client and server versions for compatibility</li>
+</ol>
+
+<h5>Test Servers for Development:</h5>
+<ul>
+    <li><code>http://localhost:3000</code> - Your local development server</li>
+    <li><code>http://127.0.0.1:3000</code> - Alternative localhost format</li>
+    <li><code>https://socket.io</code> - Official Socket.IO demo server</li>
+    <li><code>wss://echo.websocket.org</code> - WebSocket echo server</li>
+    <li><code>wss://ws.postman-echo.com/raw</code> - Postman WebSocket echo</li>
+</ul>
+
+<h5>URL Format Examples:</h5>
+<div class="row">
+    <div class="col-md-6">
+        <h6>Development (Local):</h6>
+        <ul>
+            <li><code>http://localhost:3000</code></li>
+            <li><code>http://127.0.0.1:3000</code></li>
+            <li><code>http://localhost:8080</code></li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h6>Production (Deployed):</h6>
+        <ul>
+            <li><code>https://yourdomain.com</code></li>
+            <li><code>wss://yourdomain.com</code></li>
+            <li><code>https://api.yourdomain.com</code></li>
+        </ul>
+    </div>
 </div>
 
 <hr>
@@ -422,7 +505,23 @@ function connect() {
     var q = parseQueryParams(document.getElementById('queryParams').value);
     var version = document.getElementById('clientVersion').value;
 
-    if (!url) { alert('Please enter server URL'); return; }
+    if (!url) { 
+        alert('Please enter server URL'); 
+        return; 
+    }
+
+    // Validate URL format
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('ws://') && !url.startsWith('wss://')) {
+        alert('Please enter a valid URL starting with http://, https://, ws://, or wss://');
+        return;
+    }
+
+    // Check for localhost vs production
+    var isLocalhost = url.includes('localhost') || url.includes('127.0.0.1');
+    if (isLocalhost && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        logLine('warning', '⚠️ Warning: Trying to connect to localhost from production. This will likely fail due to CORS restrictions.');
+        logLine('warning', '   Use your production server URL instead.');
+    }
 
     logLine('debug', 'Connection parameters:', {
         url: url,
@@ -433,7 +532,8 @@ function connect() {
         timeout: timeout,
         reconnection: reconnection,
         query: q,
-        version: version
+        version: version,
+        isLocalhost: isLocalhost
     });
 
     loadClient(version)
@@ -482,11 +582,64 @@ function connect() {
             socket.on('connect_error', function(err){ 
                 logLine('error', 'connect_error', err && (err.message || err)); 
                 console.error('Socket connection error:', err);
+                
+                // Provide helpful error messages for common issues
+                var errorMsg = err && err.message ? err.message : 'Unknown connection error';
+                if (errorMsg.includes('websocket error') || errorMsg.includes('WebSocket is closed')) {
+                    logLine('error', '⚠️ Connection failed. This usually means:');
+                    logLine('error', '   • The server is not accessible from this domain');
+                    logLine('error', '   • CORS policy is blocking the connection');
+                    logLine('error', '   • The server URL is incorrect or server is down');
+                    logLine('error', '   • Mixed content (HTTPS trying to connect to HTTP)');
+                }
+                
+                // Reset UI state
+                document.getElementById('statusBadge').className = 'badge badge-danger';
+                document.getElementById('statusBadge').innerText = 'Connection Failed';
+                document.getElementById('connectBtn').disabled = false;
+                document.getElementById('disconnectBtn').disabled = true;
+                document.getElementById('emitBtn').disabled = true;
             });
             
             socket.on('reconnect_attempt', function(){ logLine('info', 'reconnect_attempt'); });
             socket.on('reconnect_failed', function(){ logLine('error', 'reconnect_failed'); });
-            socket.on('message', function(data){ logLine('event:message', 'received', data); });
+            socket.on('message', function(data){ 
+                logLine('event:message', '📨 Received message:', data); 
+                console.log('📨 Received message event:', data);
+            });
+            
+            // Enhanced event logging for common Socket.IO events
+            socket.on('chat message', function(data) {
+                logLine('event:chat', '💬 Chat message received:', data);
+                console.log('💬 Chat message:', data);
+            });
+            
+            socket.on('notification', function(data) {
+                logLine('event:notification', '🔔 Notification received:', data);
+                console.log('🔔 Notification:', data);
+            });
+            
+            socket.on('update', function(data) {
+                logLine('event:update', '🔄 Update received:', data);
+                console.log('🔄 Update:', data);
+            });
+            
+            socket.on('data', function(data) {
+                logLine('event:data', '📊 Data received:', data);
+                console.log('📊 Data:', data);
+            });
+            
+            // Catch-all event listener for any other events
+            if (socket.onAny) {
+                socket.onAny(function(eventName, ...args) {
+                    if (!['connect', 'disconnect', 'connect_error', 'reconnect_attempt', 'reconnect_failed', 'reconnect', 'reconnect_error', 'error', 'message', 'chat message', 'notification', 'update', 'data'].includes(eventName)) {
+                        logLine('event:' + eventName, '📡 Event received:', args);
+                        console.log('📡 Event received:', eventName, args);
+                    }
+                });
+            } else {
+                logLine('info', 'onAny not available in this Socket.IO version. Add custom listeners for specific events.');
+            }
             
             // Add more debugging events
             socket.on('error', function(err) {
@@ -595,21 +748,53 @@ function addListener() {
         return; 
     }
     
+    // Check if listener already exists
+    if (socket.hasListeners && socket.hasListeners(ev)) {
+        logLine('warning', 'Listener already exists for event: ' + ev);
+        alert('Listener already exists for this event');
+        return;
+    }
+    
     logLine('debug', 'Adding listener for event:', ev);
     
     socket.on(ev, function(payload){ 
-        logLine('event:'+ev, 'received', payload); 
-        console.log('Received event:', ev, 'with payload:', payload);
+        logLine('event:'+ev, '📡 Custom event received:', payload); 
+        console.log('📡 Custom event received:', ev, 'with payload:', payload);
+        
+        // Add visual feedback in the log
+        var eventElement = document.createElement('div');
+        eventElement.innerHTML = '<span style="color: #28a745;">📡</span> <strong>' + ev + ':</strong> ' + 
+                               (typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2));
+        eventElement.style.marginBottom = '5px';
+        eventElement.style.padding = '5px';
+        eventElement.style.backgroundColor = '#f8f9fa';
+        eventElement.style.borderRadius = '3px';
+        document.getElementById('log').appendChild(eventElement);
+        
+        // Auto-scroll to bottom
+        document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
     });
     
     var listeners = document.getElementById('listeners');
     var badge = document.createElement('span');
-    badge.className = 'badge badge-info mr-1';
+    badge.className = 'badge badge-info mr-1 mb-1';
     badge.textContent = ev;
+    badge.style.cursor = 'pointer';
+    badge.title = 'Click to remove listener';
+    
+    // Add remove functionality
+    badge.onclick = function() {
+        if (socket) {
+            socket.off(ev);
+            logLine('info', 'Removed listener for event: ' + ev);
+            this.remove();
+        }
+    };
+    
     listeners.appendChild(badge);
     document.getElementById('onEvent').value = '';
     
-    logLine('success', 'Listener added for event: ' + ev);
+    logLine('success', '✅ Listener added for event: ' + ev);
 }
 
 // Bind buttons
