@@ -62,6 +62,12 @@
                         <a class="dropdown-item" href="curlfunctions.jsp">
                             <i class="fas fa-globe"></i> Curl Tool
                         </a>
+                        <a class="dropdown-item" href="socket-io-client.jsp">
+                            <i class="fas fa-bolt"></i> Socket.IO Client
+                        </a>
+                        <a class="dropdown-item" href="websocket-client.jsp">
+                            <i class="fas fa-plug"></i> WebSocket Client
+                        </a>
                     </div>
                 </li>
                 
