@@ -466,6 +466,10 @@
 		<url-pattern>/DnsResolverFunctionality</url-pattern>
 	</servlet-mapping>
 
+	<!-- SSH client servlet using SSHJ -->
+
+
+
 	<servlet>
 		<servlet-name>MTRFunctionality</servlet-name>
 		<servlet-class>z.y.x.Network.MTRFunctionality</servlet-class>
@@ -473,6 +477,15 @@
 	<servlet-mapping>
 		<servlet-name>MTRFunctionality</servlet-name>
 		<url-pattern>/MTRFunctionality/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>HTTPStatFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.HTTPStatFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HTTPStatFunctionality</servlet-name>
+		<url-pattern>/HTTPStatFunctionality</url-pattern>
 	</servlet-mapping>
 
 	<security-constraint>

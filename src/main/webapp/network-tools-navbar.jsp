@@ -68,6 +68,7 @@
                         <a class="dropdown-item" href="websocket-client.jsp">
                             <i class="fas fa-plug"></i> WebSocket Client
                         </a>
+
                     </div>
                 </li>
                 
@@ -79,6 +80,9 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="SubnetFunctions.jsp">
                             <i class="fas fa-calculator"></i> Subnet Calculator
+                        </a>
+                        <a class="dropdown-item" href="httpstat.jsp">
+                            <i class="fas fa-chart-line"></i> HTTP Status Tool
                         </a>
                     </div>
                 </li>
