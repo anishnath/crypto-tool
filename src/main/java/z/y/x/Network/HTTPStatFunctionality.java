@@ -54,7 +54,7 @@ public class HTTPStatFunctionality extends HttpServlet {
             }
 
             // Parse and validate the request
-            JsonObject requestJson = JsonParser.parseString(jsonRequest).getAsJsonObject();
+            JsonObject requestJson = new JsonParser().parse(jsonRequest).getAsJsonObject();
             if (!requestJson.has("url")) {
                 sendErrorResponse(response, "URL is required", 400);
                 return;
@@ -134,7 +134,7 @@ public class HTTPStatFunctionality extends HttpServlet {
     private String addTestLocation(String backendResponse) {
         try {
             // Parse the backend response
-            JsonObject responseJson = JsonParser.parseString(backendResponse).getAsJsonObject();
+            JsonObject responseJson = new JsonParser().parse(backendResponse).getAsJsonObject();
 
             // Add test location
             responseJson.addProperty("test_location", TEST_LOCATION);
