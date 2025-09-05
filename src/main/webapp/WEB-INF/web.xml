@@ -488,6 +488,15 @@
 		<url-pattern>/HTTPStatFunctionality</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+        <servlet-name>ScreenshotFunctionality</servlet-name>
+        <servlet-class>z.y.x.Network.ScreenshotFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ScreenshotFunctionality</servlet-name>
+        <url-pattern>/ScreenshotFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>

@@ -84,6 +84,9 @@
                         <a class="dropdown-item" href="httpstat.jsp">
                             <i class="fas fa-chart-line"></i> HTTP Status Tool
                         </a>
+                        <a class="dropdown-item" href="screenshot.jsp">
+                            <i class="fas fa-camera"></i> Website Screenshot
+                        </a>
                     </div>
                 </li>
                 

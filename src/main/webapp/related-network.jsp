@@ -32,6 +32,7 @@
                     <li><a href="socket-io-client.jsp">Socket.IO Client Tester</a></li>
                     <li><a href="websocket-client.jsp">WebSocket Client Tester</a></li>
                     <li><a href="httpstat.jsp">HTTP Status Analysis Tool</a></li>
+                    <li><a href="screenshot.jsp">Website Screenshot Tool</a></li>
                   </ul>
                 </div>
               </div>
