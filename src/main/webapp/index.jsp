@@ -84,31 +84,287 @@
 
 </head>
 
-<%@ include file="body-script.jsp"%>
+<!-- Bootstrap core JavaScript -->
+<script src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/vendor/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<body>
+<%@ include file="navigation.jsp"%>
 
-				<h1 class="mt-4">Cryptography</h1>
-				<p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
-				<p>In practice encryption can be a function of time, the effort and time required for an unauthorized person is so large it is impractical.&nbsp; By the time it is decrypted it is of little value.</p>
-				<p><strong>Block Cipher</strong> &ndash; Breaks the plaintext into blocks and encrypts each with the same algorithm</p>
-				<p><strong>Cipher</strong> &ndash; Cryptographic transformation operates on the characters or bites</p>
-				<p><strong>Ciphertext</strong> or Cryptogram &ndash; unintelligible message</p>
-				<p><strong>Clustering</strong> &ndash; plaintext message generates identical ciphertext using the same algorithm but different keys</p>
-				<p><strong>Codes</strong> &ndash; A cryptographic transformation that operates at the word or phrase level</p>
-				<p><strong>Cryptanalysis</strong> &ndash; act of obtaining plaintext or key from ciphertext</p>
-				<p><strong>Cryptographic Algorithm</strong> &ndash; Step-by-step procedure used to encipher plaintext and decipher ciphertext</p>
-				<p><strong>Cryptography </strong>&ndash; Art and Science of hiding the meaning of communication</p>
-				<p><strong>Cryptology</strong> &ndash; encompasses cryptography and cryptanalysis</p>
-				<p><strong>Cryptosystem</strong> &ndash; set of transformations from message space to ciphertext space</p>
-				<p><strong>Decipher</strong> - to undo cipherment process</p>
-				<p><strong>Encipher</strong> &ndash; to make a message unintelligible to all except recipient</p>
-				<p><strong>End-to-end encryption</strong> &ndash; Encrypted information that is sent from sender to receiver</p>
+<!-- Hero Section -->
+<div class="jumbotron jumbotron-fluid bg-dark text-white" style="margin-top: 56px;">
+    <div class="container">
+        <h1 class="display-4">Online Cryptography & Security Tools</h1>
+        <p class="lead">Professional-grade tools for encryption, decryption, networking, and more - all free and online</p>
+    </div>
+</div>
 
+<div class="container">
+    <%@ include file="footer_adsense.jsp"%>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
+    <!-- Tool Categories Grid -->
+    <div class="row mb-4">
 
-<%@ include file="addcomments.jsp"%>
+        <!-- Cryptography Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-lock text-primary"></i> Cryptography
+                    </h4>
+                    <p class="card-text">Encrypt, decrypt, hash, and sign data using industry-standard algorithms.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="CipherFunctions.jsp">Encryption/Decryption</a></li>
+                        <li><a href="MessageDigest.jsp">Message Digest</a></li>
+                        <li><a href="rsafunctions.jsp">RSA Encryption</a></li>
+                        <li><a href="hmacgen.jsp">HMAC Generator</a></li>
+                        <li><a href="bccrypt.jsp">BCrypt Hash</a></li>
+                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#cryptoMore" class="btn btn-sm btn-outline-primary">View All Crypto Tools</a>
+                    <div id="cryptoMore" class="collapse mt-2">
+                        <ul class="list-unstyled">
+                            <li><a href="file-encrypt.jsp">File Encryption</a></li>
+                            <li><a href="ecfunctions.jsp">EC Encryption</a></li>
+                            <li><a href="scrypt.jsp">SCrypt Hash</a></li>
+                            <li><a href="passwdgen.jsp">Password Generator</a></li>
+                            <li><a href="pbkdf.jsp">PBKDF2 Key Derivation</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PGP/PKI Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-key text-success"></i> PGP & PKI
+                    </h4>
+                    <p class="card-text">Generate keys, sign messages, and manage certificates securely.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="pgpencdec.jsp">PGP Encryption/Decryption</a></li>
+                        <li><a href="pgpkeyfunction.jsp">PGP Key Generation</a></li>
+                        <li><a href="SelfSignCertificateFunctions.jsp">Self Sign Certificate</a></li>
+                        <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
+                        <li><a href="JKSManagementFunctionality?invalidate=yes">Keystore Viewer</a></li>
+                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#pkiMore" class="btn btn-sm btn-outline-success">View All PKI Tools</a>
+                    <div id="pkiMore" class="collapse mt-2">
+                        <ul class="list-unstyled">
+                            <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
+                            <li><a href="cafunctions.jsp">CA/Certificate Generator</a></li>
+                            <li><a href="certsverify.jsp">Verify Private Key</a></li>
+                            <li><a href="ocsp.jsp">OCSP Query</a></li>
+                            <li><a href="jwkfunctions.jsp">JWK Generate</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Tools Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-network-wired text-info"></i> Network Tools
+                    </h4>
+                    <p class="card-text">DNS, IP tools, port scanning, and network diagnostics.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="SubnetFunctions.jsp">Subnet Calculator</a></li>
+                        <li><a href="dns.jsp">DNS Lookup</a></li>
+                        <li><a href="pingfunctions.jsp">Ping/Locate IP</a></li>
+                        <li><a href="whois.jsp">Whois Lookup</a></li>
+                        <li><a href="portscan.jsp">Port Scanner</a></li>
+                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#netMore" class="btn btn-sm btn-outline-info">View All Network Tools</a>
+                    <div id="netMore" class="collapse mt-2">
+                        <ul class="list-unstyled">
+                            <li><a href="subdomain.jsp">Subdomain Finder</a></li>
+                            <li><a href="revdns.jsp">Reverse DNS</a></li>
+                            <li><a href="sslscan.jsp">SSL Scanner</a></li>
+                            <li><a href="screenshot.jsp">Website Screenshot</a></li>
+                            <li><a href="websocket-client.jsp">WebSocket Client</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Sharing Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-share-alt text-warning"></i> Secure Sharing
+                    </h4>
+                    <p class="card-text">Share files and messages securely with encryption.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="pgp-upload.jsp">PGP File Transfer</a></li>
+                        <li><a href="share-file.jsp">Secure File Transfer</a></li>
+                        <li><a href="securebin.jsp">Share Secret Content</a></li>
+                        <li><a href="pastebin.jsp">TextBin</a></li>
+                        <li><a href="temp-email.jsp">Temporary Email</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DevOps/Container Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fab fa-docker text-primary"></i> DevOps & Container
+                    </h4>
+                    <p class="card-text">Kubernetes, Docker Compose, and infrastructure tools.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="kube.jsp">Kubernetes Spec Generator</a></li>
+                        <li><a href="dc.jsp">Docker Compose Generator</a></li>
+                        <li><a href="kube1.jsp">Docker to Kubernetes</a></li>
+                        <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>
+                        <li><a href="websocket-client.jsp">WebSocket Client</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blockchain Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-link text-danger"></i> Blockchain
+                    </h4>
+                    <p class="card-text">Cryptocurrency and blockchain development tools.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="eth-keygen.jsp">Ethereum Key Generator</a></li>
+                        <li><a href="hdwallet.jsp">HD Wallet Generator</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Encoders/Converters Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-exchange-alt text-success"></i> Encoders & Converters
+                    </h4>
+                    <p class="card-text">Convert between formats: Base64, Hex, JSON, YAML, XML, CSV.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
+                        <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
+                        <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
+                        <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
+                        <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
+                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#encodersMore" class="btn btn-sm btn-outline-success">View All Converters</a>
+                    <div id="encodersMore" class="collapse mt-2">
+                        <ul class="list-unstyled">
+                            <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
+                            <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
+                            <li><a href="csv-2-json.jsp">CSV-2-JSON</a></li>
+                            <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
+                            <li><a href="base64image.jsp">Base64 Image Converter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Miscellaneous Tools Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-tools text-secondary"></i> Miscellaneous Tools
+                    </h4>
+                    <p class="card-text">PDF tools, QR codes, hex editor, text comparison, and more.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
+                        <li><a href="watermark-pdf.jsp">Add WaterMark to PDF</a></li>
+                        <li><a href="qrcodegen.jsp">QR Code Generator</a></li>
+                        <li><a href="hexeditor.jsp">Professional Hex Editor</a></li>
+                        <li><a href="diff.jsp">Compare Text Differences</a></li>
+                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#miscMore" class="btn btn-sm btn-outline-secondary">View All Misc Tools</a>
+                    <div id="miscMore" class="collapse mt-2">
+                        <ul class="list-unstyled">
+                            <li><a href="hexdump.jsp">Hexdump Generate</a></li>
+                            <li><a href="short.jsp">URL Shortner</a></li>
+                            <li><a href="random-string.jsp">Random Number Gen</a></li>
+                            <li><a href="StringFunctions.jsp">String Functions</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance Tools Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-dollar-sign text-warning"></i> Finance Calculators
+                    </h4>
+                    <p class="card-text">EMI, compound interest, and stock profit calculators.</p>
+                    <ul class="list-unstyled">
+                        <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
+                        <li><a href="cinterest2.jsp">Compound Interest (Compare)</a></li>
+                        <li><a href="cinterest.jsp">Compound Interest (Simple)</a></li>
+                        <li><a href="stock-calc.jsp">Stock Profit Calculator</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- About Cryptography Section -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>About Cryptography</h3>
+                    <p>Purpose of Cryptography is to protect information from being read and understood by anyone except the intended recipient.</p>
+                    <p>In practice encryption can be a function of time, the effort and time required for an unauthorized person is so large it is impractical. By the time it is decrypted it is of little value.</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Key Concepts:</h5>
+                            <ul>
+                                <li><strong>Block Cipher</strong> - Breaks the plaintext into blocks and encrypts each with the same algorithm</li>
+                                <li><strong>Cipher</strong> - Cryptographic transformation operates on the characters or bytes</li>
+                                <li><strong>Ciphertext/Cryptogram</strong> - Unintelligible message</li>
+                                <li><strong>Cryptanalysis</strong> - Act of obtaining plaintext or key from ciphertext</li>
+                                <li><strong>Cryptographic Algorithm</strong> - Step-by-step procedure used to encipher plaintext</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Core Terms:</h5>
+                            <ul>
+                                <li><strong>Cryptography</strong> - Art and Science of hiding the meaning of communication</li>
+                                <li><strong>Cryptology</strong> - Encompasses cryptography and cryptanalysis</li>
+                                <li><strong>Cryptosystem</strong> - Set of transformations from message space to ciphertext space</li>
+                                <li><strong>Encipher</strong> - To make a message unintelligible to all except recipient</li>
+                                <li><strong>End-to-end encryption</strong> - Encrypted information sent from sender to receiver</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%@ include file="footer_adsense.jsp"%>
+
+    <div class="sharethis-inline-share-buttons"></div>
+    <%@ include file="thanks.jsp"%>
+    <%@ include file="addcomments.jsp"%>
 
 </div>
 
-<%@ include file="body-close.jsp"%>
+</body>
+</html>
