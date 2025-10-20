@@ -10,6 +10,43 @@
         <div class="card-body">
             <div class="accordion" id="sidebarAccordion">
 
+                <!-- Machine Learning Visualizers -->
+                <div class="card">
+                    <div class="card-header" id="headingML">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseML" aria-expanded="false" aria-controls="collapseML">
+                                <i class="fas fa-robot"></i> Machine Learning Visualizers
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseML" class="collapse" aria-labelledby="headingML" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="activation_function_explorer.jsp">Activation Function Explorer</a></li>
+                                <li><a href="bias_variance_explorer.jsp">Bias-Variance Explorer</a></li>
+                                <li><a href="bias_variance_tradeoff.jsp">Bias-Variance Trade-off</a></li>
+                                <li><a href="clustering_studio.jsp">Clustering Studio</a></li>
+                                <li><a href="decision_boundary_playground.jsp">Decision Boundary Playground</a></li>
+                                <li><a href="decision_tree_model_selection.jsp">Decision Tree Model Selection</a></li>
+                                <li><a href="decision_trees_random_forest.jsp">Decision Trees & Random Forest</a></li>
+                                <li><a href="diffusion_process_visualizer.jsp">Diffusion Process Visualizer</a></li>
+                                <li><a href="gradient_descent_visualizer.jsp">Gradient Descent Visualizer</a></li>
+                                <li><a href="imbalanced_learning_workshop.jsp">Imbalanced Learning Workshop</a></li>
+                                <li><a href="Logistic_Regression.jsp">Logistic Regression</a></li>
+                                <li><a href="ML_Pipeline.jsp">ML Pipeline</a></li>
+                                <li><a href="neural_network_playground.jsp">Neural Network Playground</a></li>
+                                <li><a href="probability_calibration_lab.jsp">Probability Calibration Lab</a></li>
+                                <li><a href="ROC_AUC.jsp">ROC AUC</a></li>
+                                <li><a href="shap_explorer.jsp">SHAP Explorer</a></li>
+                                <li><a href="cyclical_encoding_visualizer.jsp">Cyclical Encoding Visualizer</a></li>
+                                <li><a href="feature_hashing_collision_explorer.jsp">Feature Hashing Collision Explorer</a></li>
+                                <li><a href="categorical_encoding_lab.jsp">Categorical Encoding Lab</a></li>
+                                <li><a href="transformers_attention_visualizer.jsp">Transformers Attention Visualizer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sharing Services -->
                 <div class="card">
                     <div class="card-header" id="headingSharing">
@@ -191,6 +228,10 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="eth-keygen.jsp">libp2p/devp2p Key Gen</a></li>
                                 <li><a href="hdwallet.jsp">HD Wallet Generator</a></li>
+                                <li><a href="crypto-profit-calculator.jsp">Crypto Profit Calculator</a></li>
+                                <li><a href="bitcoin-mining-profit-calculator.jsp">Bitcoin Mining Profit Calculator</a></li>
+                                <li><a href="ethereum-gas-fee-estimator.jsp">Ethereum Gas Fee Estimator</a></li>
+                                <li><a href="crypto-tax-estimator.jsp">Crypto Tax Estimator</a></li>
                             </ul>
                         </div>
                     </div>
@@ -245,6 +286,7 @@
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
                                 <li><a href="random-string.jsp">Random Number Gen</a></li>
                                 <li><a href="contactus.jsp">Feature Request</a></li>
+                                <li><a href="binary-code-translator.jsp">Binary Code Translator</a></li>
                             </ul>
                         </div>
                     </div>
@@ -262,14 +304,99 @@
                     <div id="collapseFinance" class="collapse" aria-labelledby="headingFinance" data-parent="#sidebarAccordion">
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
+                                <li><a href="sip-calculator.jsp">SIP Calculator</a></li>
+                                <li><a href="sip-vs-lumpsum-calculator.jsp">SIP vs Lumpsum Calculator</a></li>
+                                <li><a href="retirement-calculator.jsp">Retirement Planning Calculator</a></li>
+                                <li><a href="fire-calculator.jsp">FIRE Calculator</a></li>
+                                <li><a href="net-worth-calculator.jsp">Net Worth Calculator & Tracker</a></li>
+                                <li><a href="tax-calculator.jsp">Income Tax Calculator</a></li>
                                 <li><a href="emi.jsp">Home Loan EMI Calculator</a></li>
+                                <li><a href="mortgage-affordability-calculator.jsp">Mortgage Affordability Calculator</a></li>
+                                <li><a href="prepay-vs-invest-calculator.jsp">Prepay vs Invest Calculator</a></li>
+                                <li><a href="debt-payoff-calculator.jsp">Debt Payoff Calculator</a></li>
+                                <li><a href="lease-vs-buy-calculator.jsp">Lease vs Buy Calculator</a></li>
+                                <li><a href="college-cost-roi-calculator.jsp">College Cost & ROI Calculator</a></li>
+                                <li><a href="rent-vs-buy-calculator.jsp">Rent vs Buy Calculator</a></li>
+                                <li><a href="capital-gains-tax-calculator.jsp">Capital Gains Tax Calculator</a></li>
+                                <li><a href="cost-of-living-comparison.jsp">Cost of Living Comparison</a></li>
                                 <li><a href="cinterest2.jsp">Compound Interest (Compare)</a></li>
                                 <li><a href="cinterest.jsp">Compound Interest (Simple)</a></li>
+                                <li><a href="drip-calculator.jsp">Dividend Reinvestment (DRIP) Calculator</a></li>
+                                <li><a href="annuity-calculator.jsp">Annuity Payout & Present Value</a></li>
+                                <li><a href="savings-goal-calculator.jsp">Savings Goal Calculator</a></li>
                                 <li><a href="stock-calc.jsp">Stock Profit Calculator</a></li>
                             </ul>
                         </div>
                     </div>
+
+                    <!-- Health Tools -->
+                    <div class="card">
+                        <div class="card-header" id="headingHealth">
+                            <h6 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseHealth" aria-expanded="false" aria-controls="collapseHealth">
+                                    <i class="fas fa-heartbeat"></i> Health
+                                </button>
+                            </h6>
+                        </div>
+                        <div id="collapseHealth" class="collapse" aria-labelledby="headingHealth" data-parent="#sidebarAccordion">
+                            <div class="card-body p-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li><a href="bmi-ideal-weight-calculator.jsp">BMI & Ideal Weight Calculator</a></li>
+                                    <li><a href="calorie-macro-calculator.jsp">Daily Calorie & Macro Calculator</a></li>
+                                    <li><a href="ovulation-calculator.jsp">Ovulation & Fertility Window</a></li>
+                                    <li><a href="pregnancy-due-date-calculator.jsp">Pregnancy Due Date Planner</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle & Productivity -->
+                    <div class="card">
+                        <div class="card-header" id="headingLifeProd">
+                            <h6 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseLifeProd" aria-expanded="false" aria-controls="collapseLifeProd">
+                                    <i class="fas fa-utensils"></i> Lifestyle & Productivity
+                                </button>
+                            </h6>
+                        </div>
+                        <div id="collapseLifeProd" class="collapse" aria-labelledby="headingLifeProd" data-parent="#sidebarAccordion">
+                            <div class="card-body p-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li><a href="tip-calculator.jsp">Tip Calculator & Split Bill</a></li>
+                                    <li><a href="timezone-converter.jsp">Time Zone Converter & Scheduler</a></li>
+                                    <li><a href="unix-timestamp-converter.jsp">Unix Timestamp Converter</a></li>
+                                    <li><a href="age-calculator.jsp">Age Calculator & Milestone Tracker</a></li>
+                                    <li><a href="qr-code-generator.jsp">QR Code Generator</a></li>
+                                    <li><a href="date-difference-calculator.jsp">Date Difference Calculator</a></li>
+                                    <li><a href="random-number-generator.jsp">Random Number Generator</a></li>
+                                    <li><a href="morse-code-translator.jsp">Morse Code Translator</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Math & Education -->
+                    <div class="card">
+                        <div class="card-header" id="headingMath">
+                            <h6 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseMath" aria-expanded="false" aria-controls="collapseMath">
+                                    <i class="fas fa-percentage"></i> Math & Education
+                                </button>
+                            </h6>
+                        </div>
+                        <div id="collapseMath" class="collapse" aria-labelledby="headingMath" data-parent="#sidebarAccordion">
+                            <div class="card-body p-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li><a href="percentage-calculator.jsp">Percentage Calculator</a></li>
+                                    <li><a href="roman-numeral-converter.jsp">Roman Numeral Converter</a></li>
+                                    <li><a href="unit-converter.jsp">Unit Converter</a></li>
+                                    <li><a href="binary-code-translator.jsp">Binary Code Translator</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
 
             </div>
         </div>

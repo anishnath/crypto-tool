@@ -9,6 +9,108 @@
     <loc>https://8gwifi.org/</loc>
 </url>
 <url>
+  <loc>https://8gwifi.org/rent-vs-buy-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/capital-gains-tax-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/sip-vs-lumpsum-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/prepay-vs-invest-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/cost-of-living-comparison.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/fire-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/mortgage-affordability-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/debt-payoff-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/drip-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/lease-vs-buy-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/college-cost-roi-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/net-worth-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/annuity-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/savings-goal-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/bmi-ideal-weight-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/calorie-macro-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/ovulation-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/pregnancy-due-date-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/tip-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/timezone-converter.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/age-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/qr-code-generator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/date-difference-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/random-number-generator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/roman-numeral-converter.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/unit-converter.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/morse-code-translator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/binary-code-translator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/unix-timestamp-converter.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/crypto-profit-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/bitcoin-mining-profit-calculator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/ethereum-gas-fee-estimator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/crypto-tax-estimator.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/percentage-calculator.jsp</loc>
+</url>
+<url>
   <loc>https://8gwifi.org/MessageDigest.jsp</loc>
 </url>
 <url>
@@ -549,6 +651,9 @@
     <loc>https://8gwifi.org/hexdump.jsp</loc>
   </url>
   <url>
+    <loc>https://8gwifi.org/hexeditor.jsp</loc>
+  </url>
+  <url>
     <loc>https://8gwifi.org/jwsgen.jsp</loc>
   </url>
   <url>
@@ -657,6 +762,15 @@
     <loc>https://8gwifi.org/stock-calc.jsp</loc>
   </url>
   <url>
+    <loc>https://8gwifi.org/sip-calculator.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/retirement-calculator.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/tax-calculator.jsp</loc>
+  </url>
+  <url>
     <loc>https://8gwifi.org/random-string.jsp</loc>
   </url>
 <!--  <url>-->
@@ -725,7 +839,64 @@
     <url>
         <loc>https://8gwifi.org/httpstat.jsp</loc>
     </url>
-    <url>
-        <loc>https://8gwifi.org/screenshot.jsp</loc>
-    </url>
+  <url>
+    <loc>https://8gwifi.org/activation_function_explorer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/bias_variance_explorer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/bias_variance_tradeoff.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/clustering_studio.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/decision_boundary_playground.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/decision_tree_model_selection.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/decision_trees_random_forest.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/diffusion_process_visualizer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/gradient_descent_visualizer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/imbalanced_learning_workshop.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/Logistic_Regression.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/ML_Pipeline.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/neural_network_playground.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/probability_calibration_lab.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/ROC_AUC.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/shap_explorer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/transformers_attention_visualizer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/cyclical_encoding_visualizer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/feature_hashing_collision_explorer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/categorical_encoding_lab.jsp</loc>
+  </url>
 </urlset>
