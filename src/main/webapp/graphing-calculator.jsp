@@ -18,14 +18,14 @@
     <meta property="og:url" content="https://8gwifi.org/graphing-calculator.jsp">
     <meta property="og:title" content="Free Online Graphing Calculator - Advanced Math Plotter">
     <meta property="og:description" content="Plot any mathematical function online for free. Supports derivatives, integrals, parametric, polar, implicit functions and more. Best Desmos alternative.">
-    <meta property="og:image" content="https://yourdomain.com/images/graphing-calculator-preview.png">
+    <meta property="og:image" content="https://8gwifi.org.com/images/site/graphing-calculator-preview.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://8gwifi.org/graphing-calculator.jsp">
     <meta property="twitter:title" content="Free Online Graphing Calculator - Advanced Math Plotter">
     <meta property="twitter:description" content="Plot any mathematical function online for free. Supports derivatives, integrals, parametric, polar, implicit functions and more.">
-    <meta property="twitter:image" content="https://yourdomain.com/images/graphing-calculator-preview.png">
+    <meta property="twitter:image" content="https://8gwifi.org.com/images/site/graphing-calculator-preview.png">
 
     <!-- JSON-LD Schema Markup -->
     <script type="application/ld+json">

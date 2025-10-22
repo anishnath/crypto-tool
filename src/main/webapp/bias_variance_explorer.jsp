@@ -147,12 +147,49 @@
       </div>
     </div>
   </div>
+
+  <!-- Guide -->
+  <hr id="guide">
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">How to use & What to learn</h5>
+    </div>
+    <div class="card-body">
+      <p class="mb-2"><strong>Why this is useful:</strong> It shows the bias–variance tradeoff in a single place: as model complexity increases, training error keeps dropping, but validation error first drops then rises due to overfitting.</p>
+      <p class="mb-2"><strong>How to use:</strong> Drag <em>Degree</em> to change model capacity and watch the blue fit line and the error curves. Use <em>Noise</em> and <em>Samples</em> to change data difficulty, and <em>Ridge λ</em> to regularize (smooth) the fit.</p>
+      <div class="row">
+        <div class="col-md-6">
+          <h6>Pros</h6>
+          <ul class="mb-2">
+            <li>Immediate intuition for underfitting vs overfitting.</li>
+            <li>Shows how regularization (λ) can reduce variance.</li>
+            <li>“Sweet spot” highlights the degree that minimizes validation error.</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h6>Cons</h6>
+          <ul class="mb-2">
+            <li>Toy dataset; real data can behave differently.</li>
+            <li>Focuses on MSE; other tasks may use different metrics.</li>
+            <li>Only polynomial regression—other models may respond differently.</li>
+          </ul>
+        </div>
+      </div>
+      <h6 class="mt-2">Reading the graphs</h6>
+      <ul class="mb-2">
+        <li><strong>Data & Fit:</strong> Blue curve is the model; solid points are training data; hollow points are validation. If degree is too low, the fit is too smooth (high bias). If degree is too high, the curve wiggles through noise (high variance).</li>
+        <li><strong>Error curves:</strong> Training MSE typically decreases with degree, while Validation MSE forms a U-shape. The minimum of the validation curve is the best generalization (“sweet spot”).</li>
+        <li><strong>Ridge λ:</strong> Increasing λ smooths the curve, often raising training error slightly but lowering validation error when the model is too wiggly.</li>
+      </ul>
+      <div class="small text-muted">Takeaway: choose capacity (and regularization) that minimizes validation error, not just training error. More data and appropriate regularization reduce variance.</div>
+    </div>
+  </div>
 </div>
 
 <script>
 window.addEventListener('DOMContentLoaded', function(){
   // Shortcuts
-  function $(id){ return document.getElementById(id); }
+  function $(id){ return document.getElementById(id && id[0]==='#' ? id.slice(1) : id); }
 
   // State
   var X=[], Y=[], idxTrain=[], idxVal=[];
@@ -198,6 +235,13 @@ window.addEventListener('DOMContentLoaded', function(){
   $('#btnShuffle').addEventListener('click', function(){ splitTrainVal(); fitCurrent(); });
   $('#btnFit').addEventListener('click', function(){ fitCurrent(true); });
   $('#btnCurve').addEventListener('click', function(){ computeCurve(); });
+
+  // Initialize default view
+  generateData();
+  fitCurrent();
+
+  // Utilities
+  function randn(){ var u=0,v=0; while(u===0)u=Math.random(); while(v===0)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
 
   // Data generation: noisy sine
   function generateData(){

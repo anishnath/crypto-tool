@@ -391,6 +391,7 @@
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
+                                    <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor </a></li>
                                     <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
                                     <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
                                     <li><a href="magic-1089.jsp">Magic 1089 Trick</a></li>
