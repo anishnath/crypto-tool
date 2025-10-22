@@ -279,7 +279,7 @@
 <div class="header">
     <div class="container-fluid">
         <h3><i class="fas fa-chart-line"></i> Advanced Graphing Calculator</h3>
-        <p class="mb-0" style="font-size: 14px;">Desmos-style graphing tool with multiple plot types</p>
+        <p class="mb-0" style="font-size: 14px;">Graphing tool with multiple plot types</p>
     </div>
 </div>
 
@@ -403,29 +403,29 @@
                 </small>
             </div>
 
-            <div class="settings-panel">
-                <h6><i class="fas fa-lightbulb"></i> Future Feature Ideas</h6>
-                <small style="color: #666;">
-                    <strong>Vote for next features:</strong><br>
-                    □ 3D Surface Plots (z = f(x,y))<br>
-                    □ Vector Fields & Gradients<br>
-                    □ Differential Equations Solver<br>
-                    □ Fourier Series Visualization<br>
-                    □ Taylor/Maclaurin Series Approximation<br>
-                    □ Contour Plots & Heat Maps<br>
-                    □ Complex Number Plotting<br>
-                    □ Data Import (CSV/JSON)<br>
-                    □ Curve Fitting (polynomial, exponential)<br>
-                    □ Zoom to Region<br>
-                    □ Multiple Y-axes<br>
-                    □ LaTeX Equation Editor<br>
-                    <br>
-                    <strong style="color: #28a745;">✓ Implemented:</strong><br>
-                    <span style="color: #28a745;">✓ Numerical Integration (area under curve)<br>
-                        ✓ Implicit Functions (x² + y² = 25)<br>
-                        ✓ Piecewise Functions</span>
-                </small>
-            </div>
+<%--            <div class="settings-panel">--%>
+<%--                <h6><i class="fas fa-lightbulb"></i> Future Feature Ideas</h6>--%>
+<%--                <small style="color: #666;">--%>
+<%--                    <strong>Vote for next features:</strong><br>--%>
+<%--                    □ 3D Surface Plots (z = f(x,y))<br>--%>
+<%--                    □ Vector Fields & Gradients<br>--%>
+<%--                    □ Differential Equations Solver<br>--%>
+<%--                    □ Fourier Series Visualization<br>--%>
+<%--                    □ Taylor/Maclaurin Series Approximation<br>--%>
+<%--                    □ Contour Plots & Heat Maps<br>--%>
+<%--                    □ Complex Number Plotting<br>--%>
+<%--                    □ Data Import (CSV/JSON)<br>--%>
+<%--                    □ Curve Fitting (polynomial, exponential)<br>--%>
+<%--                    □ Zoom to Region<br>--%>
+<%--                    □ Multiple Y-axes<br>--%>
+<%--                    □ LaTeX Equation Editor<br>--%>
+<%--                    <br>--%>
+<%--                    <strong style="color: #28a745;">✓ Implemented:</strong><br>--%>
+<%--                    <span style="color: #28a745;">✓ Numerical Integration (area under curve)<br>--%>
+<%--                        ✓ Implicit Functions (x² + y² = 25)<br>--%>
+<%--                        ✓ Piecewise Functions</span>--%>
+<%--                </small>--%>
+<%--            </div>--%>
         </div>
 
         <div class="col-md-9 graph-container">
