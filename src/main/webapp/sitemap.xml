@@ -9,6 +9,66 @@
     <loc>https://8gwifi.org/</loc>
 </url>
 <url>
+    <loc>https://8gwifi.org/kaprekar.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/addition-methods.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/magic-1089.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/21-card-trick.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/mean-median-mode.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/standard-deviation.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/pythagorean.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/triangle-solver.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/right-triangle-trig.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/distance-midpoint.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/circle-sector.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/heron-area.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/degree-radian.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/polar-cartesian.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/distance-3d.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/factorial-permutation.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/prime-number.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/lcm-gcd.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/fibonacci.jsp</loc>
+</url>
+<url>
+    <loc>https://8gwifi.org/graphing-calculator.jsp</loc>
+</url>
+<url>
   <loc>https://8gwifi.org/rent-vs-buy-calculator.jsp</loc>
 </url>
 <url>
@@ -898,5 +958,11 @@
   </url>
   <url>
     <loc>https://8gwifi.org/categorical_encoding_lab.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/predicted_probability_explorer.jsp</loc>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/model_validation_lab.jsp</loc>
   </url>
 </urlset>

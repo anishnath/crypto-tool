@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- Sidebar with Collapsible Sections -->
 <div class="col-lg-3 col-md-4">
 
@@ -41,6 +42,8 @@
                                 <li><a href="cyclical_encoding_visualizer.jsp">Cyclical Encoding Visualizer</a></li>
                                 <li><a href="feature_hashing_collision_explorer.jsp">Feature Hashing Collision Explorer</a></li>
                                 <li><a href="categorical_encoding_lab.jsp">Categorical Encoding Lab</a></li>
+                                <li><a href="predicted_probability_explorer.jsp">Predicted Probability Explorer</a></li>
+                                <li><a href="model_validation_lab.jsp">Model Validation Lab</a></li>
                                 <li><a href="transformers_attention_visualizer.jsp">Transformers Attention Visualizer</a></li>
                             </ul>
                         </div>
@@ -387,6 +390,26 @@
                         <div id="collapseMath" class="collapse" aria-labelledby="headingMath" data-parent="#sidebarAccordion">
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
+                                    <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
+                                    <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
+                                    <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
+                                    <li><a href="magic-1089.jsp">Magic 1089 Trick</a></li>
+                                    <li><a href="21-card-trick.jsp">21 Card Trick</a></li>
+                                    <li><a href="mean-median-mode.jsp">Mean, Median, Mode Finder</a></li>
+                                    <li><a href="standard-deviation.jsp">Standard Deviation Calculator</a></li>
+                                    <li><a href="pythagorean.jsp">Pythagorean Theorem Solver</a></li>
+                                    <li><a href="triangle-solver.jsp">Triangle Solver (SSS/SAS/ASA)</a></li>
+                                    <li><a href="right-triangle-trig.jsp">Right-Triangle Trig (SOHCAHTOA)</a></li>
+                                    <li><a href="distance-midpoint.jsp">Distance & Midpoint</a></li>
+                                    <li><a href="circle-sector.jsp">Circle & Sector</a></li>
+                                    <li><a href="heron-area.jsp">Heron’s Formula Area</a></li>
+                                    <li><a href="degree-radian.jsp">Degrees ↔ Radians</a></li>
+                                    <li><a href="polar-cartesian.jsp">Polar ↔ Cartesian</a></li>
+                                    <li><a href="distance-3d.jsp">3D Distance</a></li>
+                                    <li><a href="factorial-permutation.jsp">Factorial & Permutation</a></li>
+                                    <li><a href="prime-number.jsp">Prime Number Checker & Generator</a></li>
+                                    <li><a href="lcm-gcd.jsp">LCM/GCD Finder</a></li>
+                                    <li><a href="fibonacci.jsp">Fibonacci Sequence Generator</a></li>
                                     <li><a href="percentage-calculator.jsp">Percentage Calculator</a></li>
                                     <li><a href="roman-numeral-converter.jsp">Roman Numeral Converter</a></li>
                                     <li><a href="unit-converter.jsp">Unit Converter</a></li>
