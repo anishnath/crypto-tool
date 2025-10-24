@@ -257,6 +257,7 @@
                                 <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
                                 <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
                                 <li><a href="base64image.jsp">Base64 Image Converter</a></li>
+                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
                                 <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
                                 <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
                                 <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
@@ -393,6 +394,8 @@
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor </a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
+                                    <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                    <li><a href="guitar-chord-finder.jsp">Guitar Chord Finder</a></li>
                                     <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
                                     <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
                                     <li><a href="magic-1089.jsp">Magic 1089 Trick</a></li>
