@@ -258,6 +258,7 @@
                                 <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
                                 <li><a href="base64image.jsp">Base64 Image Converter</a></li>
                                 <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
                                 <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
                                 <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
                                 <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>

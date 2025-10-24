@@ -84,6 +84,12 @@
     <priority>0.9</priority>
 </url>
 <url>
+    <loc>https://8gwifi.org/video-resizer.jsp</loc>
+    <lastmod>2025-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+</url>
+<url>
     <loc>https://8gwifi.org/guitar-chord-finder.jsp</loc>
     <lastmod>2025-01-24</lastmod>
     <changefreq>monthly</changefreq>
