@@ -367,6 +367,7 @@
                         <div id="collapseLifeProd" class="collapse" aria-labelledby="headingLifeProd" data-parent="#sidebarAccordion">
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
+                                    <li><a href="mind-map-maker.jsp">Mind Map Maker (Online)</a></li>
                                     <li><a href="tip-calculator.jsp">Tip Calculator & Split Bill</a></li>
                                     <li><a href="timezone-converter.jsp">Time Zone Converter & Scheduler</a></li>
                                     <li><a href="unix-timestamp-converter.jsp">Unix Timestamp Converter</a></li>
