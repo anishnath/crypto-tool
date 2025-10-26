@@ -315,7 +315,13 @@
     <style>
       /* Scoped layout tweaks for screenshot tool */
       .viewport-panel .card-body { max-height: 60vh; overflow-y: auto; }
-      .viewport-panel .form-check { margin-bottom: .25rem; }
+      .viewport-panel .form-check { margin-bottom: .2rem; }
+      .viewport-panel h5.card-header { padding: .5rem .75rem; font-size: 1rem; }
+      .viewport-panel h6 { margin: .35rem 0 .25rem; font-size: .9rem; text-transform: uppercase; letter-spacing: .3px; color: #495057; }
+      .viewport-panel .form-check-label { font-size: .85rem; line-height: 1.2; }
+      .viewport-panel .form-check-input { margin-top: .2rem; }
+      .viewport-panel .checkbox-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .2rem .5rem; }
+      .viewport-panel .checkbox-grid .form-check { margin-bottom: .15rem; }
       @media (max-width: 992px) {
         .viewport-panel .card-body { max-height: none; }
       }
@@ -344,6 +350,7 @@
           <div class="row">
             <div class="col-12">
               <h6>Desktop</h6>
+              <div class="checkbox-grid">
                 <div class="form-check">
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_1920x1080" value="1920x1080">
                     <label class="form-check-label" for="viewport_1920x1080">1920x1080 (Full HD)</label>
@@ -376,9 +383,11 @@
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_3840x2160" value="3840x2160">
                     <label class="form-check-label" for="viewport_3840x2160">3840x2160 (4K UHD)</label>
                 </div>
+              </div>
             </div>
             <div class="col-12 mt-2">
               <h6>Tablet</h6>
+              <div class="checkbox-grid">
                 <div class="form-check">
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_768x1024" value="768x1024">
                     <label class="form-check-label" for="viewport_768x1024">768x1024 (iPad portrait)</label>
@@ -403,9 +412,11 @@
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_1280x800" value="1280x800">
                     <label class="form-check-label" for="viewport_1280x800">1280x800 (Android landscape)</label>
                 </div>
+              </div>
             </div>
             <div class="col-12 mt-2">
               <h6>Mobile</h6>
+              <div class="checkbox-grid">
                 <div class="form-check">
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_375x667" value="375x667">
                     <label class="form-check-label" for="viewport_375x667">375x667 (iPhone SE)</label>
@@ -442,6 +453,7 @@
                     <input class="form-check-input viewport-checkbox" type="checkbox" id="viewport_320x568" value="320x568">
                     <label class="form-check-label" for="viewport_320x568">320x568 (iPhone 5/SE 1st gen)</label>
                 </div>
+              </div>
             </div>
           </div>
           <small class="form-text text-muted">Select one or more viewport sizes. Each URL will be captured in all selected sizes.</small>
@@ -477,6 +489,22 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Capture Screenshots</button>
+
+      <!-- Results inline under the button -->
+      <div id="error" class="alert alert-danger mt-3" style="display:none;"></div>
+
+      <div id="progressText" class="alert alert-info mt-2" style="display:none;"></div>
+
+      <div id="progressiveGallery" class="mt-3"></div>
+
+      <div class="card mt-3" id="resultsCard" style="display:none;">
+        <div class="card-header">
+            <h6 class="mb-0">Results</h6>
+        </div>
+        <div class="card-body">
+            <div id="resultsBody"></div>
+        </div>
+      </div>
     </div>
   </div>
 </form>
@@ -484,21 +512,6 @@
     
 
 <hr>
-
-<div id="error" class="alert alert-danger" style="display:none;"></div>
-
-<div id="progressText" class="alert alert-info" style="display:none;"></div>
-
-<div id="progressiveGallery"></div>
-
-<div class="card" id="resultsCard" style="display:none;">
-    <div class="card-header">
-        <h6 class="mb-0">Results</h6>
-    </div>
-    <div class="card-body">
-        <div id="resultsBody"></div>
-    </div>
-</div>
 
 <!-- Screenshot Modal -->
 <div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog">
