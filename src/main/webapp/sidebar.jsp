@@ -284,7 +284,7 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
                                 <li><a href="watermark-pdf.jsp">Add WaterMark PDF</a></li>
-                                <li><a href="short.jsp">URL Shortner</a></li>
+                                <li><a href="short.jsp">URL Shortener & Analytics</a></li>
                                 <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                                 <li><a href="hexdump.jsp">Hexdump Generate</a></li>
                                 <li><a href="hexeditor.jsp">Hex Editor</a></li>

@@ -863,9 +863,9 @@
   <url>
     <loc>https://8gwifi.org/random-string.jsp</loc>
   </url>
-<!--  <url>-->
-<!--    <loc>https://8gwifi.org/short.jsp</loc>-->
-<!--  </url>-->
+    <url>
+      <loc>https://8gwifi.org/short.jsp</loc>
+    </url>
   <url>
     <loc>https://8gwifi.org/pgp-upload.jsp</loc>
   </url>
