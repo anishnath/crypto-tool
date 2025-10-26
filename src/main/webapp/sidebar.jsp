@@ -1,6 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- Sidebar with Collapsible Sections -->
-<div class="col-lg-3 col-md-4">
+<!-- Font Awesome (for icons in sidebar) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Scoped sidebar usability improvements */
+  .sidebar-ux .card { margin-bottom: 0.75rem; }
+  .sidebar-ux .card-header { padding: .5rem .75rem; }
+  .sidebar-ux .card-header .btn { font-size: 1rem; font-weight: 600; color: #333; }
+  .sidebar-ux .card-header .btn.btn-link { text-decoration: none; }
+  .sidebar-ux .card-header .btn i { margin-right: .5rem; }
+  /* Clear visual indicator for expand/collapse */
+  .sidebar-ux .card-header .btn[aria-expanded="true"]::after { content: "▾"; float: right; color: #6c757d; }
+  .sidebar-ux .card-header .btn[aria-expanded="false"]::after { content: "▸"; float: right; color: #6c757d; }
+  /* Make list items more readable and tappable */
+  .sidebar-ux .card-body { padding: .25rem .5rem; }
+  .sidebar-ux ul { margin: 0; }
+  .sidebar-ux ul li { margin: 0; }
+  .sidebar-ux ul li a {
+    display: block;
+    padding: .35rem .5rem;
+    border-radius: 4px;
+    font-size: .95rem; /* bump from .875rem used by .small */
+    color: #212529;
+  }
+  .sidebar-ux ul li a:hover { background: #f1f3f5; text-decoration: none; }
+  /* Override Bootstrap .small in this sidebar only */
+  .sidebar-ux .small { font-size: .95rem; }
+</style>
+<div class="col-lg-3 col-md-4 sidebar-ux">
 
     <!-- Ad Widget -->
     <%@ include file="footer_adsense.jsp"%>
@@ -435,3 +462,45 @@
     <%@ include file="related-upcoming.jsp"%>
 
 </div>
+
+<script>
+  (function() {
+    function addIcons(containerSelector, iconClass) {
+      var container = document.querySelector(containerSelector);
+      if (!container) return;
+      var links = container.querySelectorAll('ul li a');
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i];
+        if (a.querySelector('i')) continue; // skip if icon already present
+        var icon = document.createElement('i');
+        icon.className = iconClass + ' nav-icon';
+        a.insertBefore(icon, a.firstChild);
+      }
+    }
+
+    // Minimal icon styling
+    var style = document.createElement('style');
+    style.textContent = '.sidebar-ux .nav-icon{width:1.25em;display:inline-block;margin-right:.35rem;color:#6c757d;font-size:.95em;}';
+    document.head.appendChild(style);
+
+    var map = {
+      '#collapseML': 'fas fa-brain',
+      '#collapseSharing': 'fas fa-share-nodes',
+      '#collapsePGP': 'fas fa-key',
+      '#collapseCrypto': 'fas fa-shield-halved',
+      '#collapseNetwork': 'fas fa-network-wired',
+      '#collapseDevOps': 'fab fa-docker',
+      '#collapseBlockchain': 'fas fa-cubes',
+      '#collapseEncoders': 'fas fa-code',
+      '#collapseMisc': 'fas fa-toolbox',
+      '#collapseFinance': 'fas fa-coins',
+      '#collapseHealth': 'fas fa-heart-pulse',
+      '#collapseLifeProd': 'fas fa-list-check',
+      '#collapseMath': 'fas fa-calculator'
+    };
+
+    try {
+      for (var sel in map) { addIcons(sel, map[sel]); }
+    } catch (e) { /* no-op */ }
+  })();
+</script>
