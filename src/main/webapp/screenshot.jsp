@@ -233,7 +233,7 @@
 
                     cardHtml += '<img src="data:image/png;base64,' + data.result.screenshot_base64 + '" class="img-fluid mb-2 screenshot-image" style="max-height: 600px; width: 100%; object-fit: contain; cursor: pointer;" data-screenshot="' + data.result.screenshot_base64 + '" data-url="' + url + '" data-viewport="' + viewport + '" title="Click to view full size">';
                     cardHtml += '<div class="text-center">';
-                    cardHtml += '<button class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.result.screenshot_base64 + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
+                    cardHtml += '<button type="button" class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.result.screenshot_base64 + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
                     cardHtml += '</div>';
                 } else if (data.screenshot) {
                     // Handle direct screenshot field
@@ -243,7 +243,7 @@
 
                     cardHtml += '<img src="data:image/png;base64,' + data.screenshot + '" class="img-fluid mb-2 screenshot-image" style="max-height: 600px; width: 100%; object-fit: contain; cursor: pointer;" data-screenshot="' + data.screenshot + '" data-url="' + url + '" data-viewport="' + viewport + '" title="Click to view full size">';
                     cardHtml += '<div class="text-center">';
-                    cardHtml += '<button class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.screenshot + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
+                    cardHtml += '<button type="button" class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.screenshot + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
                     cardHtml += '</div>';
                 } else if (data.image) {
                     // Handle alternative field name
@@ -253,7 +253,7 @@
 
                     cardHtml += '<img src="data:image/png;base64,' + data.image + '" class="img-fluid mb-2 screenshot-image" style="max-height: 600px; width: 100%; object-fit: contain; cursor: pointer;" data-screenshot="' + data.image + '" data-url="' + url + '" data-viewport="' + viewport + '" title="Click to view full size">';
                     cardHtml += '<div class="text-center">';
-                    cardHtml += '<button class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.image + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
+                    cardHtml += '<button type="button" class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + data.image + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
                     cardHtml += '</div>';
                 } else if (data.data) {
                     // Handle nested data structure
@@ -265,7 +265,7 @@
 
                         cardHtml += '<img src="data:image/png;base64,' + screenshotData + '" class="img-fluid mb-2 screenshot-image" style="max-height: 600px; width: 100%; object-fit: contain; cursor: pointer;" data-screenshot="' + screenshotData + '" data-url="' + url + '" data-viewport="' + viewport + '" title="Click to view full size">';
                         cardHtml += '<div class="text-center">';
-                        cardHtml += '<button class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + screenshotData + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
+                        cardHtml += '<button type="button" class="btn btn-sm btn-primary download-screenshot" data-screenshot="' + screenshotData + '" data-url="' + url + '" data-viewport="' + viewport + '">Download</button>';
                         cardHtml += '</div>';
                     } else {
                         cardHtml += '<div class="alert alert-warning alert-sm">No screenshot data found</div>';
@@ -289,7 +289,9 @@
             });
 
             // Event delegation for download button clicks
-            $(document).on('click', '.download-screenshot', function() {
+            $(document).on('click', '.download-screenshot', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 var screenshot = $(this).data('screenshot');
                 var url = $(this).data('url');
                 var viewport = $(this).data('viewport');
