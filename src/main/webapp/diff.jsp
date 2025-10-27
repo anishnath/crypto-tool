@@ -579,13 +579,6 @@ console.log("Result:", result);</textarea>
                 <div class="row">
                     <div class="col-md-6">
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-file-code text-muted"></i> <a href="hexeditor.jsp">Hex Editor</a></li>
-                            <li><i class="fas fa-code text-muted"></i> <a href="hexdump.jsp">Hex Dump Generator</a></li>
-                            <li><i class="fas fa-compress text-muted"></i> <a href="json-minifier.jsp">JSON Formatter</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <ul class="list-unstyled">
                             <li><i class="fas fa-file-alt text-muted"></i> <a href="MessageDigest.jsp">File Hash Calculator</a></li>
                             <li><i class="fas fa-exchange-alt text-muted"></i> <a href="HexToStringFunctions.jsp">Text Converters</a></li>
                             <li><i class="fas fa-search text-muted"></i> <a href="regex.jsp">Regex Tester</a></li>
