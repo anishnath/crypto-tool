@@ -613,6 +613,14 @@
   </url>
 
   <url>
+    <loc>https://8gwifi.org/curl-builder.jsp</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/cron-generator.jsp</loc>
+  </url>
+
+  <url>
     <loc>https://8gwifi.org/docs/kube-mysql.jsp</loc>
   </url>
 
