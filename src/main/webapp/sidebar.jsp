@@ -319,7 +319,6 @@
                                 <li><a href="short.jsp">URL Shortener & Analytics</a></li>
                                 <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                                 <li><a href="hexdump.jsp">Hexdump Generate</a></li>
-                                <li><a href="hexeditor.jsp">Hex Editor</a></li>
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
                                 <li><a href="random-string.jsp">Random Number Gen</a></li>
                                 <li><a href="contactus.jsp">Feature Request</a></li>
