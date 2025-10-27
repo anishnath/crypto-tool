@@ -320,6 +320,7 @@
                                 <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
                                 <li><a href="hexdump.jsp">Hexdump Generate</a></li>
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
+                                <li><a href="regex.jsp">Regex Tester</a></li>
                                 <li><a href="random-string.jsp">Random Number Gen</a></li>
                                 <li><a href="contactus.jsp">Feature Request</a></li>
                                 <li><a href="binary-code-translator.jsp">Binary Code Translator</a></li>
