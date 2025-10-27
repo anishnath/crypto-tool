@@ -312,6 +312,7 @@
                     <div id="collapseMisc" class="collapse" aria-labelledby="headingMisc" data-parent="#sidebarAccordion">
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
+                                <li><a href="invoice-generator.jsp">Invoice Generator</a></li>
                                 <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
                                 <li><a href="watermark-pdf.jsp">Add WaterMark PDF</a></li>
                                 <li><a href="short.jsp">URL Shortener & Analytics</a></li>
