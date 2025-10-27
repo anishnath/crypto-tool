@@ -1,0 +1,108 @@
+# URL Shortener (Cloudflare Workers + D1)
+
+Minimal, production-ready URL shortener running on Cloudflare Workers with D1. Supports shortening, redirects, and analytics (daily totals, uniques with salt, top countries/referrers). CORS is enabled for `http://localhost:8080` and `https://8gwifi.org`.
+
+## Prerequisites
+- Cloudflare account and active zone (e.g., `ai-inference.xyz`) with Cloudflare nameservers.
+- API token with permissions: D1 Databases (Edit), Workers Scripts (Edit), Workers Routes (Edit), Zone (Read). Optionally User Details/Memberships (Read).
+- Node.js 18+ (for `npx`).
+
+## 1) Configure `wrangler.toml`
+- Set:
+  - `account_id = "<your-account-id>"`
+  - Route(s): `ai-inference.xyz/*` (and optionally `www.ai-inference.xyz/*`)
+  - D1 binding under `[[d1_databases]]` with `binding = "DB"` and `database_name = "url-shortener-db"`
+- Optionally set `workers_dev = true` for a `*.workers.dev` test URL.
+
+## 2) Authenticate Wrangler
+- macOS/Linux: `export CLOUDFLARE_API_TOKEN="<api-token>"`
+- Windows (PowerShell): `$Env:CLOUDFLARE_API_TOKEN = "<api-token>"`
+- Verify: `npx wrangler whoami`
+
+## 3) Create D1 database
+- Create:
+  - `npx wrangler d1 create url-shortener-db --location wnam`
+- Copy the printed `database_id` into `wrangler.toml` under the `[[d1_databases]]` block.
+
+## 4) Initialize schema (remote)
+Run each statement (remote) to create base + analytics tables:
+
+- Base table:
+```
+npx wrangler d1 execute url-shortener-db --remote --command "CREATE TABLE IF NOT EXISTS urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short_code TEXT UNIQUE NOT NULL, original_url TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, click_count INTEGER DEFAULT 0);"
+```
+
+- Analytics tables:
+```
+npx wrangler d1 execute url-shortener-db --remote --command "CREATE TABLE IF NOT EXISTS url_daily (short_code TEXT NOT NULL, day TEXT NOT NULL, clicks INTEGER DEFAULT 0, unique_clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day));"
+npx wrangler d1 execute url-shortener-db --remote --command "CREATE TABLE IF NOT EXISTS url_uniques (short_code TEXT NOT NULL, day TEXT NOT NULL, hash TEXT NOT NULL, PRIMARY KEY (short_code, day, hash));"
+npx wrangler d1 execute url-shortener-db --remote --command "CREATE TABLE IF NOT EXISTS url_countries (short_code TEXT NOT NULL, day TEXT NOT NULL, country TEXT NOT NULL, clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day, country));"
+npx wrangler d1 execute url-shortener-db --remote --command "CREATE TABLE IF NOT EXISTS url_referrers (short_code TEXT NOT NULL, day TEXT NOT NULL, referrer_host TEXT NOT NULL, clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day, referrer_host));"
+```
+
+## 5) DNS routing (apex)
+If you want the Worker on your apex domain only (no origin):
+- Add a proxied A record:
+  - Type: `A`, Name: `@`, IPv4: `192.0.2.1`, Proxy: ON (orange cloud), TTL: Auto
+- Optional `www`: add proxied `CNAME` `www -> ai-inference.xyz` and add a `www.ai-inference.xyz/*` route.
+
+## 6) (Optional) Enable uniques
+- Set a secret salt to enable unique visitor counting:
+```
+npx wrangler secret put ANALYTICS_SALT
+```
+(Use a random string; it’s never returned.)
+
+## 7) Deploy
+```
+npx wrangler deploy
+```
+This deploys to your route(s) and, if `workers_dev = true`, also to `https://<name>.<subdomain>.workers.dev`.
+
+## 8) Test
+- Shorten:
+```
+curl -s -X POST -H "content-type: application/json" -d '{"url":"https://example.com"}' https://<your-domain>/api/shorten
+```
+- Redirect:
+```
+curl -I https://<your-domain>/<short_code>
+```
+- Analytics (30-day window + top 5):
+```
+curl -s "https://<your-domain>/api/analytics/<short_code>?days=30&top_countries=5&top_referrers=5"
+```
+
+## 9) Local development
+- Start local dev:
+```
+npx wrangler dev --local
+```
+- Initialize local D1 once:
+```
+npx wrangler d1 execute url-shortener-db --local --command "CREATE TABLE IF NOT EXISTS urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short_code TEXT UNIQUE NOT NULL, original_url TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, click_count INTEGER DEFAULT 0);"
+npx wrangler d1 execute url-shortener-db --local --command "CREATE TABLE IF NOT EXISTS url_daily (short_code TEXT NOT NULL, day TEXT NOT NULL, clicks INTEGER DEFAULT 0, unique_clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day));"
+npx wrangler d1 execute url-shortener-db --local --command "CREATE TABLE IF NOT EXISTS url_uniques (short_code TEXT NOT NULL, day TEXT NOT NULL, hash TEXT NOT NULL, PRIMARY KEY (short_code, day, hash));"
+npx wrangler d1 execute url-shortener-db --local --command "CREATE TABLE IF NOT EXISTS url_countries (short_code TEXT NOT NULL, day TEXT NOT NULL, country TEXT NOT NULL, clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day, country));"
+npx wrangler d1 execute url-shortener-db --local --command "CREATE TABLE IF NOT EXISTS url_referrers (short_code TEXT NOT NULL, day TEXT NOT NULL, referrer_host TEXT NOT NULL, clicks INTEGER DEFAULT 0, PRIMARY KEY (short_code, day, referrer_host));"
+```
+- Test locally:
+```
+curl -s -X POST -H "content-type: application/json" -d '{"url":"https://example.com"}' http://127.0.0.1:8787/api/shorten
+```
+
+## API Overview
+- POST `/api/shorten` → `{ short_url }`
+- GET/HEAD `/{short_code}` → 302 Location
+- GET `/api/analytics/{short_code}?days=30&top_countries=5&top_referrers=5` →
+  `{ click_count, created_at, window_days, total_clicks, total_unique_clicks, series:[{day,clicks,unique_clicks}], top_countries?, top_referrers? }`
+
+## Troubleshooting
+- 404 on redirect with `curl -I`: ensure HEAD is allowed and short code exists.
+- 404 on domain: verify DNS A record is proxied and route matches the domain.
+- D1 errors: confirm `database_id` in `wrangler.toml` and token permissions.
+- CORS: Only `http://localhost:8080` and `https://8gwifi.org` are allowed by default.
+
+## Security
+- Rotate and keep API tokens secret.
+- Use a strong random `ANALYTICS_SALT`.

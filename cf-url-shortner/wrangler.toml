@@ -1,0 +1,15 @@
+name = "url-shortener"
+main = "index.js"
+compatibility_date = "2024-05-01"
+workers_dev = true
+account_id = "7e50090f0972664d8e6985f1e83131a3"
+
+# Route the Worker to your apex domain
+routes = [
+  { pattern = "ai-inference.xyz/*", zone_name = "ai-inference.xyz" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "url-shortener-db"
+database_id = "58d2b4ed-5f04-495c-b394-9f69534c34fb"
