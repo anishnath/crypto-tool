@@ -231,6 +231,7 @@
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="websocket-client.jsp">WebSocket Client</a></li>
+                                <li><a href="prometheus-query-builder.jsp">Prometheus Query Builder</a></li>
                                 <li><a href="kube.jsp">Kubernetes Spec Generate</a></li>
                                 <li><a href="kube1.jsp">Docker to Kubernetes</a></li>
                                 <li><a href="kube2.jsp">Kubernetes to Docker Compose</a></li>
