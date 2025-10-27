@@ -197,6 +197,7 @@
                     <div id="collapseNetwork" class="collapse" aria-labelledby="headingNetwork" data-parent="#sidebarAccordion">
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
+                                <li><a href="vpc-calculator.jsp">VPC Network Calculator</a></li>
                                 <li><a href="SubnetFunctions.jsp">IP Subnet Calculator</a></li>
                                 <li><a href="pingfunctions.jsp">Ping/Locate IPv4/IPv6</a></li>
                                 <li><a href="curlfunctions.jsp">Curl IPv4/IPv6</a></li>
