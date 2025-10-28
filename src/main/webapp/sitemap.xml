@@ -356,6 +356,10 @@
     <loc>https://8gwifi.org/scrypt.jsp</loc>
   </url>
 
+    <url>
+        <loc>https://8gwifi.org/argon2.jsp</loc>
+    </url>
+
   <url>
     <loc>https://8gwifi.org/dsafunctions.jsp</loc>
   </url>
