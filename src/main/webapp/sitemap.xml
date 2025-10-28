@@ -266,6 +266,12 @@
   <url>
     <loc>https://8gwifi.org/curlfunctions.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/ipv6-tool.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
 
   <url>
     <loc>https://8gwifi.org/rsafunctions.jsp</loc>
