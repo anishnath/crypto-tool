@@ -397,7 +397,7 @@
         </div>
 
         <div class="alert alert-info" style="margin-bottom: 1rem;">
-            <i class="fas fa-info-circle"></i> <strong>Note:</strong> Due to CORS restrictions, this tool can only check websites that allow cross-origin requests. For full header analysis, use browser developer tools (F12 → Network tab) or server-side tools.
+            <i class="fas fa-info-circle"></i> <strong>How it works:</strong> This tool checks security headers for any website by fetching them server-side. Enter any URL to analyze its HTTP security headers and get a security grade with recommendations.
         </div>
 
         <button class="btn btn-primary btn-block" onclick="checkHeaders()">
@@ -510,29 +510,53 @@ function checkHeaders() {
         return;
     }
 
-    document.getElementById('resultsContainer').style.display = 'none';
+    const resultsContainer = document.getElementById('resultsContainer');
+    resultsContainer.style.display = 'none';
 
-    fetch(url, {
-        method: 'HEAD',
-        mode: 'cors',
-        cache: 'no-cache'
-    })
-    .then(response => {
-        const headers = {};
-        for (let [key, value] of response.headers.entries()) {
-            headers[key.toLowerCase()] = value;
+    // Clear any previous redirect notices
+    const oldNotices = resultsContainer.querySelectorAll('.alert-warning');
+    oldNotices.forEach(notice => notice.remove());
+
+    // Show loading state
+    const btn = document.querySelector('.btn-primary');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+    btn.disabled = true;
+
+    // Use servlet to fetch headers (bypasses CORS)
+    fetch('SecurityHeadersFunctionality?url=' + encodeURIComponent(url))
+    .then(response => response.json())
+    .then(data => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
         }
-        displayResults(headers, url);
+
+        displayResults(data.headers, url, data.redirected, data.finalUrl);
     })
     .catch(error => {
-        alert('Error checking headers: ' + error.message + '\n\nThis is usually due to CORS restrictions. The target website must allow cross-origin requests. For full analysis, use browser developer tools (F12 → Network tab) or check your own website.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        alert('Error checking headers: ' + error.message);
     });
 }
 
-function displayResults(headers, url) {
+function displayResults(headers, url, redirected, finalUrl) {
     const present = [];
     const missing = [];
     const warnings = [];
+
+    // Show redirect notice if applicable
+    if (redirected && finalUrl && finalUrl !== url) {
+        const redirectNotice = '<div class="alert alert-warning" style="margin-bottom: 1rem;">' +
+            '<i class="fas fa-exchange-alt"></i> <strong>Redirect detected:</strong> ' +
+            url + ' redirects to ' + finalUrl + '. Showing headers from final destination.' +
+            '</div>';
+        document.getElementById('resultsContainer').insertAdjacentHTML('afterbegin', redirectNotice);
+    }
 
     for (let headerKey in securityHeaders) {
         if (headers[headerKey]) {
