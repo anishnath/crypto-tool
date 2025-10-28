@@ -141,6 +141,7 @@
                                 <li><a href="CipherFunctions.jsp">Encryption/Decryption</a></li>
                                 <li><a href="file-encrypt.jsp">File Encryption/Decryption</a></li>
                                 <li><a href="fernet.jsp">Fernet Encryption/Decryption</a></li>
+                                <li><a href="steganography-tool.jsp">Steganography Tool</a></li>
                                 <li><a href="rsafunctions.jsp">RSA Encryption/Decryption</a></li>
                                 <li><a href="rsasignverifyfunctions.jsp">RSA Signature/Verification</a></li>
                                 <li><a href="ntrufunctions.jsp">Lattice Cryptography</a></li>

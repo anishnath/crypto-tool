@@ -967,6 +967,10 @@
     <loc>https://8gwifi.org/file-encrypt.jsp</loc>
   </url>
   <url>
+    <loc>https://8gwifi.org/steganography-tool.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/merge-pdf.jsp</loc>
   </url>
   <url>
