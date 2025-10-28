@@ -152,6 +152,8 @@
                                 <li><a href="pbe.jsp">PBE (PBKDF) Encryption/Decryption</a></li>
                                 <li><a href="bccrypt.jsp">BCrypt Password Hash</a></li>
                                 <li><a href="scrypt.jsp">SCrypt Password Hash</a></li>
+                                <li><a href="argon2.jsp">Argon2 Password Hash</a></li>
+                                <li><a href="totp-hotp.jsp">TOTP/HOTP 2FA Generator</a></li>
                                 <li><a href="htpasswd.jsp">.htpasswd Generator</a></li>
                                 <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange</a></li>
                                 <li><a href="PemParserFunctions.jsp">PEM Parser/Decoder</a></li>
@@ -172,6 +174,8 @@
                                 <li><a href="samlverifysign.jsp">SAML Verify/Sign</a></li>
                                 <li><a href="jwkfunctions.jsp">JWK Generate</a></li>
                                 <li><a href="jwkconvertfunctions.jsp">JWK to PEM Convert</a></li>
+                                <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
+                                <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
                                 <li><a href="jwsparse.jsp">JWS Parser</a></li>
                                 <li><a href="jwsgen.jsp">JWS Generate Key Sign Data</a></li>
                                 <li><a href="jwssign.jsp">JWS Sign with Custom Key</a></li>
