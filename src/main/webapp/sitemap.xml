@@ -888,6 +888,12 @@
     <loc>https://8gwifi.org/hdwallet.jsp</loc>
   </url>
   <url>
+    <loc>https://8gwifi.org/bip39-mnemonic.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/emi.jsp</loc>
   </url>
   <url>

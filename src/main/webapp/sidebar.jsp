@@ -266,6 +266,7 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="eth-keygen.jsp">libp2p/devp2p Key Gen</a></li>
                                 <li><a href="hdwallet.jsp">HD Wallet Generator</a></li>
+                                <li><a href="bip39-mnemonic.jsp">BIP39 Mnemonic Generator</a></li>
                                 <li><a href="crypto-profit-calculator.jsp">Crypto Profit Calculator</a></li>
                                 <li><a href="bitcoin-mining-profit-calculator.jsp">Bitcoin Mining Profit Calculator</a></li>
                                 <li><a href="ethereum-gas-fee-estimator.jsp">Ethereum Gas Fee Estimator</a></li>
