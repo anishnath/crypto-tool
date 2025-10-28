@@ -278,6 +278,27 @@
                     </div>
                 </div>
 
+                <!-- Internationalization -->
+                <div class="card">
+                    <div class="card-header" id="headingI18n">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseI18n" aria-expanded="false" aria-controls="collapseI18n">
+                                <i class="fas fa-globe"></i> Internationalization
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseI18n" class="collapse" aria-labelledby="headingI18n" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="punycode-converter.jsp">Punycode Converter</a></li>
+                                <li><a href="unicode-inspector.jsp">Unicode Character Inspector</a></li>
+                                <li><a href="language-detector.jsp">Language Detector</a></li>
+                                <li><a href="transliteration-tool.jsp">Transliteration Tool</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Encoders/Converters -->
                 <div class="card">
                     <div class="card-header" id="headingEncoders">

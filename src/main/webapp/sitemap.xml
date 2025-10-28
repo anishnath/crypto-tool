@@ -272,6 +272,30 @@
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
+  <url>
+    <loc>https://8gwifi.org/punycode-converter.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/unicode-inspector.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/language-detector.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/transliteration-tool.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
 
   <url>
     <loc>https://8gwifi.org/rsafunctions.jsp</loc>
