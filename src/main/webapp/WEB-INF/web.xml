@@ -422,6 +422,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>SecurityHeadersFunctionality</servlet-name>
+        <servlet-class>z.y.x.Security.SecurityHeadersFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SecurityHeadersFunctionality</servlet-name>
+        <url-pattern>/SecurityHeadersFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>PortScanFunctionality</servlet-name>
         <servlet-class>z.y.x.portscan.PortScanFunctionality</servlet-class>
     </servlet>
