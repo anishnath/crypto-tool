@@ -344,6 +344,9 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="invoice-generator.jsp">Invoice Generator</a></li>
                                 <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
+                                <li><a href="split-pdf.jsp">Split PDF</a></li>
+                                <li><a href="compress-pdf.jsp">Compress PDF</a></li>
+                                <li><a href="pdf-to-images.jsp">PDF to Images</a></li>
                                 <li><a href="watermark-pdf.jsp">Add WaterMark PDF</a></li>
                                 <li><a href="short.jsp">URL Shortener & Analytics</a></li>
                                 <li><a href="qrcodegen.jsp">QR Code Generate</a></li>

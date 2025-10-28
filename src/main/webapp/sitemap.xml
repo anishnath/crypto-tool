@@ -978,6 +978,22 @@
     <loc>https://8gwifi.org/merge-pdf.jsp</loc>
   </url>
   <url>
+    <loc>https://8gwifi.org/split-pdf.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/compress-pdf.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/pdf-to-images.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/passwd-pdf.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/watermark-pdf.jsp</loc>
   </url>
   <url>
