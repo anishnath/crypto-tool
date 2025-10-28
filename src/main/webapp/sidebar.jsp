@@ -157,6 +157,7 @@
                                 <li><a href="htpasswd.jsp">.htpasswd Generator</a></li>
                                 <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange</a></li>
                                 <li><a href="PemParserFunctions.jsp">PEM Parser/Decoder</a></li>
+                                <li><a href="asn1-decoder.jsp">ASN.1 Decoder</a></li>
                                 <li><a href="pempublic.jsp">Extract Public from Private Key</a></li>
                                 <li><a href="certs.jsp">Extract Certs from URL</a></li>
                                 <li><a href="pemconvert.jsp">PKCS#8/PKCS#1 Converter</a></li>

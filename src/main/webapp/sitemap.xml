@@ -355,6 +355,13 @@
   </url>
 
   <url>
+    <loc>https://8gwifi.org/asn1-decoder.jsp</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
     <loc>https://8gwifi.org/passwdgen.jsp</loc>
   </url>
 
