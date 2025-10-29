@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.*,java.net.*,java.util.*,com.google.gson.*"%>
-<%@ page import="z.y.x.r.LoadPropertyFileFunctionality"%>
 <!DOCTYPE html>
-<html>
+<div>
 <head>
 	<title>SSL Scanner Tool - SSL/TLS Security Scanner</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
@@ -39,11 +38,150 @@
 	<meta name="target" content="all" />
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="MobileOptimized" content="width" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<%@ include file="header-script.jsp"%>
-	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<style>
+		.ssl-container { margin-top: 1rem; }
+		.form-group { margin-bottom: 1.25rem; }
+		.input-group { position: relative; }
+		.input-group .form-control { border-radius: 8px 0 0 8px; border-right: none; }
+		.input-group-append .btn { border-radius: 0 8px 8px 0; font-weight: 600; }
+		.btn { transition: all 0.3s ease; }
+		.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+		.gradient-header {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 1rem;
+			border-radius: 12px 12px 0 0;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.card {
+			border: none;
+			border-radius: 12px;
+			box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+			margin-bottom: 1.5rem;
+			overflow: hidden;
+		}
+
+		.card-body { padding: 1.5rem; }
+
+		.info-card {
+			background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+			border-radius: 12px;
+			padding: 1.5rem;
+			color: white;
+			margin-bottom: 1.5rem;
+		}
+
+		.info-card h5 { font-weight: 700; margin-bottom: 0.75rem; }
+		.info-card p { margin-bottom: 0; opacity: 0.95; }
+
+		.progress {
+			height: 28px;
+			border-radius: 14px;
+			background: #e5e7eb;
+			overflow: hidden;
+			box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+		}
+
+		.progress-bar {
+			background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+			transition: width 0.4s ease;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.status-badge {
+			display: inline-block;
+			padding: 0.4rem 0.8rem;
+			border-radius: 20px;
+			font-weight: 600;
+			font-size: 0.85rem;
+		}
+
+		.badge-vulnerable {
+			background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+			color: white;
+		}
+
+		.badge-secure {
+			background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
+			color: white;
+		}
+
+		#output {
+			background: #1f2937;
+			color: #10b981;
+			padding: 1rem;
+			border-radius: 8px;
+			max-height: 300px;
+			overflow-y: auto;
+			font-family: 'Courier New', monospace;
+			font-size: 0.9em;
+		}
+
+		#output div { margin-bottom: 0.25rem; }
+		#output strong { color: #3b82f6; }
+
+		.results-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 1.5rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.cert-info-item {
+			padding: 0.75rem 0;
+			border-bottom: 1px solid #e5e7eb;
+		}
+
+		.cert-info-item:last-child { border-bottom: none; }
+		.cert-info-item strong { color: #4b5563; font-weight: 600; }
+
+		.vulnerability-item {
+			padding: 1rem;
+			border-left: 4px solid #ef4444;
+			background: #fef2f2;
+			margin-bottom: 0.75rem;
+			border-radius: 8px;
+		}
+
+		.vulnerability-item strong { color: #dc2626; }
+
+		.scan-type-info {
+			background: #eff6ff;
+			border-left: 4px solid #3b82f6;
+			padding: 1rem;
+			border-radius: 8px;
+			margin-top: 0.5rem;
+		}
+
+		.table thead th {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			font-weight: 600;
+		}
+
+		.table-striped tbody tr:nth-of-type(odd) { background-color: #f9fafb; }
+		.table-bordered { border: 1px solid #e5e7eb; }
+		.table td, .table th { vertical-align: middle; }
+
+		@media (max-width: 768px) {
+			.results-grid { grid-template-columns: 1fr; }
+		}
+	</style>
+
 	<!-- JSON-LD Structured Data for SEO -->
 	<script type="application/ld+json">
 	{
@@ -271,7 +409,10 @@
 				status.text(message);
 			}
 
-			function updateProgress(percent) { $('#progressBar').css('width', percent + '%'); }
+			function updateProgress(percent) {
+				$('#progressBar').css('width', percent + '%');
+				$('#progressText').text(Math.round(percent) + '%');
+			}
 
 			function tryParseJSON(s) {
 				try { return JSON.parse(s); } catch(e) { return null; }
@@ -280,26 +421,26 @@
 			function renderScanResult(data) {
 				// Summary
 				var summaryHtml = '';
-				summaryHtml += '<p><strong>Domain:</strong> ' + (data.domain || 'N/A') + '</p>';
-				summaryHtml += '<p><strong>Port:</strong> ' + (data.port || 'N/A') + '</p>';
-				summaryHtml += '<p><strong>Scan Type:</strong> ' + (data.scan_type || 'N/A') + '</p>';
-				summaryHtml += '<p><strong>Status:</strong> ' + (data.status || 'N/A') + '</p>';
-				summaryHtml += '<p><strong>Scan Time:</strong> ' + (data.scan_time_seconds || '0') + ' seconds</p>';
+				summaryHtml += '<div class="cert-info-item"><strong><i class="fas fa-globe"></i> Domain:</strong> ' + (data.domain || 'N/A') + '</div>';
+				summaryHtml += '<div class="cert-info-item"><strong><i class="fas fa-network-wired"></i> Port:</strong> ' + (data.port || 'N/A') + '</div>';
+				summaryHtml += '<div class="cert-info-item"><strong><i class="fas fa-search"></i> Scan Type:</strong> ' + (data.scan_type || 'N/A').toUpperCase() + '</div>';
+				summaryHtml += '<div class="cert-info-item"><strong><i class="fas fa-check-circle"></i> Status:</strong> ' + (data.status || 'N/A') + '</div>';
+				summaryHtml += '<div class="cert-info-item"><strong><i class="fas fa-clock"></i> Scan Time:</strong> ' + (data.scan_time_seconds || '0') + ' seconds</div>';
 				$('#resultsSummary').html(summaryHtml);
 
 				// Certificate
 				if (data.certificate) {
 					var c = data.certificate;
 					var certHtml = '';
-					certHtml += '<p><strong>Subject:</strong> ' + (c.subject || 'N/A') + '</p>';
-					certHtml += '<p><strong>Issuer:</strong> ' + (c.issuer || 'N/A') + '</p>';
-					certHtml += '<p><strong>Valid From:</strong> ' + (c.valid_from || 'N/A') + '</p>';
-					certHtml += '<p><strong>Valid Until:</strong> ' + (c.valid_until || c.valid_to || 'N/A') + '</p>';
-					certHtml += '<p><strong>Serial Number:</strong> ' + (c.serial_number || 'N/A') + '</p>';
-					certHtml += '<p><strong>Signature Algorithm:</strong> ' + (c.signature_algorithm || 'N/A') + '</p>';
-					certHtml += '<p><strong>Public Key:</strong> ' + (c.public_key_algorithm || 'N/A') + ' ' + (c.public_key_size ? '(' + c.public_key_size + ' bits)' : '') + '</p>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-id-card"></i> Subject:</strong> ' + (c.subject || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-building"></i> Issuer:</strong> ' + (c.issuer || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-calendar-check"></i> Valid From:</strong> ' + (c.valid_from || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-calendar-times"></i> Valid Until:</strong> ' + (c.valid_until || c.valid_to || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-hashtag"></i> Serial Number:</strong> ' + (c.serial_number || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-signature"></i> Signature Algorithm:</strong> ' + (c.signature_algorithm || 'N/A') + '</div>';
+					certHtml += '<div class="cert-info-item"><strong><i class="fas fa-key"></i> Public Key:</strong> ' + (c.public_key_algorithm || 'N/A') + ' ' + (c.public_key_size ? '(' + c.public_key_size + ' bits)' : '') + '</div>';
 					if (c.subject_alt_names && c.subject_alt_names.length) {
-						certHtml += '<p><strong>SAN:</strong> ' + c.subject_alt_names.map(function(x){return '<span class="badge badge-info mr-1">'+x+'</span>';}).join(' ') + '</p>';
+						certHtml += '<div class="cert-info-item"><strong><i class="fas fa-network-wired"></i> SAN:</strong> ' + c.subject_alt_names.map(function(x){return '<span class="badge badge-info mr-1">'+x+'</span>';}).join(' ') + '</div>';
 					}
 					$('#certDetails').html(certHtml);
 				}
@@ -309,18 +450,18 @@
 					var s = data.security;
 					var secHtml = '';
 					if (s.tls_versions && s.tls_versions.length) {
-						secHtml += '<p><strong>TLS Versions:</strong> ' + s.tls_versions.join(', ') + '</p>';
+						secHtml += '<div class="cert-info-item"><strong><i class="fas fa-shield-alt"></i> TLS Versions:</strong> ' + s.tls_versions.map(function(v){return '<span class="badge badge-primary mr-1">'+v+'</span>';}).join(' ') + '</div>';
 					}
 					if (s.supported_ciphers) {
-						secHtml += '<div class="mt-2"><strong>Supported Ciphers</strong><pre class="mb-0">' + (Array.isArray(s.supported_ciphers) ? s.supported_ciphers.join('\n') : s.supported_ciphers) + '</pre></div>';
+						secHtml += '<div class="cert-info-item"><strong><i class="fas fa-lock"></i> Supported Ciphers:</strong><pre style="background: #f9fafb; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; max-height: 200px; overflow-y: auto;">' + (Array.isArray(s.supported_ciphers) ? s.supported_ciphers.join('\n') : s.supported_ciphers) + '</pre></div>';
 					}
 					if (s.weak_ciphers && s.weak_ciphers.length) {
-						secHtml += '<div class="mt-2"><strong>Weak Ciphers</strong><pre class="mb-0">' + s.weak_ciphers.join('\n') + '</pre></div>';
+						secHtml += '<div class="cert-info-item"><strong><i class="fas fa-exclamation-triangle"></i> Weak Ciphers:</strong><pre style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; border-left: 4px solid #ef4444;">' + s.weak_ciphers.join('\n') + '</pre></div>';
 					}
-					secHtml += '<p class="mt-2"><strong>Heartbleed:</strong> ' + (s.heartbleed_vulnerable ? '<span class="badge badge-danger">Vulnerable</span>' : '<span class="badge badge-success">Not Vulnerable</span>') + '</p>';
-					secHtml += '<p><strong>BEAST:</strong> ' + (s.beast_vulnerable ? '<span class="badge badge-danger">Vulnerable</span>' : '<span class="badge badge-success">Not Vulnerable</span>') + '</p>';
-					secHtml += '<p><strong>POODLE:</strong> ' + (s.poodle_vulnerable ? '<span class="badge badge-danger">Vulnerable</span>' : '<span class="badge badge-success">Not Vulnerable</span>') + '</p>';
-					secHtml += '<p><strong>Certificate Transparency:</strong> ' + (s.certificate_transparency ? 'Yes' : 'No') + '</p>';
+					secHtml += '<div class="cert-info-item"><strong><i class="fas fa-heartbeat"></i> Heartbleed:</strong> ' + (s.heartbleed_vulnerable ? '<span class="status-badge badge-vulnerable">Vulnerable</span>' : '<span class="status-badge badge-secure">Not Vulnerable</span>') + '</div>';
+					secHtml += '<div class="cert-info-item"><strong><i class="fas fa-bug"></i> BEAST:</strong> ' + (s.beast_vulnerable ? '<span class="status-badge badge-vulnerable">Vulnerable</span>' : '<span class="status-badge badge-secure">Not Vulnerable</span>') + '</div>';
+					secHtml += '<div class="cert-info-item"><strong><i class="fas fa-bug"></i> POODLE:</strong> ' + (s.poodle_vulnerable ? '<span class="status-badge badge-vulnerable">Vulnerable</span>' : '<span class="status-badge badge-secure">Not Vulnerable</span>') + '</div>';
+					secHtml += '<div class="cert-info-item"><strong><i class="fas fa-eye"></i> Certificate Transparency:</strong> ' + (s.certificate_transparency ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-secondary">No</span>') + '</div>';
 					$('#securityDetails').html(secHtml);
 				}
 
@@ -347,7 +488,9 @@
 						var vhtml = '';
 						for (var j=0;j<data.vulnerabilities.length;j++) {
 							var v = data.vulnerabilities[j];
-							vhtml += '<li><strong>'+ (v.name || '') +'</strong> - '+ (v.severity || '') +' - '+ (v.description || '') +'</li>';
+							var severityIcon = v.severity === 'HIGH' || v.severity === 'CRITICAL' ? 'fa-exclamation-circle' : (v.severity === 'MEDIUM' ? 'fa-exclamation-triangle' : 'fa-info-circle');
+							var severityColor = v.severity === 'HIGH' || v.severity === 'CRITICAL' ? '#dc2626' : (v.severity === 'MEDIUM' ? '#f59e0b' : '#3b82f6');
+							vhtml += '<div class="vulnerability-item" style="border-left-color: '+ severityColor +'"><i class="fas '+ severityIcon +'" style="color: '+ severityColor +';"></i> <strong>'+ (v.name || '') +'</strong> - <span class="badge" style="background: '+ severityColor +'; color: white;">'+ (v.severity || '') +'</span><div style="margin-top: 0.5rem; color: #4b5563;">'+ (v.description || '') +'</div></div>';
 						}
 						$('#vulnList').html(vhtml);
 						$('#vulnCard').show();
@@ -589,93 +732,113 @@
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">SSL Scanner Tool</h1>
+<div class="ssl-container">
+<h1 class="mt-4"><i class="fas fa-shield-alt"></i> SSL Scanner Tool</h1>
+<p class="lead">Comprehensive SSL/TLS security analysis with real-time scanning</p>
 <hr>
 
 <form id="sslScanForm" class="form-horizontal" method="POST">
 	<div class="form-group">
-		<label for="domain"><strong>Domain Name:</strong></label>
+		<label for="domain"><i class="fas fa-globe"></i> <strong>Domain Name:</strong></label>
 		<div class="input-group">
-			<input type="text" class="form-control" id="domain" name="domain" 
-				   placeholder="e.g., example.com, google.com, github.com" required>
+			<div class="input-group-prepend" style="display: flex; align-items: center; background: #fff; border: 1px solid #ced4da; border-right: none; border-radius: 8px 0 0 8px; padding: 0 12px;">
+				<i class="fas fa-server" style="color: #6c757d;"></i>
+			</div>
+			<input type="text" class="form-control" id="domain" name="domain"
+				   placeholder="e.g., example.com, google.com, github.com" required style="border-left: none; padding-left: 0;">
 			<div class="input-group-append">
-				<button type="submit" class="btn btn-primary" id="startBtn">Start SSL Scan</button>
-				<button type="button" class="btn btn-danger" id="stopBtn" style="display:none;">Stop Scan</button>
+				<button type="submit" class="btn btn-primary" id="startBtn"><i class="fas fa-play"></i> Start SSL Scan</button>
+				<button type="button" class="btn btn-danger" id="stopBtn" style="display:none;"><i class="fas fa-stop"></i> Stop Scan</button>
 			</div>
 		</div>
-		<small class="form-text text-muted">Enter a domain name without protocol (http/https)</small>
+		<small class="form-text text-muted"><i class="fas fa-info-circle"></i> Enter a domain name without protocol (http/https)</small>
 	</div>
 
 	<div class="form-group">
-		<label for="scanType"><strong>Scan Type:</strong></label>
-		<select class="form-control" id="scanType" name="scanType">
-			<option value="quick">Quick</option>
-			<option value="basic" selected>Basic</option>
-			<option value="full">Full</option>
+		<label for="scanType"><i class="fas fa-sliders-h"></i> <strong>Scan Type:</strong></label>
+		<select class="form-control" id="scanType" name="scanType" style="border-radius: 8px;">
+			<option value="quick"><i class="fas fa-bolt"></i> Quick - Fast scan (~30 seconds)</option>
+			<option value="basic" selected><i class="fas fa-search"></i> Basic - Detailed analysis (~2-3 minutes)</option>
+			<option value="full"><i class="fas fa-clipboard-check"></i> Full - Complete audit (~5-10 minutes)</option>
 		</select>
-		<small class="form-text text-muted">Quick: fastest. Basic: detailed. Full: exhaustive tests.</small>
+		<div class="scan-type-info">
+			<i class="fas fa-lightbulb"></i> <strong>Quick:</strong> Basic certificate validation. <strong>Basic:</strong> Comprehensive security analysis. <strong>Full:</strong> Complete vulnerability testing.
+		</div>
 	</div>
 </form>
 
 <hr>
 
-<div id="error" class="alert alert-danger" style="display: none;"></div>
+<div id="error" class="alert alert-danger" style="display: none;"><i class="fas fa-exclamation-triangle"></i> <span></span></div>
 
 <div id="progress" style="display: none;">
 	<div class="progress mb-3">
-		<div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+		<div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar" role="progressbar" style="width: 0%">
+			<span id="progressText">0%</span>
+		</div>
 	</div>
 </div>
 
-<div id="status" class="alert alert-info" style="display: none;"></div>
+<div id="status" class="alert alert-info" style="display: none;"><i class="fas fa-info-circle"></i> <span></span></div>
 
 <div class="card mb-3">
-	<div class="card-header"><h5 class="mb-0">Live Output</h5></div>
+	<div class="gradient-header">
+		<i class="fas fa-terminal"></i>
+		<span>Live Output</span>
+	</div>
 	<div class="card-body">
-		<div id="output" style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.9em;"></div>
+		<div id="output"></div>
 	</div>
 </div>
 
 <div id="resultsContainer" style="display:none;">
 	<div class="row mb-3">
 		<div class="col-12">
-			<button type="button" class="btn btn-success" id="downloadBtn" style="display:none;">
-				📄 Download PDF Report
+			<button type="button" class="btn btn-success btn-lg" id="downloadBtn" style="display:none;">
+				<i class="fas fa-file-pdf"></i> Download PDF Report
 			</button>
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-md-6">
-			<div class="card mb-3">
-				<div class="card-header"><h6 class="mb-0">Summary</h6></div>
-				<div class="card-body" id="resultsSummary"></div>
+	<div class="results-grid">
+		<div class="card">
+			<div class="gradient-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+				<i class="fas fa-info-circle"></i>
+				<span>Scan Summary</span>
 			</div>
+			<div class="card-body" id="resultsSummary"></div>
 		</div>
-		<div class="col-md-6">
-			<div class="card mb-3">
-				<div class="card-header"><h6 class="mb-0">Certificate</h6></div>
-				<div class="card-body" id="certDetails"></div>
+		<div class="card">
+			<div class="gradient-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+				<i class="fas fa-certificate"></i>
+				<span>Certificate Details</span>
 			</div>
+			<div class="card-body" id="certDetails"></div>
 		</div>
 	</div>
 
 	<div class="card mb-3">
-		<div class="card-header"><h6 class="mb-0">Security</h6></div>
+		<div class="gradient-header" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+			<i class="fas fa-shield-alt"></i>
+			<span>Security Analysis</span>
+		</div>
 		<div class="card-body" id="securityDetails"></div>
 	</div>
 
 	<div class="card mb-3" id="testResultsCard" style="display:none;">
-		<div class="card-header"><h6 class="mb-0">Full Scan - Test Results</h6></div>
+		<div class="gradient-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+			<i class="fas fa-clipboard-list"></i>
+			<span>Full Scan - Test Results</span>
+		</div>
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped">
-					<thead class="thead-dark">
+					<thead>
 						<tr>
-							<th>Test Name</th>
-							<th>Status</th>
-							<th>Result / Error</th>
-							<th>Duration (s)</th>
+							<th><i class="fas fa-vial"></i> Test Name</th>
+							<th><i class="fas fa-check-circle"></i> Status</th>
+							<th><i class="fas fa-file-alt"></i> Result / Error</th>
+							<th><i class="fas fa-clock"></i> Duration (s)</th>
 						</tr>
 					</thead>
 					<tbody id="testResultsBody"></tbody>
@@ -685,15 +848,21 @@
 	</div>
 
 	<div class="card mb-3" id="vulnCard" style="display:none;">
-		<div class="card-header"><h6 class="mb-0">Vulnerabilities</h6></div>
+		<div class="gradient-header" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+			<i class="fas fa-bug"></i>
+			<span>Vulnerabilities Detected</span>
+		</div>
 		<div class="card-body">
-			<ul id="vulnList" class="mb-0"></ul>
+			<div id="vulnList"></div>
 		</div>
 	</div>
 
 	<div class="card mb-3" id="rawOutputCard" style="display:none;">
-		<div class="card-header"><h6 class="mb-0">Raw Output</h6></div>
-		<div class="card-body"><pre id="rawOutput" class="mb-0"></pre></div>
+		<div class="gradient-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+			<i class="fas fa-code"></i>
+			<span>Raw Scan Output</span>
+		</div>
+		<div class="card-body"><pre id="rawOutput" class="mb-0" style="background: #f9fafb; padding: 1rem; border-radius: 8px; max-height: 400px; overflow-y: auto;"></pre></div>
 	</div>
 </div>
 
@@ -706,13 +875,13 @@
 
 <%@ include file="footer_adsense.jsp"%>
 
-<h2 class="mt-4" id="sslscanning">SSL/TLS Scanning</h2>
+<h2 class="mt-4" id="sslscanning"><i class="fas fa-search"></i> SSL/TLS Scanning</h2>
 
 <p><strong>SSL/TLS scanning</strong> provides certificate details, protocol support, cipher information, and vulnerability indicators. Full scan includes per-test results and raw tool output.</p>
 
 <hr>
 
-<h2 class="mt-4" id="sslscanner">SSL Scanner Tool Overview</h2>
+<h2 class="mt-4" id="sslscanner"><i class="fas fa-shield-alt"></i> SSL Scanner Tool Overview</h2>
 
 <p><strong>SSL Scanner Tool</strong> is a comprehensive online security assessment tool designed to analyze SSL/TLS configurations, validate certificates, and identify potential security vulnerabilities in domain configurations. This enterprise-grade scanner provides real-time analysis with detailed reporting capabilities.</p>
 
@@ -727,11 +896,11 @@
 
 <hr>
 
-<h2 class="mt-4" id="features">Key Features & Capabilities</h2>
+<h2 class="mt-4" id="features"><i class="fas fa-star"></i> Key Features & Capabilities</h2>
 
 <div class="row">
     <div class="col-md-6">
-        <h5>Certificate Analysis</h5>
+        <h5><i class="fas fa-certificate"></i> Certificate Analysis</h5>
         <ul>
             <li><strong>Certificate Validation:</strong> Complete certificate chain verification</li>
             <li><strong>Expiry Monitoring:</strong> Certificate validity period checking</li>
@@ -741,7 +910,7 @@
         </ul>
     </div>
     <div class="col-md-6">
-        <h5>Security Protocol Testing</h5>
+        <h5><i class="fas fa-lock"></i> Security Protocol Testing</h5>
         <ul>
             <li><strong>TLS Version Support:</strong> TLS 1.0, 1.1, 1.2, 1.3 compatibility</li>
             <li><strong>Protocol Security:</strong> Weak protocol detection</li>
@@ -754,7 +923,7 @@
 
 <div class="row mt-3">
     <div class="col-md-6">
-        <h5>Vulnerability Detection</h5>
+        <h5><i class="fas fa-bug"></i> Vulnerability Detection</h5>
         <ul>
             <li><strong>Common Vulnerabilities:</strong> Heartbleed, BEAST, POODLE detection</li>
             <li><strong>Weak Ciphers:</strong> Identification of deprecated algorithms</li>
@@ -764,7 +933,7 @@
         </ul>
     </div>
     <div class="col-md-6">
-        <h5>Advanced Features</h5>
+        <h5><i class="fas fa-rocket"></i> Advanced Features</h5>
         <ul>
             <li><strong>Real-time Scanning:</strong> Live progress monitoring with SSE</li>
             <li><strong>Multiple Scan Types:</strong> Quick, Basic, and Full audit modes</li>
@@ -777,7 +946,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="usage">How to Use SSL Scanner</h2>
+<h2 class="mt-4" id="usage"><i class="fas fa-book"></i> How to Use SSL Scanner</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -823,7 +992,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="scan-types">Scan Types Explained</h2>
+<h2 class="mt-4" id="scan-types"><i class="fas fa-list-check"></i> Scan Types Explained</h2>
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -858,7 +1027,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="security-standards">Security Standards & Compliance</h2>
+<h2 class="mt-4" id="security-standards"><i class="fas fa-check-double"></i> Security Standards & Compliance</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -885,7 +1054,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="common-vulnerabilities">Common SSL/TLS Vulnerabilities</h2>
+<h2 class="mt-4" id="common-vulnerabilities"><i class="fas fa-exclamation-triangle"></i> Common SSL/TLS Vulnerabilities</h2>
 
 <div class="alert alert-warning">
     <h6><strong>Critical Security Issues to Watch For:</strong></h6>
@@ -900,7 +1069,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="best-practices">SSL/TLS Security Best Practices</h2>
+<h2 class="mt-4" id="best-practices"><i class="fas fa-thumbs-up"></i> SSL/TLS Security Best Practices</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -927,7 +1096,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="reporting">Comprehensive Reporting</h2>
+<h2 class="mt-4" id="reporting"><i class="fas fa-file-pdf"></i> Comprehensive Reporting</h2>
 
 <p>The SSL Scanner Tool generates detailed security reports that include:</p>
 
@@ -956,7 +1125,7 @@
 
 <hr>
 
-<h2 class="mt-4" id="use-cases">Professional Use Cases</h2>
+<h2 class="mt-4" id="use-cases"><i class="fas fa-briefcase"></i> Professional Use Cases</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -981,24 +1150,8 @@
     </div>
 </div>
 
-<hr>
-
-<h2 class="mt-4" id="technical-details">Technical Implementation Details</h2>
-
-<p><strong>SSL Scanner Tool</strong> utilizes advanced security testing methodologies and industry-standard tools to provide comprehensive SSL/TLS analysis:</p>
-
-<ul>
-    <li><strong><em>Server-Sent Events (SSE):</em></strong> Real-time progress updates and live output streaming</li>
-    <li><strong><em>Multiple Scan Engines:</em></strong> Integration with industry-leading security testing tools</li>
-    <li><strong><em>Comprehensive Testing:</em></strong> Coverage of all major SSL/TLS security aspects</li>
-    <li><strong><em>Real-time Analysis:</em></strong> Live security assessment with immediate feedback</li>
-    <li><strong><em>PDF Generation:</strong> Professional-grade security reports for documentation</li>
-</ul>
-
-<hr>
-
 <%@ include file="addcomments.jsp"%>
 
 </div>
-
+</div>
 <%@ include file="body-close.jsp"%>
