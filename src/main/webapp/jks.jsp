@@ -1,7 +1,6 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 
@@ -54,7 +53,7 @@
 </div>
 
 
-<p>Online keytool - Upload keystore view all the aliases and delete aliases, export keystore after deleting aliases. Though your keystore is not stored in our system, <mark>please don't use any production keystore, use only test keystore </mark> alternatively you can <a href="https://leanpub.com/crypto/"> download and install </a> this product on your enviroment for extra security </p>
+<p>Online keytool - Upload keystore view all the aliases and delete aliases, export keystore after deleting aliases. Though your keystore is not stored in our system, <mark>please don't use any production keystore, use only test keystore </mark> </p>
 	<form id="form" method="POST" enctype="multipart/form-data"
 		action="JKSManagementFunctionality">
 
