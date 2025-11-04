@@ -12,7 +12,8 @@ async function ensureWatermarkFont() {
   // Try same-origin first, then CDN fallback
   const { origin, pathname } = window.location;
   const parts = pathname.split('/').filter(Boolean);
-  const context = parts.length ? `/${parts[0]}/` : '/';
+  // Use app context only when a real context segment exists (e.g., /myapp/page.jsp). If deployed at root (/page.jsp), use '/'
+  const context = (parts.length >= 2 && !/\./.test(parts[0])) ? `/${parts[0]}/` : '/';
   const candidates = [
     // Context-aware same-origin URL (works under WAR context path)
     origin + context + 'fonts/DejaVuSans.ttf',
@@ -119,7 +120,7 @@ const resolveCorePath = () => {
     const { origin, pathname } = window.location;
     // Derive Java webapp context path (first segment), e.g. /mywebapp2_war_exploded/
     const parts = pathname.split('/').filter(Boolean);
-    const context = parts.length ? `/${parts[0]}/` : '/';
+    const context = (parts.length >= 2 && !/\./.test(parts[0])) ? `/${parts[0]}/` : '/';
     return origin + context + 'js/ffmpeg/ffmpeg-core.js';
 };
 
