@@ -231,6 +231,12 @@
   <loc>https://8gwifi.org/Base64Functions.jsp</loc>
 </url>
 <url>
+  <loc>https://8gwifi.org/Base32Functions.jsp</loc>
+</url>
+<url>
+  <loc>https://8gwifi.org/Base58Functions.jsp</loc>
+</url>
+<url>
   <loc>https://8gwifi.org/CipherFunctions.jsp</loc>
 </url>
 <url>

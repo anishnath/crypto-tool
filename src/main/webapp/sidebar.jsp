@@ -313,6 +313,8 @@
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
+                                <li><a href="Base32Functions.jsp">Base32 Encode/Decode</a></li>
+                                <li><a href="Base58Functions.jsp">Base58 Encode/Decode</a></li>
                                 <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
                                 <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
                                 <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
