@@ -77,6 +77,26 @@
                     </div>
                 </div>
 
+                <!-- Media Tools -->
+                <div class="card">
+                    <div class="card-header" id="headingMedia">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseMedia" aria-expanded="false" aria-controls="collapseMedia">
+                                <i class="fas fa-photo-film"></i> Media Tools
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseMedia" class="collapse" aria-labelledby="headingMedia" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
+                                <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
+                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sharing Services -->
                 <div class="card">
                     <div class="card-header" id="headingSharing">
