@@ -38,87 +38,6 @@
         <div class="card-body">
             <div class="accordion" id="sidebarAccordion">
 
-                <!-- Machine Learning Visualizers -->
-                <div class="card">
-                    <div class="card-header" id="headingML">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseML" aria-expanded="false" aria-controls="collapseML">
-                                <i class="fas fa-robot"></i> Machine Learning Visualizers
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseML" class="collapse" aria-labelledby="headingML" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="activation_function_explorer.jsp">Activation Function Explorer</a></li>
-                                <li><a href="bias_variance_explorer.jsp">Bias-Variance Explorer</a></li>
-                                <li><a href="bias_variance_tradeoff.jsp">Bias-Variance Trade-off</a></li>
-                                <li><a href="clustering_studio.jsp">Clustering Studio</a></li>
-                                <li><a href="decision_boundary_playground.jsp">Decision Boundary Playground</a></li>
-                                <li><a href="decision_tree_model_selection.jsp">Decision Tree Model Selection</a></li>
-                                <li><a href="decision_trees_random_forest.jsp">Decision Trees & Random Forest</a></li>
-                                <li><a href="diffusion_process_visualizer.jsp">Diffusion Process Visualizer</a></li>
-                                <li><a href="gradient_descent_visualizer.jsp">Gradient Descent Visualizer</a></li>
-                                <li><a href="imbalanced_learning_workshop.jsp">Imbalanced Learning Workshop</a></li>
-                                <li><a href="Logistic_Regression.jsp">Logistic Regression</a></li>
-                                <li><a href="ML_Pipeline.jsp">ML Pipeline</a></li>
-                                <li><a href="neural_network_playground.jsp">Neural Network Playground</a></li>
-                                <li><a href="probability_calibration_lab.jsp">Probability Calibration Lab</a></li>
-                                <li><a href="ROC_AUC.jsp">ROC AUC</a></li>
-                                <li><a href="shap_explorer.jsp">SHAP Explorer</a></li>
-                                <li><a href="cyclical_encoding_visualizer.jsp">Cyclical Encoding Visualizer</a></li>
-                                <li><a href="feature_hashing_collision_explorer.jsp">Feature Hashing Collision Explorer</a></li>
-                                <li><a href="categorical_encoding_lab.jsp">Categorical Encoding Lab</a></li>
-                                <li><a href="predicted_probability_explorer.jsp">Predicted Probability Explorer</a></li>
-                                <li><a href="model_validation_lab.jsp">Model Validation Lab</a></li>
-                                <li><a href="transformers_attention_visualizer.jsp">Transformers Attention Visualizer</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Media Tools -->
-                <div class="card">
-                    <div class="card-header" id="headingMedia">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseMedia" aria-expanded="false" aria-controls="collapseMedia">
-                                <i class="fas fa-photo-film"></i> Media Tools
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseMedia" class="collapse" aria-labelledby="headingMedia" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
-                                <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
-                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sharing Services -->
-                <div class="card">
-                    <div class="card-header" id="headingSharing">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseSharing" aria-expanded="true" aria-controls="collapseSharing">
-                                <i class="fas fa-share-alt"></i> Sharing Services
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseSharing" class="collapse" aria-labelledby="headingSharing" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
-                                <li><a href="securebin.jsp">Share Secret Content</a></li>
-                                <li><a href="pastebin.jsp">TextBin Share Content</a></li>
-                                <li><a href="share-file.jsp">Transfer files securely</a></li>
-                                <li><a href="temp-email.jsp">Temporary Email</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- PGP Tools -->
                 <div class="card">
                     <div class="card-header" id="headingPGP">
@@ -142,6 +61,71 @@
                     </div>
                 </div>
 
+                <!-- Sharing Services -->
+                <div class="card">
+                    <div class="card-header" id="headingSharing">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseSharing" aria-expanded="true" aria-controls="collapseSharing">
+                                <i class="fas fa-share-alt"></i> Sharing Services
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseSharing" class="collapse" aria-labelledby="headingSharing" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+                                <li><a href="securebin.jsp">Share Secret Content</a></li>
+                                <li><a href="pastebin.jsp">TextBin Share Content</a></li>
+                                <li><a href="share-file.jsp">Transfer files securely</a></li>
+                                <li><a href="temp-email.jsp">Temporary Email</a></li>
+                                <li><a href="short.jsp">URL Shortener & Analytics</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Tools -->
+                <div class="card">
+                    <div class="card-header" id="headingSecurity">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSecurity" aria-expanded="false" aria-controls="collapseSecurity">
+                                <i class="fas fa-shield"></i> Security Tools
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseSecurity" class="collapse" aria-labelledby="headingSecurity" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
+                                <li><a href="sslscan.jsp">SSL/TLS Scanner</a></li>
+                                <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
+                                <li><a href="jwsparse.jsp">JWS Parser</a></li>
+                                <li><a href="jwsgen.jsp">JWS Generate Key Sign Data</a></li>
+                                <li><a href="jwssign.jsp">JWS Sign with Custom Key</a></li>
+                                <li><a href="jwsverify.jsp">JWS Signature Verification</a></li>
+                                <li><a href="jwkfunctions.jsp">JWK Generate</a></li>
+                                <li><a href="jwkconvertfunctions.jsp">JWK to PEM Convert</a></li>
+                                <li><a href="samlfunctions.jsp">SAML Sign Message</a></li>
+                                <li><a href="samlverifysign.jsp">SAML Verify/Sign</a></li>
+                                <li><a href="certs.jsp">Extract Certs from URL</a></li>
+                                <li><a href="certsverify.jsp">Verify Private Key vs CSR/x509</a></li>
+                                <li><a href="SelfSignCertificateFunctions.jsp">Self Sign Certificate</a></li>
+                                <li><a href="cafunctions.jsp">CA/Certificate Generator</a></li>
+                                <li><a href="signcsr.jsp">Sign CSR</a></li>
+                                <li><a href="ocsp.jsp">OCSP Query</a></li>
+                                <li><a href="JKSManagementFunctionality?invalidate=yes">Keystore Viewer</a></li>
+                                <li><a href="PemParserFunctions.jsp">PEM Parser/Decoder</a></li>
+                                <li><a href="pemconvert.jsp">PKCS#8/PKCS#1 Converter</a></li>
+                                <li><a href="pempublic.jsp">Extract Public from Private Key</a></li>
+                                <li><a href="pempasswordfinder.jsp">PEM Password Finder</a></li>
+                                <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <!-- Cryptography -->
                 <div class="card">
                     <div class="card-header" id="headingCrypto">
@@ -157,8 +141,8 @@
                                 <li><a href="MessageDigest.jsp">Message Digest (Text)</a></li>
                                 <li><a href="mdfile.jsp">Message Digest (File)</a></li>
                                 <li><a href="hmacgen.jsp">HMAC Generator</a></li>
-                                <li><a href="sslscan.jsp">SSL Scanner</a></li>
                                 <li><a href="CipherFunctions.jsp">Encryption/Decryption</a></li>
+                                <li><a href="ciph.jsp">Classical Ciphers (ROT, Caesar, Vigenère)</a></li>
                                 <li><a href="file-encrypt.jsp">File Encryption/Decryption</a></li>
                                 <li><a href="fernet.jsp">Fernet Encryption/Decryption</a></li>
                                 <li><a href="steganography-tool.jsp">Steganography Tool</a></li>
@@ -177,31 +161,9 @@
                                 <li><a href="totp-hotp.jsp">TOTP/HOTP 2FA Generator</a></li>
                                 <li><a href="htpasswd.jsp">.htpasswd Generator</a></li>
                                 <li><a href="DHFunctions.jsp">Diffie-Hellman Key Exchange</a></li>
-                                <li><a href="PemParserFunctions.jsp">PEM Parser/Decoder</a></li>
                                 <li><a href="asn1-decoder.jsp">ASN.1 Decoder</a></li>
-                                <li><a href="pempublic.jsp">Extract Public from Private Key</a></li>
-                                <li><a href="certs.jsp">Extract Certs from URL</a></li>
-                                <li><a href="pemconvert.jsp">PKCS#8/PKCS#1 Converter</a></li>
-                                <li><a href="pempasswordfinder.jsp">PEM Password Finder</a></li>
                                 <li><a href="passwdgen.jsp">Password Generator</a></li>
                                 <li><a href="uuid.jsp">UUID/GUID Generator</a></li>
-                                <li><a href="SelfSignCertificateFunctions.jsp">Self Sign Certificate</a></li>
-                                <li><a href="cafunctions.jsp">CA/Certificate Generator</a></li>
-                                <li><a href="certsverify.jsp">Verify Private Key vs CSR/x509</a></li>
-                                <li><a href="ocsp.jsp">OCSP Query</a></li>
-                                <li><a href="signcsr.jsp">Sign CSR</a></li>
-                                <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
-                                <li><a href="JKSManagementFunctionality?invalidate=yes">Keystore Viewer</a></li>
-                                <li><a href="samlfunctions.jsp">SAML Sign Message</a></li>
-                                <li><a href="samlverifysign.jsp">SAML Verify/Sign</a></li>
-                                <li><a href="jwkfunctions.jsp">JWK Generate</a></li>
-                                <li><a href="jwkconvertfunctions.jsp">JWK to PEM Convert</a></li>
-                                <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
-                                <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
-                                <li><a href="jwsparse.jsp">JWS Parser</a></li>
-                                <li><a href="jwsgen.jsp">JWS Generate Key Sign Data</a></li>
-                                <li><a href="jwssign.jsp">JWS Sign with Custom Key</a></li>
-                                <li><a href="jwsverify.jsp">JWS Signature Verification</a></li>
                                 <li><a href="naclencdec.jsp">Nacl xsalsa20 Encryption</a></li>
                                 <li><a href="naclaead.jsp">Nacl AEAD Encryption</a></li>
                                 <li><a href="naclboxenc.jsp">Nacl Box Encryption</a></li>
@@ -299,6 +261,148 @@
                     </div>
                 </div>
 
+                <!-- Encoders/Converters -->
+                <div class="card">
+                    <div class="card-header" id="headingEncoders">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseEncoders" aria-expanded="false" aria-controls="collapseEncoders">
+                                <i class="fas fa-exchange-alt"></i> Encoders/Converters
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseEncoders" class="collapse" aria-labelledby="headingEncoders" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
+                                <li><a href="Base32Functions.jsp">Base32 Encode/Decode</a></li>
+                                <li><a href="Base58Functions.jsp">Base58 Encode/Decode</a></li>
+                                <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
+                                <li><a href="ciph.jsp">Classical Ciphers (ROT, Caesar, Vigenère)</a></li>
+                                <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
+                                <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
+                                <li><a href="base64image.jsp">Base64 Image Converter</a></li>
+                                <li><a href="hexdump.jsp">Hexdump Generator</a></li>
+                                <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
+                                <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
+                                <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
+                                <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
+                                <li><a href="csv-2-json.jsp">CSV-2-JSON</a></li>
+                                <li><a href="StringFunctions.jsp">String Functions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Developer Tools -->
+                <div class="card">
+                    <div class="card-header" id="headingDev">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseDev" aria-expanded="false" aria-controls="collapseDev">
+                                <i class="fas fa-code"></i> Developer Tools
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseDev" class="collapse" aria-labelledby="headingDev" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="regex.jsp">Regex Tester</a></li>
+                                <li><a href="diff.jsp">Compare Text Diff</a></li>
+                                <li><a href="random-string.jsp">Random String Generator</a></li>
+                                <li><a href="contactus.jsp">Feature Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Machine Learning Visualizers -->
+                <div class="card">
+                    <div class="card-header" id="headingML">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseML" aria-expanded="false" aria-controls="collapseML">
+                                <i class="fas fa-robot"></i> Machine Learning Visualizers
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseML" class="collapse" aria-labelledby="headingML" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="activation_function_explorer.jsp">Activation Function Explorer</a></li>
+                                <li><a href="bias_variance_explorer.jsp">Bias-Variance Explorer</a></li>
+                                <li><a href="bias_variance_tradeoff.jsp">Bias-Variance Trade-off</a></li>
+                                <li><a href="clustering_studio.jsp">Clustering Studio</a></li>
+                                <li><a href="decision_boundary_playground.jsp">Decision Boundary Playground</a></li>
+                                <li><a href="decision_tree_model_selection.jsp">Decision Tree Model Selection</a></li>
+                                <li><a href="decision_trees_random_forest.jsp">Decision Trees & Random Forest</a></li>
+                                <li><a href="diffusion_process_visualizer.jsp">Diffusion Process Visualizer</a></li>
+                                <li><a href="gradient_descent_visualizer.jsp">Gradient Descent Visualizer</a></li>
+                                <li><a href="imbalanced_learning_workshop.jsp">Imbalanced Learning Workshop</a></li>
+                                <li><a href="Logistic_Regression.jsp">Logistic Regression</a></li>
+                                <li><a href="ML_Pipeline.jsp">ML Pipeline</a></li>
+                                <li><a href="neural_network_playground.jsp">Neural Network Playground</a></li>
+                                <li><a href="probability_calibration_lab.jsp">Probability Calibration Lab</a></li>
+                                <li><a href="ROC_AUC.jsp">ROC AUC</a></li>
+                                <li><a href="shap_explorer.jsp">SHAP Explorer</a></li>
+                                <li><a href="cyclical_encoding_visualizer.jsp">Cyclical Encoding Visualizer</a></li>
+                                <li><a href="feature_hashing_collision_explorer.jsp">Feature Hashing Collision Explorer</a></li>
+                                <li><a href="categorical_encoding_lab.jsp">Categorical Encoding Lab</a></li>
+                                <li><a href="predicted_probability_explorer.jsp">Predicted Probability Explorer</a></li>
+                                <li><a href="model_validation_lab.jsp">Model Validation Lab</a></li>
+                                <li><a href="transformers_attention_visualizer.jsp">Transformers Attention Visualizer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Tools -->
+                <div class="card">
+                    <div class="card-header" id="headingMedia">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseMedia" aria-expanded="false" aria-controls="collapseMedia">
+                                <i class="fas fa-photo-film"></i> Media Tools
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseMedia" class="collapse" aria-labelledby="headingMedia" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
+                                <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
+                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sharing Services -->
+                <!-- Documents/PDF -->
+                <div class="card">
+                    <div class="card-header" id="headingDocs">
+                        <h6 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseDocs" aria-expanded="false" aria-controls="collapseDocs">
+                                <i class="fas fa-file-pdf"></i> Documents & PDF
+                            </button>
+                        </h6>
+                    </div>
+                    <div id="collapseDocs" class="collapse" aria-labelledby="headingDocs" data-parent="#sidebarAccordion">
+                        <div class="card-body p-2">
+                            <ul class="list-unstyled mb-0 small">
+                                <li><a href="invoice-generator.jsp">Invoice Generator</a></li>
+                                <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
+                                <li><a href="split-pdf.jsp">Split PDF</a></li>
+                                <li><a href="compress-pdf.jsp">Compress PDF</a></li>
+                                <li><a href="pdf-to-images.jsp">PDF to Images</a></li>
+                                <li><a href="watermark-pdf.jsp">Add Watermark to PDF</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
                 <!-- Internationalization -->
                 <div class="card">
                     <div class="card-header" id="headingI18n">
@@ -320,68 +424,9 @@
                     </div>
                 </div>
 
-                <!-- Encoders/Converters -->
-                <div class="card">
-                    <div class="card-header" id="headingEncoders">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseEncoders" aria-expanded="false" aria-controls="collapseEncoders">
-                                <i class="fas fa-exchange-alt"></i> Encoders/Converters
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseEncoders" class="collapse" aria-labelledby="headingEncoders" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
-                                <li><a href="Base32Functions.jsp">Base32 Encode/Decode</a></li>
-                                <li><a href="Base58Functions.jsp">Base58 Encode/Decode</a></li>
-                                <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
-                                <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
-                                <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
-                                <li><a href="base64image.jsp">Base64 Image Converter</a></li>
-                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
-                                <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
-                                <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
-                                <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
-                                <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
-                                <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
-                                <li><a href="csv-2-json.jsp">CSV-2-JSON</a></li>
-                                <li><a href="StringFunctions.jsp">String Functions</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Miscellaneous Tools -->
-                <div class="card">
-                    <div class="card-header" id="headingMisc">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseMisc" aria-expanded="false" aria-controls="collapseMisc">
-                                <i class="fas fa-tools"></i> Miscellaneous
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseMisc" class="collapse" aria-labelledby="headingMisc" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="invoice-generator.jsp">Invoice Generator</a></li>
-                                <li><a href="merge-pdf.jsp">Merge PDF Files</a></li>
-                                <li><a href="split-pdf.jsp">Split PDF</a></li>
-                                <li><a href="compress-pdf.jsp">Compress PDF</a></li>
-                                <li><a href="pdf-to-images.jsp">PDF to Images</a></li>
-                                <li><a href="watermark-pdf.jsp">Add WaterMark PDF</a></li>
-                                <li><a href="short.jsp">URL Shortener & Analytics</a></li>
-                                <li><a href="qrcodegen.jsp">QR Code Generate</a></li>
-                                <li><a href="hexdump.jsp">Hexdump Generate</a></li>
-                                <li><a href="diff.jsp">Compare Text Diff</a></li>
-                                <li><a href="regex.jsp">Regex Tester</a></li>
-                                <li><a href="random-string.jsp">Random Number Gen</a></li>
-                                <li><a href="contactus.jsp">Feature Request</a></li>
-                                <li><a href="binary-code-translator.jsp">Binary Code Translator</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+
+                <!-- Miscellaneous removed: links moved to Sharing and Developer sections -->
 
                 <!-- Finance Tools -->
                 <div class="card">
@@ -482,7 +527,7 @@
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor </a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
-                                    <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                    
                                     <li><a href="guitar-chord-finder.jsp">Guitar Chord Finder</a></li>
                                     <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
                                     <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
@@ -544,6 +589,9 @@
 
     var map = {
       '#collapseML': 'fas fa-brain',
+      '#collapseMedia': 'fas fa-photo-film',
+      '#collapseSecurity': 'fas fa-shield',
+      '#collapseDocs': 'fas fa-file-pdf',
       '#collapseSharing': 'fas fa-share-nodes',
       '#collapsePGP': 'fas fa-key',
       '#collapseCrypto': 'fas fa-shield-halved',
@@ -551,6 +599,7 @@
       '#collapseDevOps': 'fab fa-docker',
       '#collapseBlockchain': 'fas fa-cubes',
       '#collapseEncoders': 'fas fa-code',
+      '#collapseDev': 'fas fa-code',
       '#collapseMisc': 'fas fa-toolbox',
       '#collapseFinance': 'fas fa-coins',
       '#collapseHealth': 'fas fa-heart-pulse',
@@ -558,8 +607,6 @@
       '#collapseMath': 'fas fa-calculator'
     };
 
-    try {
-      for (var sel in map) { addIcons(sel, map[sel]); }
-    } catch (e) { /* no-op */ }
+    try { for (var sel in map) { addIcons(sel, map[sel]); } } catch (e) { /* no-op */ }
   })();
 </script>

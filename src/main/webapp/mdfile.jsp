@@ -20,13 +20,13 @@
   <meta name="twitter:image" content="https://8gwifi.org/images/site/hash.png">
 <%@ include file="header-script.jsp"%>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"File Hash Generator","url":"https://8gwifi.org/mdfile.jsp","applicationCategory":"UtilitiesApplication","description":"Compute/verify SHA‑1, SHA‑256, SHA‑384, SHA‑512 file hashes in the browser (no upload).","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  {"@context":"https://schema.org","@type":"WebApplication","name":"File Hash Generator","url":"https://8gwifi.org/mdfile.jsp","image":"https://8gwifi.org/images/site/hash.png","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","description":"Compute/verify SHA‑256/512, SHA‑3‑224/256/384/512, MD5, RIPEMD‑160, CRC32/CRC32C, and Adler‑32 checksums entirely in your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-    {"@type":"Question","name":"How do I calculate a file's SHA‑256?","acceptedAnswer":{"@type":"Answer","text":"Click Choose File or drop a file, select SHA‑256, and the checksum is computed locally in your browser."}},
-    {"@type":"Question","name":"How do I verify a hash?","acceptedAnswer":{"@type":"Answer","text":"Paste the expected hash in the Verify box; the tool compares it to the computed value (hex or Base64) and shows match/mismatch."}},
-    {"@type":"Question","name":"Is my file uploaded?","acceptedAnswer":{"@type":"Answer","text":"No. All hashing uses WebCrypto and runs entirely client‑side in your browser."}}
+    {"@type":"Question","name":"How do I verify an SHA‑256 checksum online?","acceptedAnswer":{"@type":"Answer","text":"Click Choose File or drop a file; the SHA‑256 checksum is computed in your browser. Paste an expected value in Verify and Compare."}},
+    {"@type":"Question","name":"Can I compute MD5 or CRC32?","acceptedAnswer":{"@type":"Answer","text":"Yes. Select MD5 or CRC32/CRC32C in Compute Multiple and click Compute Selected."}},
+    {"@type":"Question","name":"Is this offline (no upload)?","acceptedAnswer":{"@type":"Answer","text":"Yes. All hashing uses WebCrypto/pure JS locally; files never leave your device."}}
   ]}
   </script>
   <style>
