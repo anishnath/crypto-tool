@@ -1,11 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Strong Random Password Generator Online with Entropy</title>
+<title>Strong Password Generator – Random, Secure, High‑Entropy (Online)</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <meta name="description" content="This tool allows you to generate random passwords using true randomness,Strong Password Generator to create secure random passwords"/>
-    <meta name="keywords"
-          content="Password Generator, Online Password Generator, Random Password Generator, Secure Password Generator, Create Password, Generate Password, Strong password entropy" />
+    <meta name="description" content="Free online strong password generator. Create random, secure, high‑entropy passwords with length/entropy control, symbols, exclude similar characters, and instant strength meter. 100% client‑side."/>
+    <meta name="keywords" content="strong password generator, random password generator, secure password generator, generate strong passwords online, high entropy passwords, password strength meter, exclude similar characters, copy password, create passwords online" />
+    <link rel="canonical" href="https://8gwifi.org/passwdgen.jsp"/>
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="Strong Password Generator – Random, Secure, High‑Entropy (Online)"/>
+    <meta property="og:description" content="Generate secure, random passwords with adjustable length or entropy. Exclude similar characters, require sets, and copy/download. Runs entirely in your browser."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://8gwifi.org/passwdgen.jsp"/>
+    <meta property="og:image" content="https://8gwifi.org/images/site/pass.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Strong Password Generator – Random, Secure, High‑Entropy (Online)"/>
+    <meta name="twitter:description" content="Free client‑side password generator with entropy controls, symbols, exclude‑similar, and strength meter."/>
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/pass.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <%@ include file="header-script.jsp"%>
@@ -14,34 +25,67 @@
 
 	<script type="application/ld+json">
     {
-    "@context" : "http://schema.org",
-    "@type" : "SoftwareApplication",
-    "name" : "Strong Random Password Generator Online with Entropy",
-    "image" : "https://8gwifi.org/images/site/pass.png",
-    "url" : "https://8gwifi.org/passwdgen.jsp",
-    "author" : {
-    "@type" : "Person",
-    "name" : "Anish Nath"
-    },
-    "datePublished" : "2018-05-26",
-    "applicationCategory" : [ "Password Generator", "Online Password Generator", "Random Password Generator", "Secure Password Generator", "Create Password", "Strong password entropy"],
-    "downloadUrl" : "https://8gwifi.org/passwdgen.jsp",
-    "operatingSystem" : "Linux,Unix,Windows,Redhat,RHEL,Fedora,Ubuntu,Android,iPhone",
-    "requirements" : "Password Generator, Online Password Generator, Random Password Generator, Secure Password Generator, Create Password, Generate Password, Strong password entropy",
-    "softwareVersion" : "v1.0"
+      "@context" : "https://schema.org",
+      "@type" : "WebApplication",
+      "name" : "Strong Password Generator (Online)",
+      "image" : "https://8gwifi.org/images/site/pass.png",
+      "url" : "https://8gwifi.org/passwdgen.jsp",
+      "author" : {"@type" : "Person","name" : "Anish Nath"},
+      "datePublished" : "2018-05-26",
+      "applicationCategory" : "UtilitiesApplication",
+      "operatingSystem" : "All",
+      "downloadUrl" : "https://8gwifi.org/passwdgen.jsp",
+      "softwareVersion" : "v1.1",
+      "offers": {"@type":"Offer","price":"0","priceCurrency":"USD"},
+      "featureList": [
+        "Length or entropy based generation",
+        "Exclude similar/ambiguous characters",
+        "Require at least one from each selected set",
+        "Avoid sequences and adjacent repeats",
+        "Instant strength meter and crack‑time estimate",
+        "Copy and download generated passwords"
+      ]
     }
     </script>
+
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"How do I generate a strong password?","acceptedAnswer":{"@type":"Answer","text":"Select the character sets you need, choose a length (12–24+) or target entropy, then click Generate. Use the strength meter and crack‑time estimate to gauge security."}},
+        {"@type":"Question","name":"Are passwords generated client‑side?","acceptedAnswer":{"@type":"Answer","text":"Yes. All generation happens in your browser using the Web Crypto API for randomness when available. Nothing is uploaded or stored on our servers."}},
+        {"@type":"Question","name":"What does exclude similar characters do?","acceptedAnswer":{"@type":"Answer","text":"It removes visually ambiguous characters such as O/0, l/1, |, and certain symbols to make passwords easier to read and transcribe."}},
+        {"@type":"Question","name":"Length vs entropy—what should I choose?","acceptedAnswer":{"@type":"Answer","text":"Both work. Length is straightforward (e.g., 16 chars). Entropy aims for a target bit strength. Higher entropy increases resistance to brute force attacks."}},
+        {"@type":"Question","name":"How strong should my password be?","acceptedAnswer":{"@type":"Answer","text":"For most accounts, 12–16 characters with mixed sets is good. For high‑value accounts, consider 20+ characters. Always enable two‑factor authentication when possible."}}
+      ]
+    }
+    </script>
+
+<style>
+  .pg .card-header{padding:.6rem .9rem;font-weight:600}
+  .pg .card-body{padding:.9rem}
+  .pg .form-group{margin-bottom:.6rem}
+  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+  .meter{height:.75rem;background:#e9ecef;border-radius:6px;overflow:hidden}
+  .meter>span{display:block;height:100%;background:#dc3545}
+  .meter.ok>span{background:#fd7e14}
+  .meter.good>span{background:#28a745}
+  .meter.excellent>span{background:#17a2b8}
+  .small-muted{font-size:.9rem;color:#6c757d}
+</style>
 
 <script type="text/javascript">
     "use strict";
 
     var CHARACTER_SETS = [
-    [true, "Numbers", "0123456789"],
-    [true, "Lowercase", "abcdefghijklmnopqrstuvwxyz"],
-    [false, "Uppercase", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
-    [false, "ASCII symbols", "!\"#$%" + String.fromCharCode(38) + "'()*+,-./:;" + String.fromCharCode(60) + "=>?@[\\]^_`{|}~"],
-    [false, "Space", " "],
+      [true,  "Numbers",        "0123456789"],
+      [true,  "Lowercase",      "abcdefghijklmnopqrstuvwxyz"],
+      [false, "Uppercase",      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
+      [false, "ASCII symbols",  "!\"#$%" + String.fromCharCode(38) + "'()*+,-./:;" + String.fromCharCode(60) + "=>?@[\\]^_`{|}~"],
+      [false, "Space",          " "]
     ];
+    var AMBIGUOUS = new Set([...'O0oIl1|`~;:"' + "'" + '.,{}[]()<>/\\']);
 
     var passwordText = document.createTextNode("");
     var statisticsText = document.createTextNode("\u00A0");
@@ -68,10 +112,15 @@
     elements.appendChild(document.createElement("br"));
     });
     var containerElem = document.getElementById("charset-checkboxes");
+    if (!containerElem) { return; }
     containerElem.insertBefore(elements, containerElem.firstChild);
     }
 
-    init();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
 
     // The one and only function called from the HTML code
     function generate() {
@@ -184,7 +233,8 @@
 
     function initCrypto() {
     var textNode = document.createTextNode("\u2717");
-    document.getElementById("crypto-getrandomvalues-entropy").appendChild(textNode);
+    var tgt = document.getElementById("crypto-getrandomvalues-entropy");
+    if (tgt) { try { tgt.appendChild(textNode); } catch(e){} }
 
     if ("crypto" in window)
     cryptoObject = crypto;
@@ -202,94 +252,198 @@
     initCrypto();
     </script>
 
+<!-- Advanced JS: enhanced generator, meter, copy/download. Overrides generate() safely. -->
+<script>
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+  function readPgOptions(){
+    return {
+      excludeSimilar: document.getElementById('exclude-similar') ? document.getElementById('exclude-similar').checked : false,
+      requireEach: document.getElementById('require-each') ? document.getElementById('require-each').checked : false,
+      noRepeatAdjacent: document.getElementById('no-repeat-adj') ? document.getElementById('no-repeat-adj').checked : false,
+      avoidSequences: document.getElementById('avoid-seq') ? document.getElementById('avoid-seq').checked : false
+    };
+  }
+  function buildPgCharset(opts){
+    var charsetStr='';
+    if(typeof CHARACTER_SETS!=='undefined'){
+      CHARACTER_SETS.forEach(function(entry,i){ var el=document.getElementById('charset-'+i); if(el && el.checked) charsetStr+=entry[2]; });
+    }
+    var custom=document.getElementById('custom'); var customchars=document.getElementById('customchars');
+    if(custom && custom.checked && customchars) charsetStr+=customchars.value;
+    charsetStr=charsetStr.replace(/ /g,'\u00A0');
+    var set=[]; for(var i=0;i<charsetStr.length;i++){ var ch=charsetStr[i]; if(opts.excludeSimilar && typeof AMBIGUOUS!=='undefined' && AMBIGUOUS.has(ch)) continue; if(set.indexOf(ch)===-1) set.push(ch); }
+    return set;
+  }
+  function pickFromSet(sourceStr, masterSet, opts){
+    var pool=[]; for(var i=0;i<sourceStr.length;i++){ var ch=sourceStr[i]; if(opts.excludeSimilar && typeof AMBIGUOUS!=='undefined' && AMBIGUOUS.has(ch)) continue; if(masterSet.indexOf(ch)!==-1 && pool.indexOf(ch)===-1) pool.push(ch); }
+    if(pool.length===0) return masterSet[randomInt(masterSet.length)];
+    return pool[randomInt(pool.length)];
+  }
+  function pgShuffle(arr){ for(var i=arr.length-1;i>0;i--){ var j=randomInt(i+1); var t=arr[i]; arr[i]=arr[j]; arr[j]=t; } return arr; }
+  function wouldMakeSeq(out,c){ var n=out.length; if(n<2) return false; var a=out[n-2].charCodeAt(0), b=out[n-1].charCodeAt(0), d=c.charCodeAt(0); return (b===a+1 && d===b+1) || (b===a-1 && d===b-1); }
+  function renderMeter(bits){ var meter=document.getElementById('entropyMeter'); if(!meter) return; var bar=meter.querySelector('span'); var pct=Math.max(0,Math.min(100,Math.round(bits/2))); meter.className='meter'; if(bits>=100) meter.classList.add('excellent'); else if(bits>=80) meter.classList.add('good'); else if(bits>=60) meter.classList.add('ok'); bar.style.width=pct+'%'; }
+  function crackEstimate(bits){ var gps=1e10; var sec=Math.pow(2,bits)/gps; return humanTime(sec); }
+  function humanTime(sec){ if(!isFinite(sec)||sec<=0) return 'instant'; var units=[['yr',31557600],['day',86400],['hr',3600],['min',60],['sec',1]]; var parts=[]; for(var i=0;i<units.length;i++){ var v=Math.floor(sec/units[i][1]); if(v>0){ parts.push(v+' '+units[i][0]+(v>1?'s':'')); sec-=v*units[i][1]; if(parts.length===2) break; } } return parts.length? parts.join(' ') : 'less than 1 sec'; }
+
+  // Override original generate()
+  function generate(){
+    var opts=readPgOptions();
+    var charset=buildPgCharset(opts);
+    if(charset.length===0){ alert('Error: Character set is empty'); return; }
+    if(document.getElementById('by-entropy') && document.getElementById('by-entropy').checked && charset.length<2){ alert('Error: Need at least 2 distinct characters in set'); return; }
+    var length=16;
+    if(document.getElementById('by-length') && document.getElementById('by-length').checked){
+      var len=parseInt(document.getElementById('length').value,10)||16; length=clamp(len,4,2048);
+    } else if(document.getElementById('entropy')){
+      var bits=parseFloat(document.getElementById('entropy').value)||128; length=Math.ceil(bits*Math.log(2)/Math.log(charset.length)); length=clamp(length,4,2048); var lr=document.getElementById('lengthRange'); if(lr) lr.value=length; var ln=document.getElementById('length'); if(ln) ln.value=length;
+    }
+    var countEl=document.getElementById('count'); var count=countEl? clamp(parseInt(countEl.value,10)||1,1,200):1;
+    var out=[]; for(var j=0;j<count;j++){ out.push(generateOne(length, charset, opts)); }
+    var first=out[0]||''; var list=out.join('\n');
+    var pw=document.getElementById('password'); if(pw) pw.value=first;
+    var pl=document.getElementById('passwordList'); if(pl) pl.value=list;
+    var bits=(Math.log(charset.length)||0)*length/Math.log(2); var stats='Length = '+length+' chars,  Charset size = '+charset.length+' symbols,  Entropy = '+(bits<70?bits.toFixed(2):bits<200?bits.toFixed(1):bits.toFixed(0))+' bits'; var st=document.getElementById('statistics'); if(st) st.value=stats; renderMeter(bits); var ct=document.getElementById('crackTime'); if(ct) ct.textContent=crackEstimate(bits);
+  }
+
+  function generateOne(length, charset, opts){
+    var out=[]; var pre=[]; if(opts.requireEach && typeof CHARACTER_SETS!=='undefined'){ CHARACTER_SETS.forEach(function(entry,i){ var el=document.getElementById('charset-'+i); if(el && el.checked){ pre.push(pickFromSet(entry[2], charset, opts)); } }); }
+    for(var i=pre.length;i<length;i++){ var c,guard=0; do{ c=charset[randomInt(charset.length)]; guard++; } while(((opts.noRepeatAdjacent && out.length>0 && out[out.length-1]===c) || (opts.avoidSequences && wouldMakeSeq(out,c))) && guard<1000); out.push(c); }
+    out=out.concat(pre); pgShuffle(out); return out.join('');
+  }
+
+  function copyField(id, btn){ try{ var el=document.getElementById(id); var val=(el&&el.value)||''; if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(val).then(function(){ showCopied(btn); }); } else { var ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); showCopied(btn); } }catch(e){} }
+  function showCopied(btn){ try{ if(window.jQuery && $(btn).tooltip){ $(btn).tooltip({title:'Copied!', trigger:'manual', placement:'top'}); $(btn).tooltip('show'); setTimeout(function(){ try{$(btn).tooltip('hide').tooltip('dispose');}catch(e){} },900); } else if(btn){ var orig=btn.getAttribute('data-orig')||btn.innerHTML; btn.setAttribute('data-orig',orig); btn.innerHTML='Copied!'; setTimeout(function(){ btn.innerHTML=btn.getAttribute('data-orig'); },900); } }catch(e){} }
+  function toggleVisibility(id, btn){ try{ var el=document.getElementById(id); if(!el) return; if(el.type==='text'){ el.type='password'; if(btn) btn.textContent='👁️'; } else { el.type='text'; if(btn) btn.textContent='🙈'; } }catch(e){} }
+  function downloadList(){ try{ var v=(document.getElementById('passwordList').value)||''; var blob=new Blob([v],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='passwords.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }catch(e){} }
+</script>
+
     </head>
 
 
 <%@ include file="body-script.jsp"%>
 
-<h1 class="mt-4">Strong Random Password Generator </h1>
+<div class="container mt-4 pg">
+  <h1 class="mb-2">Advanced Password Generator</h1>
+  <p class="text-muted">Generate strong random passwords with configurable character sets, entropy/length, and smart constraints. All generation happens in your browser.</p>
 
-<p>Thanks to the Project Nayuki Main contributor which has created a Javascript function which generate a random Password with Entropy. This tool utilize the Project Nayuki Strong Random Password genertor algorith which is completely java script based </p>
+  <form method="get" onsubmit="generate(); return false;">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-3">
+          <h5 class="card-header">Character Sets</h5>
+          <div class="card-body">
+            <div id="charset-checkboxes" class="mb-2"></div>
+            <div class="form-group form-inline">
+              <div class="form-check mr-2">
+                <input type="checkbox" class="form-check-input" id="custom" />
+                <label class="form-check-label" for="custom">Custom</label>
+              </div>
+              <input type="text" class="form-control form-control-sm" id="customchars" placeholder="Add extra characters" oninput="document.getElementById('custom').checked=true;" />
+            </div>
+            <div class="form-group">
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="exclude-similar"><label class="form-check-label" for="exclude-similar">Exclude similar/ambiguous (O,0,l,1,|,{,},…)</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="require-each" checked><label class="form-check-label" for="require-each">Require at least one from each selected set</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="no-repeat-adj" checked><label class="form-check-label" for="no-repeat-adj">No adjacent repeats (e.g., aa, 11)</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="avoid-seq"><label class="form-check-label" for="avoid-seq">Avoid simple sequences (abc, 123)</label></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="col-lg-4">
+        <div class="card mb-3">
+          <h5 class="card-header">Length & Entropy</h5>
+          <div class="card-body">
+            <div class="form-group">
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="type" id="by-length" checked>
+                <label class="form-check-label" for="by-length">Length</label>
+              </div>
+              <input type="range" class="custom-range" min="4" max="128" step="1" id="lengthRange" value="16" oninput="document.getElementById('length').value=this.value; document.getElementById('by-length').checked=true;" />
+              <input type="number" class="form-control" min="4" max="512" value="16" step="1" id="length" oninput="document.getElementById('lengthRange').value=this.value; document.getElementById('by-length').checked=true;" />
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="type" id="by-entropy">
+                <label class="form-check-label" for="by-entropy">Target entropy (bits)</label>
+              </div>
+              <input type="number" class="form-control" min="32" value="128" step="1" id="entropy" oninput="document.getElementById('by-entropy').checked=true;" />
+            </div>
+            <div class="form-group">
+              <label for="count">How many passwords</label>
+              <input type="number" id="count" class="form-control" min="1" max="200" value="5">
+            </div>
+          </div>
+        </div>
+      </div>
 
-<div id="loading" style="display: none;">
-    <img src="images/712.GIF" alt="" />Loading!
+      <div class="col-lg-4">
+        <div class="card mb-3">
+          <h5 class="card-header">Strength</h5>
+          <div class="card-body">
+            <div class="meter" id="entropyMeter"><span style="width:0%"></span></div>
+            <span id="crypto-getrandomvalues-entropy" style="display:none"></span>
+            <small class="small-muted">Crack time (at 1e10 guesses/sec): <span id="crackTime">–</span></small>
+            <div class="form-group mt-2">
+              <label for="statistics">Stats</label>
+              <input type="text" class="form-control" id="statistics" readonly placeholder="Statistics will appear here">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <h5 class="card-header">Generate</h5>
+      <div class="card-body">
+        <div class="form-row align-items-center">
+          <div class="col-md-8 mb-2">
+            <div class="input-group input-group-lg">
+              <input type="password" class="form-control mono" id="password" name="password" placeholder="First password appears here" readonly>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary" title="Show/Hide" onclick="toggleVisibility('password', this)">👁️</button>
+                <button type="button" class="btn btn-outline-secondary" title="Copy" onclick="copyField('password', this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-2 text-md-right">
+            <button type="submit" class="btn btn-primary mr-2" onclick="generate(); return false;">Generate</button>
+            <button type="button" class="btn btn-outline-secondary mr-2" onclick="copyField('passwordList', this)">Copy All</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="downloadList()">Download</button>
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <label for="passwordList">All passwords (one per line)</label>
+          <textarea id="passwordList" class="form-control mono" rows="6" readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+  <p class="small-muted">Thanks to Project Nayuki for the original entropy-based generator idea. This version adds constraints, strength meter, copy/download, and multiple outputs.</p>
+
+  <div id="output"></div>
+
+  <hr>
+
+  <div class="sharethis-inline-share-buttons"></div>
+  <%@ include file="thanks.jsp"%>
+
+  <hr>
+
+  <%@ include file="footer_adsense.jsp"%>
+
+  <h2 class="mt-4" id="thersaalgorithm">Strong password characteristics</h2>
+  <p><strong>A strong password</strong> is random. Entropy measures randomness for the process, not the password alone. Longer passwords with larger character sets yield more entropy.</p>
+  <ul>
+    <li>Use at least 12–16 characters for accounts; more for high-value targets.</li>
+    <li>Avoid reusing passwords and personal information.</li>
+    <li>Prefer a password manager and MFA whenever possible.</li>
+  </ul>
 </div>
-
-<hr>
-
-
-            <form method="get" onsubmit="generate(); return false;">
-
-
-    <p  id="charset-checkboxes">
-            <span><input type="checkbox" id="charset-0" />
-            <label for="charset-0"> Numbers <small>(0123456789)</small></label></span><br />
-            <span><input type="checkbox" checked="checked" id="charset-1" />
-            <label for="charset-1"> Lowercase <small>(abcdefghijklmnopqrstuvwxyz)</small></label></span><br />
-            <span><input type="checkbox" id="charset-2" />
-            <label for="charset-2"> Uppercase <small>(ABCDEFGHIJKLMNOPQRSTUVWXYZ)</small></label></span><br />
-            <span><input type="checkbox" id="charset-3" />
-            <label for="charset-3"> ASCII symbols <small>(!"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~)</small></label></span><br /><span><input type="checkbox" id="charset-4" /><label for="charset-4"> Space <small>( )</small></label></span><br />
-    <span><input type="checkbox" id="custom" /><label for="custom"> Custom:</label> <input type="text" id="customchars" value="" size="15" style="width:10em; font-size:80%; line-height:1.5" oninput="document.getElementById('custom').checked=true;" /></span>
-            </p>
-
-            <div  class="section"><div><table id="type">
-            <tbody>
-            <tr>
-            <td><input type="radio" name="type" id="by-length" checked="checked" /> <label for="by-length">Length:</label></td>
-    <td><input type="number" min="0" value="10" step="1" id="length" style="width:4" oninput="document.getElementById('by-length').checked=true;" /> characters</td>
-            </tr>
-            <tr>
-            <td><input type="radio" name="type" id="by-entropy" />
-            <label for="by-entropy">Entropy</label></td>
-            <td><input type="number" class="form-control" min="0" value="128" step="any" id="entropy" style="width:4" oninput="document.getElementById('by-entropy').checked=true;" /> bits</td>
-            </tr>
-            </tbody>
-            </table></div></div>
-
-            <p>
-            <input type="submit" class="btn btn-primary" value="Generate password"  />
-    <input type="text" class="form-control" readonly="true" size="30" id="password" name="password" placeholder="your Password will appear here">
-            <br/>
-            Statistics <input type="text" class="form-control" id="statistics" readonly="true" size="100" name="statistics" placeholder="Statistics will appear here">
-            </p>
-
-
-
-            </form>
-
-
-<div id="output"></div>
-
-<hr>
-
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-
-<hr>
-
-<%@ include file="footer_adsense.jsp"%>
-
-<h2 class="mt-4" id="thersaalgorithm">Strong password charaterstic</h2>
-<p><strong>A strong password</strong> is a random password. By "random". "Entropy" is the name of the mathematical concept by which this randomness can be expressed. Take care that "password entropy" is a property of the process which generated the password, and cannot be measured on the password itself</p>
-<p><strong>Good passwords / passphrases:</strong></p>
-<ul>
-    <li>A strong password must be at least 8 characters long.</li>
-    <li>It should not contain any of your personal information&mdash;specifically your real name, user name, or even your company name.</li>
-    <li>It must be very unique from your previously used passwords.</li>
-    <li>It should not contain any word spelled completely.</li>
-    <li>It should contain characters from the four primary categories, including: uppercase letters, lowercase letters, numbers, and characters.</li>
-    <li>should be 8 characters or longer, which forces you to use multiple words or extra symbols.</li>
-    <li>should have upper case, lower case, symbols, and numbers; or at least three of those four groups.</li>
-    <li>should not be a common word and should not be a common phrase.</li>
-    <li>should not contain a date, a name, or other things that can be associated with you.</li>
-    <li>should be created randomly or semi-randomly.</li>
-    <li>should not be a suggestion when you type in the first few characters into Google.</li>
-</ul>
 <%@ include file="addcomments.jsp"%>
 
 </div>
 
 <%@ include file="body-close.jsp"%>
-
