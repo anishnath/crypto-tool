@@ -391,6 +391,7 @@
                                 <li><a href="split-pdf.jsp">Split PDF</a></li>
                                 <li><a href="compress-pdf.jsp">Compress PDF</a></li>
                                 <li><a href="pdf-to-images.jsp">PDF to Images</a></li>
+                                <li><a href="pdf-password.jsp">PDF Password: Remove / Add / Change</a></li>
                                 <li><a href="watermark-pdf.jsp">Add Watermark to PDF</a></li>
                             </ul>
                         </div>
