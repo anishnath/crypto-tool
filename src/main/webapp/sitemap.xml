@@ -1002,6 +1002,18 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://8gwifi.org/pdf-to-jpg.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/jpg-to-pdf.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/pdf-to-word.jsp</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/pdf-password.jsp</loc>
     <priority>0.95</priority>
   </url>

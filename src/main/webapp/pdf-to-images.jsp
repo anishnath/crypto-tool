@@ -158,6 +158,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <style>
         body {
@@ -835,6 +836,10 @@
                         <button class="mode-btn active" id="modeAllPages">All Pages</button>
                         <button class="mode-btn" id="modeSelectPages">Select Pages</button>
                     </div>
+                    <div id="pageSelectToolbar" style="display:none; margin:.5rem 0; display:flex; gap:.5rem; flex-wrap:wrap">
+                        <button id="selectAllPages" type="button" style="padding:.35rem .6rem; background:#667eea; color:#fff; border:none; border-radius:4px; font-size:.8rem">Select All</button>
+                        <button id="selectNonePages" type="button" style="padding:.35rem .6rem; background:#64748b; color:#fff; border:none; border-radius:4px; font-size:.8rem">Select None</button>
+                    </div>
                     <div class="page-selector" id="pageSelector"></div>
                 </div>
 
@@ -1043,12 +1048,14 @@
             document.getElementById('modeAllPages').classList.add('active');
             document.getElementById('modeSelectPages').classList.remove('active');
             document.getElementById('pageSelector').classList.remove('active');
+            document.getElementById('pageSelectToolbar').style.display = 'none';
         });
 
         document.getElementById('modeSelectPages').addEventListener('click', function() {
             document.getElementById('modeSelectPages').classList.add('active');
             document.getElementById('modeAllPages').classList.remove('active');
             document.getElementById('pageSelector').classList.add('active');
+            document.getElementById('pageSelectToolbar').style.display = 'flex';
         });
 
         // Generate page selector
@@ -1077,6 +1084,21 @@
                 selector.appendChild(item);
             }
         }
+
+        // Select All / None handlers
+        document.getElementById('selectAllPages').addEventListener('click', function(){
+            var selector = document.getElementById('pageSelector');
+            var items = selector.querySelectorAll('.page-selector-item');
+            items.forEach(function(el){ el.classList.add('selected'); });
+            selectedPages.clear();
+            for (var p=1; p<=totalPages; p++){ selectedPages.add(p); }
+        });
+        document.getElementById('selectNonePages').addEventListener('click', function(){
+            var selector = document.getElementById('pageSelector');
+            var items = selector.querySelectorAll('.page-selector-item');
+            items.forEach(function(el){ el.classList.remove('selected'); });
+            selectedPages.clear();
+        });
 
         // Convert button
         document.getElementById('convertBtn').addEventListener('click', async function() {
