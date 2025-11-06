@@ -498,6 +498,15 @@
 	</servlet-mapping>
 
     <servlet>
+        <servlet-name>PDFPasswordFunctionality</servlet-name>
+        <servlet-class>z.y.x.pdf.PDFPasswordFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PDFPasswordFunctionality</servlet-name>
+        <url-pattern>/PDFPasswordFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ScreenshotFunctionality</servlet-name>
         <servlet-class>z.y.x.Network.ScreenshotFunctionality</servlet-class>
     </servlet>
