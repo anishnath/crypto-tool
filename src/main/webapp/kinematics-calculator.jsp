@@ -90,8 +90,16 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="a">Acceleration a (m/s²)</label>
-            <input id="a" type="number" step="0.0001" class="form-control" placeholder="e.g. 2">
+            <label for="a">Acceleration a</label>
+            <div class="input-group">
+              <input id="a" type="number" step="0.0001" class="form-control" placeholder="e.g. 2">
+              <div class="input-group-append">
+                <select id="unitA" class="form-control">
+                  <option value="mps2" selected>m/s²</option>
+                  <option value="g">g</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="t">Time t (s)</label>
@@ -147,6 +155,8 @@
             <button id="btnSavePng" class="btn btn-sm btn-outline-secondary ml-2" title="Save graph as PNG">Save PNG</button>
             <button id="btnShareLink" class="btn btn-sm btn-outline-primary ml-2" title="Share a link to this setup">Share</button>
             <small id="shareMsg" class="text-success ml-2" style="display:none">Link copied</small>
+            <button id="btnAddMotion" class="btn btn-sm btn-outline-dark ml-3" title="Freeze current motion">Add Motion</button>
+            <button id="btnClearMotions" class="btn btn-sm btn-outline-secondary ml-2" title="Clear saved motions">Clear</button>
             <div class="form-check ml-3" style="margin:0 .5rem;">
               <input class="form-check-input" type="checkbox" id="toggleMarkers" checked>
               <label class="form-check-label small" for="toggleMarkers">Markers</label>
@@ -163,6 +173,18 @@
               <input class="form-check-input" type="checkbox" id="toggleCrosshair" checked>
               <label class="form-check-label small" for="toggleCrosshair">Crosshair</label>
             </div>
+            <div class="form-check ml-3" style="margin:0 .5rem;">
+              <input class="form-check-input" type="checkbox" id="toggleStacked">
+              <label class="form-check-label small" for="toggleStacked">Stacked</label>
+            </div>
+            <button id="btnPlay" class="btn btn-sm btn-outline-success ml-3">Play</button>
+            <select id="speedSel" class="form-control form-control-sm ml-2" style="width:auto">
+              <option value="0.25">0.25×</option>
+              <option value="0.5">0.5×</option>
+              <option value="1" selected>1×</option>
+              <option value="2">2×</option>
+              <option value="4">4×</option>
+            </select>
             <div class="ml-3 d-flex align-items-center">
               <small class="text-muted mr-2">t</small>
               <input id="scrub" type="range" min="0" max="100" step="1" value="0">
@@ -175,8 +197,45 @@
         </h5>
         <div class="card-body">
           <canvas id="chart" height="260"></canvas>
+          <div id="stacked" style="display:none" class="mt-2">
+            <div class="mt-2">
+              <strong>v–t</strong>
+              <canvas id="chart_vt" height="180"></canvas>
+            </div>
+            <div class="mt-2">
+              <strong>s–t</strong>
+              <canvas id="chart_st" height="180"></canvas>
+            </div>
+            <div class="mt-2">
+              <strong>a–t</strong>
+              <canvas id="chart_at" height="180"></canvas>
+            </div>
+          </div>
           <small class="text-muted">v–s shows velocity vs displacement. Use v–t and s–t for time-based views.</small>
           <div id="teachBox" class="small text-muted mt-2" style="display:none"></div>
+          <div class="mt-2" style="border:1px solid #e5e7eb;border-radius:6px;padding:.25rem .5rem;background:#fff;">
+            <canvas id="track" height="40" style="width:100%"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header">Comparisons</h5>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>Color</th>
+                  <th>u</th>
+                  <th>a</th>
+                  <th>t<sub>end</sub></th>
+                  <th>s<sub>end</sub></th>
+                </tr>
+              </thead>
+              <tbody id="motionRows"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -219,6 +278,7 @@
   const unitS = el('unitS');
   const unitU = el('unitU');
   const unitV = el('unitV');
+  const unitA = el('unitA');
   const toggleMarkers = el('toggleMarkers');
   const toggleShade = el('toggleShade');
   const toggleAvg = el('toggleAvg');
@@ -226,9 +286,20 @@
   const toggleTeach = el('toggleTeach');
   const scrub = el('scrub');
   const teachBox = el('teachBox');
+  const toggleStacked = el('toggleStacked');
+  const btnAddMotion = el('btnAddMotion');
+  const btnClearMotions = el('btnClearMotions');
+  const motionRows = document.getElementById('motionRows');
+  const chartVT = document.getElementById('chart_vt');
+  const chartST = document.getElementById('chart_st');
+  const chartAT = document.getElementById('chart_at');
+  const stackedWrap = document.getElementById('stacked');
   let chart;
   let currentSeries = null;
   let currentIndex = 0;
+  let chartVti = null, chartSti = null, chartAti = null;
+  const colors = ['#0ea5e9','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6'];
+  let motions = [];
 
   function toNum(x){ const n = parseFloat(x); return Number.isFinite(n) ? n : null; }
   function fmt(n, unit){ if(n === null) return '–'; const v = Math.round(n*1000)/1000; return unit? (v+' '+unit): (''+v); }
@@ -236,20 +307,24 @@
   function resetSteps(){ stepsEl.innerHTML=''; }
 
   // Unit helpers
-  const UF = { S:{m:1, km:1000}, Vel:{mps:1, kmph:(1000/3600)} };
+  const G_CONST = 9.80665; // m/s^2
+  const UF = { S:{m:1, km:1000}, Vel:{mps:1, kmph:(1000/3600)}, Acc:{mps2:1, g:G_CONST} };
   function toBaseS(val){ return Number.isFinite(val)? val * (UF.S[unitS.value]||1) : null; }
   function toBaseVel(val, which){ const unit = which==='u'? unitU.value : unitV.value; return Number.isFinite(val)? val * (UF.Vel[unit]||1) : null; }
+  function toBaseAcc(val){ return Number.isFinite(val)? val * (UF.Acc[unitA.value]||1) : null; }
   function fromBaseS(val){ if(val===null) return null; return val / (UF.S[unitS.value]||1); }
   function fromBaseVel(val, which){ if(val===null) return null; const unit = which==='u'? unitU.value : unitV.value; return val / (UF.Vel[unit]||1); }
+  function fromBaseAcc(val){ if(val===null) return null; return val / (UF.Acc[unitA.value]||1); }
   function fmtUnitS(val){ if(val===null) return '–'; const v = fromBaseS(val); const sfx = unitS.value; const fixed = Math.abs(v)<1 ? v.toFixed(3) : v.toFixed(2); return fixed+' '+sfx; }
   function fmtUnitVel(val, which){ if(val===null) return '–'; const v = fromBaseVel(val, which); const sfx = (which==='u'? unitU.value : unitV.value) === 'kmph'? 'km/h':'m/s'; const fixed = Math.abs(v)<1 ? v.toFixed(3) : v.toFixed(2); return fixed+' '+sfx; }
+  function fmtUnitAcc(val){ if(val===null) return '–'; const v = fromBaseAcc(val); const sfx = unitA.value==='g'? 'g':'m/s²'; const fixed = Math.abs(v)<1 ? v.toFixed(3) : v.toFixed(2); return fixed+' '+sfx; }
 
   function readKnowns(){
     return {
       s: toBaseS(toNum(S.value)),
       u: toBaseVel(toNum(U.value),'u'),
       v: toBaseVel(toNum(V.value),'v'),
-      a: toNum(A.value),
+      a: toBaseAcc(toNum(A.value)),
       t: toNum(T.value)
     };
   }
@@ -341,7 +416,7 @@
     out.s.textContent = fmtUnitS(x.s);
     out.u.textContent = fmtUnitVel(x.u,'u');
     out.v.textContent = fmtUnitVel(x.v,'v');
-    out.a.textContent = fmt(x.a,'m/s²');
+    out.a.textContent = fmtUnitAcc(x.a);
     out.t.textContent = fmt(x.t,'s');
 
     return x;
@@ -370,6 +445,10 @@
 
   function plot(type, series){
     if(chart) chart.destroy();
+    if(chartVti){ chartVti.destroy(); chartVti=null; }
+    if(chartSti){ chartSti.destroy(); chartSti=null; }
+    if(chartAti){ chartAti.destroy(); chartAti=null; }
+    if(toggleStacked && toggleStacked.checked){ chartEl.style.display='none'; if(stackedWrap) stackedWrap.style.display=''; } else { chartEl.style.display=''; if(stackedWrap) stackedWrap.style.display='none'; }
     let labels, data, xlab, ylab;
     const sUnit = unitS.value;
     const vUnit = (unitV.value==='kmph')? 'km/h' : 'm/s';
@@ -378,7 +457,18 @@
     else { labels = series.ts; data = series.ss; xlab='t (s)'; ylab=`s (${sUnit})`; }
 
     // Datasets
-    const datasets = [{ label: ylab+' vs '+xlab, data, borderColor:'#0ea5e9', pointRadius:0, tension:.12, fill:false, backgroundColor:'transparent' }];
+    const datasets = [];
+    const seriesList = [ {series, color: colors[0]} ].concat(motions.map((m,i)=>({series:m.series, color: colors[(i+1)%colors.length]})));
+    function dsFor(s, color, ydata){ return { label: '', data: ydata, borderColor: color, pointRadius:0, tension:.12, fill:false, backgroundColor:'transparent' }; }
+    if(!toggleStacked || !toggleStacked.checked){
+      const ydata = (type==='vs')? series.vs : (type==='vt')? series.vs : (type==='at')? series.aa : series.ss;
+      datasets.push(dsFor(series, colors[0], ydata));
+      for(let i=0;i<motions.length;i++){
+        const ms = motions[i].series; const color = colors[(i+1)%colors.length];
+        const yd = (type==='vs')? ms.vs : (type==='vt')? ms.vs : (type==='at')? ms.aa : ms.ss;
+        datasets.push(dsFor(ms, color, yd));
+      }
+    }
     if(toggleShade.checked && type==='vt'){
       const idxC = Math.max(0, Math.min(data.length-1, Math.round(currentIndex)));
       const area = new Array(data.length).fill(null); for(let i=0;i<=idxC;i++){ area[i]=data[i]; }
@@ -468,12 +558,17 @@
       }
     };
 
-    chart = new Chart(chartEl, {
-      type:'line',
-      data:{ labels, datasets },
-      options:{ responsive:true, scales:{ x:{ title:{display:true,text:xlab} }, y:{ title:{display:true,text:ylab} } }, plugins:{legend:{display:false}, tooltip } },
-      plugins: [crosshairPlugin]
-    });
+    if(!toggleStacked || !toggleStacked.checked){
+      chart = new Chart(chartEl, { type:'line', data:{ labels, datasets }, options:{ responsive:true, scales:{ x:{ title:{display:true,text:xlab} }, y:{ title:{display:true,text:ylab} } }, plugins:{legend:{display:false}, tooltip } }, plugins: [crosshairPlugin] });
+    } else {
+      const labelsT = series.ts; const sUnitLoc = unitS.value; const vUnitLoc = (unitV.value==='kmph')? 'km/h' : 'm/s';
+      const dsVT = seriesList.map(obj=> ({ label:'', data: obj.series.vs, borderColor: obj.color, pointRadius:0, tension:.12 }));
+      const dsST = seriesList.map(obj=> ({ label:'', data: obj.series.ss, borderColor: obj.color, pointRadius:0, tension:.12 }));
+      const dsAT = seriesList.map(obj=> ({ label:'', data: obj.series.aa, borderColor: obj.color, pointRadius:0, tension:.12 }));
+      chartVti = new Chart(chartVT, { type:'line', data:{ labels: labelsT, datasets: dsVT }, options:{ responsive:true, scales:{ x:{ title:{display:true,text:'t (s)'} }, y:{ title:{display:true,text:`v (${vUnitLoc})`} } }, plugins:{legend:{display:false}} } });
+      chartSti = new Chart(chartST, { type:'line', data:{ labels: labelsT, datasets: dsST }, options:{ responsive:true, scales:{ x:{ title:{display:true,text:'t (s)'} }, y:{ title:{display:true,text:`s (${sUnitLoc})`} } }, plugins:{legend:{display:false}} } });
+      chartAti = new Chart(chartAT, { type:'line', data:{ labels: labelsT, datasets: dsAT }, options:{ responsive:true, scales:{ x:{ title:{display:true,text:'t (s)'} }, y:{ title:{display:true,text:'a (m/s²)'} } }, plugins:{legend:{display:false}} } });
+    }
 
     // Teaching overlay
     if(toggleTeach && toggleTeach.checked){
@@ -489,8 +584,43 @@
     const res = solveSUVAT(); if(!res) return; const series = buildSeries(res); currentSeries=series; scrub.value=0; currentIndex=0; plot(currentTab, series);
   });
   btnClear.addEventListener('click', ()=>{ [S,U,V,A,T].forEach(e=> e.value=''); Object.values(out).forEach(n=> n.textContent='–'); resetSteps(); if(chart) chart.destroy(); errEl.style.display='none'; if(teachBox){ teachBox.style.display='none'; } scrub.value=0; currentIndex=0; });
-  ;[unitS, unitU, unitV].forEach(sel=> sel.addEventListener('change', ()=>{ const res=solveSUVAT(); if(!res) return; const series=buildSeries(res); plot(currentTab, series); }));
-  if(toggleTeach) toggleTeach.addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
+  ;[unitS, unitU, unitV, unitA].forEach(sel=> sel.addEventListener('change', ()=>{ const res=solveSUVAT(); if(!res) return; const series=buildSeries(res); plot(currentTab, series); }));
+  if(document.getElementById('toggleStacked')) document.getElementById('toggleStacked').addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
+
+  function rebuildTable(){
+    const motionRows = document.getElementById('motionRows'); if(!motionRows) return;
+    motionRows.innerHTML = motions.map((m,i)=>{
+      const color = m.color || colors[(i+1)%colors.length];
+      const uTxt = fmtUnitVel(m.series.uBase,'u');
+      const aTxt = fmtUnitAcc(m.series.aBase);
+      const tTxt = fmt(m.series.tEnd,'s');
+      const sTxt = fmtUnitS(m.series.sEndBase);
+      return `<tr>
+        <td><input type="color" value="${color}" data-i="${i}" class="motion-color"></td>
+        <td>${uTxt}</td>
+        <td>${aTxt}</td>
+        <td>${tTxt}</td>
+        <td>${sTxt}</td>
+        <td><button class="btn btn-sm btn-outline-danger motion-remove" data-i="${i}">Remove</button></td>
+      </tr>`;
+    }).join('');
+  }
+  if(document.getElementById('btnAddMotion')) document.getElementById('btnAddMotion').addEventListener('click', ()=>{ const res = solveSUVAT(); if(!res) return; const ser = buildSeries(res); const color = colors[(motions.length+1)%colors.length]; motions.push({ series: ser, color }); rebuildTable(); if(currentSeries) plot(currentTab, currentSeries); });
+  if(document.getElementById('btnClearMotions')) document.getElementById('btnClearMotions').addEventListener('click', ()=>{ motions=[]; rebuildTable(); if(currentSeries) plot(currentTab, currentSeries); });
+  const motionRowsEl = document.getElementById('motionRows');
+  if(motionRowsEl){
+    motionRowsEl.addEventListener('input', (e)=>{
+      if(e.target && e.target.classList.contains('motion-color')){
+        const idx = parseInt(e.target.getAttribute('data-i'),10); if(!isNaN(idx) && motions[idx]){ motions[idx].color = e.target.value; if(currentSeries) plot(currentTab, currentSeries); }
+      }
+    });
+    motionRowsEl.addEventListener('click', (e)=>{
+      if(e.target && e.target.classList.contains('motion-remove')){
+        const idx = parseInt(e.target.getAttribute('data-i'),10); if(!isNaN(idx)){ motions.splice(idx,1); rebuildTable(); if(currentSeries) plot(currentTab, currentSeries); }
+      }
+    });
+  }
+if(toggleTeach) toggleTeach.addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
   if(toggleMarkers) toggleMarkers.addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
   if(toggleShade) toggleShade.addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
   if(toggleAvg) toggleAvg.addEventListener('change', ()=>{ if(currentSeries) plot(currentTab, currentSeries); });
@@ -513,18 +643,32 @@
   function savePng(){
     try{
       const off = document.createElement('canvas');
-      const pad = 64; off.width = chartEl.width; off.height = chartEl.height + pad;
-      const octx = off.getContext('2d');
-      octx.fillStyle = '#ffffff'; octx.fillRect(0,0,off.width,off.height);
-      octx.drawImage(chartEl, 0, 0);
+      const pad = 64;
+      if(document.getElementById('toggleStacked') && document.getElementById('toggleStacked').checked){
+        const c1 = document.getElementById('chart_vt');
+        const c2 = document.getElementById('chart_st');
+        const c3 = document.getElementById('chart_at');
+        const w = Math.max(c1.width, c2.width, c3.width);
+        const h = c1.height + c2.height + c3.height + pad + 16;
+        off.width = w; off.height = h;
+        var octx = off.getContext('2d');
+        octx.fillStyle = '#ffffff'; octx.fillRect(0,0,off.width,off.height);
+        let y=0; octx.drawImage(c1, 0, y); y+=c1.height+8; octx.drawImage(c2, 0, y); y+=c2.height+8; octx.drawImage(c3, 0, y);
+      } else {
+        off.width = chartEl.width; off.height = chartEl.height + pad;
+        var octx = off.getContext('2d');
+        octx.fillStyle = '#ffffff'; octx.fillRect(0,0,off.width,off.height);
+        octx.drawImage(chartEl, 0, 0);
+      }
       const xs = readKnowns();
       const meta = [
         'Kinematics (SUVAT)',
-        's: '+fmtUnitS(xs.s)+'  u: '+fmtUnitVel(xs.u,'u')+'  v: '+fmtUnitVel(xs.v,'v')+'  a: '+fmt(xs.a,'m/s²')+'  t: '+fmt(xs.t,'s'),
+        's: '+fmtUnitS(xs.s)+'  u: '+fmtUnitVel(xs.u,'u')+'  v: '+fmtUnitVel(xs.v,'v')+'  a: '+fmtUnitAcc(xs.a)+'  t: '+fmt(xs.t,'s'),
         'https://8gwifi.org/kinematics-calculator.jsp'
       ];
       octx.fillStyle='#111827'; octx.font='14px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
-      for(let k=0;k<meta.length;k++){ octx.fillText(meta[k], 12, chartEl.height + 24 + k*18); }
+      const baseY = off.height - pad + 24;
+      for(let k=0;k<meta.length;k++){ octx.fillText(meta[k], 12, baseY + k*18); }
       const a=document.createElement('a'); a.href=off.toDataURL('image/png'); a.download='kinematics-graph.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }catch(e){}
   }
