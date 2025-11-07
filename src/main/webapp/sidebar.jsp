@@ -368,6 +368,9 @@
                                 <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
                                 <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
                                 <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                <li><a href="heic-to-jpg.jsp">HEIC to JPG/PNG</a></li>
+                                <li><a href="webp-converter.jsp">WebP to JPG/PNG</a></li>
+                                <li><a href="png-jpg-converter.jsp">PNG ↔ JPG</a></li>
                             </ul>
                         </div>
                     </div>
