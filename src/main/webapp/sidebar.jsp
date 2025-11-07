@@ -367,7 +367,14 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
                                 <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
-                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                <li><a href="svg-to-image.jsp">SVG to PNG/JPG</a></li>
+                                <li><a href="gif-mp4-converter.jsp">GIF ↔ MP4 Converter</a></li>
+                                <li><a href="heic-to-jpg.jsp">HEIC to JPG/PNG</a></li>
+                                <li><a href="webp-converter.jsp">WebP to JPG/PNG</a></li>
+                                <li><a href="png-jpg-converter.jsp">PNG ↔ JPG</a></li>
+                                <li><a href="exif-remover.jsp">EXIF Remover</a></li>
+                                <li><a href="exif-editor.jsp">EXIF Editor</a></li>
                                 <li><a href="heic-to-jpg.jsp">HEIC to JPG/PNG</a></li>
                                 <li><a href="webp-converter.jsp">WebP to JPG/PNG</a></li>
                                 <li><a href="png-jpg-converter.jsp">PNG ↔ JPG</a></li>
