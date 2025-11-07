@@ -570,12 +570,32 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Physics & Astronomy -->
+                    <div class="card">
+                        <div class="card-header" id="headingPhysics">
+                            <h6 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapsePhysics" aria-expanded="false" aria-controls="collapsePhysics">
+                                    <i class="fas fa-atom"></i> Physics Tools
+                                </button>
+                            </h6>
+                        </div>
+                        <div id="collapsePhysics" class="collapse" aria-labelledby="headingPhysics" data-parent="#sidebarAccordion">
+                            <div class="card-body p-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li><a href="projectile-motion-simulator.jsp">Projectile Motion Simulator</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
             </div>
         </div>
     </div>
+
+    <!-- Physics Tools (New Section) -->
+
 
     <%@ include file="related-upcoming.jsp"%>
 
