@@ -584,6 +584,7 @@
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="projectile-motion-simulator.jsp">Projectile Motion Simulator</a></li>
                                     <li><a href="ohms-law-calculator.jsp">Ohm's Law & Circuit Calculator</a></li>
+                                    <li><a href="kinematics-calculator.jsp">Kinematics Equation Solver (SUVAT)</a></li>
                                 </ul>
                             </div>
                         </div>
