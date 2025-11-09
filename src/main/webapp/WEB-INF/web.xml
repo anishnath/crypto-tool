@@ -476,7 +476,14 @@
 	</servlet-mapping>
 
 	<!-- SSH client servlet using SSHJ -->
-
+    <servlet>
+        <servlet-name>InspectJSServlet</servlet-name>
+        <servlet-class>z.y.x.Security.InspectJSServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InspectJSServlet</servlet-name>
+        <url-pattern>/InspectJSServlet</url-pattern>
+    </servlet-mapping>
 
 
 	<servlet>

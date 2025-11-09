@@ -119,6 +119,7 @@
                                 <li><a href="pempublic.jsp">Extract Public from Private Key</a></li>
                                 <li><a href="pempasswordfinder.jsp">PEM Password Finder</a></li>
                                 <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
+                                <li><a href="InspectJSFunctions.jsp">InspectJS JavaScript Scanner</a></li>
                             </ul>
                         </div>
                     </div>
