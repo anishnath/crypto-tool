@@ -512,7 +512,7 @@
       const params = new URLSearchParams();
       params.append('url', target);
       params.append('depth', el('depth').value || '1');
-      params.append('threads', el('threads').value || '1');
+      params.append('threads', '1');
       if(el('verifySsl').checked) params.append('verifySsl', 'true');
 
       const resp = await fetch('InspectJSServlet', {
@@ -552,7 +552,6 @@
   el('btnReset').addEventListener('click', ()=>{
     el('targetUrl').value = '';
     el('depth').value = '1';
-    el('threads').value = '1';
     el('verifySsl').checked = false;
     statusEl.style.display = 'none';
     resetOutputs();
