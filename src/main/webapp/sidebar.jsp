@@ -586,6 +586,10 @@
                                     <li><a href="ohms-law-calculator.jsp">Ohm's Law & Circuit Calculator</a></li>
                                     <li><a href="kinematics-calculator.jsp">Kinematics Equation Solver (SUVAT)</a></li>
                                     <li><a href="free-fall-calculator.jsp">Free Fall & Gravity Drop</a></li>
+                                    <li><a href="wave-speed-frequency.jsp">Wave Speed & Frequency Tool</a></li>
+                                    <li><a href="energy-conservation-tracker.jsp">Energy Conservation Tracker</a></li>
+                                    <li><a href="lens-mirror-ray-tracer.jsp">Lens/Mirror Ray Tracer</a></li>
+                                    <li><a href="shm-oscillator.jsp">SHM Oscillator (Spring/Pendulum)</a></li>
                                 </ul>
                             </div>
                         </div>

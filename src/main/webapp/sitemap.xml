@@ -79,6 +79,27 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://8gwifi.org/wave-speed-frequency.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/energy-conservation-tracker.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/lens-mirror-ray-tracer.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/shm-oscillator.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
     <loc>https://8gwifi.org/ohms-law-calculator.jsp</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
