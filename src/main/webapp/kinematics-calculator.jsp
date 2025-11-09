@@ -152,6 +152,7 @@
             <button id="tabVS" class="btn btn-sm btn-outline-primary mr-2">v–s</button>
             <button id="tabVT" class="btn btn-sm btn-outline-secondary mr-2">v–t</button>
             <button id="tabST" class="btn btn-sm btn-outline-secondary">s–t</button>
+            <button id="tabAT" class="btn btn-sm btn-outline-secondary ml-2">a–t</button>
             <button id="btnSavePng" class="btn btn-sm btn-outline-secondary ml-2" title="Save graph as PNG">Save PNG</button>
             <button id="btnShareLink" class="btn btn-sm btn-outline-primary ml-2" title="Share a link to this setup">Share</button>
             <small id="shareMsg" class="text-success ml-2" style="display:none">Link copied</small>
@@ -271,7 +272,7 @@
   const errEl = el('err');
   const btnSolve = el('btnSolve'), btnClear = el('btnClear');
   const chartEl = el('chart');
-  const tabVS = el('tabVS'), tabVT = el('tabVT'), tabST = el('tabST');
+  const tabVS = el('tabVS'), tabVT = el('tabVT'), tabST = el('tabST'), tabAT = el('tabAT');
   const btnSave = el('btnSavePng');
   const btnShare = el('btnShareLink');
   const shareMsg = el('shareMsg');
@@ -637,7 +638,7 @@ if(toggleTeach) toggleTeach.addEventListener('change', ()=>{ if(currentSeries) p
   tabVS.addEventListener('click', ()=> setTabs('vs'));
   tabVT.addEventListener('click', ()=> setTabs('vt'));
   tabST.addEventListener('click', ()=> setTabs('st'));
-  tabAT.addEventListener('click', ()=> setTabs('at'));
+  if(tabAT) tabAT.addEventListener('click', ()=> setTabs('at'));
 
   // Save PNG with stats
   function savePng(){
