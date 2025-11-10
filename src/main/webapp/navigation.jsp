@@ -17,6 +17,9 @@
             <li class="nav-item">
               <a class="nav-link" href="short.jsp">URL Shortener</a>
             </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="jsonparser.jsp">JSON Beautifier</a>
+              </li>
             <li class="nav-item">
               <a class="nav-link" target="_blank" href="https://procmail.xyz">Temp Email</a>
             </li>
