@@ -591,6 +591,8 @@
                                     <li><a href="energy-conservation-tracker.jsp">Energy Conservation Tracker</a></li>
                                     <li><a href="lens-mirror-ray-tracer.jsp">Lens/Mirror Ray Tracer</a></li>
                                     <li><a href="shm-oscillator.jsp">SHM Oscillator (Spring/Pendulum)</a></li>
+                                    <li><a href="rc-rlc-filter.jsp">RC/RLC Filter Calculator</a></li>
+                                    <li><a href="led-resistor-calculator.jsp">LED Resistor Calculator</a></li>
                                 </ul>
                             </div>
                         </div>
