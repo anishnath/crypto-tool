@@ -299,7 +299,7 @@
         <h5 class="card-header">Related Physics Tools</h5>
         <div class="card-body small">
           <div class="mb-2">
-            <a href="friction-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2">
+            <a href="friction-force-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2">
               <i class="fas fa-grip-lines"></i> Friction Force Calculator
             </a>
             <a href="kinematics-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2">

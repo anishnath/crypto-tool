@@ -589,6 +589,9 @@
                                     <li><a href="momentum-collision-calculator.jsp">Momentum & Collision Calculator</a></li>
                                     <li><a href="inclined-plane-calculator.jsp">Inclined Plane Calculator</a></li>
                                     <li><a href="torque-rotation-calculator.jsp">Torque & Rotational Dynamics</a></li>
+                                    <li><a href="centripetal-force-calculator.jsp">Centripetal Force Calculator</a></li>
+                                    <li><a href="friction-force-calculator.jsp">Friction Force Calculator</a></li>
+                                    <li><a href="doppler-effect-calculator.jsp">Doppler Effect Calculator</a></li>
                                     <li><a href="free-fall-calculator.jsp">Free Fall & Gravity Drop</a></li>
                                     <li><a href="wave-speed-frequency.jsp">Wave Speed & Frequency Tool</a></li>
                                     <li><a href="energy-conservation-tracker.jsp">Energy Conservation Tracker</a></li>
