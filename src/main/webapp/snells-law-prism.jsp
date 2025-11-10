@@ -339,6 +339,20 @@
         <div class="mt-1"><strong>Prism deviation:</strong> A prism bends light twice. For apex A and internal angles r₁,r₂ with r₁+r₂=A, the emergent angle i₂ in air satisfies sin i₂ = n·sin r₂. The external deviation is δ ≈ i₁ + i₂ − A, minimized near the symmetric condition r₁=r₂=A/2.</div>
         <div class="mt-1 text-muted">Note: This tool assumes monochromatic light (single n). Dispersion (n(λ)) splits colors; a simple model could assign slightly different n for red/green/blue to visualize spread.</div>
       </div></div>
+
+      <div class="card mb-3">
+        <h5 class="card-header">Related Physics Tools</h5>
+        <div class="card-body small">
+          <div class="mb-2">
+            <a href="lens-mirror-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2">
+              <i class="fas fa-glasses"></i> Lens Equation & Mirror Formula Calculator
+            </a>
+          </div>
+          <div class="text-muted">
+            After understanding how light bends through different media with Snell's Law, explore how lenses and mirrors focus and magnify light using the thin lens equation (1/f = 1/u + 1/v). Calculate focal length, magnification, image distance with interactive ray diagrams.
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
