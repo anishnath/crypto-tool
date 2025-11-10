@@ -74,6 +74,21 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://8gwifi.org/momentum-collision-calculator.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/inclined-plane-calculator.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/torque-rotation-calculator.jsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/free-fall-calculator.jsp</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>

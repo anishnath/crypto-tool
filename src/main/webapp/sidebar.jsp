@@ -586,6 +586,9 @@
                                     <li><a href="projectile-motion-simulator.jsp">Projectile Motion Simulator</a></li>
                                     <li><a href="ohms-law-calculator.jsp">Ohm's Law & Circuit Calculator</a></li>
                                     <li><a href="kinematics-calculator.jsp">Kinematics Equation Solver (SUVAT)</a></li>
+                                    <li><a href="momentum-collision-calculator.jsp">Momentum & Collision Calculator</a></li>
+                                    <li><a href="inclined-plane-calculator.jsp">Inclined Plane Calculator</a></li>
+                                    <li><a href="torque-rotation-calculator.jsp">Torque & Rotational Dynamics</a></li>
                                     <li><a href="free-fall-calculator.jsp">Free Fall & Gravity Drop</a></li>
                                     <li><a href="wave-speed-frequency.jsp">Wave Speed & Frequency Tool</a></li>
                                     <li><a href="energy-conservation-tracker.jsp">Energy Conservation Tracker</a></li>
