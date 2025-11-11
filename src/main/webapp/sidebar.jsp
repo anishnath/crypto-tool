@@ -309,7 +309,6 @@
                                 <li><a href="regex.jsp">Regex Tester</a></li>
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
                                 <li><a href="random-string.jsp">Random String Generator</a></li>
-                                <li><a href="contactus.jsp">Feature Request</a></li>
                             </ul>
                         </div>
                     </div>
@@ -368,7 +367,7 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="video-trim.jsp">Video Trimmer & Cutter</a></li>
                                 <li><a href="video-resizer.jsp">Video Resizer & Cropper</a></li>
-                                                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
+                                <li><a href="image-resizer.jsp">Image Resizer</a></li>
                                 <li><a href="svg-to-image.jsp">SVG to PNG/JPG</a></li>
                                 <li><a href="gif-mp4-converter.jsp">GIF ↔ MP4 Converter</a></li>
                                 <li><a href="heic-to-jpg.jsp">HEIC to JPG/PNG</a></li>
@@ -412,34 +411,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-                <!-- Internationalization -->
-                <div class="card">
-                    <div class="card-header" id="headingI18n">
-                        <h6 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseI18n" aria-expanded="false" aria-controls="collapseI18n">
-                                <i class="fas fa-globe"></i> Internationalization
-                            </button>
-                        </h6>
-                    </div>
-                    <div id="collapseI18n" class="collapse" aria-labelledby="headingI18n" data-parent="#sidebarAccordion">
-                        <div class="card-body p-2">
-                            <ul class="list-unstyled mb-0 small">
-                                <li><a href="punycode-converter.jsp">Punycode Converter</a></li>
-                                <li><a href="unicode-inspector.jsp">Unicode Character Inspector</a></li>
-                                <li><a href="language-detector.jsp">Language Detector</a></li>
-                                <li><a href="transliteration-tool.jsp">Transliteration Tool</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
 
 
                 <!-- Miscellaneous removed: links moved to Sharing and Developer sections -->
@@ -603,6 +574,27 @@
                                     <li><a href="rc-rlc-filter.jsp">RC/RLC Filter Calculator</a></li>
                                     <li><a href="led-resistor-calculator.jsp">LED Resistor Calculator</a></li>
                                 </ul>
+                            </div>
+                        </div>
+
+                        <!-- Internationalization -->
+                        <div class="card">
+                            <div class="card-header" id="headingI18n">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseI18n" aria-expanded="false" aria-controls="collapseI18n">
+                                        <i class="fas fa-globe"></i> Internationalization
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseI18n" class="collapse" aria-labelledby="headingI18n" data-parent="#sidebarAccordion">
+                                <div class="card-body p-2">
+                                    <ul class="list-unstyled mb-0 small">
+                                        <li><a href="punycode-converter.jsp">Punycode Converter</a></li>
+                                        <li><a href="unicode-inspector.jsp">Unicode Character Inspector</a></li>
+                                        <li><a href="language-detector.jsp">Language Detector</a></li>
+                                        <li><a href="transliteration-tool.jsp">Transliteration Tool</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
