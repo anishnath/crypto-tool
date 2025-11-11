@@ -512,9 +512,18 @@
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
-                                    <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor </a></li>
+                                    <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
-                                    
+                                    <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
+                                    <li><a href="matrix-determinant-calculator.jsp">Matrix Determinant Calculator</a></li>
+                                    <li><a href="matrix-inverse-calculator.jsp">Matrix Inverse Calculator</a></li>
+                                    <li><a href="matrix-eigenvalue-calculator.jsp">Eigenvalue & Eigenvector Calculator</a></li>
+                                    <li><a href="matrix-rank-calculator.jsp">Matrix Rank Calculator</a></li>
+                                    <li><a href="matrix-power-calculator.jsp">Matrix Power Calculator (A^n)</a></li>
+                                    <li><a href="matrix-multiplication-calculator.jsp">Matrix Multiplication Calculator</a></li>
+                                    <li><a href="matrix-addition-calculator.jsp">Matrix Addition Calculator</a></li>
+                                    <li><a href="matrix-transpose-calculator.jsp">Matrix Transpose Calculator</a></li>
+                                    <li><a href="matrix-type-classifier.jsp">Matrix Type Classifier</a></li>
                                     <li><a href="guitar-chord-finder.jsp">Guitar Chord Finder</a></li>
                                     <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
                                     <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
