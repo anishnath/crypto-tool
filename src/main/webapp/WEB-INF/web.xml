@@ -522,6 +522,15 @@
         <url-pattern>/ScreenshotFunctionality</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>PdfPasswordCrackServlet</servlet-name>
+        <servlet-class>z.y.x.aws.s3.PdfPasswordCrackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PdfPasswordCrackServlet</servlet-name>
+        <url-pattern>/pdf-password-crack</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>

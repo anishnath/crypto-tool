@@ -406,6 +406,7 @@
                                 <li><a href="jpg-to-pdf.jsp">JPG to PDF</a></li>
                                 <li><a href="pdf-to-images.jsp">PDF to Images</a></li>
                                 <li><a href="pdf-password.jsp">PDF Password: Remove / Add / Change</a></li>
+                                <li><a href="crack-pdf-password.jsp">Crack PDF Password</a></li>
                                 <li><a href="watermark-pdf.jsp">Add Watermark to PDF</a></li>
                             </ul>
                         </div>
