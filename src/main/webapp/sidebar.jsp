@@ -97,7 +97,6 @@
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
-                                <li><a href="xss-payload-generator.jsp">XSS Payload Generator</a></li>
                                 <li><a href="sslscan.jsp">SSL/TLS Scanner</a></li>
                                 <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
                                 <li><a href="jwsparse.jsp">JWS Parser</a></li>
