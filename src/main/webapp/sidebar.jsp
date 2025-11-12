@@ -97,6 +97,7 @@
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
+                                <li><a href="xss-payload-generator.jsp">XSS Payload Generator</a></li>
                                 <li><a href="sslscan.jsp">SSL/TLS Scanner</a></li>
                                 <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
                                 <li><a href="jwsparse.jsp">JWS Parser</a></li>
@@ -512,6 +513,7 @@
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
+                                    <li><a href="math-art-gallery.jsp">Math Art Gallery - Fractal Generator & Parametric Plotter</a></li>
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
@@ -524,6 +526,10 @@
                                     <li><a href="matrix-addition-calculator.jsp">Matrix Addition Calculator</a></li>
                                     <li><a href="matrix-transpose-calculator.jsp">Matrix Transpose Calculator</a></li>
                                     <li><a href="matrix-type-classifier.jsp">Matrix Type Classifier</a></li>
+                                    <li><a href="derivative-calculator.jsp">Derivative Calculator</a></li>
+                                    <li><a href="integral-calculator.jsp">Integral Calculator (Definite & Indefinite)</a></li>
+                                    <li><a href="limit-calculator.jsp">Limit Calculator</a></li>
+                                    <li><a href="series-calculator.jsp">Taylor/Maclaurin Series Calculator</a></li>
                                     <li><a href="guitar-chord-finder.jsp">Guitar Chord Finder</a></li>
                                     <li><a href="kaprekar.jsp">Kaprekar's Constant (6174)</a></li>
                                     <li><a href="addition-methods.jsp">Addition Methods Visualizer</a></li>
