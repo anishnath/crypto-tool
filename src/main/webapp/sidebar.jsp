@@ -497,6 +497,26 @@
                         </div>
                     </div>
 
+                    <!-- Chemistry -->
+                    <div class="card">
+                        <div class="card-header" id="headingChem">
+                            <h6 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseChem" aria-expanded="false" aria-controls="collapseChem">
+                                    <i class="fas fa-flask"></i> Chemistry
+                                </button>
+                            </h6>
+                        </div>
+                        <div id="collapseChem" class="collapse" aria-labelledby="headingChem" data-parent="#sidebarAccordion">
+                            <div class="card-body p-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator</a></li>
+                                    <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
+                                    <li><a href="molarity-dilution-calculator.jsp">Molarity + Dilution (C1V1=C2V2)</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Math & Education -->
                     <div class="card">
                         <div class="card-header" id="headingMath">
@@ -511,9 +531,7 @@
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
                                     <li><a href="math-art-gallery.jsp">Math Art Gallery - Fractal Generator & Parametric Plotter</a></li>
-                                    <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator - Chemistry Tool</a></li>
-                                    <li><a href="molarity-dilution-calculator.jsp">Molarity + Dilution (C1V1=C2V2)</a></li>
-                                    <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
+                                    
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
