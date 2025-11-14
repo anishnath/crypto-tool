@@ -96,8 +96,10 @@
                     <div id="collapseSecurity" class="collapse" aria-labelledby="headingSecurity" data-parent="#sidebarAccordion">
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
+                                <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
                                 <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
                                 <li><a href="InspectJSFunctions.jsp">InspectJS JavaScript Scanner</a></li>
+                                <li><a href="subdomain.jsp">Subdomain Finder</a></li>
                                 <li><a href="sslscan.jsp">SSL/TLS Scanner</a></li>
                                 <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
                                 <li><a href="jwsparse.jsp">JWS Parser</a></li>
@@ -119,13 +121,10 @@
                                 <li><a href="pemconvert.jsp">PKCS#8/PKCS#1 Converter</a></li>
                                 <li><a href="pempublic.jsp">Extract Public from Private Key</a></li>
                                 <li><a href="pempasswordfinder.jsp">PEM Password Finder</a></li>
-                                <li><a href="sshfunctions.jsp">SSH-Keygen</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-
-
 
                 <!-- Cryptography -->
                 <div class="card">
@@ -513,6 +512,7 @@
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
                                     <li><a href="math-art-gallery.jsp">Math Art Gallery - Fractal Generator & Parametric Plotter</a></li>
                                     <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator - Chemistry Tool</a></li>
+                                    <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
@@ -613,7 +613,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </div>
         </div>
