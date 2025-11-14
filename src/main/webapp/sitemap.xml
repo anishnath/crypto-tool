@@ -92,6 +92,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
+    <url>
+        <loc>https://8gwifi.org/lewis-structure-generator.jsp</loc>
+        <lastmod>2025-11-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
   <url>
     <loc>https://8gwifi.org/ph-calculator.jsp</loc>
     <lastmod>2025-11-14</lastmod>
@@ -100,6 +106,24 @@
   </url>
   <url>
     <loc>https://8gwifi.org/electron-configuration-calculator.jsp</loc>
+    <lastmod>2025-11-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/ideal-gas-law-calculator.jsp</loc>
+    <lastmod>2025-11-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/stoichiometry-calculator.jsp</loc>
+    <lastmod>2025-11-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/lewis-structure-generator.jsp</loc>
     <lastmod>2025-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
