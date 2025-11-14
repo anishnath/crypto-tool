@@ -191,15 +191,18 @@ public class SendEmail {
 		body = builder.toString();
 
 		//String.join(delimiter, elements)
-		String BODY = String.join(
-	    	    System.getProperty("line.separator"),
-	    	    "<h1>"+subject+"</h1>",
-	    	    "<code>" + body + "</code>",
-	    	    "<hr><p>This email was sent by 8gwifi.org using the ",
-	    	    " <a href='https://8gwifi.org/"+url+"'>PGPEncryption</a>.",
-	    	    "<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
-				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
-	    	    );
+        String BODY = String.join(
+            System.getProperty("line.separator"),
+            "<h1>"+subject+"</h1>",
+            "<code>" + body + "</code>",
+            "<hr><p>Sent by <strong>8gwifi.org</strong> using ",
+            " <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
+            "<br><small>This service runs in your browser where possible and does not store your inputs.</small></p>",
+            "<p>If these tools save you time, consider supporting hosting and development: ",
+            " <a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
+            "</p>",
+            "<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
+            );
 
 		sendEmail(subject, email_to, BODY);
     }
@@ -222,15 +225,18 @@ public class SendEmail {
 		String joined2 = String.join(",", arr);
 
 		//String.join(delimiter, elements)
-		String BODY = String.join(
-	    	    System.getProperty("line.separator"),
-	    	    "<h1>"+subject+"</h1>",
-	    	    "<code>" + body + "</code>",
-	    	    "<hr><p>This email was sent by 8gwifi.org using the ",
-	    	    " <a href='https://8gwifi.org/"+url+"'>"+url+"</a></p>",
-	    	    "<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
-				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
-	    	    );
+        String BODY = String.join(
+            System.getProperty("line.separator"),
+            "<h1>"+subject+"</h1>",
+            "<code>" + body + "</code>",
+            "<hr><p>Sent by <strong>8gwifi.org</strong> from ",
+            "<a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
+            "<br><small>Inputs are not stored and pages are served over HTTPS.</small></p>",
+            "<p>If these tools help you, you can support them here: ",
+            "<a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
+            "</p>",
+            "<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
+            );
 
 		sendEmail(subject, email_to, BODY);
 		collectEMAIL(email_to, url);
@@ -242,10 +248,12 @@ public class SendEmail {
 				System.getProperty("line.separator"),
 				"<h1>"+subject+"</h1>",
 				body  ,
-				"<hr><p>This email was sent by 8gwifi.org using the ",
-				" <a href='https://8gwifi.org/"+url+"'>"+url+"</a></p>",
-				"<p>For Support/Donation Please buy my 9 books <a href='https://leanpub.com/b/9book'>from Leanpub</a> <br> <a href=\"https://leanpub.com/b/9book\"><img class=\"img-thumbnail\" src=\"https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/9_book_for__9.png\" width=\"300\" height=\"200\" ></a><br>this will help me pay the Infra costs and bring more tools </p>",
-				"<p>You can follow me <a href='https://twitter.com/anish2good'>@twitter</a></p>"
+				"<hr><p>Sent by <strong>8gwifi.org</strong> from <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
+				"<br><small>Inputs are not stored and pages are served over HTTPS.</small></p>",
+				"<p>If these tools help you, you can support them here: ",
+				"<a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
+				"</p>",
+				"<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
 		);
 
 		sendEmail(subject, email_to, BODY);
@@ -336,5 +344,4 @@ public class SendEmail {
 		}
 	}
 }
-
 

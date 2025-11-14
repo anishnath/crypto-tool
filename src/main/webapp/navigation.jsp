@@ -1,4 +1,5 @@
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <!-- Brand -->
         <a class="navbar-brand" href="index.jsp" aria-label="8gwifi.org Home">
@@ -25,6 +26,11 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://www.linkedin.com/in/anishnath">Hire Me!</a>
+            </li>
+            <li class="nav-item d-flex align-items-center ml-lg-2">
+              <a class="btn btn-warning btn-sm d-inline-flex align-items-center" href="https://buymeacoffee.com/8gwifi.org" target="_blank" rel="noopener" aria-label="Buy me a coffee">
+                ☕ Buy me a coffee
+              </a>
             </li>
             <!-- Clean, blended Twitter/X follow with inline icon -->
             <li class="nav-item d-flex align-items-center ml-lg-2">

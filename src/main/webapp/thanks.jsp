@@ -1,14 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <hr>
 <div class="card my-4 thanks-card">
     <div class="card-body">
-        <h4 class="card-title mb-3 thanks-title">Your Support Matters</h4>
+        <h4 class="card-title mb-3 thanks-title">If This Helped, Support the Project</h4>
         <p class="card-text thanks-text">
-            Hey there! I'm so grateful you find this tool helpful. Your support keeps this project alive and growing. As a thank you, I'm offering nine of my books for just $9 on Leanpub. It helps cover costs and keeps me motivated to build more awesome tools for you. Thank you from the bottom of my heart!
+            I build and maintain these tools so developers have fast, privacy‑respecting utilities at their fingertips—free, with no sign‑up. If you’d like to support hosting and new features, you can <strong>buy me a coffee</strong> or grab my <strong>9‑book bundle for $9</strong>. Every bit genuinely helps—thank you!
         </p>
-        <a class="btn btn-primary btn-lg thanks-btn" href="https://leanpub.com/b/9book" target="_blank" rel="noopener">Show your support</a>
+        <div class="d-flex flex-wrap" style="gap:.6rem;">
+            <a class="btn btn-warning btn-lg" style="border-radius:20px; font-weight:600; color:#212529;" href="https://buymeacoffee.com/8gwifi.org" target="_blank" rel="noopener" aria-label="Buy me a coffee">
+                ☕ Buy me a coffee
+            </a>
+            <a class="btn btn-primary btn-lg thanks-btn" href="https://leanpub.com/b/9book" target="_blank" rel="noopener" aria-label="Get the 9-book bundle on Leanpub">
+                📚 Get the 9‑book bundle ($9)
+            </a>
+        </div>
     </div>
 </div>
-<p class="text-muted security-note"><em>Any private key value that you enter or we generate is not stored on this site. This tool is provided via an HTTPS URL to ensure that private keys cannot be stolen..</em></p>
+<p class="text-muted security-note"><em>Any private key value that you enter or we generate is not stored on this site. This tool is served over HTTPS to help ensure private keys cannot be intercepted.</em></p>
 <hr>
 
 <style>
