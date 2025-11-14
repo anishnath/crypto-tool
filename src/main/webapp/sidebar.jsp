@@ -277,13 +277,12 @@
                                 <li><a href="Base64Functions.jsp">Base64 Encode/Decode</a></li>
                                 <li><a href="Base32Functions.jsp">Base32 Encode/Decode</a></li>
                                 <li><a href="Base58Functions.jsp">Base58 Encode/Decode</a></li>
-                                <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
-                                <li><a href="ciph.jsp">Classical Ciphers (ROT, Caesar, Vigenère)</a></li>
-                                <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
                                 <li><a href="base64Hex.jsp">Base64 To Hex</a></li>
                                 <li><a href="base64image.jsp">Base64 Image Converter</a></li>
+                                <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
+                                <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
                                 <li><a href="hexdump.jsp">Hexdump Generator</a></li>
-                                <li><a href="jsonparser.jsp">JSON-2-YAML/XML</a></li>
+                                <li><a href="jsonparser.jsp">JSON BeautifierL</a></li>
                                 <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
                                 <li><a href="xml2json.jsp">XML-2-JSON/YAML</a></li>
                                 <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
