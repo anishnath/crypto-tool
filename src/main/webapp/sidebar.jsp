@@ -517,6 +517,7 @@
                                     <li><a href="ideal-gas-law-calculator.jsp">Ideal Gas Law Calculator (PV=nRT)</a></li>
                                     <li><a href="stoichiometry-calculator.jsp">Stoichiometry Calculator</a></li>
                                     <li><a href="limiting-reagent-calculator.jsp">Limiting Reagent Calculator</a></li>
+                                    <li><a href="empirical-formula-calculator.jsp">Empirical & Molecular Formula Calculator</a></li>
                                     <li><a href="lewis-structure-generator.jsp">Lewis Structure & VSEPR Calculator</a></li>
                                     <li><a href="equilibrium-constant-calculator.jsp">Equilibrium Constant Calculator (Kc, Kp, Ka, Kb)</a></li>
                                 </ul>
