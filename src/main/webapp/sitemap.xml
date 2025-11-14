@@ -117,6 +117,12 @@
         <priority>0.95</priority>
     </url>
     <url>
+        <loc>https://8gwifi.org/titration-calculator.jsp</loc>
+        <lastmod>2025-11-14</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
         <loc>https://8gwifi.org/limiting-reagent-calculator.jsp</loc>
         <lastmod>2025-11-14</lastmod>
         <changefreq>monthly</changefreq>
