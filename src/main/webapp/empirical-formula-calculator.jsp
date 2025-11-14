@@ -8,6 +8,38 @@
     <meta name="description" content="Calculate empirical and molecular formulas from percent composition, mass data, or combustion analysis. Free online chemistry calculator with step-by-step solutions.">
     <meta name="keywords" content="empirical formula calculator, molecular formula calculator, percent composition, combustion analysis, chemistry calculator">
 
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Empirical & Molecular Formula Calculator">
+    <meta property="og:description" content="Calculate empirical and molecular formulas from percent composition, mass data, or combustion analysis. Free chemistry calculator with step-by-step solutions.">
+    <meta property="og:type" content="website">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Empirical & Molecular Formula Calculator",
+        "description": "Calculate empirical formulas from percent composition or mass data, and determine molecular formulas from empirical formulas and molar mass. Includes combustion analysis calculator.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Percent composition to empirical formula, Mass data to empirical formula, Empirical to molecular formula conversion, Combustion analysis calculator, Automatic molar mass calculation, Step-by-step solutions",
+        "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "student"
+        },
+        "educationalLevel": "High School, College",
+        "creator": {
+            "@type": "Organization",
+            "name": "8gwifi.org"
+        }
+    }
+    </script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -968,5 +1000,5 @@ document.addEventListener('DOMContentLoaded', function() {
 <hr>
 <%@ include file="addcomments.jsp"%>
 </div>
-
+<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>

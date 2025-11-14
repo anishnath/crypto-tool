@@ -8,6 +8,38 @@
     <meta name="description" content="Free titration calculator for acid-base titrations. Calculate concentration, volume, pH at equivalence point, and generate titration curves. Supports strong and weak acids/bases, polyprotic acids.">
     <meta name="keywords" content="titration calculator, acid-base titration, pH calculator, equivalence point, titration curve, chemistry calculator">
 
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Titration Calculator - Acid-Base Titration & pH">
+    <meta property="og:description" content="Calculate concentration, volume, pH at equivalence point, and generate titration curves. Free chemistry calculator with step-by-step solutions.">
+    <meta property="og:type" content="website">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Titration Calculator",
+        "description": "Calculate concentration, volume, pH at equivalence point, and generate titration curves for acid-base titrations. Supports strong and weak acids/bases with detailed step-by-step solutions.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Basic titration calculations (M1V1=M2V2), pH at equivalence point, Titration curve generation, Weak acid and weak base support, Polyprotic acid support, Step-by-step solutions",
+        "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "student"
+        },
+        "educationalLevel": "High School, College",
+        "creator": {
+            "@type": "Organization",
+            "name": "8gwifi.org"
+        }
+    }
+    </script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -1004,7 +1036,8 @@ function setCurveExample(type, acidC, acidV, baseC, ka) {
 
 <%@ include file="thanks.jsp"%>
 <hr>
+<%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
 </div>
-
+<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>

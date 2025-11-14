@@ -62,6 +62,12 @@
             <a class="dropdown-item" href="empirical-formula-calculator.jsp">
               <i class="fas fa-superscript text-warning"></i> Empirical & Molecular Formula
             </a>
+            <a class="dropdown-item" href="titration-calculator.jsp">
+              <i class="fas fa-vial text-warning"></i> Titration Calculator
+            </a>
+            <a class="dropdown-item" href="redox-balancer.jsp">
+              <i class="fas fa-exchange-alt text-warning"></i> Redox Reaction Balancer
+            </a>
             <a class="dropdown-item" href="equilibrium-constant-calculator.jsp">
               <i class="fas fa-arrows-alt-h text-warning"></i> Equilibrium (Kc, Kp, Ka, Kb)
             </a>

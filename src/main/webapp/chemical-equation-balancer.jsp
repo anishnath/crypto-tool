@@ -25,9 +25,10 @@
   <meta name="twitter:image" content="https://8gwifi.org/images/site/chem-balance.png">
 
   <style>
-    .min-h-result { min-height: 220px; }
-    @media (min-width: 992px) { .min-h-result { min-height: 280px; } }
-    .sticky-side { position: -webkit-sticky; position: sticky; top: 80px; }
+    .min-h-result { min-height: 220px; max-height: 600px; overflow-y: auto; }
+    @media (min-width: 992px) { .min-h-result { min-height: 280px; max-height: 70vh; } }
+    .sticky-side { position: -webkit-sticky; position: sticky; top: 80px; max-height: calc(100vh - 100px); }
+    .sticky-side .card-body { overflow-y: auto; max-height: calc(100vh - 150px); }
     .monospace { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
     .eq-input { font-size: 1.05rem; }
     .coeff { font-weight: 600; margin-right: .25rem; }
@@ -976,5 +977,5 @@
 
 <%@ include file="addcomments.jsp"%>
 </div>
-
+<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>

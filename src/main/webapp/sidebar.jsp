@@ -519,6 +519,7 @@
                                     <li><a href="limiting-reagent-calculator.jsp">Limiting Reagent Calculator</a></li>
                                     <li><a href="empirical-formula-calculator.jsp">Empirical & Molecular Formula Calculator</a></li>
                                     <li><a href="titration-calculator.jsp">Titration Calculator (Acid-Base & pH)</a></li>
+                                    <li><a href="redox-balancer.jsp">Redox Reaction Balancer (Half-Reaction Method)</a></li>
                                     <li><a href="lewis-structure-generator.jsp">Lewis Structure & VSEPR Calculator</a></li>
                                     <li><a href="equilibrium-constant-calculator.jsp">Equilibrium Constant Calculator (Kc, Kp, Ka, Kb)</a></li>
                                 </ul>

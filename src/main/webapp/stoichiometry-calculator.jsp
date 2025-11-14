@@ -832,5 +832,5 @@ function copyToClipboard(id){
 <hr>
 <%@ include file="addcomments.jsp"%>
 </div>
+<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>
-</html>
