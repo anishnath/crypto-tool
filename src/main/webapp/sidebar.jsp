@@ -510,6 +510,7 @@
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator</a></li>
+                                    <li><a href="significant-figures-calculator.jsp">Significant Figures Calculator</a></li>
                                     <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
                                     <li><a href="molarity-dilution-calculator.jsp">Molarity + Dilution (C1V1=C2V2)</a></li>
                                     <li><a href="ph-calculator.jsp">pH Calculator (Strong/Weak Acids & Bases + Buffers)</a></li>
