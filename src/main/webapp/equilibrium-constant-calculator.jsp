@@ -285,8 +285,11 @@
     </style>
     <%@ include file="header-script.jsp"%>
 </head>
+
 <%@ include file="body-script.jsp"%>
+
 <%@ include file="chem-menu-nav.jsp"%>
+
     <div class="container-fluid mt-4">
         <div class="row">
             <!-- Main Content -->
