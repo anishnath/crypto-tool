@@ -13,7 +13,7 @@
       <ul class="navbar-nav mr-auto">
         <!-- Core Chemistry -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemCoreDropdown" role="button" data-toggle="dropdown">
+          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemCoreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-atom text-primary"></i> Core
           </a>
           <div class="dropdown-menu">
@@ -34,7 +34,7 @@
 
         <!-- Preparation & Conversions -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemPrepDropdown" role="button" data-toggle="dropdown">
+          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemPrepDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-bezier-curve text-success"></i> Prep & Conversions
           </a>
           <div class="dropdown-menu">
@@ -55,7 +55,7 @@
 
         <!-- Advanced Chemistry -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemAdvDropdown" role="button" data-toggle="dropdown">
+          <a class="nav-link dropdown-toggle text-dark" href="#" id="chemAdvDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-graduation-cap text-warning"></i> Advanced
           </a>
           <div class="dropdown-menu">
