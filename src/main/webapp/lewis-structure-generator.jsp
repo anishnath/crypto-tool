@@ -23,7 +23,6 @@
     <meta property="twitter:image" content="https://8gwifi.org/images/site/lewis-structure-og.png">
 
     <link rel="canonical" href="https://8gwifi.org/lewis-structure-generator.jsp">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- TikZJax for TikZ rendering -->
@@ -369,7 +368,9 @@
     </style>
     <%@ include file="header-script.jsp"%>
 </head>
+
 <%@ include file="body-script.jsp"%>
+
 <%@ include file="chem-menu-nav.jsp"%>
 
     <div class="container-fluid mt-4">
@@ -653,11 +654,6 @@
             </div>
         </div>
     </div>
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
         // Valence electron data - comprehensive periodic table coverage
