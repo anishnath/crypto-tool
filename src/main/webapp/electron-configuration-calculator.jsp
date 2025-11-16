@@ -61,6 +61,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="chem-menu-nav.jsp"%>
 <div class="container mt-5">
   <h1 class="mb-3">Electron Configuration Calculator</h1>
   <p class="lead mb-4">Generate full electron configurations, noble gas notation, orbital diagrams, and identify valence electrons for any element (1-118) or ion.</p>

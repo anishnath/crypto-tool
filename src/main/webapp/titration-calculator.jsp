@@ -186,6 +186,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="chem-menu-nav.jsp"%>
 
 <div class="container mt-4">
     <h1 class="mb-3">Titration Calculator</h1>

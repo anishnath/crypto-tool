@@ -47,6 +47,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="chem-menu-nav.jsp"%>
 <div class="container mt-5">
   <h1 class="mb-3">Chemical Equation Balancer</h1>
   <p class="lead mb-4">Balance chemical equations in your browser. Get integer coefficients, atom counts on each side, and a formatted balanced equation you can copy or share.</p>
