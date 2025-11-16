@@ -509,6 +509,7 @@
                         <div id="collapseChem" class="collapse" aria-labelledby="headingChem" data-parent="#sidebarAccordion">
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
+                                    <li><a href="periodic-table.jsp"><i class="fas fa-th"></i> <strong>Periodic Table (Interactive)</strong></a></li>
                                     <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator</a></li>
                                     <li><a href="significant-figures-calculator.jsp">Significant Figures Calculator</a></li>
                                     <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>

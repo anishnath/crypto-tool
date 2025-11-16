@@ -86,6 +86,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
+    <url>
+        <loc>https://8gwifi.org/periodic-table.jsp</loc>
+        <lastmod>2025-11-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
   <url>
     <loc>https://8gwifi.org/chemical-equation-balancer.jsp</loc>
     <lastmod>2025-11-12</lastmod>

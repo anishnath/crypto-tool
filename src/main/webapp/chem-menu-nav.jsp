@@ -17,6 +17,9 @@
             <i class="fas fa-atom text-primary"></i> Core
           </a>
           <div class="dropdown-menu">
+            <a class="dropdown-item" href="periodic-table.jsp">
+              <i class="fas fa-th text-primary"></i> Periodic Table (Interactive)
+            </a>
             <a class="dropdown-item" href="molar-mass-calculator.jsp">
               <i class="fas fa-weight text-primary"></i> Molar Mass Calculator
             </a>
