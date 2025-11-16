@@ -104,6 +104,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
+    <url>
+        <loc>https://8gwifi.org/thermochemistry-calculator.jsp</loc>
+        <lastmod>2025-11-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
   <url>
     <loc>https://8gwifi.org/electron-configuration-calculator.jsp</loc>
     <lastmod>2025-11-14</lastmod>
