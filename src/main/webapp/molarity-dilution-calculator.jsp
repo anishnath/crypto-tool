@@ -36,7 +36,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="chem-menu-nav.jsp"%>
 <div class="container mt-5">
   <h1 class="mb-3">Molarity + Dilution Calculator</h1>
   <p class="lead mb-4">Compute molarity (M), mass, volume, or moles and plan C<sub>1</sub>V<sub>1</sub>=C<sub>2</sub>V<sub>2</sub> dilutions. Unit-aware, fast, and free.</p>
@@ -779,9 +779,7 @@ function calcMolarity(){
 
 <%@ include file="thanks.jsp"%>
 <hr>
-
 <%@ include file="addcomments.jsp"%>
-
+<%@ include file="footer_adsense.jsp"%>
 </div>
-
 <%@ include file="body-close.jsp"%>
