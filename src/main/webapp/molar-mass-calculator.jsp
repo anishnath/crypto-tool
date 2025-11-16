@@ -715,6 +715,7 @@
     </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="chem-menu-nav.jsp"%>
 <div class="container mt-4">
     <div class="calc-card">
 
