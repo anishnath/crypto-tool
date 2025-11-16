@@ -31,7 +31,6 @@
     }
     </script>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
@@ -149,6 +148,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+
 <%@ include file="chem-menu-nav.jsp"%>
 
 <div class="container mt-4">
@@ -188,6 +188,20 @@
                                 <input type="text" class="form-control" id="basicEquation" placeholder="e.g., 2H2 + O2 → 2H2O">
                                 <small class="help-text">Enter a balanced equation with coefficients. Supports: →, ⇌, =, ==</small>
                             </div>
+
+                            <div class="alert alert-info">
+                                <small><strong>💡 How it works:</strong> Enter your equation above and press Tab/Enter. Input fields will be generated automatically with molar masses calculated!</small>
+                            </div>
+
+                            <!-- Dynamic input fields will be generated here -->
+                            <div id="dynamicReactantFields"></div>
+
+                            <button class="btn btn-primary" onclick="calculateBasic()">
+                                <i class="fas fa-calculator"></i> Calculate Limiting Reagent
+                            </button>
+                            <button class="btn btn-outline-secondary ml-2" onclick="clearBasic()">
+                                <i class="fas fa-eraser"></i> Clear
+                            </button>
 
                             <div class="form-group">
                                 <label>Common Reactions (Click to load)</label>
@@ -259,19 +273,6 @@
                                 </div>
                             </div>
 
-                            <div class="alert alert-info">
-                                <small><strong>💡 How it works:</strong> Enter your equation above and press Tab/Enter. Input fields will be generated automatically with molar masses calculated!</small>
-                            </div>
-
-                            <!-- Dynamic input fields will be generated here -->
-                            <div id="dynamicReactantFields"></div>
-
-                            <button class="btn btn-primary" onclick="calculateBasic()">
-                                <i class="fas fa-calculator"></i> Calculate Limiting Reagent
-                            </button>
-                            <button class="btn btn-outline-secondary ml-2" onclick="clearBasic()">
-                                <i class="fas fa-eraser"></i> Clear
-                            </button>
                         </div>
 
                         <!-- Tab 2: Advanced with Yields -->
@@ -459,10 +460,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <script>
     let currentResult = '';
