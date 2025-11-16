@@ -40,6 +40,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="chem-menu-nav.jsp"%>
 <div class="container mt-5">
   <h1 class="mb-3">Ideal Gas Law Calculator</h1>
   <p class="lead mb-4">Calculate pressure (P), volume (V), moles (n), or temperature (T) using the ideal gas law PV = nRT. Includes combined gas law, Dalton's law, gas density, and molar mass calculations.</p>
