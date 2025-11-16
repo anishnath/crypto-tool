@@ -26,6 +26,9 @@
             <a class="dropdown-item" href="molarity-dilution-calculator.jsp">
               <i class="fas fa-vial text-primary"></i> Molarity + Dilution (C1V1=C2V2)
             </a>
+            <a class="dropdown-item" href="significant-figures-calculator.jsp">
+              <i class="fas fa-calculator text-primary"></i> Significant Figures Calculator
+            </a>
           </div>
         </li>
 
@@ -35,11 +38,17 @@
             <i class="fas fa-bezier-curve text-success"></i> Prep & Conversions
           </a>
           <div class="dropdown-menu">
+            <a class="dropdown-item" href="unit-converter-chemistry.jsp">
+              <i class="fas fa-exchange-alt text-success"></i> Unit Converter (Mass, Volume, Pressure, Temp)
+            </a>
             <a class="dropdown-item" href="molarity-dilution-calculator.jsp?tab=conversions">
               <i class="fas fa-exchange-alt text-success"></i> ppm/ppb/% Conversions
             </a>
             <a class="dropdown-item" href="molarity-dilution-calculator.jsp?tab=molarity">
               <i class="fas fa-prescription-bottle text-success"></i> Solution Recipe Builder
+            </a>
+            <a class="dropdown-item" href="buffer-solution-calculator.jsp">
+              <i class="fas fa-vial text-success"></i> Buffer Solution Calculator
             </a>
           </div>
         </li>
@@ -68,6 +77,9 @@
             <a class="dropdown-item" href="redox-balancer.jsp">
               <i class="fas fa-exchange-alt text-warning"></i> Redox Reaction Balancer
             </a>
+            <a class="dropdown-item" href="thermochemistry-calculator.jsp">
+              <i class="fas fa-fire text-warning"></i> Thermochemistry Calculator
+            </a>
             <a class="dropdown-item" href="equilibrium-constant-calculator.jsp">
               <i class="fas fa-arrows-alt-h text-warning"></i> Equilibrium (Kc, Kp, Ka, Kb)
             </a>
@@ -79,6 +91,9 @@
             </a>
             <a class="dropdown-item" href="lewis-structure-generator.jsp">
               <i class="fas fa-project-diagram text-warning"></i> Lewis Structure & VSEPR
+            </a>
+            <a class="dropdown-item" href="electrochemistry-calculator.jsp">
+              <i class="fas fa-bolt text-warning"></i> Electrochemistry (Nernst & Faraday)
             </a>
           </div>
         </li>

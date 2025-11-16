@@ -99,6 +99,24 @@
         <priority>0.95</priority>
     </url>
     <url>
+        <loc>https://8gwifi.org/unit-converter-chemistry.jsp</loc>
+        <lastmod>2025-11-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/buffer-solution-calculator.jsp</loc>
+        <lastmod>2025-11-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/electrochemistry-calculator.jsp</loc>
+        <lastmod>2025-11-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
         <loc>https://8gwifi.org/significant-figures-calculator.jsp</loc>
         <lastmod>2025-11-16</lastmod>
         <changefreq>monthly</changefreq>

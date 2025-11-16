@@ -513,7 +513,9 @@
                                     <li><a href="significant-figures-calculator.jsp">Significant Figures Calculator</a></li>
                                     <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
                                     <li><a href="molarity-dilution-calculator.jsp">Molarity + Dilution (C1V1=C2V2)</a></li>
+                                    <li><a href="unit-converter-chemistry.jsp">Unit Converter (Mass, Volume, Pressure, Temp, Energy)</a></li>
                                     <li><a href="ph-calculator.jsp">pH Calculator (Strong/Weak Acids & Bases + Buffers)</a></li>
+                                    <li><a href="buffer-solution-calculator.jsp">Buffer Solution Calculator (Henderson-Hasselbalch)</a></li>
                                     <li><a href="electron-configuration-calculator.jsp">Electron Configuration Calculator</a></li>
                                     <li><a href="ideal-gas-law-calculator.jsp">Ideal Gas Law Calculator (PV=nRT)</a></li>
                                     <li><a href="stoichiometry-calculator.jsp">Stoichiometry Calculator</a></li>
@@ -521,6 +523,7 @@
                                     <li><a href="empirical-formula-calculator.jsp">Empirical & Molecular Formula Calculator</a></li>
                                     <li><a href="titration-calculator.jsp">Titration Calculator (Acid-Base & pH)</a></li>
                                     <li><a href="redox-balancer.jsp">Redox Reaction Balancer (Half-Reaction Method)</a></li>
+                                    <li><a href="electrochemistry-calculator.jsp">Electrochemistry Calculator (Nernst & Faraday)</a></li>
                                     <li><a href="thermochemistry-calculator.jsp">Thermochemistry Calculator (Calorimetry & Enthalpy)</a></li>
                                     <li><a href="lewis-structure-generator.jsp">Lewis Structure & VSEPR Calculator</a></li>
                                     <li><a href="equilibrium-constant-calculator.jsp">Equilibrium Constant Calculator (Kc, Kp, Ka, Kb)</a></li>
