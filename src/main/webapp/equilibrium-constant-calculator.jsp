@@ -23,7 +23,6 @@
     <meta property="twitter:image" content="https://8gwifi.org/images/site/equilibrium-og.png">
 
     <link rel="canonical" href="https://8gwifi.org/equilibrium-constant-calculator.jsp">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- JSON-LD Schema Markup -->
@@ -287,7 +286,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="chem-menu-nav.jsp"%>
     <div class="container-fluid mt-4">
         <div class="row">
             <!-- Main Content -->
@@ -378,6 +377,15 @@
                                 </div>
                             </div>
 
+
+
+                            <button class="btn btn-primary" onclick="calculateKc()">
+                                <i class="fas fa-calculator"></i> Calculate Kc
+                            </button>
+                            <button class="btn btn-outline-secondary ml-2" onclick="clearKc()">
+                                <i class="fas fa-eraser"></i> Clear
+                            </button>
+
                             <div class="form-group">
                                 <label>Common Equilibrium Examples (Click to load)</label>
                                 <div>
@@ -392,12 +400,6 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" onclick="calculateKc()">
-                                <i class="fas fa-calculator"></i> Calculate Kc
-                            </button>
-                            <button class="btn btn-outline-secondary ml-2" onclick="clearKc()">
-                                <i class="fas fa-eraser"></i> Clear
-                            </button>
                         </div>
 
                         <!-- Tab 2: Kp Calculator -->
@@ -750,10 +752,6 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
         let currentResult = '';
