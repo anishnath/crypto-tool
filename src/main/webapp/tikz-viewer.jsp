@@ -167,6 +167,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
   <header class="app-header py-3">
     <div class="container">
       <h1 class="h4 mb-0">Free Online TikZ Viewer & Editor</h1>
