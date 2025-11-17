@@ -87,7 +87,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="kap-container">
   <h1 class="mt-4">Magic 1089 — Reverse. Subtract. Reverse. Add.</h1>
   <p class="tiny">Pick a 3‑digit number where the first and last digits differ by at least 2. Reverse it, subtract the smaller from the larger, reverse the result, then add. You'll land on <span class="pill pill-green">1089</span>!</p>

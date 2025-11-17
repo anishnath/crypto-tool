@@ -378,6 +378,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="header">
     <div class="container">
         <h1><i class="fas fa-function"></i> LaTeX Equation Editor</h1>

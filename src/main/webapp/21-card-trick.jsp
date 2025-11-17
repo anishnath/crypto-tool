@@ -110,7 +110,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="kap-container">
   <h1 class="mt-4">21 Card Trick — Pick a Column, Watch the Magic</h1>
   <p class="tiny">Think of one card. Tell which column it's in — three times. Your card is revealed in the middle! Perfect for quick demos and Shorts.</p>
