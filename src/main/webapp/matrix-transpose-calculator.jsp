@@ -69,6 +69,7 @@
   </script>
 
   <%@ include file="header-script.jsp"%>
+    <%@ include file="math-menu-nav.jsp"%>
   <script>
     window.MathJax = {
       loader: { load: ['[tex]/color'] },

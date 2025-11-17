@@ -559,6 +559,7 @@
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
+                                    <li><a href="quadratic-solver.jsp">Quadratic Equation Solver (ax²+bx+c=0)</a></li>
                                     <li><a href="matrix-determinant-calculator.jsp">Matrix Determinant Calculator</a></li>
                                     <li><a href="matrix-inverse-calculator.jsp">Matrix Inverse Calculator</a></li>
                                     <li><a href="matrix-eigenvalue-calculator.jsp">Eigenvalue & Eigenvector Calculator</a></li>

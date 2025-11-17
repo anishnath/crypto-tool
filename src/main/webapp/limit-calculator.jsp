@@ -428,6 +428,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4">
         <div class="calc-card">
             <div class="calc-header">
@@ -752,7 +753,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>

@@ -326,6 +326,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 lineq-solver">
   <h1 class="mb-2">Equation Solver (Ax = b, AX = B, XA = B, Polynomials)</h1>
   <p class="text-muted mb-3">Solve linear systems, matrix equations, and polynomial systems with step-by-step solutions.</p>
@@ -558,6 +559,21 @@ Examples: x^2, 2*x*y, (x+1)^2"></textarea>
             <li><strong>Infinite Solutions:</strong> System has infinitely many solutions (dependent equations)</li>
             <li><strong>Least Squares:</strong> Best fit solution minimizing ||Ax - b||² for overdetermined systems</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header">Related Calculus Tools</h5>
+        <div class="card-body small">
+          <div class="d-flex flex-wrap mb-2">
+            <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
+            <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
+            <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
+            <a href="series-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">Taylor Series</a>
+          </div>
+          <div class="text-muted">
+            Explore calculus tools for derivatives, integrals, limits, and series expansion.
+          </div>
         </div>
       </div>
 

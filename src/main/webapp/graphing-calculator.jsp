@@ -276,6 +276,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="header">
     <div class="container-fluid">
         <h3><i class="fas fa-chart-line"></i> Advanced Graphing Calculator</h3>

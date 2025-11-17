@@ -464,6 +464,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4">
         <div class="calc-card">
             <div class="calc-header">

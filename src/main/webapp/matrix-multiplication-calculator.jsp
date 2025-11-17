@@ -155,6 +155,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 matmul-calc">
   <h1 class="mb-2">Matrix Multiplication Calculator (A × B)</h1>
   <p class="text-muted mb-3">Multiply two matrices with step-by-step visualization. Supports any compatible dimensions.</p>

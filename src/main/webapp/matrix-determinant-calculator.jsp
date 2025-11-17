@@ -141,6 +141,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 det-calculator">
   <h1 class="mb-2">Matrix Determinant Calculator</h1>
   <p class="text-muted mb-3">Calculate the determinant of any square matrix with detailed step-by-step solutions.</p>
@@ -248,6 +249,21 @@
             <li><strong>Cofactor Expansion:</strong> Educational, shows formula clearly, O(n!) complexity</li>
             <li><strong>Gaussian Elimination:</strong> Row reduction method, O(n³) complexity</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header">Related Calculus Tools</h5>
+        <div class="card-body small">
+          <div class="d-flex flex-wrap mb-2">
+            <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
+            <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
+            <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
+            <a href="series-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">Taylor Series</a>
+          </div>
+          <div class="text-muted">
+            Explore calculus tools for derivatives, integrals, limits, and series expansion.
+          </div>
         </div>
       </div>
 

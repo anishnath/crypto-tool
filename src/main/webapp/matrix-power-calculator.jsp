@@ -145,6 +145,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 power-calc">
   <h1 class="mb-2">Matrix Power Calculator (A<sup>n</sup>)</h1>
   <p class="text-muted mb-3">Calculate matrix powers A<sup>n</sup> with efficient algorithms and step-by-step visualization.</p>

@@ -153,6 +153,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 matadd-calc">
   <h1 class="mb-2">Matrix Addition & Subtraction Calculator</h1>
   <p class="text-muted mb-3">Add, subtract matrices, and perform scalar multiplication with step-by-step solutions.</p>

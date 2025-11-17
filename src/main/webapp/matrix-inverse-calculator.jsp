@@ -124,6 +124,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 inverse-calc">
   <h1 class="mb-2">Matrix Inverse Calculator</h1>
   <p class="text-muted mb-3">Calculate the inverse of any square invertible matrix using Gauss-Jordan elimination.</p>
@@ -240,6 +241,21 @@
             <li>(A<sup>T</sup>)⁻¹ = (A⁻¹)<sup>T</sup></li>
             <li>det(A⁻¹) = 1/det(A)</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h5 class="card-header">Related Calculus Tools</h5>
+        <div class="card-body small">
+          <div class="d-flex flex-wrap mb-2">
+            <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
+            <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
+            <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
+            <a href="series-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">Taylor Series</a>
+          </div>
+          <div class="text-muted">
+            Explore calculus tools for derivatives, integrals, limits, and series expansion.
+          </div>
         </div>
       </div>
 

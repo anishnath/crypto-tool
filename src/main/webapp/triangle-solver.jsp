@@ -54,7 +54,7 @@
   <p class="tiny">Enter known values, pick a mode, and Solve. Angles in degrees. Sides are a, b, c opposite angles A, B, C respectively.</p>
 
   <%@ include file="footer_adsense.jsp"%>
-
+    <%@ include file="math-menu-nav.jsp"%>
   <div class="hero-number" id="hero">—</div>
 
   <div class="controls">

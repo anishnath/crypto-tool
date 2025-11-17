@@ -389,6 +389,7 @@
     <%@ include file="header-script.jsp"%>
 </head>
 <%@ include file="body-script.jsp"%>
+<%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4">
         <div class="calc-card">
             <div class="calc-header">

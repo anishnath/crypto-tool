@@ -95,7 +95,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="py-container">
   <h1 class="mt-4">Pythagorean Theorem Solver</h1>
   <p class="tiny">Enter any two sides of a right triangle. Leave one blank, and we'll solve it using <span class="pill pill-green">a² + b² = c²</span>. Includes area and perimeter.</p>

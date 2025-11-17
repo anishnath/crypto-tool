@@ -349,6 +349,7 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
+    <%@ include file="math-menu-nav.jsp"%>
 <div class="container mt-4 matrix-classifier">
   <h1 class="mb-2">Matrix Type Classifier</h1>
   <p class="text-muted mb-3">Paste any matrix to instantly detect its properties: square, diagonal, identity, symmetric, triangular, orthogonal, singular, stochastic and more.</p>
