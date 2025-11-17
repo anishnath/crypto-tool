@@ -23,6 +23,9 @@
             <a class="dropdown-item" href="molar-mass-calculator.jsp">
               <i class="fas fa-weight text-primary"></i> Molar Mass Calculator
             </a>
+            <a class="dropdown-item" href="percent-composition-calculator.jsp">
+              <i class="fas fa-chart-pie text-primary"></i> Percent Composition Calculator
+            </a>
             <a class="dropdown-item" href="chemical-equation-balancer.jsp">
               <i class="fas fa-equals text-primary"></i> Chemical Equation Balancer
             </a>
@@ -53,6 +56,9 @@
             <a class="dropdown-item" href="buffer-solution-calculator.jsp">
               <i class="fas fa-vial text-success"></i> Buffer Solution Calculator
             </a>
+            <a class="dropdown-item" href="density-calculator.jsp">
+              <i class="fas fa-weight text-success"></i> Density Calculator (d=m/v)
+            </a>
           </div>
         </li>
 
@@ -67,6 +73,9 @@
             </a>
             <a class="dropdown-item" href="stoichiometry-calculator.jsp">
               <i class="fas fa-balance-scale text-warning"></i> Stoichiometry Calculator
+            </a>
+            <a class="dropdown-item" href="percent-yield-calculator.jsp">
+              <i class="fas fa-percentage text-warning"></i> Percent Yield Calculator
             </a>
             <a class="dropdown-item" href="limiting-reagent-calculator.jsp">
               <i class="fas fa-flask text-warning"></i> Limiting Reagent Calculator
@@ -94,6 +103,12 @@
             </a>
             <a class="dropdown-item" href="lewis-structure-generator.jsp">
               <i class="fas fa-project-diagram text-warning"></i> Lewis Structure & VSEPR
+            </a>
+            <a class="dropdown-item" href="molecular-geometry-calculator.jsp">
+              <i class="fas fa-cube text-warning"></i> Molecular Geometry Calculator
+            </a>
+            <a class="dropdown-item" href="half-life-calculator.jsp">
+              <i class="fas fa-radiation text-warning"></i> Half-Life Calculator
             </a>
             <a class="dropdown-item" href="electrochemistry-calculator.jsp">
               <i class="fas fa-bolt text-warning"></i> Electrochemistry (Nernst & Faraday)
