@@ -100,7 +100,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="sd-container">
   <h1 class="mt-4">Standard Deviation Calculator</h1>
   <p class="tiny">Paste numbers separated by commas, spaces, or newlines. Toggle <span class="pill pill-green">sample</span> vs <span class="pill pill-gray">population</span>. See mean, variance, standard deviation, and a bell curve.</p>

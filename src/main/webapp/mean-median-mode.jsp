@@ -106,7 +106,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="kap-container">
   <h1 class="mt-4">Mean, Median, Mode Finder</h1>
   <p class="tiny">Paste numbers separated by commas, spaces, or newlines. Get <span class="pill pill-green">mean</span>, <span class="pill pill-green">median</span>, <span class="pill pill-green">mode</span>, outliers, a sorted list, and a histogram.</p>
@@ -181,11 +181,6 @@
     </ul>
   </div>
 
-  <div class="sharethis-inline-share-buttons" style="margin-top: 1rem;"></div>
-
-  <%@ include file="footer_adsense.jsp"%>
-  <%@ include file="thanks.jsp"%>
-  <%@ include file="addcomments.jsp"%>
 </div>
 
 <script>
@@ -467,6 +462,10 @@
 })();
 </script>
 
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
-
 <%@ include file="body-close.jsp"%>
