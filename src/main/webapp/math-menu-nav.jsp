@@ -143,11 +143,23 @@
             <i class="fas fa-chart-bar text-secondary"></i> Statistics
           </a>
           <div class="dropdown-menu">
+            <h6 class="dropdown-header">Descriptive Statistics</h6>
             <a class="dropdown-item" href="mean-median-mode.jsp">
               <i class="fas fa-chart-bar text-secondary"></i> Mean, Median, Mode
             </a>
             <a class="dropdown-item" href="standard-deviation.jsp">
               <i class="fas fa-sigma text-secondary"></i> Standard Deviation
+            </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Inferential Statistics</h6>
+            <a class="dropdown-item" href="p-value-calculator.jsp">
+              <i class="fas fa-vial text-secondary"></i> P-Value Calculator
+            </a>
+            <a class="dropdown-item" href="sample-size-calculator.jsp">
+              <i class="fas fa-users text-secondary"></i> Sample Size Calculator
+            </a>
+            <a class="dropdown-item" href="correlation-calculator.jsp">
+              <i class="fas fa-project-diagram text-secondary"></i> Correlation Calculator
             </a>
           </div>
         </li>
