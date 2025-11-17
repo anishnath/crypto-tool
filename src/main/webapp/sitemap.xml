@@ -57,6 +57,31 @@
     <changefreq>weekly</changefreq>
 </url>
 <url>
+    <loc>https://8gwifi.org/t-test-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/chi-square-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/anova-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/normal-distribution-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/binomial-distribution-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/pythagorean.jsp</loc>
 </url>
 <url>

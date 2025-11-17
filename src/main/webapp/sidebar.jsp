@@ -586,6 +586,11 @@
                                     <li><a href="correlation-calculator.jsp">Correlation Calculator</a></li>
                                     <li><a href="z-score-calculator.jsp">Z-Score Calculator</a></li>
                                     <li><a href="linear-regression-calculator.jsp">Linear Regression Calculator</a></li>
+                                    <li><a href="t-test-calculator.jsp">T-Test Calculator</a></li>
+                                    <li><a href="chi-square-calculator.jsp">Chi-Square Calculator</a></li>
+                                    <li><a href="anova-calculator.jsp">ANOVA Calculator</a></li>
+                                    <li><a href="normal-distribution-calculator.jsp">Normal Distribution Calculator</a></li>
+                                    <li><a href="binomial-distribution-calculator.jsp">Binomial Distribution Calculator</a></li>
                                     <li><a href="pythagorean.jsp">Pythagorean Theorem Solver</a></li>
                                     <li><a href="triangle-solver.jsp">Triangle Solver (SSS/SAS/ASA)</a></li>
                                     <li><a href="right-triangle-trig.jsp">Right-Triangle Trig (SOHCAHTOA)</a></li>

@@ -170,6 +170,23 @@
             <a class="dropdown-item" href="linear-regression-calculator.jsp">
               <i class="fas fa-chart-line text-secondary"></i> Linear Regression Calculator
             </a>
+            <a class="dropdown-item" href="t-test-calculator.jsp">
+              <i class="fas fa-vial text-secondary"></i> T-Test Calculator
+            </a>
+            <a class="dropdown-item" href="chi-square-calculator.jsp">
+              <i class="fas fa-table text-secondary"></i> Chi-Square Calculator
+            </a>
+            <a class="dropdown-item" href="anova-calculator.jsp">
+              <i class="fas fa-layer-group text-secondary"></i> ANOVA Calculator
+            </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Probability Distributions</h6>
+            <a class="dropdown-item" href="normal-distribution-calculator.jsp">
+              <i class="fas fa-bell text-secondary"></i> Normal Distribution
+            </a>
+            <a class="dropdown-item" href="binomial-distribution-calculator.jsp">
+              <i class="fas fa-dice text-secondary"></i> Binomial Distribution
+            </a>
           </div>
         </li>
 
