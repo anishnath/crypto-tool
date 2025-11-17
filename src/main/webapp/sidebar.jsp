@@ -580,6 +580,7 @@
                                     <li><a href="21-card-trick.jsp">21 Card Trick</a></li>
                                     <li><a href="mean-median-mode.jsp">Mean, Median, Mode Finder</a></li>
                                     <li><a href="standard-deviation.jsp">Standard Deviation Calculator</a></li>
+                                    <li><a href="confidence-interval-calculator.jsp">Confidence Interval Calculator</a></li>
                                     <li><a href="p-value-calculator.jsp">P-Value Calculator</a></li>
                                     <li><a href="sample-size-calculator.jsp">Sample Size Calculator</a></li>
                                     <li><a href="correlation-calculator.jsp">Correlation Calculator</a></li>

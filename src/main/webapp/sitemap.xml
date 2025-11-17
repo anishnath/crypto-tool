@@ -27,6 +27,11 @@
     <loc>https://8gwifi.org/standard-deviation.jsp</loc>
 </url>
 <url>
+    <loc>https://8gwifi.org/confidence-interval-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/p-value-calculator.jsp</loc>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
