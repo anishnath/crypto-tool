@@ -23,7 +23,7 @@
 </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="cs-container">
   <h1 class="mt-4">Circle & Sector Calculator</h1>
 
@@ -94,5 +94,10 @@
   document.getElementById('btnRandom').addEventListener('click', randomize);
 })();
 </script>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>

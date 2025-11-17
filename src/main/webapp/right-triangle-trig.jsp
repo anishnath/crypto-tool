@@ -26,7 +26,7 @@
 </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="rt-container">
   <h1 class="mt-4">Right-Triangle Trig Explorer (SOHCAHTOA)</h1>
   <p class="tiny">Provide one acute angle (θ) and one side. Choose which side you know (adjacent, opposite, or hypotenuse), then Solve.</p>
@@ -98,5 +98,10 @@
   document.getElementById('btnRandom').addEventListener('click', randomize);
 })();
 </script>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>

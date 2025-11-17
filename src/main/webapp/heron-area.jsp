@@ -179,7 +179,7 @@
 </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="he-container">
   <h1 class="mt-4"><i class="fas fa-draw-polygon"></i> Heron's Formula Triangle Calculator</h1>
 
@@ -606,5 +606,10 @@
   </div>
 </div>
 
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>
