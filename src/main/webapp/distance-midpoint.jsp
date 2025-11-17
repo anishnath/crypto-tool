@@ -24,7 +24,7 @@
 </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="dm-container">
   <h1 class="mt-4">Distance & Midpoint Calculator</h1>
   <p class="tiny">Enter coordinates of two points (x1, y1) and (x2, y2). We’ll compute distance, midpoint, slope, and line equation.</p>
@@ -100,5 +100,10 @@
   document.getElementById('btnRandom').addEventListener('click', randomize);
 })();
 </script>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>

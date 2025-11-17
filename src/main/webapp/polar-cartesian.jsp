@@ -175,7 +175,7 @@
 </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="math-menu-nav.jsp"%>
 <div class="pc-container">
   <h1 class="mt-4"><i class="fas fa-compass"></i> Polar ↔ Cartesian Coordinate Converter</h1>
 
@@ -530,5 +530,10 @@
   });
 })();
 </script>
+<div class="sharethis-inline-share-buttons"></div>
+<%@ include file="thanks.jsp"%>
+<hr>
+<%@ include file="footer_adsense.jsp"%>
+<%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>
