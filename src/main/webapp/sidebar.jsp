@@ -584,6 +584,8 @@
                                     <li><a href="p-value-calculator.jsp">P-Value Calculator</a></li>
                                     <li><a href="sample-size-calculator.jsp">Sample Size Calculator</a></li>
                                     <li><a href="correlation-calculator.jsp">Correlation Calculator</a></li>
+                                    <li><a href="z-score-calculator.jsp">Z-Score Calculator</a></li>
+                                    <li><a href="linear-regression-calculator.jsp">Linear Regression Calculator</a></li>
                                     <li><a href="pythagorean.jsp">Pythagorean Theorem Solver</a></li>
                                     <li><a href="triangle-solver.jsp">Triangle Solver (SSS/SAS/ASA)</a></li>
                                     <li><a href="right-triangle-trig.jsp">Right-Triangle Trig (SOHCAHTOA)</a></li>

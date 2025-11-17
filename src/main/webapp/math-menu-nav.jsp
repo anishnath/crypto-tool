@@ -152,6 +152,9 @@
             </a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">Inferential Statistics</h6>
+            <a class="dropdown-item" href="confidence-interval-calculator.jsp">
+              <i class="fas fa-chart-area text-secondary"></i> Confidence Interval Calculator
+            </a>
             <a class="dropdown-item" href="p-value-calculator.jsp">
               <i class="fas fa-vial text-secondary"></i> P-Value Calculator
             </a>
@@ -160,6 +163,12 @@
             </a>
             <a class="dropdown-item" href="correlation-calculator.jsp">
               <i class="fas fa-project-diagram text-secondary"></i> Correlation Calculator
+            </a>
+            <a class="dropdown-item" href="z-score-calculator.jsp">
+              <i class="fas fa-calculator text-secondary"></i> Z-Score Calculator
+            </a>
+            <a class="dropdown-item" href="linear-regression-calculator.jsp">
+              <i class="fas fa-chart-line text-secondary"></i> Linear Regression Calculator
             </a>
           </div>
         </li>
