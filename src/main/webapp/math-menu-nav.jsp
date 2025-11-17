@@ -187,6 +187,14 @@
             <a class="dropdown-item" href="binomial-distribution-calculator.jsp">
               <i class="fas fa-dice text-secondary"></i> Binomial Distribution
             </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Hypothesis Testing</h6>
+            <a class="dropdown-item" href="hypothesis-test-calculator.jsp">
+              <i class="fas fa-vial text-secondary"></i> Hypothesis Test Calculator
+            </a>
+            <a class="dropdown-item" href="standard-error-calculator.jsp">
+              <i class="fas fa-ruler text-secondary"></i> Standard Error Calculator
+            </a>
           </div>
         </li>
 
