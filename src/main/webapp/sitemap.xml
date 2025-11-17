@@ -93,6 +93,36 @@
         <priority>0.95</priority>
     </url>
   <url>
+    <loc>https://8gwifi.org/density-calculator.jsp</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/percent-yield-calculator.jsp</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/percent-composition-calculator.jsp</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/half-life-calculator.jsp</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/molecular-geometry-calculator.jsp</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/chemical-equation-balancer.jsp</loc>
     <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>

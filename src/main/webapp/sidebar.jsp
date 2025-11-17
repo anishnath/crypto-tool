@@ -511,15 +511,18 @@
                                 <ul class="list-unstyled mb-0 small">
                                     <li><a href="periodic-table.jsp"><i class="fas fa-th"></i> <strong>Periodic Table (Interactive)</strong></a></li>
                                     <li><a href="molar-mass-calculator.jsp">Molar Mass Calculator</a></li>
+                                    <li><a href="percent-composition-calculator.jsp">Percent Composition Calculator</a></li>
                                     <li><a href="significant-figures-calculator.jsp">Significant Figures Calculator</a></li>
                                     <li><a href="chemical-equation-balancer.jsp">Chemical Equation Balancer</a></li>
                                     <li><a href="molarity-dilution-calculator.jsp">Molarity + Dilution (C1V1=C2V2)</a></li>
                                     <li><a href="unit-converter-chemistry.jsp">Unit Converter (Mass, Volume, Pressure, Temp, Energy)</a></li>
+                                    <li><a href="density-calculator.jsp">Density Calculator (d=m/v)</a></li>
                                     <li><a href="ph-calculator.jsp">pH Calculator (Strong/Weak Acids & Bases + Buffers)</a></li>
                                     <li><a href="buffer-solution-calculator.jsp">Buffer Solution Calculator (Henderson-Hasselbalch)</a></li>
                                     <li><a href="electron-configuration-calculator.jsp">Electron Configuration Calculator</a></li>
                                     <li><a href="ideal-gas-law-calculator.jsp">Ideal Gas Law Calculator (PV=nRT)</a></li>
                                     <li><a href="stoichiometry-calculator.jsp">Stoichiometry Calculator</a></li>
+                                    <li><a href="percent-yield-calculator.jsp">Percent Yield Calculator</a></li>
                                     <li><a href="limiting-reagent-calculator.jsp">Limiting Reagent Calculator</a></li>
                                     <li><a href="empirical-formula-calculator.jsp">Empirical & Molecular Formula Calculator</a></li>
                                     <li><a href="titration-calculator.jsp">Titration Calculator (Acid-Base & pH)</a></li>
@@ -527,6 +530,8 @@
                                     <li><a href="electrochemistry-calculator.jsp">Electrochemistry Calculator (Nernst & Faraday)</a></li>
                                     <li><a href="thermochemistry-calculator.jsp">Thermochemistry Calculator (Calorimetry & Enthalpy)</a></li>
                                     <li><a href="lewis-structure-generator.jsp">Lewis Structure & VSEPR Calculator</a></li>
+                                    <li><a href="molecular-geometry-calculator.jsp">Molecular Geometry Calculator</a></li>
+                                    <li><a href="half-life-calculator.jsp">Half-Life Calculator</a></li>
                                     <li><a href="equilibrium-constant-calculator.jsp">Equilibrium Constant Calculator (Kc, Kp, Ka, Kb)</a></li>
                                 </ul>
                             </div>
