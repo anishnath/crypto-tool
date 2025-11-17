@@ -550,9 +550,12 @@
                         <div id="collapseMath" class="collapse" aria-labelledby="headingMath" data-parent="#sidebarAccordion">
                             <div class="card-body p-2">
                                 <ul class="list-unstyled mb-0 small">
+                                    <li><a href="scientific-calculator.jsp">Scientific Calculator</a></li>
                                     <li><a href="graphing-calculator.jsp">Graphing Calculator</a></li>
+                                    <li><a href="area-volume-calculator.jsp">Area & Volume Calculator</a></li>
+                                    <li><a href="distance-formula-calculator.jsp">Distance Formula Calculator</a></li>
                                     <li><a href="math-art-gallery.jsp">Math Art Gallery - Fractal Generator & Parametric Plotter</a></li>
-                                    
+
                                     <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
