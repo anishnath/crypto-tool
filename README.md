@@ -6,6 +6,37 @@ This README lists public pages from our sitemap as Markdown backlinks to help se
 - Generated: 2025-11-18
 - Total pages: 436
 
+## RSA Encryption Example
+You can test RSA encryption online using this tool:
+https://8gwifi.org/RsaFunction.jsp
+Description: Generate RSA keys and encrypt/decrypt messages.
+
+## More Crypto Examples
+- RSA Sign/Verify: https://8gwifi.org/rsasignverifyfunctions.jsp — Create and verify RSA signatures.
+- ECC Operations: https://8gwifi.org/ecfunctions.jsp — Explore elliptic-curve key operations.
+- ECDSA Sign/Verify: https://8gwifi.org/ecsignverify.jsp — Sign and verify data with ECDSA.
+- HMAC Generator: https://8gwifi.org/hmacgen.jsp — Compute HMACs with common hash functions.
+- JWT Debugger: https://8gwifi.org/jwt-debugger.jsp — Inspect, decode, and validate JWTs.
+- Base64/Hex Converter: https://8gwifi.org/base64Hex.jsp — Convert between Base64 and hex.
+- URL Encode/Decode: https://8gwifi.org/UrlEncodeDecodeFunctions.jsp — Encode or decode URLs.
+- Random Number Generator: https://8gwifi.org/random-number-generator.jsp — Generate random numbers.
+- Random String Generator: https://8gwifi.org/random-string.jsp — Generate random strings.
+- PBKDF2 Derivation: https://8gwifi.org/pbkdf.jsp — Derive keys from passwords with PBKDF2.
+- scrypt Derivation: https://8gwifi.org/scrypt.jsp — Memory-hard password-based key derivation.
+- Argon2 Derivation: https://8gwifi.org/argon2.jsp — Modern memory-hard key derivation.
+- ASN.1 Decoder: https://8gwifi.org/asn1-decoder.jsp — Decode ASN.1/DER structures.
+- X.509 Certificates: https://8gwifi.org/certs.jsp — Parse and view certificates.
+- Verify Certificates: https://8gwifi.org/certsverify.jsp — Verify certificate chains and validity.
+- JWS Sign: https://8gwifi.org/jwssign.jsp — Produce and verify JSON Web Signatures.
+- PGP Key Generator: https://8gwifi.org/pgpkeyfunction.jsp — Generate PGP key pairs.
+- PGP Encrypt/Decrypt: https://8gwifi.org/pgpencdec.jsp — Encrypt or decrypt PGP messages.
+- PGP File Verify: https://8gwifi.org/pgpfileverify.jsp — Verify PGP-signed files.
+- PGP Upload: https://8gwifi.org/pgp-upload.jsp — Upload and analyze PGP content.
+- File Encryption: https://8gwifi.org/file-encrypt.jsp — Encrypt files.
+- Secure Share: https://8gwifi.org/share-file.jsp — Share files securely.
+- Secure Bin: https://8gwifi.org/securebin.jsp — Pastebin-style secure storage.
+- NaCl Crypto: https://8gwifi.org/naclencdec.jsp — NaCl/libsodium-based encryption and decryption.
+
 ## Links
 
 - [Home](https://8gwifi.org/)
