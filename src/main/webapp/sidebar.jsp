@@ -307,6 +307,7 @@
                                 <li><a href="regex.jsp">Regex Tester</a></li>
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
                                 <li><a href="random-string.jsp">Random String Generator</a></li>
+                                <li><a href="word-character-counter.jsp">Word & Character Counter</a></li>
                             </ul>
                         </div>
                     </div>
