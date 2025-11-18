@@ -261,6 +261,15 @@
             <a class="dropdown-item" href="mind-reading-trick.jsp">
               <i class="fas fa-brain text-purple"></i> Mind Reading Number Trick
             </a>
+            <a class="dropdown-item" href="magic-square-generator.jsp">
+              <i class="fas fa-th text-purple"></i> Magic Square Generator
+            </a>
+            <a class="dropdown-item" href="pascals-triangle-explorer.jsp">
+              <i class="fas fa-sort-up text-purple"></i> Pascal's Triangle Explorer
+            </a>
+            <a class="dropdown-item" href="collatz-conjecture.jsp">
+              <i class="fas fa-question-circle text-purple"></i> Collatz Conjecture (3n+1)
+            </a>
             <a class="dropdown-item" href="kaprekar.jsp">
               <i class="fas fa-magic text-purple"></i> Kaprekar's Constant (6174)
             </a>
@@ -269,6 +278,36 @@
             </a>
             <a class="dropdown-item" href="21-card-trick.jsp">
               <i class="fas fa-layer-group text-purple"></i> 21 Card Trick
+            </a>
+            <a class="dropdown-item" href="24-game-solver.jsp">
+              <i class="fas fa-gamepad text-purple"></i> 24 Game Solver
+            </a>
+            <a class="dropdown-item" href="spirograph-simulator.jsp">
+              <i class="fas fa-circle-notch text-purple"></i> Spirograph Simulator
+            </a>
+            <a class="dropdown-item" href="tower-of-hanoi.jsp">
+              <i class="fas fa-layer-group text-purple"></i> Tower of Hanoi
+            </a>
+            <a class="dropdown-item" href="monty-hall-simulator.jsp">
+              <i class="fas fa-door-open text-purple"></i> Monty Hall Simulator
+            </a>
+            <a class="dropdown-item" href="prime-spiral.jsp">
+              <i class="fas fa-spiral text-purple"></i> Prime Spiral (Ulam)
+            </a>
+            <a class="dropdown-item" href="fibonacci-spiral.jsp">
+              <i class="fas fa-wave-square text-purple"></i> Fibonacci Spiral
+            </a>
+            <a class="dropdown-item" href="binary-card-trick.jsp">
+              <i class="fas fa-cards text-purple"></i> Binary Card Trick
+            </a>
+            <a class="dropdown-item" href="recaman-sequence.jsp">
+              <i class="fas fa-music text-purple"></i> Recamán's Sequence
+            </a>
+            <a class="dropdown-item" href="pythagorean-triples.jsp">
+              <i class="fas fa-triangle text-purple"></i> Pythagorean Triples
+            </a>
+            <a class="dropdown-item" href="sudoku-solver.jsp">
+              <i class="fas fa-grid-3x3 text-purple"></i> Sudoku Solver
             </a>
           </div>
         </li>
