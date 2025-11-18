@@ -144,11 +144,20 @@
           </a>
           <div class="dropdown-menu">
             <h6 class="dropdown-header">Descriptive Statistics</h6>
+            <a class="dropdown-item" href="summary-statistics-calculator.jsp">
+              <i class="fas fa-chart-pie text-secondary"></i> Summary Statistics (All-in-One)
+            </a>
             <a class="dropdown-item" href="mean-median-mode.jsp">
               <i class="fas fa-chart-bar text-secondary"></i> Mean, Median, Mode
             </a>
             <a class="dropdown-item" href="standard-deviation.jsp">
               <i class="fas fa-sigma text-secondary"></i> Standard Deviation
+            </a>
+            <a class="dropdown-item" href="variance-calculator.jsp">
+              <i class="fas fa-wave-square text-secondary"></i> Variance Calculator
+            </a>
+            <a class="dropdown-item" href="outlier-detection-calculator.jsp">
+              <i class="fas fa-exclamation-triangle text-secondary"></i> Outlier Detection
             </a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">Inferential Statistics</h6>
