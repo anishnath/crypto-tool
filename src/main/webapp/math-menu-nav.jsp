@@ -46,14 +46,30 @@
             <a class="dropdown-item" href="factoring-calculator.jsp">
               <i class="fas fa-project-diagram text-success"></i> Factoring Calculator
             </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Equations</h6>
             <a class="dropdown-item" href="linear-equations-solver.jsp">
               <i class="fas fa-equals text-success"></i> Equation Solver (Linear, Polynomial)
             </a>
             <a class="dropdown-item" href="quadratic-solver.jsp">
               <i class="fas fa-superscript text-success"></i> Quadratic Equation Solver
             </a>
+            <a class="dropdown-item" href="system-equations-solver.jsp">
+              <i class="fas fa-th text-success"></i> System of Equations Solver
+            </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Advanced</h6>
             <a class="dropdown-item" href="logarithm-calculator.jsp">
               <i class="fas fa-subscript text-success"></i> Logarithm Calculator
+            </a>
+            <a class="dropdown-item" href="exponent-calculator.jsp">
+              <i class="fas fa-superscript text-success"></i> Exponent Calculator
+            </a>
+            <a class="dropdown-item" href="radical-simplifier.jsp">
+              <i class="fas fa-square-root-alt text-success"></i> Radical Simplifier
+            </a>
+            <a class="dropdown-item" href="inequality-solver.jsp">
+              <i class="fas fa-greater-than text-success"></i> Inequality Solver
             </a>
           </div>
         </li>

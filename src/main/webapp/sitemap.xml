@@ -137,6 +137,26 @@
     <changefreq>weekly</changefreq>
 </url>
 <url>
+    <loc>https://8gwifi.org/system-equations-solver.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/exponent-calculator.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/radical-simplifier.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
+    <loc>https://8gwifi.org/inequality-solver.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/pythagorean.jsp</loc>
 </url>
 <url>

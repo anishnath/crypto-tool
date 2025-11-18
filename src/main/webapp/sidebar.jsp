@@ -562,7 +562,11 @@
                                     <li><a href="factoring-calculator.jsp">Factoring Calculator</a></li>
                                     <li><a href="linear-equations-solver.jsp">Equation Solver (Ax=b, AX=B, Polynomial)</a></li>
                                     <li><a href="quadratic-solver.jsp">Quadratic Equation Solver (ax²+bx+c=0)</a></li>
+                                    <li><a href="system-equations-solver.jsp">System of Equations Solver (2x2, 3x3)</a></li>
                                     <li><a href="logarithm-calculator.jsp">Logarithm Calculator</a></li>
+                                    <li><a href="exponent-calculator.jsp">Exponent Calculator (Laws of Exponents)</a></li>
+                                    <li><a href="radical-simplifier.jsp">Radical Simplifier (√, ∛, Rationalize)</a></li>
+                                    <li><a href="inequality-solver.jsp">Inequality Solver (Linear, Quadratic, Polynomial)</a></li>
                                     <li><a href="matrix-determinant-calculator.jsp">Matrix Determinant Calculator</a></li>
                                     <li><a href="matrix-inverse-calculator.jsp">Matrix Inverse Calculator</a></li>
                                     <li><a href="matrix-eigenvalue-calculator.jsp">Eigenvalue & Eigenvector Calculator</a></li>
