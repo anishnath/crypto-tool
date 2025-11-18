@@ -258,6 +258,9 @@
             </a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">Math Tricks & Fun</h6>
+            <a class="dropdown-item" href="mind-reading-trick.jsp">
+              <i class="fas fa-brain text-purple"></i> Mind Reading Number Trick
+            </a>
             <a class="dropdown-item" href="kaprekar.jsp">
               <i class="fas fa-magic text-purple"></i> Kaprekar's Constant (6174)
             </a>

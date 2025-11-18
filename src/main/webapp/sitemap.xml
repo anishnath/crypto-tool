@@ -9,6 +9,11 @@
     <loc>https://8gwifi.org/</loc>
 </url>
 <url>
+    <loc>https://8gwifi.org/mind-reading-trick.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/kaprekar.jsp</loc>
 </url>
 <url>
