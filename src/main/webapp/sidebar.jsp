@@ -187,6 +187,7 @@
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="vpc-calculator.jsp">VPC Network Calculator</a></li>
                                 <li><a href="SubnetFunctions.jsp">IP Subnet Calculator</a></li>
+                                <li><a href="mac-address-generator.jsp">MAC Address Generator & Validator</a></li>
                                 <li><a href="pingfunctions.jsp">Ping/Locate IPv4/IPv6</a></li>
                                 <li><a href="curlfunctions.jsp">Curl IPv4/IPv6</a></li>
                                 <li><a href="ipv6-tool.jsp">IPv6 Compressor & Expander</a></li>
@@ -492,6 +493,7 @@
                                     <li><a href="unix-timestamp-converter.jsp">Unix Timestamp Converter</a></li>
                                     <li><a href="age-calculator.jsp">Age Calculator & Milestone Tracker</a></li>
                                     <li><a href="qr-code-generator.jsp">QR Code Generator</a></li>
+                                    <li><a href="ean-upc-barcode-generator.jsp">EAN/UPC Barcode Generator</a></li>
                                     <li><a href="date-difference-calculator.jsp">Date Difference Calculator</a></li>
                                     <li><a href="random-number-generator.jsp">Random Number Generator</a></li>
                                     <li><a href="morse-code-translator.jsp">Morse Code Translator</a></li>
