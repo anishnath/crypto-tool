@@ -593,6 +593,9 @@
                                     <li><a href="binomial-distribution-calculator.jsp">Binomial Distribution Calculator</a></li>
                                     <li><a href="hypothesis-test-calculator.jsp">Hypothesis Test Calculator</a></li>
                                     <li><a href="standard-error-calculator.jsp">Standard Error Calculator</a></li>
+                                    <li><a href="probability-calculator.jsp">Probability Calculator</a></li>
+                                    <li><a href="percentile-calculator.jsp">Percentile Calculator</a></li>
+                                    <li><a href="effect-size-calculator.jsp">Effect Size Calculator</a></li>
                                     <li><a href="pythagorean.jsp">Pythagorean Theorem Solver</a></li>
                                     <li><a href="triangle-solver.jsp">Triangle Solver (SSS/SAS/ASA)</a></li>
                                     <li><a href="right-triangle-trig.jsp">Right-Triangle Trig (SOHCAHTOA)</a></li>

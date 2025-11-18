@@ -180,7 +180,13 @@
               <i class="fas fa-layer-group text-secondary"></i> ANOVA Calculator
             </a>
             <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Probability Distributions</h6>
+            <h6 class="dropdown-header">Probability & Distributions</h6>
+            <a class="dropdown-item" href="probability-calculator.jsp">
+              <i class="fas fa-dice-d20 text-secondary"></i> Probability Calculator
+            </a>
+            <a class="dropdown-item" href="percentile-calculator.jsp">
+              <i class="fas fa-chart-box text-secondary"></i> Percentile Calculator
+            </a>
             <a class="dropdown-item" href="normal-distribution-calculator.jsp">
               <i class="fas fa-bell text-secondary"></i> Normal Distribution
             </a>
@@ -188,12 +194,15 @@
               <i class="fas fa-dice text-secondary"></i> Binomial Distribution
             </a>
             <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Hypothesis Testing</h6>
+            <h6 class="dropdown-header">Hypothesis Testing & Effect Size</h6>
             <a class="dropdown-item" href="hypothesis-test-calculator.jsp">
               <i class="fas fa-vial text-secondary"></i> Hypothesis Test Calculator
             </a>
             <a class="dropdown-item" href="standard-error-calculator.jsp">
               <i class="fas fa-ruler text-secondary"></i> Standard Error Calculator
+            </a>
+            <a class="dropdown-item" href="effect-size-calculator.jsp">
+              <i class="fas fa-chart-area text-secondary"></i> Effect Size Calculator
             </a>
           </div>
         </li>
