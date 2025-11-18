@@ -40,11 +40,20 @@
             <i class="fas fa-square-root-alt text-success"></i> Algebra
           </a>
           <div class="dropdown-menu">
+            <a class="dropdown-item" href="algebraic-simplifier.jsp">
+              <i class="fas fa-function text-success"></i> Algebraic Simplifier
+            </a>
+            <a class="dropdown-item" href="factoring-calculator.jsp">
+              <i class="fas fa-project-diagram text-success"></i> Factoring Calculator
+            </a>
             <a class="dropdown-item" href="linear-equations-solver.jsp">
               <i class="fas fa-equals text-success"></i> Equation Solver (Linear, Polynomial)
             </a>
             <a class="dropdown-item" href="quadratic-solver.jsp">
               <i class="fas fa-superscript text-success"></i> Quadratic Equation Solver
+            </a>
+            <a class="dropdown-item" href="logarithm-calculator.jsp">
+              <i class="fas fa-subscript text-success"></i> Logarithm Calculator
             </a>
           </div>
         </li>
