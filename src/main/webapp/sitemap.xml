@@ -1750,4 +1750,9 @@
     <priority>0.95</priority>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>https://8gwifi.org/base-converter.jsp</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

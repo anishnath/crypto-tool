@@ -280,6 +280,7 @@
                                 <li><a href="base64image.jsp">Base64 Image Converter</a></li>
                                 <li><a href="UrlEncodeDecodeFunctions.jsp">URL Encoders/Decoders</a></li>
                                 <li><a href="HexToStringFunctions.jsp">Hex/String Conversion</a></li>
+                                <li><a href="base-converter.jsp">Base Converter (All Bases)</a></li>
                                 <li><a href="hexdump.jsp">Hexdump Generator</a></li>
                                 <li><a href="jsonparser.jsp">JSON BeautifierL</a></li>
                                 <li><a href="yamlparser.jsp">YAML-2-JSON/XML</a></li>
@@ -308,6 +309,7 @@
                                 <li><a href="diff.jsp">Compare Text Diff</a></li>
                                 <li><a href="random-string.jsp">Random String Generator</a></li>
                                 <li><a href="word-character-counter.jsp">Word & Character Counter</a></li>
+                                <li><a href="base-converter.jsp">Base Converter (All Bases)</a></li>
                             </ul>
                         </div>
                     </div>
