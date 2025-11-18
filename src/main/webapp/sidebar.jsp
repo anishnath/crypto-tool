@@ -289,6 +289,8 @@
                                 <li><a href="json-2-csv.jsp">JSON-2-CSV</a></li>
                                 <li><a href="csv-2-json.jsp">CSV-2-JSON</a></li>
                                 <li><a href="StringFunctions.jsp">String Functions</a></li>
+                                <li><a href="iban-validator.jsp">IBAN Validator & Generator</a></li>
+                                <li><a href="isbn-validator.jsp">ISBN Validator & Converter</a></li>
                             </ul>
                         </div>
                     </div>
