@@ -1,0 +1,87 @@
+# Math Tool Issues
+
+Auto-generated list of issue ideas for math-related tools found in the sitemap.
+
+- Source: src/main/webapp/sitemap.xml
+- Generated: 2025-11-18
+- Total math tools: 71
+
+## Proposed Issues
+
+- [ ] Pascals Triangle Explorer — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/pascals-triangle-explorer.jsp)
+- [ ] Collatz Conjecture — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/collatz-conjecture.jsp)
+- [ ] Kaprekar — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/kaprekar.jsp)
+- [ ] Magic 1089 — Clarify formula notes, units, and assumptions. (https://8gwifi.org/magic-1089.jsp)
+- [ ] 21 Card Trick — Include real-world example problems with solutions. (https://8gwifi.org/21-card-trick.jsp)
+- [ ] Mean Median Mode — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/mean-median-mode.jsp)
+- [ ] Standard Deviation — Improve mobile layout for long expressions. (https://8gwifi.org/standard-deviation.jsp)
+- [ ] Confidence Interval Calculator — Export results/plots to image or CSV. (https://8gwifi.org/confidence-interval-calculator.jsp)
+- [ ] P Value Calculator — Add keyboard shortcuts for common operators. (https://8gwifi.org/p-value-calculator.jsp)
+- [ ] Sample Size Calculator — Document algorithm choices and complexity. (https://8gwifi.org/sample-size-calculator.jsp)
+- [ ] Correlation Calculator — Enhance accessibility and screen reader labels. (https://8gwifi.org/correlation-calculator.jsp)
+- [ ] Z Score Calculator — Add dark-mode friendly charts and styles. (https://8gwifi.org/z-score-calculator.jsp)
+- [ ] Linear Regression Calculator — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/linear-regression-calculator.jsp)
+- [ ] T Test Calculator — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/t-test-calculator.jsp)
+- [ ] Chi Square Calculator — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/chi-square-calculator.jsp)
+- [ ] Anova Calculator — Clarify formula notes, units, and assumptions. (https://8gwifi.org/anova-calculator.jsp)
+- [ ] Normal Distribution Calculator — Include real-world example problems with solutions. (https://8gwifi.org/normal-distribution-calculator.jsp)
+- [ ] Binomial Distribution Calculator — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/binomial-distribution-calculator.jsp)
+- [ ] Hypothesis Test Calculator — Improve mobile layout for long expressions. (https://8gwifi.org/hypothesis-test-calculator.jsp)
+- [ ] Standard Error Calculator — Export results/plots to image or CSV. (https://8gwifi.org/standard-error-calculator.jsp)
+- [ ] Probability Calculator — Add keyboard shortcuts for common operators. (https://8gwifi.org/probability-calculator.jsp)
+- [ ] Percentile Calculator — Document algorithm choices and complexity. (https://8gwifi.org/percentile-calculator.jsp)
+- [ ] Effect Size Calculator — Enhance accessibility and screen reader labels. (https://8gwifi.org/effect-size-calculator.jsp)
+- [ ] Summary Statistics Calculator — Add dark-mode friendly charts and styles. (https://8gwifi.org/summary-statistics-calculator.jsp)
+- [ ] Variance Calculator — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/variance-calculator.jsp)
+- [ ] Outlier Detection Calculator — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/outlier-detection-calculator.jsp)
+- [ ] Factoring Calculator — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/factoring-calculator.jsp)
+- [ ] Algebraic Simplifier — Clarify formula notes, units, and assumptions. (https://8gwifi.org/algebraic-simplifier.jsp)
+- [ ] Logarithm Calculator — Include real-world example problems with solutions. (https://8gwifi.org/logarithm-calculator.jsp)
+- [ ] System Equations Solver — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/system-equations-solver.jsp)
+- [ ] Exponent Calculator — Improve mobile layout for long expressions. (https://8gwifi.org/exponent-calculator.jsp)
+- [ ] Radical Simplifier — Export results/plots to image or CSV. (https://8gwifi.org/radical-simplifier.jsp)
+- [ ] Inequality Solver — Add keyboard shortcuts for common operators. (https://8gwifi.org/inequality-solver.jsp)
+- [ ] Pythagorean — Document algorithm choices and complexity. (https://8gwifi.org/pythagorean.jsp)
+- [ ] Triangle Solver — Enhance accessibility and screen reader labels. (https://8gwifi.org/triangle-solver.jsp)
+- [ ] Right Triangle Trig — Add dark-mode friendly charts and styles. (https://8gwifi.org/right-triangle-trig.jsp)
+- [ ] Distance Midpoint — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/distance-midpoint.jsp)
+- [ ] Circle Sector — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/circle-sector.jsp)
+- [ ] Heron Area — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/heron-area.jsp)
+- [ ] Degree Radian — Clarify formula notes, units, and assumptions. (https://8gwifi.org/degree-radian.jsp)
+- [ ] Polar Cartesian — Include real-world example problems with solutions. (https://8gwifi.org/polar-cartesian.jsp)
+- [ ] Distance 3d — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/distance-3d.jsp)
+- [ ] Factorial Permutation — Improve mobile layout for long expressions. (https://8gwifi.org/factorial-permutation.jsp)
+- [ ] Prime Number — Export results/plots to image or CSV. (https://8gwifi.org/prime-number.jsp)
+- [ ] Lcm Gcd — Add keyboard shortcuts for common operators. (https://8gwifi.org/lcm-gcd.jsp)
+- [ ] Fibonacci — Document algorithm choices and complexity. (https://8gwifi.org/fibonacci.jsp)
+- [ ] Graphing Calculator — Enhance accessibility and screen reader labels. (https://8gwifi.org/graphing-calculator.jsp)
+- [ ] Scientific Calculator — Add dark-mode friendly charts and styles. (https://8gwifi.org/scientific-calculator.jsp)
+- [ ] Area Volume Calculator — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/area-volume-calculator.jsp)
+- [ ] Distance Formula Calculator — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/distance-formula-calculator.jsp)
+- [ ] Math Art Gallery — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/math-art-gallery.jsp)
+- [ ] Matrix Determinant Calculator — Clarify formula notes, units, and assumptions. (https://8gwifi.org/matrix-determinant-calculator.jsp)
+- [ ] Matrix Inverse Calculator — Include real-world example problems with solutions. (https://8gwifi.org/matrix-inverse-calculator.jsp)
+- [ ] Matrix Eigenvalue Calculator — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/matrix-eigenvalue-calculator.jsp)
+- [ ] Matrix Rank Calculator — Improve mobile layout for long expressions. (https://8gwifi.org/matrix-rank-calculator.jsp)
+- [ ] Matrix Power Calculator — Export results/plots to image or CSV. (https://8gwifi.org/matrix-power-calculator.jsp)
+- [ ] Matrix Multiplication Calculator — Add keyboard shortcuts for common operators. (https://8gwifi.org/matrix-multiplication-calculator.jsp)
+- [ ] Matrix Addition Calculator — Document algorithm choices and complexity. (https://8gwifi.org/matrix-addition-calculator.jsp)
+- [ ] Matrix Transpose Calculator — Enhance accessibility and screen reader labels. (https://8gwifi.org/matrix-transpose-calculator.jsp)
+- [ ] Matrix Type Classifier — Add dark-mode friendly charts and styles. (https://8gwifi.org/matrix-type-classifier.jsp)
+- [ ] Derivative Calculator — Improve input validation for edge cases (negatives, NaN). (https://8gwifi.org/derivative-calculator.jsp)
+- [ ] Integral Calculator — Add step-by-step solution walkthrough for learners. (https://8gwifi.org/integral-calculator.jsp)
+- [ ] Limit Calculator — Support fractions/rational outputs alongside decimals. (https://8gwifi.org/limit-calculator.jsp)
+- [ ] Series Calculator — Clarify formula notes, units, and assumptions. (https://8gwifi.org/series-calculator.jsp)
+- [ ] Math Art Gallery — Include real-world example problems with solutions. (https://8gwifi.org/math-art-gallery.jsp)
+- [ ] Bias Variance Explorer — Fix rounding/precision behavior for large numbers. (https://8gwifi.org/bias_variance_explorer.jsp)
+- [ ] Bias Variance Tradeoff — Improve mobile layout for long expressions. (https://8gwifi.org/bias_variance_tradeoff.jsp)
+- [ ] Probability Calibration Lab — Export results/plots to image or CSV. (https://8gwifi.org/probability_calibration_lab.jsp)
+- [ ] Predicted Probability Explorer — Add keyboard shortcuts for common operators. (https://8gwifi.org/predicted_probability_explorer.jsp)
+- [ ] Fibonacci Spiral — Document algorithm choices and complexity. (https://8gwifi.org/fibonacci-spiral.jsp)
+- [ ] Pythagorean Triples — Enhance accessibility and screen reader labels. (https://8gwifi.org/pythagorean-triples.jsp)
+
+---
+
+Notes:
+- These are suggestions to guide improvements; refine or file as GitHub issues as needed.
+- Regenerate after sitemap changes to keep this list current.
