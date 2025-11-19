@@ -8,19 +8,19 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <!-- SEO Meta -->
-<title>Mean, Median, Mode Finder — Paste Numbers, Outliers, Sorted List + Histogram</title>
-<meta name="description" content="Paste numbers to instantly get mean, median, and mode with outlier detection, a sorted list, and a histogram. Perfect for stats homework and analysts.">
+<title>Mean Median Mode Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free mean, median, mode calculator: paste numbers to get descriptive stats, outliers, sorted list, and optional histogram.">
 <meta name="keywords" content="mean median mode, average calculator, outlier detection, IQR, histogram, stats homework, statistics calculator, sorted list, descriptive statistics, median, mode, mean, visualize data">
 <link rel="canonical" href="https://8gwifi.org/mean-median-mode.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Mean, Median, Mode Finder — With Outliers & Histogram">
-<meta property="og:description" content="Paste your numbers and see mean, median, mode, outliers, sorted list and histogram.">
+<meta property="og:title" content="Mean Median Mode Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Paste numbers to get mean, median, mode, outliers, sorted list, and histogram.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/mean-median-mode.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mean, Median, Mode Finder — With Outliers & Histogram">
-<meta name="twitter:description" content="Fast stats: mean, median, mode, outliers, sorted list and histogram.">
+<meta name="twitter:title" content="Mean Median Mode Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Fast stats: mean, median, mode, outliers, sorted list, histogram.">
 
 <%@ include file="header-script.jsp"%>
 
@@ -465,7 +465,50 @@
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/mean-median-mode-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Mean • Median • Mode: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When should I use the median instead of the mean?</h3>
+      <p class="mb-0">Use the median for skewed data or when outliers exist; it’s robust to extreme values. Use the mean for roughly symmetric distributions without heavy tails.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What if there are multiple modes?</h3>
+      <p class="mb-0">Data can be bimodal or multimodal. The calculator reports the set of most frequent values; examine histograms to understand multiple peaks.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do outliers affect averages?</h3>
+      <p class="mb-0">Outliers strongly pull the mean but have limited impact on the median and none on the mode. Consider trimming or winsorizing if appropriate.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Population vs sample?</h3>
+      <p class="mb-0">For descriptive summaries, mean/median/mode share definitions; inferential formulas (e.g., variance) differ between population and sample.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"When should I use the median instead of the mean?","acceptedAnswer":{"@type":"Answer","text":"Use the median for skewed data or when outliers exist; it’s robust to extreme values. Use the mean for roughly symmetric distributions."}},
+      {"@type":"Question","name":"What if there are multiple modes?","acceptedAnswer":{"@type":"Answer","text":"Data can be bimodal or multimodal. We report the set of most frequent values; inspect histograms for multiple peaks."}},
+      {"@type":"Question","name":"How do outliers affect averages?","acceptedAnswer":{"@type":"Answer","text":"Outliers pull the mean, less so the median, and not the mode. Consider robust summaries if appropriate."}},
+      {"@type":"Question","name":"Population vs sample?","acceptedAnswer":{"@type":"Answer","text":"Descriptive definitions are the same; inferential measures like variance differ for population vs sample."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/mean-median-mode-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Mean Median Mode Calculator","item":"https://8gwifi.org/mean-median-mode.jsp"}
+    ]
+  }
+  </script>
 </div>
 <%@ include file="body-close.jsp"%>

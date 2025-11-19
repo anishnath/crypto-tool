@@ -4,20 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Outlier Detection Calculator - IQR, Z-Score, Modified Z-Score | 8gwifi.org</title>
+<title>Outlier Detection Calculator Online – Free | 8gwifi.org</title>
 <meta name="description" content="Free outlier detection calculator: identify outliers using IQR method, Z-score method, and modified Z-score. Visualize outliers with box plots and scatter plots.">
 <meta name="keywords" content="outlier detection, outlier calculator, IQR method, z-score outliers, modified z-score, box plot, outlier analysis, statistical outliers, anomaly detection">
 <link rel="canonical" href="https://8gwifi.org/outlier-detection-calculator.jsp">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Outlier Detection Calculator - IQR, Z-Score, Modified Z-Score">
+<meta property="og:title" content="Outlier Detection Calculator Online – Free | 8gwifi.org">
 <meta property="og:description" content="Detect outliers using multiple methods: IQR, Z-score, Modified Z-score. Visualize with box plots and identify extreme values.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/outlier-detection-calculator.jsp">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Outlier Detection Calculator - IQR, Z-Score, Modified Z-Score">
+<meta name="twitter:title" content="Outlier Detection Calculator Online – Free | 8gwifi.org">
 <meta name="twitter:description" content="Detect outliers using multiple methods: IQR, Z-score, Modified Z-score. Visualize with box plots and identify extreme values.">
 
 <!-- JSON-LD Structured Data -->
@@ -490,6 +490,49 @@ textarea.form-control {
   <%@ include file="thanks.jsp"%>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Outlier Detection: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Which method should I use?</h3>
+      <p class="mb-0">Use IQR (Tukey fences) for robust, distribution‑free detection; Z‑score for roughly normal data; Modified Z‑score (MAD) for added robustness against outliers.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What thresholds are common?</h3>
+      <p class="mb-0">IQR: outside [Q1−1.5·IQR, Q3+1.5·IQR]. Z‑score: |Z| ≥ 3 (sometimes 2.5). Modified Z: |Mz| ≥ 3.5 are typical starting points.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Should I remove outliers?</h3>
+      <p class="mb-0">Not automatically. Investigate causes (entry errors, different process). Consider robust summaries or transformations if outliers are genuine.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Do outliers always indicate bad data?</h3>
+      <p class="mb-0">No. They may reflect rare but valid cases. Always use domain knowledge before excluding points.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Which method should I use?","acceptedAnswer":{"@type":"Answer","text":"Use IQR (Tukey fences) for robust detection; Z‑score for normal data; Modified Z‑score (MAD) for robustness."}},
+      {"@type":"Question","name":"What thresholds are common?","acceptedAnswer":{"@type":"Answer","text":"IQR: fences at 1.5·IQR; Z‑score: |Z|≥3; Modified Z: |Mz|≥3.5 are typical."}},
+      {"@type":"Question","name":"Should I remove outliers?","acceptedAnswer":{"@type":"Answer","text":"Investigate cause; consider robust methods; don’t remove automatically without context."}},
+      {"@type":"Question","name":"Do outliers always indicate bad data?","acceptedAnswer":{"@type":"Answer","text":"No, they may be valid rare cases; rely on domain knowledge before exclusion."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Outlier Detection Calculator","item":"https://8gwifi.org/outlier-detection-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>

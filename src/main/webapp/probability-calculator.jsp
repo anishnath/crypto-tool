@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Probability Calculator - Bayes' Theorem, AND, OR, Conditional Probability | Free Tool</title>
-<meta name="description" content="Free online Probability Calculator. Calculate basic probabilities, conditional probability, Bayes' theorem, AND/OR probability, and multiple event probabilities with step-by-step solutions.">
+<title>Probability Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free probability calculator: combinations, permutations, conditional probability, Bayes’ theorem, AND/OR rules — with step‑by‑step examples.">
 <meta name="keywords" content="probability calculator, bayes theorem calculator, conditional probability, probability of events, AND OR probability, independent events, probability rules">
 <link rel="canonical" href="https://8gwifi.org/probability-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Probability Calculator - Statistical Tool">
-<meta property="og:description" content="Calculate probabilities using Bayes' theorem, conditional probability, AND/OR rules with detailed explanations.">
+<meta property="og:title" content="Probability Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Combinatorics, conditional probability, Bayes’ theorem, AND/OR rules — with examples.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/probability-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/probability-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Probability Calculator">
-<meta name="twitter:description" content="Calculate basic and conditional probabilities with Bayes' theorem.">
-<meta name="twitter:image" content="https://8gwifi.org/images/probability-calculator.png">
+<meta name="twitter:title" content="Probability Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free probability tool: combinations, conditional, Bayes’ theorem, AND/OR rules.">
 
 <%@ include file="header-script.jsp"%>
 
@@ -40,13 +38,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Basic probability, Conditional probability, Bayes' theorem, AND probability, OR probability, NOT probability, Independent events, Mutually exclusive events, Complement rule, Multiple event probability",
-  "screenshot": "https://8gwifi.org/images/probability-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "2150"
-  }
+  "featureList": "Basic probability, Conditional probability, Bayes' theorem, AND probability, OR probability, NOT probability, Independent events, Mutually exclusive events, Complement rule, Multiple event probability"
 }
 </script>
 
@@ -541,8 +533,51 @@
 
 <%@ include file="thanks.jsp"%>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/probability-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Probability Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Independent vs mutually exclusive?</h3>
+      <p class="mb-0">Independent events don’t affect each other (P(A∩B)=P(A)P(B)); mutually exclusive events cannot occur together (P(A∩B)=0). They are different concepts.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Conditional probability vs Bayes’ theorem?</h3>
+      <p class="mb-0">Conditional: P(A|B)=P(A∩B)/P(B). Bayes reverses conditioning: P(A|B)=P(B|A)P(A)/P(B), useful for updating beliefs given evidence.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Permutation vs combination?</h3>
+      <p class="mb-0">Permutations count ordered arrangements; combinations count unordered selections. Use permutations when order matters, combinations when it does not.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Common pitfalls?</h3>
+      <p class="mb-0">Confusing OR with exclusive OR, assuming independence without justification, and double‑counting overlapping outcomes in unions.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Independent vs mutually exclusive?","acceptedAnswer":{"@type":"Answer","text":"Independent: P(A∩B)=P(A)P(B). Mutually exclusive: P(A∩B)=0. Different ideas."}},
+      {"@type":"Question","name":"Conditional probability vs Bayes’ theorem?","acceptedAnswer":{"@type":"Answer","text":"Conditional: P(A|B)=P(A∩B)/P(B). Bayes: P(A|B)=P(B|A)P(A)/P(B)."}},
+      {"@type":"Question","name":"Permutation vs combination?","acceptedAnswer":{"@type":"Answer","text":"Permutations: order matters; combinations: order doesn’t."}},
+      {"@type":"Question","name":"Common pitfalls?","acceptedAnswer":{"@type":"Answer","text":"Confusing OR variants, assuming independence, double‑counting overlaps."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/probability-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Probability Calculator","item":"https://8gwifi.org/probability-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <%@ include file="body-close.jsp"%>

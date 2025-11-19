@@ -4,21 +4,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Summary Statistics Calculator - Mean, Median, SD, Variance, Skewness | 8gwifi.org</title>
-<meta name="description" content="Free summary statistics calculator: calculate mean, median, mode, standard deviation, variance, range, quartiles, skewness, kurtosis, and more. Complete descriptive statistics analysis with visualization.">
+<title>Summary Statistics Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free summary statistics calculator: mean, median, mode, variance, SD, range, quartiles, IQR, skewness, kurtosis. Paste data for instant results.">
 <meta name="keywords" content="summary statistics calculator, descriptive statistics, mean median mode, standard deviation, variance, skewness, kurtosis, quartiles, range, statistical analysis">
 <link rel="canonical" href="https://8gwifi.org/summary-statistics-calculator.jsp">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Summary Statistics Calculator - Complete Descriptive Statistics">
-<meta property="og:description" content="Calculate all descriptive statistics: mean, median, mode, SD, variance, range, quartiles, skewness, kurtosis. Comprehensive statistical analysis tool.">
+<meta property="og:title" content="Summary Statistics Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Descriptive stats: mean, median, mode, variance, SD, range, quartiles, IQR, skewness, kurtosis.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/summary-statistics-calculator.jsp">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Summary Statistics Calculator - Complete Descriptive Statistics">
-<meta name="twitter:description" content="Calculate all descriptive statistics: mean, median, mode, SD, variance, range, quartiles, skewness, kurtosis. Comprehensive statistical analysis tool.">
+<meta name="twitter:title" content="Summary Statistics Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Compute mean, median, mode, variance, SD, range, quartiles, IQR, skewness, kurtosis.">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -45,14 +45,7 @@
     "Standard error of mean",
     "Frequency distribution",
     "Histogram visualization"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "3421",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
+  ]
 }
 </script>
 
@@ -329,6 +322,49 @@ textarea.form-control {
   <%@ include file="thanks.jsp"%>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Summary Statistics: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What are the most useful summaries?</h3>
+      <p class="mb-0">Report central tendency (mean/median), spread (SD/IQR), shape (skewness/kurtosis) and range/five‑number summary depending on your data and audience.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Mean vs median — which to trust?</h3>
+      <p class="mb-0">Median is robust for skewed/heavy‑tailed data; mean is efficient for symmetric distributions without outliers.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When to use IQR or SD?</h3>
+      <p class="mb-0">Use IQR for robust spread (resistant to outliers). Use SD when the normal model is reasonable or you need variance‑based methods.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How to deal with outliers?</h3>
+      <p class="mb-0">Investigate first. Consider robust stats (median/IQR), transformations, or trimming only with justification.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What are the most useful summaries?","acceptedAnswer":{"@type":"Answer","text":"Report central tendency (mean/median), spread (SD/IQR), shape (skewness/kurtosis) and range/five‑number summary depending on context."}},
+      {"@type":"Question","name":"Mean vs median — which to trust?","acceptedAnswer":{"@type":"Answer","text":"Median is robust for skewed/heavy‑tailed data; mean is efficient for symmetric distributions without outliers."}},
+      {"@type":"Question","name":"When to use IQR or SD?","acceptedAnswer":{"@type":"Answer","text":"Use IQR for robustness; SD for normal‑like data or variance‑based methods."}},
+      {"@type":"Question","name":"How to deal with outliers?","acceptedAnswer":{"@type":"Answer","text":"Investigate; use robust stats, transformations, or trimming with justification."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Summary Statistics Calculator","item":"https://8gwifi.org/summary-statistics-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>

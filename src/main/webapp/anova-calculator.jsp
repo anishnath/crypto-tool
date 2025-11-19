@@ -1,26 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>ANOVA Calculator - One-Way Analysis of Variance | Free Statistical Tool</title>
-<meta name="description" content="Free online ANOVA Calculator for one-way analysis of variance. Calculate F-statistic, p-value, sum of squares, and compare multiple group means with F-distribution visualization.">
+<title>ANOVA Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free ANOVA calculator: one‑way analysis of variance. Compute F‑statistic, p‑value, sums of squares, degrees of freedom, and visualize the F‑distribution.">
 <meta name="keywords" content="anova calculator, analysis of variance, f-test, f-statistic, one-way anova, compare means, sum of squares, statistical analysis">
 <link rel="canonical" href="https://8gwifi.org/anova-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="ANOVA Calculator - Statistical Analysis Tool">
-<meta property="og:description" content="Perform one-way ANOVA to compare means of multiple groups with F-statistic and p-value calculation.">
+<meta property="og:title" content="ANOVA Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="One‑way ANOVA: F‑statistic, p‑value, sums of squares, df, and charts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/anova-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/anova-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ANOVA Calculator">
-<meta name="twitter:description" content="Calculate F-statistics, compare multiple group means with one-way ANOVA.">
-<meta name="twitter:image" content="https://8gwifi.org/images/anova-calculator.png">
+<meta name="twitter:title" content="ANOVA Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free one‑way ANOVA: F, p‑value, sums of squares, df, and visualization.">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -45,13 +43,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "One-way ANOVA, F-statistic calculation, P-value calculation, Sum of squares (SST, SSB, SSW), Mean squares, Degrees of freedom, F-distribution visualization, Multiple group comparison",
-  "screenshot": "https://8gwifi.org/images/anova-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "1680"
-  }
+  "featureList": "One-way ANOVA, F-statistic calculation, P-value calculation, Sum of squares (SST, SSB, SSW), Mean squares, Degrees of freedom, F-distribution visualization, Multiple group comparison"
 }
 </script>
 
@@ -472,7 +464,49 @@
 
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
-</div>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">ANOVA Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">One‑way vs two‑way ANOVA?</h3>
+      <p class="mb-0">One‑way compares means across levels of a single factor; two‑way adds a second factor and can test interaction between factors.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Key assumptions?</h3>
+      <p class="mb-0">Independence, normality of residuals, and homogeneity of variances. Inspect residual plots and use Levene’s test when needed.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What about post‑hoc tests?</h3>
+      <p class="mb-0">If ANOVA is significant, use post‑hoc comparisons (e.g., Tukey HSD) to find which group means differ while controlling family‑wise error.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How to interpret effect size?</h3>
+      <p class="mb-0">Report η² or partial η² to quantify practical significance (e.g., ~0.01 small, ~0.06 medium, ~0.14 large), alongside F and p‑value.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"One‑way vs two‑way ANOVA?","acceptedAnswer":{"@type":"Answer","text":"One‑way tests one factor; two‑way adds a second factor and tests interaction."}},
+      {"@type":"Question","name":"Key assumptions?","acceptedAnswer":{"@type":"Answer","text":"Independence, normal residuals, homogeneous variances; verify with diagnostics."}},
+      {"@type":"Question","name":"What about post‑hoc tests?","acceptedAnswer":{"@type":"Answer","text":"Use Tukey HSD (or similar) after significant ANOVA to locate pairwise differences."}},
+      {"@type":"Question","name":"How to interpret effect size?","acceptedAnswer":{"@type":"Answer","text":"Report η²/partial η² (e.g., ~0.01 small, ~0.06 medium, ~0.14 large) with F and p."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"ANOVA Calculator","item":"https://8gwifi.org/anova-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 <%@ include file="body-close.jsp"%>
 

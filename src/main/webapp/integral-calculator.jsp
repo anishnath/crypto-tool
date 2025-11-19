@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE Integral Calculator - Definite & Indefinite Integrals | Step-by-Step</title>
-    <meta name="description" content="Free online integral calculator with step-by-step solutions. Calculate definite and indefinite integrals symbolically. Supports polynomials, trigonometric, exponential, and logarithmic functions. Interactive graphs and LaTeX output.">
+    <title>Integral Calculator Online – Free | 8gwifi.org</title>
+    <meta name="description" content="Free integral calculator: definite and indefinite integrals with step‑by‑step solutions — substitution, integration by parts, and more.">
     <meta name="keywords" content="integral calculator, integration calculator, definite integral, indefinite integral, antiderivative calculator, calculus calculator, symbolic integration, step by step integrals, u-substitution, integration by parts">
     <link rel="canonical" href="https://8gwifi.org/integral-calculator.jsp">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="FREE Integral Calculator - Definite & Indefinite Integrals">
-    <meta property="og:description" content="Calculate integrals with detailed step-by-step solutions. Supports both definite and indefinite integrals.">
+    <meta property="og:title" content="Integral Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Definite/indefinite integrals with step‑by‑step solutions and graphs.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/integral-calculator.jsp">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FREE Integral Calculator - Definite & Indefinite Integrals">
-    <meta name="twitter:description" content="Calculate integrals with detailed step-by-step solutions. Supports both definite and indefinite integrals.">
+    <meta name="twitter:title" content="Integral Calculator Online – Free | 8gwifi.org">
+    <meta name="twitter:description" content="Free integration tool: steps for definite and indefinite integrals.">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">

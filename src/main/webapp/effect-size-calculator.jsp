@@ -4,21 +4,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Effect Size Calculator - Cohen's d, r, η², OR, RR | 8gwifi.org</title>
-<meta name="description" content="Free effect size calculator: Cohen's d for mean differences, Pearson's r for correlation, Eta-squared (η²) for ANOVA, Odds Ratio (OR), and Risk Ratio (RR) with confidence intervals and interpretation guidelines.">
+<title>Effect Size Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free effect size calculator: Cohen’s d, Pearson’s r, Eta‑squared (η²), Odds Ratio (OR), Risk Ratio (RR) with CIs and interpretation.">
 <meta name="keywords" content="effect size calculator, cohen's d calculator, pearson r effect size, eta squared calculator, odds ratio calculator, risk ratio calculator, meta-analysis, statistical power, research statistics">
 <link rel="canonical" href="https://8gwifi.org/effect-size-calculator.jsp">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Effect Size Calculator - Cohen's d, r, η², OR, RR">
-<meta property="og:description" content="Calculate effect sizes: Cohen's d, Pearson's r, Eta-squared, Odds Ratio, Risk Ratio with confidence intervals and interpretation. Essential for research and meta-analysis.">
+<meta property="og:title" content="Effect Size Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Cohen’s d, r, η², OR, RR with confidence intervals and interpretation.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/effect-size-calculator.jsp">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Effect Size Calculator - Cohen's d, r, η², OR, RR">
-<meta name="twitter:description" content="Calculate effect sizes: Cohen's d, Pearson's r, Eta-squared, Odds Ratio, Risk Ratio with confidence intervals and interpretation. Essential for research and meta-analysis.">
+<meta name="twitter:title" content="Effect Size Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Cohen’s d, r, η², OR, RR with CIs and interpretation guidance.">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -45,14 +45,7 @@
     "Interpretation guidelines (small/medium/large)",
     "Confidence interval calculation",
     "Power analysis support"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "1923",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
+  ]
 }
 </script>
 
@@ -566,6 +559,49 @@
   <%@ include file="thanks.jsp"%>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/effect-size-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Effect Size Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Which effect size should I use?</h3>
+      <p class="mb-0">Use Cohen’s d/Hedges’ g for mean differences, r for correlation strength, η² for ANOVA, OR/RR for categorical outcomes in risk/odds terms.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I interpret Cohen’s d?</h3>
+      <p class="mb-0">Conventional benchmarks: ~0.2 small, ~0.5 medium, ~0.8 large. Interpret relative to the field and context.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What about small‑sample correction?</h3>
+      <p class="mb-0">Hedges’ g applies a correction factor to Cohen’s d to reduce small‑sample bias.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Can I get confidence intervals?</h3>
+      <p class="mb-0">Effect sizes can be reported with CIs; formulas depend on the metric (we display or link formulas where applicable).</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Which effect size should I use?","acceptedAnswer":{"@type":"Answer","text":"Use d/g for mean differences, r for correlation, η² for ANOVA, OR/RR for categorical outcomes."}},
+      {"@type":"Question","name":"How do I interpret Cohen’s d?","acceptedAnswer":{"@type":"Answer","text":"Benchmarks: ~0.2 small, ~0.5 medium, ~0.8 large; interpret in context."}},
+      {"@type":"Question","name":"What about small‑sample correction?","acceptedAnswer":{"@type":"Answer","text":"Hedges’ g applies a bias correction to d for small samples."}},
+      {"@type":"Question","name":"Can I get confidence intervals?","acceptedAnswer":{"@type":"Answer","text":"Effect sizes can include CIs; formulas vary by metric."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/effect-size-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Effect Size Calculator","item":"https://8gwifi.org/effect-size-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <script>

@@ -4,21 +4,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Variance Calculator - Sample & Population Variance | 8gwifi.org</title>
-<meta name="description" content="Free variance calculator: calculate sample variance, population variance, standard deviation, and variance properties. Understand the relationship between variance and standard deviation.">
+<title>Variance Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free variance calculator: sample and population variance with standard deviation, step‑by‑step breakdown, and visualization.">
 <meta name="keywords" content="variance calculator, sample variance, population variance, variance formula, standard deviation, variance analysis, statistical variance, variance calculation">
 <link rel="canonical" href="https://8gwifi.org/variance-calculator.jsp">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Variance Calculator - Sample & Population Variance">
-<meta property="og:description" content="Calculate sample and population variance with step-by-step breakdown. Includes standard deviation, coefficient of variation, and visualization.">
+<meta property="og:title" content="Variance Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Sample/population variance with steps, SD, CV, and charts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/variance-calculator.jsp">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Variance Calculator - Sample & Population Variance">
-<meta name="twitter:description" content="Calculate sample and population variance with step-by-step breakdown. Includes standard deviation, coefficient of variation, and visualization.">
+<meta name="twitter:title" content="Variance Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free variance calculator (sample/population) with steps, SD, CV, and visualization.">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -44,14 +44,7 @@
     "Step-by-step calculation",
     "Deviation visualization",
     "Sum of squares breakdown"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "2156",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
+  ]
 }
 </script>
 
@@ -435,6 +428,49 @@ CV = (σ / μ) × 100%
   <%@ include file="thanks.jsp"%>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/variance-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Variance Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Why use variance instead of SD?</h3>
+      <p class="mb-0">Variance (in squared units) is algebraically convenient for additivity and ANOVA; SD (its square root) is easier to interpret in original units.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Can variance be negative?</h3>
+      <p class="mb-0">No. Variance is an average of squared deviations, so it’s zero or positive. Negative values indicate numerical or formula errors.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Sample vs population variance?</h3>
+      <p class="mb-0">Population divides by N; sample uses N−1 (Bessel’s correction) to better estimate population variance from a sample.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What’s coefficient of variation (CV)?</h3>
+      <p class="mb-0">CV = SD/mean compares variability across scales; use only when the mean is positive and meaningful.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Why use variance instead of SD?","acceptedAnswer":{"@type":"Answer","text":"Variance is algebraically convenient (additivity) and used in ANOVA; SD is its square root in original units."}},
+      {"@type":"Question","name":"Can variance be negative?","acceptedAnswer":{"@type":"Answer","text":"No. Variance is an average of squared deviations; negative variance indicates an error."}},
+      {"@type":"Question","name":"Sample vs population variance?","acceptedAnswer":{"@type":"Answer","text":"Population divides by N; sample uses N−1 (Bessel’s correction)."}},
+      {"@type":"Question","name":"What’s coefficient of variation (CV)?","acceptedAnswer":{"@type":"Answer","text":"CV = SD/mean for relative variability; only if mean > 0 and meaningful."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/variance-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Variance Calculator","item":"https://8gwifi.org/variance-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>

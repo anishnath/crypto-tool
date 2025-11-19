@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Hypothesis Test Calculator - Z-Test, T-Test, Proportion Test | Free Statistical Tool</title>
+<title>Hypothesis Test Calculator Online – Free | 8gwifi.org</title>
 <meta name="description" content="Free online Hypothesis Test Calculator. Perform Z-tests, T-tests, and proportion tests. Calculate test statistics, p-values, and make statistical decisions with confidence.">
 <meta name="keywords" content="hypothesis test calculator, z-test calculator, t-test calculator, proportion test, statistical significance, p-value, null hypothesis, alternative hypothesis">
 <link rel="canonical" href="https://8gwifi.org/hypothesis-test-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Hypothesis Test Calculator - Statistical Testing Tool">
+<meta property="og:title" content="Hypothesis Test Calculator Online – Free | 8gwifi.org">
 <meta property="og:description" content="Perform Z-tests, T-tests, and proportion tests with automatic statistical decision making.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/hypothesis-test-calculator.jsp">
 <meta property="og:image" content="https://8gwifi.org/images/hypothesis-test-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hypothesis Test Calculator">
+<meta name="twitter:title" content="Hypothesis Test Calculator Online – Free | 8gwifi.org">
 <meta name="twitter:description" content="All-in-one hypothesis testing: Z-test, T-test, proportion test with p-value calculation.">
 <meta name="twitter:image" content="https://8gwifi.org/images/hypothesis-test-calculator.png">
 
@@ -652,7 +652,50 @@
 <%@ include file="thanks.jsp"%>
 
 <%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Hypothesis Testing: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Which test should I choose?</h3>
+      <p class="mb-0">Use z‑test for large samples/known σ, t‑test for small samples unknown σ, proportion tests for binary data, and chi‑square/F tests for categorical/variance comparisons.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">One‑tailed or two‑tailed?</h3>
+      <p class="mb-0">Decide before looking at data based on your research question: directional claims use one‑tailed; non‑directional use two‑tailed.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How to interpret p‑value and α?</h3>
+      <p class="mb-0">If p ≤ α, reject H₀; if p > α, do not reject H₀. Statistical significance does not guarantee practical importance.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Assumptions matter?</h3>
+      <p class="mb-0">Yes: independence, distributional assumptions, variance equality, etc. Check diagnostics or use robust alternatives when violated.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Which test should I choose?","acceptedAnswer":{"@type":"Answer","text":"z‑test for large/known σ; t‑test for small/unknown σ; proportion tests for binary data; chi‑square/F for categorical/variance comparisons."}},
+      {"@type":"Question","name":"One‑tailed or two‑tailed?","acceptedAnswer":{"@type":"Answer","text":"Choose based on directional vs non‑directional hypotheses decided a priori."}},
+      {"@type":"Question","name":"How to interpret p‑value and α?","acceptedAnswer":{"@type":"Answer","text":"If p ≤ α, reject H₀; if p > α, do not reject H₀. Practical significance may differ."}},
+      {"@type":"Question","name":"Assumptions matter?","acceptedAnswer":{"@type":"Answer","text":"Check independence, distribution, variance equality; consider robust alternatives if violated."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Hypothesis Test Calculator","item":"https://8gwifi.org/hypothesis-test-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <%@ include file="body-close.jsp"%>

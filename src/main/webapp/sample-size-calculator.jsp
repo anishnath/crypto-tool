@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Sample Size Calculator — Surveys, A/B Testing, Research Studies</title>
-<meta name="description" content="Calculate required sample size for surveys, experiments, and research. Supports proportion estimation, mean estimation, and A/B testing with confidence levels.">
+<title>Sample Size Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free sample size calculator: surveys, A/B tests, and research. Compute size for proportions/means with confidence level and margin of error.">
 <meta name="keywords" content="sample size calculator, survey sample size, a/b test sample size, statistical power, confidence level, margin of error, research sample size">
 <link rel="canonical" href="https://8gwifi.org/sample-size-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Sample Size Calculator — Statistical Power Analysis">
-<meta property="og:description" content="Determine optimal sample size for surveys, A/B tests, and research studies.">
+<meta property="og:title" content="Sample Size Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Calculate sample size for surveys, A/B tests, and studies — proportions or means with confidence and error margins.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/sample-size-calculator.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sample Size Calculator">
-<meta name="twitter:description" content="Calculate sample size for statistical studies with confidence.">
+<meta name="twitter:title" content="Sample Size Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free sample size calculator for surveys, A/B tests, and research (proportions/means).">
 
 <%@ include file="header-script.jsp"%>
 
@@ -205,6 +205,7 @@
   <h1>Sample Size Calculator</h1>
   <p class="text-muted">Determine the optimal sample size for your surveys, experiments, and research studies.</p>
 
+  
   <%@ include file="footer_adsense.jsp"%>
 
   <div class="row mt-4">
@@ -493,6 +494,49 @@
   <hr>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/sample-size-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Sample Size Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What inputs do I need?</h3>
+      <p class="mb-0">Choose confidence level and margin of error. For proportions, provide an estimated p (use 0.5 if unknown). For means, provide population SD if available.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Why use p = 0.5 for proportions?</h3>
+      <p class="mb-0">p = 0.5 maximizes variability and yields the largest required sample size when no prior estimate is known.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Does population size matter?</h3>
+      <p class="mb-0">For large populations, required sample size mainly depends on confidence and error. Finite population correction matters when the sample is a large fraction of N.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What about power analysis?</h3>
+      <p class="mb-0">Power‑based sizing needs effect size and desired power (1−β). This tool focuses on precision (margin‑of‑error) sizing; use power analysis for hypothesis tests.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What inputs do I need?","acceptedAnswer":{"@type":"Answer","text":"Choose confidence and margin of error; use p estimate for proportions (0.5 if unknown), SD for means."}},
+      {"@type":"Question","name":"Why use p = 0.5 for proportions?","acceptedAnswer":{"@type":"Answer","text":"It maximizes variability, yielding a conservative (largest) required sample size."}},
+      {"@type":"Question","name":"Does population size matter?","acceptedAnswer":{"@type":"Answer","text":"For large N, size depends mostly on confidence and error; apply FPC when sampling a large fraction of N."}},
+      {"@type":"Question","name":"What about power analysis?","acceptedAnswer":{"@type":"Answer","text":"Power sizing needs effect size and desired power; this tool emphasizes precision (MoE)."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/sample-size-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Sample Size Calculator","item":"https://8gwifi.org/sample-size-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 </div>
 <%@ include file="body-close.jsp"%>

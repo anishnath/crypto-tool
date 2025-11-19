@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Linear Regression Calculator - Calculate Regression Line, R², Predictions | Free Tool</title>
-<meta name="description" content="Free online Linear Regression Calculator with scatter plot and regression line visualization. Calculate slope, intercept, R-squared, correlation coefficient, and make predictions. Perfect for statistics students and data analysts.">
+<title>Linear Regression Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free linear regression calculator: scatter plot with regression line, slope, intercept, R², correlation, residuals, and predictions.">
 <meta name="keywords" content="linear regression calculator, regression line, r squared calculator, correlation regression, least squares calculator, slope intercept calculator, prediction calculator, scatter plot regression">
 <link rel="canonical" href="https://8gwifi.org/linear-regression-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Linear Regression Calculator - Free Online Tool">
-<meta property="og:description" content="Calculate linear regression equations, R-squared, correlation, and make predictions with interactive scatter plot visualization.">
+<meta property="og:title" content="Linear Regression Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Linear regression with scatter plot: slope, intercept, R², correlation, residuals, and predictions.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/linear-regression-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/linear-regression-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Linear Regression Calculator - Free Online Tool">
-<meta name="twitter:description" content="Calculate linear regression equations, R-squared, correlation, and make predictions with interactive scatter plot visualization.">
-<meta name="twitter:image" content="https://8gwifi.org/images/linear-regression-calculator.png">
+<meta name="twitter:title" content="Linear Regression Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free linear regression: regression line, R², correlation, residuals, predictions with plot.">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -43,13 +41,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Linear regression equation, Slope and intercept calculation, R-squared calculation, Correlation coefficient, Residual analysis, Scatter plot with regression line, Prediction calculator, Standard error of estimate",
-  "screenshot": "https://8gwifi.org/images/linear-regression-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "1875"
-  }
+  "featureList": "Linear regression equation, Slope and intercept calculation, R-squared calculation, Correlation coefficient, Residual analysis, Scatter plot with regression line, Prediction calculator, Standard error of estimate"
 }
 </script>
 
@@ -482,10 +474,53 @@
         </div>
     </div>
 
-  <%@ include file="thanks.jsp"%>
+<%@ include file="thanks.jsp"%>
 
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/linear-regression-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Linear Regression Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What does R² tell me?</h3>
+      <p class="mb-0">R² is the proportion of variance in Y explained by X using the fitted linear model. Higher values indicate better fit, but check residuals for assumptions.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Are there key assumptions?</h3>
+      <p class="mb-0">Linearity, independence, homoscedasticity (constant variance), and approximately normal residuals. Inspect residual plots for violations.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I make predictions?</h3>
+      <p class="mb-0">Enter an X value; the model predicts Y = intercept + slope × X. Consider prediction intervals for uncertainty around point estimates.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What if the relationship isn’t linear?</h3>
+      <p class="mb-0">Try transformations (e.g., log) or polynomial terms, or consider non‑linear or robust methods if residual patterns persist.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What does R² tell me?","acceptedAnswer":{"@type":"Answer","text":"R² is the proportion of variance in Y explained by X using the fitted linear model. Check residuals for assumptions."}},
+      {"@type":"Question","name":"Are there key assumptions?","acceptedAnswer":{"@type":"Answer","text":"Linearity, independence, homoscedasticity, and approximately normal residuals."}},
+      {"@type":"Question","name":"How do I make predictions?","acceptedAnswer":{"@type":"Answer","text":"Predict Y = intercept + slope × X; consider prediction intervals."}},
+      {"@type":"Question","name":"What if the relationship isn’t linear?","acceptedAnswer":{"@type":"Answer","text":"Use transformations or polynomial terms; consider robust/non‑linear models."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/linear-regression-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Linear Regression Calculator","item":"https://8gwifi.org/linear-regression-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <%@ include file="body-close.jsp"%>

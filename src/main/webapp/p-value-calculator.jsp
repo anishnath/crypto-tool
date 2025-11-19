@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>P-Value Calculator — Z, T, Chi-Square, F Test Statistics</title>
-<meta name="description" content="Calculate p-values from Z-score, T-statistic, Chi-square, or F-statistic. Supports one-tailed and two-tailed tests for hypothesis testing.">
+<title>P-Value Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free p‑value calculator: compute one‑tail or two‑tail p‑values from Z, t, χ², and F statistics with distribution charts.">
 <meta name="keywords" content="p-value calculator, p value, hypothesis testing, z-score to p-value, t-test p-value, chi-square p-value, f-test p-value, statistical significance">
 <link rel="canonical" href="https://8gwifi.org/p-value-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="P-Value Calculator — Statistical Hypothesis Testing">
-<meta property="og:description" content="Calculate p-values from test statistics. Supports Z, T, Chi-square, and F tests.">
+<meta property="og:title" content="P-Value Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Compute p‑values from Z, t, χ², and F — one‑tail or two‑tail with visuals.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/p-value-calculator.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="P-Value Calculator">
-<meta name="twitter:description" content="Calculate p-values for hypothesis testing from various test statistics.">
+<meta name="twitter:title" content="P-Value Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free p‑value tool for Z, t, χ², F with charts.">
 
 <%@ include file="header-script.jsp"%>
 
@@ -502,6 +502,49 @@
   <hr>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">P‑Value Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">One‑tailed vs two‑tailed?</h3>
+      <p class="mb-0">One‑tailed tests look for an effect in one direction; two‑tailed tests detect effects in either direction. Match the alternative hypothesis you stated a priori.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I interpret a p‑value?</h3>
+      <p class="mb-0">It’s the probability, under the null, of observing data at least as extreme as yours. It’s not the probability the null is true.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Which distribution should I use?</h3>
+      <p class="mb-0">Use Z for large‑sample or known σ tests; t for small‑sample unknown σ; χ² for variances/contingency; F for variance ratios/ANOVA.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Common misconceptions?</h3>
+      <p class="mb-0">p≠probability the null is true; non‑significant ≠ no effect; significant ≠ practically important.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"One‑tailed vs two‑tailed?","acceptedAnswer":{"@type":"Answer","text":"One‑tailed looks for an effect in one direction; two‑tailed detects effects in either direction. Match your alternative hypothesis."}},
+      {"@type":"Question","name":"How do I interpret a p‑value?","acceptedAnswer":{"@type":"Answer","text":"Probability under the null of observing data as extreme as yours; not the probability the null is true."}},
+      {"@type":"Question","name":"Which distribution should I use?","acceptedAnswer":{"@type":"Answer","text":"Z for large‑sample/known σ; t for small‑sample unknown σ; χ² for variances; F for variance ratios/ANOVA."}},
+      {"@type":"Question","name":"Common misconceptions?","acceptedAnswer":{"@type":"Answer","text":"p≠prob(null true); non‑significant ≠ no effect; significant ≠ practically important."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"P-Value Calculator","item":"https://8gwifi.org/p-value-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 </div>
 <%@ include file="body-close.jsp"%>

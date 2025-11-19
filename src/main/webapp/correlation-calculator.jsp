@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Correlation Calculator — Pearson, Spearman, Scatter Plot & Significance</title>
-<meta name="description" content="Calculate Pearson and Spearman correlation coefficients with scatter plot visualization and statistical significance testing. Free correlation analysis tool.">
+<title>Correlation Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free correlation calculator: Pearson and Spearman r with scatter plot, significance (p‑value), and interpretation.">
 <meta name="keywords" content="correlation calculator, pearson correlation, spearman correlation, scatter plot, correlation coefficient, statistical correlation, r value, correlation analysis">
 <link rel="canonical" href="https://8gwifi.org/correlation-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Correlation Calculator — Pearson & Spearman with Visualization">
-<meta property="og:description" content="Calculate correlation coefficients with scatter plot and statistical significance.">
+<meta property="og:title" content="Correlation Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Pearson & Spearman correlation: r, p‑value, scatter plot, and guidance.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/correlation-calculator.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Correlation Calculator">
-<meta name="twitter:description" content="Analyze relationships between variables with Pearson and Spearman correlation.">
+<meta name="twitter:title" content="Correlation Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Compute Pearson/Spearman r with p‑value and visualization.">
 
 <%@ include file="header-script.jsp"%>
 
@@ -465,6 +465,49 @@
   <hr>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/correlation-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Correlation Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Pearson vs Spearman?</h3>
+      <p class="mb-0">Pearson measures linear relationship and assumes interval data; Spearman is rank‑based and captures monotonic relations, robust to outliers and non‑normality.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I interpret r?</h3>
+      <p class="mb-0">r ranges −1 to +1. Sign indicates direction; magnitude indicates strength. Always visualize with a scatter plot to check nonlinearity/outliers.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Is correlation significant?</h3>
+      <p class="mb-0">Significance depends on n and r via a test (p‑value). Large samples can make small r significant; consider effect size and context.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Correlation vs causation?</h3>
+      <p class="mb-0">Correlation does not imply causation. Confounding and reverse causality can produce correlations without causal links.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Pearson vs Spearman?","acceptedAnswer":{"@type":"Answer","text":"Pearson is linear, interval‑scale; Spearman is rank‑based and monotonic."}},
+      {"@type":"Question","name":"How do I interpret r?","acceptedAnswer":{"@type":"Answer","text":"r in [−1,+1]; sign = direction; magnitude = strength; always visualize."}},
+      {"@type":"Question","name":"Is correlation significant?","acceptedAnswer":{"@type":"Answer","text":"Use a p‑value; large n can make tiny r significant — consider effect size."}},
+      {"@type":"Question","name":"Correlation vs causation?","acceptedAnswer":{"@type":"Answer","text":"Correlation alone doesn’t prove causality; confounding and reverse causation are common."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/correlation-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Correlation Calculator","item":"https://8gwifi.org/correlation-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 </div>
 <%@ include file="body-close.jsp"%>

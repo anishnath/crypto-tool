@@ -1,24 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Z-Score Calculator — Standard Score, Percentile, Probability</title>
-<meta name="description" content="Calculate Z-scores, percentiles, and probabilities from the standard normal distribution. Convert between raw scores, Z-scores, and percentiles with visualization.">
+<title>Z-Score Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free online Z‑score calculator: convert raw scores to Z, get percentiles and probabilities on the standard normal distribution with charts and step‑by‑step modes.">
 <meta name="keywords" content="z-score calculator, standard score, z score, percentile calculator, normal distribution calculator, standardization, z-table calculator, standard normal">
 <link rel="canonical" href="https://8gwifi.org/z-score-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Z-Score Calculator — Standard Normal Distribution">
-<meta property="og:description" content="Calculate Z-scores, percentiles, and probabilities with interactive normal distribution visualization.">
+<meta property="og:title" content="Z-Score Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Free online Z‑score calculator for standard normal: convert scores to Z, percentiles and probabilities with interactive charts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/z-score-calculator.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Z-Score Calculator">
-<meta name="twitter:description" content="Free online Z-score calculator with normal distribution visualization.">
+<meta name="twitter:title" content="Z-Score Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free Z‑score calculator: raw→Z, percentiles, probabilities with normal curve visualization.">
+<!-- og:image/twitter:image intentionally omitted until an asset is available -->
 
 <%@ include file="header-script.jsp"%>
 
@@ -184,12 +185,7 @@
     "priceCurrency": "USD"
   },
   "featureList": "Z-score calculation, Percentile calculation, Probability from Z-score, Raw score from Z-score, Normal distribution visualization, Z-table lookup, Area under curve",
-  "screenshot": "https://8gwifi.org/images/z-score-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "2150"
-  }
+  
 }
 </script>
 </head>
@@ -511,6 +507,38 @@
   <hr>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/z-score-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Z‑Score Calculator: Frequently Asked Questions</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What is a Z‑score?</h3>
+      <p class="mb-0">A Z‑score (standard score) tells how many standard deviations a value is above or below the mean: Z = (x − μ) ÷ σ. Positive Z means above average; negative Z means below.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I convert a raw score to a Z‑score?</h3>
+      <p class="mb-0">Enter the raw score, mean (μ), and standard deviation (σ), then click Calculate under the “Score → Z” tab. The tool also shows the percentile and tail probabilities.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When should I use Z‑scores?</h3>
+      <p class="mb-0">Use Z‑scores to compare values from the same normal (or approximately normal) distribution, find tail probabilities, or convert between scores and percentiles.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What’s the difference between left, right, and two‑tail probabilities?</h3>
+      <p class="mb-0">Left tail is P(Z ≤ z), right tail is P(Z ≥ z), and two‑tail often refers to the probability outside ±|z|. Choose the area type that matches your hypothesis or interpretation.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question","name": "What is a Z‑score?","acceptedAnswer": {"@type": "Answer","text": "A Z‑score (standard score) tells how many standard deviations a value is above or below the mean: Z = (x − μ) ÷ σ. Positive Z means above average; negative Z means below."}},
+      {"@type": "Question","name": "How do I convert a raw score to a Z‑score?","acceptedAnswer": {"@type": "Answer","text": "Enter the raw score, mean (μ), and standard deviation (σ), then click Calculate under the “Score → Z” tab. The tool also shows the percentile and tail probabilities."}},
+      {"@type": "Question","name": "When should I use Z‑scores?","acceptedAnswer": {"@type": "Answer","text": "Use Z‑scores to compare values from the same normal (or approximately normal) distribution, find tail probabilities, or convert between scores and percentiles."}},
+      {"@type": "Question","name": "What’s the difference between left, right, and two‑tail probabilities?","acceptedAnswer": {"@type": "Answer","text": "Left tail is P(Z ≤ z), right tail is P(Z ≥ z), and two‑tail often refers to the probability outside ±|z|. Choose the area type that matches your hypothesis or interpretation."}}
+    ]
+  }
+  </script>
 </div>
 </div>
 <%@ include file="body-close.jsp"%>

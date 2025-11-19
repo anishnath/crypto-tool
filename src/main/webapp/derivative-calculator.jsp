@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE Derivative Calculator - Step-by-Step Solutions | Symbolic Differentiation</title>
-    <meta name="description" content="Free online derivative calculator with step-by-step solutions. Calculate derivatives symbolically using power rule, product rule, quotient rule, and chain rule. Supports polynomials, trigonometric, exponential, and logarithmic functions. Interactive graphs and LaTeX output.">
+    <title>Derivative Calculator Online – Free | 8gwifi.org</title>
+    <meta name="description" content="Free derivative calculator: symbolic differentiation with steps — power, product, quotient, chain rules; supports trig, exponential, logarithmic functions.">
     <meta name="keywords" content="derivative calculator, differentiation calculator, calculus calculator, derivative solver, symbolic differentiation, step by step derivatives, power rule, product rule, quotient rule, chain rule, calculus tool, math calculator">
     <link rel="canonical" href="https://8gwifi.org/derivative-calculator.jsp">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="FREE Derivative Calculator - Step-by-Step Solutions">
-    <meta property="og:description" content="Calculate derivatives with detailed step-by-step solutions. Supports all differentiation rules and function types.">
+    <meta property="og:title" content="Derivative Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Symbolic differentiation with steps — power, product, quotient, chain rules.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/derivative-calculator.jsp">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FREE Derivative Calculator - Step-by-Step Solutions">
-    <meta name="twitter:description" content="Calculate derivatives with detailed step-by-step solutions. Supports all differentiation rules and function types.">
+    <meta name="twitter:title" content="Derivative Calculator Online – Free | 8gwifi.org">
+    <meta name="twitter:description" content="Free symbolic differentiation with step‑by‑step solutions.">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">

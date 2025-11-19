@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Binomial Distribution Calculator - Calculate Probabilities & Statistics | Free Tool</title>
+<title>Binomial Distribution Calculator Online – Free | 8gwifi.org</title>
 <meta name="description" content="Free online Binomial Distribution Calculator. Calculate probabilities, cumulative probabilities, mean, variance, and visualize binomial distributions for any n and p.">
 <meta name="keywords" content="binomial distribution calculator, binomial probability, binomial theorem, probability mass function, success probability, bernoulli trial">
 <link rel="canonical" href="https://8gwifi.org/binomial-distribution-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Binomial Distribution Calculator - Statistical Tool">
+<meta property="og:title" content="Binomial Distribution Calculator Online – Free | 8gwifi.org">
 <meta property="og:description" content="Calculate binomial probabilities, cumulative probabilities, and statistics with interactive visualization.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/binomial-distribution-calculator.jsp">
 <meta property="og:image" content="https://8gwifi.org/images/binomial-distribution-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Binomial Distribution Calculator">
+<meta name="twitter:title" content="Binomial Distribution Calculator Online – Free | 8gwifi.org">
 <meta name="twitter:description" content="Calculate binomial probabilities and statistics with PMF visualization.">
 <meta name="twitter:image" content="https://8gwifi.org/images/binomial-distribution-calculator.png">
 
@@ -425,7 +425,50 @@
 <%@ include file="thanks.jsp"%>
 
 <%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inline -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Binomial Distribution: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When is the binomial model appropriate?</h3>
+      <p class="mb-0">Use when there are n independent trials, each with two outcomes (success/failure) and constant success probability p.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What are mean and variance?</h3>
+      <p class="mb-0">Mean = n·p, variance = n·p·(1−p), SD = √(n·p·(1−p)).</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Normal approximation conditions?</h3>
+      <p class="mb-0">When n·p ≥ 10 and n·(1−p) ≥ 10, a normal approximation with continuity correction is often reasonable.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">PMF vs CDF?</h3>
+      <p class="mb-0">PMF gives P(X=k); CDF gives cumulative P(X≤k). Use CDF for ranges and tail probabilities.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"When is the binomial model appropriate?","acceptedAnswer":{"@type":"Answer","text":"n independent trials, binary outcomes, constant success probability p."}},
+      {"@type":"Question","name":"What are mean and variance?","acceptedAnswer":{"@type":"Answer","text":"Mean=n·p, variance=n·p·(1−p), SD=√(n·p·(1−p))."}},
+      {"@type":"Question","name":"Normal approximation conditions?","acceptedAnswer":{"@type":"Answer","text":"Use normal approx with continuity correction when n·p and n·(1−p) ≥ 10."}},
+      {"@type":"Question","name":"PMF vs CDF?","acceptedAnswer":{"@type":"Answer","text":"PMF P(X=k); CDF P(X≤k). Use CDF for ranges/tails."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inline -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Binomial Distribution Calculator","item":"https://8gwifi.org/binomial-distribution-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <%@ include file="body-close.jsp"%>

@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Normal Distribution Calculator - Calculate Probabilities, Z-Scores, Percentiles | Free Tool</title>
-<meta name="description" content="Free online Normal Distribution Calculator. Calculate probabilities, z-scores, percentiles for any normal distribution with custom mean and standard deviation. Interactive visualization included.">
+<title>Normal Distribution Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free normal distribution calculator: probabilities, Z‑scores, and percentiles for any μ and σ — with interactive bell curve visualization.">
 <meta name="keywords" content="normal distribution calculator, gaussian distribution, bell curve calculator, normal probability calculator, z-score, percentile, standard deviation">
 <link rel="canonical" href="https://8gwifi.org/normal-distribution-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Normal Distribution Calculator - Statistical Tool">
-<meta property="og:description" content="Calculate probabilities and percentiles for any normal distribution with interactive bell curve visualization.">
+<meta property="og:title" content="Normal Distribution Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Probabilities, Z‑scores, percentiles for any normal distribution (μ, σ) with a bell curve chart.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/normal-distribution-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/normal-distribution-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Normal Distribution Calculator">
-<meta name="twitter:description" content="Calculate probabilities, z-scores, and percentiles for normal distributions.">
-<meta name="twitter:image" content="https://8gwifi.org/images/normal-distribution-calculator.png">
+<meta name="twitter:title" content="Normal Distribution Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free normal distribution tool: probabilities, Z‑scores, percentiles with bell curve visualization.">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -45,13 +43,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Normal distribution probabilities, Z-score calculation, Percentile calculation, Custom mean and standard deviation, Interactive bell curve visualization, Area calculations, Probability ranges",
-  "screenshot": "https://8gwifi.org/images/normal-distribution-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "2580"
-  }
+  "featureList": "Normal distribution probabilities, Z-score calculation, Percentile calculation, Custom mean and standard deviation, Interactive bell curve visualization, Area calculations, Probability ranges"
 }
 </script>
 
@@ -420,8 +412,51 @@
 
 <%@ include file="thanks.jsp"%>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/normal-distribution-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Normal Distribution Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What do μ and σ represent?</h3>
+      <p class="mb-0">μ is the mean (center) and σ is the standard deviation (spread) of the normal distribution.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I find tail probabilities?</h3>
+      <p class="mb-0">Enter a value and choose left tail P(X ≤ x), right tail P(X ≥ x), or between/outside ranges to shade the curve and compute areas.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I get a percentile?</h3>
+      <p class="mb-0">Use the inverse option to enter a percentile and get the corresponding x value for your specified μ and σ.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What if data aren’t normal?</h3>
+      <p class="mb-0">Consider transformations or non‑parametric methods; the normal model assumptions may not apply to heavily skewed or multimodal data.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What do μ and σ represent?","acceptedAnswer":{"@type":"Answer","text":"μ is the mean and σ is the standard deviation of the normal distribution."}},
+      {"@type":"Question","name":"How do I find tail probabilities?","acceptedAnswer":{"@type":"Answer","text":"Choose left/right tail or between/outside ranges to compute shaded areas."}},
+      {"@type":"Question","name":"How do I get a percentile?","acceptedAnswer":{"@type":"Answer","text":"Use inverse normal to input percentile and get the corresponding x."}},
+      {"@type":"Question","name":"What if data aren’t normal?","acceptedAnswer":{"@type":"Answer","text":"Consider transformations or non‑parametric methods when normality is violated."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/normal-distribution-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Normal Distribution Calculator","item":"https://8gwifi.org/normal-distribution-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 <%@ include file="body-close.jsp"%>
 

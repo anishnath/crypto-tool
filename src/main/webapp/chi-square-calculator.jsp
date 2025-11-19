@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Chi-Square Calculator - Test of Independence & Goodness of Fit | Free Statistical Tool</title>
-<meta name="description" content="Free online Chi-Square Calculator for test of independence and goodness of fit. Calculate chi-square statistic, expected frequencies, p-value, and degrees of freedom with visualization.">
+<title>Chi-Square Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free online Chi‑square calculator: independence and goodness‑of‑fit. Compute χ², expected counts, p‑value, degrees of freedom, and critical values with visuals.">
 <meta name="keywords" content="chi-square calculator, chi square test, test of independence, goodness of fit, contingency table, chi-square statistic, categorical data analysis">
 <link rel="canonical" href="https://8gwifi.org/chi-square-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Chi-Square Calculator - Statistical Test Tool">
-<meta property="og:description" content="Perform chi-square tests of independence and goodness of fit with contingency tables and expected frequency calculations.">
+<meta property="og:title" content="Chi-Square Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Chi‑square tests: independence & goodness‑of‑fit. χ², expected counts, p‑value, df, and visualizations.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/chi-square-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/chi-square-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Chi-Square Calculator - Free Tool">
-<meta name="twitter:description" content="Calculate chi-square statistics, p-values, and expected frequencies for categorical data analysis.">
-<meta name="twitter:image" content="https://8gwifi.org/images/chi-square-calculator.png">
+<meta name="twitter:title" content="Chi-Square Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free Chi‑square calculator: independence & goodness‑of‑fit with χ², p‑value, df, and charts.">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -45,13 +43,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Chi-square test of independence, Goodness of fit test, Contingency table analysis, Expected frequency calculation, Chi-square statistic, P-value calculation, Degrees of freedom, Chi-square distribution visualization",
-  "screenshot": "https://8gwifi.org/images/chi-square-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "1920"
-  }
+  "featureList": "Chi-square test of independence, Goodness of fit test, Contingency table analysis, Expected frequency calculation, Chi-square statistic, P-value calculation, Degrees of freedom, Chi-square distribution visualization"
 }
 </script>
 
@@ -326,6 +318,7 @@
   <h1>Chi-Square Calculator</h1>
   <p class="text-muted">Perform chi-square tests of independence and goodness of fit for categorical data analysis</p>
 
+  
   <%@ include file="footer_adsense.jsp"%>
 
   <div class="row mt-4">
@@ -600,8 +593,51 @@
 
 <%@ include file="thanks.jsp"%>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/chi-square-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Chi‑Square Calculator: Frequently Asked Questions</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When do I use a chi‑square test?</h3>
+      <p class="mb-0">Use goodness‑of‑fit to test if observed counts match expected proportions; use test of independence to check association between two categorical variables.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What are the assumptions?</h3>
+      <p class="mb-0">Data are counts in categories, observations are independent, and expected cell counts are not too small (rule of thumb ≥ 5 for most cells).</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How are expected counts computed?</h3>
+      <p class="mb-0">For independence, expected = (row total × column total) ÷ grand total. For goodness‑of‑fit, expected = total × hypothesized proportion.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How do I interpret χ² and p‑value?</h3>
+      <p class="mb-0">Larger χ² suggests bigger deviation from expectation. The p‑value quantifies how unusual the observed deviations are under the null hypothesis.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"When do I use a chi‑square test?","acceptedAnswer":{"@type":"Answer","text":"Use goodness‑of‑fit to test if observed counts match expected proportions; use test of independence to check association between two categorical variables."}},
+      {"@type":"Question","name":"What are the assumptions?","acceptedAnswer":{"@type":"Answer","text":"Data are counts in categories, observations are independent, and expected cell counts are not too small (rule of thumb ≥ 5 for most cells)."}},
+      {"@type":"Question","name":"How are expected counts computed?","acceptedAnswer":{"@type":"Answer","text":"For independence, expected = (row total × column total) ÷ grand total. For goodness‑of‑fit, expected = total × hypothesized proportion."}},
+      {"@type":"Question","name":"How do I interpret χ² and p‑value?","acceptedAnswer":{"@type":"Answer","text":"Larger χ² suggests bigger deviation from expectation. The p‑value quantifies how unusual the observed deviations are under the null hypothesis."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/chi-square-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Chi-Square Calculator","item":"https://8gwifi.org/chi-square-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 <%@ include file="body-close.jsp"%>
 

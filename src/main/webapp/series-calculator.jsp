@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE Taylor & Maclaurin Series Calculator - Step-by-Step Expansion | Power Series</title>
+    <title>Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org</title>
     <meta name="description" content="Free online Taylor and Maclaurin series calculator with step-by-step solutions. Calculate power series expansions for any function around any point. Interactive graphs show approximation convergence. Includes radius of convergence and common series.">
     <meta name="keywords" content="taylor series calculator, maclaurin series calculator, power series expansion, series approximation, radius of convergence, taylor polynomial, calculus calculator, step by step series, function approximation, polynomial expansion">
     <link rel="canonical" href="https://8gwifi.org/series-calculator.jsp">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="FREE Taylor & Maclaurin Series Calculator - Step-by-Step">
+    <meta property="og:title" content="Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org">
     <meta property="og:description" content="Calculate Taylor and Maclaurin series expansions with detailed step-by-step solutions and interactive visualization.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/series-calculator.jsp">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FREE Taylor & Maclaurin Series Calculator">
+    <meta name="twitter:title" content="Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org">
     <meta name="twitter:description" content="Calculate Taylor and Maclaurin series expansions with detailed step-by-step solutions and interactive visualization.">
 
     <!-- JSON-LD Structured Data -->

@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>T-Test Calculator - One Sample, Two Sample, Paired, Welch's T-Test | Free Statistical Tool</title>
-<meta name="description" content="Free online T-Test Calculator for one-sample, two-sample independent, paired, and Welch's t-tests. Calculate t-statistic, p-value, confidence intervals, and degrees of freedom with t-distribution visualization.">
+<title>T-Test Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free online T‑test calculator: one‑sample, two‑sample, paired, and Welch. Get t‑statistic, p‑value, confidence intervals, and critical values with visualization.">
 <meta name="keywords" content="t-test calculator, t test, student t test, paired t test, independent t test, welch's t test, t statistic calculator, hypothesis testing, statistical significance">
 <link rel="canonical" href="https://8gwifi.org/t-test-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="T-Test Calculator - Statistical Hypothesis Testing Tool">
-<meta property="og:description" content="Calculate t-statistics, p-values, and confidence intervals for all types of t-tests with interactive visualization.">
+<meta property="og:title" content="T-Test Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Free T‑test calculator: one‑sample, two‑sample, paired, Welch; t‑statistic, p‑value, CIs, critical values, and charts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/t-test-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/t-test-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="T-Test Calculator - Free Statistical Tool">
-<meta name="twitter:description" content="Perform one-sample, two-sample, paired, and Welch's t-tests with p-value calculation and visualization.">
-<meta name="twitter:image" content="https://8gwifi.org/images/t-test-calculator.png">
+<meta name="twitter:title" content="T-Test Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free T‑test calculator: one‑sample, two‑sample, paired, Welch; p‑value, CIs and charts.">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -46,12 +44,7 @@
     "priceCurrency": "USD"
   },
   "featureList": "One-sample t-test, Two-sample independent t-test, Paired t-test, Welch's t-test, T-statistic calculation, P-value calculation, Confidence intervals, Degrees of freedom, T-distribution visualization, Critical values",
-  "screenshot": "https://8gwifi.org/images/t-test-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "2340"
-  }
+  
 }
 </script>
 
@@ -294,6 +287,7 @@
   <h1>T-Test Calculator</h1>
   <p class="text-muted">Perform one-sample, two-sample, paired, and Welch's t-tests with p-value calculation and visualization</p>
 
+  
   <%@ include file="footer_adsense.jsp"%>
 
   <div class="row mt-4">
@@ -612,8 +606,51 @@
 
 <%@ include file="thanks.jsp"%>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/t-test-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">T‑Test Calculator: Frequently Asked Questions</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Which t‑test should I use?</h3>
+      <p class="mb-0">Use one‑sample to compare a mean to a known value, independent two‑sample for two groups, paired for before/after (same subjects), and Welch when variances are unequal.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What inputs are required?</h3>
+      <p class="mb-0">Provide sample sizes, means, and standard deviations for each group (or raw data). Choose the tail (one‑ or two‑tailed) and the significance level α.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How is the p‑value interpreted?</h3>
+      <p class="mb-0">The p‑value is the probability of observing a result as extreme as your data if the null hypothesis is true. A small p‑value suggests evidence against the null.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When should I use Welch’s t‑test?</h3>
+      <p class="mb-0">Use Welch’s test when sample variances differ or sample sizes are quite unequal; it adjusts the degrees of freedom for robustness.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Which t‑test should I use?","acceptedAnswer":{"@type":"Answer","text":"Use one‑sample to compare a mean to a known value, independent two‑sample for two groups, paired for before/after (same subjects), and Welch when variances are unequal."}},
+      {"@type":"Question","name":"What inputs are required?","acceptedAnswer":{"@type":"Answer","text":"Provide sample sizes, means, and standard deviations for each group (or raw data). Choose the tail (one‑ or two‑tailed) and the significance level α."}},
+      {"@type":"Question","name":"How is the p‑value interpreted?","acceptedAnswer":{"@type":"Answer","text":"The p‑value is the probability of observing a result as extreme as your data if the null hypothesis is true. A small p‑value suggests evidence against the null."}},
+      {"@type":"Question","name":"When should I use Welch’s t‑test?","acceptedAnswer":{"@type":"Answer","text":"Use Welch’s test when sample variances differ or sample sizes are quite unequal; it adjusts the degrees of freedom for robustness."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/t-test-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"T-Test Calculator","item":"https://8gwifi.org/t-test-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 <%@ include file="body-close.jsp"%>
 

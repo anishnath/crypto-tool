@@ -6,19 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Confidence Interval Calculator — Mean, Proportion, Difference CI</title>
-<meta name="description" content="Calculate confidence intervals for means, proportions, and differences. Supports one-sample and two-sample confidence intervals with visualization. Free statistical CI calculator.">
+<title>Confidence Interval Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free confidence interval calculator: means, proportions, and differences. One‑sample and two‑sample CIs with margin of error and visualizations.">
 <meta name="keywords" content="confidence interval calculator, CI calculator, mean confidence interval, proportion confidence interval, 95% confidence interval, statistical confidence interval, margin of error">
 <link rel="canonical" href="https://8gwifi.org/confidence-interval-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Confidence Interval Calculator — Statistical Analysis Tool">
-<meta property="og:description" content="Calculate confidence intervals for means and proportions with interactive visualization.">
+<meta property="og:title" content="Confidence Interval Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="Compute CIs for means, proportions, and differences — with margin of error and charts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/confidence-interval-calculator.jsp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Confidence Interval Calculator">
-<meta name="twitter:description" content="Free online confidence interval calculator for statistical analysis.">
+<meta name="twitter:title" content="Confidence Interval Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free CI calculator for means, proportions, and differences with MoE and visuals.">
 
 <%@ include file="header-script.jsp"%>
 
@@ -546,6 +546,49 @@
   <hr>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/confidence-interval-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Confidence Interval Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">What does a 95% CI mean?</h3>
+      <p class="mb-0">In repeated sampling, 95% of such intervals would capture the true parameter. It does not mean a 95% chance the fixed interval contains the truth.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Mean vs proportion intervals?</h3>
+      <p class="mb-0">Means use the normal/t distribution (depending on n and σ known), while proportions use a normal approximation or exact methods when n·p or n·(1−p) are small.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How does sample size affect CI?</h3>
+      <p class="mb-0">Larger samples reduce the standard error, shrinking the interval width for the same confidence level.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">One‑sample vs two‑sample CI?</h3>
+      <p class="mb-0">One‑sample CIs estimate a single population mean/proportion; two‑sample CIs estimate a difference between two means/proportions.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What does a 95% CI mean?","acceptedAnswer":{"@type":"Answer","text":"In repeated sampling, 95% of such intervals would capture the true parameter. It does not mean a 95% chance the fixed interval contains the truth."}},
+      {"@type":"Question","name":"Mean vs proportion intervals?","acceptedAnswer":{"@type":"Answer","text":"Means use normal/t; proportions use normal approx or exact when n·p or n·(1−p) are small."}},
+      {"@type":"Question","name":"How does sample size affect CI?","acceptedAnswer":{"@type":"Answer","text":"Larger samples reduce SE, shrinking interval width for a fixed confidence level."}},
+      {"@type":"Question","name":"One‑sample vs two‑sample CI?","acceptedAnswer":{"@type":"Answer","text":"One‑sample CIs estimate a single population parameter; two‑sample CIs estimate differences."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/confidence-interval-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Confidence Interval Calculator","item":"https://8gwifi.org/confidence-interval-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 </div>
 <%@ include file="body-close.jsp"%>
@@ -901,3 +944,4 @@
   window.addEventListener('load', drawExampleChart);
 })();
 </script>
+ 
