@@ -1,5 +1,19 @@
 <script src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
+<script>
+(function(){
+  function loadShare(){
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons';
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadShare, {timeout: 5000});
+  } else {
+    window.addEventListener('load', loadShare, { once: true });
+  }
+})();
+</script>
 <!-- Bootstrap core CSS -->
 <link href="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 

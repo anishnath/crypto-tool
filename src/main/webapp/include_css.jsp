@@ -33,4 +33,4 @@
 		
 	});
 	</script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/sharethis.js&product=inline-share-buttons" defer></script>
+<%--<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/sharethis.js&product=inline-share-buttons" defer></script>--%>
