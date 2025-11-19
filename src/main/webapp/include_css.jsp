@@ -13,7 +13,7 @@
 <% }  else {  %>
 <link rel="stylesheet" type="text/css" href="css/sidebar.css">
 <%}%>
-<script src="js/jquery.min.js"></script>
+<%--<script src="js/jquery.min.js"></script>--%>
 	<script>
 	$(document).ready(function() {
 		
@@ -33,6 +33,4 @@
 		
 	});
 	</script>
-<script type="text/javascript" src="/js/sharethis.js#property=5a04129f05073300123e3782&product=inline-share-buttons"></script>
-For Coffee/beer/Amazon Bills further development of the project, Grab <a href="http://leanpub.com/crypto/c/NPsT3TZmqrNS" target="_blank" rel="noopener"> The Modern Cryptography CookBook for Just $9 </a>
-(or) <a href="https://leanpub.com/crypto" target="_blank" rel="noopener" >Get this Software Bundle </a>, <a href="/crypto/rest/application.wadl">Use REST API </a>   ,  <a href="https://8gwifi.org/docs/" >Tech Blog </a>  , <a href="https://www.linkedin.com/in/anishnath" target="_blank" rel="noopener"> Hire Me </a>, <a href="contactus.jsp">ContactUs</a>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/sharethis.js&product=inline-share-buttons" defer></script>
