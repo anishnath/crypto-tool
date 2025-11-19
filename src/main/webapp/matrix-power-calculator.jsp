@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Power Calculator A^n | Matrix Exponentiation & Diagonalization Tool</title>
+  <title>Matrix Power Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Calculate matrix powers A^n instantly with our free calculator. Features repeated squaring algorithm, diagonalization method, step-by-step solutions for Markov chains, eigenvalue computation & more.">
   <meta name="keywords" content="matrix power calculator, A^n calculator, matrix exponentiation, matrix to power n, repeated matrix multiplication, diagonalization, matrix powers, square matrix calculator, nilpotent matrix, idempotent matrix, Markov chain calculator">
   <link rel="canonical" href="https://8gwifi.org/matrix-power-calculator.jsp">
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="FREE Matrix Power Calculator A^n | Matrix Exponentiation Tool">
+  <meta property="og:title" content="Matrix Power Calculator Online – Free | 8gwifi.org">
   <meta property="og:description" content="Calculate matrix powers A^n with efficient algorithms. Features repeated squaring, diagonalization, and step-by-step solutions for any square matrix.">
   <meta property="og:url" content="https://8gwifi.org/matrix-power-calculator.jsp">
   <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Power Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Compute A^n fast via repeated squaring, with steps and special-case handling (A^0, diagonal, nilpotent).">
 
   <!-- JSON-LD WebApplication Schema -->
   <script type="application/ld+json">
@@ -42,31 +46,6 @@
   }
   </script>
 
-  <!-- JSON-LD FAQPage Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is matrix exponentiation and how do you calculate A^n?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Matrix exponentiation means multiplying a square matrix A by itself n times. For example, A^3 = A × A × A. Our calculator uses an efficient repeated squaring algorithm that computes A^n in O(log n) multiplications instead of O(n), making it fast even for large powers. Special cases include: A^0 = I (identity matrix), diagonal matrices where each element is raised to power n separately, and optimization for nilpotent and idempotent matrices. The calculator automatically detects these patterns for optimal performance."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What are the applications of matrix powers in mathematics and science?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Matrix powers have numerous applications: (1) Markov Chains - Computing A^n shows long-term behavior and steady-state probabilities as n approaches infinity. (2) Graph Theory - The (i,j) entry of A^n counts the number of paths of length n from vertex i to vertex j. (3) Fibonacci Sequences - Using companion matrices to find closed-form solutions. (4) Differential Equations - Matrix exponentials e^At via series expansion for solving systems of ODEs. (5) Computer Graphics - Repeated transformations like rotations and scaling. (6) Population Dynamics - Modeling growth over multiple time periods. The repeated squaring method makes these calculations efficient even for very large powers."
-        }
-      }
-    ]
-  }
-  </script>
 
   <%@ include file="header-script.jsp"%>
   <script>
@@ -729,5 +708,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Powers: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What is matrix exponentiation and how do you compute A^n?</h3>
+    <p class="mb-0">Matrix exponentiation multiplies a square matrix by itself n times. This tool uses efficient repeated squaring (O(log n)) and optimizations for diagonal, idempotent, and nilpotent cases. Special case: A^0 = I.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What are common applications of matrix powers?</h3>
+    <p class="mb-0">Markov chains (long‑run behavior), graph theory (path counts via adjacency powers), linear recurrences (e.g., Fibonacci), repeated geometric transforms, and systems of differential equations.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes and exponents are supported?</h3>
+    <p class="mb-0">Supports square matrices and integer exponents in a practical range (including 0). For large n, repeated squaring keeps computations fast and stable.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is matrix exponentiation and how do you compute A^n?","acceptedAnswer":{"@type":"Answer","text":"Matrix exponentiation multiplies a square matrix by itself n times. This tool uses efficient repeated squaring (O(log n)) and optimizations for diagonal, idempotent, and nilpotent cases. Special case: A^0 = I."}},
+    {"@type":"Question","name":"What are common applications of matrix powers?","acceptedAnswer":{"@type":"Answer","text":"Markov chains (long‑run behavior), graph theory (path counts via adjacency powers), linear recurrences (e.g., Fibonacci), repeated geometric transforms, and systems of differential equations."}},
+    {"@type":"Question","name":"What sizes and exponents are supported?","acceptedAnswer":{"@type":"Answer","text":"Supports square matrices and integer exponents in a practical range (including 0). For large n, repeated squaring keeps computations fast and stable."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Power Calculator","item":"https://8gwifi.org/matrix-power-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>

@@ -4,20 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Type Classifier - Identify Matrix Properties Instantly</title>
+  <title>Matrix Type Classifier Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free online matrix type classifier. Paste any matrix and instantly detect if it is square, rectangular, diagonal, scalar, identity, symmetric, skew-symmetric, triangular, orthogonal, singular, or stochastic. Shows working steps with rank, determinant, trace and property explanations. Perfect for linear algebra, engineering, machine learning, and competitive exams.">
   <meta name="keywords" content="matrix type classifier, types of matrices, matrix identifier, symmetric matrix checker, diagonal matrix checker, scalar matrix, orthogonal matrix, singular matrix, stochastic matrix, linear algebra calculator, matrix rank, determinant calculator, matrix classification">
   <link rel="canonical" href="https://8gwifi.org/matrix-type-classifier.jsp">
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
   <meta name="author" content="8gwifi.org">
-  <meta property="og:title" content="FREE Matrix Type Classifier - Detect Matrix Properties Online">
+  <meta property="og:title" content="Matrix Type Classifier Online – Free | 8gwifi.org">
   <meta property="og:description" content="Paste any matrix to detect 15+ matrix types: square, diagonal, identity, symmetric, upper triangular, orthogonal, singular and more. Includes explanations and visualization.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/matrix-type-classifier.jsp">
   <meta property="og:image" content="https://8gwifi.org/images/matrix-classifier.png">
   <meta property="og:site_name" content="8gwifi.org - Free Online Tools">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FREE Matrix Type Classifier - Identify Matrix Properties">
+  <meta name="twitter:title" content="Matrix Type Classifier Online – Free | 8gwifi.org">
   <meta name="twitter:description" content="Detect dozens of matrix properties instantly. Includes proofs, rank/determinant and interactive visualization.">
   <meta name="twitter:image" content="https://8gwifi.org/images/matrix-classifier.png">
   <%@ include file="header-script.jsp"%>
@@ -66,49 +66,6 @@
     "interactivityType":"active",
     "teaches":["Matrix Classification","Linear Algebra","Symmetric Matrices","Orthogonal Matrices","Determinant","Rank"],
     "keywords":"matrix type classifier, matrix type checker, linear algebra calculator, symmetric matrix detector"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"FAQPage",
-    "mainEntity":[
-      {
-        "@type":"Question",
-        "name":"How do you identify the type of a matrix?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"To classify a matrix, first check its dimensions. If rows equal columns, it is square; otherwise rectangular. For square matrices evaluate properties: compare to its transpose (symmetric if A = Aᵀ, skew-symmetric if A = -Aᵀ), check diagonal entries (diagonal matrix has non-zero entries only on diagonal, scalar matrix has equal diagonal entries, identity matrix has ones on the diagonal). Calculate determinant to determine singularity (det A = 0) and rank to see if it is full rank. For orthogonal matrices verify AᵀA = I. The Matrix Type Classifier automates these checks instantly."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"What matrix types does this classifier detect?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"The tool detects: rectangular, square, row, column, zero, diagonal, scalar, identity, upper triangular, lower triangular, symmetric, skew-symmetric, orthogonal, singular, non-singular, stochastic, and sparse matrices. It also reports trace, determinant, rank, and notes if the matrix is positive (semi) definite when eigenvalue hints allow."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"Why is my matrix flagged as singular?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"A matrix is singular when its determinant is zero or its rows are linearly dependent. The classifier computes a tolerance-based determinant using Gaussian elimination. If the determinant magnitude is below 1e-9 relative to the largest entry, the matrix is reported as singular. The step-by-step section highlights the dependency detected."
-        }
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-      {"@type":"ListItem","position":2,"name":"Math Tools","item":"https://8gwifi.org/math-tools.jsp"},
-      {"@type":"ListItem","position":3,"name":"Matrix Type Classifier","item":"https://8gwifi.org/matrix-type-classifier.jsp"}
-    ]
   }
   </script>
   <script>
@@ -1921,6 +1878,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Type Classifier: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do you identify the type of a matrix?</h3>
+    <p class="mb-0">Check dimensions first (square vs rectangular). For square matrices, compare A to Aᵀ (symmetric if A = Aᵀ, skew‑symmetric if A = −Aᵀ), inspect diagonal entries (diagonal/scalar/identity), and compute determinant/rank for singularity and full‑rank checks. The tool automates these steps.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What matrix types does this detect?</h3>
+    <p class="mb-0">Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew‑symmetric, orthogonal, singular/non‑singular, stochastic, and sparse; it also reports trace, determinant, rank and hints about definiteness.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Why is my matrix flagged as singular?</h3>
+    <p class="mb-0">A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance‑aware elimination; very small determinants relative to entries are treated as singular.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you identify the type of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Check dimensions first (square vs rectangular). For square matrices, compare A to Aᵀ (symmetric if A = Aᵀ, skew‑symmetric if A = −Aᵀ), inspect diagonal entries (diagonal/scalar/identity), and compute determinant/rank for singularity and full‑rank checks. The tool automates these steps."}},
+    {"@type":"Question","name":"What matrix types does this detect?","acceptedAnswer":{"@type":"Answer","text":"Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew‑symmetric, orthogonal, singular/non‑singular, stochastic, and sparse; it also reports trace, determinant, rank and hints about definiteness."}},
+    {"@type":"Question","name":"Why is my matrix flagged as singular?","acceptedAnswer":{"@type":"Answer","text":"A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance‑aware elimination; very small determinants relative to entries are treated as singular."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Type Classifier","item":"https://8gwifi.org/matrix-type-classifier.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>
-

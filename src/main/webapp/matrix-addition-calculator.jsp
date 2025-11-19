@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Addition Calculator A+B, A-B | Scalar Multiplication & Linear Combinations</title>
+  <title>Matrix Addition Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Perform matrix addition A+B, subtraction A-B, scalar multiplication cA, and linear combinations aA+bB instantly. Free calculator with step-by-step solutions and detailed element-wise computations.">
   <meta name="keywords" content="matrix addition calculator, matrix subtraction, A+B calculator, A-B calculator, scalar multiplication, linear combination, matrix arithmetic, element-wise operations, matrix calculator, cA scalar multiply">
   <link rel="canonical" href="https://8gwifi.org/matrix-addition-calculator.jsp">
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="FREE Matrix Addition Calculator A+B, A-B | Scalar Multiplication Tool">
-  <meta property="og:description" content="Calculate matrix addition, subtraction, scalar multiplication, and linear combinations with step-by-step solutions. Free online matrix arithmetic calculator.">
-  <meta property="og:url" content="https://8gwifi.org/matrix-addition-calculator.jsp">
   <meta property="og:type" content="website">
+  <meta property="og:title" content="Matrix Addition Calculator Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Add/subtract matrices, do scalar multiplication and linear combinations with step-by-step element-wise calculations.">
+  <meta property="og:url" content="https://8gwifi.org/matrix-addition-calculator.jsp">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Addition Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Perform A+B, A−B, cA, and aA+bB with detailed element-wise steps.">
 
   <!-- JSON-LD WebApplication Schema -->
   <script type="application/ld+json">
@@ -42,31 +46,6 @@
   }
   </script>
 
-  <!-- JSON-LD FAQPage Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do you add and subtract matrices?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Matrix addition and subtraction are performed element-wise. To add matrices A + B or subtract A - B, both matrices must have the same dimensions (same number of rows and columns). Each element in the result C is computed by adding or subtracting the corresponding elements: c(i,j) = a(i,j) + b(i,j) for addition, or c(i,j) = a(i,j) - b(i,j) for subtraction. For example, if A = [[1,2],[3,4]] and B = [[5,6],[7,8]], then A+B = [[6,8],[10,12]]. These operations are commutative (A+B = B+A) and associative ((A+B)+C = A+(B+C))."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is scalar multiplication and linear combination of matrices?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Scalar multiplication multiplies every element of a matrix by a constant: if c is a scalar and A is a matrix, then (cA)(i,j) = c × a(i,j). For example, 3A means multiply every element by 3. A linear combination is an expression like aA + bB where a and b are scalars and A and B are matrices with the same dimensions. This is fundamental in linear algebra for: expressing vectors in terms of basis vectors, solving systems of linear equations, interpolation and approximation methods, and quantum mechanics superposition states. Properties include distributivity: c(A+B) = cA + cB, and associativity: (cd)A = c(dA)."
-        }
-      }
-    ]
-  }
-  </script>
 
   <%@ include file="header-script.jsp"%>
   <script>
@@ -827,6 +806,46 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Addition & Subtraction: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do you add and subtract matrices?</h3>
+    <p class="mb-0">Addition and subtraction are element‑wise and require the same dimensions. For result C, c<sub>i,j</sub> = a<sub>i,j</sub> ± b<sub>i,j</sub>. Addition is commutative and associative.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What is scalar multiplication and a linear combination?</h3>
+    <p class="mb-0">Scalar multiplication multiplies each entry by a constant c. Linear combinations have the form aA + bB with matching dimensions, fundamental for many linear algebra applications.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes are supported?</h3>
+    <p class="mb-0">This tool supports matrices up to 10×10 and shows element‑wise steps for A+B, A−B, cA, and aA+bB.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you add and subtract matrices?","acceptedAnswer":{"@type":"Answer","text":"Addition and subtraction are element‑wise and require the same dimensions. For result C, c i,j = a i,j ± b i,j. Addition is commutative and associative."}},
+    {"@type":"Question","name":"What is scalar multiplication and a linear combination?","acceptedAnswer":{"@type":"Answer","text":"Scalar multiplication multiplies each entry by a constant c. Linear combinations have the form aA + bB with matching dimensions, fundamental for many linear algebra applications."}},
+    {"@type":"Question","name":"What sizes are supported?","acceptedAnswer":{"@type":"Answer","text":"This tool supports matrices up to 10×10 and shows element‑wise steps for A+B, A−B, cA, and aA+bB."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Addition Calculator","item":"https://8gwifi.org/matrix-addition-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>
 </html>

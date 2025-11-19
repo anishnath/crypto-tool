@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Determinant Calculator - Step-by-Step | 2×2 to 10×10</title>
+  <title>Matrix Determinant Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free online matrix determinant calculator with step-by-step solutions. Calculate det(A) for square matrices 2×2 to 10×10. Cofactor expansion, row operations, LU decomposition. Random generator, LaTeX display, share URL.">
   <meta name="keywords" content="determinant calculator, matrix determinant, det calculator, cofactor expansion, matrix algebra, linear algebra calculator, det(A), 2x2 determinant, 3x3 determinant, 4x4 determinant">
   <link rel="canonical" href="https://8gwifi.org/matrix-determinant-calculator.jsp">
@@ -12,15 +12,15 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/matrix-determinant-calculator.jsp">
-  <meta property="og:title" content="FREE Matrix Determinant Calculator with Step-by-Step Solutions">
-  <meta property="og:description" content="Calculate determinant of square matrices (2×2 to 10×10) with detailed steps. Cofactor expansion, row operations, LU decomposition methods.">
+  <meta property="og:title" content="Matrix Determinant Calculator Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Free online matrix determinant calculator with step-by-step solutions. Calculate det(A) for square matrices 2×2 to 10×10. Cofactor expansion, row operations, LU decomposition.">
   <meta property="og:image" content="https://8gwifi.org/images/matrix-determinant-preview.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://8gwifi.org/matrix-determinant-calculator.jsp">
-  <meta property="twitter:title" content="FREE Matrix Determinant Calculator - Step-by-Step">
-  <meta property="twitter:description" content="Calculate det(A) for square matrices 2×2 to 10×10 with cofactor expansion and step-by-step solutions.">
+  <meta property="twitter:title" content="Matrix Determinant Calculator Online – Free | 8gwifi.org">
+  <meta property="twitter:description" content="Compute det(A) for 2×2 to 10×10 matrices with step-by-step methods (cofactor, row ops, LU).">
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
@@ -38,27 +38,6 @@
   }
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [{
-      "@type": "Question",
-      "name": "How do I calculate the determinant of a matrix?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Enter your square matrix (same number of rows and columns), select size, input values, and click Calculate. The calculator shows step-by-step cofactor expansion or row operations to compute det(A)."
-      }
-    }, {
-      "@type": "Question",
-      "name": "What size matrices are supported?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This calculator supports square matrices from 2×2 up to 10×10. For larger matrices, the calculator uses efficient LU decomposition method."
-      }
-    }]
-  }
-  </script>
   <%@ include file="header-script.jsp"%>
   <script>
     window.MathJax = {
@@ -791,5 +770,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Determinant: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I calculate the determinant of a matrix?</h3>
+    <p class="mb-0">Enter a square matrix and click Calculate. The tool shows step‑by‑step methods such as cofactor expansion and row operations; for larger sizes it may use LU decomposition for efficiency.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes and methods are supported?</h3>
+    <p class="mb-0">This calculator supports square matrices from 2×2 up to 10×10 and can display cofactor expansion steps, row‑operation reductions, and LU‑based computations.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What does det(A) = 0 mean?</h3>
+    <p class="mb-0">det(A) = 0 indicates the matrix is singular: rows/columns are linearly dependent, rank is less than n, and A is not invertible.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I calculate the determinant of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Enter a square matrix and click Calculate. The tool shows step‑by‑step methods such as cofactor expansion and row operations; for larger sizes it may use LU decomposition for efficiency."}},
+    {"@type":"Question","name":"What sizes and methods are supported?","acceptedAnswer":{"@type":"Answer","text":"This calculator supports square matrices from 2×2 up to 10×10 and can display cofactor expansion steps, row‑operation reductions, and LU‑based computations."}},
+    {"@type":"Question","name":"What does det(A) = 0 mean?","acceptedAnswer":{"@type":"Answer","text":"det(A) = 0 indicates the matrix is singular: rows/columns are linearly dependent, rank is less than n, and A is not invertible."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Determinant Calculator","item":"https://8gwifi.org/matrix-determinant-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>

@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Transpose Calculator A^T | Symmetric Matrix Checker & Properties Verifier</title>
+  <title>Matrix Transpose Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Calculate matrix transpose A^T instantly with our free calculator. Check symmetric and skew-symmetric matrices, verify transpose properties like (AB)^T = B^T A^T, and get detailed step-by-step solutions.">
   <meta name="keywords" content="matrix transpose calculator, A^T calculator, transpose matrix, symmetric matrix checker, skew-symmetric matrix, transpose properties, matrix transposition, (A^T)^T = A, orthogonal matrix, linear algebra calculator">
   <link rel="canonical" href="https://8gwifi.org/matrix-transpose-calculator.jsp">
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="FREE Matrix Transpose Calculator A^T | Symmetric Matrix Checker">
+  <meta property="og:title" content="Matrix Transpose Calculator Online – Free | 8gwifi.org">
   <meta property="og:description" content="Calculate matrix transpose A^T and check for symmetric and skew-symmetric properties. Verify transpose rules with detailed step-by-step solutions.">
   <meta property="og:url" content="https://8gwifi.org/matrix-transpose-calculator.jsp">
   <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Transpose Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Compute A^T, detect symmetric/skew‑symmetric matrices, and verify transpose rules with clear steps.">
 
   <!-- JSON-LD WebApplication Schema -->
   <script type="application/ld+json">
@@ -42,31 +46,6 @@
   }
   </script>
 
-  <!-- JSON-LD FAQPage Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is a matrix transpose and how do you calculate A^T?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The transpose of a matrix A, denoted A^T, is formed by interchanging its rows and columns. If A is an m×n matrix, then A^T is an n×m matrix where (A^T)(i,j) = A(j,i). For example, if A = [[1,2,3],[4,5,6]], then A^T = [[1,4],[2,5],[3,6]]. Key properties include: (A^T)^T = A (double transpose returns original), (A+B)^T = A^T + B^T (transpose distributes over addition), and (AB)^T = B^T A^T (note the order reversal for products). A matrix is symmetric if A = A^T and skew-symmetric if A = -A^T."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What are symmetric and skew-symmetric matrices and their properties?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A symmetric matrix satisfies A = A^T, meaning it's equal to its own transpose. This occurs when a(i,j) = a(j,i) for all elements. Symmetric matrices appear in: covariance matrices in statistics, adjacency matrices of undirected graphs, moment of inertia tensors in physics, and quadratic forms. A skew-symmetric (or antisymmetric) matrix satisfies A = -A^T, meaning a(i,j) = -a(j,i). All diagonal elements must be zero. These appear in: cross product operations, infinitesimal rotations in mechanics, and electromagnetic field tensors. Every square matrix can be uniquely decomposed as the sum of a symmetric and skew-symmetric matrix: A = (A+A^T)/2 + (A-A^T)/2."
-        }
-      }
-    ]
-  }
-  </script>
 
   <%@ include file="header-script.jsp"%>
     <%@ include file="math-menu-nav.jsp"%>
@@ -694,6 +673,46 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Transpose: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What is a matrix transpose and how do you compute A^T?</h3>
+    <p class="mb-0">The transpose A^T is obtained by swapping rows and columns: (A^T)<sub>i,j</sub> = A<sub>j,i</sub>. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I check symmetric or skew‑symmetric matrices?</h3>
+    <p class="mb-0">A matrix is symmetric when A = A^T and skew‑symmetric when A = −A^T (all diagonal entries are zero). This tool flags these properties automatically.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Does transposing change determinant or rank?</h3>
+    <p class="mb-0">For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is a matrix transpose and how do you compute A^T?","acceptedAnswer":{"@type":"Answer","text":"The transpose A^T is obtained by swapping rows and columns: (A^T) i,j = A j,i. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T."}},
+    {"@type":"Question","name":"How do I check symmetric or skew‑symmetric matrices?","acceptedAnswer":{"@type":"Answer","text":"A matrix is symmetric when A = A^T and skew‑symmetric when A = −A^T (all diagonal entries are zero). This tool flags these properties automatically."}},
+    {"@type":"Question","name":"Does transposing change determinant or rank?","acceptedAnswer":{"@type":"Answer","text":"For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Transpose Calculator","item":"https://8gwifi.org/matrix-transpose-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>
 </html>

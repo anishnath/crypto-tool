@@ -4,14 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Eigenvalue & Eigenvector Calculator | λ & v | Characteristic Polynomial</title>
+  <title>Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free eigenvalue & eigenvector calculator. Find λ values and eigenvectors v using characteristic polynomial det(A-λI)=0. Supports 2×2 to 5×5 matrices. Power iteration, QR algorithm. Step-by-step solutions, LaTeX display.">
   <meta name="keywords" content="eigenvalue calculator, eigenvector calculator, characteristic polynomial, power iteration, spectral decomposition, matrix diagonalization, lambda, det(A-lambda*I), QR algorithm">
   <link rel="canonical" href="https://8gwifi.org/matrix-eigenvalue-calculator.jsp">
 
-  <meta property="og:title" content="Eigenvalue & Eigenvector Calculator - Characteristic Polynomial">
-  <meta property="og:description" content="Calculate eigenvalues λ and eigenvectors v for square matrices. Shows characteristic equation det(A-λI)=0 with step-by-step solutions.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Find eigenvalues λ and eigenvectors v using det(A-λI)=0 with step-by-step solutions for 2×2–4×4 matrices.">
   <meta property="og:url" content="https://8gwifi.org/matrix-eigenvalue-calculator.jsp">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Compute eigenvalues and eigenvectors with characteristic polynomial, power iteration, and QR.">
 
   <script type="application/ld+json">
   {
@@ -26,27 +31,6 @@
   }
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [{
-      "@type": "Question",
-      "name": "How do I find eigenvalues of a matrix?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Enter your square matrix and click Calculate. The calculator solves the characteristic equation det(A-λI)=0 to find eigenvalues λ, then computes corresponding eigenvectors by solving (A-λI)v=0."
-      }
-    }, {
-      "@type": "Question",
-      "name": "What are eigenvalues and eigenvectors used for?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Eigenvalues and eigenvectors are used in: matrix diagonalization, differential equations, quantum mechanics, principal component analysis (PCA), stability analysis, and Google PageRank algorithm."
-      }
-    }]
-  }
-  </script>
   <%@ include file="header-script.jsp"%>
   <script>
     window.MathJax = {
@@ -771,5 +755,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Eigenvalues & Eigenvectors: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I find eigenvalues of a matrix?</h3>
+    <p class="mb-0">Enter a square matrix and click Calculate. The tool solves det(A − λI) = 0 to get eigenvalues λ, then computes eigenvectors by solving (A − λI)v = 0 for each λ.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What if the eigenvalues are complex?</h3>
+    <p class="mb-0">For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes and methods are supported?</h3>
+    <p class="mb-0">This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I find eigenvalues of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Enter a square matrix and click Calculate. The tool solves det(A − λI) = 0 to get eigenvalues λ, then computes eigenvectors by solving (A − λI)v = 0 for each λ."}},
+    {"@type":"Question","name":"What if the eigenvalues are complex?","acceptedAnswer":{"@type":"Answer","text":"For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well."}},
+    {"@type":"Question","name":"What sizes and methods are supported?","acceptedAnswer":{"@type":"Answer","text":"This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Eigenvalue & Eigenvector Calculator","item":"https://8gwifi.org/matrix-eigenvalue-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>

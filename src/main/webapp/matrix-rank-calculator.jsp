@@ -4,14 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Rank Calculator | rank(A) | Row Echelon Form | Nullity</title>
+  <title>Matrix Rank Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free matrix rank calculator with step-by-step row echelon transformation. Calculate rank(A), nullity, pivot positions for m×n matrices. Gaussian elimination to REF. Shows linearly independent rows. Random generator.">
   <meta name="keywords" content="matrix rank calculator, rank of matrix, row echelon form, pivot positions, nullity, linear algebra, rank nullity theorem, linearly independent, REF">
   <link rel="canonical" href="https://8gwifi.org/matrix-rank-calculator.jsp">
 
-  <meta property="og:title" content="Matrix Rank Calculator - Row Echelon Form">
-  <meta property="og:description" content="Calculate matrix rank, nullity, and pivot positions using row echelon form transformation.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Matrix Rank Calculator Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Compute rank(A), nullity, and pivot positions via row echelon form with step-by-step output.">
   <meta property="og:url" content="https://8gwifi.org/matrix-rank-calculator.jsp">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Rank Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Find rank, nullity, and pivots using REF with clear steps.">
 
   <script type="application/ld+json">
   {
@@ -26,27 +31,6 @@
   }
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [{
-      "@type": "Question",
-      "name": "How do I find the rank of a matrix?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Enter your matrix, click Calculate. The calculator transforms it to row echelon form and counts non-zero rows (pivot positions) to get rank(A). Nullity = n - rank(A)."
-      }
-    }, {
-      "@type": "Question",
-      "name": "What is the rank-nullity theorem?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Rank-nullity theorem states: rank(A) + nullity(A) = n (number of columns). Rank is the dimension of column space, nullity is the dimension of null space."
-      }
-    }]
-  }
-  </script>
   <%@ include file="header-script.jsp"%>
   <script>
     window.MathJax = {
@@ -695,5 +679,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Rank: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I find the rank of a matrix?</h3>
+    <p class="mb-0">Enter your matrix and click Calculate. The tool reduces it to row echelon form (REF) and counts non‑zero rows (pivot rows) to obtain rank(A).</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What is nullity and how is it related to rank?</h3>
+    <p class="mb-0">Nullity is the dimension of the null space. For an m×n matrix, the rank‑nullity theorem states rank(A) + nullity(A) = n.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What does rank tell me about a matrix?</h3>
+    <p class="mb-0">Full rank means maximum linearly independent columns. If rank(A) &lt; n for an n×n square matrix, A is singular and not invertible.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I find the rank of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Enter your matrix and click Calculate. The tool reduces it to row echelon form (REF) and counts non‑zero rows (pivot rows) to obtain rank(A)."}},
+    {"@type":"Question","name":"What is nullity and how is it related to rank?","acceptedAnswer":{"@type":"Answer","text":"Nullity is the dimension of the null space. For an m×n matrix, the rank‑nullity theorem states rank(A) + nullity(A) = n."}},
+    {"@type":"Question","name":"What does rank tell me about a matrix?","acceptedAnswer":{"@type":"Answer","text":"Full rank means maximum linearly independent columns. If rank(A) < n for an n×n square matrix, A is singular and not invertible."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Rank Calculator","item":"https://8gwifi.org/matrix-rank-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>

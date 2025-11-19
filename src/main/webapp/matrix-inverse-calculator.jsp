@@ -4,14 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Inverse Calculator - A⁻¹ | Gauss-Jordan Method | 2×2 to 6×6</title>
+  <title>Matrix Inverse Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free matrix inverse calculator (A⁻¹) using Gauss-Jordan elimination. Step-by-step solutions for 2×2 to 6×6 invertible matrices. Shows augmented matrix [A|I] → [I|A⁻¹]. Singularity check, LaTeX display.">
   <meta name="keywords" content="matrix inverse calculator, inverse matrix, A inverse, Gauss-Jordan elimination, adjugate matrix, matrix inversion, linear algebra calculator, invertible matrix, A^-1">
   <link rel="canonical" href="https://8gwifi.org/matrix-inverse-calculator.jsp">
 
-  <meta property="og:title" content="Matrix Inverse Calculator - Gauss-Jordan Method">
-  <meta property="og:description" content="Calculate A⁻¹ for square invertible matrices with step-by-step Gauss-Jordan elimination.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Matrix Inverse Calculator Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Free matrix inverse calculator (A⁻¹) using Gauss-Jordan elimination. Step-by-step solutions for 2×2 to 6×6 invertible matrices. Shows augmented matrix [A|I] → [I|A⁻¹]. Singularity check, LaTeX display.">
   <meta property="og:url" content="https://8gwifi.org/matrix-inverse-calculator.jsp">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Inverse Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Compute A⁻¹ via Gauss-Jordan elimination with step-by-step output and verification.">
 
   <script type="application/ld+json">
   {
@@ -26,20 +31,6 @@
   }
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [{
-      "@type": "Question",
-      "name": "How do I find the inverse of a matrix?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Enter your square matrix, click Calculate. The calculator uses Gauss-Jordan elimination on [A|I] to get [I|A⁻¹]. If det(A)=0, the matrix is singular (non-invertible)."
-      }
-    }]
-  }
-  </script>
   <%@ include file="header-script.jsp"%>
   <script>
     window.MathJax = {
@@ -755,5 +746,45 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Inverse: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I find the inverse of a matrix?</h3>
+    <p class="mb-0">Enter your square matrix and click Calculate. The tool performs Gauss‑Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">When does a matrix not have an inverse?</h3>
+    <p class="mb-0">A matrix is non‑invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes and checks are supported?</h3>
+    <p class="mb-0">This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss‑Jordan steps.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I find the inverse of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Enter your square matrix and click Calculate. The tool performs Gauss‑Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse."}},
+    {"@type":"Question","name":"When does a matrix not have an inverse?","acceptedAnswer":{"@type":"Answer","text":"A matrix is non‑invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) < n for an n×n matrix."}},
+    {"@type":"Question","name":"What sizes and checks are supported?","acceptedAnswer":{"@type":"Answer","text":"This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss‑Jordan steps."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Inverse Calculator","item":"https://8gwifi.org/matrix-inverse-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>

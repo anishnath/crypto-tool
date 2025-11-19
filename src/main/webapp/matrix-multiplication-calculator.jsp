@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Matrix Multiplication Calculator A×B | Step-by-Step Matrix Product Solutions</title>
+  <title>Matrix Multiplication Calculator Online – Free | 8gwifi.org</title>
   <meta name="description" content="Multiply matrices A×B instantly with our free calculator. Features dimension compatibility checker, step-by-step solutions, visual computation process, and support for any matrix sizes up to 10×10.">
   <meta name="keywords" content="matrix multiplication calculator, A×B calculator, matrix multiply, matrix product, linear algebra calculator, step by step matrix multiplication, matrix dimensions, compatible matrices, dot product, matrix operations">
   <link rel="canonical" href="https://8gwifi.org/matrix-multiplication-calculator.jsp">
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="FREE Matrix Multiplication Calculator A×B | Step-by-Step Solutions">
+  <meta property="og:title" content="Matrix Multiplication Calculator Online – Free | 8gwifi.org">
   <meta property="og:description" content="Multiply matrices A×B with detailed step-by-step solutions. Check dimension compatibility and visualize the entire computation process for any matrix sizes.">
   <meta property="og:url" content="https://8gwifi.org/matrix-multiplication-calculator.jsp">
   <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matrix Multiplication Calculator Online – Free | 8gwifi.org">
+  <meta name="twitter:description" content="Multiply matrices A×B with compatibility checks and step-by-step computations up to 10×10.">
 
   <!-- JSON-LD WebApplication Schema -->
   <script type="application/ld+json">
@@ -42,31 +46,6 @@
   }
   </script>
 
-  <!-- JSON-LD FAQPage Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do you multiply two matrices A×B and when are they compatible?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Two matrices A and B can be multiplied to form C = A×B only when the number of columns in A equals the number of rows in B. If A is m×n and B is n×p, then C will be m×p. Each element c(i,j) is calculated as the dot product of row i from A and column j from B: c(i,j) = sum of a(i,k) × b(k,j) for k from 1 to n. This means you multiply corresponding elements and sum them up. Matrix multiplication is not commutative (A×B ≠ B×A in general), but it is associative (A×B)×C = A×(B×C)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What are the properties and applications of matrix multiplication?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Matrix multiplication has several important properties: (1) Associativity: (AB)C = A(BC), (2) Distributivity: A(B+C) = AB + AC, (3) Transpose rule: (AB)^T = B^T A^T (note the order reversal). It's widely used in: Linear transformations in geometry and computer graphics, solving systems of linear equations, neural networks where weights are multiplied by input vectors, quantum mechanics for state transformations, economics for input-output models, and cryptography for encryption algorithms. The computational complexity is O(n^3) for n×n matrices using standard algorithms."
-        }
-      }
-    ]
-  }
-  </script>
 
   <%@ include file="header-script.jsp"%>
   <script>
@@ -697,6 +676,46 @@
 <hr>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Matrix Multiplication: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">When are two matrices compatible for A×B?</h3>
+    <p class="mb-0">A×B is defined when columns(A) = rows(B). If A is m×n and B is n×p, the product C is m×p. Each c<sub>i,j</sub> is the dot product of row i of A with column j of B.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Is A×B the same as B×A?</h3>
+    <p class="mb-0">No. Matrix multiplication is generally not commutative: A×B ≠ B×A. It is associative and distributive, and obeys (AB)^T = B^T A^T.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What sizes are supported?</h3>
+    <p class="mb-0">This tool supports rectangular and square matrices with dimensions up to 10×10, showing step‑by‑step computations.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"When are two matrices compatible for A×B?","acceptedAnswer":{"@type":"Answer","text":"A×B is defined when columns(A) = rows(B). If A is m×n and B is n×p, the product C is m×p. Each c i,j is the dot product of row i of A with column j of B."}},
+    {"@type":"Question","name":"Is A×B the same as B×A?","acceptedAnswer":{"@type":"Answer","text":"No. Matrix multiplication is generally not commutative: A×B ≠ B×A. It is associative and distributive, and obeys (AB)^T = B^T A^T."}},
+    {"@type":"Question","name":"What sizes are supported?","acceptedAnswer":{"@type":"Answer","text":"This tool supports rectangular and square matrices with dimensions up to 10×10, showing step‑by‑step computations."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Matrix Multiplication Calculator","item":"https://8gwifi.org/matrix-multiplication-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 <%@ include file="body-close.jsp"%>
 </html>
