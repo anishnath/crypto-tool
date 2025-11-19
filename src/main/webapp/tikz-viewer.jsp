@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Online TikZ Viewer & Editor - LaTeX TikZ Diagram Tool | 8gwifi.org</title>
+  <title>TikZ Viewer & Editor Online – Free | 8gwifi.org</title>
   <meta name="description" content="Create and render TikZ diagrams online for free. Professional LaTeX TikZ editor with syntax highlighting, real-time preview, and export to PNG, SVG, PDF. Draw graphs, flowcharts, circuits, 3D diagrams instantly.">
   <meta name="keywords" content="TikZ viewer, TikZ editor online, LaTeX diagrams, TikZ pictures, tikzpicture editor, LaTeX graphics, online diagram tool, TikZ to PNG, TikZ to SVG, TikZ to PDF, flowchart maker, graph editor, circuit diagram tool, mathematical diagrams, geometry diagrams, free TikZ tool">
   <meta name="author" content="8gwifi.org">
@@ -12,15 +12,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/tikz-viewer.jsp">
-  <meta property="og:title" content="Free Online TikZ Viewer & Editor - LaTeX TikZ Diagram Tool">
-  <meta property="og:description" content="Create and render TikZ diagrams online for free. Professional editor with real-time preview and export to PNG, SVG, PDF.">
+  <meta property="og:title" content="TikZ Viewer & Editor Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Create and render TikZ diagrams online for free. Professional LaTeX TikZ editor with syntax highlighting, real-time preview, and export to PNG, SVG, PDF. Draw graphs, flowcharts, circuits, 3D diagrams instantly.">
   <meta property="og:image" content="https://8gwifi.org/images/site/tikz-tool.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://8gwifi.org/tikz-viewer.jsp">
-  <meta property="twitter:title" content="Free Online TikZ Viewer & Editor - LaTeX TikZ Diagram Tool">
-  <meta property="twitter:description" content="Create and render TikZ diagrams online for free. Professional editor with real-time preview and export to PNG, SVG, PDF.">
+  <meta property="twitter:title" content="TikZ Viewer & Editor Online – Free | 8gwifi.org">
+  <meta property="twitter:description" content="Create and render TikZ diagrams online for free. Professional LaTeX TikZ editor with syntax highlighting, real-time preview, and export to PNG, SVG, PDF. Draw graphs, flowcharts, circuits, 3D diagrams instantly.">
   <meta property="twitter:image" content="https://8gwifi.org/images/site/tikz-tool.png">
 
   <!-- JSON-LD Schema -->
@@ -54,14 +54,7 @@
       "Copy LaTeX code to clipboard"
     ],
     "screenshot": "https://8gwifi.org/images/site/tikz-tool.png",
-    "softwareVersion": "2.0",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1250",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    "softwareVersion": "2.0"
   }
   </script>
 
@@ -342,6 +335,72 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/tikz-viewer.js"></script>
+
+  <!-- E-E-A-T: Visible author/methodology/trust section -->
+  <section class="container my-5">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 mb-3">About This Tool & Methodology</h2>
+            <p>This TikZ viewer uses client‑side rendering powered by TikZJax to interpret <code>tikzpicture</code> code securely in your browser. CodeMirror provides syntax highlighting and editing features. Exports are produced from the rendered SVG/Canvas to PNG, SVG, or PDF using browser APIs and jsPDF.</p>
+
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <h3 class="h6">Authorship & Review</h3>
+                <ul>
+                  <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+                  <li><strong>Reviewed by:</strong> Anish Nath (tools maintainer)</li>
+                  <li><strong>Last updated:</strong> 2025-11-19</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h3 class="h6">Trust & Privacy</h3>
+                <ul>
+                  <li>Rendering happens locally; diagrams are not uploaded to our servers.</li>
+                  <li>Share URLs only encode your TikZ content; you can remove them to keep diagrams private.</li>
+                  <li>Questions? Contact us via <a href="contactus.jsp">Contact</a>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <h3 class="h6 mt-3">References</h3>
+            <ul>
+              <li><a href="https://tikz.dev/" rel="nofollow noopener" target="_blank">PGF/TikZ Manual</a></li>
+              <li><a href="https://github.com/kisonecat/tikzjax" rel="nofollow noopener" target="_blank">TikZJax</a></li>
+              <li><a href="https://codemirror.net/5/" rel="nofollow noopener" target="_blank">CodeMirror 5</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-E-A-T JSON-LD for WebPage with author/reviewer/publisher -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "TikZ Viewer & Editor",
+    "url": "https://8gwifi.org/tikz-viewer.jsp",
+    "dateModified": "2025-11-19",
+    "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+    "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+    "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+  }
+  </script>
+
+  <!-- Breadcrumbs to reinforce page context -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"TikZ Viewer","item":"https://8gwifi.org/tikz-viewer.jsp"}
+    ]
+  }
+  </script>
 <div class="sharethis-inline-share-buttons" style="margin-top: 1rem;"></div>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="thanks.jsp"%>
