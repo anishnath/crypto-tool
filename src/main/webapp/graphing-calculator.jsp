@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
-    <title>Free Online Graphing Calculator | Plot Functions, Equations & Graphs</title>
+    <title>Graphing Calculator Online – Free | 8gwifi.org</title>
     <meta name="description" content="Free advanced graphing calculator online. Plot functions, parametric equations, polar curves, implicit functions, piecewise functions, statistical distributions, and more. Features derivatives, integrals, equation solver, and animation. No download required - works in browser like Desmos.">
     <meta name="keywords" content="graphing calculator, online graphing calculator, free graphing calculator, plot functions online, graph equations, math calculator, desmos alternative, equation plotter, function grapher, calculus calculator, derivative calculator, integral calculator, polar graph, parametric equations, implicit functions, piecewise functions, statistical graphs">
     <meta name="author" content="Advanced Math Tools">
@@ -16,16 +16,15 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/graphing-calculator.jsp">
-    <meta property="og:title" content="Free Online Graphing Calculator - Advanced Math Plotter">
-    <meta property="og:description" content="Plot any mathematical function online for free. Supports derivatives, integrals, parametric, polar, implicit functions and more. Best Desmos alternative.">
-    <meta property="og:image" content="https://8gwifi.org.com/images/site/graphing-calculator-preview.png">
+    <meta property="og:title" content="Graphing Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Plot functions and equations (Cartesian, parametric, polar, implicit) with sliders, zoom, and calculus tools.">
+    
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://8gwifi.org/graphing-calculator.jsp">
-    <meta property="twitter:title" content="Free Online Graphing Calculator - Advanced Math Plotter">
-    <meta property="twitter:description" content="Plot any mathematical function online for free. Supports derivatives, integrals, parametric, polar, implicit functions and more.">
-    <meta property="twitter:image" content="https://8gwifi.org.com/images/site/graphing-calculator-preview.png">
+    <meta property="twitter:title" content="Graphing Calculator Online – Free | 8gwifi.org">
+    <meta property="twitter:description" content="Plot functions (y=f(x)), parametric, polar, and implicit curves with interactive controls and analysis.">
 
     <!-- JSON-LD Schema Markup -->
     <script type="application/ld+json">
@@ -440,6 +439,46 @@
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Graphing Calculator: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What kinds of expressions can I plot?</h3>
+    <p class="mb-0">Plot y=f(x) functions, parametric curves x(t), y(t), polar graphs r=f(θ), and simple implicit equations like x^2 + y^2 = 25.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I add multiple functions and adjust the view?</h3>
+    <p class="mb-0">Use the Add button to insert more expressions. Pan with drag, zoom with scroll or controls, and set axis ranges in Settings.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Does it support calculus tools?</h3>
+    <p class="mb-0">Yes. Enable derivative and area tools to view slopes and integrals, and use root/intersection finders for analysis.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What kinds of expressions can I plot?","acceptedAnswer":{"@type":"Answer","text":"Plot y=f(x) functions, parametric curves x(t), y(t), polar graphs r=f(θ), and simple implicit equations like x^2 + y^2 = 25."}},
+    {"@type":"Question","name":"How do I add multiple functions and adjust the view?","acceptedAnswer":{"@type":"Answer","text":"Use the Add button to insert more expressions. Pan with drag, zoom with scroll or controls, and set axis ranges in Settings."}},
+    {"@type":"Question","name":"Does it support calculus tools?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enable derivative and area tools to view slopes and integrals, and use root/intersection finders for analysis."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Graphing Calculator","item":"https://8gwifi.org/graphing-calculator.jsp"}
+  ]
+}
+</script>
 </div>
 
 <%@ include file="body-close.jsp"%>

@@ -1,14 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <!DOCTYPE html>
-<html lang="en">
+<div lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Scientific Calculator Online | Free Math Calculator | 8gwifi.org</title>
+    <title>Scientific Calculator Online – Free | 8gwifi.org</title>
     <meta name="description" content="Free online scientific calculator with advanced mathematical functions. Calculate trigonometry, logarithms, exponents, roots, factorials and more. Full keyboard support with calculation history.">
     <meta name="keywords" content="scientific calculator, online calculator, math calculator, trigonometry calculator, log calculator, free calculator">
 
     <link rel="canonical" href="https://8gwifi.org/scientific-calculator.jsp">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://8gwifi.org/scientific-calculator.jsp">
+    <meta property="og:title" content="Scientific Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Free online scientific calculator with trigonometry, logs, exponents, roots, factorials, degrees/radians, keyboard support, and history.">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scientific Calculator Online – Free | 8gwifi.org">
+    <meta name="twitter:description" content="Compute with trig, logs, powers, roots, and more. Includes DEG/RAD modes and keyboard shortcuts.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <script type="application/ld+json">
@@ -173,7 +182,6 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
 <%@ include file="math-menu-nav.jsp"%>
 
 <div class="container mt-4">
@@ -589,9 +597,44 @@ function loadHistory() {
 }
 </script>
 
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="addcomments.jsp"%>
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Scientific Calculator: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I switch between degrees and radians?</h3>
+    <p class="mb-0">Use the DEG/RAD toggle above the display. Trig functions (sin, cos, tan and inverses) interpret angles according to the selected mode.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What functions and operators are supported?</h3>
+    <p class="mb-0">Standard arithmetic with parentheses, powers (^), roots (√), factorial (!), constants (π, e), and functions like sin, cos, tan, log, ln, asin, acos, atan, and sqrt.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Are keyboard shortcuts and history available?</h3>
+    <p class="mb-0">Yes. Type directly from the keyboard to enter expressions. Previous calculations appear in History; click any entry to reuse it.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I switch between degrees and radians?","acceptedAnswer":{"@type":"Answer","text":"Use the DEG/RAD toggle above the display. Trig functions (sin, cos, tan and inverses) interpret angles according to the selected mode."}},
+    {"@type":"Question","name":"What functions and operators are supported?","acceptedAnswer":{"@type":"Answer","text":"Standard arithmetic with parentheses, powers (^), roots (√), factorial (!), constants (π, e), and functions like sin, cos, tan, log, ln, asin, acos, atan, and sqrt."}},
+    {"@type":"Question","name":"Are keyboard shortcuts and history available?","acceptedAnswer":{"@type":"Answer","text":"Yes. Type directly from the keyboard to enter expressions. Previous calculations appear in History; click any entry to reuse it."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Scientific Calculator","item":"https://8gwifi.org/scientific-calculator.jsp"}
+  ]
+}
+</script>
 </div>
-<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>

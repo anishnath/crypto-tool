@@ -1,14 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <!DOCTYPE html>
-<html lang="en">
+<div lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Distance Formula Calculator | 2D & 3D Distance Between Points | 8gwifi.org</title>
+    <title>Distance Formula Calculator Online – Free | 8gwifi.org</title>
     <meta name="description" content="Calculate distance between two points in 2D and 3D space. Free distance formula calculator with step-by-step solutions, midpoint finder, and visual coordinate plane display.">
     <meta name="keywords" content="distance formula calculator, distance between two points, 3d distance calculator, midpoint calculator, coordinate geometry, euclidean distance">
 
     <link rel="canonical" href="https://8gwifi.org/distance-formula-calculator.jsp">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://8gwifi.org/distance-formula-calculator.jsp">
+    <meta property="og:title" content="Distance Formula Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Compute distance between two points in 2D or 3D. Includes step-by-step work, midpoint, and visualization.">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Distance Formula Calculator Online – Free | 8gwifi.org">
+    <meta name="twitter:description" content="Calculate 2D/3D distance with steps, plus midpoint finder and charts.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
@@ -329,7 +338,6 @@
                 </div>
             </div>
 
-            <%@ include file="related-encoders.jsp"%>
         </div>
     </div>
 
@@ -913,9 +921,44 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="addcomments.jsp"%>
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Distance Formula: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What formulas are used in 2D and 3D?</h3>
+    <p class="mb-0">In 2D, distance = √[(x₂−x₁)² + (y₂−y₁)²]. In 3D, distance = √[(x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²]. The tool shows each step.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I find the midpoint?</h3>
+    <p class="mb-0">The midpoint in 2D is ((x₁+x₂)/2, (y₁+y₂)/2). In 3D it is ((x₁+x₂)/2, (y₁+y₂)/2, (z₁+z₂)/2). Use the Midpoint tab to compute it directly.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">What units and precision are supported?</h3>
+    <p class="mb-0">Enter coordinates in the same units. The result is in those units; you can input decimals for higher precision.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What formulas are used in 2D and 3D?","acceptedAnswer":{"@type":"Answer","text":"In 2D, distance = √[(x2−x1)^2 + (y2−y1)^2]. In 3D, distance = √[(x2−x1)^2 + (y2−y1)^2 + (z2−z1)^2]. The tool shows each step."}},
+    {"@type":"Question","name":"How do I find the midpoint?","acceptedAnswer":{"@type":"Answer","text":"The midpoint in 2D is ((x1+x2)/2, (y1+y2)/2). In 3D it is ((x1+x2)/2, (y1+y2)/2, (z1+z2)/2). Use the Midpoint tab to compute it directly."}},
+    {"@type":"Question","name":"What units and precision are supported?","acceptedAnswer":{"@type":"Answer","text":"Enter coordinates in the same units. The result is in those units; you can input decimals for higher precision."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Distance Formula Calculator","item":"https://8gwifi.org/distance-formula-calculator.jsp"}
+  ]
+}
+</script>
 </div>
-<%@ include file="footer_adsense.jsp"%>
 <%@ include file="body-close.jsp"%>

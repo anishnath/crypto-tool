@@ -1,14 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <!DOCTYPE html>
-<html lang="en">
+<div lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Area and Volume Calculator | All Shapes & 3D Solids | 8gwifi.org</title>
+    <title>Area & Volume Calculator Online – Free | 8gwifi.org</title>
     <meta name="description" content="Calculate area and volume for all geometric shapes. Free calculator for 2D shapes (circle, square, triangle, rectangle) and 3D solids (sphere, cube, cylinder, cone, pyramid). Step-by-step solutions with formulas.">
     <meta name="keywords" content="area calculator, volume calculator, geometry calculator, circle area, triangle area, sphere volume, cylinder volume, cone volume">
 
     <link rel="canonical" href="https://8gwifi.org/area-volume-calculator.jsp">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://8gwifi.org/area-volume-calculator.jsp">
+    <meta property="og:title" content="Area & Volume Calculator Online – Free | 8gwifi.org">
+    <meta property="og:description" content="Calculate area and volume for common 2D shapes and 3D solids with clear formulas, diagrams, and step-by-step results.">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Area & Volume Calculator Online – Free | 8gwifi.org">
+    <meta name="twitter:description" content="Compute areas and volumes for circles, triangles, rectangles, spheres, cylinders, cones, and more.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <script type="application/ld+json">
@@ -1678,10 +1687,45 @@ function calculatePrism() {
 }
 </script>
 
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="body-close.jsp"%>
 
+<!-- Visible FAQ section (must match JSON-LD below) -->
+<section id="faq" class="mt-5">
+  <h2 class="h5">Area & Volume: FAQ</h2>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">How do I choose a shape and enter units?</h3>
+    <p class="mb-0">Select a 2D shape or 3D solid from the list, then enter dimensions in the same units (e.g., cm or m). Results display area or volume with squared or cubed units accordingly.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Which formulas are used?</h3>
+    <p class="mb-0">The tool uses standard geometry formulas, shown above the result (for example: circle A = πr², sphere V = 4⁄3 πr³, cylinder V = πr²h). Visual diagrams indicate each dimension.</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-body">
+    <h3 class="h6">Can I adjust precision?</h3>
+    <p class="mb-0">Yes. Use the precision or rounding controls where available, or round manually as needed. Keep consistent units to avoid conversion errors.</p>
+  </div></div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I choose a shape and enter units?","acceptedAnswer":{"@type":"Answer","text":"Select a 2D shape or 3D solid from the list, then enter dimensions in the same units (e.g., cm or m). Results display area or volume with squared or cubed units accordingly."}},
+    {"@type":"Question","name":"Which formulas are used?","acceptedAnswer":{"@type":"Answer","text":"The tool uses standard geometry formulas, shown above the result (for example: circle A = πr², sphere V = 4/3 πr³, cylinder V = πr²h). Visual diagrams indicate each dimension."}},
+    {"@type":"Question","name":"Can I adjust precision?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the precision or rounding controls where available, or round manually as needed. Keep consistent units to avoid conversion errors."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Area & Volume Calculator","item":"https://8gwifi.org/area-volume-calculator.jsp"}
+  ]
+}
+</script>
+</div>
+<%@ include file="body-close.jsp"%>
