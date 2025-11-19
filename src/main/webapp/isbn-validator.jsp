@@ -71,13 +71,6 @@
       "Works on all devices",
       "Instant conversion results"
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.7",
-      "ratingCount": "1980",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "author": {
       "@type": "Organization",
       "name": "8gwifi.org",
@@ -882,9 +875,70 @@ function clearAll() {
   document.getElementById('downloadBarcodeSvg').disabled = true;
 }
 
-// Initialize
+  // Initialize
 </script>
+
+  <!-- E-E-A-T: Visible author/methodology/trust section -->
+  <div class="isbn-card" style="padding: 1.5rem; margin-top: 1rem;">
+    <div class="doc-section" style="padding: 0; border: none; margin: 0;">
+      <h3>About This Tool & Methodology</h3>
+      <p>This tool validates ISBNs using the official check‑digit rules. ISBN‑10 uses a modulo‑11 checksum (X represents 10). ISBN‑13 uses alternating weights 1 and 3 with a modulo‑10 checksum. Conversion applies the 978 prefix for ISBN‑10 → ISBN‑13 and recalculates the check digit. ISBN‑13 values beginning with 979 cannot be converted to ISBN‑10.</p>
+
+      <div class="format-guide">
+        <h5>Authorship & Review</h5>
+        <ul>
+          <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+          <li><strong>Reviewed by:</strong> Anish Nath (tools maintainer)</li>
+          <li><strong>Last updated:</strong> 2025-11-19</li>
+        </ul>
+      </div>
+
+      <div class="format-guide">
+        <h5>Sources & References</h5>
+        <ul>
+          <li><a href="https://www.isbn-international.org/" rel="nofollow noopener" target="_blank">International ISBN Agency</a></li>
+          <li><a href="https://www.iso.org/standard/84979.html" rel="nofollow noopener" target="_blank">ISO 2108:2017 — International Standard Book Number (ISBN)</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/International_Standard_Book_Number" rel="nofollow noopener" target="_blank">ISBN overview (reference)</a></li>
+        </ul>
+      </div>
+
+      <div class="format-guide">
+        <h5>Trust & Privacy</h5>
+        <ul>
+          <li>Validation and barcode generation run in your browser; no ISBNs are stored on our servers.</li>
+          <li>Barcodes are generated client‑side via SVG/Canvas and can be downloaded as PNG or SVG.</li>
+          <li>Questions or feedback? Reach us via <a href="contactus.jsp">Contact</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- E-E-A-T JSON-LD for WebPage with author/reviewer/publisher -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "ISBN Validator & Converter",
+    "url": "https://8gwifi.org/isbn-validator.jsp",
+    "dateModified": "2025-11-19",
+    "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+    "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+    "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+  }
+  </script>
+
+  <!-- Breadcrumbs to reinforce page context -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
+      {"@type": "ListItem", "position": 2, "name": "ISBN Validator", "item": "https://8gwifi.org/isbn-validator.jsp"}
+    ]
+  }
+  </script>
+
     <%@ include file="thanks.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>
-
