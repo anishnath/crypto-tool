@@ -356,7 +356,7 @@ public class PGPFunctionality extends HttpServlet {
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                     return;
                 }
                 BufferedReader br = new BufferedReader(
@@ -447,7 +447,7 @@ public class PGPFunctionality extends HttpServlet {
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                     return;
                 }
                 BufferedReader br = new BufferedReader(
@@ -567,7 +567,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
                             addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                            out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                             return;
                         }
                         BufferedReader br = new BufferedReader(
@@ -623,9 +623,8 @@ public class PGPFunctionality extends HttpServlet {
 
                     if (passPhrase == null || passPhrase.trim().length() == 0) {
                         addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> does not have a valid Passphase it's empty or null</font>");
+                        out.println("<font size=\"2\" color=\"red\"> does not have a valid Passphrase it's empty or null</font>");
                         return;
-
                     }
 
                     if (privateKey == null || privateKey.trim().length() == 0) {
@@ -657,7 +656,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
                             addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                            out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                             return;
                         }
                         BufferedReader br = new BufferedReader(
@@ -673,7 +672,33 @@ public class PGPFunctionality extends HttpServlet {
                         }
                         String d = content.toString().substring(1, content.toString().length() - 1);
                         d = d.replace("\\n", "<br />");
-                        out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
+
+                        // Check if response contains error messages
+                        String lowerD = d.toLowerCase();
+
+                        // Common PGP error patterns
+                        boolean isError = (lowerD.contains("secret key") && lowerD.contains("not found"))
+                                       || (lowerD.contains("secret key") && lowerD.contains("message"))
+                                       || lowerD.contains("secret key for message not found")
+                                       || lowerD.contains("incorrect passphrase")
+                                       || lowerD.contains("wrong passphrase")
+                                       || lowerD.contains("checksum mismatch")
+                                       || lowerD.contains("invalid")
+                                       || lowerD.contains("pgpexception")
+                                       || lowerD.contains("exception")
+                                       || lowerD.contains("error")
+                                       || lowerD.contains("failed")
+                                       || lowerD.contains("cannot decrypt")
+                                       || lowerD.contains("decryption failed")
+                                       || lowerD.contains("no suitable key")
+                                       // Short messages with key-related terms are likely errors
+                                       || (d.length() < 200 && (lowerD.contains("key") || lowerD.contains("passphrase")));
+
+                        if (isError) {
+                            out.println("<font size=\"4\" color=\"red\"> ❌ INVALID: " + d + "<br/><br/>⚠️ This means the private key provided does not belong to the recipient of this encrypted message, or the passphrase is incorrect. The message was encrypted for a different public key.</font>");
+                        } else {
+                            out.println("<font size=\"4\" color=\"green\"> ✅ " + d + "</font>");
+                        }
 
                     } else {
                         addHorizontalLine(out);
