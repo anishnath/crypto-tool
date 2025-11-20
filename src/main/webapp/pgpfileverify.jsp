@@ -463,22 +463,7 @@ vXJn8EzT7t9P/wBbfxTc
 </div>
 
 <div id="output">
-
-	<%
-
-		String value =(String)session.getAttribute("msg");
-		if(null==value)
-		{
-			value="";
-		}
-
-	%>
-
-	<%=value%>
-
-
-
-
+	<!-- Results will be displayed here via AJAX -->
 </div>
 
 <hr>

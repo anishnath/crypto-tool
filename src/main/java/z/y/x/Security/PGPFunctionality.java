@@ -160,6 +160,8 @@ public class PGPFunctionality extends HttpServlet {
 
             if (VERIFY_PGP_FILE.equalsIgnoreCase(methodName)) {
 
+                response.setContentType("text/html");
+                 out = response.getWriter();
 
                 String samplePGPFile = "\n-----BEGIN PGP PUBLIC KEY BLOCK-----\n" +
                         "Version: BCPG v1.58\n" +
@@ -177,24 +179,17 @@ public class PGPFunctionality extends HttpServlet {
                 String pKey = (String) requestParameter.get("pKey");
 
                 if (pKey == null || pKey.trim().length() == 0) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("<div class=\"alert alert-danger\" role=\"alert\">");
-                    builder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Missing Public Key</h5>");
-                    builder.append("  <p class=\"mb-0\">PGP Public Key is required for signature verification. Please provide a valid PGP public key.</p>");
-                    builder.append("</div>");
-                    builder.append("<div class=\"card\">");
-                    builder.append("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example PGP Public Key</div>");
-                    builder.append("  <div class=\"card-body p-0\">");
-                    builder.append("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
-                    builder.append("  </div>");
-                    builder.append("</div>");
-
-                    response.setContentType("text/html");
-
-                    session.setAttribute("msg", builder.toString());
-                    response.sendRedirect("pgpfileverify.jsp");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Missing Public Key</h5>");
+                    out.println("  <p class=\"mb-0\">PGP Public Key is required for signature verification. Please provide a valid PGP public key.</p>");
+                    out.println("</div>");
+                    out.println("<div class=\"card\">");
+                    out.println("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example PGP Public Key</div>");
+                    out.println("  <div class=\"card-body p-0\">");
+                    out.println("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
+                    out.println("  </div>");
+                    out.println("</div>");
                     return;
-
                 }
 
 
@@ -232,10 +227,6 @@ public class PGPFunctionality extends HttpServlet {
                     HttpResponse httpResponse = httpclient.execute(httpPost);
                     String responseString = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
                     //System.out.println(responseString);
-                    response.setContentType("text/html");
-
-                    // Wrap response in modern Bootstrap alert
-                    StringBuilder resultBuilder = new StringBuilder();
 
                     // Determine if verification passed or failed based on response
                     boolean isSuccess = responseString.toLowerCase().contains("verified") ||
@@ -246,47 +237,38 @@ public class PGPFunctionality extends HttpServlet {
                                        responseString.toLowerCase().contains("failed");
 
                     if (isSuccess && !isFailure) {
-                        resultBuilder.append("<div class=\"alert alert-success\" role=\"alert\">");
-                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-check-circle\"></i> Signature Verification Result</h5>");
-                        resultBuilder.append("  <hr>");
-                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
-                        resultBuilder.append("</div>");
+                        out.println("<div class=\"alert alert-success\" role=\"alert\">");
+                        out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-check-circle\"></i> Signature Verification Result</h5>");
+                        out.println("  <hr>");
+                        out.println("  <p class=\"mb-0\">" + responseString + "</p>");
+                        out.println("</div>");
                     } else if (isFailure) {
-                        resultBuilder.append("<div class=\"alert alert-danger\" role=\"alert\">");
-                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-times-circle\"></i> Signature Verification Result</h5>");
-                        resultBuilder.append("  <hr>");
-                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
-                        resultBuilder.append("</div>");
+                        out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                        out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-times-circle\"></i> Signature Verification Result</h5>");
+                        out.println("  <hr>");
+                        out.println("  <p class=\"mb-0\">" + responseString + "</p>");
+                        out.println("</div>");
                     } else {
-                        resultBuilder.append("<div class=\"alert alert-info\" role=\"alert\">");
-                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-info-circle\"></i> Verification Result</h5>");
-                        resultBuilder.append("  <hr>");
-                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
-                        resultBuilder.append("</div>");
+                        out.println("<div class=\"alert alert-info\" role=\"alert\">");
+                        out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-info-circle\"></i> Verification Result</h5>");
+                        out.println("  <hr>");
+                        out.println("  <p class=\"mb-0\">" + responseString + "</p>");
+                        out.println("</div>");
                     }
 
-                    session.setAttribute("msg", resultBuilder.toString());
-
-                    session.setAttribute("pKey", pKey);
-                    response.sendRedirect("pgpfileverify.jsp");
                     return;
                 } else {
-                    StringBuilder builder = new StringBuilder();
-                    response.setContentType("text/html");
-                    builder.append("<div class=\"alert alert-danger\" role=\"alert\">");
-                    builder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-triangle\"></i> Invalid PGP Public Key</h5>");
-                    builder.append("  <p>The provided key is not a valid PGP public key. Public keys must begin with <code>-----BEGIN PGP PUBLIC KEY BLOCK-----</code> and end with <code>-----END PGP PUBLIC KEY BLOCK-----</code></p>");
-                    builder.append("  <p class=\"mb-0\">Please check your key format and try again.</p>");
-                    builder.append("</div>");
-                    builder.append("<div class=\"card\">");
-                    builder.append("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example Valid PGP Public Key</div>");
-                    builder.append("  <div class=\"card-body p-0\">");
-                    builder.append("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
-                    builder.append("  </div>");
-                    builder.append("</div>");
-                    session.setAttribute("msg", builder.toString());
-                    session.setAttribute("pKey", pKey);
-                    response.sendRedirect("pgpfileverify.jsp");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-triangle\"></i> Invalid PGP Public Key</h5>");
+                    out.println("  <p>The provided key is not a valid PGP public key. Public keys must begin with <code>-----BEGIN PGP PUBLIC KEY BLOCK-----</code> and end with <code>-----END PGP PUBLIC KEY BLOCK-----</code></p>");
+                    out.println("  <p class=\"mb-0\">Please check your key format and try again.</p>");
+                    out.println("</div>");
+                    out.println("<div class=\"card\">");
+                    out.println("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example Valid PGP Public Key</div>");
+                    out.println("  <div class=\"card-body p-0\">");
+                    out.println("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
+                    out.println("  </div>");
+                    out.println("</div>");
                     return;
                 }
 
