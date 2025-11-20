@@ -356,7 +356,7 @@ public class PGPFunctionality extends HttpServlet {
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
+                    out.println("<font size=\"4\" color=\"red\"> System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                     return;
                 }
                 BufferedReader br = new BufferedReader(
@@ -447,7 +447,7 @@ public class PGPFunctionality extends HttpServlet {
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
                     addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
+                    out.println("<font size=\"4\" color=\"red\"> System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                     return;
                 }
                 BufferedReader br = new BufferedReader(
@@ -567,7 +567,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
                             addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
+                            out.println("<font size=\"4\" color=\"red\"> System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                             return;
                         }
                         BufferedReader br = new BufferedReader(
@@ -656,7 +656,7 @@ public class PGPFunctionality extends HttpServlet {
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
                             addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> ⚠️ System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
+                            out.println("<font size=\"4\" color=\"red\"> System Error: Unable to process your request. Please try again later. If the problem persists, contact support at <a href=\"https://x.com/anish2good\" target=\"_blank\" style=\"color: #dc2626; text-decoration: underline;\">@anish2good</a> </font>");
                             return;
                         }
                         BufferedReader br = new BufferedReader(
@@ -695,9 +695,9 @@ public class PGPFunctionality extends HttpServlet {
                                        || (d.length() < 200 && (lowerD.contains("key") || lowerD.contains("passphrase")));
 
                         if (isError) {
-                            out.println("<font size=\"4\" color=\"red\"> ❌ INVALID: " + d + "<br/><br/>⚠️ This means the private key provided does not belong to the recipient of this encrypted message, or the passphrase is incorrect. The message was encrypted for a different public key.</font>");
+                            out.println("<font size=\"4\" color=\"red\"> INVALID: " + d + "<br/><br/>This means the private key provided does not belong to the recipient of this encrypted message, or the passphrase is incorrect. The message was encrypted for a different public key.</font>");
                         } else {
-                            out.println("<font size=\"4\" color=\"green\"> ✅ " + d + "</font>");
+                            out.println("<font size=\"4\" color=\"green\"> " + d + "</font>");
                         }
 
                     } else {
