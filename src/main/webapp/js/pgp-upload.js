@@ -2,7 +2,11 @@
 
 async function uploadFile() {
 	// Get the upload button and disable it
-	var uploadBtn = document.querySelector('button[onclick="uploadFile()"]');
+	var uploadBtn = document.getElementById('uploadBtn');
+	if (!uploadBtn) {
+		console.error('Upload button not found');
+		return;
+	}
 	var originalBtnHtml = uploadBtn.innerHTML;
 
 	// Disable button and show processing state

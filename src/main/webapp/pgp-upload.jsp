@@ -257,7 +257,7 @@ mnvy6YZuJS2ukOPgmYH+AlhIKR3DyYtNXK7W/Jw1L7da4vq+4BzyRrMOEGeCqdlF
 	</div>
 
 	<div class="form-group">
-		<button type="button" class="btn btn-primary btn-lg" onclick="uploadFile()">
+		<button type="button" id="uploadBtn" class="btn btn-primary btn-lg" onclick="uploadFile()">
 			<i class="fas fa-upload"></i> Encrypt & Transfer
 		</button>
 		<button type="button" class="btn btn-outline-secondary btn-lg ml-2" onclick="resetForm()">
