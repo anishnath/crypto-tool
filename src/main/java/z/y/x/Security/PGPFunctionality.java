@@ -178,9 +178,16 @@ public class PGPFunctionality extends HttpServlet {
 
                 if (pKey == null || pKey.trim().length() == 0) {
                     StringBuilder builder = new StringBuilder();
-                    builder.append("<font size=\"2\" color=\"red\"> PGP Public Key is Empty or NULL  </font>\n");
-                    builder.append("\n");
-                    builder.append("<font size=\"2\" color=\"red\">" + samplePGPFile + "</font>");
+                    builder.append("<div class=\"alert alert-danger\" role=\"alert\">");
+                    builder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Missing Public Key</h5>");
+                    builder.append("  <p class=\"mb-0\">PGP Public Key is required for signature verification. Please provide a valid PGP public key.</p>");
+                    builder.append("</div>");
+                    builder.append("<div class=\"card\">");
+                    builder.append("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example PGP Public Key</div>");
+                    builder.append("  <div class=\"card-body p-0\">");
+                    builder.append("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
+                    builder.append("  </div>");
+                    builder.append("</div>");
 
                     response.setContentType("text/html");
 
@@ -227,7 +234,38 @@ public class PGPFunctionality extends HttpServlet {
                     //System.out.println(responseString);
                     response.setContentType("text/html");
 
-                    session.setAttribute("msg", "<font size=\"4\" color=\"green\"> " + responseString + "</font>");
+                    // Wrap response in modern Bootstrap alert
+                    StringBuilder resultBuilder = new StringBuilder();
+
+                    // Determine if verification passed or failed based on response
+                    boolean isSuccess = responseString.toLowerCase().contains("verified") ||
+                                       responseString.toLowerCase().contains("good signature") ||
+                                       responseString.toLowerCase().contains("valid");
+                    boolean isFailure = responseString.toLowerCase().contains("bad signature") ||
+                                       responseString.toLowerCase().contains("invalid") ||
+                                       responseString.toLowerCase().contains("failed");
+
+                    if (isSuccess && !isFailure) {
+                        resultBuilder.append("<div class=\"alert alert-success\" role=\"alert\">");
+                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-check-circle\"></i> Signature Verification Result</h5>");
+                        resultBuilder.append("  <hr>");
+                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
+                        resultBuilder.append("</div>");
+                    } else if (isFailure) {
+                        resultBuilder.append("<div class=\"alert alert-danger\" role=\"alert\">");
+                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-times-circle\"></i> Signature Verification Result</h5>");
+                        resultBuilder.append("  <hr>");
+                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
+                        resultBuilder.append("</div>");
+                    } else {
+                        resultBuilder.append("<div class=\"alert alert-info\" role=\"alert\">");
+                        resultBuilder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-info-circle\"></i> Verification Result</h5>");
+                        resultBuilder.append("  <hr>");
+                        resultBuilder.append("  <p class=\"mb-0\">" + responseString + "</p>");
+                        resultBuilder.append("</div>");
+                    }
+
+                    session.setAttribute("msg", resultBuilder.toString());
 
                     session.setAttribute("pKey", pKey);
                     response.sendRedirect("pgpfileverify.jsp");
@@ -235,9 +273,17 @@ public class PGPFunctionality extends HttpServlet {
                 } else {
                     StringBuilder builder = new StringBuilder();
                     response.setContentType("text/html");
-                    builder.append("<font size=\"2\" color=\"red\"> Not a Valid PGP Key File  </font>\n");
-                    builder.append("<font size=\"2\" color=\"red\"> Sample PGP File  </font>\n");
-                    builder.append("<font size=\"2\" color=\"red\">" + samplePGPFile + "</font>");
+                    builder.append("<div class=\"alert alert-danger\" role=\"alert\">");
+                    builder.append("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-triangle\"></i> Invalid PGP Public Key</h5>");
+                    builder.append("  <p>The provided key is not a valid PGP public key. Public keys must begin with <code>-----BEGIN PGP PUBLIC KEY BLOCK-----</code> and end with <code>-----END PGP PUBLIC KEY BLOCK-----</code></p>");
+                    builder.append("  <p class=\"mb-0\">Please check your key format and try again.</p>");
+                    builder.append("</div>");
+                    builder.append("<div class=\"card\">");
+                    builder.append("  <div class=\"card-header bg-secondary text-white\"><i class=\"fas fa-key\"></i> Example Valid PGP Public Key</div>");
+                    builder.append("  <div class=\"card-body p-0\">");
+                    builder.append("    <pre class=\"mb-0 p-3\" style=\"font-size: 11px;\">" + samplePGPFile + "</pre>");
+                    builder.append("  </div>");
+                    builder.append("</div>");
                     session.setAttribute("msg", builder.toString());
                     session.setAttribute("pKey", pKey);
                     response.sendRedirect("pgpfileverify.jsp");
