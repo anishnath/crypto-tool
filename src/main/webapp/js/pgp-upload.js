@@ -1,37 +1,62 @@
 // Assuming you have included OpenPGP.js in your HTML file
 
 async function uploadFile() {
+	// Get the upload button and disable it
+	var uploadBtn = document.querySelector('button[onclick="uploadFile()"]');
+	var originalBtnHtml = uploadBtn.innerHTML;
+
+	// Disable button and show processing state
+	uploadBtn.disabled = true;
+	uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+	// Show progress bar
+	var progressContainer = document.getElementById('progressContainer');
+	if (progressContainer) {
+		progressContainer.classList.add('active');
+	}
 
 	var fileInput = document.getElementById('file');
 	var pgpKeys = document.getElementById('pgpKeys').value;
 	var email = document.getElementById('email').value;
 
 
-	if (!pgpKeys || pgpKeys.trim() === '') {
-		alert('Please enter a valid PGP Keys .');
-		return false; // Empty or null PGP public key
+	// Helper function to re-enable button
+	function enableButton() {
+		uploadBtn.disabled = false;
+		uploadBtn.innerHTML = originalBtnHtml;
+		if (progressContainer) {
+			progressContainer.classList.remove('active');
+		}
 	}
 
+	// Helper function to show error message
+	function showError(message) {
+		var container = document.getElementById('fileTableContainer');
+		container.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> ' + message + '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
+		container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		enableButton();
+	}
 
+	if (!pgpKeys || pgpKeys.trim() === '') {
+		showError('Please enter valid PGP Keys.');
+		return false;
+	}
 
 	// Validate email
 	if (!isValidEmail(email)) {
-		alert('Please enter a valid email address.');
+		showError('Please enter a valid email address.');
 		return false;
 	}
-
 
 	// Validate file
 	if (fileInput.files.length === 0) {
-		alert('Please choose a file to upload.');
+		showError('Please choose a file to upload.');
 		return false;
 	}
 
-
-
 	// Validate PGPKeys
 	if (!isValidPgpKeys(pgpKeys)) {
-		alert('Please enter valid PGP Public Keys.');
+		showError('Please enter valid PGP Public Keys.');
 		return;
 	}
 
@@ -41,7 +66,7 @@ async function uploadFile() {
 	// Check file size
     var maxSizeInBytes = 100 * 1024 * 1024; // 100MB
     if (file.size > maxSizeInBytes) {
-        alert('File size exceeds the maximum allowed size of 100MB.');
+        showError('File size exceeds the maximum allowed size of 100MB.');
         return false;
     }
 
@@ -99,9 +124,12 @@ async function uploadFile() {
 						uploadXhr.onreadystatechange = function() {
 							if (uploadXhr.readyState === 4) {
 								if (uploadXhr.status === 200) {
-									sendEmail(email, fileName);
+									sendEmail(email, fileName, enableButton);
 								} else {
-									alert('File upload failed. Please try again.');
+									var container = document.getElementById('fileTableContainer');
+									container.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fas fa-exclamation-circle"></i> <strong>Upload Failed:</strong> Unable to upload file. Please try again.<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
+									container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+									enableButton();
 								}
 							}
 						};
@@ -113,8 +141,10 @@ async function uploadFile() {
 				xhr.send();
 			}).catch(function(error) {
 				console.error('Encryption failed:', error);
-
-				alert("Failed to Encrypted File possible reason wrong pgp file ....", error)
+				var container = document.getElementById('fileTableContainer');
+				container.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fas fa-exclamation-circle"></i> <strong>Encryption Failed:</strong> Unable to encrypt file. Please verify the PGP public key is correct.<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
+				container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				enableButton();
 			});
 		};
 
@@ -122,7 +152,7 @@ async function uploadFile() {
 	}
 }
 
-function sendEmail(email, fileName) {
+function sendEmail(email, fileName, enableButton) {
 	var emailXhr = new XMLHttpRequest();
 	var emailEndpoint = 'presign';  // Replace with your actual email sending endpoint
 
@@ -143,35 +173,52 @@ function sendEmail(email, fileName) {
 				var currentUrl = window.location.href.split('#')[0];
             	var shortenedUrl = currentUrl.replace("pgp-upload.jsp", "d/"+JSON.parse(emailXhr.responseText).status );
 
-				// Create the table inside the new div
-				var tableHtml = `
-				<input type=hidden id="copyLink" value=${shortenedUrl}>
-        <table class="table mt-3">
-            <thead>
-                <tr>
-                    <th scope="col">File Name</th>
-                    <th scope="col">Download Link</th>
-                    <th scope="col">Copy</th>
-                </tr>
-            </thead>
-            <tbody id="fileTableBody">
-                <tr>
-                    <td>${fileName}</td>
-                    <td><a href="${shortenedUrl}" target="_blank">${shortenedUrl}</a></td>
-                    <td><button class="btn btn-secondary copy-button" data-clipboard-target="#copyLink"><i class="fas fa-copy"></i></button></td>
-                </tr>
-            </tbody>
-        </table>
-    `;
+                // Build a compact result with copy/open actions
+                var tableHtml = `
+                    <input type="hidden" id="copyLink" value="${shortenedUrl}">
+                    <div class="form-group">
+                      <label class="font-weight-bold">File</label>
+                      <div>${fileName}</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="pgpResultLink" class="font-weight-bold">Download Link</label>
+                      <div class="input-group input-group-sm">
+                        <input id="pgpResultLink" type="text" class="form-control" readonly value="${shortenedUrl}">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary copy-button" data-clipboard-target="#pgpResultLink" type="button" title="Copy link">📋 Copy</button>
+                          <a class="btn btn-primary" target="_blank" rel="noopener" href="${shortenedUrl}" title="Open in new tab">Open</a>
+                        </div>
+                      </div>
+                      <small class="form-text text-muted">Only the link is emailed. Keep your private key safe.</small>
+                    </div>
+                `;
 
 				// Set the HTML content of the new div
 				newTableDiv.innerHTML = tableHtml;
 
 				// Initialize Clipboard.js
                 new ClipboardJS('.copy-button');
-                alert('Email sent successfully.');
+
+                // Add success message at the top with highlight
+                var successMsg = document.createElement('div');
+                successMsg.className = 'alert alert-success alert-dismissible fade show mb-3';
+                successMsg.setAttribute('role', 'alert');
+                successMsg.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Success!</strong> File encrypted and uploaded. Download link sent to <strong>' + email + '</strong><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>';
+                tableContainer.insertBefore(successMsg, newTableDiv);
+
+                // Highlight and scroll to result
+                newTableDiv.className = 'card border-success';
+                newTableDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Re-enable the upload button
+                if (enableButton) enableButton();
 			} else {
-				alert('Failed to send email. Please try again.');
+				// Show error message
+				tableContainer.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fas fa-exclamation-circle"></i> <strong>Email Failed:</strong> Unable to send notification email. Please try again.<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
+				tableContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+				// Re-enable the upload button
+				if (enableButton) enableButton();
 			}
 		}
 	};
@@ -188,10 +235,13 @@ function sendEmail(email, fileName) {
 
 
 function updateProgressBar(percent) {
-	// Assuming you have a progress bar element with id "progressBar"
-	var progressBar = document.getElementById('progressBar');
-	progressBar.style.width = percent + '%';
-	progressBar.innerText = percent.toFixed(2) + '%';
+    var wrapper = document.getElementById('progressWrapper');
+    var progressBar = document.getElementById('progressBar');
+    if (!progressBar) return;
+    if (wrapper && percent > 0 && wrapper.style.display === 'none') wrapper.style.display = 'block';
+    progressBar.style.width = percent + '%';
+    progressBar.innerText = percent.toFixed(2) + '%';
+    if (wrapper && percent >= 100) setTimeout(function(){ wrapper.style.display = 'none'; }, 1000);
 }
 
 async function isValidPgpKeys(pgpKeys) {
