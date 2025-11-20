@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Guitar Chord Finder & Diagram Generator - 2000+ Chords | 8gwifi.org</title>
+  <title>Guitar Chord Finder Online – Free | 8gwifi.org</title>
   <meta name="description" content="Find guitar chords instantly with interactive fretboard diagrams. 2000+ chord variations with finger positions, audio preview, and capo transpose. Perfect for beginners and pros. Free chord chart library.">
   <meta name="keywords" content="guitar chord finder, guitar chords, chord chart, guitar chord diagram, chord finder, guitar chord chart, beginner guitar chords, guitar finger positions, capo chords, guitar chord library, guitar tabs, acoustic guitar chords, electric guitar chords, free chord finder">
   <meta name="author" content="8gwifi.org">
@@ -13,15 +13,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/guitar-chord-finder.jsp">
-  <meta property="og:title" content="Free Guitar Chord Finder & Diagram Generator - 2000+ Chords">
-  <meta property="og:description" content="Find guitar chords instantly with interactive diagrams, finger positions, and audio preview. Perfect for beginners and pros.">
+  <meta property="og:title" content="Guitar Chord Finder Online – Free | 8gwifi.org">
+  <meta property="og:description" content="Find guitar chords instantly with interactive fretboard diagrams. 2000+ chord variations with finger positions, audio preview, and capo transpose.">
   <meta property="og:image" content="https://8gwifi.org/images/site/guitar-chord-tool.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://8gwifi.org/guitar-chord-finder.jsp">
-  <meta property="twitter:title" content="Free Guitar Chord Finder & Diagram Generator">
-  <meta property="twitter:description" content="Find guitar chords instantly with interactive diagrams and audio preview.">
+  <meta property="twitter:title" content="Guitar Chord Finder Online – Free | 8gwifi.org">
+  <meta property="twitter:description" content="Find guitar chords instantly with interactive fretboard diagrams, finger positions, audio preview, and capo transpose.">
   <meta property="twitter:image" content="https://8gwifi.org/images/site/guitar-chord-tool.png">
 
   <!-- JSON-LD Schema -->
