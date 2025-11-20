@@ -54,14 +54,7 @@
       "Printable chord charts"
     ],
     "screenshot": "https://8gwifi.org/images/site/guitar-chord-tool.png",
-    "softwareVersion": "1.0",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "8750",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    "softwareVersion": "1.0"
   }
   </script>
 
@@ -695,6 +688,72 @@
 </main>
 
 <script src="js/guitar-chord-finder.js"></script>
+
+<!-- E-E-A-T: Expertise, Experience, Authoritativeness, Trustworthiness -->
+<section class="container my-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h5 mb-3">About This Tool & Methodology</h2>
+          <p>This chord finder renders fretboard diagrams and audio previews entirely in your browser. Chord shapes are computed from music‑theory intervals for each chord quality (e.g., major: 1–3–5; minor: 1–♭3–5; dominant 7th: 1–3–5–♭7). The engine maps target tones to playable positions on standard‑tuned guitar (E A D G B E), applies heuristics for finger reach and muted strings, and returns common voicings and alternatives. Audio previews are synthesized via Web Audio using tuned oscillators/envelopes (or sampled notes where supported) to approximate strummed playback.</p>
+
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <h3 class="h6">Authorship & Review</h3>
+              <ul>
+                <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+                <li><strong>Reviewed by:</strong> Anish Nath (tools maintainer)</li>
+                <li><strong>Last updated:</strong> 2025-11-19</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h3 class="h6">Trust & Privacy</h3>
+              <ul>
+                <li>All chord computation and audio playback run locally; no input is sent to servers.</li>
+                <li>Share links only encode chord names/settings; remove parameters to keep sessions private.</li>
+                <li>For feedback or corrections, contact us via <a href="contactus.jsp">Contact</a>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 class="h6 mt-3">Sources & References</h3>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Chord_(music)" rel="nofollow noopener" target="_blank">Chord (music) – intervals and chord qualities</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Guitar_tunings#Standard_tuning" rel="nofollow noopener" target="_blank">Guitar standard tuning (EADGBE)</a></li>
+            <li><a href="https://www.musictheory.net/lessons" rel="nofollow noopener" target="_blank">musictheory.net – foundational theory lessons</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- E-E-A-T JSON-LD for WebPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Guitar Chord Finder",
+  "url": "https://8gwifi.org/guitar-chord-finder.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+
+<!-- Breadcrumbs -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Guitar Chord Finder","item":"https://8gwifi.org/guitar-chord-finder.jsp"}
+  ]
+}
+</script>
 
 <div class="sharethis-inline-share-buttons" style="margin-top: 1rem;"></div>
 <%@ include file="footer_adsense.jsp"%>
