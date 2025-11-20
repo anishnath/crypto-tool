@@ -399,8 +399,10 @@ public class PGPFunctionality extends HttpServlet {
 
 
                 if (p_identity == null || p_identity.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Identity is Null Associate a Name or Email</font>");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Validation Error</h6>");
+                    out.println("  <p class=\"mb-0\">Identity is required. Please provide a name or email address.</p>");
+                    out.println("</div>");
                     return;
                 }
 
@@ -411,15 +413,19 @@ public class PGPFunctionality extends HttpServlet {
                 boolean b = m.find();
 
                 if (b) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Invalid Indentity Name No Special Chanacters</font>");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Validation Error</h6>");
+                    out.println("  <p class=\"mb-0\">Invalid identity name. Only alphanumeric characters, spaces, @ and . are allowed.</p>");
+                    out.println("</div>");
                     return;
                 }
 
 
                 if (p_passpharse == null || p_passpharse.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> Passphrase is EMpty or Null </font>");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Validation Error</h6>");
+                    out.println("  <p class=\"mb-0\">Passphrase is required. Please provide a strong passphrase to protect your private key.</p>");
+                    out.println("</div>");
                     return;
                 }
 
@@ -463,12 +469,39 @@ public class PGPFunctionality extends HttpServlet {
                 }
 
                 pgppojo pgp = gson.fromJson(content.toString(), pgppojo.class);
-                out.println("<b><u>PGP Key Information for Identity  [" + p_identity + "] (Private Key/Public Key)  </b></u> <br>");
-                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"20\" cols=\"20\" form=\"X\">" + pgp.getPrivateKey() + "</textarea>");
-                out.println("<hr>");
-                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"y\">" + pgp.getPubliceKey() + "</textarea>");
 
-                addHorizontalLine(out);
+                // Modern output with better CLS
+                out.println("<div class=\"alert alert-success\" role=\"alert\">");
+                out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-check-circle\"></i> PGP Key Pair Generated Successfully</h5>");
+                out.println("  <p class=\"mb-0\">Keys generated for identity: <strong>" + p_identity + "</strong></p>");
+                out.println("</div>");
+
+                out.println("<div class=\"card mb-3\">");
+                out.println("  <div class=\"card-header bg-danger text-white\">");
+                out.println("    <i class=\"fas fa-lock\"></i> <strong>Private Key</strong> <span class=\"badge badge-light text-danger ml-2\">KEEP SECRET</span>");
+                out.println("  </div>");
+                out.println("  <div class=\"card-body p-0\">");
+                out.println("    <textarea name=\"comment\" class=\"form-control border-0\" readonly=\"true\" rows=\"20\" style=\"font-family: 'Courier New', monospace; font-size: 12px; resize: none;\" form=\"X\">" + pgp.getPrivateKey() + "</textarea>");
+                out.println("  </div>");
+                out.println("</div>");
+
+                out.println("<div class=\"card mb-3\">");
+                out.println("  <div class=\"card-header bg-success text-white\">");
+                out.println("    <i class=\"fas fa-key\"></i> <strong>Public Key</strong> <span class=\"badge badge-light text-success ml-2\">SHARE FREELY</span>");
+                out.println("  </div>");
+                out.println("  <div class=\"card-body p-0\">");
+                out.println("    <textarea name=\"comment\" class=\"form-control border-0\" readonly=\"true\" rows=\"12\" style=\"font-family: 'Courier New', monospace; font-size: 12px; resize: none;\" form=\"y\">" + pgp.getPubliceKey() + "</textarea>");
+                out.println("  </div>");
+                out.println("</div>");
+
+                out.println("<div class=\"alert alert-info\" role=\"alert\">");
+                out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-info-circle\"></i> Next Steps</h6>");
+                out.println("  <ul class=\"mb-0 pl-3\">");
+                out.println("    <li>Save your <strong>Private Key</strong> securely and never share it</li>");
+                out.println("    <li>Share your <strong>Public Key</strong> with anyone who wants to send you encrypted messages</li>");
+                out.println("    <li>Use the Copy and Download buttons above to save your keys</li>");
+                out.println("  </ul>");
+                out.println("</div>");
                 
                 String sessionId = request.getSession().getId();
             	
@@ -476,22 +509,24 @@ public class PGPFunctionality extends HttpServlet {
                 {
                 	if(!sessionId.equalsIgnoreCase(j_session_id))
                 	{
-                		addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> Invalid CSRF token can't send email. Please refresh the page and Try again....</font>");
+                        out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                        out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-exclamation-triangle\"></i> Security Error</h6>");
+                        out.println("  <p class=\"mb-0\">Invalid CSRF token. Please refresh the page and try again.</p>");
+                        out.println("</div>");
                         return;
                 	}
-                	
+
                 	SendEmail sendEmail = new SendEmail();
-                	
+
                 	final String id = p_identity;
                 	final String pw = p_passpharse;
                 	final String privKey = pgp.getPrivateKey();
                 	final String pubKey =  pgp.getPubliceKey();
-                	
-                	
+
+
                 	if(sendEmail.isValidEmail(email))
                 	{
-                		
+
                 		new Thread(new Runnable() {
                 			  public void run() {
                 			    SendEmail sendEmail = new SendEmail();
@@ -502,13 +537,18 @@ public class PGPFunctionality extends HttpServlet {
     									e.printStackTrace();
     								}
                 			    }
-                			}).start();	
-    					out.println("<font size=\"2\" color=\"green\"> Email Send Successfully.</font>");
+                			}).start();
+                        out.println("<div class=\"alert alert-success\" role=\"alert\">");
+                        out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-envelope-circle-check\"></i> Email Sent</h6>");
+                        out.println("  <p class=\"mb-0\">Your PGP keys have been successfully sent to <strong>" + email + "</strong></p>");
+                        out.println("</div>");
     	                return;
                 	}
                 	else {
-                		addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> Invalid Email ...</font>");
+                        out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                        out.println("  <h6 class=\"alert-heading\"><i class=\"fas fa-exclamation-circle\"></i> Validation Error</h6>");
+                        out.println("  <p class=\"mb-0\">Invalid email address. Please provide a valid email.</p>");
+                        out.println("</div>");
                         return;
                 	}
                 	
