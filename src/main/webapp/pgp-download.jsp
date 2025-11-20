@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <!DOCTYPE html>
-<html lang="en">
+<div lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +28,7 @@
 	<%@ include file="header-script.jsp"%>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<script src="https://unpkg.com/openpgp@4.10.10/dist/openpgp.min.js"></script>
+	<script src="https://unpkg.com/openpgp@5.11.2/dist/openpgp.min.js"></script>
 
 	<!-- WebApplication Schema -->
 	<script type="application/ld+json">
@@ -36,13 +36,13 @@
   "@context" : "https://schema.org",
   "@type" : "WebApplication",
   "name" : "Download PGP Encrypted File Online – Free",
-  "description" : "Download and decrypt PGP encrypted files online. Secure file retrieval service with OpenPGP decryption support. Download encrypted .asc files and decrypt them with your private key. Client-side decryption ensures privacy.",
+  "description" : "Download and decrypt PGP encrypted files online using OpenPGP.js v5. Secure file retrieval service with client-side decryption support. Download encrypted .pgp or .asc files and decrypt them with your private key. Client-side decryption ensures privacy and security.",
   "url" : "https://8gwifi.org/pgp-download.jsp",
   "image" : "https://8gwifi.org/images/site/pgp-download.png",
   "screenshot" : "https://8gwifi.org/images/site/pgp-download.png",
   "applicationCategory" : ["SecurityApplication", "FileTransferApplication", "CryptographyApplication"],
   "applicationSubCategory" : "Encrypted File Download and Decryption",
-  "browserRequirements" : "Requires JavaScript and OpenPGP.js. Works with Chrome, Firefox, Safari, Edge.",
+  "browserRequirements" : "Requires JavaScript and OpenPGP.js v5. Works with Chrome, Firefox, Safari, Edge.",
   "author" : {
     "@type" : "Person",
     "name" : "Anish Nath",
@@ -50,18 +50,21 @@
     "jobTitle" : "Security Engineer"
   },
   "datePublished" : "2023-11-21",
-  "dateModified" : "2025-11-20",
+  "dateModified" : "2025-11-21",
   "offers" : {
     "@type" : "Offer",
     "price" : "0",
     "priceCurrency" : "USD"
   },
   "featureList" : [
-    "Download PGP encrypted files (.asc format)",
-    "Client-side decryption using OpenPGP.js",
-    "Secure file retrieval with private key",
-    "No server-side decryption - privacy preserved",
-    "Direct download of encrypted or decrypted files"
+    "Download PGP encrypted files (supports .pgp and .asc formats)",
+    "Client-side decryption using OpenPGP.js v5",
+    "Decrypt binary .pgp and armored .asc files",
+    "Secure file retrieval with private key and passphrase",
+    "No server-side decryption - complete privacy preserved",
+    "Direct download of encrypted or decrypted files",
+    "Automatic binary file handling - no corruption",
+    "Support for all file types"
   ]
 }
 	</script>
@@ -351,10 +354,12 @@
 
 		<h5>Security Features</h5>
 		<ul>
-			<li><strong>Client-Side Decryption:</strong> Files are decrypted in your browser using OpenPGP.js</li>
+			<li><strong>Client-Side Decryption:</strong> Files are decrypted in your browser using OpenPGP.js v5</li>
 			<li><strong>Private Key Security:</strong> Your private key never leaves your device</li>
 			<li><strong>End-to-End Encryption:</strong> Server never sees decrypted content</li>
 			<li><strong>OpenPGP Standard:</strong> Uses RFC 4880 compliant OpenPGP format</li>
+			<li><strong>Binary File Support:</strong> Properly handles binary files without corruption</li>
+			<li><strong>Format Support:</strong> Supports both .pgp (binary) and .asc (armored) formats</li>
 			<li><strong>Temporary Storage:</strong> Files are automatically deleted after download</li>
 		</ul>
 
@@ -378,7 +383,7 @@
 		</ul>
 
 		<div class="alert alert-info mt-3">
-			<strong>Implementation Note:</strong> This tool uses OpenPGP.js for client-side decryption, ensuring your private key and decrypted files never leave your browser.
+			<strong>Implementation Note:</strong> This tool uses OpenPGP.js v5 for client-side decryption with proper binary file handling, ensuring your private key and decrypted files never leave your browser. Supports both .pgp and .asc formats.
 		</div>
 	</div>
 </div>
@@ -436,7 +441,7 @@
       "name": "Can I decrypt the file in my browser?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, click 'Decrypt & Download' to decrypt the file client-side in your browser. You'll need to upload your PGP private key file (.asc) and enter your passphrase. The decryption happens entirely in your browser using OpenPGP.js - your private key never leaves your device."
+        "text": "Yes, click 'Decrypt & Download' to decrypt the file client-side in your browser. You'll need to upload your PGP private key file (.asc) and enter your passphrase. The decryption happens entirely in your browser using OpenPGP.js v5 - your private key never leaves your device. Supports both .pgp and .asc formats."
       }
     },
     {
@@ -452,7 +457,7 @@
       "name": "Is my private key safe when decrypting online?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, when using our in-browser decryption feature. The decryption happens entirely client-side in your browser using OpenPGP.js. Your private key file and passphrase are never uploaded to the server. They remain in your browser's memory only and are discarded when you close or refresh the page."
+        "text": "Yes, when using our in-browser decryption feature. The decryption happens entirely client-side in your browser using OpenPGP.js v5. Your private key file and passphrase are never uploaded to the server. They remain in your browser's memory only and are discarded when you close or refresh the page. Binary files are properly handled without corruption."
       }
     },
     {
@@ -584,83 +589,79 @@
 		decryptButton.disabled = true;
 		decryptButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Decrypting...';
 
-		const reader = new FileReader();
-		reader.onload = async function() {
-			const privateKeyArmored = reader.result;
-			const fileURL = presignedUrl;
+		try {
+			// Read the private key file
+			const privateKeyArmored = await keyFile.text();
 
+			// Fetch the encrypted file content
+			const response = await fetch(presignedUrl);
+			const arrayBuffer = await response.arrayBuffer();
+			const uint8 = new Uint8Array(arrayBuffer);
+
+			// Parse the private key using v5 API
+			const privateKeyObj = await openpgp.readPrivateKey({ armoredKey: privateKeyArmored });
+
+			// Decrypt the private key with the passphrase
+			let decryptedPrivateKey;
 			try {
-				// Fetch the encrypted file content
-				const response = await fetch(fileURL);
-				const encryptedText = await response.text();
-
-				// Validate PGP message format
-				if (!encryptedText.includes('-----BEGIN PGP MESSAGE-----') || !encryptedText.includes('-----END PGP MESSAGE-----')) {
-					showError('Invalid PGP message format. The file should contain PGP message delimiters.');
-					decryptButton.disabled = false;
-					decryptButton.innerHTML = originalBtnHtml;
-					return;
-				}
-
-				// Read private key
-				const privateKeyObj = (await openpgp.key.readArmored(privateKeyArmored)).keys[0];
-
-				// Decrypt the private key with the passphrase
-				try {
-					await privateKeyObj.decrypt(password);
-				} catch (error) {
-					showError('Failed to decrypt private key. Please check your passphrase and try again.');
-					decryptButton.disabled = false;
-					decryptButton.innerHTML = originalBtnHtml;
-					return;
-				}
-
-				// Decrypt the file
-				const decrypted = await openpgp.decrypt({
-					message: await openpgp.message.readArmored(encryptedText),
-					privateKeys: [privateKeyObj],
+				decryptedPrivateKey = await openpgp.decryptKey({
+					privateKey: privateKeyObj,
+					passphrase: password
 				});
-
-				// Create download link
-				const decryptedBlob = new Blob([decrypted.data], { type: 'application/octet-stream' });
-				const downloadLink = document.createElement('a');
-				downloadLink.href = URL.createObjectURL(decryptedBlob);
-
-				// Extract original filename
-				const filenameWithoutPrefix = file_name.split('_').slice(1).join('_');
-				const filenameWithoutExtension = filenameWithoutPrefix.replace(/\.asc$/, '');
-				downloadLink.download = filenameWithoutExtension;
-
-				// Trigger download
-				document.body.appendChild(downloadLink);
-				downloadLink.click();
-				document.body.removeChild(downloadLink);
-
-				// Show success message
-				showSuccess('File "' + filenameWithoutExtension + '" decrypted and downloaded successfully!');
-
-				// Re-enable button
-				decryptButton.disabled = false;
-				decryptButton.innerHTML = originalBtnHtml;
-
 			} catch (error) {
-				console.error('Decryption error:', error);
-				showError('Failed to decrypt file: ' + error.message);
+				showError('Failed to decrypt private key. Please check your passphrase and try again.');
 				decryptButton.disabled = false;
 				decryptButton.innerHTML = originalBtnHtml;
+				return;
 			}
-		};
 
-		reader.onerror = function() {
-			showError('Failed to read private key file.');
+			// Read the message - try binary first, then armored
+			let message;
+			try {
+				// Try binary message first (.pgp files)
+				message = await openpgp.readMessage({ binaryMessage: uint8 });
+			} catch (e) {
+				// Fall back to armored text (.asc files)
+				const text = new TextDecoder().decode(uint8);
+				message = await openpgp.readMessage({ armoredMessage: text });
+			}
+
+			// Decrypt the data with format: 'binary' to get Uint8Array
+			const { data: decrypted } = await openpgp.decrypt({
+				message,
+				decryptionKeys: decryptedPrivateKey,
+				format: 'binary'
+			});
+
+			// Extract original filename
+			const filenameWithoutPrefix = file_name.split('_').slice(1).join('_');
+			const filenameWithoutExtension = filenameWithoutPrefix.replace(/\.(pgp|asc)$/i, '');
+
+			// Create download link
+			const decryptedBlob = new Blob([decrypted], { type: 'application/octet-stream' });
+			const downloadLink = document.createElement('a');
+			downloadLink.href = URL.createObjectURL(decryptedBlob);
+			downloadLink.download = filenameWithoutExtension;
+
+			// Trigger download
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+
+			// Show success message
+			showSuccess('File "' + filenameWithoutExtension + '" decrypted and downloaded successfully!');
+
+			// Re-enable button
 			decryptButton.disabled = false;
 			decryptButton.innerHTML = originalBtnHtml;
-		};
 
-		reader.readAsText(keyFile);
+		} catch (error) {
+			console.error('Decryption error:', error);
+			showError('Failed to decrypt file: ' + error.message);
+			decryptButton.disabled = false;
+			decryptButton.innerHTML = originalBtnHtml;
+		}
 	}
 </script>
-
 </div>
-
 <%@ include file="body-close.jsp"%>
