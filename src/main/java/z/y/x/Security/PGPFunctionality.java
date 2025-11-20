@@ -334,39 +334,32 @@ public class PGPFunctionality extends HttpServlet {
             if (PGP_DUMP.equalsIgnoreCase(methodName)) {
             	String msg = request.getParameter("p_dump");
             	if (msg == null || msg.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Please input either PGP Public/Private Key pair</font>");
+                    out.println("<div class=\"alert alert-warning\" role=\"alert\">");
+                    out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-exclamation-triangle\"></i> Missing Input</h5>");
+                    out.println("  <p class=\"mb-0\">Please provide a PGP public/private key, message, or signature to analyze.</p>");
+                    out.println("</div>");
                     return;
                 }
             	
             	msg = msg.trim();
-            	
-            	boolean isValid=false;
-        		
-        		if(msg.contains("BEGIN PGP MESSAGE") && msg.contains("END PGP MESSAGE"))
-        		{
-        			isValid=true;
-        		}
-        		
-        		if(!isValid)
-        		{
-        			if (msg.contains("BEGIN PGP PRIVATE KEY BLOCK") && msg.contains("END PGP PRIVATE KEY BLOCK")) 
-        			{
-        				isValid=true;
-        			}
-        		}
-        		
-        		if(!isValid)
-        		{
-        			if (msg.contains("BEGIN PGP PUBLIC KEY BLOCK") && msg.contains("END PGP PUBLIC KEY BLOCK"))  
-        			{
-        				isValid=true;
-        			}
-        		}
+
+            	// Validate PGP format
+            	boolean isValid = (msg.contains("BEGIN PGP MESSAGE") && msg.contains("END PGP MESSAGE")) ||
+        				          (msg.contains("BEGIN PGP PRIVATE KEY BLOCK") && msg.contains("END PGP PRIVATE KEY BLOCK")) ||
+        				          (msg.contains("BEGIN PGP PUBLIC KEY BLOCK") && msg.contains("END PGP PUBLIC KEY BLOCK")) ||
+        				          (msg.contains("BEGIN PGP SIGNATURE") && msg.contains("END PGP SIGNATURE"));
         		
         		if(!isValid) {
-        			addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Please input either PGP Public/Private Key pair</font>");
+                    out.println("<div class=\"alert alert-danger\" role=\"alert\">");
+                    out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-times-circle\"></i> Invalid PGP Format</h5>");
+                    out.println("  <p>The input does not contain valid PGP markers. Supported formats:</p>");
+                    out.println("  <ul class=\"mb-0\">");
+                    out.println("    <li><code>-----BEGIN PGP PUBLIC KEY BLOCK-----</code></li>");
+                    out.println("    <li><code>-----BEGIN PGP PRIVATE KEY BLOCK-----</code></li>");
+                    out.println("    <li><code>-----BEGIN PGP MESSAGE-----</code></li>");
+                    out.println("    <li><code>-----BEGIN PGP SIGNATURE-----</code></li>");
+                    out.println("  </ul>");
+                    out.println("</div>");
                     return;
         		}
         		
@@ -405,10 +398,21 @@ public class PGPFunctionality extends HttpServlet {
                 s=s.replace("\\t", "&#32;&#32;");
                 s=s.replace("\"", "");
                 //System.out.println(s);
-                
-                out.println("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"20\" cols=\"20\" form=\"X\">" + s + "</textarea>");
-                out.println("<hr>");
-                addHorizontalLine(out);
+
+                // Output with modern Bootstrap card wrapper
+                out.println("<div class=\"alert alert-success\" role=\"alert\">");
+                out.println("  <h5 class=\"alert-heading\"><i class=\"fas fa-check-circle\"></i> PGP Packet Dump Successful</h5>");
+                out.println("  <p class=\"mb-0\">Packet information decoded and parsed according to RFC 4880 (OpenPGP)</p>");
+                out.println("</div>");
+
+                out.println("<div class=\"card\">");
+                out.println("  <div class=\"card-header bg-primary text-white\">");
+                out.println("    <i class=\"fas fa-file-code\"></i> <strong>Decoded Packet Information</strong>");
+                out.println("  </div>");
+                out.println("  <div class=\"card-body p-0\">");
+                out.println("    <textarea name=\"comment\" class=\"form-control border-0\" readonly=\"true\" rows=\"20\" style=\"font-family: 'Courier New', monospace; font-size: 12px; resize: vertical;\" form=\"X\">" + s + "</textarea>");
+                out.println("  </div>");
+                out.println("</div>");
                 return;
             	
             	
