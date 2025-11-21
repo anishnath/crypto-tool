@@ -74,7 +74,7 @@
                         <div class="card-body p-2">
                             <ul class="list-unstyled mb-0 small">
                                 <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
-                                <li><a href="securebin.jsp" title="Share a one‑time secret with end‑to‑end encryption">One‑Time Secret (Encrypted)</a></li>
+                                <li><a href="securebin.jsp" title="Share a one‑time secret with end‑to‑end encryption">Share Secret</a></li>
                                 <li><a href="pastebin.jsp" title="Pastebin: share text publicly or encrypt with a password">Pastebin (Public or Encrypted)</a></li>
                                 <li><a href="share-file.jsp">Transfer files securely</a></li>
                                 <li><a href="temp-email.jsp">Temporary Email</a></li>
