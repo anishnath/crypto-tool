@@ -279,6 +279,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="pgp-menu-nav.jsp"%>
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
