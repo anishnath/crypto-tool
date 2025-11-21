@@ -142,7 +142,7 @@ public class CipherFunctionality extends HttpServlet {
                             return;
                         } else {
                             addHorizontalLine(out);
-                            out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
+                            out.println("<p><font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font></p>");
                             return;
                         }
 
@@ -230,7 +230,7 @@ public class CipherFunctionality extends HttpServlet {
                               return;
                           } else {
                               addHorizontalLine(out);
-                              out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
+                              out.println("<p><font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font></p>");
                               return;
                           }
 
@@ -285,7 +285,7 @@ public class CipherFunctionality extends HttpServlet {
 
                  if (response1.getStatusLine().getStatusCode() != 200) {
                      addHorizontalLine(out);
-                     out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                     out.println("<font size=\"2\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font>");
                      return;
                  }
                  BufferedReader br = new BufferedReader(
@@ -385,6 +385,7 @@ public class CipherFunctionality extends HttpServlet {
 
         if (METHOD_CIPHERBLOCK_NEW.equalsIgnoreCase(methodName)) {
 
+            response.setContentType("application/json");
             String secretkey = request.getParameter("secretkey");
             final String encryptorDecrypt = request.getParameter("encryptorDecrypt");
             final String plaintext = request.getParameter("plaintext");
@@ -395,15 +396,19 @@ public class CipherFunctionality extends HttpServlet {
 
             if(null == secretkey || secretkey.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Secret Key is null or empty </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setErrorMessage("Secret Key is null or empty");
+                out.println(errorResponse.toString());
                 return;
             }
 
             if(null == plaintext || plaintext.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setErrorMessage("Text is null or empty");
+                out.println(errorResponse.toString());
                 return;
             }
 
@@ -430,8 +435,11 @@ public class CipherFunctionality extends HttpServlet {
                     }
                 }
                 if (!isValidMessage) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption Please Base64 Message which is generated during encryption process " + plaintext + "</font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setErrorMessage("For Decryption Please provide Base64 or Hex encoded message");
+                    errorResponse.setOriginalMessage(plaintext);
+                    out.println(errorResponse.toString());
                     return;
                 }
 
@@ -451,6 +459,12 @@ public class CipherFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setAlgorithm(cipherparameter);
+                    errorResponse.setOperation(encryptorDecrypt);
+                    errorResponse.setOriginalMessage(plaintext);
+
                     if (response1.getStatusLine().getStatusCode() == 404) {
                         BufferedReader br = new BufferedReader(
                                 new InputStreamReader(
@@ -462,30 +476,25 @@ public class CipherFunctionality extends HttpServlet {
                         while (null != (line = br.readLine())) {
                             content.append(line);
                         }
-                        addHorizontalLine(out);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(content);
-                        if(cipherparameter.contains("NOPADDING") && content.toString().contains("data not block size aligned"))
-                        {
-                            stringBuilder.append("<br>");
-                            stringBuilder.append("Input Message [" + plaintext +"] is not multiple of 16");
-                        }
 
-                        else if(content.toString().contains("java.security.InvalidKeyException: Wrong algorithm: AES or Rijndael required"))
+                        String errorMsg = content.toString();
+                        if(cipherparameter.contains("NOPADDING") && errorMsg.contains("data not block size aligned"))
                         {
-                            out.println("<font size=\"4\" color=\"red\">Invalid Secret Key Length Try the secret key legnth (16,24,32) </font>");
+                            errorResponse.setErrorMessage("Input Message [" + plaintext +"] is not multiple of 16 bytes (block size)");
+                        }
+                        else if(errorMsg.contains("java.security.InvalidKeyException: Wrong algorithm: AES or Rijndael required"))
+                        {
+                            errorResponse.setErrorMessage("Invalid Secret Key Length. Try key length (16, 24, or 32 bytes)");
                         }
                         else {
-
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
+                            errorResponse.setErrorMessage("System Error: " + errorMsg);
                         }
-                        return;
                     } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
+                        errorResponse.setErrorMessage("System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support.");
                     }
 
+                    out.println(errorResponse.toString());
+                    return;
                 }
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(
@@ -498,43 +507,48 @@ public class CipherFunctionality extends HttpServlet {
                     content.append(line);
                 }
 
-                EncodedMessage certpojo1 = gson.fromJson(content.toString(), EncodedMessage.class);
-                addHorizontalLine(out);
-                out.println("<p><font size=\"4\" color=\"blue\">[" + encryptorDecrypt + "]</font> </p>");
-                out.println("<p><code> [" + plaintext + "] </code></p>");
-                out.println("<p> <font size=\"4\" color=\"blue\"> using Algo [" + cipherparameter + "] </font></p>");
-                out.println("<p><textarea class=\"form-control\" name=\"encrypedmessagetextarea\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + certpojo1.getMessage() + "</textarea></br></p>");
+                EncodedMessage result = gson.fromJson(content.toString(), EncodedMessage.class);
+                result.setSuccess(true);
+                result.setOperation(encryptorDecrypt);
+                result.setAlgorithm(cipherparameter);
+                result.setOriginalMessage(plaintext);
 
+                // Extract salt and IV for AES_* algorithms (not GCM)
                 if(!"decrypt".equalsIgnoreCase(encryptorDecrypt))
                 {
                     if (cipherparameter != null && (cipherparameter.startsWith("AES_") && !cipherparameter.contains("GCM"))) {
-                        ByteBuffer buffer = ByteBuffer.wrap(new BASE64Decoder().decodeBuffer(certpojo1.getMessage()));
-                        byte[] saltBytes = new byte[20];
-                        buffer.get(saltBytes, 0, saltBytes.length);
-                        String salt20bit = new BASE64Encoder().encode(saltBytes);
-                        out.println("</br><font size=\"4\" color=\"blue\">20 bit salt used[  "+  salt20bit + "] </font> </br>");
-                        byte[] ivBytes1 = null;
+                        try {
+                            ByteBuffer buffer = ByteBuffer.wrap(new BASE64Decoder().decodeBuffer(result.getMessage()));
+                            byte[] saltBytes = new byte[20];
+                            buffer.get(saltBytes, 0, saltBytes.length);
+                            String salt20bit = new BASE64Encoder().encode(saltBytes);
+                            result.setSalt(salt20bit);
 
-                        if (!cipherparameter.contains("ECB")) {
-                            ivBytes1 = new byte[16];
-                            buffer.get(ivBytes1, 0, ivBytes1.length);
-                            String iv16bit = new BASE64Encoder().encode(ivBytes1);
-                            out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  iv16bit + "] </font> </br>");
+                            if (!cipherparameter.contains("ECB")) {
+                                byte[] ivBytes1 = new byte[16];
+                                buffer.get(ivBytes1, 0, ivBytes1.length);
+                                String iv16bit = new BASE64Encoder().encode(ivBytes1);
+                                result.setIv(iv16bit);
+                            }
+                        } catch (Exception e) {
+                            // If salt/IV extraction fails, continue without them
                         }
-
                     }
                 }
 
-
+                out.println(result.toString());
                 return;
 
 
 
             } catch (Exception e) {
-                    out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setErrorMessage("Exception: " + e.getMessage());
+                errorResponse.setAlgorithm(cipherparameter);
+                errorResponse.setOperation(encryptorDecrypt);
+                out.println(errorResponse.toString());
             }
-
-
 
             return;
 
@@ -1284,7 +1298,7 @@ public class CipherFunctionality extends HttpServlet {
                         return;
                     } else {
                         addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        out.println("<font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font>");
                         return;
                     }
 
@@ -1442,7 +1456,7 @@ public class CipherFunctionality extends HttpServlet {
                         return;
                     } else {
                         addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                        out.println("<font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font>");
                         return;
                     }
 

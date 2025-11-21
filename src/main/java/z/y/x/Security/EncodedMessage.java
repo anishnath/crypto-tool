@@ -22,6 +22,14 @@ public class EncodedMessage {
 	private rsapojo rsapojo;
 	private eckeypojo eckeypojo;
 	private dsapojo dsapojo;
+
+	// Additional fields for cipher operations
+	private String operation;           // "encrypt" or "decrypt"
+	private String algorithm;           // cipher algorithm used
+	private String originalMessage;     // input message
+	private String salt;                // 20-bit salt (for AES_* algorithms)
+	private String iv;                  // 16-bit IV (for CBC/CFB/OFB modes)
+	private boolean success;            // operation success status
 	
 	
 	
@@ -292,9 +300,53 @@ public class EncodedMessage {
 		this.dsapojo = dsapojo;
 	}
 
+	public String getOperation() {
+		return operation;
+	}
 
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
 
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public String getOriginalMessage() {
+		return originalMessage;
+	}
+
+	public void setOriginalMessage(String originalMessage) {
+		this.originalMessage = originalMessage;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getIv() {
+		return iv;
+	}
+
+	public void setIv(String iv) {
+		this.iv = iv;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
 
 	@Override
 	public String toString() {
