@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free URL Shortener & Link Analytics (QR) – Short Links, Track Clicks</title>
+  <title>URL Shortener Online – Free | 8gwifi.org</title>
   <meta name="description" content="Free URL shortener to create short links and track clicks. Link analytics with daily charts, top countries, referrers, and QR codes. No login required.">
   <meta name="keywords" content="url shortener, free url shortener, link shortener, create short link, short url, shorten url online, qr code short link, link analytics, track link clicks, link tracker">
   <!-- Open Graph / Twitter for rich previews -->
@@ -12,38 +12,61 @@
   <meta property="og:description" content="Create short links and track clicks with daily charts, countries, referrers, and QR codes. No login required.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/short.jsp">
-  <meta property="og:image" content="https://8gwifi.org/images/site/qrcodegen.png">
+  <meta property="og:image" content="https://8gwifi.org/images/site/short.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free URL Shortener & Link Analytics (QR)">
   <meta name="twitter:description" content="Create short links and track clicks with daily charts, countries, referrers, and QR codes.">
-  <meta name="twitter:image" content="https://8gwifi.org/images/site/qrcodegen.png">
+  <meta name="twitter:image" content="https://8gwifi.org/images/site/short.png">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free URL Shortener & Link Analytics (QR)",
+    "name": "Free URL Shortener & Link Analytics with QR Codes",
     "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (Web-based)",
+    "browserRequirements": "Requires JavaScript",
     "url": "https://8gwifi.org/short.jsp",
-    "description": "Create short links and track clicks with daily charts, countries, referrers, and QR codes.",
+    "description": "Free URL shortener to create short links and track clicks. Comprehensive link analytics with daily charts, top countries, referrers, and automatic QR code generation. No registration required.",
     "offers": {"@type":"Offer","price":"0","priceCurrency":"USD"},
-    "keywords": [
-      "url shortener",
-      "free url shortener",
-      "link shortener",
-      "create short link",
-      "short url",
-      "qr code short link",
-      "link analytics",
-      "track link clicks"
-    ],
     "featureList": [
-      "Shorten long links",
-      "QR code for short link",
-      "Daily clicks chart",
-      "Top countries",
-      "Top referrers"
-    ]
+      "Shorten long URLs instantly",
+      "Automatic QR code generation",
+      "Real-time click tracking",
+      "30-day analytics with daily breakdown",
+      "Top countries by clicks",
+      "Top referrers analysis",
+      "Unique visitor tracking",
+      "All-time click statistics",
+      "No registration required",
+      "Free forever",
+      "Copy and share functionality",
+      "Open Graph metadata support"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Anish Nath",
+      "url": "https://8gwifi.org",
+      "jobTitle": "Security Engineer & Web Tools Developer",
+      "sameAs": "https://twitter.com/anish2good",
+      "knowsAbout": ["URL Shortening", "Link Analytics", "QR Code Generation", "Web Development", "API Development"]
+    },
+    "provider": {
+      "@type": "Organization",
+      "name": "8gwifi.org",
+      "url": "https://8gwifi.org",
+      "logo": "https://8gwifi.org/images/logo.png",
+      "description": "Free online tools for developers and professionals.",
+      "founder": {
+        "@type": "Person",
+        "name": "Anish Nath"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Technical Support",
+        "url": "https://8gwifi.org"
+      }
+    }
   }
   </script>
   <script type="application/ld+json">
@@ -54,22 +77,50 @@
       {
         "@type": "Question",
         "name": "How do I shorten a URL?",
-        "acceptedAnswer": {"@type": "Answer", "text": "Paste your long link, click Shorten URL, then copy the short URL or scan the QR code."}
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply paste your long link (starting with http:// or https://) into the input field and click 'Shorten URL'. You'll instantly get a short link, QR code, and the ability to copy or share it."
+        }
       },
       {
         "@type": "Question",
         "name": "Is this URL shortener free?",
-        "acceptedAnswer": {"@type": "Answer", "text": "Yes, it’s free and does not require login."}
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, completely free with no registration required. No hidden fees or premium tiers – all features are available to everyone for free."
+        }
       },
       {
         "@type": "Question",
         "name": "Can I track clicks for my short link?",
-        "acceptedAnswer": {"@type": "Answer", "text": "Yes. Enter the short code in Analytics to see all‑time clicks, a 30‑day chart, top countries and referrers."}
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Enter the short code in the Analytics section to see all-time clicks, a 30-day daily breakdown chart, top countries, top referrers, and unique visitor statistics."
+        }
       },
       {
         "@type": "Question",
         "name": "Do you provide QR codes?",
-        "acceptedAnswer": {"@type": "Answer", "text": "Yes, a QR code is generated for every short link so you can share it offline."}
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, a QR code is automatically generated for every short link so you can easily share it offline via posters, flyers, business cards, or presentations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do short links expire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Short links are permanent and do not expire. They will continue working indefinitely unless manually deleted."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What analytics are available?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Analytics include: all-time click count, creation date, 30-day daily clicks chart, unique visitors, top countries by clicks, and top referrer sources. All analytics are available for free without any limits."
+        }
       }
     ]
   }
@@ -113,8 +164,34 @@
 </head>
 <%@ include file="body-script.jsp"%>
 
-  <h1 class="mb-2">URL Shortener</h1>
-  <p class="mb-3">Create short links and track performance. Paste your long URL, shorten, then view clicks over time with top countries and referrers.</p>
+  <div class="text-center mb-4">
+    <h1 class="mb-2">URL Shortener & Link Analytics</h1>
+    <p class="lead text-muted mb-3">Create short links and track performance. Paste your long URL, shorten, then view clicks over time with top countries and referrers.</p>
+    <div class="d-flex justify-content-center flex-wrap">
+      <span class="badge badge-success badge-pill px-3 py-2 m-1"><i class="fas fa-link"></i> Free Forever</span>
+      <span class="badge badge-primary badge-pill px-3 py-2 m-1"><i class="fas fa-chart-line"></i> Real-Time Analytics</span>
+      <span class="badge badge-info badge-pill px-3 py-2 m-1"><i class="fas fa-qrcode"></i> Auto QR Codes</span>
+      <span class="badge badge-warning badge-pill px-3 py-2 m-1"><i class="fas fa-user-secret"></i> No Registration</span>
+    </div>
+  </div>
+
+  <!-- Trust Banner -->
+  <div class="alert alert-light border mb-4">
+    <div class="row text-center small">
+      <div class="col-md-3 col-6 mb-2 mb-md-0">
+        <i class="fas fa-bolt text-primary"></i> <strong>Instant:</strong> Create short links in seconds
+      </div>
+      <div class="col-md-3 col-6 mb-2 mb-md-0">
+        <i class="fas fa-infinity text-success"></i> <strong>Permanent:</strong> Links never expire
+      </div>
+      <div class="col-md-3 col-6">
+        <i class="fas fa-globe text-info"></i> <strong>Track:</strong> Countries & referrers
+      </div>
+      <div class="col-md-3 col-6">
+        <i class="fas fa-mobile-alt text-warning"></i> <strong>Mobile:</strong> Scan with QR codes
+      </div>
+    </div>
+  </div>
 
   <div class="card mb-3 shadow-sm">
     <div class="card-header">Shorten a URL</div>
@@ -338,6 +415,117 @@
     });
     document.getElementById('btnFetch').addEventListener('click', function(){ fetchAnalytics(); });
   </script>
+
+  <!-- Common Use Cases -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3"><i class="fas fa-lightbulb text-warning"></i> Common Use Cases</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="mb-2">
+            <li class="mb-2"><strong>Social Media:</strong> Share short links on Twitter, Instagram, LinkedIn, and Facebook</li>
+            <li class="mb-2"><strong>Marketing Campaigns:</strong> Track campaign performance with detailed analytics</li>
+            <li class="mb-2"><strong>QR Codes:</strong> Generate QR codes for posters, flyers, and business cards</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="mb-0">
+            <li class="mb-2"><strong>Email Newsletters:</strong> Shorten long URLs for cleaner emails</li>
+            <li class="mb-2"><strong>Analytics:</strong> Track click performance by country and referrer source</li>
+            <li class="mb-2"><strong>Link Sharing:</strong> Share cleaner, more professional-looking links</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="row mb-4">
+    <div class="col-md-6 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3"><i class="fas fa-star text-warning"></i> Key Features</h5>
+          <ul class="mb-0 list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Instant Shortening:</strong> Create short links in seconds</li>
+            <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>QR Code Generation:</strong> Automatic QR code for every link</li>
+            <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Real-Time Analytics:</strong> Track clicks as they happen</li>
+            <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>30-Day Charts:</strong> Daily breakdown with unique visitors</li>
+            <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Geographic Data:</strong> See top countries by clicks</li>
+            <li class="mb-0"><i class="fas fa-check text-success"></i> <strong>Referrer Tracking:</strong> Know where your traffic comes from</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="card shadow-sm h-100 border-primary">
+        <div class="card-body">
+          <h5 class="card-title mb-3"><i class="fas fa-question-circle text-primary"></i> How It Works</h5>
+          <ol class="mb-0 pl-3">
+            <li class="mb-2"><strong>Paste URL:</strong> Enter your long link (http:// or https://)</li>
+            <li class="mb-2"><strong>Shorten:</strong> Click "Shorten URL" to create a short link</li>
+            <li class="mb-2"><strong>Copy & Share:</strong> Copy link, download QR code, or share directly</li>
+            <li class="mb-2"><strong>Track:</strong> Use the short code to view detailed analytics</li>
+            <li class="mb-0"><strong>Analyze:</strong> Monitor clicks, countries, and referrer sources</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Author/Expertise Section (E-E-A-T) -->
+  <div class="card shadow-sm mb-4 border-primary">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h5 class="card-title mb-2"><i class="fas fa-user-shield text-primary"></i> About the Developer</h5>
+          <p class="mb-2">
+            <strong>Anish Nath</strong> – Security Engineer & Web Tools Developer
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="ml-2" title="Follow on Twitter">
+              <i class="fab fa-twitter text-primary"></i> @anish2good
+            </a>
+          </p>
+          <p class="text-muted small mb-2">
+            Extensive experience in web development, API design, and analytics systems.
+            Creator of 8gwifi.org, providing free online tools used by developers and professionals worldwide.
+          </p>
+          <div class="d-flex flex-wrap">
+            <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-link"></i> URL Shortening</span>
+            <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-chart-bar"></i> Link Analytics</span>
+            <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-qrcode"></i> QR Code Generation</span>
+            <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-code"></i> Web Development</span>
+            <span class="badge badge-primary mb-2"><i class="fas fa-server"></i> API Development</span>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="border rounded p-3 bg-light">
+            <div class="mb-2">
+              <i class="fas fa-tools fa-3x text-primary"></i>
+            </div>
+            <p class="small mb-1"><strong>8gwifi.org</strong></p>
+            <p class="small text-muted mb-0">Free Tools Since 2010</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Trust This Tool -->
+  <div class="alert alert-light border mb-4">
+    <div class="row text-center small">
+      <div class="col-md-4 mb-2 mb-md-0">
+        <i class="fas fa-code text-primary fa-2x mb-2"></i>
+        <p class="mb-0"><strong>Open Standards:</strong> Standard HTTP redirects</p>
+      </div>
+      <div class="col-md-4 mb-2 mb-md-0">
+        <i class="fas fa-history text-success fa-2x mb-2"></i>
+        <p class="mb-0"><strong>Proven Track Record:</strong> Serving users since 2010</p>
+      </div>
+      <div class="col-md-4">
+        <i class="fas fa-users text-info fa-2x mb-2"></i>
+        <p class="mb-0"><strong>Trusted Worldwide:</strong> Used by professionals globally</p>
+      </div>
+    </div>
+  </div>
 
   <div class="sharethis-inline-share-buttons"></div>
   <%@ include file="thanks.jsp"%>
