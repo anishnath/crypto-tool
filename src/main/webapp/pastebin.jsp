@@ -30,15 +30,55 @@
         {
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            "name": "Pastebin – Encrypted or Public",
-            "description": "Free online pastebin to share text publicly or with end‑to‑end encryption in your browser.",
+            "name": "Pastebin – Encrypted or Public Text Sharing",
+            "description": "Free online pastebin to share text publicly or with end-to-end AES-256-GCM encryption in your browser. No registration required, 24-hour expiry, zero-knowledge architecture.",
             "url": "https://8gwifi.org/pastebin.jsp",
-            "image" : "https://8gwifi.org/images/site/pastebin.png",
-            "applicationCategory": "Utility",
-            "version": "1.0",
+            "image": "https://8gwifi.org/images/site/pastebin.png",
+            "applicationCategory": "UtilityApplication",
+            "operatingSystem": "Any (Web-based)",
+            "browserRequirements": "Requires JavaScript and Web Crypto API",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "featureList": [
+                "AES-256-GCM client-side encryption (optional)",
+                "Public or password-protected text sharing",
+                "Zero-knowledge architecture",
+                "24-hour automatic expiry",
+                "No registration or sign-up required",
+                "Browser-only processing",
+                "Anonymous sharing",
+                "Separate password generation",
+                "Multiple views within 24 hours",
+                "Optional email notification (link only)",
+                "Real-time character counting",
+                "Copy and share utilities"
+            ],
             "author": {
                 "@type": "Person",
-                "name": "Anish Nath"
+                "name": "Anish Nath",
+                "url": "https://8gwifi.org",
+                "jobTitle": "Security Engineer & Cryptography Specialist",
+                "sameAs": "https://twitter.com/anish2good",
+                "knowsAbout": ["Cryptography", "Web Security", "AES Encryption", "Zero-Knowledge Architecture", "Privacy Engineering"]
+            },
+            "provider": {
+                "@type": "Organization",
+                "name": "8gwifi.org",
+                "url": "https://8gwifi.org",
+                "logo": "https://8gwifi.org/images/logo.png",
+                "description": "Free online cryptography, networking, and security tools for developers and security professionals.",
+                "founder": {
+                    "@type": "Person",
+                    "name": "Anish Nath"
+                },
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "Technical Support",
+                    "url": "https://8gwifi.org"
+                }
             }
         }
     </script>
@@ -50,39 +90,75 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="pgp-menu-nav.jsp"%>
 <div class="container mt-5">
-    <h1 class="mb-3">Pastebin: Share Text Online</h1>
-    <p class="lead mb-4">Share text publicly or protect it with end‑to‑end encryption and a password. Free, browser‑only, no sign‑up.</p>
+    <div class="text-center mb-4">
+        <h1 class="mb-2">Pastebin: Share Text Online</h1>
+        <p class="lead text-muted mb-3">Share text publicly or protect it with end-to-end encryption and a password. Free, browser-only, no sign-up.</p>
+        <div class="d-flex justify-content-center flex-wrap">
+            <span class="badge badge-success badge-pill px-3 py-2 m-1"><i class="fas fa-shield-alt"></i> Optional E2E Encryption</span>
+            <span class="badge badge-warning badge-pill px-3 py-2 m-1"><i class="fas fa-clock"></i> 24-Hour Expiry</span>
+            <span class="badge badge-info badge-pill px-3 py-2 m-1"><i class="fas fa-user-secret"></i> No Registration</span>
+            <span class="badge badge-primary badge-pill px-3 py-2 m-1"><i class="fas fa-lock"></i> AES-256-GCM</span>
+        </div>
+    </div>
+
+    <!-- Trust Banner -->
+    <div class="alert alert-light border mb-4">
+        <div class="row text-center small">
+            <div class="col-md-3 col-6 mb-2 mb-md-0">
+                <i class="fas fa-laptop-code text-primary"></i> <strong>Browser-Only:</strong> Client-side encryption
+            </div>
+            <div class="col-md-3 col-6 mb-2 mb-md-0">
+                <i class="fas fa-eye-slash text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-redo text-info"></i> <strong>Multiple Views:</strong> Access within 24 hours
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-trash-alt text-warning"></i> <strong>Auto-Delete:</strong> Removed after 24 hours
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-lg-7 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Create a New Paste</h5>
-                    <p class="text-muted mb-3">Email is optional; it only sends the link. Passwords are never emailed.</p>
+                    <h5 class="card-title"><i class="fas fa-file-alt text-primary"></i> Create a New Paste</h5>
+                    <p class="text-muted mb-3">Share text publicly or with password protection. Email is optional and only sends the link.</p>
                     <form id="uploadForm">
                         <div class="form-group">
-                            <label for="email">Recipient Email (optional)</label>
-                            <input type="email" class="form-control" id="email" placeholder="name@example.com" aria-describedby="emailHelp">
+                            <label for="email"><i class="fas fa-envelope"></i> Recipient Email (optional)</label>
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" aria-describedby="emailHelp" style="border-radius: 8px;">
                             <small id="emailHelp" class="form-text text-muted">We email only the link. Share the password yourself if encryption is enabled.</small>
                         </div>
 
                         <div class="form-group mb-2">
-                            <label for="textData">Content</label>
-                            <textarea class="form-control" id="textData" rows="6" placeholder="Paste or type your text here..."></textarea>
+                            <label for="textData"><i class="fas fa-keyboard"></i> Content <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="textData" rows="6" placeholder="Paste or type your text here..." style="border-radius: 8px; font-family: 'Courier New', monospace;"></textarea>
                             <small class="form-text text-muted"><span id="charCount">0</span> characters</small>
                         </div>
 
-                        <div class="form-group form-check">
+                        <div class="form-group form-check mb-3">
                             <input type="checkbox" value="true" class="form-check-input" id="isEncrypted">
-                            <label class="form-check-label" for="isEncrypted">Protect with password (encrypt)</label>
+                            <label class="form-check-label" for="isEncrypted">
+                                <i class="fas fa-lock"></i> Protect with password (AES-256-GCM encryption)
+                            </label>
+                            <small class="form-text text-muted ml-4">Password will be auto-generated and must be shared separately</small>
                         </div>
 
                         <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-primary mr-2" onclick="createPresignedURL()">Share</button>
-                            <button type="reset" class="btn btn-outline-secondary" onclick="resetFormUI()">Reset</button>
+                            <button type="button" id="createPasteBtn" class="btn btn-primary btn-lg mr-2" onclick="createPresignedURL()" style="border-radius: 8px;">
+                                <i class="fas fa-share-alt"></i> Create Paste
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary" onclick="resetFormUI()" style="border-radius: 8px;">
+                                <i class="fas fa-eraser"></i> Clear Form
+                            </button>
                         </div>
+                        <small id="validationError" class="text-danger mt-2" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i> <strong>Please enter content before creating a paste.</strong>
+                        </small>
                     </form>
                 </div>
                 <div class="card-footer bg-white">
@@ -95,24 +171,123 @@
         <div class="col-lg-5">
             <div class="card shadow-sm sticky-top" style="top: 80px;">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Result</h5>
-                    <div id="tableContainer" class="min-h-result"></div>
+                    <h5 class="card-title mb-3"><i class="fas fa-link text-success"></i> Share Link</h5>
+                    <div id="tableContainer" class="min-h-result text-center text-muted">
+                        <p class="mt-4"><i class="fas fa-arrow-left"></i> Create a paste to get a shareable link</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- How It Works -->
+    <!-- How It Works & Security Features -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="fas fa-question-circle text-primary"></i> How It Works</h5>
+                    <ol class="mb-0 pl-3">
+                        <li class="mb-2"><strong>Enter your text:</strong> Paste code, logs, or any text content</li>
+                        <li class="mb-2"><strong>Choose protection:</strong> Enable encryption for sensitive data or share publicly</li>
+                        <li class="mb-2"><strong>Get shareable link:</strong> Receive a URL (and auto-generated password if encrypted)</li>
+                        <li class="mb-2"><strong>Share securely:</strong> Send link via email/chat, password via separate channel</li>
+                        <li class="mb-0"><strong>Recipient views:</strong> Opens link and enters password if required</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="fas fa-shield-alt text-success"></i> Security Features</h5>
+                    <ul class="mb-0 list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Client-Side Encryption:</strong> AES-256-GCM in your browser</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext or passwords</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Auto-Generated Passwords:</strong> Strong 12-character passwords</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>24-Hour Auto-Delete:</strong> Automatic expiry and removal</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Multiple Views:</strong> Access anytime within 24 hours</li>
+                        <li class="mb-0"><i class="fas fa-check text-success"></i> <strong>No Registration:</strong> Anonymous and private</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Use Cases -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h5 class="card-title mb-2">How It Works</h5>
-            <ol class="mb-0">
-                <li>Enter your text (email optional).</li>
-                <li>Optionally enable encryption (password protected).</li>
-                <li>Get a shareable URL (and password if encrypted).</li>
-                <li>Share via your preferred channel.</li>
-                <li>Recipient opens the link (and enters password if required).</li>
-            </ol>
+            <h5 class="card-title mb-3"><i class="fas fa-lightbulb text-warning"></i> Common Use Cases</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="mb-2">
+                        <li class="mb-2"><strong>Share Code Snippets:</strong> Share code examples, debug logs, or error traces with colleagues</li>
+                        <li class="mb-2"><strong>Temporary Credentials:</strong> Share API keys, passwords, or tokens securely with encryption</li>
+                        <li class="mb-2"><strong>Configuration Files:</strong> Share config files, environment variables, or setup instructions</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="mb-0">
+                        <li class="mb-2"><strong>Log Analysis:</strong> Share application logs, server outputs, or debugging information</li>
+                        <li class="mb-2"><strong>Notes & Documentation:</strong> Quick temporary notes, meeting notes, or documentation drafts</li>
+                        <li class="mb-2"><strong>Collaboration:</strong> Share JSON, XML, CSV data or API responses for review</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Author/Expertise Section (E-E-A-T) -->
+    <div class="card shadow-sm mb-4 border-primary">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="card-title mb-2"><i class="fas fa-user-shield text-primary"></i> About the Developer</h5>
+                    <p class="mb-2">
+                        <strong>Anish Nath</strong> – Security Engineer & Cryptography Specialist
+                        <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="ml-2" title="Follow on Twitter">
+                            <i class="fab fa-twitter text-primary"></i> @anish2good
+                        </a>
+                    </p>
+                    <p class="text-muted small mb-2">
+                        Extensive experience in cryptography, web security, and privacy engineering.
+                        Creator of 8gwifi.org, a comprehensive suite of free online security and networking tools used by developers and security professionals worldwide.
+                    </p>
+                    <div class="d-flex flex-wrap">
+                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-shield-alt"></i> Cryptography</span>
+                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-lock"></i> Web Security</span>
+                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-key"></i> AES Encryption</span>
+                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-user-secret"></i> Zero-Knowledge Systems</span>
+                        <span class="badge badge-primary mb-2"><i class="fas fa-code"></i> Privacy Engineering</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="border rounded p-3 bg-light">
+                        <div class="mb-2">
+                            <i class="fas fa-tools fa-3x text-primary"></i>
+                        </div>
+                        <p class="small mb-1"><strong>8gwifi.org</strong></p>
+                        <p class="small text-muted mb-0">Free Cryptography & Security Tools Since 2010</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Trust This Tool -->
+    <div class="alert alert-light border mb-4">
+        <div class="row text-center small">
+            <div class="col-md-4 mb-2 mb-md-0">
+                <i class="fas fa-code text-primary fa-2x mb-2"></i>
+                <p class="mb-0"><strong>Open Source Approach:</strong> Uses standard Web Crypto API</p>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+                <i class="fas fa-history text-success fa-2x mb-2"></i>
+                <p class="mb-0"><strong>Proven Track Record:</strong> Serving developers since 2010</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-users text-info fa-2x mb-2"></i>
+                <p class="mb-0"><strong>Trusted by Professionals:</strong> Used by security teams worldwide</p>
+            </div>
         </div>
     </div>
 
@@ -164,13 +339,36 @@
         var email = document.getElementById("email").value;
         var textData = document.getElementById("textData").value;
         var isEncrypted = document.getElementById("isEncrypted").checked;
-        var password = generateStrongPassword(12)
+        var password = generateStrongPassword(12);
+        var createBtn = document.getElementById("createPasteBtn");
+        var validationError = document.getElementById("validationError");
 
+        // Validation: Check if textData is empty
         if (textData === null || textData.trim() === "") {
-            alert("Input Message can't be Empty")
-            return
-            // You can also display an alert or perform other actions here
+            validationError.style.display = 'block';
+            // Add shake animation if available
+            if (validationError.classList) {
+                validationError.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(function() {
+                    validationError.classList.remove('animate__animated', 'animate__shakeX');
+                }, 1000);
+            }
+            // Scroll to and focus on textarea
+            document.getElementById("textData").focus();
+            document.getElementById("textData").style.borderColor = '#dc3545';
+            setTimeout(function() {
+                document.getElementById("textData").style.borderColor = '#dee2e6';
+            }, 2000);
+            return;
         }
+
+        // Hide validation error if shown
+        validationError.style.display = 'none';
+
+        // Disable button and show processing state
+        var originalBtnHtml = createBtn.innerHTML;
+        createBtn.disabled = true;
+        createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Paste...';
 
 
         // Convert textData to Base58 format
@@ -235,7 +433,7 @@
                                         '      <button class="btn btn-success btn-sm mr-2" type="button" onclick="copyBoth()" data-toggle="tooltip" title="Copy URL and password together">Copy Both</button>' +
                                         '      <button class="btn btn-outline-secondary btn-sm" type="button" onclick="resetFormUI()" data-toggle="tooltip" title="Create another">Create Another</button>' +
                                         '    </div>' +
-                                        '    <div class="alert alert-info mt-3 mb-0" role="alert">This link remains active only for a limited time and requires the password to view.</div>' +
+                                        '    <div class="alert alert-info mt-3 mb-0" role="alert"><i class="fas fa-info-circle"></i> This link remains active for <strong>24 hours</strong> and requires the password to view. Can be accessed multiple times.</div>' +
                                         '  </div>' +
                                         '</div>';
 
@@ -244,18 +442,59 @@
 
                                     sendEmail(email, password , shortCode);
 
+                                    // Show success state on button
+                                    createBtn.disabled = false;
+                                    createBtn.innerHTML = '<i class="fas fa-check-circle"></i> Paste Created!';
+                                    createBtn.classList.remove('btn-primary');
+                                    createBtn.classList.add('btn-outline-success');
+                                    setTimeout(function() {
+                                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                                        createBtn.classList.remove('btn-outline-success');
+                                        createBtn.classList.add('btn-primary');
+                                    }, 3000);
+
                                 })
                                 .catch(function (error) {
                                     console.error("Upload error:", error);
+                                    // Show error state on button
+                                    createBtn.disabled = false;
+                                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload Failed';
+                                    createBtn.classList.remove('btn-primary');
+                                    createBtn.classList.add('btn-danger');
+                                    setTimeout(function() {
+                                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                                        createBtn.classList.remove('btn-danger');
+                                        createBtn.classList.add('btn-primary');
+                                    }, 4000);
                                 });
                         },
                         error: function (error) {
                             console.error("Error:", error);
+                            // Show error state on button
+                            createBtn.disabled = false;
+                            createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Server Error';
+                            createBtn.classList.remove('btn-primary');
+                            createBtn.classList.add('btn-danger');
+                            setTimeout(function() {
+                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                                createBtn.classList.remove('btn-danger');
+                                createBtn.classList.add('btn-primary');
+                            }, 4000);
                         }
                     });
                 })
                 .catch(function (error) {
                     console.error("Encryption Error:", error);
+                    // Show error state on button
+                    createBtn.disabled = false;
+                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Encryption Failed';
+                    createBtn.classList.remove('btn-primary');
+                    createBtn.classList.add('btn-danger');
+                    setTimeout(function() {
+                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                        createBtn.classList.remove('btn-danger');
+                        createBtn.classList.add('btn-primary');
+                    }, 4000);
                 });
         } else {
             var textDataBase64 = btoa(textData);
@@ -297,7 +536,7 @@
                                 '        </div>' +
                                 '      </div>' +
                                 '    </div>' +
-                                '    <div class="alert alert-info mt-3 mb-0" role="alert">This link remains active only for a limited time. No password required.</div>' +
+                                '    <div class="alert alert-info mt-3 mb-0" role="alert"><i class="fas fa-info-circle"></i> This link remains active for <strong>24 hours</strong>. No password required. Can be accessed multiple times.</div>' +
                                 '  </div>' +
                                 '</div>';
 
@@ -306,13 +545,44 @@
 
                             sendEmail(email, "", shortCode);
 
+                            // Show success state on button
+                            createBtn.disabled = false;
+                            createBtn.innerHTML = '<i class="fas fa-check-circle"></i> Paste Created!';
+                            createBtn.classList.remove('btn-primary');
+                            createBtn.classList.add('btn-outline-success');
+                            setTimeout(function() {
+                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                                createBtn.classList.remove('btn-outline-success');
+                                createBtn.classList.add('btn-primary');
+                            }, 3000);
+
                         })
                         .catch(function (error) {
                             console.error("Upload error:", error);
+                            // Show error state on button
+                            createBtn.disabled = false;
+                            createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload Failed';
+                            createBtn.classList.remove('btn-primary');
+                            createBtn.classList.add('btn-danger');
+                            setTimeout(function() {
+                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                                createBtn.classList.remove('btn-danger');
+                                createBtn.classList.add('btn-primary');
+                            }, 4000);
                         });
                 },
                 error: function (error) {
                     console.error("Error:", error);
+                    // Show error state on button
+                    createBtn.disabled = false;
+                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Server Error';
+                    createBtn.classList.remove('btn-primary');
+                    createBtn.classList.add('btn-danger');
+                    setTimeout(function() {
+                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+                        createBtn.classList.remove('btn-danger');
+                        createBtn.classList.add('btn-primary');
+                    }, 4000);
                 }
             });
 
@@ -471,9 +741,54 @@
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "mainEntity": [
-            {"@type": "Question", "name": "Is encryption optional?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can share text publicly or protect it with a password (encrypted client‑side)."}},
-            {"@type": "Question", "name": "Do I need an account?", "acceptedAnswer": {"@type": "Answer", "text": "No sign‑up required. Everything runs in your browser."}},
-            {"@type": "Question", "name": "What gets emailed?", "acceptedAnswer": {"@type": "Answer", "text": "Only the link. Passwords are never emailed and should be shared separately."}}
+            {
+              "@type": "Question",
+              "name": "Is encryption optional on this pastebin?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. You can share text publicly (no password) or protect it with AES-256-GCM encryption by enabling the password option. All encryption happens client-side in your browser using the Web Crypto API."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to create an account?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No sign-up or registration required. The pastebin is completely anonymous and runs entirely in your browser. No personal information is collected."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What gets sent when I provide an email address?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Only the link to view the paste is emailed. Passwords are NEVER sent via email and must be shared through a separate secure channel (like Signal, WhatsApp, or in person)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How long do pastes remain available?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Pastes are available for 24 hours and can be viewed multiple times during this period. After 24 hours, they are automatically deleted from the server."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is my data secure?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. If you enable encryption, your text is encrypted client-side using AES-256-GCM before being uploaded. The server never sees your plaintext or password (zero-knowledge architecture). For public pastes, text is base64-encoded and stored temporarily."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I share code snippets or logs?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. This pastebin is perfect for sharing code snippets, logs, configuration files, API responses, or any text content. Use encryption for sensitive data."
+              }
+            }
           ]
         }
     </script>
@@ -501,10 +816,35 @@
         if (window.jQuery && typeof $ === 'function') {
             $(function(){
                 $('[data-toggle="tooltip"]').tooltip();
-                $('#textData').on('input', function(){
+
+                var createBtn = $('#createPasteBtn');
+                var textDataInput = $('#textData');
+                var validationError = $('#validationError');
+
+                // Initially disable button if empty
+                if (createBtn.length && textDataInput.length) {
+                    createBtn.prop('disabled', textDataInput.val().trim() === '');
+                }
+
+                // Real-time validation on input
+                textDataInput.on('input', function(){
                     var len = (this.value || '').length;
                     var cc = document.getElementById('charCount');
                     if (cc) cc.textContent = len;
+
+                    // Enable/disable button based on content
+                    var hasContent = this.value.trim() !== '';
+                    if (createBtn.length) {
+                        createBtn.prop('disabled', !hasContent);
+
+                        // Add visual feedback
+                        if (hasContent) {
+                            createBtn.removeClass('btn-outline-primary').addClass('btn-primary');
+                            validationError.fadeOut();
+                        } else {
+                            createBtn.addClass('btn-primary').removeClass('btn-outline-primary');
+                        }
+                    }
                 });
             });
         }
@@ -525,6 +865,19 @@
             bar.textContent = '0%';
         }
         if (wrapper) wrapper.style.display = 'none';
+
+        // Reset button state
+        var createBtn = document.getElementById('createPasteBtn');
+        if (createBtn) {
+            createBtn.disabled = true; // Disable since form is empty
+            createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
+            createBtn.classList.remove('btn-outline-success', 'btn-danger', 'btn-outline-primary');
+            createBtn.classList.add('btn-primary');
+        }
+
+        // Hide validation error
+        var validationError = document.getElementById('validationError');
+        if (validationError) validationError.style.display = 'none';
     }
 
     function copyBoth() {
