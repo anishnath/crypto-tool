@@ -121,8 +121,12 @@ public class RSAFunctionality extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
-        //System.out.println("algo" + algo);
+        // Set response content type to JSON
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
 
 
         String publiKeyParam = request.getParameter("publickeyparam");
@@ -184,7 +188,7 @@ public class RSAFunctionality extends HttpServlet {
                     try {
 
 
-                        Gson gson = new Gson();
+                        gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "rsa/verify";
                         post = new HttpPost(url1);
@@ -282,7 +286,7 @@ public class RSAFunctionality extends HttpServlet {
                         InputStreamReader isr = new InputStreamReader(is);
                         BufferedReader br = new BufferedReader(isr);
 
-                        Gson gson = new Gson();
+                        gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/sign";
                         post = new HttpPost(url1);
@@ -367,10 +371,13 @@ public class RSAFunctionality extends HttpServlet {
             if ("encrypt".equals(encryptdecryptparameter)) {
 
                 if (null == message || message.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("encrypt");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Message is null or empty");
+                    out.println(gson.toJson(errorResponse));
                     return;
-
                 }
 
                 if (publiKeyParam != null && publiKeyParam.trim().length() > 0) {
@@ -383,7 +390,7 @@ public class RSAFunctionality extends HttpServlet {
                     try {
 
 
-                        Gson gson = new Gson();
+                        gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "rsa/encrypt";
                         post = new HttpPost(url1);
@@ -398,6 +405,11 @@ public class RSAFunctionality extends HttpServlet {
                         HttpResponse response1 = client.execute(post);
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("encrypt");
+                            errorResponse.setAlgorithm(algo);
+
                             if (response1.getStatusLine().getStatusCode() == 404) {
                                 BufferedReader br1 = new BufferedReader(
                                         new InputStreamReader(
@@ -409,15 +421,12 @@ public class RSAFunctionality extends HttpServlet {
                                 while (null != (line = br1.readLine())) {
                                     content1.append(line);
                                 }
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                                return;
+                                errorResponse.setErrorMessage("System error: " + content1.toString());
                             } else {
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                                return;
+                                errorResponse.setErrorMessage("System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support.");
                             }
-
+                            out.println(gson.toJson(errorResponse));
+                            return;
                         }
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -430,20 +439,22 @@ public class RSAFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
-
-
-                        //System.out.println("line-- " + line);
-
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
-                        addHorizontalLine(out);
-                       // System.out.println("encodedMessage-- " + encodedMessage);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + encodedMessage.getBase64Encoded() + "</textarea>");
+                        encodedMessage.setSuccess(true);
+                        encodedMessage.setOperation("encrypt");
+                        encodedMessage.setAlgorithm(algo);
+                        encodedMessage.setOriginalMessage(message);
+                        out.println(gson.toJson(encodedMessage));
                         return;
 
 
                     } catch (Exception e) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> " + e);
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("encrypt");
+                        errorResponse.setAlgorithm(algo);
+                        errorResponse.setErrorMessage("Encryption failed: " + e.getMessage());
+                        out.println(gson.toJson(errorResponse));
                     }finally {
                         if(post!=null)
                         {
@@ -452,9 +463,12 @@ public class RSAFunctionality extends HttpServlet {
                     }
 
                 } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + " Public Key Can't be EMPTY </font>");
-
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("encrypt");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Public key cannot be empty");
+                    out.println(gson.toJson(errorResponse));
                 }
             } else {
 
@@ -467,16 +481,23 @@ public class RSAFunctionality extends HttpServlet {
 
                     boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
                     if (!isBase64) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"3\" color=\"red\"> " + "Please Provide Base64 Encoded value Failed to Decrypt.. </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("decrypt");
+                        errorResponse.setAlgorithm(algo);
+                        errorResponse.setErrorMessage("Please provide Base64 encoded value. Failed to decrypt.");
+                        out.println(gson.toJson(errorResponse));
                         return;
                     }
 
                     if (null == message || message.trim().length() == 0) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> RSA Encryped Message is Null or EMpty....</font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("decrypt");
+                        errorResponse.setAlgorithm(algo);
+                        errorResponse.setErrorMessage("RSA encrypted message is null or empty");
+                        out.println(gson.toJson(errorResponse));
                         return;
-
                     }
 
 //                    privateKeParam = privateKeParam.replace("-----BEGIN PRIVATE KEY-----\n", "");
@@ -491,7 +512,7 @@ public class RSAFunctionality extends HttpServlet {
                         InputStreamReader isr = new InputStreamReader(is);
                         BufferedReader br = new BufferedReader(isr);
 
-                        Gson gson = new Gson();
+                        gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/rsadecrypt";
                          post = new HttpPost(url1);
@@ -506,6 +527,11 @@ public class RSAFunctionality extends HttpServlet {
                         HttpResponse response1 = client.execute(post);
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("decrypt");
+                            errorResponse.setAlgorithm(algo);
+
                             if (response1.getStatusLine().getStatusCode() == 404) {
                                 BufferedReader br1 = new BufferedReader(
                                         new InputStreamReader(
@@ -517,15 +543,12 @@ public class RSAFunctionality extends HttpServlet {
                                 while (null != (line = br1.readLine())) {
                                     content1.append(line);
                                 }
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                                return;
+                                errorResponse.setErrorMessage("System error: " + content1.toString());
                             } else {
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                                return;
+                                errorResponse.setErrorMessage("System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support.");
                             }
-
+                            out.println(gson.toJson(errorResponse));
+                            return;
                         }
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -538,17 +561,21 @@ public class RSAFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
-
-
                         EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
-                        addHorizontalLine(out);
-                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + encodedMessage.getMessage() + "</textarea>");
+                        encodedMessage.setSuccess(true);
+                        encodedMessage.setOperation("decrypt");
+                        encodedMessage.setAlgorithm(algo);
+                        out.println(gson.toJson(encodedMessage));
                         return;
 
 
                     } catch (Exception e) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("decrypt");
+                        errorResponse.setAlgorithm(algo);
+                        errorResponse.setErrorMessage("Decryption failed: " + e.getMessage());
+                        out.println(gson.toJson(errorResponse));
                     }finally {
 
                         if(post!=null)
@@ -560,8 +587,12 @@ public class RSAFunctionality extends HttpServlet {
 
 
                 } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + "  Key Can't be EMPTY </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("decrypt");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Private key cannot be empty");
+                    out.println(gson.toJson(errorResponse));
                 }
             }
         }
