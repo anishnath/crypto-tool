@@ -15,7 +15,7 @@
 <!-- Meta Tags for SEO -->
 <meta name="description" content="Interactive Logistic Regression visualization tool. Learn binary classification with hands-on gradient descent, decision boundaries, and confusion matrix analysis.">
 <meta name="keywords" content="logistic regression, binary classification, machine learning, gradient descent, decision boundary, confusion matrix, sigmoid function">
-<title>Interactive Logistic Regression Demo - Machine Learning Tool</title>
+<title>Logistic Regression Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -712,6 +712,52 @@
 <%--<div class="sharethis-inline-share-buttons"></div>--%>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (Logistic Regression) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>This module fits logistic regression for binary outcomes using maximum likelihood with optional regularization. It visualizes decision boundaries, probability surfaces, and key metrics (log‑loss, accuracy, ROC/AUC) based on synthetic or provided data.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Relate coefficients to log‑odds and probability.</li>
+      <li>See effects of regularization (L2) on boundary and variance.</li>
+      <li>Understand thresholding, ROC/AUC, and calibration basics.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs locally in your browser; sample data is generated client‑side.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Logistic Regression",
+  "url": "https://8gwifi.org/Logistic_Regression.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Logistic Regression","item":"https://8gwifi.org/Logistic_Regression.jsp"}
+  ]
+}
+</script>
 
 </div>
 <%@ include file="body-close.jsp"%>

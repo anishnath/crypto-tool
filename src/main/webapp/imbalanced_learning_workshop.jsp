@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Imbalanced Learning Workshop - Resampling (undersample, oversample, SMOTE), class weights, focal loss, and threshold tuning with PR/ROC curves.">
 <meta name="keywords" content="imbalanced learning, class weights, SMOTE, undersampling, oversampling, focal loss, precision recall">
-<title>Imbalanced Learning Workshop</title>
+<title>Imbalanced Learning Workshop Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -661,6 +661,52 @@ window.addEventListener('DOMContentLoaded', function() {
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (Imbalanced Learning) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>This workshop explores class imbalance strategies: resampling (undersample/oversample), class weights, and threshold tuning. It visualizes confusion matrices, ROC/PR curves, and metrics sensitive to imbalance (F1, MCC).</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Understand why accuracy can be misleading under imbalance.</li>
+      <li>Compare class weighting vs sampling; observe PR curve behavior.</li>
+      <li>Use MCC/F1/recall@precision as robust alternatives.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs locally with synthetic or provided data; nothing is uploaded.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Imbalanced Learning Workshop",
+  "url": "https://8gwifi.org/imbalanced_learning_workshop.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Imbalanced Learning Workshop","item":"https://8gwifi.org/imbalanced_learning_workshop.jsp"}
+  ]
+}
+</script>
 
 </div> <!-- end col-lg-9 -->
 <%@ include file="body-close.jsp"%>

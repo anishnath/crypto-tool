@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Bias–Variance Tradeoff Explorer - Interactive underfitting vs overfitting demo using polynomial regression on a noisy sine dataset with training/validation error curves and sweet spot.">
 <meta name="keywords" content="bias variance tradeoff visual, underfitting vs overfitting demo, polynomial regression visualization, ML generalization, bias variance graph">
-<title>Bias–Variance Tradeoff Explorer</title>
+<title>Bias–Variance Tradeoff Explorer Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 

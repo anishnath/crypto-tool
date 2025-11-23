@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Bias–Variance Tradeoff Explorer - Interactive polynomial regression on a noisy sine curve with training vs validation error curves and sweet spot highlight.">
 <meta name="keywords" content="bias variance tradeoff visual, underfitting vs overfitting demo, polynomial regression visualization, ML generalization, training validation error">
-<title>Bias–Variance Tradeoff Explorer</title>
+<title>Bias–Variance Tradeoff Explorer Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 

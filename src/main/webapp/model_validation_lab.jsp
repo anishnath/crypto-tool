@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Model Validation Lab: Hold-out, K-Fold, Nested, Time-Series (Interactive)</title>
+<title>Model Validation Lab Online – Free | 8gwifi.org</title>
 <meta name="description" content="Interactive lab for model validation: hold-out, K-fold, repeated, nested cross-validation, group-aware and time-series splits. Visualize splits, per-fold metrics, ROC/PR, and the impact of leakage." />
 <meta name="keywords" content="model validation, cross-validation, k-fold, repeated k-fold, nested cross-validation, group kfold, time series split, leakage, ROC AUC, PR AUC, log loss">
 
@@ -196,6 +196,52 @@
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (Model Validation) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>This lab demonstrates proper validation workflows: holdout splits, k‑fold cross‑validation, stratification under imbalance, and leakage checks. It summarizes metrics and variance across folds.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Design reliable train/validation/test splits without leakage.</li>
+      <li>Use cross‑validation to estimate generalization and model selection.</li>
+      <li>Understand stratification and when it’s necessary.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs locally with synthetic or provided datasets.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Model Validation Lab",
+  "url": "https://8gwifi.org/model_validation_lab.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Model Validation Lab","item":"https://8gwifi.org/model_validation_lab.jsp"}
+  ]
+}
+</script>
 
 </div> <!-- end col-lg-9 -->
 <%@ include file="body-close.jsp"%>

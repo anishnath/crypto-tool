@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cyclical Feature Encoding: Sin/Cos Unit Circle (Interactive)</title>
+    <title>Cyclical Encoding Visualizer Online – Free | 8gwifi.org</title>
     <meta name="description" content="Visualize cyclical feature encoding with sin/cos on the unit circle. Compare raw numeric vs. cyclical encoding and see the impact on regression/classification performance." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -10,11 +10,11 @@
     {
       "@context": "http://schema.org",
       "@type": "WebApplication",
-      "name": "Cyclical Feature Encoding: Sin/Cos Unit Circle (Interactive)",
+      "name": "Cyclical Encoding Visualizer",
       "applicationCategory": "EducationalApplication",
       "description": "Interactive visualizer demonstrating cyclical feature encoding on the unit circle and its effect on model performance.",
       "url": "https://8gwifi.org/cyclical_encoding_visualizer.jsp",
-      "author": { "@type": "Person", "name": "Anish Nath" }
+      "author": { "@type": "Organization", "name": "8gwifi.org" }
     }
     </script>
 
@@ -54,8 +54,8 @@
                 <a href="#guide" class="btn btn-outline-primary">Guide</a>
             </div>
 
-            <%@ include file="footer_adsense.jsp"%>
-            <hr>
+<%@ include file="footer_adsense.jsp"%>
+<hr>
 
             <div class="afe">
                 <div class="row">
@@ -76,8 +76,53 @@
                                     <span class="ml-auto small-muted">Cyclic distance wraps endpoints (e.g., 23 ↔ 0 is close)</span>
                                 </div>
                             </div>
-                        </div>
+</div>
 
+<!-- E-E-A-T: About & Learning Outcomes (Cyclical Encoding) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>Maps a cyclical scalar x (e.g., hour, month, day‑of‑week) to the unit circle via <code>(cos θ, sin θ)</code> where <code>θ = 2π·x/period</code>. This preserves wrap‑around distances (e.g., 23 and 0 are close). Demo models compare raw numeric vs sin/cos encodings on downstream tasks.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Why raw numeric encodings break cyclic adjacency at boundaries.</li>
+      <li>How sin/cos restore continuity and help linear models learn cyclic patterns.</li>
+      <li>Effect on metrics (R²/MAE/Accuracy/F1) under different periods and noise.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs entirely in your browser; no data is uploaded.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Cyclical Encoding Visualizer",
+  "url": "https://8gwifi.org/cyclical_encoding_visualizer.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Cyclical Encoding Visualizer","item":"https://8gwifi.org/cyclical_encoding_visualizer.jsp"}
+  ]
+}
+</script>
                         <!-- Demo + Metrics -->
                         <div class="card chart-card">
                             <div class="card-header">

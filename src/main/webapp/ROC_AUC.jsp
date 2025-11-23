@@ -15,7 +15,7 @@
 <!-- Meta Tags for SEO -->
 <meta name="description" content="Interactive ROC Curve, AUC, and Precision-Recall curve visualization tool. Learn about ROC-AUC metrics and PR curves with hands-on logistic regression demo.">
 <meta name="keywords" content="ROC curve, AUC, precision recall curve, PR curve, logistic regression, machine learning visualization, binary classification">
-<title>Interactive ROC, AUC & PR Curve - Machine Learning Visualization</title>
+<title>ROC, AUC & PR Curve Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -495,6 +495,52 @@
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (ROC AUC) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>This module computes ROC curves by sweeping probability thresholds over predicted scores and true labels. It calculates TPR/FPR pairs, area under the curve (AUC) via trapezoidal rule, and can display class‑imbalance aware views (e.g., PR curve where available).</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Interpret ROC curves and AUC across different thresholds.</li>
+      <li>Understand when ROC vs PR curves are appropriate (imbalance).</li>
+      <li>See how calibration and score distributions affect metrics.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>All calculations happen in your browser; datasets are not uploaded.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "ROC AUC",
+  "url": "https://8gwifi.org/ROC_AUC.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"ROC AUC","item":"https://8gwifi.org/ROC_AUC.jsp"}
+  ]
+}
+</script>
 
 </div>
 <%@ include file="body-close.jsp"%>

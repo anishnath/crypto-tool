@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Diffusion Process Visualizer - Add noise forward and denoise backward on a clean image. See β-schedules and a 2D latent trajectory.">
 <meta name="keywords" content="diffusion model explained, denoising diffusion visualization, latent diffusion tutorial, stable diffusion, noise schedule">
-<title>Diffusion Process Visualizer</title>
+<title>Diffusion Process Visualizer Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -474,5 +474,50 @@ window.addEventListener('DOMContentLoaded', function(){
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
 
+<!-- E-E-A-T: About & Learning Outcomes (Diffusion) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>Illustrates forward diffusion (noise addition over steps) and an intuitive denoising process. Uses simplified schedules and visualizations to convey the idea behind diffusion models; not a full generative model implementation.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Understand progressive noise schedules and their visual effect.</li>
+      <li>Build intuition for reverse denoising and sampling.</li>
+      <li>Recognize differences between toy demos and real diffusion models.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs entirely in your browser with synthetic visuals.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Diffusion Process Visualizer",
+  "url": "https://8gwifi.org/diffusion_process_visualizer.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Diffusion Process Visualizer","item":"https://8gwifi.org/diffusion_process_visualizer.jsp"}
+  ]
+}
+</script>
 </div> <!-- end col-lg-9 -->
 <%@ include file="body-close.jsp"%>

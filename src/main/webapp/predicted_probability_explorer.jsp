@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Predicted Probability & Calibration: Interactive Visual Guide</title>
+<title>Predicted Probability Explorer Online – Free | 8gwifi.org</title>
 <meta name="description" content="Explore predicted probabilities, calibration (Platt / Isotonic), ROC/PR curves, thresholds, ECE/Brier/Log Loss, and class imbalance—interactive visual guide." />
 <meta name="keywords" content="predicted probability, calibration curve, reliability diagram, ECE, Brier score, log loss, ROC AUC, PR AUC, threshold selection">
 
@@ -168,6 +168,51 @@
 </div> <!-- end col-lg-9 -->
 <%@ include file="body-close.jsp"%>
 
+<!-- E-E-A-T: About & Learning Outcomes (Predicted Probability) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>Simulates predicted scores under tunable class imbalance and separation, then maps scores to probabilities with optional calibration (Platt/Isotonic). Plots reliability diagrams, ROC/PR curves, and reports ECE/Brier/Log Loss—all in your browser.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Differentiate discrimination (ROC/PR) from calibration (reliability/ECE/Brier).</li>
+      <li>See how imbalance and score separation influence thresholds and metrics.</li>
+      <li>Practice choosing thresholds for specific precision/recall or cost trade‑offs.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>All computations run locally with synthetic data by default; nothing is uploaded.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Predicted Probability Explorer",
+  "url": "https://8gwifi.org/predicted_probability_explorer.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Predicted Probability Explorer","item":"https://8gwifi.org/predicted_probability_explorer.jsp"}
+  ]
+}
+</script>
 <script>
 (function(){
   'use strict';

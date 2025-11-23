@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="SHAP Explorer — Global and local model explanations with SHAP-like feature attributions. Train a small Random Forest, view summary and per-instance waterfall plots.">
 <meta name="keywords" content="shap visualization, shapley additive explanations, tree shap, model interpretability, beeswarm plot, waterfall plot, feature importance">
-<title>SHAP Explorer — Global & Local Explanations</title>
+<title>SHAP Explorer Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -545,6 +545,52 @@ window.addEventListener('DOMContentLoaded', function(){
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (SHAP) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>SHAP (SHapley Additive exPlanations) attributes a model’s prediction to each feature using game‑theoretic Shapley values. This explorer visualizes local (per‑sample) and global (aggregate) attributions and supports dependence/summary plots. For performance, simplified background distributions may be used.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Interpret SHAP values as feature contributions to individual predictions.</li>
+      <li>Distinguish global importance vs local explanations.</li>
+      <li>Recognize interactions and correlated features caveats.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>Runs locally with sample or provided data; no uploads are stored.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "SHAP Explorer",
+  "url": "https://8gwifi.org/shap_explorer.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"SHAP Explorer","item":"https://8gwifi.org/shap_explorer.jsp"}
+  ]
+}
+</script>
 
 </div> <!-- end shap -->
 <%@ include file="body-close.jsp"%>

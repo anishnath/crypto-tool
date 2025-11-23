@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Clustering Studio - Interactive K-Means, DBSCAN, and Hierarchical clustering on 2D datasets with elbow and silhouette visualizations.">
 <meta name="keywords" content="clustering, k-means, dbscan, hierarchical, agglomerative, silhouette, elbow method, machine learning visualization">
-<title>Clustering Studio - Unsupervised Learning Playground</title>
+<title>Clustering Studio Online – Free | 8gwifi.org</title>
 
 <%@ include file="header-script.jsp"%>
 
@@ -635,6 +635,52 @@ window.addEventListener('DOMContentLoaded', function() {
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- E-E-A-T: About & Learning Outcomes (Clustering) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>This studio implements common clustering algorithms (e.g., k‑means, hierarchical, DBSCAN) and visualizes clusters, centroids, and evaluation scores (silhouette where applicable). Data can be synthetic or user‑provided.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2">
+      <li>Compare clustering methods and hyperparameters (k, linkage, eps/minPts).</li>
+      <li>Interpret silhouette scores and cluster separability.</li>
+      <li>Understand sensitivity to scaling, initialization, and outliers.</li>
+    </ul>
+    <div class="row mt-2">
+      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
+        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+        <li><strong>Reviewed by:</strong> Anish Nath</li>
+        <li><strong>Last updated:</strong> 2025-11-19</li>
+      </ul></div>
+      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
+        <li>All computations run locally in your browser.</li>
+      </ul></div>
+    </div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Clustering Studio",
+  "url": "https://8gwifi.org/clustering_studio.jsp",
+  "dateModified": "2025-11-19",
+  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
+  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+    {"@type":"ListItem","position":2,"name":"Clustering Studio","item":"https://8gwifi.org/clustering_studio.jsp"}
+  ]
+}
+</script>
 
 </div> <!-- end col-lg-9 -->
 <%@ include file="body-close.jsp"%>
