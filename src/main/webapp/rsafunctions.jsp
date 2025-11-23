@@ -182,7 +182,7 @@
 	<meta name="googlebot" content="index,follow">
 
 	<%@ include file="header-script.jsp"%>
-	<%@ include file="cryptography-tools-navbar.jsp"%>
+	<%@ include file="pgp-menu-nav.jsp"%>
 
 	<%
 		String pubKey = "";
