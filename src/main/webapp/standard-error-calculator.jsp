@@ -6,21 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- SEO Meta -->
-<title>Standard Error Calculator - SE for Mean, Proportion, Difference | Free Statistical Tool</title>
-<meta name="description" content="Free online Standard Error Calculator. Calculate standard error for mean, proportion, difference of means, and difference of proportions. Includes margin of error and confidence intervals.">
+<title>Standard Error Calculator Online – Free | 8gwifi.org</title>
+<meta name="description" content="Free standard error calculator: SE for mean, proportion, difference of means/proportions — with margin of error and confidence intervals.">
 <meta name="keywords" content="standard error calculator, SE calculator, standard error of mean, standard error of proportion, margin of error, confidence interval, sampling error">
 <link rel="canonical" href="https://8gwifi.org/standard-error-calculator.jsp">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="Standard Error Calculator - Statistical Tool">
-<meta property="og:description" content="Calculate standard error for means, proportions, and differences with margin of error and confidence intervals.">
+<meta property="og:title" content="Standard Error Calculator Online – Free | 8gwifi.org">
+<meta property="og:description" content="SE for means, proportions, and differences — with margin of error and CIs.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/standard-error-calculator.jsp">
-<meta property="og:image" content="https://8gwifi.org/images/standard-error-calculator.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Standard Error Calculator">
-<meta name="twitter:description" content="Calculate standard error, margin of error, and confidence intervals for statistical analysis.">
-<meta name="twitter:image" content="https://8gwifi.org/images/standard-error-calculator.png">
+<meta name="twitter:title" content="Standard Error Calculator Online – Free | 8gwifi.org">
+<meta name="twitter:description" content="Free SE calculator with margin of error and confidence intervals.">
 
 <!-- jStat -->
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
@@ -43,13 +41,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Standard error of mean, Standard error of proportion, Standard error of difference of means, Standard error of difference of proportions, Margin of error, Confidence intervals, Critical values",
-  "screenshot": "https://8gwifi.org/images/standard-error-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.7",
-    "ratingCount": "1320"
-  }
+  "featureList": "Standard error of mean, Standard error of proportion, Standard error of difference of means, Standard error of difference of proportions, Margin of error, Confidence intervals, Critical values"
 }
 </script>
 
@@ -584,8 +576,51 @@
 
 <%@ include file="thanks.jsp"%>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+  <%@ include file="footer_adsense.jsp"%>
+  <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/standard-error-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Standard Error (SE): FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">SE vs SD?</h3>
+      <p class="mb-0">SD measures variability of data; SE measures variability of a statistic (e.g., mean) across repeated samples and shrinks with larger n.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How does SE relate to CIs?</h3>
+      <p class="mb-0">Confidence intervals are built from estimates ± critical value × SE (e.g., mean ± t*·SE).</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">When to use pooled SE?</h3>
+      <p class="mb-0">For differences in means under equal variance assumptions; otherwise use Welch’s (unpooled) approach.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Why does larger n reduce SE?</h3>
+      <p class="mb-0">SE typically scales like SD/√n, so it decreases as sample size grows, reflecting more precise estimates.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"SE vs SD?","acceptedAnswer":{"@type":"Answer","text":"SD measures data spread; SE measures estimator spread, shrinking with n."}},
+      {"@type":"Question","name":"How does SE relate to CIs?","acceptedAnswer":{"@type":"Answer","text":"CIs use estimate ± critical value × SE (e.g., mean ± t*·SE)."}},
+      {"@type":"Question","name":"When to use pooled SE?","acceptedAnswer":{"@type":"Answer","text":"For equal variance assumptions in two‑sample means; else use Welch (unpooled)."}},
+      {"@type":"Question","name":"Why does larger n reduce SE?","acceptedAnswer":{"@type":"Answer","text":"SE often scales as SD/√n, decreasing with larger samples."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/standard-error-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Standard Error Calculator","item":"https://8gwifi.org/standard-error-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <%@ include file="body-close.jsp"%>

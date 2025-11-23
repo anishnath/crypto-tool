@@ -4,20 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Percentile Calculator - Rank, Quartiles & Box Plot | 8gwifi.org</title>
+<title>Percentile Calculator Online – Free | 8gwifi.org</title>
 <meta name="description" content="Free percentile calculator: calculate percentile rank, find values at percentiles, quartiles (Q1, Q2, Q3), IQR, five-number summary, and visualize with box plots. Perfect for test scores, salaries, and rankings.">
 <meta name="keywords" content="percentile calculator, quartile calculator, percentile rank, IQR calculator, box plot, five number summary, Q1 Q2 Q3, test score percentile, salary percentile, statistics calculator">
 <link rel="canonical" href="https://8gwifi.org/percentile-calculator.jsp">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Percentile Calculator - Rank, Quartiles & Box Plot">
+<meta property="og:title" content="Percentile Calculator Online – Free | 8gwifi.org">
 <meta property="og:description" content="Calculate percentile rank, quartiles, IQR, and visualize with box plots. Essential for analyzing test scores, salaries, and rankings.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://8gwifi.org/percentile-calculator.jsp">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Percentile Calculator - Rank, Quartiles & Box Plot">
+<meta name="twitter:title" content="Percentile Calculator Online – Free | 8gwifi.org">
 <meta name="twitter:description" content="Calculate percentile rank, quartiles, IQR, and visualize with box plots. Essential for analyzing test scores, salaries, and rankings.">
 
 <!-- JSON-LD Structured Data -->
@@ -45,14 +45,7 @@
     "Box plot visualization",
     "Outlier detection",
     "Descriptive statistics"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "2847",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
+  ]
 }
 </script>
 
@@ -363,9 +356,52 @@ textarea.form-control {
     </div>
   </div>
 
-  <%@ include file="thanks.jsp"%>
+<%@ include file="thanks.jsp"%>
   <%@ include file="footer_adsense.jsp"%>
   <%@ include file="addcomments.jsp"%>
+  <!-- FAQ: inlined (was jspf/faq/math/percentile-calculator-faq.jspf) -->
+  <section id="faq" class="mt-5">
+    <h2 class="h5">Percentile Calculator: FAQ</h2>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">Percentile vs percentile rank?</h3>
+      <p class="mb-0">A percentile (e.g., 90th) is the value below which a given percentage of observations fall; percentile rank is the percentage position of a given value within the data.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How is the value at a percentile computed?</h3>
+      <p class="mb-0">Data are sorted ascending; index is typically (p/100)·(n+1). If non‑integer, interpolate. Methods vary; we use a common linear interpolation approach.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How are quartiles and IQR related?</h3>
+      <p class="mb-0">Quartiles split data into four equal parts: Q1 (25th), Q2/median (50th), Q3 (75th). IQR = Q3 − Q1 is a robust spread measure used for outlier detection.</p>
+    </div></div>
+    <div class="card mb-3"><div class="card-body">
+      <h3 class="h6">How are outliers flagged?</h3>
+      <p class="mb-0">A common rule flags values below Q1 − 1.5·IQR or above Q3 + 1.5·IQR as potential outliers. Context matters — not all flagged points are errors.</p>
+    </div></div>
+  </section>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Percentile vs percentile rank?","acceptedAnswer":{"@type":"Answer","text":"A percentile is the value below which a given percentage of observations fall; percentile rank is the percentage position of a given value within the data."}},
+      {"@type":"Question","name":"How is the value at a percentile computed?","acceptedAnswer":{"@type":"Answer","text":"Data are sorted; index (p/100)·(n+1). Interpolate if non‑integer. Methods vary; we use linear interpolation."}},
+      {"@type":"Question","name":"How are quartiles and IQR related?","acceptedAnswer":{"@type":"Answer","text":"Quartiles are 25th, 50th, 75th percentiles. IQR = Q3 − Q1, a robust spread used for outliers."}},
+      {"@type":"Question","name":"How are outliers flagged?","acceptedAnswer":{"@type":"Answer","text":"Values outside Q1 − 1.5·IQR to Q3 + 1.5·IQR are often flagged. Domain context is important."}}
+    ]
+  }
+  </script>
+  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/percentile-calculator-breadcrumbs.jspf) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
+      {"@type":"ListItem","position":2,"name":"Percentile Calculator","item":"https://8gwifi.org/percentile-calculator.jsp"}
+    ]
+  }
+  </script>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>

@@ -416,6 +416,7 @@
   $('btnAddForce').addEventListener('click', function(){
     forces.push({r: 1, F: 10, dir: 'ccw'});
     renderForcesList();
+    calculate();
   });
 
   function renderForcesList(){
@@ -440,6 +441,7 @@
         var idx = parseInt(this.getAttribute('data-idx'));
         var field = this.getAttribute('data-field');
         forces[idx][field] = field === 'dir' ? this.value : parseFloat(this.value);
+        calculate();
       });
     }
 
@@ -449,6 +451,7 @@
         var idx = parseInt(this.getAttribute('data-remove'));
         forces.splice(idx, 1);
         renderForcesList();
+        calculate();
       });
     }
   }
@@ -558,6 +561,111 @@
       html += '</div>';
       html += '</div>';
 
+    } else if(result.mode === 'equilibrium'){
+      // Header
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Torque Equilibrium Diagram', 30, 38);
+
+      // Reference dashed lines
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([6,6]);
+      ctx.beginPath();
+      ctx.moveTo(0, cy - 120);
+      ctx.lineTo(w, cy - 120);
+      ctx.moveTo(0, cy);
+      ctx.lineTo(w, cy);
+      ctx.moveTo(0, cy + 120);
+      ctx.lineTo(w, cy + 120);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw beam with pivot at center
+      var beamLength = Math.min(w * 0.6, 500);
+      var pivotX = cx;
+      var beamY = cy;
+
+      // Beam
+      ctx.fillStyle = '#2563eb';
+      ctx.fillRect(pivotX - beamLength/2, beamY - 14, beamLength, 28);
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 5;
+      ctx.strokeRect(pivotX - beamLength/2, beamY - 14, beamLength, 28);
+
+      // Pivot
+      ctx.fillStyle = '#1f2937';
+      ctx.beginPath();
+      ctx.moveTo(pivotX - 25, beamY + 12);
+      ctx.lineTo(pivotX + 25, beamY + 12);
+      ctx.lineTo(pivotX, beamY + 60);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('Pivot', pivotX - 18, beamY + 80);
+
+      if(result.forces && result.forces.length){
+        var maxR = 0;
+        for(var i = 0; i < result.forces.length; i++){
+          maxR = Math.max(maxR, Math.abs(result.forces[i].r));
+        }
+        if(maxR === 0) maxR = 1;
+
+        for(var i = 0; i < result.forces.length; i++){
+          var f = result.forces[i];
+          var offset = (f.r / maxR) * (beamLength/2 - 40);
+          var forceX = pivotX + offset;
+          var forceY = beamY - 14;
+          var dir = f.dir === 'ccw' ? -1 : 1;
+          var arrowLen = Math.min(120, 30 + Math.abs(f.F));
+
+          // Mark position
+          ctx.strokeStyle = '#334155';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(forceX, beamY - 18);
+          ctx.lineTo(forceX, beamY + 18);
+          ctx.stroke();
+
+          // Force arrow
+          var arrowStartY = dir === -1 ? forceY : forceY + 28;
+          var arrowEndY = arrowStartY + dir * arrowLen;
+          drawArrow(forceX, arrowStartY, forceX, arrowEndY, dir === -1 ? '#0ea5e9' : '#ef4444', 5, 'F'+(i+1));
+
+          // Labels
+          ctx.fillStyle = '#0f172a';
+          ctx.font = '12px sans-serif';
+          ctx.fillText('r = '+f.r+' m', forceX - 30, beamY - 36);
+          ctx.fillText('F = '+f.F+' N', forceX - 30, dir === -1 ? arrowEndY - 12 : arrowEndY + 26);
+
+          // Torque indicator
+          var torqueRadius = 45;
+          ctx.strokeStyle = f.dir === 'ccw' ? '#22c55e' : '#ef4444';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          var startAngle = dir === -1 ? Math.PI : 0;
+          var endAngle = dir === -1 ? Math.PI * 1.7 : Math.PI * -0.7;
+          ctx.arc(forceX, beamY, torqueRadius, startAngle, endAngle, dir === -1);
+          ctx.stroke();
+
+          ctx.fillStyle = f.dir === 'ccw' ? '#15803d' : '#b91c1c';
+          ctx.font = '11px sans-serif';
+          ctx.fillText((f.torque >= 0 ? '+' : '')+f.torque.toFixed(1)+' N⋅m', forceX - 35, beamY + (dir === -1 ? -torqueRadius - 10 : torqueRadius + 20));
+        }
+      }
+
+      // Net torque label
+      ctx.fillStyle = result.isEquilibrium ? '#15803d' : '#b45309';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('Στ = '+result.totalTorque.toFixed(2)+' N⋅m', 30, 40);
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(result.isEquilibrium ? 'System in equilibrium' : 'Not in equilibrium', 30, 62);
+      ctx.fillStyle = '#475569';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('Positive torques (↺) are counter-clockwise; negative torques (↻) are clockwise.', 30, h - 30);
+
     } else if(result.mode === 'rotation'){
       html += '<div class="result-card">';
       html += '<h6 class="mb-2">Moment of Inertia</h6>';
@@ -588,7 +696,7 @@
     var h = canvas.height;
     ctx.clearRect(0,0,w,h);
 
-    ctx.fillStyle = '#f8fafc';
+    ctx.fillStyle = '#f1f5f9';
     ctx.fillRect(0,0,w,h);
 
     var cx = w/2;
@@ -1023,6 +1131,16 @@
 <%@ include file="thanks.jsp"%>
 <hr>
 <%@ include file="footer_adsense.jsp"%>
+<!-- E-E-A-T: About & Learning Outcomes (Physics) -->
+<section class="container my-4"><div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+  <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+  <p>Computes torque, angular acceleration, and rotational dynamics quantities using SI units. Illustrates how force, lever arm, and moment of inertia interact.</p>
+  <h3 class="h6 mt-2">Learning Outcomes</h3>
+  <ul class="mb-2"><li>Relate torque = r×F and rotational analogs of Newton’s laws.</li><li>Understand the role of moment of inertia.</li><li>Practice unit consistency and parameter effects.</li></ul>
+  <div class="row mt-2"><div class="col-md-6"><h4 class="h6">Authorship</h4><ul><li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener">Anish Nath</a> — Follow on X</li><li><strong>Last updated:</strong> 2025-11-19</li></ul></div><div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul><li>All calculations run locally.</li></ul></div></div>
+</div></div></div></div></section>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Torque & Rotational Dynamics","url":"https://8gwifi.org/torque-rotation-calculator.jsp","dateModified":"2025-11-19","author":{"@type":"Person","name":"Anish Nath","url":"https://x.com/anish2good"},"publisher":{"@type":"Organization","name":"8gwifi.org"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},{"@type":"ListItem","position":2,"name":"Torque & Rotational Dynamics","item":"https://8gwifi.org/torque-rotation-calculator.jsp"}]}</script>
 <%@ include file="addcomments.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>

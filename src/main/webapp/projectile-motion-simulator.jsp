@@ -2553,6 +2553,18 @@
 <%@ include file="thanks.jsp"%>
 <hr>
 <%@ include file="footer_adsense.jsp"%>
+<!-- E-E-A-T: About & Learning Outcomes (Physics) -->
+<section class="container my-4">
+  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+    <p>Applies standard kinematics to simulate projectile motion under uniform gravity (no air resistance). Uses SI units and plots trajectories based on initial speed and angle.</p>
+    <h3 class="h6 mt-2">Learning Outcomes</h3>
+    <ul class="mb-2"><li>Relate speed, angle, and range/height/time‑of‑flight.</li><li>Practice unit handling and parameter intuition.</li><li>Explore edge cases (vertical shots, shallow angles).</li></ul>
+    <div class="row mt-2"><div class="col-md-6"><h4 class="h6">Authorship</h4><ul><li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener">Anish Nath</a> — Follow on X</li><li><strong>Last updated:</strong> 2025-11-19</li></ul></div><div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul><li>Runs locally in your browser.</li></ul></div></div>
+  </div></div></div></div>
+</section>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Projectile Motion Simulator","url":"https://8gwifi.org/projectile-motion-simulator.jsp","dateModified":"2025-11-19","author":{"@type":"Person","name":"Anish Nath","url":"https://x.com/anish2good"},"publisher":{"@type":"Organization","name":"8gwifi.org"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},{"@type":"ListItem","position":2,"name":"Projectile Motion Simulator","item":"https://8gwifi.org/projectile-motion-simulator.jsp"}]}</script>
 <%@ include file="addcomments.jsp"%>
 
 </div>

@@ -18,7 +18,9 @@
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
     {"@type":"Question","name":"How do I calculate drop time?","acceptedAnswer":{"@type":"Answer","text":"Without air resistance, time to fall from height h under gravity g is t = √(2h/g). With air resistance, this tool uses numerical simulation with quadratic drag."}},
     {"@type":"Question","name":"What about impact speed?","acceptedAnswer":{"@type":"Answer","text":"Without drag, v = √(2gh + v₀²). With drag, terminal velocity is vₜ = √(2mg/(ρ C_d A)); the tool simulates until ground to estimate impact speed."}},
-    {"@type":"Question","name":"Can I use Moon or Mars gravity?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use Preset to switch between Earth (9.81 m/s²), Moon (1.62 m/s²), and Mars (3.71 m/s²), or enter a custom value."}}
+    {"@type":"Question","name":"Can I use Moon or Mars gravity?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use Preset to switch between Earth (9.81 m/s²), Moon (1.62 m/s²), and Mars (3.71 m/s²), or enter a custom value."}},
+    {"@type":"Question","name":"How can teachers use the animation in class?","acceptedAnswer":{"@type":"Answer","text":"Use the play/pause controls to freeze the motion at key instants. Ask students to map the ball's height to the y(t) graph, or to compare Earth, Moon, and Mars overlays for cross-planet reasoning."}},
+    {"@type":"Question","name":"What misconception should I address?","acceptedAnswer":{"@type":"Answer","text":"Students often think heavier objects fall faster in vacuum. Toggle drag off, keep mass constant, and let different heights show identical accelerations to emphasise g is independent of mass without resistance."}}
   ]}
   </script>
 
@@ -37,6 +39,21 @@
     .kv .value{font-weight:600}
     .ff-toolbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .mini-track{border:1px solid #e5e7eb;border-radius:6px;padding:.25rem .5rem;background:#fff}
+    .ff-edu-grid{display:grid;gap:.75rem;margin-bottom:.75rem}
+    @media (min-width:768px){.ff-edu-grid{grid-template-columns:repeat(3,1fr)}}
+    .ff-edu-card{border-radius:8px;border-left:4px solid;padding:.75rem .9rem;background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,0.08)}
+    .ff-edu-card h6{font-size:.95rem;font-weight:600;margin-bottom:.35rem}
+    .ff-edu-card p{margin-bottom:.35rem;font-size:.9rem}
+    .ff-edu-card ul{padding-left:1rem;margin-bottom:0;font-size:.88rem}
+    .ff-edu-card ul li{margin-bottom:.25rem}
+    .ff-edu-card--concept{background:#ecfeff;border-left-color:#0ea5e9}
+    .ff-edu-card--teach{background:#f0fdf4;border-left-color:#22c55e}
+    .ff-edu-card--alert{background:#fef3c7;border-left-color:#f59e0b}
+    .ff-faq-item + .ff-faq-item{margin-top:.75rem}
+    .ff-faq-item strong{color:#0f172a}
+    .ff-formula-card ul{padding-left:1rem;margin-bottom:.5rem;font-size:.9rem}
+    .ff-formula-card ul li{margin-bottom:.25rem}
+    .ff-formula-card .small{text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:.25rem}
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
@@ -210,11 +227,65 @@
     </div>
   </div>
 
-  <div class="card mb-3">
-    <h5 class="card-header">FAQ</h5>
+  <div class="card mb-3 ff-formula-card">
+    <h5 class="card-header">Formula Breakdown</h5>
     <div class="card-body">
-      <p><strong>What assumptions are used?</strong><br>Constant gravity and either no drag (analytic), or quadratic drag with constant air density for the numerical simulation.</p>
-      <p class="mb-0"><strong>What is terminal velocity?</strong><br>The speed where drag balances weight: v<sub>t</sub> = √(2 m g / (ρ C<sub>d</sub> A)). For lighter or larger objects, v<sub>t</sub> is lower.</p>
+      <div class="small">No Air Resistance</div>
+      <ul>
+        <li>Time to impact: <code>t = (-v₀ + √(v₀² + 2 g h)) / g</code></li>
+        <li>Impact speed: <code>v = v₀ + g · t</code></li>
+        <li>Height profile: <code>y(t) = h − v₀ t − ½ g t²</code></li>
+      </ul>
+      <div class="small">With Quadratic Drag</div>
+      <ul>
+        <li>Simulated from <code>m dv/dt = m g − ½ ρ C<sub>d</sub> A v |v|</code></li>
+        <li>Position from <code>dy/dt = v</code> integrated numerically (time step 0.005 s)</li>
+        <li>Terminal speed estimate: <code>v<sub>t</sub> = √(2 m g / (ρ C<sub>d</sub> A))</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <h5 class="card-header">FAQ & Teaching Notes</h5>
+    <div class="card-body">
+      <div class="ff-edu-grid">
+        <div class="ff-edu-card ff-edu-card--concept">
+          <h6>Concept Focus</h6>
+          <p>Highlight that in a vacuum, all objects share the same acceleration g regardless of mass.</p>
+          <ul class="mb-0">
+            <li>Use the presets to compare Earth, Moon, and Mars.</li>
+            <li>Toggle air drag to contrast analytic vs. numeric motion.</li>
+          </ul>
+        </div>
+        <div class="ff-edu-card ff-edu-card--teach">
+          <h6>Classroom Moves</h6>
+          <p>Freeze the animation at quarter intervals and ask students to match the position with points on y(t).</p>
+          <ul class="mb-0">
+            <li>Invite students to predict impact speed before revealing calculations.</li>
+            <li>Assign planet overlays to different lab groups for mini-presentations.</li>
+          </ul>
+        </div>
+        <div class="ff-edu-card ff-edu-card--alert">
+          <h6>Misconception Alert</h6>
+          <p>“Heavier falls faster” only holds with drag. Show how terminal speed depends on mass, area, and drag coefficient.</p>
+          <ul class="mb-0">
+            <li>Adjust mass while drag is on to see v<sub>t</sub> change.</li>
+            <li>Discuss why skydivers change body posture to alter drag.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ff-faq-item">
+        <strong>What assumptions are used?</strong><br>
+        Constant gravity and either no drag (analytic), or quadratic drag with constant air density for the numerical simulation.
+      </div>
+      <div class="ff-faq-item">
+        <strong>How can I connect to energy ideas?</strong><br>
+        Ask students to compute potential energy (mgh) at release and kinetic energy (½mv²) at impact, then compare with and without drag to explain where the “missing energy” goes.
+      </div>
+      <div class="ff-faq-item mb-0">
+        <strong>What is terminal velocity?</strong><br>
+        The speed where drag balances weight: v<sub>t</sub> = √(2 m g / (ρ C<sub>d</sub> A)). For lighter or larger objects, v<sub>t</sub> is lower.
+      </div>
     </div>
   </div>
 </div>
@@ -514,6 +585,16 @@ btnPlay.addEventListener('click', ()=>{
 <%@ include file="thanks.jsp"%>
 <hr>
 <%@ include file="footer_adsense.jsp"%>
+<!-- E-E-A-T: About & Learning Outcomes (Physics) -->
+<section class="container my-4"><div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
+  <h2 class="h6 mb-2">About This Tool & Methodology</h2>
+  <p>Computes free‑fall distance, time, and velocity under uniform gravity (optionally with initial velocity). Uses SI units and the standard kinematics equations.</p>
+  <h3 class="h6 mt-2">Learning Outcomes</h3>
+  <ul class="mb-2"><li>Relate position, velocity, and acceleration due to gravity.</li><li>Explore initial velocity effects and time symmetry.</li><li>Practice unit consistency and typical g values.</li></ul>
+  <div class="row mt-2"><div class="col-md-6"><h4 class="h6">Authorship</h4><ul><li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener">Anish Nath</a> — Follow on X</li><li><strong>Last updated:</strong> 2025-11-19</li></ul></div><div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul><li>Runs locally in your browser.</li></ul></div></div>
+</div></div></div></div></section>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Free Fall Calculator","url":"https://8gwifi.org/free-fall-calculator.jsp","dateModified":"2025-11-19","author":{"@type":"Person","name":"Anish Nath","url":"https://x.com/anish2good"},"publisher":{"@type":"Organization","name":"8gwifi.org"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},{"@type":"ListItem","position":2,"name":"Free Fall Calculator","item":"https://8gwifi.org/free-fall-calculator.jsp"}]}</script>
 <%@ include file="addcomments.jsp"%>
 
 </div>
