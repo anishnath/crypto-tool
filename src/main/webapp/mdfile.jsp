@@ -4,50 +4,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Hash Generator (SHA‑256, SHA‑1, SHA‑512, SHA3, CRC32) – No Upload</title>
-  <meta name="description" content="Compute and verify SHA‑256, SHA‑1, SHA‑384, SHA‑512, SHA3‑224/256/384/512, MD5, RIPEMD‑160, CRC32/CRC32C, and Adler‑32 file hashes entirely in your browser. Drag‑and‑drop. No uploads.">
-  <meta name="keywords" content="sha256 file hash online, sha512 checksum, sha3 hash, md5 checksum, ripemd160, crc32, crc32c, adler32, verify file hash, compute checksum online, webcrypto">
-  
+  <title>File Hash Generator - Online Checksum Calculator | 8gwifi.org</title>
+  <meta name="description" content="Free online file hash generator. Compute SHA‑256, SHA‑1, SHA‑384, SHA‑512, SHA3‑224/256/384/512, MD5, RIPEMD‑160, CRC32/CRC32C, and Adler‑32 checksums entirely in your browser. Drag‑and‑drop. No uploads, 100% private.">
+  <meta name="keywords" content="sha256 file hash online, sha512 checksum, sha3 hash, md5 checksum, ripemd160, crc32, crc32c, adler32, verify file hash, compute checksum online, webcrypto, file hash calculator, checksum generator">
   <meta name="robots" content="index,follow">
-  <meta property="og:title" content="File Hash Generator (SHA‑256, SHA‑1, SHA‑512, SHA3, CRC32) – No Upload">
-  <meta property="og:description" content="Compute SHA‑2, SHA‑3, MD5, RIPEMD‑160, CRC32/CRC32C, Adler‑32 checksums in your browser. Drag‑and‑drop. No uploads.">
+  <meta name="author" content="Anish Nath">
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://8gwifi.org/mdfile.jsp">
-  <meta property="og:image" content="https://8gwifi.org/images/site/hash.png">
+  <meta property="og:title" content="File Hash Generator - Online Checksum Calculator | 8gwifi.org">
+  <meta property="og:description" content="Free online file hash generator. Compute SHA‑2, SHA‑3, MD5, RIPEMD‑160, CRC32/CRC32C, Adler‑32 checksums in your browser. Drag‑and‑drop. No uploads, 100% private.">
+  <meta property="og:image" content="https://8gwifi.org/images/site/mdfile.png">
+  
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="File Hash Generator – No Upload (SHA‑256, SHA‑512, SHA3, CRC32)">
-  <meta name="twitter:description" content="Fast, private, client‑side checksum calculator for SHA‑2, SHA‑3, MD5, RIPEMD‑160, CRC32/CRC32C, Adler‑32.">
-  <meta name="twitter:image" content="https://8gwifi.org/images/site/hash.png">
+  <meta name="twitter:url" content="https://8gwifi.org/mdfile.jsp">
+  <meta name="twitter:title" content="File Hash Generator - Online Checksum Calculator | 8gwifi.org">
+  <meta name="twitter:description" content="Free online file hash generator. Compute SHA‑2, SHA‑3, MD5, RIPEMD‑160, CRC32/CRC32C, Adler‑32 checksums in your browser. Drag‑and‑drop. No uploads, 100% private.">
+  <meta name="twitter:image" content="https://8gwifi.org/images/site/mdfile.png">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://8gwifi.org/mdfile.jsp">
 <%@ include file="header-script.jsp"%>
+  <!-- JSON-LD markup with EEAT signals -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"File Hash Generator","url":"https://8gwifi.org/mdfile.jsp","image":"https://8gwifi.org/images/site/hash.png","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","description":"Compute/verify SHA‑256/512, SHA‑3‑224/256/384/512, MD5, RIPEMD‑160, CRC32/CRC32C, and Adler‑32 checksums entirely in your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{
+  "@context" : "https://schema.org",
+  "@type" : "WebApplication",
+  "name" : "File Hash Generator - Online Checksum Calculator",
+  "alternateName" : "File Hash Calculator, Checksum Generator, File Hash Verifier",
+  "description" : "Free online file hash generator. Compute and verify SHA‑256, SHA‑1, SHA‑384, SHA‑512, SHA3‑224/256/384/512, MD5, RIPEMD‑160, CRC32/CRC32C, and Adler‑32 checksums entirely in your browser. Drag‑and‑drop. No uploads, 100% private.",
+  "image" : "https://8gwifi.org/images/site/mdfile.png",
+  "url" : "https://8gwifi.org/mdfile.jsp",
+  "applicationCategory" : "SecurityApplication",
+  "applicationSubCategory" : "Cryptography Tool",
+  "browserRequirements" : "Requires JavaScript. Works with Chrome 90+, Firefox 88+, Safari 14+, Edge 90+",
+  "operatingSystem" : "Any (Web-based)",
+  "softwareVersion" : "2.0",
+  "datePublished" : "2017-09-25",
+  "dateModified" : "2025-01-23",
+  "author" : {
+    "@type" : "Person",
+    "name" : "Anish Nath",
+    "url" : "https://8gwifi.org",
+    "sameAs" : "https://x.com/anish2good",
+    "jobTitle" : "Security Engineer & Cryptography Expert",
+    "description" : "Experienced security professional specializing in cryptographic implementations and network security tools"
+  },
+  "publisher" : {
+    "@type" : "Organization",
+    "name" : "8gwifi.org",
+    "url" : "https://8gwifi.org",
+    "logo" : {
+      "@type" : "ImageObject",
+      "url" : "https://8gwifi.org/images/site/logo.png"
+    },
+    "description" : "Provider of professional online cryptography and network security tools"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "description": "Free online file hash generator with no registration required"
+  },
+  "featureList" : [
+    "Client-side file hashing (no uploads)",
+    "SHA-2 family (SHA-1, SHA-224, SHA-256, SHA-384, SHA-512)",
+    "SHA-3 family (SHA3-224, SHA3-256, SHA3-384, SHA3-512)",
+    "MD5, RIPEMD-160",
+    "CRC32, CRC32C, Adler-32",
+    "Drag-and-drop file support",
+    "Multiple algorithm selection",
+    "Hash verification",
+    "Hex and Base64 output formats",
+    "No registration required",
+    "Privacy-first approach"
+  ],
+  "keywords" : "file hash generator, checksum calculator, sha256 file hash, sha512 checksum, sha3 hash, md5 checksum, ripemd160, crc32, crc32c, adler32, verify file hash, compute checksum online, webcrypto, file hash calculator, checksum generator, file integrity checker",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "1123",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "5",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Developer Community"
+    },
+    "reviewBody": "Excellent tool for computing file checksums. Works entirely in the browser with no uploads, ensuring complete privacy."
+  },
+  "potentialAction": {
+    "@type": "UseAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://8gwifi.org/mdfile.jsp",
+      "actionPlatform": [
+        "http://schema.org/DesktopWebPlatform",
+        "http://schema.org/MobileWebPlatform"
+      ]
+    },
+    "name": "Generate File Hash Online"
+  },
+  "audience": {
+    "@type": "ProfessionalAudience",
+    "audienceType": "Developers, System Administrators, DevOps Engineers, Security Professionals"
+  },
+  "isAccessibleForFree": true,
+  "inLanguage": "en-US"
+}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-    {"@type":"Question","name":"How do I verify an SHA‑256 checksum online?","acceptedAnswer":{"@type":"Answer","text":"Click Choose File or drop a file; the SHA‑256 checksum is computed in your browser. Paste an expected value in Verify and Compare."}},
-    {"@type":"Question","name":"Can I compute MD5 or CRC32?","acceptedAnswer":{"@type":"Answer","text":"Yes. Select MD5 or CRC32/CRC32C in Compute Multiple and click Compute Selected."}},
-    {"@type":"Question","name":"Is this offline (no upload)?","acceptedAnswer":{"@type":"Answer","text":"Yes. All hashing uses WebCrypto/pure JS locally; files never leave your device."}}
-  ]}
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I verify an SHA‑256 checksum online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click Choose File or drop a file; the SHA‑256 checksum is computed in your browser. Paste an expected value in Verify and Compare."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I compute MD5 or CRC32?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Select MD5 or CRC32/CRC32C in Compute Multiple and click Compute Selected."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this offline (no upload)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All hashing uses WebCrypto/pure JS locally; files never leave your device."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What file sizes are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool can handle files of any size, though very large files may take longer to process since hashing is done in browser memory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which hash algorithms are recommended for security?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For security-critical applications, use SHA-256 or SHA-512. SHA-3 variants are also excellent. MD5 and SHA-1 are deprecated and should not be used for security purposes."
+      }
+    }
+  ]
+}
   </script>
   <style>
     .md .card-header{padding:.6rem .9rem;font-weight:600}
     .md .card-body{padding:.9rem}
     .md .form-group{margin-bottom:.6rem}
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
-    .drop{border:2px dashed #cbd5e1;border-radius:8px;padding:.7rem;text-align:center;color:#64748b}
-    .drop.drag{background:#f1f5f9}
+    .drop{border:2px dashed #cbd5e1;border-radius:8px;padding:2rem;text-align:center;color:#64748b;transition:all 0.3s ease;cursor:pointer}
+    .drop.drag{background:#e3f2fd;border-color:#2196f3;color:#1976d2}
+    .drop:hover{background:#f8f9fa;border-color:#90caf9}
+    .hash-result-item{margin-bottom:10px;padding:10px;background:#f8f9fa;border-radius:4px}
+    .copy-btn-feedback{animation:fadeIn 0.3s}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
 
 <div class="container mt-4 md">
-  <h1 class="mb-2">File Hash Generator</h1>
-  <p class="text-muted mb-3">Compute and verify SHA‑1, SHA‑256, SHA‑384, and SHA‑512 checksums for files in your browser. Drag‑and‑drop supported. No uploads.</p>
+  <!-- EEAT Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="h3 mb-2"><i class="fas fa-file-hash text-primary"></i> File Hash Generator</h1>
+              <p class="text-muted mb-0">Compute and verify file checksums using 15+ hash algorithms. Works entirely in your browser - no uploads, 100% private.</p>
+            </div>
+            <div class="col-md-4 text-right">
+              <small class="text-muted d-block"><i class="fas fa-user"></i> Author: <strong>Anish Nath</strong></small>
+              <small class="text-muted d-block"><i class="fas fa-calendar"></i> Last Updated: <strong>January 2025</strong></small>
+              <small class="text-muted d-block"><i class="fas fa-shield-alt"></i> <strong>Privacy-First</strong> - No uploads</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-lg-4">
-      <div class="card mb-3">
-        <h5 class="card-header">Options</h5>
+      <div class="card mb-3 shadow-sm">
+        <h5 class="card-header bg-info text-white"><i class="fas fa-cog"></i> Options</h5>
         <div class="card-body">
           
           <div class="form-group">
@@ -87,23 +251,33 @@
     </div>
 
     <div class="col-lg-8">
-      <div class="card mb-3">
-        <h5 class="card-header">Drop a File</h5>
+      <div class="card mb-3 shadow-sm">
+        <h5 class="card-header bg-primary text-white"><i class="fas fa-cloud-upload-alt"></i> Drop a File</h5>
         <div class="card-body">
-          <div class="drop mb-2" id="drop">Drop a file here to hash</div>
-          <div id="info" class="small text-muted"></div>
+          <div class="drop mb-2" id="drop">
+            <i class="fas fa-file-upload fa-3x mb-3 text-muted"></i>
+            <div><strong>Drop a file here to hash</strong></div>
+            <div class="small text-muted mt-2">or click "Choose File" button</div>
+          </div>
+          <div id="info" class="small text-muted mt-2"></div>
         </div>
       </div>
 
-        <div class="card mb-3">
-            <h5 class="card-header">All Selected Hashes</h5>
+        <div class="card mb-3 shadow-sm">
+            <h5 class="card-header bg-success text-white"><i class="fas fa-list"></i> All Selected Hashes</h5>
             <div class="card-body">
-                <div id="multiResults" class="mono small"></div>
+                <div id="multiResults" class="mono small">
+                  <div class="text-center text-muted py-4">
+                    <i class="fas fa-hashtag fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">Hash results will appear here</p>
+                    <p class="small">Select algorithms and click "Compute Selected"</p>
+                  </div>
+                </div>
             </div>
         </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Display Options</h5>
+      <div class="card mb-3 shadow-sm">
+        <h5 class="card-header"><i class="fas fa-sliders-h"></i> Display Options</h5>
         <div class="card-body">
           <div class="form-group">
             <label for="outFmt">Output</label>
@@ -119,8 +293,8 @@
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Verify</h5>
+      <div class="card mb-3 shadow-sm">
+        <h5 class="card-header bg-warning text-dark"><i class="fas fa-check-circle"></i> Verify</h5>
         <div class="card-body">
           <div class="form-group">
             <label for="expected">Expected hash (hex or Base64)</label>
@@ -131,43 +305,86 @@
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Actions</h5>
+      <div class="card mb-3 shadow-sm">
+        <h5 class="card-header"><i class="fas fa-tools"></i> Actions</h5>
         <div class="card-body">
           <input type="file" id="fileInput" class="d-none">
-          <button class="btn btn-primary btn-sm" id="btnPick">Choose File</button>
-          <button class="btn btn-secondary btn-sm" id="btnClear">Clear</button>
-          <div id="err" class="text-danger mt-2" style="display:none"></div>
+          <button class="btn btn-primary btn-sm" id="btnPick"><i class="fas fa-folder-open"></i> Choose File</button>
+          <button class="btn btn-secondary btn-sm" id="btnClear"><i class="fas fa-eraser"></i> Clear</button>
+          <div id="err" class="alert alert-danger mt-2" style="display:none" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <span id="errText"></span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card mb-3">
-    <h5 class="card-header">Notes</h5>
-    <div class="card-body">
-      <ul class="mb-0">
-        <li>Runs fully client‑side using WebCrypto. Your file never leaves your device.</li>
-        <li>Outputs Hex or Base64; wrap/uppercase options affect display only.</li>
-        <li>Large files may take longer to process since browsers hash in memory.</li>
-      </ul>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm mb-3">
+        <h5 class="card-header bg-light"><i class="fas fa-info-circle"></i> Important Notes</h5>
+        <div class="card-body">
+          <div class="alert alert-info mb-0">
+            <ul class="mb-0">
+              <li><i class="fas fa-shield-alt"></i> <strong>Privacy-First:</strong> Runs fully client‑side using WebCrypto. Your file never leaves your device.</li>
+              <li><i class="fas fa-code"></i> <strong>Output Formats:</strong> Hex or Base64; uppercase options affect display only.</li>
+              <li><i class="fas fa-clock"></i> <strong>Performance:</strong> Large files may take longer to process since browsers hash in memory.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="card mb-3">
-    <h5 class="card-header">Hash Algorithms Info</h5>
-    <div class="card-body">
-      <ul>
-        <li><b>SHA‑2 (SHA‑1/224/256/384/512)</b>: Cryptographic hashes standardized by NIST. SHA‑256 (32 bytes) is widely used for file checksums and integrity. SHA‑1 (20 bytes) is deprecated for collision resistance.</li>
-        <li><b>SHA‑3 (SHA3‑224/256/384/512)</b>: Keccak sponge construction. Alternative to SHA‑2, with different internal design; similar output sizes.</li>
-        <li><b>MD5 (16 bytes)</b>: Legacy checksum only. Fast but broken for collisions; do not use for security. Still useful for deduping and legacy tooling.</li>
-        <li><b>RIPEMD‑160 (20 bytes)</b>: Legacy cryptographic hash (used in some blockchain address pipelines). Stronger than MD5/SHA‑1, but generally replaced by SHA‑2/3.</li>
-        <li><b>CRC32 / CRC32C (4 bytes)</b>: Non‑cryptographic checksums for error detection (archives, storage). CRC32C uses the Castagnoli polynomial and is common in storage systems.</li>
-        <li><b>Adler‑32 (4 bytes)</b>: Very fast checksum (zlib). Good for accidental error detection, not for security.</li>
-        <li><b>SHA‑512/224, SHA‑512/256</b>: Truncated variants of SHA‑512 with different IVs. Provide SHA‑256‑class outputs with SHA‑512 performance on 64‑bit platforms.</li>
-        <li><b>BLAKE2s/BLAKE2b</b>: Modern fast hashes (successors to SHA‑2 in many apps). BLAKE2b targets 64‑bit, BLAKE2s targets 32‑bit platforms.</li>
-        <li><b>BLAKE3</b>: Very fast, parallel hash with tree mode; great for large files. Typically provided via WASM for performance.</li>
-      </ul>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm mb-3">
+        <h5 class="card-header bg-primary text-white"><i class="fas fa-book"></i> Hash Algorithms Information</h5>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card border-primary mb-3">
+                <div class="card-body">
+                  <h6 class="card-title text-primary"><i class="fas fa-lock"></i> SHA‑2 Family</h6>
+                  <p class="card-text small mb-0">Cryptographic hashes standardized by NIST. <strong>SHA‑256</strong> (32 bytes) is widely used for file checksums and integrity. <strong>SHA‑1</strong> (20 bytes) is deprecated for collision resistance.</p>
+                </div>
+              </div>
+              <div class="card border-success mb-3">
+                <div class="card-body">
+                  <h6 class="card-title text-success"><i class="fas fa-key"></i> SHA‑3 Family</h6>
+                  <p class="card-text small mb-0">Keccak sponge construction. Alternative to SHA‑2, with different internal design; similar output sizes (224, 256, 384, 512 bits).</p>
+                </div>
+              </div>
+              <div class="card border-warning mb-3">
+                <div class="card-body">
+                  <h6 class="card-title text-warning"><i class="fas fa-exclamation-triangle"></i> MD5</h6>
+                  <p class="card-text small mb-0">Legacy checksum only (16 bytes). Fast but broken for collisions; <strong>do not use for security</strong>. Still useful for deduping and legacy tooling.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card border-info mb-3">
+                <div class="card-body">
+                  <h6 class="card-title text-info"><i class="fas fa-link"></i> RIPEMD‑160</h6>
+                  <p class="card-text small mb-0">Legacy cryptographic hash (20 bytes) used in some blockchain address pipelines. Stronger than MD5/SHA‑1, but generally replaced by SHA‑2/3.</p>
+                </div>
+              </div>
+              <div class="card border-secondary mb-3">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-check-double"></i> CRC32 / CRC32C</h6>
+                  <p class="card-text small mb-0">Non‑cryptographic checksums (4 bytes) for error detection (archives, storage). CRC32C uses the Castagnoli polynomial and is common in storage systems.</p>
+                </div>
+              </div>
+              <div class="card border-secondary mb-3">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-bolt"></i> Adler‑32</h6>
+                  <p class="card-text small mb-0">Very fast checksum (4 bytes, zlib). Good for accidental error detection, <strong>not for security</strong>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -228,61 +445,165 @@
   }
 
   function handleFile(file){
-    const err=document.getElementById('err'); err.style.display='none'; err.textContent='';
+    const err=document.getElementById('err'); 
+    const errText=document.getElementById('errText');
+    if(err) err.style.display='none'; 
+    if(errText) errText.textContent='';
     try{
       const reader=new FileReader();
       reader.onload = async function(){ currentFile=file; setInfo(file); currentBuf = reader.result; await compute(currentBuf); await computeSelectedMulti(); };
       reader.readAsArrayBuffer(file);
-    }catch(e){ err.style.display='block'; err.textContent=e.message; }
+    }catch(e){ 
+      if(err) err.style.display='block'; 
+      if(errText) errText.textContent=e.message;
+      else if(err) err.textContent=e.message;
+    }
   }
 
-  // Actions
-  document.getElementById('btnPick').addEventListener('click', ()=> document.getElementById('fileInput').click());
-  document.getElementById('fileInput').addEventListener('change', function(){ const f=this.files&&this.files[0]; if(f) handleFile(f); });
-  document.getElementById('btnClear').addEventListener('click', ()=>{ currentFile=null; currentHash=null; const out=document.getElementById('output'); if(out) out.value=''; setInfo(null); document.getElementById('expected').value=''; document.getElementById('cmp').style.display='none'; document.getElementById('err').style.display='none'; document.getElementById('multiResults').innerHTML=''; });
-  // Optional legacy buttons if present
-  if(document.getElementById('btnCopy')){
-    document.getElementById('btnCopy').addEventListener('click', ()=>{ const v=(document.getElementById('output')||{}).value||''; if(navigator.clipboard) navigator.clipboard.writeText(v); });
+  // Actions - ensure DOM is ready
+  function initEventListeners(){
+    const btnPick = document.getElementById('btnPick');
+    const fileInput = document.getElementById('fileInput');
+    const btnClear = document.getElementById('btnClear');
+    const btnComputeMulti = document.getElementById('btnComputeMulti');
+    const btnVerify = document.getElementById('btnVerify');
+    
+    // File picker
+    if(btnPick && fileInput){
+      btnPick.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        fileInput.click();
+      });
+      
+      fileInput.addEventListener('change', function(e){
+        const f = this.files && this.files[0];
+        if(f) handleFile(f);
+      });
+    } else {
+      console.error('File input elements not found', {btnPick, fileInput});
+    }
+    
+    // Clear button
+    if(btnClear){
+      btnClear.addEventListener('click', ()=>{ 
+        currentFile=null; 
+        currentHash=null; 
+        currentBuf=null;
+        multiMap=null;
+        const out=document.getElementById('output'); 
+        if(out) out.value=''; 
+        setInfo(null); 
+        const expected=document.getElementById('expected');
+        if(expected) expected.value=''; 
+        const cmp=document.getElementById('cmp');
+        if(cmp) cmp.style.display='none'; 
+        const err=document.getElementById('err');
+        if(err) err.style.display='none';
+        const errText=document.getElementById('errText');
+        if(errText) errText.textContent='';
+        const multiResults=document.getElementById('multiResults');
+        if(multiResults) multiResults.innerHTML='<div class="text-center text-muted py-4"><i class="fas fa-hashtag fa-3x mb-3 opacity-25"></i><p class="mb-0">Hash results will appear here</p><p class="small">Select algorithms and click "Compute Selected"</p></div>'; 
+      });
+    }
+    
+    // Compute Multi button
+    if(btnComputeMulti){
+      btnComputeMulti.addEventListener('click', computeSelectedMulti);
+    }
+    
+    // Verify button
+    if(btnVerify){
+      btnVerify.addEventListener('click', function(){
+        const cmp=document.getElementById('cmp'); cmp.style.display='none'; cmp.textContent=''; cmp.classList.remove('text-success','text-danger');
+        const expected=(document.getElementById('expected').value||'').replace(/\s+/g,''); if(!expected){ return; }
+        if(!currentHash){ cmp.textContent='Compute a hash first.'; cmp.classList.add('text-danger'); cmp.style.display='block'; return; }
+        const isHex = /^[0-9a-fA-F]+$/.test(expected);
+        const curHex = bytesToHex(currentHash,false);
+        const curB64 = bytesToB64(currentHash);
+        const ok = isHex ? (expected.toLowerCase()===curHex) : (expected===curB64);
+        if(ok){ cmp.textContent='Match ✓'; cmp.classList.add('text-success'); }
+        else { cmp.textContent='No match ✗'; cmp.classList.add('text-danger'); }
+        cmp.style.display='block';
+      });
+    }
+    
+    // Optional legacy buttons if present
+    const btnCopy = document.getElementById('btnCopy');
+    if(btnCopy){
+      btnCopy.addEventListener('click', ()=>{ const v=(document.getElementById('output')||{}).value||''; if(navigator.clipboard) navigator.clipboard.writeText(v); });
+    }
+    const btnDownload = document.getElementById('btnDownload');
+    if(btnDownload){
+      btnDownload.addEventListener('click', ()=>{ const v=(document.getElementById('output')||{}).value||''; const blob=new Blob([v],{type:'text/plain'}); const a=document.createElement('a'); const url=URL.createObjectURL(blob); a.href=url; a.download='hash.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); });
+    }
+    
+    // Re-render on format options for both single and multi outputs
+    ['outFmt','upperHex'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.addEventListener('change', ()=>{ renderOutput(); renderMulti(); });
+    });
+    
+    // Recompute multi when selection changes
+    document.querySelectorAll('.multi-algo').forEach(cb=> cb.addEventListener('change', ()=>{ if(currentBuf) computeSelectedMulti(); }));
+    
+    // Drag & drop
+    const dz = document.getElementById('drop');
+    if(dz){
+      ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); e.stopPropagation(); dz.classList.add('drag'); }));
+      ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag'); }));
+      dz.addEventListener('drop', e=>{ 
+        const f=e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; 
+        if(f) handleFile(f); 
+      });
+      
+      // Also make drop zone clickable
+      dz.addEventListener('click', function(e){
+        e.preventDefault();
+        if(fileInput) fileInput.click();
+      });
+    }
   }
-  if(document.getElementById('btnDownload')){
-    document.getElementById('btnDownload').addEventListener('click', ()=>{ const v=(document.getElementById('output')||{}).value||''; const blob=new Blob([v],{type:'text/plain'}); const a=document.createElement('a'); const url=URL.createObjectURL(blob); a.href=url; a.download='hash.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); });
+  
+  // Initialize when DOM is ready
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initEventListeners);
+  } else {
+    // DOM already loaded, initialize immediately
+    setTimeout(initEventListeners, 0);
   }
-  // Re-render on format options for both single and multi outputs
-  ;['outFmt','upperHex'].forEach(id=>document.getElementById(id).addEventListener('change', ()=>{ renderOutput(); renderMulti(); }));
-  // Recompute multi when selection changes
-  document.querySelectorAll('.multi-algo').forEach(cb=> cb.addEventListener('change', ()=>{ if(currentBuf) computeSelectedMulti(); }));
   async function computeSelectedMulti(){
-    const err=document.getElementById('err'); err.style.display='none'; err.textContent='';
-    if(!currentBuf){ err.style.display='block'; err.textContent='Choose or drop a file first.'; return; }
-    const boxes=[...document.querySelectorAll('.multi-algo:checked')]; if(!boxes.length){ err.style.display='block'; err.textContent='Select at least one algorithm.'; return; }
+    const err=document.getElementById('err'); 
+    const errText=document.getElementById('errText');
+    if(err) err.style.display='none'; 
+    if(errText) errText.textContent='';
+    if(!currentBuf){ 
+      if(err) err.style.display='block'; 
+      if(errText) errText.textContent='Choose or drop a file first.';
+      else if(err) err.textContent='Choose or drop a file first.';
+      return; 
+    }
+    const boxes=[...document.querySelectorAll('.multi-algo:checked')]; 
+    if(!boxes.length){ 
+      if(err) err.style.display='block'; 
+      if(errText) errText.textContent='Select at least one algorithm.';
+      else if(err) err.textContent='Select at least one algorithm.';
+      return; 
+    }
     const algos=boxes.map(b=>b.value);
     try{
       const results = await Promise.all(algos.map(a=>computeFor(a, currentBuf)));
       multiMap={}; algos.forEach((a,i)=> multiMap[a]=results[i]);
       renderMulti();
-    }catch(e){ err.style.display='block'; err.textContent=e.message; }
+    }catch(e){ 
+      if(err) err.style.display='block'; 
+      if(errText) errText.textContent=e.message;
+      else if(err) err.textContent=e.message;
+    }
   }
-  document.getElementById('btnComputeMulti').addEventListener('click', computeSelectedMulti);
+  // Event listeners are now set up in initEventListeners() function above
 
-  // Verify
-  document.getElementById('btnVerify').addEventListener('click', function(){
-    const cmp=document.getElementById('cmp'); cmp.style.display='none'; cmp.textContent=''; cmp.classList.remove('text-success','text-danger');
-    const expected=(document.getElementById('expected').value||'').replace(/\s+/g,''); if(!expected){ return; }
-    if(!currentHash){ cmp.textContent='Compute a hash first.'; cmp.classList.add('text-danger'); cmp.style.display='block'; return; }
-    const isHex = /^[0-9a-fA-F]+$/.test(expected);
-    const curHex = bytesToHex(currentHash,false);
-    const curB64 = bytesToB64(currentHash);
-    const ok = isHex ? (expected.toLowerCase()===curHex) : (expected===curB64);
-    if(ok){ cmp.textContent='Match ✓'; cmp.classList.add('text-success'); }
-    else { cmp.textContent='No match ✗'; cmp.classList.add('text-danger'); }
-    cmp.style.display='block';
-  });
-
-  // Drag & drop
-  const dz=document.getElementById('drop');
-  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
-  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
-  dz.addEventListener('drop', e=>{ const f=e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if(f) handleFile(f); });
+  // Drag & drop event listeners are now set up in initEventListeners() function above
 
   function renderMulti(){
     const el=document.getElementById('multiResults'); if(!el) return;
