@@ -169,82 +169,98 @@ public class MDFunctionality extends HttpServlet {
         //System.out.println("algo" + algo);
         PrintWriter out = response.getWriter();
         if (METHOD_CALCULATEMD5.equalsIgnoreCase(methodName)) {
-
+            // Set response type to JSON
+            response.setContentType("application/json");
 
             final String inputText = request.getParameter("text");
             final String algo = request.getParameter("SHA");
 
-
             if(null==inputText || inputText.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Message is null or empty " +
-                        "</font>" +
-                        "  <br>");
+                Gson gson = new Gson();
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("CALCULATE_MD");
+                errorResponse.setErrorMessage("Message is null or empty");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             final String[] cipherparameter = request.getParameterValues("cipherparameternew");
+            
+            if (cipherparameter == null || cipherparameter.length == 0) {
+                Gson gson = new Gson();
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("CALCULATE_MD");
+                errorResponse.setErrorMessage("Please select at least one hash algorithm");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
 
             Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "md/generate";
-            HttpPost post = new HttpPost(url1);
-
-
+            
+            // Create a list to hold all results
+            java.util.List<java.util.Map<String, Object>> results = new ArrayList<>();
+            String errorMessage = null;
 
             for(int i=0; i<cipherparameter.length; i++)
             {
-
-
+                HttpPost post = new HttpPost(url1);
                 List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                 urlParameters.add(new BasicNameValuePair("p_msg", inputText));
                 urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter[i]));
 
-
                 post.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-
                 post.addHeader("accept", "application/json");
 
-                HttpResponse response1 = client.execute(post);
+                try {
+                    HttpResponse response1 = client.execute(post);
 
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request if Problem Persists </font>");
-                    return;
+                    if (response1.getStatusLine().getStatusCode() != 200) {
+                        errorMessage = "System error for algorithm " + cipherparameter[i] + ". Please try again later.";
+                        continue;
+                    }
+                    
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
+                    }
+
+                    EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+                    
+                    // Create result map for this algorithm
+                    java.util.Map<String, Object> result = new java.util.HashMap<>();
+                    result.put("algorithm", cipherparameter[i]);
+                    result.put("message", encodedMessage.getMessage());
+                    result.put("base64Encoded", encodedMessage.getBase64Encoded());
+                    result.put("hexEncoded", encodedMessage.getHexEncoded());
+                    results.add(result);
+                } catch (Exception e) {
+                    errorMessage = "Error processing algorithm " + cipherparameter[i] + ": " + e.getMessage();
                 }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-
-                EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"green\">Message [  " + inputText + "] </font> </br>");
-                out.println("<font size=\"4\" color=\"purple\"> Algo [" + encodedMessage.getMessage() + "]  </font> </br>");
-                out.println("<font size=\"4\" color=\"purple\">Algo  "+  cipherparameter[i]  + " </font> <font size=\"4\" color=\"green\"> Base64 Encoded</font><font size=\"4\" color=\"blue\"> [" + encodedMessage.getBase64Encoded() + "] </font> </br>");
-                out.println("<font size=\"4\" color=\"purple\">Algo "+   cipherparameter[i]  + " </font> <font size=\"4\" color=\"green\"> Hex Encoded </font><font size=\"4\" color=\"blue\">[" + encodedMessage.getHexEncoded() + "] </font> </br>");
-
-
-
-//                final String MD = CalcualateMD5(cipherparameter[i], inputText, "BC");
-//                if (MD != null && !MD.isEmpty()) {
-//                    addHorizontalLine(out);
-//                    out.println("<font size=\"2\" color=\"green\"> Message Digest "
-//                            + cipherparameter[i] + "</font>"
-//                            + "<b> = <font size=\"4\" color=\"blue\">"
-//                            + MD + "</font></b><br>");
-//                }
             }
 
+            // Create final response
+            java.util.Map<String, Object> responseMap = new java.util.HashMap<>();
+            responseMap.put("success", results.size() > 0);
+            responseMap.put("operation", "CALCULATE_MD");
+            responseMap.put("inputText", inputText);
+            responseMap.put("results", results);
+            if (errorMessage != null) {
+                responseMap.put("errorMessage", errorMessage);
+            }
+
+            out.println(gson.toJson(responseMap));
             return;
 
 
