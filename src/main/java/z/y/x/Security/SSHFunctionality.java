@@ -64,7 +64,8 @@ public class SSHFunctionality extends HttpServlet {
         final String methodName = request.getParameter("methodName");
 
 
-        response.setContentType("text/html");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
         if (METHOD_GENERATE_SSHKEYGEN.equals(methodName)) {
@@ -74,69 +75,108 @@ public class SSHFunctionality extends HttpServlet {
 
 
             if (algo == null || algo.trim().length() == 0) {
-                algo="RSA";
+                algo="ED25519";  // Default to ED25519 (recommended)
             }
 
-            if(passphrase!=null && passphrase.trim().length()>20)
+            if(passphrase!=null && passphrase.trim().length()>128)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\">password length should be less than 20 </font>");
+                Gson gson = new Gson();
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate");
+                errorResponse.setErrorMessage("Passphrase length should be less than 128 characters");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
 
-            int keySize=2048;
+            int keySize=256;  // Default for ED25519
             if(keysize == null || keysize.trim().length()==0)
             {
-                keySize=2048 ;
+                keySize=256 ;
             }
 
             try {
                 keySize= Integer.parseInt(keysize);
             } catch(Exception e) {
-                keySize=2048 ;
+                keySize=256 ;
             }
 
 
             algo = algo.trim().toUpperCase();
+            Gson gson = new Gson();
 
-            if(algo.equals("RSA") || algo.equals("DSA")  || algo.equals("ECDSA")  )
+            // Validate algorithm and key size combinations
+            if(algo.equals("ED25519"))
             {
-
+                // ED25519 has fixed 256-bit key size
+                keySize = 256;
+            }
+            else if(algo.equals("RSA") || algo.equals("DSA") || algo.equals("ECDSA"))
+            {
                 if(algo.equals("ECDSA"))
                 {
-                    if( keySize==256 || keySize==384 || keySize==521  )
+                    if( keySize==256 || keySize==384 || keySize==521 )
                     {
-                        //DO Nothing
+                        // Valid ECDSA key size
                     }
                     else{
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> valid Key size for  ECDSA is (256,384,521)  </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("generate");
+                        errorResponse.setAlgorithm("ECDSA");
+                        errorResponse.setErrorMessage("Valid key size for ECDSA is (256, 384, 521)");
+                        out.println(gson.toJson(errorResponse));
                         return;
                     }
-
-                    }
                 }
-                if(algo.equals("DSA"))
+                else if(algo.equals("DSA"))
                 {
-                    if( "512,576,640,704,768,832,896,960,1024,2048".contains(keysize)  )
+                    // Fix: Use proper list contains check instead of string contains
+                    java.util.List<String> validDsaSizes = java.util.Arrays.asList("512","576","640","704","768","832","896","960","1024","2048");
+                    if( validDsaSizes.contains(String.valueOf(keySize)) )
                     {
-                        //DO Nothing
+                        // Valid DSA key size
                     }
                     else{
-
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> valid Key size for  DSA is (512,576,640,704,768,832,896,960,1024,2048)   </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("generate");
+                        errorResponse.setAlgorithm("DSA");
+                        errorResponse.setErrorMessage("Valid key size for DSA is (512, 576, 640, 704, 768, 832, 896, 960, 1024, 2048). Note: DSA is deprecated.");
+                        out.println(gson.toJson(errorResponse));
                         return;
-
-
                     }
                 }
+                else if(algo.equals("RSA"))
+                {
+                    // Validate RSA key size (minimum 1024, recommended 2048+)
+                    if(keySize < 1024)
+                    {
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("generate");
+                        errorResponse.setAlgorithm("RSA");
+                        errorResponse.setErrorMessage("RSA key size must be at least 1024 bits. Recommended: 2048 or 4096 bits.");
+                        out.println(gson.toJson(errorResponse));
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // Unsupported algorithm
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate");
+                errorResponse.setErrorMessage("Unsupported algorithm: " + algo + ". Supported algorithms: ED25519, RSA, ECDSA, DSA");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
 
 
             try {
 
-                Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "ssh/keygen";
 
@@ -147,7 +187,7 @@ public class SSHFunctionality extends HttpServlet {
                 post.addHeader("accept", "application/json");
 
 
-                urlParameters.add(new BasicNameValuePair("p_keysize", keysize));
+                urlParameters.add(new BasicNameValuePair("p_keysize", String.valueOf(keySize)));
                 urlParameters.add(new BasicNameValuePair("p_algo", algo));
                 urlParameters.add(new BasicNameValuePair("p_passphrase", passphrase));
 
@@ -158,8 +198,12 @@ public class SSHFunctionality extends HttpServlet {
                 HttpResponse response1 = httpClient.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("generate");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("System error: External API returned status " + response1.getStatusLine().getStatusCode() + ". Please try later.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
                 BufferedReader br = new BufferedReader(
@@ -176,68 +220,95 @@ public class SSHFunctionality extends HttpServlet {
 
                 sshpojo sshpojo = gson.fromJson(content.toString(), sshpojo.class);
                 if(sshpojo!=null) {
-                    out.println("<font size=\"4\" color=\"green\"> <b><u>SSH-keygen for [" + sshpojo.getAlgo() + "-" + sshpojo.getKeySize() + "]  (PrivateKey/PublicKey) </b></u> <br>");
-                    out.println("<font size=\"3\" color=\"red\"> FingerPrint [" + sshpojo.getFingerprint() + "]</font> <br>");
-                    out.println("<p>Private Key</p>");
-                    out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"20\" cols=\"30\" form=\"X\">" + sshpojo.getPrivateKey() + "</textarea>");
-                    out.println("<br>");
-                    out.println("<p>Public Key</p>");
-                    out.println("<textarea readonly class=\"form-control\" name=\"comment\" rows=\"10\" cols=\"30\" form=\"y\">" + sshpojo.getPublicKey() + "</textarea>");
-                }
-                
-                String sessionId = request.getSession().getId();
-                String email = request.getParameter("email");
-                String j_session_id = request.getParameter("j_csrf");
-                
-                if(email!=null && email.length()>0)
-                {
-                	if(!sessionId.equalsIgnoreCase(j_session_id))
-                	{
-                		addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> Invalid CSRF token can't send email. Please refresh the page and Try again....</font>");
-                        return;
-                	}
-                	
-                	SendEmail sendEmail = new SendEmail();
-                	final String pw = passphrase;
-                	final String privKey = sshpojo.getPrivateKey();
-                	final String pubKey =  sshpojo.getPublicKey();
-                	
-                	
-                	if(sendEmail.isValidEmail(email))
-                	{
-                		
-                		new Thread(new Runnable() {
-                			  public void run() {
-                			    SendEmail sendEmail = new SendEmail();
-                			    	try {
-                			    		if(pw!=null && pw.length()>1)
-                			    		{
-                			    			sendEmail.sendEmail("Your's SSH Key's ", pw , "Password" , privKey , "SSH Private Key" , pubKey , "PublicKey (authorized_keys)",  email, "sshfunctions.jsp");
-                			    		}
-                			    		else {
-                			    			sendEmail.sendEmail("Your's SSH Key's ", privKey , "Private Key" , pubKey , "PublicKey (authorized_keys)",  email, "sshfunctions.jsp");
-                			    		}
-    									
-    								} catch (Exception e) {
-    									// TODO Auto-generated catch block
-    									e.printStackTrace();
-    								}
-                			    }
-                			}).start();	
-    					out.println("<font size=\"2\" color=\"green\"> Email Send Successfully.</font>");
-    	                return;
-                	}
-                	else {
-                		addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> Invalid Email ...</font>");
-                        return;
-                	}
+                    // Return structured JSON response
+                    EncodedMessage successResponse = new EncodedMessage();
+                    successResponse.setSuccess(true);
+                    successResponse.setOperation("generate");
+                    successResponse.setAlgorithm(sshpojo.getAlgo());
+                    successResponse.setOriginalMessage(String.valueOf(sshpojo.getKeySize()));
+                    successResponse.setMessage(sshpojo.getPublicKey());  // Public key
+                    successResponse.setBase64Encoded(sshpojo.getPrivateKey());  // Private key
+                    successResponse.setHexEncoded(sshpojo.getFingerprint());  // Fingerprint
+
+                    // Store keys in session for potential email sending
+                    request.getSession().setAttribute("ssh_private_key", sshpojo.getPrivateKey());
+                    request.getSession().setAttribute("ssh_public_key", sshpojo.getPublicKey());
+                    request.getSession().setAttribute("ssh_fingerprint", sshpojo.getFingerprint());
+                    request.getSession().setAttribute("ssh_algo", sshpojo.getAlgo());
+                    request.getSession().setAttribute("ssh_keysize", sshpojo.getKeySize());
+
+                    String sessionId = request.getSession().getId();
+                    String email = request.getParameter("email");
+                    String j_session_id = request.getParameter("j_csrf");
+
+                    // Handle email sending if requested
+                    if(email!=null && email.length()>0)
+                    {
+                        if(!sessionId.equalsIgnoreCase(j_session_id))
+                        {
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("generate");
+                            errorResponse.setAlgorithm(algo);
+                            errorResponse.setErrorMessage("Invalid CSRF token. Can't send email. Please refresh the page and try again.");
+                            out.println(gson.toJson(errorResponse));
+                            return;
+                        }
+
+                        SendEmail sendEmail = new SendEmail();
+                        final String pw = passphrase;
+                        final String privKey = sshpojo.getPrivateKey();
+                        final String pubKey =  sshpojo.getPublicKey();
+
+
+                        if(sendEmail.isValidEmail(email))
+                        {
+                            // Send email asynchronously
+                            new Thread(new Runnable() {
+                                  public void run() {
+                                    SendEmail sendEmail = new SendEmail();
+                                        try {
+                                            if(pw!=null && pw.length()>1)
+                                            {
+                                                sendEmail.sendEmail("Your SSH Keys", pw , "Password" , privKey , "SSH Private Key" , pubKey , "Public Key (authorized_keys)",  email, "sshfunctions.jsp");
+                                            }
+                                            else {
+                                                sendEmail.sendEmail("Your SSH Keys", privKey , "Private Key" , pubKey , "Public Key (authorized_keys)",  email, "sshfunctions.jsp");
+                                            }
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+
+                            // Add email sent status to response
+                            successResponse.setIv("Email sent successfully to: " + email);
+                        }
+                        else {
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("generate");
+                            errorResponse.setAlgorithm(algo);
+                            errorResponse.setErrorMessage("Invalid email address: " + email);
+                            out.println(gson.toJson(errorResponse));
+                            return;
+                        }
+                    }
+
+                    // Return success response with keys
+                    out.println(gson.toJson(successResponse));
                 }
 
             }catch (Exception ex)
             {
-                out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request" + ex +" </font>");
+                gson = new Gson();
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate");
+                errorResponse.setAlgorithm(algo);
+                errorResponse.setErrorMessage("System error: " + ex.getMessage() + ". Please try later or report the issue.");
+                out.println(gson.toJson(errorResponse));
             }
 
 
