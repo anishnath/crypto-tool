@@ -110,14 +110,14 @@
 	<meta property="og:url" content="https://8gwifi.org/jwkfunctions.jsp">
 	<meta property="og:title" content="JWK Generator Online – Free | 8gwifi.org">
 	<meta property="og:description" content="Generate JWK keys online. Free tool creates RSA, EC, Ed25519, HMAC, and AES keys in JWK format. Instant generation, privacy-first.">
-	<meta property="og:image" content="https://8gwifi.org/docs/jwk.png">
+	<meta property="og:image" content="https://8gwifi.org/images/site/jwk.png">
 	
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:url" content="https://8gwifi.org/jwkfunctions.jsp">
 	<meta name="twitter:title" content="JWK Generator Online – Free | 8gwifi.org">
 	<meta name="twitter:description" content="Generate JWK keys online. Free tool creates RSA, EC, Ed25519, HMAC, and AES keys in JWK format. Instant generation, privacy-first.">
-	<meta name="twitter:image" content="https://8gwifi.org/docs/jwk.png">
+	<meta name="twitter:image" content="https://8gwifi.org/images/site/jwk.png">
 	
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://8gwifi.org/jwkfunctions.jsp">
