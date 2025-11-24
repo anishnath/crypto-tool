@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="java.security.KeyPair" %>
 <%@ page import="com.google.gson.Gson" %>
