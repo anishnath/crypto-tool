@@ -196,6 +196,9 @@
             </a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">SSL/TLS Tools</h6>
+            <a class="dropdown-item" href="ssl-tls-handshake-demo.jsp">
+              <i class="fas fa-project-diagram text-danger"></i> SSL/TLS Handshake Demo
+            </a>
             <a class="dropdown-item" href="sslscan.jsp">
               <i class="fas fa-shield text-danger"></i> SSL/TLS Scanner
             </a>

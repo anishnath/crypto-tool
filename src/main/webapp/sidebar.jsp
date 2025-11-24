@@ -100,6 +100,7 @@
                                 <li><a href="security-headers-checker.jsp">Security Headers Checker</a></li>
                                 <li><a href="InspectJSFunctions.jsp">InspectJS JavaScript Scanner</a></li>
                                 <li><a href="subdomain.jsp">Subdomain Finder</a></li>
+                                <li><a href="ssl-tls-handshake-demo.jsp">SSL/TLS Handshake Demo</a></li>
                                 <li><a href="sslscan.jsp">SSL/TLS Scanner</a></li>
                                 <li><a href="jwt-debugger.jsp">JWT Debugger & Validator</a></li>
                                 <li><a href="jwsparse.jsp">JWS Parser</a></li>
