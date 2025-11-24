@@ -488,6 +488,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
+<%@ include file="pgp-menu-nav.jsp"%>
 <h1 class="mt-4">Generate SSH Keys Online</h1>
 
 <!-- EEAT: Author & Trust Signals -->
