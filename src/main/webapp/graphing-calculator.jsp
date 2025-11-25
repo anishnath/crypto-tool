@@ -322,6 +322,17 @@
                 <button class="dropdown-item" onclick="gcQuickPreset('lissajous')">Lissajous Curve</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('hypotrochoid')">Hypotrochoid</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('logistic_exp')">Logistic vs Exponential</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">More</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('rose_curves')">Rose Curves (k=3,4,5)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('piece_deriv_integral')">Piecewise + Derivative + Integral</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('quad_regression')">Quadratic Regression (random data)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('fourier_square')">Fourier Square Wave (partials)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('spirals')">Spirals: Archimedean vs Log</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('distributions_overlay')">Normal vs Student's t (PDF)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('deltoid')">Deltoid (Epicycloid)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('lemniscate')">Lemniscate (Implicit)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('butterfly')">Butterfly Curve (Polar)</button>
               </div>
             </div>
             <button class="btn btn-sm btn-outline-light" onclick="gcClearAll()"><i class="fas fa-broom"></i> Clear All</button>
@@ -657,6 +668,107 @@
         gcSetExpr(firstId, 'cartesian', '1/(1+exp(-x))', '#22c55e');
         gcAdd('cartesian', '0.2*exp(0.3*x)', '#ef4444');
         setRange(-10, 10, 0, 5);
+        break;
+      case 'rose_curves':
+        // r = cos(kθ) with k=3,4,5
+        gcSetExpr(firstId, 'polar', '2*cos(3*theta)', '#ef4444');
+        gcAdd('polar', '2*cos(4*theta)', '#22c55e');
+        gcAdd('polar', '2*cos(5*theta)', '#2563eb');
+        setRange(-3,3,-3,3);
+        break;
+      case 'piece_deriv_integral':
+        // Base cartesian f(x) with derivative + shaded integral
+        gcSetExpr(firstId, 'cartesian', 'x^2 - 2*x + 1', '#2563eb');
+        // Turn on derivative
+        (function(){
+          var cb = document.getElementById('show-derivative-'+firstId);
+          if (cb){ cb.checked = true; toggleDerivative(firstId); }
+          var ci = document.getElementById('show-integration-'+firstId);
+          if (ci){ ci.checked = true; toggleIntegration(firstId); }
+          var a = document.getElementById('integration-a-'+firstId);
+          var b = document.getElementById('integration-b-'+firstId);
+          if (a && b){ a.value = 0; b.value = 2; updateIntegrationBounds(firstId); }
+        })();
+        // Add a piecewise function (defaults are prefilled: good demo)
+        gcAdd('piecewise', '', '#10b981');
+        setRange(-4,4,-2,6);
+        break;
+      case 'quad_regression':
+        // Generate random quadratic data and fit a quadratic
+        (function(){
+          // Generate noisy data around y = 0.5x^2 - x + 2
+          var xs = [], ys = [], pts = [];
+          for (var x=-3; x<=3; x+=0.5){
+            var noise = (Math.random()-0.5)*0.6;
+            var y = 0.5*x*x - 1*x + 2 + noise;
+            xs.push(x); ys.push(y);
+            pts.push(x.toFixed(2) + ', ' + y.toFixed(2));
+          }
+          // Place data
+          gcSetExpr(firstId, 'table', pts.join('\n'), '#2563eb');
+          // Compute quadratic least squares fit using math.js
+          function quadFit(xs, ys){
+            var n = xs.length;
+            var s1=0,s2=0,s3=0,s4=0, sx=0, sy=0, sxy=0, sx2y=0;
+            for (var i=0;i<n;i++){
+              var x=xs[i], y=ys[i];
+              var x2=x*x; var x3=x2*x; var x4=x3*x;
+              s1 += 1; sx += x; s2 += x2; s3 += x3; s4 += x4;
+              sy += y; sxy += x*y; sx2y += x2*y;
+            }
+            var A = [ [s4, s3, s2], [s3, s2, sx], [s2, sx, s1] ];
+            var b = [ sx2y, sxy, sy ];
+            try{
+              var sol = math.lusolve(A, b); // 3x1
+              var a = sol[0][0], bb = sol[1][0], c = sol[2][0];
+              return {a:a, b:bb, c:c};
+            }catch(e){ return {a:0.5, b:-1, c:2}; }
+          }
+          var coeffs = quadFit(xs, ys);
+          var expr = coeffs.a.toFixed(3)+'*x^2 + '+coeffs.b.toFixed(3)+'*x + '+coeffs.c.toFixed(3);
+          gcAdd('cartesian', expr, '#f59e0b');
+          setRange(-3.5,3.5, -1, 7);
+        })();
+        break;
+      case 'fourier_square':
+        // Partial sums for square wave approx: (4/pi) * sum_{n odd<=N} sin(n x)/n
+        var pi = Math.PI;
+        gcSetExpr(firstId, 'cartesian', '(4/'+pi.toFixed(3)+')*(sin(x))', '#ef4444');
+        gcAdd('cartesian', '(4/'+pi.toFixed(3)+')*(sin(x) + (1/3)*sin(3*x))', '#22c55e');
+        gcAdd('cartesian', '(4/'+pi.toFixed(3)+')*(sin(x) + (1/3)*sin(3*x) + (1/5)*sin(5*x))', '#2563eb');
+        gcAdd('cartesian', '(4/'+pi.toFixed(3)+')*(sin(x) + (1/3)*sin(3*x) + (1/5)*sin(5*x) + (1/7)*sin(7*x))', '#a78bfa');
+        setRange(-10,10, -2, 2);
+        break;
+      case 'spirals':
+        // Archimedean: r = a + b*theta ; Logarithmic: r = a*exp(b*theta)
+        gcSetExpr(firstId, 'polar', '0.1*theta', '#2563eb');
+        gcAdd('polar', '0.1*exp(0.15*theta)', '#f59e0b');
+        setRange(-6,6,-6,6);
+        break;
+      case 'distributions_overlay':
+        // Overlay normal(0,1) and Student's t (v=3) pdfs as cartesian
+        // normal pdf: (1/sqrt(2*pi))*exp(-x^2/2)
+        // t pdf (v=3): gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)) * (1 + x^2/v)^(-(v+1)/2)
+        var norm = '(1/sqrt(2*pi))*exp(-x^2/2)';
+        var t3 = '(gamma((3+1)/2)/(sqrt(3*pi)*gamma(3/2)))* (1 + x^2/3)^(- (3+1)/2)';
+        gcSetExpr(firstId, 'cartesian', norm, '#2563eb');
+        gcAdd('cartesian', t3, '#ef4444');
+        setRange(-5,5, 0, 0.5);
+        break;
+      case 'deltoid':
+        // Deltoid epicycloid
+        gcSetExpr(firstId, 'parametric', '3*cos(t) - cos(3*t), 3*sin(t) - sin(3*t)', '#22c55e');
+        setRange(-4,4,-4,4);
+        break;
+      case 'lemniscate':
+        // Lemniscate of Bernoulli: (x^2 + y^2)^2 = 2a^2(x^2 - y^2), choose a=2 -> 8*(x^2 - y^2)
+        gcSetExpr(firstId, 'implicit', '(x^2 + y^2)^2 = 8*(x^2 - y^2)', '#a78bfa');
+        setRange(-4,4,-4,4);
+        break;
+      case 'butterfly':
+        // Butterfly curve: r = e^{sin θ} − 2 cos 4θ + sin^5(θ/12)
+        gcSetExpr(firstId, 'polar', 'exp(sin(theta)) - 2*cos(4*theta) + (sin(theta/12))^5', '#f43f5e');
+        setRange(-4,4,-4,4);
         break;
       default:
         gcQuickSample('cartesian');
