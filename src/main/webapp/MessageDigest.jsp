@@ -102,7 +102,7 @@
 }
 </script>
 
-    <title>Message Digest Calculator - Online Hash Generator | 8gwifi.org</title>
+    <title>Message Digest Calculator Online – Free | 8gwifi.org</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <meta name="description" content="Free online message digest calculator supporting 50+ hash algorithms: MD5, SHA-1, SHA-256, SHA-512, SHA-3, RIPEMD, BLAKE2b, Keccak, GOST, and more. Generate hex and Base64 hashes instantly.">
     <meta name="keywords" content="message digest calculator, hash calculator, md5 generator, sha256 calculator, sha512 generator, hash function online, message digest online, hash algorithm calculator, sha1 calculator, sha3 calculator, ripemd calculator, blake2b calculator">
