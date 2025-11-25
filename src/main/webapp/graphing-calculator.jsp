@@ -78,10 +78,10 @@
     </script>
 
     <!-- Math.js for expression parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+    <script data-cfasync="false" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
 
     <!-- Plotly.js for graphing -->
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script data-cfasync="false" src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 
     <!-- Bootstrap for UI -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -89,8 +89,8 @@
 
     <!-- KaTeX for beautiful math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
     <style>
         body {
@@ -146,16 +146,22 @@
 
         .expression-input {
             width: 100%;
-            border: none;
-            background: transparent;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            padding: 5px;
+            font-size: 15px;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #ffffff;
+            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
         }
+
+        .expression-input::placeholder { color:#7a7a7a; opacity:1; }
 
         .expression-input:focus {
             outline: none;
-            background: white;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,.15);
+            background: #ffffff;
         }
 
         .color-picker {
@@ -271,6 +277,18 @@
             margin-bottom: 4px;
             font-weight: 500;
         }
+
+        /* Dark mode */
+        body.gc-dark .header { background: linear-gradient(135deg, #0f172a 0%, #334155 100%); }
+        body.gc-dark { background:#0b0f14; color:#e5e7eb; }
+        body.gc-dark .sidebar { background:#0f172a; color:#e5e7eb; box-shadow: 2px 0 10px rgba(0,0,0,0.4); }
+        body.gc-dark .settings-panel { background:#111827; }
+        body.gc-dark .form-check-label, body.gc-dark label, body.gc-dark .text-muted { color:#94a3b8 !important; }
+        body.gc-dark input, body.gc-dark textarea, body.gc-dark select { background:#0b1220; color:#e5e7eb; border-color:#1f2937; }
+        body.gc-dark .expression-input { background:#0b1220; border-color:#334155; }
+        body.gc-dark .expression-input:focus { border-color:#60a5fa; box-shadow:0 0 0 3px rgba(96,165,250,.15); }
+        body.gc-dark .btn-add { background:#1e293b; }
+        body.gc-dark .expression-item { background:#0b1220; border-left-color:#60a5fa; }
     </style>
     <%@ include file="header-script.jsp"%>
 </head>
@@ -280,6 +298,34 @@
     <div class="container-fluid">
         <h3><i class="fas fa-chart-line"></i> Advanced Graphing Calculator</h3>
         <p class="mb-0" style="font-size: 14px;">Graphing tool with multiple plot types</p>
+        <div class="d-flex align-items-center mt-2" style="gap:12px;">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="gcDarkToggle">
+              <label class="form-check-label" for="gcDarkToggle">Dark mode</label>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-wand-magic-sparkles"></i> Examples</button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item" onclick="gcQuickSample('cartesian')">Cartesian: sin(x)</button>
+                <button class="dropdown-item" onclick="gcQuickSample('parametric')">Parametric: Circle</button>
+                <button class="dropdown-item" onclick="gcQuickSample('polar')">Polar: Spiral</button>
+                <button class="dropdown-item" onclick="gcQuickSample('implicit')">Implicit: Circle</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Multi‑Expression Presets</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('sin_cos')">Sine + Cosine</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('circle_line')">Circle + Line</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('polar_flowers')">Polar Flowers</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('band_inequality')">Inequality Band</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('data_vs_fit')">Data Points + Fit Line</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Parametric & Growth</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('lissajous')">Lissajous Curve</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('hypotrochoid')">Hypotrochoid</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('logistic_exp')">Logistic vs Exponential</button>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-light" onclick="gcClearAll()"><i class="fas fa-broom"></i> Clear All</button>
+        </div>
     </div>
 </div>
 
@@ -434,7 +480,7 @@
     </div>
 </div>
 
-<script src="js/graphing-tool-engine.js"></script>
+<script data-cfasync="false" src="js/graphing-tool-engine.js"></script>
 <div class="sharethis-inline-share-buttons" style="margin-top: 1rem;"></div>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="thanks.jsp"%>
@@ -467,6 +513,157 @@
     {"@type":"Question","name":"Does it support calculus tools?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enable derivative and area tools to view slopes and integrals, and use root/intersection finders for analysis."}}
   ]
 }
+</script>
+
+<script>
+// Dark mode + examples + error banner
+(function(){
+  function setDark(on){
+    window.GC_DARK = !!on;
+    document.body.classList.toggle('gc-dark', !!on);
+    try{ localStorage.setItem('gc_dark', on? '1':'0'); }catch(_){ }
+    // Replot to apply theme
+    try{ if (typeof updateGraph === 'function') updateGraph(); }catch(_){ }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    // Missing libs banner
+    if (typeof math === 'undefined' || typeof Plotly === 'undefined'){
+      var alert = document.createElement('div');
+      alert.className = 'alert alert-danger m-3';
+      alert.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Required libraries failed to load. If you use script optimizers (e.g., Rocket Loader), disable them for this page.';
+      document.body.insertBefore(alert, document.body.firstChild);
+    }
+    // Init dark from storage
+    var pref = null; try { pref = localStorage.getItem('gc_dark'); } catch(_){ }
+    var on = pref === '1';
+    var toggle = document.getElementById('gcDarkToggle');
+    if (toggle){ toggle.checked = on; toggle.addEventListener('change', function(){ setDark(this.checked); }); }
+    setDark(on);
+  });
+
+  // Quick samples
+  window.gcClearAll = function(){
+    try{
+      engine.expressions = [];
+      var list = document.getElementById('expressions-list'); if (list) list.innerHTML='';
+      window.expressionElements = {};
+      if (typeof addExpression === 'function') addExpression();
+      if (typeof updateGraph === 'function') updateGraph();
+    }catch(_){ }
+  };
+  window.gcQuickSample = function(kind){
+    gcClearAll();
+    // Expect one default expression present
+    var exprEls = document.querySelectorAll('[id^=expr-item-]');
+    if (!exprEls.length) { if (typeof addExpression==='function') addExpression(); }
+    var item = document.querySelector('[id^=expr-item-]');
+    if (!item) return;
+    var id = parseInt(item.id.replace('expr-item-',''));
+    var typeSel = document.getElementById('type-'+id);
+    switch(kind){
+      case 'cartesian':
+        if (typeSel){ typeSel.value='cartesian'; updateExpressionType(id); }
+        var input = document.getElementById('expr-'+id); if (input){ input.value='sin(x)'; updateExpressionValue(id); }
+        break;
+      case 'parametric':
+        if (typeSel){ typeSel.value='parametric'; updateExpressionType(id); }
+        var input2 = document.getElementById('expr-'+id); if (input2){ input2.value='cos(t), sin(t)'; updateExpressionValue(id); }
+        break;
+      case 'polar':
+        if (typeSel){ typeSel.value='polar'; updateExpressionType(id); }
+        var input3 = document.getElementById('expr-'+id); if (input3){ input3.value='theta'; updateExpressionValue(id); }
+        break;
+      case 'implicit':
+        if (typeSel){ typeSel.value='implicit'; updateExpressionType(id); }
+        var input4 = document.getElementById('expr-'+id); if (input4){ input4.value='x^2 + y^2 = 9'; updateExpressionValue(id); }
+        break;
+    }
+  };
+
+  // Helper to set an expression by id
+  function gcSetExpr(id, type, value, color){
+    var typeSel = document.getElementById('type-'+id);
+    if (typeSel){ typeSel.value = type; updateExpressionType(id); }
+    var input = document.getElementById('expr-'+id);
+    if (input){ input.value = value; updateExpressionValue(id); }
+    if (color){ var c = document.getElementById('color-'+id); if (c){ c.value = color; updateExpressionColor(id); } }
+  }
+
+  // Helper to add a new expression and return its id
+  function gcAdd(type, value, color){
+    if (typeof addExpression==='function') addExpression();
+    var items = document.querySelectorAll('[id^=expr-item-]');
+    var last = items[items.length-1];
+    if(!last) return null;
+    var id = parseInt(last.id.replace('expr-item-',''));
+    gcSetExpr(id, type, value, color);
+    return id;
+  }
+
+  // Multi-expression presets
+  window.gcQuickPreset = function(name){
+    gcClearAll();
+    // Modify the first default expression
+    var firstEl = document.querySelector('[id^=expr-item-]');
+    if (!firstEl) { if (typeof addExpression==='function') addExpression(); firstEl = document.querySelector('[id^=expr-item-]'); }
+    var firstId = parseInt(firstEl.id.replace('expr-item-',''));
+    // Defaults ranges
+    var xMin = document.getElementById('xMin'), xMax = document.getElementById('xMax');
+    var yMin = document.getElementById('yMin'), yMax = document.getElementById('yMax');
+    function setRange(x0,x1,y0,y1){ if(xMin)xMin.value=x0; if(xMax)xMax.value=x1; if(yMin)yMin.value=y0; if(yMax)yMax.value=y1; }
+
+    switch(name){
+      case 'sin_cos':
+        gcSetExpr(firstId, 'cartesian', 'sin(x)', '#2563eb');
+        gcAdd('cartesian', 'cos(x)', '#f59e0b');
+        setRange(-10,10,-2,2);
+        break;
+      case 'circle_line':
+        gcSetExpr(firstId, 'implicit', 'x^2 + y^2 = 9', '#10b981');
+        gcAdd('cartesian', 'y = x', '#ef4444');
+        setRange(-5,5,-5,5);
+        break;
+      case 'polar_flowers':
+        gcSetExpr(firstId, 'polar', '2*cos(5*theta)', '#a78bfa');
+        gcAdd('polar', '2*sin(3*theta)', '#22d3ee');
+        setRange(-3,3,-3,3);
+        break;
+      case 'band_inequality':
+        gcSetExpr(firstId, 'inequality', 'y > x - 1', '#f43f5e');
+        gcAdd('inequality', 'y < x + 1', '#22c55e');
+        setRange(-10,10,-10,10);
+        break;
+      case 'data_vs_fit':
+        // Data
+        gcSetExpr(firstId, 'table', '1, 2\n2, 4.1\n3, 6.0\n4, 8.2\n5, 10.1', '#2563eb');
+        // Fit
+        gcAdd('cartesian', '2*x', '#f59e0b');
+        setRange(0,6,0,12);
+        break;
+      case 'lissajous':
+        // x = sin(3t), y = sin(4t)
+        gcSetExpr(firstId, 'parametric', 'sin(3*t), sin(4*t)', '#10b981');
+        setRange(-1.2, 1.2, -1.2, 1.2);
+        break;
+      case 'hypotrochoid':
+        // (2*cos(t) + 5*cos((2/3)*t), 2*sin(t) - 5*sin((2/3)*t))
+        gcSetExpr(firstId, 'parametric', '2*cos(t), 2*sin(t)', '#a78bfa');
+        // Add second parametric as separate expression to overlay hypotrochoid path approximation
+        gcAdd('parametric', '2*cos(t) + 5*cos((2/3)*t), 2*sin(t) - 5*sin((2/3)*t)', '#22d3ee');
+        setRange(-8, 8, -8, 8);
+        break;
+      case 'logistic_exp':
+        // Logistic curve vs Exponential growth
+        gcSetExpr(firstId, 'cartesian', '1/(1+exp(-x))', '#22c55e');
+        gcAdd('cartesian', '0.2*exp(0.3*x)', '#ef4444');
+        setRange(-10, 10, 0, 5);
+        break;
+      default:
+        gcQuickSample('cartesian');
+    }
+    if (typeof updateGraph==='function') updateGraph();
+  };
+})();
 </script>
 
 <script type="application/ld+json">

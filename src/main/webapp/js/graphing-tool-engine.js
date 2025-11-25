@@ -1233,6 +1233,7 @@ class GraphingEngine {
             }
         }
 
+        const dark = !!(typeof window !== 'undefined' && window.GC_DARK);
         const layout = {
             title: '',
             xaxis: {
@@ -1240,25 +1241,29 @@ class GraphingEngine {
                 range: [xMin, xMax],
                 zeroline: true,
                 showgrid: showGrid,
-                gridcolor: '#e0e0e0'
+                gridcolor: dark ? '#374151' : '#e0e0e0',
+                color: dark ? '#e5e7eb' : '#111827'
             },
             yaxis: {
                 title: 'y',
                 range: [yMin, yMax],
                 zeroline: true,
                 showgrid: showGrid,
-                gridcolor: '#e0e0e0',
+                gridcolor: dark ? '#374151' : '#e0e0e0',
+                color: dark ? '#e5e7eb' : '#111827',
                 scaleanchor: 'x'
             },
             showlegend: showLegend,
             legend: {
                 x: 1,
                 xanchor: 'right',
-                y: 1
+                y: 1,
+                font: { color: dark ? '#e5e7eb' : '#111827' }
             },
             hovermode: 'closest',
-            plot_bgcolor: '#fafafa',
-            paper_bgcolor: 'white'
+            plot_bgcolor: dark ? '#0b1220' : '#fafafa',
+            paper_bgcolor: dark ? '#0b0f14' : 'white',
+            font: { color: dark ? '#e5e7eb' : '#111827' }
         };
 
         const config = {
