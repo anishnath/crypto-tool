@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%@page import="z.y.x.Security.fernetpojo"%>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
@@ -66,7 +67,7 @@
 }
 </script>
 
-	<title>Fernet Encryption/Decryption Online – Generate Key, Encrypt & Decrypt</title>
+	<title>Fernet Encryption/Decryption Online – Free | 8gwifi.org</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 
 	<meta name="keywords" content="fernet encryption online, generate fernet key, fernet decrypt online, base64url key, AES128 CBC HMAC, cryptography fernet token" />
