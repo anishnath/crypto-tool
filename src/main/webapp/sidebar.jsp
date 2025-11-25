@@ -53,6 +53,7 @@
                                 <li><a href="pgpencdec.jsp">PGP Encryption/Decryption</a></li>
                                 <li><a href="pgpkeyfunction.jsp">PGP Key Generation</a></li>
                                 <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier</a></li>
+                                <li><a href="pgp-suite.jsp">PGP Suite: Sign/Verify/Keys</a></li>
                                 <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
                                 <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
                                 <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>

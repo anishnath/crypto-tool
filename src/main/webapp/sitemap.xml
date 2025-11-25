@@ -1510,6 +1510,11 @@
   <url>
     <loc>https://8gwifi.org/pgp-file-decrypt.jsp</loc>
   </url>
+  <url>
+    <loc>https://8gwifi.org/pgp-suite.jsp</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
     <url>
     <loc>https://8gwifi.org/file-encrypt.jsp</loc>
   </url>

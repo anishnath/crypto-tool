@@ -22,6 +22,9 @@
             <a class="dropdown-item" href="pgpencdec.jsp">
               <i class="fas fa-lock text-primary"></i> PGP Encrypt/Decrypt Messages
             </a>
+            <a class="dropdown-item" href="pgp-suite.jsp">
+              <i class="fas fa-toolbox text-primary"></i> PGP Suite: Sign/Verify/Keys
+            </a>
             <a class="dropdown-item" href="pgpkeyfunction.jsp">
               <i class="fas fa-key text-primary"></i> PGP Key Generation
             </a>
