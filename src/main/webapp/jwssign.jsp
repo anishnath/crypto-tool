@@ -476,7 +476,6 @@
 
 <%@ include file="body-script.jsp"%>
 <%@ include file="pgp-menu-nav.jsp"%>
-<%@ include file="pgp-menu-nav.jsp"%>
 
 <h1 class="mt-4">JWS Sign Payload with Custom Key</h1>
 
