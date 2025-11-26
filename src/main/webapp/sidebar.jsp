@@ -565,7 +565,7 @@
                                     <li><a href="distance-formula-calculator.jsp">Distance Formula Calculator</a></li>
                                     <li><a href="math-art-gallery.jsp">Math Art Gallery - Fractal Generator & Parametric Plotter</a></li>
 
-                                    <li><a href="latex-equation-editor.jsp">LaTeX Equation Editor</a></li>
+                                    <li><a href="latex-equation-editor.jsp">Math Equation Editor</a></li>
                                     <li><a href="tikz-viewer.jsp">TikZ Viewer & Editor</a></li>
                                     <li><a href="algebraic-simplifier.jsp">Algebraic Expression Simplifier</a></li>
                                     <li><a href="factoring-calculator.jsp">Factoring Calculator</a></li>
