@@ -356,6 +356,20 @@
                 <button class="dropdown-item" onclick="gcQuickPreset('folium')">🍀 Folium of Descartes</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('cissoid')">📐 Cissoid of Diocles</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('tractrix')">🛞 Tractrix</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Machine Learning</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('activation_functions')">🧠 Activation Functions</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('sigmoid_tanh')">📈 Sigmoid vs Tanh</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('relu_variants')">⚡ ReLU & Variants</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('loss_functions')">📉 Loss Functions</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('softmax')">🎯 Softmax Intuition</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('gradient_descent')">⛰️ Gradient Descent</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('learning_rates')">🎚️ Learning Rate Comparison</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('regularization')">🔧 L1 vs L2 Regularization</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('decision_boundary')">🎨 Decision Boundary</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('gaussian_distributions')">🔔 Gaussian Distributions</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('bias_variance')">⚖️ Bias-Variance Tradeoff</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('vanishing_gradient')">📊 Vanishing Gradient Problem</button>
               </div>
             </div>
             <button class="btn btn-sm btn-outline-light" onclick="gcClearAll()"><i class="fas fa-broom"></i> Clear All</button>
@@ -937,6 +951,114 @@
         // Add the generating catenary for reference
         gcAdd('cartesian', '2*cosh((x-4)/2)', '#94a3b8');
         setRange(-2, 8, -1, 5);
+        break;
+
+      // ============ MACHINE LEARNING ============
+      case 'activation_functions':
+        // Compare common activation functions: Sigmoid, Tanh, ReLU
+        gcSetExpr(firstId, 'cartesian', '1/(1+exp(-x))', '#3b82f6');  // Sigmoid
+        gcAdd('cartesian', 'tanh(x)', '#22c55e');  // Tanh
+        gcAdd('cartesian', 'max(0, x)', '#ef4444');  // ReLU
+        gcAdd('cartesian', 'max(0.1*x, x)', '#f59e0b');  // Leaky ReLU
+        setRange(-5, 5, -1.5, 1.5);
+        break;
+      case 'sigmoid_tanh':
+        // Sigmoid vs Tanh - showing range differences
+        gcSetExpr(firstId, 'cartesian', '1/(1+exp(-x))', '#3b82f6');  // Sigmoid [0,1]
+        gcAdd('cartesian', 'tanh(x)', '#22c55e');  // Tanh [-1,1]
+        // Show derivatives
+        gcAdd('cartesian', '(1/(1+exp(-x)))*(1 - 1/(1+exp(-x)))', '#93c5fd');  // Sigmoid derivative
+        gcAdd('cartesian', '1 - (tanh(x))^2', '#86efac');  // Tanh derivative
+        setRange(-5, 5, -1.2, 1.2);
+        break;
+      case 'relu_variants':
+        // ReLU and its variants
+        gcSetExpr(firstId, 'cartesian', 'max(0, x)', '#ef4444');  // ReLU
+        gcAdd('cartesian', 'max(0.1*x, x)', '#f59e0b');  // Leaky ReLU (α=0.1)
+        gcAdd('cartesian', 'max(0.2*x, x)', '#22c55e');  // PReLU (α=0.2)
+        gcAdd('cartesian', 'log(1 + exp(x))', '#3b82f6');  // Softplus
+        gcAdd('cartesian', 'x * (1/(1+exp(-x)))', '#a855f7');  // Swish/SiLU
+        setRange(-4, 4, -1, 4);
+        break;
+      case 'loss_functions':
+        // Common loss functions
+        // MSE: (y - y_hat)^2, treating x as error
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#3b82f6');  // MSE / L2
+        gcAdd('cartesian', 'abs(x)', '#22c55e');  // MAE / L1
+        gcAdd('cartesian', 'x < 1 ? 0.5*x^2 : abs(x) - 0.5', '#f59e0b');  // Huber (δ=1)
+        // Cross-entropy for y=1: -log(sigmoid(x))
+        gcAdd('cartesian', '-log(1/(1+exp(-x)))', '#ef4444');  // Binary CE (y=1)
+        setRange(-3, 3, -0.5, 5);
+        break;
+      case 'softmax':
+        // Softmax intuition: e^x / sum(e^x) - showing exponential scaling
+        gcSetExpr(firstId, 'cartesian', 'exp(x)', '#3b82f6');  // Exponential
+        gcAdd('cartesian', 'exp(x)/(exp(-2) + exp(0) + exp(x))', '#22c55e');  // Softmax(x) with 2 other classes
+        gcAdd('cartesian', 'exp(2*x)/(exp(-4) + exp(0) + exp(2*x))', '#ef4444');  // Temperature T=0.5 (sharper)
+        gcAdd('cartesian', 'exp(0.5*x)/(exp(-1) + exp(0) + exp(0.5*x))', '#f59e0b');  // Temperature T=2 (softer)
+        setRange(-3, 3, 0, 1.2);
+        break;
+      case 'gradient_descent':
+        // Loss landscape: convex bowl and gradient descent path intuition
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#3b82f6');  // Convex loss
+        gcAdd('cartesian', '0.5*x^2 + 0.3*sin(5*x)', '#ef4444');  // Non-convex with local minima
+        gcAdd('cartesian', 'abs(x)', '#22c55e');  // L1 loss (non-smooth at 0)
+        // Show gradient at different points
+        gcAdd('cartesian', '4 + 2*(x-2)', '#94a3b8');  // Tangent line at x=2
+        setRange(-4, 4, -0.5, 8);
+        break;
+      case 'learning_rates':
+        // Effect of learning rate on convergence (conceptual)
+        // Showing different decay patterns
+        gcSetExpr(firstId, 'cartesian', 'exp(-0.1*x)', '#3b82f6');  // Small LR - slow convergence
+        gcAdd('cartesian', 'exp(-0.5*x)', '#22c55e');  // Good LR - fast convergence
+        gcAdd('cartesian', 'exp(-0.3*x)*cos(2*x)', '#ef4444');  // Large LR - oscillation
+        gcAdd('cartesian', '0.5*exp(-0.2*x) + 0.5', '#f59e0b');  // With warmup plateau
+        setRange(0, 15, -0.5, 1.5);
+        break;
+      case 'regularization':
+        // L1 vs L2 regularization penalty
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#3b82f6');  // L2 (Ridge) - smooth
+        gcAdd('cartesian', 'abs(x)', '#22c55e');  // L1 (Lasso) - sparsity inducing
+        gcAdd('cartesian', '0.5*x^2 + 0.5*abs(x)', '#f59e0b');  // Elastic Net
+        // Show why L1 induces sparsity - diamond vs circle constraint
+        gcAdd('implicit', 'x^2 + y^2 = 1', '#93c5fd');  // L2 ball
+        gcAdd('implicit', 'abs(x) + abs(y) = 1', '#86efac');  // L1 ball (diamond)
+        setRange(-2, 2, -2, 2);
+        break;
+      case 'decision_boundary':
+        // Linear vs non-linear decision boundaries
+        gcSetExpr(firstId, 'cartesian', '0.5*x + 0.5', '#3b82f6');  // Linear
+        gcAdd('cartesian', '0.2*x^2', '#22c55e');  // Quadratic
+        gcAdd('cartesian', 'sin(x)', '#ef4444');  // Non-linear (complex)
+        gcAdd('implicit', 'x^2 + y^2 = 4', '#f59e0b');  // Circular (RBF kernel)
+        setRange(-4, 4, -3, 3);
+        break;
+      case 'gaussian_distributions':
+        // Gaussian/Normal distributions with different parameters
+        gcSetExpr(firstId, 'cartesian', '(1/sqrt(2*pi))*exp(-x^2/2)', '#3b82f6');  // Standard N(0,1)
+        gcAdd('cartesian', '(1/(2*sqrt(2*pi)))*exp(-x^2/(2*4))', '#22c55e');  // N(0,2) wider
+        gcAdd('cartesian', '(1/(0.5*sqrt(2*pi)))*exp(-x^2/(2*0.25))', '#ef4444');  // N(0,0.5) narrow
+        gcAdd('cartesian', '(1/sqrt(2*pi))*exp(-(x-2)^2/2)', '#f59e0b');  // N(2,1) shifted
+        setRange(-5, 7, 0, 1);
+        break;
+      case 'bias_variance':
+        // Bias-variance tradeoff visualization
+        // True function vs underfitting vs overfitting
+        gcSetExpr(firstId, 'cartesian', 'sin(x)', '#3b82f6');  // True function
+        gcAdd('cartesian', '0.2*x', '#ef4444');  // High bias (underfitting) - too simple
+        gcAdd('cartesian', 'sin(x) + 0.3*sin(5*x)', '#22c55e');  // High variance (overfitting) - too complex
+        gcAdd('cartesian', 'sin(x) + 0.1*sin(3*x)', '#f59e0b');  // Good fit
+        setRange(-5, 5, -2, 2);
+        break;
+      case 'vanishing_gradient':
+        // Vanishing gradient problem: sigmoid derivatives stack
+        gcSetExpr(firstId, 'cartesian', '1/(1+exp(-x))', '#3b82f6');  // Sigmoid
+        gcAdd('cartesian', '(1/(1+exp(-x)))*(1 - 1/(1+exp(-x)))', '#22c55e');  // 1st derivative (max 0.25)
+        gcAdd('cartesian', '((1/(1+exp(-x)))*(1 - 1/(1+exp(-x))))^2', '#f59e0b');  // Squared (2 layers)
+        gcAdd('cartesian', '((1/(1+exp(-x)))*(1 - 1/(1+exp(-x))))^4', '#ef4444');  // 4th power (4 layers)
+        gcAdd('cartesian', '0.25', '#94a3b8');  // Max derivative line
+        setRange(-5, 5, 0, 0.5);
         break;
 
       default:
