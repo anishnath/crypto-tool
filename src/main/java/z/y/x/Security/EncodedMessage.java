@@ -30,6 +30,15 @@ public class EncodedMessage {
 	private String salt;                // 20-bit salt (for AES_* algorithms)
 	private String iv;                  // 16-bit IV (for CBC/CFB/OFB modes)
 	private boolean success;            // operation success status
+
+	// JWS-specific fields
+	private String jwsHeader;           // JWS header (JSON)
+	private String jwsSignature;        // JWS signature (Base64URL)
+	private String jwsSerialize;        // JWS compact serialization (header.payload.signature)
+	private String jwsState;            // JWS state
+	private String sharedSecret;        // HMAC shared secret (Base64 encoded)
+	private String privateKey;          // Private key (PEM format)
+	private String publicKey;           // Public key (PEM format)
 	
 	
 	
@@ -346,6 +355,63 @@ public class EncodedMessage {
 
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+
+	// JWS getters and setters
+	public String getJwsHeader() {
+		return jwsHeader;
+	}
+
+	public void setJwsHeader(String jwsHeader) {
+		this.jwsHeader = jwsHeader;
+	}
+
+	public String getJwsSignature() {
+		return jwsSignature;
+	}
+
+	public void setJwsSignature(String jwsSignature) {
+		this.jwsSignature = jwsSignature;
+	}
+
+	public String getJwsSerialize() {
+		return jwsSerialize;
+	}
+
+	public void setJwsSerialize(String jwsSerialize) {
+		this.jwsSerialize = jwsSerialize;
+	}
+
+	public String getJwsState() {
+		return jwsState;
+	}
+
+	public void setJwsState(String jwsState) {
+		this.jwsState = jwsState;
+	}
+
+	public String getSharedSecret() {
+		return sharedSecret;
+	}
+
+	public void setSharedSecret(String sharedSecret) {
+		this.sharedSecret = sharedSecret;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
 	}
 
 	@Override
