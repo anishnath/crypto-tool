@@ -13,7 +13,7 @@
   "name" : "JWK to PEM Converter - Online JSON Web Key Converter",
   "alternateName" : "PEM to JWK Converter, JWK PEM Format Converter",
   "description" : "Professional online tool to convert JSON Web Keys (JWK) to PEM format and PEM to JWK. Supports RSA and Elliptic Curve (EC) keys. Free, secure, and privacy-first conversion tool.",
-  "image" : "https://8gwifi.org/docs/jwkconvert.png",
+  "image" : "https://8gwifi.org/images/site/jwkconvert.png",
   "url" : "https://8gwifi.org/jwkconvertfunctions.jsp",
   "applicationCategory" : "SecurityApplication",
   "applicationSubCategory" : "Cryptography Tool",
@@ -162,14 +162,14 @@
 	<meta property="og:url" content="https://8gwifi.org/jwkconvertfunctions.jsp">
 	<meta property="og:title" content="JWK to PEM Converter Online – Free | 8gwifi.org">
 	<meta property="og:description" content="Convert JWK to PEM and PEM to JWK online. Free tool supports RSA and EC keys. Instant conversion, privacy-first.">
-	<meta property="og:image" content="https://8gwifi.org/docs/jwkconvert.png">
+	<meta property="og:image" content="https://8gwifi.org/images/site/jwkconvert.png">
 	
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:url" content="https://8gwifi.org/jwkconvertfunctions.jsp">
 	<meta name="twitter:title" content="JWK to PEM Converter Online – Free | 8gwifi.org">
 	<meta name="twitter:description" content="Convert JWK to PEM and PEM to JWK online. Free tool supports RSA and EC keys. Instant conversion, privacy-first.">
-	<meta name="twitter:image" content="https://8gwifi.org/docs/jwkconvert.png">
+	<meta name="twitter:image" content="https://8gwifi.org/images/site/jwkconvert.png">
 	
 	<!-- Canonical URL -->
 	<link rel="canonical" href="https://8gwifi.org/jwkconvertfunctions.jsp">
