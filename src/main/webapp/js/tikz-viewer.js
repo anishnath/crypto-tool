@@ -159,37 +159,98 @@
     'Circuits': [
       {
         name: 'Simple Circuit',
-        code: `\\begin{tikzpicture}[circuit ee IEC]
-  \\draw (0,0) to [battery] (0,2)
-              to [resistor] (3,2)
-              to [bulb] (3,0)
-              to (0,0);
-  \\node at (1.5,-0.5) {Basic Circuit};
-\\end{tikzpicture}`,
-        preamble: '\\usetikzlibrary{circuits.ee.IEC}'
+        code: `\\begin{tikzpicture}[scale=1.2]
+  % Battery
+  \\draw[thick] (0,0) -- (0,0.3);
+  \\draw[thick] (-0.3,0.3) -- (0.3,0.3);
+  \\draw[thick] (-0.2,0.5) -- (0.2,0.5);
+  \\draw[thick] (0,0.5) -- (0,1);
+  \\node[left] at (-0.3,0.4) {$+$};
+  \\node[left] at (-0.3,0.15) {$-$};
+
+  % Top wire
+  \\draw[thick] (0,1) -- (3,1);
+
+  % Resistor
+  \\draw[thick] (3,1) -- (3,0.8);
+  \\draw[thick] (2.8,0.8) rectangle (3.2,0.2);
+  \\node[right] at (3.2,0.5) {$R$};
+  \\draw[thick] (3,0.2) -- (3,0);
+
+  % Bottom wire
+  \\draw[thick] (3,0) -- (0,0);
+
+  % Labels
+  \\node at (1.5,-0.6) {Basic Circuit};
+\\end{tikzpicture}`
       },
       {
         name: 'Logic Gates',
-        code: `\\begin{tikzpicture}[circuit logic US]
-  \\node[and gate] (and1) at (0,0) {};
-  \\node[or gate] (or1) at (0,-2) {};
-  \\node[not gate] (not1) at (3,0) {};
-  \\draw (and1.input 1) -- ++(-1,0) node[left] {A};
-  \\draw (and1.input 2) -- ++(-1,0) node[left] {B};
-  \\draw (and1.output) -- (not1.input);
-  \\draw (not1.output) -- ++(1,0) node[right] {Out};
-\\end{tikzpicture}`,
-        preamble: '\\usetikzlibrary{circuits.logic.US}'
+        code: `\\begin{tikzpicture}[scale=0.8]
+  % AND Gate
+  \\draw[thick] (0,2) -- (0.5,2) arc[start angle=90, end angle=-90, radius=0.5] -- (0,1) -- cycle;
+  \\draw[thick] (-0.5,2.3) -- (0,2.3) node[left] at (-0.5,2.3) {A};
+  \\draw[thick] (-0.5,1.7) -- (0,1.7) node[left] at (-0.5,1.7) {B};
+  \\draw[thick] (1,1.5) -- (1.5,1.5);
+  \\node at (0.5,2.8) {AND};
+
+  % OR Gate
+  \\draw[thick] (0,0) .. controls (0.3,0) and (0.3,0) .. (0.5,0.5) .. controls (0.3,1) and (0.3,1) .. (0,1);
+  \\draw[thick] (0,0.5) .. controls (0.2,0.5) .. (0,1);
+  \\draw[thick] (-0.5,0.7) -- (0,0.7) node[left] at (-0.5,0.7) {C};
+  \\draw[thick] (-0.5,0.3) -- (0,0.3) node[left] at (-0.5,0.3) {D};
+  \\draw[thick] (0.5,0.5) -- (1,0.5);
+  \\node at (0.25,1.3) {OR};
+
+  % NOT Gate (Inverter)
+  \\draw[thick] (2.5,1.5) -- (2.5,2) -- (3.2,1.75) -- cycle;
+  \\draw[thick] (3.2,1.75) circle (0.1);
+  \\draw[thick] (1.5,1.5) -- (2.5,1.75);
+  \\draw[thick] (3.3,1.75) -- (3.8,1.75) node[right] {Out};
+  \\node at (2.85,2.3) {NOT};
+
+  \\node at (1.5,-0.8) {Digital Logic Gates};
+\\end{tikzpicture}`
       },
       {
-        name: 'Resistor Network',
-        code: `\\begin{tikzpicture}[>=stealth]
-  \\draw (0,0) -- (2,0) node[midway,above] {$R_1$};
-  \\draw (2,0) -- (2,-1.5) node[midway,right] {$R_2$};
-  \\draw (2,0) -- (4,0) node[midway,above] {$R_3$};
-  \\draw (0,0) circle (2pt);
-  \\draw (4,0) circle (2pt);
-  \\node at (2,-2.5) {Resistor Network};
+        name: 'Series-Parallel Circuit',
+        code: `\\begin{tikzpicture}[scale=1.1]
+  % Power source
+  \\draw[thick] (0,0) circle (0.3);
+  \\node at (0,0) {V};
+  \\draw[thick] (0,0.3) -- (0,1);
+  \\draw[thick] (0,-0.3) -- (0,-1);
+
+  % Top branch with R1
+  \\draw[thick] (0,1) -- (2,1);
+  \\draw[thick,fill=white] (2,1) rectangle (2.8,0.6);
+  \\node at (2.4,0.8) {$R_1$};
+  \\draw[thick] (2.8,0.8) -- (4,0.8);
+
+  % Parallel branches R2 and R3
+  \\draw[thick] (4,0.8) -- (4,1.2);
+  \\draw[thick] (4,0.8) -- (4,0.4);
+
+  % R2 branch
+  \\draw[thick] (4,1.2) -- (5,1.2);
+  \\draw[thick,fill=white] (5,1.2) rectangle (5.8,0.8);
+  \\node at (5.4,1) {$R_2$};
+  \\draw[thick] (5.8,1) -- (6.5,1);
+
+  % R3 branch
+  \\draw[thick] (4,0.4) -- (5,0.4);
+  \\draw[thick,fill=white] (5,0.4) rectangle (5.8,0);
+  \\node at (5.4,0.2) {$R_3$};
+  \\draw[thick] (5.8,0.2) -- (6.5,0.2);
+
+  % Join parallel branches
+  \\draw[thick] (6.5,1) -- (6.5,0.8);
+  \\draw[thick] (6.5,0.2) -- (6.5,0.4);
+
+  % Return to source
+  \\draw[thick] (6.5,0.6) -- (7,0.6) -- (7,-1) -- (0,-1);
+
+  \\node at (3.5,-1.5) {Series-Parallel Circuit};
 \\end{tikzpicture}`
       }
     ],
@@ -229,11 +290,26 @@
       {
         name: 'Rotation Example',
         code: `\\begin{tikzpicture}[scale=1.2]
-  \\draw[gray!30] (-2,-2) grid (2,2);
-  \\draw[->] (-2.5,0) -- (2.5,0) node[right] {$x$};
-  \\draw[->] (0,-2.5) -- (0,2.5) node[above] {$y$};
-  \\draw[thick,blue,rotate=30] (-1,-1) rectangle (1,1);
-  \\node at (0,-3) {Rotated Square (30°)};
+  % Grid and axes
+  \\draw[gray!30] (-3,-3) grid (3,3);
+  \\draw[->] (-3.5,0) -- (3.5,0) node[right] {$x$};
+  \\draw[->] (0,-3.5) -- (0,3.5) node[above] {$y$};
+
+  % Original square (semi-transparent)
+  \\draw[thick,blue!30,fill=blue!10] (-1,-1) rectangle (1,1);
+  \\node[blue!50] at (0,0) {Original};
+
+  % Rotated square using coordinate transformation
+  \\draw[thick,red,fill=red!20,rotate=45] (-1,-1) rectangle (1,1);
+
+  % Rotation arc
+  \\draw[->,thick,green!70!black] (1.5,0) arc (0:45:1.5);
+  \\node[green!70!black] at (1.8,0.5) {$45^\\circ$};
+
+  % Center point
+  \\fill[black] (0,0) circle (2pt);
+
+  \\node at (0,-4) {Rotated Square (45 degrees)};
 \\end{tikzpicture}`
       },
       {
