@@ -54,44 +54,56 @@ public class JWSFunctionality extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
-        //System.out.println("algo" + algo);
-        PrintWriter out = response.getWriter();
-
-
-
         final String methodName = request.getParameter("methodName");
+
+        // Set JSON response for GENERATE_JSONKEY, VERIFY_JWS, SIGN_JSON, and PARSE_JWS methods
+        if (METHOD_GENERATE_JSONKEY.equalsIgnoreCase(methodName) || METHOD_VERIFY_JWS.equalsIgnoreCase(methodName) || METHOD_SIGN_JSON.equalsIgnoreCase(methodName) || METHOD_PARSE_JWS.equalsIgnoreCase(methodName)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        }
+
+        PrintWriter out = response.getWriter();
 
         if (METHOD_VERIFY_JWS.equalsIgnoreCase(methodName)) {
 
             String serialized = request.getParameter("serialized");
             String publickey = request.getParameter("publickey");
             String sharedsecret = request.getParameter("sharedsecret");
+            Gson gson = new Gson();
 
             if (serialized == null || serialized.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Null or EMpty....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_jws");
+                errorResponse.setErrorMessage("JWS serialized object is null or empty. Please provide a valid JWS token.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            final String t =serialized.trim();
+            final String t = serialized.trim();
 
             final int dot1 = t.indexOf(".");
             if (dot1 == -1) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_jws");
+                errorResponse.setErrorMessage("Invalid JWS format. JWS must contain three parts separated by dots (header.payload.signature).");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             final int dot2 = t.indexOf(".", dot1 + 1);
             if (dot2 == -1) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_jws");
+                errorResponse.setErrorMessage("Invalid JWS format. JWS must contain three parts separated by dots (header.payload.signature).");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             try {
 
-                Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/verify";
                 HttpPost post = new HttpPost(url1);
@@ -106,6 +118,10 @@ public class JWSFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("verify_jws");
+
                     if (response1.getStatusLine().getStatusCode() == 404) {
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -117,16 +133,14 @@ public class JWSFunctionality extends HttpServlet {
                         while (null != (line = br1.readLine())) {
                             content1.append(line);
                         }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: " + content1.toString());
                     } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                     }
-
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
+
                 BufferedReader br1 = new BufferedReader(
                         new InputStreamReader(
                                 (response1.getEntity().getContent())
@@ -138,27 +152,29 @@ public class JWSFunctionality extends HttpServlet {
                     content1.append(line);
                 }
 
-                //System.out.println("line-- " + line);
-
-
-                addHorizontalLine(out);
-                // System.out.println("encodedMessage-- " + encodedMessage);
                 String message = content1.toString();
-                if("VALID".equalsIgnoreCase(message))
-                {
-                    out.println("<font size=\"4\" color=\"green\"> SIGNATURE VALID </font>");
-                }
-                else{
-                    out.println("<font size=\"4\" color=\"red\"> SIGNATURE INVALID </font>");
+                EncodedMessage successResponse = new EncodedMessage();
+                successResponse.setSuccess(true);
+                successResponse.setOperation("verify_jws");
+                successResponse.setJwsSerialize(serialized);
+
+                if ("VALID".equalsIgnoreCase(message)) {
+                    successResponse.setMessage("VALID");
+                    successResponse.setJwsState("Signature verification successful");
+                } else {
+                    successResponse.setMessage("INVALID");
+                    successResponse.setJwsState("Signature verification failed");
                 }
 
-                //out.println("<textarea class=\"form-control\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"8\" cols=\"40\">" + content1.toString() + "</textarea>");
+                out.println(gson.toJson(successResponse));
                 return;
 
-
             } catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> " + e);
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_jws");
+                errorResponse.setErrorMessage("Error verifying JWS: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
 
         }
@@ -166,32 +182,41 @@ public class JWSFunctionality extends HttpServlet {
         if (METHOD_PARSE_JWS.equalsIgnoreCase(methodName)) {
 
             String serialized = request.getParameter("serialized");
+            Gson gson = new Gson();
 
             if (serialized == null || serialized.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Null or EMpty....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("parse_jws");
+                errorResponse.setErrorMessage("JWS serialized object is null or empty. Please provide a valid JWS token.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            final String t =serialized.trim();
+            final String t = serialized.trim();
 
             final int dot1 = t.indexOf(".");
             if (dot1 == -1) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("parse_jws");
+                errorResponse.setErrorMessage("Invalid JWS format. JWS must contain at least two dots separating header, payload, and signature.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             final int dot2 = t.indexOf(".", dot1 + 1);
             if (dot2 == -1) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> JWS Seriazed Object is Not Valid....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("parse_jws");
+                errorResponse.setErrorMessage("Invalid JWS format. JWS must have the format: header.payload.signature");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             try {
 
-                Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/parse";
                 HttpPost post = new HttpPost(url1);
@@ -205,6 +230,10 @@ public class JWSFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("parse_jws");
+
                     if (response1.getStatusLine().getStatusCode() == 404) {
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -216,15 +245,12 @@ public class JWSFunctionality extends HttpServlet {
                         while (null != (line = br1.readLine())) {
                             content1.append(line);
                         }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: " + content1.toString());
                     } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                     }
-
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
 
                 BufferedReader br = new BufferedReader(
@@ -239,137 +265,127 @@ public class JWSFunctionality extends HttpServlet {
                     content.append(line);
                 }
 
-                jwspojo jwspojo = gson.fromJson(content.toString(), jwspojo.class);
+                jwspojo jwsResult = gson.fromJson(content.toString(), jwspojo.class);
 
+                // Build structured JSON response
+                StringBuilder jsonBuilder = new StringBuilder();
+                jsonBuilder.append("{");
+                jsonBuilder.append("\"success\":true,");
+                jsonBuilder.append("\"operation\":\"parse_jws\",");
 
-
-                if(jwspojo.getHeader()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Header</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getHeader() + "</textarea>");
+                // Header
+                if (jwsResult.getHeader() != null) {
+                    jsonBuilder.append("\"jwsHeader\":").append(gson.toJson(jwsResult.getHeader())).append(",");
                 }
 
-                if(jwspojo.getJwtid()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">JWTID </h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getJwtid() + "</textarea>");
+                // Payload
+                if (jwsResult.getPayload() != null) {
+                    jsonBuilder.append("\"jwsPayload\":").append(gson.toJson(jwsResult.getPayload())).append(",");
                 }
 
-
-                if(jwspojo.getPayload()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Payload</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPayload() + "</textarea>");
+                // Signature
+                if (jwsResult.getSignature() != null) {
+                    jsonBuilder.append("\"jwsSignature\":").append(gson.toJson(jwsResult.getSignature())).append(",");
                 }
 
-                if(jwspojo.getSignature()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Singature</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getSignature() + "</textarea>");
+                // State
+                if (jwsResult.getState() != null) {
+                    jsonBuilder.append("\"jwsState\":").append(gson.toJson(jwsResult.getState())).append(",");
                 }
 
-
-                if(jwspojo.getState()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">State</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getState() + "</textarea>");
+                // JWT ID
+                if (jwsResult.getJwtid() != null) {
+                    jsonBuilder.append("\"jwtId\":").append(gson.toJson(jwsResult.getJwtid())).append(",");
                 }
 
-                if(jwspojo.getEncryptedKey()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">EncryptedKey</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getEncryptedKey() + "</textarea>");
+                // Issuer
+                if (jwsResult.getIssuer() != null) {
+                    jsonBuilder.append("\"issuer\":").append(gson.toJson(jwsResult.getIssuer())).append(",");
                 }
 
-                if(jwspojo.getIv()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">IV</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIv() + "</textarea>");
+                // Subject
+                if (jwsResult.getSubject() != null) {
+                    jsonBuilder.append("\"subject\":").append(gson.toJson(jwsResult.getSubject())).append(",");
                 }
 
-                if(jwspojo.getCipherText()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">CipherText</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=3  form=\"X\">" + jwspojo.getCipherText() + "</textarea>");
+                // Audience Size
+                if (jwsResult.getAudienceSize() != null) {
+                    jsonBuilder.append("\"audienceSize\":").append(gson.toJson(jwsResult.getAudienceSize())).append(",");
                 }
 
-                if(jwspojo.getAuthTag()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Auth TAG</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getAuthTag() + "</textarea>");
+                // Expiration Time
+                if (jwsResult.getExpirationTime() != null) {
+                    jsonBuilder.append("\"expirationTime\":").append(gson.toJson(jwsResult.getExpirationTime())).append(",");
                 }
 
-                if(jwspojo.getIssuer()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Issuer</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIssuer() + "</textarea>");
+                // Not Before Time
+                if (jwsResult.getNotBeforeTime() != null) {
+                    jsonBuilder.append("\"notBeforeTime\":").append(gson.toJson(jwsResult.getNotBeforeTime())).append(",");
                 }
 
-                if(jwspojo.getSubject()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Subject</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getSubject() + "</textarea>");
+                // Issue Time
+                if (jwsResult.getIssueTime() != null) {
+                    jsonBuilder.append("\"issueTime\":").append(gson.toJson(jwsResult.getIssueTime())).append(",");
                 }
 
-                if(jwspojo.getAudienceSize()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Audience Size</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getAudienceSize() + "</textarea>");
+                // Encrypted Key (for JWE)
+                if (jwsResult.getEncryptedKey() != null) {
+                    jsonBuilder.append("\"encryptedKey\":").append(gson.toJson(jwsResult.getEncryptedKey())).append(",");
                 }
 
-                if(jwspojo.getExpirationTime()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Expiration Time </h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getExpirationTime() + "</textarea>");
+                // IV (for JWE)
+                if (jwsResult.getIv() != null) {
+                    jsonBuilder.append("\"iv\":").append(gson.toJson(jwsResult.getIv())).append(",");
                 }
 
-                if(jwspojo.getNotBeforeTime()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">NotBefore Time </h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getNotBeforeTime() + "</textarea>");
+                // Cipher Text (for JWE)
+                if (jwsResult.getCipherText() != null) {
+                    jsonBuilder.append("\"cipherText\":").append(gson.toJson(jwsResult.getCipherText())).append(",");
                 }
 
-                if(jwspojo.getIssueTime()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Issue Time </h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getIssueTime() + "</textarea>");
+                // Auth Tag (for JWE)
+                if (jwsResult.getAuthTag() != null) {
+                    jsonBuilder.append("\"authTag\":").append(gson.toJson(jwsResult.getAuthTag())).append(",");
                 }
 
+                // Original serialized input
+                jsonBuilder.append("\"originalInput\":").append(gson.toJson(serialized));
 
+                jsonBuilder.append("}");
 
-
-
-
+                out.println(jsonBuilder.toString());
                 return;
 
-
-
-            }catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> " + e);
+            } catch (Exception e) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("parse_jws");
+                errorResponse.setErrorMessage("Error parsing JWS: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-
-
 
         }
 
         if (METHOD_GENERATE_JSONKEY.equalsIgnoreCase(methodName)) {
             String algo = request.getParameter("algo");
             String payload = request.getParameter("payload");
+            Gson gson = new Gson();
 
             if (algo == null || algo.length() == 0) {
                 algo = "HS256";
             }
 
             if (payload == null || payload.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Payload is Null or EMpty....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate_jws");
+                errorResponse.setErrorMessage("Payload is null or empty. Please provide a JSON payload to sign.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             try {
 
-                Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/generatekey";
                 HttpPost post = new HttpPost(url1);
@@ -383,6 +399,11 @@ public class JWSFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("generate_jws");
+                    errorResponse.setAlgorithm(algo);
+
                     if (response1.getStatusLine().getStatusCode() == 404) {
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -394,15 +415,12 @@ public class JWSFunctionality extends HttpServlet {
                         while (null != (line = br1.readLine())) {
                             content1.append(line);
                         }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: " + content1.toString());
                     } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                     }
-
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
 
                 BufferedReader br = new BufferedReader(
@@ -417,60 +435,54 @@ public class JWSFunctionality extends HttpServlet {
                     content.append(line);
                 }
 
-                jwspojo jwspojo = gson.fromJson(content.toString(), jwspojo.class);
+                jwspojo jwsResult = gson.fromJson(content.toString(), jwspojo.class);
 
-                if(jwspojo.getHeader()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Header</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getHeader() + "</textarea>");
+                // Build structured JSON response
+                EncodedMessage successResponse = new EncodedMessage();
+                successResponse.setSuccess(true);
+                successResponse.setOperation("generate_jws");
+                successResponse.setAlgorithm(algo);
+                successResponse.setOriginalMessage(payload);
+
+                if (jwsResult.getHeader() != null) {
+                    successResponse.setJwsHeader(jwsResult.getHeader());
                 }
 
-                if(jwspojo.getState()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">State</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getState() + "</textarea>");
+                if (jwsResult.getState() != null) {
+                    successResponse.setJwsState(jwsResult.getState());
                 }
 
-                if(jwspojo.getSerialize()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Serialize</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=5  form=\"X\">" + jwspojo.getSerialize() + "</textarea>");
+                if (jwsResult.getSerialize() != null) {
+                    successResponse.setJwsSerialize(jwsResult.getSerialize());
                 }
 
-                if(jwspojo.getSignature()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Singature</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getSignature() + "</textarea>");
+                if (jwsResult.getSignature() != null) {
+                    successResponse.setJwsSignature(jwsResult.getSignature());
                 }
 
-
-                if(jwspojo.getSharedSecret()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">SharedSecret (Generated for MAC key (Base64 encoded))</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getSharedSecret() + "</textarea>");
+                if (jwsResult.getSharedSecret() != null) {
+                    successResponse.setSharedSecret(jwsResult.getSharedSecret());
                 }
 
-                if(jwspojo.getPrivateKey()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Private Key</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPrivateKey() + "</textarea>");
+                if (jwsResult.getPrivateKey() != null) {
+                    successResponse.setPrivateKey(jwsResult.getPrivateKey());
                 }
 
-                if(jwspojo.getPublicKey()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Public Key</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPublicKey() + "</textarea>");
+                if (jwsResult.getPublicKey() != null) {
+                    successResponse.setPublicKey(jwsResult.getPublicKey());
                 }
 
+                out.println(gson.toJson(successResponse));
                 return;
 
-
-
-            }catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> " + e);
+            } catch (Exception e) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate_jws");
+                errorResponse.setAlgorithm(algo);
+                errorResponse.setErrorMessage("Error generating JWS: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-
 
         }
 
@@ -480,88 +492,107 @@ public class JWSFunctionality extends HttpServlet {
             String payload = request.getParameter("payload");
             String sharedsecret = request.getParameter("sharedsecret");
             String key = request.getParameter("key");
-
-
-
+            Gson gson = new Gson();
 
             if (algo == null || algo.length() == 0) {
                 algo = "HS256";
             }
 
             if (payload == null || payload.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Payload is Null or EMpty....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_jws");
+                errorResponse.setAlgorithm(algo);
+                errorResponse.setErrorMessage("Payload is null or empty. Please provide a JSON payload to sign.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            if(algo.equalsIgnoreCase("HS256") || algo.equalsIgnoreCase("HS384") || algo.equalsIgnoreCase("HS512")) {
+            // Validation for HMAC algorithms
+            if (algo.equalsIgnoreCase("HS256") || algo.equalsIgnoreCase("HS384") || algo.equalsIgnoreCase("HS512")) {
                 if (sharedsecret == null || sharedsecret.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Shared secret is Null or EMpty....</font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Shared secret is null or empty. Please provide a secret key for HMAC signing.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
-                if(sharedsecret.length()< 384)
-                {
-                    if(algo.equalsIgnoreCase("HS384"))
-                    {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> shared secret length is too small for HS384 it should be minimum of 48byte </font>");
-                        return;
-                    }
+                if (sharedsecret.length() < 48 && algo.equalsIgnoreCase("HS384")) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Shared secret length is too small for HS384. Minimum 48 bytes required.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
 
-                if(sharedsecret.length()> 384 && sharedsecret.length()<512)
-                {
-                    if(algo.equalsIgnoreCase("H512"))
-                    {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> shared secret length is too small for H512 it should be minimum of 64byte </font>");
-                        return;
-                    }
-                }
-
-                if(algo.equalsIgnoreCase("RS256") || algo.equalsIgnoreCase("RS384") || algo.equalsIgnoreCase("RS512") || algo.equalsIgnoreCase("PS256") || algo.equalsIgnoreCase("PS384") || algo.equalsIgnoreCase("PS512") )
-                {
-                    if (key == null || key.trim().length() == 0) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\">PEM key is Null or EMpty....</font>");
-                        return;
-                    }
-
-                        if (!(key.contains("BEGIN PRIVATE KEY") && key.contains("END PRIVATE KEY")) || !(key.contains("BEGIN RSA PRIVATE KEY") && key.contains("END RSA PRIVATE KEY"))) {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\">Private key is Not Valid Check the format....</font>");
-                            return;
-
-                        }
-
-
-                }
-
-                if(algo.equalsIgnoreCase("ES256") || algo.equalsIgnoreCase("ES384") || algo.equalsIgnoreCase("ES512") ) {
-                    if (key == null || key.trim().length() == 0) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\">PEM key is Null or EMpty....</font>");
-                        return;
-                    }
-
-                        if (!(key.contains("BEGIN EC PRIVATE KEY") && key.contains("END EC PRIVATE KEY"))) {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\">Private key is Null or EMpty....</font>");
-                            return;
-                        }
-
-
+                if (sharedsecret.length() < 64 && algo.equalsIgnoreCase("HS512")) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Shared secret length is too small for HS512. Minimum 64 bytes required.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
             }
 
+            // Validation for RSA algorithms
+            if (algo.equalsIgnoreCase("RS256") || algo.equalsIgnoreCase("RS384") || algo.equalsIgnoreCase("RS512") ||
+                algo.equalsIgnoreCase("PS256") || algo.equalsIgnoreCase("PS384") || algo.equalsIgnoreCase("PS512")) {
+                if (key == null || key.trim().length() == 0) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("PEM key is null or empty. Please provide an RSA private key for signing.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+
+                if (!((key.contains("BEGIN PRIVATE KEY") && key.contains("END PRIVATE KEY")) ||
+                      (key.contains("BEGIN RSA PRIVATE KEY") && key.contains("END RSA PRIVATE KEY")))) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Invalid RSA private key format. Key must be in PEM format with proper BEGIN/END markers.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+            }
+
+            // Validation for EC algorithms
+            if (algo.equalsIgnoreCase("ES256") || algo.equalsIgnoreCase("ES384") || algo.equalsIgnoreCase("ES512")) {
+                if (key == null || key.trim().length() == 0) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("PEM key is null or empty. Please provide an EC private key for signing.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+
+                if (!(key.contains("BEGIN EC PRIVATE KEY") && key.contains("END EC PRIVATE KEY"))) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+                    errorResponse.setErrorMessage("Invalid EC private key format. Key must be in PEM format with BEGIN EC PRIVATE KEY/END EC PRIVATE KEY markers.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+            }
 
             try {
 
-                Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-                String url1 =LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/sign";;
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "jws/sign";
                 HttpPost post = new HttpPost(url1);
                 List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                 urlParameters.add(new BasicNameValuePair("p_algo", algo));
@@ -575,6 +606,11 @@ public class JWSFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_jws");
+                    errorResponse.setAlgorithm(algo);
+
                     if (response1.getStatusLine().getStatusCode() == 404) {
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -586,15 +622,12 @@ public class JWSFunctionality extends HttpServlet {
                         while (null != (line = br1.readLine())) {
                             content1.append(line);
                         }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: " + content1.toString());
                     } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
+                        errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                     }
-
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
 
                 BufferedReader br = new BufferedReader(
@@ -609,61 +642,54 @@ public class JWSFunctionality extends HttpServlet {
                     content.append(line);
                 }
 
-                jwspojo jwspojo = gson.fromJson(content.toString(), jwspojo.class);
+                jwspojo jwsResult = gson.fromJson(content.toString(), jwspojo.class);
 
-                if(jwspojo.getHeader()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Header</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getHeader() + "</textarea>");
+                // Build structured JSON response
+                EncodedMessage successResponse = new EncodedMessage();
+                successResponse.setSuccess(true);
+                successResponse.setOperation("sign_jws");
+                successResponse.setAlgorithm(algo);
+                successResponse.setOriginalMessage(payload);
+
+                if (jwsResult.getHeader() != null) {
+                    successResponse.setJwsHeader(jwsResult.getHeader());
                 }
 
-                if(jwspojo.getState()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">State</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getState() + "</textarea>");
+                if (jwsResult.getState() != null) {
+                    successResponse.setJwsState(jwsResult.getState());
                 }
 
-                if(jwspojo.getSerialize()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Serialize</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=5  form=\"X\">" + jwspojo.getSerialize() + "</textarea>");
+                if (jwsResult.getSerialize() != null) {
+                    successResponse.setJwsSerialize(jwsResult.getSerialize());
                 }
 
-                if(jwspojo.getSignature()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Singature</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=4  form=\"X\">" + jwspojo.getSignature() + "</textarea>");
+                if (jwsResult.getSignature() != null) {
+                    successResponse.setJwsSignature(jwsResult.getSignature());
                 }
 
-
-                if(jwspojo.getSharedSecret()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">SharedSecret (Generated for MAC key (Base64 encoded))</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=1  form=\"X\">" + jwspojo.getSharedSecret() + "</textarea>");
+                if (jwsResult.getSharedSecret() != null) {
+                    successResponse.setSharedSecret(jwsResult.getSharedSecret());
                 }
 
-                if(jwspojo.getPrivateKey()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Private Key</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPrivateKey() + "</textarea>");
+                if (jwsResult.getPrivateKey() != null) {
+                    successResponse.setPrivateKey(jwsResult.getPrivateKey());
                 }
 
-                if(jwspojo.getPublicKey()!=null)
-                {
-                    out.println("<h4 class=\"mt-4\">Public Key</h4>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + jwspojo.getPublicKey() + "</textarea>");
+                if (jwsResult.getPublicKey() != null) {
+                    successResponse.setPublicKey(jwsResult.getPublicKey());
                 }
 
+                out.println(gson.toJson(successResponse));
                 return;
 
-
-
-            }catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> " + e);
+            } catch (Exception e) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_jws");
+                errorResponse.setAlgorithm(algo);
+                errorResponse.setErrorMessage("Error signing JWS: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-
-
 
         }
     }
