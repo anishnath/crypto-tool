@@ -250,6 +250,9 @@
             <a class="dropdown-item" href="latex-equation-editor.jsp">
               <i class="fas fa-subscript text-purple"></i> Math Equation Editor
             </a>
+            <a class="dropdown-item" href="latex-document-editor.jsp">
+              <i class="fas fa-file-code text-purple"></i> LaTeX Document Editor
+            </a>
             <a class="dropdown-item" href="tikz-viewer.jsp">
               <i class="fas fa-bezier-curve text-purple"></i> TikZ Viewer & Editor
             </a>
