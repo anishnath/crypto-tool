@@ -119,9 +119,14 @@ public class ECFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
+        // Set JSON response for EC_SIGN_MESSAGEE
+        if (EC_SIGN_MESSAGEE.equals(methodName)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        } else {
+            response.setContentType("text/html");
+        }
 
-
-        response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(true);
 
@@ -134,14 +139,15 @@ public class ECFunctionality extends HttpServlet {
             String algo = request.getParameter("cipherparameter");
             String signature = request.getParameter("signature");
             String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
-
-            //System.out.println("encryptdecryptparameter  " +encryptdecryptparameter);
+            Gson gson = new Gson();
 
             if (null == message || message.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("ec_sign_verify");
+                errorResponse.setErrorMessage("Message is null or empty. Please provide a message to sign or verify.");
+                out.println(gson.toJson(errorResponse));
                 return;
-
             }
 
 
@@ -154,9 +160,11 @@ public class ECFunctionality extends HttpServlet {
                     if (!publiKeyParam.contains("BEGIN EC PRIVATE KEY") && !publiKeyParam.contains("END EC PRIVATE KEY"))
 
                     {
-
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + algo + " EC Private Key is not valid for Signature generation </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("ec_sign");
+                        errorResponse.setErrorMessage("EC Private Key is not valid for signature generation. Please provide a valid EC private key in PEM format.");
+                        out.println(gson.toJson(errorResponse));
                         return;
 
                     }
@@ -165,12 +173,6 @@ public class ECFunctionality extends HttpServlet {
 
                     try {
 
-                        byte[] content = privateKeParam.getBytes();
-                        InputStream is = new ByteArrayInputStream(content);
-                        InputStreamReader isr = new InputStreamReader(is);
-                        BufferedReader br = new BufferedReader(isr);
-
-                        Gson gson = new Gson();
                         HttpClient client = HttpClientBuilder.create().build();
                         String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/sign";
                         post = new HttpPost(url1);
@@ -185,6 +187,10 @@ public class ECFunctionality extends HttpServlet {
                         HttpResponse response1 = client.execute(post);
 
                         if (response1.getStatusLine().getStatusCode() != 200) {
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("ec_sign");
+
                             if (response1.getStatusLine().getStatusCode() == 404) {
                                 BufferedReader br1 = new BufferedReader(
                                         new InputStreamReader(
@@ -196,15 +202,12 @@ public class ECFunctionality extends HttpServlet {
                                 while (null != (line = br1.readLine())) {
                                     content1.append(line);
                                 }
-                                addHorizontalLine(out);
-                                out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font></p>");
-                                return;
+                                errorResponse.setErrorMessage("System Error: " + content1.toString());
                             } else {
-                                addHorizontalLine(out);
-                                out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
-                                return;
+                                errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                             }
-
+                            out.println(gson.toJson(errorResponse));
+                            return;
                         }
                         BufferedReader br1 = new BufferedReader(
                                 new InputStreamReader(
@@ -217,17 +220,21 @@ public class ECFunctionality extends HttpServlet {
                             content1.append(line);
                         }
 
-
-
-
-                        addHorizontalLine(out);
-                        out.println("<p><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"40\">" + content1.toString() + "</textarea></p>");
+                        EncodedMessage successResponse = new EncodedMessage();
+                        successResponse.setSuccess(true);
+                        successResponse.setOperation("ec_sign");
+                        successResponse.setJwsSignature(content1.toString());
+                        successResponse.setOriginalMessage(message);
+                        out.println(gson.toJson(successResponse));
                         return;
 
 
                     } catch (Exception e) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("ec_sign");
+                        errorResponse.setErrorMessage("Error generating signature: " + e.getMessage());
+                        out.println(gson.toJson(errorResponse));
                     }finally {
 
                         if(post!=null)
@@ -240,8 +247,11 @@ public class ECFunctionality extends HttpServlet {
 
                 }
                 else {
-                    addHorizontalLine(out);
-                    out.println("<p><font size=\"2\" color=\"red\"> " + algo + " EC Private Key Can't be EMPTY </font></p>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_sign");
+                    errorResponse.setErrorMessage("EC Private Key cannot be empty for signature generation.");
+                    out.println(gson.toJson(errorResponse));
                 }
 
 
@@ -252,23 +262,26 @@ public class ECFunctionality extends HttpServlet {
 
 
                 if (null == signature || signature.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> signature is Null or EMpty....</font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_verify");
+                    errorResponse.setErrorMessage("Signature is null or empty. Please provide a signature to verify.");
+                    out.println(gson.toJson(errorResponse));
                     return;
 
                 }
 
-
-               // System.out.println("privateKeParam  " + privateKeParam);
 
                 if (privateKeParam != null && privateKeParam.trim().length() > 0) {
 
                     if (!privateKeParam.contains("BEGIN PUBLIC KEY") && !privateKeParam.contains("END PUBLIC KEY"))
 
                     {
-
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + algo + " EC Public Key is not valid for Signature Verification </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("ec_verify");
+                        errorResponse.setErrorMessage("EC Public Key is not valid for signature verification. Please provide a valid EC public key in PEM format.");
+                        out.println(gson.toJson(errorResponse));
                         return;
 
                     }
@@ -278,14 +291,6 @@ public class ECFunctionality extends HttpServlet {
 
                         try {
 
-                            //System.out.println("Signature-- " + signature);
-
-                            byte[] content = privateKeParam.getBytes();
-                            InputStream is = new ByteArrayInputStream(content);
-                            InputStreamReader isr = new InputStreamReader(is);
-                            BufferedReader br = new BufferedReader(isr);
-
-                            Gson gson = new Gson();
                             HttpClient client = HttpClientBuilder.create().build();
                             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/verify";
                             post = new HttpPost(url1);
@@ -301,6 +306,10 @@ public class ECFunctionality extends HttpServlet {
                             HttpResponse response1 = client.execute(post);
 
                             if (response1.getStatusLine().getStatusCode() != 200) {
+                                EncodedMessage errorResponse = new EncodedMessage();
+                                errorResponse.setSuccess(false);
+                                errorResponse.setOperation("ec_verify");
+
                                 if (response1.getStatusLine().getStatusCode() == 404) {
                                     BufferedReader br1 = new BufferedReader(
                                             new InputStreamReader(
@@ -312,15 +321,12 @@ public class ECFunctionality extends HttpServlet {
                                     while (null != (line = br1.readLine())) {
                                         content1.append(line);
                                     }
-                                    addHorizontalLine(out);
-                                    out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font></p>");
-                                    return;
+                                    errorResponse.setErrorMessage("System Error: " + content1.toString());
                                 } else {
-                                    addHorizontalLine(out);
-                                    out.println("<p><font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font></p>");
-                                    return;
+                                    errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                                 }
-
+                                out.println(gson.toJson(errorResponse));
+                                return;
                             }
                             BufferedReader br1 = new BufferedReader(
                                     new InputStreamReader(
@@ -333,26 +339,33 @@ public class ECFunctionality extends HttpServlet {
                                 content1.append(line);
                             }
 
-                            //System.out.println("content1.toString()-- " + content1.toString());
-
-                            addHorizontalLine(out);
-
                             String ret = content1.toString();
 
-                            if ( ret.contains("Passed"))
-                            {
-                                out.println("<p><font size=\"4\" color=\"green\">" + ret + "</font></p>");
-                            }
-                            else {
-                                out.println("<p><font size=\"4\" color=\"red\">" + ret + "</font></p>");
+                            EncodedMessage verifyResponse = new EncodedMessage();
+                            verifyResponse.setOperation("ec_verify");
+                            verifyResponse.setOriginalMessage(message);
+                            verifyResponse.setJwsSignature(signature);
+
+                            if (ret.contains("Passed")) {
+                                verifyResponse.setSuccess(true);
+                                verifyResponse.setMessage("Signature Verification Passed");
+                                verifyResponse.setJwsState("VALID");
+                            } else {
+                                verifyResponse.setSuccess(true);  // Request succeeded, but signature invalid
+                                verifyResponse.setMessage("Signature Verification Failed");
+                                verifyResponse.setJwsState("INVALID");
                             }
 
+                            out.println(gson.toJson(verifyResponse));
                             return;
 
 
                         } catch (Exception e) {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
+                            EncodedMessage errorResponse = new EncodedMessage();
+                            errorResponse.setSuccess(false);
+                            errorResponse.setOperation("ec_verify");
+                            errorResponse.setErrorMessage("Error verifying signature: " + e.getMessage());
+                            out.println(gson.toJson(errorResponse));
                         }finally {
 
                             if(post!=null)
@@ -366,8 +379,11 @@ public class ECFunctionality extends HttpServlet {
 
 
                 }else{
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + "EC Public Key Can't be EMPTY for Signature Verification </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_verify");
+                    errorResponse.setErrorMessage("EC Public Key cannot be empty for signature verification.");
+                    out.println(gson.toJson(errorResponse));
                 }
 
 
