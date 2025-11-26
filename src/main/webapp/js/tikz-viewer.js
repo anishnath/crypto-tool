@@ -273,13 +273,10 @@
     }
   }
 
-  function buildIframeHtml(tikz, preamble = '') {
+  function buildIframeHtml(tikz) {
     // Ensure it's wrapped in a tikzpicture environment if user pasted only contents
     const hasEnv = /\\begin\{tikzpicture\}[\s\S]*\\end\{tikzpicture\}/.test(tikz);
     const bodyTikz = hasEnv ? tikz : ("\\begin{tikzpicture}\n" + tikz + "\n\\end{tikzpicture}");
-
-    // Include custom preamble if provided
-    const preambleContent = preamble ? `${preamble}\n` : '';
 
     // Minimal HTML that TikZJax will process on load
     return `<!DOCTYPE html>
@@ -306,25 +303,54 @@
   </head>
   <body>
     <script type="text/tikz">
-${preambleContent}${bodyTikz}
+${bodyTikz}
     </script>
   </body>
 </html>`;
   }
 
-  function render() {
-    const input = editor ? editor.getValue() : $('tikzInput').value;
-    const preamble = $('preambleInput') ? $('preambleInput').value : '';
+  // Strip full LaTeX preamble and keep only tikzpicture; keep \usetikzlibrary lines before it
+  function sanitizeTikzInput(code) {
+    let modified = false;
+    let c = code || '';
 
-    // Warn on document-level LaTeX
-    if (/\\documentclass|\\begin\{document\}/.test(input)) {
-      showError('Please paste only a tikzpicture (no \\documentclass/\\begin{document}).');
-    } else {
-      showError('');
+    // Collect \usetikzlibrary lines
+    const libRegex = /^\s*\\usetikzlibrary\{[^}]+\}\s*$/gm;
+    const libs = c.match(libRegex);
+    if (libs && libs.length) {
+      c = c.replace(libRegex, '');
+      modified = true;
     }
 
+    // Remove documentclass, usepackage, begin/end{document}
+    const dropPatterns = [/^\s*\\documentclass[^\n]*$/gm, /^\s*\\usepackage[^\n]*$/gm, /\\begin\{document\}/g, /\\end\{document\}/g];
+    dropPatterns.forEach(rx => { if (rx.test(c)) { c = c.replace(rx, ''); modified = true; } });
+
+    // Extract first tikzpicture environment if present
+    const envMatch = c.match(/\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/);
+    if (envMatch) {
+      const tikzBlock = envMatch[0].trim();
+      const libsJoined = libs && libs.length ? libs.join('\n') + '\n\n' : '';
+      c = libsJoined + tikzBlock;
+      modified = true;
+    }
+
+    return { code: c.trim(), modified };
+  }
+
+  function render() {
+    let input = editor ? editor.getValue() : $('tikzInput').value;
+    // Auto-sanitize input: keep tikzpicture and \usetikzlibrary in code
+    const san = sanitizeTikzInput(input);
+    if (san.modified) {
+      input = san.code;
+      if (editor) editor.setValue(input); else $('tikzInput').value = input;
+    }
+    // Clear any previous error/info banner
+    showError('');
+
     showLoading(true);
-    const html = buildIframeHtml(input, preamble);
+    const html = buildIframeHtml(input);
     const iframe = $('viewer');
     iframe.srcdoc = html;
 
@@ -343,7 +369,6 @@ ${preambleContent}${bodyTikz}
     } else {
       $('tikzInput').value = '';
     }
-    if ($('preambleInput')) $('preambleInput').value = '';
     showError('');
     $('viewer').srcdoc = buildIframeHtml('');
   }
@@ -437,14 +462,8 @@ ${preambleContent}${bodyTikz}
 
   function copyLatexToClipboard() {
     const input = editor ? editor.getValue() : $('tikzInput').value;
-    const preamble = $('preambleInput') ? $('preambleInput').value : '';
+    const fullLatex = input;
 
-    let fullLatex = '';
-    if (preamble) {
-      fullLatex = preamble + '\n\n' + input;
-    } else {
-      fullLatex = input;
-    }
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(fullLatex).then(() => {
@@ -486,6 +505,29 @@ ${preambleContent}${bodyTikz}
     $('zoom-level').textContent = Math.round(currentZoom * 100) + '%';
   }
 
+  // Expand viewer to full width toggle
+  let expanded = false;
+  function applyExpand() {
+    const editorCol = $('editorCol');
+    const viewerCol = $('viewerCol');
+    const btn = $('btn-expand');
+    if (!editorCol || !viewerCol || !btn) return;
+    if (expanded) {
+      // Full width viewer
+      editorCol.style.display = 'none';
+      viewerCol.classList.remove('col-lg-6');
+      viewerCol.classList.add('col-lg-12');
+      btn.textContent = 'Shrink';
+    } else {
+      // Split view
+      viewerCol.classList.remove('col-lg-12');
+      viewerCol.classList.add('col-lg-6');
+      editorCol.style.display = '';
+      btn.textContent = 'Expand';
+    }
+    try { localStorage.setItem('tikz_expanded', expanded ? '1' : '0'); } catch(_) {}
+  }
+
   function zoomIn() {
     if (currentZoom < MAX_ZOOM) {
       currentZoom = Math.min(currentZoom + ZOOM_STEP, MAX_ZOOM);
@@ -506,14 +548,11 @@ ${preambleContent}${bodyTikz}
   }
 
   function loadExample(code, preamble = '') {
+    const combined = (preamble ? preamble + '\n\n' : '') + code;
     if (editor) {
-      editor.setValue(code);
+      editor.setValue(combined);
     } else {
-      $('tikzInput').value = code;
-    }
-    // If example has preamble, set it
-    if (preamble && $('preambleInput')) {
-      $('preambleInput').value = preamble;
+      $('tikzInput').value = combined;
     }
     render();
   }
@@ -544,12 +583,10 @@ ${preambleContent}${bodyTikz}
 
   function shareURL() {
     const input = editor ? editor.getValue() : $('tikzInput').value;
-    const preamble = $('preambleInput') ? $('preambleInput').value : '';
 
-    // Encode the TikZ code and preamble in URL
+    // Encode the TikZ code in URL
     const params = new URLSearchParams();
     params.set('code', input);
-    if (preamble) params.set('preamble', preamble);
 
     const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
 
@@ -568,7 +605,6 @@ ${preambleContent}${bodyTikz}
   function loadFromURL() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    const preamble = params.get('preamble');
 
     if (code) {
       if (editor) {
@@ -576,10 +612,6 @@ ${preambleContent}${bodyTikz}
       } else {
         $('tikzInput').value = code;
       }
-    }
-
-    if (preamble && $('preambleInput')) {
-      $('preambleInput').value = preamble;
     }
 
     // Auto-render if we loaded from URL
@@ -617,6 +649,16 @@ ${preambleContent}${bodyTikz}
     // Initialize CodeMirror
     initCodeMirror();
 
+    // Restore from localStorage (unless URL provided)
+    try {
+      if (!window.location.search) {
+        const saved = localStorage.getItem('tikz_code');
+        if (saved) {
+          if (editor) editor.setValue(saved); else $('tikzInput').value = saved;
+        }
+      }
+    } catch(_) {}
+
     // Populate examples dropdown
     populateExamples();
 
@@ -628,6 +670,11 @@ ${preambleContent}${bodyTikz}
     $('btn-pdf').addEventListener('click', exportPDF);
     $('btn-share').addEventListener('click', shareURL);
     $('btn-copy-latex').addEventListener('click', copyLatexToClipboard);
+    $('btn-download-tex').addEventListener('click', downloadTex);
+    $('input-upload-tex').addEventListener('change', uploadTex);
+    if ($('btn-expand')) {
+      $('btn-expand').addEventListener('click', function(){ expanded = !expanded; applyExpand(); });
+    }
 
     // Zoom controls
     $('btn-zoom-in').addEventListener('click', zoomIn);
@@ -641,6 +688,18 @@ ${preambleContent}${bodyTikz}
       }
     });
 
+    // Dark theme toggle
+    const themeToggle = $('cmThemeToggle');
+    if (themeToggle){
+      try{
+        const pref = localStorage.getItem('tikz_cm_dark');
+        const on = pref === '1';
+        themeToggle.checked = on;
+        setCmTheme(on);
+      }catch(_){ setCmTheme(false); }
+      themeToggle.addEventListener('change', function(){ setCmTheme(this.checked); });
+    }
+
     // Load from URL if present
     loadFromURL();
 
@@ -648,7 +707,56 @@ ${preambleContent}${bodyTikz}
     if (!window.location.search) {
       $('viewer').srcdoc = buildIframeHtml('');
     }
+
+    // Restore expand preference
+    try { expanded = (localStorage.getItem('tikz_expanded') === '1'); } catch(_) { expanded = false; }
+    applyExpand();
   }
 
   window.addEventListener('DOMContentLoaded', init);
+
+  // Persist editor state
+  function persist(){
+    try{
+      const code = editor ? editor.getValue() : ($('tikzInput')? $('tikzInput').value : '');
+      localStorage.setItem('tikz_code', code);
+    }catch(_){ }
+  }
+  // Hook persistence into changes
+  document.addEventListener('keyup', function(e){ if (e.target && e.target.id==='tikzInput') persist(); });
+  setInterval(persist, 3000);
+
+  // Editor theme
+  function setCmTheme(dark){
+    if (!editor) return;
+    editor.setOption('theme', dark ? 'monokai' : 'default');
+    try{ localStorage.setItem('tikz_cm_dark', dark? '1':'0'); }catch(_){ }
+  }
+
+  // Download .tex file
+  function downloadTex(){
+    const code = editor ? editor.getValue() : ($('tikzInput')? $('tikzInput').value : '');
+    const blob = new Blob([ code ], {type:'text/x-tex'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'diagram-'+Date.now()+'.tex';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  }
+
+  // Upload .tex file
+  function uploadTex(e){
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = function(){
+      let text = String(reader.result||'');
+      // Sanitize on import
+      const san = sanitizeTikzInput(text);
+      if (editor) editor.setValue(san.code); else if ($('tikzInput')) $('tikzInput').value = san.code;
+      debouncedRender();
+    };
+    reader.readAsText(f);
+    e.target.value = '';
+  }
 })();

@@ -76,12 +76,12 @@
       font-weight: 500;
     }
     .editor {
-      height: 45vh;
+      height: 55vh;
       resize: vertical;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     .CodeMirror {
-      height: 45vh;
+      height: 55vh;
       font-size: 14px;
       border: 1px solid #e9ecef;
       border-radius: .5rem;
@@ -171,7 +171,7 @@
 
   <main class="container my-4">
     <div class="row g-3">
-      <div class="col-lg-6">
+      <div class="col-lg-6" id="editorCol">
         <div class="card">
           <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
             <span>Input</span>
@@ -196,6 +196,16 @@
                     <!-- Populated by JS -->
                   </ul>
                 </div>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button id="btn-download-tex" class="btn btn-outline-secondary" title="Download as .tex">.tex</button>
+                  <label class="btn btn-outline-secondary mb-0" title="Upload .tex">
+                    <input id="input-upload-tex" type="file" accept=".tex,text/plain" style="display:none;"> Upload
+                  </label>
+                </div>
+                <div class="form-check form-switch ms-2">
+                  <input class="form-check-input" type="checkbox" id="cmThemeToggle">
+                  <label class="form-check-label" for="cmThemeToggle">Dark editor</label>
+                </div>
               </div>
             </div>
           </div>
@@ -209,31 +219,12 @@
   \fill[red] (2,3) circle (2pt) node[above right] {$P(2,3)$};
 \end{tikzpicture}</textarea>
             <div id="errorMessage" class="error"></div>
-            <div class="preamble-section">
-              <label for="preambleInput" class="form-label">
-                <small><strong>Custom Preamble</strong> - Add TikZ Libraries & Custom Styles
-                  <button type="button" class="btn btn-link btn-sm p-0 ms-1" data-bs-toggle="collapse" data-bs-target="#preambleHelp" style="text-decoration: none;">ℹ️</button>
-                </small>
-              </label>
-              <div class="collapse mb-2" id="preambleHelp">
-                <div class="alert alert-info py-2 px-3 small">
-                  <strong>What is Custom Preamble?</strong><br>
-                  Add LaTeX commands that load TikZ libraries or define custom styles before your diagram.<br><br>
-                  <strong>Examples:</strong><br>
-                  • <code>\usetikzlibrary{arrows,shapes,positioning}</code> - Load arrow and shape libraries<br>
-                  • <code>\usetikzlibrary{circuits.ee.IEC}</code> - Load circuit symbols<br>
-                  • <code>\usetikzlibrary{3d,shadows,patterns}</code> - 3D, shadows, and pattern fills<br>
-                  • <code>\tikzset{mystyle/.style={draw=blue,thick}}</code> - Define custom styles
-                </div>
-              </div>
-              <textarea id="preambleInput" class="form-control" rows="2" placeholder="e.g. \usetikzlibrary{arrows,shapes,positioning}"></textarea>
-            </div>
-            <div class="hint mt-2"><strong>💡 Tip:</strong> Do not include <code>\documentclass</code> or <code>\begin{document}</code>. TikZJax provides the preamble.</div>
+            <div class="hint mt-2"><strong>💡 Tip:</strong> Paste your full LaTeX or just <code>\begin{tikzpicture}...\end{tikzpicture}</code>. We automatically keep the TikZ block and place any <code>\usetikzlibrary{...}</code> lines right above it.</div>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-6" id="viewerCol">
         <div class="card">
           <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
             <span>Rendered Output</span>
@@ -244,6 +235,7 @@
                 <button id="btn-pdf" class="btn btn-outline-danger">PDF</button>
               </div>
               <button id="btn-share" class="btn btn-outline-info btn-sm">Share URL</button>
+              <button id="btn-expand" class="btn btn-outline-secondary btn-sm ms-2" title="Toggle full-width output">Expand</button>
             </div>
           </div>
           <div class="card-body viewer-container">
