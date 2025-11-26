@@ -333,6 +333,29 @@
                 <button class="dropdown-item" onclick="gcQuickPreset('deltoid')">Deltoid (Epicycloid)</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('lemniscate')">Lemniscate (Implicit)</button>
                 <button class="dropdown-item" onclick="gcQuickPreset('butterfly')">Butterfly Curve (Polar)</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Creative Curves</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('heart')">❤️ Heart Curve</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('spirograph')">🎨 Spirograph Pattern</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('astroid')">⭐ Astroid (4-cusped Star)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('cardioid')">💗 Cardioid</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('golden_spiral')">🐚 Golden Spiral</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('cycloid')">🔄 Cycloid</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('nephroid')">☕ Nephroid (Coffee Cup Caustic)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('limacon')">🐌 Limaçon Family</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Physics & Science</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('damped_oscillation')">📉 Damped Oscillation</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('catenary')">⛓️ Catenary (Hanging Chain)</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('wave_interference')">🌊 Wave Interference</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('projectile')">🎯 Projectile Motion</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('pendulum_phase')">🕐 Pendulum Phase Space</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Classic & Historical</h6>
+                <button class="dropdown-item" onclick="gcQuickPreset('witch_agnesi')">🧙 Witch of Agnesi</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('folium')">🍀 Folium of Descartes</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('cissoid')">📐 Cissoid of Diocles</button>
+                <button class="dropdown-item" onclick="gcQuickPreset('tractrix')">🛞 Tractrix</button>
               </div>
             </div>
             <button class="btn btn-sm btn-outline-light" onclick="gcClearAll()"><i class="fas fa-broom"></i> Clear All</button>
@@ -770,6 +793,152 @@
         gcSetExpr(firstId, 'polar', 'exp(sin(theta)) - 2*cos(4*theta) + (sin(theta/12))^5', '#f43f5e');
         setRange(-4,4,-4,4);
         break;
+
+      // ============ CREATIVE CURVES ============
+      case 'heart':
+        // Heart curve parametric: x = 16sin³(t), y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
+        gcSetExpr(firstId, 'parametric', '16*(sin(t))^3, 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)', '#e11d48');
+        setRange(-20, 20, -20, 18);
+        break;
+      case 'spirograph':
+        // Epitrochoid: x = (R+r)cos(t) - d*cos((R+r)/r * t), y = (R+r)sin(t) - d*sin((R+r)/r * t)
+        // Using R=5, r=3, d=5 for nice pattern
+        gcSetExpr(firstId, 'parametric', '(5+3)*cos(t) - 5*cos((5+3)/3*t), (5+3)*sin(t) - 5*sin((5+3)/3*t)', '#8b5cf6');
+        gcAdd('parametric', '(7+2)*cos(t) - 3*cos((7+2)/2*t), (7+2)*sin(t) - 3*sin((7+2)/2*t)', '#06b6d4');
+        setRange(-15, 15, -15, 15);
+        break;
+      case 'astroid':
+        // Astroid (hypocycloid with 4 cusps): x = a*cos³(t), y = a*sin³(t)
+        gcSetExpr(firstId, 'parametric', '4*(cos(t))^3, 4*(sin(t))^3', '#f59e0b');
+        // Also show circumscribed circle for reference
+        gcAdd('parametric', '4*cos(t), 4*sin(t)', '#94a3b8');
+        setRange(-5, 5, -5, 5);
+        break;
+      case 'cardioid':
+        // Cardioid in polar: r = a(1 + cos(θ))
+        gcSetExpr(firstId, 'polar', '2*(1 + cos(theta))', '#ec4899');
+        // Add inner cardioid for comparison
+        gcAdd('polar', '1*(1 - cos(theta))', '#f472b6');
+        setRange(-1, 5, -3, 3);
+        break;
+      case 'golden_spiral':
+        // Golden/Fibonacci spiral approximation: r = a * φ^(2θ/π), φ ≈ 1.618
+        var phi = 1.618033988749895;
+        gcSetExpr(firstId, 'polar', '0.3 * ' + phi.toFixed(6) + '^(2*theta/pi)', '#d97706');
+        // Add golden rectangles as reference (approximate with lines)
+        gcAdd('cartesian', '0', '#94a3b8');
+        setRange(-8, 8, -8, 8);
+        break;
+      case 'cycloid':
+        // Cycloid: x = r(t - sin(t)), y = r(1 - cos(t)) - path of point on rolling circle
+        gcSetExpr(firstId, 'parametric', '2*(t - sin(t)), 2*(1 - cos(t))', '#3b82f6');
+        // Curtate cycloid (point inside the circle)
+        gcAdd('parametric', '2*t - 1*sin(t), 2 - 1*cos(t)', '#10b981');
+        // Prolate cycloid (point outside the circle)
+        gcAdd('parametric', '2*t - 3*sin(t), 2 - 3*cos(t)', '#f43f5e');
+        setRange(-2, 15, -2, 8);
+        break;
+      case 'nephroid':
+        // Nephroid (2-cusped epicycloid): x = 3cos(t) - cos(3t), y = 3sin(t) - sin(3t)
+        // This is the caustic curve you see in a coffee cup!
+        gcSetExpr(firstId, 'parametric', '3*cos(t) - cos(3*t), 3*sin(t) - sin(3*t)', '#7c3aed');
+        // Add outer circle (coffee cup rim)
+        gcAdd('parametric', '4*cos(t), 4*sin(t)', '#94a3b8');
+        setRange(-5, 5, -5, 5);
+        break;
+      case 'limacon':
+        // Limaçon family: r = a + b*cos(θ)
+        // Cardioid (a=b), Limaçon with inner loop (a<b), Dimpled (a>b but a<2b), Convex (a≥2b)
+        gcSetExpr(firstId, 'polar', '1 + 2*cos(theta)', '#ef4444');  // Inner loop (a<b)
+        gcAdd('polar', '2 + 2*cos(theta)', '#22c55e');  // Cardioid (a=b)
+        gcAdd('polar', '3 + 2*cos(theta)', '#3b82f6');  // Dimpled (a>b)
+        gcAdd('polar', '4 + 2*cos(theta)', '#a855f7');  // Convex (a≥2b)
+        setRange(-5, 7, -5, 5);
+        break;
+
+      // ============ PHYSICS & SCIENCE ============
+      case 'damped_oscillation':
+        // Damped harmonic motion: y = A*e^(-γt)*cos(ωt)
+        gcSetExpr(firstId, 'cartesian', '5*exp(-0.15*x)*cos(2*x)', '#3b82f6');
+        // Show envelope curves
+        gcAdd('cartesian', '5*exp(-0.15*x)', '#94a3b8');
+        gcAdd('cartesian', '-5*exp(-0.15*x)', '#94a3b8');
+        // Critically damped for comparison
+        gcAdd('cartesian', '5*(1 + 0.5*x)*exp(-0.5*x)', '#f59e0b');
+        setRange(-1, 25, -6, 6);
+        break;
+      case 'catenary':
+        // Catenary: y = a*cosh(x/a) - the shape of a hanging chain
+        gcSetExpr(firstId, 'cartesian', '2*cosh(x/2)', '#0ea5e9');
+        // Compare with parabola (often confused)
+        gcAdd('cartesian', '0.25*x^2 + 2', '#f43f5e');
+        setRange(-5, 5, 0, 8);
+        break;
+      case 'wave_interference':
+        // Two waves interfering: constructive and destructive interference
+        gcSetExpr(firstId, 'cartesian', 'sin(x)', '#3b82f6');  // Wave 1
+        gcAdd('cartesian', 'sin(x + pi/4)', '#ef4444');  // Wave 2 (phase shifted)
+        gcAdd('cartesian', 'sin(x) + sin(x + pi/4)', '#22c55e');  // Sum (interference)
+        // Beating pattern: two close frequencies
+        gcAdd('cartesian', 'sin(5*x) + sin(5.5*x)', '#a855f7');
+        setRange(-10, 10, -3, 3);
+        break;
+      case 'projectile':
+        // Projectile motion: y = x*tan(θ) - (g*x²)/(2*v₀²*cos²(θ))
+        // Multiple launch angles showing optimal 45°
+        gcSetExpr(firstId, 'cartesian', 'x*tan(pi/6) - (9.8*x^2)/(2*20^2*(cos(pi/6))^2)', '#ef4444');  // 30°
+        gcAdd('cartesian', 'x*tan(pi/4) - (9.8*x^2)/(2*20^2*(cos(pi/4))^2)', '#22c55e');  // 45° (max range)
+        gcAdd('cartesian', 'x*tan(pi/3) - (9.8*x^2)/(2*20^2*(cos(pi/3))^2)', '#3b82f6');  // 60°
+        gcAdd('cartesian', 'x*tan(pi/4.5) - (9.8*x^2)/(2*20^2*(cos(pi/4.5))^2)', '#f59e0b');  // 40°
+        setRange(-5, 50, -5, 25);
+        break;
+      case 'pendulum_phase':
+        // Simple pendulum phase space: θ vs dθ/dt
+        // For small angles: dθ/dt = ±ω*sqrt(θ₀² - θ²) (ellipse)
+        // Plot multiple energy levels as ellipses
+        gcSetExpr(firstId, 'parametric', '0.5*cos(t), 0.5*sin(t)', '#3b82f6');
+        gcAdd('parametric', '1*cos(t), 1*sin(t)', '#22c55e');
+        gcAdd('parametric', '1.5*cos(t), 1.5*sin(t)', '#f59e0b');
+        gcAdd('parametric', '2*cos(t), 2*sin(t)', '#ef4444');
+        // Add separatrix (critical energy level)
+        gcAdd('cartesian', 'sqrt(4 - 2*(1 - cos(x)))', '#a855f7');
+        gcAdd('cartesian', '-sqrt(4 - 2*(1 - cos(x)))', '#a855f7');
+        setRange(-4, 4, -3, 3);
+        break;
+
+      // ============ CLASSIC & HISTORICAL ============
+      case 'witch_agnesi':
+        // Witch of Agnesi: y = 8a³/(x² + 4a²), using a=1
+        gcSetExpr(firstId, 'cartesian', '8/(x^2 + 4)', '#7c3aed');
+        // Show the generating circle
+        gcAdd('parametric', '2*cos(t), 1 + sin(t)', '#94a3b8');
+        setRange(-8, 8, -1, 4);
+        break;
+      case 'folium':
+        // Folium of Descartes: x³ + y³ = 3axy (implicit)
+        gcSetExpr(firstId, 'implicit', 'x^3 + y^3 = 3*2*x*y', '#10b981');
+        // Add the asymptote: x + y + a = 0
+        gcAdd('cartesian', '-x - 2', '#94a3b8');
+        setRange(-4, 6, -4, 6);
+        break;
+      case 'cissoid':
+        // Cissoid of Diocles: y² = x³/(2a - x) or parametric
+        gcSetExpr(firstId, 'parametric', '2*(sin(t))^2, 2*(sin(t))^3/cos(t)', '#0891b2');
+        // Add the generating circle
+        gcAdd('parametric', '1 + cos(t), sin(t)', '#94a3b8');
+        // Asymptote
+        gcAdd('cartesian', 'x = 2', '#f43f5e');
+        setRange(-1, 4, -4, 4);
+        break;
+      case 'tractrix':
+        // Tractrix: x = sech⁻¹(y/a) - sqrt(a² - y²), parametric form is easier
+        // x = a*(t - tanh(t)), y = a*sech(t)
+        gcSetExpr(firstId, 'parametric', '2*(t - tanh(t)), 2/cosh(t)', '#dc2626');
+        // Add the generating catenary for reference
+        gcAdd('cartesian', '2*cosh((x-4)/2)', '#94a3b8');
+        setRange(-2, 8, -1, 5);
+        break;
+
       default:
         gcQuickSample('cartesian');
     }
