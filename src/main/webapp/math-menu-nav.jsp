@@ -248,7 +248,7 @@
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="latex-equation-editor.jsp">
-              <i class="fas fa-subscript text-purple"></i> LaTeX Equation Editor
+              <i class="fas fa-subscript text-purple"></i> Math Equation Editor
             </a>
             <a class="dropdown-item" href="tikz-viewer.jsp">
               <i class="fas fa-bezier-curve text-purple"></i> TikZ Viewer & Editor
