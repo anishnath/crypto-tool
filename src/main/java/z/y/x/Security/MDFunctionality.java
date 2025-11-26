@@ -276,107 +276,125 @@ public class MDFunctionality extends HttpServlet {
 
         if (METHOD_GENERATE_HMAC.equalsIgnoreCase(methodName)) {
 
+            // HMAC branch now returns JSON, similar to CALCULATE_MD
+            response.setContentType("application/json");
+
             final String inputText = request.getParameter("text");
             final String key = request.getParameter("passphrase");
 
+            Gson gson = new Gson();
 
-            if (null == inputText || inputText.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Message is null or empty " +
-                        "</font>" +
-                        "  <br>");
+            if (inputText == null || inputText.trim().length() == 0) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("GENERATE_HMAC");
+                errorResponse.setErrorMessage("Message is null or empty");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            if (key == inputText || key.length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Key is null or empty " +
-                        "</font>" +
-                        "  <br>");
+            if (key == null || key.trim().length() == 0) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("GENERATE_HMAC");
+                errorResponse.setErrorMessage("Key is null or empty");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-
-            Enumeration en = request.getParameterNames();
-
+            // Collect selected HMAC algorithms from request parameters
+            List<String> algos = new ArrayList<String>();
+            Enumeration<?> en = request.getParameterNames();
             while (en.hasMoreElements()) {
                 Object objOri = en.nextElement();
                 String param = (String) objOri;
-                String value = request.getParameter(param);
-
-                try {
-                    macchoices macchoic;
-                    macchoic = macchoices.valueOf(value);
-
-                    if (!param.equals(METHOD_GENERATE_HMAC) || !param.equals("text") || !param.equals("key")) //Pass only the Algo
-                    {
-
-
-                        Gson gson = new Gson();
-                        HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "hmac/generatehmac";
-                        HttpPost post = new HttpPost(url1);
-
-
-                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-                        urlParameters.add(new BasicNameValuePair("p_msg", inputText));
-                        urlParameters.add(new BasicNameValuePair("p_key", key));
-                        urlParameters.add(new BasicNameValuePair("p_algo", value));
-
-
-                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-
-                        post.addHeader("accept", "application/json");
-
-                        HttpResponse response1 = client.execute(post);
-
-                        if (response1.getStatusLine().getStatusCode() != 200) {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request if Problem Persists </font>");
-                            return;
-                        }
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-
-                        EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-
-                        addHorizontalLine(out);
-                        out.println("<h4 class=\"mt-4\">Base64 Encoded HMAC Value using algo [" + value + "]</h4>");
-                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + encodedMessage.getBase64Encoded() + "</textarea>");
-
-                        out.println("<h4 class=\"mt-4\">Hex Encoded HMAC Value using algo [" + value + "]</h4>");
-                        out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=2  form=\"X\">" + encodedMessage.getHexEncoded() + "</textarea>");
-
-
-
-//					final String MD = CalcualateMD5(value, inputText,provider);
-//					if(MD!=null && !MD.isEmpty())
-//					{
-//						addHorizontalLine(out);
-//						out.println("<font size=\"2\" color=\"green\"> Message Digest "
-//								+ value + "</font>"
-//								+ "<b> = <font size=\"4\" color=\"blue\">"
-//								+ MD + "</font></b><br>");
-//					}
-                    }
-                    // yes
-                } catch (IllegalArgumentException ex) {
-
+                if ("methodName".equals(param) || "text".equals(param) || "passphrase".equals(param)) {
+                    continue;
                 }
-
-
+                String value = request.getParameter(param);
+                if (value == null || value.trim().length() == 0) {
+                    continue;
+                }
+                try {
+                    macchoices macchoic = macchoices.valueOf(value);
+                    // Only add valid macchoices values
+                    algos.add(macchoic.name());
+                } catch (IllegalArgumentException ex) {
+                    // ignore unknown values
+                }
             }
 
+            if (algos.isEmpty()) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("GENERATE_HMAC");
+                errorResponse.setErrorMessage("Please select at least one HMAC algorithm");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
+
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "hmac/generatehmac";
+
+            java.util.List<java.util.Map<String, Object>> results = new java.util.ArrayList<java.util.Map<String, Object>>();
+            String errorMessage = null;
+
+            for (String algo : algos) {
+                HttpPost post = new HttpPost(url1);
+
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_msg", inputText));
+                urlParameters.add(new BasicNameValuePair("p_key", key));
+                urlParameters.add(new BasicNameValuePair("p_algo", algo));
+
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
+
+                try {
+                    HttpResponse response1 = client.execute(post);
+
+                    if (response1.getStatusLine().getStatusCode() != 200) {
+                        errorMessage = "System error for algorithm " + algo + ". Please try again later.";
+                        continue;
+                    }
+
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
+                    }
+
+                    EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+
+                    java.util.Map<String, Object> result = new java.util.HashMap<String, Object>();
+                    result.put("algorithm", algo);
+                    result.put("message", encodedMessage.getMessage());
+                    result.put("base64Encoded", encodedMessage.getBase64Encoded());
+                    result.put("hexEncoded", encodedMessage.getHexEncoded());
+                    results.add(result);
+
+                } catch (Exception e) {
+                    errorMessage = "Error processing algorithm " + algo + ": " + e.getMessage();
+                }
+            }
+
+            java.util.Map<String, Object> responseMap = new java.util.HashMap<String, Object>();
+            responseMap.put("success", results.size() > 0);
+            responseMap.put("operation", "GENERATE_HMAC");
+            responseMap.put("inputText", inputText);
+            responseMap.put("results", results);
+            if (errorMessage != null) {
+                responseMap.put("errorMessage", errorMessage);
+            }
+
+            out.println(gson.toJson(responseMap));
+            return;
         }
     }
 
