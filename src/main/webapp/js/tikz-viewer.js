@@ -9,6 +9,8 @@
   let editor = null;
   let autoRenderTimeout = null;
   const AUTO_RENDER_DELAY = 1500; // ms
+  // Prevent auto-render loops when we update the editor programmatically
+  let suppressAuto = false;
 
   // Example gallery organized by category
   const EXAMPLES = {
@@ -344,7 +346,8 @@ ${bodyTikz}
     const san = sanitizeTikzInput(input);
     if (san.modified) {
       input = san.code;
-      if (editor) editor.setValue(input); else $('tikzInput').value = input;
+      if (editor) { suppressAuto = true; editor.setValue(input); suppressAuto = false; }
+      else $('tikzInput').value = input;
     }
     // Clear any previous error/info banner
     showError('');
@@ -549,11 +552,7 @@ ${bodyTikz}
 
   function loadExample(code, preamble = '') {
     const combined = (preamble ? preamble + '\n\n' : '') + code;
-    if (editor) {
-      editor.setValue(combined);
-    } else {
-      $('tikzInput').value = combined;
-    }
+    if (editor) { suppressAuto = true; editor.setValue(combined); suppressAuto = false; } else { $('tikzInput').value = combined; }
     render();
   }
 
@@ -602,16 +601,62 @@ ${bodyTikz}
     }
   }
 
+  // Local storage: save/load/manage multiple TikZ snippets
+  function saveTikzSet(){
+    const name = prompt('Enter a name for this TikZ diagram:');
+    if (!name) return;
+    const code = editor ? editor.getValue() : ($('tikzInput')? $('tikzInput').value : '');
+    const entry = { name, code, timestamp: Date.now() };
+    try{
+      const saved = JSON.parse(localStorage.getItem('tikz_saved_sets') || '[]');
+      saved.push(entry);
+      localStorage.setItem('tikz_saved_sets', JSON.stringify(saved));
+      alert(`Saved "${name}" locally.`);
+    }catch(e){ alert('Unable to save locally: ' + e.message); }
+  }
+
+  function loadTikzSet(){
+    try{
+      const saved = JSON.parse(localStorage.getItem('tikz_saved_sets') || '[]');
+      if (!saved.length){ alert('No saved diagrams found.'); return; }
+      let msg = 'Select a diagram to load:\n\n';
+      saved.forEach((s,i)=>{ msg += `${i+1}. ${s.name} (${new Date(s.timestamp).toLocaleString()})\n`; });
+      const pick = prompt(msg + '\nEnter number:');
+      const idx = parseInt(pick) - 1;
+      if (isNaN(idx) || idx<0 || idx>=saved.length){ alert('Invalid selection'); return; }
+      const code = saved[idx].code;
+      if (editor) editor.setValue(code); else if ($('tikzInput')) $('tikzInput').value = code;
+      debouncedRender();
+    }catch(e){ alert('Unable to load: ' + e.message); }
+  }
+
+  function manageTikzSets(){
+    try{
+      const saved = JSON.parse(localStorage.getItem('tikz_saved_sets') || '[]');
+      if (!saved.length){ alert('No saved diagrams found.'); return; }
+      let msg = 'Saved diagrams:\n\n';
+      saved.forEach((s,i)=>{ msg += `${i+1}. ${s.name} (${new Date(s.timestamp).toLocaleString()})\n`; });
+      msg += '\nEnter number to delete, or "all" to delete all:';
+      const pick = prompt(msg);
+      if (!pick) return;
+      if (pick.toLowerCase() === 'all'){ if(confirm('Delete ALL saved diagrams?')){ localStorage.removeItem('tikz_saved_sets'); alert('All cleared.'); } return; }
+      const idx = parseInt(pick)-1;
+      if (isNaN(idx) || idx<0 || idx>=saved.length){ alert('Invalid selection'); return; }
+      const name = saved[idx].name;
+      if (confirm(`Delete "${name}"?`)){
+        saved.splice(idx,1);
+        localStorage.setItem('tikz_saved_sets', JSON.stringify(saved));
+        alert('Deleted.');
+      }
+    }catch(e){ alert('Unable to manage: ' + e.message); }
+  }
+
   function loadFromURL() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
 
     if (code) {
-      if (editor) {
-        editor.setValue(code);
-      } else {
-        $('tikzInput').value = code;
-      }
+      if (editor) { suppressAuto = true; editor.setValue(code); suppressAuto = false; } else { $('tikzInput').value = code; }
     }
 
     // Auto-render if we loaded from URL
@@ -637,8 +682,9 @@ ${bodyTikz}
       }
     });
 
-    // Auto-render on change if enabled
+    // Auto-render on change if enabled (skip when setValue programmatically)
     editor.on('change', () => {
+      if (suppressAuto) return;
       if ($('auto-render') && $('auto-render').checked) {
         debouncedRender();
       }
@@ -653,9 +699,7 @@ ${bodyTikz}
     try {
       if (!window.location.search) {
         const saved = localStorage.getItem('tikz_code');
-        if (saved) {
-          if (editor) editor.setValue(saved); else $('tikzInput').value = saved;
-        }
+        if (saved) { if (editor) { suppressAuto = true; editor.setValue(saved); suppressAuto = false; } else $('tikzInput').value = saved; }
       }
     } catch(_) {}
 
@@ -672,6 +716,9 @@ ${bodyTikz}
     $('btn-copy-latex').addEventListener('click', copyLatexToClipboard);
     $('btn-download-tex').addEventListener('click', downloadTex);
     $('input-upload-tex').addEventListener('change', uploadTex);
+    if ($('btn-save-local')) $('btn-save-local').addEventListener('click', saveTikzSet);
+    if ($('btn-load-local')) $('btn-load-local').addEventListener('click', loadTikzSet);
+    if ($('btn-manage-local')) $('btn-manage-local').addEventListener('click', manageTikzSets);
     if ($('btn-expand')) {
       $('btn-expand').addEventListener('click', function(){ expanded = !expanded; applyExpand(); });
     }
@@ -753,7 +800,7 @@ ${bodyTikz}
       let text = String(reader.result||'');
       // Sanitize on import
       const san = sanitizeTikzInput(text);
-      if (editor) editor.setValue(san.code); else if ($('tikzInput')) $('tikzInput').value = san.code;
+      if (editor) { suppressAuto = true; editor.setValue(san.code); suppressAuto = false; } else if ($('tikzInput')) $('tikzInput').value = san.code;
       debouncedRender();
     };
     reader.readAsText(f);

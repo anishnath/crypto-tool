@@ -169,7 +169,7 @@
     </div>
   </header>
 
-  <main class="container my-4">
+  <div class="container my-4">
     <div class="row g-3">
       <div class="col-lg-6" id="editorCol">
         <div class="card">
@@ -202,6 +202,11 @@
                     <input id="input-upload-tex" type="file" accept=".tex,text/plain" style="display:none;"> Upload
                   </label>
                 </div>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button id="btn-save-local" class="btn btn-outline-primary" title="Save locally">Save</button>
+                  <button id="btn-load-local" class="btn btn-outline-primary" title="Load saved">Load</button>
+                  <button id="btn-manage-local" class="btn btn-outline-primary" title="Manage saved">Manage</button>
+                </div>
                 <div class="form-check form-switch ms-2">
                   <input class="form-check-input" type="checkbox" id="cmThemeToggle">
                   <label class="form-check-label" for="cmThemeToggle">Dark editor</label>
@@ -226,16 +231,20 @@
 
       <div class="col-lg-6" id="viewerCol">
         <div class="card">
-          <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
-            <span>Rendered Output</span>
-            <div class="d-flex share-controls flex-wrap">
-              <div class="btn-group btn-group-sm me-2" role="group">
-                <button id="btn-png" class="btn btn-outline-primary">PNG</button>
-                <button id="btn-svg" class="btn btn-outline-secondary">SVG</button>
-                <button id="btn-pdf" class="btn btn-outline-danger">PDF</button>
+          <div class="card-header bg-white">
+            <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:.5rem;">
+              <span class="font-weight-bold">Rendered Output</span>
+              <div class="btn-toolbar" role="toolbar" style="flex-wrap: wrap; gap: .5rem;">
+                <div class="btn-group btn-group-sm mr-2" role="group">
+                  <button id="btn-png" class="btn btn-outline-primary"><i class="fas fa-image"></i> PNG</button>
+                  <button id="btn-svg" class="btn btn-outline-secondary"><i class="fas fa-vector-square"></i> SVG</button>
+                  <button id="btn-pdf" class="btn btn-outline-danger"><i class="fas fa-file-pdf"></i> PDF</button>
+                </div>
+                <div class="btn-group btn-group-sm mr-2" role="group">
+                  <button id="btn-share" class="btn btn-outline-info"><i class="fas fa-link"></i> Share</button>
+                  <button id="btn-expand" class="btn btn-outline-secondary" title="Toggle full-width output"><i class="fas fa-expand"></i> Expand</button>
+                </div>
               </div>
-              <button id="btn-share" class="btn btn-outline-info btn-sm">Share URL</button>
-              <button id="btn-expand" class="btn btn-outline-secondary btn-sm ms-2" title="Toggle full-width output">Expand</button>
             </div>
           </div>
           <div class="card-body viewer-container">
@@ -314,7 +323,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <!-- CodeMirror Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
