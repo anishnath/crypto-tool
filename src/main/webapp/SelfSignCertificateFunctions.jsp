@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -311,7 +312,8 @@
     </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="pgp-menu-nav.jsp"%>
+<%@ include file="footer_adsense.jsp"%>
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
