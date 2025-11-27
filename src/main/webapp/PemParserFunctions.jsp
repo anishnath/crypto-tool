@@ -435,6 +435,7 @@
 			
 			// Render X.509 Certificate
 			function renderX509Certificate(x509) {
+                console.log(x509);
 				var html = '<div class="card mb-3 border-primary">';
 				html += '<div class="card-header bg-primary text-white"><h5 class="mb-0"><i class="fas fa-certificate"></i> X.509 Certificate Details</h5></div>';
 				html += '<div class="card-body">';
@@ -451,16 +452,16 @@
 				
 				html += '<div class="row">';
 				html += '<div class="col-md-6">';
-				html += renderField('Serial Number', x509.serialNumber, 2);
-				html += renderField('Not Before', x509.notBefore);
-				html += renderField('Not After', x509.notAfter);
+				html += renderField('Serial Number', x509.SerialNumber, 2);
+				html += renderField('Not Before', x509.NotBefore);
+				html += renderField('Not After', x509.NotAfter);
 				html += '</div><div class="col-md-6">';
-				html += renderField('Signature Algorithm', x509.sigAlgName);
-				html += renderField('Subject DN', x509.subjectDN, 2);
-				html += renderField('Issuer DN', x509.issuerDN, 2);
-				html += renderField('Subject Alternative Names (SANs)', x509.subjectAlternativeNames, 3);
+				html += renderField('Signature Algorithm', x509.SigAlgName);
+				html += renderField('Subject DN', x509.SubjectDN, 2);
+				html += renderField('Issuer DN', x509.IssuerDN, 2);
+				html += renderField('Subject Alternative Names (SANs)', x509.SubjectAlternativeNames, 3);
 				html += '</div></div>';
-				
+
 				// Fingerprints - each on dedicated row
 				html += '<hr><h6 class="text-primary"><i class="fas fa-fingerprint"></i> Fingerprints</h6>';
 				html += '<div class="row">';
