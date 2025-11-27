@@ -196,12 +196,12 @@ public class SendEmail {
             "<h1>"+subject+"</h1>",
             "<code>" + body + "</code>",
             "<hr><p>Sent by <strong>8gwifi.org</strong> using ",
-            " <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
-            "<br><small>This service runs in your browser where possible and does not store your inputs.</small></p>",
-            "<p>If these tools save you time, consider supporting hosting and development: ",
-            " <a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
-            "</p>",
-            "<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
+            " <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.</p>",
+            "<p style='color:#555;'>Every coffee helps keep the servers running. Every book sale funds the next tool I'm dreaming up. ",
+            "<strong>You're not just supporting a site — you're helping me build what developers actually need.</strong></p>",
+            "<p><a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>☕ Buy me a coffee</a> | ",
+            "<a href='https://leanpub.com/b/9book' target='_blank' rel='noopener'>📚 9-Book Bundle ($9)</a> | ",
+            "<a href='https://x.com/anish2good' target='_blank' rel='noopener'>Follow @anish2good</a></p>"
             );
 
 		sendEmail(subject, email_to, BODY);
@@ -230,12 +230,12 @@ public class SendEmail {
             "<h1>"+subject+"</h1>",
             "<code>" + body + "</code>",
             "<hr><p>Sent by <strong>8gwifi.org</strong> from ",
-            "<a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
-            "<br><small>Inputs are not stored and pages are served over HTTPS.</small></p>",
-            "<p>If these tools help you, you can support them here: ",
-            "<a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
-            "</p>",
-            "<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
+            "<a href='https://8gwifi.org/"+url+"'>"+url+"</a>.</p>",
+            "<p style='color:#555;'>Every coffee helps keep the servers running. Every book sale funds the next tool I'm dreaming up. ",
+            "<strong>You're not just supporting a site — you're helping me build what developers actually need.</strong></p>",
+            "<p><a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>☕ Buy me a coffee</a> | ",
+            "<a href='https://leanpub.com/b/9book' target='_blank' rel='noopener'>📚 9-Book Bundle ($9)</a> | ",
+            "<a href='https://x.com/anish2good' target='_blank' rel='noopener'>Follow @anish2good</a></p>"
             );
 
 		sendEmail(subject, email_to, BODY);
@@ -247,13 +247,13 @@ public class SendEmail {
 		String BODY = String.join(
 				System.getProperty("line.separator"),
 				"<h1>"+subject+"</h1>",
-				body  ,
-				"<hr><p>Sent by <strong>8gwifi.org</strong> from <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.",
-				"<br><small>Inputs are not stored and pages are served over HTTPS.</small></p>",
-				"<p>If these tools help you, you can support them here: ",
-				"<a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>Buy me a coffee</a>.",
-				"</p>",
-				"<p>Follow updates: <a href='https://twitter.com/anish2good' target='_blank' rel='noopener'>@anish2good</a></p>"
+				body,
+				"<hr><p>Sent by <strong>8gwifi.org</strong> from <a href='https://8gwifi.org/"+url+"'>"+url+"</a>.</p>",
+				"<p style='color:#555;'>Every coffee helps keep the servers running. Every book sale funds the next tool I'm dreaming up. ",
+				"<strong>You're not just supporting a site — you're helping me build what developers actually need.</strong></p>",
+				"<p><a href='https://buymeacoffee.com/8gwifi.org' target='_blank' rel='noopener'>☕ Buy me a coffee</a> | ",
+				"<a href='https://leanpub.com/b/9book' target='_blank' rel='noopener'>📚 9-Book Bundle ($9)</a> | ",
+				"<a href='https://x.com/anish2good' target='_blank' rel='noopener'>Follow @anish2good</a></p>"
 		);
 
 		sendEmail(subject, email_to, BODY);
