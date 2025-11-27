@@ -521,10 +521,6 @@ Unj2w7Fr9rT9tWSWUS3MZ2DJWiT0riohJSjlQJjC5UcYnuMVjUdd
                 <h6><i class="fas fa-key me-1"></i>Extract Public Key</h6>
                 <p>Extract public key from private key</p>
             </a>
-            <a href="pempasswordfinder.jsp" class="related-tool-card">
-                <h6><i class="fas fa-unlock me-1"></i>PEM Password Finder</h6>
-                <p>Find password for encrypted PEM files</p>
-            </a>
             <a href="rsafunctions.jsp" class="related-tool-card">
                 <h6><i class="fas fa-cogs me-1"></i>RSA Key Generator</h6>
                 <p>Generate RSA key pairs online</p>
