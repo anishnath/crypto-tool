@@ -819,6 +819,10 @@ public class CipherFunctionality extends HttpServlet {
 
         //X509_CERTIFICATECREATOR
         if (METHOD_X509_CERTIFICATECREATOR.equalsIgnoreCase(methodName)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+
             final String hostname = request.getParameter("hostname");
             final String company = request.getParameter("company");
             final String department = request.getParameter("department");
@@ -830,104 +834,83 @@ public class CipherFunctionality extends HttpServlet {
             final int expiry = Integer.valueOf(request.getParameter("expiry"));
             String p_privateKey = request.getParameter("p_privatekey");
 
-            final String format = request.getParameter("format");
-
-            Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/genselfsignwithprivkey";
 
             List<NameValuePair> urlParameters = new ArrayList<>();
 
             if (hostname == null || hostname.isEmpty()) {
-                //addHorizontalLine(out);
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\">  Host Name is Empty or Null  </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("self_signed_certificate");
+                errorResponse.setErrorMessage("Hostname (CN) is required");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             String encryptdecrypt = request.getParameter("encryptdecrypt");
-
-            boolean x= false;
+            boolean useProvidedKey = false;
 
             if ("useprivatekey".equalsIgnoreCase(encryptdecrypt)) {
                 if (null == p_privateKey || p_privateKey.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\">  RSA Private Key is Empty or NULL   </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("self_signed_certificate");
+                    errorResponse.setErrorMessage("RSA Private Key is required when using your own key");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
                 p_privateKey = p_privateKey.trim();
                 if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
-                    x=true;
+                    useProvidedKey = true;
                     urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
-                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "certs/genselfsignwithprivkey";
+                    url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/genselfsignwithprivkey";
                 } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Not a Valid RSA Private   </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("self_signed_certificate");
+                    errorResponse.setErrorMessage("Not a valid RSA Private Key. Must contain BEGIN/END RSA PRIVATE KEY headers.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
-
             } else {
                 url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/genselfsign";
             }
 
-
             HttpPost post = new HttpPost(url1);
 
-
-
             CertInfo certInfo = null;
-            if(alt_name!=null)
-            {
-
+            if (alt_name != null && !alt_name.trim().isEmpty()) {
                 String[] namesList = alt_name.split(",");
-                certInfo = new CertInfo(hostname, company, department, email, city, state, country,namesList, expiry);
-            }
-            else {
+                certInfo = new CertInfo(hostname, company, department, email, city, state, country, namesList, expiry);
+            } else {
                 certInfo = new CertInfo(hostname, company, department, email, city, state, country, expiry);
             }
 
-
-            //System.out.println(certInfo);
-            //final int bits = Integer.valueOf(request.getParameter("bits"));
             final String version = request.getParameter("version");
             urlParameters.add(new BasicNameValuePair("p_version", version));
-
-            String json = certInfo.toString();
-
-            urlParameters.add(new BasicNameValuePair("p_certinfo", json));
+            urlParameters.add(new BasicNameValuePair("p_certinfo", certInfo.toString()));
 
             try {
-//
                 post.setEntity(new UrlEncodedFormEntity(urlParameters));
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font>");
-                        return;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
                     }
-
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("self_signed_certificate");
+                    errorResponse.setErrorMessage("System Error: " + content.toString());
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
                 StringBuilder content = new StringBuilder();
                 String line;
                 while (null != (line = br.readLine())) {
@@ -936,30 +919,36 @@ public class CipherFunctionality extends HttpServlet {
 
                 certpojo certpojo1 = gson.fromJson(content.toString(), certpojo.class);
 
-                addHorizontalLine(out);
-                String msg = "<b><u> Certificate in PEM and in X.509 Decoded Format </b></u> <br>";
-                if(!x)
-                {
-                    msg = "<b><u> Certificate in PEM, in X.509 Decoded Format and RSA Private Key </b></u> <br>";
-                }
-                out.println(msg);
-                out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"X\">" + certpojo1.getMessage() + "</textarea><hr>");
-                out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"10\" cols=\"10\" form=\"X\">" + certpojo1.getMessage2() + "</textarea><hr>");
+                // Build structured JSON response
+                SelfSignedCertResponse certResponse = new SelfSignedCertResponse();
+                certResponse.setSuccess(true);
+                certResponse.setOperation("self_signed_certificate");
+                certResponse.setHostname(hostname);
+                certResponse.setCertificatePem(certpojo1.getMessage());
+                certResponse.setCertificateDecoded(certpojo1.getMessage2());
+                certResponse.setUsedProvidedKey(useProvidedKey);
 
-                if(!x)
-                {
-
-                    out.print("<p>Private Key </p>");
-                    out.print("<textarea name=\"comment\" class=\"form-control\" readonly=\"true\" rows=\"5\" cols=\"10\" form=\"X\">" + certpojo1.getPrivatekey() + "</textarea>");
+                if (!useProvidedKey) {
+                    certResponse.setPrivateKey(certpojo1.getPrivatekey());
                 }
 
+                // Set certificate info
+                certResponse.setVersion("v" + version);
+                certResponse.setExpiry(expiry + " days");
+                if (alt_name != null && !alt_name.trim().isEmpty()) {
+                    certResponse.setAltNames(alt_name);
+                }
 
+                out.println(gson.toJson(certResponse));
 
             } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
-            }finally {
-                if(post!=null)
-                {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("self_signed_certificate");
+                errorResponse.setErrorMessage("Error generating certificate: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
+            } finally {
+                if (post != null) {
                     post.releaseConnection();
                 }
             }

@@ -65,8 +65,8 @@ public class GenCAFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
-        // Set JSON response for GENERATE_TEST_CA
-        if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
+        // Set JSON response for GENERATE_TEST_CA and CSR_SIGNER
+        if (METHOD_GENERATE_TEST_CA.equals(methodName) || METHOD_CSR_SIGNER.equals(methodName)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
         } else {
@@ -256,113 +256,132 @@ public class GenCAFunctionality extends HttpServlet {
         }
 
         if (METHOD_CSR_SIGNER.equals(methodName)) {
+            Gson gson = new Gson();
 
             String p_pem = request.getParameter("p_pem");
             String p_crl = request.getParameter("crl");
             String p_ocsp = request.getParameter("ocsp");
 
-
             if (p_pem == null || p_pem.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> CSR is EMpty </font>");
+                SignCSRResponse errorResponse = new SignCSRResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_csr");
+                errorResponse.setErrorMessage("CSR is empty. Please provide a valid Certificate Signing Request.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             p_pem = p_pem.trim();
-            if (p_pem.contains("BEGIN CERTIFICATE REQUEST")) {
-                if (p_pem.contains("END CERTIFICATE REQUEST")) {
-                    String privateKey = null;
-                    String encryptdecrypt = request.getParameter("encryptdecrypt");
+            if (!p_pem.contains("BEGIN CERTIFICATE REQUEST")) {
+                SignCSRResponse errorResponse = new SignCSRResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_csr");
+                errorResponse.setErrorMessage("Not a valid CSR. Missing -----BEGIN CERTIFICATE REQUEST-----");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
 
-                    String p_privateKey = request.getParameter("p_privatekey");
+            if (!p_pem.contains("END CERTIFICATE REQUEST")) {
+                SignCSRResponse errorResponse = new SignCSRResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_csr");
+                errorResponse.setErrorMessage("Not a valid CSR. Missing -----END CERTIFICATE REQUEST-----");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
 
-                    Gson gson = new Gson();
-                    HttpClient client = HttpClientBuilder.create().build();
-                    String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/signcsrprivkey";
-                    HttpPost post = new HttpPost(url1);
-                    List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            String encryptdecrypt = request.getParameter("encryptdecrypt");
+            String p_privateKey = request.getParameter("p_privatekey");
+            boolean useProvidedKey = false;
 
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/signcsrprivkey";
+            HttpPost post = new HttpPost(url1);
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 
-                    if ("useprivatekey".equalsIgnoreCase(encryptdecrypt)) {
-                        if (null == p_privateKey || p_privateKey.trim().length() == 0) {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\">  RSA Private Key is Empty or NULL   </font>");
-                            return;
-                        }
-                        p_privateKey = p_privateKey.trim();
-                        if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
-                            urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
-                        } else {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"2\" color=\"red\"> Not a Valid RSA Private   </font>");
-                            return;
-                        }
+            if ("useprivatekey".equalsIgnoreCase(encryptdecrypt)) {
+                if (null == p_privateKey || p_privateKey.trim().length() == 0) {
+                    SignCSRResponse errorResponse = new SignCSRResponse();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_csr");
+                    errorResponse.setErrorMessage("RSA Private Key is required when using your own CA key.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+                p_privateKey = p_privateKey.trim();
+                if (p_privateKey.contains("BEGIN RSA PRIVATE KEY") && p_privateKey.contains("END RSA PRIVATE KEY")) {
+                    urlParameters.add(new BasicNameValuePair("p_privatekey", p_privateKey.trim()));
+                    useProvidedKey = true;
+                } else {
+                    SignCSRResponse errorResponse = new SignCSRResponse();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_csr");
+                    errorResponse.setErrorMessage("Not a valid RSA Private Key. Must contain BEGIN/END RSA PRIVATE KEY headers.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+            } else {
+                urlParameters.add(new BasicNameValuePair("p_privatekey", null));
+            }
 
-                    } else {
-                        urlParameters.add(new BasicNameValuePair("p_privatekey", null));
-                    }
+            urlParameters.add(new BasicNameValuePair("p_pem", p_pem));
+            urlParameters.add(new BasicNameValuePair("p_crl", p_crl));
+            urlParameters.add(new BasicNameValuePair("p_ocsp", p_ocsp));
 
-                    urlParameters.add(new BasicNameValuePair("p_pem", p_pem));
-                    urlParameters.add(new BasicNameValuePair("p_crl", p_crl));
-                    urlParameters.add(new BasicNameValuePair("p_ocsp", p_ocsp));
+            try {
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
 
-                    post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                    post.addHeader("accept", "application/json");
+                HttpResponse response1 = client.execute(post);
 
-                    HttpResponse response1 = client.execute(post);
-
-                    if (response1.getStatusLine().getStatusCode() != 200) {
-                        if (response1.getStatusLine().getStatusCode() == 404) {
-                            BufferedReader br = new BufferedReader(
-                                    new InputStreamReader(
-                                            (response1.getEntity().getContent())
-                                    )
-                            );
-                            StringBuilder content = new StringBuilder();
-                            String line;
-                            while (null != (line = br.readLine())) {
-                                content.append(line);
-                            }
-                            addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
-                            return;
-                        } else {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                            return;
-                        }
-
-                    }
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(
-                                    (response1.getEntity().getContent())
-                            )
-                    );
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
                     StringBuilder content = new StringBuilder();
                     String line;
                     while (null != (line = br.readLine())) {
                         content.append(line);
                     }
-
-                    EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-                    addHorizontalLine(out);
-                    out.println("<p><b><u> Your Certificate in PEM format </b></u> <p>");
-                    out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"10\" cols=\"20\" form=\"X\">" + encodedMessage.getMessage() + "</textarea><hr>");
-                    out.println("<p>Parse X.509 PEM file<a href=\"https://8gwifi.org/PemParserFunctions.jsp\" target=\"_blank\"> here</a></p>");
-                   // out.println("<textarea class=\"form-control animated\" name=\"comment\" readonly=true rows=\"20\" cols=\"50\" form=\"X\">" + encodedMessage.getBase64Decoded() + "</textarea>");
-                    return;
-
-                } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Not a Valid CSR Missing -----END CERTIFICATE REQUEST----- </font>");
+                    SignCSRResponse errorResponse = new SignCSRResponse();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("sign_csr");
+                    errorResponse.setErrorMessage("System Error: " + content.toString());
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
-            } else {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Not a Valid CSR Missing -----BEGIN CERTIFICATE REQUEST----- </font>");
-                return;
-            }
 
+                BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+
+                SignCSRResponse csrResponse = new SignCSRResponse();
+                csrResponse.setSuccess(true);
+                csrResponse.setOperation("sign_csr");
+                csrResponse.setCertificatePem(encodedMessage.getMessage());
+                csrResponse.setUsedProvidedKey(useProvidedKey);
+                if (p_crl != null && !p_crl.trim().isEmpty()) {
+                    csrResponse.setCrlDistributionPoint(p_crl.trim());
+                }
+                if (p_ocsp != null && !p_ocsp.trim().isEmpty()) {
+                    csrResponse.setOcspUrl(p_ocsp.trim());
+                }
+                out.println(gson.toJson(csrResponse));
+
+            } catch (Exception e) {
+                SignCSRResponse errorResponse = new SignCSRResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("sign_csr");
+                errorResponse.setErrorMessage("Error signing CSR: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
+            } finally {
+                if (post != null) {
+                    post.releaseConnection();
+                }
+            }
         }
     }
 
