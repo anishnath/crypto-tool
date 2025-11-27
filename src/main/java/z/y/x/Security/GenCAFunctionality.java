@@ -65,45 +65,50 @@ public class GenCAFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
-
-        response.setContentType("text/html");
+        // Set JSON response for GENERATE_TEST_CA
+        if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        } else {
+            response.setContentType("text/html");
+        }
         PrintWriter out = response.getWriter();
-        
+
         if (METHOD_CERTS_COMMAND.equals(methodName)) {
         	String port = request.getParameter("port");
         	String ipaddress = request.getParameter("ipaddress");
-        	
+
         	if (ipaddress == null || ipaddress.trim().length() == 0) {
                 addHorizontalLine(out);
                 out.println("<font size=\"2\" color=\"red\"> Please provide the URL to connect</font>");
                 return;
             }
-        	
+
         	ipaddress = ipaddress.trim();
-        	
+
         	if(ipaddress.indexOf("http://")==0)
         	{
         		 addHorizontalLine(out);
                  out.println("<font size=\"2\" color=\"red\"> Only https URL </font>");
                  return;
         	}
-        	
+
         	if(ipaddress.indexOf("https://")==0)
         	{
         		System.out.println(ipaddress.substring("https://".length()));
         		ipaddress = ipaddress.substring("https://".length());
         	}
-        	
+
 //        	URL url = new URL("https://"+ipaddress);
 //        	System.out.println(url.getHost());
-        	
+
         	System.out.println(ipaddress);
-        	
+
         	Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/webcerts";
             HttpPost post = new HttpPost(url1);
-            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();            
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
             urlParameters.add(new BasicNameValuePair("p_url", ipaddress));
             urlParameters.add(new BasicNameValuePair("p_port", port));
             post.setEntity(new UrlEncodedFormEntity(urlParameters));
@@ -143,9 +148,9 @@ public class GenCAFunctionality extends HttpServlet {
             while (null != (line = br.readLine())) {
                 content.append(line);
             }
-            
+
             List<String> listMessage = gson.fromJson(content.toString(), List.class);
-            
+
             //System.out.println(listMessage);
             int i = 1;
             for (Iterator iterator = listMessage.iterator(); iterator.hasNext();) {
@@ -155,16 +160,20 @@ public class GenCAFunctionality extends HttpServlet {
 			}
             out.println("<a href=\"PemParserFunctions.jsp\" target=\"_blank\">Use PEM Parser to Parse for Extra Information</a>");
         	return;
-        	
-        	
+
+
         }
 
         if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
             String p_dns_name = request.getParameter("p_dns_name");
+            Gson gson = new Gson();
 
             if (p_dns_name == null || p_dns_name.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> CN name is Empty </font>");
+                CACertificateResponse errorResponse = new CACertificateResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate_ca");
+                errorResponse.setErrorMessage("CN name is empty. Please provide a valid hostname.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
@@ -175,151 +184,75 @@ public class GenCAFunctionality extends HttpServlet {
             boolean b = m.find();
 
             if (b) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> CN name is Empty </font>");
+                CACertificateResponse errorResponse = new CACertificateResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate_ca");
+                errorResponse.setErrorMessage("Invalid CN name. Only alphanumeric characters, dots, and spaces are allowed.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            Gson gson = new Gson();
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "cacerts/" + p_dns_name;
+            try {
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "cacerts/" + p_dns_name;
 
-            //System.out.println(url1);
+                HttpGet getRequest = new HttpGet(url1);
+                getRequest.addHeader("accept", "application/json");
 
-            HttpGet getRequest = new HttpGet(url1);
-            getRequest.addHeader("accept", "application/json");
+                HttpResponse response1 = httpClient.execute(getRequest);
 
-            HttpResponse response1 = httpClient.execute(getRequest);
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    CACertificateResponse errorResponse = new CACertificateResponse();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("generate_ca");
+                    errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
 
-            if (response1.getStatusLine().getStatusCode() != 200) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                return;
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                CAAuthorityPOJO caAuthorityPOJO = gson.fromJson(content.toString(), CAAuthorityPOJO.class);
+
+                // Create JSON response with all certificate data
+                CACertificateResponse caResponse = new CACertificateResponse();
+                caResponse.setSuccess(true);
+                caResponse.setOperation("generate_ca");
+                caResponse.setHostname(p_dns_name);
+
+                // Server certificate info
+                caResponse.setServerPrivateKey(caAuthorityPOJO.getDnsPrivateKey());
+                caResponse.setServerPublicKey(caAuthorityPOJO.getDnsPubliceKey());
+                caResponse.setServerCertificate(caAuthorityPOJO.getDnsCerts());
+
+                // Intermediate CA info
+                caResponse.setIntermediatePrivateKey(caAuthorityPOJO.getInterCAPrivateKey());
+                caResponse.setIntermediatePublicKey(caAuthorityPOJO.getInterCAPubliceKey());
+                caResponse.setIntermediateCertificate(caAuthorityPOJO.getInterCACerts());
+
+                // Root CA info
+                caResponse.setRootPrivateKey(caAuthorityPOJO.getRootCAPrivateKey());
+                caResponse.setRootPublicKey(caAuthorityPOJO.getRootCAPubliceKey());
+                caResponse.setRootCertificate(caAuthorityPOJO.getRootCACerts());
+
+                out.println(gson.toJson(caResponse));
+
+            } catch (Exception e) {
+                CACertificateResponse errorResponse = new CACertificateResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("generate_ca");
+                errorResponse.setErrorMessage("Error generating CA: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            (response1.getEntity().getContent())
-                    )
-            );
-
-            StringBuilder content = new StringBuilder();
-            String line;
-            while (null != (line = br.readLine())) {
-                content.append(line);
-            }
-
-            CAAuthorityPOJO caAuthorityPOJO = gson.fromJson(content.toString(), CAAuthorityPOJO.class);
-
-
-            out.println("<h4 class=\"mt-4\">Certificate Information for " + p_dns_name + " </h4>");
-
-            out.println("<hr>");
-
-
-            out.println("<table class=\"table\">");
-            out.println("<thead>");
-            out.println("<tr>");
-            out.println("<th scope=\"col\">Private key</th>");
-            out.println("<th scope=\"col\">Public key</th>");
-            out.println("<th scope=\"col\">Certificate(X.509)</th>");
-            out.println("</tr>");
-            out.println("</thead>");
-            out.println("<tbody>");
-
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + caAuthorityPOJO.getDnsPrivateKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment2\" rows=10 form=\"y\">" + caAuthorityPOJO.getDnsPubliceKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment3\" rows=10 form=\"y\">" + caAuthorityPOJO.getDnsCerts() + "</textarea>");
-            out.println("</td>");
-
-            out.println("</tr>");
-            out.println("</tbody>");
-            out.println("</table>");
-
-
-
-
-
-            out.println("<hr>");
-
-            out.println("<h4 class=\"mt-4\">Intermediate CA Information</h4>");
-
-            out.println("<table class=\"table\">");
-            out.println("<thead>");
-            out.println("<tr>");
-            out.println("<th scope=\"col\">Private key</th>");
-            out.println("<th scope=\"col\">Public key</th>");
-            out.println("<th scope=\"col\">Certificate(X.509)</th>");
-            out.println("</tr>");
-            out.println("</thead>");
-            out.println("<tbody>");
-
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"X\">" + caAuthorityPOJO.getInterCAPrivateKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getInterCAPubliceKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getInterCACerts() + "</textarea>");
-            out.println("</td>");
-
-            out.println("</tr>");
-            out.println("</tbody>");
-            out.println("</table>");
-
-
-
-            out.println("<hr>");
-
-            out.println("<h4 class=\"mt-4\">rootCA Information</h4>");
-
-
-
-
-            out.println("<table class=\"table\">");
-            out.println("<thead>");
-            out.println("<tr>");
-            out.println("<th scope=\"col\">Private key</th>");
-            out.println("<th scope=\"col\">Public key</th>");
-            out.println("<th scope=\"col\">Certificate(X.509)</th>");
-            out.println("</tr>");
-            out.println("</thead>");
-            out.println("<tbody>");
-
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\"  rows=10 form=\"X\">" + caAuthorityPOJO.getRootCAPrivateKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment\" rows=10 form=\"y\">" + caAuthorityPOJO.getRootCAPubliceKey() + "</textarea>");
-            out.println("</td>");
-
-            out.println("<td>");
-            out.println("<textarea nclass=\"form-control animated\" readonly=\"true\" ame=\"comments\"  rows=10 form=\"y\">" + caAuthorityPOJO.getRootCACerts() + "</textarea>");
-            out.println("</td>");
-
-            out.println("</tr>");
-            out.println("</tbody>");
-            out.println("</table>");
-
-
-
-
-
-
-
         }
 
         if (METHOD_CSR_SIGNER.equals(methodName)) {

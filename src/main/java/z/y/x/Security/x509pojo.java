@@ -34,6 +34,11 @@ public class x509pojo {
     private String crticalExtensions;
     private String noncrticalExtensions;
 
+    // Subject Public Key Info
+    private String publicKeyAlgorithm;
+    private String publicKeySize;
+    private String publicKey;
+
 
 
 
@@ -607,6 +612,30 @@ public class x509pojo {
 
     public void setNoncrticalExtensions(String noncrticalExtensions) {
         this.noncrticalExtensions = noncrticalExtensions;
+    }
+
+    public String getPublicKeyAlgorithm() {
+        return publicKeyAlgorithm;
+    }
+
+    public void setPublicKeyAlgorithm(String publicKeyAlgorithm) {
+        this.publicKeyAlgorithm = publicKeyAlgorithm;
+    }
+
+    public String getPublicKeySize() {
+        return publicKeySize;
+    }
+
+    public void setPublicKeySize(String publicKeySize) {
+        this.publicKeySize = publicKeySize;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
 
