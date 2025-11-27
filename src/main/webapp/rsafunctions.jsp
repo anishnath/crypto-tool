@@ -183,7 +183,6 @@
 	<meta name="googlebot" content="index,follow">
 
 	<%@ include file="header-script.jsp"%>
-	<%@ include file="pgp-menu-nav.jsp"%>
 
 	<%
 		String pubKey = "";
@@ -240,7 +239,7 @@
 </head>
 
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="pgp-menu-nav.jsp"%>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-12">
