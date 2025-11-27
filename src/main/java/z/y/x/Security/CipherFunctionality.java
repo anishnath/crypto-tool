@@ -1023,22 +1023,32 @@ public class CipherFunctionality extends HttpServlet {
         //METHOD_DH
         if (METHOD_VERIFY_CERTSCSR.equalsIgnoreCase(methodName)) {
 
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+
             String pem1 = request.getParameter("publickeyparama");
             String pem2 = request.getParameter("privatekeyparama");
 
-
             if(null==pem1 || pem1.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Input field 1 is empty or null </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Input field 1 is empty or null");
+                out.println(gson.toJson(errorResponse));
+                return;
             }
 
             pem1 = pem1.trim();
 
             if(null==pem2 || pem2.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Input field 2 is empty or null </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Input field 2 is empty or null");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
@@ -1046,53 +1056,68 @@ public class CipherFunctionality extends HttpServlet {
 
             if(pem1.equals(pem2))
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Input field 1 and field2 is Equal  </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Input field 1 and field 2 are identical");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            boolean isValid = false;
-
+            // Detect input 1 type
+            String input1Type = "Unknown";
+            boolean isValid1 = false;
             if (pem1.contains("BEGIN RSA PRIVATE KEY") && pem1.contains("END RSA PRIVATE KEY")) {
-                isValid = true;
+                isValid1 = true;
+                input1Type = "RSA Private Key";
+            } else if (pem1.contains("BEGIN PRIVATE KEY") && pem1.contains("END PRIVATE KEY")) {
+                isValid1 = true;
+                input1Type = "Private Key (PKCS#8)";
+            } else if (pem1.contains("BEGIN CERTIFICATE REQUEST") && pem1.contains("END CERTIFICATE REQUEST")) {
+                isValid1 = true;
+                input1Type = "CSR";
+            } else if (pem1.contains("BEGIN CERTIFICATE") && pem1.contains("END CERTIFICATE")) {
+                isValid1 = true;
+                input1Type = "X.509 Certificate";
             }
 
-            if (pem1.contains("BEGIN CERTIFICATE REQUEST") && pem1.contains("END CERTIFICATE REQUEST")) {
-                isValid = true;
-            }
-
-            if (pem1.contains("BEGIN CERTIFICATE") && pem1.contains("END CERTIFICATE")) {
-                isValid = true;
-            }
-
-            if(!isValid)
+            if(!isValid1)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Input field 1 is Invalid, provide a Valid CSR or X509 or RSA Private key  </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Input 1 is invalid. Please provide a valid CSR, X.509 Certificate, or Private Key.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
+            // Detect input 2 type
+            String input2Type = "Unknown";
+            boolean isValid2 = false;
             if (pem2.contains("BEGIN RSA PRIVATE KEY") && pem2.contains("END RSA PRIVATE KEY")) {
-                isValid = true;
+                isValid2 = true;
+                input2Type = "RSA Private Key";
+            } else if (pem2.contains("BEGIN PRIVATE KEY") && pem2.contains("END PRIVATE KEY")) {
+                isValid2 = true;
+                input2Type = "Private Key (PKCS#8)";
+            } else if (pem2.contains("BEGIN CERTIFICATE REQUEST") && pem2.contains("END CERTIFICATE REQUEST")) {
+                isValid2 = true;
+                input2Type = "CSR";
+            } else if (pem2.contains("BEGIN CERTIFICATE") && pem2.contains("END CERTIFICATE")) {
+                isValid2 = true;
+                input2Type = "X.509 Certificate";
             }
 
-            if (pem2.contains("BEGIN CERTIFICATE REQUEST") && pem2.contains("END CERTIFICATE REQUEST")) {
-                isValid = true;
-            }
-
-            if (pem2.contains("BEGIN CERTIFICATE") && pem2.contains("END CERTIFICATE")) {
-                isValid = true;
-            }
-
-            if(!isValid)
+            if(!isValid2)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Input field 2 is Invalid, provide a Valid CSR or X509 or RSA Private key  </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Input 2 is invalid. Please provide a valid CSR, X.509 Certificate, or Private Key.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-
-            Gson gson = new Gson();
             HttpClient client = HttpClientBuilder.create().build();
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "certs/verifycsrcrtkey";
             HttpPost post = new HttpPost(url1);
@@ -1107,27 +1132,24 @@ public class CipherFunctionality extends HttpServlet {
                 HttpResponse response1 = client.execute(post);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> System error encountered. Please try again later. If the issue persists, contact us at https://x.com/anish2good for support. </font>");
-                        return;
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    (response1.getEntity().getContent())
+                            )
+                    );
+                    StringBuilder content = new StringBuilder();
+                    String line;
+                    while (null != (line = br.readLine())) {
+                        content.append(line);
                     }
-
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("verify_certs");
+                    errorResponse.setErrorMessage("System error: " + content.toString());
+                    out.println(gson.toJson(errorResponse));
+                    return;
                 }
+
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(
                                 (response1.getEntity().getContent())
@@ -1141,35 +1163,38 @@ public class CipherFunctionality extends HttpServlet {
 
                 certpojo certpojo1 = gson.fromJson(content.toString(), certpojo.class);
 
-                addHorizontalLine(out);
-                if (certpojo1!=null)
-                {
-                    if("match".equalsIgnoreCase(certpojo1.getMessage()))
-                    {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"green\"> Key Matched  SHA-1 Input1 Key [ " +certpojo1.getMessage2() + "] SHA1-input2 key ["  +certpojo1.getMessage3() + "]  </font>");
-                        return;
+                if (certpojo1 != null) {
+                    EncodedMessage successResponse = new EncodedMessage();
+                    successResponse.setOperation("verify_certs");
+                    successResponse.setInput1Type(input1Type);
+                    successResponse.setInput2Type(input2Type);
+                    successResponse.setHash1(certpojo1.getMessage2());
+                    successResponse.setHash2(certpojo1.getMessage3());
 
+                    if ("match".equalsIgnoreCase(certpojo1.getMessage())) {
+                        successResponse.setSuccess(true);
+                        successResponse.setMatchResult("match");
+                        successResponse.setMessage("Keys match! Both inputs derive from the same key pair.");
+                    } else {
+                        successResponse.setSuccess(true);
+                        successResponse.setMatchResult("no_match");
+                        successResponse.setMessage("Keys do NOT match. The inputs derive from different key pairs.");
                     }
-                    else
-                    {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> Failed SHA-1 Input1 Key [ " +certpojo1.getMessage2() + "] SHA-2 input2 key ["  +certpojo1.getMessage3() + "]  </font>");
-                        return;
-                    }
+                    out.println(gson.toJson(successResponse));
+                    return;
                 }
 
-
-
-            }catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " +e +" </font>");
-            }finally {
-                if(post!=null)
-                {
+            } catch (Exception e) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("verify_certs");
+                errorResponse.setErrorMessage("Error: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
+            } finally {
+                if (post != null) {
                     post.releaseConnection();
                 }
             }
-
 
         }
 

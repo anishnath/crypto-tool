@@ -44,6 +44,13 @@ public class EncodedMessage {
 	private String convertedKey;        // Converted key (PEM format)
 	private String inputFormat;         // Input format (PKCS#1, PKCS#8, etc.)
 	private String outputFormat;        // Output format (PKCS#1, PKCS#8, etc.)
+
+	// Certificate verification fields
+	private String input1Type;          // Type of input 1 (Certificate, CSR, Private Key)
+	private String input2Type;          // Type of input 2 (Certificate, CSR, Private Key)
+	private String hash1;               // SHA-1 hash of input 1 public key
+	private String hash2;               // SHA-1 hash of input 2 public key
+	private String matchResult;         // "match" or "no_match"
 	
 	
 	
@@ -441,6 +448,46 @@ public class EncodedMessage {
 
 	public void setOutputFormat(String outputFormat) {
 		this.outputFormat = outputFormat;
+	}
+
+	public String getInput1Type() {
+		return input1Type;
+	}
+
+	public void setInput1Type(String input1Type) {
+		this.input1Type = input1Type;
+	}
+
+	public String getInput2Type() {
+		return input2Type;
+	}
+
+	public void setInput2Type(String input2Type) {
+		this.input2Type = input2Type;
+	}
+
+	public String getHash1() {
+		return hash1;
+	}
+
+	public void setHash1(String hash1) {
+		this.hash1 = hash1;
+	}
+
+	public String getHash2() {
+		return hash2;
+	}
+
+	public void setHash2(String hash2) {
+		this.hash2 = hash2;
+	}
+
+	public String getMatchResult() {
+		return matchResult;
+	}
+
+	public void setMatchResult(String matchResult) {
+		this.matchResult = matchResult;
 	}
 
 	@Override
