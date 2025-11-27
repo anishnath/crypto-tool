@@ -119,8 +119,8 @@ public class ECFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
-        // Set JSON response for EC_SIGN_MESSAGEE
-        if (EC_SIGN_MESSAGEE.equals(methodName)) {
+        // Set JSON response for EC_SIGN_MESSAGEE and EC_FUNCTION
+        if (EC_SIGN_MESSAGEE.equals(methodName) || EC_FUNCTION.equals(methodName)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
         } else {
@@ -474,10 +474,18 @@ public class ECFunctionality extends HttpServlet {
             final String message = request.getParameter("message");
             String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
 
-
-
-
             Gson gson = new Gson();
+
+            // Validate message
+            if (null == message || message.trim().length() == 0) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("encrypt".equalsIgnoreCase(encryptdecryptparameter) ? "ec_encrypt" : "ec_decrypt");
+                errorResponse.setErrorMessage("Message is required. Please enter a message to encrypt or decrypt.");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
+
             HttpClient client = HttpClientBuilder.create().build();
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/ecencryptdecrypt";
             HttpPost post = new HttpPost(url1);
@@ -486,14 +494,20 @@ public class ECFunctionality extends HttpServlet {
 
             if ("encrypt".equalsIgnoreCase(encryptdecryptparameter)) {
                 if (null == privateKeParam || privateKeParam.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Encryption EC-Private Key of Alice is Needed </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_encrypt");
+                    errorResponse.setErrorMessage("For Encryption, EC Private Key of Alice is required.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
                 if (null == publickeyparamb || publickeyparamb.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Encryption Public Key of Bob is Needed </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_encrypt");
+                    errorResponse.setErrorMessage("For Encryption, Public Key of Bob is required.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
@@ -503,14 +517,20 @@ public class ECFunctionality extends HttpServlet {
 
             if ("decrypt".equalsIgnoreCase(encryptdecryptparameter)) {
                 if (null == privatekeyparamb || privatekeyparamb.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption EC-Private Key of Bob is Needed </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_decrypt");
+                    errorResponse.setErrorMessage("For Decryption, EC Private Key of Bob is required.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
                 if (null == publiKeyParam || publiKeyParam.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption Public Key of Alice is Needed </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_decrypt");
+                    errorResponse.setErrorMessage("For Decryption, Public Key of Alice is required.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
@@ -530,8 +550,11 @@ public class ECFunctionality extends HttpServlet {
                     }
                 }
                 if (!isValidMessage) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> For Decryption Please input a valid Base64 Message " + message + "</font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("ec_decrypt");
+                    errorResponse.setErrorMessage("For Decryption, please input a valid Base64 encoded message.");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
@@ -544,52 +567,75 @@ public class ECFunctionality extends HttpServlet {
             post.setEntity(new UrlEncodedFormEntity(urlParameters));
             post.addHeader("accept", "application/json");
 
-            HttpResponse response1 = client.execute(post);
+            try {
+                HttpResponse response1 = client.execute(post);
 
-            if (response1.getStatusLine().getStatusCode() != 200) {
-                if (response1.getStatusLine().getStatusCode() == 404) {
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(
-                                    (response1.getEntity().getContent())
-                            )
-                    );
-                    StringBuilder content = new StringBuilder();
-                    String line;
-                    while (null != (line = br.readLine())) {
-                        content.append(line);
+                if (response1.getStatusLine().getStatusCode() != 200) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("encrypt".equalsIgnoreCase(encryptdecryptparameter) ? "ec_encrypt" : "ec_decrypt");
+
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                        (response1.getEntity().getContent())
+                                )
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
+                        }
+                        errorResponse.setErrorMessage("System Error: " + content.toString());
+                    } else {
+                        errorResponse.setErrorMessage("System Error: Please try later. If problem persists, raise a feature request.");
                     }
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
+                    out.println(gson.toJson(errorResponse));
                     return;
-                } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+                }
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                (response1.getEntity().getContent())
+                        )
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
+
+                if ("decrypt".equalsIgnoreCase(encryptdecryptparameter)) {
+                    EncodedMessage successResponse = new EncodedMessage();
+                    successResponse.setSuccess(true);
+                    successResponse.setOperation("ec_decrypt");
+                    successResponse.setMessage(encodedMessage.getMessage());
+                    successResponse.setOriginalMessage(message);
+                    out.println(gson.toJson(successResponse));
                     return;
                 }
 
-            }
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            (response1.getEntity().getContent())
-                    )
-            );
-            StringBuilder content = new StringBuilder();
-            String line;
-            while (null != (line = br.readLine())) {
-                content.append(line);
-            }
-
-            EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-
-            if ("decrypt".equalsIgnoreCase(encryptdecryptparameter)) {
-                out.println("Decrypted Message<font size=\"4\" color=\"green\"> [ " + encodedMessage.getMessage() + " ]</font>");
-                return;
-            }
-
-            if ("encrypt".equalsIgnoreCase(encryptdecryptparameter)) {
-                out.println("Base64 Encoded Encrypted Message<font size=\"4\" color=\"green\">  [" + encodedMessage.getBase64Encoded() + "]</font>\n</br>");
-                out.println("Random 16 bit Intial Vector Used <font size=\"4\" color=\"green\">  [" + encodedMessage.getIntialVector() + "]</font>\n");
-                return;
+                if ("encrypt".equalsIgnoreCase(encryptdecryptparameter)) {
+                    EncodedMessage successResponse = new EncodedMessage();
+                    successResponse.setSuccess(true);
+                    successResponse.setOperation("ec_encrypt");
+                    successResponse.setBase64Encoded(encodedMessage.getBase64Encoded());
+                    successResponse.setIntialVector(encodedMessage.getIntialVector());
+                    successResponse.setOriginalMessage(message);
+                    out.println(gson.toJson(successResponse));
+                    return;
+                }
+            } catch (Exception e) {
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("encrypt".equalsIgnoreCase(encryptdecryptparameter) ? "ec_encrypt" : "ec_decrypt");
+                errorResponse.setErrorMessage("Error: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
+            } finally {
+                if (post != null) {
+                    post.releaseConnection();
+                }
             }
 
         }
