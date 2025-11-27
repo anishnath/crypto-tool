@@ -318,33 +318,91 @@ public class CipherFunctionality extends HttpServlet {
 
         if (METHOD_CONVERT_PKCS8.equalsIgnoreCase(methodName)) {
 
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+
             final String password = request.getParameter("password");
             final String pem = request.getParameter("pem");
 
             if(null == pem || pem.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> PEM file is null or empty </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("convert_pkcs");
+                errorResponse.setErrorMessage("PEM file is null or empty");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             if (!pem.contains("PRIVATE KEY")) {
-
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> PEM file is not Valid </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("convert_pkcs");
+                errorResponse.setErrorMessage("Not a valid private key. PEM must contain 'PRIVATE KEY' header.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             PemParser parser = new PemParser();
             try {
-                String message = parser.toPKCS8(pem, password);
-                addHorizontalLine(out);
-                // System.out.println("encodedMessage-- " + encodedMessage);
-                out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
+                String convertedKey = parser.toPKCS8(pem, password);
+
+                EncodedMessage successResponse = new EncodedMessage();
+                successResponse.setSuccess(true);
+                successResponse.setOperation("convert_pkcs");
+                successResponse.setConvertedKey(convertedKey);
+
+                // Detect input and output formats
+                String inputFormat = "Unknown";
+                String outputFormat = "Unknown";
+                if (pem.contains("BEGIN RSA PRIVATE KEY")) {
+                    inputFormat = "PKCS#1 (RSA)";
+                    outputFormat = "PKCS#8";
+                } else if (pem.contains("BEGIN EC PRIVATE KEY")) {
+                    inputFormat = "SEC1 (EC)";
+                    outputFormat = "PKCS#8";
+                } else if (pem.contains("BEGIN DSA PRIVATE KEY")) {
+                    inputFormat = "DSA Traditional";
+                    outputFormat = "PKCS#8";
+                } else if (pem.contains("BEGIN PRIVATE KEY")) {
+                    inputFormat = "PKCS#8";
+                    // Determine output format from converted key
+                    if (convertedKey.contains("BEGIN RSA PRIVATE KEY")) {
+                        outputFormat = "PKCS#1 (RSA)";
+                    } else if (convertedKey.contains("BEGIN EC PRIVATE KEY")) {
+                        outputFormat = "SEC1 (EC)";
+                    } else if (convertedKey.contains("BEGIN DSA PRIVATE KEY")) {
+                        outputFormat = "DSA Traditional";
+                    } else {
+                        outputFormat = "Algorithm-specific";
+                    }
+                } else if (pem.contains("BEGIN ENCRYPTED PRIVATE KEY")) {
+                    inputFormat = "Encrypted PKCS#8";
+                    outputFormat = "PKCS#8 (Decrypted)";
+                }
+                successResponse.setInputFormat(inputFormat);
+                successResponse.setOutputFormat(outputFormat);
+
+                // Detect algorithm type
+                String algorithm = "Unknown";
+                if (pem.contains("RSA") || convertedKey.contains("RSA")) {
+                    algorithm = "RSA";
+                } else if (pem.contains("EC") || convertedKey.contains("EC")) {
+                    algorithm = "EC";
+                } else if (pem.contains("DSA") || convertedKey.contains("DSA")) {
+                    algorithm = "DSA";
+                }
+                successResponse.setAlgorithm(algorithm);
+
+                out.println(gson.toJson(successResponse));
                 return;
             } catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("convert_pkcs");
+                errorResponse.setErrorMessage("Error converting key: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
 
         }

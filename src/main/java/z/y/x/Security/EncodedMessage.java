@@ -39,6 +39,11 @@ public class EncodedMessage {
 	private String sharedSecret;        // HMAC shared secret (Base64 encoded)
 	private String privateKey;          // Private key (PEM format)
 	private String publicKey;           // Public key (PEM format)
+
+	// Key conversion fields
+	private String convertedKey;        // Converted key (PEM format)
+	private String inputFormat;         // Input format (PKCS#1, PKCS#8, etc.)
+	private String outputFormat;        // Output format (PKCS#1, PKCS#8, etc.)
 	
 	
 	
@@ -412,6 +417,30 @@ public class EncodedMessage {
 
 	public void setPublicKey(String publicKey) {
 		this.publicKey = publicKey;
+	}
+
+	public String getConvertedKey() {
+		return convertedKey;
+	}
+
+	public void setConvertedKey(String convertedKey) {
+		this.convertedKey = convertedKey;
+	}
+
+	public String getInputFormat() {
+		return inputFormat;
+	}
+
+	public void setInputFormat(String inputFormat) {
+		this.inputFormat = inputFormat;
+	}
+
+	public String getOutputFormat() {
+		return outputFormat;
+	}
+
+	public void setOutputFormat(String outputFormat) {
+		this.outputFormat = outputFormat;
 	}
 
 	@Override
