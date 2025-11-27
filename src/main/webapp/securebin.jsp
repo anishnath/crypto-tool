@@ -293,29 +293,7 @@
         </div>
     </div>
 
-    <!-- Trust Banner -->
-    <div class="alert alert-success border-success mb-4">
-        <div class="d-flex align-items-start">
-            <div class="mr-3" style="font-size: 2rem;">
-                <i class="fas fa-shield-alt text-success"></i>
-            </div>
-            <div>
-                <h5 class="alert-heading mb-2"><strong>Zero-Knowledge Architecture - Your Secret Stays Secret</strong></h5>
-                <p class="mb-2">Your secret is encrypted with AES-256-GCM <strong>in your browser before upload</strong>. The server receives only encrypted data - it never sees your plaintext or password. True zero-knowledge design.</p>
-                <hr class="my-2">
-                <div class="row small">
-                    <div class="col-md-6">
-                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Client-Side Encryption:</strong> AES-256-GCM in browser</p>
-                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Separate Channels:</strong> URL + password sent separately</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Multiple Access:</strong> View anytime within 24 hours</p>
-                        <p class="mb-0"><i class="fas fa-check text-success"></i> <strong>Auto-Expires:</strong> Deleted after 24 hours</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="row">
         <div class="col-lg-7 mb-4">
@@ -390,6 +368,30 @@
                             <i class="fas fa-arrow-left fa-3x mb-3 opacity-25"></i>
                             <p class="mb-0">Enter your secret and click<br><strong>"Encrypt & Share Secret"</strong><br>to generate a secure link</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust Banner -->
+    <div class="alert alert-success border-success mb-4">
+        <div class="d-flex align-items-start">
+            <div class="mr-3" style="font-size: 2rem;">
+                <i class="fas fa-shield-alt text-success"></i>
+            </div>
+            <div>
+                <h5 class="alert-heading mb-2"><strong>Zero-Knowledge Architecture - Your Secret Stays Secret</strong></h5>
+                <p class="mb-2">Your secret is encrypted with AES-256-GCM <strong>in your browser before upload</strong>. The server receives only encrypted data - it never sees your plaintext or password. True zero-knowledge design.</p>
+                <hr class="my-2">
+                <div class="row small">
+                    <div class="col-md-6">
+                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Client-Side Encryption:</strong> AES-256-GCM in browser</p>
+                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Separate Channels:</strong> URL + password sent separately</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1"><i class="fas fa-check text-success"></i> <strong>Multiple Access:</strong> View anytime within 24 hours</p>
+                        <p class="mb-0"><i class="fas fa-check text-success"></i> <strong>Auto-Expires:</strong> Deleted after 24 hours</p>
                     </div>
                 </div>
             </div>
