@@ -351,33 +351,62 @@ public class CipherFunctionality extends HttpServlet {
 
         if (METHOD_EXTRACT_PUBLICKEY.equalsIgnoreCase(methodName)) {
 
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+
             final String password = request.getParameter("password");
             final String pem = request.getParameter("pem");
 
             if(null == pem || pem.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> PEM file is null or empty </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_publickey");
+                errorResponse.setErrorMessage("PEM file is null or empty");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             if (!pem.contains("PRIVATE KEY")) {
-
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> PEM file is not Valid </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_publickey");
+                errorResponse.setErrorMessage("Not a valid private key. PEM must contain 'PRIVATE KEY' header.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
             PemParser parser = new PemParser();
             try {
-                String message = parser.extractPublicKey(pem, password);
-                addHorizontalLine(out);
-                // System.out.println("encodedMessage-- " + encodedMessage);
-                out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" id=\"encrypedmessagetextarea\" readonly=true rows=\"10\" cols=\"80\">" + message + "</textarea>");
+                String publicKey = parser.extractPublicKey(pem, password);
+
+                EncodedMessage successResponse = new EncodedMessage();
+                successResponse.setSuccess(true);
+                successResponse.setOperation("extract_publickey");
+                successResponse.setPublicKey(publicKey);
+
+                // Detect key type from input
+                String keyType = "Unknown";
+                if (pem.contains("RSA PRIVATE KEY") || pem.contains("RSA PRIVATE")) {
+                    keyType = "RSA";
+                } else if (pem.contains("EC PRIVATE KEY") || pem.contains("EC PRIVATE")) {
+                    keyType = "EC";
+                } else if (pem.contains("DSA PRIVATE KEY") || pem.contains("DSA PRIVATE")) {
+                    keyType = "DSA";
+                } else if (pem.contains("PRIVATE KEY")) {
+                    keyType = "PKCS#8";
+                }
+                successResponse.setAlgorithm(keyType);
+
+                out.println(gson.toJson(successResponse));
                 return;
             } catch (Exception e) {
-                addHorizontalLine(out);
-                out.println("<font size=\"3\" color=\"red\"> " + e.getMessage()  + " </font>");
+                EncodedMessage errorResponse = new EncodedMessage();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_publickey");
+                errorResponse.setErrorMessage("Error extracting public key: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
 
 
