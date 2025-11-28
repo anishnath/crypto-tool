@@ -23,6 +23,12 @@
                         <a class="dropdown-item" href="portscan.jsp">
                             <i class="fas fa-shield-alt"></i> Port Scanner
                         </a>
+                        <a class="dropdown-item" href="screenshot.jsp">
+                            <i class="fas fa-camera"></i> Website Screenshot
+                        </a>
+                        <a class="dropdown-item" href="sslscan.jsp">
+                            <i class="fas fa-lock"></i> SSL Scanner
+                        </a>
                     </div>
                 </li>
                 
@@ -81,11 +87,17 @@
                         <a class="dropdown-item" href="SubnetFunctions.jsp">
                             <i class="fas fa-calculator"></i> Subnet Calculator
                         </a>
+                        <a class="dropdown-item" href="vpc-calculator.jsp">
+                            <i class="fas fa-cloud"></i> VPC Network Calculator
+                        </a>
+                        <a class="dropdown-item" href="ipv6-tool.jsp">
+                            <i class="fas fa-compress-alt"></i> IPv6 Compressor & Expander
+                        </a>
+                        <a class="dropdown-item" href="mac-address-generator.jsp">
+                            <i class="fas fa-network-wired"></i> MAC Address Generator
+                        </a>
                         <a class="dropdown-item" href="httpstat.jsp">
                             <i class="fas fa-chart-line"></i> HTTP Status Tool
-                        </a>
-                        <a class="dropdown-item" href="screenshot.jsp">
-                            <i class="fas fa-camera"></i> Website Screenshot
                         </a>
                     </div>
                 </li>
