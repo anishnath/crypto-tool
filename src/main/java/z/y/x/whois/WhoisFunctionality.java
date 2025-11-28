@@ -90,3 +90,10 @@ public class WhoisFunctionality extends HttpServlet {
         return domain.matches(domainRegex) && domain.length() > 0 && domain.length() <= 253;
     }
 }
+
+
+
+
+
+
+
