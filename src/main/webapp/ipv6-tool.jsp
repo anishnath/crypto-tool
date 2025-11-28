@@ -1,26 +1,15 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>IPv6 Address Compressor & Expander - IPv6 Format Converter | 8gwifi.org</title>
-
+    <title>IPv6 Address Compressor & Expander Online – Free | 8gwifi.org</title>
     <meta name="description" content="Free online IPv6 address compressor and expander tool. Convert between compressed and expanded IPv6 formats, validate addresses, and convert to decimal, binary, and hex formats.">
     <meta name="keywords" content="IPv6 compressor, IPv6 expander, IPv6 converter, compress IPv6 address, expand IPv6 address, IPv6 format converter, IPv6 validator, IPv6 shorthand, IPv6 full format, IPv6 to decimal, IPv6 to binary, IPv6 address tool, IPv6 notation, IPv6 address format, shorten IPv6, full IPv6 address, IPv6 address calculator, IPv6 subnet calculator, IPv6 address parser, IPv6 CIDR, IPv6 network calculator, IPv6 address compression, IPv6 zero compression, IPv6 address validation, IPv6 address analyzer">
-
-    <meta property="og:title" content="IPv6 Address Compressor & Expander Tool">
-    <meta property="og:description" content="Compress, expand, and convert IPv6 addresses between different formats. Validate and analyze IPv6 addresses online.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://8gwifi.org/ipv6-tool.jsp">
-    <meta property="og:site_name" content="8gwifi.org">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IPv6 Address Compressor & Expander">
-    <meta name="twitter:description" content="Free tool to compress, expand, and convert IPv6 addresses.">
-
-    <link rel="canonical" href="https://8gwifi.org/ipv6-tool.jsp">
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="Anish Nath" />
+    <link rel="canonical" href="https://8gwifi.org/ipv6-tool.jsp" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -28,62 +17,16 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@type": "WebApplication",
         "name": "IPv6 Address Compressor & Expander",
         "description": "Free online tool to compress and expand IPv6 addresses, validate IPv6 format, and convert between different representations including decimal, binary, and hexadecimal formats.",
         "url": "https://8gwifi.org/ipv6-tool.jsp",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web Browser",
-        "permissions": "No installation required",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "featureList": [
-            "Compress IPv6 addresses to shortest form",
-            "Expand IPv6 addresses to full format",
-            "Validate IPv6 address format",
-            "Convert to decimal representation",
-            "Convert to binary representation",
-            "Convert to hexadecimal groups",
-            "Show leading zero compression",
-            "Show consecutive zero compression",
-            "Parse IPv6 CIDR notation",
-            "Detect IPv6 address type",
-            "Show address properties",
-            "Privacy-focused (client-side only)",
-            "Copy to clipboard functionality"
-        ],
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "ratingCount": "456",
-            "bestRating": "5",
-            "worstRating": "1"
-        }
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://8gwifi.org"
-        },{
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Network Tools",
-            "item": "https://8gwifi.org/ipv6-tool.jsp"
-        },{
-            "@type": "ListItem",
-            "position": 3,
-            "name": "IPv6 Compressor & Expander"
-        }]
+        "applicationCategory": "NetworkApplication",
+        "operatingSystem": "Any",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "author": {"@type": "Person", "name": "Anish Nath", "url": "https://x.com/anish2good"},
+        "datePublished": "2020-01-15",
+        "dateModified": "2025-01-28"
     }
     </script>
 
@@ -96,148 +39,122 @@
             "name": "What is IPv6 address compression?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "IPv6 address compression is the process of shortening an IPv6 address by removing leading zeros in each group and replacing the longest sequence of consecutive zero groups with '::'. For example, 2001:0db8:0000:0000:0000:ff00:0042:8329 becomes 2001:db8::ff00:42:8329."
+                "text": "IPv6 address compression is the process of shortening an IPv6 address by removing leading zeros in each group and replacing the longest sequence of consecutive zero groups with '::'. For example, 2001:0db8:0000:0000:0000:ff00:0042:8329 becomes 2001:db8::ff00:42:8329. This makes IPv6 addresses more readable and easier to work with."
             }
         },{
             "@type": "Question",
             "name": "How do I expand a compressed IPv6 address?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Expanding an IPv6 address means converting it to its full 128-bit representation with all 8 groups of 4 hexadecimal digits. Replace '::' with the appropriate number of zero groups and add leading zeros to each group."
+                "text": "Expanding an IPv6 address means converting it to its full 128-bit representation with all 8 groups of 4 hexadecimal digits. Replace '::' with the appropriate number of zero groups and add leading zeros to each group. For example, 2001:db8::1 expands to 2001:0db8:0000:0000:0000:0000:0000:0001."
             }
         },{
             "@type": "Question",
             "name": "What does :: mean in an IPv6 address?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The double colon (::) in an IPv6 address represents one or more consecutive groups of zeros. It can only appear once in an address. For example, in 2001:db8::1, the :: represents 0000:0000:0000:0000:0000:0000."
+                "text": "The double colon (::) in an IPv6 address represents one or more consecutive groups of zeros. It can only appear once in an address. For example, in 2001:db8::1, the :: represents 0000:0000:0000:0000:0000:0000. This is called zero compression and is used to make addresses shorter and more readable."
             }
         },{
             "@type": "Question",
             "name": "How many bits is an IPv6 address?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "An IPv6 address is 128 bits long, represented as eight groups of four hexadecimal digits (16 bits each). This provides approximately 340 undecillion unique addresses."
+                "text": "An IPv6 address is 128 bits long, represented as eight groups of four hexadecimal digits (16 bits each). This provides approximately 340 undecillion (3.4×10^38) unique addresses, which is vastly more than IPv4's 4.3 billion addresses."
             }
         },{
             "@type": "Question",
             "name": "What are the different types of IPv6 addresses?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "IPv6 addresses include: Global Unicast (2000::/3), Link-Local (fe80::/10), Unique Local (fc00::/7), Multicast (ff00::/8), Loopback (::1), and Unspecified (::/128)."
+                "text": "IPv6 addresses include: Global Unicast (2000::/3) - globally routable addresses similar to public IPv4; Link-Local (fe80::/10) - used for communication on a single network link; Unique Local (fc00::/7) - similar to private IPv4 addresses (RFC 4193); Multicast (ff00::/8) - one-to-many communication; Loopback (::1) - equivalent to 127.0.0.1 in IPv4; and Unspecified (::/128) - all zeros, equivalent to 0.0.0.0."
             }
         }]
     }
     </script>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "How to Compress and Expand IPv6 Addresses",
-        "description": "Step-by-step guide to using the IPv6 address compressor and expander",
-        "step": [{
-            "@type": "HowToStep",
-            "position": 1,
-            "name": "Enter IPv6 Address",
-            "text": "Paste or type your IPv6 address in either compressed or expanded format"
-        },{
-            "@type": "HowToStep",
-            "position": 2,
-            "name": "Choose Operation",
-            "text": "Click 'Compress' to shorten the address or 'Expand' to show the full format"
-        },{
-            "@type": "HowToStep",
-            "position": 3,
-            "name": "View Results",
-            "text": "See the compressed/expanded address along with decimal, binary, and other format conversions"
-        },{
-            "@type": "HowToStep",
-            "position": 4,
-            "name": "Copy Result",
-            "text": "Use the copy button to copy the converted address to your clipboard"
-        }]
-    }
-    </script>
+    <%@ include file="header-script.jsp"%>
 
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 1rem 0;
+        :root {
+            --theme-primary: #059669;
+            --theme-secondary: #10b981;
+            --theme-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --theme-light: #ecfdf5;
         }
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .tool-header {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .tool-header h1 {
-            color: #667eea;
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .tool-header p {
-            color: #6c757d;
-            margin-bottom: 0;
-            font-size: 0.9rem;
-        }
-        .control-panel {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .control-panel h3 {
-            color: #495057;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .form-control {
-            border-radius: 6px;
-            border: 2px solid #e9ecef;
-            padding: 0.6rem;
-            font-size: 0.9rem;
-            font-family: 'Courier New', monospace;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .tool-card {
             border: none;
-            padding: 0.6rem 1.5rem;
-            font-weight: 600;
-            border-radius: 6px;
-            transition: transform 0.2s;
-            font-size: 0.9rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(5, 150, 105, 0.15);
+            transition: box-shadow 0.3s ease;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        .tool-card:hover {
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.25);
         }
-        .btn-secondary {
-            padding: 0.6rem 1.5rem;
+        .card-header-custom {
+            background: var(--theme-gradient);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 0.75rem 1rem;
+        }
+        .card-header-custom h5 {
+            margin: 0;
             font-weight: 600;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: 1rem;
+        }
+        .form-section {
+            background: var(--theme-light);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .form-section-title {
+            font-weight: 600;
+            color: var(--theme-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .result-card {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            min-height: 200px;
+        }
+        .result-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            min-height: 150px;
+        }
+        .result-content {
+            display: none;
+        }
+        .eeat-badge {
+            background: var(--theme-gradient);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .info-badge {
+            display: inline-block;
+            background: var(--theme-light);
+            color: var(--theme-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-right: 0.25rem;
         }
         .result-box {
             background: #f8f9fa;
-            border: 2px solid #667eea;
+            border: 2px solid var(--theme-primary);
             border-radius: 6px;
             padding: 0.75rem;
             font-family: 'Courier New', monospace;
-            font-size: 1rem;
+            font-size: 0.9rem;
             word-break: break-all;
             position: relative;
             margin-bottom: 0.75rem;
@@ -247,14 +164,13 @@
             color: #495057;
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         .copy-btn-inline {
             position: absolute;
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            background: #667eea;
+            background: var(--theme-primary);
             color: white;
             border: none;
             padding: 0.3rem 0.6rem;
@@ -263,207 +179,331 @@
             font-size: 0.8rem;
         }
         .copy-btn-inline:hover {
-            background: #764ba2;
-        }
-        .info-panel {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .info-panel h3 {
-            color: #495057;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            background: var(--theme-secondary);
         }
         .info-item {
             margin-bottom: 0.75rem;
             padding: 0.5rem;
-            background: #f8f9fa;
+            background: var(--theme-light);
             border-radius: 6px;
         }
         .info-label {
             font-weight: 600;
-            color: #495057;
+            color: var(--theme-primary);
             font-size: 0.9rem;
         }
         .info-value {
             color: #212529;
             font-size: 0.9rem;
         }
-        .alert {
-            border-radius: 6px;
-            padding: 0.75rem;
-            font-size: 0.9rem;
-        }
-        .info-section {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .info-section h3 {
-            color: #495057;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-        .info-section p {
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
-        }
-        .info-section ul {
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
-            padding-left: 1.25rem;
-        }
-        .collapse-toggle {
-            color: #667eea;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-        .collapse-toggle:hover {
-            color: #764ba2;
-            text-decoration: none;
-        }
-        .related-tools {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .related-tools h3 {
-            color: #495057;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-        .related-tools a {
-            color: #667eea;
-            text-decoration: none;
-            margin-right: 1rem;
-            font-size: 0.9rem;
-        }
-        .related-tools a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
         .example-links {
             margin-top: 0.5rem;
         }
         .example-links a {
-            color: #667eea;
+            color: var(--theme-primary);
             cursor: pointer;
             font-size: 0.85rem;
             margin-right: 1rem;
+            text-decoration: none;
         }
         .example-links a:hover {
+            color: var(--theme-secondary);
             text-decoration: underline;
         }
+        .related-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .related-tool-card {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        .related-tool-card:hover {
+            border-color: var(--theme-primary);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+            text-decoration: none;
+        }
+        .related-tool-card h6 {
+            color: var(--theme-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .related-tool-card p {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin: 0;
+        }
+        .hash-output {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 0.5rem;
+            word-break: break-all;
+            position: relative;
+        }
     </style>
-    <%@ include file="header-script.jsp"%>
 </head>
-
 <%@ include file="body-script.jsp"%>
+    <%@ include file="network-tools-navbar.jsp"%>
+<%@ include file="footer_adsense.jsp"%>
 
-<div class="main-container">
-    <div class="tool-header">
-        <h1><i class="fas fa-network-wired"></i> IPv6 Address Compressor & Expander</h1>
-        <p>Compress, expand, and convert IPv6 addresses between different formats with validation.</p>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+        <h1 class="h4 mb-0">IPv6 Address Compressor & Expander</h1>
+        <div class="mt-1">
+            <span class="info-badge"><i class="fas fa-network-wired"></i> 128-bit</span>
+            <span class="info-badge"><i class="fas fa-compress-alt"></i> Compression</span>
+            <span class="info-badge"><i class="fas fa-expand-alt"></i> Expansion</span>
+            <span class="info-badge"><i class="fas fa-shield-alt"></i> Client-Side</span>
+        </div>
     </div>
+    <div class="eeat-badge">
+        <i class="fas fa-user-check"></i>
+        <span>Anish Nath</span>
+    </div>
+</div>
 
-    <div class="control-panel">
-        <h3><i class="fas fa-keyboard"></i> IPv6 Address Input</h3>
-
-        <textarea class="form-control" id="ipv6Input" rows="3" placeholder="Enter IPv6 address...
+<div class="row">
+    <!-- Left Column: Input Form -->
+    <div class="col-lg-5 mb-4">
+        <div class="card tool-card">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-keyboard me-2"></i>IPv6 Address Input</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-section">
+                    <div class="form-section-title"><i class="fas fa-network-wired me-1"></i>IPv6 Address</div>
+                    <textarea class="form-control" id="ipv6Input" rows="4" placeholder="Enter IPv6 address...
 Examples:
 2001:0db8:0000:0000:0000:ff00:0042:8329
 2001:db8::ff00:42:8329
-::1"></textarea>
+::1" style="font-family: 'Courier New', monospace;"></textarea>
+                </div>
 
-        <div class="example-links">
-            <strong><i class="fas fa-lightbulb"></i> Try examples:</strong>
-            <a onclick="loadExample('full')">Full Format</a>
-            <a onclick="loadExample('compressed')">Compressed</a>
-            <a onclick="loadExample('loopback')">Loopback</a>
-        </div>
+                <div class="example-links">
+                    <strong><i class="fas fa-lightbulb me-1"></i>Try examples:</strong>
+                    <a onclick="loadExample('full')">Full Format</a>
+                    <a onclick="loadExample('compressed')">Compressed</a>
+                    <a onclick="loadExample('loopback')">Loopback</a>
+                </div>
 
-        <div style="margin-top: 1rem;">
-            <button class="btn btn-primary" onclick="compressIPv6()">
-                <i class="fas fa-compress-alt"></i> Compress
-            </button>
-            <button class="btn btn-primary" onclick="expandIPv6()">
-                <i class="fas fa-expand-alt"></i> Expand
-            </button>
-            <button class="btn btn-secondary" onclick="clearAll()">
-                <i class="fas fa-eraser"></i> Clear
-            </button>
-        </div>
-    </div>
-
-    <div id="resultsContainer" style="display: none;">
-        <div class="info-panel">
-            <h3><i class="fas fa-check-circle"></i> Results</h3>
-            <div id="results"></div>
-        </div>
-
-        <div class="info-panel">
-            <h3><i class="fas fa-info-circle"></i> Address Information</h3>
-            <div id="addressInfo"></div>
+                <div class="mt-3">
+                    <button class="btn w-100 mb-2" onclick="compressIPv6()" style="background: var(--theme-gradient); color: white; font-weight: 600;">
+                        <i class="fas fa-compress-alt me-2"></i>Compress
+                    </button>
+                    <button class="btn w-100 mb-2" onclick="expandIPv6()" style="background: var(--theme-gradient); color: white; font-weight: 600;">
+                        <i class="fas fa-expand-alt me-2"></i>Expand
+                    </button>
+                    <button class="btn btn-secondary w-100" onclick="clearAll()">
+                        <i class="fas fa-eraser me-2"></i>Clear
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="info-section">
-        <a class="collapse-toggle" data-toggle="collapse" href="#howItWorksCollapse">
-            <i class="fas fa-question-circle"></i> About IPv6 Addresses
-        </a>
-        <div class="collapse" id="howItWorksCollapse">
-            <p><strong>IPv6 Address Format:</strong></p>
-            <p>IPv6 addresses are 128-bit identifiers represented as eight groups of four hexadecimal digits, separated by colons. Example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334</p>
+    <!-- Right Column: Results -->
+    <div class="col-lg-7 mb-4">
+        <div class="card tool-card result-card">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-check-circle me-2"></i>Results</h5>
+            </div>
+            <div class="card-body">
+                <div class="result-placeholder" id="resultPlaceholder">
+                    <div class="text-center">
+                        <i class="fas fa-arrow-left fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Enter an IPv6 address and click Compress or Expand</p>
+                    </div>
+                </div>
+                <div class="result-content" id="resultContent">
+                    <div id="results"></div>
+                </div>
+            </div>
+        </div>
 
-            <p><strong>Compression Rules:</strong></p>
-            <ul>
-                <li><strong>Leading Zero Compression:</strong> Leading zeros in each group can be omitted. 0042 becomes 42, 0000 becomes 0.</li>
-                <li><strong>Consecutive Zero Compression:</strong> The longest sequence of consecutive all-zero groups can be replaced with ::. Can only be used once per address.</li>
-                <li><strong>Example:</strong> 2001:0db8:0000:0000:0000:ff00:0042:8329 → 2001:db8::ff00:42:8329</li>
-            </ul>
-
-            <p><strong>IPv6 Address Types:</strong></p>
-            <ul>
-                <li><strong>Global Unicast (2000::/3):</strong> Globally routable addresses, similar to public IPv4</li>
-                <li><strong>Link-Local (fe80::/10):</strong> Used for communication on a single link</li>
-                <li><strong>Unique Local (fc00::/7):</strong> Similar to private IPv4 addresses (RFC 4193)</li>
-                <li><strong>Multicast (ff00::/8):</strong> One-to-many communication</li>
-                <li><strong>Loopback (::1):</strong> Equivalent to 127.0.0.1 in IPv4</li>
-                <li><strong>Unspecified (::/128):</strong> All zeros, equivalent to 0.0.0.0</li>
-            </ul>
-
-            <p><strong>IPv6 vs IPv4:</strong></p>
-            <ul>
-                <li>IPv6: 128 bits (340 undecillion addresses)</li>
-                <li>IPv4: 32 bits (4.3 billion addresses)</li>
-                <li>IPv6 eliminates the need for NAT</li>
-                <li>Built-in IPsec support</li>
-                <li>Simplified header structure</li>
-            </ul>
+        <div class="card tool-card mt-3" id="addressInfoCard" style="display: none;">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-info-circle me-2"></i>Address Information</h5>
+            </div>
+            <div class="card-body">
+                <div id="addressInfo"></div>
+            </div>
         </div>
     </div>
+</div>
 
+<!-- Educational Content Section -->
+<div class="card tool-card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Understanding IPv6 Addresses</h5>
+    </div>
+    <div class="card-body">
+        <h6>What is IPv6?</h6>
+        <p>IPv6 (Internet Protocol version 6) is the most recent version of the Internet Protocol, designed to replace IPv4. IPv6 addresses are 128-bit identifiers represented as eight groups of four hexadecimal digits, separated by colons. Example: <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code></p>
+
+        <h6 class="mt-4">IPv6 Address Compression Rules</h6>
+        <p>IPv6 addresses can be compressed using two methods:</p>
+        <ul>
+            <li><strong>Leading Zero Compression:</strong> Leading zeros in each group can be omitted. <code>0042</code> becomes <code>42</code>, <code>0000</code> becomes <code>0</code>.</li>
+            <li><strong>Consecutive Zero Compression:</strong> The longest sequence of consecutive all-zero groups can be replaced with <code>::</code>. This can only be used once per address.</li>
+        </ul>
+        <p><strong>Example:</strong> <code>2001:0db8:0000:0000:0000:ff00:0042:8329</code> → <code>2001:db8::ff00:42:8329</code></p>
+
+        <h6 class="mt-4">IPv6 Address Types</h6>
+        <table class="table table-sm table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Type</th>
+                    <th>Prefix</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Global Unicast</strong></td>
+                    <td><code>2000::/3</code></td>
+                    <td>Globally routable addresses, similar to public IPv4</td>
+                </tr>
+                <tr>
+                    <td><strong>Link-Local</strong></td>
+                    <td><code>fe80::/10</code></td>
+                    <td>Used for communication on a single network link</td>
+                </tr>
+                <tr>
+                    <td><strong>Unique Local</strong></td>
+                    <td><code>fc00::/7</code></td>
+                    <td>Similar to private IPv4 addresses (RFC 4193)</td>
+                </tr>
+                <tr>
+                    <td><strong>Multicast</strong></td>
+                    <td><code>ff00::/8</code></td>
+                    <td>One-to-many communication</td>
+                </tr>
+                <tr>
+                    <td><strong>Loopback</strong></td>
+                    <td><code>::1</code></td>
+                    <td>Equivalent to 127.0.0.1 in IPv4</td>
+                </tr>
+                <tr>
+                    <td><strong>Unspecified</strong></td>
+                    <td><code>::/128</code></td>
+                    <td>All zeros, equivalent to 0.0.0.0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h6 class="mt-4">IPv6 vs IPv4 Comparison</h6>
+        <table class="table table-sm table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Feature</th>
+                    <th>IPv4</th>
+                    <th>IPv6</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Address Length</strong></td>
+                    <td>32 bits</td>
+                    <td>128 bits</td>
+                </tr>
+                <tr>
+                    <td><strong>Address Space</strong></td>
+                    <td>4.3 billion</td>
+                    <td>340 undecillion</td>
+                </tr>
+                <tr>
+                    <td><strong>Address Format</strong></td>
+                    <td>Dotted decimal (192.168.1.1)</td>
+                    <td>Hexadecimal groups (2001:db8::1)</td>
+                </tr>
+                <tr>
+                    <td><strong>NAT Required</strong></td>
+                    <td>Often</td>
+                    <td>Not required</td>
+                </tr>
+                <tr>
+                    <td><strong>IPsec Support</strong></td>
+                    <td>Optional</td>
+                    <td>Built-in</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h6 class="mt-4">Code Examples</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="small mb-1"><strong>Python</strong></p>
+                <pre class="bg-dark text-light p-2 rounded small"><code>import ipaddress
+
+# Expand IPv6
+addr = ipaddress.IPv6Address('2001:db8::1')
+print(addr.exploded)  # 2001:0db8:0000:0000:0000:0000:0000:0001
+
+# Compress IPv6
+addr = ipaddress.IPv6Address('2001:0db8::1')
+print(addr.compressed)  # 2001:db8::1</code></pre>
+            </div>
+            <div class="col-md-6">
+                <p class="small mb-1"><strong>JavaScript</strong></p>
+                <pre class="bg-dark text-light p-2 rounded small"><code>// Validate IPv6
+function isValidIPv6(addr) {
+    const pattern = /^([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}$/i;
+    return pattern.test(addr.replace('::', ':'));
+}
+
+// Expand compressed IPv6
+const expanded = addr.replace(/::/, 
+    ':'.repeat(8 - addr.split(':').length + 1));</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Tools Section -->
+<div class="card tool-card mb-4">
+    <div class="card-header bg-light py-2">
+        <h6 class="mb-0"><i class="fas fa-tools me-2"></i>Related Tools</h6>
+    </div>
+    <div class="card-body">
+        <div class="related-tools">
+            <a href="dns.jsp" class="related-tool-card">
+                <h6><i class="fas fa-search me-1"></i>DNS Lookup</h6>
+                <p>Resolve domain names to IP addresses</p>
+            </a>
+            <a href="whois.jsp" class="related-tool-card">
+                <h6><i class="fas fa-info-circle me-1"></i>WHOIS Lookup</h6>
+                <p>Query domain registration information</p>
+            </a>
+            <a href="SubnetFunctions.jsp" class="related-tool-card">
+                <h6><i class="fas fa-calculator me-1"></i>Subnet Calculator</h6>
+                <p>Calculate IPv4 subnet masks and ranges</p>
+            </a>
+            <a href="pingfunctions.jsp" class="related-tool-card">
+                <h6><i class="fas fa-network-wired me-1"></i>Ping Tool</h6>
+                <p>Test network connectivity</p>
+            </a>
+            <a href="portscan.jsp" class="related-tool-card">
+                <h6><i class="fas fa-door-open me-1"></i>Port Scanner</h6>
+                <p>Scan for open ports on hosts</p>
+            </a>
+            <a href="revdns.jsp" class="related-tool-card">
+                <h6><i class="fas fa-exchange-alt me-1"></i>Reverse DNS</h6>
+                <p>Reverse DNS lookup for IP addresses</p>
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="sharethis-inline-share-buttons"></div>
 <%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
 
 <script>
@@ -477,11 +517,19 @@ function loadExample(type) {
     document.getElementById('ipv6Input').value = examples[type];
 }
 
+function showToast(message) {
+    var toast = $('<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">' +
+        '<div class="toast show"><div class="toast-body text-white rounded" style="background: var(--theme-gradient);">' +
+        '<i class="fas fa-info-circle me-2"></i>' + message + '</div></div></div>');
+    $('body').append(toast);
+    setTimeout(function() { toast.fadeOut(function() { toast.remove(); }); }, 2000);
+}
+
 function compressIPv6() {
     const input = document.getElementById('ipv6Input').value.trim();
 
     if (!input) {
-        alert('Please enter an IPv6 address');
+        showToast('Please enter an IPv6 address');
         return;
     }
 
@@ -496,7 +544,7 @@ function compressIPv6() {
         displayResults(input, expanded, compressed, 'compress');
 
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast('Error: ' + error.message);
     }
 }
 
@@ -504,7 +552,7 @@ function expandIPv6() {
     const input = document.getElementById('ipv6Input').value.trim();
 
     if (!input) {
-        alert('Please enter an IPv6 address');
+        showToast('Please enter an IPv6 address');
         return;
     }
 
@@ -515,7 +563,7 @@ function expandIPv6() {
         displayResults(input, expanded, compressed, 'expand');
 
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast('Error: ' + error.message);
     }
 }
 
@@ -639,22 +687,22 @@ function displayResults(original, expanded, compressed, operation) {
     // Compressed format
     html += '<div class="result-label">Compressed Format:</div>';
     html += '<div class="result-box">';
-    html += compressed;
-    html += '<button class="copy-btn-inline" onclick="copyText(\'' + escapeForJs(compressed) + '\')">Copy</button>';
+    html += escapeHtml(compressed);
+    html += '<button class="copy-btn-inline" onclick="copyText(\'' + escapeForJs(compressed) + '\')"><i class="fas fa-copy"></i></button>';
     html += '</div>';
 
     // Expanded format
     html += '<div class="result-label">Expanded Format:</div>';
     html += '<div class="result-box">';
-    html += expanded.split('/')[0];
-    html += '<button class="copy-btn-inline" onclick="copyText(\'' + escapeForJs(expanded.split('/')[0]) + '\')">Copy</button>';
+    html += escapeHtml(expanded.split('/')[0]);
+    html += '<button class="copy-btn-inline" onclick="copyText(\'' + escapeForJs(expanded.split('/')[0]) + '\')"><i class="fas fa-copy"></i></button>';
     html += '</div>';
 
     // Decimal representation
     const decimal = ipv6ToDecimal(expanded.split('/')[0]);
     html += '<div class="result-label">Decimal:</div>';
     html += '<div class="result-box" style="font-size: 0.85rem;">';
-    html += decimal;
+    html += escapeHtml(decimal);
     html += '</div>';
 
     // Binary representation (first 64 bits)
@@ -665,12 +713,13 @@ function displayResults(original, expanded, compressed, operation) {
     html += '</div>';
 
     document.getElementById('results').innerHTML = html;
+    document.getElementById('resultPlaceholder').style.display = 'none';
+    document.getElementById('resultContent').style.display = 'block';
 
     // Address information
     displayAddressInfo(expanded.split('/')[0]);
 
-    document.getElementById('resultsContainer').style.display = 'block';
-    showNotification('IPv6 address ' + operation + 'ed successfully!', 'success');
+    showToast('IPv6 address ' + operation + 'ed successfully!');
 }
 
 function displayAddressInfo(address) {
@@ -681,12 +730,12 @@ function displayAddressInfo(address) {
 
     html += '<div class="info-item">';
     html += '<span class="info-label">Address Type: </span>';
-    html += '<span class="info-value">' + type + '</span>';
+    html += '<span class="info-value">' + escapeHtml(type) + '</span>';
     html += '</div>';
 
     html += '<div class="info-item">';
     html += '<span class="info-label">Scope: </span>';
-    html += '<span class="info-value">' + scope + '</span>';
+    html += '<span class="info-value">' + escapeHtml(scope) + '</span>';
     html += '</div>';
 
     html += '<div class="info-item">';
@@ -695,11 +744,12 @@ function displayAddressInfo(address) {
     html += '</div>';
 
     html += '<div class="info-item">';
-    html += '<span class="info-label">Total Addresses: </span>';
-    html += '<span class="info-value">340,282,366,920,938,463,463,374,607,431,768,211,456</span>';
+    html += '<span class="info-label">Total Address Space: </span>';
+    html += '<span class="info-value">340 undecillion</span>';
     html += '</div>';
 
     document.getElementById('addressInfo').innerHTML = html;
+    document.getElementById('addressInfoCard').style.display = 'block';
 }
 
 function getIPv6Type(address) {
@@ -763,7 +813,13 @@ function ipv6ToBinary(address) {
 }
 
 function escapeForJs(text) {
-    return text.replace(/'/g, "\\'");
+    return text.replace(/'/g, "\\'").replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function copyText(text) {
@@ -776,36 +832,15 @@ function copyText(text) {
     document.execCommand('copy');
     document.body.removeChild(textarea);
 
-    showNotification('Copied to clipboard!', 'success');
+    showToast('Copied to clipboard!');
 }
 
 function clearAll() {
     document.getElementById('ipv6Input').value = '';
     document.getElementById('resultsContainer').style.display = 'none';
-}
-
-function showNotification(message, type) {
-    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-
-    const notification = document.createElement('div');
-    notification.className = 'alert ' + alertClass;
-    notification.style.position = 'fixed';
-    notification.style.top = '20px';
-    notification.style.right = '20px';
-    notification.style.zIndex = '9999';
-    notification.style.minWidth = '300px';
-    notification.innerHTML = '<i class="fas ' + icon + '"></i> ' + message;
-
-    document.body.appendChild(notification);
-
-    setTimeout(function() {
-        notification.style.transition = 'opacity 0.5s';
-        notification.style.opacity = '0';
-        setTimeout(function() {
-            document.body.removeChild(notification);
-        }, 500);
-    }, 3000);
+    document.getElementById('resultPlaceholder').style.display = 'flex';
+    document.getElementById('resultContent').style.display = 'none';
+    document.getElementById('addressInfoCard').style.display = 'none';
 }
 </script>
 </div>
