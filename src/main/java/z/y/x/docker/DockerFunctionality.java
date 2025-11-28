@@ -68,10 +68,11 @@ public class DockerFunctionality extends HttpServlet {
                           HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         final String methodName = request.getParameter("methodName");
-
-
+        Gson gson = new Gson();
         PrintWriter out = response.getWriter();
 
         //System.out.println("methodName" + methodName);
@@ -79,11 +80,14 @@ public class DockerFunctionality extends HttpServlet {
         if (METHOD_GENERATE_DC_RUN_2_DC.equals(methodName)) {
 
             String dockerrun = request.getParameter("dockerrun");
+            DockerComposeResponse resp = new DockerComposeResponse();
+            resp.setOperation("docker_compose_to_command");
 
             if(null == dockerrun || dockerrun.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Paste your Docker Compose File</font>");
+                resp.setSuccess(false);
+                resp.setErrorMessage("Please provide a Docker Compose file");
+                out.println(gson.toJson(resp));
                 return;
             }
 
@@ -93,23 +97,23 @@ public class DockerFunctionality extends HttpServlet {
                 String output = dockerCompose2Command.getDockerCommand(dockerrun);
 
                 if(output!=null && output.trim().length()>0) {
-
-                    out.println("<h5 class=\"mt-4\">Generated docker command </h5>");
-                    out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=10  form=\"X\">" + output +
-                            "</textarea>");
-
+                    resp.setSuccess(true);
+                    resp.setDockerComposeYaml(output);
+                    out.println(gson.toJson(resp));
                     return;
                 }
                 else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> The Docker Compose file is Not Valid</font>");
+                    resp.setSuccess(false);
+                    resp.setErrorMessage("The Docker Compose file is not valid");
+                    out.println(gson.toJson(resp));
                     return;
                 }
 
             }catch (Exception ex)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\">" + ex.getMessage() + "</font>");
+                resp.setSuccess(false);
+                resp.setErrorMessage(ex.getMessage() != null ? ex.getMessage() : "Error processing Docker Compose file");
+                out.println(gson.toJson(resp));
                 return;
             }
 
@@ -118,26 +122,32 @@ public class DockerFunctionality extends HttpServlet {
         if (METHOD_GENERATE_DC_FROM_DOCKER_RUN.equals(methodName)) {
 
             String dockerrun = request.getParameter("dockerrun");
+            DockerComposeResponse resp = new DockerComposeResponse();
+            resp.setOperation("docker_run_to_compose");
 
             if(null == dockerrun || dockerrun.trim().length()==0)
             {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Paste your Docker run </font>");
+                resp.setSuccess(false);
+                resp.setErrorMessage("Please provide a Docker run command");
+                out.println(gson.toJson(resp));
                 return;
             }
 
-            Docker docker = new Docker();
-            String output =  docker.genDockerCompose(dockerrun);
+            try {
+                Docker docker = new Docker();
+                String output = docker.genDockerCompose(dockerrun);
 
-            out.println("<h5 class=\"mt-4\">docker-compose.yml</h5>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">" + output +
-                    "</textarea>");
-
-            return;
-
-
-
-
+                resp.setSuccess(true);
+                resp.setDockerComposeYaml(output);
+                resp.setVersion("3");
+                out.println(gson.toJson(resp));
+                return;
+            } catch (Exception ex) {
+                resp.setSuccess(false);
+                resp.setErrorMessage(ex.getMessage() != null ? ex.getMessage() : "Error converting Docker run command");
+                out.println(gson.toJson(resp));
+                return;
+            }
         }
 
         if (METHOD_GENERATE_DC.equals(methodName)) {
@@ -460,19 +470,30 @@ public class DockerFunctionality extends HttpServlet {
             dockerCompose.setServices(mapServices);
 
 
-            String output = yaml.dump(dockerCompose);
+            try {
+                String output = yaml.dump(dockerCompose);
+                output = output.replaceAll("!!z.y.x.docker.DockerCompose","");
 
-            output = output.replaceAll("!!z.y.x.docker.DockerCompose","");
+                DockerComposeResponse resp = new DockerComposeResponse();
+                resp.setSuccess(true);
+                resp.setOperation("generate_docker_compose");
+                resp.setDockerComposeYaml(output);
+                resp.setServiceName(name);
+                resp.setImage(image);
+                resp.setContainerName(container_name);
+                resp.setVersion("3");
+                resp.setGeneratedAt(java.time.Instant.now().toString());
 
-           // System.out.println(output);
-
-            out.println("<h5 class=\"mt-4\">docker-compose.yml</h5>");
-            out.println("<textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=30  form=\"X\">" + output +
-                    "</textarea>");
-
-            return;
-
-
+                out.println(gson.toJson(resp));
+                return;
+            } catch (Exception ex) {
+                DockerComposeResponse resp = new DockerComposeResponse();
+                resp.setSuccess(false);
+                resp.setOperation("generate_docker_compose");
+                resp.setErrorMessage(ex.getMessage() != null ? ex.getMessage() : "Error generating Docker Compose file");
+                out.println(gson.toJson(resp));
+                return;
+            }
         }
     }
 

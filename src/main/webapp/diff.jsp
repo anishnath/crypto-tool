@@ -1030,5 +1030,5 @@ console.log("Result:", result);</textarea>
         }
     </script>
 </div>
-    <%@ include file="body-close.jsp"%>
+<%@ include file="body-close.jsp"%>
 
