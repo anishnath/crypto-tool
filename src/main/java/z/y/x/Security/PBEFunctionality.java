@@ -29,6 +29,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.security.Security;
 import java.util.*;
+import java.util.Base64;
 
 /**
  * 14 November 2017
@@ -265,8 +266,10 @@ public class PBEFunctionality extends HttpServlet {
             if(METHOD_NAME_PBE_MESSAGE.equalsIgnoreCase(mName))
             {
 
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
                 PrintWriter out = response.getWriter();
-
+                Gson gson = new Gson();
 
                 String encryptdecryptparameter=request.getParameter("encryptdecryptparameter");
                 String message = request.getParameter("message");
@@ -275,131 +278,130 @@ public class PBEFunctionality extends HttpServlet {
                 String algo = request.getParameter("cipherparameter");
                 int rs = 100;
 
-//                    System.out.println(encryptdecryptparameter);
-//                    System.out.println(message);
-//                    System.out.println(salt);
-//                    System.out.println(rounds);
-//                    System.out.println(algo);
-
-
                 try {
                     rs = Integer.parseInt(rounds);
                     if (rs > 20001) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> Currenlty Only Supported upto 20000 round raise feature request </font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("pbe");
+                        errorResponse.setErrorMessage("Currently only supported up to 20000 rounds");
+                        out.println(gson.toJson(errorResponse));
                         return;
                     }
                 } catch (NumberFormatException nfe) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Valid Number of Rounds required in Integer </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("pbe");
+                    errorResponse.setErrorMessage("Valid number of rounds required (integer)");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
                 String password = request.getParameter("password");
 
                 if (password == null || password.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Please provide the password for PBE encryption </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("pbe");
+                    errorResponse.setErrorMessage("Please provide a password for PBE encryption");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
                 if (message == null || message.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Please provide the message for PBE encryption </font>");
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("pbe");
+                    errorResponse.setErrorMessage("Please provide a message for PBE encryption");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
                 try
                 {
                     String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pbe/encrypt";
+                    boolean isDecrypt = "decryprt".equals(encryptdecryptparameter);
 
-                //System.out.println("encryptdecryptparameter -- " + encryptdecryptparameter);
-                if ("decryprt".equals(encryptdecryptparameter)) {
+                if (isDecrypt) {
+                    // Remove whitespace/newlines that may have been introduced during copy-paste
+                    message = message.replaceAll("\\s+", "");
 
-                    String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+                    // Validate Base64 - try to decode it
                     boolean isValidMessage = false;
-                    if (message.matches(pattern)) {
-                        isValidMessage = true;
+                    try {
+                        // Try Base64 decoding
+                        byte[] decoded = Base64.getDecoder().decode(message);
+                        if (decoded != null && decoded.length > 0) {
+                            isValidMessage = true;
+                        }
+                    } catch (Exception ex) {
+                        isValidMessage = false;
                     }
 
+                    // Also check for hex format as fallback
                     if (!isValidMessage) {
                         try {
-                            Long.parseLong(message, 16);
-                            isValidMessage = true;
-                        } catch (NumberFormatException ex) {
+                            // Check if it's a valid hex string
+                            if (message.matches("^[0-9A-Fa-f]+$") && message.length() % 2 == 0) {
+                                isValidMessage = true;
+                            }
+                        } catch (Exception ex) {
                             isValidMessage = false;
                         }
                     }
+
                     if (!isValidMessage) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\">For Decryption Please input Base64 Message which is generated during encryption process [" + message + "]</font>");
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("pbe_decrypt");
+                        errorResponse.setErrorMessage("For decryption, please input the Base64 encoded message generated during encryption");
+                        out.println(gson.toJson(errorResponse));
                         return;
                     }
 
                     url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "pbe/decrypt";
-
                 }
-
-
 
                 final String[] cipherparameter = request.getParameterValues("cipherparameternew");
 
-                Gson gson = new Gson();
                 HttpClient client = HttpClientBuilder.create().build();
-
                 HttpPost post = new HttpPost(url1);
 
-
+                // Build results for all selected algorithms
+                java.util.List<java.util.Map<String, Object>> results = new java.util.ArrayList<>();
 
                 for(int i=0; i<cipherparameter.length; i++)
                 {
-
-
                     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                     urlParameters.add(new BasicNameValuePair("p_msg", message));
                     urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter[i]));
                     urlParameters.add(new BasicNameValuePair("p_secretkey", password));
                     urlParameters.add(new BasicNameValuePair("p_rounds", String.valueOf(rs)));
 
-
                     post.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-
                     post.addHeader("accept", "application/json");
 
                     HttpResponse response1 = client.execute(post);
 
                     if (response1.getStatusLine().getStatusCode() != 200) {
-                        if (response1.getStatusLine().getStatusCode() == 404) {
-                            BufferedReader br = new BufferedReader(
-                                    new InputStreamReader(
-                                            (response1.getEntity().getContent())
-                                    )
-                            );
-                            StringBuilder content = new StringBuilder();
-                            String line;
-                            while (null != (line = br.readLine())) {
-                                content.append(line);
-                            }
-                            addHorizontalLine(out);
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(content);
-
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-                            return;
-                        } else {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                            return;
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader((response1.getEntity().getContent()))
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
                         }
+                        EncodedMessage errorResponse = new EncodedMessage();
+                        errorResponse.setSuccess(false);
+                        errorResponse.setOperation("pbe");
+                        errorResponse.setErrorMessage("System error: " + content.toString());
+                        out.println(gson.toJson(errorResponse));
+                        return;
                     }
 
-
                     BufferedReader br = new BufferedReader(
-                            new InputStreamReader(
-                                    (response1.getEntity().getContent())
-                            )
+                            new InputStreamReader((response1.getEntity().getContent()))
                     );
-
                     StringBuilder content = new StringBuilder();
                     String line;
                     while (null != (line = br.readLine())) {
@@ -407,12 +409,12 @@ public class PBEFunctionality extends HttpServlet {
                     }
 
                     EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"purple\">Input Message [  " + message + "] </font> </br>");
 
-                    out.println("<font size=\"4\" color=\"green\">Algo  "+  cipherparameter[i]  + " </font> </br>");
+                    java.util.Map<String, Object> resultItem = new java.util.HashMap<>();
+                    resultItem.put("algorithm", cipherparameter[i]);
 
-                    if (!"decryprt".equals(encryptdecryptparameter)) {
+                    if (!isDecrypt) {
+                        // Encryption - extract salt and IV from the result
                         ByteBuffer buffer = ByteBuffer.wrap(new BASE64Decoder().decodeBuffer(encodedMessage.getMessage()));
                         byte[] saltBytes = new byte[8];
                         buffer.get(saltBytes, 0, saltBytes.length);
@@ -422,29 +424,34 @@ public class PBEFunctionality extends HttpServlet {
                         String salt8bit = new BASE64Encoder().encode(saltBytes);
                         String iv16bit = new BASE64Encoder().encode(ivBytes1);
 
-                        out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"3\" cols=\"3\">" + encodedMessage.getMessage() + "</textarea>");
-
-                        //out.println("<font size=\"4\" color=\"red\"> Encrypted Message </font><font size=\"5\" color=\"green\">" + encodedMessage.getMessage() + " </font> </br>");
-                        out.println("<font size=\"4\" color=\"blue\">8 bit salt used[  "+  salt8bit + "] </font> </br>");
-                        out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  iv16bit + "] </font> </br>");
-                    }
-                    else
-                    {
-                        out.println("<font size=\"4\" color=\"red\"> Decryped Message[</font> <font size=\"5\" color=\"green\"> " + encodedMessage.getMessage() + "]  </font> </br>");
+                        resultItem.put("encryptedMessage", encodedMessage.getMessage());
+                        resultItem.put("salt", salt8bit);
+                        resultItem.put("iv", iv16bit);
+                    } else {
+                        resultItem.put("decryptedMessage", encodedMessage.getMessage());
                     }
 
-
-
-
+                    results.add(resultItem);
                 }
+
+                // Build success response
+                java.util.Map<String, Object> successResponse = new java.util.HashMap<>();
+                successResponse.put("success", true);
+                successResponse.put("operation", isDecrypt ? "pbe_decrypt" : "pbe_encrypt");
+                successResponse.put("inputMessage", message);
+                successResponse.put("rounds", rs);
+                successResponse.put("results", results);
+
+                out.println(gson.toJson(successResponse));
+
                 }catch (Exception ex)
                 {
-                    addHorizontalLine(out);
-                    out.println("System Error " + ex.getMessage());
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("pbe");
+                    errorResponse.setErrorMessage("System error: " + ex.getMessage());
+                    out.println(gson.toJson(errorResponse));
                 }
-
-
-                //Validations
 
             }
 
