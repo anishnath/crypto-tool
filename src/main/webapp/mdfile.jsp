@@ -185,7 +185,8 @@
   </style>
 </head>
 <%@ include file="body-script.jsp"%>
-
+<%@ include file="pgp-menu-nav.jsp"%>
+<%@ include file="footer_adsense.jsp"%>
 <div class="container mt-4 md">
   <!-- EEAT Header -->
   <div class="row mb-4">
@@ -798,7 +799,6 @@
 <%@ include file="thanks.jsp"%>
 
 <hr>
-<%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
 
 </div>
