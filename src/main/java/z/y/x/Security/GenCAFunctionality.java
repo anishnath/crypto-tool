@@ -65,8 +65,8 @@ public class GenCAFunctionality extends HttpServlet {
 
         final String methodName = request.getParameter("methodName");
 
-        // Set JSON response for GENERATE_TEST_CA and CSR_SIGNER
-        if (METHOD_GENERATE_TEST_CA.equals(methodName) || METHOD_CSR_SIGNER.equals(methodName)) {
+        // Set JSON response for all methods
+        if (METHOD_GENERATE_TEST_CA.equals(methodName) || METHOD_CSR_SIGNER.equals(methodName) || METHOD_CERTS_COMMAND.equals(methodName)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
         } else {
@@ -75,93 +75,145 @@ public class GenCAFunctionality extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         if (METHOD_CERTS_COMMAND.equals(methodName)) {
-        	String port = request.getParameter("port");
-        	String ipaddress = request.getParameter("ipaddress");
+            Gson gson = new Gson();
+            String port = request.getParameter("port");
+            String ipaddress = request.getParameter("ipaddress");
+            int portNum = 443;
 
-        	if (ipaddress == null || ipaddress.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Please provide the URL to connect</font>");
+            // Validate input
+            if (ipaddress == null || ipaddress.trim().length() == 0) {
+                CertExtractResponse errorResponse = new CertExtractResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_certs");
+                errorResponse.setErrorMessage("Please provide a URL or hostname to connect.");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-        	ipaddress = ipaddress.trim();
+            ipaddress = ipaddress.trim();
 
-        	if(ipaddress.indexOf("http://")==0)
-        	{
-        		 addHorizontalLine(out);
-                 out.println("<font size=\"2\" color=\"red\"> Only https URL </font>");
-                 return;
-        	}
+            // Check for http://
+            if (ipaddress.indexOf("http://") == 0) {
+                CertExtractResponse errorResponse = new CertExtractResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_certs");
+                errorResponse.setErrorMessage("Only HTTPS URLs are supported. Please use https:// or just the hostname.");
+                out.println(gson.toJson(errorResponse));
+                return;
+            }
 
-        	if(ipaddress.indexOf("https://")==0)
-        	{
-        		System.out.println(ipaddress.substring("https://".length()));
-        		ipaddress = ipaddress.substring("https://".length());
-        	}
+            // Strip https:// prefix if present
+            if (ipaddress.indexOf("https://") == 0) {
+                ipaddress = ipaddress.substring("https://".length());
+            }
 
-//        	URL url = new URL("https://"+ipaddress);
-//        	System.out.println(url.getHost());
+            // Remove trailing path if present
+            if (ipaddress.contains("/")) {
+                ipaddress = ipaddress.substring(0, ipaddress.indexOf("/"));
+            }
 
-        	System.out.println(ipaddress);
+            // Parse port
+            try {
+                if (port != null && !port.trim().isEmpty()) {
+                    portNum = Integer.parseInt(port.trim());
+                }
+            } catch (NumberFormatException e) {
+                portNum = 443;
+            }
 
-        	Gson gson = new Gson();
-            HttpClient client = HttpClientBuilder.create().build();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/webcerts";
-            HttpPost post = new HttpPost(url1);
-            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-            urlParameters.add(new BasicNameValuePair("p_url", ipaddress));
-            urlParameters.add(new BasicNameValuePair("p_port", port));
-            post.setEntity(new UrlEncodedFormEntity(urlParameters));
-            post.addHeader("accept", "application/json");
+            try {
+                HttpClient client = HttpClientBuilder.create().build();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "certs/webcerts";
+                HttpPost post = new HttpPost(url1);
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_url", ipaddress));
+                urlParameters.add(new BasicNameValuePair("p_port", String.valueOf(portNum)));
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                post.addHeader("accept", "application/json");
 
-            HttpResponse response1 = client.execute(post);
+                HttpResponse response1 = client.execute(post);
 
-            if (response1.getStatusLine().getStatusCode() != 200) {
-                if (response1.getStatusLine().getStatusCode() == 404) {
+                if (response1.getStatusLine().getStatusCode() != 200) {
                     BufferedReader br = new BufferedReader(
-                            new InputStreamReader(
-                                    (response1.getEntity().getContent())
-                            )
+                            new InputStreamReader((response1.getEntity().getContent()))
                     );
                     StringBuilder content = new StringBuilder();
                     String line;
                     while (null != (line = br.readLine())) {
                         content.append(line);
                     }
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content + "</font>");
-                    return;
-                } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
+
+                    CertExtractResponse errorResponse = new CertExtractResponse();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("extract_certs");
+                    errorResponse.setHostname(ipaddress);
+                    errorResponse.setPort(portNum);
+                    if (response1.getStatusLine().getStatusCode() == 404) {
+                        errorResponse.setErrorMessage("Could not connect to " + ipaddress + ":" + portNum + ". " + content);
+                    } else {
+                        errorResponse.setErrorMessage("System error. Please try again later. Status: " + response1.getStatusLine().getStatusCode());
+                    }
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader((response1.getEntity().getContent()))
+                );
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+
+                List<String> listMessage = gson.fromJson(content.toString(), List.class);
+
+                // Build successful response
+                CertExtractResponse certResponse = new CertExtractResponse();
+                certResponse.setSuccess(true);
+                certResponse.setOperation("extract_certs");
+                certResponse.setHostname(ipaddress);
+                certResponse.setPort(portNum);
+                certResponse.setCertificateCount(listMessage.size());
+
+                StringBuilder fullChain = new StringBuilder();
+                int i = 1;
+                for (Iterator<String> iterator = listMessage.iterator(); iterator.hasNext(); ) {
+                    String certPem = iterator.next();
+
+                    // Determine certificate type based on position
+                    String certType;
+                    if (i == 1) {
+                        certType = "server";
+                    } else if (i == listMessage.size() && listMessage.size() > 1) {
+                        certType = "root";
+                    } else {
+                        certType = "intermediate";
+                    }
+
+                    CertExtractResponse.CertificateInfo certInfo = new CertExtractResponse.CertificateInfo(i, certType, certPem);
+                    certResponse.addCertificate(certInfo);
+
+                    fullChain.append(certPem);
+                    if (iterator.hasNext()) {
+                        fullChain.append("\n");
+                    }
+                    i++;
+                }
+
+                certResponse.setFullChainPem(fullChain.toString());
+                out.println(gson.toJson(certResponse));
+
+            } catch (Exception e) {
+                CertExtractResponse errorResponse = new CertExtractResponse();
+                errorResponse.setSuccess(false);
+                errorResponse.setOperation("extract_certs");
+                errorResponse.setHostname(ipaddress);
+                errorResponse.setPort(portNum);
+                errorResponse.setErrorMessage("Error extracting certificates: " + e.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            (response1.getEntity().getContent())
-                    )
-            );
-            StringBuilder content = new StringBuilder();
-            String line;
-            while (null != (line = br.readLine())) {
-                content.append(line);
-            }
-
-            List<String> listMessage = gson.fromJson(content.toString(), List.class);
-
-            //System.out.println(listMessage);
-            int i = 1;
-            for (Iterator iterator = listMessage.iterator(); iterator.hasNext();) {
-				String string = (String) iterator.next();
-				out.println("<br><p>Certificate#"+i+"<br><textarea class=\"form-control animated\" readonly=\"true\" name=\"comment1\" rows=13  form=\"X\">" + string + "</textarea></p><br/>");
-				i++;
-			}
-            out.println("<a href=\"PemParserFunctions.jsp\" target=\"_blank\">Use PEM Parser to Parse for Extra Information</a>");
-        	return;
-
-
+            return;
         }
 
         if (METHOD_GENERATE_TEST_CA.equals(methodName)) {
