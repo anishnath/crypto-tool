@@ -458,81 +458,84 @@ public class PBEFunctionality extends HttpServlet {
 
         if(METHOD_NAME_PBKDF2DERIVEKEY.equalsIgnoreCase(mName))
         {
-
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
             PrintWriter out = response.getWriter();
-
+            Gson gson = new Gson();
 
             String keylength=request.getParameter("keylength");
             String salt = request.getParameter("salt");
             String rounds = request.getParameter("rounds");
-            String algo = request.getParameter("cipherparameter");
             int rs = 100;
-
-//                    System.out.println(encryptdecryptparameter);
-//                    System.out.println(message);
-//                    System.out.println(salt);
-//                    System.out.println(rounds);
-//                    System.out.println(algo);
-
 
             try {
                 rs = Integer.parseInt(rounds);
             } catch (NumberFormatException nfe) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Valid Number of Rounds required in Integer </font>");
+                java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                errorResponse.put("success", false);
+                errorResponse.put("operation", "pbkdf2_derive");
+                errorResponse.put("errorMessage", "Valid number of iterations required (integer)");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-            int keyLength =32;
+            int keyLength = 32;
 
             try {
                 keyLength = Integer.parseInt(keylength);
 
-                if(keyLength>100000)
-                {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Maximum Supported key Length is < 100000 by This site </font>");
+                if(keyLength > 100000) {
+                    java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                    errorResponse.put("success", false);
+                    errorResponse.put("operation", "pbkdf2_derive");
+                    errorResponse.put("errorMessage", "Maximum supported key length is 100,000 bytes");
+                    out.println(gson.toJson(errorResponse));
                     return;
                 }
 
             } catch (NumberFormatException nfe) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Key Length Must be Integer </font>");
+                java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                errorResponse.put("success", false);
+                errorResponse.put("operation", "pbkdf2_derive");
+                errorResponse.put("errorMessage", "Key length must be a valid integer");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
-
 
             String password = request.getParameter("password");
 
             if (password == null || password.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> Please provide the password to drive key </font>");
+                java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                errorResponse.put("success", false);
+                errorResponse.put("operation", "pbkdf2_derive");
+                errorResponse.put("errorMessage", "Please provide a password to derive the key");
+                out.println(gson.toJson(errorResponse));
                 return;
             }
 
-
-
             try
             {
-                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "pbe/derivekey";
-
-
-
-
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "pbe/derivekey";
 
                 final String[] cipherparameter = request.getParameterValues("cipherparameternew");
 
-                Gson gson = new Gson();
-                HttpClient client = HttpClientBuilder.create().build();
+                if (cipherparameter == null || cipherparameter.length == 0) {
+                    java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                    errorResponse.put("success", false);
+                    errorResponse.put("operation", "pbkdf2_derive");
+                    errorResponse.put("errorMessage", "Please select at least one algorithm");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
 
+                HttpClient client = HttpClientBuilder.create().build();
                 HttpPost post = new HttpPost(url1);
 
-
+                // Build results for all selected algorithms
+                java.util.List<java.util.Map<String, Object>> results = new java.util.ArrayList<>();
 
                 for(int i=0; i<cipherparameter.length; i++)
                 {
-
-
                     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
                     urlParameters.add(new BasicNameValuePair("p_keylength", keylength));
                     urlParameters.add(new BasicNameValuePair("p_cipher", cipherparameter[i]));
@@ -540,44 +543,30 @@ public class PBEFunctionality extends HttpServlet {
                     urlParameters.add(new BasicNameValuePair("p_rounds", String.valueOf(rs)));
                     urlParameters.add(new BasicNameValuePair("p_salt", salt));
 
-
                     post.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-
                     post.addHeader("accept", "application/json");
 
                     HttpResponse response1 = client.execute(post);
 
                     if (response1.getStatusLine().getStatusCode() != 200) {
-                        if (response1.getStatusLine().getStatusCode() == 404) {
-                            BufferedReader br = new BufferedReader(
-                                    new InputStreamReader(
-                                            (response1.getEntity().getContent())
-                                    )
-                            );
-                            StringBuilder content = new StringBuilder();
-                            String line;
-                            while (null != (line = br.readLine())) {
-                                content.append(line);
-                            }
-                            addHorizontalLine(out);
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(content);
-
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-                            return;
-                        } else {
-                            addHorizontalLine(out);
-                            out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                            return;
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader((response1.getEntity().getContent()))
+                        );
+                        StringBuilder content = new StringBuilder();
+                        String line;
+                        while (null != (line = br.readLine())) {
+                            content.append(line);
                         }
+                        java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                        errorResponse.put("success", false);
+                        errorResponse.put("operation", "pbkdf2_derive");
+                        errorResponse.put("errorMessage", "System error: " + content.toString());
+                        out.println(gson.toJson(errorResponse));
+                        return;
                     }
 
-
                     BufferedReader br = new BufferedReader(
-                            new InputStreamReader(
-                                    (response1.getEntity().getContent())
-                            )
+                            new InputStreamReader((response1.getEntity().getContent()))
                     );
 
                     StringBuilder content = new StringBuilder();
@@ -587,26 +576,33 @@ public class PBEFunctionality extends HttpServlet {
                     }
 
                     EncodedMessage encodedMessage = gson.fromJson(content.toString(), EncodedMessage.class);
-                    addHorizontalLine(out);
 
+                    java.util.Map<String, Object> resultItem = new java.util.HashMap<>();
+                    resultItem.put("algorithm", cipherparameter[i]);
+                    resultItem.put("derivedKey", encodedMessage.getBase64Decoded());
+                    resultItem.put("iv", encodedMessage.getIntialVector());
 
-                    out.println("<font size=\"4\" color=\"green\">PBKDF2 Derived Key using Algo  "+  cipherparameter[i]  + " </font> </br>");
-                    out.println("<textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=\"true\"  id=\"encrypedmessagetextarea\" rows=\"3\" cols=\"3\">" + encodedMessage.getBase64Decoded() + "</textarea>");
-                    out.println("<font size=\"4\" color=\"blue\">16 bit Initial Vector[  "+  encodedMessage.getIntialVector() + "] </font> </br>");
-
-
-
-
+                    results.add(resultItem);
                 }
-            }catch (Exception ex)
-            {
-                addHorizontalLine(out);
-                out.println("System Error " + ex.getMessage());
+
+                // Build success response
+                java.util.Map<String, Object> successResponse = new java.util.HashMap<>();
+                successResponse.put("success", true);
+                successResponse.put("operation", "pbkdf2_derive");
+                successResponse.put("salt", salt);
+                successResponse.put("iterations", rs);
+                successResponse.put("keyLengthBytes", keyLength);
+                successResponse.put("results", results);
+
+                out.println(gson.toJson(successResponse));
+
+            } catch (Exception ex) {
+                java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                errorResponse.put("success", false);
+                errorResponse.put("operation", "pbkdf2_derive");
+                errorResponse.put("errorMessage", "System error: " + ex.getMessage());
+                out.println(gson.toJson(errorResponse));
             }
-
-
-            //Validations
-
         }
 
 
