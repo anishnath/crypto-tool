@@ -276,7 +276,7 @@
     </style>
 </head>
 <%@ include file="body-script.jsp"%>
-<%@ include file="pgp-menu-nav.jsp"%>
+<%@ include file="devops-tools-navbar.jsp"%>
 <%@ include file="footer_adsense.jsp"%>
 
 <!-- Page Header -->
@@ -1309,5 +1309,6 @@ $(document).on('click', '#copyShareUrl', function() {
 </div>
 <%@ include file="body-close.jsp"%>
 
+<%@ include file="body-close.jsp"%>
 <%@ include file="body-close.jsp"%>
 <%@ include file="body-close.jsp"%>

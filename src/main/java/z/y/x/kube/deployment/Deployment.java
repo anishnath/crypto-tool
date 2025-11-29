@@ -4,7 +4,7 @@ import z.y.x.kube.metadata;
 
 public class Deployment {
 	
-	private String apiVersion="apps/v1beta1";
+	private String apiVersion="apps/v1";
 	private String kind="Deployment";
 	private metadata metadata;
 	private spec spec;

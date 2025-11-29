@@ -21,6 +21,7 @@ public class DockerComposeResponse {
     private String serviceName;
     private String image;
     private String containerName;
+    private String dockerRunCommand; // Original docker run command (for dc1.jsp)
 
     // Metadata
     private String version; // Docker Compose version
@@ -109,6 +110,14 @@ public class DockerComposeResponse {
 
     public void setGeneratedAt(String generatedAt) {
         this.generatedAt = generatedAt;
+    }
+
+    public String getDockerRunCommand() {
+        return dockerRunCommand;
+    }
+
+    public void setDockerRunCommand(String dockerRunCommand) {
+        this.dockerRunCommand = dockerRunCommand;
     }
 
     @Override

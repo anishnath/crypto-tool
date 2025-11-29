@@ -99,6 +99,9 @@ public class DockerFunctionality extends HttpServlet {
                 if(output!=null && output.trim().length()>0) {
                     resp.setSuccess(true);
                     resp.setDockerComposeYaml(output);
+                    resp.setDockerRunCommand(output); // Store the generated docker run command
+                    resp.setVersion("3");
+                    resp.setGeneratedAt(java.time.Instant.now().toString());
                     out.println(gson.toJson(resp));
                     return;
                 }
@@ -139,7 +142,22 @@ public class DockerFunctionality extends HttpServlet {
 
                 resp.setSuccess(true);
                 resp.setDockerComposeYaml(output);
+                resp.setDockerRunCommand(dockerrun);
                 resp.setVersion("3");
+                resp.setGeneratedAt(java.time.Instant.now().toString());
+                
+                // Extract image name if possible
+                if (dockerrun != null && dockerrun.trim().length() > 0) {
+                    String[] parts = dockerrun.trim().split("\\s+");
+                    // Image is typically the last argument
+                    for (int i = parts.length - 1; i >= 0; i--) {
+                        if (!parts[i].startsWith("-") && !parts[i].equals("run") && !parts[i].equals("docker")) {
+                            resp.setImage(parts[i]);
+                            break;
+                        }
+                    }
+                }
+                
                 out.println(gson.toJson(resp));
                 return;
             } catch (Exception ex) {
