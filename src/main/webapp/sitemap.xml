@@ -1793,4 +1793,34 @@
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>https://8gwifi.org/dockerfile-generator.jsp</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/firewall-generator.jsp</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/apache-virtualhost-generator.jsp</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/github-actions-generator.jsp</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/gitlab-ci-generator.jsp</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
 </urlset>

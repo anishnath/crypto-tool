@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
+import org.json.simple.JSONObject;
 import z.y.x.r.LoadPropertyFileFunctionality;
 
 /**
@@ -29,6 +32,7 @@ import z.y.x.r.LoadPropertyFileFunctionality;
 public class ETHFunctionality extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 	private static final String ETH_NODEKEY = "ETH_NODEKEY";
+	private static final String SIGN_MESSAGE = "SIGN_MESSAGE";
 
 	public ETHFunctionality() {
 
@@ -50,6 +54,83 @@ public class ETHFunctionality extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession(true);
+
+		if (SIGN_MESSAGE.equals(methodName)) {
+
+			final String privateKey = request.getParameter("privateKey");
+			final String message = request.getParameter("message");
+
+			if (null == privateKey || privateKey.trim().length() == 0) {
+				JSONObject errorResponse = new JSONObject();
+				errorResponse.put("error", "One or more parameters are missing.");
+
+				// Set response content type to JSON
+				response.setContentType("application/json");
+
+				// Send error JSON response back to the client
+				out = response.getWriter();
+				out.print(errorResponse.toString());
+				out.flush();
+				return; // Exit the method
+			}
+
+			if (null == message || message.trim().length() == 0) {
+				JSONObject errorResponse = new JSONObject();
+				errorResponse.put("error", "One or more parameters are missing.");
+
+				// Set response content type to JSON
+				response.setContentType("application/json");
+
+				// Send error JSON response back to the client
+				out = response.getWriter();
+				out.print(errorResponse.toString());
+				out.flush();
+				return; // Exit the method
+			}
+
+			// Prepare data to be sent to the other API
+			JSONObject requestData = new JSONObject();
+			requestData.put("private_key", privateKey);
+			requestData.put("message", message);
+
+			// Convert the data to be sent to a string
+			String jsonString = requestData.toString();
+
+			System.out.println(jsonString);
+
+			// URL of the other API
+			String apiUrl = LoadPropertyFileFunctionality.getConfigProperty().get("blockchain") + "signMessage";;
+
+			System.out.println(apiUrl);
+
+			// Send a POST request to the other API
+			URL url = new URL(apiUrl);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setDoOutput(true);
+			out = new PrintWriter(connection.getOutputStream());
+			out.println(jsonString);
+			out.close();
+
+			// Get the response from the other API
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			StringBuilder responseStringBuilder = new StringBuilder();
+			String responseLine;
+			while ((responseLine = in.readLine()) != null) {
+				responseStringBuilder.append(responseLine);
+			}
+			in.close();
+
+			// Set response content type to JSON
+			response.setContentType("application/json");
+
+			// Send the response from the other API back to the client
+			PrintWriter responseOut = response.getWriter();
+			responseOut.print(responseStringBuilder.toString());
+			responseOut.flush();
+
+		}
 
 		if (ETH_NODEKEY.equals(methodName)) {
 
