@@ -106,7 +106,7 @@
             --oc-error: #f48771;
             --oc-warning: #dcdcaa;
             --toolbar-height: 40px;
-            --panel-height: 180px;
+            --panel-height: 280px;
         }
 
         body {
@@ -1426,7 +1426,7 @@
         var currentVersion = '';
         var isRunning = false;
         var panelMinimized = false;
-        var originalPanelHeight = 180;
+        var originalPanelHeight = 280;
 
         // Multi-file state
         var files = [];
