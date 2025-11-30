@@ -6,3 +6,4 @@ epn=http://localhost/ntru/rest/
 blockchain=http://localhost:1888/
 sqlite=/home/ec2-user/sqlite.db
 api=http://172.31.68.17:8080
+onecompiler=http://34.201.114.213:8080
