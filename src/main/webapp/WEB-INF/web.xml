@@ -531,6 +531,15 @@
         <url-pattern>/pdf-password-crack</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>OneCompilerFunctionality</servlet-name>
+        <servlet-class>z.y.x.onecompiler.OneCompilerFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OneCompilerFunctionality</servlet-name>
+        <url-pattern>/OneCompilerFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
