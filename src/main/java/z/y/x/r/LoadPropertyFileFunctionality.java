@@ -82,6 +82,22 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
                 configProperty.put("api", "http://localhost:8080/");
           }
 
+          if(prop.getProperty("onecompiler")!=null)
+          {
+                configProperty.put("onecompiler", prop.getProperty("onecompiler"));
+          }
+          else{
+                configProperty.put("onecompiler", "http://localhost:8080/");
+          }
+
+          if(prop.getProperty("ONE_COMPILER_API_KEY")!=null)
+          {
+                configProperty.put("ONE_COMPILER_API_KEY", prop.getProperty("ONE_COMPILER_API_KEY"));
+          }
+          else{
+                configProperty.put("ONE_COMPILER_API_KEY", "");
+          }
+
 
 		  System.out.println("API PORT-- " + prop.getProperty("port"));
 		  System.out.println("API URL-- " + prop.getProperty("url"));
