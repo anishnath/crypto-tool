@@ -395,6 +395,7 @@
                                 data-parent="#sidebarAccordion">
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
+                                        <li><a href="onecompiler.jsp"><strong>Online Compiler (60+ Languages)</strong></a></li>
                                         <li><a href="regex.jsp">Regex Tester</a></li>
                                         <li><a href="diff.jsp">Compare Text Diff</a></li>
                                         <li><a href="random-string.jsp">Random String Generator</a></li>
