@@ -311,6 +311,7 @@
                                         <li><a href="dc.jsp">Docker Compose Generator</a></li>
                                         <li><a href="rbac-policy-generator.jsp">Kubernetes RBAC Policy Generator</a>
                                         </li>
+                                        <li><a href="service-mesh-generator.jsp">Istio Service Mesh Generator</a></li>
                                         <li><a href="dc1.jsp">Docker run to Compose</a></li>
                                         <li><a href="dc2.jsp">Compose to Docker run</a></li>
                                         <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>

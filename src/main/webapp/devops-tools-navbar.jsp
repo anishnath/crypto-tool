@@ -104,6 +104,9 @@
                         <a class="dropdown-item" href="rbac-policy-generator.jsp">
                             <i class="fas fa-user-shield text-danger"></i> Kubernetes RBAC Generator
                         </a>
+                        <a class="dropdown-item" href="service-mesh-generator.jsp">
+                            <i class="fas fa-project-diagram text-info"></i> Istio Service Mesh Generator
+                        </a>
                         <a class="dropdown-item" href="sql-query-builder.jsp">
                             <i class="fas fa-database text-primary"></i> SQL Query Builder
                         </a>
