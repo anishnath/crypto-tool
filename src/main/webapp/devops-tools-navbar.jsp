@@ -101,6 +101,9 @@
                         <a class="dropdown-item" href="gitlab-ci-generator.jsp">
                             <i class="fab fa-gitlab text-warning"></i> GitLab CI/CD Generator
                         </a>
+                        <a class="dropdown-item" href="rbac-policy-generator.jsp">
+                            <i class="fas fa-user-shield text-danger"></i> Kubernetes RBAC Generator
+                        </a>
                         <a class="dropdown-item" href="sql-query-builder.jsp">
                             <i class="fas fa-database text-primary"></i> SQL Query Builder
                         </a>

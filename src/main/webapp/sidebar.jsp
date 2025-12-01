@@ -309,6 +309,8 @@
                                         <li><a href="kube1.jsp">Docker to Kubernetes</a></li>
                                         <li><a href="kube2.jsp">Kubernetes to Docker Compose</a></li>
                                         <li><a href="dc.jsp">Docker Compose Generator</a></li>
+                                        <li><a href="rbac-policy-generator.jsp">Kubernetes RBAC Policy Generator</a>
+                                        </li>
                                         <li><a href="dc1.jsp">Docker run to Compose</a></li>
                                         <li><a href="dc2.jsp">Compose to Docker run</a></li>
                                         <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>
