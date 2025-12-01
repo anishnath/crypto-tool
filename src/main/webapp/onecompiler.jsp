@@ -17,6 +17,18 @@
     <meta property="og:description" content="Free online compiler supporting Python, Java, C++, JavaScript, Go, Rust and 60+ more languages.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/onecompiler.jsp">
+    <meta property="og:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="8gwifi.org">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@anish2good">
+    <meta name="twitter:creator" content="@anish2good">
+    <meta name="twitter:title" content="Online Compiler - Run Code in 60+ Languages Free">
+    <meta name="twitter:description" content="Free online compiler supporting Python, Java, C++, JavaScript, Go, Rust and 60+ more languages.">
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
 
     <!-- Canonical -->
     <link rel="canonical" href="https://8gwifi.org/onecompiler.jsp">
