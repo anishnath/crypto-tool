@@ -36,6 +36,9 @@
                         <i class="fas fa-cube"></i> Kubernetes
                     </a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" href="helm-chart-generator.jsp">
+                            <i class="fas fa-dharmachakra text-primary"></i> Helm Chart Generator
+                        </a>
                         <a class="dropdown-item" href="kube.jsp">
                             <i class="fas fa-server"></i> Kubernetes Spec Generator
                         </a>
@@ -93,6 +96,9 @@
                         </a>
                         <a class="dropdown-item" href="gitlab-ci-generator.jsp">
                             <i class="fab fa-gitlab text-warning"></i> GitLab CI/CD Generator
+                        </a>
+                        <a class="dropdown-item" href="sql-query-builder.jsp">
+                            <i class="fas fa-database text-primary"></i> SQL Query Builder
                         </a>
                         <a class="dropdown-item" href="curl-builder.jsp">
                             <i class="fas fa-terminal"></i> cURL Builder & HTTP Client

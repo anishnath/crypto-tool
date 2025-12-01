@@ -302,6 +302,7 @@
                                         <li><a href="prometheus-query-builder.jsp">Prometheus Query Builder</a></li>
                                         <li><a href="curl-builder.jsp">cURL Builder & HTTP Client</a></li>
                                         <li><a href="cron-generator.jsp">Cron Expression Generator</a></li>
+                                        <li><a href="helm-chart-generator.jsp">Helm Chart Generator</a></li>
                                         <li><a href="kube.jsp">Kubernetes Spec Generate</a></li>
                                         <li><a href="kube1.jsp">Docker to Kubernetes</a></li>
                                         <li><a href="kube2.jsp">Kubernetes to Docker Compose</a></li>
@@ -395,7 +396,8 @@
                                 data-parent="#sidebarAccordion">
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
-                                        <li><a href="onecompiler.jsp"><strong>Online Compiler (60+ Languages)</strong></a></li>
+                                        <li><a href="onecompiler.jsp"><strong>Online Compiler (60+
+                                                    Languages)</strong></a></li>
                                         <li><a href="regex.jsp">Regex Tester</a></li>
                                         <li><a href="diff.jsp">Compare Text Diff</a></li>
                                         <li><a href="random-string.jsp">Random String Generator</a></li>
