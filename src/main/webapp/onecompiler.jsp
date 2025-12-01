@@ -7,8 +7,8 @@
 
     <!-- SEO Meta Tags -->
     <title>Online Compiler - Run Code in 60+ Languages Free | 8gwifi.org</title>
-    <meta name="description" content="Free online compiler and code editor. Run Python, Java, C++, JavaScript, Go, Rust, PHP, Ruby and 60+ more languages instantly. No installation required.">
-    <meta name="keywords" content="online compiler, code compiler, online code editor, run code online, python compiler, java compiler, c++ compiler, javascript compiler">
+    <meta name="description" content="Free online compiler and code editor. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages. Embed interactive code snippets in blogs, books, tutorials and documentation. Perfect for authors and educators.">
+    <meta name="keywords" content="online compiler, code compiler, online code editor, run code online, embed code snippets, interactive code tutorials, code examples for books, programming book code, embeddable code editor, technical documentation code, python compiler, java compiler, c++ compiler, javascript compiler, code playground for educators">
     <meta name="author" content="8gwifi.org">
     <meta name="robots" content="index, follow">
 
@@ -45,7 +45,28 @@
       "operatingSystem": "Web",
       "author": { "@type": "Person", "name": "Anish Nath" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": ["Online code execution", "60+ programming languages", "Real-time output", "Code formatting", "Code sharing", "No installation required"]
+      "featureList": [
+        "Online code execution",
+        "60+ programming languages",
+        "Multi-file project support",
+        "Monaco editor (VS Code engine)",
+        "Syntax highlighting",
+        "Real-time output",
+        "Code formatting",
+        "Code sharing with unique URLs",
+        "Embeddable code widgets for blogs and books",
+        "Interactive code examples for tutorials",
+        "Perfect for technical authors and educators",
+        "Standard input (stdin) support",
+        "Compiler flags support",
+        "Dark/Light theme options",
+        "Read-only mode for documentation",
+        "Auto-run code on page load",
+        "Keyboard shortcuts (Ctrl+Enter)",
+        "Download code",
+        "No signup required",
+        "No installation required"
+      ]
     }
     </script>
 
@@ -93,6 +114,38 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Yes, click the Share button to generate a unique URL that others can use to view and run your code."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I embed code snippets in my blog or website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Click the Embed button to generate an iframe code that you can paste into any blog, website, or CMS. Readers can view and run the code directly on your page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this suitable for programming books and tutorials?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! Authors and educators can embed interactive code examples in their books, tutorials, and documentation. Options include read-only mode, auto-run on page load, and dark/light themes to match your content."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use this for technical documentation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our embeddable code widgets are perfect for API documentation, SDK guides, and technical manuals. Readers can test code examples without leaving your documentation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the embed support multiple files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can create multi-file projects (like Go packages or Java classes) and share them. The embed will show all files in tabs."
           }
         }
       ]
@@ -630,6 +683,122 @@
             text-align: center;
         }
 
+        /* Full width SEO cards */
+        .seo-full-width {
+            grid-column: 1 / -1;
+        }
+
+        .seo-highlight {
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 100%);
+            border: 1px solid #007acc33;
+        }
+
+        /* How to Use Steps */
+        .seo-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .seo-step {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--oc-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-content strong {
+            display: block;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Embed Features Grid */
+        .seo-embed-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .embed-feature {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .embed-feature i {
+            font-size: 1.5rem;
+            color: var(--oc-primary);
+            margin-bottom: 8px;
+        }
+
+        .embed-feature strong {
+            display: block;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .embed-feature p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .seo-cta {
+            text-align: center;
+            margin-top: 12px;
+            padding: 10px;
+            background: var(--oc-primary);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .seo-cta strong {
+            color: white;
+        }
+
+        /* Code Example */
+        .seo-code-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 12px 0;
+        }
+
+        .seo-code-example code {
+            color: #d4d4d4;
+        }
+
         @media (max-width: 768px) {
             .seo-section {
                 padding: 12px;
@@ -685,7 +854,7 @@
             }
 
             .ide-panel {
-                height: 150px;
+                height: 280px;
             }
 
             .ide-tab {
@@ -717,7 +886,7 @@
             }
 
             .ide-panel {
-                height: 130px;
+                height: 350px;
             }
         }
 
@@ -1415,6 +1584,86 @@
                 </div>
             </div>
 
+            <!-- How to Use -->
+            <div class="seo-card seo-full-width">
+                <h2><i class="fas fa-play-circle"></i> How to Use Online Compiler</h2>
+                <div class="seo-steps">
+                    <div class="seo-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <strong>Select Language</strong>
+                            <p>Choose from 60+ programming languages including Python, Java, C++, JavaScript, Go, Rust, and more.</p>
+                        </div>
+                    </div>
+                    <div class="seo-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <strong>Write Your Code</strong>
+                            <p>Use our Monaco editor (same as VS Code) with syntax highlighting, auto-completion, and error detection.</p>
+                        </div>
+                    </div>
+                    <div class="seo-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <strong>Run & See Output</strong>
+                            <p>Click Run or press Ctrl+Enter. Your code executes in a secure sandbox and output appears instantly.</p>
+                        </div>
+                    </div>
+                    <div class="seo-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <strong>Share or Embed</strong>
+                            <p>Share your code via unique URL or embed interactive code snippets in your blog, book, or documentation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- For Authors & Educators -->
+            <div class="seo-card seo-full-width seo-highlight">
+                <h2><i class="fas fa-book"></i> For Authors, Educators & Technical Writers</h2>
+                <p>Perfect for <strong>programming books</strong>, <strong>online tutorials</strong>, <strong>technical documentation</strong>, and <strong>educational content</strong>. Embed interactive, runnable code examples directly in your content.</p>
+                <div class="seo-embed-features">
+                    <div class="embed-feature">
+                        <i class="fas fa-code"></i>
+                        <strong>Embeddable Widgets</strong>
+                        <p>Copy iframe code and paste into any website, blog, CMS, or e-book platform.</p>
+                    </div>
+                    <div class="embed-feature">
+                        <i class="fas fa-eye"></i>
+                        <strong>Read-Only Mode</strong>
+                        <p>Show code without allowing edits - perfect for displaying solutions or examples.</p>
+                    </div>
+                    <div class="embed-feature">
+                        <i class="fas fa-play"></i>
+                        <strong>Auto-Run on Load</strong>
+                        <p>Code executes automatically when readers view your page - instant demonstrations.</p>
+                    </div>
+                    <div class="embed-feature">
+                        <i class="fas fa-palette"></i>
+                        <strong>Theme Options</strong>
+                        <p>Choose dark or light theme to match your website or publication design.</p>
+                    </div>
+                </div>
+                <p class="seo-cta">Click <strong>Embed</strong> button above to generate embed code for your content!</p>
+            </div>
+
+            <!-- Code Example -->
+            <div class="seo-card seo-full-width">
+                <h2><i class="fas fa-file-code"></i> Example: Hello World in Python</h2>
+                <pre class="seo-code-example"><code># Simple Python example - try it above!
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("World"))
+print("Welcome to 8gwifi.org Online Compiler")
+
+# Output:
+# Hello, World!
+# Welcome to 8gwifi.org Online Compiler</code></pre>
+                <p>Copy this code into the editor above and click <strong>Run</strong> to see it in action!</p>
+            </div>
+
             <!-- Related Tools -->
             <div class="seo-related">
                 <h2><i class="fas fa-link"></i> Related Developer Tools</h2>
@@ -1451,6 +1700,7 @@
         var isRunning = false;
         var panelMinimized = false;
         var originalPanelHeight = 280;
+        var loadedFromURL = false;
 
         // Multi-file state
         var files = [];
@@ -1765,7 +2015,7 @@
                 populateLanguageSelect();
                 updateVersionSelect(currentLanguage);
                 loadAllTemplates();
-                loadTemplate();
+                if (!loadedFromURL) loadTemplate();
                 return;
             }
 
@@ -1777,7 +2027,7 @@
                     populateLanguageSelect();
                     updateVersionSelect(currentLanguage);
                     loadAllTemplates();
-                    loadTemplate();
+                    if (!loadedFromURL) loadTemplate();
                 })
                 .catch(function() {
                     languages = [
@@ -2326,15 +2576,50 @@
             }
         });
 
-        // Load from URL - supports ?s=snippet-id and ?c=encoded-json
+        // Load from URL - supports ?s=snippet-id, ?c=encoded-json, and ?b64=base64-code
         function loadFromURL() {
             var params = new URLSearchParams(window.location.search);
             var snippetId = params.get('s');
             var codeParam = params.get('c');
+            var b64Param = params.get('b64');
+            var langParam = params.get('lang');
 
             if (snippetId) {
                 // Load snippet from API
+                loadedFromURL = true;
                 loadSnippet(snippetId);
+            } else if (b64Param) {
+                // Load from base64-encoded code (simple format)
+                loadedFromURL = true;
+                try {
+                    var code = decodeURIComponent(escape(atob(b64Param)));
+                    if (langParam) currentLanguage = langParam;
+                    waitForEditor(function() {
+                        // Set language dropdown
+                        document.getElementById('languageSelect').value = currentLanguage;
+
+                        // Set Monaco language (without triggering template load)
+                        var monacoLang = monacoLanguageMap[currentLanguage] || 'plaintext';
+                        monaco.editor.setModelLanguage(editor.getModel(), monacoLang);
+
+                        // Update status bar
+                        document.getElementById('statusLangText').textContent = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
+
+                        // Update version select
+                        updateVersionSelect(currentLanguage);
+
+                        // Set the decoded code
+                        editor.setValue(code);
+
+                        // Update file tab with decoded code
+                        var ext = fileExtensions[currentLanguage] || '.txt';
+                        files = [{ name: 'main' + ext, content: code }];
+                        activeFileIndex = 0;
+                        renderFileTabs();
+                    });
+                } catch (e) {
+                    console.error('Failed to decode base64:', e);
+                }
             } else if (codeParam) {
                 // Legacy: Load from URL-encoded JSON
                 try {
