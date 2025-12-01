@@ -107,6 +107,9 @@
                         <a class="dropdown-item" href="service-mesh-generator.jsp">
                             <i class="fas fa-project-diagram text-info"></i> Istio Service Mesh Generator
                         </a>
+                        <a class="dropdown-item" href="k8s-resource-calculator.jsp">
+                            <i class="fas fa-calculator text-success"></i> K8s Resource Calculator
+                        </a>
                         <a class="dropdown-item" href="sql-query-builder.jsp">
                             <i class="fas fa-database text-primary"></i> SQL Query Builder
                         </a>
