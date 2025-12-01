@@ -291,6 +291,8 @@
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
                                         <li><a href="nginx-config-generator.jsp">Nginx Config Generator</a></li>
+                                        <li><a href="load-test-generator.jsp">Load Testing Generator (K6, Locust,
+                                                JMeter, Gatling)</a></li>
                                         <li><a href="chmod-calculator.jsp">Chmod Calculator (Permissions)</a></li>
                                         <li><a href="systemd-generator.jsp">Systemd Service Generator</a></li>
                                         <li><a href="dockerfile-generator.jsp">Dockerfile Generator</a></li>

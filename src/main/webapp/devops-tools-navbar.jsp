@@ -76,6 +76,10 @@
                         <a class="dropdown-item" href="nginx-config-generator.jsp">
                             <i class="fas fa-server"></i> Nginx Config Generator
                         </a>
+                        <a class="dropdown-item" href="load-test-generator.jsp">
+                            <i class="fas fa-tachometer-alt text-purple"></i> Load Testing Generator (K6, Locust,
+                            JMeter, Gatling)
+                        </a>
                         <a class="dropdown-item" href="chmod-calculator.jsp">
                             <i class="fas fa-calculator"></i> Chmod Calculator
                         </a>
