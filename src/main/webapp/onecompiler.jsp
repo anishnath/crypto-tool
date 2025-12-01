@@ -1174,14 +1174,14 @@
 
             <div class="toolbar-divider"></div>
 
-            <button class="ide-toolbar-btn" onclick="shareCode()" title="Share">
-                <i class="fas fa-share-alt"></i>
+            <button class="ide-toolbar-btn" onclick="shareCode()" title="Share Code">
+                <i class="fas fa-share-alt"></i><span>Share Code</span>
             </button>
             <button class="ide-toolbar-btn" onclick="showEmbedModal()" title="Embed">
-                <i class="fas fa-code"></i>
+                <i class="fas fa-code"></i><span>Embed</span>
             </button>
             <button class="ide-toolbar-btn" onclick="downloadCode()" title="Download">
-                <i class="fas fa-download"></i>
+                <i class="fas fa-download"></i><span>Download</span>
             </button>
         </div>
 
@@ -1264,6 +1264,18 @@
                     <button class="embed-modal-close" onclick="closeEmbedModal()">&times;</button>
                 </div>
                 <div class="embed-modal-body">
+                    <!-- Support Section -->
+                    <div class="share-support-section">
+                        <p>Support us by following and sharing on Twitter/X!</p>
+                        <div class="share-social-buttons">
+                            <a href="https://twitter.com/anish2good" target="_blank" class="share-social-btn follow">
+                                <i class="fab fa-twitter"></i> Follow @anish2good
+                            </a>
+                            <a href="#" id="tweetEmbedBtn" target="_blank" class="share-social-btn twitter">
+                                <i class="fab fa-twitter"></i> Tweet
+                            </a>
+                        </div>
+                    </div>
                     <div class="embed-options">
                         <label class="embed-option">
                             <select id="embedTheme" onchange="updateEmbedCode()">
@@ -1313,8 +1325,8 @@
                     <div class="share-support-section">
                         <p>Support us by following and sharing on Twitter/X!</p>
                         <div class="share-social-buttons">
-                            <a href="https://twitter.com/AnisNath8" target="_blank" class="share-social-btn follow">
-                                <i class="fab fa-twitter"></i> Follow @AniNath8
+                            <a href="https://twitter.com/anish2good" target="_blank" class="share-social-btn follow">
+                                <i class="fab fa-twitter"></i> Follow @anish2good
                             </a>
                             <a href="#" id="tweetShareBtn" target="_blank" class="share-social-btn twitter">
                                 <i class="fab fa-twitter"></i> Tweet
@@ -2269,6 +2281,18 @@
                 '</iframe>';
 
             document.getElementById('embedCode').textContent = embedCode;
+
+            // Update tweet button for embed
+            var shareUrl = window.location.origin + window.location.pathname;
+            if (currentSnippetId) {
+                shareUrl += '?s=' + currentSnippetId;
+            }
+            var tweetText = 'Check out this embeddable code snippet on 8gwifi.org! ' + shareUrl + ' #coding #programming #developer';
+            var tweetUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetText);
+            var tweetBtn = document.getElementById('tweetEmbedBtn');
+            if (tweetBtn) {
+                tweetBtn.href = tweetUrl;
+            }
         }
 
         function copyEmbedCode() {
