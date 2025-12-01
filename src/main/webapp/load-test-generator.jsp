@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Load Testing Script Generator – K6, Locust, JMeter, Gatling, Artillery, Vegeta | 8gwifi.org</title>
+    <title>Load Testing Script Generator Online – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate production-ready load testing scripts for K6, Locust, JMeter, Gatling, Artillery, and Vegeta. Visual scenario builder with multi-step workflows and performance thresholds.">
     <meta name="keywords"

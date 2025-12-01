@@ -3,7 +3,7 @@
     <html>
 
     <head>
-        <title>Kubernetes RBAC Policy Generator – Role, ClusterRole, Binding | 8gwifi.org</title>
+        <title>Kubernetes RBAC Policy Generator Online – Free | 8gwifi.org</title>
         <meta name="description"
             content="Generate Kubernetes RBAC policies visually. Create Roles, ClusterRoles, and Bindings without writing YAML. Free online K8s security tool.">
         <meta name="keywords"
