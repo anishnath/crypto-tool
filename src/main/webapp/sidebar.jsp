@@ -314,6 +314,7 @@
                                         <li><a href="service-mesh-generator.jsp">Istio Service Mesh Generator</a></li>
                                         <li><a href="k8s-resource-calculator.jsp">Kubernetes Resource Calculator</a>
                                         </li>
+                                        <li><a href="rate-limiter-generator.jsp">API Rate Limiter Generator</a></li>
                                         <li><a href="dc1.jsp">Docker run to Compose</a></li>
                                         <li><a href="dc2.jsp">Compose to Docker run</a></li>
                                         <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>
