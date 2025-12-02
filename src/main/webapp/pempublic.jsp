@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <div lang="en">
 <head>
-    <title>Extract Public Key from Private Key Online - RSA, DSA, EC | 8gwifi.org</title>
+    <title>Extract Public Key from Private Key Online - RSA, DSA, EC Free | 8gwifi.org</title>
     <meta charset="UTF-8">
     <meta name="description" content="Extract public key from private key online. Supports RSA, DSA, and EC (Elliptic Curve) private keys in PEM format. Free tool with OpenSSL equivalent commands.">
     <meta name="keywords" content="extract public key from private key, openssl public key from private key, rsa private key to public key, ec public key extract, dsa public key extract, pem public key extractor">
