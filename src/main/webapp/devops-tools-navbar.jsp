@@ -128,6 +128,9 @@
                         <a class="dropdown-item" href="cron-generator.jsp">
                             <i class="fas fa-clock"></i> Cron Expression Generator
                         </a>
+                        <a class="dropdown-item" href="graph-easy.jsp">
+                            <i class="fas fa-project-diagram text-success"></i> Graph-Easy ASCII Diagram
+                        </a>
                     </div>
                 </li>
             </ul>

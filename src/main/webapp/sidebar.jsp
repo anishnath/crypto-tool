@@ -442,6 +442,7 @@
                                         <li><a href="random-string.jsp">Random String Generator</a></li>
                                         <li><a href="word-character-counter.jsp">Word & Character Counter</a></li>
                                         <li><a href="base-converter.jsp">Base Converter (All Bases)</a></li>
+                                        <li><a href="graph-easy.jsp">Graph-Easy ASCII Diagram Generator</a></li>
                                     </ul>
                                 </div>
                             </div>
