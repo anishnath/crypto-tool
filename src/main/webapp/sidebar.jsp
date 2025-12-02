@@ -275,6 +275,37 @@
                             </div>
                         </div>
 
+                        <!-- Legal & Compliance -->
+                        <div class="card">
+                            <div class="card-header" id="headingLegal">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseLegal" aria-expanded="false"
+                                        aria-controls="collapseLegal">
+                                        <i class="fas fa-balance-scale"></i> Legal & Compliance
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseLegal" class="collapse" aria-labelledby="headingLegal"
+                                data-parent="#sidebarAccordion">
+                                <div class="card-body p-2">
+                                    <ul class="list-unstyled mb-0 small">
+                                        <li><a href="app-privacy-policy-generator.jsp">App Privacy Policy Generator</a>
+                                        </li>
+                                        <li><a href="aup-generator.jsp">Acceptable Use Policy Generator</a></li>
+                                        <li><a href="terms-of-use-generator.jsp">Terms of Use Generator</a></li>
+                                        <li><a href="eula-generator.jsp">EULA Generator</a></li>
+                                        <li><a href="cookie-policy-generator.jsp">Cookie Policy Generator</a></li>
+                                        <li><a href="disclaimer-generator.jsp">Disclaimer Generator</a></li>
+                                        <li><a href="dmca-policy-generator.jsp">DMCA Policy Generator</a></li>
+                                        <li><a href="shipping-policy-generator.jsp">Shipping Policy Generator</a></li>
+                                        <li><a href="return-refund-policy-generator.jsp">Return & Refund Policy
+                                                Generator</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- DevOps/Container -->
                         <div class="card">
                             <div class="card-header" id="headingDevOps">
