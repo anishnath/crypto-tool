@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base64 Encode/Decode – Text & File, URL‑Safe, Wrap, Data URI</title>
+  <title>Base64 Encode/Decode – Text & File, URL‑Safe, Wrap, Data URI Free | 8gwifi.org</title>
   <meta name="description" content="Free online Base64 encoder/decoder for text and files. URL‑safe option, padding control, line wrap, data URI paste, drag‑and‑drop, and code examples.">
   <meta name="keywords" content="base64 encode, base64 decode, base64 file, base64 url safe, base64 line wrap, base64 data uri, online base64 tool">
   <link rel="canonical" href="https://8gwifi.org/Base64Functions.jsp">
