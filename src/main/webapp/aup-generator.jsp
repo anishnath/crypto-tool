@@ -3,19 +3,19 @@
     <html>
 
     <head>
-        <title>Shipping Policy Generator - Free for E-commerce | 8gwifi.org</title>
+        <title>Acceptable Use Policy Generator - Free for SaaS & Communities | 8gwifi.org</title>
         <meta name="description"
-            content="Generate a professional Shipping Policy for your e-commerce store. Clear shipping rates, processing times, and international shipping rules. Free and easy to use.">
+            content="Generate a professional Acceptable Use Policy (AUP) for your website, app, or SaaS. Define prohibited activities, content standards, and enforcement rules.">
         <meta name="keywords"
-            content="shipping policy generator, ecommerce shipping policy, free shipping policy template, shipping terms generator, online store policy">
+            content="aup generator, acceptable use policy generator, free aup template, saas policy generator, community guidelines generator">
         <%@ include file="header-script.jsp" %>
             <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Shipping Policy Generator",
-      "url": "https://8gwifi.org/shipping-policy-generator.jsp",
-      "description": "Generate a professional Shipping Policy for your e-commerce store.",
+      "name": "Acceptable Use Policy Generator",
+      "url": "https://8gwifi.org/aup-generator.jsp",
+      "description": "Generate a professional Acceptable Use Policy (AUP) for your website, app, or SaaS.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Any",
       "author": {
@@ -29,10 +29,10 @@
         "priceCurrency": "USD"
       },
       "featureList": [
-        "Processing Time",
-        "Shipping Rates",
-        "International Shipping",
-        "Tracking Info",
+        "Prohibited Activities",
+        "Content Standards",
+        "System Security",
+        "Enforcement Actions",
         "HTML & Markdown Export"
       ]
     }
@@ -100,6 +100,12 @@
                     overflow-y: auto;
                 }
 
+                .nav-tabs .nav-link.active {
+                    font-weight: bold;
+                    color: var(--theme-primary);
+                    border-bottom: 3px solid var(--theme-primary);
+                }
+
                 .sticky-preview {
                     position: sticky;
                     top: 80px;
@@ -123,8 +129,8 @@
             <div class="container-fluid px-lg-5 mt-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h1 class="h3 mb-0">Shipping Policy Generator</h1>
-                        <p class="text-muted mb-0">Create a clear Shipping Policy to set customer expectations for your online store</p>
+                        <h1 class="h3 mb-0">Acceptable Use Policy Generator</h1>
+                        <p class="text-muted mb-0">Define the rules of conduct for your platform to prevent abuse and ensure safety</p>
                     </div>
                     <div class="eeat-badge"><i class="fas fa-user-check"></i><span>Anish Nath</span></div>
                 </div>
@@ -132,90 +138,100 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card tool-card mb-4">
-                            <div class="card-header card-header-custom"><i class="fas fa-shipping-fast mr-2"></i>Shipping Configuration</div>
+                            <div class="card-header card-header-custom"><i class="fas fa-user-shield mr-2"></i>AUP Configuration</div>
                             <div class="card-body">
-
-                                <!-- Store Info -->
-                                <div class="form-section">
-                                    <div class="form-section-title"><i class="fas fa-store"></i> Store Information</div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Store Name</label>
-                                                <input type="text" class="form-control" id="storeName"
-                                                    placeholder="e.g., My Awesome Shop">
+                                <form id="aupForm">
+                                    <!-- General Info -->
+                                    <div class="form-section">
+                                        <div class="form-section-title">
+                                            <i class="fas fa-building"></i> General Information
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Company/App Name</label>
+                                                    <input type="text" class="form-control" id="companyName"
+                                                        placeholder="e.g., My SaaS Platform">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Contact Email</label>
+                                                    <input type="email" class="form-control" id="contactEmail"
+                                                        placeholder="abuse@example.com">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Support Email</label>
-                                                <input type="email" class="form-control" id="contactEmail"
-                                                    placeholder="support@example.com">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Effective Date</label>
-                                                <input type="date" class="form-control" id="effectiveDate">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Processing & Rates -->
-                                <div class="form-section">
-                                    <div class="form-section-title"><i class="fas fa-clock"></i> Processing & Rates</div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Order Processing Time</label>
-                                                <select class="form-control" id="processingTime">
-                                                    <option value="1-2 business days">1-2 business days</option>
-                                                    <option value="2-3 business days">2-3 business days</option>
-                                                    <option value="3-5 business days">3-5 business days</option>
-                                                    <option value="5-7 business days">5-7 business days</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Shipping Rates</label>
-                                                <select class="form-control" id="shippingRates">
-                                                    <option value="calculated">Calculated at checkout</option>
-                                                    <option value="flat">Flat rate shipping</option>
-                                                    <option value="free">Free shipping on all orders</option>
-                                                    <option value="threshold">Free over certain amount</option>
-                                                </select>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Effective Date</label>
+                                                    <input type="date" class="form-control" id="effectiveDate">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Delivery Options -->
-                                <div class="form-section">
-                                    <div class="form-section-title"><i class="fas fa-globe"></i> Delivery Options</div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="custom-control custom-checkbox mb-2">
-                                                <input type="checkbox" class="custom-control-input" id="internationalShipping" checked>
-                                                <label class="custom-control-label" for="internationalShipping">International Shipping</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-2">
-                                                <input type="checkbox" class="custom-control-input" id="poBoxes" checked>
-                                                <label class="custom-control-label" for="poBoxes">Ship to P.O. Boxes</label>
-                                            </div>
+                                    <!-- Prohibited Activities -->
+                                    <div class="form-section">
+                                        <div class="form-section-title">
+                                            <i class="fas fa-ban"></i> Prohibited Activities
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="custom-control custom-checkbox mb-2">
-                                                <input type="checkbox" class="custom-control-input" id="localPickup">
-                                                <label class="custom-control-label" for="localPickup">Local Pickup Available</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="illegal" checked>
+                                                    <label class="custom-control-label" for="illegal">Illegal Activities (fraud, gambling, etc.)</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="spam" checked>
+                                                    <label class="custom-control-label" for="spam">Spam & Unsolicited Messages</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="malware" checked>
+                                                    <label class="custom-control-label" for="malware">Malware & Viruses</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="security" checked>
+                                                    <label class="custom-control-label" for="security">Security Violations (hacking, scanning)</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                    <!-- Content Standards -->
+                                    <div class="form-section">
+                                        <div class="form-section-title">
+                                            <i class="fas fa-comments"></i> Content Standards
+                                        </div>
+                                        <p class="text-muted small">Restrict specific types of user-generated content.</p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="hateSpeech" checked>
+                                                    <label class="custom-control-label" for="hateSpeech">Hate Speech & Harassment</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="violence" checked>
+                                                    <label class="custom-control-label" for="violence">Violence & Graphic Content</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="adult" checked>
+                                                    <label class="custom-control-label" for="adult">Adult/Sexually Explicit Content</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" class="custom-control-input" id="copyright" checked>
+                                                    <label class="custom-control-label" for="copyright">Intellectual Property Infringement</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -288,160 +304,121 @@
                 });
 
                 function generatePolicy() {
-                    const storeName = document.getElementById('storeName').value || '[Store Name]';
+                    const companyName = document.getElementById('companyName').value || '[Company Name]';
                     const contactEmail = document.getElementById('contactEmail').value || '[Email]';
                     const effectiveDate = document.getElementById('effectiveDate').value;
 
-                    const processingTime = document.getElementById('processingTime').value;
-                    const shippingRates = document.getElementById('shippingRates').value;
-
-                    const options = {
-                        international: document.getElementById('internationalShipping').checked,
-                        poBoxes: document.getElementById('poBoxes').checked,
-                        localPickup: document.getElementById('localPickup').checked
+                    const prohibited = {
+                        illegal: document.getElementById('illegal').checked,
+                        spam: document.getElementById('spam').checked,
+                        malware: document.getElementById('malware').checked,
+                        security: document.getElementById('security').checked
                     };
 
-                    const html = generateHTML(storeName, contactEmail, effectiveDate, processingTime, shippingRates, options);
-                    const markdown = generateMarkdown(storeName, contactEmail, effectiveDate, processingTime, shippingRates, options);
+                    const content = {
+                        hateSpeech: document.getElementById('hateSpeech').checked,
+                        violence: document.getElementById('violence').checked,
+                        adult: document.getElementById('adult').checked,
+                        copyright: document.getElementById('copyright').checked
+                    };
+
+                    const html = generateHTML(companyName, contactEmail, effectiveDate, prohibited, content);
+                    const markdown = generateMarkdown(companyName, contactEmail, effectiveDate, prohibited, content);
 
                     document.getElementById('previewOutput').innerHTML = html;
                     document.getElementById('htmlOutput').textContent = html;
                     document.getElementById('markdownOutput').textContent = markdown;
                 }
 
-                function generateHTML(storeName, contactEmail, effectiveDate, processingTime, shippingRates, options) {
-                    let ratesText = "";
-                    switch (shippingRates) {
-                        case 'calculated': ratesText = "Shipping charges for your order will be calculated and displayed at checkout."; break;
-                        case 'flat': ratesText = "We offer flat rate shipping for all orders."; break;
-                        case 'free': ratesText = "We offer free shipping on all orders."; break;
-                        case 'threshold': ratesText = "Shipping is free for orders over a certain amount. For orders under that amount, shipping charges will be calculated at checkout."; break;
-                    }
+                function generateHTML(companyName, contactEmail, effectiveDate, prohibited, content) {
+                    let prohibitedList = '';
+                    if (prohibited.illegal) prohibitedList += '<li>Engage in any illegal activities, including but not limited to fraud, gambling, or money laundering.</li>';
+                    if (prohibited.spam) prohibitedList += '<li>Send unsolicited messages, promotions, or advertisements (spam).</li>';
+                    if (prohibited.malware) prohibitedList += '<li>Distribute malware, viruses, trojan horses, or other harmful software.</li>';
+                    if (prohibited.security) prohibitedList += '<li>Attempt to gain unauthorized access to our systems, user accounts, or networks (hacking or scanning).</li>';
 
-                    let optionalSections = '';
-
-                    if (options.poBoxes) {
-                        optionalSections += `
-    <h3>3. Shipment to P.O. boxes or APO/FPO addresses</h3>
-    <p>${storeName} ships to addresses within the U.S., U.S. Territories, and APO/FPO/DPO addresses.</p>`;
-                    }
-
-                    if (options.international) {
-                        optionalSections += `
-    <h3>4. International Shipping Policy</h3>
-    <p>We currently ship outside the U.S.</p>
-    <p><strong>Customs, Duties and Taxes:</strong> ${storeName} is not responsible for any customs and taxes applied to your order. All fees imposed during or after shipping are the responsibility of the customer (tariffs, taxes, etc.).</p>`;
-                    }
-
-                    if (options.localPickup) {
-                        optionalSections += `
-    <h3>5. Local Pickup</h3>
-    <p>You can skip the shipping fees with free local pickup. After placing your order and selecting local pickup at checkout, your order will be prepared and ready for pick up within ${processingTime}. We will send you an email when your order is ready along with instructions.</p>`;
-                    }
+                    let contentList = '';
+                    if (content.hateSpeech) contentList += '<li>Promotes hate speech, discrimination, or harassment based on race, ethnicity, religion, gender, or sexual orientation.</li>';
+                    if (content.violence) contentList += '<li>Depicts excessive violence or incites violence against individuals or groups.</li>';
+                    if (content.adult) contentList += '<li>Contains sexually explicit material or pornography.</li>';
+                    if (content.copyright) contentList += '<li>Infringes on the intellectual property rights of others (copyright, trademark, patent).</li>';
 
                     return `<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width'>
-    <title>Shipping Policy</title>
+    <title>Acceptable Use Policy</title>
     <style> body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding:1em; } </style>
 </head>
 <body>
-    <h2>Shipping Policy</h2>
+    <h2>Acceptable Use Policy</h2>
     <p><strong>Effective Date:</strong> ${effectiveDate}</p>
 
-    <p>Thank you for visiting and shopping at <strong>${storeName}</strong>. Following are the terms and conditions that constitute our Shipping Policy.</p>
+    <p>This Acceptable Use Policy ("AUP") governs your use of the services provided by <strong>${companyName}</strong> ("we", "us", or "our"). By accessing or using our services, you agree to comply with this AUP. If you violate this AUP, we may suspend or terminate your access to our services.</p>
 
-    <h3>1. Shipment Processing Time</h3>
-    <p>All orders are processed within <strong>${processingTime}</strong>. Orders are not shipped or delivered on weekends or holidays.</p>
-    <p>If we are experiencing a high volume of orders, shipments may be delayed by a few days. Please allow additional days in transit for delivery. If there will be a significant delay in shipment of your order, we will contact you via email or telephone.</p>
+    <h3>1. Prohibited Activities</h3>
+    <p>You may not use our services for any illegal or unauthorized purpose. Specifically, you agree not to:</p>
+    <ul>${prohibitedList}</ul>
 
-    <h3>2. Shipping Rates & Delivery Estimates</h3>
-    <p>${ratesText}</p>
-    <p>Delivery delays can occasionally occur.</p>
-${optionalSections}
-    <h3>6. Shipment Confirmation & Order Tracking</h3>
-    <p>You will receive a Shipment Confirmation email once your order has shipped containing your tracking number(s). The tracking number will be active within 24 hours.</p>
+    <h3>2. Content Standards</h3>
+    <p>You are solely responsible for the content you post or transmit through our services. You agree not to post content that:</p>
+    <ul>${contentList}</ul>
 
-    <h3>7. Damages</h3>
-    <p>${storeName} is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim.</p>
-    <p>Please save all packaging materials and damaged goods before filing a claim.</p>
+    <h3>3. Enforcement</h3>
+    <p>We reserve the right to investigate any violation of this AUP. If we determine that you have violated this AUP, we may take action including:</p>
+    <ul>
+        <li>Removing the offending content.</li>
+        <li>Suspending or terminating your account.</li>
+        <li>Reporting illegal activities to law enforcement.</li>
+    </ul>
 
-    <h3>Contact Us</h3>
-    <p>If you have any questions about this Shipping Policy, please contact us at: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
+    <h3>4. Reporting Violations</h3>
+    <p>If you become aware of any violation of this AUP, please report it to us immediately at: <a href="mailto:${contactEmail}">${contactEmail}</a>.</p>
 </body>
 </html>`;
                 }
 
-                function generateMarkdown(storeName, contactEmail, effectiveDate, processingTime, shippingRates, options) {
-                    let ratesText = "";
-                    switch (shippingRates) {
-                        case 'calculated': ratesText = "Shipping charges for your order will be calculated and displayed at checkout."; break;
-                        case 'flat': ratesText = "We offer flat rate shipping for all orders."; break;
-                        case 'free': ratesText = "We offer free shipping on all orders."; break;
-                        case 'threshold': ratesText = "Shipping is free for orders over a certain amount. For orders under that amount, shipping charges will be calculated at checkout."; break;
-                    }
+                function generateMarkdown(companyName, contactEmail, effectiveDate, prohibited, content) {
+                    let prohibitedList = '';
+                    if (prohibited.illegal) prohibitedList += '*   Engage in any illegal activities, including but not limited to fraud, gambling, or money laundering.\n';
+                    if (prohibited.spam) prohibitedList += '*   Send unsolicited messages, promotions, or advertisements (spam).\n';
+                    if (prohibited.malware) prohibitedList += '*   Distribute malware, viruses, trojan horses, or other harmful software.\n';
+                    if (prohibited.security) prohibitedList += '*   Attempt to gain unauthorized access to our systems, user accounts, or networks (hacking or scanning).\n';
 
-                    let optionalSections = '';
+                    let contentList = '';
+                    if (content.hateSpeech) contentList += '*   Promotes hate speech, discrimination, or harassment based on race, ethnicity, religion, gender, or sexual orientation.\n';
+                    if (content.violence) contentList += '*   Depicts excessive violence or incites violence against individuals or groups.\n';
+                    if (content.adult) contentList += '*   Contains sexually explicit material or pornography.\n';
+                    if (content.copyright) contentList += '*   Infringes on the intellectual property rights of others (copyright, trademark, patent).\n';
 
-                    if (options.poBoxes) {
-                        optionalSections += `
-## 3. Shipment to P.O. boxes or APO/FPO addresses
-
-${storeName} ships to addresses within the U.S., U.S. Territories, and APO/FPO/DPO addresses.
-`;
-                    }
-
-                    if (options.international) {
-                        optionalSections += `
-## 4. International Shipping Policy
-
-We currently ship outside the U.S.
-
-**Customs, Duties and Taxes:** ${storeName} is not responsible for any customs and taxes applied to your order. All fees imposed during or after shipping are the responsibility of the customer (tariffs, taxes, etc.).
-`;
-                    }
-
-                    if (options.localPickup) {
-                        optionalSections += `
-## 5. Local Pickup
-
-You can skip the shipping fees with free local pickup. After placing your order and selecting local pickup at checkout, your order will be prepared and ready for pick up within ${processingTime}. We will send you an email when your order is ready along with instructions.
-`;
-                    }
-
-                    return `# Shipping Policy
+                    return `# Acceptable Use Policy
 
 **Effective Date:** ${effectiveDate}
 
-Thank you for visiting and shopping at **${storeName}**. Following are the terms and conditions that constitute our Shipping Policy.
+This Acceptable Use Policy ("AUP") governs your use of the services provided by **${companyName}** ("we", "us", or "our"). By accessing or using our services, you agree to comply with this AUP. If you violate this AUP, we may suspend or terminate your access to our services.
 
-## 1. Shipment Processing Time
+## 1. Prohibited Activities
 
-All orders are processed within **${processingTime}**. Orders are not shipped or delivered on weekends or holidays.
+You may not use our services for any illegal or unauthorized purpose. Specifically, you agree not to:
 
-If we are experiencing a high volume of orders, shipments may be delayed by a few days. Please allow additional days in transit for delivery. If there will be a significant delay in shipment of your order, we will contact you via email or telephone.
+${prohibitedList}
+## 2. Content Standards
 
-## 2. Shipping Rates & Delivery Estimates
+You are solely responsible for the content you post or transmit through our services. You agree not to post content that:
 
-${ratesText}
+${contentList}
+## 3. Enforcement
 
-Delivery delays can occasionally occur.
-${optionalSections}
-## 6. Shipment Confirmation & Order Tracking
+We reserve the right to investigate any violation of this AUP. If we determine that you have violated this AUP, we may take action including:
 
-You will receive a Shipment Confirmation email once your order has shipped containing your tracking number(s). The tracking number will be active within 24 hours.
+*   Removing the offending content.
+*   Suspending or terminating your account.
+*   Reporting illegal activities to law enforcement.
 
-## 7. Damages
+## 4. Reporting Violations
 
-${storeName} is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim.
-
-Please save all packaging materials and damaged goods before filing a claim.
-
-## Contact Us
-
-If you have any questions about this Shipping Policy, please contact us at: ${contactEmail}
+If you become aware of any violation of this AUP, please report it to us immediately at: ${contactEmail}.
 `;
                 }
 
@@ -470,7 +447,7 @@ If you have any questions about this Shipping Policy, please contact us at: ${co
 
                     const activeTab = document.querySelector('.tab-pane.active');
                     let content = '';
-                    let filename = 'shipping_policy';
+                    let filename = 'acceptable_use_policy';
 
                     if (activeTab.id === 'markdown') {
                         content = document.getElementById('markdownOutput').textContent;
@@ -491,13 +468,9 @@ If you have any questions about this Shipping Policy, please contact us at: ${co
                     if (confirm('Are you sure you want to reset all fields?')) {
                         const inputs = document.querySelectorAll('input');
                         inputs.forEach(input => {
-                            if (input.type === 'checkbox') {
-                                input.checked = input.id === 'internationalShipping' || input.id === 'poBoxes';
-                            }
+                            if (input.type === 'checkbox') input.checked = true;
                             else if (input.type !== 'date') input.value = '';
                         });
-                        document.getElementById('processingTime').selectedIndex = 0;
-                        document.getElementById('shippingRates').selectedIndex = 0;
 
                         generatePolicy();
                     }
@@ -525,7 +498,7 @@ If you have any questions about this Shipping Policy, please contact us at: ${co
                                     class="btn btn-info text-white mr-2">
                                     <i class="fab fa-twitter"></i> Follow @anish2good
                                 </a>
-                                <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20Free%20Shipping%20Policy%20Generator!%20%23ecommerce%20%23shopify%20https://8gwifi.org/shipping-policy-generator.jsp"
+                                <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20Free%20Acceptable%20Use%20Policy%20Generator!%20%23saas%20%23startup%20https://8gwifi.org/aup-generator.jsp"
                                     target="_blank" class="btn btn-outline-info">
                                     <i class="fab fa-twitter"></i> Tweet
                                 </a>
