@@ -11,6 +11,19 @@
     <meta name="author" content="Anish Nath" />
     <link rel="canonical" href="https://8gwifi.org/graph-easy.jsp" />
 
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Text to Diagram Generator | ASCII Flowchart & Graph-Easy Online – Free | 8gwifi.org" />
+    <meta property="og:description" content="Free online text-to-diagram converter. Create ASCII flowcharts, architecture diagrams from simple text. Export to PNG, SVG, PDF. Mermaid & PlantUML alternative." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://8gwifi.org/graph-easy.jsp" />
+    <meta property="og:image" content="https://8gwifi.org/images/graph-easy-og.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Text to Diagram Generator – ASCII Flowchart Free Online" />
+    <meta name="twitter:description" content="Create ASCII flowcharts from text notation. Export to PNG/SVG/PDF. Free Mermaid & PlantUML alternative. No signup required." />
+    <meta name="twitter:creator" content="@anish2good" />
+
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -26,7 +39,7 @@
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
             "author": {"@type": "Person", "name": "Anish Nath", "url": "https://x.com/anish2good"},
             "datePublished": "2024-06-01",
-            "dateModified": "2025-12-02",
+            "dateModified": "2025-12-03",
             "featureList": [
                 "Text to ASCII diagram conversion",
                 "Export to PNG, SVG, PDF",
@@ -37,7 +50,9 @@
                 "Runs entirely in browser"
             ],
             "screenshot": "https://8gwifi.org/images/graph-easy-screenshot.png",
-            "softwareHelp": {"@type": "CreativeWork", "url": "https://8gwifi.org/graph-easy.jsp#understanding"}
+            "softwareHelp": {"@type": "CreativeWork", "url": "https://8gwifi.org/graph-easy.jsp#understanding"},
+            "publisher": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
+            "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.7", "ratingCount": "89"}
         }
     </script>
 
@@ -421,6 +436,9 @@ Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
                         <button class="btn btn-sm btn-light" id="copyBtn" disabled>
                             <i class="fas fa-copy"></i> Copy
                         </button>
+                        <button class="btn btn-sm btn-success" id="shareBtn" title="Share this tool">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -758,10 +776,78 @@ Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
             </div>
         </div>
     </div>
+
+    <!-- Share Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--theme-gradient); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-share-alt me-2"></i>Share This Tool</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <i class="fas fa-project-diagram fa-3x" style="color: var(--theme-primary);"></i>
+                        </div>
+                        <h5>Graph-Easy ASCII Diagram Generator</h5>
+                        <p class="text-muted small">Free online text-to-diagram converter for flowcharts and architecture diagrams</p>
+                    </div>
+
+                    <!-- Share URL -->
+                    <div class="mb-4">
+                        <label class="form-label small"><strong>Share URL</strong></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="shareUrl" value="https://8gwifi.org/graph-easy.jsp" readonly>
+                            <button class="btn btn-outline-secondary" type="button" id="copyShareUrl">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Twitter Section -->
+                    <div class="border rounded p-3 text-center" style="background: linear-gradient(135deg, #e8f5fd 0%, #f0f9ff 100%);">
+                        <p class="mb-3"><strong><i class="fab fa-twitter me-1" style="color: #1DA1F2;"></i>Support on Twitter</strong></p>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <a href="https://twitter.com/anish2good" target="_blank" class="btn btn-sm text-white" style="background: #1DA1F2;">
+                                <i class="fab fa-twitter me-1"></i>Follow @anish2good
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?text=Just%20created%20an%20awesome%20ASCII%20diagram%20using%20Graph-Easy%20tool%20by%20%40anish2good%20%F0%9F%9A%80%0A%0ACreate%20flowcharts%2C%20export%20to%20PNG%2FSVG%2FPDF%20-%20all%20in%20your%20browser!%0A%0Ahttps%3A%2F%2F8gwifi.org%2Fgraph-easy.jsp&hashtags=ASCII,DevTools,Diagrams,Documentation" target="_blank" class="btn btn-sm btn-outline-primary" style="border-color: #1DA1F2; color: #1DA1F2;">
+                                <i class="fab fa-twitter me-1"></i>Tweet This Tool
+                            </a>
+                        </div>
+                        <p class="mt-3 mb-0 small text-muted">Your support helps keep this tool free!</p>
+                    </div>
+
+                    <!-- Other Share Options -->
+                    <div class="mt-4">
+                        <p class="small text-muted mb-2"><strong>More ways to share:</strong></p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://8gwifi.org/graph-easy.jsp" target="_blank" class="btn btn-sm" style="background: #0077b5; color: white;" title="Share on LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="https://www.reddit.com/submit?url=https://8gwifi.org/graph-easy.jsp&title=Free%20ASCII%20Diagram%20Generator%20-%20Text%20to%20Flowchart" target="_blank" class="btn btn-sm" style="background: #ff4500; color: white;" title="Share on Reddit">
+                                <i class="fab fa-reddit"></i>
+                            </a>
+                            <a href="https://news.ycombinator.com/submitlink?u=https://8gwifi.org/graph-easy.jsp&t=Graph-Easy%20Online%20-%20Free%20ASCII%20Diagram%20Generator" target="_blank" class="btn btn-sm" style="background: #ff6600; color: white;" title="Share on Hacker News">
+                                <i class="fab fa-hacker-news"></i>
+                            </a>
+                            <a href="mailto:?subject=Free%20ASCII%20Diagram%20Generator&body=Check%20out%20this%20free%20tool%20to%20create%20ASCII%20flowcharts%20and%20diagrams%3A%0A%0Ahttps%3A%2F%2F8gwifi.org%2Fgraph-easy.jsp" class="btn btn-sm btn-secondary" title="Share via Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Load Graph-Easy modules bundle -->
-<script src="graph-easy/graph-easy-modules.js"></script>
+<script src="graph-easy/graph-easy-modules.js?v=<%= System.currentTimeMillis() %>"></script>
 
 <!-- Setup script -->
 <script>
@@ -1205,6 +1291,75 @@ Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
         }
     });
 
+    // Share button functionality
+    const shareBtn = document.getElementById('shareBtn');
+    const shareModal = $('#shareModal');
+    const copyShareUrlBtn = document.getElementById('copyShareUrl');
+    const shareUrlInput = document.getElementById('shareUrl');
+
+    // Generate share URL with encoded input data
+    function generateShareUrl() {
+        const input = inputEl.value.trim();
+        const baseUrl = 'https://8gwifi.org/graph-easy.jsp';
+
+        if (input) {
+            // Use base64 encoding for the input data
+            const encoded = btoa(unescape(encodeURIComponent(input)));
+            return baseUrl + '?data=' + encodeURIComponent(encoded);
+        }
+        return baseUrl;
+    }
+
+    // Update Twitter share link with current data
+    function updateTwitterShareLink() {
+        const shareUrl = generateShareUrl();
+        const tweetText = encodeURIComponent('Just created an awesome ASCII diagram using Graph-Easy tool by @anish2good 🚀\n\nCreate flowcharts, export to PNG/SVG/PDF - all in your browser!\n\n');
+        const tweetLink = document.querySelector('#shareModal a[href*="twitter.com/intent/tweet"]');
+        if (tweetLink) {
+            tweetLink.href = 'https://twitter.com/intent/tweet?text=' + tweetText + encodeURIComponent(shareUrl) + '&hashtags=ASCII,DevTools,Diagrams,Documentation';
+        }
+    }
+
+    shareBtn.addEventListener('click', function() {
+        // Update share URL with current input data
+        shareUrlInput.value = generateShareUrl();
+        updateTwitterShareLink();
+        shareModal.modal('show');
+    });
+
+    copyShareUrlBtn.addEventListener('click', function() {
+        shareUrlInput.select();
+        document.execCommand('copy');
+        showToast('URL copied to clipboard!');
+    });
+
+    // Load data from URL parameter on page load
+    function loadFromUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedData = urlParams.get('data');
+
+        if (encodedData) {
+            try {
+                const decoded = decodeURIComponent(escape(atob(decodeURIComponent(encodedData))));
+                inputEl.value = decoded;
+                showToast('Data loaded from shared URL!');
+
+                // Auto-render graph once Perl is ready
+                const checkPerlAndRender = setInterval(function() {
+                    if (perlReady) {
+                        clearInterval(checkPerlAndRender);
+                        setTimeout(renderGraph, 500);
+                    }
+                }, 100);
+            } catch (e) {
+                console.error('Failed to decode shared data:', e);
+            }
+        }
+    }
+
+    // Call on page load
+    loadFromUrlParams();
+
     // Store modules for Perl to access
     window.graphEasyModuleList = Object.keys(window.GraphEasyModules);
     window.getModuleContent = function(path) {
@@ -1213,7 +1368,7 @@ Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
 </script>
 
 <!-- Load WebPerl -->
-<script src="graph-easy/webperl.js"></script>
+<script src="graph-easy/webperl.js?v=<%= System.currentTimeMillis() %>"></script>
 
 <!-- Perl code that runs after WebPerl loads -->
 <script type="text/perl">

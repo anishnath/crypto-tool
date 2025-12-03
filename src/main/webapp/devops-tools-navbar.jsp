@@ -131,6 +131,12 @@
                         <a class="dropdown-item" href="graph-easy.jsp">
                             <i class="fas fa-project-diagram text-success"></i> Graph-Easy ASCII Diagram
                         </a>
+                        <a class="dropdown-item" href="inframap.jsp">
+                            <i class="fas fa-sitemap text-warning"></i> InfraMap - Terraform Visualizer
+                        </a>
+                        <a class="dropdown-item" href="typing-speed-test.jsp">
+                            <i class="fas fa-keyboard text-info"></i> Typing Speed Test (WPM)
+                        </a>
                     </div>
                 </li>
             </ul>

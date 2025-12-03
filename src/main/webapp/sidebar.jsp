@@ -350,6 +350,7 @@
                                         <li><a href="dc2.jsp">Compose to Docker run</a></li>
                                         <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>
                                         <li><a href="aws-smtp.jsp">AWS SMTP Password Generator</a></li>
+                                        <li><a href="inframap.jsp">InfraMap - Terraform State Visualizer</a></li>
                                     </ul>
                                 </div>
                             </div>

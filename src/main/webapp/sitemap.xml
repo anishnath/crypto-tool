@@ -19,6 +19,12 @@
     <changefreq>weekly</changefreq>
 </url>
 <url>
+    <loc>https://8gwifi.org/inframap.jsp</loc>
+    <lastmod>2025-12-03</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/typing-speed-test.jsp</loc>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
