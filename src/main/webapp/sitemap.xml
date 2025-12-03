@@ -30,6 +30,12 @@
     <changefreq>weekly</changefreq>
 </url>
 <url>
+    <loc>https://8gwifi.org/resume-builder.jsp</loc>
+    <lastmod>2025-12-03</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+</url>
+<url>
     <loc>https://8gwifi.org/mind-reading-trick.jsp</loc>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>

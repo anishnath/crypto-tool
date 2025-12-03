@@ -438,6 +438,10 @@
                                     <ul class="list-unstyled mb-0 small">
                                         <li><a href="onecompiler.jsp"><strong>Online Compiler (60+
                                                     Languages)</strong></a></li>
+                                        <li><a href="resume-builder.jsp"><strong>Resume Builder</strong> <span
+                                                    class="badge badge-success">New</span></a></li>
+                                        <li><a href="typing-speed-test.jsp"><strong>Typing Speed Test</strong> <span
+                                                    class="badge badge-success">New</span></a></li>
                                         <li><a href="regex.jsp">Regex Tester</a></li>
                                         <li><a href="diff.jsp">Compare Text Diff</a></li>
                                         <li><a href="random-string.jsp">Random String Generator</a></li>
@@ -658,8 +662,10 @@
                                     data-parent="#sidebarAccordion">
                                     <div class="card-body p-2">
                                         <ul class="list-unstyled mb-0 small">
+                                            <li><a href="resume-builder.jsp"><strong>Resume Builder (50+ Templates)</strong> <span
+                                                        class="badge badge-warning">Hot</span></a></li>
                                             <li><a href="typing-speed-test.jsp"><strong>Typing Speed Test</strong> <span
-                                                    class="badge badge-success">New</span></a></li>
+                                                        class="badge badge-success">New</span></a></li>
                                             <li><a href="mind-map-maker.jsp">Mind Map Maker (Online)</a></li>
                                             <li><a href="tip-calculator.jsp">Tip Calculator & Split Bill</a></li>
                                             <li><a href="timezone-converter.jsp">Time Zone Converter & Scheduler</a>
