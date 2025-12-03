@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +58,7 @@
   ]
 }
 </script>
-	<title>JSON Formatter & Validator – JSON to YAML/XML, Diff</title>
+	<title>Free JSON Formatter & Validator – JSON to YAML/XML, Diff</title>
 	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 	<meta name="keywords" content="JSON formatter online, JSON beautifier, validate JSON online, JSON to YAML, JSON to XML, JSON converter, JSON diff compare, prettify JSON, format JSON"/>
 	<meta name="description" content="Free online JSON formatter and validator with JSON to YAML/XML conversion and JSON diff compare. Fast, private, and works in your browser." />
