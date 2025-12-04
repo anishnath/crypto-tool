@@ -1,12 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Chmod Calculator Online – Advanced Permissions | 8gwifi.org</title>
+    <title>Chmod Calculator Online – Advanced Permissions – Free | 8gwifi.org</title>
     <meta name="description"
         content="Advanced Linux Permissions Calculator. Support for SUID, SGID, Sticky Bit (4-digit octal). Convert rwxr-xr-x to 755. Recursive chmod generator. Free DevOps tool.">
     <meta name="keywords"
         content="chmod calculator, linux permissions, suid calculator, sgid calculator, sticky bit, chmod recursive, octal to symbolic">
+    <link rel="canonical" href="https://8gwifi.org/chmod-calculator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Chmod Calculator – Octal, Symbolic, Sticky, setuid/setgid" />
+    <meta property="og:description" content="Calculate Linux permissions in octal and symbolic forms with sticky, setuid/setgid, and umask preview. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/chmod-calculator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Chmod Calculator – Octal, Symbolic, Sticky, setuid/setgid" />
+    <meta name="twitter:description" content="Calculate Linux permissions in octal and symbolic forms with sticky, setuid/setgid, and umask preview. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {
