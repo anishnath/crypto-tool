@@ -8,639 +8,336 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import z.y.x.r.LoadPropertyFileFunctionality;
 
-import javax.crypto.*;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.DESedeKeySpec;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.security.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
- * @author  Anish Nath
- * Demo at 8gwifi.org
+ * NaCl (libsodium) Encryption/Decryption Servlet
+ * Supports: XSalsa20, AEAD, Box, SealedBox
+ * Returns structured JSON responses
+ * @author Anish Nath
+ * For Demo Visit https://8gwifi.org
  */
-
 public class NaclFunctionality extends HttpServlet {
 
-    private static final String METHOD_CIPHERBLOCK_NEW = "NACL_crypto_stream_xsalsa20_xor";
-    private static final String METHOD_CIPHERBLOCK_AEAD = "AEAD_MESSAGE";
-    private static final String METHOD_CIPHERBLOCK_BOX = "NACL_BOX_ENCRYPT";
-    private static final String METHOD_CIPHERBLOCK_SEALBOX ="NACL_SEALBOX_ENCRYPT";
+    private static final String METHOD_XSALSA20 = "NACL_crypto_stream_xsalsa20_xor";
+    private static final String METHOD_AEAD = "AEAD_MESSAGE";
+    private static final String METHOD_BOX = "NACL_BOX_ENCRYPT";
+    private static final String METHOD_SEALBOX = "NACL_SEALBOX_ENCRYPT";
 
+    private final Gson gson = new Gson();
 
-
-
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException, IOException {
-
-        // TODO Auto-generated method stub
-
-        // Set response content type
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html");
-
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("naclencdec.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/naclencdec.jsp");
         dispatcher.forward(request, response);
-
-
-        return;
-
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
-
-        final String methodName = request.getParameter("methodName");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        if (METHOD_CIPHERBLOCK_NEW.equalsIgnoreCase(methodName)) {
+        final String methodName = request.getParameter("methodName");
 
-            String secretkey = request.getParameter("secretkey");
-            final String encryptorDecrypt = request.getParameter("encryptorDecrypt");
-            final String plaintext = request.getParameter("plaintext");
-            //plaintext
-            //cipherparameter
-            final String nonce = request.getParameter("nonce");
-
-
-            if (null == secretkey || secretkey.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Secret Key is null or empty </font>");
-                return;
-            }
-
-            if(secretkey!=null && secretkey.length() !=32 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Secret Key Must be length of 32 </font>");
-                return;
-            }
-
-            if (null == plaintext || plaintext.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
-                return;
-            }
-
-            if (null == nonce || nonce.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Noce is EMpty or Null</font>");
-                return;
-            }
-
-            if(nonce!=null && nonce.trim().length()<48)
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Nonce is Invalid It must be 24 bit in Hex</font>");
-                return;
-            }
-
-
-            Gson gson = new Gson();
-            HttpClient client = HttpClientBuilder.create().build();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/encrypt";
-
-            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
-                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/decrypt";
-
-            }
-
-            HttpPost post = new HttpPost(url1);
-
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
-            urlParameters.add(new BasicNameValuePair("p_nonce", nonce));
-            urlParameters.add(new BasicNameValuePair("p_key", secretkey));
-
-
-            try {
-//
-                post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                HttpResponse response1 = client.execute(post);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(content);
-
-
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
-                    }
-
-                }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-
-
-                addHorizontalLine(out);
-
-
-                String msg = "Encrypted Message in Hex";
-
-                if("decrypt".equalsIgnoreCase(encryptorDecrypt))
-                {
-                    msg = "Decrypted Message";
-                }
-
-                out.println( "<font size=\"4\" color=\"blue\">  " +msg + "  </font><br/><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + content.toString() + "</textarea></br>");
-
-                return;
-
-
-            } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " + e + " </font>");
-            }
-
-
-            return;
-
+        if (METHOD_XSALSA20.equalsIgnoreCase(methodName)) {
+            handleXSalsa20(request, out);
+        } else if (METHOD_AEAD.equalsIgnoreCase(methodName)) {
+            handleAEAD(request, out);
+        } else if (METHOD_BOX.equalsIgnoreCase(methodName)) {
+            handleBox(request, out);
+        } else if (METHOD_SEALBOX.equalsIgnoreCase(methodName)) {
+            handleSealBox(request, out);
+        } else {
+            out.println(gson.toJson(NaclResponse.error("Invalid method name")));
         }
-
-
-
-
-        if (METHOD_CIPHERBLOCK_AEAD.equalsIgnoreCase(methodName)) {
-
-            String secretkey = request.getParameter("secretkey");
-            final String encryptorDecrypt = request.getParameter("encryptorDecrypt");
-            final String plaintext = request.getParameter("plaintext");
-            final String aead = request.getParameter("aead");
-            //plaintext
-            //cipherparameter
-            final String nonce = request.getParameter("nonce");
-
-
-            if (null == secretkey || secretkey.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Secret Key is null or empty </font>");
-                return;
-            }
-
-            if(secretkey!=null && secretkey.length() !=32 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Secret Key Must be length of 32 </font>");
-                return;
-            }
-
-            if(null == aead || aead.trim().length() == 0 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> aead is empty, this value is not secret</font>");
-                return;
-            }
-
-            if (null == plaintext || plaintext.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
-                return;
-            }
-
-            if (null == nonce || nonce.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Noce is EMpty or Null</font>");
-                return;
-            }
-
-            if(nonce!=null && nonce.trim().length()<8)
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Nonce is Invalid It must be 24 bit in Hex</font>");
-                return;
-            }
-
-
-            Gson gson = new Gson();
-            HttpClient client = HttpClientBuilder.create().build();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/encrypt/aead";
-
-            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
-                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/decrypt/aead";
-
-            }
-
-            HttpPost post = new HttpPost(url1);
-
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
-            urlParameters.add(new BasicNameValuePair("p_nonce", nonce));
-            urlParameters.add(new BasicNameValuePair("p_key", secretkey));
-            urlParameters.add(new BasicNameValuePair("p_aead", aead));
-
-
-            try {
-//
-                post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                HttpResponse response1 = client.execute(post);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(content);
-
-
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
-                    }
-
-                }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-
-
-                addHorizontalLine(out);
-
-
-                String msg = "Encrypted Message in Hex";
-
-                if("decrypt".equalsIgnoreCase(encryptorDecrypt))
-                {
-                    msg = "Decrypted Message";
-                }
-
-                out.println( "<font size=\"4\" color=\"blue\">  " +msg + "  </font><br/><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + content.toString() + "</textarea></br>");
-
-                return;
-
-
-            } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " + e + " </font>");
-            }
-
-
-            return;
-
-        }
-
-
-
-
-        if (METHOD_CIPHERBLOCK_BOX.equalsIgnoreCase(methodName)) {
-
-
-            final String encryptorDecrypt = request.getParameter("encryptdecryptparameter");
-            final String plaintext = request.getParameter("message");
-            final String publickeyparam = request.getParameter("publickeyparam");
-            final String privatekeyparam = request.getParameter("privatekeyparam");
-            //plaintext
-            //cipherparameter
-            final String nonce = request.getParameter("nonce");
-
-
-            if (null == publickeyparam || publickeyparam.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Public Key is Empty </font>");
-                return;
-            }
-
-            if(publickeyparam!=null && publickeyparam.length() !=64 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Public Key length should be 32 in Hex (64) </font>");
-                return;
-            }
-
-            if(null == privatekeyparam || privatekeyparam.trim().length() == 0 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Private Key is EMpty</font>");
-                return;
-            }
-
-            if(privatekeyparam!=null && privatekeyparam.length() !=64 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Private Key length should be 32 in Hex (64) </font>");
-                return;
-            }
-
-            if (null == plaintext || plaintext.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
-                return;
-            }
-
-            if (null == nonce || nonce.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Noce is EMpty or Null</font>");
-                return;
-            }
-
-            if(nonce!=null && nonce.trim().length()<8)
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Nonce is Invalid It must be 24 bit in Hex</font>");
-                return;
-            }
-
-
-            Gson gson = new Gson();
-            HttpClient client = HttpClientBuilder.create().build();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/encrypt";
-
-            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
-                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/decrypt";
-
-            }
-
-            HttpPost post = new HttpPost(url1);
-
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
-            urlParameters.add(new BasicNameValuePair("p_nonce", nonce));
-            urlParameters.add(new BasicNameValuePair("p_key", privatekeyparam));
-            urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
-
-
-            try {
-//
-                post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                HttpResponse response1 = client.execute(post);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(content);
-
-
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
-                    }
-
-                }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-
-
-                addHorizontalLine(out);
-
-
-                String msg = "Encrypted Message in Hex";
-
-                if("decrypt".equalsIgnoreCase(encryptorDecrypt))
-                {
-                    msg = "Decrypted Message";
-                }
-
-                out.println( "<font size=\"4\" color=\"blue\">  " +msg + "  </font><br/><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + content.toString() + "</textarea></br>");
-
-                return;
-
-
-            } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " + e + " </font>");
-            }
-
-
-            return;
-
-        }
-
-
-
-        if (METHOD_CIPHERBLOCK_SEALBOX.equalsIgnoreCase(methodName)) {
-
-
-            final String encryptorDecrypt = request.getParameter("encryptdecryptparameter");
-            final String plaintext = request.getParameter("message");
-            final String publickeyparam = request.getParameter("publickeyparam");
-            final String privatekeyparam = request.getParameter("privatekeyparam");
-
-
-
-            if (null == publickeyparam || publickeyparam.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Public Key is Empty </font>");
-                return;
-            }
-
-            if(publickeyparam!=null && publickeyparam.length() !=64 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Public Key length should be 32 in Hex (64) </font>");
-                return;
-            }
-
-            if(null == privatekeyparam || privatekeyparam.trim().length() == 0 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Private Key is EMpty</font>");
-                return;
-            }
-
-            if(privatekeyparam!=null && privatekeyparam.length() !=64 )
-            {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Private Key length should be 32 in Hex (64) </font>");
-                return;
-            }
-
-            if (null == plaintext || plaintext.trim().length() == 0) {
-                addHorizontalLine(out);
-                out.println("<font size=\"4\" color=\"red\"> Text is null or empty </font>");
-                return;
-            }
-
-
-
-
-            Gson gson = new Gson();
-            HttpClient client = HttpClientBuilder.create().build();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/encrypt";
-
-            List<NameValuePair> urlParameters = new ArrayList<>();
-
-            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
-                url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/decrypt";
-                urlParameters.add(new BasicNameValuePair("p_key", privatekeyparam));
-                urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
-
-            }
-            else {
-                urlParameters.add(new BasicNameValuePair("p_pubkey", publickeyparam));
-            }
-
-            HttpPost post = new HttpPost(url1);
-
-
-            urlParameters.add(new BasicNameValuePair("p_msg", plaintext));
-
-
-
-
-            try {
-//
-                post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                HttpResponse response1 = client.execute(post);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    if (response1.getStatusLine().getStatusCode() == 404) {
-                        BufferedReader br = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content = new StringBuilder();
-                        String line;
-                        while (null != (line = br.readLine())) {
-                            content.append(line);
-                        }
-                        addHorizontalLine(out);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(content);
-
-
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + stringBuilder + "</font>");
-
-                        return;
-                    } else {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                        return;
-                    }
-
-                }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-
-
-                addHorizontalLine(out);
-
-
-                String msg = "Encrypted Message in Hex";
-
-                if("decrypt".equalsIgnoreCase(encryptorDecrypt))
-                {
-                    msg = "Decrypted Message";
-                }
-
-                out.println( "<font size=\"4\" color=\"blue\">  " +msg + "  </font><br/><textarea name=\"encrypedmessagetextarea\" class=\"form-control\" readonly=true id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"5\">" + content.toString() + "</textarea></br>");
-
-                return;
-
-
-            } catch (Exception e) {
-                out.println("<font size=\"4\" color=\"red\"> " + e + " </font>");
-            }
-
-
-            return;
-
-        }
-
-
     }
 
+    /**
+     * Handle XSalsa20 stream cipher encryption/decryption
+     */
+    private void handleXSalsa20(HttpServletRequest request, PrintWriter out) {
+        String secretkey = request.getParameter("secretkey");
+        String encryptorDecrypt = request.getParameter("encryptorDecrypt");
+        String plaintext = request.getParameter("plaintext");
+        String nonce = request.getParameter("nonce");
 
+        // Validation
+        if (secretkey == null || secretkey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", "Secret Key is null or empty")));
+            return;
+        }
+        if (secretkey.length() != 32) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", "Secret Key must be 32 characters")));
+            return;
+        }
+        if (plaintext == null || plaintext.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", "Text is null or empty")));
+            return;
+        }
+        if (nonce == null || nonce.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", "Nonce is empty or null")));
+            return;
+        }
+        if (nonce.trim().length() < 48) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", "Nonce must be 24 bytes in Hex (48 characters)")));
+            return;
+        }
 
+        try {
+            String url = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +
+                ("decrypt".equalsIgnoreCase(encryptorDecrypt) ? "nacl/decrypt" : "nacl/encrypt");
 
-    private void addHorizontalLine(PrintWriter out) {
-        out.println("<hr>");
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("p_msg", plaintext));
+            params.add(new BasicNameValuePair("p_nonce", nonce));
+            params.add(new BasicNameValuePair("p_key", secretkey));
+
+            String result = executePost(url, params, out, encryptorDecrypt, "xsalsa20");
+            if (result != null) {
+                if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                    NaclResponse resp = NaclResponse.decryptSuccess(result, "XSalsa20");
+                    resp.setNonce(nonce);
+                    out.println(gson.toJson(resp));
+                } else {
+                    NaclResponse resp = NaclResponse.encryptSuccess(result, "XSalsa20", nonce);
+                    out.println(gson.toJson(resp));
+                }
+            }
+        } catch (Exception e) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "xsalsa20", e.getMessage())));
+        }
     }
 
+    /**
+     * Handle AEAD (xsalsa20poly1305) encryption/decryption
+     */
+    private void handleAEAD(HttpServletRequest request, PrintWriter out) {
+        String secretkey = request.getParameter("secretkey");
+        String encryptorDecrypt = request.getParameter("encryptorDecrypt");
+        String plaintext = request.getParameter("plaintext");
+        String aead = request.getParameter("aead");
+        String nonce = request.getParameter("nonce");
 
+        // Validation
+        if (secretkey == null || secretkey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "Secret Key is null or empty")));
+            return;
+        }
+        if (secretkey.length() != 32) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "Secret Key must be 32 characters")));
+            return;
+        }
+        if (aead == null || aead.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "AEAD (additional data) is empty")));
+            return;
+        }
+        if (plaintext == null || plaintext.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "Text is null or empty")));
+            return;
+        }
+        if (nonce == null || nonce.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "Nonce is empty or null")));
+            return;
+        }
+        if (nonce.trim().length() < 8) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", "Nonce is invalid")));
+            return;
+        }
 
+        try {
+            String url = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +
+                ("decrypt".equalsIgnoreCase(encryptorDecrypt) ? "nacl/decrypt/aead" : "nacl/encrypt/aead");
 
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("p_msg", plaintext));
+            params.add(new BasicNameValuePair("p_nonce", nonce));
+            params.add(new BasicNameValuePair("p_key", secretkey));
+            params.add(new BasicNameValuePair("p_aead", aead));
+
+            String result = executePost(url, params, out, encryptorDecrypt, "aead");
+            if (result != null) {
+                NaclResponse resp;
+                if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                    resp = NaclResponse.decryptSuccess(result, "XSalsa20-Poly1305 (AEAD)");
+                } else {
+                    resp = NaclResponse.encryptSuccess(result, "XSalsa20-Poly1305 (AEAD)");
+                }
+                resp.setNonce(nonce);
+                resp.setAead(aead);
+                out.println(gson.toJson(resp));
+            }
+        } catch (Exception e) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "aead", e.getMessage())));
+        }
+    }
+
+    /**
+     * Handle Box (curve25519xsalsa20poly1305) encryption/decryption
+     */
+    private void handleBox(HttpServletRequest request, PrintWriter out) {
+        String encryptorDecrypt = request.getParameter("encryptdecryptparameter");
+        String plaintext = request.getParameter("message");
+        String publicKey = request.getParameter("publickeyparam");
+        String privateKey = request.getParameter("privatekeyparam");
+        String nonce = request.getParameter("nonce");
+
+        // Validation
+        if (publicKey == null || publicKey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Public Key is empty")));
+            return;
+        }
+        if (publicKey.length() != 64) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Public Key must be 32 bytes in Hex (64 characters)")));
+            return;
+        }
+        if (privateKey == null || privateKey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Private Key is empty")));
+            return;
+        }
+        if (privateKey.length() != 64) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Private Key must be 32 bytes in Hex (64 characters)")));
+            return;
+        }
+        if (plaintext == null || plaintext.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Message is null or empty")));
+            return;
+        }
+        if (nonce == null || nonce.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Nonce is empty or null")));
+            return;
+        }
+        if (nonce.trim().length() < 8) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", "Nonce is invalid")));
+            return;
+        }
+
+        try {
+            String url = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +
+                ("decrypt".equalsIgnoreCase(encryptorDecrypt) ? "nacl/box/decrypt" : "nacl/box/encrypt");
+
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("p_msg", plaintext));
+            params.add(new BasicNameValuePair("p_nonce", nonce));
+            params.add(new BasicNameValuePair("p_key", privateKey));
+            params.add(new BasicNameValuePair("p_pubkey", publicKey));
+
+            String result = executePost(url, params, out, encryptorDecrypt, "box");
+            if (result != null) {
+                NaclResponse resp;
+                if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                    resp = NaclResponse.decryptSuccess(result, "Curve25519-XSalsa20-Poly1305 (Box)");
+                } else {
+                    resp = NaclResponse.encryptSuccess(result, "Curve25519-XSalsa20-Poly1305 (Box)");
+                }
+                resp.setNonce(nonce);
+                out.println(gson.toJson(resp));
+            }
+        } catch (Exception e) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "box", e.getMessage())));
+        }
+    }
+
+    /**
+     * Handle SealedBox encryption/decryption
+     */
+    private void handleSealBox(HttpServletRequest request, PrintWriter out) {
+        String encryptorDecrypt = request.getParameter("encryptdecryptparameter");
+        String plaintext = request.getParameter("message");
+        String publicKey = request.getParameter("publickeyparam");
+        String privateKey = request.getParameter("privatekeyparam");
+
+        // Validation
+        if (publicKey == null || publicKey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", "Public Key is empty")));
+            return;
+        }
+        if (publicKey.length() != 64) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", "Public Key must be 32 bytes in Hex (64 characters)")));
+            return;
+        }
+        if (privateKey == null || privateKey.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", "Private Key is empty")));
+            return;
+        }
+        if (privateKey.length() != 64) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", "Private Key must be 32 bytes in Hex (64 characters)")));
+            return;
+        }
+        if (plaintext == null || plaintext.trim().isEmpty()) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", "Message is null or empty")));
+            return;
+        }
+
+        try {
+            String url;
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("p_msg", plaintext));
+
+            if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                url = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/decrypt";
+                params.add(new BasicNameValuePair("p_key", privateKey));
+                params.add(new BasicNameValuePair("p_pubkey", publicKey));
+            } else {
+                url = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "nacl/box/seal/encrypt";
+                params.add(new BasicNameValuePair("p_pubkey", publicKey));
+            }
+
+            String result = executePost(url, params, out, encryptorDecrypt, "sealedbox");
+            if (result != null) {
+                NaclResponse resp;
+                if ("decrypt".equalsIgnoreCase(encryptorDecrypt)) {
+                    resp = NaclResponse.decryptSuccess(result, "X25519-XSalsa20-Poly1305 (SealedBox)");
+                } else {
+                    resp = NaclResponse.encryptSuccess(result, "X25519-XSalsa20-Poly1305 (SealedBox)");
+                }
+                out.println(gson.toJson(resp));
+            }
+        } catch (Exception e) {
+            out.println(gson.toJson(NaclResponse.error(encryptorDecrypt, "sealedbox", e.getMessage())));
+        }
+    }
+
+    /**
+     * Execute HTTP POST and return result, or write error response
+     */
+    private String executePost(String url, List<NameValuePair> params, PrintWriter out,
+                               String operation, String algorithm) throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost post = new HttpPost(url);
+        post.setEntity(new UrlEncodedFormEntity(params));
+
+        HttpResponse response = client.execute(post);
+        int statusCode = response.getStatusLine().getStatusCode();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        StringBuilder content = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            content.append(line);
+        }
+
+        if (statusCode != 200) {
+            String errorMsg = statusCode == 404 ?
+                "System Error: " + content.toString() :
+                "System Error. Please try later. If problem persists, raise a feature request.";
+            out.println(gson.toJson(NaclResponse.error(operation, algorithm, errorMsg)));
+            return null;
+        }
+
+        return content.toString();
+    }
 }
