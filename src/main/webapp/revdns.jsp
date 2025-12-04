@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Reverse DNS Lookup Tool Online - PTR Record, IP to Hostname | 8gwifi.org</title>
+    <title>Reverse DNS Lookup (PTR) – IP to Hostname – Free | 8gwifi.org</title>
     <meta name="description" content="Free online Reverse DNS lookup tool. Convert IP addresses to hostnames using PTR records. Supports bulk IP lookups for IPv4 addresses." />
     <meta name="keywords" content="reverse dns lookup, ptr record lookup, ip to hostname, rdns lookup, reverse ip lookup, ptr lookup, ip to domain, reverse dns checker" />
     <meta name="robots" content="index,follow" />
@@ -17,6 +17,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/revdns.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/dns.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Reverse DNS Lookup (PTR) – IP to Hostname" />
+    <meta name="twitter:description" content="Free reverse DNS (PTR) lookup. Resolve IP addresses to hostnames. Bulk IPv4 support for quick analysis." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/dns.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -444,6 +448,13 @@
     </div>
 </div>
 
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="revdnsFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">What is reverse DNS?</h6></div><div class="card-body small text-muted">Reverse DNS resolves an IP address to a hostname by querying PTR records (in‑addr.arpa/ip6.arpa).</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why is PTR important for email?</h6></div><div class="card-body small text-muted">Mail servers often require valid PTR (FCrDNS) for deliverability; missing/mismatched PTR can cause spam rejection.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What if there is no PTR record?</h6></div><div class="card-body small text-muted">It means no hostname is configured for the IP. Contact your ISP/cloud provider to set an appropriate PTR.</div></div>
+</div>
 <!-- Related Tools -->
 <div class="card tool-card mb-4">
     <div class="card-header bg-light py-2">

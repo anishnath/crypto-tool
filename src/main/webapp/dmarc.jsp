@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>DMARC Record Checker - Email Authentication Policy Lookup | 8gwifi.org</title>
+    <title>DMARC Record Lookup & Validator – Free | 8gwifi.org</title>
     <meta name="description" content="Free online DMARC record checker and validator. Lookup DMARC policies, analyze email authentication settings, and verify domain email security configuration." />
     <meta name="keywords" content="dmarc lookup, dmarc record checker, dmarc validator, email authentication, dmarc policy, email security, spf dkim dmarc, domain email protection" />
     <meta name="robots" content="index,follow" />
@@ -17,6 +17,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/dmarc.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/dmarc.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DMARC Record Lookup & Validator" />
+    <meta name="twitter:description" content="Check and validate DMARC records (SPF/DKIM alignment, policy, rua/ruf). Free DMARC checker for domain email security." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/dmarc.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">

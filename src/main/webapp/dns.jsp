@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>DNS Lookup Tool Online - Query A, AAAA, MX, NS, TXT, CNAME Records | 8gwifi.org</title>
+    <title>DNS Lookup – Query A, AAAA, MX, NS, TXT, CNAME (Free) | 8gwifi.org</title>
     <meta name="description" content="Free online DNS lookup tool. Query A, AAAA, MX, NS, TXT, CNAME, CAA, SOA, and other DNS records for any domain. Fast and comprehensive DNS checker." />
     <meta name="keywords" content="dns lookup, dns checker, domain lookup, a record lookup, mx record lookup, ns record lookup, txt record lookup, cname lookup, dns query, dns records" />
     <meta name="robots" content="index,follow" />
@@ -17,6 +17,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/dns.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/dns.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DNS Lookup – Query A, AAAA, MX, NS, TXT, CNAME" />
+    <meta name="twitter:description" content="Free DNS lookup. Query A, AAAA, MX, NS, TXT, CNAME, CAA, SOA, DNSKEY and more. Direct authoritative queries." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/dns.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">

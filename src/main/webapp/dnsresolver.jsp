@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Multi-Resolver DNS Lookup Tool - Compare DNS Servers | 8gwifi.org</title>
+    <title>DNS Propagation Checker – Multi‑Resolver Lookup (Free) | 8gwifi.org</title>
     <meta name="description" content="Free online multi-resolver DNS lookup tool. Query multiple DNS servers (Google, Cloudflare, Quad9, OpenDNS) simultaneously and compare results for A, AAAA, MX, NS, TXT records." />
     <meta name="keywords" content="dns resolver, multi dns lookup, dns comparison, dns propagation, cloudflare dns, google dns, quad9, opendns, dns checker, dns records" />
     <meta name="robots" content="index,follow" />
@@ -17,6 +17,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/dnsresolver.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/dns.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DNS Propagation Checker – Multi‑Resolver Lookup" />
+    <meta name="twitter:description" content="Query Cloudflare, Google, Quad9, OpenDNS and more. Compare DNS answers and propagation for A, AAAA, MX, NS, TXT, CNAME." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/dns.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
