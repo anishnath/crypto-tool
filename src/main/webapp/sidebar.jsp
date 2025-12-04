@@ -328,16 +328,16 @@
                                         <li><a href="systemd-generator.jsp">Systemd Service Generator</a></li>
                                         <li><a href="dockerfile-generator.jsp">Dockerfile Generator</a></li>
                                         <li><a href="firewall-generator.jsp">Firewall Rules Generator</a></li>
-                                        <li><a href="apache-virtualhost-generator.jsp">Apache VirtualHost</a></li>
-                                        <li><a href="github-actions-generator.jsp">GitHub Actions</a></li>
-                                        <li><a href="gitlab-ci-generator.jsp">GitLab CI/CD</a></li>
+                                        <li><a href="apache-virtualhost-generator.jsp">Apache VirtualHost Generator</a></li>
+                                        <li><a href="github-actions-generator.jsp">GitHub Actions Generator</a></li>
+                                        <li><a href="gitlab-ci-generator.jsp">GitLab CI/CD Generator</a></li>
                                         <li><a href="websocket-client.jsp">WebSocket Client</a></li>
                                         <li><a href="prometheus-query-builder.jsp">Prometheus Query Builder</a></li>
                                         <li><a href="curl-builder.jsp">cURL Builder & HTTP Client</a></li>
                                         <li><a href="cron-generator.jsp">Cron Expression Generator</a></li>
                                         <li><a href="helm-chart-generator.jsp">Helm Chart Generator</a></li>
-                                        <li><a href="kube.jsp">Kubernetes Spec Generate</a></li>
-                                        <li><a href="kube1.jsp">Docker to Kubernetes</a></li>
+                                        <li><a href="kube.jsp">Kubernetes YAML Generator</a></li>
+                                        <li><a href="kube1.jsp">Docker Compose to Kubernetes</a></li>
                                         <li><a href="kube2.jsp">Kubernetes to Docker Compose</a></li>
                                         <li><a href="dc.jsp">Docker Compose Generator</a></li>
                                         <li><a href="rbac-policy-generator.jsp">Kubernetes RBAC Policy Generator</a>
@@ -346,8 +346,8 @@
                                         <li><a href="k8s-resource-calculator.jsp">Kubernetes Resource Calculator</a>
                                         </li>
                                         <li><a href="rate-limiter-generator.jsp">API Rate Limiter Generator</a></li>
-                                        <li><a href="dc1.jsp">Docker run to Compose</a></li>
-                                        <li><a href="dc2.jsp">Compose to Docker run</a></li>
+                                        <li><a href="dc1.jsp">Docker Run to Compose</a></li>
+                                        <li><a href="dc2.jsp">Compose to Docker Run</a></li>
                                         <li><a href="aws.jsp">Ansible Generator (AWS)</a></li>
                                         <li><a href="aws-smtp.jsp">AWS SMTP Password Generator</a></li>
                                         <li><a href="inframap.jsp">InfraMap - Terraform State Visualizer</a></li>
@@ -416,6 +416,7 @@
                                         <li><a href="StringFunctions.jsp">String Functions</a></li>
                                         <li><a href="iban-validator.jsp">IBAN Validator & Generator</a></li>
                                         <li><a href="isbn-validator.jsp">ISBN Validator & Converter</a></li>
+                                        <li><a href="html-to-markdown.jsp"><strong>HTML to Markdown</strong> <span class="badge badge-success">New</span></a></li>
                                     </ul>
                                 </div>
                             </div>
