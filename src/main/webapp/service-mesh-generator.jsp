@@ -2,14 +2,36 @@
     <!DOCTYPE html>
     <html>
 
-    <head>
+<head>
         <title>Istio Service Mesh Generator Online – Free | 8gwifi.org</title>
         <meta name="description"
             content="Free Istio generator for Kubernetes. Create canary deployments, blue-green traffic splitting, VirtualServices, DestinationRules, Gateways, mTLS, and authorization policies. No YAML required.">
         <meta name="keywords"
             content="istio generator, canary deployment kubernetes, blue green deployment, service mesh istio, virtualservice generator, destinationrule, istio gateway yaml, mtls kubernetes, istio authorization policy, kubernetes traffic splitting, istio canary release">
         <%@ include file="header-script.jsp" %>
-            <script type="application/ld+json">
+        <link rel="canonical" href="https://8gwifi.org/service-mesh-generator.jsp" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Istio Service Mesh Generator – VirtualService, DestinationRule, Gateway" />
+        <meta property="og:description" content="Generate Istio resources (VirtualService, DestinationRule, Gateway) with mTLS and traffic policies. Free, no signup." />
+        <meta property="og:url" content="https://8gwifi.org/service-mesh-generator.jsp" />
+        <meta property="og:site_name" content="8gwifi.org" />
+        <meta property="og:image" content="https://8gwifi.org/images/site/kube.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Istio Service Mesh Generator – VirtualService, DestinationRule, Gateway" />
+        <meta name="twitter:description" content="Generate Istio resources (VirtualService, DestinationRule, Gateway) with mTLS and traffic policies. Free, no signup." />
+        <meta name="twitter:image" content="https://8gwifi.org/images/site/kube.png" />
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "VirtualService vs DestinationRule?","acceptedAnswer": {"@type": "Answer","text": "VirtualService routes traffic; DestinationRule configures policies (subsets, mTLS, load balancing) for a service."}},
+    {"@type": "Question","name": "How do I enable mTLS?","acceptedAnswer": {"@type": "Answer","text": "Set PeerAuthentication to STRICT and configure DestinationRule trafficPolicy.tls to ISTIO_MUTUAL."}},
+    {"@type": "Question","name": "How to do canary / traffic splitting?","acceptedAnswer": {"@type": "Answer","text": "Define subsets (v1, v2) and use VirtualService weighted routes (e.g., 90/10) with retries/timeouts as needed."}}
+  ]
+}
+        </script>
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -920,6 +942,14 @@ spec:
                     link.click();
                 }
             </script>
+
+            <hr>
+            <h2 class="mt-4" id="faqs">Istio Service Mesh FAQs</h2>
+            <div class="accordion" id="istioFaqs">
+                <div class="card"><div class="card-header"><h6 class="mb-0">VirtualService vs DestinationRule?</h6></div><div class="card-body small text-muted">VirtualService controls routing; DestinationRule defines policies (subsets, mTLS, LB) for a destination.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">How to enable mTLS?</h6></div><div class="card-body small text-muted">Set PeerAuthentication STRICT and DestinationRule trafficPolicy.tls=ISTIO_MUTUAL.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Canary/traffic splitting</h6></div><div class="card-body small text-muted">Create version subsets and weight routes (e.g., 90/10), adding retries/timeouts where needed.</div></div>
+            </div>
 
             <div class="sharethis-inline-share-buttons"></div>
             <%@ include file="footer_adsense.jsp" %>

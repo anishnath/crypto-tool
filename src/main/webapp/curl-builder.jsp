@@ -10,8 +10,8 @@
         "name": "cURL Builder & HTTP Client Online",
         "alternateName": ["cURL Command Generator", "HTTP Request Builder", "REST API Tester", "cURL to Code Converter"],
         "description": "Professional free online cURL builder and HTTP client. Build, test, and debug REST APIs with custom headers, authentication, request body, query parameters. Execute requests, capture responses, import/export cURL commands, and generate code in Python, JavaScript, PHP, Java. Perfect for API testing and development.",
-        "image": "https://8gwifi.org/images/site/curl-builder.png",
-        "screenshot": "https://8gwifi.org/images/site/curl-builder.png",
+        "image": "https://8gwifi.org/images/site/terminal.png",
+        "screenshot": "https://8gwifi.org/images/site/terminal.png",
         "url": "https://8gwifi.org/curl-builder.jsp",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
@@ -178,19 +178,20 @@
 
     <meta name="keywords" content="curl builder online free, curl command generator, http client online, rest api tester, curl to code converter, postman alternative, api testing tool, curl parser, import curl command, custom headers, bearer token, basic auth, request builder, api client"/>
     <meta name="description" content="Free professional cURL builder and HTTP client. Build and test REST APIs with custom headers, authentication, request body, and query parameters. Execute requests, capture responses, import/export cURL commands, generate code in Python/JavaScript/PHP. Perfect Postman alternative. 100% free, no signup required." />
+    <link rel="canonical" href="https://8gwifi.org/curl-builder.jsp" />
 
     <meta name="author" content="Anish Nath">
     <meta property="og:title" content="Free cURL Builder - Advanced HTTP Client & REST API Tester">
     <meta property="og:description" content="Build, test, and debug REST APIs. Execute HTTP requests, capture responses, import cURL commands, generate code. Free Postman alternative.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/curl-builder.jsp">
-    <meta property="og:image" content="https://8gwifi.org/images/site/curl-builder.png">
+    <meta property="og:image" content="https://8gwifi.org/images/site/terminal.png">
     <meta property="og:site_name" content="8gwifi.org">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="cURL Builder - HTTP Client & API Tester Online Free">
     <meta name="twitter:description" content="Build cURL commands, test REST APIs, capture responses. Import/export cURL, generate code. Free forever.">
-    <meta name="twitter:image" content="https://8gwifi.org/images/site/curl-builder.png">
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/terminal.png">
 
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />

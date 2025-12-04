@@ -1,12 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Systemd Service Generator Online – Advanced & Free | 8gwifi.org</title>
+    <title>Systemd Service & Timer Generator – Advanced & Free | 8gwifi.org</title>
     <meta name="description"
-        content="Create hardened Systemd service and timer files online. Advanced features: Security hardening (PrivateTmp, ProtectSystem), Dependencies (Requires/After), and Cron-like timers. Free DevOps tool.">
+        content="Generate systemd service and timer unit files with security hardening, dependencies, restart policies, and watchdog. Free DevOps tool.">
     <meta name="keywords"
         content="systemd generator, systemd service file, linux service generator, systemd timer generator, systemd hardening, devops tools">
+    <link rel="canonical" href="https://8gwifi.org/systemd-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Systemd Service & Timer Generator – Unit Files with Watchdog" />
+    <meta property="og:description" content="Create systemd service and timer units with secure defaults, restart policies, and watchdog. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/systemd-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/terminal.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Systemd Service & Timer Generator – Unit Files with Watchdog" />
+    <meta name="twitter:description" content="Create systemd service and timer units with secure defaults, restart policies, and watchdog. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/terminal.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {
@@ -20,7 +32,7 @@
       "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
       "author": {"@type": "Person", "name": "Anish Nath", "url": "https://8gwifi.org"},
       "datePublished": "2024-01-15",
-      "dateModified": "2025-11-29"
+      "dateModified": "2025-12-01"
     }
     </script>
         <script type="application/ld+json">

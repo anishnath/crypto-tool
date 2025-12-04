@@ -1,15 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>GitLab CI/CD Pipeline Generator – Docker, Auto DevOps & Security | 8gwifi.org</title>
+    <title>GitLab CI/CD Pipeline Generator – Docker, Auto DevOps & Security – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate GitLab CI/CD pipelines with Docker-in-Docker, caching, artifacts, and security scanning. Free .gitlab-ci.yml generator.">
-    <meta name="keywords" content="gitlab ci, gitlab pipeline, ci/cd, gitlab-ci.yml, docker in docker, auto devops">
+    <link rel="canonical" href="https://8gwifi.org/gitlab-ci-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GitLab CI/CD Pipeline Generator – Docker & Deployments" />
+    <meta property="og:description" content="Create robust .gitlab-ci.yml with stages, caching, artifacts, Docker runners, and deployments. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/gitlab-ci-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/gitlab-ci.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GitLab CI/CD Pipeline Generator – Docker & Deployments" />
+    <meta name="twitter:description" content="Create robust .gitlab-ci.yml with stages, caching, artifacts, Docker runners, and deployments. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/gitlab-ci.png" />
+    <meta name="keywords" content="gitlab ci, gitlab pipeline, ci/cd, gitlab-ci.yml, docker in docker, auto devops, gitlab cache, gitlab artifacts">
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"WebApplication","name":"GitLab CI/CD Generator","description":"Generate production-ready GitLab CI/CD pipelines.","url":"https://8gwifi.org/gitlab-ci-generator.jsp","author":{"@type":"Person","name":"Anish Nath"},"datePublished":"2025-01-15"}
+    {"@context":"https://schema.org","@type":"WebApplication","name":"GitLab CI/CD Generator","description":"Generate production-ready GitLab CI/CD pipelines.","url":"https://8gwifi.org/gitlab-ci-generator.jsp","author":{"@type":"Person","name":"Anish Nath"},"datePublished":"2025-01-15","dateModified":"2025-12-01"}
     </script>
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "How do I use Docker runners?","acceptedAnswer": {"@type": "Answer","text": "Select Docker integration; the generator configures image/services and optional DinD."}},
+    {"@type": "Question","name": "How do I cache dependencies?","acceptedAnswer": {"@type": "Answer","text": "Enable caching with keys per job or language to reduce pipeline times."}},
+    {"@type": "Question","name": "Can I deploy to environments?","acceptedAnswer": {"@type": "Answer","text": "Yes. Add environment jobs with manual approvals and environment URLs as needed."}}
+  ]
+}
+        </script>
         <style>
             :root {
                 --theme-primary: #a855f7;

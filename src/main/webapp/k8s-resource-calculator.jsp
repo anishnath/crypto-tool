@@ -2,14 +2,36 @@
     <!DOCTYPE html>
     <html>
 
-    <head>
+<head>
         <title>Kubernetes Resource Calculator Online – Free | 8gwifi.org</title>
         <meta name="description"
             content="Free Kubernetes resource calculator. Calculate optimal CPU and memory requests/limits, generate ResourceQuota and LimitRange YAML, estimate cloud costs for AWS, GCP, and Azure.">
         <meta name="keywords"
             content="kubernetes resource calculator, k8s quota calculator, cpu memory calculator, resourcequota generator, limitrange yaml, kubernetes cost calculator, pod resource limits">
         <%@ include file="header-script.jsp" %>
-            <script type="application/ld+json">
+        <link rel="canonical" href="https://8gwifi.org/k8s-resource-calculator.jsp" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Kubernetes Resource Calculator – Requests & Limits Sizing" />
+        <meta property="og:description" content="Calculate Kubernetes CPU/Memory requests and limits with presets and guidance. Free, no signup." />
+        <meta property="og:url" content="https://8gwifi.org/k8s-resource-calculator.jsp" />
+        <meta property="og:site_name" content="8gwifi.org" />
+        <meta property="og:image" content="https://8gwifi.org/images/site/kube.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Kubernetes Resource Calculator – Requests & Limits Sizing" />
+        <meta name="twitter:description" content="Calculate Kubernetes CPU/Memory requests and limits with presets and guidance. Free, no signup." />
+        <meta name="twitter:image" content="https://8gwifi.org/images/site/kube.png" />
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "What is the difference between requests and limits?","acceptedAnswer": {"@type": "Answer","text": "Requests are the guaranteed minimum for scheduling; limits cap the maximum usage to prevent noisy neighbors."}},
+    {"@type": "Question","name": "How do I size resources for Java/Node/Go?","acceptedAnswer": {"@type": "Answer","text": "Start with language presets, profile under load, and apply a safety margin. Adjust per latency and GC behavior."}},
+    {"@type": "Question","name": "How can I avoid OOMKilled?","acceptedAnswer": {"@type": "Answer","text": "Set memory limits above peak usage with headroom and monitor RSS; avoid aggressive overcommit for critical services."}}
+  ]
+}
+        </script>
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -1038,6 +1060,14 @@
                     link.click();
                 }
             </script>
+
+            <hr>
+            <h2 class="mt-4" id="faqs">Kubernetes Resources FAQs</h2>
+            <div class="accordion" id="k8sResFaqs">
+                <div class="card"><div class="card-header"><h6 class="mb-0">Requests vs limits?</h6></div><div class="card-body small text-muted">Requests guarantee scheduling; limits cap maximum usage. Start with requests≈typical load and add modest headroom.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Language presets guidance</h6></div><div class="card-body small text-muted">Use presets per runtime, then profile under realistic load. Tune CPU for latency and memory for GC or heap growth.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Avoiding OOMKilled</h6></div><div class="card-body small text-muted">Set memory limits above peak, monitor RSS, and avoid extreme overcommit for critical workloads.</div></div>
+            </div>
 
             <div class="sharethis-inline-share-buttons"></div>
             <%@ include file="footer_adsense.jsp" %>

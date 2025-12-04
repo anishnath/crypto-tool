@@ -1,12 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Apache VirtualHost Generator – Reverse Proxy & SSL Config | 8gwifi.org</title>
+    <title>Apache VirtualHost Generator – Reverse Proxy & SSL Config – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate Apache VirtualHost configurations with mod_proxy reverse proxy, mod_rewrite URL rewriting, SSL/TLS, load balancing, and security headers. Free Apache config tool.">
     <meta name="keywords"
         content="apache virtualhost, apache config generator, mod_proxy, mod_rewrite, apache ssl, reverse proxy apache, apache load balancer">
+    <link rel="canonical" href="https://8gwifi.org/apache-virtualhost-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Apache VirtualHost Generator – Reverse Proxy & SSL" />
+    <meta property="og:description" content="Generate Apache vhost configs with SSL, reverse proxy, HTTP/2, and security headers. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/apache-virtualhost-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Apache VirtualHost Generator – Reverse Proxy & SSL" />
+    <meta name="twitter:description" content="Generate Apache vhost configs with SSL, reverse proxy, HTTP/2, and security headers. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {

@@ -8,6 +8,17 @@
             content="Generate Kubernetes RBAC policies visually. Create Roles, ClusterRoles, and Bindings without writing YAML. Free online K8s security tool.">
         <meta name="keywords"
             content="kubernetes rbac generator, k8s role generator, clusterrole builder, rbac policy, kubernetes security, yaml generator">
+        <link rel="canonical" href="https://8gwifi.org/rbac-policy-generator.jsp" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Kubernetes RBAC Policy Generator – Roles, ClusterRoles, Bindings" />
+        <meta property="og:description" content="Generate Kubernetes RBAC YAML visually: Roles, ClusterRoles, and Bindings. Free, no signup." />
+        <meta property="og:url" content="https://8gwifi.org/rbac-policy-generator.jsp" />
+        <meta property="og:site_name" content="8gwifi.org" />
+        <meta property="og:image" content="https://8gwifi.org/images/site/kube.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Kubernetes RBAC Policy Generator – Roles, ClusterRoles, Bindings" />
+        <meta name="twitter:description" content="Generate Kubernetes RBAC YAML visually: Roles, ClusterRoles, and Bindings. Free, no signup." />
+        <meta name="twitter:image" content="https://8gwifi.org/images/site/kube.png" />
         <%@ include file="header-script.jsp" %>
             <script type="application/ld+json">
     {
@@ -23,6 +34,7 @@
         "name": "Anish Nath"
       },
       "datePublished": "2025-02-01",
+      "dateModified": "2025-12-01",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -36,6 +48,17 @@
       ]
     }
     </script>
+            <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "When should I use Role vs ClusterRole?","acceptedAnswer": {"@type": "Answer","text": "Use Role for namespaced permissions and ClusterRole for cluster-wide resources or multiple namespaces."}},
+    {"@type": "Question","name": "What verbs should I grant?","acceptedAnswer": {"@type": "Answer","text": "Follow least-privilege: start with get/list/watch for read-only, add create/update/patch/delete only when required."}},
+    {"@type": "Question","name": "How do I bind permissions?","acceptedAnswer": {"@type": "Answer","text": "Use RoleBinding to bind a Role in a namespace; use ClusterRoleBinding to bind a ClusterRole."}}
+  ]
+}
+            </script>
             <style>
                 :root {
                     --theme-primary: #0f1689;

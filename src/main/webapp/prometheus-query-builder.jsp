@@ -10,8 +10,8 @@
         "name": "Free Prometheus Query Builder & PromQL Tester Online",
         "alternateName": ["PromQL Builder", "Prometheus Query Tool", "PromQL Tester", "Prometheus Alert Generator"],
         "description": "Professional free online Prometheus Query Builder with PromQL editor, syntax validation, time-series chart visualization, alert rule generator, and 50+ query templates. Test and build monitoring queries for Kubernetes, containers, and infrastructure. Perfect for DevOps, SRE, and monitoring engineers.",
-        "image": "https://8gwifi.org/images/site/prometheus-query-builder.png",
-        "screenshot": "https://8gwifi.org/images/site/prometheus-query-builder.png",
+        "image": "https://8gwifi.org/images/site/logo.png",
+        "screenshot": "https://8gwifi.org/images/site/logo.png",
         "url": "https://8gwifi.org/prometheus-query-builder.jsp",
         "applicationCategory": "DeveloperApplication",
         "applicationSubCategory": "Monitoring & Observability Tool",
@@ -118,7 +118,7 @@
     }
     </script>
 
-    <title>Prometheus Query Builder Online Free - PromQL Tester, Validator & Alert Generator</title>
+    <title>Prometheus Query Builder Online – PromQL Tester, Validator & Alert Generator – Free | 8gwifi.org</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -130,13 +130,13 @@
     <meta property="og:description" content="Build and test Prometheus queries with live validation, time-series visualization, and alert rule generation. 50+ templates for monitoring.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/prometheus-query-builder.jsp">
-    <meta property="og:image" content="https://8gwifi.org/images/site/prometheus-query-builder.png">
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png">
     <meta property="og:site_name" content="8gwifi.org">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Prometheus Query Builder - PromQL Tester Online Free">
     <meta name="twitter:description" content="Build Prometheus queries, test PromQL, generate alert rules. Free online tool with 50+ templates.">
-    <meta name="twitter:image" content="https://8gwifi.org/images/site/prometheus-query-builder.png">
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png">
 
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
@@ -639,15 +639,33 @@
                 font-size: 1.5rem;
             }
         }
-    </style>
+</style>
 </head>
 
 <%@ include file="body-script.jsp"%>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "When should I use rate, irate, or increase?","acceptedAnswer": {"@type": "Answer","text": "Use rate() for stable per-second rates, irate() for spiky/instant rates, and increase() for totals over intervals."}},
+    {"@type": "Question","name": "How do group aggregations work?","acceptedAnswer": {"@type": "Answer","text": "Use sum/avg by(...) to keep labels; control matching in binary ops with on()/ignoring and group_left/right."}},
+    {"@type": "Question","name": "How can I reduce high cardinality?","acceptedAnswer": {"@type": "Answer","text": "Use recording rules to pre-aggregate, drop noisy labels, and limit wildcard matchers on hot series."}}
+  ]
+}
+</script>
 
 <h1 class="mt-4">Free Prometheus Query Builder & PromQL Tester</h1>
 <p>Build, test, and visualize Prometheus queries with live validation and time-series charts</p>
 
 <hr>
+
+<h2 class="mt-4" id="faqs">Prometheus & PromQL FAQs</h2>
+<div class="accordion" id="promFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">When should I use rate, irate, or increase?</h6></div><div class="card-body small text-muted">Use rate() for stable per-second rates, irate() for instantaneous rates on spiky series, and increase() for total change over the range.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How do group aggregations work?</h6></div><div class="card-body small text-muted">Use sum/avg by(...) to keep grouping labels; for binary ops use on()/group_left/right with ignoring/without to control label matching.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How do I reduce high cardinality?</h6></div><div class="card-body small text-muted">Pre-aggregate with recording rules, drop unneeded labels, and avoid wildcard-heavy matchers in hot paths.</div></div>
+</div>
 
         <div class="info-box">
             <h3>🚀 Professional Prometheus Query Builder</h3>
@@ -2277,5 +2295,3 @@
 </script>
 </div>
 <%@ include file="body-close.jsp"%>
-
-

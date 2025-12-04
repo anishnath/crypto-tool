@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -7,8 +8,19 @@
         content="Generate production-ready Nginx configurations online. Advanced features: Reverse Proxy, Load Balancing, Security Headers (HSTS, CSP), SPA routing, and Performance tuning. Free DevOps tool.">
     <meta name="keywords"
         content="nginx config generator, nginx online tool, nginx reverse proxy, nginx load balancing, nginx security headers, nginx hsts config, devops tools">
+    <link rel="canonical" href="https://8gwifi.org/nginx-config-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nginx Config Generator – Reverse Proxy, SSL & Performance" />
+    <meta property="og:description" content="Generate secure, high-performance Nginx configs with reverse proxy, load balancing, and security headers. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/nginx-config-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/nginx.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nginx Config Generator – Reverse Proxy, SSL & Performance" />
+    <meta name="twitter:description" content="Generate secure, high-performance Nginx configs with reverse proxy, load balancing, and security headers. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/nginx.png" />
     <%@ include file="header-script.jsp" %>
-        <script type="application/ld+json">
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -20,7 +32,7 @@
       "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
       "author": {"@type": "Person", "name": "Anish Nath", "url": "https://8gwifi.org"},
       "datePublished": "2024-01-15",
-      "dateModified": "2025-11-29"
+      "dateModified": "2025-12-01"
     }
     </script>
         <script type="application/ld+json">

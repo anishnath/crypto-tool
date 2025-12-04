@@ -24,11 +24,33 @@
     }
     </script>
 
-    <title>Advanced Cron Expression Generator Online Free | Build Crontab Schedule | 8gwifi.org</title>
+    <title>Advanced Cron Expression Generator Online – Build Crontab Schedules – Free | 8gwifi.org</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free online cron expression generator with visual builder, 50+ examples, validation, and next execution times. Build and test Unix/Linux crontab schedules easily.">
+    <link rel="canonical" href="https://8gwifi.org/cron-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cron Expression Generator – Visual Builder & Next Run Times" />
+    <meta property="og:description" content="Build and validate cron expressions with a visual builder and 50+ examples. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/cron-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cron Expression Generator – Visual Builder & Next Run Times" />
+    <meta name="twitter:description" content="Build and validate cron expressions with a visual builder and 50+ examples. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "How do I run a job every 5 minutes?","acceptedAnswer": {"@type": "Answer","text": "Use */5 * * * * to run every five minutes."}},
+    {"@type": "Question","name": "How do I schedule for specific days?","acceptedAnswer": {"@type": "Answer","text": "Use the Day-of-Week field (0-6 or SUN-SAT). For example, MON-FRI for weekdays."}},
+    {"@type": "Question","name": "Does cron support time zones?","acceptedAnswer": {"@type": "Answer","text": "System cron typically uses the server's time zone. Use environment variables or systemd timers for per-task zones."}}
+  ]
+}
+    </script>
     <meta name="keywords" content="cron generator, crontab generator, cron expression builder, cron syntax, schedule generator, unix cron, linux cron, cron validator, cron parser, quartz cron, spring cron, task scheduler, cron examples">
     <meta name="author" content="8gwifi.org">
     <meta name="robots" content="index, follow">

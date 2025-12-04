@@ -1,12 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Firewall Rules Generator – UFW & iptables with Rate Limiting | 8gwifi.org</title>
+    <title>Firewall Rules Generator – UFW, iptables, nftables with Rate Limiting – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate firewall rules for UFW and iptables with advanced features: rate limiting, DDoS protection, service presets, and IP filtering. Free Linux firewall configuration tool.">
     <meta name="keywords"
-        content="ufw firewall, iptables generator, firewall rules, rate limiting, ddos protection, linux firewall, ufw config, iptables config">
+        content="ufw firewall, iptables generator, nftables, firewall rules, rate limiting, ddos protection, linux firewall, ufw config, iptables config">
+    <link rel="canonical" href="https://8gwifi.org/firewall-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Firewall Rules Generator – UFW, iptables, nftables" />
+    <meta property="og:description" content="Generate firewall rules with safe defaults and rate limiting. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/firewall-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Firewall Rules Generator – UFW, iptables, nftables" />
+    <meta name="twitter:description" content="Generate firewall rules with safe defaults and rate limiting. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {

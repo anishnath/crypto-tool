@@ -1,16 +1,39 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>GitHub Actions Workflow Generator – Matrix Builds & Deployments | 8gwifi.org</title>
+    <title>GitHub Actions Workflow Generator – Matrix Builds & Deployments – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate GitHub Actions workflows with matrix builds, caching, artifacts, and deployment configurations. Free CI/CD pipeline generator for GitHub.">
     <meta name="keywords"
-        content="github actions, ci/cd, workflow generator, matrix build, github pipeline, continuous integration">
+        content="github actions, ci/cd, workflow generator, matrix build, github pipeline, continuous integration, github cache, github artifacts">
+    <link rel="canonical" href="https://8gwifi.org/github-actions-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GitHub Actions Workflow Generator – Matrix Builds & Deployments" />
+    <meta property="og:description" content="Generate ready-to-use GitHub Actions with matrix builds, caching, artifacts, and deployments. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/github-actions-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GitHub Actions Workflow Generator – Matrix Builds & Deployments" />
+    <meta name="twitter:description" content="Generate ready-to-use GitHub Actions with matrix builds, caching, artifacts, and deployments. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"WebApplication","name":"GitHub Actions Generator","description":"Generate production-ready GitHub Actions workflows.","url":"https://8gwifi.org/github-actions-generator.jsp","author":{"@type":"Person","name":"Anish Nath"},"datePublished":"2025-01-15"}
+    {"@context":"https://schema.org","@type":"WebApplication","name":"GitHub Actions Generator","description":"Generate production-ready GitHub Actions workflows.","url":"https://8gwifi.org/github-actions-generator.jsp","author":{"@type":"Person","name":"Anish Nath"},"datePublished":"2025-01-15","dateModified":"2025-12-01"}
     </script>
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "How do I enable matrix builds?","acceptedAnswer": {"@type": "Answer","text": "Pick languages/versions in the generator; it emits a strategy.matrix with OS and version axes."}},
+    {"@type": "Question","name": "How can I speed up workflows?","acceptedAnswer": {"@type": "Answer","text": "Enable dependency caching, use setup actions with caching, and limit concurrency for long-running jobs."}},
+    {"@type": "Question","name": "How do I manage secrets?","acceptedAnswer": {"@type": "Answer","text": "Add repository or environment secrets in GitHub and reference them via ${{ secrets.MY_SECRET }} in steps."}}
+  ]
+}
+        </script>
         <style>
             :root {
                 --theme-primary: #4f46e5;

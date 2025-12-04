@@ -1,10 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Load Testing Script Generator Online – Free | 8gwifi.org</title>
+    <title>Load Testing Script Generator – k6, Locust, JMeter, Gatling – Free | 8gwifi.org</title>
     <meta name="description"
-        content="Generate production-ready load testing scripts for K6, Locust, JMeter, Gatling, Artillery, and Vegeta. Visual scenario builder with multi-step workflows and performance thresholds.">
+        content="Generate load testing scripts for k6, Locust, JMeter, Gatling, Artillery, and Vegeta with visual scenarios and thresholds. Free, no signup.">
+    <link rel="canonical" href="https://8gwifi.org/load-test-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Load Testing Script Generator – k6, Locust, JMeter, Gatling" />
+    <meta property="og:description" content="Create load testing scripts with scenarios, thresholds and reports. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/load-test-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Load Testing Script Generator – k6, Locust, JMeter, Gatling" />
+    <meta name="twitter:description" content="Create load testing scripts with scenarios, thresholds and reports. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <meta name="keywords"
         content="k6 script generator, locust load test, jmeter script, gatling simulation, artillery load testing, vegeta attack, performance testing, stress testing, load testing tool">
     <%@ include file="header-script.jsp" %>
@@ -22,6 +34,7 @@
         "name": "Anish Nath"
       },
       "datePublished": "2025-01-31",
+      "dateModified": "2025-12-01",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -32,6 +45,17 @@
         "Multi-framework Support (K6, Locust, JMeter, Gatling, Artillery, Vegeta)",
         "Performance Threshold Configuration",
         "One-click Script Generation"
+      ]
+    }
+    </script>
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question","name": "When should I use VUs vs RPS (k6)?","acceptedAnswer": {"@type": "Answer","text": "Use VUs to model concurrent users; use RPS for throughput targets. Combine with thresholds for SLOs."}},
+        {"@type": "Question","name": "How do I model multi-step user flows?","acceptedAnswer": {"@type": "Answer","text": "Group steps into scenarios with think time between actions; use tags to correlate metrics and results."}},
+        {"@type": "Question","name": "How do I run tests in CI/CD?","acceptedAnswer": {"@type": "Answer","text": "Export scripts and run via CLI in GitHub Actions/GitLab CI; fail builds using thresholds on latency or error rate."}}
       ]
     }
     </script>
@@ -215,7 +239,7 @@
                 background: var(--theme-light);
                 transform: translateY(-2px)
             }
-        </style>
+</style>
 </head>
 <%@ include file="body-script.jsp" %>
     <%@ include file="devops-tools-navbar.jsp" %>
@@ -316,6 +340,50 @@
                                     </div>
                                 </div>
 
+                                <!-- Authentication -->
+                                <div class="form-section">
+                                    <div class="form-section-title"><i class="fas fa-lock"></i> Authentication</div>
+                                    <div class="form-group">
+                                        <label>Auth Type</label>
+                                        <select class="form-control" id="authType" onchange="toggleAuthFields()">
+                                            <option value="none">None</option>
+                                            <option value="basic">Basic Auth</option>
+                                            <option value="bearer">Bearer Token</option>
+                                            <option value="apikey">API Key</option>
+                                        </select>
+                                    </div>
+                                    <div id="authFields" style="display: none;">
+                                        <div id="basicAuthFields" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Username</label>
+                                                <input type="text" class="form-control" id="authUsername">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Password</label>
+                                                <input type="password" class="form-control" id="authPassword">
+                                            </div>
+                                        </div>
+                                        <div id="bearerAuthFields" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Token</label>
+                                                <input type="text" class="form-control" id="authToken"
+                                                    placeholder="eyJhbGciOi...">
+                                            </div>
+                                        </div>
+                                        <div id="apiKeyFields" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Key Name</label>
+                                                <input type="text" class="form-control" id="authKeyName"
+                                                    placeholder="X-API-Key">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Key Value</label>
+                                                <input type="text" class="form-control" id="authKeyValue">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Load Configuration -->
                                 <div class="form-section">
                                     <div class="form-section-title"><i class="fas fa-users"></i> Load Pattern</div>
@@ -347,6 +415,12 @@
                                             <option value="spike">Spike Test</option>
                                             <option value="stress">Stress Test</option>
                                         </select>
+                                    </div>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="distributedMode"
+                                            onchange="generateAllScripts()">
+                                        <label class="custom-control-label" for="distributedMode">Distributed Mode
+                                            (Cluster)</label>
                                     </div>
                                 </div>
 
@@ -748,15 +822,89 @@
                 const unit = document.getElementById('durationUnit').value;
                 const enableThresholds = document.getElementById('enableThresholds').checked;
                 const maxResponseTime = document.getElementById('maxResponseTime').value;
-                const maxErrorRate = document.getElementById('maxErrorRate').value;
                 const p95 = document.getElementById('p95ResponseTime').value;
+                const loadPattern = document.getElementById('loadPattern').value;
+
+                // Auth
+                const authType = document.getElementById('authType').value;
+                let authHeaders = '';
+                if (authType === 'basic') {
+                    // K6 handles basic auth in options or headers, but headers is easier for per-request
+                    // Actually K6 has a nice way: http.get(url, { headers: { 'Authorization': 'Basic ' + encoding.b64encode(user + ':' + pass) } })
+                    // But simpler to just assume user knows or use a helper. 
+                    // Let's use a simple header injection for now.
+                    const user = document.getElementById('authUsername').value;
+                    const pass = document.getElementById('authPassword').value;
+                    // Note: K6 requires encoding module for b64encode, or we can just say 'Basic <base64>'
+                    // For simplicity in this generator, we'll add a comment or use a placeholder function
+                    authHeaders = `, { headers: { 'Authorization': 'Basic ' + encoding.b64encode('${user}:${pass}') } }`;
+                } else if (authType === 'bearer') {
+                    const token = document.getElementById('authToken').value;
+                    authHeaders = `, { headers: { 'Authorization': 'Bearer ${token}' } }`;
+                } else if (authType === 'apikey') {
+                    const key = document.getElementById('authKeyName').value;
+                    const val = document.getElementById('authKeyValue').value;
+                    authHeaders = `, { headers: { '${key}': '${val}' } }`;
+                }
 
                 let script = `import http from 'k6/http';
 import { check, sleep } from 'k6';
+import encoding from 'k6/encoding';
 
 export const options = {
   vus: ${vus},
   duration: '${duration}${unit}',`;
+
+                if (document.getElementById('distributedMode').checked) {
+                    script = `/* 
+ * DISTRIBUTED MODE ENABLED
+ * To run this in distributed mode with K6:
+ * k6 run --execution-segment "0:1/4" script.js  # Instance 1
+ * k6 run --execution-segment "1/4:2/4" script.js # Instance 2
+ * ...
+ */
+` + script;
+                }
+
+                if (loadPattern === 'ramp') {
+                    // Calculate stages based on duration
+                    // Simple ramp: 1/3 ramp up, 1/3 stay, 1/3 ramp down
+                    // We need to parse duration and unit to split it, but for simplicity let's just use fixed stages relative to total
+                    // Actually K6 stages override duration.
+                    script = script.replace(`duration: '${duration}${unit}',`, '');
+                    script = script.replace(`vus: ${vus},`, '');
+
+                    script += `
+  stages: [
+    { duration: '10s', target: ${Math.floor(vus / 2)} }, // Ramp up to 50%
+    { duration: '20s', target: ${vus} }, // Ramp up to 100%
+    { duration: '${duration}${unit}', target: ${vus} }, // Stay at 100%
+    { duration: '10s', target: 0 }, // Ramp down
+  ],`;
+                } else if (loadPattern === 'spike') {
+                    script = script.replace(`duration: '${duration}${unit}',`, '');
+                    script = script.replace(`vus: ${vus},`, '');
+                    script += `
+  stages: [
+    { duration: '10s', target: ${Math.floor(vus / 5)} }, // Warm up
+    { duration: '10s', target: ${vus * 2} }, // Spike!
+    { duration: '1m', target: ${vus * 2} }, // Hold spike
+    { duration: '10s', target: 0 }, // Cool down
+  ],`;
+                } else if (loadPattern === 'stress') {
+                    script += `
+  stages: [
+    { duration: '1m', target: ${vus} },
+    { duration: '2m', target: ${vus} },
+    { duration: '1m', target: ${vus * 2} }, // Stress point
+    { duration: '2m', target: ${vus * 2} },
+    { duration: '1m', target: 0 },
+  ],`;
+                    // Remove default duration/vus if we use stages, but for stress we might want to keep them as base
+                    // K6 prefers stages for this.
+                    script = script.replace(`duration: '${duration}${unit}',`, '');
+                    script = script.replace(`vus: ${vus},`, '');
+                }
 
                 if (enableThresholds) {
                     script += `
@@ -774,8 +922,12 @@ export default function() {`;
                 steps.forEach((step, index) => {
                     if (step.type === 'http') {
                         const url = step.path.startsWith('http') ? step.path : `\${baseUrl}${step.path}`;
+                        let params = authHeaders || '';
+                        if (!params && step.method === 'POST') params = ', { headers: { "Content-Type": "application/json" } }';
+                        // Merge auth headers if exists
+
                         script += `
-  const res${index} = http.${step.method.toLowerCase()}('${url}');`;
+  const res${index} = http.${step.method.toLowerCase()}('${url}'${params});`;
 
                         script += `
   check(res${index}, {
@@ -801,12 +953,42 @@ export default function() {`;
                 const testName = document.getElementById('testName').value;
                 const baseUrl = document.getElementById('baseUrl').value;
 
+                const authType = document.getElementById('authType').value;
+                let authHeaders = '';
+
                 let script = `from locust import HttpUser, task, between
 
 class ${testName.replace(/[^a-zA-Z0-9]/g, '')}User(HttpUser):
     wait_time = between(1, 3)
     host = '${baseUrl}'
 `;
+                if (document.getElementById('distributedMode').checked) {
+                    script = `# DISTRIBUTED MODE
+# Run master: locust -f script.py --master
+# Run worker: locust -f script.py --worker --master-host=<master-ip>
+` + script;
+                }
+
+                if (authType === 'basic') {
+                    const user = document.getElementById('authUsername').value;
+                    const pass = document.getElementById('authPassword').value;
+                    script += `    # Basic Auth is handled automatically if provided in URL or via client.auth
+    # self.client.auth = ('${user}', '${pass}')
+`;
+                } else if (authType === 'bearer') {
+                    const token = document.getElementById('authToken').value;
+                    script += `    
+    def on_start(self):
+        self.client.headers.update({'Authorization': 'Bearer ${token}'})
+`;
+                } else if (authType === 'apikey') {
+                    const key = document.getElementById('authKeyName').value;
+                    const val = document.getElementById('authKeyValue').value;
+                    script += `    
+    def on_start(self):
+        self.client.headers.update({'${key}': '${val}'})
+`;
+                }
 
                 steps.forEach((step, index) => {
                     if (step.type === 'http') {
@@ -817,6 +999,31 @@ class ${testName.replace(/[^a-zA-Z0-9]/g, '')}User(HttpUser):
         self.client.${step.method.toLowerCase()}('${step.path}')`;
                     }
                 });
+
+                if (loadPattern === 'ramp' || loadPattern === 'spike') {
+                    script += `
+
+from locust import LoadTestShape
+
+class StepLoadShape(LoadTestShape):
+    """
+    A step load shape
+    """
+    step_time = 30
+    step_load = 10
+    spawn_rate = 10
+    limit = ${vus}
+
+    def tick(self):
+        run_time = self.get_run_time()
+        if run_time > self.step_time:
+            self.step_time += 30
+            self.step_load += 10
+            if self.step_load > self.limit:
+                self.step_load = self.limit
+        return (self.step_load, self.spawn_rate)
+`;
+                }
 
                 document.getElementById('locustOutput').textContent = script;
             }
@@ -838,7 +1045,11 @@ class ${testName.replace(/[^a-zA-Z0-9]/g, '')}User(HttpUser):
         <stringProp name="ThreadGroup.num_threads">${vus}</stringProp>
         <stringProp name="ThreadGroup.duration">${duration}</stringProp>
       </ThreadGroup>
+      <!-- Distributed Mode: To run distributed, configure remote_hosts in jmeter.properties and run: jmeter -n -t script.jmx -r -->
       <hashTree>`;
+                if (document.getElementById('distributedMode').checked) {
+                    // JMeter distributed mode is mostly config outside the script, but we can add a comment property
+                }
 
                 steps.forEach((step) => {
                     if (step.type === 'http') {
@@ -1141,6 +1352,16 @@ scenarios:
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = filename;
+                link.click();
+            }
+
+            function toggleAuthFields() {
+                const type = document.getElementById('authType').value;
+                document.getElementById('authFields').style.display = type === 'none' ? 'none' : 'block';
+                document.getElementById('basicAuthFields').style.display = type === 'basic' ? 'block' : 'none';
+                document.getElementById('bearerAuthFields').style.display = type === 'bearer' ? 'block' : 'none';
+                document.getElementById('apiKeyFields').style.display = type === 'apikey' ? 'block' : 'none';
+                generateAllScripts();
             }
         </script>
 
@@ -1221,7 +1442,15 @@ scenarios:
             </div>
         </div>
 
-        <div class="sharethis-inline-share-buttons"></div>
+            <hr>
+            <h2 class="mt-4" id="faqs">Load Testing FAQs</h2>
+            <div class="accordion" id="ltFaqs">
+                <div class="card"><div class="card-header"><h6 class="mb-0">When should I use VUs vs RPS (k6)?</h6></div><div class="card-body small text-muted">VUs emulate users and think time; RPS targets throughput. Use thresholds to enforce SLOs.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">How do I model multi-step flows?</h6></div><div class="card-body small text-muted">Define scenarios with sequential steps and think time; tag requests to group results.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Can I run tests in CI?</h6></div><div class="card-body small text-muted">Yes—run via CLI in GitHub Actions/GitLab CI and fail builds using latency/error thresholds.</div></div>
+            </div>
+
+            <div class="sharethis-inline-share-buttons"></div>
         <%@ include file="footer_adsense.jsp" %>
             <%@ include file="thanks.jsp" %>
                 <hr>

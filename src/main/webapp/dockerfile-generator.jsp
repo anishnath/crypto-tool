@@ -1,12 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Dockerfile Generator Online – Multi-Stage Builds & Security | 8gwifi.org</title>
+    <title>Dockerfile Generator – Multi-Stage, Secure & Best Practices – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate production-ready Dockerfiles with multi-stage builds, security best practices, and optimization. Advanced Docker container generator with popular base images (Node, Python, Go, Java, .NET, Rust).">
     <meta name="keywords"
-        content="dockerfile generator, docker multi-stage builds, docker security, docker optimization, container best practices, dockerfile online, docker base images">
+        content="dockerfile generator, docker multi-stage builds, docker security, non-root docker, docker optimization, container best practices, dockerfile online, docker base images">
+    <link rel="canonical" href="https://8gwifi.org/dockerfile-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dockerfile Generator – Multi-Stage, Secure & Best Practices" />
+    <meta property="og:description" content="Create secure Dockerfiles with multi-stage builds, non-root, caching and healthchecks. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/dockerfile-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dockerfile Generator – Multi-Stage, Secure & Best Practices" />
+    <meta name="twitter:description" content="Create secure Dockerfiles with multi-stage builds, non-root, caching and healthchecks. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {

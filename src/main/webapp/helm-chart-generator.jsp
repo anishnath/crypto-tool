@@ -3,15 +3,37 @@
 <html>
 
 <head>
-    <title>Helm Chart Generator – Kubernetes Chart Scaffolder | 8gwifi.org</title>
+    <title>Helm Chart Generator – Kubernetes Chart Scaffolder – Free | 8gwifi.org</title>
     <meta name="description"
         content="Generate production-ready Helm charts with deployments, services, ingress, HPA, and more. Free Kubernetes chart generator.">
     <meta name="keywords"
-        content="helm chart, kubernetes, helm generator, k8s chart, helm scaffolder, kubernetes deployment">
+        content="helm chart, kubernetes, helm generator, k8s chart, helm scaffolder, kubernetes deployment, values.yaml, ingress, hpa">
+    <link rel="canonical" href="https://8gwifi.org/helm-chart-generator.jsp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Helm Chart Generator – Kubernetes Charts with Deploy, Ingress, HPA" />
+    <meta property="og:description" content="Generate complete Helm charts: Deployments, Services, Ingress, HPA, and more. Free, no signup." />
+    <meta property="og:url" content="https://8gwifi.org/helm-chart-generator.jsp" />
+    <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/helm-chart-generator.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Helm Chart Generator – Kubernetes Charts with Deploy, Ingress, HPA" />
+    <meta name="twitter:description" content="Generate complete Helm charts: Deployments, Services, Ingress, HPA, and more. Free, no signup." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/helm-chart-generator.png" />
     <%@ include file="header-script.jsp" %>
         <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"WebApplication","name":"Helm Chart Generator","description":"Generate complete Helm charts for Kubernetes applications.","url":"https://8gwifi.org/helm-chart-generator.jsp","author":{"@type":"Person","name":"Anish Nath"},"datePublished":"2025-01-15"}
     </script>
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "How do I structure values.yaml?","acceptedAnswer": {"@type": "Answer","text": "Keep image, resources, service, ingress, and autoscaling keys at the top level for clarity; the generator outputs a clean default structure."}},
+    {"@type": "Question","name": "Does this support Ingress and HPA?","acceptedAnswer": {"@type": "Answer","text": "Yes. Toggle Ingress and HorizontalPodAutoscaler; YAML is generated with sensible defaults."}},
+    {"@type": "Question","name": "Can I download the chart?","acceptedAnswer": {"@type": "Answer","text": "Yes. Copy individual files or download the full chart as a bundle."}}
+  ]
+}
+        </script>
         <style>
             :root {
                 --theme-primary: #0f1689;

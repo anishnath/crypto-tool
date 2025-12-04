@@ -1,10 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebSocket Test Client - Online WebSocket Server Testing Tool</title>
+    <title>WebSocket Test Client – Online WebSocket Server Testing Tool – Free | 8gwifi.org</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <meta name="keywords" content="websocket test client, online websocket server tester, websocket debugging, real-time communication testing, websocket connection test, websocket client tool, websocket server validation" />
     <meta name="description" content="Free online WebSocket test client for testing WebSocket servers. Test real-time connections, debug WebSocket issues, and validate server configurations with instant feedback and comprehensive logging." />
+    <link rel="canonical" href="https://8gwifi.org/websocket-client.jsp" />
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <meta name="resource-type" content="document" />
@@ -18,13 +20,28 @@
     <meta property="og:description" content="Test WebSocket servers online with instant connection feedback, real-time messaging, and comprehensive debugging capabilities." />
     <meta property="og:url" content="https://8gwifi.org/websocket-client.jsp" />
     <meta property="og:site_name" content="8gwifi.org" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/websocket-client.png" />
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="WebSocket Test Client - Online WebSocket Server Testing Tool" />
     <meta name="twitter:description" content="Test WebSocket servers online with instant connection feedback and real-time messaging." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/websocket-client.png" />
     
     <%@ include file="header-script.jsp"%>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question","name": "How do I connect to WSS with self-signed certificates?","acceptedAnswer": {"@type": "Answer","text": "Browsers typically block invalid certificates. Install a trusted cert or test via a proxy that terminates TLS with a valid certificate."}},
+        {"@type": "Question","name": "Why do I get 'Error during WebSocket handshake'?","acceptedAnswer": {"@type": "Answer","text": "Usually a 4xx/426 response. Check upgrade headers, CORS, and that the server supports WS/WSS at the requested path."}},
+        {"@type": "Question","name": "How can I set custom headers or protocols?","acceptedAnswer": {"@type": "Answer","text": "Use the 'Sec-WebSocket-Protocol' field for subprotocols. Custom headers are restricted in browsers; use a reverse proxy when needed."}},
+        {"@type": "Question","name": "How do ping/pong keep-alives work?","acceptedAnswer": {"@type": "Answer","text": "Servers usually initiate pings; the client replies with pong automatically. If idle connections drop, configure periodic pings server-side."}}
+      ]
+    }
+    </script>
 
     <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
@@ -364,6 +381,28 @@
     <li><strong><em>IoT applications</em></strong> (device monitoring, control systems)</li>
     <li><strong><em>Financial applications</em></strong> (trading platforms, price feeds)</li>
 </ul>
+
+<hr>
+
+<h2 class="mt-4" id="faqs">WebSocket FAQs</h2>
+<div class="accordion" id="wsFaqs">
+  <div class="card">
+    <div class="card-header"><h6 class="mb-0">How do I connect to WSS with self-signed certificates?</h6></div>
+    <div class="card-body small text-muted">Browsers block invalid certs; use a valid TLS cert or a proxy that terminates TLS with a trusted certificate.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h6 class="mb-0">Why do I get “Error during WebSocket handshake”?</h6></div>
+    <div class="card-body small text-muted">Check Upgrade/Connection headers, ensure the endpoint supports WS/WSS, and verify CORS and auth requirements.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h6 class="mb-0">Can I set custom headers or subprotocols?</h6></div>
+    <div class="card-body small text-muted">Browsers restrict custom headers. Use Sec-WebSocket-Protocol for subprotocols or a reverse proxy to inject headers.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h6 class="mb-0">How do ping/pong keep-alives work?</h6></div>
+    <div class="card-body small text-muted">Servers send pings; clients respond with pong. Configure periodic pings server-side to keep connections alive.</div>
+  </div>
+  </div>
 
 <hr>
 

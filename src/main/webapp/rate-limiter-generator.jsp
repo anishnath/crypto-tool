@@ -2,14 +2,36 @@
     <!DOCTYPE html>
     <html>
 
-    <head>
-        <title>API Rate Limiter Generator – Cloudflare, Redis, Nginx | DDoS Protection | 8gwifi.org</title>
+<head>
+    <title>API Rate Limiter Generator – Cloudflare, Redis, Nginx – Free | 8gwifi.org</title>
         <meta name="description"
             content="Free API rate limiter generator for Cloudflare Workers, Redis, Nginx, Kong, Express.js. Token bucket, sliding window algorithms. Stop DDoS attacks, prevent API abuse, implement API throttling.">
         <meta name="keywords"
             content="cloudflare rate limit, cloudflare workers rate limiting, api rate limiting, ddos protection, token bucket algorithm, sliding window rate limit, redis rate limiter, nginx rate limit, api throttling, prevent api abuse, cloudflare ddos, rate limit api, api gateway rate limiting">
         <%@ include file="header-script.jsp" %>
-            <script type="application/ld+json">
+        <link rel="canonical" href="https://8gwifi.org/rate-limiter-generator.jsp" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="API Rate Limiter Generator – Token/Leaky Bucket & Sliding Window" />
+        <meta property="og:description" content="Generate rate limiter configs and code using Token Bucket, Leaky Bucket, or Sliding Window. Free, no signup." />
+        <meta property="og:url" content="https://8gwifi.org/rate-limiter-generator.jsp" />
+        <meta property="og:site_name" content="8gwifi.org" />
+        <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="API Rate Limiter Generator – Token/Leaky Bucket & Sliding Window" />
+        <meta name="twitter:description" content="Generate rate limiter configs and code using Token Bucket, Leaky Bucket, or Sliding Window. Free, no signup." />
+        <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
+        <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "Token Bucket vs Leaky Bucket vs Sliding Window?","acceptedAnswer": {"@type": "Answer","text": "Token Bucket allows bursts; Leaky Bucket smooths at a fixed rate; Sliding Window gives fairer limits over exact windows."}},
+    {"@type": "Question","name": "Burst vs sustained limits?","acceptedAnswer": {"@type": "Answer","text": "Set burst higher than sustained RPS to allow short spikes while enforcing a lower average rate."}},
+    {"@type": "Question","name": "How to scale distributed rate limits?","acceptedAnswer": {"@type": "Answer","text": "Use a shared backend like Redis with time-based keys and be mindful of clock skew and eviction policies."}}
+  ]
+}
+        </script>
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -747,6 +769,14 @@ export default {
                             link.click();
                         }
             </script>
+
+            <hr>
+            <h2 class="mt-4" id="faqs">Rate Limiting FAQs</h2>
+            <div class="accordion" id="rlFaqs">
+                <div class="card"><div class="card-header"><h6 class="mb-0">Token vs Leaky vs Sliding Window</h6></div><div class="card-body small text-muted">Token allows bursts, Leaky smooths at a fixed pace, Sliding Window enforces fair limits over exact windows.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Burst vs sustained limits</h6></div><div class="card-body small text-muted">Use a higher burst to tolerate spikes but keep a lower sustained RPS to protect backends.</div></div>
+                <div class="card"><div class="card-header"><h6 class="mb-0">Distributed rate limits</h6></div><div class="card-body small text-muted">Back with Redis, use time-bucketed keys, and account for clock skew/evictions.</div></div>
+            </div>
 
             <div class="sharethis-inline-share-buttons"></div>
             <%@ include file="footer_adsense.jsp" %>
