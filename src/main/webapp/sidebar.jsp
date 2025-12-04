@@ -125,8 +125,12 @@
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
                                         <li><a href="pgp-upload.jsp">PGP Encrypted File Transfer</a></li>
-                                        <li><a href="securebin.jsp" title="Share a one‑time secret with end‑to‑end encryption">Encrypted Pastebin (E2EE, 24h)</a></li>
-                                        <li><a href="pastebin.jsp" title="Pastebin: share text publicly or encrypt with a password">Pastebin (Public or Encrypted)</a></li>
+                                        <li><a href="securebin.jsp"
+                                                title="Share a one‑time secret with end‑to‑end encryption">Encrypted
+                                                Pastebin (E2EE, 24h)</a></li>
+                                        <li><a href="pastebin.jsp"
+                                                title="Pastebin: share text publicly or encrypt with a password">Pastebin
+                                                (Public or Encrypted)</a></li>
                                         <li><a href="share-file.jsp">Secure File Transfer (Password Protected)</a></li>
                                         <li><a href="temp-email.jsp">Temporary Email (Disposable)</a></li>
                                         <li><a href="short.jsp">URL Shortener & Analytics (QR)</a></li>
@@ -324,7 +328,8 @@
                                         <li><a href="systemd-generator.jsp">Systemd Service Generator</a></li>
                                         <li><a href="dockerfile-generator.jsp">Dockerfile Generator</a></li>
                                         <li><a href="firewall-generator.jsp">Firewall Rules Generator</a></li>
-                                        <li><a href="apache-virtualhost-generator.jsp">Apache VirtualHost Generator</a></li>
+                                        <li><a href="apache-virtualhost-generator.jsp">Apache VirtualHost Generator</a>
+                                        </li>
                                         <li><a href="github-actions-generator.jsp">GitHub Actions Generator</a></li>
                                         <li><a href="gitlab-ci-generator.jsp">GitLab CI/CD Generator</a></li>
                                         <li><a href="websocket-client.jsp">WebSocket Client</a></li>
@@ -412,7 +417,8 @@
                                         <li><a href="StringFunctions.jsp">String Functions</a></li>
                                         <li><a href="iban-validator.jsp">IBAN Validator & Generator</a></li>
                                         <li><a href="isbn-validator.jsp">ISBN Validator & Converter</a></li>
-                                        <li><a href="html-to-markdown.jsp"><strong>HTML to Markdown</strong> <span class="badge badge-success">New</span></a></li>
+                                        <li><a href="html-to-markdown.jsp"><strong>HTML to Markdown</strong> <span
+                                                    class="badge badge-success">New</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -435,6 +441,8 @@
                                     <ul class="list-unstyled mb-0 small">
                                         <li><a href="onecompiler.jsp"><strong>Online Compiler (60+
                                                     Languages)</strong></a></li>
+                                        <li><a href="html-code-editor.jsp"><strong>HTML/CSS/JS Playground</strong> <span
+                                                    class="badge badge-success">New</span></a></li>
                                         <li><a href="resume-builder.jsp"><strong>Resume Builder</strong> <span
                                                     class="badge badge-success">New</span></a></li>
                                         <li><a href="typing-speed-test.jsp"><strong>Typing Speed Test</strong> <span
@@ -659,7 +667,8 @@
                                     data-parent="#sidebarAccordion">
                                     <div class="card-body p-2">
                                         <ul class="list-unstyled mb-0 small">
-                                            <li><a href="resume-builder.jsp"><strong>Resume Builder (50+ Templates)</strong> <span
+                                            <li><a href="resume-builder.jsp"><strong>Resume Builder (50+
+                                                        Templates)</strong> <span
                                                         class="badge badge-warning">Hot</span></a></li>
                                             <li><a href="typing-speed-test.jsp"><strong>Typing Speed Test</strong> <span
                                                         class="badge badge-success">New</span></a></li>
