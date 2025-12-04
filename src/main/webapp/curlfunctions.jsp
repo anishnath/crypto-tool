@@ -333,13 +333,7 @@
 </div>
 </div>
 
-<!-- Visible FAQs -->
-<h2 class="mt-4" id="faqs">FAQs</h2>
-<div class="accordion" id="curlFaqs">
-  <div class="card"><div class="card-header"><h6 class="mb-0">Why does curl show SSL errors?</h6></div><div class="card-body small text-muted">Expired/invalid cert, mismatched domain, untrusted CA, or incomplete chain. Fix server certs; use -k only for testing.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">How to test IPv6?</h6></div><div class="card-body small text-muted">Use IPv6 hostnames or run curl -6. Ensure AAAA DNS records and IPv6 reachability.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">How to test a custom port?</h6></div><div class="card-body small text-muted">Specify the port in the URL (e.g., https://example.com:8443). This tool supports non‑standard ports.</div></div>
-</div>
+
 
 <div class="row">
     <!-- Left Column: Input Form -->
@@ -566,6 +560,13 @@
             </div>
         </div>
     </div>
+</div>
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="curlFaqs">
+    <div class="card"><div class="card-header"><h6 class="mb-0">Why does curl show SSL errors?</h6></div><div class="card-body small text-muted">Expired/invalid cert, mismatched domain, untrusted CA, or incomplete chain. Fix server certs; use -k only for testing.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">How to test IPv6?</h6></div><div class="card-body small text-muted">Use IPv6 hostnames or run curl -6. Ensure AAAA DNS records and IPv6 reachability.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">How to test a custom port?</h6></div><div class="card-body small text-muted">Specify the port in the URL (e.g., https://example.com:8443). This tool supports non‑standard ports.</div></div>
 </div>
 
 <%@ include file="addcomments.jsp"%>
