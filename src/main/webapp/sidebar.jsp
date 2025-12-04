@@ -246,12 +246,12 @@
                                 data-parent="#sidebarAccordion">
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
-                                        <li><a href="vpc-calculator.jsp">VPC Network Calculator</a></li>
-                                        <li><a href="SubnetFunctions.jsp">IP Subnet Calculator</a></li>
+                                        <li><a href="vpc-calculator.jsp">VPC Calculator & Subnet Planner</a></li>
+                                        <li><a href="SubnetFunctions.jsp">IP Subnet Calculator (CIDR)</a></li>
                                         <li><a href="mac-address-generator.jsp">MAC Address Generator & Validator</a>
                                         </li>
-                                        <li><a href="pingfunctions.jsp">Ping/Locate IPv4/IPv6</a></li>
-                                        <li><a href="curlfunctions.jsp">Curl IPv4/IPv6</a></li>
+                                        <li><a href="pingfunctions.jsp">Online Ping Tool (IPv4/IPv6)</a></li>
+                                        <li><a href="curlfunctions.jsp">Online Curl Tool (HTTP/HTTPS)</a></li>
                                         <li><a href="ipv6-tool.jsp">IPv6 Compressor & Expander</a></li>
                                         <li><a href="dns.jsp">DNS Lookup</a></li>
                                         <li><a href="dmarc.jsp">DMARC Record Lookup</a></li>
