@@ -17,6 +17,18 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/whois.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+<!-- JSON-LD FAQPage Schema (additions matching visible FAQs) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question","name": "What is WHOIS?","acceptedAnswer": {"@type": "Answer","text": "WHOIS is a public directory of domain registration data: registrar, registrant (if not redacted), name servers, creation and expiry dates."}},
+        {"@type": "Question","name": "Why is some data hidden?","acceptedAnswer": {"@type": "Answer","text": "Privacy/GDPR masking or proxy services often redact registrant info. Use registrar-provided contact forms if needed."}},
+        {"@type": "Question","name": "How current is WHOIS data?","acceptedAnswer": {"@type": "Answer","text": "WHOIS reflects registry/registrar records; updates depend on provider propagation and cache refresh intervals."}}
+      ]
+    }
+    </script>
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="WHOIS Lookup – Domain Registration & Ownership" />
     <meta name="twitter:description" content="Free WHOIS lookup. Find domain registration details, ownership info, expiration dates, and name servers." />
@@ -322,13 +334,7 @@
 <%@ include file="network-tools-navbar.jsp"%>
 <%@ include file="footer_adsense.jsp"%>
 
-<!-- Visible FAQs (bottom) -->
-<h2 class="mt-4" id="faqs">FAQs</h2>
-<div class="accordion" id="whoisFaqs">
-  <div class="card"><div class="card-header"><h6 class="mb-0">What is WHOIS?</h6></div><div class="card-body small text-muted">WHOIS is a public directory of domain registration data: registrar, registrant (if not redacted), name servers, creation/expiry.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">Why is some data hidden?</h6></div><div class="card-body small text-muted">Privacy/GDPR masking or proxy services often redact registrant info. Use registrar contact forms if needed.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">How current is WHOIS data?</h6></div><div class="card-body small text-muted">WHOIS reflects registry/registrar records; updates depend on provider propagation and cache refresh.</div></div>
-</div>
+
 
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -504,6 +510,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- Related Tools -->
@@ -539,6 +546,13 @@
             </a>
         </div>
     </div>
+</div>
+<!-- Visible FAQs (bottom) -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="whoisFaqs">
+    <div class="card"><div class="card-header"><h6 class="mb-0">What is WHOIS?</h6></div><div class="card-body small text-muted">WHOIS is a public directory of domain registration data: registrar, registrant (if not redacted), name servers, creation/expiry.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">Why is some data hidden?</h6></div><div class="card-body small text-muted">Privacy/GDPR masking or proxy services often redact registrant info. Use registrar contact forms if needed.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">How current is WHOIS data?</h6></div><div class="card-body small text-muted">WHOIS reflects registry/registrar records; updates depend on provider propagation and cache refresh.</div></div>
 </div>
 
 <%@ include file="thanks.jsp"%>
