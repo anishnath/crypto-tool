@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>MTR Traceroute Tool - Network Path Analysis & Diagnostics | 8gwifi.org</title>
+    <title>MTR Traceroute – Network Path Analysis & Diagnostics (Free) | 8gwifi.org</title>
     <meta name="description" content="Free online MTR traceroute tool for network path analysis. Diagnose network issues, measure latency, detect packet loss, and analyze routing between hosts." />
     <meta name="keywords" content="mtr traceroute, network path analysis, packet loss, latency test, network diagnostics, traceroute tool, hop analysis, network troubleshooting" />
     <meta name="robots" content="index,follow" />
@@ -16,7 +16,11 @@
     <meta property="og:description" content="Analyze network paths with MTR. Measure latency, packet loss, and diagnose routing issues between any two points." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/mtr.jsp" />
-    <meta property="og:image" content="https://8gwifi.org/images/site/mtr.png" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MTR Traceroute – Network Path Analysis & Diagnostics" />
+    <meta name="twitter:description" content="Analyze network paths with MTR. Measure latency, packet loss, and diagnose routing issues." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -311,6 +315,14 @@
 <%@ include file="body-script.jsp"%>
 <%@ include file="network-tools-navbar.jsp"%>
 <%@ include file="footer_adsense.jsp"%>
+
+<!-- Visible FAQs (bottom) -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="mtrFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why do some hops show *?</h6></div><div class="card-body small text-muted">Routers may not respond to probes, or firewalls block diagnostics. Subsequent responsive hops are normal.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How many packets should I send?</h6></div><div class="card-body small text-muted">10–20 for quick checks; 50–100 for intermittent issues. More packets increase accuracy but take longer.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What indicates a network issue?</h6></div><div class="card-body small text-muted">Consistent packet loss/latency rising at or beyond a specific hop typically signals congestion or faults.</div></div>
+</div>
 
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-2">

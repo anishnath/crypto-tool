@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>WHOIS Lookup Tool - Domain Registration & Ownership Information | 8gwifi.org</title>
+    <title>WHOIS Lookup – Domain Registration & Ownership (Free) | 8gwifi.org</title>
     <meta name="description" content="Free online WHOIS lookup tool to find domain registration information, registrar details, creation and expiration dates, name servers, and ownership data." />
     <meta name="keywords" content="whois lookup, domain lookup, domain registration, registrar lookup, domain expiry, name servers, domain ownership, domain information" />
     <meta name="robots" content="index,follow" />
@@ -16,7 +16,11 @@
     <meta property="og:description" content="Find domain registration details, ownership information, expiration dates, and name servers with our free WHOIS lookup tool." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/whois.jsp" />
-    <meta property="og:image" content="https://8gwifi.org/images/site/whois.png" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WHOIS Lookup – Domain Registration & Ownership" />
+    <meta name="twitter:description" content="Free WHOIS lookup. Find domain registration details, ownership info, expiration dates, and name servers." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -317,6 +321,14 @@
 <%@ include file="body-script.jsp"%>
 <%@ include file="network-tools-navbar.jsp"%>
 <%@ include file="footer_adsense.jsp"%>
+
+<!-- Visible FAQs (bottom) -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="whoisFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">What is WHOIS?</h6></div><div class="card-body small text-muted">WHOIS is a public directory of domain registration data: registrar, registrant (if not redacted), name servers, creation/expiry.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why is some data hidden?</h6></div><div class="card-body small text-muted">Privacy/GDPR masking or proxy services often redact registrant info. Use registrar contact forms if needed.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How current is WHOIS data?</h6></div><div class="card-body small text-muted">WHOIS reflects registry/registrar records; updates depend on provider propagation and cache refresh.</div></div>
+</div>
 
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-2">

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Port Scanner Tool - Online Port Scanning</title>
+	<title>Port Scanner – Online Port Scanning (Free) | 8gwifi.org</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="keywords" content="port scanner, port scanning, online port scanner, network scanner, port checker, open ports" />
 	<meta name="description" content="Online port scanner tool to check open ports on any host or IP address. Quick scan, top ports, custom ports, and full port scanning capabilities." />
@@ -14,6 +14,21 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="canonical" href="https://8gwifi.org/portscan.jsp" />
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Port Scanner – Online Port Scanning" />
+	<meta property="og:description" content="Check open ports on any public host. Quick, top, custom, and full scans. Free online port scanner." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://8gwifi.org/portscan.jsp" />
+	<meta property="og:image" content="https://8gwifi.org/images/site/terminal.png" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Port Scanner – Online Port Scanning" />
+	<meta name="twitter:description" content="Quick, top, custom, and full scans. Check open ports on any public host. Free online tool." />
+	<meta name="twitter:image" content="https://8gwifi.org/images/site/terminal.png" />
 
 	<%@ include file="header-script.jsp"%>
 	
@@ -62,6 +77,8 @@
 		}
 	}
 	</script>
+
+    
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -289,6 +306,14 @@
 <hr>
 
 <%@ include file="footer_adsense.jsp"%>
+
+<!-- Visible FAQs (bottom) -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="portscanFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">Is port scanning legal?</h6></div><div class="card-body small text-muted">Only scan hosts you own or have permission to test. Unauthorized scanning may violate policies or local laws.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why block private networks?</h6></div><div class="card-body small text-muted">For safety. The tool only allows public targets; private/reserved ranges and localhost are not permitted.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What scan types are available?</h6></div><div class="card-body small text-muted">Quick/top/custom/full scans with service/version detection on top/custom. Full scans may take longer.</div></div>
+</div>
 
 <h2 class="mt-4" id="portscanning">Port Scanning</h2>
 

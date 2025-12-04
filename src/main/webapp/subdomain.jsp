@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Subdomain Enumeration Tool - Online Subdomain Finder</title>
+	<title>Subdomain Finder – Online Subdomain Enumeration (Free) | 8gwifi.org</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="keywords" content="subdomain enumeration, subdomain finder, online subdomain tool, domain enumeration, subdomain discovery" />
 	<meta name="description" content="Online subdomain enumeration tool to discover subdomains for any domain. Find all subdomains using various sources like certificate transparency logs." />
@@ -14,6 +14,21 @@
 	<meta name="classification" content="tools" />
 	<meta name="language" content="en" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="canonical" href="https://8gwifi.org/subdomain.jsp" />
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Subdomain Finder – Online Subdomain Enumeration" />
+	<meta property="og:description" content="Discover subdomains using CT logs and multiple sources. Free online subdomain enumeration." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://8gwifi.org/subdomain.jsp" />
+	<meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Subdomain Finder – Online Subdomain Enumeration" />
+	<meta name="twitter:description" content="Discover subdomains using CT logs and multiple sources. Free enumeration tool." />
+	<meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
 
 	<%@ include file="header-script.jsp"%>
 	
@@ -62,6 +77,8 @@
 		}
 	}
 	</script>
+
+    
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -259,6 +276,14 @@
 </table>
 
 <hr>
+
+<!-- Visible FAQs (bottom) -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="subdomainFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">What sources are used?</h6></div><div class="card-body small text-muted">Certificate Transparency logs and other public sources are queried to discover subdomains.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Are results exhaustive?</h6></div><div class="card-body small text-muted">Enumeration is best‑effort; visibility depends on public data. New entries appear as CT logs update.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Any rate limits?</h6></div><div class="card-body small text-muted">Excessive queries may be rate‑limited. Use responsibly and cache/export results for later analysis.</div></div>
+</div>
 
 <%@ include file="addcomments.jsp"%>
 
