@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Online Ping Tool - IPv4/IPv6 Connectivity Test | 8gwifi.org</title>
+    <title>Online Ping Tool – IPv4/IPv6 Connectivity Test – Free | 8gwifi.org</title>
     <meta name="description" content="Free online ping tool to test IPv4 and IPv6 connectivity. Check host reachability, response time, packet loss, and geolocation from our servers." />
     <meta name="keywords" content="ping online, ping tool, ping test, ipv4 ping, ipv6 ping, icmp test, network connectivity, response time, packet loss, host reachability" />
     <meta name="robots" content="index,follow" />
@@ -16,7 +16,11 @@
     <meta property="og:description" content="Test network connectivity with our free online ping tool. Check host reachability and response times for IPv4 and IPv6 addresses." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/pingfunctions.jsp" />
-    <meta property="og:image" content="https://8gwifi.org/images/site/ping.png" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Online Ping Tool – IPv4/IPv6 Connectivity Test" />
+    <meta name="twitter:description" content="Test host reachability, response time, and packet loss for IPv4/IPv6. Free online ping tool." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -297,12 +301,20 @@
             <span class="info-badge"><i class="fas fa-satellite-dish"></i> ICMP</span>
             <span class="info-badge"><i class="fas fa-network-wired"></i> IPv4/IPv6</span>
             <span class="info-badge"><i class="fas fa-clock"></i> Latency</span>
-        </div>
-    </div>
+</div>
+</div>
     <div class="eeat-badge">
         <i class="fas fa-user-check"></i>
         <span>Anish Nath</span>
-    </div>
+</div>
+</div>
+
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="pingFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why does ping timeout?</h6></div><div class="card-body small text-muted">Host down, ICMP blocked by firewall, routing issues, or target disables ping replies.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What is a good ping time?</h6></div><div class="card-body small text-muted">Browsing <100ms; gaming <50ms (excellent <20ms); local network often <1ms.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What does TTL indicate?</h6></div><div class="card-body small text-muted">TTL decrements each hop; received value helps estimate hop count and OS defaults.</div></div>
 </div>
 
 <div class="row">

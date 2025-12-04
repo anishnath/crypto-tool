@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>IP Subnet Calculator Online - CIDR, Network Range, Hosts | 8gwifi.org</title>
+    <title>IP Subnet Calculator Online – CIDR, Network Range, Hosts – Free | 8gwifi.org</title>
     <meta name="description" content="Free online IP subnet calculator. Calculate subnet mask, network address, broadcast address, wildcard mask, and usable host range from CIDR notation. Supports IPv4 subnetting." />
     <meta name="keywords" content="subnet calculator, CIDR calculator, IP subnet calculator, network calculator, subnet mask calculator, IP address calculator, subnetting, network planning, IPv4 calculator" />
     <meta name="robots" content="index,follow" />
@@ -17,6 +17,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/SubnetFunctions.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/subnet.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="IP Subnet Calculator – CIDR, Network Range, Hosts" />
+    <meta name="twitter:description" content="Calculate subnet mask, network, broadcast, wildcard mask, usable host range from CIDR. Free online IPv4 subnet tool." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/subnet.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -524,6 +528,14 @@
 </div>
 
 <%@ include file="thanks.jsp"%>
+
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="subnetFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">How many usable hosts are in a subnet?</h6></div><div class="card-body small text-muted">Usable hosts = total IPs minus network and broadcast. /24 → 254 usable; /28 → 14 usable.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">Which private ranges should I use?</h6></div><div class="card-body small text-muted">RFC1918: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16. Avoid overlaps across environments.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">What is a wildcard mask?</h6></div><div class="card-body small text-muted">Wildcard is inverse of subnet mask; used in ACLs. For 255.255.255.0, wildcard is 0.0.0.255.</div></div>
+</div>
 
 <!-- Educational Content -->
 <div class="card tool-card mb-4">

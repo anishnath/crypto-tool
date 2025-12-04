@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Online Curl Tool - HTTP/HTTPS Website Accessibility Test | 8gwifi.org</title>
+    <title>Online Curl Tool – HTTP/HTTPS Website Accessibility Test – Free | 8gwifi.org</title>
     <meta name="description" content="Free online curl tool to test website accessibility over IPv4 and IPv6. Check HTTP/HTTPS connectivity, response headers, SSL certificates, and connection status." />
     <meta name="keywords" content="curl online, http test, https test, website accessibility, ipv6 test, ssl check, http headers, website checker, curl tool, web connectivity" />
     <meta name="robots" content="index,follow" />
@@ -16,7 +16,11 @@
     <meta property="og:description" content="Test HTTP/HTTPS website accessibility with our free online curl tool. Check IPv4/IPv6 connectivity and response headers." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/curlfunctions.jsp" />
-    <meta property="og:image" content="https://8gwifi.org/images/site/curl.png" />
+    <meta property="og:image" content="https://8gwifi.org/images/site/terminal.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Online Curl Tool – Website Accessibility & SSL Checks" />
+    <meta name="twitter:description" content="Test HTTP/HTTPS accessibility, IPv4/IPv6, headers, SSL certs, and ports. Free curl tool." />
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/terminal.png" />
 
     <!-- JSON-LD WebApplication Schema -->
     <script type="application/ld+json">
@@ -321,12 +325,20 @@
             <span class="info-badge"><i class="fas fa-globe"></i> HTTP/HTTPS</span>
             <span class="info-badge"><i class="fas fa-network-wired"></i> IPv4/IPv6</span>
             <span class="info-badge"><i class="fas fa-lock"></i> SSL</span>
-        </div>
-    </div>
+</div>
+</div>
     <div class="eeat-badge">
         <i class="fas fa-user-check"></i>
         <span>Anish Nath</span>
-    </div>
+</div>
+</div>
+
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="curlFaqs">
+  <div class="card"><div class="card-header"><h6 class="mb-0">Why does curl show SSL errors?</h6></div><div class="card-body small text-muted">Expired/invalid cert, mismatched domain, untrusted CA, or incomplete chain. Fix server certs; use -k only for testing.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How to test IPv6?</h6></div><div class="card-body small text-muted">Use IPv6 hostnames or run curl -6. Ensure AAAA DNS records and IPv6 reachability.</div></div>
+  <div class="card"><div class="card-header"><h6 class="mb-0">How to test a custom port?</h6></div><div class="card-body small text-muted">Specify the port in the URL (e.g., https://example.com:8443). This tool supports non‑standard ports.</div></div>
 </div>
 
 <div class="row">

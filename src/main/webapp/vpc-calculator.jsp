@@ -39,11 +39,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org/vpc-calculator.jsp">
     <meta property="og:site_name" content="8gwifi.org">
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Advanced VPC Calculator & Subnet Planner">
     <meta name="twitter:description" content="Plan AWS/Azure/GCP networks with CIDR calculator and visual diagrams.">
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png">
 
     <link rel="canonical" href="https://8gwifi.org/vpc-calculator.jsp">
 
@@ -542,6 +544,16 @@
 
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
+
+<!-- Visible FAQs -->
+<div class="container mt-4">
+  <h2 class="mt-4" id="faqs">FAQs</h2>
+  <div class="accordion" id="vpcFaqs">
+    <div class="card"><div class="card-header"><h6 class="mb-0">How should I pick a VPC CIDR?</h6></div><div class="card-body small text-muted">Choose a non‑overlapping private CIDR (RFC1918) sized for growth (e.g., 10.0.0.0/16). Avoid conflicts with on‑prem or peered networks.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">What subnet sizes are recommended?</h6></div><div class="card-body small text-muted">/24 is common for application tiers; /28–/26 for smaller/internal tiers. Balance IP usage, AZ distribution, and future scale.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">How do I avoid overlapping IPs?</h6></div><div class="card-body small text-muted">Use the planner’s conflict warnings and reserve ranges for peering/VPN. Keep a registry for all assigned CIDRs across environments.</div></div>
+  </div>
+</div>
 
 <script>
     let currentVPC = null;
