@@ -19,63 +19,42 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.security.KeyPair;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ANish Nath on 11/7/17.
+ * ElGamal Encryption/Decryption Servlet
+ * Returns structured JSON responses
+ * @author Anish Nath
  */
 public class ELGAMALFunctionality extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private static final String METHOD_CALCULATERSA = "CALCULATE_ELGAMAL";
-
-
-
-
+    private final Gson gson = new Gson();
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
+     * Handle GET requests - Key generation
      */
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
 
-        // TODO Auto-generated method stub
-
-        // Set response content type
-        response.setContentType("text/html");
-
-        // Actual logic goes here.
-        PrintWriter out = response.getWriter();
-        //out.println("<h1>" + "Hello CANT PROCESS THE MESSAGE " + "</h1>");
-
-
         String keysize = request.getParameter("keysize");
 
-        int keys =160;
+        int keys = 160;
         if (keysize != null && keysize.trim().length() > 0) {
             try {
-
                 try {
                     keys = Integer.parseInt(keysize);
-                }catch (NumberFormatException w)
-                {
-                    keys =160;
+                } catch (NumberFormatException w) {
+                    keys = 160;
                 }
 
-                if(keys>512)
-                {
-                    keys=160;
+                if (keys > 512) {
+                    keys = 160;
                 }
 
-                Gson gson = new Gson();
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/" + keysize;
-
-                //System.out.println(url1);
 
                 HttpGet getRequest = new HttpGet(url1);
                 getRequest.addHeader("accept", "application/json");
@@ -83,14 +62,14 @@ public class ELGAMALFunctionality extends HttpServlet {
                 HttpResponse response1 = httpClient.execute(getRequest);
 
                 if (response1.getStatusLine().getStatusCode() != 200) {
-                    addHorizontalLine(out);
+                    response.setContentType("text/html");
+                    PrintWriter out = response.getWriter();
                     out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
                     return;
                 }
+
                 BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
+                        new InputStreamReader((response1.getEntity().getContent()))
                 );
 
                 StringBuilder content = new StringBuilder();
@@ -100,57 +79,38 @@ public class ELGAMALFunctionality extends HttpServlet {
                 }
                 elgamlpojo elgamlpojo = gson.fromJson(content.toString(), elgamlpojo.class);
 
-
                 request.getSession().setAttribute("pubkey", elgamlpojo.getPublicKey());
-
-//                String s = new org.apache.commons.net.util.Base64().encodeToString(kp.getPrivate().getEncoded());
-//
-//                StringBuilder builder = new StringBuilder();
-//                builder.append("-----BEGIN PRIVATE KEY-----");
-//                builder.append("\n");
-//                builder.append(s);
-//                builder.append("-----END PRIVATE KEY-----");
-
-                String privKey = elgamlpojo.getPrivateKey();
-
-                request.getSession().setAttribute("privKey", privKey);
+                request.getSession().setAttribute("privKey", elgamlpojo.getPrivateKey());
                 request.getSession().setAttribute("keysize", keysize);
+
                 String nextJSP = "/elgamalfunctions.jsp";
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
                 dispatcher.forward(request, response);
 
-
                 return;
             } catch (Exception ex) {
-                //DO NOTHING
+                // DO NOTHING
             }
         }
-        //System.out.println(keysize);
-        // System.out.println("asdas");
-
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
+     * Handle POST requests - Encrypt/Decrypt operations
+     * Returns JSON response
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
-        //System.out.println("algo" + algo);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-
 
         String publiKeyParam = request.getParameter("publickeyparam");
         String privateKeParam = request.getParameter("privatekeyparam");
         final String message = request.getParameter("message");
         String algo = request.getParameter("cipherparameter");
         final String methodName = request.getParameter("methodName");
-        String keysize = request.getParameter("keysize");
         String encryptdecryptparameter = request.getParameter("encryptdecryptparameter");
-
-
-
 
         if (METHOD_CALCULATERSA.equalsIgnoreCase(methodName)) {
 
@@ -158,184 +118,139 @@ public class ELGAMALFunctionality extends HttpServlet {
                 algo = "ELGAMAL";
             }
 
-
             if ("encrypt".equals(encryptdecryptparameter)) {
-
-                if (null == message || message.trim().length() == 0) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> Message is Null or EMpty....</font>");
-                    return;
-
-                }
-
-                if (publiKeyParam != null && publiKeyParam.trim().length() > 0) {
-//                    publiKeyParam = publiKeyParam.replace("-----BEGIN PUBLIC KEY-----\n", "");
-//                    publiKeyParam = publiKeyParam.replace("-----END PUBLIC KEY-----", "");
-
-                    try {
-
-                        Gson gson = new Gson();
-                        HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "elgamal/encrypt";
-                        HttpPost post = new HttpPost(url1);
-                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-                        urlParameters.add(new BasicNameValuePair("p_msg", message));
-                        urlParameters.add(new BasicNameValuePair("p_key", publiKeyParam));
-                        urlParameters.add(new BasicNameValuePair("p_algo", algo));
-
-                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                        post.addHeader("accept", "application/json");
-
-                        HttpResponse response1 = client.execute(post);
-
-                        if (response1.getStatusLine().getStatusCode() != 200) {
-                            if (response1.getStatusLine().getStatusCode() == 404) {
-                                BufferedReader br1 = new BufferedReader(
-                                        new InputStreamReader(
-                                                (response1.getEntity().getContent())
-                                        )
-                                );
-                                StringBuilder content1 = new StringBuilder();
-                                String line;
-                                while (null != (line = br1.readLine())) {
-                                    content1.append(line);
-                                }
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                                return;
-                            } else {
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                                return;
-                            }
-
-                        }
-                        BufferedReader br1 = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content1 = new StringBuilder();
-                        String line;
-                        while (null != (line = br1.readLine())) {
-                            content1.append(line);
-                        }
-
-                        //System.out.println("line-- " + line);
-
-                        EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
-                        addHorizontalLine(out);
-                       // System.out.println("encodedMessage-- " + encodedMessage);
-                        out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"10\">" + encodedMessage.getBase64Encoded() + "</textarea>");
-                        return;
-
-
-                    } catch (Exception e) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"4\" color=\"red\"> " + e);
-                    }
-
-                } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + " Public Key Can't be EMPTY </font>");
-
-                }
+                handleEncrypt(out, message, publiKeyParam, algo);
             } else {
-
-                //Assumed Decrypt ...
-                // System.out.println(encryptdecryptparameter);
-                String encrypedmessagetextarea = request.getParameter("encrypedmessagetextarea");
-                //System.out.println("encrypedmessagetextarea ---> " + encrypedmessagetextarea);
-
-                if (privateKeParam != null && privateKeParam.trim().length() > 0) {
-
-                    boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
-                    if (!isBase64) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"3\" color=\"red\"> " + "Please Provide Base64 Encoded value Failed to Decrypt.. </font>");
-                        return;
-                    }
-
-                    if (null == message || message.trim().length() == 0) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> RSA Encryped Message is Null or EMpty....</font>");
-                        return;
-
-                    }
-
-                    try {
-                        Gson gson = new Gson();
-                        HttpClient client = HttpClientBuilder.create().build();
-                        String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/decrypt";
-                        HttpPost post = new HttpPost(url1);
-                        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-                        urlParameters.add(new BasicNameValuePair("p_msg", message));
-                        urlParameters.add(new BasicNameValuePair("p_privatekey", privateKeParam));
-                        urlParameters.add(new BasicNameValuePair("p_algo", algo));
-
-                        post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                        post.addHeader("accept", "application/json");
-
-                        HttpResponse response1 = client.execute(post);
-
-                        if (response1.getStatusLine().getStatusCode() != 200) {
-                            if (response1.getStatusLine().getStatusCode() == 404) {
-                                BufferedReader br1 = new BufferedReader(
-                                        new InputStreamReader(
-                                                (response1.getEntity().getContent())
-                                        )
-                                );
-                                StringBuilder content1 = new StringBuilder();
-                                String line;
-                                while (null != (line = br1.readLine())) {
-                                    content1.append(line);
-                                }
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error  " + content1 + "</font>");
-                                return;
-                            } else {
-                                addHorizontalLine(out);
-                                out.println("<font size=\"4\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                                return;
-                            }
-
-                        }
-                        BufferedReader br1 = new BufferedReader(
-                                new InputStreamReader(
-                                        (response1.getEntity().getContent())
-                                )
-                        );
-                        StringBuilder content1 = new StringBuilder();
-                        String line;
-                        while (null != (line = br1.readLine())) {
-                            content1.append(line);
-                        }
-
-                        EncodedMessage encodedMessage = gson.fromJson(content1.toString(), EncodedMessage.class);
-                        addHorizontalLine(out);
-                        out.println("<textarea class=\"form-control\" readonly=\"true\" name=\"encrypedmessagetextarea\" id=\"encrypedmessagetextarea\" rows=\"5\" cols=\"10\">" + encodedMessage.getMessage() + "</textarea>");
-                        return;
-
-
-                    } catch (Exception e) {
-                        addHorizontalLine(out);
-                        out.println("<font size=\"2\" color=\"red\"> " + e + "</font>");
-                    }
-
-
-                } else {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> " + algo + "  Key Can't be EMPTY </font>");
-                }
+                handleDecrypt(out, message, privateKeParam, algo);
             }
+        } else {
+            out.println(gson.toJson(ElGamalResponse.error("Invalid method name")));
+        }
+    }
+
+    /**
+     * Handle encryption operation
+     */
+    private void handleEncrypt(PrintWriter out, String message, String publicKey, String algo) {
+        // Validate message
+        if (null == message || message.trim().length() == 0) {
+            out.println(gson.toJson(ElGamalResponse.error("encrypt", "Message is null or empty")));
+            return;
         }
 
+        // Validate public key
+        if (publicKey == null || publicKey.trim().length() == 0) {
+            out.println(gson.toJson(ElGamalResponse.error("encrypt", algo + " Public Key cannot be empty")));
+            return;
+        }
+
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/encrypt";
+            HttpPost post = new HttpPost(url1);
+
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            urlParameters.add(new BasicNameValuePair("p_msg", message));
+            urlParameters.add(new BasicNameValuePair("p_key", publicKey));
+            urlParameters.add(new BasicNameValuePair("p_algo", algo));
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post.addHeader("accept", "application/json");
+
+            HttpResponse response1 = client.execute(post);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                String errorContent = readResponse(response1);
+                if (response1.getStatusLine().getStatusCode() == 404) {
+                    out.println(gson.toJson(ElGamalResponse.error("encrypt", "System Error: " + errorContent)));
+                } else {
+                    out.println(gson.toJson(ElGamalResponse.error("encrypt", "System Error. Please try later. If problem persists, raise a feature request.")));
+                }
+                return;
+            }
+
+            String responseContent = readResponse(response1);
+            EncodedMessage encodedMessage = gson.fromJson(responseContent, EncodedMessage.class);
+
+            ElGamalResponse resp = ElGamalResponse.encryptSuccess(encodedMessage.getBase64Encoded(), algo);
+            out.println(gson.toJson(resp));
+
+        } catch (Exception e) {
+            out.println(gson.toJson(ElGamalResponse.error("encrypt", "Encryption failed: " + e.getMessage())));
+        }
     }
 
+    /**
+     * Handle decryption operation
+     */
+    private void handleDecrypt(PrintWriter out, String message, String privateKey, String algo) {
+        // Validate private key
+        if (privateKey == null || privateKey.trim().length() == 0) {
+            out.println(gson.toJson(ElGamalResponse.error("decrypt", algo + " Private Key cannot be empty")));
+            return;
+        }
 
-    private void addHorizontalLine(PrintWriter out) {
-        out.println("<hr>");
+        // Validate message
+        if (null == message || message.trim().length() == 0) {
+            out.println(gson.toJson(ElGamalResponse.error("decrypt", "Encrypted message is null or empty")));
+            return;
+        }
+
+        // Validate Base64 encoding
+        boolean isBase64 = Base64.isArrayByteBase64(message.getBytes());
+        if (!isBase64) {
+            out.println(gson.toJson(ElGamalResponse.error("decrypt", "Please provide Base64 encoded ciphertext. Failed to decrypt.")));
+            return;
+        }
+
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/decrypt";
+            HttpPost post = new HttpPost(url1);
+
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            urlParameters.add(new BasicNameValuePair("p_msg", message));
+            urlParameters.add(new BasicNameValuePair("p_privatekey", privateKey));
+            urlParameters.add(new BasicNameValuePair("p_algo", algo));
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post.addHeader("accept", "application/json");
+
+            HttpResponse response1 = client.execute(post);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                String errorContent = readResponse(response1);
+                if (response1.getStatusLine().getStatusCode() == 404) {
+                    out.println(gson.toJson(ElGamalResponse.error("decrypt", "System Error: " + errorContent)));
+                } else {
+                    out.println(gson.toJson(ElGamalResponse.error("decrypt", "System Error. Please try later. If problem persists, raise a feature request.")));
+                }
+                return;
+            }
+
+            String responseContent = readResponse(response1);
+            EncodedMessage encodedMessage = gson.fromJson(responseContent, EncodedMessage.class);
+
+            ElGamalResponse resp = ElGamalResponse.decryptSuccess(encodedMessage.getMessage(), algo);
+            out.println(gson.toJson(resp));
+
+        } catch (Exception e) {
+            out.println(gson.toJson(ElGamalResponse.error("decrypt", "Decryption failed: " + e.getMessage())));
+        }
     }
 
-
+    /**
+     * Helper method to read HTTP response content
+     */
+    private String readResponse(HttpResponse response) throws IOException {
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader((response.getEntity().getContent()))
+        );
+        StringBuilder content = new StringBuilder();
+        String line;
+        while (null != (line = br.readLine())) {
+            content.append(line);
+        }
+        return content.toString();
+    }
 }
