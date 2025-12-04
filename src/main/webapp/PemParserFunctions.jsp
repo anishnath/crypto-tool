@@ -100,7 +100,7 @@
 }
 </script>
 
-	<title>PEM Parser Online – Free | 8gwifi.org</title>
+	<title>Read & Parse PEM Certificates/Keys Online – Free Tool | 8gwifi.org</title>
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 	<meta name="description" content="Parse and decode PEM certificates online. Free tool decodes CRL, CRT, CSR, private keys, public keys, RSA, DSA, EC, and PKCS7. View X.509 details instantly.">
 	<meta name="keywords" content="pem parser, certificate decoder, pem decoder, certificate viewer, decode certificate online, parse crl crt csr, rsa private key decoder, x.509 certificate viewer, openssl decode certificate, pem file decoder">
