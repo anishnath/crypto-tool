@@ -39,16 +39,16 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="dns.jsp">
-                            <i class="fas fa-search"></i> DNS Lookup
+                            <i class="fas fa-search"></i> DNS Lookup (All Records)
                         </a>
                         <a class="dropdown-item" href="dnsresolver.jsp">
-                            <i class="fas fa-link"></i> Multi-Resolver
+                            <i class="fas fa-link"></i> DNS Propagation Checker
                         </a>
                         <a class="dropdown-item" href="revdns.jsp">
-                            <i class="fas fa-undo"></i> Reverse DNS
+                            <i class="fas fa-undo"></i> Reverse DNS (PTR)
                         </a>
                         <a class="dropdown-item" href="dmarc.jsp">
-                            <i class="fas fa-envelope"></i> DMARC Lookup
+                            <i class="fas fa-envelope"></i> DMARC Record Lookup & Validator
                         </a>
                     </div>
                 </li>
@@ -60,13 +60,13 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="pingfunctions.jsp">
-                            <i class="fas fa-ping-pong"></i> Ping Tool
+                            <i class="fas fa-ping-pong"></i> Online Ping Tool (IPv4/IPv6)
                         </a>
                         <a class="dropdown-item" href="mtr.jsp">
                             <i class="fas fa-route"></i> MTR Traceroute
                         </a>
                         <a class="dropdown-item" href="curlfunctions.jsp">
-                            <i class="fas fa-globe"></i> Curl Tool
+                            <i class="fas fa-globe"></i> Online Curl Tool (HTTP/HTTPS)
                         </a>
                         <a class="dropdown-item" href="socket-io-client.jsp">
                             <i class="fas fa-bolt"></i> Socket.IO Client
@@ -85,10 +85,10 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="SubnetFunctions.jsp">
-                            <i class="fas fa-calculator"></i> Subnet Calculator
+                            <i class="fas fa-calculator"></i> IP Subnet Calculator (CIDR)
                         </a>
                         <a class="dropdown-item" href="vpc-calculator.jsp">
-                            <i class="fas fa-cloud"></i> VPC Network Calculator
+                            <i class="fas fa-cloud"></i> VPC Calculator & Subnet Planner
                         </a>
                         <a class="dropdown-item" href="ipv6-tool.jsp">
                             <i class="fas fa-compress-alt"></i> IPv6 Compressor & Expander
