@@ -468,7 +468,7 @@
                     String hex = Utils.toHexEncoded(Utils.getIV(8));
                 %>
                 <div class="card">
-                    <div class="card-header key-toggle" data-bs-toggle="collapse" data-bs-target="#keySection">
+                    <div class="card-header key-toggle" data-toggle="collapse" data-target="#keySection">
                         Secret Key & Nonce
                         <span class="float-end">
                             <small class="text-muted">click to expand</small>
@@ -594,7 +594,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Share This Encryption</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="social-support">
@@ -739,7 +739,7 @@
         var tweetText = 'Check out this NaCl AEAD encryption tool! XSalsa20-Poly1305 authenticated encryption with associated data. @anish2good';
         document.getElementById('tweetBtn').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetText) + '&url=' + encodeURIComponent('https://8gwifi.org/naclaead.jsp');
 
-        new bootstrap.Modal(document.getElementById('shareModal')).show();
+        $('#shareModal').modal('show');
     }
 
     function copyShareUrl() {

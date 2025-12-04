@@ -203,14 +203,14 @@
         </div>
         <div class="card-body">
             <ul class="nav nav-tabs" id="codeExampleTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="python-tab" data-bs-toggle="tab" data-bs-target="#python-code" type="button">Python</button>
+                <li class="nav-item">
+                    <a class="nav-link active" id="python-tab" data-toggle="tab" href="#python-code" role="tab" aria-controls="python-code" aria-selected="true">Python</a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="js-tab" data-bs-toggle="tab" data-bs-target="#js-code" type="button">JavaScript</button>
+                <li class="nav-item">
+                    <a class="nav-link" id="js-tab" data-toggle="tab" href="#js-code" role="tab" aria-controls="js-code" aria-selected="false">JavaScript</a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="go-tab" data-bs-toggle="tab" data-bs-target="#go-code" type="button">Go</button>
+                <li class="nav-item">
+                    <a class="nav-link" id="go-tab" data-toggle="tab" href="#go-code" role="tab" aria-controls="go-code" aria-selected="false">Go</a>
                 </li>
             </ul>
             <div class="tab-content border border-top-0 rounded-bottom p-3" id="codeExampleTabsContent">
