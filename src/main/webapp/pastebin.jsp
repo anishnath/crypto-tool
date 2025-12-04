@@ -103,24 +103,6 @@
         </div>
     </div>
 
-    <!-- Trust Banner -->
-    <div class="alert alert-light border mb-4">
-        <div class="row text-center small">
-            <div class="col-md-3 col-6 mb-2 mb-md-0">
-                <i class="fas fa-laptop-code text-primary"></i> <strong>Browser-Only:</strong> Client-side encryption
-            </div>
-            <div class="col-md-3 col-6 mb-2 mb-md-0">
-                <i class="fas fa-eye-slash text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="fas fa-redo text-info"></i> <strong>Multiple Views:</strong> Access within 24 hours
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="fas fa-trash-alt text-warning"></i> <strong>Auto-Delete:</strong> Removed after 24 hours
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-lg-7 mb-4">
             <div class="card shadow-sm h-100">
@@ -176,6 +158,32 @@
                         <p class="mt-4"><i class="fas fa-arrow-left"></i> Create a paste to get a shareable link</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visible FAQs -->
+    <h2 class="mt-4" id="faqs">FAQs</h2>
+    <div class="accordion" id="pastebinFaqs">
+        <div class="card"><div class="card-header"><h6 class="mb-0">Do links expire?</h6></div><div class="card-body small text-muted">Yes, encrypted or public pastes can expire (default 24 hours) to limit exposure.</div></div>
+        <div class="card"><div class="card-header"><h6 class="mb-0">Is encryption client‑side?</h6></div><div class="card-body small text-muted">Yes. If enabled, AES‑256‑GCM encryption happens in your browser; servers never see plaintext.</div></div>
+        <div class="card"><div class="card-header"><h6 class="mb-0">How should I share the password?</h6></div><div class="card-body small text-muted">Share the password separately from the link (e.g., different channel) for better security.</div></div>
+    </div>
+
+    <!-- Trust Banner -->
+    <div class="alert alert-light border mb-4">
+        <div class="row text-center small">
+            <div class="col-md-3 col-6 mb-2 mb-md-0">
+                <i class="fas fa-laptop-code text-primary"></i> <strong>Browser-Only:</strong> Client-side encryption
+            </div>
+            <div class="col-md-3 col-6 mb-2 mb-md-0">
+                <i class="fas fa-eye-slash text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-redo text-info"></i> <strong>Multiple Views:</strong> Access within 24 hours
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-trash-alt text-warning"></i> <strong>Auto-Delete:</strong> Removed after 24 hours
             </div>
         </div>
     </div>

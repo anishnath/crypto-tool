@@ -226,6 +226,8 @@
     </div>
   </div>
 
+
+
   <div class="card mb-3 shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center">Analytics</div>
     <div class="card-body">
@@ -308,6 +310,14 @@
       <div id="anaErr" class="alert alert-danger mt-3" style="display:none;"></div>
     </div>
   </div>
+
+<!-- Visible FAQs -->
+<h2 class="mt-4" id="faqs">FAQs</h2>
+<div class="accordion" id="shortFaqs">
+    <div class="card"><div class="card-header"><h6 class="mb-0">Do short links expire?</h6></div><div class="card-body small text-muted">Short links are permanent and do not expire unless deleted.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">Can I get a QR code?</h6></div><div class="card-body small text-muted">Yes—QR is generated automatically for every short link.</div></div>
+    <div class="card"><div class="card-header"><h6 class="mb-0">What analytics are available?</h6></div><div class="card-body small text-muted">Daily clicks (30‑day chart), top countries, referrers, and unique visitors.</div></div>
+</div>
 
   <script>
     var BASE = 'https://ai-inference.xyz';

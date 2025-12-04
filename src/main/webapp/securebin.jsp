@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Encrypted Pastebin | Secure Secret Sharing (24-Hour, E2EE) | 8gwifi.org</title>
+    <title>Encrypted Pastebin – Secure Secret Sharing (24-Hour, E2EE) – Free | 8gwifi.org</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="index, follow">
@@ -17,7 +17,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="8gwifi.org">
-    <meta property="og:title" content="Encrypted Pastebin | Secure Secret Sharing (24-Hour, E2EE)">
+    <meta property="og:title" content="Encrypted Pastebin – Secure Secret Sharing (24-Hour, E2EE) – Free">
     <meta property="og:description" content="Free online tool with client‑side encryption. Create a secure link and separate password to share sensitive data safely. 24-hour expiry.">
     <meta property="og:url" content="https://8gwifi.org/securebin.jsp">
     <meta property="og:image" content="https://8gwifi.org/images/site/securebin.png">
@@ -26,7 +26,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@anish2good">
-    <meta name="twitter:title" content="Encrypted Pastebin | Secure Secret Sharing (24-Hour, E2EE)">
+    <meta name="twitter:title" content="Encrypted Pastebin – Secure Secret Sharing (24-Hour, E2EE) – Free">
     <meta name="twitter:description" content="Free browser‑based secret sharing. 24-hour expiry. Create a secure link + separate password.">
     <meta name="twitter:image" content="https://8gwifi.org/images/site/securebin.png">
 
@@ -71,6 +71,8 @@
           ]
         }
     </script>
+
+
 
     <!-- JSON-LD: Organization -->
     <script type="application/ld+json">
@@ -371,6 +373,16 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Visible FAQs -->
+    <div class="container mt-4">
+        <h2 class="mt-4" id="faqs">FAQs</h2>
+        <div class="accordion" id="securebinFaqs">
+            <div class="card"><div class="card-header"><h6 class="mb-0">Do links expire?</h6></div><div class="card-body small text-muted">Yes, by default pastes expire after 24 hours to reduce exposure risk.</div></div>
+            <div class="card"><div class="card-header"><h6 class="mb-0">Are secrets stored on the server?</h6></div><div class="card-body small text-muted">Encryption is client‑side (E2EE). The server never sees plaintext. Expired content is not retained.</div></div>
+            <div class="card"><div class="card-header"><h6 class="mb-0">Can I share the password in the same link?</h6></div><div class="card-body small text-muted">Share the password separately from the link for safer transmission.</div></div>
         </div>
     </div>
 

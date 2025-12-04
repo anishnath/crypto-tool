@@ -10,21 +10,23 @@
   <meta name="author" content="Anish Nath">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
-  <link rel="canonical" href="<%= request.getRequestURL() %>">
+  <link rel="canonical" href="https://8gwifi.org/temp-email.jsp">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Temporary Email Online – Free Disposable Inbox">
   <meta property="og:description" content="Free temporary email service. Generate disposable email addresses instantly, receive emails in real-time, no registration required.">
-  <meta property="og:url" content="<%= request.getRequestURL() %>">
+  <meta property="og:url" content="https://8gwifi.org/temp-email.jsp">
   <meta property="og:site_name" content="8gwifi.org">
-  <meta property="og:image" content="https://8gwifi.org/images/site/temp-email.png">
+  <meta property="og:image" content="https://8gwifi.org/images/site/logo.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Temporary Email Online – Free Disposable Inbox">
   <meta name="twitter:description" content="Free temporary email service. Generate disposable email addresses instantly, receive emails in real-time, no registration required.">
   <meta name="twitter:creator" content="@anish2good">
+  <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png">
+  <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png">
 
   <!-- JSON-LD structured data -->
   <script type="application/ld+json">

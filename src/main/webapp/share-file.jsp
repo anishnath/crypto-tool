@@ -7,7 +7,7 @@
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="robots" content="index, follow">
-        <link rel="canonical" href="https://8gwifi.org/share-file.jsp">
+  <link rel="canonical" href="https://8gwifi.org/share-file.jsp">
         <link rel="alternate" href="https://8gwifi.org/share-file.jsp" hreflang="en">
         <meta name="description" content="Free, browser‑only secure file transfer. Encrypt files with a password (E2EE) and send a protected download link via email. No sign‑up required.">
 
@@ -25,7 +25,12 @@
         <meta name="twitter:site" content="@anish2good">
         <meta name="twitter:title" content="Secure File Transfer | Encrypted Files Online (Free)">
         <meta name="twitter:description" content="Client‑side encryption and shareable download links.">
-        <meta name="twitter:image" content="https://8gwifi.org/images/site/file-encrypt.png">
+  <meta name="twitter:image" content="https://8gwifi.org/images/site/file-encrypt.png">
+
+  <style>
+    .howto-steps .step {border:1px solid #eef0f3;border-radius:8px;padding:.75rem;margin-bottom:.5rem;background:#fafbfc}
+    .howto-steps .step .num {display:inline-block;width:24px;height:24px;border-radius:999px;background:#3c5be8;color:#fff;text-align:center;line-height:24px;font-weight:700;margin-right:.5rem}
+  </style>
     	   <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -667,7 +672,25 @@
         // Copy to clipboard for convenience
         copyText(pwd).then(function(){ showCopied(btn); }).catch(function(){ showCopied(btn, false); });
     }
-</script>
+  </script>
+
+  <!-- Visible: How it works & FAQs -->
+  <div class="container mt-4">
+    <h2 class="mt-4">How It Works</h2>
+    <div class="howto-steps">
+      <div class="step"><span class="num">1</span><strong>Upload file</strong>: Select a file to encrypt client‑side in your browser.</div>
+      <div class="step"><span class="num">2</span><strong>Set password</strong>: Choose a strong password; we encrypt locally before transfer.</div>
+      <div class="step"><span class="num">3</span><strong>Share link</strong>: Send the protected download link to the recipient. Share the password via a separate channel.</div>
+    </div>
+
+    <hr>
+    <h2 class="mt-4" id="faqs">FAQs</h2>
+    <div class="accordion" id="sftFaqs">
+      <div class="card"><div class="card-header"><h6 class="mb-0">Are files stored on the server?</h6></div><div class="card-body small text-muted">Encryption occurs in your browser; we do not permanently store your files. Use the link promptly and avoid sharing sensitive data over insecure channels.</div></div>
+      <div class="card"><div class="card-header"><h6 class="mb-0">How should I share the password?</h6></div><div class="card-body small text-muted">Share the password separately (e.g., messaging app) and avoid including it in the same email as the link.</div></div>
+      <div class="card"><div class="card-header"><h6 class="mb-0">Any file size limits?</h6></div><div class="card-body small text-muted">Browser‑based encryption works best with moderate file sizes. For very large files, compress or split before encrypting.</div></div>
+    </div>
+  </div>
 
 <!-- JSON-LD: WebPage + Breadcrumbs + FAQ + HowTo -->
 <script type="application/ld+json">

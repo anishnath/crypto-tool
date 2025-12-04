@@ -72,6 +72,12 @@
 }
 	</script>
 
+    <!-- How it works (visible) -->
+    <style>
+      .howto-steps .step {border:1px solid #eef0f3;border-radius:8px;padding:.75rem;margin-bottom:.5rem;background:#fafbfc}
+      .howto-steps .step .num {display:inline-block;width:24px;height:24px;border-radius:999px;background:#3c5be8;color:#fff;text-align:center;line-height:24px;font-weight:700;margin-right:.5rem}
+    </style>
+
 	<!-- WebPage with Breadcrumb Schema -->
 	<script type="application/ld+json">
 {
@@ -427,7 +433,25 @@ mnvy6YZuJS2ukOPgmYH+AlhIKR3DyYtNXK7W/Jw1L7da4vq+4BzyRrMOEGeCqdlF
     }
   ]
 }
-</script>
+	</script>
+
+    <!-- Visible: How it works & FAQs -->
+    <div class="container mt-4">
+      <h2 class="mt-4">How It Works</h2>
+      <div class="howto-steps">
+        <div class="step"><span class="num">1</span><strong>Upload file</strong>: Choose a file to send. Processing is client‑side in your browser.</div>
+        <div class="step"><span class="num">2</span><strong>Encrypt with public key</strong>: Paste the recipient’s PGP public key. The file is encrypted locally (no server storage).</div>
+        <div class="step"><span class="num">3</span><strong>Share securely</strong>: Send the download link to the recipient. Only their private key can decrypt.</div>
+      </div>
+
+      <hr>
+      <h2 class="mt-4" id="faqs">FAQs</h2>
+      <div class="accordion" id="pgpUploadFaqs">
+        <div class="card"><div class="card-header"><h6 class="mb-0">Do you store any files or keys?</h6></div><div class="card-body small text-muted">No. Encryption happens in your browser (client‑side) and files are not stored on the server.</div></div>
+        <div class="card"><div class="card-header"><h6 class="mb-0">Which keys are supported?</h6></div><div class="card-body small text-muted">OpenPGP public keys. The recipient decrypts using their private key.</div></div>
+        <div class="card"><div class="card-header"><h6 class="mb-0">How big can files be?</h6></div><div class="card-body small text-muted">Use reasonable sizes for browser‑based encryption. For very large files, consider chunking before encrypting.</div></div>
+      </div>
+    </div>
 
 <!-- Organization Schema -->
 <script type="application/ld+json">
