@@ -226,10 +226,10 @@
                                         <li><a href="asn1-decoder.jsp">ASN.1 Decoder</a></li>
                                         <li><a href="passwdgen.jsp">Password Generator</a></li>
                                         <li><a href="uuid.jsp">UUID/GUID Generator</a></li>
-                                        <li><a href="naclencdec.jsp">NaCl XSalsa20 Encryption</a></li>
-                                        <li><a href="naclaead.jsp">NaCl AEAD Encryption</a></li>
-                                        <li><a href="naclboxenc.jsp">NaCl Box Encryption</a></li>
-                                        <li><a href="naclsealboxenc.jsp">NaCl Sealed Box Encryption</a></li>
+                                        <li><a href="naclencdec.jsp">NaCl XSalsa20 (crypto_stream)</a></li>
+                                        <li><a href="naclaead.jsp">Libsodium SecretBox (crypto_secretbox)</a></li>
+                                        <li><a href="naclboxenc.jsp">NaCl Box (crypto_box)</a></li>
+                                        <li><a href="naclsealboxenc.jsp">NaCl SealedBox (crypto_box_seal)</a></li>
                                     </ul>
                                 </div>
                             </div>
