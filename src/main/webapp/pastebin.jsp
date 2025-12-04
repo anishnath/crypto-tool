@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pastebin Online – Free | 8gwifi.org</title>
+    <title>Pastebin Online – Public or Encrypted (Free) | 8gwifi.org</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="index, follow">

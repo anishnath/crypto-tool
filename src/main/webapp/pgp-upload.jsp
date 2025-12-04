@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>PGP Encrypted File Transfer Online – Free | 8gwifi.org</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>PGP Encrypted File Transfer (OpenPGP) – Free | 8gwifi.org</title>
+    <link rel="canonical" href="https://8gwifi.org/pgp-upload.jsp" />
 	<meta name="description" content="Free secure file sharing with PGP encryption. Upload and transfer files encrypted with OpenPGP. Share sensitive documents securely using public key cryptography. No storage, direct encrypted file transfer.">
 	<meta name="keywords" content="pgp file transfer, encrypted file sharing, secure file upload, openpgp file encryption, pgp encrypted transfer, secure document sharing, encrypted file send">
 

@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>URL Shortener Online – Free | 8gwifi.org</title>
+  <link rel="canonical" href="https://8gwifi.org/short.jsp" />
+  <title>URL Shortener & Link Analytics (QR) – Free | 8gwifi.org</title>
   <meta name="description" content="Free URL shortener to create short links and track clicks. Link analytics with daily charts, top countries, referrers, and QR codes. No login required.">
   <meta name="keywords" content="url shortener, free url shortener, link shortener, create short link, short url, shorten url online, qr code short link, link analytics, track link clicks, link tracker">
   <!-- Open Graph / Twitter for rich previews -->

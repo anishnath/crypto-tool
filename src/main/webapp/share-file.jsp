@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-        <title>Secure File Transfer Online – Free | 8gwifi.org</title>
+        <title>Secure File Transfer – Password Protected (Free) | 8gwifi.org</title>
         <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="robots" content="index, follow">
@@ -17,7 +17,7 @@
         <meta property="og:title" content="Secure File Transfer | Send Encrypted Files Online (Free, E2EE)">
         <meta property="og:description" content="Encrypt files in your browser and share a protected download link. Free, no sign‑up.">
         <meta property="og:url" content="https://8gwifi.org/share-file.jsp">
-        <meta property="og:image" content="https://8gwifi.org/images/site/share-file.png">
+        <meta property="og:image" content="https://8gwifi.org/images/site/file-encrypt.png">
         <meta property="og:locale" content="en_US">
 
         <!-- Twitter Card -->
@@ -25,7 +25,7 @@
         <meta name="twitter:site" content="@anish2good">
         <meta name="twitter:title" content="Secure File Transfer | Encrypted Files Online (Free)">
         <meta name="twitter:description" content="Client‑side encryption and shareable download links.">
-        <meta name="twitter:image" content="https://8gwifi.org/images/site/share-file.png">
+        <meta name="twitter:image" content="https://8gwifi.org/images/site/file-encrypt.png">
     	   <script type="application/ld+json">
         {
             "@context": "https://schema.org",
