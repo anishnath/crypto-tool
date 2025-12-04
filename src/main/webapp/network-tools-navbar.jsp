@@ -109,7 +109,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="whois.jsp">
-                            <i class="fas fa-user"></i> Whois Lookup
+                            <i class="fas fa-user"></i> WHOIS Lookup
                         </a>
                     </div>
                 </li>
