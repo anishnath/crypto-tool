@@ -253,13 +253,13 @@
                                         <li><a href="pingfunctions.jsp">Online Ping Tool (IPv4/IPv6)</a></li>
                                         <li><a href="curlfunctions.jsp">Online Curl Tool (HTTP/HTTPS)</a></li>
                                         <li><a href="ipv6-tool.jsp">IPv6 Compressor & Expander</a></li>
-                                        <li><a href="dns.jsp">DNS Lookup</a></li>
-                                        <li><a href="dmarc.jsp">DMARC Record Lookup</a></li>
+                                        <li><a href="dns.jsp">DNS Lookup (All Records)</a></li>
+                                        <li><a href="dmarc.jsp">DMARC Record Lookup & Validator</a></li>
                                         <li><a href="subdomain.jsp">Subdomain Finder</a></li>
                                         <li><a href="portscan.jsp">Port Scanner</a></li>
                                         <li><a href="whois.jsp">Whois Lookup</a></li>
-                                        <li><a href="revdns.jsp">Reverse DNS</a></li>
-                                        <li><a href="dnsresolver.jsp">DNS Resolver Tool</a></li>
+                                        <li><a href="revdns.jsp">Reverse DNS (PTR)</a></li>
+                                        <li><a href="dnsresolver.jsp">DNS Propagation Checker</a></li>
                                         <li><a href="mtr.jsp">Traceroute Mtr Tool</a></li>
                                         <li><a href="socket-io-client.jsp">Socket.IO Client</a></li>
                                         <li><a href="websocket-client.jsp">WebSocket Client</a></li>
