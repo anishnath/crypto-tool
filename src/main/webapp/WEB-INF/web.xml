@@ -110,6 +110,16 @@
 		<servlet-name>NetworkFunctionality</servlet-name>
 		<url-pattern>/NetworkFunctionality</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>UrlFetchFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.UrlFetchFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UrlFetchFunctionality</servlet-name>
+		<url-pattern>/UrlFetchFunctionality</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>MDFunctionality</servlet-name>
 		<servlet-class>z.y.x.Security.MDFunctionality</servlet-class>
