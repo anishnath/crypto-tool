@@ -171,7 +171,30 @@
 					$('#form').submit();
 				}, 500);
 			}
-			
+
+			// Check for PEM from JKS Viewer (via localStorage)
+			if (urlParams.has('fromJks')) {
+				var jksPem = localStorage.getItem('jks_pem_to_parse');
+				if (jksPem) {
+					$('#pem').val(jksPem);
+					localStorage.removeItem('jks_pem_to_parse'); // Clean up
+
+					// Show info message
+					$('#output').html('<div class="alert alert-info"><i class="fas fa-info-circle"></i> Certificate loaded from JKS Viewer. Click <strong>Submit</strong> to parse.</div>');
+
+					// Highlight the textarea
+					$('#pem').addClass('border-info');
+					setTimeout(function() {
+						$('#pem').removeClass('border-info');
+					}, 3000);
+
+					// Auto-submit
+					setTimeout(function() {
+						$('#form').submit();
+					}, 500);
+				}
+			}
+
 			// Copy Share URL from modal
 			$('#copyShareUrl').click(function() {
 				const shareUrl = $('#shareUrlText').val();
