@@ -102,7 +102,7 @@
                                         <li><a href="PGPFunctionality?invalidate=yes">PGP Signature Verifier</a></li>
                                         <li><a href="pgp-suite.jsp">PGP Suite: Sign/Verify/Keys</a></li>
                                         <li><a href="pgpdump.jsp">PGP KeyDumper</a></li>
-                                        <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
+                                        <li><a href="pgp-upload.jsp">PGP Encrypted File Transfer</a></li>
                                         <li><a href="pgp-file-decrypt.jsp">PGP Decrypt files</a></li>
                                     </ul>
                                 </div>
@@ -124,16 +124,12 @@
                                 data-parent="#sidebarAccordion">
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
-                                        <li><a href="pgp-upload.jsp">PGP Send Encrypt files</a></li>
-                                        <li><a href="securebin.jsp"
-                                                title="Share a one‑time secret with end‑to‑end encryption">Share
-                                                Secret</a></li>
-                                        <li><a href="pastebin.jsp"
-                                                title="Pastebin: share text publicly or encrypt with a password">Pastebin
-                                                (Public or Encrypted)</a></li>
-                                        <li><a href="share-file.jsp">Transfer files securely</a></li>
-                                        <li><a href="temp-email.jsp">Temporary Email</a></li>
-                                        <li><a href="short.jsp">URL Shortener & Analytics</a></li>
+                                        <li><a href="pgp-upload.jsp">PGP Encrypted File Transfer</a></li>
+                                        <li><a href="securebin.jsp" title="Share a one‑time secret with end‑to‑end encryption">Encrypted Pastebin (E2EE, 24h)</a></li>
+                                        <li><a href="pastebin.jsp" title="Pastebin: share text publicly or encrypt with a password">Pastebin (Public or Encrypted)</a></li>
+                                        <li><a href="share-file.jsp">Secure File Transfer (Password Protected)</a></li>
+                                        <li><a href="temp-email.jsp">Temporary Email (Disposable)</a></li>
+                                        <li><a href="short.jsp">URL Shortener & Analytics (QR)</a></li>
                                     </ul>
                                 </div>
                             </div>
