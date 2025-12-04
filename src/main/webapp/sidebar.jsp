@@ -203,22 +203,22 @@
                                         <li><a href="MessageDigest.jsp">Message Digest (Text)</a></li>
                                         <li><a href="mdfile.jsp">Message Digest (File)</a></li>
                                         <li><a href="hmacgen.jsp">HMAC Generator</a></li>
-                                        <li><a href="CipherFunctions.jsp">Encryption/Decryption</a></li>
+                                        <li><a href="CipherFunctions.jsp">Symmetric Encryption/Decryption</a></li>
                                         <li><a href="ciph.jsp">Classical Ciphers (ROT, Caesar, Vigenère)</a></li>
                                         <li><a href="file-encrypt.jsp">File Encryption/Decryption</a></li>
                                         <li><a href="fernet.jsp">Fernet Encryption/Decryption</a></li>
                                         <li><a href="steganography-tool.jsp">Steganography Tool</a></li>
                                         <li><a href="rsafunctions.jsp">RSA Encryption/Decryption</a></li>
                                         <li><a href="rsasignverifyfunctions.jsp">RSA Signature/Verification</a></li>
-                                        <li><a href="ntrufunctions.jsp">Lattice Cryptography</a></li>
+                                        <li><a href="ntrufunctions.jsp">NTRU Encryption/Decryption</a></li>
                                         <li><a href="dsafunctions.jsp">DSA Keygen, Sign, Verify</a></li>
                                         <li><a href="ecfunctions.jsp">EC Encryption/Decryption</a></li>
                                         <li><a href="ecsignverify.jsp">EC Sign/Verify Message</a></li>
-                                        <li><a href="elgamalfunctions.jsp">ELGAMAL Encryption/Decryption</a></li>
+                                        <li><a href="elgamalfunctions.jsp">ElGamal Encryption/Decryption</a></li>
                                         <li><a href="pbkdf.jsp">PBKDF2 Derive Key</a></li>
                                         <li><a href="pbe.jsp">PBE (PBKDF) Encryption/Decryption</a></li>
                                         <li><a href="bccrypt.jsp">BCrypt Password Hash</a></li>
-                                        <li><a href="scrypt.jsp">SCrypt Password Hash</a></li>
+                                        <li><a href="scrypt.jsp">scrypt Password Hash</a></li>
                                         <li><a href="argon2.jsp">Argon2 Password Hash</a></li>
                                         <li><a href="totp-hotp.jsp">TOTP/HOTP 2FA Generator</a></li>
                                         <li><a href="htpasswd.jsp">.htpasswd Generator</a></li>
@@ -226,10 +226,10 @@
                                         <li><a href="asn1-decoder.jsp">ASN.1 Decoder</a></li>
                                         <li><a href="passwdgen.jsp">Password Generator</a></li>
                                         <li><a href="uuid.jsp">UUID/GUID Generator</a></li>
-                                        <li><a href="naclencdec.jsp">Nacl xsalsa20 Encryption</a></li>
-                                        <li><a href="naclaead.jsp">Nacl AEAD Encryption</a></li>
-                                        <li><a href="naclboxenc.jsp">Nacl Box Encryption</a></li>
-                                        <li><a href="naclsealboxenc.jsp">Nacl SealBox Encryption</a></li>
+                                        <li><a href="naclencdec.jsp">NaCl XSalsa20 Encryption</a></li>
+                                        <li><a href="naclaead.jsp">NaCl AEAD Encryption</a></li>
+                                        <li><a href="naclboxenc.jsp">NaCl Box Encryption</a></li>
+                                        <li><a href="naclsealboxenc.jsp">NaCl Sealed Box Encryption</a></li>
                                     </ul>
                                 </div>
                             </div>
