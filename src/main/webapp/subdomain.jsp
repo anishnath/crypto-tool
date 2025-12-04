@@ -78,6 +78,19 @@
 	}
 	</script>
 
+	<!-- JSON-LD FAQPage Schema -->
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "FAQPage",
+	  "mainEntity": [
+	    {"@type": "Question","name": "What sources are used?","acceptedAnswer": {"@type": "Answer","text": "Certificate Transparency logs and other public sources are queried to discover subdomains."}},
+	    {"@type": "Question","name": "Are results exhaustive?","acceptedAnswer": {"@type": "Answer","text": "Enumeration is best‑effort; visibility depends on public data. New entries appear as CT logs update."}},
+	    {"@type": "Question","name": "Any rate limits?","acceptedAnswer": {"@type": "Answer","text": "Excessive queries may be rate‑limited. Use responsibly and cache or export results for later analysis."}}
+	  ]
+	}
+	</script>
+
     
 
 	<script type="text/javascript">

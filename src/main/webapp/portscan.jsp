@@ -78,6 +78,19 @@
 	}
 	</script>
 
+	<!-- JSON-LD FAQPage Schema -->
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "FAQPage",
+	  "mainEntity": [
+	    {"@type": "Question","name": "Is port scanning legal?","acceptedAnswer": {"@type": "Answer","text": "Only scan hosts you own or have permission to test. Unauthorized scanning may violate policies or local laws."}},
+	    {"@type": "Question","name": "Why block private networks?","acceptedAnswer": {"@type": "Answer","text": "For safety. The tool only allows public targets; private/reserved ranges and localhost are not permitted."}},
+	    {"@type": "Question","name": "What scan types are available?","acceptedAnswer": {"@type": "Answer","text": "Quick, top, custom, and full scans are supported. Service/version detection is available on top/custom scans."}}
+	  ]
+	}
+	</script>
+
     
 
 	<script type="text/javascript">
