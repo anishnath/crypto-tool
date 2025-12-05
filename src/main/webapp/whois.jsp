@@ -17,18 +17,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://8gwifi.org/whois.jsp" />
     <meta property="og:image" content="https://8gwifi.org/images/site/logo.png" />
-<!-- JSON-LD FAQPage Schema (additions matching visible FAQs) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {"@type": "Question","name": "What is WHOIS?","acceptedAnswer": {"@type": "Answer","text": "WHOIS is a public directory of domain registration data: registrar, registrant (if not redacted), name servers, creation and expiry dates."}},
-        {"@type": "Question","name": "Why is some data hidden?","acceptedAnswer": {"@type": "Answer","text": "Privacy/GDPR masking or proxy services often redact registrant info. Use registrar-provided contact forms if needed."}},
-        {"@type": "Question","name": "How current is WHOIS data?","acceptedAnswer": {"@type": "Answer","text": "WHOIS reflects registry/registrar records; updates depend on provider propagation and cache refresh intervals."}}
-      ]
-    }
-    </script>
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="WHOIS Lookup – Domain Registration & Ownership" />
     <meta name="twitter:description" content="Free WHOIS lookup. Find domain registration details, ownership info, expiration dates, and name servers." />
