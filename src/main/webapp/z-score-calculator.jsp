@@ -184,8 +184,7 @@
     "price": "0",
     "priceCurrency": "USD"
   },
-  "featureList": "Z-score calculation, Percentile calculation, Probability from Z-score, Raw score from Z-score, Normal distribution visualization, Z-table lookup, Area under curve",
-  
+  "featureList": "Z-score calculation, Percentile calculation, Probability from Z-score, Raw score from Z-score, Normal distribution visualization, Z-table lookup, Area under curve"
 }
 </script>
 </head>
