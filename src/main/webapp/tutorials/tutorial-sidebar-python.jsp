@@ -1144,10 +1144,10 @@
                                                         </div>
 
                                                         <%-- Sidebar Ad --%>
-                                                            <div class="sidebar-ad-container"
-                                                                style="padding: var(--space-4); margin-top: var(--space-4);">
-                                                                <%@ include file="ads/ad-sidebar.jsp" %>
-                                                            </div>
+<%--                                                            <div class="sidebar-ad-container"--%>
+<%--                                                                style="padding: var(--space-4); margin-top: var(--space-4);">--%>
+<%--                                                                <%@ include file="ads/ad-sidebar.jsp" %>--%>
+<%--                                                            </div>--%>
                 </nav>
             </aside>
 

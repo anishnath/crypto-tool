@@ -754,8 +754,8 @@
                 </div>
 
                 <%-- Ad Slot: Sidebar (Sticky Bottom) --%>
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="sidebar" />
-                    </jsp:include>
+<%--                    <jsp:include page="../tutorial-ad-slot.jsp">--%>
+<%--                        <jsp:param name="slot" value="sidebar" />--%>
+<%--                    </jsp:include>--%>
             </div>
         </nav>
