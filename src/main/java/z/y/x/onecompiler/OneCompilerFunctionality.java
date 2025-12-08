@@ -273,7 +273,6 @@ public class OneCompilerFunctionality extends HttpServlet {
 
         try {
             String result = makePostRequest(url, requestBody);
-            System.out.println(result);
             sendJsonResponse(response, HttpServletResponse.SC_OK, result);
         } catch (Exception e) {
             sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
