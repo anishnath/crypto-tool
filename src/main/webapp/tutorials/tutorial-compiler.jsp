@@ -79,6 +79,7 @@
             case "kotlin": filename = "Main.kt"; break;
             case "swift": filename = "main.swift"; break;
             case "scala": filename = "Main.scala"; break;
+            case "bash": case "shell": case "sh": filename = "script.sh"; break;
             default: filename = "main." + language;
         }
     }
@@ -575,7 +576,10 @@
             'php': 'text/x-php',
             'kotlin': 'text/x-kotlin',
             'swift': 'swift',
-            'scala': 'text/x-scala'
+            'scala': 'text/x-scala',
+            'bash': 'shell',
+            'shell': 'shell',
+            'sh': 'shell'
         };
 
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
