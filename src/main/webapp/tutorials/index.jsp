@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>8gwifi.org Tutorials - Learn Programming</title>
     <meta name="description"
-        content="Free interactive tutorials for programming. Learn HTML, CSS, JavaScript, Python, Java, Go, and more with live code editor.">
+        content="Free interactive tutorials for programming. Learn HTML, CSS, JavaScript, Python, Bash, Java, Go, and more with live code editor.">
 
     <link rel="icon" type="image/svg+xml"
         href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
@@ -270,6 +270,18 @@
                     <h3>Python</h3>
                 </div>
                 <p>Versatile language for web, data science, AI, and automation.</p>
+                <span class="tutorial-card-badge badge-available">Available</span>
+            </a>
+
+            <%-- Bash Tutorial --%>
+            <a href="<%=request.getContextPath()%>/tutorials/bash/" class="tutorial-card">
+                <div class="tutorial-card-header">
+                    <div class="tutorial-card-icon" style="background: #4eaa2515;">
+                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/bash-logo.svg" alt="Bash">
+                    </div>
+                    <h3>Bash</h3>
+                </div>
+                <p>Shell scripting for automation, DevOps, and system administration.</p>
                 <span class="tutorial-card-badge badge-available">Available</span>
             </a>
         </section>

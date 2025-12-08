@@ -2158,4 +2158,62 @@
   <url><loc>https://8gwifi.org/tutorials/python/prof-logging.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/prof-args.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/prof-sqlite.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Bash Tutorial -->
+  <url><loc>https://8gwifi.org/tutorials/bash/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/first-script.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/terminal-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/variables-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/variables-expansion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/variables-environment.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/variables-special.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/variables-arrays.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/strings-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/strings-manipulation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/strings-parameter-expansion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/strings-heredoc.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/operators-arithmetic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/operators-comparison.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/operators-logical.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/operators-file-test.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/control-if.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/control-case.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/loops-for.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/loops-while.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/loops-control.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/loops-select.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/functions-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/functions-parameters.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/functions-return.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/functions-scope.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/functions-recursive.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/io-read.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/io-redirection.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/io-pipes.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/io-heredoc.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/io-process-substitution.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/files-reading.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/files-writing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/files-manipulation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/files-testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/files-directories.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-regex.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-sed.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-awk.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-signals.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/processes-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-jobs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-debugging.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-brace-expansion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/advanced-parameter-expansion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-best-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-error-handling.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-logging.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-configuration.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-arguments.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-templates.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/bash/practices-examples.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
