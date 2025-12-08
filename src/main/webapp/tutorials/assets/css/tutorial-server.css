@@ -1,0 +1,56 @@
+/**
+ * Server-Side Tutorial Styles
+ *
+ * For Python, Java, Go, Rust, and other server-side language tutorials.
+ * These tutorials have NO live preview panel - content fills full width.
+ *
+ * Include AFTER tutorial.css:
+ * <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">
+ * <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial-server.css">
+ */
+
+/* Remove preview panel margin - content fills full width */
+@media (min-width: 768px) {
+    .no-preview .tutorial-content {
+        margin-right: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+    .no-preview .tutorial-content {
+        margin-right: 0;
+        /* Content stretches full width after sidebar */
+    }
+}
+
+/* On very wide screens, limit width for better readability */
+@media (min-width: 1800px) {
+    .no-preview .tutorial-content {
+        max-width: calc(100vw - var(--sidebar-width) - var(--space-12));
+    }
+}
+
+/* Compiler component enhancements for full-width layout */
+.no-preview .compiler-container {
+    max-width: 100%;
+}
+
+.no-preview .compiler-editor {
+    max-height: 500px; /* More room without preview panel */
+}
+
+/* Code blocks can be wider */
+.no-preview .code-block,
+.no-preview pre {
+    max-width: 100%;
+}
+
+/* Better use of horizontal space for tables */
+.no-preview table {
+    width: 100%;
+}
+
+/* Quiz component can stretch wider */
+.no-preview .quiz-container {
+    max-width: 100%;
+}

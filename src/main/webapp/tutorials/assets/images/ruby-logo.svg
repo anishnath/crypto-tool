@@ -1,0 +1,67 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <linearGradient id="ruby-a" gradientUnits="userSpaceOnUse" x1="109.5" y1="18.5" x2="57.5" y2="126.5">
+    <stop offset="0" stop-color="#fb7655"/>
+    <stop offset=".41" stop-color="#e42b1e"/>
+    <stop offset=".99" stop-color="#900"/>
+    <stop offset="1" stop-color="#900"/>
+  </linearGradient>
+  <path fill="url(#ruby-a)" d="M28 104l49 16 43-94z"/>
+  <linearGradient id="ruby-b" gradientUnits="userSpaceOnUse" x1="107" y1="94" x2="43" y2="18">
+    <stop offset="0" stop-color="#871101"/>
+    <stop offset=".99" stop-color="#911209"/>
+    <stop offset="1" stop-color="#911209"/>
+  </linearGradient>
+  <path fill="url(#ruby-b)" d="M120 26L77 120l43-94z"/>
+  <linearGradient id="ruby-c" gradientUnits="userSpaceOnUse" x1="62" y1="106" x2="62" y2="18">
+    <stop offset="0" stop-color="#871101"/>
+    <stop offset=".99" stop-color="#911209"/>
+    <stop offset="1" stop-color="#911209"/>
+  </linearGradient>
+  <path fill="url(#ruby-c)" d="M28 104l49-86 43 8z"/>
+  <linearGradient id="ruby-d" gradientUnits="userSpaceOnUse" x1="41" y1="108" x2="41" y2="58">
+    <stop offset="0" stop-color="#fff"/>
+    <stop offset=".23" stop-color="#e57252"/>
+    <stop offset=".46" stop-color="#de3b20"/>
+    <stop offset=".99" stop-color="#a60003"/>
+    <stop offset="1" stop-color="#a60003"/>
+  </linearGradient>
+  <path fill="url(#ruby-d)" d="M8 58l20 46L77 18z"/>
+  <linearGradient id="ruby-e" gradientUnits="userSpaceOnUse" x1="42" y1="48" x2="42" y2="8">
+    <stop offset="0" stop-color="#fff"/>
+    <stop offset=".23" stop-color="#e4714e"/>
+    <stop offset=".56" stop-color="#be1a0d"/>
+    <stop offset=".99" stop-color="#a80d00"/>
+    <stop offset="1" stop-color="#a80d00"/>
+  </linearGradient>
+  <path fill="url(#ruby-e)" d="M8 58l69-40-69-10z"/>
+  <linearGradient id="ruby-f" gradientUnits="userSpaceOnUse" x1="96" y1="20" x2="96" y2="8">
+    <stop offset="0" stop-color="#fff"/>
+    <stop offset=".18" stop-color="#e46342"/>
+    <stop offset=".4" stop-color="#c82410"/>
+    <stop offset=".99" stop-color="#a80d00"/>
+    <stop offset="1" stop-color="#a80d00"/>
+  </linearGradient>
+  <path fill="url(#ruby-f)" d="M77 18l43 8-48-18z"/>
+  <path fill="#fff" d="M8 8h69v10H8z"/>
+  <linearGradient id="ruby-g" gradientUnits="userSpaceOnUse" x1="66" y1="122" x2="66" y2="108">
+    <stop offset="0" stop-color="#bd0012"/>
+    <stop offset=".07" stop-color="#fff"/>
+    <stop offset=".17" stop-color="#fff"/>
+    <stop offset=".27" stop-color="#c82f1c"/>
+    <stop offset=".33" stop-color="#820c01"/>
+    <stop offset=".46" stop-color="#a31601"/>
+    <stop offset=".72" stop-color="#b31301"/>
+    <stop offset=".99" stop-color="#e82609"/>
+    <stop offset="1" stop-color="#e82609"/>
+  </linearGradient>
+  <path fill="url(#ruby-g)" d="M28 104h96l-47 16z"/>
+  <linearGradient id="ruby-h" gradientUnits="userSpaceOnUse" x1="118" y1="76" x2="118" y2="26">
+    <stop offset="0" stop-color="#8c0c01"/>
+    <stop offset=".54" stop-color="#990c00"/>
+    <stop offset=".99" stop-color="#a80d00"/>
+    <stop offset="1" stop-color="#a80d00"/>
+  </linearGradient>
+  <path fill="url(#ruby-h)" d="M120 26l4 78-47 16z"/>
+  <path fill="#9e1209" d="M120 26l-43-8 43-10z"/>
+  <path fill="#fff" d="M120 8v10h-43L120 8z"/>
+</svg>
