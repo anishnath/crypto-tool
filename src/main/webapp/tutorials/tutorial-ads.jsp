@@ -32,9 +32,10 @@
             googletag.defineSlot('/147246189,22976055811/8gwifi.org_250x250_sidebar_desktop', [[250,250]], 'site_8gwifi_org_sidebar_desktop').addService(googletag.pubads());
         }
 
-        // Siderail ads - very wide screens only (>=1490px)
-        if (window.innerWidth >= 1490) {
-            googletag.defineSlot('/147246189,22976055811/8gwifi.org_160x600_siderail_left_desktop', [[160,600],[120,600]], 'site_8gwifi_org_siderail_left_desktop').addService(googletag.pubads());
+        // Siderail ads - very wide screens only (>=1600px)
+        // Note: Left siderail disabled for tutorials (overlaps sidebar navigation)
+        if (window.innerWidth >= 1600) {
+            // googletag.defineSlot('/147246189,22976055811/8gwifi.org_160x600_siderail_left_desktop', [[160,600],[120,600]], 'site_8gwifi_org_siderail_left_desktop').addService(googletag.pubads());
             googletag.defineSlot('/147246189,22976055811/8gwifi.org_160x600_siderail_right_desktop', [[160,600],[120,600]], 'site_8gwifi_org_siderail_right_desktop').addService(googletag.pubads());
         }
 
@@ -84,7 +85,7 @@
         margin-bottom: var(--space-4);
     }
     /* Hide siderails when they would overlap content */
-    @media (max-width: 1489px) {
+    @media (max-width: 1599px) {
         #site_8gwifi_org_siderail_left_desktop,
         #site_8gwifi_org_siderail_right_desktop {
             display: none !important;
