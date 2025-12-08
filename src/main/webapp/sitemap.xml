@@ -9,10 +9,29 @@
     <loc>https://8gwifi.org/</loc>
 </url>
 <url>
-    <loc>https://8gwifi.org/onecompiler.jsp</loc>
+    <loc>https://8gwifi.org/online-compiler/</loc>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
-</url>
+    </url>
+<url><loc>https://8gwifi.org/embed-online-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-python-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-javascript-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-typescript-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-ruby-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-php-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-go-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-java-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-c-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-cpp-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-csharp-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-rust-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-swift-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-scala-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-dart-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-kotlin-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-r-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-lua-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/online-bash-compiler/</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
 <url>
     <loc>https://8gwifi.org/html-code-editor.jsp</loc>
     <priority>1.0</priority>

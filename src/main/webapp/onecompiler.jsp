@@ -1,4 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
+<%
+    String uri = request.getRequestURI();
+    if (uri != null && uri.endsWith("/onecompiler.jsp")) {
+        String target = request.getContextPath() + "/online-compiler/";
+        response.setStatus(301);
+        response.setHeader("Location", target);
+        return;
+    }
+%>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -7,21 +16,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <!-- SEO Meta Tags -->
-        <title>Online Compiler & IDE - Run Code Online (60+ Languages) | Free</title>
+        <title><%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %></title>
         <meta name="description"
-            content="Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required. Intelligent code completion, execution history, and embeddable widgets. Perfect for developers, educators, and interviews.">
+            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required. Intelligent code completion, execution history, and embeddable widgets. Perfect for developers, educators, and interviews." %>">
         <meta name="keywords"
             content="online compiler, online ide, run code online, code playground, online code editor, online debugger, run code free, python compiler, java compiler, c++ compiler, javascript compiler, embeddable code editor, programming tutorials, code snippets, technical documentation">
         <meta name="author" content="8gwifi.org">
-        <meta name="robots" content="index, follow">
+        <meta name="robots" content="index, follow, max-image-preview:large">
 
         <!-- Open Graph Meta Tags -->
-        <meta property="og:title" content="Online Compiler & IDE - Run Code Online (60+ Languages) | Free">
+        <meta property="og:title" content="<%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %>">
         <meta property="og:description"
-            content="Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required.">
+            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required." %>">
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://8gwifi.org/onecompiler.jsp">
+        <meta property="og:url" content="<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>">
         <meta property="og:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
+        <meta property="og:image:alt" content="Run code online in 60+ languages with a free compiler and IDE">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:site_name" content="8gwifi.org">
@@ -30,13 +40,19 @@
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@anish2good">
         <meta name="twitter:creator" content="@anish2good">
-        <meta name="twitter:title" content="Online Compiler & IDE - Run Code Online (60+ Languages) | Free">
+        <meta name="twitter:title" content="<%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %>">
         <meta name="twitter:description"
-            content="Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required.">
+            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required." %>">
         <meta name="twitter:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
 
         <!-- Canonical -->
-        <link rel="canonical" href="https://8gwifi.org/onecompiler.jsp">
+        <link rel="canonical" href="<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>">
+
+        <% if (request.getAttribute("preferredLanguage") != null) { %>
+        <script>
+            window.PREFERRED_LANG = '<%= request.getAttribute("preferredLanguage") %>';
+        </script>
+        <% } %>
 
         <!-- JSON-LD Structured Data - WebApplication -->
         <script type="application/ld+json">
@@ -45,7 +61,7 @@
       "@type": "WebApplication",
       "name": "Online Compiler & IDE",
       "description": "Free online compiler and integrated development environment (IDE) supporting 60+ programming languages. Features intelligent code completion, execution history, and embeddable widgets.",
-      "url": "https://8gwifi.org/onecompiler.jsp",
+      "url": "<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>",
       "applicationCategory": "DeveloperApplication",
       "applicationSubCategory": "Integrated Development Environment (IDE)",
       "operatingSystem": "Web",
@@ -75,7 +91,33 @@
         "No installation required"
       ]
     }
-    </script>
+        </script>
+
+        <!-- JSON-LD Structured Data - Breadcrumbs -->
+        <script type="application/ld+json">
+        <%
+          String baseUrl = "https://8gwifi.org";
+          String langSlug = (String) request.getAttribute("preferredLanguage");
+          boolean isLang = (langSlug != null && !langSlug.isEmpty());
+        %>
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "<%= baseUrl %>/"},
+            {"@type": "ListItem", "position": 2, "name": "Online Compiler", "item": "<%= baseUrl %>/online-compiler/"}
+            <% if (isLang) { %>
+            , {"@type": "ListItem", "position": 3, "name": "Online <%= ((String)request.getAttribute("pageTitle")).toString().replace("Online ", "").replace(" & IDE", "") %>", "item": "<%= request.getAttribute("pageUrl") %>"}
+            <% } %>
+          ]
+        }
+        </script>
+
+        <% if (request.getAttribute("softwareAppJsonLd") != null) { %>
+        <script type="application/ld+json">
+<%= request.getAttribute("softwareAppJsonLd") %>
+        </script>
+        <% } %>
 
         <!-- JSON-LD Structured Data - FAQPage -->
         <script type="application/ld+json">
@@ -1575,17 +1617,17 @@
                     <!-- SEO Content (Always visible for crawlers, scrollable below IDE) -->
                     <div class="seo-section" id="seoSection">
                         <!-- H1 for SEO -->
-                        <h1 class="seo-h1">Free Online Compiler - Run Code in 60+ Programming Languages</h1>
+                        <h1 class="seo-h1"><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h1>
 
                         <div class="seo-grid">
                             <!-- About Section -->
                             <div class="seo-card">
                                 <h2><i class="fas fa-info-circle"></i> About Online Compiler</h2>
                                 <p>Our <strong>free online compiler</strong> lets you write, compile, and run code
-                                    instantly in your browser. Supports <a href="onecompiler.jsp"
-                                        title="Python Online Compiler">Python</a>, <a href="onecompiler.jsp"
-                                        title="Java Compiler Online">Java</a>, <a href="onecompiler.jsp"
-                                        title="C++ Compiler Online">C++</a>, JavaScript, Go, Rust, and 60+ more
+                                    instantly in your browser. Supports <a href="/online-python-compiler/"
+                                        title="Online Python Compiler">Python</a>, <a href="/online-java-compiler/"
+                                        title="Online Java Compiler">Java</a>, <a href="/online-cpp-compiler/"
+                                        title="Online C++ Compiler">C++</a>, JavaScript, Go, Rust, and many more
                                     languages. No installation required.</p>
                             </div>
 
@@ -1619,6 +1661,30 @@
                                 <p><strong>Can I share code?</strong> Yes, click Share to get a unique URL.</p>
                             </div>
                         </div>
+
+                        <!-- Breadcrumb UI -->
+                        <div class="seo-card">
+                            <nav aria-label="Breadcrumb" style="font-size:14px;">
+                                <a href="/">Home</a> &raquo; <a href="/online-compiler/">Online Compiler</a>
+                                <% if (request.getAttribute("preferredLanguage") != null) { %>
+                                    &raquo; <span>Online <%= ((String)request.getAttribute("pageTitle")).toString().replace("Online ", "").replace(" & IDE", "") %></span>
+                                <% } %>
+                            </nav>
+                        </div>
+
+                        <% if (request.getAttribute("seoIntroTitle") != null) { %>
+                        <div class="seo-card seo-full-width">
+                            <h2><i class="fas fa-terminal"></i> <%= request.getAttribute("seoIntroTitle") %></h2>
+                            <p><%= request.getAttribute("seoIntroBody") %></p>
+                        </div>
+                        <% } %>
+
+                        <% if (request.getAttribute("languageFaqHtml") != null) { %>
+                        <div class="seo-card">
+                            <h2><i class="fas fa-question-circle"></i> FAQ</h2>
+                            <div><%= request.getAttribute("languageFaqHtml") %></div>
+                        </div>
+                        <% } %>
 
                         <!-- How to Use -->
                         <div class="seo-card seo-full-width">
@@ -1710,25 +1776,52 @@ print("Welcome to 8gwifi.org Online Compiler")
                             </p>
                         </div>
 
+                        <!-- Popular Online Compilers -->
+                        <div class="seo-card seo-full-width">
+                            <h2><i class="fas fa-code"></i> Popular Online Compilers</h2>
+                            <p>Jump straight to a language‑specific page:</p>
+                            <p>
+                                <a href="/online-python-compiler/">Python</a> ·
+                                <a href="/online-javascript-compiler/">JavaScript</a> ·
+                                <a href="/online-typescript-compiler/">TypeScript</a> ·
+                                <a href="/online-ruby-compiler/">Ruby</a> ·
+                                <a href="/online-php-compiler/">PHP</a> ·
+                                <a href="/online-go-compiler/">Go</a> ·
+                                <a href="/online-java-compiler/">Java</a> ·
+                                <a href="/online-c-compiler/">C</a> ·
+                                <a href="/online-cpp-compiler/">C++</a> ·
+                                <a href="/online-csharp-compiler/">C#</a> ·
+                                <a href="/online-rust-compiler/">Rust</a> ·
+                                <a href="/online-swift-compiler/">Swift</a> ·
+                                <a href="/online-scala-compiler/">Scala</a> ·
+                                <a href="/online-dart-compiler/">Dart</a> ·
+                                <a href="/online-kotlin-compiler/">Kotlin</a> ·
+                                <a href="/online-r-compiler/">R</a> ·
+                                <a href="/online-lua-compiler/">Lua</a> ·
+                                <a href="/online-bash-compiler/">Bash</a>
+                            </p>
+                            <p>Need embeds? See <a href="/embed-online-compiler/">Embed Online Compiler</a>.</p>
+                        </div>
+
                         <!-- Related Tools -->
                         <div class="seo-related">
                             <h2><i class="fas fa-link"></i> Related Developer Tools</h2>
                             <div class="seo-links">
-                                <a href="regex.jsp" title="Online Regex Tester"><i class="fas fa-code"></i> Regex
+                                <a href="/regex.jsp" title="Online Regex Tester"><i class="fas fa-code"></i> Regex
                                     Tester</a>
-                                <a href="jsonparser.jsp" title="JSON Formatter"><i class="fas fa-file-code"></i> JSON
+                                <a href="/jsonparser.jsp" title="JSON Formatter"><i class="fas fa-file-code"></i> JSON
                                     Formatter</a>
-                                <a href="Base64Functions.jsp" title="Base64 Encoder"><i class="fas fa-lock"></i> Base64
+                                <a href="/Base64Functions.jsp" title="Base64 Encoder"><i class="fas fa-lock"></i> Base64
                                     Encoder</a>
-                                <a href="diff.jsp" title="Text Diff Tool"><i class="fas fa-exchange-alt"></i> Diff
+                                <a href="/diff.jsp" title="Text Diff Tool"><i class="fas fa-exchange-alt"></i> Diff
                                     Tool</a>
-                                <a href="MessageDigest.jsp" title="Hash Calculator"><i class="fas fa-hashtag"></i> Hash
+                                <a href="/MessageDigest.jsp" title="Hash Calculator"><i class="fas fa-hashtag"></i> Hash
                                     Calculator</a>
-                                <a href="curlfunctions.jsp" title="cURL Builder"><i class="fas fa-terminal"></i> cURL
+                                <a href="/curlfunctions.jsp" title="cURL Builder"><i class="fas fa-terminal"></i> cURL
                                     Builder</a>
-                                <a href="jwt-debugger.jsp" title="JWT Debugger"><i class="fas fa-key"></i> JWT
+                                <a href="/jwt-debugger.jsp" title="JWT Debugger"><i class="fas fa-key"></i> JWT
                                     Debugger</a>
-                                <a href="uuid.jsp" title="UUID Generator"><i class="fas fa-random"></i> UUID
+                                <a href="/uuid.jsp" title="UUID Generator"><i class="fas fa-random"></i> UUID
                                     Generator</a>
                             </div>
                         </div>
@@ -1746,10 +1839,19 @@ print("Welcome to 8gwifi.org Online Compiler")
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
                 <script>
+                    // Allow wrapper pages to set a preferred language before initialization
+                    if (typeof window !== 'undefined' && window.PREFERRED_LANG) {
+                        try { window.PREFERRED_LANG = String(window.PREFERRED_LANG).toLowerCase(); } catch (e) {}
+                    }
                     // Global state
                     var editor = null;
                     var languages = [];
                     var currentLanguage = 'python';
+                    if (typeof window !== 'undefined' && window.PREFERRED_LANG) {
+                        currentLanguage = window.PREFERRED_LANG;
+                    }
+                    // Root-relative API base to avoid path issues under subdirectories
+                    var API_BASE = '<%= request.getContextPath() %>/OneCompilerFunctionality';
                     var currentVersion = '';
                     var isRunning = false;
                     var panelMinimized = false;
@@ -1772,14 +1874,18 @@ print("Welcome to 8gwifi.org Online Compiler")
                         'csharp': 'csharp', 'javascript': 'javascript', 'typescript': 'typescript',
                         'go': 'go', 'rust': 'rust', 'php': 'php', 'ruby': 'ruby',
                         'swift': 'swift', 'kotlin': 'kotlin', 'scala': 'scala', 'r': 'r',
-                        'perl': 'perl', 'lua': 'lua', 'haskell': 'haskell', 'bash': 'shell'
+                        'perl': 'perl', 'lua': 'lua', 'haskell': 'haskell', 'bash': 'shell',
+                        // API language key "test" maps to Bash shell for editor highlighting
+                        'test': 'shell'
                     };
 
                     var fileExtensions = {
                         'python': '.py', 'java': '.java', 'c': '.c', 'cpp': '.cpp',
                         'csharp': '.cs', 'javascript': '.js', 'typescript': '.ts',
                         'go': '.go', 'rust': '.rs', 'php': '.php', 'ruby': '.rb',
-                        'swift': '.swift', 'kotlin': '.kt', 'scala': '.scala'
+                        'swift': '.swift', 'kotlin': '.kt', 'scala': '.scala',
+                        'r': '.r', 'lua': '.lua', 'bash': '.sh', 'dart': '.dart',
+                        'test': '.sh'
                     };
 
                     // Initialize files with default main file
@@ -1979,9 +2085,32 @@ print("Welcome to 8gwifi.org Online Compiler")
                     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
 
                     require(['vs/editor/editor.main'], function () {
+                        var initMonacoLang = monacoLanguageMap[currentLanguage] || 'plaintext';
+                        var initialSamples = {
+                            python: "# Write your Python code here\nprint('Hello, World!')\n",
+                            javascript: "// Node.js JavaScript example\nconsole.log('Hello, World!');\n",
+                            typescript: "// TypeScript example\nconsole.log('ok-ts');\n",
+                            ruby: "# Ruby example\nputs 'Hello, World!'\n",
+                            php: "<?php\\n// PHP example\\necho 'Hello, World!';\\n",
+                            go: "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}\n",
+                            java: "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello, World!\");\n  }\n}\n",
+                            cpp: "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\\n\";\n    return 0;\n}\n",
+                            c: "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n",
+                            csharp: "using System;\nclass Program {\n  static void Main() {\n    Console.WriteLine(\"Hello, World!\");\n  }\n}\n",
+                            rust: "fn main() {\n    println!(\"Hello, World!\");\n}\n",
+                            swift: "print(\"Hello, World!\")\n",
+                            scala: "object Main extends App {\n  println(\"Hello, World!\")\n}\n",
+                            dart: "void main() {\n  print('Hello, World!');\n}\n",
+                            kotlin: "fun main() {\n  println(\"Hello, World!\")\n}\n",
+                            r: "print('Hello, World!')\n",
+                            lua: "print('Hello, World!')\n",
+                            bash: "#!/usr/bin/env bash\necho \"Hello, World!\"\n",
+                            test: "#!/usr/bin/env bash\necho \"Hello, World!\"\n"
+                        };
+                        var initValue = initialSamples[currentLanguage] || '// Write your ' + (currentLanguage || 'code') + ' code here\n';
                         editor = monaco.editor.create(document.getElementById('codeEditor'), {
-                            value: '# Write your Python code here\nprint("Hello, World!")',
-                            language: 'python',
+                            value: initValue,
+                            language: initMonacoLang,
                             theme: 'vs-dark',
                             fontSize: 14,
                             minimap: { enabled: false },
@@ -2073,7 +2202,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             return;
                         }
 
-                        fetch('OneCompilerFunctionality?action=languages')
+                        fetch(API_BASE + '?action=languages')
                             .then(function (r) { return r.json(); })
                             .then(function (data) {
                                 languages = data;
@@ -2101,7 +2230,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                         var cached = getFromCache(CACHE_KEY_TEMPLATES);
                         if (cached) { templatesCache = cached; return; }
 
-                        fetch('OneCompilerFunctionality?action=templates')
+                        fetch(API_BASE + '?action=templates')
                             .then(function (r) { return r.json(); })
                             .then(function (data) {
                                 templatesCache = data;
@@ -2186,7 +2315,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             return;
                         }
 
-                        fetch('OneCompilerFunctionality?action=template&lang=' + currentLanguage)
+                        fetch(API_BASE + '?action=template&lang=' + currentLanguage)
                             .then(function (r) { return r.json(); })
                             .then(function (data) {
                                 if (data.template) {
@@ -2211,7 +2340,7 @@ print("Welcome to 8gwifi.org Online Compiler")
 
                     function formatCode() {
                         var code = editor.getValue();
-                        fetch('OneCompilerFunctionality?action=format', {
+                        fetch(API_BASE + '?action=format', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ language: currentLanguage, code: code })
@@ -2264,7 +2393,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             requestBody.code = apiFiles[0].content;
                         }
 
-                        fetch('OneCompilerFunctionality?action=execute', {
+                        fetch(API_BASE + '?action=execute', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(requestBody)
@@ -2362,7 +2491,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             requestBody.code = apiFiles[0].content;
                         }
 
-                        fetch('OneCompilerFunctionality?action=snippet_create', {
+                        fetch(API_BASE + '?action=snippet_create', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(requestBody)
@@ -2522,7 +2651,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             requestBody.code = apiFiles[0].content;
                         }
 
-                        fetch('OneCompilerFunctionality?action=snippet_create', {
+                        fetch(API_BASE + '?action=snippet_create', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(requestBody)
@@ -2695,7 +2824,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                     function loadSnippet(snippetId) {
                         document.getElementById('statusExec').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
 
-                        fetch('OneCompilerFunctionality?action=snippet_get&id=' + encodeURIComponent(snippetId))
+                        fetch(API_BASE + '?action=snippet_get&id=' + encodeURIComponent(snippetId))
                             .then(function (r) { return r.json(); })
                             .then(function (data) {
                                 if (data.error) {

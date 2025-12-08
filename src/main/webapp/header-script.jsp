@@ -26,3 +26,18 @@
 
 <%@ include file="analytics.jsp"%>
 <%@ include file="setupad.jsp"%>
+
+<!-- Site-wide Schema: WebSite + SearchAction and Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "8gwifi.org",
+  "url": "https://8gwifi.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.google.com/search?q=site:8gwifi.org+{search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
