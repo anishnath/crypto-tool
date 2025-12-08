@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<% request.setAttribute("currentLesson", "advanced-debugging"); request.setAttribute("currentModule", "Advanced Topics" ); %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Debugging - Bash Tutorial | 8gwifi.org</title>
+  <meta name="description" content="Debug Bash scripts with xtrace, strict modes, and error handling patterns.">
+  <meta name="keywords" content="bash set -x, set -e, set -u, debug bash, xtrace">
+  <meta property="og:type" content="article"><meta property="og:title" content="Debugging - Bash Tutorial | 8gwifi.org"><meta property="og:description" content="Learn practical debugging options for Bash."><meta property="og:site_name" content="8gwifi.org Tutorials">
+  <link rel="canonical" href="https://8gwifi.org/tutorials/bash/advanced-debugging.jsp">
+  <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial-server.css">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/codemirror.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/monokai.min.css">
+  <script>(function(){var t=localStorage.getItem('tutorial-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"Bash Advanced: Debugging","description":"Use set -x/-e/-u and error handling patterns to debug scripts.","learningResourceType":"tutorial","educationalLevel":"Advanced","teaches":["set -x","set -e","set -u","error handling"],"timeRequired":"PT25M","isPartOf":{"@type":"Course","name":"Bash Tutorial","url":"https://8gwifi.org/tutorials/bash/"}}</script>
+  <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
+</head>
+<body class="tutorial-body no-preview" data-lesson="advanced-debugging">
+<div class="tutorial-layout">
+  <%@ include file="../tutorial-header.jsp" %>
+  <main class="tutorial-main">
+    <%@ include file="../tutorial-sidebar-bash.jsp" %>
+    <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <article class="tutorial-content">
+      <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/bash/intro.jsp">Bash</a><span class="breadcrumb-separator">/</span><span>Debugging</span></nav>
+      <header class="lesson-header"><h1 class="lesson-title">Debugging</h1><div class="lesson-meta"><span>Advanced</span><span>~25 min read</span></div></header>
+      <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
+      <div class="lesson-body">
+        <p class="lead">Enable tracing, fail fast on errors, and detect unset variables to catch bugs early.</p>
+        <h2>Tracing and Strict Modes</h2>
+        <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="bash/advanced-debugging.sh" /><jsp:param name="language" value="bash" /><jsp:param name="editorId" value="compiler-advanced-debugging" /><jsp:param name="filename" value="advanced-debugging.sh" /></jsp:include>
+        <div class="info-box"><strong>Note:</strong> Prefer enabling options in subshells to avoid affecting the whole script unintentionally.</div>
+        <div class="tip-box"><strong>Pro Tip:</strong> Add trace prefixes with <code>PS4='+ ${BASH_SOURCE}:${LINENO}: '</code> for clearer <code>set -x</code> output.</div>
+        <div class="warning-box"><strong>Caution:</strong> <code>set -e</code> has edge cases with pipelines and subshells. Consider explicit checks.</div>
+        <h2>Common Mistakes</h2>
+        <div class="mistake-box"><h4>1) Assuming -e covers all errors</h4><p>Check exit codes or use <code>pipefail</code> for pipelines.</p></div>
+        <div class="mistake-box"><h4>2) Tracing secrets</h4><p>Avoid printing sensitive data under xtrace in CI logs.</p></div>
+        <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /><jsp:param name="responsive" value="true" /></jsp:include>
+        <h2>Exercise: Safer Pipeline</h2>
+        <div class="exercise-section"><p><strong>Task:</strong> Enable <code>set -o pipefail</code> and demonstrate a failing pipeline that correctly returns non-zero.</p>
+          <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="bash/exercises/ex-advanced-debugging.sh" /><jsp:param name="language" value="bash" /><jsp:param name="editorId" value="exercise-advanced-debugging" /><jsp:param name="filename" value="ex-advanced-debugging.sh" /></jsp:include>
+          <details class="exercise-hint"><summary>Show Solution</summary><pre><code class="language-bash">set -o pipefail; false | true; echo $? # -> 1</code></pre></details>
+        </div>
+        <h2>Summary</h2>
+        <div class="summary-box"><ul><li>Trace with <code>-x</code>.</li><li>Fail fast with <code>-e</code>.</li><li>Detect typos with <code>-u</code>; use <code>pipefail</code> for pipelines.</li></ul></div>
+        <h2>What's Next?</h2>
+        <p>Generate sequences and templated names via <a href="advanced-brace-expansion.jsp">Brace Expansion</a>.</p>
+      </div>
+      <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
+      <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="advanced-jobs.jsp" /><jsp:param name="prevTitle" value="Background Jobs" /><jsp:param name="nextLink" value="advanced-brace-expansion.jsp" /><jsp:param name="nextTitle" value="Brace Expansion" /><jsp:param name="currentLessonId" value="advanced-debugging" /></jsp:include>
+    </article>
+  </main>
+  <%@ include file="../tutorial-footer.jsp" %>
+</div>
+<script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror.min.js"></script>
+<script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror-modes/shell.min.js"></script>
+<script src="<%=request.getContextPath()%>/tutorials/assets/js/progress.js"></script>
+<script src="<%=request.getContextPath()%>/tutorials/assets/js/tutorial-core.js?v=4"></script>
+</body>
+</html>
+
