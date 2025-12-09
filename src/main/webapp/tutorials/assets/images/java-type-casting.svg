@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Type Casting</text>
+  <text x="400" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#666">Widening (Automatic) vs Narrowing (Explicit)</text>
+
+  <!-- Widening Path (Top) -->
+  <g transform="translate(50, 100)">
+    <text x="350" y="30" text-anchor="middle" font-weight="bold" font-size="18" fill="#2e7d32">Widening Casting (Automatic Safety)</text>
+    <text x="350" y="50" text-anchor="middle" font-size="12" fill="#555">Small → Large (No Data Loss)</text>
+
+    <!-- Arrow Path -->
+    <path d="M50,80 H650" stroke="#4caf50" stroke-width="4" marker-end="url(#arrow-green)"/>
+    
+    <!-- Bubbles -->
+    <circle cx="50" cy="80" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="50" y="85" text-anchor="middle" font-weight="bold">byte</text>
+    
+    <circle cx="170" cy="80" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="170" y="85" text-anchor="middle" font-weight="bold">short</text>
+    
+    <circle cx="290" cy="80" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="290" y="85" text-anchor="middle" font-weight="bold">char</text>
+    
+    <circle cx="410" cy="80" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="410" y="85" text-anchor="middle" font-weight="bold">int</text>
+    
+    <circle cx="530" cy="80" r="30" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="530" y="85" text-anchor="middle" font-weight="bold">long</text>
+    
+    <circle cx="650" cy="80" r="35" fill="#c8e6c9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="650" y="85" text-anchor="middle" font-weight="bold">double</text>
+  </g>
+
+  <!-- Narrowing Path (Bottom) -->
+  <g transform="translate(50, 250)">
+    <text x="350" y="30" text-anchor="middle" font-weight="bold" font-size="18" fill="#c62828">Narrowing Casting (Manual)</text>
+    <text x="350" y="50" text-anchor="middle" font-size="12" fill="#555">Large → Small (Potential Data Loss - Needs (type))</text>
+
+    <!-- Arrow Path Backwards -->
+    <path d="M650,80 H50" stroke="#f44336" stroke-width="4" marker-end="url(#arrow-red)"/>
+
+    <!-- Bubbles -->
+    <circle cx="650" cy="80" r="35" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <text x="650" y="85" text-anchor="middle" font-weight="bold">double</text>
+    
+    <circle cx="530" cy="80" r="30" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <text x="530" y="85" text-anchor="middle" font-weight="bold">long</text>
+    
+    <circle cx="410" cy="80" r="30" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <text x="410" y="85" text-anchor="middle" font-weight="bold">int</text>
+
+    <text x="290" y="85" text-anchor="middle" font-size="20">...</text>
+
+    <circle cx="50" cy="80" r="30" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/>
+    <text x="50" y="85" text-anchor="middle" font-weight="bold">byte</text>
+  </g>
+  
+  <!-- Definitions -->
+  <defs>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4caf50" />
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f44336" />
+    </marker>
+  </defs>
+
+  <!-- Watermark -->
+  <text x="790" y="440" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

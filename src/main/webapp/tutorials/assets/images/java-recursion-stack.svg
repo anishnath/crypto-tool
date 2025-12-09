@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: #333; }
+      .box { fill: #fff; stroke: #333; stroke-width: 2; }
+      .arrow { stroke: #e11d48; stroke-width: 2; marker-end: url(#arrowhead); }
+      .return-arrow { stroke: #059669; stroke-width: 2; stroke-dasharray: 4; marker-end: url(#arrowhead-green); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e11d48" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#059669" />
+    </marker>
+  </defs>
+
+  <!-- Step 1 -->
+  <rect x="50" y="50" width="120" height="40" class="box" />
+  <text x="110" y="75" class="text">factorial(3)</text>
+  
+  <path d="M110 90 L110 120" class="arrow" />
+
+  <!-- Step 2 -->
+  <rect x="50" y="130" width="120" height="40" class="box" />
+  <text x="110" y="155" class="text">3 * factorial(2)</text>
+
+  <path d="M110 170 L110 200" class="arrow" />
+
+  <!-- Step 3 -->
+  <rect x="50" y="210" width="120" height="40" class="box" />
+  <text x="110" y="235" class="text">2 * factorial(1)</text>
+
+  <path d="M110 250 L110 280" class="arrow" />
+
+  <!-- Base Case -->
+  <rect x="50" y="290" width="120" height="40" class="box" style="stroke: #e11d48; stroke-width: 3;" />
+  <text x="110" y="315" class="text" font-weight="bold">Returns 1</text>
+
+
+  <!-- Returns -->
+  <text x="300" y="315" class="text" fill="#059669">Base Case Hit!</text>
+  
+  <path d="M180 310 L250 240" class="return-arrow" />
+  <text x="280" y="240" class="text">Returns 2 * 1 = 2</text>
+
+  <path d="M180 230 L250 160" class="return-arrow" />
+  <text x="280" y="160" class="text">Returns 3 * 2 = 6</text>
+
+  <path d="M180 150 L250 80" class="return-arrow" />
+  <text x="280" y="80" class="text" font-weight="bold">Final Result: 6</text>
+
+   <!-- Watermark -->
+    <text x="490" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+
+</svg>

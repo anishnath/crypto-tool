@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 520">
+    <!-- Background -->
+    <rect width="850" height="520" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="425" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">HashMap Internal Structure</text>
+    <text x="425" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Key-value storage with hash table buckets</text>
+
+    <!-- Put operation flow -->
+    <g transform="translate(30, 80)">
+        <text x="0" y="0" font-family="Arial" font-size="13" font-weight="bold" fill="#1565c0">map.put("name", "Alice")</text>
+
+        <!-- Key -->
+        <rect x="0" y="15" width="80" height="40" rx="4" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="40" y="30" text-anchor="middle" font-family="Arial" font-size="10" fill="#1565c0">Key</text>
+        <text x="40" y="45" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">"name"</text>
+
+        <path d="M80 35 L120 35" stroke="#1976d2" stroke-width="2" fill="none"/>
+        <polygon points="120,35 110,30 110,40" fill="#1976d2"/>
+
+        <!-- Hash function -->
+        <rect x="125" y="15" width="90" height="40" rx="20" fill="#90caf9" stroke="#1976d2" stroke-width="2"/>
+        <text x="170" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#0d47a1">hashCode()</text>
+
+        <path d="M215 35 L255 35" stroke="#1976d2" stroke-width="2" fill="none"/>
+        <polygon points="255,35 245,30 245,40" fill="#1976d2"/>
+
+        <!-- Bucket index -->
+        <rect x="260" y="15" width="70" height="40" rx="4" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+        <text x="295" y="30" text-anchor="middle" font-family="Arial" font-size="10" fill="#2e7d32">Bucket</text>
+        <text x="295" y="45" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">[1]</text>
+    </g>
+
+    <!-- Bucket Array with Key-Value pairs -->
+    <g transform="translate(50, 150)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Hash Table (Bucket Array)</text>
+
+        <!-- Bucket 0 -->
+        <rect x="0" y="20" width="150" height="60" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+        <text x="75" y="45" text-anchor="middle" font-family="Arial" font-size="11" fill="#757575">[0] empty</text>
+
+        <!-- Bucket 1 - has entries -->
+        <rect x="170" y="20" width="150" height="60" fill="#e8f5e9" stroke="#4caf50" stroke-width="3"/>
+        <text x="245" y="38" text-anchor="middle" font-family="Arial" font-size="10" fill="#2e7d32">[1]</text>
+        <text x="245" y="55" text-anchor="middle" font-family="Arial" font-size="9" fill="#388e3c">Entry chain</text>
+        <line x1="245" y1="80" x2="245" y2="100" stroke="#4caf50" stroke-width="2"/>
+
+        <!-- Entry 1 in Bucket 1 -->
+        <g transform="translate(170, 105)">
+            <rect x="0" y="0" width="150" height="55" rx="4" fill="#c8e6c9" stroke="#388e3c" stroke-width="2"/>
+            <text x="75" y="15" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#1b5e20">Entry</text>
+            <line x1="5" y1="20" x2="145" y2="20" stroke="#a5d6a7" stroke-width="1"/>
+            <text x="10" y="35" font-family="Monospace" font-size="9" fill="#2e7d32">key: "name"</text>
+            <text x="10" y="48" font-family="Monospace" font-size="9" fill="#2e7d32">value: "Alice"</text>
+        </g>
+
+        <!-- Arrow to next entry -->
+        <path d="M320 132 L360 132" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="360,132 350,127 350,137" fill="#4caf50"/>
+
+        <!-- Entry 2 in Bucket 1 (collision) -->
+        <g transform="translate(370, 105)">
+            <rect x="0" y="0" width="150" height="55" rx="4" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+            <text x="75" y="15" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#e65100">Entry (collision)</text>
+            <line x1="5" y1="20" x2="145" y2="20" stroke="#ffcc80" stroke-width="1"/>
+            <text x="10" y="35" font-family="Monospace" font-size="9" fill="#bf360c">key: "email"</text>
+            <text x="10" y="48" font-family="Monospace" font-size="9" fill="#bf360c">value: "a@b.com"</text>
+        </g>
+
+        <!-- Bucket 2 -->
+        <rect x="540" y="20" width="150" height="60" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="615" y="38" text-anchor="middle" font-family="Arial" font-size="10" fill="#1565c0">[2]</text>
+        <text x="615" y="55" text-anchor="middle" font-family="Arial" font-size="9" fill="#1976d2">Entry</text>
+        <line x1="615" y1="80" x2="615" y2="100" stroke="#1976d2" stroke-width="2"/>
+
+        <!-- Entry in Bucket 2 -->
+        <g transform="translate(540, 105)">
+            <rect x="0" y="0" width="150" height="55" rx="4" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+            <text x="75" y="15" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#0d47a1">Entry</text>
+            <line x1="5" y1="20" x2="145" y2="20" stroke="#90caf9" stroke-width="1"/>
+            <text x="10" y="35" font-family="Monospace" font-size="9" fill="#1565c0">key: "age"</text>
+            <text x="10" y="48" font-family="Monospace" font-size="9" fill="#1565c0">value: 25</text>
+        </g>
+
+        <!-- Bucket 3 -->
+        <rect x="710" y="20" width="100" height="60" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+        <text x="760" y="45" text-anchor="middle" font-family="Arial" font-size="11" fill="#757575">[3] empty</text>
+    </g>
+
+    <!-- Get operation -->
+    <g transform="translate(50, 340)">
+        <rect x="0" y="0" width="350" height="75" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="175" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2e7d32">Get Operation: map.get("name")</text>
+        <text x="15" y="42" font-family="Arial" font-size="11" fill="#1b5e20">1. Calculate hashCode("name") -> bucket [1]</text>
+        <text x="15" y="57" font-family="Arial" font-size="11" fill="#1b5e20">2. Search entries using equals("name")</text>
+        <text x="15" y="72" font-family="Arial" font-size="11" fill="#1b5e20">3. Return value: "Alice"</text>
+    </g>
+
+    <!-- Entry structure detail -->
+    <g transform="translate(430, 340)">
+        <rect x="0" y="0" width="370" height="75" rx="8" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+        <text x="185" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e65100">Entry Node Structure</text>
+        <text x="15" y="42" font-family="Monospace" font-size="10" fill="#bf360c">class Entry&lt;K,V&gt; {</text>
+        <text x="25" y="57" font-family="Monospace" font-size="10" fill="#bf360c">  K key; V value; int hash; Entry next;</text>
+        <text x="15" y="72" font-family="Monospace" font-size="10" fill="#bf360c">}</text>
+    </g>
+
+    <!-- Key characteristics -->
+    <g transform="translate(50, 430)">
+        <rect x="0" y="0" width="750" height="65" rx="8" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="1"/>
+        <text x="375" y="20" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">HashMap Characteristics</text>
+        <text x="20" y="42" font-family="Arial" font-size="11" fill="#1565c0">O(1) average for get/put</text>
+        <text x="200" y="42" font-family="Arial" font-size="11" fill="#666">|</text>
+        <text x="220" y="42" font-family="Arial" font-size="11" fill="#e65100">One null key allowed</text>
+        <text x="380" y="42" font-family="Arial" font-size="11" fill="#666">|</text>
+        <text x="400" y="42" font-family="Arial" font-size="11" fill="#2e7d32">Keys must implement hashCode() &amp; equals()</text>
+        <text x="20" y="58" font-family="Arial" font-size="11" fill="#7b1fa2">Default capacity: 16, Load factor: 0.75 (rehash when 75% full)</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="840" y="510" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

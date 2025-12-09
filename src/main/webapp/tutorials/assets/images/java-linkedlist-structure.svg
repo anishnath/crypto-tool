@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+    <!-- Background -->
+    <rect width="800" height="480" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">LinkedList Internal Structure</text>
+    <text x="400" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Doubly-linked list with head and tail pointers</text>
+
+    <!-- LinkedList Object -->
+    <g transform="translate(50, 85)">
+        <rect x="0" y="0" width="120" height="70" rx="6" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="60" y="20" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#1565c0">LinkedList</text>
+        <line x1="5" y1="28" x2="115" y2="28" stroke="#90caf9" stroke-width="1"/>
+        <text x="10" y="45" font-family="Monospace" font-size="10" fill="#0d47a1">head: Node</text>
+        <text x="10" y="60" font-family="Monospace" font-size="10" fill="#0d47a1">tail: Node</text>
+    </g>
+
+    <!-- Head arrow -->
+    <path d="M170 105 L220 105" stroke="#1976d2" stroke-width="2" fill="none"/>
+    <polygon points="220,105 210,100 210,110" fill="#1976d2"/>
+    <text x="195" y="98" text-anchor="middle" font-family="Arial" font-size="10" fill="#1976d2">head</text>
+
+    <!-- Node 1 -->
+    <g transform="translate(230, 80)">
+        <rect x="0" y="0" width="130" height="70" rx="6" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="65" y="18" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#2e7d32">Node</text>
+        <line x1="5" y1="25" x2="125" y2="25" stroke="#a5d6a7" stroke-width="1"/>
+
+        <rect x="10" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="22" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">prev</text>
+
+        <rect x="40" y="30" width="50" height="20" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+        <text x="65" y="44" text-anchor="middle" font-family="Monospace" font-size="11" font-weight="bold" fill="#1b5e20">"A"</text>
+
+        <rect x="95" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="107" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">next</text>
+
+        <text x="22" y="62" text-anchor="middle" font-family="Arial" font-size="9" fill="#9e9e9e">null</text>
+    </g>
+
+    <!-- Arrow Node1 to Node2 -->
+    <path d="M360 115 L390 115" stroke="#4caf50" stroke-width="2" fill="none"/>
+    <polygon points="390,115 380,110 380,120" fill="#4caf50"/>
+
+    <!-- Node 2 -->
+    <g transform="translate(400, 80)">
+        <rect x="0" y="0" width="130" height="70" rx="6" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="65" y="18" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#2e7d32">Node</text>
+        <line x1="5" y1="25" x2="125" y2="25" stroke="#a5d6a7" stroke-width="1"/>
+
+        <rect x="10" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="22" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">prev</text>
+
+        <rect x="40" y="30" width="50" height="20" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+        <text x="65" y="44" text-anchor="middle" font-family="Monospace" font-size="11" font-weight="bold" fill="#1b5e20">"B"</text>
+
+        <rect x="95" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="107" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">next</text>
+    </g>
+
+    <!-- Arrow Node2 back to Node1 -->
+    <path d="M410 130 L370 130" stroke="#ff9800" stroke-width="2" fill="none"/>
+    <polygon points="370,130 380,125 380,135" fill="#ff9800"/>
+
+    <!-- Arrow Node2 to Node3 -->
+    <path d="M530 115 L560 115" stroke="#4caf50" stroke-width="2" fill="none"/>
+    <polygon points="560,115 550,110 550,120" fill="#4caf50"/>
+
+    <!-- Node 3 -->
+    <g transform="translate(570, 80)">
+        <rect x="0" y="0" width="130" height="70" rx="6" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="65" y="18" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#2e7d32">Node</text>
+        <line x1="5" y1="25" x2="125" y2="25" stroke="#a5d6a7" stroke-width="1"/>
+
+        <rect x="10" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="22" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">prev</text>
+
+        <rect x="40" y="30" width="50" height="20" fill="#81c784" stroke="#388e3c" stroke-width="1"/>
+        <text x="65" y="44" text-anchor="middle" font-family="Monospace" font-size="11" font-weight="bold" fill="#1b5e20">"C"</text>
+
+        <rect x="95" y="30" width="25" height="20" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+        <text x="107" y="44" text-anchor="middle" font-family="Arial" font-size="8" fill="#1b5e20">next</text>
+
+        <text x="107" y="62" text-anchor="middle" font-family="Arial" font-size="9" fill="#9e9e9e">null</text>
+    </g>
+
+    <!-- Arrow Node3 back to Node2 -->
+    <path d="M580 130 L540 130" stroke="#ff9800" stroke-width="2" fill="none"/>
+    <polygon points="540,130 550,125 550,135" fill="#ff9800"/>
+
+    <!-- Tail arrow -->
+    <path d="M170 135 C200 135, 200 200, 635 200 L635 155" stroke="#1976d2" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+    <polygon points="635,155 630,165 640,165" fill="#1976d2"/>
+    <text x="400" y="195" text-anchor="middle" font-family="Arial" font-size="10" fill="#1976d2">tail</text>
+
+    <!-- Insert Operation Illustration -->
+    <g transform="translate(50, 240)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#7b1fa2">Insert "X" at position 1 - O(1) pointer changes</text>
+
+        <!-- Node A -->
+        <rect x="50" y="25" width="80" height="45" rx="4" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="90" y="55" text-anchor="middle" font-family="Monospace" font-size="13" fill="#6a1b9a">"A"</text>
+
+        <!-- New Node X -->
+        <rect x="200" y="25" width="80" height="45" rx="4" fill="#ffecb3" stroke="#ffc107" stroke-width="3"/>
+        <text x="240" y="55" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#ff8f00">"X"</text>
+        <text x="240" y="85" text-anchor="middle" font-family="Arial" font-size="10" fill="#ff8f00">new node</text>
+
+        <!-- Node B -->
+        <rect x="350" y="25" width="80" height="45" rx="4" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="390" y="55" text-anchor="middle" font-family="Monospace" font-size="13" fill="#6a1b9a">"B"</text>
+
+        <!-- New links (green) -->
+        <path d="M130 40 L200 40" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="200,40 190,35 190,45" fill="#4caf50"/>
+
+        <path d="M280 40 L350 40" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="350,40 340,35 340,45" fill="#4caf50"/>
+
+        <path d="M200 60 L130 60" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="130,60 140,55 140,65" fill="#4caf50"/>
+
+        <path d="M350 60 L280 60" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="280,60 290,55 290,65" fill="#4caf50"/>
+
+        <!-- Old link (crossed out) -->
+        <line x1="130" y1="50" x2="350" y2="50" stroke="#ef5350" stroke-width="1" stroke-dasharray="5,3"/>
+        <text x="240" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#c62828">old link removed</text>
+    </g>
+
+    <!-- Key Points -->
+    <g transform="translate(50, 370)">
+        <rect x="0" y="0" width="340" height="90" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="170" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2e7d32">LinkedList Advantages</text>
+        <text x="15" y="45" font-family="Arial" font-size="11" fill="#1b5e20">+ Fast insert/delete: O(1)</text>
+        <text x="15" y="62" font-family="Arial" font-size="11" fill="#1b5e20">+ No resize needed</text>
+        <text x="15" y="79" font-family="Arial" font-size="11" fill="#1b5e20">+ Efficient for queues/stacks</text>
+    </g>
+
+    <g transform="translate(410, 370)">
+        <rect x="0" y="0" width="340" height="90" rx="8" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+        <text x="170" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#c62828">LinkedList Disadvantages</text>
+        <text x="15" y="45" font-family="Arial" font-size="11" fill="#b71c1c">- Slow random access: O(n)</text>
+        <text x="15" y="62" font-family="Arial" font-size="11" fill="#b71c1c">- More memory (prev/next refs)</text>
+        <text x="15" y="79" font-family="Arial" font-size="11" fill="#b71c1c">- Poor cache locality</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="790" y="470" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

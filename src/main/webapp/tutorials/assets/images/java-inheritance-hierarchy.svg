@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <!-- Background -->
+  <rect width="800" height="550" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Inheritance Hierarchy</text>
+  <text x="400" y="65" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Class relationships using extends keyword</text>
+
+  <!-- Object Class (Root) - Gray -->
+  <g transform="translate(300, 90)">
+    <rect x="0" y="0" width="200" height="60" rx="8" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Monospace" font-size="16" font-weight="bold" fill="#424242">Object</text>
+    <text x="100" y="45" text-anchor="middle" font-family="Arial" font-size="11" fill="#757575">java.lang.Object (Root)</text>
+  </g>
+
+  <!-- Arrow from Object to Animal -->
+  <line x1="400" y1="150" x2="400" y2="180" stroke="#616161" stroke-width="2"/>
+  <polygon points="400,180 395,170 405,170" fill="#616161"/>
+  <text x="420" y="170" font-family="Arial" font-size="11" fill="#616161">extends</text>
+
+  <!-- Animal Class - Java Orange -->
+  <g transform="translate(300, 185)">
+    <rect x="0" y="0" width="200" height="80" rx="8" fill="#fff3e0" stroke="#ed8b00" stroke-width="2"/>
+    <text x="100" y="22" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#e65100">Animal</text>
+    <line x1="10" y1="32" x2="190" y2="32" stroke="#ffcc80" stroke-width="1"/>
+    <text x="100" y="50" text-anchor="middle" font-family="Monospace" font-size="11" fill="#bf360c">+ name: String</text>
+    <text x="100" y="68" text-anchor="middle" font-family="Monospace" font-size="11" fill="#bf360c">+ makeSound()</text>
+  </g>
+
+  <!-- Arrows from Animal to subclasses -->
+  <!-- Left arrow to Dog -->
+  <path d="M350 265 L350 295 L200 295 L200 320" stroke="#ed8b00" stroke-width="2" fill="none"/>
+  <polygon points="200,320 195,310 205,310" fill="#ed8b00"/>
+
+  <!-- Middle arrow to Cat -->
+  <line x1="400" y1="265" x2="400" y2="320" stroke="#ed8b00" stroke-width="2"/>
+  <polygon points="400,320 395,310 405,310" fill="#ed8b00"/>
+
+  <!-- Right arrow to Bird -->
+  <path d="M450 265 L450 295 L600 295 L600 320" stroke="#ed8b00" stroke-width="2" fill="none"/>
+  <polygon points="600,320 595,310 605,310" fill="#ed8b00"/>
+
+  <!-- extends labels -->
+  <text x="255" y="290" font-family="Arial" font-size="10" fill="#ed8b00">extends</text>
+  <text x="410" y="300" font-family="Arial" font-size="10" fill="#ed8b00">extends</text>
+  <text x="530" y="290" font-family="Arial" font-size="10" fill="#ed8b00">extends</text>
+
+  <!-- Dog Class - Blue -->
+  <g transform="translate(100, 325)">
+    <rect x="0" y="0" width="200" height="90" rx="8" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+    <text x="100" y="22" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#1565c0">Dog</text>
+    <line x1="10" y1="32" x2="190" y2="32" stroke="#90caf9" stroke-width="1"/>
+    <text x="100" y="50" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">+ breed: String</text>
+    <text x="100" y="68" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">+ makeSound() // Woof!</text>
+    <text x="100" y="82" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">+ fetch()</text>
+  </g>
+
+  <!-- Cat Class - Green -->
+  <g transform="translate(300, 325)">
+    <rect x="0" y="0" width="200" height="90" rx="8" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+    <text x="100" y="22" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#2e7d32">Cat</text>
+    <line x1="10" y1="32" x2="190" y2="32" stroke="#a5d6a7" stroke-width="1"/>
+    <text x="100" y="50" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">+ isIndoor: boolean</text>
+    <text x="100" y="68" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">+ makeSound() // Meow!</text>
+    <text x="100" y="82" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">+ scratch()</text>
+  </g>
+
+  <!-- Bird Class - Purple -->
+  <g transform="translate(500, 325)">
+    <rect x="0" y="0" width="200" height="90" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <text x="100" y="22" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#6a1b9a">Bird</text>
+    <line x1="10" y1="32" x2="190" y2="32" stroke="#ce93d8" stroke-width="1"/>
+    <text x="100" y="50" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">+ canFly: boolean</text>
+    <text x="100" y="68" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">+ makeSound() // Tweet!</text>
+    <text x="100" y="82" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">+ fly()</text>
+  </g>
+
+  <!-- IS-A Relationship Legend -->
+  <g transform="translate(50, 460)">
+    <rect x="0" y="0" width="700" height="70" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="20" y="25" font-family="Arial" font-size="14" font-weight="bold" fill="#333">IS-A Relationships:</text>
+    <text x="20" y="50" font-family="Arial" font-size="12" fill="#555">Dog IS-A Animal</text>
+    <text x="180" y="50" font-family="Arial" font-size="12" fill="#555">Cat IS-A Animal</text>
+    <text x="340" y="50" font-family="Arial" font-size="12" fill="#555">Bird IS-A Animal</text>
+    <text x="500" y="50" font-family="Arial" font-size="12" fill="#555">All ARE Object</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="790" y="540" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Primitive Data Types</text>
+  <text x="400" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#666">Size  Range Comparison</text>
+
+  <!-- Groups -->
+  <!-- Integer Group -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="700" height="180" rx="10" fill="#f0f8ff" stroke="#007396" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#007396">Whole Numbers (Integers)</text>
+    
+    <!-- Byte -->
+    <g transform="translate(30, 50)">
+      <rect x="0" y="0" width="80" height="80" rx="5" fill="#e1f5fe" stroke="#0288d1" stroke-width="1"/>
+      <text x="40" y="30" text-anchor="middle" font-weight="bold" font-size="14">byte</text>
+      <text x="40" y="50" text-anchor="middle" font-size="12">8 bits</text>
+      <text x="40" y="65" text-anchor="middle" font-size="10">(1 byte)</text>
+    </g>
+    
+    <!-- Short -->
+    <g transform="translate(140, 50)">
+      <rect x="0" y="0" width="120" height="80" rx="5" fill="#b3e5fc" stroke="#0288d1" stroke-width="1"/>
+      <text x="60" y="30" text-anchor="middle" font-weight="bold" font-size="14">short</text>
+      <text x="60" y="50" text-anchor="middle" font-size="12">16 bits</text>
+      <text x="60" y="65" text-anchor="middle" font-size="10">(2 bytes)</text>
+    </g>
+    
+    <!-- Int -->
+    <g transform="translate(290, 50)">
+      <rect x="0" y="0" width="160" height="80" rx="5" fill="#81d4fa" stroke="#0288d1" stroke-width="2"/>
+      <text x="80" y="30" text-anchor="middle" font-weight="bold" font-size="14">int</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12">32 bits</text>
+      <text x="80" y="65" text-anchor="middle" font-size="10">(4 bytes)</text>
+      <text x="80" y="100" text-anchor="middle" font-size="12" fill="#d32f2f" font-weight="bold">Default for whole numbers</text>
+    </g>
+    
+    <!-- Long -->
+    <g transform="translate(480, 50)">
+      <rect x="0" y="0" width="200" height="80" rx="5" fill="#4fc3f7" stroke="#0288d1" stroke-width="1"/>
+      <text x="100" y="30" text-anchor="middle" font-weight="bold" font-size="14">long</text>
+      <text x="100" y="50" text-anchor="middle" font-size="12">64 bits</text>
+      <text x="100" y="65" text-anchor="middle" font-size="10">(8 bytes)</text>
+      <text x="100" y="77" text-anchor="middle" font-size="10" fill="#555">Suffix: L (e.g., 100L)</text>
+    </g>
+  </g>
+
+  <!-- Floating Point Group -->
+  <g transform="translate(50, 300)">
+    <rect x="0" y="0" width="340" height="150" rx="10" fill="#fff3e0" stroke="#ed8b00" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ed8b00">Decimal Numbers (Floating Point)</text>
+    
+    <!-- Float -->
+    <g transform="translate(30, 50)">
+      <rect x="0" y="0" width="120" height="80" rx="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+      <text x="60" y="30" text-anchor="middle" font-weight="bold" font-size="14">float</text>
+      <text x="60" y="50" text-anchor="middle" font-size="12">32 bits</text>
+      <text x="60" y="65" text-anchor="middle" font-size="10">(4 bytes)</text>
+      <text x="60" y="77" text-anchor="middle" font-size="10" fill="#555">Suffix: f (e.g., 3.14f)</text>
+    </g>
+    
+    <!-- Double -->
+    <g transform="translate(180, 50)">
+      <rect x="0" y="0" width="130" height="80" rx="5" fill="#ffcc80" stroke="#f57c00" stroke-width="2"/>
+      <text x="65" y="30" text-anchor="middle" font-weight="bold" font-size="14">double</text>
+      <text x="65" y="50" text-anchor="middle" font-size="12">64 bits</text>
+      <text x="65" y="65" text-anchor="middle" font-size="10">(8 bytes)</text>
+      <text x="65" y="95" text-anchor="middle" font-size="12" fill="#d32f2f" font-weight="bold">Default for decimals</text>
+    </g>
+  </g>
+
+  <!-- Other Types Group -->
+  <g transform="translate(410, 300)">
+    <rect x="0" y="0" width="340" height="150" rx="10" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#43a047">Other Types</text>
+    
+    <!-- Char -->
+    <g transform="translate(30, 50)">
+      <rect x="0" y="0" width="120" height="80" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+      <text x="60" y="30" text-anchor="middle" font-weight="bold" font-size="14">char</text>
+      <text x="60" y="50" text-anchor="middle" font-size="12">16 bits</text>
+      <text x="60" y="65" text-anchor="middle" font-size="10">(2 bytes, Unicode)</text>
+      <text x="60" y="77" text-anchor="middle" font-size="10" fill="#555">Example: 'A'</text>
+    </g>
+    
+    <!-- Boolean -->
+    <g transform="translate(180, 50)">
+      <rect x="0" y="0" width="130" height="80" rx="5" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+      <text x="65" y="30" text-anchor="middle" font-weight="bold" font-size="14">boolean</text>
+      <text x="65" y="50" text-anchor="middle" font-size="12">1 bit*</text>
+      <text x="65" y="65" text-anchor="middle" font-size="10">(Conceptual)</text>
+      <text x="65" y="77" text-anchor="middle" font-size="10" fill="#555">true / false</text>
+    </g>
+  </g>
+
+  <!-- Watermark -->
+  <text x="790" y="490" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

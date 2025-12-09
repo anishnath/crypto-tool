@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: bold; fill: #1e293b; font-family: sans-serif; text-anchor: middle;}
+      .header { font-size: 14px; font-weight: bold; fill: #ffffff; font-family: sans-serif; text-anchor: middle;}
+      .cell { font-size: 14px; fill: #334155; font-family: sans-serif; text-anchor: middle;}
+      .true { fill: #10b981; font-weight: bold; }
+      .false { fill: #ef4444; font-weight: bold; }
+      .bg-header { fill: #475569; }
+      .bg-row-odd { fill: #f8fafc; }
+      .bg-row-even { fill: #e2e8f0; }
+      .border { margin: 10px; }
+    </style>
+  </defs>
+
+  <!-- AND Table -->
+  <g transform="translate(50, 50)">
+    <text x="100" y="-15" class="title">AND (&amp;&amp;)</text>
+    <rect x="0" y="0" width="200" height="30" class="bg-header" rx="4" />
+    <text x="33" y="20" class="header">A</text>
+    <text x="99" y="20" class="header">B</text>
+    <text x="165" y="20" class="header">A &amp;&amp; B</text>
+    
+    <!-- Rows -->
+    <rect x="0" y="30" width="200" height="30" class="bg-row-odd" />
+    <text x="33" y="50" class="cell true">T</text>
+    <text x="99" y="50" class="cell true">T</text>
+    <text x="165" y="50" class="cell true">T</text>
+    
+    <rect x="0" y="60" width="200" height="30" class="bg-row-even" />
+    <text x="33" y="80" class="cell true">T</text>
+    <text x="99" y="80" class="cell false">F</text>
+    <text x="165" y="80" class="cell false">F</text>
+
+    <rect x="0" y="90" width="200" height="30" class="bg-row-odd" />
+    <text x="33" y="110" class="cell false">F</text>
+    <text x="99" y="110" class="cell true">T</text>
+    <text x="165" y="110" class="cell false">F</text>
+
+    <rect x="0" y="120" width="200" height="30" class="bg-row-even" />
+    <text x="33" y="140" class="cell false">F</text>
+    <text x="99" y="140" class="cell false">F</text>
+    <text x="165" y="140" class="cell false">F</text>
+    
+    <text x="100" y="180" class="cell" font-size="12">Both must be true</text>
+  </g>
+
+  <!-- OR Table -->
+  <g transform="translate(300, 50)">
+    <text x="100" y="-15" class="title">OR (||)</text>
+    <rect x="0" y="0" width="200" height="30" class="bg-header" rx="4" />
+    <text x="33" y="20" class="header">A</text>
+    <text x="99" y="20" class="header">B</text>
+    <text x="165" y="20" class="header">A || B</text>
+    
+    <!-- Rows -->
+    <rect x="0" y="30" width="200" height="30" class="bg-row-odd" />
+    <text x="33" y="50" class="cell true">T</text>
+    <text x="99" y="50" class="cell true">T</text>
+    <text x="165" y="50" class="cell true">T</text>
+    
+    <rect x="0" y="60" width="200" height="30" class="bg-row-even" />
+    <text x="33" y="80" class="cell true">T</text>
+    <text x="99" y="80" class="cell false">F</text>
+    <text x="165" y="80" class="cell true">T</text>
+
+    <rect x="0" y="90" width="200" height="30" class="bg-row-odd" />
+    <text x="33" y="110" class="cell false">F</text>
+    <text x="99" y="110" class="cell true">T</text>
+    <text x="165" y="110" class="cell true">T</text>
+
+    <rect x="0" y="120" width="200" height="30" class="bg-row-even" />
+    <text x="33" y="140" class="cell false">F</text>
+    <text x="99" y="140" class="cell false">F</text>
+    <text x="165" y="140" class="cell false">F</text>
+    
+    <text x="100" y="180" class="cell" font-size="12">At least one true</text>
+  </g>
+
+  <!-- NOT Table -->
+  <g transform="translate(550, 50)">
+    <text x="75" y="-15" class="title">NOT (!)</text>
+    <rect x="0" y="0" width="150" height="30" class="bg-header" rx="4" />
+    <text x="37.5" y="20" class="header">A</text>
+    <text x="112.5" y="20" class="header">!A</text>
+    
+    <!-- Rows -->
+    <rect x="0" y="30" width="150" height="30" class="bg-row-odd" />
+    <text x="37.5" y="50" class="cell true">T</text>
+    <text x="112.5" y="50" class="cell false">F</text>
+    
+    <rect x="0" y="60" width="150" height="30" class="bg-row-even" />
+    <text x="37.5" y="80" class="cell false">F</text>
+    <text x="112.5" y="80" class="cell true">T</text>
+    
+    <text x="75" y="120" class="cell" font-size="12">Inverts value</text>
+  </g>
+    <!-- Watermark -->
+    <text x="790" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

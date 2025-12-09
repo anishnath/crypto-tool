@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .code-text { font-family: 'Courier New', monospace; font-size: 20px; fill: #333; font-weight: bold; }
+      .label-text { font-family: sans-serif; font-size: 14px; fill: #666; text-anchor: middle; }
+      .line { stroke: #666; stroke-width: 1; marker-end: url(#arrow); }
+      .highlight { fill: #f0f9ff; stroke: #0ea5e9; stroke-width: 2; rx: 4; }
+    </style>
+     <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Code Block -->
+  <text x="50" y="80" class="code-text">public static void myMethod() { ... }</text>
+
+  <!-- Annotations -->
+
+  <!-- Modifiers -->
+  <path d="M100 130 L100 95" class="line" />
+  <text x="100" y="150" class="label-text">Access Modifiers</text>
+  <text x="100" y="165" class="label-text" font-size="12">(who can call this?)</text>
+
+  <!-- Return Type -->
+  <path d="M220 130 L220 95" class="line" />
+  <text x="220" y="150" class="label-text">Return Type</text>
+  <text x="220" y="165" class="label-text" font-size="12">(void = nothing)</text>
+
+  <!-- Name -->
+  <path d="M300 30 L300 65" class="line" />
+  <text x="300" y="20" class="label-text">Method Name</text>
+  <text x="300" y="165" class="label-text" font-size="12"> </text>
+
+  <!-- Parameters -->
+  <path d="M400 130 L400 95" class="line" />
+  <text x="400" y="150" class="label-text">Parameters</text>
+  <text x="400" y="165" class="label-text" font-size="12">(Inputs go here)</text>
+
+   <!-- Watermark -->
+    <text x="590" y="190" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Multi-Dimensional Arrays</text>
+  <text x="400" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#666">2D Array Structure (Matrix)</text>
+
+  <!-- Matrix Visualization -->
+  <g transform="translate(150, 120)">
+    <!-- Column Headers -->
+    <text x="75" y="-10" text-anchor="middle" font-weight="bold" fill="#555">Col 0</text>
+    <text x="175" y="-10" text-anchor="middle" font-weight="bold" fill="#555">Col 1</text>
+    <text x="275" y="-10" text-anchor="middle" font-weight="bold" fill="#555">Col 2</text>
+    
+    <!-- Row Headers -->
+    <text x="-40" y="55" text-anchor="middle" font-weight="bold" fill="#555">Row 0</text>
+    <text x="-40" y="155" text-anchor="middle" font-weight="bold" fill="#555">Row 1</text>
+    <text x="-40" y="255" text-anchor="middle" font-weight="bold" fill="#555">Row 2</text>
+
+    <!-- Row 0 -->
+    <g transform="translate(0, 0)">
+      <rect x="25" y="5" width="100" height="100" fill="#e1bee7" stroke="#7b1fa2" stroke-width="2"/>
+      <text x="75" y="60" text-anchor="middle" font-size="20">[0][0]</text>
+      
+      <rect x="125" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="175" y="60" text-anchor="middle" font-size="20">[0][1]</text>
+      
+      <rect x="225" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="275" y="60" text-anchor="middle" font-size="20">[0][2]</text>
+    </g>
+
+    <!-- Row 1 -->
+    <g transform="translate(0, 100)">
+      <rect x="25" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="75" y="60" text-anchor="middle" font-size="20">[1][0]</text>
+      
+      <rect x="125" y="5" width="100" height="100" fill="#e1bee7" stroke="#7b1fa2" stroke-width="2"/>
+      <text x="175" y="60" text-anchor="middle" font-size="20">[1][1]</text>
+      
+      <rect x="225" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="275" y="60" text-anchor="middle" font-size="20">[1][2]</text>
+    </g>
+
+    <!-- Row 2 -->
+    <g transform="translate(0, 200)">
+      <rect x="25" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="75" y="60" text-anchor="middle" font-size="20">[2][0]</text>
+      
+      <rect x="125" y="5" width="100" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+      <text x="175" y="60" text-anchor="middle" font-size="20">[2][1]</text>
+      
+      <rect x="225" y="5" width="100" height="100" fill="#e1bee7" stroke="#7b1fa2" stroke-width="2"/>
+      <text x="275" y="60" text-anchor="middle" font-size="20">[2][2]</text>
+    </g>
+  </g>
+
+  <!-- Syntax Box -->
+  <g transform="translate(550, 150)">
+    <rect x="0" y="0" width="220" height="180" rx="10" fill="#e0f2f1" stroke="#009688" stroke-width="2"/>
+    <text x="110" y="40" text-anchor="middle" font-weight="bold" fill="#00796b">Syntax</text>
+    <text x="20" y="80" font-family="Monospace" font-size="14" fill="#333">int[][] matrix = </text>
+    <text x="20" y="100" font-family="Monospace" font-size="14" fill="#333">   new int[3][3];</text>
+    <line x1="20" y1="120" x2="200" y2="120" stroke="#009688" stroke-width="1"/>
+    <text x="20" y="150" font-family="Monospace" font-size="14" fill="#333">matrix[row][col]</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="790" y="490" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

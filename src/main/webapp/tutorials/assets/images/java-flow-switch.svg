@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: #1e293b; }
+      .bold { font-weight: bold; }
+      .shape { fill: #f1f5f9; stroke: #334155; stroke-width: 2; }
+      .arrow { stroke: #334155; stroke-width: 2; marker-end: url(#arrowhead); fill: none; }
+      .case-text { fill: #334155; font-family: sans-serif; font-size: 12px; font-weight: bold; background-color: white;}
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155" />
+    </marker>
+  </defs>
+
+  <!-- Start -->
+  <rect x="200" y="20" width="100" height="40" rx="20" class="shape" />
+  <text x="250" y="45" class="text">Start Switch</text>
+
+  <path d="M250 60 L250 90" class="arrow" />
+
+  <!-- Expression -->
+  <path d="M250 90 L320 130 L250 170 L180 130 Z" class="shape" fill="#fbbf24" stroke="#d97706" />
+  <text x="250" y="135" class="text bold">Expression</text>
+
+  <!-- Case 1 -->
+  <path d="M250 170 L100 200 L100 250" class="arrow" />
+  <rect x="50" y="250" width="100" height="40" class="shape" fill="#d1fae5" stroke="#059669" />
+  <text x="100" y="275" class="text">Case 1 Code</text>
+  <text x="150" y="210" class="case-text" text-anchor="start">Match 1</text>
+
+    <!-- Case 2 -->
+  <path d="M250 170 L250 250" class="arrow" />
+  <rect x="200" y="250" width="100" height="40" class="shape" fill="#d1fae5" stroke="#059669" />
+  <text x="250" y="275" class="text">Case 2 Code</text>
+  <text x="260" y="210" class="case-text" text-anchor="start">Match 2</text>
+
+  <!-- Default -->
+  <path d="M250 170 L400 200 L400 250" class="arrow" />
+  <rect x="350" y="250" width="100" height="40" class="shape" fill="#fee2e2" stroke="#dc2626" />
+  <text x="400" y="275" class="text">Default Code</text>
+  <text x="350" y="210" class="case-text" text-anchor="end">No Match</text>
+
+
+  <!-- Merge -->
+  <path d="M100 290 L100 350 L250 350" class="arrow" />
+  <path d="M250 290 L250 350" class="arrow" />
+  <path d="M400 290 L400 350 L250 350" class="arrow" />
+
+ <!-- End -->
+  <rect x="200" y="380" width="100" height="40" rx="20" class="shape" />
+  <text x="250" y="405" class="text">End Switch</text>
+
+  <path d="M250 350 L250 380" class="arrow" />
+    <!-- Watermark -->
+    <text x="790" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

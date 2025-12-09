@@ -1,0 +1,91 @@
+<svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="jvmGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ED8B00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D67700;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="jreGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#007396;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005A75;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="jdkGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#007396;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004050;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="700" height="500" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="350" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
+    Java Platform Architecture
+  </text>
+  
+  <!-- JDK (Outermost - Darkest Blue) -->
+  <rect x="50" y="80" width="600" height="350" rx="10" fill="url(#jdkGradient)" filter="url(#shadow)"/>
+  <text x="350" y="110" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+    JDK (Java Development Kit)
+  </text>
+  <text x="350" y="135" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#e0f2ff" font-style="italic">
+    Complete development environment
+  </text>
+  
+  <!-- JDK Contents -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#b3e5ff">Development Tools:</text>
+  <text x="120" y="190" font-family="Arial, sans-serif" font-size="12" fill="#d9f2ff">• javac (Compiler)</text>
+  <text x="120" y="210" font-family="Arial, sans-serif" font-size="12" fill="#d9f2ff">• javadoc (Documentation)</text>
+  <text x="120" y="230" font-family="Arial, sans-serif" font-size="12" fill="#d9f2ff">• jdb (Debugger)</text>
+  <text x="120" y="250" font-family="Arial, sans-serif" font-size="12" fill="#d9f2ff">• jar, javap, etc.</text>
+  
+  <!-- JRE (Middle - Medium Blue) -->
+  <rect x="80" y="290" width="540" height="120" rx="8" fill="url(#jreGradient)" filter="url(#shadow)"/>
+  <text x="350" y="315" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+    JRE (Java Runtime Environment)
+  </text>
+  <text x="350" y="335" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#b3e5ff" font-style="italic">
+    Runtime environment for executing Java programs
+  </text>
+  
+  <!-- JRE Contents -->
+  <text x="120" y="360" font-family="Arial, sans-serif" font-size="11" fill="#d9f2ff">• Java Class Libraries (rt.jar, charsets.jar, etc.)</text>
+  <text x="120" y="380" font-family="Arial, sans-serif" font-size="11" fill="#d9f2ff">• Supporting files and properties</text>
+  
+  <!-- JVM (Innermost - Orange) -->
+  <rect x="110" y="355" width="480" height="60" rx="6" fill="url(#jvmGradient)" filter="url(#shadow)"/>
+  <text x="350" y="378" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    JVM (Java Virtual Machine)
+  </text>
+  <text x="350" y="398" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#ffe6cc" font-style="italic">
+    Executes bytecode (.class files)
+  </text>
+  
+  <!-- Arrow annotations -->
+  <path d="M 350 250 L 350 288" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="370" y="265" font-family="Arial, sans-serif" font-size="11" fill="#fff">contains</text>
+  
+  <path d="M 350 350 L 350 353" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead2)"/>
+  <text x="370" y="356" font-family="Arial, sans-serif" font-size="11" fill="#fff">contains</text>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#fff"/>
+    </marker>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#fff"/>
+    </marker>
+  </defs>
+  
+  <!-- Legend/Note -->
+  <rect x="50" y="450" width="600" height="35" rx="5" fill="#e3f2fd" stroke="#007396" stroke-width="1"/>
+  <text x="350" y="468" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+    <tspan font-weight="bold">Note:</tspan> JDK includes JRE, JRE includes JVM
+  </text>
+    <!-- Watermark -->
+    <text x="790" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>
+

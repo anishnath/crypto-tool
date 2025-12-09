@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+    <!-- Background -->
+    <rect width="900" height="600" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="450" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Iterator Pattern</text>
+    <text x="450" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Traverse and safely modify collections during iteration</text>
+
+    <!-- Collection with Iterator -->
+    <g transform="translate(50, 90)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#1565c0">ArrayList&lt;String&gt; with Iterator</text>
+
+        <!-- Array elements -->
+        <rect x="0" y="20" width="80" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="40" y="52" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"A"</text>
+        <text x="40" y="82" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[0]</text>
+
+        <rect x="80" y="20" width="80" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="120" y="52" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"B"</text>
+        <text x="120" y="82" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[1]</text>
+
+        <rect x="160" y="20" width="80" height="50" fill="#fff3e0" stroke="#ff9800" stroke-width="3"/>
+        <text x="200" y="52" text-anchor="middle" font-family="Monospace" font-size="14" font-weight="bold" fill="#e65100">"C"</text>
+        <text x="200" y="82" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[2]</text>
+
+        <rect x="240" y="20" width="80" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="280" y="52" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"D"</text>
+        <text x="280" y="82" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[3]</text>
+
+        <rect x="320" y="20" width="80" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="360" y="52" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"E"</text>
+        <text x="360" y="82" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[4]</text>
+
+        <!-- Iterator pointer -->
+        <path d="M200 10 L200 17" stroke="#ff9800" stroke-width="3" fill="none"/>
+        <polygon points="200,20 195,10 205,10" fill="#ff9800"/>
+        <text x="200" y="0" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#e65100">cursor</text>
+    </g>
+
+    <!-- Iterator Interface Methods -->
+    <g transform="translate(500, 90)">
+        <rect x="0" y="0" width="350" height="100" rx="8" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="175" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#7b1fa2">Iterator&lt;E&gt; Interface</text>
+        <line x1="10" y1="32" x2="340" y2="32" stroke="#ce93d8" stroke-width="1"/>
+        <text x="20" y="52" font-family="Monospace" font-size="11" fill="#4a148c">boolean hasNext()  // More elements?</text>
+        <text x="20" y="70" font-family="Monospace" font-size="11" fill="#4a148c">E next()           // Get next element</text>
+        <text x="20" y="88" font-family="Monospace" font-size="11" fill="#4a148c">void remove()      // Remove current</text>
+    </g>
+
+    <!-- Iterator Flow Diagram -->
+    <g transform="translate(50, 210)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#2e7d32">Iterator Traversal Flow</text>
+
+        <!-- Step boxes -->
+        <g transform="translate(0, 20)">
+            <rect x="0" y="0" width="160" height="70" rx="6" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+            <text x="80" y="20" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#1b5e20">1. Get Iterator</text>
+            <text x="80" y="40" text-anchor="middle" font-family="Monospace" font-size="9" fill="#2e7d32">Iterator&lt;String&gt; it</text>
+            <text x="80" y="55" text-anchor="middle" font-family="Monospace" font-size="9" fill="#2e7d32">= list.iterator();</text>
+        </g>
+
+        <path d="M160 55 L190 55" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="190,55 180,50 180,60" fill="#4caf50"/>
+
+        <g transform="translate(200, 20)">
+            <rect x="0" y="0" width="160" height="70" rx="6" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+            <text x="80" y="20" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#e65100">2. Check hasNext()</text>
+            <text x="80" y="40" text-anchor="middle" font-family="Monospace" font-size="9" fill="#ef6c00">while(it.hasNext())</text>
+            <text x="80" y="55" text-anchor="middle" font-family="Arial" font-size="9" fill="#ff9800">Returns true/false</text>
+        </g>
+
+        <path d="M360 55 L390 55" stroke="#ff9800" stroke-width="2" fill="none"/>
+        <polygon points="390,55 380,50 380,60" fill="#ff9800"/>
+
+        <g transform="translate(400, 20)">
+            <rect x="0" y="0" width="160" height="70" rx="6" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+            <text x="80" y="20" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#1565c0">3. Get next()</text>
+            <text x="80" y="40" text-anchor="middle" font-family="Monospace" font-size="9" fill="#0d47a1">String s = it.next();</text>
+            <text x="80" y="55" text-anchor="middle" font-family="Arial" font-size="9" fill="#1976d2">Advances cursor</text>
+        </g>
+
+        <path d="M560 55 L590 55" stroke="#1976d2" stroke-width="2" fill="none"/>
+        <polygon points="590,55 580,50 580,60" fill="#1976d2"/>
+
+        <g transform="translate(600, 20)">
+            <rect x="0" y="0" width="160" height="70" rx="6" fill="#ffebee" stroke="#e53935" stroke-width="2"/>
+            <text x="80" y="20" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#c62828">4. remove() (optional)</text>
+            <text x="80" y="40" text-anchor="middle" font-family="Monospace" font-size="9" fill="#b71c1c">it.remove();</text>
+            <text x="80" y="55" text-anchor="middle" font-family="Arial" font-size="9" fill="#e53935">Safe removal!</text>
+        </g>
+
+        <!-- Loop back arrow -->
+        <path d="M680 90 L680 115 L280 115 L280 90" stroke="#9e9e9e" stroke-width="2" fill="none" stroke-dasharray="5,3"/>
+        <polygon points="280,90 275,100 285,100" fill="#9e9e9e"/>
+        <text x="480" y="130" text-anchor="middle" font-family="Arial" font-size="10" fill="#757575">repeat while hasNext() is true</text>
+    </g>
+
+    <!-- Safe Removal Example -->
+    <g transform="translate(50, 370)">
+        <rect x="0" y="0" width="400" height="120" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="200" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2e7d32">Safe Removal with Iterator</text>
+        <text x="15" y="45" font-family="Monospace" font-size="10" fill="#1b5e20">Iterator&lt;Integer&gt; it = numbers.iterator();</text>
+        <text x="15" y="62" font-family="Monospace" font-size="10" fill="#1b5e20">while (it.hasNext()) {</text>
+        <text x="15" y="79" font-family="Monospace" font-size="10" fill="#1b5e20">    Integer n = it.next();</text>
+        <text x="15" y="96" font-family="Monospace" font-size="10" fill="#388e3c">    if (n &lt; 10) it.remove(); // Safe!</text>
+        <text x="15" y="113" font-family="Monospace" font-size="10" fill="#1b5e20">}</text>
+    </g>
+
+    <!-- Dangerous Example -->
+    <g transform="translate(470, 370)">
+        <rect x="0" y="0" width="380" height="120" rx="8" fill="#ffebee" stroke="#e53935" stroke-width="2"/>
+        <text x="190" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#c62828">ConcurrentModificationException!</text>
+        <text x="15" y="45" font-family="Monospace" font-size="10" fill="#b71c1c">for (Integer n : numbers) {</text>
+        <text x="15" y="62" font-family="Monospace" font-size="10" fill="#d32f2f">    if (n &lt; 10) numbers.remove(n);</text>
+        <text x="15" y="79" font-family="Monospace" font-size="10" fill="#b71c1c">}</text>
+        <text x="15" y="100" font-family="Arial" font-size="11" fill="#c62828">// Throws ConcurrentModificationException</text>
+        <text x="15" y="115" font-family="Arial" font-size="10" fill="#e53935">Cannot modify collection in for-each loop!</text>
+    </g>
+
+    <!-- ListIterator Extension -->
+    <g transform="translate(50, 510)">
+        <rect x="0" y="0" width="400" height="70" rx="8" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="200" y="20" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#1565c0">ListIterator (for Lists only)</text>
+        <text x="15" y="42" font-family="Monospace" font-size="10" fill="#0d47a1">hasPrevious(), previous() // Bidirectional</text>
+        <text x="15" y="58" font-family="Monospace" font-size="10" fill="#0d47a1">add(E), set(E)            // Modify list</text>
+    </g>
+
+    <!-- Iterator Types -->
+    <g transform="translate(470, 510)">
+        <rect x="0" y="0" width="380" height="70" rx="8" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+        <text x="190" y="20" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#424242">When to Use Iterator</text>
+        <text x="15" y="42" font-family="Arial" font-size="11" fill="#616161">- Need to remove elements while iterating</text>
+        <text x="15" y="58" font-family="Arial" font-size="11" fill="#616161">- Working with legacy code or custom collections</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="890" y="590" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

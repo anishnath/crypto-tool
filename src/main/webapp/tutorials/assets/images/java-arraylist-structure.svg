@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+    <!-- Background -->
+    <rect width="800" height="480" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">ArrayList Internal Structure</text>
+    <text x="400" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Dynamic array that grows automatically</text>
+
+    <!-- Initial Array (small) -->
+    <g transform="translate(50, 90)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#1565c0">Initial State (capacity = 4)</text>
+
+        <!-- Array boxes -->
+        <rect x="0" y="15" width="60" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="30" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"A"</text>
+        <text x="30" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[0]</text>
+
+        <rect x="60" y="15" width="60" height="50" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="90" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#0d47a1">"B"</text>
+        <text x="90" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[1]</text>
+
+        <rect x="120" y="15" width="60" height="50" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2" stroke-dasharray="3,3"/>
+        <text x="150" y="47" text-anchor="middle" font-family="Arial" font-size="12" fill="#9e9e9e">empty</text>
+        <text x="150" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[2]</text>
+
+        <rect x="180" y="15" width="60" height="50" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2" stroke-dasharray="3,3"/>
+        <text x="210" y="47" text-anchor="middle" font-family="Arial" font-size="12" fill="#9e9e9e">empty</text>
+        <text x="210" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[3]</text>
+
+        <text x="280" y="47" font-family="Arial" font-size="12" fill="#666">size = 2</text>
+    </g>
+
+    <!-- Arrow down -->
+    <g transform="translate(180, 180)">
+        <line x1="0" y1="0" x2="0" y2="30" stroke="#4caf50" stroke-width="3"/>
+        <polygon points="0,35 -8,22 8,22" fill="#4caf50"/>
+        <text x="20" y="20" font-family="Arial" font-size="12" fill="#4caf50">add("C"), add("D"), add("E")</text>
+    </g>
+
+    <!-- Array needs to grow -->
+    <g transform="translate(50, 230)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#e65100">Capacity Exceeded - Array Grows!</text>
+
+        <!-- Old array (faded) -->
+        <g opacity="0.4">
+            <rect x="0" y="15" width="60" height="40" fill="#fff3e0" stroke="#ff9800" stroke-width="1"/>
+            <rect x="60" y="15" width="60" height="40" fill="#fff3e0" stroke="#ff9800" stroke-width="1"/>
+            <rect x="120" y="15" width="60" height="40" fill="#fff3e0" stroke="#ff9800" stroke-width="1"/>
+            <rect x="180" y="15" width="60" height="40" fill="#fff3e0" stroke="#ff9800" stroke-width="1"/>
+        </g>
+
+        <!-- Arrow to new array -->
+        <path d="M270 35 L320 35" stroke="#e65100" stroke-width="2" fill="none"/>
+        <polygon points="320,35 310,30 310,40" fill="#e65100"/>
+        <text x="280" y="25" font-family="Arial" font-size="10" fill="#e65100">copy</text>
+
+        <!-- New larger array -->
+        <rect x="330" y="15" width="50" height="40" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="355" y="40" text-anchor="middle" font-family="Monospace" font-size="12" fill="#2e7d32">"A"</text>
+
+        <rect x="380" y="15" width="50" height="40" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="405" y="40" text-anchor="middle" font-family="Monospace" font-size="12" fill="#2e7d32">"B"</text>
+
+        <rect x="430" y="15" width="50" height="40" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="455" y="40" text-anchor="middle" font-family="Monospace" font-size="12" fill="#2e7d32">"C"</text>
+
+        <rect x="480" y="15" width="50" height="40" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="505" y="40" text-anchor="middle" font-family="Monospace" font-size="12" fill="#2e7d32">"D"</text>
+
+        <rect x="530" y="15" width="50" height="40" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+        <text x="555" y="40" text-anchor="middle" font-family="Monospace" font-size="12" font-weight="bold" fill="#1b5e20">"E"</text>
+
+        <rect x="580" y="15" width="50" height="40" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="605" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#9e9e9e">empty</text>
+
+        <text x="650" y="40" font-family="Arial" font-size="11" fill="#2e7d32">New capacity = 6</text>
+        <text x="650" y="55" font-family="Arial" font-size="11" fill="#2e7d32">(oldCapacity * 1.5)</text>
+    </g>
+
+    <!-- Index Access Illustration -->
+    <g transform="translate(50, 330)">
+        <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#7b1fa2">O(1) Random Access by Index</text>
+
+        <rect x="0" y="15" width="60" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="30" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#6a1b9a">"A"</text>
+        <text x="30" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[0]</text>
+
+        <rect x="60" y="15" width="60" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="90" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#6a1b9a">"B"</text>
+        <text x="90" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[1]</text>
+
+        <rect x="120" y="15" width="60" height="50" fill="#ce93d8" stroke="#7b1fa2" stroke-width="3"/>
+        <text x="150" y="47" text-anchor="middle" font-family="Monospace" font-size="14" font-weight="bold" fill="#4a148c">"C"</text>
+        <text x="150" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[2]</text>
+
+        <rect x="180" y="15" width="60" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="210" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#6a1b9a">"D"</text>
+        <text x="210" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[3]</text>
+
+        <rect x="240" y="15" width="60" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+        <text x="270" y="47" text-anchor="middle" font-family="Monospace" font-size="14" fill="#6a1b9a">"E"</text>
+        <text x="270" y="78" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">[4]</text>
+
+        <!-- Pointer arrow -->
+        <path d="M150 0 L150 12" stroke="#7b1fa2" stroke-width="2" fill="none"/>
+        <polygon points="150,15 145,5 155,5" fill="#7b1fa2"/>
+        <text x="150" y="-8" text-anchor="middle" font-family="Monospace" font-size="11" fill="#7b1fa2">get(2)</text>
+    </g>
+
+    <!-- Key Points -->
+    <g transform="translate(400, 330)">
+        <rect x="0" y="0" width="370" height="110" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="185" y="25" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2e7d32">ArrayList Key Characteristics</text>
+
+        <text x="15" y="48" font-family="Arial" font-size="11" fill="#1b5e20">+ Fast random access: O(1)</text>
+        <text x="15" y="65" font-family="Arial" font-size="11" fill="#1b5e20">+ Fast add at end: O(1) amortized</text>
+        <text x="15" y="82" font-family="Arial" font-size="11" fill="#c62828">- Slow insert/delete in middle: O(n)</text>
+        <text x="15" y="99" font-family="Arial" font-size="11" fill="#c62828">- Resize cost when capacity exceeded</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="790" y="470" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

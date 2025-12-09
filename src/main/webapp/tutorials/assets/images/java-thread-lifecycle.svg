@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .state { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 20; ry: 20; }
+      .text { font-family: sans-serif; font-size: 14px; fill: #1e293b; text-anchor: middle; font-weight: bold; }
+      .arrow { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="text" font-size="18">Java Thread Lifecycle</text>
+
+  <!-- States -->
+  
+  <!-- New -->
+  <rect x="20" y="125" width="100" height="50" class="state" fill="#dbeafe" stroke="#2563eb" />
+  <text x="70" y="155" class="text" fill="#2563eb">New</text>
+
+  <!-- Runnable -->
+  <rect x="180" y="125" width="100" height="50" class="state" fill="#dcfce7" stroke="#16a34a" />
+  <text x="230" y="155" class="text" fill="#16a34a">Runnable</text>
+
+  <!-- Running -->
+  <rect x="340" y="125" width="100" height="50" class="state" fill="#fef9c3" stroke="#ca8a04" />
+  <text x="390" y="155" class="text" fill="#ca8a04">Running</text>
+
+  <!-- Terminated -->
+  <rect x="480" y="125" width="100" height="50" class="state" fill="#fee2e2" stroke="#dc2626" />
+  <text x="530" y="155" class="text" fill="#dc2626">Terminated</text>
+
+  <!-- Blocked/Waiting -->
+  <rect x="340" y="230" width="100" height="50" class="state" fill="#f3f4f6" stroke="#4b5563" />
+  <text x="390" y="260" class="text" fill="#4b5563">Blocked</text>
+
+  <!-- Arrows -->
+  
+  <!-- New -> Runnable -->
+  <path d="M120 150 L180 150" class="arrow" />
+  <text x="150" y="145" class="text" font-size="10">start()</text>
+
+  <!-- Runnable <-> Running -->
+  <path d="M280 140 L340 140" class="arrow" />
+  <text x="310" y="135" class="text" font-size="10">Scheduler</text>
+  <path d="M340 160 L280 160" class="arrow" />
+  <text x="310" y="175" class="text" font-size="10">yield()</text>
+
+  <!-- Running -> Terminated -->
+  <path d="M440 150 L480 150" class="arrow" />
+  <text x="460" y="145" class="text" font-size="10">Exit</text>
+
+  <!-- Running -> Blocked -->
+  <path d="M390 175 L390 230" class="arrow" />
+  <text x="400" y="210" class="text" font-size="10" text-anchor="start">sleep()/wait()</text>
+
+  <!-- Blocked -> Runnable (Back to Ready) -->
+  <path d="M340 255 L230 255 L230 175" class="arrow" />
+  <text x="240" y="250" class="text" font-size="10" text-anchor="start">notify()/End</text>
+  
+   <!-- Watermark -->
+    <text x="590" y="290" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+
+</svg>

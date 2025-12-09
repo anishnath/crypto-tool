@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 20px; font-weight: bold; fill: #1e293b; font-family: sans-serif; text-anchor: middle;}
+      .bit-box { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1; }
+      .bit-text { font-size: 16px; font-family: monospace; text-anchor: middle; fill: #475569;}
+      .result-box { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
+      .result-text { font-size: 16px; font-family: monospace; text-anchor: middle; fill: #1e40af; font-weight: bold;}
+      .label { font-size: 14px; fill: #64748b; font-family: sans-serif; text-anchor: end; }
+      .op-symbol { font-size: 24px; font-weight: bold; fill: #ef4444; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- AND Operation -->
+  <g transform="translate(150, 60)">
+    <text x="100" y="-20" class="title">Bitwise AND (&amp;)</text>
+    
+    <text x="-20" y="20" class="label">5 (A)</text>
+    <g transform="translate(0, 0)">
+       <rect x="0" y="0" width="30" height="30" class="bit-box"/><text x="15" y="20" class="bit-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="bit-box"/><text x="45" y="20" class="bit-text">1</text>
+       <rect x="60" y="0" width="30" height="30" class="bit-box"/><text x="75" y="20" class="bit-text">0</text>
+       <rect x="90" y="0" width="30" height="30" class="bit-box"/><text x="105" y="20" class="bit-text">1</text>
+    </g>
+
+    <text x="-20" y="60" class="label">3 (B)</text>
+    <g transform="translate(0, 40)">
+       <rect x="0" y="0" width="30" height="30" class="bit-box"/><text x="15" y="20" class="bit-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="bit-box"/><text x="45" y="20" class="bit-text">0</text>
+       <rect x="60" y="0" width="30" height="30" class="bit-box"/><text x="75" y="20" class="bit-text">1</text>
+       <rect x="90" y="0" width="30" height="30" class="bit-box"/><text x="105" y="20" class="bit-text">1</text>
+    </g>
+
+    <line x1="0" y1="80" x2="120" y2="80" stroke="#334155" stroke-width="2"/>
+    <text x="140" y="45" class="op-symbol">&amp;</text>
+
+    <text x="-20" y="110" class="label">Result (1)</text>
+    <g transform="translate(0, 90)">
+       <rect x="0" y="0" width="30" height="30" class="result-box"/><text x="15" y="20" class="result-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="result-box"/><text x="45" y="20" class="result-text">0</text>
+       <rect x="60" y="0" width="30" height="30" class="result-box"/><text x="75" y="20" class="result-text">0</text>
+       <rect x="90" y="0" width="30" height="30" class="result-box"/><text x="105" y="20" class="result-text">1</text>
+    </g>
+  </g>
+
+  <!-- OR Operation -->
+  <g transform="translate(450, 60)">
+    <text x="100" y="-20" class="title">Bitwise OR (|)</text>
+    
+    <text x="-20" y="20" class="label">5 (A)</text>
+    <g transform="translate(0, 0)">
+       <rect x="0" y="0" width="30" height="30" class="bit-box"/><text x="15" y="20" class="bit-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="bit-box"/><text x="45" y="20" class="bit-text">1</text>
+       <rect x="60" y="0" width="30" height="30" class="bit-box"/><text x="75" y="20" class="bit-text">0</text>
+       <rect x="90" y="0" width="30" height="30" class="bit-box"/><text x="105" y="20" class="bit-text">1</text>
+    </g>
+
+    <text x="-20" y="60" class="label">3 (B)</text>
+    <g transform="translate(0, 40)">
+       <rect x="0" y="0" width="30" height="30" class="bit-box"/><text x="15" y="20" class="bit-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="bit-box"/><text x="45" y="20" class="bit-text">0</text>
+       <rect x="60" y="0" width="30" height="30" class="bit-box"/><text x="75" y="20" class="bit-text">1</text>
+       <rect x="90" y="0" width="30" height="30" class="bit-box"/><text x="105" y="20" class="bit-text">1</text>
+    </g>
+
+    <line x1="0" y1="80" x2="120" y2="80" stroke="#334155" stroke-width="2"/>
+    <text x="140" y="45" class="op-symbol">|</text>
+
+    <text x="-20" y="110" class="label">Result (7)</text>
+    <g transform="translate(0, 90)">
+       <rect x="0" y="0" width="30" height="30" class="result-box"/><text x="15" y="20" class="result-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="result-box"/><text x="45" y="20" class="result-text">1</text>
+       <rect x="60" y="0" width="30" height="30" class="result-box"/><text x="75" y="20" class="result-text">1</text>
+       <rect x="90" y="0" width="30" height="30" class="result-box"/><text x="105" y="20" class="result-text">1</text>
+    </g>
+  </g>
+
+  <!-- Left Shift Operation -->
+  <g transform="translate(280, 240)">
+    <text x="100" y="-20" class="title">Left Shift (&lt;&lt; 1)</text>
+    
+    <text x="-20" y="20" class="label">5</text>
+    <g transform="translate(0, 0)">
+       <rect x="0" y="0" width="30" height="30" class="bit-box"/><text x="15" y="20" class="bit-text">0</text>
+       <rect x="30" y="0" width="30" height="30" class="bit-box"/><text x="45" y="20" class="bit-text">1</text>
+       <rect x="60" y="0" width="30" height="30" class="bit-box"/><text x="75" y="20" class="bit-text">0</text>
+       <rect x="90" y="0" width="30" height="30" class="bit-box"/><text x="105" y="20" class="bit-text">1</text>
+    </g>
+
+    <text x="180" y="25" class="op-symbol" font-size="20" fill="#3b82f6">&lt;&lt;</text>
+
+    <text x="-20" y="70" class="label">Result (10)</text>
+    <g transform="translate(0, 50)">
+       <rect x="0" y="0" width="30" height="30" class="result-box"/><text x="15" y="20" class="result-text">1</text>
+       <rect x="30" y="0" width="30" height="30" class="result-box"/><text x="45" y="20" class="result-text">0</text>
+       <rect x="60" y="0" width="30" height="30" class="result-box"/><text x="75" y="20" class="result-text">1</text>
+       <rect x="90" y="0" width="30" height="30" class="result-box" fill="#fecaca"/><text x="105" y="20" class="result-text" fill="#ef4444">0</text>
+    </g>
+    <text x="150" y="70" class="label" fill="#ef4444" font-size="12">Padded with 0</text>
+  </g>
+    <!-- Watermark -->
+    <text x="790" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

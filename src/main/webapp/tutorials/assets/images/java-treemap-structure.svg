@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580">
+    <!-- Background -->
+    <rect width="900" height="580" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="450" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">TreeMap Internal Structure</text>
+    <text x="450" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Red-Black Tree storing key-value pairs sorted by keys</text>
+
+    <!-- Put operation -->
+    <g transform="translate(30, 85)">
+        <text x="0" y="0" font-family="Arial" font-size="13" font-weight="bold" fill="#c62828">TreeMap&lt;String, Integer&gt; scores = new TreeMap&lt;&gt;();</text>
+        <text x="0" y="20" font-family="Arial" font-size="11" fill="#e53935">scores.put("Charlie", 85); scores.put("Alice", 95); scores.put("Eve", 78); scores.put("Bob", 88); scores.put("Diana", 92);</text>
+    </g>
+
+    <!-- Tree Structure with Key-Value pairs -->
+    <g transform="translate(450, 170)">
+        <!-- Root: Charlie (alphabetically middle) -->
+        <g transform="translate(0, 0)">
+            <rect x="-55" y="-25" width="110" height="50" rx="6" fill="#424242" stroke="#212121" stroke-width="3"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">Charlie</text>
+            <line x1="-50" y1="2" x2="50" y2="2" stroke="#616161" stroke-width="1"/>
+            <text x="0" y="18" text-anchor="middle" font-family="Monospace" font-size="14" fill="#ffeb3b">85</text>
+        </g>
+
+        <!-- Left Child: Bob -->
+        <line x1="-40" y1="25" x2="-130" y2="70" stroke="#424242" stroke-width="2"/>
+        <g transform="translate(-150, 85)">
+            <rect x="-45" y="-25" width="90" height="50" rx="6" fill="#c62828" stroke="#b71c1c" stroke-width="3"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">Bob</text>
+            <line x1="-40" y1="2" x2="40" y2="2" stroke="#e57373" stroke-width="1"/>
+            <text x="0" y="18" text-anchor="middle" font-family="Monospace" font-size="14" fill="#ffeb3b">88</text>
+        </g>
+
+        <!-- Bob's Left Child: Alice -->
+        <line x1="-165" y1="110" x2="-230" y2="155" stroke="#424242" stroke-width="2"/>
+        <g transform="translate(-250, 170)">
+            <rect x="-45" y="-25" width="90" height="50" rx="6" fill="#424242" stroke="#212121" stroke-width="2"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">Alice</text>
+            <line x1="-40" y1="2" x2="40" y2="2" stroke="#616161" stroke-width="1"/>
+            <text x="0" y="18" text-anchor="middle" font-family="Monospace" font-size="14" fill="#ffeb3b">95</text>
+        </g>
+
+        <!-- Right Child: Eve -->
+        <line x1="40" y1="25" x2="130" y2="70" stroke="#424242" stroke-width="2"/>
+        <g transform="translate(150, 85)">
+            <rect x="-45" y="-25" width="90" height="50" rx="6" fill="#c62828" stroke="#b71c1c" stroke-width="3"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">Eve</text>
+            <line x1="-40" y1="2" x2="40" y2="2" stroke="#e57373" stroke-width="1"/>
+            <text x="0" y="18" text-anchor="middle" font-family="Monospace" font-size="14" fill="#ffeb3b">78</text>
+        </g>
+
+        <!-- Eve's Left Child: Diana -->
+        <line x1="135" y1="110" x2="70" y2="155" stroke="#424242" stroke-width="2"/>
+        <g transform="translate(50, 170)">
+            <rect x="-45" y="-25" width="90" height="50" rx="6" fill="#424242" stroke="#212121" stroke-width="2"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#fff">Diana</text>
+            <line x1="-40" y1="2" x2="40" y2="2" stroke="#616161" stroke-width="1"/>
+            <text x="0" y="18" text-anchor="middle" font-family="Monospace" font-size="14" fill="#ffeb3b">92</text>
+        </g>
+    </g>
+
+    <!-- Sorted Key Order Output -->
+    <g transform="translate(50, 400)">
+        <rect x="0" y="0" width="800" height="70" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+        <text x="400" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2e7d32">Keys Always Sorted Alphabetically (In-Order Traversal)</text>
+
+        <!-- Sorted key-value pairs -->
+        <g transform="translate(40, 35)">
+            <rect x="0" y="0" width="120" height="28" rx="4" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+            <text x="60" y="19" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">Alice: 95</text>
+        </g>
+        <text x="175" y="53" font-family="Arial" font-size="16" fill="#4caf50">&amp;rarr;</text>
+        <g transform="translate(195, 35)">
+            <rect x="0" y="0" width="100" height="28" rx="4" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+            <text x="50" y="19" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">Bob: 88</text>
+        </g>
+        <text x="310" y="53" font-family="Arial" font-size="16" fill="#4caf50">&amp;rarr;</text>
+        <g transform="translate(330, 35)">
+            <rect x="0" y="0" width="120" height="28" rx="4" fill="#81c784" stroke="#388e3c" stroke-width="2"/>
+            <text x="60" y="19" text-anchor="middle" font-family="Monospace" font-size="11" font-weight="bold" fill="#1b5e20">Charlie: 85</text>
+        </g>
+        <text x="465" y="53" font-family="Arial" font-size="16" fill="#4caf50">&amp;rarr;</text>
+        <g transform="translate(485, 35)">
+            <rect x="0" y="0" width="110" height="28" rx="4" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+            <text x="55" y="19" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">Diana: 92</text>
+        </g>
+        <text x="610" y="53" font-family="Arial" font-size="16" fill="#4caf50">&amp;rarr;</text>
+        <g transform="translate(630, 35)">
+            <rect x="0" y="0" width="100" height="28" rx="4" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+            <text x="50" y="19" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">Eve: 78</text>
+        </g>
+    </g>
+
+    <!-- NavigableMap Methods -->
+    <g transform="translate(50, 485)">
+        <rect x="0" y="0" width="400" height="75" rx="8" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+        <text x="200" y="20" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#1565c0">NavigableMap Methods</text>
+        <text x="15" y="40" font-family="Monospace" font-size="10" fill="#0d47a1">scores.firstKey()           // "Alice"</text>
+        <text x="15" y="55" font-family="Monospace" font-size="10" fill="#0d47a1">scores.lastEntry()          // Eve=78</text>
+        <text x="15" y="70" font-family="Monospace" font-size="10" fill="#0d47a1">scores.subMap("Bob","Diana") // {Bob=88, Charlie=85}</text>
+    </g>
+
+    <!-- HashMap vs TreeMap -->
+    <g transform="translate(470, 485)">
+        <rect x="0" y="0" width="380" height="75" rx="8" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+        <text x="190" y="20" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#e65100">HashMap vs TreeMap</text>
+        <text x="15" y="40" font-family="Arial" font-size="11" fill="#bf360c">HashMap: O(1) - Unordered keys</text>
+        <text x="15" y="55" font-family="Arial" font-size="11" fill="#bf360c">TreeMap: O(log n) - Sorted keys</text>
+        <text x="15" y="70" font-family="Arial" font-size="11" fill="#e65100">TreeMap: null keys NOT allowed</text>
+    </g>
+
+    <!-- Legend -->
+    <g transform="translate(720, 120)">
+        <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Node Structure</text>
+        <rect x="0" y="10" width="70" height="40" rx="4" fill="#757575" stroke="#424242" stroke-width="2"/>
+        <text x="35" y="28" text-anchor="middle" font-family="Arial" font-size="9" fill="#fff">Key</text>
+        <line x1="5" y1="32" x2="65" y2="32" stroke="#9e9e9e" stroke-width="1"/>
+        <text x="35" y="45" text-anchor="middle" font-family="Monospace" font-size="10" fill="#ffeb3b">Value</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="890" y="570" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

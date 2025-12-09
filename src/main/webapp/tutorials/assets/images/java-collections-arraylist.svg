@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: sans-serif; font-size: 14px; fill: #333; text-anchor: middle; }
+      .box { fill: #f0f9ff; stroke: #0284c7; stroke-width: 2; rx: 4; }
+      .cell { fill: #fff; stroke: #64748b; stroke-width: 1; }
+      .arrow { stroke: #0284c7; stroke-width: 2; marker-end: url(#arrowhead); }
+      .new-cell { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0284c7" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="text" font-size="18" font-weight="bold">ArrayList Internal Resizing</text>
+
+  <!-- Step 1: Full Array -->
+  <text x="100" y="70" class="text" font-weight="bold">1. Array Full (Size 3)</text>
+  <rect x="50" y="90" width="50" height="50" class="cell" />
+  <text x="75" y="120" class="text">A</text>
+  <rect x="100" y="90" width="50" height="50" class="cell" />
+  <text x="125" y="120" class="text">B</text>
+  <rect x="150" y="90" width="50" height="50" class="cell" />
+  <text x="175" y="120" class="text">C</text>
+
+  <!-- Arrow -->
+  <path d="M220 115 L280 115" class="arrow" />
+  <text x="250" y="100" class="text" font-size="12">add("D")</text>
+
+  <!-- Step 2: New Larger Array -->
+  <text x="450" y="70" class="text" font-weight="bold">2. New Array (Growth)</text>
+  <!-- Copied Elements -->
+  <rect x="300" y="90" width="50" height="50" class="cell" />
+  <text x="325" y="120" class="text">A</text>
+  <rect x="350" y="90" width="50" height="50" class="cell" />
+  <text x="375" y="120" class="text">B</text>
+  <rect x="400" y="90" width="50" height="50" class="cell" />
+  <text x="425" y="120" class="text">C</text>
+  
+  <!-- New Element -->
+  <rect x="450" y="90" width="50" height="50" class="new-cell" />
+  <text x="475" y="120" class="text" font-weight="bold">D</text>
+
+  <!-- Empty Space -->
+  <rect x="500" y="90" width="50" height="50" class="cell" stroke-dasharray="4" />
+  <rect x="550" y="90" width="50" height="50" class="cell" stroke-dasharray="4" />
+
+  <text x="450" y="160" class="text" font-size="12" fill="#666">Capacity increases (usually 50% or 100%)</text>
+  
+  <!-- Step 3: Removing -->
+   <text x="100" y="200" class="text" font-weight="bold">3. remove(1) - Index B</text>
+   
+   <rect x="50" y="220" width="50" height="50" class="cell" />
+   <text x="75" y="250" class="text">A</text>
+   
+   <rect x="100" y="220" width="50" height="50" class="cell" fill="#fee2e2" />
+   <text x="125" y="250" class="text" fill="#ef4444" text-decoration="line-through">B</text>
+   
+   <rect x="150" y="220" width="50" height="50" class="cell" />
+   <text x="175" y="250" class="text">C</text>
+
+   <path d="M180 230 L130 230" class="arrow" stroke="#ef4444" fill="none" />
+   <text x="210" y="260" class="text" font-size="12">Shift Left</text>
+
+
+   <!-- Watermark -->
+    <text x="590" y="290" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+
+</svg>

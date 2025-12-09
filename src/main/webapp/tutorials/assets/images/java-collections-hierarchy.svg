@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+    <!-- Background -->
+    <rect width="900" height="600" fill="#ffffff"/>
+
+    <!-- Title -->
+    <text x="450" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Collections Framework Hierarchy</text>
+    <text x="450" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Interfaces and their common implementations</text>
+
+    <!-- Iterable Interface (Root) -->
+    <g transform="translate(375, 80)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#616161">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#424242">Iterable</text>
+    </g>
+
+    <!-- Arrow from Iterable to Collection -->
+    <line x1="450" y1="125" x2="450" y2="145" stroke="#9e9e9e" stroke-width="2"/>
+    <polygon points="450,145 445,138 455,138" fill="#9e9e9e"/>
+
+    <!-- Collection Interface -->
+    <g transform="translate(375, 150)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#1565c0">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#0d47a1">Collection</text>
+    </g>
+
+    <!-- Arrows from Collection to List, Set, Queue -->
+    <path d="M420 195 L420 220 L200 220 L200 245" stroke="#1976d2" stroke-width="2" fill="none"/>
+    <polygon points="200,245 195,238 205,238" fill="#1976d2"/>
+
+    <line x1="450" y1="195" x2="450" y2="245" stroke="#1976d2" stroke-width="2"/>
+    <polygon points="450,245 445,238 455,238" fill="#1976d2"/>
+
+    <path d="M480 195 L480 220 L700 220 L700 245" stroke="#1976d2" stroke-width="2" fill="none"/>
+    <polygon points="700,245 695,238 705,238" fill="#1976d2"/>
+
+    <!-- List Interface -->
+    <g transform="translate(125, 250)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#2e7d32">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#1b5e20">List</text>
+    </g>
+
+    <!-- Set Interface -->
+    <g transform="translate(375, 250)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#fff3e0" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#e65100">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#bf360c">Set</text>
+    </g>
+
+    <!-- Queue Interface -->
+    <g transform="translate(625, 250)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#6a1b9a">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#4a148c">Queue</text>
+    </g>
+
+    <!-- Arrows from List to implementations -->
+    <path d="M170 295 L170 320 L100 320 L100 350" stroke="#4caf50" stroke-width="2" fill="none"/>
+    <polygon points="100,350 95,343 105,343" fill="#4caf50"/>
+
+    <path d="M230 295 L230 320 L300 320 L300 350" stroke="#4caf50" stroke-width="2" fill="none"/>
+    <polygon points="300,350 295,343 305,343" fill="#4caf50"/>
+
+    <!-- ArrayList -->
+    <g transform="translate(25, 355)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#c8e6c9" stroke="#388e3c" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#1b5e20">ArrayList</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#2e7d32">Dynamic Array</text>
+    </g>
+
+    <!-- LinkedList -->
+    <g transform="translate(225, 355)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#c8e6c9" stroke="#388e3c" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#1b5e20">LinkedList</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#2e7d32">Doubly-Linked</text>
+    </g>
+
+    <!-- Arrows from Set to implementations -->
+    <path d="M420 295 L420 320 L380 320 L380 350" stroke="#ff9800" stroke-width="2" fill="none"/>
+    <polygon points="380,350 375,343 385,343" fill="#ff9800"/>
+
+    <path d="M480 295 L480 320 L530 320 L530 350" stroke="#ff9800" stroke-width="2" fill="none"/>
+    <polygon points="530,350 525,343 535,343" fill="#ff9800"/>
+
+    <!-- HashSet -->
+    <g transform="translate(305, 355)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#ffe0b2" stroke="#f57c00" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#e65100">HashSet</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#ef6c00">Hash Table</text>
+    </g>
+
+    <!-- TreeSet -->
+    <g transform="translate(455, 355)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#ffe0b2" stroke="#f57c00" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#e65100">TreeSet</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#ef6c00">Red-Black Tree</text>
+    </g>
+
+    <!-- Arrow from Queue to PriorityQueue -->
+    <line x1="700" y1="295" x2="700" y2="350" stroke="#9c27b0" stroke-width="2"/>
+    <polygon points="700,350 695,343 705,343" fill="#9c27b0"/>
+
+    <!-- PriorityQueue -->
+    <g transform="translate(625, 355)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#e1bee7" stroke="#8e24aa" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#6a1b9a">PriorityQueue</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#7b1fa2">Heap</text>
+    </g>
+
+    <!-- Map Interface (Separate hierarchy) -->
+    <g transform="translate(700, 80)">
+        <rect x="0" y="0" width="150" height="45" rx="6" fill="#ffebee" stroke="#e53935" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="75" y="18" text-anchor="middle" font-family="Arial" font-size="10" fill="#c62828">&lt;&lt;interface&gt;&gt;</text>
+        <text x="75" y="35" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#b71c1c">Map</text>
+    </g>
+
+    <!-- Note about Map -->
+    <text x="775" y="140" text-anchor="middle" font-family="Arial" font-size="10" fill="#c62828">(Not a Collection)</text>
+
+    <!-- Arrows from Map to implementations -->
+    <path d="M745 125 L745 155 L680 155 L680 175" stroke="#e53935" stroke-width="2" fill="none"/>
+    <polygon points="680,175 675,168 685,168" fill="#e53935"/>
+
+    <path d="M805 125 L805 155 L870 155 L870 175" stroke="#e53935" stroke-width="2" fill="none"/>
+    <polygon points="870,175 865,168 875,168" fill="#e53935"/>
+
+    <!-- HashMap -->
+    <g transform="translate(605, 180)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#ffcdd2" stroke="#d32f2f" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#b71c1c">HashMap</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#c62828">Hash Table</text>
+    </g>
+
+    <!-- TreeMap -->
+    <g transform="translate(795, 180)">
+        <rect x="0" y="0" width="150" height="50" rx="6" fill="#ffcdd2" stroke="#d32f2f" stroke-width="2"/>
+        <text x="75" y="22" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#b71c1c">TreeMap</text>
+        <text x="75" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#c62828">Red-Black Tree</text>
+    </g>
+
+    <!-- Legend -->
+    <g transform="translate(30, 450)">
+        <rect x="0" y="0" width="840" height="120" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+        <text x="420" y="25" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">Legend &amp; Key Characteristics</text>
+
+        <line x1="30" y1="45" x2="70" y2="45" stroke="#666" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="80" y="49" font-family="Arial" font-size="11" fill="#666">Interface</text>
+
+        <line x1="180" y1="45" x2="220" y2="45" stroke="#666" stroke-width="2"/>
+        <text x="230" y="49" font-family="Arial" font-size="11" fill="#666">Class (Implementation)</text>
+
+        <text x="30" y="75" font-family="Arial" font-size="11" fill="#1b5e20">List: Ordered, allows duplicates, index-based access</text>
+        <text x="30" y="92" font-family="Arial" font-size="11" fill="#e65100">Set: No duplicates, unique elements only</text>
+        <text x="30" y="109" font-family="Arial" font-size="11" fill="#6a1b9a">Queue: FIFO ordering (First-In-First-Out)</text>
+        <text x="450" y="75" font-family="Arial" font-size="11" fill="#b71c1c">Map: Key-value pairs, unique keys</text>
+        <text x="450" y="92" font-family="Arial" font-size="11" fill="#666">Hash-based: O(1) average operations</text>
+        <text x="450" y="109" font-family="Arial" font-size="11" fill="#666">Tree-based: O(log n), sorted order</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="890" y="590" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

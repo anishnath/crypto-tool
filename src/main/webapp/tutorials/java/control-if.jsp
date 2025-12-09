@@ -1,0 +1,199 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <% request.setAttribute("currentLesson", "control-if" ); request.setAttribute("currentModule", "Control Flow" ); %>
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+            <title>Java If-Else Statements - Java Tutorial | 8gwifi.org</title>
+            <meta name="description"
+                content="Learn how to use Java's control flow statements: if, if-else, else-if ladders, and nested if statements. Master conditional logic in Java programming.">
+            <meta name="keywords"
+                content="java if statement, java if else, java else if, java nested if, java conditional logic, java control flow">
+
+            <meta property="og:type" content="article">
+            <meta property="og:title" content="Java If-Else Statements - Java Tutorial | 8gwifi.org">
+            <meta property="og:description"
+                content="Master decision making in Java with If-Else statements. Interactive examples and flowcharts included.">
+            <meta property="og:site_name" content="8gwifi.org Tutorials">
+
+            <link rel="canonical" href="https://8gwifi.org/tutorials/java/control-if.jsp">
+            <link rel="icon" type="image/svg+xml"
+                href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
+            <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
+            <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">
+            <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial-server.css">
+            <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/codemirror.min.css">
+            <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/monokai.min.css">
+
+            <script>
+                (function () {
+                    var theme = localStorage.getItem('tutorial-theme');
+                    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                })();
+            </script>
+
+            <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Java If-Else Statements",
+    "description": "Guide to Java conditional logic using if-else statements.",
+    "learningResourceType": "tutorial",
+    "educationalLevel": "Beginner",
+    "teaches": ["If statement", "Else block", "Else-If ladder", "Nested Ifs"],
+    "timeRequired": "PT15M",
+    "isPartOf": {
+        "@type": "Course",
+        "name": "Java Tutorial",
+        "url": "https://8gwifi.org/tutorials/java/"
+    }
+}
+</script>
+
+            <%@ include file="../tutorial-ads.jsp" %>
+                <%@ include file="../tutorial-analytics.jsp" %>
+        </head>
+
+        <body class="tutorial-body no-preview" data-lesson="control-if">
+            <div class="tutorial-layout">
+                <%@ include file="../tutorial-header.jsp" %>
+
+                    <main class="tutorial-main">
+                        <%@ include file="../tutorial-sidebar-java.jsp" %>
+                            <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+                            <article class="tutorial-content">
+                                <nav class="breadcrumb">
+                                    <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
+                                    <span class="breadcrumb-separator">/</span>
+                                    <a href="<%=request.getContextPath()%>/tutorials/java/">Java</a>
+                                    <span class="breadcrumb-separator">/</span>
+                                    <span>If-Else Statements</span>
+                                </nav>
+
+                                <header class="lesson-header">
+                                    <h1 class="lesson-title">If-Else Statements</h1>
+                                    <div class="lesson-meta">
+                                        <span>Beginner</span>
+                                        <span>~15 min read</span>
+                                    </div>
+                                </header>
+
+                                <jsp:include page="../tutorial-ad-slot.jsp">
+                                    <jsp:param name="slot" value="top" />
+                                </jsp:include>
+
+                                <div class="lesson-body">
+                                    <p class="lead">Control flow allows your program to make decisions. The most basic
+                                        building block of decision making is the <code>if</code> statement.</p>
+
+                                    <!-- Section 1: The Basics -->
+                                    <h2>The <code>if</code> Statement</h2>
+                                    <p>The <code>if</code> statement tells Java to execute a block of code <em>only
+                                            if</em> a specific condition is true.</p>
+
+                                    <div class="code-box">
+                                        <pre><code class="language-java">if (condition) {
+    // Code to execute if condition is true
+}</code></pre>
+                                    </div>
+
+                                    <img src="<%=request.getContextPath()%>/tutorials/assets/images/java-flow-if.svg"
+                                        alt="Java If-Else Flowchart" class="diagram-image"
+                                        style="max-width: 600px; margin: 2rem auto; display: block;">
+
+                                    <!-- Section 2: If-Else -->
+                                    <h2>The <code>else</code> Block</h2>
+                                    <p>Use <code>else</code> to specify a block of code to be executed if the condition
+                                        is <strong>false</strong>.</p>
+                                    <pre><code class="language-java">if (age >= 18) {
+    System.out.println("You are an adult.");
+} else {
+    System.out.println("You are a minor.");
+}</code></pre>
+
+                                    <!-- Section 3: Else-If Ladder -->
+                                    <h2>The <code>else-if</code> Ladder</h2>
+                                    <p>When you have multiple conditions to check, use <code>else if</code>. Java checks
+                                        them in order properly.</p>
+                                    <pre><code class="language-java">if (score >= 90) {
+    grade = 'A';
+} else if (score >= 80) {
+    grade = 'B';
+} else {
+    grade = 'C';
+}</code></pre>
+
+                                    <jsp:include page="../tutorial-compiler.jsp">
+                                        <jsp:param name="codeFile" value="java/control-if.java" />
+                                        <jsp:param name="language" value="java" />
+                                        <jsp:param name="editorId" value="compiler-if" />
+                                    </jsp:include>
+
+                                    <!-- Section 4: Formatting Pitfalls -->
+                                    <h2>Common Pitfalls</h2>
+                                    <div class="mistake-box">
+                                        <h4>Missing Braces</h4>
+                                        <p>Java allows omitting braces <code>{}</code> if there is only one line of
+                                            code. <strong>Avoid this practice.</strong> It leads to bugs if you add a
+                                            second line later and forget to add braces.</p>
+
+                                        <pre><code class="language-java">// BAD (Dangerous)
+if (isLogged)
+    System.out.println("Welcome");
+
+// GOOD (Safe)
+if (isLogged) {
+    System.out.println("Welcome");
+}</code></pre>
+                                    </div>
+
+                                    <!-- Summary -->
+                                    <h2>Summary</h2>
+                                    <div class="summary-box">
+                                        <ul>
+                                            <li>Use <code>if</code> to execute code based on a condition.</li>
+                                            <li>Use <code>else</code> for the alternative path.</li>
+                                            <li>Use <code>else if</code> for multiple conditions.</li>
+                                            <li>Always use curly braces <code>{}</code> to group your code blocks
+                                                cleanly.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div style="margin-top: 3rem;">
+                                        <% String prevLinkUrl=request.getContextPath()
+                                            + "/tutorials/java/operators-precedence.jsp" ; String
+                                            nextLinkUrl=request.getContextPath() + "/tutorials/java/control-switch.jsp"
+                                            ; %>
+                                            <jsp:include page="../tutorial-nav.jsp">
+                                                <jsp:param name="prevLink" value="<%=prevLinkUrl%>" />
+                                                <jsp:param name="prevTitle" value="Operator Precedence" />
+                                                <jsp:param name="nextLink" value="<%=nextLinkUrl%>" />
+                                                <jsp:param name="nextTitle" value="Switch Statements →" />
+                                                <jsp:param name="currentLessonId" value="control-if" />
+                                            </jsp:include>
+                                    </div>
+                                </div>
+
+                                <jsp:include page="../tutorial-ad-slot.jsp">
+                                    <jsp:param name="slot" value="bottom" />
+                                </jsp:include>
+                            </article>
+                    </main>
+
+                    <%@ include file="../tutorial-footer.jsp" %>
+            </div>
+
+            <script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror.min.js"></script>
+            <script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror-modes/clike.min.js"></script>
+            <script src="<%=request.getContextPath()%>/tutorials/assets/js/progress.js"></script>
+            <script src="<%=request.getContextPath()%>/tutorials/assets/js/tutorial-core.js?v=4"></script>
+        </body>
+
+        </html>

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580">
+  <!-- Background -->
+  <rect width="800" height="580" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Java Polymorphism</text>
+  <text x="400" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">"Many Forms" - One interface, multiple implementations</text>
+
+  <!-- Central concept circle -->
+  <circle cx="400" cy="150" r="60" fill="#fff3e0" stroke="#ed8b00" stroke-width="3"/>
+  <text x="400" y="145" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#e65100">Animal</text>
+  <text x="400" y="165" text-anchor="middle" font-family="Monospace" font-size="11" fill="#bf360c">makeSound()</text>
+
+  <!-- Arrows radiating to different implementations -->
+  <!-- Arrow to Dog -->
+  <line x1="345" y1="175" x2="180" y2="260" stroke="#1976d2" stroke-width="2"/>
+  <polygon points="180,260 192,258 188,246" fill="#1976d2"/>
+
+  <!-- Arrow to Cat -->
+  <line x1="400" y1="210" x2="400" y2="260" stroke="#388e3c" stroke-width="2"/>
+  <polygon points="400,260 395,248 405,248" fill="#388e3c"/>
+
+  <!-- Arrow to Bird -->
+  <line x1="455" y1="175" x2="620" y2="260" stroke="#7b1fa2" stroke-width="2"/>
+  <polygon points="620,260 608,258 612,246" fill="#7b1fa2"/>
+
+  <!-- Dog implementation -->
+  <g transform="translate(80, 265)">
+    <rect x="0" y="0" width="200" height="100" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#1565c0">Dog</text>
+    <line x1="10" y1="35" x2="190" y2="35" stroke="#90caf9" stroke-width="1"/>
+    <text x="100" y="55" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">@Override</text>
+    <text x="100" y="72" text-anchor="middle" font-family="Monospace" font-size="11" fill="#0d47a1">makeSound() {</text>
+    <text x="100" y="89" text-anchor="middle" font-family="Monospace" font-size="12" font-weight="bold" fill="#1976d2">"Woof!"</text>
+  </g>
+
+  <!-- Cat implementation -->
+  <g transform="translate(300, 265)">
+    <rect x="0" y="0" width="200" height="100" rx="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#2e7d32">Cat</text>
+    <line x1="10" y1="35" x2="190" y2="35" stroke="#a5d6a7" stroke-width="1"/>
+    <text x="100" y="55" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">@Override</text>
+    <text x="100" y="72" text-anchor="middle" font-family="Monospace" font-size="11" fill="#1b5e20">makeSound() {</text>
+    <text x="100" y="89" text-anchor="middle" font-family="Monospace" font-size="12" font-weight="bold" fill="#388e3c">"Meow!"</text>
+  </g>
+
+  <!-- Bird implementation -->
+  <g transform="translate(520, 265)">
+    <rect x="0" y="0" width="200" height="100" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Monospace" font-size="15" font-weight="bold" fill="#6a1b9a">Bird</text>
+    <line x1="10" y1="35" x2="190" y2="35" stroke="#ce93d8" stroke-width="1"/>
+    <text x="100" y="55" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">@Override</text>
+    <text x="100" y="72" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">makeSound() {</text>
+    <text x="100" y="89" text-anchor="middle" font-family="Monospace" font-size="12" font-weight="bold" fill="#7b1fa2">"Tweet!"</text>
+  </g>
+
+  <!-- Polymorphic Usage Example -->
+  <g transform="translate(50, 390)">
+    <rect x="0" y="0" width="700" height="160" rx="10" fill="#263238" stroke="#37474f" stroke-width="2"/>
+    <text x="350" y="25" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#80cbc4">Polymorphic Code Example</text>
+
+    <text x="20" y="50" font-family="Monospace" font-size="12" fill="#80cbc4">// One variable type, different objects</text>
+    <text x="20" y="70" font-family="Monospace" font-size="12" fill="#fff">Animal[] animals = {</text>
+    <text x="40" y="88" font-family="Monospace" font-size="12" fill="#90caf9">new Dog()</text>
+    <text x="120" y="88" font-family="Monospace" font-size="12" fill="#fff">,</text>
+    <text x="135" y="88" font-family="Monospace" font-size="12" fill="#a5d6a7">new Cat()</text>
+    <text x="210" y="88" font-family="Monospace" font-size="12" fill="#fff">,</text>
+    <text x="225" y="88" font-family="Monospace" font-size="12" fill="#ce93d8">new Bird()</text>
+    <text x="20" y="106" font-family="Monospace" font-size="12" fill="#fff">};</text>
+
+    <text x="20" y="128" font-family="Monospace" font-size="12" fill="#fff">for (Animal a : animals) {</text>
+    <text x="40" y="146" font-family="Monospace" font-size="12" fill="#ffcc80">a.makeSound();</text>
+    <text x="175" y="146" font-family="Monospace" font-size="11" fill="#81c784">// Each calls its own version!</text>
+    <text x="20" y="158" font-family="Monospace" font-size="12" fill="#fff">}</text>
+
+    <!-- Output box -->
+    <g transform="translate(450, 45)">
+      <rect x="0" y="0" width="220" height="100" rx="5" fill="#37474f" stroke="#546e7a" stroke-width="1"/>
+      <text x="110" y="20" text-anchor="middle" font-family="Arial" font-size="11" fill="#b0bec5">Output:</text>
+      <text x="20" y="45" font-family="Monospace" font-size="13" fill="#90caf9">Woof!</text>
+      <text x="20" y="65" font-family="Monospace" font-size="13" fill="#a5d6a7">Meow!</text>
+      <text x="20" y="85" font-family="Monospace" font-size="13" fill="#ce93d8">Tweet!</text>
+    </g>
+  </g>
+
+  <!-- Watermark -->
+  <text x="790" y="570" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

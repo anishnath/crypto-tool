@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 4; }
+      .text { font-family: sans-serif; font-size: 14px; fill: #1e293b; text-anchor: middle; font-weight: bold; }
+      .subtext { font-family: sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; }
+      .line { stroke: #334155; stroke-width: 2; fill: none; }
+      .arrow { fill: #334155; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="text" font-size="18">Java Exception Hierarchy</text>
+
+  <!-- Level 1: Throwable -->
+  <rect x="225" y="50" width="150" height="50" class="box" fill="#e0f2fe" stroke="#0369a1" />
+  <text x="300" y="75" class="text">Throwable</text>
+  <text x="300" y="90" class="subtext">Root Class</text>
+
+  <!-- Connector -->
+  <path d="M300 100 L300 130 M150 130 L450 130 M150 130 L150 150 M450 130 L450 150" class="line" />
+
+  <!-- Level 2: Error and Exception -->
+  
+  <!-- Error -->
+  <rect x="75" y="150" width="150" height="50" class="box" fill="#fee2e2" stroke="#b91c1c" />
+  <text x="150" y="175" class="text" fill="#b91c1c">Error</text>
+  <text x="150" y="190" class="subtext">Unchecked (Fatal)</text>
+
+  <!-- Exception -->
+  <rect x="375" y="150" width="150" height="50" class="box" fill="#dcfce7" stroke="#15803d" />
+  <text x="450" y="175" class="text" fill="#15803d">Exception</text>
+  <text x="450" y="190" class="subtext">Checked (Mostly)</text>
+
+  <!-- Connectors for Error -->
+  <path d="M150 200 L150 230" class="line" />
+  <rect x="75" y="230" width="150" height="40" class="box" stroke-dasharray="4" />
+  <text x="150" y="255" class="subtext">OutOfMemoryError, etc.</text>
+
+  <!-- Connectors for Exception -->
+  <path d="M450 200 L450 230 M350 230 L550 230 M350 230 L350 250 M550 230 L550 250" class="line" />
+
+  <!-- RuntimeException -->
+  <rect x="275" y="250" width="150" height="50" class="box" fill="#fef3c7" stroke="#b45309" />
+  <text x="350" y="275" class="text" fill="#b45309">RuntimeException</text>
+  <text x="350" y="290" class="subtext">Unchecked</text>
+
+  <!-- Other Exceptions -->
+  <rect x="475" y="250" width="150" height="50" class="box" />
+  <text x="550" y="275" class="text">Other Exceptions</text>
+  <text x="550" y="290" class="subtext">Checked (IOException, etc.)</text>
+
+  <!-- Examples under Runtime -->
+  <path d="M350 300 L350 320" class="line" />
+  <rect x="250" y="320" width="200" height="40" class="box" stroke-dasharray="4" />
+  <text x="350" y="345" class="subtext">NullPointer, Arithmetic...</text>
+
+   <!-- Watermark -->
+    <text x="590" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <!-- Background -->
+  <rect width="800" height="520" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Method Overriding in Java</text>
+  <text x="400" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Subclass provides specific implementation of parent method</text>
+
+  <!-- Parent Class Box -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="300" height="150" rx="10" fill="#fff3e0" stroke="#ed8b00" stroke-width="3"/>
+    <rect x="0" y="0" width="300" height="35" rx="10" fill="#ed8b00"/>
+    <rect x="0" y="25" width="300" height="10" fill="#ed8b00"/>
+    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#fff">Parent: Animal</text>
+
+    <text x="20" y="65" font-family="Monospace" font-size="13" fill="#e65100">void makeSound() {</text>
+    <text x="30" y="85" font-family="Monospace" font-size="12" fill="#bf360c">  print("Generic sound");</text>
+    <text x="20" y="105" font-family="Monospace" font-size="13" fill="#e65100">}</text>
+
+    <rect x="200" y="115" width="90" height="25" rx="5" fill="#ffcc80" stroke="#f57c00" stroke-width="1"/>
+    <text x="245" y="132" text-anchor="middle" font-family="Arial" font-size="11" fill="#e65100">Original</text>
+  </g>
+
+  <!-- Child Class Box -->
+  <g transform="translate(450, 80)">
+    <rect x="0" y="0" width="300" height="150" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+    <rect x="0" y="0" width="300" height="35" rx="10" fill="#1976d2"/>
+    <rect x="0" y="25" width="300" height="10" fill="#1976d2"/>
+    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#fff">Child: Dog extends Animal</text>
+
+    <text x="20" y="60" font-family="Monospace" font-size="12" fill="#0d47a1">@Override</text>
+    <text x="20" y="80" font-family="Monospace" font-size="13" fill="#1565c0">void makeSound() {</text>
+    <text x="30" y="100" font-family="Monospace" font-size="12" fill="#0d47a1">  print("Woof! Woof!");</text>
+    <text x="20" y="120" font-family="Monospace" font-size="13" fill="#1565c0">}</text>
+
+    <rect x="200" y="115" width="90" height="25" rx="5" fill="#90caf9" stroke="#1976d2" stroke-width="1"/>
+    <text x="245" y="132" text-anchor="middle" font-family="Arial" font-size="11" fill="#1565c0">Override</text>
+  </g>
+
+  <!-- Arrow showing extends -->
+  <path d="M450 155 L380 155" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+  <text x="415" y="148" font-family="Arial" font-size="12" fill="#666">extends</text>
+
+  <!-- Dynamic Method Dispatch Section -->
+  <g transform="translate(50, 260)">
+    <rect x="0" y="0" width="700" height="220" rx="10" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="2"/>
+    <text x="350" y="30" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#333">Dynamic Method Dispatch (Runtime)</text>
+
+    <!-- Code Example -->
+    <g transform="translate(30, 50)">
+      <rect x="0" y="0" width="300" height="100" rx="5" fill="#263238" stroke="#37474f" stroke-width="1"/>
+      <text x="15" y="25" font-family="Monospace" font-size="12" fill="#80cbc4">// Parent reference, Child object</text>
+      <text x="15" y="45" font-family="Monospace" font-size="12" fill="#fff">Animal animal = </text>
+      <text x="145" y="45" font-family="Monospace" font-size="12" fill="#ffcc80">new Dog();</text>
+      <text x="15" y="70" font-family="Monospace" font-size="12" fill="#fff">animal.makeSound();</text>
+      <text x="15" y="90" font-family="Monospace" font-size="12" fill="#81c784">// Output: "Woof! Woof!"</text>
+    </g>
+
+    <!-- Explanation Arrow -->
+    <path d="M350 100 L420 100" stroke="#4caf50" stroke-width="3" fill="none"/>
+    <polygon points="420,100 410,95 410,105" fill="#4caf50"/>
+
+    <!-- Result Box -->
+    <g transform="translate(440, 50)">
+      <rect x="0" y="0" width="230" height="100" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+      <text x="115" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2e7d32">Result at Runtime</text>
+      <text x="115" y="55" text-anchor="middle" font-family="Arial" font-size="12" fill="#1b5e20">JVM checks actual object type</text>
+      <text x="115" y="75" text-anchor="middle" font-family="Arial" font-size="12" fill="#1b5e20">Object is Dog</text>
+      <text x="115" y="92" text-anchor="middle" font-family="Monospace" font-size="13" font-weight="bold" fill="#4caf50">Dog's makeSound() called!</text>
+    </g>
+
+    <!-- Key Point -->
+    <g transform="translate(30, 165)">
+      <rect x="0" y="0" width="640" height="40" rx="5" fill="#fff8e1" stroke="#ffc107" stroke-width="1"/>
+      <text x="20" y="26" font-family="Arial" font-size="13" fill="#f57f17">Key: The method called is determined by the ACTUAL OBJECT TYPE, not the reference type!</text>
+    </g>
+  </g>
+
+  <!-- Watermark -->
+  <text x="790" y="510" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>
