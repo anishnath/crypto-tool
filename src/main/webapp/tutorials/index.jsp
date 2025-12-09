@@ -6,14 +6,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8gwifi.org Tutorials - Learn Programming</title>
+    <title>Free Coding Tutorials 2025 - Learn HTML, CSS, JavaScript, Python | 8gwifi.org</title>
     <meta name="description"
-        content="Free interactive tutorials for programming. Learn HTML, CSS, JavaScript, Python, Bash, Java, Go, and more with live code editor.">
+        content="[Free] Learn to code with interactive tutorials. Master HTML, CSS, JavaScript, Python, Bash, Java with live editor. No signup. Practice instantly in browser. 50+ lessons.">
+    <link rel="canonical" href="https://8gwifi.org/tutorials/">
+
+    <%-- Open Graph Tags --%>
+    <meta property="og:title" content="Free Programming Tutorials - Learn to Code Online | 8gwifi.org">
+    <meta property="og:description" content="Interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java by doing - not just reading.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://8gwifi.org/tutorials/">
+    <meta property="og:site_name" content="8gwifi.org">
+
+    <%-- Twitter Card --%>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Programming Tutorials - Learn to Code">
+    <meta name="twitter:description" content="Learn HTML, CSS, JavaScript, Python with interactive code editor. Practice instantly in your browser.">
 
     <link rel="icon" type="image/svg+xml"
         href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">
+
+    <%-- Structured Data: CollectionPage + ItemList --%>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Free Programming Tutorials - Learn to Code Online",
+        "description": "Free interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java from scratch.",
+        "url": "https://8gwifi.org/tutorials/",
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "HTML Tutorial",
+                    "description": "Learn the foundation of web development. Structure content for the web.",
+                    "url": "https://8gwifi.org/tutorials/html/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "CSS Tutorial",
+                    "description": "Style your webpages. Colors, layouts, animations, and responsive design.",
+                    "url": "https://8gwifi.org/tutorials/css/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "JavaScript Tutorial",
+                    "description": "Add interactivity to websites. Learn programming fundamentals.",
+                    "url": "https://8gwifi.org/tutorials/javascript/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "name": "Python Tutorial",
+                    "description": "Versatile language for web, data science, AI, and automation.",
+                    "url": "https://8gwifi.org/tutorials/python/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 5,
+                    "name": "Bash Tutorial",
+                    "description": "Shell scripting for automation, DevOps, and system administration.",
+                    "url": "https://8gwifi.org/tutorials/bash/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 6,
+                    "name": "Java Tutorial",
+                    "description": "Enterprise-grade programming. Build robust applications.",
+                    "url": "https://8gwifi.org/tutorials/java/"
+                }
+            ]
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "8gwifi.org",
+            "url": "https://8gwifi.org"
+        }
+    }
+    </script>
+
+    <%-- FAQ Schema for Rich Snippets --%>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Are these programming tutorials free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, all tutorials are 100% free. No signup, no credit card, no hidden fees. Just open and start coding immediately in your browser."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do I need to install any software to learn coding?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No installation required. Our tutorials include a live code editor that runs directly in your browser. Write code, see results instantly."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which programming language should I learn first?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For web development, start with HTML, then CSS, then JavaScript. For data science or automation, start with Python. For DevOps, learn Bash scripting."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long does it take to complete a tutorial?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Each tutorial has 10-15 lessons. Most learners complete a full tutorial in 2-4 hours of focused practice. Learn at your own pace."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <%-- Course Schema for Enhanced SERP --%>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+            {
+                "@type": "Course",
+                "position": 1,
+                "name": "HTML Tutorial for Beginners",
+                "description": "Learn HTML from scratch. Build web page structure with hands-on exercises.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/html/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 2,
+                "name": "CSS Tutorial for Beginners",
+                "description": "Master CSS styling. Colors, layouts, animations, responsive design.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/css/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 3,
+                "name": "JavaScript Tutorial for Beginners",
+                "description": "Learn JavaScript programming. Add interactivity to websites.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/javascript/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 4,
+                "name": "Python Tutorial for Beginners",
+                "description": "Learn Python for web development, data science, AI, and automation.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/python/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 5,
+                "name": "Bash Scripting Tutorial",
+                "description": "Shell scripting for automation, DevOps, and system administration.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/bash/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 6,
+                "name": "Java Tutorial for Beginners",
+                "description": "Enterprise Java programming. Build robust applications.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/java/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        ]
+    }
+    </script>
 
     <script>
         (function () {
@@ -175,6 +369,184 @@
             border: none;
             border-top: 1px solid var(--border);
         }
+
+        /* Breadcrumb Styles */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: var(--space-4) auto 0;
+            padding: 0 var(--space-4);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: var(--text-sm);
+        }
+
+        .breadcrumb-list li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .breadcrumb-list li:not(:last-child)::after {
+            content: "/";
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-list a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb-list a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-list .current {
+            color: var(--text-secondary);
+        }
+
+        /* Learning Paths Styles */
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-5);
+            padding: 0 var(--space-4);
+            max-width: 1200px;
+            margin: 0 auto var(--space-8);
+        }
+
+        .path-card {
+            padding: var(--space-5);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--bg-primary);
+            transition: all var(--transition-normal);
+        }
+
+        .path-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .path-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-2);
+        }
+
+        .path-icon {
+            font-size: var(--text-2xl);
+        }
+
+        .path-card h3 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: var(--text-lg);
+        }
+
+        .path-card > p {
+            margin: 0 0 var(--space-3) 0;
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .path-steps {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-3);
+        }
+
+        .path-steps a {
+            padding: var(--space-1) var(--space-3);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            transition: background var(--transition-fast);
+        }
+
+        .path-steps a:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .path-arrow {
+            color: var(--text-muted);
+            font-size: var(--text-sm);
+        }
+
+        .path-badge {
+            display: inline-block;
+            padding: var(--space-1) var(--space-2);
+            background: linear-gradient(135deg, var(--accent-primary), var(--success));
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: 600;
+        }
+
+        /* FAQ Styles */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto var(--space-12);
+            padding: 0 var(--space-4);
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .faq-item summary {
+            padding: var(--space-4);
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-primary);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary::after {
+            content: "+";
+            font-size: var(--text-xl);
+            color: var(--accent-primary);
+            transition: transform var(--transition-fast);
+        }
+
+        .faq-item[open] summary::after {
+            content: "−";
+        }
+
+        .faq-item p {
+            padding: 0 var(--space-4) var(--space-4);
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .faq-item[open] {
+            border-color: var(--accent-primary);
+        }
     </style>
 </head>
 
@@ -213,6 +585,20 @@
     </header>
 
     <div class="hub-content">
+        <%-- Breadcrumb Navigation with Schema.org markup --%>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a itemprop="item" href="/"><span itemprop="name">Home</span></a>
+                    <meta itemprop="position" content="1">
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <span class="current" itemprop="name">Tutorials</span>
+                    <meta itemprop="position" content="2">
+                </li>
+            </ol>
+        </nav>
+
         <section class="hero">
             <h1 class="hero-title">Learn to Code</h1>
             <p class="hero-subtitle">
@@ -389,11 +775,91 @@
                 <span class="tutorial-card-badge badge-coming">Coming Soon</span>
             </div>
         </section>
+
+        <div class="divider"><hr></div>
+
+        <%-- Learning Paths Section --%>
+        <h2 class="section-title">Learning Paths</h2>
+        <p class="section-subtitle">Not sure where to start? Follow a structured path</p>
+
+        <section class="learning-paths">
+            <div class="path-card">
+                <div class="path-header">
+                    <span class="path-icon">🌐</span>
+                    <h3>Web Developer</h3>
+                </div>
+                <p>Build websites from scratch</p>
+                <div class="path-steps">
+                    <a href="<%=request.getContextPath()%>/tutorials/html/">HTML</a>
+                    <span class="path-arrow">→</span>
+                    <a href="<%=request.getContextPath()%>/tutorials/css/">CSS</a>
+                    <span class="path-arrow">→</span>
+                    <a href="<%=request.getContextPath()%>/tutorials/javascript/">JavaScript</a>
+                </div>
+                <span class="path-badge">Beginner Friendly</span>
+            </div>
+
+            <div class="path-card">
+                <div class="path-header">
+                    <span class="path-icon">🤖</span>
+                    <h3>Data & Automation</h3>
+                </div>
+                <p>Automate tasks, analyze data</p>
+                <div class="path-steps">
+                    <a href="<%=request.getContextPath()%>/tutorials/python/">Python</a>
+                    <span class="path-arrow">→</span>
+                    <a href="<%=request.getContextPath()%>/tutorials/bash/">Bash</a>
+                </div>
+                <span class="path-badge">High Demand</span>
+            </div>
+
+            <div class="path-card">
+                <div class="path-header">
+                    <span class="path-icon">☁️</span>
+                    <h3>DevOps Engineer</h3>
+                </div>
+                <p>CI/CD, servers, infrastructure</p>
+                <div class="path-steps">
+                    <a href="<%=request.getContextPath()%>/tutorials/bash/">Bash</a>
+                    <span class="path-arrow">→</span>
+                    <a href="<%=request.getContextPath()%>/tutorials/python/">Python</a>
+                </div>
+                <span class="path-badge">Career Growth</span>
+            </div>
+        </section>
+
+        <div class="divider"><hr></div>
+
+        <%-- FAQ Section --%>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Quick answers to common questions</p>
+
+        <section class="faq-section">
+            <details class="faq-item">
+                <summary>Are these programming tutorials free?</summary>
+                <p>Yes, all tutorials are 100% free. No signup, no credit card, no hidden fees. Just open and start coding immediately in your browser.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Do I need to install any software to learn coding?</summary>
+                <p>No installation required. Our tutorials include a live code editor that runs directly in your browser. Write code, see results instantly.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Which programming language should I learn first?</summary>
+                <p>For web development, start with HTML, then CSS, then JavaScript. For data science or automation, start with Python. For DevOps, learn Bash scripting.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>How long does it take to complete a tutorial?</summary>
+                <p>Each tutorial has 10-15 lessons. Most learners complete a full tutorial in 2-4 hours of focused practice. Learn at your own pace.</p>
+            </details>
+        </section>
     </div>
 
     <footer class="tutorial-footer" style="margin: 0;">
         <div class="footer-content">
-            <p>&copy; 2024 8gwifi.org Tutorials. Learn to code with interactive examples.</p>
+            <p>&copy; 2025 8gwifi.org Tutorials. Learn to code with interactive examples.</p>
             <div class="footer-links">
                 <a href="/">Main Site</a>
             </div>
