@@ -560,6 +560,15 @@
             return;
         }
 
+        // Store original code from textarea BEFORE CodeMirror takes over (preserves escape sequences)
+        const originalCode = textarea.value;
+        
+        // Store in container data attribute for reset function
+        const container = document.getElementById(editorId + '-container');
+        if (container) {
+            container.dataset.originalCode = originalCode;
+        }
+
         // Map language to CodeMirror mode
         const modeMap = {
             'python': 'python',
@@ -610,8 +619,8 @@
             }
         });
 
-        // Set initial code
-        codeEditor.setValue(initialCode.replace(/\\n/g, '\n'));
+        // Set initial code from textarea (preserves escape sequences like \n in strings)
+        codeEditor.setValue(originalCode);
 
         // Store editor instance globally for reset/run functions
         window.codeMirrorEditors = window.codeMirrorEditors || {};
@@ -764,12 +773,17 @@
         const container = document.getElementById(id + '-container');
         const lang = container.dataset.language;
         
+        // Get original code from container data attribute (preserves escape sequences)
+        const originalCode = container && container.dataset.originalCode 
+            ? container.dataset.originalCode 
+            : initialCode;
+        
         // Reset CodeMirror editor if available
         const editor = window.codeMirrorEditors && window.codeMirrorEditors[id];
         if (editor) {
-            editor.setValue(initialCode.replace(/\\n/g, '\n'));
+            editor.setValue(originalCode);
         } else {
-            document.getElementById(id + '-code').value = initialCode.replace(/\\n/g, '\n');
+            document.getElementById(id + '-code').value = originalCode;
         }
         
         document.getElementById(id + '-input').value = '';
