@@ -284,6 +284,18 @@
                 <p>Shell scripting for automation, DevOps, and system administration.</p>
                 <span class="tutorial-card-badge badge-available">Available</span>
             </a>
+
+            <%-- Java Tutorial --%>
+            <a href="<%=request.getContextPath()%>/tutorials/java/" class="tutorial-card">
+                <div class="tutorial-card-header">
+                    <div class="tutorial-card-icon" style="background: #ed8b0015;">
+                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/java-logo.svg" alt="Java">
+                    </div>
+                    <h3>Java</h3>
+                </div>
+                <p>Enterprise-grade programming. Build robust applications.</p>
+                <span class="tutorial-card-badge badge-available">Available</span>
+            </a>
         </section>
 
         <div class="divider"><hr></div>
@@ -293,18 +305,6 @@
         <p class="section-subtitle">More tutorials are on the way</p>
 
         <section class="tutorials-grid">
-            <%-- Java Tutorial --%>
-            <div class="tutorial-card disabled">
-                <div class="tutorial-card-header">
-                    <div class="tutorial-card-icon" style="background: #ed8b0015;">
-                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/java-logo.svg" alt="Java">
-                    </div>
-                    <h3>Java</h3>
-                </div>
-                <p>Enterprise-grade programming. Build robust applications.</p>
-                <span class="tutorial-card-badge badge-coming">Coming Soon</span>
-            </div>
-
             <%-- Go Tutorial --%>
             <div class="tutorial-card disabled">
                 <div class="tutorial-card-header">
