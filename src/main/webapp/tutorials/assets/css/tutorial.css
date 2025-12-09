@@ -616,7 +616,7 @@ pre code {
 }
 
 .lesson-body {
-    max-width: 720px;
+    max-width: 900px;
 }
 
 .lesson-body h2 {
@@ -997,7 +997,7 @@ pre code {
 }
 
 .footer-content {
-    max-width: 720px;
+    max-width: 900px;
     margin: 0 auto;
     text-align: center;
     color: var(--text-muted);
