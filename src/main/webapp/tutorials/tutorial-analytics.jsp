@@ -39,3 +39,21 @@
         });
     }
 </script>
+
+<!-- Default Statcounter code for 8gwifi.org
+http://8gwifi.org -->
+<script type="text/javascript">
+    var sc_project=9638240;
+    var sc_invisible=1;
+    var sc_security="c4db7f3d";
+</script>
+<script type="text/javascript"
+        src="https://www.statcounter.com/counter/counter.js"
+        async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+                                      href="https://statcounter.com/" target="_blank"><img
+        class="statcounter"
+        src="https://c.statcounter.com/9638240/0/c4db7f3d/1/"
+        alt="Web Analytics"
+        referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
