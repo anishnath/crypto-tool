@@ -2348,4 +2348,39 @@
   <url><loc>https://8gwifi.org/tutorials/typescript/practices-linting.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/typescript/practices-testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+  <!-- Rust Tutorial -->
+  <url><loc>https://8gwifi.org/tutorials/rust/</loc><lastmod>2025-12-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/installation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/hello-world.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/cargo-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/variables.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/data-types.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/strings.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/type-conversion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/functions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/comments.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/control-if.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/control-loops.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/control-match.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/ownership.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/borrowing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/slices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/structs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/methods.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/enums.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/vectors.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/hashmaps.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/panic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/result.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/error-propagation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/custom-errors.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/traits.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/generics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/packages-crates.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/iterators.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/closures.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/rust/smart-pointers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
 </urlset>
