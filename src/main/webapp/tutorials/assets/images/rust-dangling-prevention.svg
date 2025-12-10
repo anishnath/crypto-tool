@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Rust Prevents Dangling References
+  </text>
+  
+  <!-- Unsafe (Other Languages) -->
+  <text x="200" y="75" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+    ✗ Unsafe (Other Languages)
+  </text>
+  
+  <g transform="translate(50, 90)">
+    <rect width="300" height="160" rx="8" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Code -->
+    <text x="20" y="30" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      function dangle() {
+    </text>
+    <text x="40" y="50" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      let s = "hello";
+    </text>
+    <text x="40" y="70" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      return &amp;s;
+    </text>
+    <text x="20" y="90" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      } // s is destroyed!
+    </text>
+    
+    <!-- Problem -->
+    <rect x="10" y="105" width="280" height="45" rx="5" fill="#e74c3c"/>
+    <text x="150" y="125" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      ⚠ Dangling Pointer!
+    </text>
+    <text x="150" y="142" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+      Reference points to freed memory
+    </text>
+  </g>
+  
+  <!-- Safe (Rust) -->
+  <text x="600" y="75" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#27ae60">
+    ✓ Safe (Rust)
+  </text>
+  
+  <g transform="translate(450, 90)">
+    <rect width="300" height="160" rx="8" fill="#d5f4e6" stroke="#27ae60" stroke-width="2"/>
+    
+    <!-- Code -->
+    <text x="20" y="30" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      fn no_dangle() -&gt; String {
+    </text>
+    <text x="40" y="50" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      let s = String::from("hello");
+    </text>
+    <text x="40" y="70" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      s  // Move ownership out
+    </text>
+    <text x="20" y="90" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- Solution -->
+    <rect x="10" y="105" width="280" height="45" rx="5" fill="#27ae60"/>
+    <text x="150" y="125" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      ✓ Memory Safe!
+    </text>
+    <text x="150" y="142" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+      Ownership transferred to caller
+    </text>
+  </g>
+  
+  <!-- Compiler Error Example -->
+  <rect x="50" y="280" width="700" height="180" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="50" y="280" width="700" height="40" rx="10" fill="#34495e"/>
+  <text x="400" y="307" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Rust Compiler Catches This at Compile Time
+  </text>
+  
+  <!-- Error code -->
+  <rect x="70" y="335" width="660" height="110" rx="5" fill="#ecf0f1"/>
+  <text x="90" y="360" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+    fn dangle() -&gt; &amp;String {  // ✗ Error!
+  </text>
+  <text x="110" y="380" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+    let s = String::from("hello");
+  </text>
+  <text x="110" y="400" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+    &amp;s  // ✗ Error: returns reference to local variable
+  </text>
+  <text x="90" y="420" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+    }
+  </text>
+  
+  <!-- Error message -->
+  <text x="90" y="440" font-family="Arial, sans-serif" font-size="11" fill="#e74c3c">
+    error: missing lifetime specifier
+  </text>
+  
+  <!-- Bottom note -->
+  <rect x="50" y="475" width="700" height="20" rx="3" fill="#f39c12"/>
+  <text x="400" y="490" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+    References must always be valid - enforced at compile time!
+  </text>
+  
+  <!-- Watermark -->
+  <text x="750" y="495" font-family="Arial, sans-serif" font-size="11" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

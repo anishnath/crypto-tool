@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="900" height="550">
+  <!-- Background -->
+  <rect width="900" height="550" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    The Three Rules of Ownership
+  </text>
+  
+  <!-- Rule 1 -->
+  <g transform="translate(50, 70)">
+    <rect width="800" height="130" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    
+    <!-- Number badge -->
+    <circle cx="40" cy="40" r="25" fill="#3498db"/>
+    <text x="40" y="50" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+      1
+    </text>
+    
+    <!-- Rule text -->
+    <text x="80" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">
+      Each value has a single owner
+    </text>
+    
+    <!-- Example -->
+    <rect x="80" y="50" width="700" height="65" rx="5" fill="#ecf0f1"/>
+    <text x="100" y="75" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      let s = String::from("hello");  // s is the owner
+    </text>
+    <text x="100" y="95" font-family="Arial, sans-serif" font-size="12" fill="#7f8c8d">
+      The variable 's' owns the String value "hello"
+    </text>
+  </g>
+  
+  <!-- Rule 2 -->
+  <g transform="translate(50, 220)">
+    <rect width="800" height="130" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    
+    <!-- Number badge -->
+    <circle cx="40" cy="40" r="25" fill="#27ae60"/>
+    <text x="40" y="50" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+      2
+    </text>
+    
+    <!-- Rule text -->
+    <text x="80" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">
+      When the owner goes out of scope, the value is dropped
+    </text>
+    
+    <!-- Example -->
+    <rect x="80" y="50" width="700" height="65" rx="5" fill="#ecf0f1"/>
+    <text x="100" y="75" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      {
+    </text>
+    <text x="120" y="90" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      let s = String::from("hello");
+    </text>
+    <text x="100" y="105" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      }  // s goes out of scope, memory is freed automatically
+    </text>
+  </g>
+  
+  <!-- Rule 3 -->
+  <g transform="translate(50, 370)">
+    <rect width="800" height="130" rx="10" fill="white" stroke="#e74c3c" stroke-width="3"/>
+    
+    <!-- Number badge -->
+    <circle cx="40" cy="40" r="25" fill="#e74c3c"/>
+    <text x="40" y="50" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+      3
+    </text>
+    
+    <!-- Rule text -->
+    <text x="80" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">
+      There can only be ONE owner at a time
+    </text>
+    
+    <!-- Example -->
+    <rect x="80" y="50" width="700" height="65" rx="5" fill="#ecf0f1"/>
+    <text x="100" y="75" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      let s1 = String::from("hello");
+    </text>
+    <text x="100" y="90" font-family="Courier New, monospace" font-size="14" fill="#2c3e50">
+      let s2 = s1;  // Ownership moves to s2
+    </text>
+    <text x="100" y="105" font-family="Courier New, monospace" font-size="14" fill="#e74c3c">
+      // s1 is no longer valid!
+    </text>
+  </g>
+  
+  <!-- Bottom note -->
+  <rect x="50" y="515" width="800" height="30" rx="5" fill="#f39c12"/>
+  <text x="450" y="535" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="white">
+    These rules are enforced at compile time - no runtime overhead!
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="545" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

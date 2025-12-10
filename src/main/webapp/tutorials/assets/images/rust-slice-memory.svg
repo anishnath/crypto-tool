@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="900" height="550">
+  <!-- Background -->
+  <rect width="900" height="550" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    String Slice Memory Layout
+  </text>
+  
+  <!-- String Owner -->
+  <text x="150" y="80" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#27ae60">
+    String (Owner)
+  </text>
+  
+  <g transform="translate(50, 90)">
+    <rect width="200" height="140" rx="8" fill="white" stroke="#27ae60" stroke-width="2"/>
+    
+    <!-- Stack data -->
+    <text x="100" y="25" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#27ae60">
+      s = String
+    </text>
+    
+    <rect x="20" y="35" width="160" height="90" rx="5" fill="#d5f4e6"/>
+    <text x="30" y="55" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      ptr
+    </text>
+    <text x="30" y="75" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      len: 11
+    </text>
+    <text x="30" y="95" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      capacity: 11
+    </text>
+  </g>
+  
+  <!-- Arrow to heap -->
+  <path d="M 250 140 Q 350 140, 400 180" stroke="#27ae60" stroke-width="2" fill="none" marker-end="url(#arrowhead-green)"/>
+  
+  <!-- Heap Data -->
+  <g transform="translate(400, 90)">
+    <rect width="450" height="140" rx="8" fill="white" stroke="#e74c3c" stroke-width="2"/>
+    
+    <text x="225" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+      Heap Memory
+    </text>
+    
+    <!-- Character boxes -->
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="17.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">h</text>
+      <text x="17.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">0</text>
+      
+      <rect x="35" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="52.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">e</text>
+      <text x="52.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">1</text>
+      
+      <rect x="70" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="87.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">l</text>
+      <text x="87.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">2</text>
+      
+      <rect x="105" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="122.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">l</text>
+      <text x="122.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">3</text>
+      
+      <rect x="140" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="157.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">o</text>
+      <text x="157.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">4</text>
+      
+      <rect x="175" y="0" width="35" height="40" fill="#ecf0f1" stroke="#34495e" stroke-width="1"/>
+      <text x="192.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#7f8c8d">␣</text>
+      <text x="192.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">5</text>
+      
+      <rect x="210" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="227.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">w</text>
+      <text x="227.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">6</text>
+      
+      <rect x="245" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="262.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">o</text>
+      <text x="262.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">7</text>
+      
+      <rect x="280" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="297.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">r</text>
+      <text x="297.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">8</text>
+      
+      <rect x="315" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="332.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">l</text>
+      <text x="332.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">9</text>
+      
+      <rect x="350" y="0" width="35" height="40" fill="#fff5f5" stroke="#34495e" stroke-width="1"/>
+      <text x="367.5" y="25" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#2c3e50">d</text>
+      <text x="367.5" y="55" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7f8c8d">10</text>
+    </g>
+    
+    <text x="225" y="110" font-family="Courier New, monospace" font-size="13" text-anchor="middle" fill="#7f8c8d">
+      "hello world"
+    </text>
+  </g>
+  
+  <!-- Slice 1: hello -->
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#3498db">
+    Slice: &amp;s[0..5]
+  </text>
+  
+  <g transform="translate(50, 290)">
+    <rect width="200" height="120" rx="8" fill="white" stroke="#3498db" stroke-width="2"/>
+    
+    <text x="100" y="25" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#3498db">
+      hello = &amp;str
+    </text>
+    
+    <rect x="20" y="35" width="160" height="70" rx="5" fill="#ebf5fb"/>
+    <text x="30" y="55" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      ptr (to index 0)
+    </text>
+    <text x="30" y="75" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      len: 5
+    </text>
+  </g>
+  
+  <!-- Arrow from slice 1 to heap -->
+  <path d="M 250 340 Q 350 300, 420 200" stroke="#3498db" stroke-width="2" fill="none" marker-end="url(#arrowhead-blue)"/>
+  
+  <!-- Highlight slice 1 area -->
+  <rect x="420" y="130" width="175" height="40" fill="none" stroke="#3498db" stroke-width="3" stroke-dasharray="5,3"/>
+  
+  <!-- Slice 2: world -->
+  <text x="150" y="460" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#9b59b6">
+    Slice: &amp;s[6..11]
+  </text>
+  
+  <g transform="translate(50, 470)">
+    <rect width="200" height="120" rx="8" fill="white" stroke="#9b59b6" stroke-width="2"/>
+    
+    <text x="100" y="25" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#9b59b6">
+      world = &amp;str
+    </text>
+    
+    <rect x="20" y="35" width="160" height="70" rx="5" fill="#f4ecf7"/>
+    <text x="30" y="55" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      ptr (to index 6)
+    </text>
+    <text x="30" y="75" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      len: 5
+    </text>
+  </g>
+  
+  <!-- Arrow from slice 2 to heap -->
+  <path d="M 250 520 Q 450 400, 630 200" stroke="#9b59b6" stroke-width="2" fill="none" marker-end="url(#arrowhead-purple)"/>
+  
+  <!-- Highlight slice 2 area -->
+  <rect x="630" y="130" width="175" height="40" fill="none" stroke="#9b59b6" stroke-width="3" stroke-dasharray="5,3"/>
+  
+  <!-- Key Point -->
+  <rect x="300" y="280" width="550" height="280" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="300" y="280" width="550" height="40" rx="10" fill="#34495e"/>
+  <text x="575" y="307" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Key Points About Slices
+  </text>
+  
+  <text x="320" y="345" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • Slices are <strong>references</strong> to a portion of data
+  </text>
+  <text x="320" y="370" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • Type: <strong>&amp;str</strong> for strings, <strong>&amp;[T]</strong> for arrays
+  </text>
+  <text x="320" y="395" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • Contains: <strong>pointer</strong> to start + <strong>length</strong>
+  </text>
+  <text x="320" y="420" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • <strong>No ownership</strong> - just borrows the data
+  </text>
+  <text x="320" y="445" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • <strong>Safe</strong> - prevents invalid indices at compile time
+  </text>
+  <text x="320" y="470" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • Syntax: <strong>&amp;s[start..end]</strong> (end is exclusive)
+  </text>
+  <text x="320" y="495" font-family="Arial, sans-serif" font-size="13" fill="#2c3e50">
+    • Shortcuts: <strong>&amp;s[..5]</strong>, <strong>&amp;s[5..]</strong>, <strong>&amp;s[..]</strong>
+  </text>
+  <text x="320" y="530" font-family="Arial, sans-serif" font-size="12" font-style="italic" fill="#7f8c8d">
+    💡 Slices keep your code safe by tying the reference to the original data
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="543" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#27ae60"/>
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3498db"/>
+    </marker>
+    <marker id="arrowhead-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#9b59b6"/>
+    </marker>
+  </defs>
+</svg>

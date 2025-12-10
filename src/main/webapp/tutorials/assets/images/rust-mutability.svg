@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Rust Variables: Immutable vs Mutable</text>
+  
+  <!-- Left Side: Immutable (Default) -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="320" height="280" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="160" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#dc2626">Immutable (Default)</text>
+    
+    <!-- Lock Icon -->
+    <g transform="translate(130, 60)">
+      <rect x="10" y="15" width="40" height="30" rx="3" fill="none" stroke="#dc2626" stroke-width="2"/>
+      <path d="M 15 15 Q 15 5, 30 5 Q 45 5, 45 15" fill="none" stroke="#dc2626" stroke-width="2"/>
+      <circle cx="30" cy="28" r="3" fill="#dc2626"/>
+    </g>
+    
+    <!-- Code Example -->
+    <rect x="30" y="120" width="260" height="50" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
+    <text x="160" y="145" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#333">let x = 5;</text>
+    <text x="160" y="162" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="#666">// x is immutable</text>
+    
+    <!-- Arrow -->
+    <path d="M 160 180 L 160 200" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+    
+    <!-- Error -->
+    <rect x="30" y="210" width="260" height="50" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="50" y="235" font-family="Courier New, monospace" font-size="14" fill="#dc2626">x = 6;</text>
+    <text x="250" y="235" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#dc2626" text-anchor="end">✗ ERROR</text>
+    <text x="160" y="252" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#dc2626">cannot assign twice to immutable variable</text>
+  </g>
+  
+  <!-- Right Side: Mutable -->
+  <g transform="translate(430, 80)">
+    <rect x="0" y="0" width="320" height="280" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="160" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#16a34a">Mutable (with mut)</text>
+    
+    <!-- Unlock Icon -->
+    <g transform="translate(130, 60)">
+      <rect x="10" y="15" width="40" height="30" rx="3" fill="none" stroke="#16a34a" stroke-width="2"/>
+      <path d="M 15 15 Q 15 5, 30 5 Q 45 5, 45 10" fill="none" stroke="#16a34a" stroke-width="2"/>
+      <circle cx="30" cy="28" r="3" fill="#16a34a"/>
+    </g>
+    
+    <!-- Code Example -->
+    <rect x="30" y="120" width="260" height="50" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1"/>
+    <text x="160" y="145" font-family="Courier New, monospace" font-size="14" text-anchor="middle" fill="#333">let mut y = 5;</text>
+    <text x="160" y="162" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="#666">// y is mutable</text>
+    
+    <!-- Arrow -->
+    <path d="M 160 180 L 160 200" stroke="#16a34a" stroke-width="2" marker-end="url(#arrowGreen)"/>
+    
+    <!-- Success -->
+    <rect x="30" y="210" width="260" height="50" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+    <text x="50" y="235" font-family="Courier New, monospace" font-size="14" fill="#16a34a">y = 6;</text>
+    <text x="250" y="235" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#16a34a" text-anchor="end">✓ OK</text>
+    <text x="160" y="252" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#16a34a">value can be changed</text>
+  </g>
+  
+  <!-- Arrow Markers -->
+  <defs>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#16a34a"/>
+    </marker>
+  </defs>
+  
+  <!-- Watermark -->
+  <text x="790" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

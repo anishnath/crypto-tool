@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    HashMap Structure in Rust
+  </text>
+  <text x="450" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+    Key-value storage with hash table implementation
+  </text>
+  
+  <!-- Insert operation flow -->
+  <g transform="translate(30, 80)">
+    <text x="0" y="0" font-family="Arial" font-size="13" font-weight="bold" fill="#9b59b6">map.insert("Blue", 10)</text>
+    
+    <!-- Key -->
+    <rect x="0" y="15" width="80" height="40" rx="4" fill="#e1bee7" stroke="#9b59b6" stroke-width="2"/>
+    <text x="40" y="30" text-anchor="middle" font-family="Arial" font-size="10" fill="#6a1b9a">Key</text>
+    <text x="40" y="45" text-anchor="middle" font-family="Monospace" font-size="11" fill="#4a148c">"Blue"</text>
+    
+    <path d="M80 35 L120 35" stroke="#9b59b6" stroke-width="2" fill="none"/>
+    <polygon points="120,35 110,30 110,40" fill="#9b59b6"/>
+    
+    <!-- Hash function -->
+    <rect x="125" y="15" width="90" height="40" rx="20" fill="#ce93d8" stroke="#9b59b6" stroke-width="2"/>
+    <text x="170" y="40" text-anchor="middle" font-family="Arial" font-size="10" fill="#4a148c">Hash</text>
+    
+    <path d="M215 35 L255 35" stroke="#9b59b6" stroke-width="2" fill="none"/>
+    <polygon points="255,35 245,30 245,40" fill="#9b59b6"/>
+    
+    <!-- Bucket index -->
+    <rect x="260" y="15" width="70" height="40" rx="4" fill="#c8e6c9" stroke="#27ae60" stroke-width="2"/>
+    <text x="295" y="30" text-anchor="middle" font-family="Arial" font-size="10" fill="#1b5e20">Bucket</text>
+    <text x="295" y="45" text-anchor="middle" font-family="Monospace" font-size="11" fill="#27ae60">[2]</text>
+  </g>
+  
+  <!-- HashMap structure -->
+  <g transform="translate(50, 150)">
+    <text x="0" y="0" font-family="Arial" font-size="14" font-weight="bold" fill="#2c3e50">HashMap&lt;K, V&gt; Structure</text>
+    
+    <!-- Bucket 0 -->
+    <rect x="0" y="25" width="140" height="60" fill="#f5f5f5" stroke="#95a5a6" stroke-width="2"/>
+    <text x="70" y="50" text-anchor="middle" font-family="Arial" font-size="11" fill="#7f8c8d">[0]</text>
+    <text x="70" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="#95a5a6">empty</text>
+    
+    <!-- Bucket 1 -->
+    <rect x="160" y="25" width="140" height="60" fill="#f5f5f5" stroke="#95a5a6" stroke-width="2"/>
+    <text x="230" y="50" text-anchor="middle" font-family="Arial" font-size="11" fill="#7f8c8d">[1]</text>
+    <text x="230" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="#95a5a6">empty</text>
+    
+    <!-- Bucket 2 - has entry -->
+    <rect x="320" y="25" width="140" height="60" fill="#e1bee7" stroke="#9b59b6" stroke-width="3"/>
+    <text x="390" y="45" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#6a1b9a">[2]</text>
+    <text x="390" y="60" text-anchor="middle" font-family="Arial" font-size="9" fill="#4a148c">Entry</text>
+    <line x1="390" y1="85" x2="390" y2="105" stroke="#9b59b6" stroke-width="2"/>
+    
+    <!-- Entry in Bucket 2 -->
+    <g transform="translate(320, 110)">
+      <rect x="0" y="0" width="140" height="55" rx="4" fill="#f3e5f5" stroke="#9b59b6" stroke-width="2"/>
+      <text x="70" y="15" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#6a1b9a">Entry</text>
+      <line x1="5" y1="20" x2="135" y2="20" stroke="#ce93d8" stroke-width="1"/>
+      <text x="10" y="35" font-family="Monospace" font-size="9" fill="#4a148c">key: "Blue"</text>
+      <text x="10" y="48" font-family="Monospace" font-size="9" fill="#4a148c">value: 10</text>
+    </g>
+    
+    <!-- Bucket 3 -->
+    <rect x="480" y="25" width="140" height="60" fill="#e3f2fd" stroke="#3498db" stroke-width="2"/>
+    <text x="550" y="45" text-anchor="middle" font-family="Arial" font-size="11" fill="#2980b9">[3]</text>
+    <text x="550" y="60" text-anchor="middle" font-family="Arial" font-size="9" fill="#3498db">Entry</text>
+    <line x1="550" y1="85" x2="550" y2="105" stroke="#3498db" stroke-width="2"/>
+    
+    <!-- Entry in Bucket 3 -->
+    <g transform="translate(480, 110)">
+      <rect x="0" y="0" width="140" height="55" rx="4" fill="#bbdefb" stroke="#3498db" stroke-width="2"/>
+      <text x="70" y="15" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#2980b9">Entry</text>
+      <line x1="5" y1="20" x2="135" y2="20" stroke="#90caf9" stroke-width="1"/>
+      <text x="10" y="35" font-family="Monospace" font-size="9" fill="#1565c0">key: "Yellow"</text>
+      <text x="10" y="48" font-family="Monospace" font-size="9" fill="#1565c0">value: 50</text>
+    </g>
+    
+    <!-- Bucket 4 -->
+    <rect x="640" y="25" width="140" height="60" fill="#f5f5f5" stroke="#95a5a6" stroke-width="2"/>
+    <text x="710" y="50" text-anchor="middle" font-family="Arial" font-size="11" fill="#7f8c8d">[4]</text>
+    <text x="710" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="#95a5a6">empty</text>
+  </g>
+  
+  <!-- Get operation -->
+  <g transform="translate(50, 300)">
+    <rect x="0" y="0" width="380" height="90" rx="8" fill="#e1bee7" stroke="#9b59b6" stroke-width="2"/>
+    <text x="190" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#6a1b9a">Get Operation: map.get(&amp;"Blue")</text>
+    <text x="15" y="42" font-family="Arial" font-size="11" fill="#4a148c">1. Calculate hash("Blue") → bucket [2]</text>
+    <text x="15" y="57" font-family="Arial" font-size="11" fill="#4a148c">2. Search entries in bucket [2]</text>
+    <text x="15" y="72" font-family="Arial" font-size="11" fill="#4a148c">3. Return Option&lt;&amp;V&gt;: Some(10)</text>
+  </g>
+  
+  <!-- Entry API -->
+  <g transform="translate(450, 300)">
+    <rect x="0" y="0" width="400" height="90" rx="8" fill="#fff3e0" stroke="#e67e22" stroke-width="2"/>
+    <text x="200" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#d35400">Entry API: map.entry("Red")</text>
+    <text x="15" y="42" font-family="Arial" font-size="11" fill="#e67e22">• Returns Entry enum (Occupied or Vacant)</text>
+    <text x="15" y="57" font-family="Arial" font-size="11" fill="#e67e22">• .or_insert(50) - insert if key missing</text>
+    <text x="15" y="72" font-family="Arial" font-size="11" fill="#e67e22">• .and_modify(|v| *v += 10) - update if exists</text>
+  </g>
+  
+  <!-- Ownership example -->
+  <g transform="translate(50, 410)">
+    <rect x="0" y="0" width="800" height="80" rx="8" fill="#ecf0f1" stroke="#34495e" stroke-width="2"/>
+    <text x="400" y="22" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#2c3e50">Ownership in HashMap</text>
+    
+    <text x="20" y="42" font-family="Monospace" font-size="11" fill="#2c3e50">
+      let key = String::from("name");
+    </text>
+    <text x="20" y="57" font-family="Monospace" font-size="11" fill="#2c3e50">
+      map.insert(key, "Alice");  // key moved into HashMap
+    </text>
+    <text x="20" y="72" font-family="Monospace" font-size="11" fill="#e74c3c">
+      // key is no longer valid here
+    </text>
+    
+    <text x="450" y="42" font-family="Monospace" font-size="11" fill="#2c3e50">
+      let key = "name";  // &amp;str reference
+    </text>
+    <text x="450" y="57" font-family="Monospace" font-size="11" fill="#2c3e50">
+      map.insert(key, "Alice");  // key still valid
+    </text>
+    <text x="450" y="72" font-family="Monospace" font-size="11" fill="#27ae60">
+      // key remains valid (if lifetime is long enough)
+    </text>
+  </g>
+  
+  <!-- Key characteristics -->
+  <g transform="translate(50, 510)">
+    <rect x="0" y="0" width="800" height="70" rx="8" fill="#f8f9fa" stroke="#95a5a6" stroke-width="1"/>
+    <text x="400" y="20" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#2c3e50">HashMap Characteristics</text>
+    
+    <text x="20" y="42" font-family="Arial" font-size="11" fill="#9b59b6">O(1) average for get/insert</text>
+    <text x="200" y="42" font-family="Arial" font-size="11" fill="#666">|</text>
+    <text x="220" y="42" font-family="Arial" font-size="11" fill="#e67e22">Keys must implement Eq + Hash</text>
+    <text x="450" y="42" font-family="Arial" font-size="11" fill="#666">|</text>
+    <text x="470" y="42" font-family="Arial" font-size="11" fill="#27ae60">Owned values are moved</text>
+    
+    <text x="20" y="58" font-family="Arial" font-size="11" fill="#3498db">Unordered (use BTreeMap for sorted)</text>
+    <text x="300" y="58" font-family="Arial" font-size="11" fill="#666">|</text>
+    <text x="320" y="58" font-family="Arial" font-size="11" fill="#9b59b6">Entry API for conditional updates</text>
+    <text x="600" y="58" font-family="Arial" font-size="11" fill="#666">|</text>
+    <text x="620" y="58" font-family="Arial" font-size="11" fill="#e74c3c">Not in prelude (must import)</text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="890" y="593" font-family="Arial, sans-serif" font-size="12" fill="#95a5a6" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>
+

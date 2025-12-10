@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="900" height="550">
+  <!-- Background -->
+  <rect width="900" height="550" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Rust Collections
+  </text>
+  
+  <!-- Vector -->
+  <g transform="translate(50, 70)">
+    <rect width="250" height="140" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="250" height="40" rx="10" fill="#3498db"/>
+    <text x="125" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Vec&lt;T&gt; - Vector
+    </text>
+    
+    <text x="15" y="65" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Dynamic array
+    </text>
+    <text x="15" y="85" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Growable size
+    </text>
+    <text x="15" y="105" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Stored on heap
+    </text>
+    <text x="15" y="125" font-family="Arial, sans-serif" font-size="12" fill="#27ae60" font-weight="bold">
+      vec![1, 2, 3]
+    </text>
+  </g>
+  
+  <!-- String -->
+  <g transform="translate(325, 70)">
+    <rect width="250" height="140" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="250" height="40" rx="10" fill="#27ae60"/>
+    <text x="125" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      String
+    </text>
+    
+    <text x="15" y="65" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • UTF-8 encoded
+    </text>
+    <text x="15" y="85" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Growable text
+    </text>
+    <text x="15" y="105" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Owned data
+    </text>
+    <text x="15" y="125" font-family="Arial, sans-serif" font-size="12" fill="#27ae60" font-weight="bold">
+      String::from("hello")
+    </text>
+  </g>
+  
+  <!-- HashMap -->
+  <g transform="translate(600, 70)">
+    <rect width="250" height="140" rx="10" fill="white" stroke="#9b59b6" stroke-width="3"/>
+    <rect width="250" height="40" rx="10" fill="#9b59b6"/>
+    <text x="125" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      HashMap&lt;K, V&gt;
+    </text>
+    
+    <text x="15" y="65" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Key-value pairs
+    </text>
+    <text x="15" y="85" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Fast lookup
+    </text>
+    <text x="15" y="105" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      • Unordered
+    </text>
+    <text x="15" y="125" font-family="Arial, sans-serif" font-size="12" fill="#27ae60" font-weight="bold">
+      HashMap::new()
+    </text>
+  </g>
+  
+  <!-- Vector Memory Layout -->
+  <g transform="translate(50, 240)">
+    <rect width="800" height="140" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+    <rect width="800" height="40" rx="10" fill="#34495e"/>
+    <text x="400" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Vector Memory Layout
+    </text>
+    
+    <!-- Stack -->
+    <rect x="20" y="55" width="180" height="70" rx="5" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+    <text x="110" y="75" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Stack
+    </text>
+    <text x="30" y="95" font-family="Courier New, monospace" font-size="11" fill="#2c3e50">
+      ptr: 0x1234
+    </text>
+    <text x="30" y="110" font-family="Courier New, monospace" font-size="11" fill="#2c3e50">
+      len: 3
+    </text>
+    
+    <!-- Arrow -->
+    <path d="M 210 90 L 280 90" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- Heap -->
+    <rect x="290" y="55" width="490" height="70" rx="5" fill="#ecf0f1" stroke="#e74c3c" stroke-width="2"/>
+    <text x="535" y="75" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Heap
+    </text>
+    <rect x="310" y="85" width="60" height="30" fill="#3498db"/>
+    <text x="340" y="105" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="white">1</text>
+    <rect x="380" y="85" width="60" height="30" fill="#3498db"/>
+    <text x="410" y="105" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="white">2</text>
+    <rect x="450" y="85" width="60" height="30" fill="#3498db"/>
+    <text x="480" y="105" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="white">3</text>
+    <rect x="520" y="85" width="60" height="30" fill="#95a5a6" stroke-dasharray="5,5"/>
+    <rect x="590" y="85" width="60" height="30" fill="#95a5a6" stroke-dasharray="5,5"/>
+    <rect x="660" y="85" width="60" height="30" fill="#95a5a6" stroke-dasharray="5,5"/>
+    <text x="610" y="75" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">
+      (capacity for growth)
+    </text>
+  </g>
+  
+  <!-- Common Operations -->
+  <rect x="50" y="410" width="800" height="110" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="50" y="410" width="800" height="40" rx="10" fill="#34495e"/>
+  <text x="450" y="437" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Common Operations
+  </text>
+  
+  <g transform="translate(70, 465)">
+    <!-- Vector ops -->
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#3498db">
+      Vector:
+    </text>
+    <text x="0" y="18" font-family="Courier New, monospace" font-size="11" fill="#2c3e50">
+      v.push(x), v.pop(), v[i], v.get(i)
+    </text>
+    
+    <!-- String ops -->
+    <text x="260" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#27ae60">
+      String:
+    </text>
+    <text x="260" y="18" font-family="Courier New, monospace" font-size="11" fill="#2c3e50">
+      s.push_str(), s + &amp;t, format!()
+    </text>
+    
+    <!-- HashMap ops -->
+    <text x="520" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#9b59b6">
+      HashMap:
+    </text>
+    <text x="520" y="18" font-family="Courier New, monospace" font-size="11" fill="#2c3e50">
+      m.insert(k, v), m.get(&amp;k), m.entry(k)
+    </text>
+  </g>
+  
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e74c3c"/>
+    </marker>
+  </defs>
+  
+  <!-- Watermark -->
+  <text x="850" y="543" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

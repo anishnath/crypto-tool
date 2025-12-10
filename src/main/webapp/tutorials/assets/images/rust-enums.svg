@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Enums in Rust
+  </text>
+  
+  <!-- Basic Enum -->
+  <g transform="translate(50, 70)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#3498db"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Basic Enum
+    </text>
+    
+    <rect x="15" y="55" width="350" height="110" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      enum IpAddrKind {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      V4,
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      V6,
+    </text>
+    <text x="25" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Enum with Data -->
+  <g transform="translate(470, 70)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#27ae60"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Enum with Data
+    </text>
+    
+    <rect x="15" y="55" width="350" height="110" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      enum Message {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      Quit,
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      Move { x: i32, y: i32 },
+    </text>
+    <text x="35" y="135" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      Write(String),
+    </text>
+    <text x="25" y="155" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Option<T> -->
+  <g transform="translate(50, 280)">
+    <rect width="380" height="140" rx="10" fill="white" stroke="#9b59b6" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#9b59b6"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Option&lt;T&gt; - Nullable Values
+    </text>
+    
+    <rect x="15" y="55" width="350" height="70" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      enum Option&lt;T&gt; {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      Some(T),
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      None,
+    </text>
+    <text x="25" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Result<T, E> -->
+  <g transform="translate(470, 280)">
+    <rect width="380" height="140" rx="10" fill="white" stroke="#e67e22" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#e67e22"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Result&lt;T, E&gt; - Error Handling
+    </text>
+    
+    <rect x="15" y="55" width="350" height="70" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      enum Result&lt;T, E&gt; {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#27ae60">
+      Ok(T),
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      Err(E),
+    </text>
+    <text x="25" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Pattern Matching -->
+  <rect x="50" y="450" width="800" height="120" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="50" y="450" width="800" height="40" rx="10" fill="#34495e"/>
+  <text x="450" y="477" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Pattern Matching with match
+  </text>
+  
+  <g transform="translate(70, 505)">
+    <text x="0" y="20" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      match value {
+    </text>
+    <text x="20" y="40" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      Some(x) =&gt; println!("Value: {}", x),
+    </text>
+    <text x="20" y="60" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      None    =&gt; println!("No value"),
+    </text>
+    <text x="0" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <text x="450" y="20" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      match result {
+    </text>
+    <text x="470" y="40" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      Ok(val)  =&gt; println!("Success: {}", val),
+    </text>
+    <text x="470" y="60" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      Err(e)   =&gt; println!("Error: {}", e),
+    </text>
+    <text x="450" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="850" y="593" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

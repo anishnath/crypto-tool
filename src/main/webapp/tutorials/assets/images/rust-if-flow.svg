@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    if Expression Flow in Rust
+  </text>
+  
+  <!-- Start -->
+  <ellipse cx="400" cy="80" rx="60" ry="30" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+  <text x="400" y="88" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+    Start
+  </text>
+  
+  <!-- Arrow to condition -->
+  <line x1="400" y1="110" x2="400" y2="140" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Condition diamond -->
+  <path d="M 400 140 L 480 190 L 400 240 L 320 190 Z" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <text x="400" y="185" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="white">
+    Condition
+  </text>
+  <text x="400" y="203" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+    true?
+  </text>
+  
+  <!-- True branch -->
+  <line x1="320" y1="190" x2="200" y2="190" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="250" y="180" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#27ae60">
+    true
+  </text>
+  
+  <rect x="110" y="160" width="140" height="60" rx="8" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+  <text x="180" y="185" font-family="Courier New, monospace" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+    if block
+  </text>
+  <text x="180" y="205" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+    Execute code
+  </text>
+  
+  <!-- False branch -->
+  <line x1="480" y1="190" x2="600" y2="190" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="550" y="180" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#e74c3c">
+    false
+  </text>
+  
+  <rect x="530" y="160" width="140" height="60" rx="8" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+  <text x="600" y="185" font-family="Courier New, monospace" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+    else block
+  </text>
+  <text x="600" y="205" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+    (optional)
+  </text>
+  
+  <!-- Arrows to merge -->
+  <line x1="180" y1="220" x2="180" y2="280" stroke="#34495e" stroke-width="2"/>
+  <line x1="180" y1="280" x2="400" y2="280" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <line x1="600" y1="220" x2="600" y2="280" stroke="#34495e" stroke-width="2"/>
+  <line x1="600" y1="280" x2="400" y2="280" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Merge point -->
+  <circle cx="400" cy="280" r="5" fill="#34495e"/>
+  
+  <!-- Arrow to result -->
+  <line x1="400" y1="285" x2="400" y2="320" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Result box -->
+  <rect x="320" y="320" width="160" height="50" rx="8" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+  <text x="400" y="340" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="white">
+    Return Value
+  </text>
+  <text x="400" y="358" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+    (if used as expression)
+  </text>
+  
+  <!-- Example code -->
+  <rect x="50" y="400" width="700" height="80" rx="8" fill="white" stroke="#bdc3c7" stroke-width="1.5"/>
+  <text x="400" y="425" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Example: if as Expression
+  </text>
+  
+  <text x="70" y="450" font-family="Courier New, monospace" font-size="13" fill="#34495e">
+    let number = if condition { 5 } else { 6 };
+  </text>
+  
+  <text x="70" y="470" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+    • Both branches must return the same type
+  </text>
+  
+  <!-- Watermark -->
+  <text x="750" y="490" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+</svg>

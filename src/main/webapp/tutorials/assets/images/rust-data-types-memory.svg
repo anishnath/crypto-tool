@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <!-- Background -->
+  <rect width="800" height="550" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Rust Data Types: Memory Layout</text>
+  
+  <!-- Scalar Types Section -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="700" height="180" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2563eb">Scalar Types (Single Value)</text>
+    
+    <!-- Integer -->
+    <g transform="translate(40, 50)">
+      <rect x="0" y="0" width="140" height="100" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="70" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#1e40af">Integer</text>
+      <text x="70" y="55" text-anchor="middle" font-family="Courier New, monospace" font-size="20" fill="#333">42</text>
+      <text x="70" y="75" text-anchor="middle" font-size="12" fill="#666">i32</text>
+      <text x="70" y="92" text-anchor="middle" font-size="11" fill="#999">4 bytes</text>
+    </g>
+    
+    <!-- Float -->
+    <g transform="translate(210, 50)">
+      <rect x="0" y="0" width="140" height="100" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="70" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#1e40af">Float</text>
+      <text x="70" y="55" text-anchor="middle" font-family="Courier New, monospace" font-size="20" fill="#333">3.14</text>
+      <text x="70" y="75" text-anchor="middle" font-size="12" fill="#666">f64</text>
+      <text x="70" y="92" text-anchor="middle" font-size="11" fill="#999">8 bytes</text>
+    </g>
+    
+    <!-- Boolean -->
+    <g transform="translate(380, 50)">
+      <rect x="0" y="0" width="140" height="100" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="70" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#1e40af">Boolean</text>
+      <text x="70" y="55" text-anchor="middle" font-family="Courier New, monospace" font-size="20" fill="#333">true</text>
+      <text x="70" y="75" text-anchor="middle" font-size="12" fill="#666">bool</text>
+      <text x="70" y="92" text-anchor="middle" font-size="11" fill="#999">1 byte</text>
+    </g>
+    
+    <!-- Character -->
+    <g transform="translate(550, 50)">
+      <rect x="0" y="0" width="140" height="100" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="70" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#1e40af">Character</text>
+      <text x="70" y="55" text-anchor="middle" font-family="Courier New, monospace" font-size="20" fill="#333">'A'</text>
+      <text x="70" y="75" text-anchor="middle" font-size="12" fill="#666">char</text>
+      <text x="70" y="92" text-anchor="middle" font-size="11" fill="#999">4 bytes (Unicode)</text>
+    </g>
+  </g>
+  
+  <!-- Compound Types Section -->
+  <g transform="translate(50, 290)">
+    <rect x="0" y="0" width="700" height="220" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#059669">Compound Types (Multiple Values)</text>
+    
+    <!-- Tuple -->
+    <g transform="translate(40, 50)">
+      <text x="0" y="20" font-weight="bold" font-size="14" fill="#047857">Tuple (Mixed Types)</text>
+      <text x="0" y="40" font-family="Courier New, monospace" font-size="13" fill="#666">(500, 6.4, 1)</text>
+      
+      <!-- Tuple cells -->
+      <g transform="translate(0, 50)">
+        <rect x="0" y="0" width="80" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="40" y="30" text-anchor="middle" font-family="Courier New, monospace" font-size="16">500</text>
+        <text x="40" y="50" text-anchor="middle" font-size="10" fill="#666">i32</text>
+        <text x="40" y="-8" text-anchor="middle" font-size="10" fill="#999">.0</text>
+      </g>
+      <g transform="translate(90, 50)">
+        <rect x="0" y="0" width="80" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="40" y="30" text-anchor="middle" font-family="Courier New, monospace" font-size="16">6.4</text>
+        <text x="40" y="50" text-anchor="middle" font-size="10" fill="#666">f64</text>
+        <text x="40" y="-8" text-anchor="middle" font-size="10" fill="#999">.1</text>
+      </g>
+      <g transform="translate(180, 50)">
+        <rect x="0" y="0" width="80" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="40" y="30" text-anchor="middle" font-family="Courier New, monospace" font-size="16">1</text>
+        <text x="40" y="50" text-anchor="middle" font-size="10" fill="#666">u8</text>
+        <text x="40" y="-8" text-anchor="middle" font-size="10" fill="#999">.2</text>
+      </g>
+      
+      <text x="130" y="135" text-anchor="middle" font-size="11" fill="#047857">Fixed size, different types</text>
+    </g>
+    
+    <!-- Array -->
+    <g transform="translate(360, 50)">
+      <text x="0" y="20" font-weight="bold" font-size="14" fill="#047857">Array (Same Type)</text>
+      <text x="0" y="40" font-family="Courier New, monospace" font-size="13" fill="#666">[1, 2, 3, 4, 5]</text>
+      
+      <!-- Array cells -->
+      <g transform="translate(0, 50)">
+        <rect x="0" y="0" width="50" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="25" y="35" text-anchor="middle" font-family="Courier New, monospace" font-size="16">1</text>
+        <text x="25" y="-8" text-anchor="middle" font-size="10" fill="#999">[0]</text>
+      </g>
+      <g transform="translate(55, 50)">
+        <rect x="0" y="0" width="50" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="25" y="35" text-anchor="middle" font-family="Courier New, monospace" font-size="16">2</text>
+        <text x="25" y="-8" text-anchor="middle" font-size="10" fill="#999">[1]</text>
+      </g>
+      <g transform="translate(110, 50)">
+        <rect x="0" y="0" width="50" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="25" y="35" text-anchor="middle" font-family="Courier New, monospace" font-size="16">3</text>
+        <text x="25" y="-8" text-anchor="middle" font-size="10" fill="#999">[2]</text>
+      </g>
+      <g transform="translate(165, 50)">
+        <rect x="0" y="0" width="50" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="25" y="35" text-anchor="middle" font-family="Courier New, monospace" font-size="16">4</text>
+        <text x="25" y="-8" text-anchor="middle" font-size="10" fill="#999">[3]</text>
+      </g>
+      <g transform="translate(220, 50)">
+        <rect x="0" y="0" width="50" height="60" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="25" y="35" text-anchor="middle" font-family="Courier New, monospace" font-size="16">5</text>
+        <text x="25" y="-8" text-anchor="middle" font-size="10" fill="#999">[4]</text>
+      </g>
+      
+      <text x="135" y="135" text-anchor="middle" font-size="11" fill="#047857">Fixed size, same type (i32)</text>
+    </g>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="790" y="540" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

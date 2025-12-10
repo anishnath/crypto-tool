@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Generics in Rust
+  </text>
+  
+  <!-- Generic Function -->
+  <g transform="translate(50, 70)">
+    <rect width="800" height="100" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="800" height="40" rx="10" fill="#3498db"/>
+    <text x="400" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Generic Function
+    </text>
+    
+    <rect x="20" y="55" width="760" height="30" rx="5" fill="#ecf0f1"/>
+    <text x="30" y="75" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -> &amp;T { ... }
+    </text>
+  </g>
+  
+  <!-- Generic Struct -->
+  <g transform="translate(50, 190)">
+    <rect width="380" height="140" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#27ae60"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Generic Struct
+    </text>
+    
+    <rect x="15" y="55" width="350" height="70" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      struct Point&lt;T&gt; {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#27ae60">
+      x: T,
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#27ae60">
+      y: T,
+    </text>
+    <text x="25" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Generic Enum -->
+  <g transform="translate(470, 190)">
+    <rect width="380" height="140" rx="10" fill="white" stroke="#9b59b6" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#9b59b6"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Generic Enum
+    </text>
+    
+    <rect x="15" y="55" width="350" height="70" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      enum Option&lt;T&gt; {
+    </text>
+    <text x="35" y="95" font-family="Courier New, monospace" font-size="12" fill="#9b59b6">
+      Some(T),
+    </text>
+    <text x="35" y="115" font-family="Courier New, monospace" font-size="12" fill="#9b59b6">
+      None,
+    </text>
+    <text x="25" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Generic Implementation -->
+  <rect x="50" y="360" width="800" height="210" rx="10" fill="white" stroke="#e67e22" stroke-width="2"/>
+  <rect x="50" y="360" width="800" height="40" rx="10" fill="#e67e22"/>
+  <text x="450" y="387" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Generic Implementations
+  </text>
+  
+  <g transform="translate(70, 415)">
+    <!-- For all types -->
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#e67e22">
+      For All Types:
+    </text>
+    <rect x="0" y="10" width="360" height="55" rx="5" fill="#ecf0f1"/>
+    <text x="10" y="30" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      impl&lt;T&gt; Point&lt;T&gt; {
+    </text>
+    <text x="20" y="45" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      fn x(&amp;self) -> &amp;T { &amp;self.x }
+    </text>
+    <text x="10" y="60" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- For specific type -->
+    <text x="400" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#e67e22">
+      For Specific Type:
+    </text>
+    <rect x="400" y="10" width="360" height="55" rx="5" fill="#ecf0f1"/>
+    <text x="410" y="30" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      impl Point&lt;f32&gt; {
+    </text>
+    <text x="420" y="45" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      fn distance(&amp;self) -> f32 { ... }
+    </text>
+    <text x="410" y="60" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- With trait bounds -->
+    <text x="0" y="90" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#e67e22">
+      With Trait Bounds:
+    </text>
+    <rect x="0" y="100" width="760" height="55" rx="5" fill="#ecf0f1"/>
+    <text x="10" y="120" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      impl&lt;T: Display + PartialOrd&gt; Pair&lt;T&gt; {
+    </text>
+    <text x="20" y="135" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      fn cmp_display(&amp;self) { ... }
+    </text>
+    <text x="10" y="150" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+  </g>
+  
+  <!-- Key Points -->
+  <g transform="translate(70, 415)">
+    <text x="0" y="175" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      💡 Generics enable code reuse • Zero runtime cost • Monomorphization at compile time
+    </text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="850" y="593" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

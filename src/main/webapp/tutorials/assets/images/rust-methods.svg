@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="900" height="550">
+  <!-- Background -->
+  <rect width="900" height="550" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Methods vs Associated Functions in Rust
+  </text>
+  
+  <!-- Methods Section -->
+  <g transform="translate(50, 70)">
+    <rect width="380" height="220" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="380" height="45" rx="10" fill="#3498db"/>
+    <text x="190" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Methods (with self)
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="60" width="350" height="130" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      impl Rectangle {
+    </text>
+    <text x="35" y="100" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      fn area(&amp;self) -> u32 {
+    </text>
+    <text x="45" y="120" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      self.width * self.height
+    </text>
+    <text x="35" y="140" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    <text x="25" y="160" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- Usage -->
+    <text x="190" y="210" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#27ae60">
+      rect.area()
+    </text>
+  </g>
+  
+  <!-- Associated Functions Section -->
+  <g transform="translate(470, 70)">
+    <rect width="380" height="220" rx="10" fill="white" stroke="#9b59b6" stroke-width="3"/>
+    <rect width="380" height="45" rx="10" fill="#9b59b6"/>
+    <text x="190" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Associated Functions (no self)
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="60" width="350" height="130" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      impl Rectangle {
+    </text>
+    <text x="35" y="100" font-family="Courier New, monospace" font-size="12" fill="#e74c3c">
+      fn new(w: u32, h: u32) -> Self {
+    </text>
+    <text x="45" y="120" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      Rectangle { width: w, height: h }
+    </text>
+    <text x="35" y="140" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    <text x="25" y="160" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- Usage -->
+    <text x="190" y="210" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#27ae60">
+      Rectangle::new(30, 50)
+    </text>
+  </g>
+  
+  <!-- Self Parameter Types -->
+  <rect x="50" y="320" width="800" height="200" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="50" y="320" width="800" height="40" rx="10" fill="#34495e"/>
+  <text x="450" y="347" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Method Self Parameter Types
+  </text>
+  
+  <!-- Table -->
+  <g transform="translate(70, 375)">
+    <!-- Headers -->
+    <rect x="0" y="0" width="200" height="35" fill="#ecf0f1"/>
+    <rect x="200" y="0" width="280" height="35" fill="#ecf0f1"/>
+    <rect x="480" y="0" width="280" height="35" fill="#ecf0f1"/>
+    
+    <text x="100" y="23" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Syntax
+    </text>
+    <text x="340" y="23" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Use Case
+    </text>
+    <text x="620" y="23" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Example
+    </text>
+    
+    <!-- Row 1: &self -->
+    <rect x="0" y="35" width="200" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="200" y="35" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="480" y="35" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="100" y="58" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="#3498db">
+      &amp;self
+    </text>
+    <text x="340" y="58" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2c3e50">
+      Read-only access
+    </text>
+    <text x="620" y="58" font-family="Courier New, monospace" font-size="11" text-anchor="middle" fill="#2c3e50">
+      fn area(&amp;self) -> u32
+    </text>
+    
+    <!-- Row 2: &mut self -->
+    <rect x="0" y="70" width="200" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="200" y="70" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="480" y="70" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="100" y="93" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="#e74c3c">
+      &amp;mut self
+    </text>
+    <text x="340" y="93" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2c3e50">
+      Can modify the instance
+    </text>
+    <text x="620" y="93" font-family="Courier New, monospace" font-size="11" text-anchor="middle" fill="#2c3e50">
+      fn scale(&amp;mut self, n: u32)
+    </text>
+    
+    <!-- Row 3: self -->
+    <rect x="0" y="105" width="200" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="200" y="105" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    <rect x="480" y="105" width="280" height="35" fill="white" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="100" y="128" font-family="Courier New, monospace" font-size="12" text-anchor="middle" fill="#9b59b6">
+      self
+    </text>
+    <text x="340" y="128" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2c3e50">
+      Takes ownership (rare)
+    </text>
+    <text x="620" y="128" font-family="Courier New, monospace" font-size="11" text-anchor="middle" fill="#2c3e50">
+      fn consume(self) -> String
+    </text>
+  </g>
+  
+  <!-- Key Points -->
+  <g transform="translate(70, 385)">
+    <text x="0" y="145" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      💡 Methods are called with dot notation: instance.method()
+    </text>
+    <text x="0" y="165" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      💡 Associated functions are called with :: syntax: Type::function()
+    </text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="850" y="543" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

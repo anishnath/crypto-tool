@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Stack vs Heap Memory in Rust
+  </text>
+  
+  <!-- Dividing line -->
+  <line x1="450" y1="60" x2="450" y2="550" stroke="#95a5a6" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- STACK Section -->
+  <g transform="translate(50, 70)">
+    <rect width="350" height="450" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    
+    <!-- Header -->
+    <rect width="350" height="50" rx="10" fill="#3498db"/>
+    <text x="175" y="33" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+      STACK
+    </text>
+    
+    <!-- Characteristics -->
+    <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Characteristics:
+    </text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Fast allocation/deallocation
+    </text>
+    <text x="20" y="118" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Fixed size, known at compile time
+    </text>
+    <text x="20" y="136" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ LIFO (Last In, First Out)
+    </text>
+    <text x="20" y="154" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Automatically managed
+    </text>
+    
+    <!-- Stack visualization -->
+    <text x="20" y="185" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Stack Memory:
+    </text>
+    
+    <!-- Stack frames -->
+    <rect x="40" y="200" width="280" height="50" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+    <text x="60" y="225" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      let x: i32 = 5
+    </text>
+    <text x="250" y="225" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      4 bytes
+    </text>
+    
+    <rect x="40" y="255" width="280" height="50" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+    <text x="60" y="280" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      let y: bool = true
+    </text>
+    <text x="250" y="280" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      1 byte
+    </text>
+    
+    <rect x="40" y="310" width="280" height="50" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+    <text x="60" y="335" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      let z: char = 'A'
+    </text>
+    <text x="250" y="335" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      4 bytes
+    </text>
+    
+    <!-- Copy trait types -->
+    <text x="20" y="385" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Copy Types (on Stack):
+    </text>
+    <text x="20" y="405" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • Integers (i8, i32, u64, etc.)
+    </text>
+    <text x="20" y="420" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • Floats (f32, f64)
+    </text>
+    <text x="20" y="435" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • bool, char
+    </text>
+  </g>
+  
+  <!-- HEAP Section -->
+  <g transform="translate(500, 70)">
+    <rect width="350" height="450" rx="10" fill="white" stroke="#e74c3c" stroke-width="3"/>
+    
+    <!-- Header -->
+    <rect width="350" height="50" rx="10" fill="#e74c3c"/>
+    <text x="175" y="33" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">
+      HEAP
+    </text>
+    
+    <!-- Characteristics -->
+    <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Characteristics:
+    </text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Slower allocation/deallocation
+    </text>
+    <text x="20" y="118" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Dynamic size, runtime allocation
+    </text>
+    <text x="20" y="136" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Flexible memory layout
+    </text>
+    <text x="20" y="154" font-family="Arial, sans-serif" font-size="12" fill="#34495e">
+      ✓ Ownership rules apply
+    </text>
+    
+    <!-- Heap visualization -->
+    <text x="20" y="185" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Heap Memory:
+    </text>
+    
+    <!-- String example -->
+    <rect x="40" y="200" width="280" height="80" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+    <text x="60" y="220" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      String::from("hello")
+    </text>
+    <text x="60" y="240" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Pointer → Heap data
+    </text>
+    <text x="60" y="255" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Length: 5
+    </text>
+    <text x="60" y="270" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Capacity: 5
+    </text>
+    
+    <!-- Vec example -->
+    <rect x="40" y="290" width="280" height="70" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+    <text x="60" y="310" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      Vec&lt;i32&gt;
+    </text>
+    <text x="60" y="330" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Pointer → Heap array
+    </text>
+    <text x="60" y="345" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Length, Capacity
+    </text>
+    
+    <!-- Move types -->
+    <text x="20" y="385" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Move Types (on Heap):
+    </text>
+    <text x="20" y="405" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • String
+    </text>
+    <text x="20" y="420" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • Vec&lt;T&gt;
+    </text>
+    <text x="20" y="435" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      • Box&lt;T&gt;, HashMap, etc.
+    </text>
+  </g>
+  
+  <!-- Bottom comparison -->
+  <rect x="50" y="540" width="800" height="45" rx="8" fill="#34495e"/>
+  <text x="450" y="568" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+    Stack = Copy semantics (cheap) | Heap = Move semantics (ownership transfer)
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="593" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

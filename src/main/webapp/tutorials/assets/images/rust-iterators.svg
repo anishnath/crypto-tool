@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700">
+  <!-- Background -->
+  <rect width="900" height="700" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Iterators in Rust
+  </text>
+  
+  <!-- Iterator Trait -->
+  <g transform="translate(50, 70)">
+    <rect width="800" height="100" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="800" height="40" rx="10" fill="#3498db"/>
+    <text x="400" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Iterator Trait
+    </text>
+    
+    <rect x="20" y="55" width="760" height="30" rx="5" fill="#ecf0f1"/>
+    <text x="30" y="75" font-family="Courier New, monospace" font-size="13" fill="#2c3e50">
+      trait Iterator { type Item; fn next(&amp;mut self) -> Option&lt;Self::Item&gt;; }
+    </text>
+  </g>
+  
+  <!-- Three Iterator Methods -->
+  <g transform="translate(50, 190)">
+    <rect width="800" height="150" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="800" height="40" rx="10" fill="#27ae60"/>
+    <text x="400" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Three Ways to Iterate
+    </text>
+    
+    <!-- iter() -->
+    <g transform="translate(20, 55)">
+      <rect width="240" height="80" rx="5" fill="#ecf0f1"/>
+      <text x="120" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#27ae60">
+        .iter()
+      </text>
+      <text x="10" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Borrows immutably
+      </text>
+      <text x="10" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Returns &amp;T
+      </text>
+      <text x="10" y="75" font-family="Courier New, monospace" font-size="11" fill="#27ae60">
+        v.iter()
+      </text>
+    </g>
+    
+    <!-- into_iter() -->
+    <g transform="translate(280, 55)">
+      <rect width="240" height="80" rx="5" fill="#ecf0f1"/>
+      <text x="120" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+        .into_iter()
+      </text>
+      <text x="10" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Takes ownership
+      </text>
+      <text x="10" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Returns T
+      </text>
+      <text x="10" y="75" font-family="Courier New, monospace" font-size="11" fill="#e74c3c">
+        v.into_iter()
+      </text>
+    </g>
+    
+    <!-- iter_mut() -->
+    <g transform="translate(540, 55)">
+      <rect width="240" height="80" rx="5" fill="#ecf0f1"/>
+      <text x="120" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#f39c12">
+        .iter_mut()
+      </text>
+      <text x="10" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Borrows mutably
+      </text>
+      <text x="10" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Returns &amp;mut T
+      </text>
+      <text x="10" y="75" font-family="Courier New, monospace" font-size="11" fill="#f39c12">
+        v.iter_mut()
+      </text>
+    </g>
+  </g>
+  
+  <!-- Iterator Adapters -->
+  <rect x="50" y="360" width="800" height="200" rx="10" fill="white" stroke="#9b59b6" stroke-width="2"/>
+  <rect x="50" y="360" width="800" height="40" rx="10" fill="#9b59b6"/>
+  <text x="450" y="387" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Common Iterator Adapters (Lazy)
+  </text>
+  
+  <g transform="translate(70, 415)">
+    <!-- Column 1 -->
+    <text x="0" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .map(|x| x * 2)
+    </text>
+    <text x="180" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Transform elements
+    </text>
+    
+    <text x="0" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .filter(|x| *x > 5)
+    </text>
+    <text x="180" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Keep matching
+    </text>
+    
+    <text x="0" y="50" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .take(5)
+    </text>
+    <text x="180" y="50" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      First n elements
+    </text>
+    
+    <text x="0" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .skip(3)
+    </text>
+    <text x="180" y="75" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Skip n elements
+    </text>
+    
+    <text x="0" y="100" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .enumerate()
+    </text>
+    <text x="180" y="100" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Add index
+    </text>
+    
+    <text x="0" y="125" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .zip(other)
+    </text>
+    <text x="180" y="125" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Combine iterators
+    </text>
+    
+    <!-- Column 2 -->
+    <text x="400" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .chain(other)
+    </text>
+    <text x="550" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Concatenate
+    </text>
+    
+    <text x="400" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .flat_map(|x| ...)
+    </text>
+    <text x="550" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Map and flatten
+    </text>
+    
+    <text x="400" y="50" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .rev()
+    </text>
+    <text x="550" y="50" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Reverse
+    </text>
+    
+    <text x="400" y="75" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .cycle()
+    </text>
+    <text x="550" y="75" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Repeat forever
+    </text>
+    
+    <text x="400" y="100" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .inspect(|x| ...)
+    </text>
+    <text x="550" y="100" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Debug/peek
+    </text>
+    
+    <text x="400" y="125" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .copied()
+    </text>
+    <text x="550" y="125" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Copy elements
+    </text>
+  </g>
+  
+  <!-- Consumers -->
+  <rect x="50" y="580" width="800" height="90" rx="10" fill="white" stroke="#e67e22" stroke-width="2"/>
+  <rect x="50" y="580" width="800" height="40" rx="10" fill="#e67e22"/>
+  <text x="450" y="607" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Consumers (Execute Immediately)
+  </text>
+  
+  <g transform="translate(70, 635)">
+    <text x="0" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .collect()
+    </text>
+    <text x="120" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      To collection
+    </text>
+    
+    <text x="250" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .sum()
+    </text>
+    <text x="330" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Sum all
+    </text>
+    
+    <text x="450" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .count()
+    </text>
+    <text x="540" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Count items
+    </text>
+    
+    <text x="650" y="0" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .find()
+    </text>
+    <text x="730" y="0" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      First match
+    </text>
+    
+    <text x="0" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .any()
+    </text>
+    <text x="80" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Any match
+    </text>
+    
+    <text x="200" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .all()
+    </text>
+    <text x="270" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      All match
+    </text>
+    
+    <text x="380" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .fold()
+    </text>
+    <text x="460" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Reduce
+    </text>
+    
+    <text x="560" y="25" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      .for_each()
+    </text>
+    <text x="670" y="25" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Execute closure
+    </text>
+  </g>
+  
+  <!-- Key Points -->
+  <text x="450" y="690" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+    💡 Lazy evaluation • Zero-cost abstraction • Functional programming • Chainable
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="693" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

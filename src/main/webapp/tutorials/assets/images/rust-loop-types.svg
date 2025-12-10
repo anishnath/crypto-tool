@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="900" height="550">
+  <!-- Background -->
+  <rect width="900" height="550" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Rust Loop Types Comparison
+  </text>
+  
+  <!-- Loop 1: loop -->
+  <g transform="translate(50, 70)">
+    <rect width="240" height="400" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    
+    <!-- Header -->
+    <rect width="240" height="50" rx="10" fill="#3498db"/>
+    <text x="120" y="33" font-family="Courier New, monospace" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+      loop
+    </text>
+    
+    <!-- Description -->
+    <text x="120" y="80" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Infinite Loop
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="100" width="210" height="120" rx="5" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="25" y="120" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      <tspan x="25" dy="0">loop {</tspan>
+      <tspan x="35" dy="15">  // Runs forever</tspan>
+      <tspan x="35" dy="15">  if condition {</tspan>
+      <tspan x="45" dy="15">    break;</tspan>
+      <tspan x="35" dy="15">  }</tspan>
+      <tspan x="25" dy="15">}</tspan>
+    </text>
+    
+    <!-- Features -->
+    <text x="20" y="245" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Features:
+    </text>
+    <text x="20" y="265" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Runs indefinitely
+    </text>
+    <text x="20" y="283" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Must use break
+    </text>
+    <text x="20" y="301" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Can return values
+    </text>
+    
+    <!-- Use case -->
+    <text x="20" y="330" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Use when:
+    </text>
+    <text x="20" y="350" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Exit condition is
+    </text>
+    <text x="20" y="368" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      complex or in the
+    </text>
+    <text x="20" y="386" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      middle of the loop
+    </text>
+  </g>
+  
+  <!-- Loop 2: while -->
+  <g transform="translate(330, 70)">
+    <rect width="240" height="400" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    
+    <!-- Header -->
+    <rect width="240" height="50" rx="10" fill="#27ae60"/>
+    <text x="120" y="33" font-family="Courier New, monospace" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+      while
+    </text>
+    
+    <!-- Description -->
+    <text x="120" y="80" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Conditional Loop
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="100" width="210" height="120" rx="5" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="25" y="120" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      <tspan x="25" dy="0">let mut n = 5;</tspan>
+      <tspan x="25" dy="15">while n != 0 {</tspan>
+      <tspan x="35" dy="15">  println!("{}", n);</tspan>
+      <tspan x="35" dy="15">  n -= 1;</tspan>
+      <tspan x="25" dy="15">}</tspan>
+    </text>
+    
+    <!-- Features -->
+    <text x="20" y="245" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Features:
+    </text>
+    <text x="20" y="265" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Checks condition first
+    </text>
+    <text x="20" y="283" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • May not run at all
+    </text>
+    <text x="20" y="301" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Condition is boolean
+    </text>
+    
+    <!-- Use case -->
+    <text x="20" y="330" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Use when:
+    </text>
+    <text x="20" y="350" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Loop depends on a
+    </text>
+    <text x="20" y="368" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      simple condition
+    </text>
+    <text x="20" y="386" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      checked before each
+    </text>
+    <text x="20" y="404" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      iteration
+    </text>
+  </g>
+  
+  <!-- Loop 3: for -->
+  <g transform="translate(610, 70)">
+    <rect width="240" height="400" rx="10" fill="white" stroke="#e74c3c" stroke-width="3"/>
+    
+    <!-- Header -->
+    <rect width="240" height="50" rx="10" fill="#e74c3c"/>
+    <text x="120" y="33" font-family="Courier New, monospace" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+      for
+    </text>
+    
+    <!-- Description -->
+    <text x="120" y="80" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      Iterator Loop
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="100" width="210" height="120" rx="5" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="25" y="120" font-family="Courier New, monospace" font-size="11" fill="#34495e">
+      <tspan x="25" dy="0">for i in 1..=5 {</tspan>
+      <tspan x="35" dy="15">  println!("{}", i);</tspan>
+      <tspan x="25" dy="15">}</tspan>
+      <tspan x="25" dy="25">for item in array {</tspan>
+      <tspan x="35" dy="15">  // process item</tspan>
+      <tspan x="25" dy="15">}</tspan>
+    </text>
+    
+    <!-- Features -->
+    <text x="20" y="245" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Features:
+    </text>
+    <text x="20" y="265" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Iterates over items
+    </text>
+    <text x="20" y="283" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Safe (no bounds errors)
+    </text>
+    <text x="20" y="301" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      • Most idiomatic
+    </text>
+    
+    <!-- Use case -->
+    <text x="20" y="330" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Use when:
+    </text>
+    <text x="20" y="350" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      Iterating over a
+    </text>
+    <text x="20" y="368" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      collection, range,
+    </text>
+    <text x="20" y="386" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      or known number of
+    </text>
+    <text x="20" y="404" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      iterations
+    </text>
+  </g>
+  
+  <!-- Bottom comparison -->
+  <rect x="50" y="490" width="800" height="40" rx="5" fill="#34495e"/>
+  <text x="450" y="515" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+    💡 Tip: Prefer 'for' loops when possible - they're safer and more idiomatic in Rust
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="540" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

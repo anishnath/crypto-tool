@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Shadowing vs Mutation in Rust</text>
+  
+  <!-- Left Side: Shadowing -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="340" height="330" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="170" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#7c3aed">Shadowing</text>
+    <text x="170" y="55" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#666">Creates new variable</text>
+    
+    <!-- Layer 1 -->
+    <g transform="translate(30, 80)">
+      <rect x="0" y="0" width="280" height="60" rx="5" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="20" y="25" font-family="Courier New, monospace" font-size="14" fill="#333">let x = 5;</text>
+      <text x="20" y="45" font-family="Arial, sans-serif" font-size="11" fill="#666">Type: i32</text>
+      <circle cx="260" cy="30" r="15" fill="#7c3aed"/>
+      <text x="260" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">1</text>
+    </g>
+    
+    <!-- Layer 2 -->
+    <g transform="translate(35, 155)">
+      <rect x="0" y="0" width="280" height="60" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+      <text x="20" y="25" font-family="Courier New, monospace" font-size="14" fill="#333">let x = x + 1;</text>
+      <text x="20" y="45" font-family="Arial, sans-serif" font-size="11" fill="#666">Type: i32 (value: 6)</text>
+      <circle cx="260" cy="30" r="15" fill="#7c3aed"/>
+      <text x="260" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">2</text>
+    </g>
+    
+    <!-- Layer 3 -->
+    <g transform="translate(40, 230)">
+      <rect x="0" y="0" width="280" height="60" rx="5" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+      <text x="20" y="25" font-family="Courier New, monospace" font-size="14" fill="#333">let x = "hello";</text>
+      <text x="20" y="45" font-family="Arial, sans-serif" font-size="11" fill="#666">Type: &amp;str</text>
+      <circle cx="260" cy="30" r="15" fill="#7c3aed"/>
+      <text x="260" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">3</text>
+    </g>
+    
+    <!-- Checkmark -->
+    <text x="170" y="315" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#16a34a">✓ Can change type</text>
+  </g>
+  
+  <!-- Right Side: Mutation -->
+  <g transform="translate(430, 80)">
+    <rect x="0" y="0" width="340" height="330" rx="10" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+    <text x="170" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#ea580c">Mutation</text>
+    <text x="170" y="55" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#666">Modifies existing variable</text>
+    
+    <!-- Initial -->
+    <g transform="translate(30, 100)">
+      <rect x="0" y="0" width="280" height="60" rx="5" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+      <text x="20" y="25" font-family="Courier New, monospace" font-size="14" fill="#333">let mut x = 5;</text>
+      <text x="20" y="45" font-family="Arial, sans-serif" font-size="11" fill="#666">Type: i32</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 170 180 L 170 210" stroke="#ea580c" stroke-width="3" marker-end="url(#arrowOrange)"/>
+    <text x="200" y="200" font-family="Arial, sans-serif" font-size="12" fill="#ea580c">mutate</text>
+    
+    <!-- Modified -->
+    <g transform="translate(30, 220)">
+      <rect x="0" y="0" width="280" height="60" rx="5" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+      <text x="20" y="25" font-family="Courier New, monospace" font-size="14" fill="#333">x = 6;</text>
+      <text x="20" y="45" font-family="Arial, sans-serif" font-size="11" fill="#666">Type: i32 (still same type)</text>
+    </g>
+    
+    <!-- X mark -->
+    <text x="170" y="315" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#dc2626">✗ Cannot change type</text>
+  </g>
+  
+  <!-- Arrow Marker -->
+  <defs>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#ea580c"/>
+    </marker>
+  </defs>
+  
+  <!-- Watermark -->
+  <text x="790" y="440" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

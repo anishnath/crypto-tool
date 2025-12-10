@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650" width="900" height="650">
+  <!-- Background -->
+  <rect width="900" height="650" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Move Semantics in Rust
+  </text>
+  
+  <!-- Before Move -->
+  <text x="225" y="75" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#27ae60">
+    BEFORE: let s2 = s1;
+  </text>
+  
+  <!-- Stack (before) -->
+  <g transform="translate(50, 90)">
+    <rect width="150" height="180" rx="8" fill="white" stroke="#3498db" stroke-width="2"/>
+    <rect width="150" height="40" rx="8" fill="#3498db"/>
+    <text x="75" y="27" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      Stack
+    </text>
+    
+    <!-- s1 variable -->
+    <rect x="15" y="55" width="120" height="110" rx="5" fill="#ecf0f1" stroke="#34495e" stroke-width="1.5"/>
+    <text x="75" y="75" font-family="Courier New, monospace" font-size="13" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      s1
+    </text>
+    <line x1="15" y1="82" x2="135" y2="82" stroke="#7f8c8d" stroke-width="1"/>
+    
+    <text x="25" y="100" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      ptr
+    </text>
+    <text x="25" y="120" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      len: 5
+    </text>
+    <text x="25" y="140" font-family="Arial, sans-serif" font-size="11" fill="#34495e">
+      capacity: 5
+    </text>
+  </g>
+  
+  <!-- Arrow to heap -->
+  <path d="M 200 130 Q 250 130, 280 150" stroke="#e74c3c" stroke-width="2" fill="none" marker-end="url(#arrowhead-red)"/>
+  <text x="230" y="125" font-family="Arial, sans-serif" font-size="11" fill="#e74c3c">
+    points to
+  </text>
+  
+  <!-- Heap (before) -->
+  <g transform="translate(280, 90)">
+    <rect width="150" height="180" rx="8" fill="white" stroke="#e74c3c" stroke-width="2"/>
+    <rect width="150" height="40" rx="8" fill="#e74c3c"/>
+    <text x="75" y="27" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      Heap
+    </text>
+    
+    <!-- Heap data -->
+    <rect x="15" y="55" width="120" height="110" rx="5" fill="#fff5f5" stroke="#34495e" stroke-width="1.5"/>
+    <text x="75" y="80" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      "hello"
+    </text>
+    <text x="75" y="110" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      [h][e][l][l][o]
+    </text>
+    <text x="75" y="135" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#7f8c8d">
+      Actual string data
+    </text>
+    <text x="75" y="150" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#7f8c8d">
+      stored on heap
+    </text>
+  </g>
+  
+  <!-- Arrow down -->
+  <line x1="225" y1="280" x2="225" y2="310" stroke="#34495e" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="240" y="300" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#e74c3c">
+    MOVE
+  </text>
+  
+  <!-- After Move -->
+  <text x="225" y="345" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+    AFTER: Ownership Transferred
+  </text>
+  
+  <!-- Stack (after) -->
+  <g transform="translate(50, 360)">
+    <rect width="350" height="220" rx="8" fill="white" stroke="#3498db" stroke-width="2"/>
+    <rect width="350" height="40" rx="8" fill="#3498db"/>
+    <text x="175" y="27" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      Stack
+    </text>
+    
+    <!-- s1 (invalid) -->
+    <rect x="15" y="55" width="150" height="150" rx="5" fill="#ecf0f1" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="90" y="75" font-family="Courier New, monospace" font-size="13" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+      s1 (INVALID)
+    </text>
+    <line x1="15" y1="82" x2="165" y2="82" stroke="#e74c3c" stroke-width="1"/>
+    
+    <text x="25" y="105" font-family="Arial, sans-serif" font-size="11" fill="#95a5a6" text-decoration="line-through">
+      ptr
+    </text>
+    <text x="25" y="125" font-family="Arial, sans-serif" font-size="11" fill="#95a5a6" text-decoration="line-through">
+      len: 5
+    </text>
+    <text x="25" y="145" font-family="Arial, sans-serif" font-size="11" fill="#95a5a6" text-decoration="line-through">
+      capacity: 5
+    </text>
+    
+    <text x="90" y="175" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#e74c3c">
+      ✗ Can't use s1
+    </text>
+    <text x="90" y="190" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#e74c3c">
+      anymore!
+    </text>
+    
+    <!-- s2 (new owner) -->
+    <rect x="185" y="55" width="150" height="150" rx="5" fill="#d5f4e6" stroke="#27ae60" stroke-width="2"/>
+    <text x="260" y="75" font-family="Courier New, monospace" font-size="13" font-weight="bold" text-anchor="middle" fill="#27ae60">
+      s2 (OWNER)
+    </text>
+    <line x1="185" y1="82" x2="335" y2="82" stroke="#27ae60" stroke-width="1"/>
+    
+    <text x="195" y="105" font-family="Arial, sans-serif" font-size="11" fill="#27ae60">
+      ptr
+    </text>
+    <text x="195" y="125" font-family="Arial, sans-serif" font-size="11" fill="#27ae60">
+      len: 5
+    </text>
+    <text x="195" y="145" font-family="Arial, sans-serif" font-size="11" fill="#27ae60">
+      capacity: 5
+    </text>
+    
+    <text x="260" y="175" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      ✓ s2 is now
+    </text>
+    <text x="260" y="190" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      the owner
+    </text>
+  </g>
+  
+  <!-- Arrow to heap (from s2) -->
+  <path d="M 335 450 Q 400 450, 450 450" stroke="#27ae60" stroke-width="2" fill="none" marker-end="url(#arrowhead-green)"/>
+  <text x="375" y="440" font-family="Arial, sans-serif" font-size="11" fill="#27ae60">
+    points to
+  </text>
+  
+  <!-- Heap (after) - same data -->
+  <g transform="translate(450, 360)">
+    <rect width="150" height="220" rx="8" fill="white" stroke="#e74c3c" stroke-width="2"/>
+    <rect width="150" height="40" rx="8" fill="#e74c3c"/>
+    <text x="75" y="27" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      Heap
+    </text>
+    
+    <!-- Heap data -->
+    <rect x="15" y="55" width="120" height="150" rx="5" fill="#fff5f5" stroke="#34495e" stroke-width="1.5"/>
+    <text x="75" y="80" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+      "hello"
+    </text>
+    <text x="75" y="110" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      [h][e][l][l][o]
+    </text>
+    <text x="75" y="140" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      Same heap data
+    </text>
+    <text x="75" y="155" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      NOT copied!
+    </text>
+    <text x="75" y="175" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      Only ownership
+    </text>
+    <text x="75" y="190" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#27ae60">
+      was transferred
+    </text>
+  </g>
+  
+  <!-- Key Points -->
+  <rect x="50" y="595" width="800" height="45" rx="8" fill="#34495e"/>
+  <text x="450" y="623" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="white">
+    💡 Move = Transfer ownership without copying heap data (efficient!)
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="643" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e74c3c"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#27ae60"/>
+    </marker>
+  </defs>
+</svg>

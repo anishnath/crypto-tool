@@ -1,0 +1,258 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700">
+  <!-- Background -->
+  <rect width="900" height="700" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Smart Pointers in Rust
+  </text>
+  
+  <!-- Box<T> -->
+  <g transform="translate(50, 70)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#3498db"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Box&lt;T&gt; - Heap Allocation
+    </text>
+    
+    <g transform="translate(15, 55)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#3498db">
+        Purpose:
+      </text>
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Store data on heap
+      </text>
+      <text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Known size at compile time
+      </text>
+      <text x="0" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Single ownership
+      </text>
+      
+      <text x="0" y="90" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#3498db">
+        Example:
+      </text>
+      <rect x="0" y="95" width="350" height="25" rx="5" fill="#ecf0f1"/>
+      <text x="10" y="113" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+        let b = Box::new(5);
+      </text>
+    </g>
+  </g>
+  
+  <!-- Rc<T> -->
+  <g transform="translate(470, 70)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#27ae60"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Rc&lt;T&gt; - Reference Counting
+    </text>
+    
+    <g transform="translate(15, 55)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#27ae60">
+        Purpose:
+      </text>
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Multiple ownership
+      </text>
+      <text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Immutable references
+      </text>
+      <text x="0" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Single-threaded only
+      </text>
+      
+      <text x="0" y="90" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#27ae60">
+        Example:
+      </text>
+      <rect x="0" y="95" width="350" height="25" rx="5" fill="#ecf0f1"/>
+      <text x="10" y="113" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+        let a = Rc::new(5);
+      </text>
+    </g>
+  </g>
+  
+  <!-- RefCell<T> -->
+  <g transform="translate(50, 270)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#9b59b6" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#9b59b6"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      RefCell&lt;T&gt; - Interior Mutability
+    </text>
+    
+    <g transform="translate(15, 55)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#9b59b6">
+        Purpose:
+      </text>
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Mutable borrows at runtime
+      </text>
+      <text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Borrow rules checked at runtime
+      </text>
+      <text x="0" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Single-threaded only
+      </text>
+      
+      <text x="0" y="90" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#9b59b6">
+        Example:
+      </text>
+      <rect x="0" y="95" width="350" height="25" rx="5" fill="#ecf0f1"/>
+      <text x="10" y="113" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+        let x = RefCell::new(5);
+      </text>
+    </g>
+  </g>
+  
+  <!-- Arc<T> -->
+  <g transform="translate(470, 270)">
+    <rect width="380" height="180" rx="10" fill="white" stroke="#e74c3c" stroke-width="3"/>
+    <rect width="380" height="40" rx="10" fill="#e74c3c"/>
+    <text x="190" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Arc&lt;T&gt; - Atomic Ref Counting
+    </text>
+    
+    <g transform="translate(15, 55)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#e74c3c">
+        Purpose:
+      </text>
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Multiple ownership
+      </text>
+      <text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Thread-safe
+      </text>
+      <text x="0" y="60" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+        • Immutable references
+      </text>
+      
+      <text x="0" y="90" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#e74c3c">
+        Example:
+      </text>
+      <rect x="0" y="95" width="350" height="25" rx="5" fill="#ecf0f1"/>
+      <text x="10" y="113" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+        let a = Arc::new(5);
+      </text>
+    </g>
+  </g>
+  
+  <!-- Comparison Table -->
+  <rect x="50" y="470" width="800" height="200" rx="10" fill="white" stroke="#e67e22" stroke-width="2"/>
+  <rect x="50" y="470" width="800" height="40" rx="10" fill="#e67e22"/>
+  <text x="450" y="497" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Smart Pointer Comparison
+  </text>
+  
+  <g transform="translate(70, 525)">
+    <!-- Headers -->
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Type
+    </text>
+    <text x="120" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Ownership
+    </text>
+    <text x="280" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Mutability
+    </text>
+    <text x="440" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Thread-Safe
+    </text>
+    <text x="600" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50">
+      Use Case
+    </text>
+    
+    <!-- Box<T> -->
+    <text x="0" y="30" font-family="Courier New, monospace" font-size="11" fill="#3498db">
+      Box&lt;T&gt;
+    </text>
+    <text x="120" y="30" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Single
+    </text>
+    <text x="280" y="30" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Compile-time
+    </text>
+    <text x="440" y="30" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      N/A
+    </text>
+    <text x="600" y="30" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Heap allocation
+    </text>
+    
+    <!-- Rc<T> -->
+    <text x="0" y="60" font-family="Courier New, monospace" font-size="11" fill="#27ae60">
+      Rc&lt;T&gt;
+    </text>
+    <text x="120" y="60" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Multiple
+    </text>
+    <text x="280" y="60" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Immutable
+    </text>
+    <text x="440" y="60" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      No
+    </text>
+    <text x="600" y="60" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Shared ownership
+    </text>
+    
+    <!-- RefCell<T> -->
+    <text x="0" y="90" font-family="Courier New, monospace" font-size="11" fill="#9b59b6">
+      RefCell&lt;T&gt;
+    </text>
+    <text x="120" y="90" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Single
+    </text>
+    <text x="280" y="90" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Runtime checks
+    </text>
+    <text x="440" y="90" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      No
+    </text>
+    <text x="600" y="90" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Interior mutability
+    </text>
+    
+    <!-- Arc<T> -->
+    <text x="0" y="120" font-family="Courier New, monospace" font-size="11" fill="#e74c3c">
+      Arc&lt;T&gt;
+    </text>
+    <text x="120" y="120" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Multiple
+    </text>
+    <text x="280" y="120" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Immutable
+    </text>
+    <text x="440" y="120" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Yes
+    </text>
+    <text x="600" y="120" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Threaded sharing
+    </text>
+    
+    <!-- Common Combo -->
+    <text x="0" y="150" font-family="Courier New, monospace" font-size="11" fill="#f39c12">
+      Rc&lt;RefCell&lt;T&gt;&gt;
+    </text>
+    <text x="120" y="150" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Multiple
+    </text>
+    <text x="280" y="150" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Runtime checks
+    </text>
+    <text x="440" y="150" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      No
+    </text>
+    <text x="600" y="150" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+      Shared mutability
+    </text>
+  </g>
+  
+  <!-- Key Points -->
+  <text x="450" y="690" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+    💡 Heap allocation • Reference counting • Interior mutability • Thread safety
+  </text>
+  
+  <!-- Watermark -->
+  <text x="850" y="693" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+</svg>

@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    Struct Types in Rust
+  </text>
+  
+  <!-- Named Structs -->
+  <g transform="translate(50, 70)">
+    <rect width="250" height="220" rx="10" fill="white" stroke="#3498db" stroke-width="3"/>
+    <rect width="250" height="45" rx="10" fill="#3498db"/>
+    <text x="125" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Named Structs
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="60" width="220" height="130" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      struct User {
+    </text>
+    <text x="35" y="100" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      username: String,
+    </text>
+    <text x="35" y="120" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      email: String,
+    </text>
+    <text x="35" y="140" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      active: bool,
+    </text>
+    <text x="25" y="160" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      }
+    </text>
+    
+    <!-- Features -->
+    <text x="125" y="210" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      ✓ Named fields
+    </text>
+  </g>
+  
+  <!-- Tuple Structs -->
+  <g transform="translate(325, 70)">
+    <rect width="250" height="220" rx="10" fill="white" stroke="#27ae60" stroke-width="3"/>
+    <rect width="250" height="45" rx="10" fill="#27ae60"/>
+    <text x="125" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Tuple Structs
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="60" width="220" height="130" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      struct Color(i32, i32, i32);
+    </text>
+    <text x="25" y="110" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      let black = Color(0, 0, 0);
+    </text>
+    <text x="25" y="140" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      println!("{}", black.0);
+    </text>
+    
+    <!-- Features -->
+    <text x="125" y="210" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      ✓ Indexed fields (0, 1, 2...)
+    </text>
+  </g>
+  
+  <!-- Unit-like Structs -->
+  <g transform="translate(600, 70)">
+    <rect width="250" height="220" rx="10" fill="white" stroke="#e74c3c" stroke-width="3"/>
+    <rect width="250" height="45" rx="10" fill="#e74c3c"/>
+    <text x="125" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      Unit-like Structs
+    </text>
+    
+    <!-- Code example -->
+    <rect x="15" y="60" width="220" height="130" rx="5" fill="#ecf0f1"/>
+    <text x="25" y="80" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      struct AlwaysEqual;
+    </text>
+    <text x="25" y="110" font-family="Courier New, monospace" font-size="12" fill="#2c3e50">
+      let subject = AlwaysEqual;
+    </text>
+    
+    <!-- Features -->
+    <text x="125" y="210" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      ✓ No fields
+    </text>
+  </g>
+  
+  <!-- Detailed Example: Named Struct -->
+  <rect x="50" y="320" width="800" height="250" rx="10" fill="white" stroke="#34495e" stroke-width="2"/>
+  <rect x="50" y="320" width="800" height="40" rx="10" fill="#34495e"/>
+  <text x="450" y="347" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Named Struct Memory Layout
+  </text>
+  
+  <!-- Stack representation -->
+  <g transform="translate(70, 375)">
+    <text x="0" y="15" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Stack:
+    </text>
+    
+    <rect x="0" y="25" width="350" height="170" rx="8" fill="#d5f4e6" stroke="#27ae60" stroke-width="2"/>
+    
+    <text x="175" y="50" font-family="Courier New, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#27ae60">
+      user: User
+    </text>
+    
+    <rect x="20" y="60" width="310" height="125" rx="5" fill="white"/>
+    
+    <text x="30" y="80" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      username: String
+    </text>
+    <text x="250" y="80" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      (ptr, len, cap)
+    </text>
+    
+    <line x1="20" y1="90" x2="330" y2="90" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="30" y="110" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      email: String
+    </text>
+    <text x="250" y="110" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      (ptr, len, cap)
+    </text>
+    
+    <line x1="20" y1="120" x2="330" y2="120" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="30" y="140" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      active: bool
+    </text>
+    <text x="250" y="140" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      1 byte
+    </text>
+    
+    <line x1="20" y1="150" x2="330" y2="150" stroke="#bdc3c7" stroke-width="1"/>
+    
+    <text x="30" y="170" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+      sign_in_count: u64
+    </text>
+    <text x="250" y="170" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">
+      8 bytes
+    </text>
+  </g>
+  
+  <!-- Heap representation -->
+  <g transform="translate(470, 375)">
+    <text x="0" y="15" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Heap:
+    </text>
+    
+    <rect x="0" y="25" width="350" height="80" rx="8" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+    
+    <text x="175" y="50" font-family="Courier New, monospace" font-size="13" text-anchor="middle" fill="#2c3e50">
+      "alice@example.com"
+    </text>
+    <text x="175" y="70" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      email data
+    </text>
+    
+    <rect x="0" y="115" width="350" height="80" rx="8" fill="#fff5f5" stroke="#e74c3c" stroke-width="2"/>
+    
+    <text x="175" y="140" font-family="Courier New, monospace" font-size="13" text-anchor="middle" fill="#2c3e50">
+      "alice123"
+    </text>
+    <text x="175" y="160" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7f8c8d">
+      username data
+    </text>
+  </g>
+  
+  <!-- Arrows -->
+  <path d="M 330 415 L 470 445" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+  <path d="M 330 445 L 470 545" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+  
+  <!-- Watermark -->
+  <text x="850" y="593" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#95a5a6">
+    8gwifi.org/tutorials
+  </text>
+  
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e74c3c"/>
+    </marker>
+  </defs>
+</svg>
