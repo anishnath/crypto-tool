@@ -1,0 +1,117 @@
+<svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="circleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rectGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="triGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F57C00;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/></filter>
+  </defs>
+  
+  <rect width="900" height="500" fill="#f8f9fa"/>
+  
+  <text x="450" y="30" font-family="Arial" font-size="22" font-weight="bold" text-anchor="middle" fill="#333">
+    Discriminated Unions (Tagged Unions)
+  </text>
+  
+  <!-- Circle Type -->
+  <rect x="50" y="70" width="250" height="120" rx="8" fill="white" stroke="#4CAF50" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="50" y="70" width="250" height="40" rx="8" fill="url(#circleGrad)"/>
+  <text x="175" y="97" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Circle
+  </text>
+  <text x="70" y="125" font-family="Courier New" font-size="12" fill="#4CAF50" font-weight="bold">
+    kind: "circle"
+  </text>
+  <text x="70" y="145" font-family="Courier New" font-size="11" fill="#333">
+    radius: number
+  </text>
+  <text x="70" y="170" font-family="Arial" font-size="10" fill="#666" font-style="italic">
+    Discriminant property
+  </text>
+  
+  <!-- Rectangle Type -->
+  <rect x="325" y="70" width="250" height="120" rx="8" fill="white" stroke="#2196F3" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="325" y="70" width="250" height="40" rx="8" fill="url(#rectGrad)"/>
+  <text x="450" y="97" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Rectangle
+  </text>
+  <text x="345" y="125" font-family="Courier New" font-size="12" fill="#2196F3" font-weight="bold">
+    kind: "rectangle"
+  </text>
+  <text x="345" y="145" font-family="Courier New" font-size="11" fill="#333">
+    width: number
+  </text>
+  <text x="345" y="165" font-family="Courier New" font-size="11" fill="#333">
+    height: number
+  </text>
+  
+  <!-- Triangle Type -->
+  <rect x="600" y="70" width="250" height="120" rx="8" fill="white" stroke="#FF9800" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="600" y="70" width="250" height="40" rx="8" fill="url(#triGrad)"/>
+  <text x="725" y="97" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Triangle
+  </text>
+  <text x="620" y="125" font-family="Courier New" font-size="12" fill="#FF9800" font-weight="bold">
+    kind: "triangle"
+  </text>
+  <text x="620" y="145" font-family="Courier New" font-size="11" fill="#333">
+    base: number
+  </text>
+  <text x="620" y="165" font-family="Courier New" font-size="11" fill="#333">
+    height: number
+  </text>
+  
+  <!-- Union Arrow -->
+  <text x="450" y="220" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#666">
+    type Shape = Circle | Rectangle | Triangle
+  </text>
+  
+  <!-- Pattern Matching Box -->
+  <rect x="150" y="250" width="600" height="220" rx="8" fill="white" stroke="#9C27B0" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="150" y="250" width="600" height="40" rx="8" fill="#9C27B0"/>
+  <text x="450" y="277" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Pattern Matching with switch
+  </text>
+  
+  <text x="170" y="310" font-family="Courier New" font-size="11" fill="#333">
+    function calculateArea(shape: Shape): number {
+  </text>
+  <text x="190" y="330" font-family="Courier New" font-size="11" fill="#333">
+    switch (shape.kind) {
+  </text>
+  
+  <text x="210" y="350" font-family="Courier New" font-size="11" fill="#4CAF50">
+    case "circle":
+  </text>
+  <text x="230" y="370" font-family="Courier New" font-size="11" fill="#666">
+    return Math.PI * shape.radius ** 2;
+  </text>
+  
+  <text x="210" y="390" font-family="Courier New" font-size="11" fill="#2196F3">
+    case "rectangle":
+  </text>
+  <text x="230" y="410" font-family="Courier New" font-size="11" fill="#666">
+    return shape.width * shape.height;
+  </text>
+  
+  <text x="210" y="430" font-family="Courier New" font-size="11" fill="#FF9800">
+    case "triangle":
+  </text>
+  <text x="230" y="450" font-family="Courier New" font-size="11" fill="#666">
+    return (shape.base * shape.height) / 2;
+  </text>
+  
+  <text x="190" y="465" font-family="Courier New" font-size="11" fill="#333">
+    }
+  </text>
+  
+  <text x="850" y="490" font-family="Arial" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

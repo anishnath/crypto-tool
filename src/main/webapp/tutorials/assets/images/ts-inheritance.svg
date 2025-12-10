@@ -1,0 +1,81 @@
+<svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="parentGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3178C6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#235A97;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="childGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <rect width="700" height="500" fill="#f8f9fa"/>
+  
+  <text x="350" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">
+    TypeScript Inheritance
+  </text>
+  
+  <!-- Parent Class -->
+  <rect x="225" y="60" width="250" height="140" rx="8" fill="white" stroke="#3178C6" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="225" y="60" width="250" height="40" rx="8" fill="url(#parentGradient)"/>
+  <text x="350" y="87" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Animal
+  </text>
+  
+  <text x="245" y="125" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + nameAnimal: string
+  </text>
+  <text x="245" y="145" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + constructor(nameAnimal)
+  </text>
+  <text x="245" y="165" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + makeSound(): void
+  </text>
+  <text x="245" y="185" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + move(): void
+  </text>
+  
+  <!-- Inheritance Arrow -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4CAF50" />
+    </marker>
+  </defs>
+  <line x1="350" y1="200" x2="350" y2="250" stroke="#4CAF50" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+  <text x="370" y="230" font-family="Arial, sans-serif" font-size="12" fill="#4CAF50" font-weight="bold">
+    extends
+  </text>
+  
+  <!-- Child Class -->
+  <rect x="225" y="260" width="250" height="180" rx="8" fill="white" stroke="#4CAF50" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="225" y="260" width="250" height="40" rx="8" fill="url(#childGradient)"/>
+  <text x="350" y="287" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+    Dog
+  </text>
+  
+  <text x="245" y="320" font-family="Arial, sans-serif" font-size="11" fill="#999" font-style="italic">
+    Inherited:
+  </text>
+  <text x="245" y="340" font-family="Courier New, monospace" font-size="11" fill="#999">
+    + nameAnimal: string
+  </text>
+  <text x="245" y="360" font-family="Courier New, monospace" font-size="11" fill="#999">
+    + makeSound(): void
+  </text>
+  
+  <text x="245" y="385" font-family="Arial, sans-serif" font-size="11" fill="#333" font-style="italic">
+    Own:
+  </text>
+  <text x="245" y="405" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + breed: string
+  </text>
+  <text x="245" y="425" font-family="Courier New, monospace" font-size="11" fill="#333">
+    + bark(): void
+  </text>
+  
+  <text x="650" y="490" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

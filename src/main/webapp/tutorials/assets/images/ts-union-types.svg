@@ -1,0 +1,37 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="unionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3178C6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#235A97;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/></filter>
+  </defs>
+  <rect width="800" height="450" fill="#f8f9fa"/>
+  <text x="400" y="35" font-family="Arial" font-size="22" font-weight="bold" text-anchor="middle" fill="#333">Union Types (OR Logic)</text>
+  
+  <!-- Type 1 -->
+  <circle cx="250" cy="220" r="120" fill="#3178C6" opacity="0.3" filter="url(#shadow)"/>
+  <text x="250" y="180" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#3178C6">string</text>
+  <text x="250" y="210" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">"hello"</text>
+  <text x="250" y="230" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">"world"</text>
+  <text x="250" y="250" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">"typescript"</text>
+  
+  <!-- Type 2 -->
+  <circle cx="550" cy="220" r="120" fill="#4CAF50" opacity="0.3" filter="url(#shadow)"/>
+  <text x="550" y="180" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#4CAF50">number</text>
+  <text x="550" y="210" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">42</text>
+  <text x="550" y="230" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">3.14</text>
+  <text x="550" y="250" font-family="Courier New" font-size="12" text-anchor="middle" fill="#333">-10</text>
+  
+  <!-- Union Symbol -->
+  <text x="400" y="230" font-family="Arial" font-size="48" font-weight="bold" text-anchor="middle" fill="#FF9800">|</text>
+  <text x="400" y="270" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">OR</text>
+  
+  <!-- Code Example -->
+  <rect x="150" y="360" width="500" height="70" rx="8" fill="white" stroke="#3178C6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="400" y="385" font-family="Courier New" font-size="13" text-anchor="middle" fill="#333" font-weight="bold">type ID = string | number;</text>
+  <text x="400" y="410" font-family="Courier New" font-size="12" text-anchor="middle" fill="#666">let userId: ID = "user123";  // ✓ OK</text>
+  <text x="400" y="425" font-family="Courier New" font-size="12" text-anchor="middle" fill="#666">let productId: ID = 456;      // ✓ OK</text>
+  
+  <text x="750" y="440" font-family="Arial" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>

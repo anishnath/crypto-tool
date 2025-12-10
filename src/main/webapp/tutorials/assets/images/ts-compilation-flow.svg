@@ -1,0 +1,103 @@
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tsBoxGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3178C6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#235A97;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="jsBoxGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F7DF1E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5CD1A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="checkGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666"/>
+    </marker>
+  </defs>
+  
+  <rect width="900" height="400" fill="#f8f9fa"/>
+  
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#333">
+    TypeScript Compilation Process
+  </text>
+  
+  <rect x="30" y="100" width="140" height="100" rx="8" fill="url(#tsBoxGradient)" filter="url(#shadow)"/>
+  <text x="100" y="135" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">
+    .ts File
+  </text>
+  <text x="100" y="155" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#e0f2ff">
+    TypeScript
+  </text>
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#e0f2ff">
+    Source Code
+  </text>
+  
+  <path d="M 170 150 L 220 150" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="195" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">tsc</text>
+  
+  <rect x="220" y="100" width="140" height="100" rx="8" fill="url(#checkGradient)" filter="url(#shadow)"/>
+  <text x="290" y="130" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">
+    Type Checking
+  </text>
+  <circle cx="290" cy="165" r="18" fill="#fff" opacity="0.3"/>
+  <path d="M 280 165 L 287 172 L 300 157" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M 360 150 L 410 150" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="385" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">compile</text>
+  
+  <rect x="410" y="100" width="140" height="100" rx="8" fill="url(#jsBoxGradient)" filter="url(#shadow)"/>
+  <text x="480" y="135" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">
+    .js File
+  </text>
+  <text x="480" y="155" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">
+    JavaScript
+  </text>
+  <text x="480" y="170" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">
+    Output
+  </text>
+  
+  <path d="M 550 150 L 600 150" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="575" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#666">runs in</text>
+  
+  <rect x="600" y="100" width="170" height="100" rx="8" fill="#607D8B" filter="url(#shadow)"/>
+  <text x="685" y="130" font-family="Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" fill="#fff">
+    Browser / Node.js
+  </text>
+  <text x="685" y="155" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#CFD8DC">
+    JavaScript Runtime
+  </text>
+  <text x="685" y="175" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#CFD8DC">
+    Environment
+  </text>
+  
+  <text x="100" y="230" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#3178C6">
+    1. Write
+  </text>
+  <text x="290" y="230" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#4CAF50">
+    2. Check
+  </text>
+  <text x="480" y="230" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#F7DF1E">
+    3. Compile
+  </text>
+  <text x="685" y="230" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#607D8B">
+    4. Execute
+  </text>
+  
+  <rect x="50" y="280" width="800" height="80" rx="5" fill="#e3f2fd" stroke="#3178C6" stroke-width="1"/>
+  <text x="450" y="305" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#333">
+    How It Works:
+  </text>
+  <text x="450" y="325" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555">
+    TypeScript compiler (tsc) checks your code for type errors, then transpiles it to JavaScript.
+  </text>
+  <text x="450" y="343" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555">
+    The resulting JavaScript runs in any browser or Node.js environment - no TypeScript runtime needed!
+  </text>
+  
+  <text x="850" y="390" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="end">8gwifi.org/tutorials</text>
+</svg>
