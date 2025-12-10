@@ -6,15 +6,15 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Free Coding Tutorials 2025 - Learn HTML, CSS, JavaScript, Python | 8gwifi.org</title>
+            <title>Free Coding Tutorials 2025 - Learn HTML, CSS, JavaScript, Python, Rust | 8gwifi.org</title>
             <meta name="description"
-                content="[Free] Learn to code with interactive tutorials. Master HTML, CSS, JavaScript, TypeScript, Python, Bash, Java with live editor. No signup. Practice instantly in browser. 50+ lessons.">
+                content="[Free] Learn to code with interactive tutorials. Master HTML, CSS, JavaScript, TypeScript, Python, Bash, Java, Rust with live editor. No signup. Practice instantly in browser. 80+ lessons.">
             <link rel="canonical" href="https://8gwifi.org/tutorials/">
 
             <%-- Open Graph Tags --%>
                 <meta property="og:title" content="Free Programming Tutorials - Learn to Code Online | 8gwifi.org">
                 <meta property="og:description"
-                    content="Interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java by doing - not just reading.">
+                    content="Interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java, Rust by doing - not just reading.">
                 <meta property="og:type" content="website">
                 <meta property="og:url" content="https://8gwifi.org/tutorials/">
                 <meta property="og:site_name" content="8gwifi.org">
@@ -36,7 +36,7 @@
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "name": "Free Programming Tutorials - Learn to Code Online",
-        "description": "Free interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java from scratch.",
+        "description": "Free interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java, Rust from scratch.",
         "url": "https://8gwifi.org/tutorials/",
         "mainEntity": {
             "@type": "ItemList",
@@ -89,6 +89,13 @@
                     "name": "TypeScript Tutorial",
                     "description": "JavaScript with types. Build large-scale, type-safe applications.",
                     "url": "https://8gwifi.org/tutorials/typescript/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 8,
+                    "name": "Rust Tutorial",
+                    "description": "Memory-safe systems programming. Performance without compromise.",
+                    "url": "https://8gwifi.org/tutorials/rust/"
                 }
             ]
         },
@@ -221,6 +228,17 @@
                 "description": "Learn TypeScript for type-safe JavaScript. Build large-scale applications.",
                 "provider": {"@type": "Organization", "name": "8gwifi.org"},
                 "url": "https://8gwifi.org/tutorials/typescript/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 8,
+                "name": "Rust Tutorial for Beginners",
+                "description": "Learn Rust for memory-safe systems programming. Performance without compromise.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/rust/",
                 "educationalLevel": "Beginner",
                 "isAccessibleForFree": true,
                 "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
@@ -732,6 +750,23 @@
                                                             <span
                                                                 class="tutorial-card-badge badge-available">Available</span>
                                                         </a>
+
+                                                        <%-- Rust Tutorial --%>
+                                                            <a href="<%=request.getContextPath()%>/tutorials/rust/"
+                                                                class="tutorial-card">
+                                                                <div class="tutorial-card-header">
+                                                                    <div class="tutorial-card-icon"
+                                                                        style="background: #dea58415;">
+                                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/rust-logo.svg"
+                                                                            alt="Rust">
+                                                                    </div>
+                                                                    <h3>Rust</h3>
+                                                                </div>
+                                                                <p>Memory-safe systems programming. Performance without
+                                                                    compromise.</p>
+                                                                <span
+                                                                    class="tutorial-card-badge badge-available">Available</span>
+                                                            </a>
                         </section>
 
                         <div class="divider">
@@ -756,20 +791,7 @@
                                         <span class="tutorial-card-badge badge-coming">Coming Soon</span>
                                     </div>
 
-                                    <%-- Rust Tutorial --%>
-                                        <div class="tutorial-card disabled">
-                                            <div class="tutorial-card-header">
-                                                <div class="tutorial-card-icon" style="background: #dea58415;">
-                                                    <img src="<%=request.getContextPath()%>/tutorials/assets/images/rust-logo.svg"
-                                                        alt="Rust">
-                                                </div>
-                                                <h3>Rust</h3>
-                                            </div>
-                                            <p>Memory-safe systems programming. Performance without compromise.</p>
-                                            <span class="tutorial-card-badge badge-coming">Coming Soon</span>
-                                        </div>
-
-                                        <%-- C++ Tutorial --%>
+                                    <%-- C++ Tutorial --%>
                                             <div class="tutorial-card disabled">
                                                 <div class="tutorial-card-header">
                                                     <div class="tutorial-card-icon" style="background: #00599c15;">
@@ -899,6 +921,20 @@
                                             <a href="<%=request.getContextPath()%>/tutorials/python/">Python</a>
                                         </div>
                                         <span class="path-badge">Career Growth</span>
+                                    </div>
+
+                                    <div class="path-card">
+                                        <div class="path-header">
+                                            <span class="path-icon">⚙️</span>
+                                            <h3>Systems Programmer</h3>
+                                        </div>
+                                        <p>Build fast, safe systems software</p>
+                                        <div class="path-steps">
+                                            <a href="<%=request.getContextPath()%>/tutorials/rust/">Rust</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/bash/">Bash</a>
+                                        </div>
+                                        <span class="path-badge">High Performance</span>
                                     </div>
                                 </section>
 
