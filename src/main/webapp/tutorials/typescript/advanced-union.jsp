@@ -43,6 +43,11 @@
             "name": "8gwifi.org",
             "url": "https://8gwifi.org"
         },
+        "isPartOf": {
+            "@type": "Course",
+            "name": "Typescript Tutorial",
+            "url": "https://8gwifi.org/tutorials/typescript/"
+        },
         "datePublished": "2025-12-10",
         "dateModified": "2025-12-10"
     }

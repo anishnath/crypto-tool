@@ -21,8 +21,37 @@
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/codemirror.min.css">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/monokai.min.css">
             <script>(function () { var t = localStorage.getItem('tutorial-theme'); if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.setAttribute('data-theme', 'dark'); } })()</script>
-            <script
-                type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"TypeScript Classes","learningResourceType":"tutorial","educationalLevel":"Beginner","timeRequired":"PT25M","isPartOf":{"@type":"Course","name":"TypeScript Tutorial","url":"https://8gwifi.org/tutorials/typescript/"}}</script>
+
+            <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LearningResource",
+        "name": "TypeScript Classes",
+        "description": "Master TypeScript classes with properties, methods, and constructors. Build object-oriented applications with type safety.",
+        "learningResourceType": "tutorial",
+        "educationalLevel": "Beginner",
+        "timeRequired": "PT25M",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": {
+            "@type": "Organization",
+            "name": "8gwifi.org",
+            "url": "https://8gwifi.org"
+        },
+        "isPartOf": {
+            "@type": "Course",
+            "name": "TypeScript Tutorial",
+            "url": "https://8gwifi.org/tutorials/typescript/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "8gwifi.org",
+            "url": "https://8gwifi.org"
+        },
+        "datePublished": "2025-12-10",
+        "dateModified": "2025-12-10"
+    }
+    </script>
             <%@ include file="../tutorial-ads.jsp" %>
                 <%@ include file="../tutorial-analytics.jsp" %>
         </head>
