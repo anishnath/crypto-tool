@@ -202,6 +202,34 @@
     transition: transform 0.3s ease-in-out;
 }
 
+/* Desktop: Position sticky footer ad to the right side */
+@media (min-width: 992px) {
+    .ad-sticky-footer {
+        left: auto; /* Remove left: 0 */
+        right: 20px; /* Position from right edge */
+        width: 728px; /* Standard leaderboard width */
+        max-width: 728px;
+        border-radius: var(--radius-lg, 0.75rem) var(--radius-lg, 0.75rem) 0 0;
+        border-left: 1px solid var(--border, #e2e8f0);
+        border-right: 1px solid var(--border, #e2e8f0);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Ensure close button is easily accessible on desktop */
+    .ad-sticky-footer .ad-close {
+        top: var(--space-2, 0.5rem);
+        right: var(--space-2, 0.5rem);
+        background: var(--bg-primary, #ffffff);
+        border: 1px solid var(--border, #e2e8f0);
+        z-index: 2;
+    }
+    
+    .ad-sticky-footer .ad-close:hover {
+        background: var(--bg-secondary, #f8fafc);
+        border-color: var(--primary, #6366f1);
+    }
+}
+
 .ad-sticky-footer.ad-visible {
     display: block;
     transform: translateY(0);
