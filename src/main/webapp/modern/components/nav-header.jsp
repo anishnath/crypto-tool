@@ -8,9 +8,12 @@
     <div class="nav-container">
         <!-- Logo -->
         <a href="index.jsp" class="nav-logo" aria-label="8gwifi.org Home">
-            <img src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/logo.png"
+            <img src="<%=request.getContextPath()%>/images/site/logo.svg"
                  alt="8gwifi.org logo" 
-                 onerror="this.style.display='none'">
+                 width="32"
+                 height="32"
+                 loading="eager"
+                 onerror="this.onerror=null;this.src='<%=request.getContextPath()%>/images/site/logo.png';this.width=32;this.height=32;">
             <span>8gwifi.org</span>
         </a>
 
