@@ -204,29 +204,34 @@
     <!-- Ad System Initialization -->
     <%@ include file="modern/ads/ad-init.jsp" %>
 
-    <!-- jQuery - Deferred for LCP (will load async) -->
+    <!-- jQuery - Load early but async for LCP optimization -->
     <script>
-        // Load jQuery asynchronously after page load to improve LCP
+        // Load jQuery asynchronously - improved loading strategy
         (function() {
+            // Try to load jQuery immediately but asynchronously
             var script = document.createElement('script');
             script.src = 'https://code.jquery.com/jquery-3.6.0.min.js';
             script.integrity = 'sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=';
             script.crossOrigin = 'anonymous';
-            script.async = true;
+            script.async = false; // Load synchronously but non-blocking for parser
+            
             script.onerror = function() {
+                console.warn('jQuery CDN failed, trying fallback...');
                 var fallback = document.createElement('script');
-                fallback.src = 'https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/js/jquery.min.js';
-                fallback.async = true;
+                fallback.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js';
+                fallback.async = false;
+                fallback.onerror = function() {
+                    console.warn('Google CDN failed, trying jsDelivr...');
+                    var finalFallback = document.createElement('script');
+                    finalFallback.src = 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js';
+                    finalFallback.async = false;
+                    document.head.appendChild(finalFallback);
+                };
                 document.head.appendChild(fallback);
             };
-            // Load after DOMContentLoaded for better LCP
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(function() { document.head.appendChild(script); }, 100);
-                });
-            } else {
-                setTimeout(function() { document.head.appendChild(script); }, 100);
-            }
+            
+            // Append immediately (will load async due to browser behavior)
+            document.head.appendChild(script);
         })();
 </script>
 
@@ -1270,6 +1275,9 @@
     <!-- Sticky Footer Ad -->
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 
+    <!-- Right Column Ads (Desktop Only - Uses empty space on right, stacked vertical) -->
+    <%@ include file="modern/ads/ad-right-sidebar.jsp" %>
+    
     <!-- Floating Right Ad (Desktop Only) -->
     <%@ include file="modern/ads/ad-floating-right.jsp" %>
 

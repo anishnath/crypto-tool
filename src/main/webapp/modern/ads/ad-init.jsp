@@ -86,14 +86,36 @@
         }
         
         // ============================================
-        // AD SLOT 4: Floating Right Rectangle (Desktop Only, > 1200px)
+        // AD SLOT 4: Floating Right Rectangle (Desktop Only, > 1300px)
         // Placement: Fixed right side, appears after scroll
         // ============================================
-        if (width >= 1200) {
+        if (width >= 1300) {
             // Desktop Wide: 336x280 or 300x250 Rectangle
             googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_floating_desktop', 
                 [[336,280],[300,250],[250,250]], 
                 'site_8gwifi_org_floating_right')
+                .addService(googletag.pubads());
+        }
+        
+        // ============================================
+        // AD SLOT 5: Right Sidebar Top (Desktop Only, > 1300px)
+        // Placement: Fixed right sidebar, top position
+        // ============================================
+        if (width >= 1300) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_top', 
+                [[336,280],[300,250],[250,250]], 
+                'site_8gwifi_org_sidebar_top')
+                .addService(googletag.pubads());
+        }
+        
+        // ============================================
+        // AD SLOT 6: Right Sidebar Mid (Desktop Only, > 1300px)
+        // Placement: Fixed right sidebar, middle position (after scroll)
+        // ============================================
+        if (width >= 1300) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_mid', 
+                [[336,280],[300,250],[250,250]], 
+                'site_8gwifi_org_sidebar_mid')
                 .addService(googletag.pubads());
         }
         

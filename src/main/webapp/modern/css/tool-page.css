@@ -50,6 +50,23 @@
 .tool-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+/* Optimize for larger screens without ads */
+@media (min-width: 1300px) {
+    .tool-header-container,
+    .tool-container {
+        max-width: min(1200px, calc(100vw - 3rem));
+    }
+}
+
+@media (min-width: 1600px) {
+    .tool-header-container,
+    .tool-container {
+        max-width: 1400px; /* Use more space on very large screens */
+    }
 }
 
 .tool-header-content {
@@ -107,6 +124,21 @@
 .tool-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+/* Optimize for larger screens */
+@media (min-width: 1300px) {
+    .tool-container {
+        max-width: min(1200px, calc(100vw - 3rem));
+    }
+}
+
+@media (min-width: 1600px) {
+    .tool-container {
+        max-width: 1400px; /* Use more space on very large screens */
+    }
 }
 
 /* Tool Form Card */

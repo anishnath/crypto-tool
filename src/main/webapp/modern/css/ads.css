@@ -59,7 +59,7 @@
         margin-left: auto;
         margin-right: auto;
     }
-    
+
     .ad-in-content-mid {
         min-height: 280px; /* Accommodate 336x280 */
         max-width: 336px;
@@ -73,7 +73,7 @@
     .ad-in-content-top {
         min-height: 90px;
     }
-    
+
     .ad-in-content-mid {
         min-height: 250px;
         max-width: 300px;
@@ -88,11 +88,11 @@
         margin: var(--space-6, 1.5rem) 0;
         padding: var(--space-3, 0.75rem);
     }
-    
+
     .ad-in-content-top {
         min-height: 100px;
     }
-    
+
     .ad-in-content-mid {
         min-height: 250px;
         width: 100%;
@@ -106,10 +106,10 @@
 
 .ad-floating-right {
     position: fixed;
-    right: 20px;
+    right: 10px;  /* Moved closer to edge */
     top: 100px;
-    width: 336px;
-    max-width: 336px;
+    width: 300px;  /* Slightly smaller to fit better */
+    max-width: 300px;
     z-index: 100;
     display: none;
     opacity: 0;
@@ -125,48 +125,47 @@
     transform: translateX(0);
 }
 
-/* Hide on mobile/tablet */
-@media (max-width: 1199px) {
+/* Hide on mobile/tablet and smaller desktop screens */
+@media (max-width: 1299px) {
     .ad-floating-right {
         display: none !important;
     }
 }
 
-/* Desktop wide screens only */
-@media (min-width: 1200px) {
+/* Desktop - only show on screens 1300px+ */
+/* Hide floating right ad when right column ads are present */
+@media (min-width: 1300px) {
+    body.has-right-ads .ad-floating-right {
+        display: none !important;
+    }
+    
     .ad-floating-right {
-        min-height: 280px;
+        min-height: 250px;
         bottom: 120px; /* Above sticky footer */
-    }
-    
-    /* Adjust content width to prevent overlap with floating ad (only for non-tool pages) */
-    main:not(.tool-main) {
-        max-width: calc(100% - 380px); /* 336px ad + 44px spacing */
-        margin-right: auto;
-        margin-left: auto;
-        padding-right: 2rem;
-        padding-left: 2rem;
-    }
-    
-    /* Tool pages keep their max-width constraint */
-    .tool-main .tool-container {
-        max-width: 1200px;
+        right: 15px;  /* Safe distance from edge */
     }
 }
 
-/* Extra wide screens - position floating ad better */
-@media (min-width: 1400px) {
+/* Large screens - more breathing room */
+@media (min-width: 1440px) {
     .ad-floating-right {
-        right: calc((100vw - 1200px) / 2 + 20px);
+        right: 25px;
+        width: 336px;  /* Can show full size on larger screens */
+        max-width: 336px;
     }
-    
-    /* Extra wide: full content width, floating ad positioned relative to content */
-    main:not(.tool-main) {
-        max-width: 1200px;
-        margin-right: auto;
-        margin-left: auto;
-        padding-right: 2rem;
-        padding-left: 2rem;
+}
+
+/* Extra large screens - optimal positioning */
+@media (min-width: 1600px) {
+    .ad-floating-right {
+        right: 40px;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+    .ad-floating-right {
+        right: 60px;
     }
 }
 
@@ -175,6 +174,125 @@
     top: var(--space-2, 0.5rem);
     right: var(--space-2, 0.5rem);
     z-index: 2;
+}
+
+/* ============================================
+   RIGHT COLUMN AD CONTAINER (Desktop Only)
+   Uses empty space on the right side
+   ============================================ */
+
+.ad-right-column {
+    position: fixed;
+    right: 10px;
+    top: 100px;
+    width: 300px;
+    max-width: 300px;
+    z-index: 99;
+    display: none;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Show right column ads on large desktop screens */
+@media (min-width: 1300px) {
+    .ad-right-column {
+        display: flex;
+    }
+}
+
+/* Large screens - full size */
+@media (min-width: 1440px) {
+    .ad-right-column {
+        width: 336px;
+        max-width: 336px;
+        right: 15px;
+    }
+}
+
+/* Extra large screens */
+@media (min-width: 1600px) {
+    .ad-right-column {
+        right: 25px;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+    .ad-right-column {
+        right: 40px;
+    }
+}
+
+/* Right Column Ad Slot */
+.ad-right-slot {
+    position: relative;
+    min-height: 250px;
+    display: none;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin: 0;
+}
+
+.ad-right-slot.ad-visible {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Optimize content width when right column ads are present */
+/* Content uses available space, ads positioned absolutely */
+@media (min-width: 1300px) {
+    body.has-right-ads .tool-container,
+    body.has-right-ads .tool-header-container {
+        max-width: calc(100vw - 380px) !important; /* Viewport - ads (300px) - spacing (80px) */
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    body.has-right-ads .breadcrumbs-container {
+        max-width: calc(100vw - 380px) !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (min-width: 1440px) {
+    body.has-right-ads .tool-container,
+    body.has-right-ads .tool-header-container {
+        max-width: calc(100vw - 420px) !important; /* Viewport - ads (336px) - spacing (84px) */
+    }
+    
+    body.has-right-ads .breadcrumbs-container {
+        max-width: calc(100vw - 420px) !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    body.has-right-ads .tool-container,
+    body.has-right-ads .tool-header-container {
+        max-width: 1400px !important; /* Fixed max on very large screens */
+    }
+    
+    body.has-right-ads .breadcrumbs-container {
+        max-width: 1400px !important;
+    }
+}
+
+/* Right column ad close button */
+.ad-right-slot .ad-close {
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 2;
+    background: var(--bg-primary, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.ad-right-slot .ad-close:hover {
+    background: var(--bg-secondary, #f8fafc);
+    border-color: var(--primary, #6366f1);
 }
 
 /* ============================================
@@ -214,7 +332,7 @@
         border-right: 1px solid var(--border, #e2e8f0);
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
     }
-    
+
     /* Ensure close button is easily accessible on desktop */
     .ad-sticky-footer .ad-close {
         top: var(--space-2, 0.5rem);
@@ -223,7 +341,7 @@
         border: 1px solid var(--border, #e2e8f0);
         z-index: 2;
     }
-    
+
     .ad-sticky-footer .ad-close:hover {
         background: var(--bg-secondary, #f8fafc);
         border-color: var(--primary, #6366f1);
@@ -280,7 +398,7 @@
     .ad-sticky-footer {
         padding: var(--space-2, 0.5rem);
     }
-    
+
     .ad-close {
         width: 36px;
         height: 36px;
@@ -318,18 +436,18 @@
         max-width: 970px;
         margin: 0 auto;
     }
-    
+
     #site_8gwifi_org_anchor_responsive {
         min-height: 90px;
         max-width: 970px;
         margin: 0 auto;
     }
-    
+
     #site_8gwifi_org_rectangle_responsive {
         min-height: 280px;
         max-width: 336px;
     }
-    
+
     #site_8gwifi_org_floating_right {
         min-height: 280px;
         max-width: 336px;
@@ -349,11 +467,11 @@
     #site_8gwifi_org_leaderboard_responsive {
         min-height: 100px;
     }
-    
+
     #site_8gwifi_org_rectangle_responsive {
         min-height: 250px;
     }
-    
+
     #site_8gwifi_org_anchor_responsive {
         min-height: 100px;
     }
@@ -363,9 +481,7 @@
    ACCESSIBILITY
    ============================================ */
 
-.ad-container[aria-label] {
-    /* Ensure screen readers can identify ads */
-}
+/* Accessibility: aria-label ensures screen readers can identify ads */
 
 .ad-container:focus-within {
     outline: 2px solid var(--primary, #6366f1);
@@ -381,17 +497,17 @@
         background: var(--bg-secondary, #1e293b);
         border-color: var(--border, #334155);
     }
-    
+
     .ad-label {
         color: var(--text-muted, #94a3b8);
     }
-    
+
     .ad-sticky-footer {
         background: var(--bg-primary, #0f172a);
         border-top-color: var(--border, #334155);
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
     }
-    
+
     .ad-close:hover {
         background: var(--bg-secondary, #1e293b);
         color: var(--text-primary, #f1f5f9);
@@ -452,4 +568,3 @@
         padding-bottom: 31.25%; /* 100px / 320px ≈ 31.25% */
     }
 }
-
