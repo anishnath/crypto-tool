@@ -110,7 +110,7 @@
         
         // ============================================
         // AD SLOT 6: Right Sidebar Mid (Desktop Only, > 1300px)
-        // Placement: Fixed right sidebar, middle position (after scroll)
+        // Placement: Fixed right sidebar, middle position (displays immediately)
         // ============================================
         if (width >= 1300) {
             googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_mid', 

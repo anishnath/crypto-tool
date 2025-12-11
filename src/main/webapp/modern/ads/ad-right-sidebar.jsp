@@ -63,7 +63,7 @@
         </div>
     </div>
     
-    <!-- Ad Slot 2: Middle Rectangle (appears after scroll) -->
+    <!-- Ad Slot 2: Middle Rectangle -->
     <div class="ad-container ad-right-slot" 
          id="site_8gwifi_org_sidebar_mid"
          data-ad-type="right-column-rectangle"
@@ -75,22 +75,20 @@
         
         <div class="ad-content">
             <script>
-                // Load mid sidebar ad after scroll
+                // Load mid sidebar ad immediately (with slight delay after top ad)
                 (function() {
                     var adContainer = document.getElementById('site_8gwifi_org_sidebar_mid');
                     if (!adContainer) return;
                     
                     var dismissed = localStorage.getItem('rightAdMidDismissed') === 'true';
-                    var hasScrolled = false;
-                    
                     if (dismissed) {
                         adContainer.style.display = 'none';
                         return;
                     }
                     
-                    function checkScroll() {
-                        if (!hasScrolled && window.pageYOffset >= 500 && window.innerWidth >= 1300) {
-                            hasScrolled = true;
+                    // Show after page load on desktop (small delay after top ad loads)
+                    if (window.innerWidth >= 1300) {
+                        setTimeout(function() {
                             adContainer.classList.add('ad-visible');
                             document.body.classList.add('has-right-ads');
                             
@@ -99,12 +97,7 @@
                                     googletag.display('site_8gwifi_org_sidebar_mid');
                                 });
                             }
-                        }
-                    }
-                    
-                    window.addEventListener('scroll', checkScroll);
-                    if (window.pageYOffset >= 500 && window.innerWidth >= 1300) {
-                        checkScroll();
+                        }, 1000); // 1 seconds - slightly after top ad (2 seconds)
                     }
                 })();
             </script>
