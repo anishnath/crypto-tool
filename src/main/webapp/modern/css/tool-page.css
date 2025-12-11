@@ -13,11 +13,25 @@
 
 .breadcrumbs-container {
     max-width: 1400px;
-    margin: 0 auto;
+    margin-left: 1.5rem; /* Left-aligned with small left margin */
+    margin-right: auto;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
+}
+
+/* Adjust breadcrumbs for larger screens */
+@media (min-width: 1300px) {
+    .breadcrumbs-container {
+        max-width: min(1400px, calc(100vw - 380px - 3rem));
+    }
+}
+
+@media (min-width: 1440px) {
+    .breadcrumbs-container {
+        max-width: min(1400px, calc(100vw - 420px - 3rem));
+    }
 }
 
 .breadcrumbs a {
@@ -49,7 +63,8 @@
 .tool-header-container,
 .tool-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin-left: 1.5rem; /* Left-aligned with small left margin */
+    margin-right: auto;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }
@@ -58,7 +73,16 @@
 @media (min-width: 1300px) {
     .tool-header-container,
     .tool-container {
-        max-width: min(1200px, calc(100vw - 3rem));
+        max-width: min(1200px, calc(100vw - 380px - 3rem)); /* Reserve space for right ads */
+        margin-left: 1.5rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    .tool-header-container,
+    .tool-container {
+        max-width: min(1200px, calc(100vw - 420px - 3rem)); /* Reserve space for larger right ads */
+        margin-left: 1.5rem;
     }
 }
 
@@ -66,6 +90,7 @@
     .tool-header-container,
     .tool-container {
         max-width: 1400px; /* Use more space on very large screens */
+        margin-left: 1.5rem;
     }
 }
 
@@ -121,9 +146,41 @@
     min-height: 60vh;
 }
 
+/* Dedicated Layout Wrapper for Content + Ads (Desktop only) */
+@media (min-width: 1300px) {
+    .tool-main {
+        display: grid;
+        grid-template-columns: 1fr 356px; /* Content + Ad column (336px + 20px gap) */
+        gap: 1.5rem;
+        padding: 3rem 1.5rem;
+        max-width: 100vw;
+        margin: 0;
+    }
+    
+    /* Content area in dedicated left column */
+    .tool-main > .tool-container {
+        grid-column: 1;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* Ad column - dedicated right space (grid column 2) */
+    .tool-main > .ad-right-column {
+        grid-column: 2;
+    }
+}
+
+@media (min-width: 1440px) {
+    .tool-main {
+        grid-template-columns: 1fr 372px; /* 336px + 36px gap */
+    }
+}
+
 .tool-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin-left: 1.5rem; /* Left-aligned with small left margin */
+    margin-right: auto;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }
@@ -131,13 +188,22 @@
 /* Optimize for larger screens */
 @media (min-width: 1300px) {
     .tool-container {
-        max-width: min(1200px, calc(100vw - 3rem));
+        max-width: min(1200px, calc(100vw - 380px - 3rem)); /* Reserve space for right ads */
+        margin-left: 1.5rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    .tool-container {
+        max-width: min(1200px, calc(100vw - 420px - 3rem)); /* Reserve space for larger right ads */
+        margin-left: 1.5rem;
     }
 }
 
 @media (min-width: 1600px) {
     .tool-container {
         max-width: 1400px; /* Use more space on very large screens */
+        margin-left: 1.5rem;
     }
 }
 

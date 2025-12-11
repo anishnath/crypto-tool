@@ -190,6 +190,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/cipher-tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
     
     <!-- Non-Critical CSS - Deferred -->
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -931,6 +932,7 @@
 
     <!-- Main Content -->
     <main class="tool-main">
+        <!-- Content Area (Left Column) -->
         <div class="tool-container">
 
             <!-- In-Content Ad (Top) -->
@@ -1255,6 +1257,11 @@
             </jsp:include>
 
 					</div>
+        </div>
+        
+        <!-- Ad Column (Right Column - Desktop Only) -->
+        <!-- Grid column 2: Ads will be positioned here via CSS grid -->
+        <%@ include file="modern/ads/ad-right-sidebar.jsp" %>
     </main>
 
     <!-- Support Section -->
@@ -1274,11 +1281,8 @@
 
     <!-- Sticky Footer Ad -->
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-
-    <!-- Right Column Ads (Desktop Only - Uses empty space on right, stacked vertical) -->
-    <%@ include file="modern/ads/ad-right-sidebar.jsp" %>
     
-    <!-- Floating Right Ad (Desktop Only) -->
+    <!-- Floating Right Ad (Desktop Only - Fallback when grid not used) -->
     <%@ include file="modern/ads/ad-floating-right.jsp" %>
 
     <!-- Analytics - Loaded at end of body for LCP optimization -->

@@ -41,7 +41,8 @@
         
         .tool-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin-left: 1.5rem; /* Left-aligned with small left margin */
+            margin-right: auto;
             padding-left: 1.5rem;
             padding-right: 1.5rem;
         }
@@ -49,13 +50,22 @@
         /* Optimize for larger screens */
         @media (min-width: 1300px) {
             .tool-container {
-                max-width: min(1200px, calc(100vw - 3rem));
+                max-width: min(1200px, calc(100vw - 380px - 3rem)); /* Reserve space for right ads */
+                margin-left: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1440px) {
+            .tool-container {
+                max-width: min(1200px, calc(100vw - 420px - 3rem)); /* Reserve space for larger right ads */
+                margin-left: 1.5rem;
             }
         }
         
         @media (min-width: 1600px) {
             .tool-container {
                 max-width: 1400px; /* Use more space on very large screens */
+                margin-left: 1.5rem;
             }
         }
         

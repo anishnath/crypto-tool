@@ -194,9 +194,31 @@
 }
 
 /* Show right column ads on large desktop screens */
+/* Use dedicated grid column when available, otherwise fixed positioning */
 @media (min-width: 1300px) {
     .ad-right-column {
         display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    /* If inside tool-main grid, use grid positioning instead of fixed */
+    .tool-main > .ad-right-column {
+        position: sticky;
+        top: 100px; /* Sticky within grid column */
+        align-self: start;
+        width: 100%;
+        max-width: 336px;
+        height: fit-content;
+    }
+    
+    /* Fallback: Fixed positioning when not in grid */
+    .ad-right-column:not(.tool-main > *) {
+        position: fixed;
+        right: 10px;
+        top: 100px;
+        width: 300px;
+        max-width: 300px;
     }
 }
 
@@ -206,6 +228,11 @@
         width: 336px;
         max-width: 336px;
         right: 15px;
+    }
+    
+    /* In grid layout, use full width of grid column */
+    .tool-main .ad-right-column {
+        max-width: 100%;
     }
 }
 
@@ -240,44 +267,47 @@
     transform: translateX(0);
 }
 
-/* Optimize content width when right column ads are present */
-/* Content uses available space, ads positioned absolutely */
+/* Content width optimization - now handled by grid layout */
+/* Fallback for when grid is not used */
 @media (min-width: 1300px) {
-    body.has-right-ads .tool-container,
+    /* Grid layout handles spacing automatically, but keep fallback for compatibility */
+    .tool-main:not(:has(.ad-right-column)) .tool-container {
+        max-width: calc(100vw - 3rem);
+    }
+    
+    /* Header and breadcrumbs still use calculated widths */
     body.has-right-ads .tool-header-container {
-        max-width: calc(100vw - 380px) !important; /* Viewport - ads (300px) - spacing (80px) */
-        margin-left: auto;
-        margin-right: auto;
+        max-width: calc(100vw - 380px - 3rem) !important;
+        margin-left: 1.5rem !important;
+        margin-right: auto !important;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
     }
     
     body.has-right-ads .breadcrumbs-container {
-        max-width: calc(100vw - 380px) !important;
-        margin-left: auto;
-        margin-right: auto;
+        max-width: calc(100vw - 380px - 3rem) !important;
+        margin-left: 1.5rem !important;
+        margin-right: auto !important;
     }
 }
 
 @media (min-width: 1440px) {
-    body.has-right-ads .tool-container,
     body.has-right-ads .tool-header-container {
-        max-width: calc(100vw - 420px) !important; /* Viewport - ads (336px) - spacing (84px) */
+        max-width: calc(100vw - 420px - 3rem) !important;
     }
     
     body.has-right-ads .breadcrumbs-container {
-        max-width: calc(100vw - 420px) !important;
+        max-width: calc(100vw - 420px - 3rem) !important;
     }
 }
 
 @media (min-width: 1600px) {
-    body.has-right-ads .tool-container,
     body.has-right-ads .tool-header-container {
-        max-width: 1400px !important; /* Fixed max on very large screens */
+        max-width: min(1400px, calc(100vw - 420px - 3rem)) !important;
     }
     
     body.has-right-ads .breadcrumbs-container {
-        max-width: 1400px !important;
+        max-width: min(1400px, calc(100vw - 420px - 3rem)) !important;
     }
 }
 
