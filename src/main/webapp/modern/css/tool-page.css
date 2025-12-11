@@ -1,0 +1,281 @@
+/**
+ * Modern Tool Page Styles
+ * Consistent styling for all tool pages
+ */
+
+/* Breadcrumbs */
+.breadcrumbs {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    margin-top: 72px;
+}
+
+.breadcrumbs-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.breadcrumbs a {
+    color: var(--primary, #6366f1);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.breadcrumbs a:hover {
+    opacity: 0.8;
+}
+
+.breadcrumb-separator {
+    color: var(--text-muted, #94a3b8);
+}
+
+.breadcrumb-current {
+    color: var(--text-secondary, #475569);
+    font-weight: 500;
+}
+
+/* Tool Header */
+.tool-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3rem 1.5rem;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.tool-header-container,
+.tool-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tool-header-content {
+    text-align: center;
+}
+
+.tool-page-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-primary, #0f172a);
+    letter-spacing: -0.02em;
+}
+
+.tool-page-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary, #475569);
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+}
+
+.tool-meta {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.tool-category-badge,
+.tool-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.tool-category-badge {
+    background: var(--primary, #6366f1);
+    color: white;
+}
+
+.tool-badge {
+    background: var(--bg-secondary, #f8fafc);
+    color: var(--text-secondary, #475569);
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+/* Tool Main */
+.tool-main {
+    padding: 3rem 1.5rem;
+    min-height: 60vh;
+}
+
+.tool-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Tool Form Card */
+.tool-form-card {
+    background: white;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tool-form-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary, #0f172a);
+}
+
+/* Tool Input Groups */
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary, #0f172a);
+    font-size: 0.9375rem;
+}
+
+.input-field,
+.textarea-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    transition: all 0.2s;
+    background: var(--bg-primary, #ffffff);
+    color: var(--text-primary, #0f172a);
+}
+
+.textarea-field {
+    min-height: 150px;
+    resize: vertical;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.input-field:focus,
+.textarea-field:focus {
+    outline: none;
+    border-color: var(--primary, #6366f1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Tool Buttons */
+.btn-primary,
+.btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--primary, #6366f1);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark, #4f46e5);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary, #f8fafc);
+    color: var(--text-secondary, #475569);
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary, #f1f5f9);
+    border-color: var(--primary, #6366f1);
+    color: var(--primary, #6366f1);
+}
+
+/* Results Card */
+.results-card {
+    background: white;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.results-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.result-output {
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.9375rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+    color: var(--text-primary, #0f172a);
+}
+
+/* Dark Mode */
+[data-theme="dark"] .breadcrumbs {
+    background: var(--bg-secondary, #1e293b);
+    border-bottom-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .tool-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+[data-theme="dark"] .tool-form-card,
+[data-theme="dark"] .results-card {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .input-field,
+[data-theme="dark"] .textarea-field,
+[data-theme="dark"] .result-output {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #334155);
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .breadcrumbs {
+        margin-top: 64px;
+        padding: 0.75rem 1rem;
+    }
+
+    .tool-header {
+        padding: 2rem 1rem;
+    }
+
+    .tool-main {
+        padding: 2rem 1rem;
+    }
+
+    .tool-form-card {
+        padding: 1.5rem;
+    }
+}
+

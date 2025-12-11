@@ -1,0 +1,427 @@
+/**
+ * Modern Ad System Styling
+ * Mobile-first, non-intrusive ad placement
+ */
+
+/* ============================================
+   AD CONTAINER BASE STYLES
+   ============================================ */
+
+.ad-container {
+    position: relative;
+    background: var(--bg-primary, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-left: 3px solid var(--primary, #6366f1);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: var(--space-4, 1rem);
+    margin: var(--space-8, 2rem) 0;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ad-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Ad Label (Required by AdSense) */
+.ad-label {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-2, 0.5rem);
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ============================================
+   IN-CONTENT AD STYLES
+   ============================================ */
+
+.ad-in-content-top,
+.ad-in-content-mid {
+    min-height: 90px; /* Prevent layout shift */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Desktop: Leaderboard */
+@media (min-width: 992px) {
+    .ad-in-content-top {
+        min-height: 90px;
+        padding: var(--space-6, 1.5rem);
+        max-width: 970px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .ad-in-content-mid {
+        min-height: 280px; /* Accommodate 336x280 */
+        max-width: 336px;
+        margin-left: auto;
+        margin-right: 0; /* Right-align for better visibility */
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    .ad-in-content-top {
+        min-height: 90px;
+    }
+    
+    .ad-in-content-mid {
+        min-height: 250px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .ad-container {
+        margin: var(--space-6, 1.5rem) 0;
+        padding: var(--space-3, 0.75rem);
+    }
+    
+    .ad-in-content-top {
+        min-height: 100px;
+    }
+    
+    .ad-in-content-mid {
+        min-height: 250px;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* ============================================
+   FLOATING RIGHT AD STYLES (Desktop Only)
+   ============================================ */
+
+.ad-floating-right {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    width: 336px;
+    max-width: 336px;
+    z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateX(20px);
+    margin: 0;
+    border-radius: var(--radius-lg, 0.75rem);
+}
+
+.ad-floating-right.ad-visible {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Hide on mobile/tablet */
+@media (max-width: 1199px) {
+    .ad-floating-right {
+        display: none !important;
+    }
+}
+
+/* Desktop wide screens only */
+@media (min-width: 1200px) {
+    .ad-floating-right {
+        min-height: 280px;
+        bottom: 120px; /* Above sticky footer */
+    }
+    
+    /* Adjust content width to prevent overlap with floating ad (only for non-tool pages) */
+    main:not(.tool-main) {
+        max-width: calc(100% - 380px); /* 336px ad + 44px spacing */
+        margin-right: auto;
+        margin-left: auto;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+    
+    /* Tool pages keep their max-width constraint */
+    .tool-main .tool-container {
+        max-width: 1200px;
+    }
+}
+
+/* Extra wide screens - position floating ad better */
+@media (min-width: 1400px) {
+    .ad-floating-right {
+        right: calc((100vw - 1200px) / 2 + 20px);
+    }
+    
+    /* Extra wide: full content width, floating ad positioned relative to content */
+    main:not(.tool-main) {
+        max-width: 1200px;
+        margin-right: auto;
+        margin-left: auto;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+}
+
+/* Close button for floating ad */
+.ad-floating-right .ad-close {
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 2;
+}
+
+/* ============================================
+   STICKY FOOTER AD STYLES
+   ============================================ */
+
+.ad-sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed, 1030);
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-top: 1px solid var(--border, #e2e8f0);
+    background: var(--bg-primary, #ffffff);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    min-height: auto;
+    display: none; /* Hidden by default, shown via JS */
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.ad-sticky-footer.ad-visible {
+    display: block;
+    transform: translateY(0);
+}
+
+.ad-sticky-footer.ad-collapsed {
+    transform: translateY(80%);
+}
+
+.ad-sticky-footer.ad-dismissed {
+    transform: translateY(100%);
+}
+
+/* Close Button */
+.ad-close {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    background: none;
+    border: none;
+    font-size: var(--text-xl, 1.25rem);
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    padding: var(--space-1, 0.25rem);
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full, 9999px);
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+.ad-close:hover {
+    background: var(--bg-secondary, #f8fafc);
+    color: var(--text-primary, #0f172a);
+}
+
+.ad-close:focus {
+    outline: 2px solid var(--primary, #6366f1);
+    outline-offset: 2px;
+}
+
+/* Mobile Sticky Footer */
+@media (max-width: 767px) {
+    .ad-sticky-footer {
+        padding: var(--space-2, 0.5rem);
+    }
+    
+    .ad-close {
+        width: 36px;
+        height: 36px;
+        font-size: var(--text-2xl, 1.5rem);
+    }
+}
+
+/* ============================================
+   AD CONTENT WRAPPER
+   ============================================ */
+
+.ad-content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ============================================
+   RESPONSIVE AD SIZING
+   ============================================ */
+
+/* Ensure ads don't overflow */
+.ad-container ins {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Desktop: Center and constrain leaderboard */
+@media (min-width: 992px) {
+    #site_8gwifi_org_leaderboard_responsive {
+        min-height: 90px;
+        max-width: 970px;
+        margin: 0 auto;
+    }
+    
+    #site_8gwifi_org_anchor_responsive {
+        min-height: 90px;
+        max-width: 970px;
+        margin: 0 auto;
+    }
+    
+    #site_8gwifi_org_rectangle_responsive {
+        min-height: 280px;
+        max-width: 336px;
+    }
+    
+    #site_8gwifi_org_floating_right {
+        min-height: 280px;
+        max-width: 336px;
+    }
+}
+
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    #site_8gwifi_org_leaderboard_responsive {
+        min-height: 90px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    #site_8gwifi_org_leaderboard_responsive {
+        min-height: 100px;
+    }
+    
+    #site_8gwifi_org_rectangle_responsive {
+        min-height: 250px;
+    }
+    
+    #site_8gwifi_org_anchor_responsive {
+        min-height: 100px;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.ad-container[aria-label] {
+    /* Ensure screen readers can identify ads */
+}
+
+.ad-container:focus-within {
+    outline: 2px solid var(--primary, #6366f1);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .ad-container {
+        background: var(--bg-secondary, #1e293b);
+        border-color: var(--border, #334155);
+    }
+    
+    .ad-label {
+        color: var(--text-muted, #94a3b8);
+    }
+    
+    .ad-sticky-footer {
+        background: var(--bg-primary, #0f172a);
+        border-top-color: var(--border, #334155);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .ad-close:hover {
+        background: var(--bg-secondary, #1e293b);
+        color: var(--text-primary, #f1f5f9);
+    }
+}
+
+[data-theme="dark"] .ad-container {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ad-sticky-footer {
+    background: var(--bg-primary, #0f172a);
+    border-top-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ad-floating-right {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ad-floating-right .ad-close:hover {
+    background: var(--bg-tertiary, #334155);
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .ad-container {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Prevent layout shift while ads load */
+.ad-container::before {
+    content: '';
+    display: block;
+    width: 100%;
+}
+
+.ad-in-content-top::before {
+    padding-bottom: 12.4%; /* 90px / 728px ≈ 12.4% */
+}
+
+.ad-in-content-mid::before {
+    padding-bottom: 83.3%; /* 250px / 300px ≈ 83.3% */
+}
+
+@media (max-width: 991px) {
+    .ad-in-content-top::before {
+        padding-bottom: 31.25%; /* 100px / 320px ≈ 31.25% */
+    }
+}
+

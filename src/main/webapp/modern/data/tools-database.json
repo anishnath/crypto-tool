@@ -1,0 +1,2344 @@
+{
+  "version": "1.3",
+  "lastUpdated": "2025-12-11T11:23:37.010Z",
+  "totalTools": 331,
+  "categories": [
+    "Blockchain & Crypto",
+    "Chemistry",
+    "Cryptography",
+    "Data Converters",
+    "DevOps & Infrastructure",
+    "Developer Tools",
+    "Document Tools",
+    "File Sharing",
+    "Finance",
+    "Health",
+    "Legal & Compliance",
+    "Machine Learning",
+    "Mathematics",
+    "Media Tools",
+    "Network Tools",
+    "Physics",
+    "Productivity",
+    "Security & PKI"
+  ],
+  "tools": [
+    {
+      "name": "BIP39 Mnemonic Generator",
+      "url": "bip39-mnemonic.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "bip39 mnemonic generator blockchain & crypto",
+      "description": "BIP39 Mnemonic Generator - Free online blockchain & crypto tool"
+    },
+    {
+      "name": "Ethereum Gas Fee Estimator",
+      "url": "ethereum-gas-fee-estimator.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "ethereum gas fee estimator blockchain & crypto",
+      "description": "Ethereum Gas Fee Estimator - Free online blockchain & crypto tool"
+    },
+    {
+      "name": "HD Wallet Generator",
+      "url": "hdwallet.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "wallet generator blockchain & crypto",
+      "description": "HD Wallet Generator - Free online blockchain & crypto tool"
+    },
+    {
+      "name": "libp2p/devp2p Key Gen",
+      "url": "eth-keygen.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "libp2p devp2p key gen blockchain & crypto",
+      "description": "libp2p/devp2p Key Gen - Free online blockchain & crypto tool"
+    },
+    {
+      "name": "Degrees ↔ Radians",
+      "url": "degree-radian.jsp",
+      "category": "Mathematics",
+      "keywords": "degrees radians mathematics",
+      "description": "Degrees ↔ Radians - Free online mathematics tool"
+    },
+    {
+      "name": "Apache htpasswd Generator",
+      "url": "htpasswd.jsp",
+      "category": "Cryptography",
+      "keywords": "apache htpasswd generator cryptography",
+      "description": "Apache htpasswd Generator - Free online cryptography tool"
+    },
+    {
+      "name": "Argon2 Hash",
+      "url": "argon2.jsp",
+      "category": "Cryptography",
+      "keywords": "argon2 hash cryptography",
+      "description": "Argon2 Hash - Free online cryptography tool"
+    },
+    {
+      "name": "ASN.1 Decoder",
+      "url": "asn1-decoder.jsp",
+      "category": "Cryptography",
+      "keywords": "asn decoder cryptography",
+      "description": "ASN.1 Decoder - Free online cryptography tool"
+    },
+    {
+      "name": "BCrypt Hash",
+      "url": "bccrypt.jsp",
+      "category": "Cryptography",
+      "keywords": "bcrypt hash cryptography",
+      "description": "BCrypt Hash - Free online cryptography tool"
+    },
+    {
+      "name": "Cipher Encryption/Decryption",
+      "url": "CipherFunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "cipher encryption decryption cryptography",
+      "description": "Cipher Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "Classical Ciphers",
+      "url": "ciph.jsp",
+      "category": "Cryptography",
+      "keywords": "classical ciphers cryptography",
+      "description": "Classical Ciphers - Free online cryptography tool"
+    },
+    {
+      "name": "Diffie-Hellman Key Exchange",
+      "url": "DHFunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "diffie hellman key exchange cryptography",
+      "description": "Diffie-Hellman Key Exchange - Free online cryptography tool"
+    },
+    {
+      "name": "DSA Keygen, Sign, Verify",
+      "url": "dsafunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "dsa keygen sign verify cryptography",
+      "description": "DSA Keygen, Sign, Verify - Free online cryptography tool"
+    },
+    {
+      "name": "EC Encryption/Decryption",
+      "url": "ecfunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "encryption decryption cryptography",
+      "description": "EC Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "EC Sign/Verify Message",
+      "url": "ecsignverify.jsp",
+      "category": "Cryptography",
+      "keywords": "sign verify message cryptography",
+      "description": "EC Sign/Verify Message - Free online cryptography tool"
+    },
+    {
+      "name": "ElGamal Encryption/Decryption",
+      "url": "elgamalfunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "elgamal encryption decryption cryptography",
+      "description": "ElGamal Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "Fernet Encryption/Decryption",
+      "url": "fernet.jsp",
+      "category": "Cryptography",
+      "keywords": "fernet encryption decryption cryptography",
+      "description": "Fernet Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "File Encryption/Decryption",
+      "url": "file-encrypt.jsp",
+      "category": "Cryptography",
+      "keywords": "file encryption decryption cryptography",
+      "description": "File Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "Hash Generator (File)",
+      "url": "mdfile.jsp",
+      "category": "Cryptography",
+      "keywords": "hash generator file cryptography",
+      "description": "Hash Generator (File) - Free online cryptography tool"
+    },
+    {
+      "name": "Hash Generator (Text)",
+      "url": "MessageDigest.jsp",
+      "category": "Cryptography",
+      "keywords": "hash generator text cryptography",
+      "description": "Hash Generator (Text) - Free online cryptography tool"
+    },
+    {
+      "name": "HMAC Generator",
+      "url": "hmacgen.jsp",
+      "category": "Cryptography",
+      "keywords": "hmac generator cryptography",
+      "description": "HMAC Generator - Free online cryptography tool"
+    },
+    {
+      "name": "Libsodium SecretBox",
+      "url": "naclaead.jsp",
+      "category": "Cryptography",
+      "keywords": "libsodium secretbox cryptography",
+      "description": "Libsodium SecretBox - Free online cryptography tool"
+    },
+    {
+      "name": "NaCl Box",
+      "url": "naclboxenc.jsp",
+      "category": "Cryptography",
+      "keywords": "nacl box cryptography",
+      "description": "NaCl Box - Free online cryptography tool"
+    },
+    {
+      "name": "NaCl SealedBox",
+      "url": "naclsealboxenc.jsp",
+      "category": "Cryptography",
+      "keywords": "nacl sealedbox cryptography",
+      "description": "NaCl SealedBox - Free online cryptography tool"
+    },
+    {
+      "name": "NaCl XSalsa20",
+      "url": "naclencdec.jsp",
+      "category": "Cryptography",
+      "keywords": "nacl xsalsa20 cryptography",
+      "description": "NaCl XSalsa20 - Free online cryptography tool"
+    },
+    {
+      "name": "NTRU Encryption/Decryption",
+      "url": "ntrufunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "ntru encryption decryption cryptography",
+      "description": "NTRU Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "PBE (PBKDF) Encryption/Decryption",
+      "url": "pbe.jsp",
+      "category": "Cryptography",
+      "keywords": "pbe pbkdf encryption decryption cryptography",
+      "description": "PBE (PBKDF) Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "PBKDF2 Derive Key",
+      "url": "pbkdf.jsp",
+      "category": "Cryptography",
+      "keywords": "pbkdf2 derive key cryptography",
+      "description": "PBKDF2 Derive Key - Free online cryptography tool"
+    },
+    {
+      "name": "RSA Encryption/Decryption",
+      "url": "rsafunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "rsa encryption decryption cryptography",
+      "description": "RSA Encryption/Decryption - Free online cryptography tool"
+    },
+    {
+      "name": "RSA Signature/Verification",
+      "url": "rsasignverifyfunctions.jsp",
+      "category": "Cryptography",
+      "keywords": "rsa signature verification cryptography",
+      "description": "RSA Signature/Verification - Free online cryptography tool"
+    },
+    {
+      "name": "SCrypt Hash",
+      "url": "scrypt.jsp",
+      "category": "Cryptography",
+      "keywords": "scrypt hash cryptography",
+      "description": "SCrypt Hash - Free online cryptography tool"
+    },
+    {
+      "name": "Steganography Tool",
+      "url": "steganography-tool.jsp",
+      "category": "Cryptography",
+      "keywords": "steganography tool cryptography",
+      "description": "Steganography Tool - Free online cryptography tool"
+    },
+    {
+      "name": "TOTP/HOTP Generator",
+      "url": "totp-hotp.jsp",
+      "category": "Cryptography",
+      "keywords": "totp hotp generator cryptography",
+      "description": "TOTP/HOTP Generator - Free online cryptography tool"
+    },
+    {
+      "name": "Base Converter (All Bases)",
+      "url": "base-converter.jsp",
+      "category": "Data Converters",
+      "keywords": "base converter all bases data converters",
+      "description": "Base Converter (All Bases) - Free online data converters tool"
+    },
+    {
+      "name": "Base32 Encode/Decode",
+      "url": "Base32Functions.jsp",
+      "category": "Data Converters",
+      "keywords": "base32 encode decode data converters",
+      "description": "Base32 Encode/Decode - Free online data converters tool"
+    },
+    {
+      "name": "Base58 Encode/Decode",
+      "url": "Base58Functions.jsp",
+      "category": "Data Converters",
+      "keywords": "base58 encode decode data converters",
+      "description": "Base58 Encode/Decode - Free online data converters tool"
+    },
+    {
+      "name": "Base64 Encode/Decode",
+      "url": "Base64Functions.jsp",
+      "category": "Data Converters",
+      "keywords": "base64 encode decode data converters",
+      "description": "Base64 Encode/Decode - Free online data converters tool"
+    },
+    {
+      "name": "Base64 Image Converter",
+      "url": "base64image.jsp",
+      "category": "Data Converters",
+      "keywords": "base64 image converter data converters",
+      "description": "Base64 Image Converter - Free online data converters tool"
+    },
+    {
+      "name": "Base64 To Hex",
+      "url": "base64Hex.jsp",
+      "category": "Data Converters",
+      "keywords": "base64 hex data converters",
+      "description": "Base64 To Hex - Free online data converters tool"
+    },
+    {
+      "name": "CSV-2-JSON",
+      "url": "csv-2-json.jsp",
+      "category": "Data Converters",
+      "keywords": "csv json data converters",
+      "description": "CSV-2-JSON - Free online data converters tool"
+    },
+    {
+      "name": "Hex/String Conversion",
+      "url": "HexToStringFunctions.jsp",
+      "category": "Data Converters",
+      "keywords": "hex string conversion data converters",
+      "description": "Hex/String Conversion - Free online data converters tool"
+    },
+    {
+      "name": "Hexdump Generator",
+      "url": "hexdump.jsp",
+      "category": "Data Converters",
+      "keywords": "hexdump generator data converters",
+      "description": "Hexdump Generator - Free online data converters tool"
+    },
+    {
+      "name": "HTML to Markdown",
+      "url": "html-to-markdown.jsp",
+      "category": "Data Converters",
+      "keywords": "html markdown data converters",
+      "description": "HTML to Markdown - Free online data converters tool"
+    },
+    {
+      "name": "JSON Beautifier",
+      "url": "jsonparser.jsp",
+      "category": "Data Converters",
+      "keywords": "json beautifier data converters",
+      "description": "JSON Beautifier - Free online data converters tool"
+    },
+    {
+      "name": "JSON-2-CSV",
+      "url": "json-2-csv.jsp",
+      "category": "Data Converters",
+      "keywords": "json csv data converters",
+      "description": "JSON-2-CSV - Free online data converters tool"
+    },
+    {
+      "name": "URL Encoders/Decoders",
+      "url": "UrlEncodeDecodeFunctions.jsp",
+      "category": "Data Converters",
+      "keywords": "url encoders decoders data converters",
+      "description": "URL Encoders/Decoders - Free online data converters tool"
+    },
+    {
+      "name": "XML-2-JSON/YAML",
+      "url": "xml2json.jsp",
+      "category": "Data Converters",
+      "keywords": "xml json yaml data converters",
+      "description": "XML-2-JSON/YAML - Free online data converters tool"
+    },
+    {
+      "name": "YAML-2-JSON/XML",
+      "url": "yamlparser.jsp",
+      "category": "Data Converters",
+      "keywords": "yaml json xml data converters",
+      "description": "YAML-2-JSON/XML - Free online data converters tool"
+    },
+    {
+      "name": "Compare Text Diff",
+      "url": "diff.jsp",
+      "category": "Developer Tools",
+      "keywords": "compare text diff developer tools",
+      "description": "Compare Text Diff - Free online developer tools tool"
+    },
+    {
+      "name": "Graph-Easy ASCII Diagram Generator",
+      "url": "graph-easy.jsp",
+      "category": "Developer Tools",
+      "keywords": "graph easy ascii diagram generator developer tools",
+      "description": "Graph-Easy ASCII Diagram Generator - Free online developer tools tool"
+    },
+    {
+      "name": "HTML/CSS/JS Editor",
+      "url": "html-code-editor.jsp",
+      "category": "Developer Tools",
+      "keywords": "html css editor developer tools",
+      "description": "HTML/CSS/JS Editor - Free online developer tools tool"
+    },
+    {
+      "name": "Online Compiler (60+ Languages)",
+      "url": "onecompiler.jsp",
+      "category": "Developer Tools",
+      "keywords": "online compiler languages developer tools",
+      "description": "Online Compiler (60+ Languages) - Free online developer tools tool"
+    },
+    {
+      "name": "Random String Generator",
+      "url": "random-string.jsp",
+      "category": "Developer Tools",
+      "keywords": "random string generator developer tools",
+      "description": "Random String Generator - Free online developer tools tool"
+    },
+    {
+      "name": "Regex Tester",
+      "url": "regex.jsp",
+      "category": "Developer Tools",
+      "keywords": "regex tester developer tools",
+      "description": "Regex Tester - Free online developer tools tool"
+    },
+    {
+      "name": "Resume Builder",
+      "url": "resume-builder.jsp",
+      "category": "Developer Tools",
+      "keywords": "resume builder developer tools",
+      "description": "Resume Builder - Free online developer tools tool"
+    },
+    {
+      "name": "Secure Password Generator",
+      "url": "passwdgen.jsp",
+      "category": "Developer Tools",
+      "keywords": "secure password generator developer tools",
+      "description": "Secure Password Generator - Free online developer tools tool"
+    },
+    {
+      "name": "String Functions",
+      "url": "StringFunctions.jsp",
+      "category": "Developer Tools",
+      "keywords": "string functions developer tools",
+      "description": "String Functions - Free online developer tools tool"
+    },
+    {
+      "name": "Typing Speed Test",
+      "url": "typing-speed-test.jsp",
+      "category": "Developer Tools",
+      "keywords": "typing speed test developer tools",
+      "description": "Typing Speed Test - Free online developer tools tool"
+    },
+    {
+      "name": "UUID Generator",
+      "url": "uuid.jsp",
+      "category": "Developer Tools",
+      "keywords": "uuid generator developer tools",
+      "description": "UUID Generator - Free online developer tools tool"
+    },
+    {
+      "name": "Ansible Generator (AWS)",
+      "url": "aws.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "ansible generator aws devops & infrastructure",
+      "description": "Ansible Generator (AWS) - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Apache VirtualHost Generator",
+      "url": "apache-virtualhost-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "apache virtualhost generator devops & infrastructure",
+      "description": "Apache VirtualHost Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "AWS SMTP Password Generator",
+      "url": "aws-smtp.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "aws smtp password generator devops & infrastructure",
+      "description": "AWS SMTP Password Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Chmod Calculator (Permissions)",
+      "url": "chmod-calculator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "chmod calculator permissions devops & infrastructure",
+      "description": "Chmod Calculator (Permissions) - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Compose to Docker Run",
+      "url": "dc2.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "compose docker run devops & infrastructure",
+      "description": "Compose to Docker Run - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Cron Expression Generator",
+      "url": "cron-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "cron expression generator devops & infrastructure",
+      "description": "Cron Expression Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "cURL Builder & HTTP Client",
+      "url": "curl-builder.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "curl builder http client devops & infrastructure",
+      "description": "cURL Builder & HTTP Client - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Docker Compose Generator",
+      "url": "dc.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "docker compose generator devops & infrastructure",
+      "description": "Docker Compose Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Docker Compose to Kubernetes",
+      "url": "kube1.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "docker compose kubernetes devops & infrastructure",
+      "description": "Docker Compose to Kubernetes - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Docker Run to Compose",
+      "url": "dc1.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "docker run compose devops & infrastructure",
+      "description": "Docker Run to Compose - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Dockerfile Generator",
+      "url": "dockerfile-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "dockerfile generator devops & infrastructure",
+      "description": "Dockerfile Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Firewall Rules Generator",
+      "url": "firewall-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "firewall rules generator devops & infrastructure",
+      "description": "Firewall Rules Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "GitLab CI/CD Generator",
+      "url": "gitlab-ci-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "gitlab generator devops & infrastructure",
+      "description": "GitLab CI/CD Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Helm Chart Generator",
+      "url": "helm-chart-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "helm chart generator devops & infrastructure",
+      "description": "Helm Chart Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "InfraMap - Terraform State Visualizer",
+      "url": "inframap.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "inframap terraform state visualizer devops & infrastructure",
+      "description": "InfraMap - Terraform State Visualizer - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Kubernetes RBAC Policy Generator",
+      "url": "rbac-policy-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "kubernetes rbac policy generator devops & infrastructure",
+      "description": "Kubernetes RBAC Policy Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Kubernetes Resource Calculator",
+      "url": "k8s-resource-calculator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "kubernetes resource calculator devops & infrastructure",
+      "description": "Kubernetes Resource Calculator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Kubernetes to Docker Compose",
+      "url": "kube2.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "kubernetes docker compose devops & infrastructure",
+      "description": "Kubernetes to Docker Compose - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Kubernetes YAML Generator",
+      "url": "kube.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "kubernetes yaml generator devops & infrastructure",
+      "description": "Kubernetes YAML Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Load Testing Generator (K6, Locust, JMeter, Gatling)",
+      "url": "load-test-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "load testing generator locust jmeter gatling devops & infrastructure",
+      "description": "Load Testing Generator (K6, Locust, JMeter, Gatling) - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Nginx Config Generator",
+      "url": "nginx-config-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "nginx config generator devops & infrastructure",
+      "description": "Nginx Config Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Prometheus Query Builder",
+      "url": "prometheus-query-builder.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "prometheus query builder devops & infrastructure",
+      "description": "Prometheus Query Builder - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Systemd Service Generator",
+      "url": "systemd-generator.jsp",
+      "category": "DevOps & Infrastructure",
+      "keywords": "systemd service generator devops & infrastructure",
+      "description": "Systemd Service Generator - Free online devops & infrastructure tool"
+    },
+    {
+      "name": "Add Watermark to PDF",
+      "url": "watermark-pdf.jsp",
+      "category": "Document Tools",
+      "keywords": "add watermark pdf document tools",
+      "description": "Add Watermark to PDF - Free online document tools tool"
+    },
+    {
+      "name": "Compress PDF",
+      "url": "compress-pdf.jsp",
+      "category": "Document Tools",
+      "keywords": "compress pdf document tools",
+      "description": "Compress PDF - Free online document tools tool"
+    },
+    {
+      "name": "Crack PDF Password",
+      "url": "crack-pdf-password.jsp",
+      "category": "Document Tools",
+      "keywords": "crack pdf password document tools",
+      "description": "Crack PDF Password - Free online document tools tool"
+    },
+    {
+      "name": "Invoice Generator",
+      "url": "invoice-generator.jsp",
+      "category": "Document Tools",
+      "keywords": "invoice generator document tools",
+      "description": "Invoice Generator - Free online document tools tool"
+    },
+    {
+      "name": "JPG to PDF",
+      "url": "jpg-to-pdf.jsp",
+      "category": "Document Tools",
+      "keywords": "jpg pdf document tools",
+      "description": "JPG to PDF - Free online document tools tool"
+    },
+    {
+      "name": "Merge PDF Files",
+      "url": "merge-pdf.jsp",
+      "category": "Document Tools",
+      "keywords": "merge pdf files document tools",
+      "description": "Merge PDF Files - Free online document tools tool"
+    },
+    {
+      "name": "PDF Password: Remove / Add / Change",
+      "url": "pdf-password.jsp",
+      "category": "Document Tools",
+      "keywords": "pdf password remove add change document tools",
+      "description": "PDF Password: Remove / Add / Change - Free online document tools tool"
+    },
+    {
+      "name": "PDF to Images",
+      "url": "pdf-to-images.jsp",
+      "category": "Document Tools",
+      "keywords": "pdf images document tools",
+      "description": "PDF to Images - Free online document tools tool"
+    },
+    {
+      "name": "PDF to JPG",
+      "url": "pdf-to-jpg.jsp",
+      "category": "Document Tools",
+      "keywords": "pdf jpg document tools",
+      "description": "PDF to JPG - Free online document tools tool"
+    },
+    {
+      "name": "PDF to Word (DOCX)",
+      "url": "pdf-to-word.jsp",
+      "category": "Document Tools",
+      "keywords": "pdf word docx document tools",
+      "description": "PDF to Word (DOCX) - Free online document tools tool"
+    },
+    {
+      "name": "Split PDF",
+      "url": "split-pdf.jsp",
+      "category": "Document Tools",
+      "keywords": "split pdf document tools",
+      "description": "Split PDF - Free online document tools tool"
+    },
+    {
+      "name": "Encrypted Pastebin (E2EE, 24h)",
+      "url": "securebin.jsp",
+      "category": "File Sharing",
+      "keywords": "encrypted pastebin e2ee 24h file sharing",
+      "description": "Encrypted Pastebin (E2EE, 24h) - Free online file sharing tool"
+    },
+    {
+      "name": "Pastebin (Public or Encrypted)",
+      "url": "pastebin.jsp",
+      "category": "File Sharing",
+      "keywords": "pastebin public encrypted file sharing",
+      "description": "Pastebin (Public or Encrypted) - Free online file sharing tool"
+    },
+    {
+      "name": "PGP File Transfer",
+      "url": "pgp-upload.jsp",
+      "category": "File Sharing",
+      "keywords": "pgp file transfer sharing",
+      "description": "PGP File Transfer - Free online file sharing tool"
+    },
+    {
+      "name": "Secure File Transfer (Password Protected)",
+      "url": "share-file.jsp",
+      "category": "File Sharing",
+      "keywords": "secure file transfer password protected sharing",
+      "description": "Secure File Transfer (Password Protected) - Free online file sharing tool"
+    },
+    {
+      "name": "Temporary Email (Disposable)",
+      "url": "temp-email.jsp",
+      "category": "File Sharing",
+      "keywords": "temporary email disposable file sharing",
+      "description": "Temporary Email (Disposable) - Free online file sharing tool"
+    },
+    {
+      "name": "URL Shortener",
+      "url": "short.jsp",
+      "category": "File Sharing",
+      "keywords": "url shortener file sharing",
+      "description": "URL Shortener - Free online file sharing tool"
+    },
+    {
+      "name": "Bitcoin Mining Profit Calculator",
+      "url": "bitcoin-mining-profit-calculator.jsp",
+      "category": "Finance",
+      "keywords": "bitcoin mining profit calculator finance",
+      "description": "Bitcoin Mining Profit Calculator - Free online finance tool"
+    },
+    {
+      "name": "BMI & Ideal Weight Calculator",
+      "url": "bmi-ideal-weight-calculator.jsp",
+      "category": "Finance",
+      "keywords": "bmi ideal weight calculator finance",
+      "description": "BMI & Ideal Weight Calculator - Free online finance tool"
+    },
+    {
+      "name": "Capital Gains Tax Calculator",
+      "url": "capital-gains-tax-calculator.jsp",
+      "category": "Finance",
+      "keywords": "capital gains tax calculator finance",
+      "description": "Capital Gains Tax Calculator - Free online finance tool"
+    },
+    {
+      "name": "College Cost & ROI Calculator",
+      "url": "college-cost-roi-calculator.jsp",
+      "category": "Finance",
+      "keywords": "college cost roi calculator finance",
+      "description": "College Cost & ROI Calculator - Free online finance tool"
+    },
+    {
+      "name": "Compound Interest (Compare)",
+      "url": "cinterest2.jsp",
+      "category": "Finance",
+      "keywords": "compound interest compare finance",
+      "description": "Compound Interest (Compare) - Free online finance tool"
+    },
+    {
+      "name": "Compound Interest (Simple)",
+      "url": "cinterest.jsp",
+      "category": "Finance",
+      "keywords": "compound interest simple finance",
+      "description": "Compound Interest (Simple) - Free online finance tool"
+    },
+    {
+      "name": "Crypto Profit Calculator",
+      "url": "crypto-profit-calculator.jsp",
+      "category": "Finance",
+      "keywords": "crypto profit calculator finance",
+      "description": "Crypto Profit Calculator - Free online finance tool"
+    },
+    {
+      "name": "Crypto Tax Estimator",
+      "url": "crypto-tax-estimator.jsp",
+      "category": "Finance",
+      "keywords": "crypto tax estimator finance",
+      "description": "Crypto Tax Estimator - Free online finance tool"
+    },
+    {
+      "name": "Daily Calorie & Macro Calculator",
+      "url": "calorie-macro-calculator.jsp",
+      "category": "Finance",
+      "keywords": "daily calorie macro calculator finance",
+      "description": "Daily Calorie & Macro Calculator - Free online finance tool"
+    },
+    {
+      "name": "Dividend Reinvestment (DRIP) Calculator",
+      "url": "drip-calculator.jsp",
+      "category": "Finance",
+      "keywords": "dividend reinvestment drip calculator finance",
+      "description": "Dividend Reinvestment (DRIP) Calculator - Free online finance tool"
+    },
+    {
+      "name": "FIRE Calculator",
+      "url": "fire-calculator.jsp",
+      "category": "Finance",
+      "keywords": "fire calculator finance",
+      "description": "FIRE Calculator - Free online finance tool"
+    },
+    {
+      "name": "Home Loan EMI Calculator",
+      "url": "emi.jsp",
+      "category": "Finance",
+      "keywords": "home loan emi calculator finance",
+      "description": "Home Loan EMI Calculator - Free online finance tool"
+    },
+    {
+      "name": "IBAN Validator & Generator",
+      "url": "iban-validator.jsp",
+      "category": "Finance",
+      "keywords": "iban validator generator finance",
+      "description": "IBAN Validator & Generator - Free online finance tool"
+    },
+    {
+      "name": "Income Tax Calculator",
+      "url": "tax-calculator.jsp",
+      "category": "Finance",
+      "keywords": "income tax calculator finance",
+      "description": "Income Tax Calculator - Free online finance tool"
+    },
+    {
+      "name": "Lease vs Buy Calculator",
+      "url": "lease-vs-buy-calculator.jsp",
+      "category": "Finance",
+      "keywords": "lease buy calculator finance",
+      "description": "Lease vs Buy Calculator - Free online finance tool"
+    },
+    {
+      "name": "Mortgage Affordability Calculator",
+      "url": "mortgage-affordability-calculator.jsp",
+      "category": "Finance",
+      "keywords": "mortgage affordability calculator finance",
+      "description": "Mortgage Affordability Calculator - Free online finance tool"
+    },
+    {
+      "name": "Net Worth Calculator & Tracker",
+      "url": "net-worth-calculator.jsp",
+      "category": "Finance",
+      "keywords": "net worth calculator tracker finance",
+      "description": "Net Worth Calculator & Tracker - Free online finance tool"
+    },
+    {
+      "name": "Ovulation & Fertility Window",
+      "url": "ovulation-calculator.jsp",
+      "category": "Finance",
+      "keywords": "ovulation fertility window finance",
+      "description": "Ovulation & Fertility Window - Free online finance tool"
+    },
+    {
+      "name": "Pregnancy Due Date Planner",
+      "url": "pregnancy-due-date-calculator.jsp",
+      "category": "Finance",
+      "keywords": "pregnancy due date planner finance",
+      "description": "Pregnancy Due Date Planner - Free online finance tool"
+    },
+    {
+      "name": "Prepay vs Invest Calculator",
+      "url": "prepay-vs-invest-calculator.jsp",
+      "category": "Finance",
+      "keywords": "prepay invest calculator finance",
+      "description": "Prepay vs Invest Calculator - Free online finance tool"
+    },
+    {
+      "name": "Retirement Planning Calculator",
+      "url": "retirement-calculator.jsp",
+      "category": "Finance",
+      "keywords": "retirement planning calculator finance",
+      "description": "Retirement Planning Calculator - Free online finance tool"
+    },
+    {
+      "name": "Savings Goal Calculator",
+      "url": "savings-goal-calculator.jsp",
+      "category": "Finance",
+      "keywords": "savings goal calculator finance",
+      "description": "Savings Goal Calculator - Free online finance tool"
+    },
+    {
+      "name": "SIP Calculator",
+      "url": "sip-calculator.jsp",
+      "category": "Finance",
+      "keywords": "sip calculator finance",
+      "description": "SIP Calculator - Free online finance tool"
+    },
+    {
+      "name": "SIP vs Lumpsum Calculator",
+      "url": "sip-vs-lumpsum-calculator.jsp",
+      "category": "Finance",
+      "keywords": "sip lumpsum calculator finance",
+      "description": "SIP vs Lumpsum Calculator - Free online finance tool"
+    },
+    {
+      "name": "Stock Profit Calculator",
+      "url": "stock-calc.jsp",
+      "category": "Finance",
+      "keywords": "stock profit calculator finance",
+      "description": "Stock Profit Calculator - Free online finance tool"
+    },
+    {
+      "name": "Age Calculator & Milestone Tracker",
+      "url": "age-calculator.jsp",
+      "category": "Health",
+      "keywords": "age calculator milestone tracker health",
+      "description": "Age Calculator & Milestone Tracker - Free online health tool"
+    },
+    {
+      "name": "EAN/UPC Barcode Generator",
+      "url": "ean-upc-barcode-generator.jsp",
+      "category": "Health",
+      "keywords": "ean upc barcode generator health",
+      "description": "EAN/UPC Barcode Generator - Free online health tool"
+    },
+    {
+      "name": "Mind Map Maker (Online)",
+      "url": "mind-map-maker.jsp",
+      "category": "Health",
+      "keywords": "mind map maker online health",
+      "description": "Mind Map Maker (Online) - Free online health tool"
+    },
+    {
+      "name": "Morse Code Translator",
+      "url": "morse-code-translator.jsp",
+      "category": "Health",
+      "keywords": "morse code translator health",
+      "description": "Morse Code Translator - Free online health tool"
+    },
+    {
+      "name": "QR Code Generator",
+      "url": "qr-code-generator.jsp",
+      "category": "Health",
+      "keywords": "code generator health",
+      "description": "QR Code Generator - Free online health tool"
+    },
+    {
+      "name": "Time Zone Converter & Scheduler",
+      "url": "timezone-converter.jsp",
+      "category": "Health",
+      "keywords": "time zone converter scheduler health",
+      "description": "Time Zone Converter & Scheduler - Free online health tool"
+    },
+    {
+      "name": "Tip Calculator & Split Bill",
+      "url": "tip-calculator.jsp",
+      "category": "Health",
+      "keywords": "tip calculator split bill health",
+      "description": "Tip Calculator & Split Bill - Free online health tool"
+    },
+    {
+      "name": "App Privacy Policy Generator",
+      "url": "app-privacy-policy-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "app privacy policy generator legal & compliance",
+      "description": "App Privacy Policy Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Cookie Policy Generator",
+      "url": "cookie-policy-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "cookie policy generator legal & compliance",
+      "description": "Cookie Policy Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Disclaimer Generator",
+      "url": "disclaimer-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "disclaimer generator legal & compliance",
+      "description": "Disclaimer Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "DMCA Policy Generator",
+      "url": "dmca-policy-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "dmca policy generator legal & compliance",
+      "description": "DMCA Policy Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "EULA Generator",
+      "url": "eula-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "eula generator legal & compliance",
+      "description": "EULA Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Return & Refund Policy Generator",
+      "url": "return-refund-policy-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "return refund policy generator legal & compliance",
+      "description": "Return & Refund Policy Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Shipping Policy Generator",
+      "url": "shipping-policy-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "shipping policy generator legal & compliance",
+      "description": "Shipping Policy Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Terms of Use Generator",
+      "url": "terms-of-use-generator.jsp",
+      "category": "Legal & Compliance",
+      "keywords": "terms use generator legal & compliance",
+      "description": "Terms of Use Generator - Free online legal & compliance tool"
+    },
+    {
+      "name": "Activation Function Explorer",
+      "url": "activation_function_explorer.jsp",
+      "category": "Machine Learning",
+      "keywords": "activation function explorer machine learning",
+      "description": "Activation Function Explorer - Free online machine learning tool"
+    },
+    {
+      "name": "Bias-Variance Trade-off",
+      "url": "bias_variance_tradeoff.jsp",
+      "category": "Machine Learning",
+      "keywords": "bias variance trade off machine learning",
+      "description": "Bias-Variance Trade-off - Free online machine learning tool"
+    },
+    {
+      "name": "Categorical Encoding Lab",
+      "url": "categorical_encoding_lab.jsp",
+      "category": "Machine Learning",
+      "keywords": "categorical encoding lab machine learning",
+      "description": "Categorical Encoding Lab - Free online machine learning tool"
+    },
+    {
+      "name": "Clustering Studio",
+      "url": "clustering_studio.jsp",
+      "category": "Machine Learning",
+      "keywords": "clustering studio machine learning",
+      "description": "Clustering Studio - Free online machine learning tool"
+    },
+    {
+      "name": "Cyclical Encoding Visualizer",
+      "url": "cyclical_encoding_visualizer.jsp",
+      "category": "Machine Learning",
+      "keywords": "cyclical encoding visualizer machine learning",
+      "description": "Cyclical Encoding Visualizer - Free online machine learning tool"
+    },
+    {
+      "name": "Decision Boundary Playground",
+      "url": "decision_boundary_playground.jsp",
+      "category": "Machine Learning",
+      "keywords": "decision boundary playground machine learning",
+      "description": "Decision Boundary Playground - Free online machine learning tool"
+    },
+    {
+      "name": "Decision Trees & Random Forest",
+      "url": "decision_trees_random_forest.jsp",
+      "category": "Machine Learning",
+      "keywords": "decision trees random forest machine learning",
+      "description": "Decision Trees & Random Forest - Free online machine learning tool"
+    },
+    {
+      "name": "Diffusion Process Visualizer",
+      "url": "diffusion_process_visualizer.jsp",
+      "category": "Machine Learning",
+      "keywords": "diffusion process visualizer machine learning",
+      "description": "Diffusion Process Visualizer - Free online machine learning tool"
+    },
+    {
+      "name": "ML Pipeline",
+      "url": "ML_Pipeline.jsp",
+      "category": "Machine Learning",
+      "keywords": "pipeline machine learning",
+      "description": "ML Pipeline - Free online machine learning tool"
+    },
+    {
+      "name": "Model Validation Lab",
+      "url": "model_validation_lab.jsp",
+      "category": "Machine Learning",
+      "keywords": "model validation lab machine learning",
+      "description": "Model Validation Lab - Free online machine learning tool"
+    },
+    {
+      "name": "Neural Network Playground",
+      "url": "neural_network_playground.jsp",
+      "category": "Machine Learning",
+      "keywords": "neural network playground machine learning",
+      "description": "Neural Network Playground - Free online machine learning tool"
+    },
+    {
+      "name": "Predicted Probability Explorer",
+      "url": "predicted_probability_explorer.jsp",
+      "category": "Machine Learning",
+      "keywords": "predicted probability explorer machine learning",
+      "description": "Predicted Probability Explorer - Free online machine learning tool"
+    },
+    {
+      "name": "Probability Calibration Lab",
+      "url": "probability_calibration_lab.jsp",
+      "category": "Machine Learning",
+      "keywords": "probability calibration lab machine learning",
+      "description": "Probability Calibration Lab - Free online machine learning tool"
+    },
+    {
+      "name": "SHAP Explorer",
+      "url": "shap_explorer.jsp",
+      "category": "Machine Learning",
+      "keywords": "shap explorer machine learning",
+      "description": "SHAP Explorer - Free online machine learning tool"
+    },
+    {
+      "name": "Transformers Attention Visualizer",
+      "url": "transformers_attention_visualizer.jsp",
+      "category": "Machine Learning",
+      "keywords": "transformers attention visualizer machine learning",
+      "description": "Transformers Attention Visualizer - Free online machine learning tool"
+    },
+    {
+      "name": "21 Card Trick",
+      "url": "21-card-trick.jsp",
+      "category": "Mathematics",
+      "keywords": "card trick mathematics",
+      "description": "21 Card Trick - Free online mathematics tool"
+    },
+    {
+      "name": "24 Game Solver",
+      "url": "24-game-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "game solver mathematics",
+      "description": "24 Game Solver - Free online mathematics tool"
+    },
+    {
+      "name": "3D Distance",
+      "url": "distance-3d.jsp",
+      "category": "Mathematics",
+      "keywords": "distance mathematics",
+      "description": "3D Distance - Free online mathematics tool"
+    },
+    {
+      "name": "Addition Methods Visualizer",
+      "url": "addition-methods.jsp",
+      "category": "Mathematics",
+      "keywords": "addition methods visualizer mathematics",
+      "description": "Addition Methods Visualizer - Free online mathematics tool"
+    },
+    {
+      "name": "Algebraic Expression Simplifier",
+      "url": "algebraic-simplifier.jsp",
+      "category": "Mathematics",
+      "keywords": "algebraic expression simplifier mathematics",
+      "description": "Algebraic Expression Simplifier - Free online mathematics tool"
+    },
+    {
+      "name": "ANOVA Calculator",
+      "url": "anova-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "anova calculator mathematics",
+      "description": "ANOVA Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Area & Volume Calculator",
+      "url": "area-volume-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "area volume calculator mathematics",
+      "description": "Area & Volume Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Binary Card Trick",
+      "url": "binary-card-trick.jsp",
+      "category": "Mathematics",
+      "keywords": "binary card trick mathematics",
+      "description": "Binary Card Trick - Free online mathematics tool"
+    },
+    {
+      "name": "Binary Code Translator",
+      "url": "binary-code-translator.jsp",
+      "category": "Mathematics",
+      "keywords": "binary code translator mathematics",
+      "description": "Binary Code Translator - Free online mathematics tool"
+    },
+    {
+      "name": "Binomial Distribution Calculator",
+      "url": "binomial-distribution-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "binomial distribution calculator mathematics",
+      "description": "Binomial Distribution Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Centripetal Force Calculator",
+      "url": "centripetal-force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "centripetal force calculator physics",
+      "description": "Centripetal Force Calculator - Free online physics tool"
+    },
+    {
+      "name": "Chi-Square Calculator",
+      "url": "chi-square-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "chi square calculator mathematics",
+      "description": "Chi-Square Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Circle & Sector",
+      "url": "circle-sector.jsp",
+      "category": "Mathematics",
+      "keywords": "circle sector mathematics",
+      "description": "Circle & Sector - Free online mathematics tool"
+    },
+    {
+      "name": "Confidence Interval Calculator",
+      "url": "confidence-interval-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "confidence interval calculator mathematics",
+      "description": "Confidence Interval Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Correlation Calculator",
+      "url": "correlation-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "correlation calculator mathematics",
+      "description": "Correlation Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Derivative Calculator",
+      "url": "derivative-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "derivative calculator mathematics",
+      "description": "Derivative Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Distance Formula Calculator",
+      "url": "distance-formula-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "distance formula calculator mathematics",
+      "description": "Distance Formula Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Effect Size Calculator",
+      "url": "effect-size-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "effect size calculator mathematics",
+      "description": "Effect Size Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Energy Conservation Tracker",
+      "url": "energy-conservation-tracker.jsp",
+      "category": "Physics",
+      "keywords": "energy conservation tracker physics",
+      "description": "Energy Conservation Tracker - Free online physics tool"
+    },
+    {
+      "name": "Equation Solver (Ax=b, AX=B, Polynomial)",
+      "url": "linear-equations-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "equation solver polynomial mathematics",
+      "description": "Equation Solver (Ax=b, AX=B, Polynomial) - Free online mathematics tool"
+    },
+    {
+      "name": "Exponent Calculator (Laws of Exponents)",
+      "url": "exponent-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "exponent calculator laws exponents mathematics",
+      "description": "Exponent Calculator (Laws of Exponents) - Free online mathematics tool"
+    },
+    {
+      "name": "Factorial & Permutation",
+      "url": "factorial-permutation.jsp",
+      "category": "Mathematics",
+      "keywords": "factorial permutation mathematics",
+      "description": "Factorial & Permutation - Free online mathematics tool"
+    },
+    {
+      "name": "Fibonacci Sequence Generator",
+      "url": "fibonacci.jsp",
+      "category": "Mathematics",
+      "keywords": "fibonacci sequence generator mathematics",
+      "description": "Fibonacci Sequence Generator - Free online mathematics tool"
+    },
+    {
+      "name": "Fibonacci Spiral",
+      "url": "fibonacci-spiral.jsp",
+      "category": "Mathematics",
+      "keywords": "fibonacci spiral mathematics",
+      "description": "Fibonacci Spiral - Free online mathematics tool"
+    },
+    {
+      "name": "Friction Force Calculator",
+      "url": "friction-force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "friction force calculator physics",
+      "description": "Friction Force Calculator - Free online physics tool"
+    },
+    {
+      "name": "Graphing Calculator",
+      "url": "graphing-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "graphing calculator mathematics",
+      "description": "Graphing Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Heron’s Formula Area",
+      "url": "heron-area.jsp",
+      "category": "Mathematics",
+      "keywords": "heron formula area mathematics",
+      "description": "Heron’s Formula Area - Free online mathematics tool"
+    },
+    {
+      "name": "Hypothesis Test Calculator",
+      "url": "hypothesis-test-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "hypothesis test calculator mathematics",
+      "description": "Hypothesis Test Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Inclined Plane Calculator",
+      "url": "inclined-plane-calculator.jsp",
+      "category": "Physics",
+      "keywords": "inclined plane calculator physics",
+      "description": "Inclined Plane Calculator - Free online physics tool"
+    },
+    {
+      "name": "Inequality Solver (Linear, Quadratic, Polynomial)",
+      "url": "inequality-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "inequality solver linear quadratic polynomial mathematics",
+      "description": "Inequality Solver (Linear, Quadratic, Polynomial) - Free online mathematics tool"
+    },
+    {
+      "name": "Integral Calculator (Definite & Indefinite)",
+      "url": "integral-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "integral calculator definite indefinite mathematics",
+      "description": "Integral Calculator (Definite & Indefinite) - Free online mathematics tool"
+    },
+    {
+      "name": "Language Detector",
+      "url": "language-detector.jsp",
+      "category": "Mathematics",
+      "keywords": "language detector mathematics",
+      "description": "Language Detector - Free online mathematics tool"
+    },
+    {
+      "name": "LaTeX Document Editor",
+      "url": "latex-document-editor.jsp",
+      "category": "Mathematics",
+      "keywords": "latex document editor mathematics",
+      "description": "LaTeX Document Editor - Free online mathematics tool"
+    },
+    {
+      "name": "LCM/GCD Finder",
+      "url": "lcm-gcd.jsp",
+      "category": "Mathematics",
+      "keywords": "lcm gcd finder mathematics",
+      "description": "LCM/GCD Finder - Free online mathematics tool"
+    },
+    {
+      "name": "LED Resistor Calculator",
+      "url": "led-resistor-calculator.jsp",
+      "category": "Physics",
+      "keywords": "led resistor calculator physics",
+      "description": "LED Resistor Calculator - Free online physics tool"
+    },
+    {
+      "name": "Lens Equation & Mirror Formula Calculator",
+      "url": "lens-mirror-calculator.jsp",
+      "category": "Physics",
+      "keywords": "lens equation mirror formula calculator physics",
+      "description": "Lens Equation & Mirror Formula Calculator - Free online physics tool"
+    },
+    {
+      "name": "Lens/Mirror Ray Tracer",
+      "url": "lens-mirror-ray-tracer.jsp",
+      "category": "Physics",
+      "keywords": "lens mirror ray tracer physics",
+      "description": "Lens/Mirror Ray Tracer - Free online physics tool"
+    },
+    {
+      "name": "Limit Calculator",
+      "url": "limit-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "limit calculator mathematics",
+      "description": "Limit Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Linear Regression Calculator",
+      "url": "linear-regression-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "linear regression calculator mathematics",
+      "description": "Linear Regression Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Logarithm Calculator",
+      "url": "logarithm-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "logarithm calculator mathematics",
+      "description": "Logarithm Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Magic 1089 Trick",
+      "url": "magic-1089.jsp",
+      "category": "Mathematics",
+      "keywords": "magic 1089 trick mathematics",
+      "description": "Magic 1089 Trick - Free online mathematics tool"
+    },
+    {
+      "name": "Magic Square Generator",
+      "url": "magic-square-generator.jsp",
+      "category": "Mathematics",
+      "keywords": "magic square generator mathematics",
+      "description": "Magic Square Generator - Free online mathematics tool"
+    },
+    {
+      "name": "Math Art Gallery - Fractal Generator & Parametric Plotter",
+      "url": "math-art-gallery.jsp",
+      "category": "Mathematics",
+      "keywords": "math art gallery fractal generator parametric plotter mathematics",
+      "description": "Math Art Gallery - Fractal Generator & Parametric Plotter - Free online mathematics tool"
+    },
+    {
+      "name": "Math Equation Editor",
+      "url": "latex-equation-editor.jsp",
+      "category": "Mathematics",
+      "keywords": "math equation editor mathematics",
+      "description": "Math Equation Editor - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Addition Calculator",
+      "url": "matrix-addition-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix addition calculator mathematics",
+      "description": "Matrix Addition Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Determinant Calculator",
+      "url": "matrix-determinant-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix determinant calculator mathematics",
+      "description": "Matrix Determinant Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Inverse Calculator",
+      "url": "matrix-inverse-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix inverse calculator mathematics",
+      "description": "Matrix Inverse Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Power Calculator (A^n)",
+      "url": "matrix-power-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix power calculator mathematics",
+      "description": "Matrix Power Calculator (A^n) - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Rank Calculator",
+      "url": "matrix-rank-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix rank calculator mathematics",
+      "description": "Matrix Rank Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Matrix Type Classifier",
+      "url": "matrix-type-classifier.jsp",
+      "category": "Mathematics",
+      "keywords": "matrix type classifier mathematics",
+      "description": "Matrix Type Classifier - Free online mathematics tool"
+    },
+    {
+      "name": "Mean, Median, Mode Finder",
+      "url": "mean-median-mode.jsp",
+      "category": "Mathematics",
+      "keywords": "mean median mode finder mathematics",
+      "description": "Mean, Median, Mode Finder - Free online mathematics tool"
+    },
+    {
+      "name": "Mind Reading Number Trick",
+      "url": "mind-reading-trick.jsp",
+      "category": "Mathematics",
+      "keywords": "mind reading number trick mathematics",
+      "description": "Mind Reading Number Trick - Free online mathematics tool"
+    },
+    {
+      "name": "Momentum & Collision Calculator",
+      "url": "momentum-collision-calculator.jsp",
+      "category": "Physics",
+      "keywords": "momentum collision calculator physics",
+      "description": "Momentum & Collision Calculator - Free online physics tool"
+    },
+    {
+      "name": "Monty Hall Simulator",
+      "url": "monty-hall-simulator.jsp",
+      "category": "Mathematics",
+      "keywords": "monty hall simulator mathematics",
+      "description": "Monty Hall Simulator - Free online mathematics tool"
+    },
+    {
+      "name": "Normal Distribution Calculator",
+      "url": "normal-distribution-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "normal distribution calculator mathematics",
+      "description": "Normal Distribution Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Ohm's Law & Circuit Calculator",
+      "url": "ohms-law-calculator.jsp",
+      "category": "Physics",
+      "keywords": "ohm law circuit calculator physics",
+      "description": "Ohm's Law & Circuit Calculator - Free online physics tool"
+    },
+    {
+      "name": "Outlier Detection Calculator",
+      "url": "outlier-detection-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "outlier detection calculator mathematics",
+      "description": "Outlier Detection Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "P-Value Calculator",
+      "url": "p-value-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "value calculator mathematics",
+      "description": "P-Value Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Pascal's Triangle Explorer",
+      "url": "pascals-triangle-explorer.jsp",
+      "category": "Mathematics",
+      "keywords": "pascal triangle explorer mathematics",
+      "description": "Pascal's Triangle Explorer - Free online mathematics tool"
+    },
+    {
+      "name": "Percentage Calculator",
+      "url": "percentage-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "percentage calculator mathematics",
+      "description": "Percentage Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Percentile Calculator",
+      "url": "percentile-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "percentile calculator mathematics",
+      "description": "Percentile Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Polar ↔ Cartesian",
+      "url": "polar-cartesian.jsp",
+      "category": "Mathematics",
+      "keywords": "polar cartesian mathematics",
+      "description": "Polar ↔ Cartesian - Free online mathematics tool"
+    },
+    {
+      "name": "Prime Number Checker & Generator",
+      "url": "prime-number.jsp",
+      "category": "Mathematics",
+      "keywords": "prime number checker generator mathematics",
+      "description": "Prime Number Checker & Generator - Free online mathematics tool"
+    },
+    {
+      "name": "Prime Spiral (Ulam)",
+      "url": "prime-spiral.jsp",
+      "category": "Mathematics",
+      "keywords": "prime spiral ulam mathematics",
+      "description": "Prime Spiral (Ulam) - Free online mathematics tool"
+    },
+    {
+      "name": "Projectile Motion Simulator",
+      "url": "projectile-motion-simulator.jsp",
+      "category": "Physics",
+      "keywords": "projectile motion simulator physics",
+      "description": "Projectile Motion Simulator - Free online physics tool"
+    },
+    {
+      "name": "Punycode Converter",
+      "url": "punycode-converter.jsp",
+      "category": "Mathematics",
+      "keywords": "punycode converter mathematics",
+      "description": "Punycode Converter - Free online mathematics tool"
+    },
+    {
+      "name": "Pythagorean Theorem Solver",
+      "url": "pythagorean.jsp",
+      "category": "Mathematics",
+      "keywords": "pythagorean theorem solver mathematics",
+      "description": "Pythagorean Theorem Solver - Free online mathematics tool"
+    },
+    {
+      "name": "Pythagorean Triples",
+      "url": "pythagorean-triples.jsp",
+      "category": "Mathematics",
+      "keywords": "pythagorean triples mathematics",
+      "description": "Pythagorean Triples - Free online mathematics tool"
+    },
+    {
+      "name": "Quadratic Equation Solver (ax²+bx+c=0)",
+      "url": "quadratic-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "quadratic equation solver mathematics",
+      "description": "Quadratic Equation Solver (ax²+bx+c=0) - Free online mathematics tool"
+    },
+    {
+      "name": "Radical Simplifier (√, ∛, Rationalize)",
+      "url": "radical-simplifier.jsp",
+      "category": "Mathematics",
+      "keywords": "radical simplifier rationalize mathematics",
+      "description": "Radical Simplifier (√, ∛, Rationalize) - Free online mathematics tool"
+    },
+    {
+      "name": "RC/RLC Filter Calculator",
+      "url": "rc-rlc-filter.jsp",
+      "category": "Physics",
+      "keywords": "rlc filter calculator physics",
+      "description": "RC/RLC Filter Calculator - Free online physics tool"
+    },
+    {
+      "name": "Recamán's Sequence",
+      "url": "recaman-sequence.jsp",
+      "category": "Mathematics",
+      "keywords": "recam sequence mathematics",
+      "description": "Recamán's Sequence - Free online mathematics tool"
+    },
+    {
+      "name": "Right-Triangle Trig (SOHCAHTOA)",
+      "url": "right-triangle-trig.jsp",
+      "category": "Mathematics",
+      "keywords": "right triangle trig sohcahtoa mathematics",
+      "description": "Right-Triangle Trig (SOHCAHTOA) - Free online mathematics tool"
+    },
+    {
+      "name": "Roman Numeral Converter",
+      "url": "roman-numeral-converter.jsp",
+      "category": "Mathematics",
+      "keywords": "roman numeral converter mathematics",
+      "description": "Roman Numeral Converter - Free online mathematics tool"
+    },
+    {
+      "name": "Sample Size Calculator",
+      "url": "sample-size-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "sample size calculator mathematics",
+      "description": "Sample Size Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Scientific Calculator",
+      "url": "scientific-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "scientific calculator mathematics",
+      "description": "Scientific Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "SHM Oscillator (Spring/Pendulum)",
+      "url": "shm-oscillator.jsp",
+      "category": "Physics",
+      "keywords": "shm oscillator spring pendulum physics",
+      "description": "SHM Oscillator (Spring/Pendulum) - Free online physics tool"
+    },
+    {
+      "name": "Snell's Law & Prism Refraction",
+      "url": "snells-law-prism.jsp",
+      "category": "Physics",
+      "keywords": "snell law prism refraction physics",
+      "description": "Snell's Law & Prism Refraction - Free online physics tool"
+    },
+    {
+      "name": "Spirograph Simulator",
+      "url": "spirograph-simulator.jsp",
+      "category": "Mathematics",
+      "keywords": "spirograph simulator mathematics",
+      "description": "Spirograph Simulator - Free online mathematics tool"
+    },
+    {
+      "name": "Standard Deviation Calculator",
+      "url": "standard-deviation.jsp",
+      "category": "Mathematics",
+      "keywords": "standard deviation calculator mathematics",
+      "description": "Standard Deviation Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Sudoku Solver",
+      "url": "sudoku-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "sudoku solver mathematics",
+      "description": "Sudoku Solver - Free online mathematics tool"
+    },
+    {
+      "name": "Summary Statistics Calculator (All-in-One)",
+      "url": "summary-statistics-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "summary statistics calculator all one mathematics",
+      "description": "Summary Statistics Calculator (All-in-One) - Free online mathematics tool"
+    },
+    {
+      "name": "System of Equations Solver (2x2, 3x3)",
+      "url": "system-equations-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "system equations solver 2x2 3x3 mathematics",
+      "description": "System of Equations Solver (2x2, 3x3) - Free online mathematics tool"
+    },
+    {
+      "name": "T-Test Calculator",
+      "url": "t-test-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "test calculator mathematics",
+      "description": "T-Test Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Taylor/Maclaurin Series Calculator",
+      "url": "series-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "taylor maclaurin series calculator mathematics",
+      "description": "Taylor/Maclaurin Series Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "TikZ Viewer & Editor",
+      "url": "tikz-viewer.jsp",
+      "category": "Mathematics",
+      "keywords": "tikz viewer editor mathematics",
+      "description": "TikZ Viewer & Editor - Free online mathematics tool"
+    },
+    {
+      "name": "Tower of Hanoi",
+      "url": "tower-of-hanoi.jsp",
+      "category": "Mathematics",
+      "keywords": "tower hanoi mathematics",
+      "description": "Tower of Hanoi - Free online mathematics tool"
+    },
+    {
+      "name": "Transliteration Tool",
+      "url": "transliteration-tool.jsp",
+      "category": "Mathematics",
+      "keywords": "transliteration tool mathematics",
+      "description": "Transliteration Tool - Free online mathematics tool"
+    },
+    {
+      "name": "Triangle Solver (SSS/SAS/ASA)",
+      "url": "triangle-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "triangle solver sss sas asa mathematics",
+      "description": "Triangle Solver (SSS/SAS/ASA) - Free online mathematics tool"
+    },
+    {
+      "name": "Unicode Character Inspector",
+      "url": "unicode-inspector.jsp",
+      "category": "Mathematics",
+      "keywords": "unicode character inspector mathematics",
+      "description": "Unicode Character Inspector - Free online mathematics tool"
+    },
+    {
+      "name": "Unit Converter",
+      "url": "unit-converter.jsp",
+      "category": "Mathematics",
+      "keywords": "unit converter mathematics",
+      "description": "Unit Converter - Free online mathematics tool"
+    },
+    {
+      "name": "Variance Calculator",
+      "url": "variance-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "variance calculator mathematics",
+      "description": "Variance Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Wave Speed & Frequency Tool",
+      "url": "wave-speed-frequency.jsp",
+      "category": "Physics",
+      "keywords": "wave speed frequency tool physics",
+      "description": "Wave Speed & Frequency Tool - Free online physics tool"
+    },
+    {
+      "name": "Z-Score Calculator",
+      "url": "z-score-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "score calculator mathematics",
+      "description": "Z-Score Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "EXIF Editor",
+      "url": "exif-editor.jsp",
+      "category": "Media Tools",
+      "keywords": "exif editor media tools",
+      "description": "EXIF Editor - Free online media tools tool"
+    },
+    {
+      "name": "EXIF Remover",
+      "url": "exif-remover.jsp",
+      "category": "Media Tools",
+      "keywords": "exif remover media tools",
+      "description": "EXIF Remover - Free online media tools tool"
+    },
+    {
+      "name": "GIF ↔ MP4 Converter",
+      "url": "gif-mp4-converter.jsp",
+      "category": "Media Tools",
+      "keywords": "gif mp4 converter media tools",
+      "description": "GIF ↔ MP4 Converter - Free online media tools tool"
+    },
+    {
+      "name": "HEIC to JPG/PNG",
+      "url": "heic-to-jpg.jsp",
+      "category": "Media Tools",
+      "keywords": "heic jpg png media tools",
+      "description": "HEIC to JPG/PNG - Free online media tools tool"
+    },
+    {
+      "name": "Image Resizer",
+      "url": "image-resizer.jsp",
+      "category": "Media Tools",
+      "keywords": "image resizer media tools",
+      "description": "Image Resizer - Free online media tools tool"
+    },
+    {
+      "name": "PNG ↔ JPG",
+      "url": "png-jpg-converter.jsp",
+      "category": "Media Tools",
+      "keywords": "png jpg media tools",
+      "description": "PNG ↔ JPG - Free online media tools tool"
+    },
+    {
+      "name": "SVG to PNG/JPG",
+      "url": "svg-to-image.jsp",
+      "category": "Media Tools",
+      "keywords": "svg png jpg media tools",
+      "description": "SVG to PNG/JPG - Free online media tools tool"
+    },
+    {
+      "name": "Video Resizer & Cropper",
+      "url": "video-resizer.jsp",
+      "category": "Media Tools",
+      "keywords": "video resizer cropper media tools",
+      "description": "Video Resizer & Cropper - Free online media tools tool"
+    },
+    {
+      "name": "Video Trimmer & Cutter",
+      "url": "video-trim.jsp",
+      "category": "Media Tools",
+      "keywords": "video trimmer cutter media tools",
+      "description": "Video Trimmer & Cutter - Free online media tools tool"
+    },
+    {
+      "name": "WebP to JPG/PNG",
+      "url": "webp-converter.jsp",
+      "category": "Media Tools",
+      "keywords": "webp jpg png media tools",
+      "description": "WebP to JPG/PNG - Free online media tools tool"
+    },
+    {
+      "name": "cURL Tool",
+      "url": "curlfunctions.jsp",
+      "category": "Network Tools",
+      "keywords": "curl tool network tools",
+      "description": "cURL Tool - Free online network tools tool"
+    },
+    {
+      "name": "DMARC Lookup",
+      "url": "dmarc.jsp",
+      "category": "Network Tools",
+      "keywords": "dmarc lookup network tools",
+      "description": "DMARC Lookup - Free online network tools tool"
+    },
+    {
+      "name": "DNS Lookup",
+      "url": "dns.jsp",
+      "category": "Network Tools",
+      "keywords": "dns lookup network tools",
+      "description": "DNS Lookup - Free online network tools tool"
+    },
+    {
+      "name": "DNS Propagation Checker",
+      "url": "dnsresolver.jsp",
+      "category": "Network Tools",
+      "keywords": "dns propagation checker network tools",
+      "description": "DNS Propagation Checker - Free online network tools tool"
+    },
+    {
+      "name": "HTTP Status Analysis",
+      "url": "httpstat.jsp",
+      "category": "Network Tools",
+      "keywords": "http status analysis network tools",
+      "description": "HTTP Status Analysis - Free online network tools tool"
+    },
+    {
+      "name": "IPv6 Compressor & Expander",
+      "url": "ipv6-tool.jsp",
+      "category": "Network Tools",
+      "keywords": "ipv6 compressor expander network tools",
+      "description": "IPv6 Compressor & Expander - Free online network tools tool"
+    },
+    {
+      "name": "MAC Address Generator & Validator",
+      "url": "mac-address-generator.jsp",
+      "category": "Network Tools",
+      "keywords": "mac address generator validator network tools",
+      "description": "MAC Address Generator & Validator - Free online network tools tool"
+    },
+    {
+      "name": "MTR Traceroute",
+      "url": "mtr.jsp",
+      "category": "Network Tools",
+      "keywords": "mtr traceroute network tools",
+      "description": "MTR Traceroute - Free online network tools tool"
+    },
+    {
+      "name": "Port Scanner",
+      "url": "portscan.jsp",
+      "category": "Network Tools",
+      "keywords": "port scanner network tools",
+      "description": "Port Scanner - Free online network tools tool"
+    },
+    {
+      "name": "Reverse DNS Lookup",
+      "url": "revdns.jsp",
+      "category": "Network Tools",
+      "keywords": "reverse dns lookup network tools",
+      "description": "Reverse DNS Lookup - Free online network tools tool"
+    },
+    {
+      "name": "Socket.IO Client",
+      "url": "socket-io-client.jsp",
+      "category": "Network Tools",
+      "keywords": "socket client network tools",
+      "description": "Socket.IO Client - Free online network tools tool"
+    },
+    {
+      "name": "Subdomain Finder",
+      "url": "subdomain.jsp",
+      "category": "Network Tools",
+      "keywords": "subdomain finder network tools",
+      "description": "Subdomain Finder - Free online network tools tool"
+    },
+    {
+      "name": "Subnet Calculator",
+      "url": "SubnetFunctions.jsp",
+      "category": "Network Tools",
+      "keywords": "subnet calculator network tools",
+      "description": "Subnet Calculator - Free online network tools tool"
+    },
+    {
+      "name": "VPC Calculator & Subnet Planner",
+      "url": "vpc-calculator.jsp",
+      "category": "Network Tools",
+      "keywords": "vpc calculator subnet planner network tools",
+      "description": "VPC Calculator & Subnet Planner - Free online network tools tool"
+    },
+    {
+      "name": "Website Screenshot",
+      "url": "screenshot.jsp",
+      "category": "Network Tools",
+      "keywords": "website screenshot network tools",
+      "description": "Website Screenshot - Free online network tools tool"
+    },
+    {
+      "name": "WebSocket Client",
+      "url": "websocket-client.jsp",
+      "category": "Network Tools",
+      "keywords": "websocket client network tools",
+      "description": "WebSocket Client - Free online network tools tool"
+    },
+    {
+      "name": "WHOIS Lookup",
+      "url": "whois.jsp",
+      "category": "Network Tools",
+      "keywords": "whois lookup network tools",
+      "description": "WHOIS Lookup - Free online network tools tool"
+    },
+    {
+      "name": "Periodic Table",
+      "url": "periodic-table.jsp",
+      "category": "Chemistry",
+      "keywords": "periodic table chemistry elements",
+      "description": "Periodic Table - Free online chemistry tool"
+    },
+    {
+      "name": "Buffer Solution Calculator (Henderson-Hasselbalch)",
+      "url": "buffer-solution-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "buffer solution calculator henderson hasselbalch chemistry chemistry",
+      "description": "Buffer Solution Calculator (Henderson-Hasselbalch) - Free online chemistry tool"
+    },
+    {
+      "name": "Chemical Equation Balancer",
+      "url": "chemical-equation-balancer.jsp",
+      "category": "Chemistry",
+      "keywords": "chemical equation balancer chemistry chemistry",
+      "description": "Chemical Equation Balancer - Free online chemistry tool"
+    },
+    {
+      "name": "Density Calculator (d=m/v)",
+      "url": "density-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "density calculator chemistry chemistry",
+      "description": "Density Calculator (d=m/v) - Free online chemistry tool"
+    },
+    {
+      "name": "Electrochemistry Calculator (Nernst & Faraday)",
+      "url": "electrochemistry-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "electrochemistry calculator nernst faraday chemistry chemistry",
+      "description": "Electrochemistry Calculator (Nernst & Faraday) - Free online chemistry tool"
+    },
+    {
+      "name": "Electron Configuration Calculator",
+      "url": "electron-configuration-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "electron configuration calculator chemistry chemistry",
+      "description": "Electron Configuration Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Empirical & Molecular Formula Calculator",
+      "url": "empirical-formula-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "empirical molecular formula calculator chemistry chemistry",
+      "description": "Empirical & Molecular Formula Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Equilibrium Constant Calculator (Kc, Kp, Ka, Kb)",
+      "url": "equilibrium-constant-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "equilibrium constant calculator chemistry chemistry",
+      "description": "Equilibrium Constant Calculator (Kc, Kp, Ka, Kb) - Free online chemistry tool"
+    },
+    {
+      "name": "Half-Life Calculator",
+      "url": "half-life-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "half life calculator chemistry chemistry",
+      "description": "Half-Life Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Ideal Gas Law Calculator (PV=nRT)",
+      "url": "ideal-gas-law-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "ideal gas law calculator nrt chemistry chemistry",
+      "description": "Ideal Gas Law Calculator (PV=nRT) - Free online chemistry tool"
+    },
+    {
+      "name": "ISBN Validator & Converter",
+      "url": "isbn-validator.jsp",
+      "category": "Productivity",
+      "keywords": "isbn validator converter productivity",
+      "description": "ISBN Validator & Converter - Free online productivity tool"
+    },
+    {
+      "name": "Lewis Structure & VSEPR Calculator",
+      "url": "lewis-structure-generator.jsp",
+      "category": "Chemistry",
+      "keywords": "lewis structure vsepr calculator chemistry chemistry",
+      "description": "Lewis Structure & VSEPR Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Limiting Reagent Calculator",
+      "url": "limiting-reagent-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "limiting reagent calculator chemistry chemistry",
+      "description": "Limiting Reagent Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Molar Mass Calculator",
+      "url": "molar-mass-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "molar mass calculator chemistry chemistry",
+      "description": "Molar Mass Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Molecular Geometry Calculator",
+      "url": "molecular-geometry-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "molecular geometry calculator chemistry chemistry",
+      "description": "Molecular Geometry Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Percent Composition Calculator",
+      "url": "percent-composition-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "percent composition calculator chemistry chemistry",
+      "description": "Percent Composition Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Percent Yield Calculator",
+      "url": "percent-yield-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "percent yield calculator chemistry chemistry",
+      "description": "Percent Yield Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "pH Calculator (Strong/Weak Acids & Bases + Buffers)",
+      "url": "ph-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "calculator strong weak acids bases buffers chemistry chemistry",
+      "description": "pH Calculator (Strong/Weak Acids & Bases + Buffers) - Free online chemistry tool"
+    },
+    {
+      "name": "Redox Reaction Balancer (Half-Reaction Method)",
+      "url": "redox-balancer.jsp",
+      "category": "Chemistry",
+      "keywords": "redox reaction balancer half method chemistry chemistry",
+      "description": "Redox Reaction Balancer (Half-Reaction Method) - Free online chemistry tool"
+    },
+    {
+      "name": "Significant Figures Calculator",
+      "url": "significant-figures-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "significant figures calculator chemistry chemistry",
+      "description": "Significant Figures Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Stoichiometry Calculator",
+      "url": "stoichiometry-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "stoichiometry calculator chemistry chemistry",
+      "description": "Stoichiometry Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Thermochemistry Calculator (Calorimetry & Enthalpy)",
+      "url": "thermochemistry-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "thermochemistry calculator calorimetry enthalpy chemistry chemistry",
+      "description": "Thermochemistry Calculator (Calorimetry & Enthalpy) - Free online chemistry tool"
+    },
+    {
+      "name": "Titration Calculator (Acid-Base & pH)",
+      "url": "titration-calculator.jsp",
+      "category": "Chemistry",
+      "keywords": "titration calculator acid base chemistry chemistry",
+      "description": "Titration Calculator (Acid-Base & pH) - Free online chemistry tool"
+    },
+    {
+      "name": "Unit Converter (Mass, Volume, Pressure, Temp, Energy)",
+      "url": "unit-converter-chemistry.jsp",
+      "category": "Chemistry",
+      "keywords": "unit converter mass volume pressure temp energy chemistry chemistry",
+      "description": "Unit Converter (Mass, Volume, Pressure, Temp, Energy) - Free online chemistry tool"
+    },
+    {
+      "name": "Word & Character Counter",
+      "url": "word-character-counter.jsp",
+      "category": "Productivity",
+      "keywords": "word character counter productivity",
+      "description": "Word & Character Counter - Free online productivity tool"
+    },
+    {
+      "name": "CA/Certificate Generator",
+      "url": "cafunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "certificate generator security & pki",
+      "description": "CA/Certificate Generator - Free online security & pki tool"
+    },
+    {
+      "name": "Extract Certs from URL",
+      "url": "certs.jsp",
+      "category": "Security & PKI",
+      "keywords": "extract certs from url security & pki",
+      "description": "Extract Certs from URL - Free online security & pki tool"
+    },
+    {
+      "name": "Extract Public from Private Key",
+      "url": "pempublic.jsp",
+      "category": "Security & PKI",
+      "keywords": "extract public from private key security & pki",
+      "description": "Extract Public from Private Key - Free online security & pki tool"
+    },
+    {
+      "name": "JavaScript Security Scanner",
+      "url": "InspectJSFunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "javascript security scanner & pki",
+      "description": "JavaScript Security Scanner - Free online security & pki tool"
+    },
+    {
+      "name": "JWK Generate",
+      "url": "jwkfunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "jwk generate security & pki",
+      "description": "JWK Generate - Free online security & pki tool"
+    },
+    {
+      "name": "JWK to PEM Convert",
+      "url": "jwkconvertfunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "jwk pem convert security & pki",
+      "description": "JWK to PEM Convert - Free online security & pki tool"
+    },
+    {
+      "name": "JWS Generate Key Sign Data",
+      "url": "jwsgen.jsp",
+      "category": "Security & PKI",
+      "keywords": "jws generate key sign data security & pki",
+      "description": "JWS Generate Key Sign Data - Free online security & pki tool"
+    },
+    {
+      "name": "JWS Parser",
+      "url": "jwsparse.jsp",
+      "category": "Security & PKI",
+      "keywords": "jws parser security & pki",
+      "description": "JWS Parser - Free online security & pki tool"
+    },
+    {
+      "name": "JWS Sign with Custom Key",
+      "url": "jwssign.jsp",
+      "category": "Security & PKI",
+      "keywords": "jws sign custom key security & pki",
+      "description": "JWS Sign with Custom Key - Free online security & pki tool"
+    },
+    {
+      "name": "JWS Signature Verification",
+      "url": "jwsverify.jsp",
+      "category": "Security & PKI",
+      "keywords": "jws signature verification security & pki",
+      "description": "JWS Signature Verification - Free online security & pki tool"
+    },
+    {
+      "name": "JWT Debugger",
+      "url": "jwt-debugger.jsp",
+      "category": "Security & PKI",
+      "keywords": "jwt debugger security & pki",
+      "description": "JWT Debugger - Free online security & pki tool"
+    },
+    {
+      "name": "Keystore Viewer",
+      "url": "JKSManagementFunctionality?invalidate=yes",
+      "category": "Security & PKI",
+      "keywords": "keystore viewer security & pki",
+      "description": "Keystore Viewer - Free online security & pki tool"
+    },
+    {
+      "name": "OCSP Query",
+      "url": "ocsp.jsp",
+      "category": "Security & PKI",
+      "keywords": "ocsp query security & pki",
+      "description": "OCSP Query - Free online security & pki tool"
+    },
+    {
+      "name": "PEM Parser/Decoder",
+      "url": "PemParserFunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "pem parser decoder security & pki",
+      "description": "PEM Parser/Decoder - Free online security & pki tool"
+    },
+    {
+      "name": "PEM Password Finder",
+      "url": "pempasswordfinder.jsp",
+      "category": "Security & PKI",
+      "keywords": "pem password finder security & pki",
+      "description": "PEM Password Finder - Free online security & pki tool"
+    },
+    {
+      "name": "PGP Decrypt files",
+      "url": "pgp-file-decrypt.jsp",
+      "category": "Security & PKI",
+      "keywords": "pgp decrypt files security & pki",
+      "description": "PGP Decrypt files - Free online security & pki tool"
+    },
+    {
+      "name": "PGP Encryption/Decryption",
+      "url": "pgpencdec.jsp",
+      "category": "Security & PKI",
+      "keywords": "pgp encryption decryption security & pki",
+      "description": "PGP Encryption/Decryption - Free online security & pki tool"
+    },
+    {
+      "name": "PGP Key Generation",
+      "url": "pgpkeyfunction.jsp",
+      "category": "Security & PKI",
+      "keywords": "pgp key generation security & pki",
+      "description": "PGP Key Generation - Free online security & pki tool"
+    },
+    {
+      "name": "PGP KeyDumper",
+      "url": "pgpdump.jsp",
+      "category": "Security & PKI",
+      "keywords": "pgp keydumper security & pki",
+      "description": "PGP KeyDumper - Free online security & pki tool"
+    },
+    {
+      "name": "PGP Signature Verifier",
+      "url": "PGPFunctionality?invalidate=yes",
+      "category": "Security & PKI",
+      "keywords": "pgp signature verifier security & pki",
+      "description": "PGP Signature Verifier - Free online security & pki tool"
+    },
+    {
+      "name": "PGP Suite: Sign/Verify/Keys",
+      "url": "pgp-suite.jsp",
+      "category": "Security & PKI",
+      "keywords": "pgp suite sign verify keys security & pki",
+      "description": "PGP Suite: Sign/Verify/Keys - Free online security & pki tool"
+    },
+    {
+      "name": "PKCS#8/PKCS#1 Converter",
+      "url": "pemconvert.jsp",
+      "category": "Security & PKI",
+      "keywords": "pkcs converter security & pki",
+      "description": "PKCS#8/PKCS#1 Converter - Free online security & pki tool"
+    },
+    {
+      "name": "SAML Sign Message",
+      "url": "samlfunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "saml sign message security & pki",
+      "description": "SAML Sign Message - Free online security & pki tool"
+    },
+    {
+      "name": "SAML Verify/Sign",
+      "url": "samlverifysign.jsp",
+      "category": "Security & PKI",
+      "keywords": "saml verify sign security & pki",
+      "description": "SAML Verify/Sign - Free online security & pki tool"
+    },
+    {
+      "name": "Security Headers Checker",
+      "url": "security-headers-checker.jsp",
+      "category": "Security & PKI",
+      "keywords": "security headers checker & pki",
+      "description": "Security Headers Checker - Free online security & pki tool"
+    },
+    {
+      "name": "Self Sign Certificate",
+      "url": "SelfSignCertificateFunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "self sign certificate security & pki",
+      "description": "Self Sign Certificate - Free online security & pki tool"
+    },
+    {
+      "name": "Sign CSR",
+      "url": "signcsr.jsp",
+      "category": "Security & PKI",
+      "keywords": "sign csr security & pki",
+      "description": "Sign CSR - Free online security & pki tool"
+    },
+    {
+      "name": "SSH Key Generator",
+      "url": "sshfunctions.jsp",
+      "category": "Security & PKI",
+      "keywords": "ssh key generator security & pki",
+      "description": "SSH Key Generator - Free online security & pki tool"
+    },
+    {
+      "name": "SSL/TLS Handshake Demo",
+      "url": "ssl-tls-handshake-demo.jsp",
+      "category": "Security & PKI",
+      "keywords": "ssl tls handshake demo security & pki",
+      "description": "SSL/TLS Handshake Demo - Free online security & pki tool"
+    },
+    {
+      "name": "SSL/TLS Scanner",
+      "url": "sslscan.jsp",
+      "category": "Security & PKI",
+      "keywords": "ssl tls scanner security & pki",
+      "description": "SSL/TLS Scanner - Free online security & pki tool"
+    },
+    {
+      "name": "Verify Private Key vs CSR/x509",
+      "url": "certsverify.jsp",
+      "category": "Security & PKI",
+      "keywords": "verify private key csr x509 security & pki",
+      "description": "Verify Private Key vs CSR/x509 - Free online security & pki tool"
+    }
+  ]
+}
