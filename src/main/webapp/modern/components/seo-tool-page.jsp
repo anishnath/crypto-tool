@@ -63,9 +63,46 @@
     }
 %>
 
+<!-- Page Title -->
+<title><%= escapeJson(pageTitle) %></title>
+
 <!-- Meta Tags -->
 <meta name="title" content="<%= escapeJson(pageTitle) %>">
-<meta name="description" content="<%= escapeJson(toolDescription + " Free, secure, client-side processing. No registration required.") %>">
+<%
+    // Optimize description length (150-160 chars for best CTR)
+    String metaDescription = toolDescription;
+    // Only append if description is short enough to keep total under 160 chars
+    String appendText = " Free, secure, client-side processing. No registration required.";
+    if (metaDescription.length() + appendText.length() <= 160) {
+        metaDescription = metaDescription + appendText;
+    } else {
+        // If too long, truncate to 156 chars for optimal CTR, preferably at sentence boundary
+        if (metaDescription.length() > 156) {
+            // Try to cut at the last sentence boundary (period, exclamation, question mark) before 156 chars
+            int maxLen = 153;
+            int lastSentenceEnd = -1;
+            for (int i = Math.min(maxLen, metaDescription.length() - 1); i >= 0; i--) {
+                char c = metaDescription.charAt(i);
+                if (c == '.' || c == '!' || c == '?') {
+                    lastSentenceEnd = i + 1;
+                    break;
+                }
+            }
+            if (lastSentenceEnd > 0 && lastSentenceEnd <= maxLen + 3) {
+                metaDescription = metaDescription.substring(0, lastSentenceEnd).trim();
+            } else {
+                // Fallback: cut at word boundary
+                int lastSpace = metaDescription.lastIndexOf(' ', maxLen);
+                if (lastSpace > maxLen - 20) { // Only use if we're not cutting too early
+                    metaDescription = metaDescription.substring(0, lastSpace).trim() + "...";
+                } else {
+                    metaDescription = metaDescription.substring(0, maxLen).trim() + "...";
+                }
+            }
+        }
+    }
+%>
+<meta name="description" content="<%= escapeJson(metaDescription) %>">
 <meta name="keywords" content="<%= escapeJson(toolKeywords + ", online tool, free, developer tool, client-side, secure") %>">
 <link rel="canonical" href="<%= fullUrl %>">
 
