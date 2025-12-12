@@ -78,6 +78,40 @@
 
     <%-- Right Section --%>
     <div class="header-right">
+        <%-- Support & Social Buttons --%>
+        <div class="header-social">
+            <a href="https://buymeacoffee.com/8gwifi.org"
+               target="_blank"
+               rel="noopener"
+               class="header-btn header-btn-coffee"
+               aria-label="Buy me a coffee">
+                <span class="btn-icon">☕</span>
+                <span class="btn-text">Coffee</span>
+            </a>
+            <a href="https://twitter.com/anish2good"
+               target="_blank"
+               rel="noopener"
+               class="header-btn header-btn-twitter"
+               aria-label="Follow on Twitter">
+                <span class="btn-icon">𝕏</span>
+                <span class="btn-text">Follow</span>
+            </a>
+            <button class="header-btn header-btn-share"
+                    onclick="openShareMenu()"
+                    aria-label="Share this tutorial">
+                <span class="btn-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"/>
+                        <circle cx="6" cy="12" r="3"/>
+                        <circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                </span>
+                <span class="btn-text">Share</span>
+            </button>
+        </div>
+
         <%-- Progress Indicator --%>
         <div class="header-progress" id="headerProgress">
             <div class="progress-bar">
