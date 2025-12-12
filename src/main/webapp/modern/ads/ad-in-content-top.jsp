@@ -37,6 +37,7 @@
                             if (typeof googletag !== 'undefined' && googletag.cmd) {
                                 googletag.cmd.push(function() {
                                     googletag.display('site_8gwifi_org_leaderboard_responsive');
+                                    adContainer.classList.add('ad-loaded');
                                     console.log('✅ Ad loaded (Top): Leaderboard');
                                 });
                             }
@@ -58,6 +59,7 @@
                 if (typeof googletag !== 'undefined' && googletag.cmd) {
                     googletag.cmd.push(function() {
                         googletag.display('site_8gwifi_org_leaderboard_responsive');
+                        adContainer.classList.add('ad-loaded');
                     });
                 }
             }

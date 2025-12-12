@@ -12,14 +12,14 @@
     - Lazy loading with IntersectionObserver
     - Loading placeholder animation
     - Dark mode support
-    - Hides automatically on tablet/mobile (<1200px)
+    - Hides automatically on tablet/mobile (<1024px)
 
     Grid Requirements:
     - Parent grid should have a dedicated column for ads (typically 300px)
     - Example: grid-template-columns: minmax(320px, 400px) 1fr 300px;
 
-    Desktop (>=1200px): Shows 2 stacked rectangle ads
-    Tablet/Mobile (<1200px): Hidden (use ad-in-content-mid.jsp instead)
+    Desktop (>=1025px): Shows 2 stacked rectangle ads
+    Tablet/Mobile (<1025px): Hidden (use ad-in-content-mid.jsp instead)
 
     Usage: <%@ include file="modern/ads/ad-three-column.jsp" %>
 
@@ -43,7 +43,7 @@
                     if (!adContainer) return;
 
                     // Load immediately on desktop
-                    if (window.innerWidth >= 1200) {
+                    if (window.innerWidth >= 1025) {
                         setTimeout(function() {
                             adContainer.classList.add('ad-loaded');
 
@@ -76,7 +76,7 @@
                     if (!adContainer) return;
 
                     // Lazy load second ad using IntersectionObserver
-                    if ('IntersectionObserver' in window && window.innerWidth >= 1200) {
+                    if ('IntersectionObserver' in window && window.innerWidth >= 1025) {
                         var observer = new IntersectionObserver(function(entries) {
                             entries.forEach(function(entry) {
                                 if (entry.isIntersecting) {
@@ -175,14 +175,14 @@
 }
 
 /* Hide on tablet and mobile - use in-content ads instead */
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
     .ad-three-column-stack {
         display: none;
     }
 }
 
 /* Desktop: Standard size */
-@media (min-width: 1200px) {
+@media (min-width: 1025px) {
     .ad-three-column-slot {
         min-height: 250px;
     }
