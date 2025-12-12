@@ -40,7 +40,8 @@ const SocialPopupState = {
     pageLoadTime: Date.now(),
     hasInteracted: false,
     popupShown: false,
-    shareMenuOpen: false
+    shareMenuOpen: false,
+    lastTrigger: null  // 'time', 'run_click', 'navigation'
 };
 
 // ============================================
@@ -183,6 +184,7 @@ function checkTimeBasedTrigger() {
 
     if (secondsOnPage >= SOCIAL_POPUP_CONFIG.minTimeOnPage) {
         log('Time trigger:', secondsOnPage, 'seconds');
+        SocialPopupState.lastTrigger = 'time';
         showSocialPopup();
     }
 }
@@ -190,6 +192,9 @@ function checkTimeBasedTrigger() {
 function checkRunClickTrigger() {
     SocialPopupState.runClickCount++;
     log('Run click count:', SocialPopupState.runClickCount);
+
+    // Track every run click for analytics
+    trackRunClick();
 
     // Repeating run click trigger - bypasses cooldown/session limits
     if (SOCIAL_POPUP_CONFIG.runClicksRepeat) {
@@ -212,6 +217,7 @@ function checkRunClickTrigger() {
         if (SocialPopupState.runClickCount % SOCIAL_POPUP_CONFIG.minRunClicks === 0) {
             log('Run click repeat trigger at:', SocialPopupState.runClickCount);
             SocialPopupState.popupShown = false; // Reset to allow showing again
+            SocialPopupState.lastTrigger = 'run_click';
             showSocialPopup();
         }
         return;
@@ -222,6 +228,7 @@ function checkRunClickTrigger() {
 
     if (SocialPopupState.runClickCount >= SOCIAL_POPUP_CONFIG.minRunClicks) {
         log('Run click trigger reached');
+        SocialPopupState.lastTrigger = 'run_click';
         showSocialPopup();
     }
 }
@@ -234,6 +241,7 @@ function checkNavigationTrigger() {
     const secondsOnPage = (Date.now() - SocialPopupState.pageLoadTime) / 1000;
     if (secondsOnPage >= SOCIAL_POPUP_CONFIG.firstVisitDelay) {
         log('Navigation trigger');
+        SocialPopupState.lastTrigger = 'navigation';
         showSocialPopup();
     }
 }
@@ -255,10 +263,13 @@ function showSocialPopup() {
     const count = Storage.getNumber(Storage.KEY_SESSION_COUNT) + 1;
     Storage.set(Storage.KEY_SESSION_COUNT, count.toString());
 
+    // Track popup shown
+    trackPopupEvent('shown');
+
     log('Popup shown, session count:', count);
 }
 
-function closeSocialPopup() {
+function closeSocialPopup(skipTracking = false) {
     const popup = document.getElementById('socialPopup');
     const overlay = document.getElementById('socialOverlay');
 
@@ -267,15 +278,25 @@ function closeSocialPopup() {
 
     // Record dismiss time
     Storage.set(Storage.KEY_LAST_DISMISS, Date.now().toString());
+
+    // Track popup dismissed (unless called from dismissPopupForever)
+    if (!skipTracking) {
+        trackPopupEvent('dismissed');
+    }
+
     log('Popup closed');
 }
 
 function dismissPopupForever() {
     // Store timestamp instead of boolean - expires after neverShowCooldownHours
     Storage.set(Storage.KEY_NEVER_SHOW, Date.now().toString());
-    closeSocialPopup();
+
+    // Track "never show" action
+    trackPopupEvent('never_show');
+
+    closeSocialPopup(true); // Skip tracking since we already tracked 'never_show'
     showToast('Got it! We won\'t bother you for a while.');
-    log('Popup disabled forever');
+    log('Popup disabled for ' + SOCIAL_POPUP_CONFIG.neverShowCooldownHours + ' hours');
 }
 
 // ============================================
@@ -392,6 +413,37 @@ function shareFromPopup() {
 // ============================================
 // TRACKING
 // ============================================
+function trackEvent(eventName, params = {}) {
+    // Add common params
+    const fullParams = {
+        page_url: getPageUrl(),
+        page_title: getPageTitle(),
+        tutorial_language: detectTutorialLanguage(),
+        ...params
+    };
+
+    log('Track event:', eventName, fullParams);
+
+    // Google Analytics 4
+    if (typeof gtag === 'function') {
+        gtag('event', eventName, fullParams);
+    }
+}
+
+function detectTutorialLanguage() {
+    const url = window.location.pathname.toLowerCase();
+    if (url.includes('/python/')) return 'python';
+    if (url.includes('/javascript/')) return 'javascript';
+    if (url.includes('/java/')) return 'java';
+    if (url.includes('/rust/')) return 'rust';
+    if (url.includes('/typescript/')) return 'typescript';
+    if (url.includes('/html/')) return 'html';
+    if (url.includes('/css/')) return 'css';
+    if (url.includes('/bash/')) return 'bash';
+    if (url.includes('/lua/')) return 'lua';
+    return 'unknown';
+}
+
 function trackSocialAction(action) {
     log('Social action:', action);
 
@@ -401,13 +453,38 @@ function trackSocialAction(action) {
         Storage.set(Storage.KEY_HAS_SHARED, 'true');
     }
 
-    // Analytics tracking (if available)
-    if (typeof gtag === 'function') {
-        gtag('event', 'social_action', {
-            action: action,
-            page: getPageUrl()
-        });
-    }
+    trackEvent('social_action', {
+        action: action,
+        event_category: 'engagement'
+    });
+}
+
+function trackPopupEvent(action) {
+    trackEvent('social_popup', {
+        action: action,  // 'shown', 'dismissed', 'never_show'
+        trigger: SocialPopupState.lastTrigger || 'unknown',
+        run_click_count: SocialPopupState.runClickCount,
+        time_on_page: Math.round((Date.now() - SocialPopupState.pageLoadTime) / 1000),
+        event_category: 'engagement'
+    });
+}
+
+function trackRunClick() {
+    trackEvent('code_run', {
+        run_count: SocialPopupState.runClickCount,
+        event_category: 'tutorial_interaction'
+    });
+}
+
+function trackNavigation(direction, targetTitle, targetUrl) {
+    trackEvent('lesson_navigation', {
+        direction: direction,  // 'previous' or 'next'
+        target_title: targetTitle,
+        target_url: targetUrl,
+        time_on_page: Math.round((Date.now() - SocialPopupState.pageLoadTime) / 1000),
+        run_click_count: SocialPopupState.runClickCount,
+        event_category: 'tutorial_interaction'
+    });
 }
 
 // ============================================
@@ -460,8 +537,22 @@ function initSocialPopup() {
 
     // Hook into prev/next navigation
     document.addEventListener('click', (e) => {
-        const navLink = e.target.closest('.nav-prev, .nav-next, .lesson-nav a');
-        if (navLink) {
+        // Match navigation buttons: .nav-left a, .nav-right a (from tutorial-nav.jsp)
+        const navBtn = e.target.closest('.tutorial-nav .nav-left a, .tutorial-nav .nav-right a, .nav-prev, .nav-next, .lesson-nav a');
+        if (navBtn) {
+            // Determine direction
+            const isNext = navBtn.closest('.nav-right') !== null || navBtn.classList.contains('nav-next');
+            const direction = isNext ? 'next' : 'previous';
+
+            // Get target info
+            const titleEl = navBtn.querySelector('.nav-title');
+            const targetTitle = titleEl ? titleEl.textContent.trim() : '';
+            const targetUrl = navBtn.href || '';
+
+            // Track navigation
+            trackNavigation(direction, targetTitle, targetUrl);
+
+            // Check popup trigger
             checkNavigationTrigger();
         }
     });
