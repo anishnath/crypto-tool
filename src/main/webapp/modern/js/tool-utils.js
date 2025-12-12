@@ -460,21 +460,264 @@
         /**
          * Copy from element (textarea, input, etc.)
          * Helper function for copy buttons
-         * 
+         *
          * @param {Element|string} element - Element or selector
          * @param {Object} options - Copy options
          */
         copyFromElement: function(element, options = {}) {
-            const el = typeof element === 'string' 
-                ? document.querySelector(element) 
+            const el = typeof element === 'string'
+                ? document.querySelector(element)
                 : element;
-            
+
             if (!el) return;
-            
+
             const text = el.value || el.textContent || el.innerText;
             if (!text) return;
-            
+
             return this.copyToClipboard(text, options);
+        },
+
+        /**
+         * Download content as a file
+         *
+         * @param {string} content - Content to download
+         * @param {string} filename - Filename with extension
+         * @param {Object} options - Options object
+         * @param {string} options.mimeType - MIME type (default: auto-detected from extension)
+         * @param {boolean} options.showToast - Show toast notification (default: true)
+         * @param {string} options.toastMessage - Custom toast message
+         * @param {boolean} options.showSupportPopup - Show support popup after download (default: true)
+         * @param {string} options.toolName - Tool name for support popup
+         * @returns {boolean} Success status
+         */
+        downloadAsFile: function(content, filename, options = {}) {
+            const {
+                mimeType = null,
+                showToast = true,
+                toastMessage = null,
+                showSupportPopup = true,
+                toolName = null
+            } = options;
+
+            try {
+                // Auto-detect MIME type from extension if not provided
+                const detectedMime = mimeType || this._getMimeType(filename);
+
+                // Create blob
+                const blob = new Blob([content], { type: detectedMime });
+
+                // Create download URL
+                const url = URL.createObjectURL(blob);
+
+                // Create temporary link and trigger download
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.style.display = 'none';
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Clean up URL object
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+
+                // Show toast
+                if (showToast) {
+                    const message = toastMessage || `Downloaded ${filename}`;
+                    this.showToast(message, 2000, 'success');
+                }
+
+                // Show support popup after download
+                if (showSupportPopup) {
+                    setTimeout(() => {
+                        this.showSupportPopup(toolName, `Downloaded: ${filename}`);
+                    }, 500);
+                }
+
+                return true;
+            } catch (err) {
+                console.error('Download failed:', err);
+                if (showToast) {
+                    this.showToast('Download failed. Please try again.', 3000, 'error');
+                }
+                return false;
+            }
+        },
+
+        /**
+         * Share result via URL with encoded data
+         * Creates a shareable URL with the result encoded in a parameter
+         *
+         * @param {string} content - Content to share
+         * @param {Object} options - Options object
+         * @param {string} options.paramName - URL parameter name (default: 'data')
+         * @param {boolean} options.encode - Base64 encode the content (default: true for large content)
+         * @param {Object} options.extraParams - Additional URL parameters
+         * @param {boolean} options.copyToClipboard - Auto copy URL to clipboard (default: true)
+         * @param {boolean} options.showSupportPopup - Show support popup (default: true)
+         * @param {string} options.toolName - Tool name for popup
+         * @returns {string} Shareable URL
+         */
+        shareResult: function(content, options = {}) {
+            const {
+                paramName = 'data',
+                encode = true,
+                extraParams = {},
+                copyToClipboard = true,
+                showSupportPopup = true,
+                toolName = null
+            } = options;
+
+            try {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const urlParams = new URLSearchParams();
+
+                // Encode content if needed (use base64 for safety with special chars)
+                let encodedContent;
+                if (encode) {
+                    // Use base64 encoding for reliable URL transport
+                    encodedContent = btoa(unescape(encodeURIComponent(content)));
+                    urlParams.set(paramName, encodedContent);
+                    urlParams.set('enc', 'base64'); // Flag to indicate encoding
+                } else {
+                    urlParams.set(paramName, encodeURIComponent(content));
+                }
+
+                // Add extra parameters
+                for (const [key, value] of Object.entries(extraParams)) {
+                    if (value != null && value !== '') {
+                        urlParams.set(key, value);
+                    }
+                }
+
+                const shareUrl = baseUrl + '?' + urlParams.toString();
+
+                // Copy to clipboard
+                if (copyToClipboard) {
+                    this.copyToClipboard(shareUrl, {
+                        toastMessage: 'Share URL copied to clipboard!',
+                        showSupportPopup: showSupportPopup,
+                        toolName: toolName,
+                        resultText: shareUrl
+                    });
+                }
+
+                return shareUrl;
+            } catch (err) {
+                console.error('Share failed:', err);
+                this.showToast('Failed to generate share URL', 3000, 'error');
+                return null;
+            }
+        },
+
+        /**
+         * Load shared result from URL
+         * Decodes the result from URL parameters
+         *
+         * @param {string} paramName - URL parameter name (default: 'data')
+         * @returns {string|null} Decoded content or null if not found
+         */
+        loadSharedResult: function(paramName = 'data') {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const data = urlParams.get(paramName);
+
+                if (!data) return null;
+
+                const encoding = urlParams.get('enc');
+
+                if (encoding === 'base64') {
+                    // Decode base64
+                    return decodeURIComponent(escape(atob(data)));
+                } else {
+                    // URL decode
+                    return decodeURIComponent(data);
+                }
+            } catch (err) {
+                console.error('Failed to load shared result:', err);
+                return null;
+            }
+        },
+
+        /**
+         * Download content from element as a file
+         *
+         * @param {Element|string} element - Element or selector containing content
+         * @param {string} filename - Filename with extension
+         * @param {Object} options - Download options
+         */
+        downloadFromElement: function(element, filename, options = {}) {
+            const el = typeof element === 'string'
+                ? document.querySelector(element)
+                : element;
+
+            if (!el) {
+                console.error('Element not found for download');
+                return false;
+            }
+
+            const content = el.value || el.textContent || el.innerText;
+            if (!content) {
+                this.showToast('No content to download', 2000, 'warning');
+                return false;
+            }
+
+            return this.downloadAsFile(content, filename, options);
+        },
+
+        /**
+         * Get MIME type from filename extension
+         * @private
+         */
+        _getMimeType: function(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const mimeTypes = {
+                // Text formats
+                'txt': 'text/plain',
+                'csv': 'text/csv',
+                'html': 'text/html',
+                'css': 'text/css',
+                'js': 'application/javascript',
+
+                // Data formats
+                'json': 'application/json',
+                'xml': 'application/xml',
+                'yaml': 'text/yaml',
+                'yml': 'text/yaml',
+
+                // Config formats
+                'ini': 'text/plain',
+                'conf': 'text/plain',
+                'cfg': 'text/plain',
+                'env': 'text/plain',
+                'properties': 'text/plain',
+
+                // Code formats
+                'py': 'text/x-python',
+                'java': 'text/x-java',
+                'sh': 'application/x-sh',
+                'bash': 'application/x-sh',
+                'sql': 'application/sql',
+
+                // Document formats
+                'md': 'text/markdown',
+                'markdown': 'text/markdown',
+
+                // Certificate/Key formats
+                'pem': 'application/x-pem-file',
+                'crt': 'application/x-x509-ca-cert',
+                'cer': 'application/x-x509-ca-cert',
+                'key': 'application/x-pem-file',
+                'csr': 'application/pkcs10',
+                'p12': 'application/x-pkcs12',
+                'pfx': 'application/x-pkcs12',
+
+                // Default
+                'default': 'text/plain'
+            };
+
+            return mimeTypes[ext] || mimeTypes['default'];
         },
 
         /**

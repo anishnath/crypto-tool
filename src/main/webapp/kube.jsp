@@ -1,2429 +1,2164 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Kubernetes YAML Generator Online – Free | 8gwifi.org</title>
-    <meta name="description" content="Free online Kubernetes YAML/JSON generator for Pods, Deployments, StatefulSets, Jobs, CronJobs, ConfigMaps, Secrets, and Services. Generate K8s manifests instantly with resource limits, health checks, and environment variables. No signup required.">
-    <meta name="keywords" content="kubernetes yaml generator, k8s manifest generator, kubernetes deployment generator, kubernetes pod generator, kubernetes statefulset generator, kubernetes job generator, kubernetes cronjob generator, kubernetes configmap generator, kubernetes secret generator, kubernetes service generator, k8s yaml online, kubernetes json generator, generate kubernetes yaml, k8s deployment yaml, kubectl apply yaml, kubernetes manifest creator, kubernetes config generator, k8s yaml template, kubernetes resource generator">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index,follow" />
-    <meta name="author" content="Anish Nath" />
-    <link rel="canonical" href="https://8gwifi.org/kube.jsp" />
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://code.jquery.com">
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Kubernetes YAML/JSON Generator",
-        "alternateName": ["K8s Manifest Generator", "Kubernetes Config Generator", "K8s YAML Tool"],
-        "description": "Free online tool to generate Kubernetes manifests for Pods, Deployments, StatefulSets, Jobs, CronJobs, ConfigMaps, Secrets, and Services in YAML and JSON format. Supports resource limits, health checks, environment variables, and all secret types.",
-        "url": "https://8gwifi.org/kube.jsp",
-        "applicationCategory": "DeveloperApplication",
-        "applicationSubCategory": "DevOps Tools",
-        "operatingSystem": "Any",
-        "browserRequirements": "Requires JavaScript",
-        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-        "author": {"@type": "Person", "name": "Anish Nath", "url": "https://x.com/anish2good"},
-        "publisher": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
-        "datePublished": "2020-02-19",
-        "dateModified": "2025-11-29",
-        "featureList": [
-            "Generate Kubernetes Pod YAML/JSON",
-            "Generate Kubernetes Deployment manifests",
-            "Generate StatefulSet configurations",
-            "Generate Kubernetes Jobs and CronJobs",
-            "Generate ConfigMaps and Secrets",
-            "Generate Kubernetes Services (ClusterIP, NodePort, LoadBalancer)",
-            "Support for TLS, Docker Registry, SSH, and Basic Auth secrets",
-            "Resource limits and requests configuration",
-            "Liveness and readiness probe setup",
-            "Environment variables with key-value editor",
-            "Download YAML/JSON files",
-            "Share configuration via URL"
-        ],
-        "screenshot": "https://8gwifi.org/images/site/kube.png",
-        "softwareVersion": "2.0",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "ratingCount": "1250",
-            "bestRating": "5",
-            "worstRating": "1"
-        }
-    }
-    </script>
+    <!-- Critical CSS -->
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
+        :root{--primary:#326ce5;--primary-dark:#1d4ed8;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
+    </style>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-            "@type": "Question",
-            "name": "How do I generate Kubernetes YAML/JSON manifests?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Select the resource type (Pod, Deployment, StatefulSet, Job, CronJob, ConfigMap, Secret, or Service) from the dropdown. Fill in the configuration form with details like container image, ports, environment variables, resource limits, and labels. Click Generate to create valid Kubernetes YAML and JSON manifests ready for kubectl apply."
-            }
-        },{
-            "@type": "Question",
-            "name": "What Kubernetes resources can I generate with this tool?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "This tool generates 8 Kubernetes resource types: 1) Pods - single container instances, 2) Deployments - for stateless apps with rolling updates, 3) StatefulSets - for stateful apps with persistent storage, 4) Jobs - one-time batch tasks, 5) CronJobs - scheduled recurring tasks, 6) ConfigMaps - configuration data storage, 7) Secrets - sensitive data like passwords, TLS certs, Docker registry credentials, and 8) Services - network access with ClusterIP, NodePort, LoadBalancer types."
-            }
-        },{
-            "@type": "Question",
-            "name": "What types of Kubernetes Secrets can I create?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The generator supports 5 Kubernetes Secret types: 1) Opaque - generic key-value secrets, 2) kubernetes.io/basic-auth - username/password for HTTP authentication, 3) kubernetes.io/ssh-auth - SSH private keys, 4) kubernetes.io/tls - TLS certificates with tls.crt and tls.key, and 5) kubernetes.io/dockerconfigjson - Docker registry credentials for pulling private images. All secrets use stringData for automatic base64 encoding."
-            }
-        },{
-            "@type": "Question",
-            "name": "How do I create a Kubernetes CronJob YAML?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Select 'CronJob' from the resource dropdown. Enter the cron schedule (e.g., '*/5 * * * *' for every 5 minutes), container image, command, and optional settings like concurrency policy, backoff limit, and job history limits. The generator creates a valid batch/v1 CronJob manifest with proper jobTemplate structure."
-            }
-        },{
-            "@type": "Question",
-            "name": "What is the difference between ConfigMap and Secret in Kubernetes?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "ConfigMaps store non-sensitive configuration data like environment variables and config files in plain text. Secrets store sensitive data like passwords, API keys, and TLS certificates with base64 encoding. While both can be mounted as volumes or environment variables, Secrets provide additional security features and should be used for any sensitive information."
-            }
-        },{
-            "@type": "Question",
-            "name": "How do I set resource limits and requests in Kubernetes?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "In the Resource Limits section, set CPU limits/requests (e.g., '500m' for 0.5 CPU cores, '1' for 1 core) and memory limits/requests (e.g., '256Mi', '1Gi'). Requests guarantee minimum resources for scheduling, while limits cap maximum usage. Best practice: set requests equal to or slightly below limits for predictable performance."
-            }
-        },{
-            "@type": "Question",
-            "name": "Can I download the generated Kubernetes manifest?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! After generating a manifest, use the Download YAML or Download JSON buttons to save the file directly. You can also use the Share URL feature to create a shareable link that preserves all your configuration settings, making it easy to collaborate or save configurations for later."
-            }
-        },{
-            "@type": "Question",
-            "name": "What API versions does the generator use?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The generator uses current stable API versions: v1 for Pods, Services, ConfigMaps, and Secrets; apps/v1 for Deployments and StatefulSets; batch/v1 for Jobs and CronJobs. These are the recommended versions for Kubernetes 1.16+ and ensure compatibility with modern clusters."
-            }
-        }]
-    }
-    </script>
+    <!-- SEO -->
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Kubernetes YAML Generator Online Free - K8s Manifest Builder" />
+        <jsp:param name="toolDescription" value="Free Kubernetes YAML generator online. Create Deployments, Pods, Services, ConfigMaps, Secrets, Jobs, CronJobs & StatefulSets instantly. Live preview, copy & download. No signup required." />
+        <jsp:param name="toolCategory" value="DevOps" />
+        <jsp:param name="toolUrl" value="kube.jsp" />
+        <jsp:param name="toolKeywords" value="kubernetes yaml generator, k8s yaml generator online, kubernetes manifest generator, kubernetes deployment yaml generator, kubectl yaml generator, k8s config generator, kubernetes service yaml, kubernetes pod yaml, configmap generator, kubernetes secret generator, statefulset yaml, cronjob yaml kubernetes, kubernetes job yaml, helm alternative, k8s yaml online, kubernetes yaml builder, free kubernetes tool, yaml generator online, k8s deployment generator, kubernetes yaml creator" />
+        <jsp:param name="toolImage" value="kube.png" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="What is a Kubernetes YAML generator?" />
+        <jsp:param name="faq1a" value="A Kubernetes YAML generator creates properly formatted manifest files for K8s resources like Deployments, Pods, Services, and ConfigMaps without manual coding." />
+        <jsp:param name="faq2q" value="Is this Kubernetes YAML generator free?" />
+        <jsp:param name="faq2a" value="Yes, completely free with no registration required. All processing happens in your browser for security." />
+        <jsp:param name="faq3q" value="What Kubernetes resources can I generate?" />
+        <jsp:param name="faq3a" value="Deployments, Pods, Services, StatefulSets, Jobs, CronJobs, ConfigMaps, and Secrets with full configuration options." />
+    </jsp:include>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "How to Generate Kubernetes YAML Manifests Online",
-        "description": "Step-by-step guide to create Kubernetes resource manifests (Pod, Deployment, StatefulSet, Job, CronJob, ConfigMap, Secret, Service) using our free online generator.",
-        "totalTime": "PT2M",
-        "estimatedCost": {"@type": "MonetaryAmount", "currency": "USD", "value": "0"},
-        "tool": [
-            {"@type": "HowToTool", "name": "Web browser"},
-            {"@type": "HowToTool", "name": "kubectl (for applying manifests)"}
-        ],
-        "step": [{
-            "@type": "HowToStep",
-            "position": 1,
-            "name": "Select Resource Type",
-            "text": "Choose the Kubernetes resource type from the dropdown: Pod/Deployment, Service, StatefulSet, Job, CronJob, ConfigMap, or Secret.",
-            "url": "https://8gwifi.org/kube.jsp#step1"
-        },{
-            "@type": "HowToStep",
-            "position": 2,
-            "name": "Configure Basic Settings",
-            "text": "Enter the resource name, namespace, and for workloads specify the container image (e.g., nginx:latest, redis:7-alpine).",
-            "url": "https://8gwifi.org/kube.jsp#step2"
-        },{
-            "@type": "HowToStep",
-            "position": 3,
-            "name": "Add Labels and Environment Variables",
-            "text": "Use the key-value editor to add labels for organization and selectors, and environment variables for configuration.",
-            "url": "https://8gwifi.org/kube.jsp#step3"
-        },{
-            "@type": "HowToStep",
-            "position": 4,
-            "name": "Set Resource Limits (Recommended)",
-            "text": "Configure CPU and memory requests/limits. Example: CPU request 100m, limit 500m; Memory request 128Mi, limit 512Mi.",
-            "url": "https://8gwifi.org/kube.jsp#step4"
-        },{
-            "@type": "HowToStep",
-            "position": 5,
-            "name": "Generate and Download",
-            "text": "Click Generate to create the manifest. Review the YAML/JSON output, then use Download YAML or Download JSON to save the file.",
-            "url": "https://8gwifi.org/kube.jsp#step5"
-        },{
-            "@type": "HowToStep",
-            "position": 6,
-            "name": "Apply to Kubernetes Cluster",
-            "text": "Apply the manifest to your cluster using: kubectl apply -f manifest.yaml. Verify with kubectl get pods or kubectl get deployments.",
-            "url": "https://8gwifi.org/kube.jsp#step6"
-        }]
-    }
-    </script>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://8gwifi.org"
-        },{
-            "@type": "ListItem",
-            "position": 2,
-            "name": "DevOps Tools",
-            "item": "https://8gwifi.org/devops.jsp"
-        },{
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Kubernetes YAML Generator",
-            "item": "https://8gwifi.org/kube.jsp"
-        }]
-    }
-    </script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    </noscript>
 
-    <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <style>
+        /* Kubernetes-specific theme variables */
         :root {
-            --theme-primary: #326ce5;
-            --theme-secondary: #1d4ed8;
-            --theme-gradient: linear-gradient(135deg, #326ce5 0%, #1d4ed8 100%);
-            --theme-light: #eff6ff;
+            --tool-primary: #326ce5;
+            --tool-primary-dark: #1d4ed8;
+            --tool-gradient: linear-gradient(135deg, #326ce5 0%, #1d4ed8 100%);
+            --tool-light: #eff6ff;
+            --kube-gradient: var(--tool-gradient);
+            --kube-light: var(--tool-light);
         }
-        .tool-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(50, 108, 229, 0.15);
-            transition: box-shadow 0.3s ease;
+
+        [data-theme="dark"] {
+            --tool-gradient: linear-gradient(135deg, #4f7fdb 0%, #3b6fd1 100%);
+            --tool-light: rgba(50, 108, 229, 0.15);
+            --kube-gradient: var(--tool-gradient);
+            --kube-light: var(--tool-light);
         }
-        .tool-card:hover {
-            box-shadow: 0 4px 20px rgba(50, 108, 229, 0.25);
-        }
-        .card-header-custom {
-            background: var(--theme-gradient);
-            color: white;
-            border-radius: 12px 12px 0 0 !important;
-            padding: 0.75rem 1rem;
-        }
-        .card-header-custom h5 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .form-section {
-            background: var(--theme-light);
-            border-radius: 6px;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-section-title {
-            font-weight: 600;
-            color: var(--theme-primary);
-            margin-bottom: 0.4rem;
-            font-size: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .form-section-title:hover {
-            color: var(--theme-secondary);
-        }
-        .form-section-title i {
-            transition: transform 0.2s;
-        }
-        .form-section-title[aria-expanded="true"] i.fa-chevron-down {
-            transform: rotate(180deg);
-        }
-        .form-section-content.collapse:not(.show) {
-            display: none;
-        }
-        .form-section-content.collapsing {
-            position: relative;
-            height: 0;
-            overflow: hidden;
-            transition: height 0.35s ease;
-        }
-        .form-group {
-            margin-bottom: 0.5rem;
-        }
-        .form-group label {
-            font-size: 0.8rem;
-            margin-bottom: 0.2rem;
-            font-weight: 500;
-        }
-        .form-control-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-        }
-        .card-body {
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 0.75rem;
-        }
-        .card-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        .card-body::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-        .card-body::-webkit-scrollbar-thumb {
-            background: var(--theme-primary);
-            border-radius: 3px;
-        }
-        .card-body::-webkit-scrollbar-thumb:hover {
-            background: var(--theme-secondary);
-        }
-        .result-card {
-            border: 2px dashed #dee2e6;
-            border-radius: 12px;
-            min-height: 200px;
-        }
-        .result-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            min-height: 150px;
-        }
-        .result-content {
-            display: none;
-        }
-        .eeat-badge {
-            background: var(--theme-gradient);
-            color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .info-badge {
-            display: inline-block;
-            background: var(--theme-light);
-            color: var(--theme-primary);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            margin-right: 0.25rem;
-        }
-        .hash-output {
-            font-family: 'Courier New', monospace;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 0.5rem;
-            word-break: break-all;
-            position: relative;
-            white-space: pre-wrap;
-        }
-        .related-tools {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-        }
-        .related-tool-card {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 1rem;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s;
-        }
-        .related-tool-card:hover {
-            border-color: var(--theme-primary);
-            box-shadow: 0 2px 8px rgba(50, 108, 229, 0.2);
-            text-decoration: none;
-        }
-        .related-tool-card h6 {
-            color: var(--theme-primary);
-            margin-bottom: 0.25rem;
-            font-size: 0.9rem;
-        }
-        .related-tool-card p {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin: 0;
-        }
-        /* KV Pair Styles */
-        .kv-container {
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 0.5rem;
-            background: #fff;
-        }
-        .kv-pair {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            align-items: center;
-        }
-        .kv-pair:last-child {
-            margin-bottom: 0;
-        }
-        .kv-pair input {
-            flex: 1;
-        }
-        .kv-pair .btn-remove-kv {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            line-height: 1;
-            color: #dc3545;
-            background: transparent;
-            border: 1px solid #dc3545;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-        .kv-pair .btn-remove-kv:hover {
-            background: #dc3545;
-            color: white;
-            text-decoration: none;
-        }
-        .btn-add-kv {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.75rem;
-            color: var(--theme-primary);
-            background: var(--theme-light);
-            border: 1px dashed var(--theme-primary);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 0.5rem;
-            text-decoration: none;
-        }
-        .btn-add-kv:hover {
-            background: var(--theme-primary);
-            color: white;
-            border-style: solid;
-            text-decoration: none;
-        }
-        .kv-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .kv-label small {
-            font-weight: normal;
-            color: #6c757d;
-        }
-        /* Prevent icon clicks from causing issues */
-        .btn-add-kv i,
-        .btn-remove-kv i {
-            pointer-events: none;
-        }
+
+        /* YAML Syntax Highlighting */
+        .tool-output-pre .yaml-key { color: #7dd3fc; }
+        .tool-output-pre .yaml-value { color: #fde68a; }
+        .tool-output-pre .yaml-string { color: #86efac; }
+        .tool-output-pre .yaml-number { color: #c4b5fd; }
+        .tool-output-pre .yaml-comment { color: #64748b; font-style: italic; }
+        .tool-output-pre .yaml-boolean { color: #f472b6; }
     </style>
 </head>
-<%@ include file="body-script.jsp"%>
-<%@ include file="devops-tools-navbar.jsp"%>
-<%@ include file="footer_adsense.jsp"%>
+<body>
+    <!-- Navigation -->
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-2">
-    <div>
-        <h1 class="h4 mb-0">Kubernetes Spec Generator</h1>
-        <div class="mt-1">
-            <span class="info-badge"><i class="fas fa-dharmachakra"></i> Kubernetes</span>
-            <span class="info-badge"><i class="fas fa-cube"></i> Pods</span>
-            <span class="info-badge"><i class="fas fa-layer-group"></i> Deployments</span>
-            <span class="info-badge"><i class="fas fa-network-wired"></i> Services</span>
-        </div>
-    </div>
-    <div class="eeat-badge">
-        <i class="fas fa-user-check"></i>
-        <span>Anish Nath</span>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Left Column: Input Forms -->
-    <div class="col-lg-5 mb-4">
-        <div class="card tool-card">
-            <div class="card-header card-header-custom">
-                <h5><i class="fas fa-cogs mr-2"></i>Kubernetes Configuration</h5>
+    <!-- Page Header -->
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Kubernetes YAML Generator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/devops.jsp">DevOps</a> /
+                    Kubernetes Generator
+                </nav>
             </div>
-            <div class="card-body">
-                <!-- Resource Type Selector -->
-                <div class="form-group mb-3">
-                    <label for="selectkubeobject">Build Kubernetes Object</label>
-                    <select class="form-control form-control-sm" id="selectkubeobject">
-                        <option value="1">Pod / Deployment</option>
-                        <option value="2">Service</option>
-                        <option value="3">StatefulSet</option>
-                        <option value="4">Job</option>
-                        <option value="5">CronJob</option>
-                        <option value="6">ConfigMap</option>
-                        <option value="7">Secret</option>
-                    </select>
+            <div class="tool-page-badges">
+                <span class="tool-badge">K8s v1.28+</span>
+                <span class="tool-badge">YAML & JSON</span>
+                <span class="tool-badge">Live Preview</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tool Description + Ad Section -->
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Generate production-ready Kubernetes manifests instantly. Create Deployments, Services, ConfigMaps, Secrets, Jobs, CronJobs, and StatefulSets with live YAML/JSON preview. Use presets for popular stacks like nginx, Redis, and PostgreSQL.</p>
+            </div>
+            <div class="tool-description-ad">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="tool-page-container">
+        <!-- ========== INPUT COLUMN ========== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <!-- Resource Type Tabs -->
+                <div class="tool-tabs" role="tablist">
+                    <button class="tool-tab active" data-resource="deployment" role="tab">Deployment</button>
+                    <button class="tool-tab" data-resource="pod" role="tab">Pod</button>
+                    <button class="tool-tab" data-resource="service" role="tab">Service</button>
+                    <button class="tool-tab" data-resource="statefulset" role="tab">StatefulSet</button>
+                    <button class="tool-tab" data-resource="job" role="tab">Job</button>
+                    <button class="tool-tab" data-resource="cronjob" role="tab">CronJob</button>
+                    <button class="tool-tab" data-resource="configmap" role="tab">ConfigMap</button>
+                    <button class="tool-tab" data-resource="secret" role="tab">Secret</button>
                 </div>
 
-                <!-- Service Form -->
-                <form id="service" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="SERVICE_GENERATE">
+                <!-- Template Presets -->
+                <div class="tool-presets" id="presetsBar">
+                    <button class="tool-preset-btn" data-preset="nginx-prod">Nginx</button>
+                    <button class="tool-preset-btn" data-preset="node-api">Node.js API</button>
+                    <button class="tool-preset-btn" data-preset="python-api">Python API</button>
+                    <button class="tool-preset-btn" data-preset="go-api">Go API</button>
+                    <button class="tool-preset-btn" data-preset="redis-prod">Redis</button>
+                    <button class="tool-preset-btn" data-preset="postgres-prod">PostgreSQL</button>
+                    <button class="tool-preset-btn" data-preset="mongodb">MongoDB</button>
+                    <button class="tool-preset-btn" data-preset="elasticsearch">Elasticsearch</button>
+                </div>
 
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#serviceBasic" aria-expanded="true">
-                            <span><i class="fas fa-network-wired mr-1"></i>Service Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="serviceBasic" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="svcName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="svcName" name="name" placeholder="my-service">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="svcNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" value="default" id="svcNamespace" name="namespace">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="type">Service Type</label>
-                                <select class="form-control form-control-sm" name="type" id="type">
-                                    <option value="ClusterIP" selected>ClusterIP</option>
-                                    <option value="NodePort">NodePort</option>
-                                    <option value="LoadBalancer">LoadBalancer</option>
-                                    <option value="ExternalName">ExternalName</option>
-                                </select>
-                            </div>
+                <div class="tool-card-body">
+                    <!-- Hidden fields for form submission -->
+                    <input type="hidden" id="resourceType" value="deployment">
+                    <input type="hidden" id="labelData" name="label">
+                    <input type="hidden" id="annotationData" name="annotation">
+                    <input type="hidden" id="envData" name="environment">
 
-                            <!-- Selector Labels for Service -->
-                            <div class="form-group">
-                                <div class="kv-label">
-                                    <span>Selector Labels</span>
-                                    <small>Matches pod labels</small>
-                                </div>
-                                <input type="hidden" name="label" id="svcLabel">
-                                <div class="kv-container" id="svcLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key (e.g., app)" value="app">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value (e.g., nginx)" value="nginx">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                    <!-- ========== DEPLOYMENT/POD FORM ========== -->
+                    <div id="formDeployment" class="tool-resource-form">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>Basic Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="name" placeholder="my-app" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="namespace" value="default" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('svcLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#servicePorts" aria-expanded="true">
-                            <span><i class="fas fa-plug mr-1"></i>Ports</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="servicePorts" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="portname">Port Name</label>
-                                    <input type="text" class="form-control form-control-sm" value="http" id="portname" name="portname">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label for="port">Port</label>
-                                    <input type="text" class="form-control form-control-sm" value="80" id="port" name="port">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="targetPort">Target</label>
-                                    <input type="text" class="form-control form-control-sm" value="80" name="targetPort" id="targetPort">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="protocol">Protocol</label>
-                                    <select class="form-control form-control-sm" name="protocol" id="protocol">
-                                        <option value="TCP" selected>TCP</option>
-                                        <option value="UDP">UDP</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="nodePortRow" class="form-row" style="display: none;">
-                                <div class="form-group col-md-6">
-                                    <label for="nodePort">Node Port</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="30000-32767" name="nodePort" id="nodePort">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#serviceAdvanced" aria-expanded="false">
-                            <span><i class="fas fa-sliders-h mr-1"></i>Advanced</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="serviceAdvanced" class="form-section-content collapse">
-                            <div class="form-row">
-                                <div class="form-group col-md-6" id="clusterIPField">
-                                    <label for="clusterIP">Cluster IP</label>
-                                    <input type="text" class="form-control form-control-sm" id="clusterIP" name="clusterIP" placeholder="None or IP">
-                                </div>
-                                <div class="form-group col-md-6" id="loadBalancerIPField" style="display: none;">
-                                    <label for="loadBalancerIP">LoadBalancer IP</label>
-                                    <input type="text" class="form-control form-control-sm" id="loadBalancerIP" name="loadBalancerIP">
-                                </div>
-                            </div>
-                            <div class="form-group" id="externalNameField" style="display: none;">
-                                <label for="externalName">External Name</label>
-                                <input type="text" class="form-control form-control-sm" id="externalName" name="externalName" placeholder="my.database.example.com">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="externalIPs">External IPs</label>
-                                    <input type="text" class="form-control form-control-sm" name="externalIPs" id="externalIPs" placeholder="1.2.3.4,5.6.7.8">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="sessionAffinity">Session Affinity</label>
-                                    <select class="form-control form-control-sm" name="sessionAffinity" id="sessionAffinity">
-                                        <option value="None" selected>None</option>
-                                        <option value="ClientIP">ClientIP</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn w-100 mt-2" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-magic mr-2"></i>Generate Service
-                    </button>
-                </form>
-
-                <!-- Pod/Deployment Form -->
-                <form id="form" method="POST">
-                    <input type="hidden" name="methodName" value="POD_GENERATE">
-                    <input type="hidden" name="deployment" id="deployment" value="pod">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#podMetadata" aria-expanded="true">
-                            <span><i class="fas fa-info-circle mr-1"></i>Metadata</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="podMetadata" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="my-pod">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="namespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" value="default" id="namespace" name="namespace">
-                                </div>
-                            </div>
-                            <!-- Labels -->
-                            <div class="form-group">
-                                <div class="kv-label">
-                                    <span>Labels</span>
-                                    <small>Used for pod selection</small>
-                                </div>
-                                <input type="hidden" name="label" id="label">
-                                <div class="kv-container" id="labelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key (e.g., app)" value="app">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value (e.g., nginx)" value="nginx">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Image <span class="required">*</span></label>
+                                        <input type="text" class="tool-input" id="image" placeholder="nginx:latest" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Replicas</label>
+                                        <input type="number" class="tool-input" id="replicas" value="1" min="1" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('labelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-
-                            <!-- Annotations -->
-                            <div class="form-group">
-                                <div class="kv-label">
-                                    <span>Annotations</span>
-                                    <small>Metadata for tools</small>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Container Ports</label>
+                                    <input type="text" class="tool-input" id="containerPorts" placeholder="80, 443" oninput="updatePreview()">
+                                    <span class="tool-form-hint">Comma-separated port numbers</span>
                                 </div>
-                                <input type="hidden" name="annotation" id="annotation">
-                                <div class="kv-container" id="annotationsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Labels & Annotations</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content hidden">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Labels</label>
+                                    <div class="kv-container" id="labelsContainer">
+                                        <div class="kv-pair">
+                                            <input type="text" class="kv-key" placeholder="Key" value="app" oninput="updatePreview()">
+                                            <input type="text" class="kv-value" placeholder="Value" value="myapp" oninput="updatePreview()">
+                                            <button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addKVPair('labelsContainer')">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Resources</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content hidden">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">CPU Request</label>
+                                        <input type="text" class="tool-input" id="cpuRequest" placeholder="100m" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">CPU Limit</label>
+                                        <input type="text" class="tool-input" id="cpuLimit" placeholder="500m" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('annotationsContainer')">
-                                    <i class="fas fa-plus"></i> Add Annotation
-                                </a>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Memory Request</label>
+                                        <input type="text" class="tool-input" id="memoryRequest" placeholder="128Mi" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Memory Limit</label>
+                                        <input type="text" class="tool-input" id="memoryLimit" placeholder="512Mi" oninput="updatePreview()">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#containerSpec" aria-expanded="true">
-                            <span><i class="fas fa-cube mr-1"></i>Container Spec</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="containerSpec" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="image">Docker Image</label>
-                                    <input type="text" class="form-control form-control-sm" id="image" value="nginx" name="image">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="containerName">Container Name</label>
-                                    <input type="text" class="form-control form-control-sm" name="containerName" id="containerName" placeholder="nginx">
-                                </div>
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Environment Variables</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="imagePullPolicy">Pull Policy</label>
-                                    <select class="form-control form-control-sm" name="imagePullPolicy" id="imagePullPolicy">
-                                        <option value="IfNotPresent" selected>IfNotPresent</option>
-                                        <option value="Always">Always</option>
-                                        <option value="Never">Never</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="restartPolicy">Restart</label>
-                                    <select class="form-control form-control-sm" name="restartPolicy" id="restartPolicy">
-                                        <option value="Always" selected>Always</option>
-                                        <option value="OnFailure">OnFailure</option>
-                                        <option value="Never">Never</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="containerPorts">Ports</label>
-                                    <input type="text" class="form-control form-control-sm" value="80" id="containerPorts" name="containerPorts" placeholder="80,443">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#resourcesSection" aria-expanded="false">
-                            <span><i class="fas fa-microchip mr-1"></i>Resources (CPU/Memory)</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="resourcesSection" class="form-section-content collapse">
-                            <p class="small text-muted mb-2">Requests (guaranteed resources)</p>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="cpuRequest">CPU Request</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="100m" id="cpuRequest" name="cpuRequest">
-                                    <small class="text-muted" style="font-size: 0.65rem;">e.g., 100m, 0.5, 1</small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="memoryRequest">Memory Request</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="128Mi" id="memoryRequest" name="memoryRequest">
-                                    <small class="text-muted" style="font-size: 0.65rem;">e.g., 128Mi, 1Gi</small>
-                                </div>
-                            </div>
-                            <p class="small text-muted mb-2">Limits (maximum allowed)</p>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="cpuLimit">CPU Limit</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="500m" id="cpuLimit" name="cpuLimit">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="memoryLimit">Memory Limit</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="256Mi" id="memoryLimit" name="memoryLimit">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#deploymentSection" aria-expanded="false">
-                            <span><i class="fas fa-clone mr-1"></i>Deployment Settings</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="deploymentSection" class="form-section-content collapse">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="replicas">Replicas</label>
-                                    <input type="number" class="form-control form-control-sm" value="1" min="1" max="100" id="replicas" name="replicas">
-                                    <small class="text-muted" style="font-size: 0.65rem;">Number of pod replicas (for Deployments)</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#envSection" aria-expanded="false">
-                            <span><i class="fas fa-cog mr-1"></i>Environment & Commands</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="envSection" class="form-section-content collapse">
-                            <!-- Environment Variables -->
-                            <div class="form-group">
-                                <div class="kv-label">
-                                    <span>Environment Variables</span>
-                                    <small>KEY=VALUE pairs</small>
-                                </div>
-                                <input type="hidden" name="environment" id="environment">
+                            <div class="tool-section-content hidden">
                                 <div class="kv-container" id="envContainer">
                                     <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="KEY (e.g., NGINX_HOST)">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value (e.g., example.com)">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                                        <input type="text" class="kv-key" placeholder="Key" oninput="updatePreview()">
+                                        <input type="text" class="kv-value" placeholder="Value" oninput="updatePreview()">
+                                        <button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('envContainer')">
-                                    <i class="fas fa-plus"></i> Add Environment Variable
-                                </a>
-                            </div>
-
-                            <hr class="my-2">
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="containercommand">Commands</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="/bin/sh,-c" id="containercommand" name="containercommand">
-                                    <small class="text-muted" style="font-size: 0.65rem;">Comma separated</small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="containerargs">Arguments</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="echo hello" name="containerargs" id="containerargs">
-                                </div>
+                                <button type="button" class="btn-add-kv" onclick="addKVPair('envContainer')">+ Add</button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#healthSection" aria-expanded="false">
-                            <span><i class="fas fa-heartbeat mr-1"></i>Health Checks</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="healthSection" class="form-section-content collapse">
-                            <p class="small text-muted mb-2">Liveness Probe</p>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="livenessProbepath">Path</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="/healthz" id="livenessProbepath" name="livenessProbepath">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="livenessProbeport">Port</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="8080" id="livenessProbeport" name="livenessProbeport">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="livenessProbescheme">Scheme</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="HTTP" id="livenessProbescheme" name="livenessProbescheme">
-                                </div>
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Health Checks</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <p class="small text-muted mb-2">Readiness Probe</p>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="readinessProbepath">Path</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="/ready" id="readinessProbepath" name="readinessProbepath">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="readinessProbeport">Port</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="8080" id="readinessProbeport" name="readinessProbeport">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="readinessProbescheme">Scheme</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="HTTP" id="readinessProbescheme" name="readinessProbescheme">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#advancedSection" aria-expanded="false">
-                            <span><i class="fas fa-sliders-h mr-1"></i>Advanced</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="advancedSection" class="form-section-content collapse">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="volumeMounts">Volume Mounts</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="/mnt/data" name="volumeMounts" id="volumeMounts">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="dnsPolicy">DNS Policy</label>
-                                    <select class="form-control form-control-sm" name="dnsPolicy" id="dnsPolicy">
-                                        <option value="ClusterFirst" selected>ClusterFirst</option>
-                                        <option value="ClusterFirstWithHostNet">ClusterFirstWithHostNet</option>
-                                        <option value="None">None</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="serviceAccountName">Service Account</label>
-                                    <input type="text" class="form-control form-control-sm" name="serviceAccountName" id="serviceAccountName">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="nodeName">Node Name</label>
-                                    <input type="text" class="form-control form-control-sm" name="nodeName" id="nodeName">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#securitySection" aria-expanded="false">
-                            <span><i class="fas fa-shield-alt mr-1"></i>Security Context</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="securitySection" class="form-section-content collapse">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="apployonPod" id="apployonPod" value="apployonPod">
-                                <label class="form-check-label small" for="apployonPod">Apply on Pod Level</label>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="runAsUser">runAsUser</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="1000" name="runAsUser" id="runAsUser">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="runAsGroup">runAsGroup</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="1000" name="runAsGroup" id="runAsGroup">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="fsGroup">fsGroup</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="2000" name="fsGroup" id="fsGroup">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="runAsNonRoot">nonRoot</label>
-                                    <input type="text" class="form-control form-control-sm" placeholder="true" name="runAsNonRoot" id="runAsNonRoot">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex mt-2" style="gap: 0.5rem;">
-                        <button type="button" class="btn flex-fill" id="generatePod" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                            <i class="fas fa-cube mr-1"></i>Generate Pod
-                        </button>
-                        <button type="button" class="btn flex-fill" id="generateDeployment" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                            <i class="fas fa-layer-group mr-1"></i>Generate Deployment
-                        </button>
-                    </div>
-                </form>
-
-                <!-- StatefulSet Form -->
-                <form id="statefulsetForm" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="STATEFULSET_GENERATE">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#ssMetadata" aria-expanded="true">
-                            <span><i class="fas fa-database mr-1"></i>StatefulSet Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="ssMetadata" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="ssName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssName" name="name" placeholder="my-statefulset">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="ssNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssNamespace" name="namespace" value="default">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="ssImage">Docker Image <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-sm" id="ssImage" name="image" placeholder="nginx:latest" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="ssContainerName">Container Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssContainerName" name="containerName" placeholder="container-name">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="ssReplicas">Replicas</label>
-                                    <input type="number" class="form-control form-control-sm" id="ssReplicas" name="replicas" value="3" min="1">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="ssServiceName">Service Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssServiceName" name="serviceName" placeholder="headless-svc">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="ssPodManagementPolicy">Pod Management</label>
-                                    <select class="form-control form-control-sm" id="ssPodManagementPolicy" name="podManagementPolicy">
-                                        <option value="OrderedReady">OrderedReady</option>
-                                        <option value="Parallel">Parallel</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="ssContainerPorts">Container Ports</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssContainerPorts" name="containerPorts" placeholder="80,443">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="ssVolumeMounts">Volume Mounts</label>
-                                    <input type="text" class="form-control form-control-sm" id="ssVolumeMounts" name="volumeMounts" placeholder="/data,/config">
-                                    <small class="form-text text-muted">Comma-separated mount paths</small>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Labels</label>
-                                <input type="hidden" id="ssLabel" name="label">
-                                <div class="kv-container" id="ssLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key" value="app">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value" value="myapp">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                            <div class="tool-section-content hidden">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Liveness Probe</p>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Path</label>
+                                        <input type="text" class="tool-input" id="livenessPath" placeholder="/healthz" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Port</label>
+                                        <input type="text" class="tool-input" id="livenessPort" placeholder="8080" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('ssLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                <label>Environment Variables</label>
-                                <input type="hidden" id="ssEnvironment" name="environment">
-                                <div class="kv-container" id="ssEnvContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0.75rem 0 0.5rem;">Readiness Probe</p>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Path</label>
+                                        <input type="text" class="tool-input" id="readinessPath" placeholder="/ready" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Port</label>
+                                        <input type="text" class="tool-input" id="readinessPort" placeholder="8080" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('ssEnvContainer')">
-                                    <i class="fas fa-plus"></i> Add Environment Variable
-                                </a>
                             </div>
                         </div>
-                    </div>
 
-                    <button type="submit" class="btn btn-block mt-3" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-database mr-1"></i>Generate StatefulSet
-                    </button>
-                </form>
-
-                <!-- Job Form -->
-                <form id="jobForm" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="JOB_GENERATE">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#jobConfig" aria-expanded="true">
-                            <span><i class="fas fa-tasks mr-1"></i>Job Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Security Context</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content hidden">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Pod Security Context</p>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Run As User</label>
+                                        <input type="number" class="tool-input" id="runAsUser" placeholder="1000" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Run As Group</label>
+                                        <input type="number" class="tool-input" id="runAsGroup" placeholder="1000" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">FS Group</label>
+                                        <input type="number" class="tool-input" id="fsGroup" placeholder="2000" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">
+                                            <input type="checkbox" id="runAsNonRoot" onchange="updatePreview()"> Run As Non-Root
+                                        </label>
+                                    </div>
+                                </div>
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0.75rem 0 0.5rem;">Container Security Context</p>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">
+                                            <input type="checkbox" id="privileged" onchange="updatePreview()"> Privileged
+                                        </label>
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">
+                                            <input type="checkbox" id="readOnlyRootFs" onchange="updatePreview()"> Read-Only Root FS
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">
+                                        <input type="checkbox" id="allowPrivilegeEscalation" onchange="updatePreview()"> Allow Privilege Escalation
+                                    </label>
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Add Capabilities</label>
+                                        <input type="text" class="tool-input" id="capAdd" placeholder="NET_ADMIN, SYS_TIME" oninput="updatePreview()">
+                                        <span class="tool-form-hint">Comma-separated</span>
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Drop Capabilities</label>
+                                        <input type="text" class="tool-input" id="capDrop" placeholder="ALL" oninput="updatePreview()">
+                                        <span class="tool-form-hint">Comma-separated</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div id="jobConfig" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="jobName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="jobName" name="name" placeholder="my-job">
+
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Volumes & Mounts</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content hidden">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Volume Mounts</label>
+                                    <div class="kv-container" id="volumeMountsContainer">
+                                        <div class="volume-mount-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">
+                                            <select class="tool-select" style="width: 100px;" onchange="updatePreview()">
+                                                <option value="emptyDir">EmptyDir</option>
+                                                <option value="configMap">ConfigMap</option>
+                                                <option value="secret">Secret</option>
+                                                <option value="pvc">PVC</option>
+                                                <option value="hostPath">HostPath</option>
+                                            </select>
+                                            <input type="text" class="kv-key" placeholder="Volume Name" style="flex: 1; min-width: 80px;" oninput="updatePreview()">
+                                            <input type="text" class="kv-value" placeholder="Mount Path" style="flex: 1; min-width: 100px;" oninput="updatePreview()">
+                                            <input type="text" class="kv-extra" placeholder="Source (ConfigMap/Secret/PVC name)" style="flex: 1; min-width: 100px;" oninput="updatePreview()">
+                                            <button type="button" class="btn-remove-kv" onclick="removeVolumeMountRow(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addVolumeMountRow()">+ Add Volume</button>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="jobNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" id="jobNamespace" name="namespace" value="default">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Service Account</label>
+                                    <input type="text" class="tool-input" id="serviceAccount" placeholder="default" oninput="updatePreview()">
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="jobImage">Docker Image <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-sm" id="jobImage" name="image" placeholder="busybox:latest" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="jobContainerName">Container Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="jobContainerName" name="containerName" placeholder="container-name">
-                                </div>
+                        </div>
+
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Scheduling</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="jobCommand">Command</label>
-                                    <input type="text" class="form-control form-control-sm" id="jobCommand" name="containercommand" placeholder="echo">
+                            <div class="tool-section-content hidden">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Node Selector</label>
+                                    <div class="kv-container" id="nodeSelectorContainer">
+                                        <div class="kv-pair">
+                                            <input type="text" class="kv-key" placeholder="Key" oninput="updatePreview()">
+                                            <input type="text" class="kv-value" placeholder="Value" oninput="updatePreview()">
+                                            <button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addKVPair('nodeSelectorContainer')">+ Add</button>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="jobArgs">Arguments</label>
-                                    <input type="text" class="form-control form-control-sm" id="jobArgs" name="containerargs" placeholder="Hello World">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Tolerations</label>
+                                    <div class="kv-container" id="tolerationsContainer">
+                                        <div class="toleration-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">
+                                            <input type="text" class="kv-key" placeholder="Key" style="flex: 1; min-width: 60px;" oninput="updatePreview()">
+                                            <select class="tool-select" style="width: 80px;" onchange="updatePreview()">
+                                                <option value="Equal">Equal</option>
+                                                <option value="Exists">Exists</option>
+                                            </select>
+                                            <input type="text" class="kv-value" placeholder="Value" style="flex: 1; min-width: 60px;" oninput="updatePreview()">
+                                            <select class="tool-select" style="width: 100px;" onchange="updatePreview()">
+                                                <option value="NoSchedule">NoSchedule</option>
+                                                <option value="PreferNoSchedule">PreferNoSchedule</option>
+                                                <option value="NoExecute">NoExecute</option>
+                                            </select>
+                                            <button type="button" class="btn-remove-kv" onclick="removeTolerationRow(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addTolerationRow()">+ Add Toleration</button>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="jobBackoffLimit">Backoff Limit</label>
-                                    <input type="number" class="form-control form-control-sm" id="jobBackoffLimit" name="backoffLimit" value="6" min="0">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="jobCompletions">Completions</label>
-                                    <input type="number" class="form-control form-control-sm" id="jobCompletions" name="completions" value="1" min="1">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="jobParallelism">Parallelism</label>
-                                    <input type="number" class="form-control form-control-sm" id="jobParallelism" name="parallelism" value="1" min="1">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="jobRestartPolicy">Restart Policy</label>
-                                    <select class="form-control form-control-sm" id="jobRestartPolicy" name="restartPolicy">
-                                        <option value="Never">Never</option>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Restart Policy</label>
+                                    <select class="tool-select" id="restartPolicy" onchange="updatePreview()">
+                                        <option value="">Default (Always)</option>
+                                        <option value="Always">Always</option>
                                         <option value="OnFailure">OnFailure</option>
+                                        <option value="Never">Never</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="jobTtl">TTL After Finished (seconds)</label>
-                                <input type="number" class="form-control form-control-sm" id="jobTtl" name="ttlSecondsAfterFinished" placeholder="100">
-                                <small class="form-text text-muted">Auto-delete completed jobs</small>
-                            </div>
-                            <div class="form-group">
-                                <label>Labels</label>
-                                <input type="hidden" id="jobLabel" name="label">
-                                <div class="kv-container" id="jobLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key" value="app">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value" value="myjob">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('jobLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                <label>Environment Variables</label>
-                                <input type="hidden" id="jobEnvironment" name="environment">
-                                <div class="kv-container" id="jobEnvContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('jobEnvContainer')">
-                                    <i class="fas fa-plus"></i> Add Environment Variable
-                                </a>
-                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-block mt-3" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-tasks mr-1"></i>Generate Job
-                    </button>
-                </form>
-
-                <!-- CronJob Form -->
-                <form id="cronjobForm" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="CRONJOB_GENERATE">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#cronjobConfig" aria-expanded="true">
-                            <span><i class="fas fa-clock mr-1"></i>CronJob Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="cronjobConfig" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobName" name="name" placeholder="my-cronjob">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobNamespace" name="namespace" value="default">
-                                </div>
+                    <!-- ========== SERVICE FORM ========== -->
+                    <div id="formService" class="tool-resource-form" style="display: none;">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>Service Configuration</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <div class="form-group">
-                                <label for="cronjobSchedule">Schedule <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-sm" id="cronjobSchedule" name="schedule" placeholder="*/5 * * * *" required>
-                                <small class="form-text text-muted">Cron format: MIN HOUR DOM MON DOW (e.g., "0 2 * * *" for daily at 2am)</small>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobImage">Docker Image <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobImage" name="image" placeholder="busybox:latest" required>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="svcName" placeholder="my-service" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="svcNamespace" value="default" oninput="updatePreview()">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobContainerName">Container Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobContainerName" name="containerName" placeholder="container-name">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobCommand">Command</label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobCommand" name="containercommand" placeholder="echo">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="cronjobArgs">Arguments</label>
-                                    <input type="text" class="form-control form-control-sm" id="cronjobArgs" name="containerargs" placeholder="Running scheduled task">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="cronjobConcurrency">Concurrency Policy</label>
-                                    <select class="form-control form-control-sm" id="cronjobConcurrency" name="concurrencyPolicy">
-                                        <option value="Allow">Allow</option>
-                                        <option value="Forbid">Forbid</option>
-                                        <option value="Replace">Replace</option>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Type</label>
+                                    <select class="tool-select" id="svcType" onchange="updatePreview(); toggleServiceFields()">
+                                        <option value="ClusterIP">ClusterIP</option>
+                                        <option value="NodePort">NodePort</option>
+                                        <option value="LoadBalancer">LoadBalancer</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="cronjobSuccessHistory">Success History</label>
-                                    <input type="number" class="form-control form-control-sm" id="cronjobSuccessHistory" name="successfulJobsHistoryLimit" value="3" min="0">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="cronjobFailHistory">Failed History</label>
-                                    <input type="number" class="form-control form-control-sm" id="cronjobFailHistory" name="failedJobsHistoryLimit" value="1" min="0">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Labels</label>
-                                <input type="hidden" id="cronjobLabel" name="label">
-                                <div class="kv-container" id="cronjobLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key" value="app">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value" value="mycronjob">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Port</label>
+                                        <input type="number" class="tool-input" id="svcPort" placeholder="80" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Target Port</label>
+                                        <input type="text" class="tool-input" id="svcTargetPort" placeholder="8080" oninput="updatePreview()">
                                     </div>
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('cronjobLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                <label>Environment Variables</label>
-                                <input type="hidden" id="cronjobEnvironment" name="environment">
-                                <div class="kv-container" id="cronjobEnvContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
+                                <div class="tool-form-group" id="nodePortField" style="display: none;">
+                                    <label class="tool-form-label">Node Port</label>
+                                    <input type="number" class="tool-input" id="svcNodePort" placeholder="30000" min="30000" max="32767" oninput="updatePreview()">
                                 </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('cronjobEnvContainer')">
-                                    <i class="fas fa-plus"></i> Add Environment Variable
-                                </a>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Selector (app label)</label>
+                                    <input type="text" class="tool-input" id="svcSelector" placeholder="myapp" oninput="updatePreview()">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-block mt-3" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-clock mr-1"></i>Generate CronJob
+                    <!-- ========== CONFIGMAP FORM ========== -->
+                    <div id="formConfigmap" class="tool-resource-form" style="display: none;">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>ConfigMap Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="cmName" placeholder="my-config" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="cmNamespace" value="default" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Data</label>
+                                    <div class="kv-container" id="cmDataContainer">
+                                        <div class="kv-pair">
+                                            <input type="text" class="kv-key" placeholder="Key" value="APP_ENV" oninput="updatePreview()">
+                                            <input type="text" class="kv-value" placeholder="Value" value="production" oninput="updatePreview()">
+                                            <button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addKVPair('cmDataContainer')">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== SECRET FORM ========== -->
+                    <div id="formSecret" class="tool-resource-form" style="display: none;">
+                        <div class="tool-alert tool-alert-warning">
+                            <span>&#9888;</span>
+                            <span>Secrets are base64-encoded, not encrypted. Use external secret management in production.</span>
+                        </div>
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>Secret Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="secretName" placeholder="my-secret" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="secretNamespace" value="default" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Type</label>
+                                    <select class="tool-select" id="secretType" onchange="updatePreview()">
+                                        <option value="Opaque">Opaque</option>
+                                        <option value="kubernetes.io/tls">TLS</option>
+                                        <option value="kubernetes.io/dockerconfigjson">Docker Registry</option>
+                                    </select>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Data</label>
+                                    <div class="kv-container" id="secretDataContainer">
+                                        <div class="kv-pair">
+                                            <input type="text" class="kv-key" placeholder="Key" value="API_KEY" oninput="updatePreview()">
+                                            <input type="text" class="kv-value" placeholder="Value" value="secret-value" oninput="updatePreview()">
+                                            <button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add-kv" onclick="addKVPair('secretDataContainer')">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== JOB FORM ========== -->
+                    <div id="formJob" class="tool-resource-form" style="display: none;">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>Job Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="jobName" placeholder="my-job" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="jobNamespace" value="default" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Image <span class="required">*</span></label>
+                                    <input type="text" class="tool-input" id="jobImage" placeholder="busybox:latest" oninput="updatePreview()">
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Command</label>
+                                        <input type="text" class="tool-input" id="jobCommand" placeholder="echo" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Args</label>
+                                        <input type="text" class="tool-input" id="jobArgs" placeholder="Hello World" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Completions</label>
+                                        <input type="number" class="tool-input" id="jobCompletions" value="1" min="1" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Backoff Limit</label>
+                                        <input type="number" class="tool-input" id="jobBackoffLimit" value="6" min="0" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== CRONJOB FORM ========== -->
+                    <div id="formCronjob" class="tool-resource-form" style="display: none;">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>CronJob Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="cronName" placeholder="my-cronjob" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="cronNamespace" value="default" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Schedule <span class="required">*</span></label>
+                                    <input type="text" class="tool-input" id="cronSchedule" placeholder="*/5 * * * *" oninput="updatePreview()">
+                                    <span class="tool-form-hint">Cron format: MIN HOUR DOM MON DOW</span>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Image <span class="required">*</span></label>
+                                    <input type="text" class="tool-input" id="cronImage" placeholder="busybox:latest" oninput="updatePreview()">
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Command</label>
+                                        <input type="text" class="tool-input" id="cronCommand" placeholder="echo" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Args</label>
+                                        <input type="text" class="tool-input" id="cronArgs" placeholder="Running task" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== STATEFULSET FORM ========== -->
+                    <div id="formStatefulset" class="tool-resource-form" style="display: none;">
+                        <div class="tool-section">
+                            <div class="tool-section-header" onclick="toggleSection(this)">
+                                <span>StatefulSet Configuration</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Name</label>
+                                        <input type="text" class="tool-input" id="ssName" placeholder="my-statefulset" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Namespace</label>
+                                        <input type="text" class="tool-input" id="ssNamespace" value="default" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Image <span class="required">*</span></label>
+                                        <input type="text" class="tool-input" id="ssImage" placeholder="nginx:latest" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Replicas</label>
+                                        <input type="number" class="tool-input" id="ssReplicas" value="3" min="1" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label">Service Name</label>
+                                    <input type="text" class="tool-input" id="ssServiceName" placeholder="my-service" oninput="updatePreview()">
+                                    <span class="tool-form-hint">Required headless service name</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tool-section">
+                            <div class="tool-section-header collapsed" onclick="toggleSection(this)">
+                                <span>Volume Claim</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="tool-section-content hidden">
+                                <div class="tool-form-row">
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Volume Name</label>
+                                        <input type="text" class="tool-input" id="ssVolumeName" placeholder="data" oninput="updatePreview()">
+                                    </div>
+                                    <div class="tool-form-group">
+                                        <label class="tool-form-label">Storage Size</label>
+                                        <input type="text" class="tool-input" id="ssStorageSize" placeholder="10Gi" oninput="updatePreview()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button type="button" class="tool-action-btn" id="generateBtn" onclick="generateManifest()">
+                        Generate & Download
                     </button>
-                </form>
+                </div>
+            </div>
+        </div>
 
-                <!-- ConfigMap Form -->
-                <form id="configmapForm" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="CONFIGMAP_GENERATE">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#configmapConfig" aria-expanded="true">
-                            <span><i class="fas fa-file-alt mr-1"></i>ConfigMap Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="configmapConfig" class="form-section-content collapse show">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="configmapName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="configmapName" name="name" placeholder="my-configmap">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="configmapNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" id="configmapNamespace" name="namespace" value="default">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Data (Configuration)</label>
-                                <input type="hidden" id="configmapData" name="data">
-                                <div class="kv-container" id="configmapDataContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key (e.g., APP_ENV)" value="APP_ENV">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value (e.g., production)" value="production">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('configmapDataContainer')">
-                                    <i class="fas fa-plus"></i> Add Data Entry
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                <label>Labels</label>
-                                <input type="hidden" id="configmapLabel" name="label">
-                                <div class="kv-container" id="configmapLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('configmapLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="configmapImmutable" name="immutable" value="true">
-                                <label class="form-check-label small" for="configmapImmutable">Immutable (cannot be modified after creation)</label>
-                            </div>
-                        </div>
+        <!-- ========== OUTPUT COLUMN ========== -->
+        <div class="tool-output-column">
+            <div class="tool-card tool-output-wrapper">
+                <!-- Actions Bar -->
+                <div class="tool-actions-bar">
+                    <div class="tool-format-toggle">
+                        <button class="tool-format-btn active" data-format="yaml">YAML</button>
+                        <button class="tool-format-btn" data-format="json">JSON</button>
                     </div>
-
-                    <button type="submit" class="btn btn-block mt-3" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-file-alt mr-1"></i>Generate ConfigMap
+                    <div class="tool-live-indicator">
+                        <span class="tool-live-dot"></span>
+                        Live Preview
+                    </div>
+                    <div class="tool-actions-spacer"></div>
+                    <button class="tool-btn" id="copyBtn" onclick="copyOutput()" disabled>
+                        <span>&#128203;</span> Copy
                     </button>
-                </form>
-
-                <!-- Secret Form -->
-                <form id="secretForm" method="POST" style="display: none;">
-                    <input type="hidden" name="methodName" value="SECRET_GENERATE">
-
-                    <div class="form-section">
-                        <div class="form-section-title" data-section="#secretConfig" aria-expanded="true">
-                            <span><i class="fas fa-key mr-1"></i>Secret Configuration</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div id="secretConfig" class="form-section-content collapse show">
-                            <div class="alert alert-warning small py-2">
-                                <i class="fas fa-exclamation-triangle mr-1"></i>
-                                <strong>Security Note:</strong> Secrets are base64-encoded, not encrypted. Use external secret management for production.
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="secretName">Name</label>
-                                    <input type="text" class="form-control form-control-sm" id="secretName" name="name" placeholder="my-secret">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="secretNamespace">Namespace</label>
-                                    <input type="text" class="form-control form-control-sm" id="secretNamespace" name="namespace" value="default">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="secretType">Secret Type</label>
-                                <select class="form-control form-control-sm" id="secretType" name="secretType">
-                                    <option value="Opaque">Opaque (generic)</option>
-                                    <option value="kubernetes.io/basic-auth">Basic Auth</option>
-                                    <option value="kubernetes.io/ssh-auth">SSH Auth</option>
-                                    <option value="kubernetes.io/tls">TLS Certificate</option>
-                                    <option value="kubernetes.io/dockerconfigjson">Docker Registry</option>
-                                </select>
-                            </div>
-
-                            <!-- Opaque Secret Data (Generic KV pairs) -->
-                            <div class="form-group secret-type-field" id="secretOpaqueFields">
-                                <label>Secret Data</label>
-                                <input type="hidden" id="secretData" name="data">
-                                <div class="kv-container" id="secretDataContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key (e.g., API_KEY)" value="API_KEY">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value" value="your-api-key-here">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('secretDataContainer')">
-                                    <i class="fas fa-plus"></i> Add Secret Entry
-                                </a>
-                                <small class="form-text text-muted">Generic key-value pairs (stringData - auto base64 encoded)</small>
-                            </div>
-
-                            <!-- Basic Auth Fields -->
-                            <div class="form-group secret-type-field" id="secretBasicAuthFields" style="display: none;">
-                                <label>Basic Auth Credentials</label>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="secretBasicUsername" class="small">Username</label>
-                                        <input type="text" class="form-control form-control-sm" id="secretBasicUsername" placeholder="admin">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="secretBasicPassword" class="small">Password</label>
-                                        <input type="password" class="form-control form-control-sm" id="secretBasicPassword" placeholder="password">
-                                    </div>
-                                </div>
-                                <small class="form-text text-muted">Used for basic HTTP authentication</small>
-                            </div>
-
-                            <!-- SSH Auth Fields -->
-                            <div class="form-group secret-type-field" id="secretSSHFields" style="display: none;">
-                                <label>SSH Private Key</label>
-                                <textarea class="form-control form-control-sm" id="secretSSHKey" rows="6" placeholder="-----BEGIN OPENSSH PRIVATE KEY-----
-...
------END OPENSSH PRIVATE KEY-----"></textarea>
-                                <small class="form-text text-muted">Paste your SSH private key (will be stored as ssh-privatekey)</small>
-                            </div>
-
-                            <!-- TLS Certificate Fields -->
-                            <div class="form-group secret-type-field" id="secretTLSFields" style="display: none;">
-                                <label>TLS Certificate</label>
-                                <textarea class="form-control form-control-sm mb-2" id="secretTLSCert" rows="4" placeholder="-----BEGIN CERTIFICATE-----
-...
------END CERTIFICATE-----"></textarea>
-                                <label>TLS Private Key</label>
-                                <textarea class="form-control form-control-sm" id="secretTLSKey" rows="4" placeholder="-----BEGIN PRIVATE KEY-----
-...
------END PRIVATE KEY-----"></textarea>
-                                <small class="form-text text-muted">For HTTPS/TLS termination (stored as tls.crt and tls.key)</small>
-                            </div>
-
-                            <!-- Docker Registry Fields -->
-                            <div class="form-group secret-type-field" id="secretDockerFields" style="display: none;">
-                                <label>Docker Registry Credentials</label>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="secretDockerServer" class="small">Registry Server</label>
-                                        <input type="text" class="form-control form-control-sm" id="secretDockerServer" placeholder="https://index.docker.io/v1/" value="https://index.docker.io/v1/">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="secretDockerEmail" class="small">Email</label>
-                                        <input type="email" class="form-control form-control-sm" id="secretDockerEmail" placeholder="user@example.com">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="secretDockerUsername" class="small">Username</label>
-                                        <input type="text" class="form-control form-control-sm" id="secretDockerUsername" placeholder="docker-username">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="secretDockerPassword" class="small">Password / Token</label>
-                                        <input type="password" class="form-control form-control-sm" id="secretDockerPassword" placeholder="docker-password">
-                                    </div>
-                                </div>
-                                <small class="form-text text-muted">For pulling images from private registries (stored as .dockerconfigjson)</small>
-                            </div>
-                            <div class="form-group">
-                                <label>Labels</label>
-                                <input type="hidden" id="secretLabel" name="label">
-                                <div class="kv-container" id="secretLabelsContainer">
-                                    <div class="kv-pair">
-                                        <input type="text" class="form-control form-control-sm kv-key" placeholder="Key">
-                                        <input type="text" class="form-control form-control-sm kv-value" placeholder="Value">
-                                        <a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0)" class="btn-add-kv" onclick="addKVPair('secretLabelsContainer')">
-                                    <i class="fas fa-plus"></i> Add Label
-                                </a>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="secretImmutable" name="immutable" value="true">
-                                <label class="form-check-label small" for="secretImmutable">Immutable (cannot be modified after creation)</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-block mt-3" style="background: var(--theme-gradient); color: white; font-weight: 600;">
-                        <i class="fas fa-key mr-1"></i>Generate Secret
+                    <button class="tool-btn" id="shareBtn" onclick="shareOutput()" disabled>
+                        <span>&#128279;</span> Share
                     </button>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Right Column: Results -->
-    <div class="col-lg-7 mb-4">
-        <div class="card tool-card result-card">
-            <div class="card-header card-header-custom">
-                <h5><i class="fas fa-code mr-2"></i>Generated Kubernetes Manifest</h5>
-            </div>
-            <div class="card-body">
-                <div class="result-placeholder" id="resultPlaceholder">
-                    <div class="text-center">
-                        <i class="fas fa-dharmachakra fa-3x text-muted mb-3"></i>
-                        <p class="text-muted mb-0">Configure your Kubernetes resource and click Generate</p>
-                        <p class="text-muted small">Output will appear here in YAML and JSON format</p>
-                    </div>
+                    <button class="tool-btn" id="downloadBtn" onclick="downloadOutput()" disabled>
+                        <span>&#8681;</span> Download
+                    </button>
+                    <button class="tool-btn" onclick="resetForm()">
+                        <span>&#8635;</span> Reset
+                    </button>
                 </div>
-                <div class="result-content" id="resultContent">
-                    <div id="output"></div>
+
+                <!-- Status Bar (shown when valid) -->
+                <div class="tool-status" id="statusBar" style="display: none;">
+                    <span class="tool-status-dot"></span>
+                    <span id="statusText">Valid Kubernetes manifest</span>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- kubectl Commands Section -->
-<div class="card tool-card mb-4">
-    <div class="card-header bg-dark text-white py-2">
-        <h6 class="mb-0"><i class="fas fa-terminal mr-2"></i>kubectl Commands</h6>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <p class="small mb-1"><strong>Apply manifest</strong></p>
-                <pre class="bg-light p-2 rounded small mb-2"><code>kubectl apply -f manifest.yaml</code></pre>
-                <p class="small mb-1"><strong>Create deployment</strong></p>
-                <pre class="bg-light p-2 rounded small mb-2"><code>kubectl create deployment nginx --image=nginx</code></pre>
-            </div>
-            <div class="col-md-6">
-                <p class="small mb-1"><strong>Expose as service</strong></p>
-                <pre class="bg-light p-2 rounded small mb-2"><code>kubectl expose deployment nginx --port=80 --type=LoadBalancer</code></pre>
-                <p class="small mb-1"><strong>Generate YAML (dry-run)</strong></p>
-                <pre class="bg-light p-2 rounded small mb-2"><code>kubectl create deployment nginx --image=nginx --dry-run=client -o yaml</code></pre>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Educational Content Section -->
-<div class="card tool-card mb-4">
-    <div class="card-header bg-light">
-        <h5 class="mb-0"><i class="fas fa-graduation-cap mr-2"></i>Understanding Kubernetes Resources</h5>
-    </div>
-    <div class="card-body">
-        <h6>What is Kubernetes?</h6>
-        <p>Kubernetes (K8s) is an open-source container orchestration platform that automates deployment, scaling, and management of containerized applications. This tool helps you generate Kubernetes resource manifests in YAML or JSON format.</p>
-
-        <h6 class="mt-4">Kubernetes Resource Types</h6>
-        <table class="table table-sm table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th>Resource</th>
-                    <th>Purpose</th>
-                    <th>Use Case</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Pod</strong></td>
-                    <td>Smallest deployable unit</td>
-                    <td>Single container instances, one-off tasks</td>
-                </tr>
-                <tr class="table-success">
-                    <td><strong>Deployment</strong></td>
-                    <td>Manages ReplicaSets and Pods</td>
-                    <td>Stateless apps, rolling updates (recommended)</td>
-                </tr>
-                <tr>
-                    <td><strong>Service</strong></td>
-                    <td>Network access to pods</td>
-                    <td>Load balancing, service discovery</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h6 class="mt-4">API Versions (Current Standard)</h6>
-        <table class="table table-sm table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th>Resource</th>
-                    <th>API Version</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Pod</td>
-                    <td><code>v1</code></td>
-                    <td>Core API, stable</td>
-                </tr>
-                <tr>
-                    <td>Deployment</td>
-                    <td><code>apps/v1</code></td>
-                    <td>Stable since K8s 1.9 (replaces apps/v1beta1)</td>
-                </tr>
-                <tr>
-                    <td>Service</td>
-                    <td><code>v1</code></td>
-                    <td>Core API, stable</td>
-                </tr>
-                <tr>
-                    <td>StatefulSet</td>
-                    <td><code>apps/v1</code></td>
-                    <td>For stateful applications</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h6 class="mt-4">Resource Limits Best Practices</h6>
-        <ul class="small">
-            <li><strong>Always set requests:</strong> Helps scheduler place pods efficiently</li>
-            <li><strong>CPU units:</strong> 1 CPU = 1000m (millicores). Use 100m-500m for typical apps</li>
-            <li><strong>Memory units:</strong> Mi (mebibytes), Gi (gibibytes). Use 128Mi-512Mi for typical apps</li>
-            <li><strong>Limits vs Requests:</strong> Limits cap usage; requests guarantee minimum resources</li>
-        </ul>
-
-        <h6 class="mt-4">Service Types</h6>
-        <ul class="small">
-            <li><strong>ClusterIP:</strong> Internal cluster access only (default)</li>
-            <li><strong>NodePort:</strong> Exposes on each node's IP at a static port (30000-32767)</li>
-            <li><strong>LoadBalancer:</strong> Creates external load balancer (cloud providers)</li>
-            <li><strong>ExternalName:</strong> Maps service to external DNS name (CNAME)</li>
-        </ul>
-
-        <h6 class="mt-4">Code Examples</h6>
-        <div class="row">
-            <div class="col-md-6">
-                <p class="small mb-1"><strong>Python (kubernetes client)</strong></p>
-                <pre class="bg-dark text-light p-2 rounded small"><code>from kubernetes import client, config
-config.load_kube_config()
-v1 = client.CoreV1Api()
-pods = v1.list_namespaced_pod("default")</code></pre>
-            </div>
-            <div class="col-md-6">
-                <p class="small mb-1"><strong>Go (client-go)</strong></p>
-                <pre class="bg-dark text-light p-2 rounded small"><code>clientset, _ := kubernetes.NewForConfig(config)
-pods, _ := clientset.CoreV1().
-    Pods("default").List(ctx, metav1.ListOptions{})</code></pre>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Related Tools Section -->
-<div class="card tool-card mb-4">
-    <div class="card-header bg-light py-2">
-        <h6 class="mb-0"><i class="fas fa-tools mr-2"></i>Related Tools</h6>
-    </div>
-    <div class="card-body">
-        <div class="related-tools">
-            <a href="dc.jsp" class="related-tool-card">
-                <h6><i class="fab fa-docker mr-1"></i>Docker Compose Generator</h6>
-                <p>Generate docker-compose.yml files</p>
-            </a>
-            <a href="kube1.jsp" class="related-tool-card">
-                <h6><i class="fas fa-exchange-alt mr-1"></i>Compose to Kubernetes</h6>
-                <p>Convert Docker Compose to K8s</p>
-            </a>
-            <a href="kube2.jsp" class="related-tool-card">
-                <h6><i class="fas fa-exchange-alt mr-1"></i>Kubernetes to Compose</h6>
-                <p>Convert K8s manifests to Compose</p>
-            </a>
-            <a href="dc1.jsp" class="related-tool-card">
-                <h6><i class="fas fa-terminal mr-1"></i>Docker Run to Compose</h6>
-                <p>Convert docker run commands</p>
-            </a>
-            <a href="yamlparser.jsp" class="related-tool-card">
-                <h6><i class="fas fa-code mr-1"></i>YAML Parser</h6>
-                <p>Parse and validate YAML</p>
-            </a>
-            <a href="jsonparser.jsp" class="related-tool-card">
-                <h6><i class="fas fa-code mr-1"></i>JSON Parser</h6>
-                <p>Parse and format JSON</p>
-            </a>
-        </div>
-    </div>
-</div>
-
-<!-- Share URL Modal -->
-<div class="modal fade" id="shareUrlModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background: var(--theme-gradient); color: white;">
-                <h5 class="modal-title">
-                    <i class="fas fa-share-alt"></i> Share Kubernetes Manifest
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-info mb-3">
-                    <strong><i class="fas fa-shield-alt"></i> What's Being Shared:</strong>
-                    <ul class="mb-0 mt-2">
-                        <li><strong>All Form Fields:</strong> Pod/Deployment name, image, ports, labels, environment variables, and all other configuration</li>
-                        <li><strong>Generated YAML/JSON:</strong> The Kubernetes manifest content</li>
-                        <li><strong class="text-success">NOT Included:</strong> Your personal data or secrets</li>
-                    </ul>
+                <!-- Output Area -->
+                <div id="outputEmpty" class="tool-empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <h3>Configure your resource</h3>
+                    <p>Fill in the form on the left. YAML preview will appear here as you type.</p>
                 </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="shareUrlText" readonly>
-                    <div class="input-group-append">
-                        <button class="btn btn-success" id="copyShareUrl">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                    </div>
-                </div>
-                <p class="text-muted small mb-0">
-                    <i class="fas fa-info-circle"></i> Anyone with this link can view and download the Kubernetes manifest.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <pre class="tool-output-pre" id="outputPre" style="display: none;"></pre>
             </div>
         </div>
+
+        <!-- ========== ADS COLUMN ========== -->
+        <div class="tool-ads-column">
+            <%@ include file="modern/ads/ad-three-column.jsp" %>
+        </div>
+    </main>
+
+    <!-- In-Content Ad (All Devices) -->
+    <div class="tool-mobile-ad-container">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
     </div>
-</div>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<%@ include file="addcomments.jsp"%>
+    <!-- Related Tools -->
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="kube.jsp"/>
+        <jsp:param name="category" value="DevOps & Infrastructure"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
 
-<script>
-var lastYaml = '';
-var lastJson = '';
+    <!-- Support Section -->
+    <%@ include file="modern/components/support-section.jsp" %>
 
-function showToast(message) {
-    var toast = $('<div class="position-fixed" style="bottom: 20px; right: 20px; z-index: 9999;">' +
-        '<div class="toast show"><div class="toast-body text-white rounded" style="background: var(--theme-gradient);">' +
-        '<i class="fas fa-info-circle mr-2"></i>' + message + '</div></div></div>');
-    $('body').append(toast);
-    setTimeout(function() { toast.fadeOut(function() { toast.remove(); }); }, 2000);
-}
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+            <div class="footer-links">
+                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+            </div>
+        </div>
+    </footer>
 
-function escapeHtml(text) {
-    if (!text) return '';
-    var div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-function copyToClipboard(text) {
-    var textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('Copied to clipboard!');
-}
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
 
-function displayResult(response) {
-    if (!response.success) {
-        $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>' + escapeHtml(response.errorMessage || 'Error generating manifest') + '</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-        showToast('Error: ' + (response.errorMessage || 'Unknown error'));
-        return;
-    }
+    <script>
+    // ========== GLOBAL STATE ==========
+    var currentFormat = 'yaml';
+    var currentResource = 'deployment';
+    var currentYaml = '';
+    var currentJson = '';
+    var updateTimeout = null;
 
-    lastYaml = response.kubernetesYaml || '';
-    lastJson = response.kubernetesJson || '';
-    window.lastResourceType = response.resourceType || 'kubernetes';
-
-    var html = '<div class="mb-3">' +
-        '<div class="d-flex justify-content-between align-items-center mb-2">' +
-        '<span class="badge" style="background: var(--theme-gradient); color: white;"><i class="fas fa-check-circle mr-1"></i>' + escapeHtml(response.resourceType || 'Resource') + ' Generated</span>' +
-        '</div>';
-
-    if (lastYaml) {
-        html += '<div class="mb-3">' +
-            '<div class="d-flex justify-content-between align-items-center mb-1">' +
-            '<strong class="small">YAML</strong>' +
-            '<button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard(lastYaml)"><i class="fas fa-copy mr-1"></i>Copy</button>' +
-            '</div>' +
-            '<pre class="hash-output" style="max-height: 300px; overflow-y: auto; font-size: 0.8rem;">' + escapeHtml(lastYaml) + '</pre>' +
-            '</div>';
-    }
-
-    if (lastJson) {
-        html += '<div class="mb-3">' +
-            '<div class="d-flex justify-content-between align-items-center mb-1">' +
-            '<strong class="small">JSON</strong>' +
-            '<button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard(lastJson)"><i class="fas fa-copy mr-1"></i>Copy</button>' +
-            '</div>' +
-            '<pre class="hash-output" style="max-height: 300px; overflow-y: auto; font-size: 0.8rem;">' + escapeHtml(lastJson) + '</pre>' +
-            '</div>';
-    }
-
-    // Add Download and Share buttons
-    html += '<div class="d-flex mt-2" style="gap: 0.5rem;">' +
-        '<button class="btn btn-sm" onclick="downloadYaml()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-download mr-1"></i>Download YAML</button>' +
-        '<button class="btn btn-sm" onclick="downloadJson()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-download mr-1"></i>Download JSON</button>' +
-        '<button class="btn btn-sm" onclick="shareUrl()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-share-alt mr-1"></i>Share</button>' +
-        '</div>';
-
-    html += '</div>';
-
-    $('#output').html(html);
-    $('#resultPlaceholder').hide();
-    $('#resultContent').show();
-    showToast(response.resourceType + ' generated successfully!');
-}
-
-function downloadYaml() {
-    if (!lastYaml || !lastYaml.trim()) {
-        showToast('No YAML content to download');
-        return;
-    }
-    var resourceType = (window.lastResourceType || 'kubernetes').toLowerCase().replace(/\s+/g, '-');
-    var today = new Date();
-    var dateStr = today.getFullYear() + '-' +
-                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                 String(today.getDate()).padStart(2, '0');
-    var filename = '8gwifi-' + resourceType + '-' + dateStr + '.yaml';
-
-    var blob = new Blob([lastYaml], { type: 'text/yaml' });
-    var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-    showToast('Download started!');
-}
-
-function downloadJson() {
-    if (!lastJson || !lastJson.trim()) {
-        showToast('No JSON content to download');
-        return;
-    }
-    var resourceType = (window.lastResourceType || 'kubernetes').toLowerCase().replace(/\s+/g, '-');
-    var today = new Date();
-    var dateStr = today.getFullYear() + '-' +
-                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                 String(today.getDate()).padStart(2, '0');
-    var filename = '8gwifi-' + resourceType + '-' + dateStr + '.json';
-
-    var blob = new Blob([lastJson], { type: 'application/json' });
-    var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-    showToast('Download started!');
-}
-
-function shareUrl() {
-    var formType = $('#selectkubeobject').val();
-    var formData = { formType: formType };
-
-    if (formType === '1') {
-        // Pod/Deployment form
-        formData.name = $('#name').val() || '';
-        formData.namespace = $('#namespace').val() || '';
-        formData.image = $('#image').val() || '';
-        formData.containerName = $('#containerName').val() || '';
-        formData.imagePullPolicy = $('#imagePullPolicy').val() || '';
-        formData.restartPolicy = $('#restartPolicy').val() || '';
-        formData.containerPorts = $('#containerPorts').val() || '';
-        formData.deployment = $('#deployment').val() || '';
-        formData.replicas = $('#replicas').val() || '';
-        formData.cpuRequest = $('#cpuRequest').val() || '';
-        formData.memoryRequest = $('#memoryRequest').val() || '';
-        formData.cpuLimit = $('#cpuLimit').val() || '';
-        formData.memoryLimit = $('#memoryLimit').val() || '';
-        formData.containercommand = $('#containercommand').val() || '';
-        formData.containerargs = $('#containerargs').val() || '';
-        formData.livenessProbepath = $('#livenessProbepath').val() || '';
-        formData.livenessProbeport = $('#livenessProbeport').val() || '';
-        formData.livenessProbescheme = $('#livenessProbescheme').val() || '';
-        formData.readinessProbepath = $('#readinessProbepath').val() || '';
-        formData.readinessProbeport = $('#readinessProbeport').val() || '';
-        formData.readinessProbescheme = $('#readinessProbescheme').val() || '';
-        formData.volumeMounts = $('#volumeMounts').val() || '';
-        formData.dnsPolicy = $('#dnsPolicy').val() || '';
-        formData.serviceAccountName = $('#serviceAccountName').val() || '';
-        formData.nodeName = $('#nodeName').val() || '';
-        formData.runAsUser = $('#runAsUser').val() || '';
-        formData.runAsGroup = $('#runAsGroup').val() || '';
-        formData.fsGroup = $('#fsGroup').val() || '';
-        formData.runAsNonRoot = $('#runAsNonRoot').val() || '';
-        formData.apployonPod = $('#apployonPod').is(':checked') ? 'apployonPod' : '';
-
-        // Collect KV pairs
-        formData.labelPairs = [];
-        $('#labelsContainer .kv-pair').each(function() {
-            var key = $(this).find('.kv-key').val().trim();
-            var value = $(this).find('.kv-value').val().trim();
-            if (key || value) formData.labelPairs.push({key: key, value: value});
-        });
-        formData.annotationPairs = [];
-        $('#annotationsContainer .kv-pair').each(function() {
-            var key = $(this).find('.kv-key').val().trim();
-            var value = $(this).find('.kv-value').val().trim();
-            if (key || value) formData.annotationPairs.push({key: key, value: value});
-        });
-        formData.envPairs = [];
-        $('#envContainer .kv-pair').each(function() {
-            var key = $(this).find('.kv-key').val().trim();
-            var value = $(this).find('.kv-value').val().trim();
-            if (key || value) formData.envPairs.push({key: key, value: value});
-        });
-    } else {
-        // Service form
-        formData.svcName = $('#svcName').val() || '';
-        formData.svcNamespace = $('#svcNamespace').val() || '';
-        formData.type = $('#type').val() || '';
-        formData.portname = $('#portname').val() || '';
-        formData.port = $('#port').val() || '';
-        formData.targetPort = $('#targetPort').val() || '';
-        formData.protocol = $('#protocol').val() || '';
-        formData.nodePort = $('#nodePort').val() || '';
-        formData.clusterIP = $('#clusterIP').val() || '';
-        formData.loadBalancerIP = $('#loadBalancerIP').val() || '';
-        formData.externalName = $('#externalName').val() || '';
-        formData.externalIPs = $('#externalIPs').val() || '';
-        formData.sessionAffinity = $('#sessionAffinity').val() || '';
-
-        formData.svcLabelPairs = [];
-        $('#svcLabelsContainer .kv-pair').each(function() {
-            var key = $(this).find('.kv-key').val().trim();
-            var value = $(this).find('.kv-value').val().trim();
-            if (key || value) formData.svcLabelPairs.push({key: key, value: value});
-        });
-    }
-
-    // Include generated content
-    if (lastYaml) formData.kubernetesYaml = lastYaml;
-    if (lastJson) formData.kubernetesJson = lastJson;
-    if (window.lastResourceType) formData.resourceType = window.lastResourceType;
-
-    try {
-        var jsonData = JSON.stringify(formData);
-        var base64Encoded = btoa(unescape(encodeURIComponent(jsonData)));
-        var urlEncoded = encodeURIComponent(base64Encoded);
-        var shareUrlValue = window.location.origin + window.location.pathname + '?data=' + urlEncoded;
-
-        $('#shareUrlText').val(shareUrlValue);
-        $('#shareUrlModal').modal('show');
-    } catch (e) {
-        showToast('Error generating share URL: ' + e.message);
-    }
-}
-
-function loadFromUrl() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var dataParam = urlParams.get('data');
-
-    if (!dataParam) return;
-
-    try {
-        var base64Decoded = decodeURIComponent(dataParam);
-        var jsonData = decodeURIComponent(escape(atob(base64Decoded)));
-        var formData = JSON.parse(jsonData);
-
-        // Set form type
-        if (formData.formType) {
-            $('#selectkubeobject').val(formData.formType).trigger('change');
+    // ========== PRESETS ==========
+    var presets = {
+        'nginx-prod': {
+            name: 'nginx-web',
+            image: 'nginx:1.25-alpine',
+            replicas: 3,
+            ports: '80, 443',
+            labels: {app: 'nginx-web', tier: 'frontend'},
+            cpuRequest: '100m',
+            cpuLimit: '500m',
+            memoryRequest: '128Mi',
+            memoryLimit: '256Mi',
+            livenessPath: '/healthz',
+            livenessPort: '80',
+            readinessPath: '/ready',
+            readinessPort: '80',
+            runAsNonRoot: true,
+            readOnlyRootFs: true,
+            capDrop: 'ALL',
+            volumes: [
+                { type: 'configMap', name: 'nginx-config', mountPath: '/etc/nginx/conf.d', source: 'nginx-config' }
+            ]
+        },
+        'redis-prod': {
+            name: 'redis-cache',
+            image: 'redis:7.2-alpine',
+            replicas: 1,
+            ports: '6379',
+            labels: {app: 'redis-cache', tier: 'cache'},
+            cpuRequest: '100m',
+            cpuLimit: '250m',
+            memoryRequest: '128Mi',
+            memoryLimit: '512Mi',
+            livenessPath: '',
+            livenessPort: '',
+            runAsUser: '999',
+            runAsGroup: '999',
+            runAsNonRoot: true,
+            readOnlyRootFs: true,
+            capDrop: 'ALL',
+            volumes: [
+                { type: 'emptyDir', name: 'redis-data', mountPath: '/data', source: '' }
+            ],
+            env: { REDIS_MAXMEMORY: '256mb', REDIS_MAXMEMORY_POLICY: 'allkeys-lru' }
+        },
+        'postgres-prod': {
+            name: 'postgres-db',
+            image: 'postgres:16-alpine',
+            replicas: 1,
+            ports: '5432',
+            labels: {app: 'postgres-db', tier: 'database'},
+            cpuRequest: '250m',
+            cpuLimit: '1000m',
+            memoryRequest: '256Mi',
+            memoryLimit: '1Gi',
+            runAsUser: '70',
+            runAsGroup: '70',
+            fsGroup: '70',
+            runAsNonRoot: true,
+            volumes: [
+                { type: 'pvc', name: 'postgres-data', mountPath: '/var/lib/postgresql/data', source: 'postgres-pvc' }
+            ],
+            env: { POSTGRES_DB: 'appdb', PGDATA: '/var/lib/postgresql/data/pgdata' }
+        },
+        'node-api': {
+            name: 'node-api',
+            image: 'node:20-alpine',
+            replicas: 3,
+            ports: '3000',
+            labels: {app: 'node-api', tier: 'backend'},
+            cpuRequest: '100m',
+            cpuLimit: '500m',
+            memoryRequest: '128Mi',
+            memoryLimit: '512Mi',
+            livenessPath: '/health',
+            livenessPort: '3000',
+            readinessPath: '/ready',
+            readinessPort: '3000',
+            runAsUser: '1000',
+            runAsGroup: '1000',
+            runAsNonRoot: true,
+            readOnlyRootFs: true,
+            capDrop: 'ALL',
+            env: { NODE_ENV: 'production', PORT: '3000' }
+        },
+        'python-api': {
+            name: 'python-api',
+            image: 'python:3.12-slim',
+            replicas: 3,
+            ports: '8000',
+            labels: {app: 'python-api', tier: 'backend'},
+            cpuRequest: '100m',
+            cpuLimit: '500m',
+            memoryRequest: '128Mi',
+            memoryLimit: '512Mi',
+            livenessPath: '/health',
+            livenessPort: '8000',
+            readinessPath: '/ready',
+            readinessPort: '8000',
+            runAsUser: '1000',
+            runAsGroup: '1000',
+            runAsNonRoot: true,
+            capDrop: 'ALL',
+            env: { PYTHONUNBUFFERED: '1', WORKERS: '4' }
+        },
+        'go-api': {
+            name: 'go-api',
+            image: 'golang:1.22-alpine',
+            replicas: 3,
+            ports: '8080',
+            labels: {app: 'go-api', tier: 'backend'},
+            cpuRequest: '50m',
+            cpuLimit: '200m',
+            memoryRequest: '64Mi',
+            memoryLimit: '128Mi',
+            livenessPath: '/healthz',
+            livenessPort: '8080',
+            readinessPath: '/readyz',
+            readinessPort: '8080',
+            runAsUser: '65534',
+            runAsGroup: '65534',
+            runAsNonRoot: true,
+            readOnlyRootFs: true,
+            capDrop: 'ALL',
+            env: { GIN_MODE: 'release' }
+        },
+        'mongodb': {
+            name: 'mongodb',
+            image: 'mongo:7.0',
+            replicas: 1,
+            ports: '27017',
+            labels: {app: 'mongodb', tier: 'database'},
+            cpuRequest: '250m',
+            cpuLimit: '1000m',
+            memoryRequest: '512Mi',
+            memoryLimit: '2Gi',
+            runAsUser: '999',
+            runAsGroup: '999',
+            fsGroup: '999',
+            volumes: [
+                { type: 'pvc', name: 'mongo-data', mountPath: '/data/db', source: 'mongo-pvc' }
+            ],
+            env: { MONGO_INITDB_DATABASE: 'appdb' }
+        },
+        'elasticsearch': {
+            name: 'elasticsearch',
+            image: 'docker.elastic.co/elasticsearch/elasticsearch:8.11.0',
+            replicas: 1,
+            ports: '9200, 9300',
+            labels: {app: 'elasticsearch', tier: 'search'},
+            cpuRequest: '500m',
+            cpuLimit: '2000m',
+            memoryRequest: '1Gi',
+            memoryLimit: '2Gi',
+            fsGroup: '1000',
+            volumes: [
+                { type: 'pvc', name: 'es-data', mountPath: '/usr/share/elasticsearch/data', source: 'elasticsearch-pvc' }
+            ],
+            env: { 'discovery.type': 'single-node', 'xpack.security.enabled': 'false', 'ES_JAVA_OPTS': '-Xms512m -Xmx512m' }
         }
+    };
 
-        if (formData.formType === '1') {
-            // Populate Pod/Deployment form
-            if (formData.name) $('#name').val(formData.name);
-            if (formData.namespace) $('#namespace').val(formData.namespace);
-            if (formData.image) $('#image').val(formData.image);
-            if (formData.containerName) $('#containerName').val(formData.containerName);
-            if (formData.imagePullPolicy) $('#imagePullPolicy').val(formData.imagePullPolicy);
-            if (formData.restartPolicy) $('#restartPolicy').val(formData.restartPolicy);
-            if (formData.containerPorts) $('#containerPorts').val(formData.containerPorts);
-            if (formData.deployment) $('#deployment').val(formData.deployment);
-            if (formData.replicas) $('#replicas').val(formData.replicas);
-            if (formData.cpuRequest) $('#cpuRequest').val(formData.cpuRequest);
-            if (formData.memoryRequest) $('#memoryRequest').val(formData.memoryRequest);
-            if (formData.cpuLimit) $('#cpuLimit').val(formData.cpuLimit);
-            if (formData.memoryLimit) $('#memoryLimit').val(formData.memoryLimit);
-            if (formData.containercommand) $('#containercommand').val(formData.containercommand);
-            if (formData.containerargs) $('#containerargs').val(formData.containerargs);
-            if (formData.livenessProbepath) $('#livenessProbepath').val(formData.livenessProbepath);
-            if (formData.livenessProbeport) $('#livenessProbeport').val(formData.livenessProbeport);
-            if (formData.livenessProbescheme) $('#livenessProbescheme').val(formData.livenessProbescheme);
-            if (formData.readinessProbepath) $('#readinessProbepath').val(formData.readinessProbepath);
-            if (formData.readinessProbeport) $('#readinessProbeport').val(formData.readinessProbeport);
-            if (formData.readinessProbescheme) $('#readinessProbescheme').val(formData.readinessProbescheme);
-            if (formData.volumeMounts) $('#volumeMounts').val(formData.volumeMounts);
-            if (formData.dnsPolicy) $('#dnsPolicy').val(formData.dnsPolicy);
-            if (formData.serviceAccountName) $('#serviceAccountName').val(formData.serviceAccountName);
-            if (formData.nodeName) $('#nodeName').val(formData.nodeName);
-            if (formData.runAsUser) $('#runAsUser').val(formData.runAsUser);
-            if (formData.runAsGroup) $('#runAsGroup').val(formData.runAsGroup);
-            if (formData.fsGroup) $('#fsGroup').val(formData.fsGroup);
-            if (formData.runAsNonRoot) $('#runAsNonRoot').val(formData.runAsNonRoot);
-            if (formData.apployonPod === 'apployonPod') $('#apployonPod').prop('checked', true);
-
-            // Restore KV pairs
-            if (formData.labelPairs && formData.labelPairs.length > 0) {
-                $('#labelsContainer').empty();
-                formData.labelPairs.forEach(function(pair) {
-                    addKVPair('labelsContainer');
-                    var lastPair = $('#labelsContainer .kv-pair').last();
-                    lastPair.find('.kv-key').val(pair.key || '');
-                    lastPair.find('.kv-value').val(pair.value || '');
-                });
-            }
-            if (formData.annotationPairs && formData.annotationPairs.length > 0) {
-                $('#annotationsContainer').empty();
-                formData.annotationPairs.forEach(function(pair) {
-                    addKVPair('annotationsContainer');
-                    var lastPair = $('#annotationsContainer .kv-pair').last();
-                    lastPair.find('.kv-key').val(pair.key || '');
-                    lastPair.find('.kv-value').val(pair.value || '');
-                });
-            }
-            if (formData.envPairs && formData.envPairs.length > 0) {
-                $('#envContainer').empty();
-                formData.envPairs.forEach(function(pair) {
-                    addKVPair('envContainer');
-                    var lastPair = $('#envContainer .kv-pair').last();
-                    lastPair.find('.kv-key').val(pair.key || '');
-                    lastPair.find('.kv-value').val(pair.value || '');
-                });
-            }
+    // ========== UTILITIES ==========
+    // Use ToolUtils.showToast for consistency across all tools
+    function showToast(msg, type) {
+        if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+            ToolUtils.showToast(msg, 2500, type || 'success');
         } else {
-            // Populate Service form
-            if (formData.svcName) $('#svcName').val(formData.svcName);
-            if (formData.svcNamespace) $('#svcNamespace').val(formData.svcNamespace);
-            if (formData.type) $('#type').val(formData.type).trigger('change');
-            if (formData.portname) $('#portname').val(formData.portname);
-            if (formData.port) $('#port').val(formData.port);
-            if (formData.targetPort) $('#targetPort').val(formData.targetPort);
-            if (formData.protocol) $('#protocol').val(formData.protocol);
-            if (formData.nodePort) $('#nodePort').val(formData.nodePort);
-            if (formData.clusterIP) $('#clusterIP').val(formData.clusterIP);
-            if (formData.loadBalancerIP) $('#loadBalancerIP').val(formData.loadBalancerIP);
-            if (formData.externalName) $('#externalName').val(formData.externalName);
-            if (formData.externalIPs) $('#externalIPs').val(formData.externalIPs);
-            if (formData.sessionAffinity) $('#sessionAffinity').val(formData.sessionAffinity);
+            // Fallback if ToolUtils not loaded yet
+            var toast = document.createElement('div');
+            toast.className = 'tool-toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(function() { toast.remove(); }, 300);
+            }, 2500);
+        }
+    }
 
-            if (formData.svcLabelPairs && formData.svcLabelPairs.length > 0) {
-                $('#svcLabelsContainer').empty();
-                formData.svcLabelPairs.forEach(function(pair) {
-                    addKVPair('svcLabelsContainer');
-                    var lastPair = $('#svcLabelsContainer .kv-pair').last();
-                    lastPair.find('.kv-key').val(pair.key || '');
-                    lastPair.find('.kv-value').val(pair.value || '');
+    function toggleSection(header) {
+        header.classList.toggle('collapsed');
+        header.nextElementSibling.classList.toggle('hidden');
+    }
+
+    function collectKVPairs(containerId) {
+        var result = {};
+        $('#' + containerId + ' .kv-pair').each(function() {
+            var k = $(this).find('.kv-key').val().trim();
+            var v = $(this).find('.kv-value').val().trim();
+            if (k) result[k] = v;
+        });
+        return result;
+    }
+
+    function addKVPair(containerId) {
+        var html = '<div class="kv-pair">' +
+            '<input type="text" class="kv-key" placeholder="Key" oninput="updatePreview()">' +
+            '<input type="text" class="kv-value" placeholder="Value" oninput="updatePreview()">' +
+            '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+            '</div>';
+        $('#' + containerId).append(html);
+    }
+
+    function removeKVPair(el) {
+        var container = $(el).closest('.kv-container');
+        if (container.find('.kv-pair').length > 1) {
+            $(el).closest('.kv-pair').remove();
+        } else {
+            $(el).closest('.kv-pair').find('input').val('');
+        }
+        updatePreview();
+    }
+
+    // Volume Mounts helpers
+    function addVolumeMountRow() {
+        var html = '<div class="volume-mount-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+            '<select class="tool-select" style="width: 100px;" onchange="updatePreview()">' +
+            '<option value="emptyDir">EmptyDir</option>' +
+            '<option value="configMap">ConfigMap</option>' +
+            '<option value="secret">Secret</option>' +
+            '<option value="pvc">PVC</option>' +
+            '<option value="hostPath">HostPath</option>' +
+            '</select>' +
+            '<input type="text" class="kv-key" placeholder="Volume Name" style="flex: 1; min-width: 80px;" oninput="updatePreview()">' +
+            '<input type="text" class="kv-value" placeholder="Mount Path" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+            '<input type="text" class="kv-extra" placeholder="Source (ConfigMap/Secret/PVC name)" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+            '<button type="button" class="btn-remove-kv" onclick="removeVolumeMountRow(this)">&#10005;</button>' +
+            '</div>';
+        $('#volumeMountsContainer').append(html);
+    }
+
+    function removeVolumeMountRow(el) {
+        var container = $('#volumeMountsContainer');
+        if (container.find('.volume-mount-row').length > 1) {
+            $(el).closest('.volume-mount-row').remove();
+        } else {
+            $(el).closest('.volume-mount-row').find('input').val('');
+            $(el).closest('.volume-mount-row').find('select').val('emptyDir');
+        }
+        updatePreview();
+    }
+
+    function collectVolumeMounts() {
+        var result = [];
+        $('#volumeMountsContainer .volume-mount-row').each(function() {
+            var type = $(this).find('select').val();
+            var name = $(this).find('.kv-key').val().trim();
+            var mountPath = $(this).find('.kv-value').val().trim();
+            var source = $(this).find('.kv-extra').val().trim();
+            if (name && mountPath) {
+                result.push({
+                    type: type,
+                    name: name,
+                    mountPath: mountPath,
+                    source: source
                 });
             }
-        }
-
-        // Display generated content if available
-        if (formData.kubernetesYaml || formData.kubernetesJson) {
-            lastYaml = formData.kubernetesYaml || '';
-            lastJson = formData.kubernetesJson || '';
-            window.lastResourceType = formData.resourceType || 'Kubernetes';
-
-            var html = '<div class="mb-3">' +
-                '<div class="d-flex justify-content-between align-items-center mb-2">' +
-                '<span class="badge" style="background: var(--theme-gradient); color: white;"><i class="fas fa-link mr-1"></i>' + escapeHtml(formData.resourceType || 'Resource') + ' (from shared link)</span>' +
-                '</div>';
-
-            if (lastYaml) {
-                html += '<div class="mb-3">' +
-                    '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                    '<strong class="small">YAML</strong>' +
-                    '<button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard(lastYaml)"><i class="fas fa-copy mr-1"></i>Copy</button>' +
-                    '</div>' +
-                    '<pre class="hash-output" style="max-height: 300px; overflow-y: auto; font-size: 0.8rem;">' + escapeHtml(lastYaml) + '</pre>' +
-                    '</div>';
-            }
-
-            if (lastJson) {
-                html += '<div class="mb-3">' +
-                    '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                    '<strong class="small">JSON</strong>' +
-                    '<button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard(lastJson)"><i class="fas fa-copy mr-1"></i>Copy</button>' +
-                    '</div>' +
-                    '<pre class="hash-output" style="max-height: 300px; overflow-y: auto; font-size: 0.8rem;">' + escapeHtml(lastJson) + '</pre>' +
-                    '</div>';
-            }
-
-            html += '<div class="d-flex mt-2" style="gap: 0.5rem;">' +
-                '<button class="btn btn-sm" onclick="downloadYaml()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-download mr-1"></i>Download YAML</button>' +
-                '<button class="btn btn-sm" onclick="downloadJson()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-download mr-1"></i>Download JSON</button>' +
-                '<button class="btn btn-sm" onclick="shareUrl()" style="background: var(--theme-gradient); color: white; flex: 1;"><i class="fas fa-share-alt mr-1"></i>Share</button>' +
-                '</div></div>';
-
-            $('#output').html(html);
-            $('#resultPlaceholder').hide();
-            $('#resultContent').show();
-        }
-
-        showToast('Configuration loaded from shared link!');
-    } catch (e) {
-        console.error('Error loading from URL:', e);
+        });
+        return result;
     }
-}
 
-// KV Pair Management Functions
-function collectKVPairs(containerId) {
-    var pairs = [];
-    $('#' + containerId + ' .kv-pair').each(function() {
-        var key = $(this).find('.kv-key').val().trim();
-        var value = $(this).find('.kv-value').val().trim();
-        if (key && value) {
-            pairs.push(key + '=' + value);
-        }
-    });
-    return pairs.join(',');
-}
-
-function addKVPair(containerId) {
-    var newPair = '<div class="kv-pair">' +
-        '<input type="text" class="form-control form-control-sm kv-key" placeholder="Key">' +
-        '<input type="text" class="form-control form-control-sm kv-value" placeholder="Value">' +
-        '<a href="javascript:void(0)" class="btn-remove-kv" onclick="removeKVPair(this)" title="Remove"><i class="fas fa-times"></i></a>' +
-        '</div>';
-    $('#' + containerId).append(newPair);
-}
-
-function removeKVPair(el) {
-    var $el = $(el);
-    var $container = $el.closest('.kv-container');
-    var $pairs = $container.find('.kv-pair');
-    if ($pairs.length > 1) {
-        $el.closest('.kv-pair').remove();
-    } else {
-        // Clear the values instead of removing the last pair
-        $el.closest('.kv-pair').find('input').val('');
+    // Tolerations helpers
+    function addTolerationRow() {
+        var html = '<div class="toleration-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+            '<input type="text" class="kv-key" placeholder="Key" style="flex: 1; min-width: 60px;" oninput="updatePreview()">' +
+            '<select class="tool-select" style="width: 80px;" onchange="updatePreview()">' +
+            '<option value="Equal">Equal</option>' +
+            '<option value="Exists">Exists</option>' +
+            '</select>' +
+            '<input type="text" class="kv-value" placeholder="Value" style="flex: 1; min-width: 60px;" oninput="updatePreview()">' +
+            '<select class="tool-select effect-select" style="width: 100px;" onchange="updatePreview()">' +
+            '<option value="NoSchedule">NoSchedule</option>' +
+            '<option value="PreferNoSchedule">PreferNoSchedule</option>' +
+            '<option value="NoExecute">NoExecute</option>' +
+            '</select>' +
+            '<button type="button" class="btn-remove-kv" onclick="removeTolerationRow(this)">&#10005;</button>' +
+            '</div>';
+        $('#tolerationsContainer').append(html);
     }
-}
 
-function updateHiddenKVFields() {
-    $('#label').val(collectKVPairs('labelsContainer'));
-    $('#annotation').val(collectKVPairs('annotationsContainer'));
-    $('#environment').val(collectKVPairs('envContainer'));
-}
-
-$(document).ready(function() {
-    // Load from URL on page load
-    loadFromUrl();
-
-    // Copy share URL button handler
-    $('#copyShareUrl').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var shareUrlText = $('#shareUrlText').val();
-        if (shareUrlText) {
-            copyToClipboard(shareUrlText);
+    function removeTolerationRow(el) {
+        var container = $('#tolerationsContainer');
+        if (container.find('.toleration-row').length > 1) {
+            $(el).closest('.toleration-row').remove();
+        } else {
+            $(el).closest('.toleration-row').find('input').val('');
+            $(el).closest('.toleration-row').find('select').first().val('Equal');
+            $(el).closest('.toleration-row').find('.effect-select').val('NoSchedule');
         }
-    });
+        updatePreview();
+    }
 
-    // Custom collapse handler - avoids Bootstrap's data-toggle issues
-    $('.form-section-title').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var target = $(this).data('section');
-        if (target) {
-            var $target = $(target);
-            var isExpanded = $(this).attr('aria-expanded') === 'true';
-            if (isExpanded) {
-                $target.removeClass('show');
-                $(this).attr('aria-expanded', 'false');
+    function collectTolerations() {
+        var result = [];
+        $('#tolerationsContainer .toleration-row').each(function() {
+            var key = $(this).find('.kv-key').val().trim();
+            var operator = $(this).find('select').first().val();
+            var value = $(this).find('.kv-value').val().trim();
+            var effect = $(this).find('.effect-select').val();
+            if (key) {
+                result.push({
+                    key: key,
+                    operator: operator,
+                    value: value,
+                    effect: effect
+                });
+            }
+        });
+        return result;
+    }
+
+    function toggleServiceFields() {
+        var type = $('#svcType').val();
+        $('#nodePortField').toggle(type === 'NodePort' || type === 'LoadBalancer');
+    }
+
+    // ========== YAML GENERATION (Client-side) ==========
+    function generateYamlPreview() {
+        var yaml = '';
+        var json = {};
+
+        switch(currentResource) {
+            case 'deployment':
+            case 'pod':
+                yaml = generateDeploymentYaml();
+                json = generateDeploymentJson();
+                break;
+            case 'service':
+                yaml = generateServiceYaml();
+                json = generateServiceJson();
+                break;
+            case 'configmap':
+                yaml = generateConfigMapYaml();
+                json = generateConfigMapJson();
+                break;
+            case 'secret':
+                yaml = generateSecretYaml();
+                json = generateSecretJson();
+                break;
+            case 'job':
+                yaml = generateJobYaml();
+                json = generateJobJson();
+                break;
+            case 'cronjob':
+                yaml = generateCronJobYaml();
+                json = generateCronJobJson();
+                break;
+            case 'statefulset':
+                yaml = generateStatefulSetYaml();
+                json = generateStatefulSetJson();
+                break;
+        }
+
+        currentYaml = yaml;
+        currentJson = JSON.stringify(json, null, 2);
+
+        return currentFormat === 'yaml' ? currentYaml : currentJson;
+    }
+
+    function generateDeploymentYaml() {
+        var name = $('#name').val().trim() || 'my-app';
+        var ns = $('#namespace').val().trim() || 'default';
+        var image = $('#image').val().trim() || 'nginx:latest';
+        var replicas = $('#replicas').val() || '1';
+        var ports = $('#containerPorts').val().trim();
+        var labels = collectKVPairs('labelsContainer');
+        var envVars = collectKVPairs('envContainer');
+        var cpuReq = $('#cpuRequest').val().trim();
+        var cpuLim = $('#cpuLimit').val().trim();
+        var memReq = $('#memoryRequest').val().trim();
+        var memLim = $('#memoryLimit').val().trim();
+        var livePath = $('#livenessPath').val().trim();
+        var livePort = $('#livenessPort').val().trim();
+        var readyPath = $('#readinessPath').val().trim();
+        var readyPort = $('#readinessPort').val().trim();
+
+        // Security Context
+        var runAsUser = $('#runAsUser').val().trim();
+        var runAsGroup = $('#runAsGroup').val().trim();
+        var fsGroup = $('#fsGroup').val().trim();
+        var runAsNonRoot = $('#runAsNonRoot').is(':checked');
+        var privileged = $('#privileged').is(':checked');
+        var readOnlyRootFs = $('#readOnlyRootFs').is(':checked');
+        var allowPrivEsc = $('#allowPrivilegeEscalation').is(':checked');
+        var capAdd = $('#capAdd').val().trim();
+        var capDrop = $('#capDrop').val().trim();
+
+        // Volumes & Mounts
+        var volumeMounts = collectVolumeMounts();
+        var serviceAccount = $('#serviceAccount').val().trim();
+
+        // Scheduling
+        var nodeSelectors = collectKVPairs('nodeSelectorContainer');
+        var tolerations = collectTolerations();
+        var restartPolicy = $('#restartPolicy').val();
+
+        var isPod = currentResource === 'pod';
+        var kind = isPod ? 'Pod' : 'Deployment';
+        var apiVersion = isPod ? 'v1' : 'apps/v1';
+
+        var labelStr = '';
+        for (var k in labels) {
+            labelStr += '    ' + k + ': ' + labels[k] + '\n';
+        }
+        if (!labelStr) labelStr = '    app: ' + name + '\n';
+
+        var yaml = 'apiVersion: ' + apiVersion + '\n';
+        yaml += 'kind: ' + kind + '\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += '  labels:\n' + labelStr;
+
+        var specIndent = isPod ? '  ' : '      ';
+        var containerIndent = isPod ? '    ' : '        ';
+        var containerPropIndent = isPod ? '      ' : '          ';
+
+        if (!isPod) {
+            yaml += 'spec:\n';
+            yaml += '  replicas: ' + replicas + '\n';
+            yaml += '  selector:\n';
+            yaml += '    matchLabels:\n';
+            yaml += '      app: ' + name + '\n';
+            yaml += '  template:\n';
+            yaml += '    metadata:\n';
+            yaml += '      labels:\n';
+            yaml += '        app: ' + name + '\n';
+            yaml += '    spec:\n';
+        } else {
+            yaml += 'spec:\n';
+        }
+
+        // Service Account
+        if (serviceAccount) {
+            yaml += specIndent + 'serviceAccountName: ' + serviceAccount + '\n';
+        }
+
+        // Restart Policy (mainly for Pod)
+        if (restartPolicy) {
+            yaml += specIndent + 'restartPolicy: ' + restartPolicy + '\n';
+        }
+
+        // Pod Security Context
+        var hasPodSecCtx = runAsUser || runAsGroup || fsGroup || runAsNonRoot;
+        if (hasPodSecCtx) {
+            yaml += specIndent + 'securityContext:\n';
+            if (runAsUser) yaml += specIndent + '  runAsUser: ' + runAsUser + '\n';
+            if (runAsGroup) yaml += specIndent + '  runAsGroup: ' + runAsGroup + '\n';
+            if (fsGroup) yaml += specIndent + '  fsGroup: ' + fsGroup + '\n';
+            if (runAsNonRoot) yaml += specIndent + '  runAsNonRoot: true\n';
+        }
+
+        // Node Selector
+        if (Object.keys(nodeSelectors).length > 0) {
+            yaml += specIndent + 'nodeSelector:\n';
+            for (var ns_key in nodeSelectors) {
+                yaml += specIndent + '  ' + ns_key + ': ' + nodeSelectors[ns_key] + '\n';
+            }
+        }
+
+        // Tolerations
+        if (tolerations.length > 0) {
+            yaml += specIndent + 'tolerations:\n';
+            tolerations.forEach(function(t) {
+                yaml += specIndent + '  - key: "' + t.key + '"\n';
+                yaml += specIndent + '    operator: "' + t.operator + '"\n';
+                if (t.operator === 'Equal' && t.value) {
+                    yaml += specIndent + '    value: "' + t.value + '"\n';
+                }
+                yaml += specIndent + '    effect: "' + t.effect + '"\n';
+            });
+        }
+
+        // Volumes (at pod spec level)
+        if (volumeMounts.length > 0) {
+            yaml += specIndent + 'volumes:\n';
+            volumeMounts.forEach(function(v) {
+                yaml += specIndent + '  - name: ' + v.name + '\n';
+                if (v.type === 'emptyDir') {
+                    yaml += specIndent + '    emptyDir: {}\n';
+                } else if (v.type === 'configMap') {
+                    yaml += specIndent + '    configMap:\n';
+                    yaml += specIndent + '      name: ' + (v.source || v.name) + '\n';
+                } else if (v.type === 'secret') {
+                    yaml += specIndent + '    secret:\n';
+                    yaml += specIndent + '      secretName: ' + (v.source || v.name) + '\n';
+                } else if (v.type === 'pvc') {
+                    yaml += specIndent + '    persistentVolumeClaim:\n';
+                    yaml += specIndent + '      claimName: ' + (v.source || v.name) + '\n';
+                } else if (v.type === 'hostPath') {
+                    yaml += specIndent + '    hostPath:\n';
+                    yaml += specIndent + '      path: ' + (v.source || '/tmp') + '\n';
+                }
+            });
+        }
+
+        // Containers
+        yaml += specIndent + 'containers:\n';
+        yaml += containerIndent + '- name: ' + name + '\n';
+        yaml += containerIndent + '  image: ' + image + '\n';
+
+        // Container Security Context
+        var hasContainerSecCtx = privileged || readOnlyRootFs || allowPrivEsc || capAdd || capDrop;
+        if (hasContainerSecCtx) {
+            yaml += containerIndent + '  securityContext:\n';
+            if (privileged) yaml += containerIndent + '    privileged: true\n';
+            if (readOnlyRootFs) yaml += containerIndent + '    readOnlyRootFilesystem: true\n';
+            if (allowPrivEsc) yaml += containerIndent + '    allowPrivilegeEscalation: true\n';
+            if (capAdd || capDrop) {
+                yaml += containerIndent + '    capabilities:\n';
+                if (capAdd) {
+                    yaml += containerIndent + '      add:\n';
+                    capAdd.split(',').forEach(function(c) {
+                        c = c.trim();
+                        if (c) yaml += containerIndent + '        - ' + c + '\n';
+                    });
+                }
+                if (capDrop) {
+                    yaml += containerIndent + '      drop:\n';
+                    capDrop.split(',').forEach(function(c) {
+                        c = c.trim();
+                        if (c) yaml += containerIndent + '        - ' + c + '\n';
+                    });
+                }
+            }
+        }
+
+        // Ports
+        if (ports) {
+            yaml += containerIndent + '  ports:\n';
+            ports.split(',').forEach(function(p) {
+                p = p.trim();
+                if (p) yaml += containerIndent + '    - containerPort: ' + p + '\n';
+            });
+        }
+
+        // Environment Variables
+        if (Object.keys(envVars).length > 0) {
+            yaml += containerIndent + '  env:\n';
+            for (var ek in envVars) {
+                yaml += containerIndent + '    - name: ' + ek + '\n';
+                yaml += containerIndent + '      value: "' + envVars[ek] + '"\n';
+            }
+        }
+
+        // Resources
+        if (cpuReq || cpuLim || memReq || memLim) {
+            yaml += containerIndent + '  resources:\n';
+            if (cpuReq || memReq) {
+                yaml += containerIndent + '    requests:\n';
+                if (cpuReq) yaml += containerIndent + '      cpu: ' + cpuReq + '\n';
+                if (memReq) yaml += containerIndent + '      memory: ' + memReq + '\n';
+            }
+            if (cpuLim || memLim) {
+                yaml += containerIndent + '    limits:\n';
+                if (cpuLim) yaml += containerIndent + '      cpu: ' + cpuLim + '\n';
+                if (memLim) yaml += containerIndent + '      memory: ' + memLim + '\n';
+            }
+        }
+
+        // Volume Mounts (at container level)
+        if (volumeMounts.length > 0) {
+            yaml += containerIndent + '  volumeMounts:\n';
+            volumeMounts.forEach(function(v) {
+                yaml += containerIndent + '    - name: ' + v.name + '\n';
+                yaml += containerIndent + '      mountPath: ' + v.mountPath + '\n';
+            });
+        }
+
+        // Liveness Probe
+        if (livePath && livePort) {
+            yaml += containerIndent + '  livenessProbe:\n';
+            yaml += containerIndent + '    httpGet:\n';
+            yaml += containerIndent + '      path: ' + livePath + '\n';
+            yaml += containerIndent + '      port: ' + livePort + '\n';
+            yaml += containerIndent + '    initialDelaySeconds: 15\n';
+            yaml += containerIndent + '    periodSeconds: 10\n';
+        }
+
+        // Readiness Probe
+        if (readyPath && readyPort) {
+            yaml += containerIndent + '  readinessProbe:\n';
+            yaml += containerIndent + '    httpGet:\n';
+            yaml += containerIndent + '      path: ' + readyPath + '\n';
+            yaml += containerIndent + '      port: ' + readyPort + '\n';
+            yaml += containerIndent + '    initialDelaySeconds: 5\n';
+            yaml += containerIndent + '    periodSeconds: 5\n';
+        }
+
+        return yaml;
+    }
+
+    function generateDeploymentJson() {
+        var name = $('#name').val().trim() || 'my-app';
+        var ns = $('#namespace').val().trim() || 'default';
+        var image = $('#image').val().trim() || 'nginx:latest';
+        var replicas = parseInt($('#replicas').val()) || 1;
+        var isPod = currentResource === 'pod';
+
+        var container = {
+            name: name,
+            image: image
+        };
+
+        var ports = $('#containerPorts').val().trim();
+        if (ports) {
+            container.ports = ports.split(',').map(function(p) {
+                return { containerPort: parseInt(p.trim()) };
+            }).filter(function(p) { return !isNaN(p.containerPort); });
+        }
+
+        if (isPod) {
+            return {
+                apiVersion: 'v1',
+                kind: 'Pod',
+                metadata: { name: name, namespace: ns, labels: { app: name } },
+                spec: { containers: [container] }
+            };
+        }
+
+        return {
+            apiVersion: 'apps/v1',
+            kind: 'Deployment',
+            metadata: { name: name, namespace: ns, labels: { app: name } },
+            spec: {
+                replicas: replicas,
+                selector: { matchLabels: { app: name } },
+                template: {
+                    metadata: { labels: { app: name } },
+                    spec: { containers: [container] }
+                }
+            }
+        };
+    }
+
+    function generateServiceYaml() {
+        var name = $('#svcName').val().trim() || 'my-service';
+        var ns = $('#svcNamespace').val().trim() || 'default';
+        var type = $('#svcType').val() || 'ClusterIP';
+        var port = $('#svcPort').val() || '80';
+        var targetPort = $('#svcTargetPort').val() || '8080';
+        var selector = $('#svcSelector').val().trim() || 'myapp';
+        var nodePort = $('#svcNodePort').val();
+
+        var yaml = 'apiVersion: v1\n';
+        yaml += 'kind: Service\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'spec:\n';
+        yaml += '  type: ' + type + '\n';
+        yaml += '  selector:\n';
+        yaml += '    app: ' + selector + '\n';
+        yaml += '  ports:\n';
+        yaml += '    - port: ' + port + '\n';
+        yaml += '      targetPort: ' + targetPort + '\n';
+        if ((type === 'NodePort' || type === 'LoadBalancer') && nodePort) {
+            yaml += '      nodePort: ' + nodePort + '\n';
+        }
+
+        return yaml;
+    }
+
+    function generateServiceJson() {
+        var name = $('#svcName').val().trim() || 'my-service';
+        var ns = $('#svcNamespace').val().trim() || 'default';
+        var type = $('#svcType').val() || 'ClusterIP';
+        var port = parseInt($('#svcPort').val()) || 80;
+        var targetPort = $('#svcTargetPort').val() || '8080';
+        var selector = $('#svcSelector').val().trim() || 'myapp';
+
+        return {
+            apiVersion: 'v1',
+            kind: 'Service',
+            metadata: { name: name, namespace: ns },
+            spec: {
+                type: type,
+                selector: { app: selector },
+                ports: [{ port: port, targetPort: isNaN(parseInt(targetPort)) ? targetPort : parseInt(targetPort) }]
+            }
+        };
+    }
+
+    function generateConfigMapYaml() {
+        var name = $('#cmName').val().trim() || 'my-config';
+        var ns = $('#cmNamespace').val().trim() || 'default';
+        var data = collectKVPairs('cmDataContainer');
+
+        var yaml = 'apiVersion: v1\n';
+        yaml += 'kind: ConfigMap\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'data:\n';
+        for (var k in data) {
+            yaml += '  ' + k + ': "' + data[k] + '"\n';
+        }
+        return yaml;
+    }
+
+    function generateConfigMapJson() {
+        var name = $('#cmName').val().trim() || 'my-config';
+        var ns = $('#cmNamespace').val().trim() || 'default';
+        var data = collectKVPairs('cmDataContainer');
+
+        return {
+            apiVersion: 'v1',
+            kind: 'ConfigMap',
+            metadata: { name: name, namespace: ns },
+            data: data
+        };
+    }
+
+    function generateSecretYaml() {
+        var name = $('#secretName').val().trim() || 'my-secret';
+        var ns = $('#secretNamespace').val().trim() || 'default';
+        var type = $('#secretType').val() || 'Opaque';
+        var data = collectKVPairs('secretDataContainer');
+
+        var yaml = 'apiVersion: v1\n';
+        yaml += 'kind: Secret\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'type: ' + type + '\n';
+        yaml += 'stringData:\n';
+        for (var k in data) {
+            yaml += '  ' + k + ': "' + data[k] + '"\n';
+        }
+        return yaml;
+    }
+
+    function generateSecretJson() {
+        var name = $('#secretName').val().trim() || 'my-secret';
+        var ns = $('#secretNamespace').val().trim() || 'default';
+        var type = $('#secretType').val() || 'Opaque';
+        var data = collectKVPairs('secretDataContainer');
+
+        return {
+            apiVersion: 'v1',
+            kind: 'Secret',
+            metadata: { name: name, namespace: ns },
+            type: type,
+            stringData: data
+        };
+    }
+
+    function generateJobYaml() {
+        var name = $('#jobName').val().trim() || 'my-job';
+        var ns = $('#jobNamespace').val().trim() || 'default';
+        var image = $('#jobImage').val().trim() || 'busybox:latest';
+        var cmd = $('#jobCommand').val().trim();
+        var args = $('#jobArgs').val().trim();
+        var completions = $('#jobCompletions').val() || '1';
+        var backoff = $('#jobBackoffLimit').val() || '6';
+
+        var yaml = 'apiVersion: batch/v1\n';
+        yaml += 'kind: Job\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'spec:\n';
+        yaml += '  completions: ' + completions + '\n';
+        yaml += '  backoffLimit: ' + backoff + '\n';
+        yaml += '  template:\n';
+        yaml += '    spec:\n';
+        yaml += '      containers:\n';
+        yaml += '        - name: ' + name + '\n';
+        yaml += '          image: ' + image + '\n';
+        if (cmd) yaml += '          command: ["' + cmd + '"]\n';
+        if (args) yaml += '          args: ["' + args + '"]\n';
+        yaml += '      restartPolicy: Never\n';
+        return yaml;
+    }
+
+    function generateJobJson() {
+        var name = $('#jobName').val().trim() || 'my-job';
+        var ns = $('#jobNamespace').val().trim() || 'default';
+        var image = $('#jobImage').val().trim() || 'busybox:latest';
+
+        return {
+            apiVersion: 'batch/v1',
+            kind: 'Job',
+            metadata: { name: name, namespace: ns },
+            spec: {
+                template: {
+                    spec: {
+                        containers: [{ name: name, image: image }],
+                        restartPolicy: 'Never'
+                    }
+                }
+            }
+        };
+    }
+
+    function generateCronJobYaml() {
+        var name = $('#cronName').val().trim() || 'my-cronjob';
+        var ns = $('#cronNamespace').val().trim() || 'default';
+        var schedule = $('#cronSchedule').val().trim() || '*/5 * * * *';
+        var image = $('#cronImage').val().trim() || 'busybox:latest';
+        var cmd = $('#cronCommand').val().trim();
+        var args = $('#cronArgs').val().trim();
+
+        var yaml = 'apiVersion: batch/v1\n';
+        yaml += 'kind: CronJob\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'spec:\n';
+        yaml += '  schedule: "' + schedule + '"\n';
+        yaml += '  jobTemplate:\n';
+        yaml += '    spec:\n';
+        yaml += '      template:\n';
+        yaml += '        spec:\n';
+        yaml += '          containers:\n';
+        yaml += '            - name: ' + name + '\n';
+        yaml += '              image: ' + image + '\n';
+        if (cmd) yaml += '              command: ["' + cmd + '"]\n';
+        if (args) yaml += '              args: ["' + args + '"]\n';
+        yaml += '          restartPolicy: OnFailure\n';
+        return yaml;
+    }
+
+    function generateCronJobJson() {
+        var name = $('#cronName').val().trim() || 'my-cronjob';
+        var ns = $('#cronNamespace').val().trim() || 'default';
+        var schedule = $('#cronSchedule').val().trim() || '*/5 * * * *';
+        var image = $('#cronImage').val().trim() || 'busybox:latest';
+
+        return {
+            apiVersion: 'batch/v1',
+            kind: 'CronJob',
+            metadata: { name: name, namespace: ns },
+            spec: {
+                schedule: schedule,
+                jobTemplate: {
+                    spec: {
+                        template: {
+                            spec: {
+                                containers: [{ name: name, image: image }],
+                                restartPolicy: 'OnFailure'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    function generateStatefulSetYaml() {
+        var name = $('#ssName').val().trim() || 'my-statefulset';
+        var ns = $('#ssNamespace').val().trim() || 'default';
+        var image = $('#ssImage').val().trim() || 'nginx:latest';
+        var replicas = $('#ssReplicas').val() || '3';
+        var serviceName = $('#ssServiceName').val().trim() || name;
+        var volName = $('#ssVolumeName').val().trim();
+        var storageSize = $('#ssStorageSize').val().trim();
+
+        var yaml = 'apiVersion: apps/v1\n';
+        yaml += 'kind: StatefulSet\n';
+        yaml += 'metadata:\n';
+        yaml += '  name: ' + name + '\n';
+        yaml += '  namespace: ' + ns + '\n';
+        yaml += 'spec:\n';
+        yaml += '  serviceName: ' + serviceName + '\n';
+        yaml += '  replicas: ' + replicas + '\n';
+        yaml += '  selector:\n';
+        yaml += '    matchLabels:\n';
+        yaml += '      app: ' + name + '\n';
+        yaml += '  template:\n';
+        yaml += '    metadata:\n';
+        yaml += '      labels:\n';
+        yaml += '        app: ' + name + '\n';
+        yaml += '    spec:\n';
+        yaml += '      containers:\n';
+        yaml += '        - name: ' + name + '\n';
+        yaml += '          image: ' + image + '\n';
+
+        if (volName && storageSize) {
+            yaml += '          volumeMounts:\n';
+            yaml += '            - name: ' + volName + '\n';
+            yaml += '              mountPath: /data\n';
+            yaml += '  volumeClaimTemplates:\n';
+            yaml += '    - metadata:\n';
+            yaml += '        name: ' + volName + '\n';
+            yaml += '      spec:\n';
+            yaml += '        accessModes: ["ReadWriteOnce"]\n';
+            yaml += '        resources:\n';
+            yaml += '          requests:\n';
+            yaml += '            storage: ' + storageSize + '\n';
+        }
+
+        return yaml;
+    }
+
+    function generateStatefulSetJson() {
+        var name = $('#ssName').val().trim() || 'my-statefulset';
+        var ns = $('#ssNamespace').val().trim() || 'default';
+        var image = $('#ssImage').val().trim() || 'nginx:latest';
+        var replicas = parseInt($('#ssReplicas').val()) || 3;
+        var serviceName = $('#ssServiceName').val().trim() || name;
+
+        return {
+            apiVersion: 'apps/v1',
+            kind: 'StatefulSet',
+            metadata: { name: name, namespace: ns },
+            spec: {
+                serviceName: serviceName,
+                replicas: replicas,
+                selector: { matchLabels: { app: name } },
+                template: {
+                    metadata: { labels: { app: name } },
+                    spec: { containers: [{ name: name, image: image }] }
+                }
+            }
+        };
+    }
+
+    // ========== SYNTAX HIGHLIGHTING ==========
+    function highlightYaml(yaml) {
+        return yaml
+            .replace(/^(\s*)([a-zA-Z0-9_-]+):/gm, '$1<span class="yaml-key">$2</span>:')
+            .replace(/: "([^"]*)"/g, ': "<span class="yaml-string">$1</span>"')
+            .replace(/: (\d+)$/gm, ': <span class="yaml-number">$1</span>')
+            .replace(/: (true|false)$/gm, ': <span class="yaml-boolean">$1</span>')
+            .replace(/(#.*$)/gm, '<span class="yaml-comment">$1</span>');
+    }
+
+    // ========== UPDATE PREVIEW ==========
+    function updatePreview() {
+        clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(function() {
+            var output = generateYamlPreview();
+
+            if (output && output.trim()) {
+                $('#outputEmpty').hide();
+                $('#outputPre').show().html(currentFormat === 'yaml' ? highlightYaml(output) : output);
+                $('#copyBtn, #shareBtn, #downloadBtn').prop('disabled', false);
+                $('#statusBar').show();
+                $('#statusText').text('Valid ' + currentResource.charAt(0).toUpperCase() + currentResource.slice(1) + ' manifest');
             } else {
-                $target.addClass('show');
-                $(this).attr('aria-expanded', 'true');
+                $('#outputEmpty').show();
+                $('#outputPre').hide();
+                $('#copyBtn, #shareBtn, #downloadBtn').prop('disabled', true);
+                $('#statusBar').hide();
+            }
+        }, 150);
+    }
+
+    // ========== ACTIONS ==========
+    function copyOutput() {
+        var text = currentFormat === 'yaml' ? currentYaml : currentJson;
+        if (!text) {
+            showToast('No content to copy', 'warning');
+            return;
+        }
+
+        if (typeof ToolUtils !== 'undefined' && ToolUtils.copyToClipboard) {
+            ToolUtils.copyToClipboard(text, {
+                toastMessage: 'Kubernetes manifest copied!',
+                showSupportPopup: true,
+                toolName: 'Kubernetes YAML Generator',
+                resultText: text.substring(0, 100) + '...'
+            });
+        } else {
+            // Fallback
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('Copied to clipboard!');
+            });
+        }
+    }
+
+    function downloadOutput() {
+        var text = currentFormat === 'yaml' ? currentYaml : currentJson;
+        if (!text) {
+            showToast('No content to download', 'warning');
+            return;
+        }
+
+        var ext = currentFormat === 'yaml' ? '.yaml' : '.json';
+        var name = ($('#name').val().trim() || currentResource) + ext;
+
+        if (typeof ToolUtils !== 'undefined' && ToolUtils.downloadAsFile) {
+            ToolUtils.downloadAsFile(text, name, {
+                toastMessage: 'Downloaded ' + name,
+                showSupportPopup: true,
+                toolName: 'Kubernetes YAML Generator'
+            });
+        } else {
+            // Fallback
+            var mime = currentFormat === 'yaml' ? 'text/yaml' : 'application/json';
+            var blob = new Blob([text], { type: mime });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded ' + name);
+        }
+    }
+
+    function shareOutput() {
+        var text = currentFormat === 'yaml' ? currentYaml : currentJson;
+        if (!text) {
+            showToast('No content to share', 'warning');
+            return;
+        }
+
+        if (typeof ToolUtils !== 'undefined' && ToolUtils.shareResult) {
+            ToolUtils.shareResult(text, {
+                paramName: 'manifest',
+                encode: true,
+                extraParams: {
+                    type: currentResource,
+                    format: currentFormat
+                },
+                copyToClipboard: true,
+                showSupportPopup: true,
+                toolName: 'Kubernetes YAML Generator'
+            });
+        } else {
+            // Fallback - simple URL encoding
+            var encoded = btoa(unescape(encodeURIComponent(text)));
+            var shareUrl = window.location.origin + window.location.pathname +
+                '?manifest=' + encoded + '&enc=base64&type=' + currentResource + '&format=' + currentFormat;
+            navigator.clipboard.writeText(shareUrl).then(function() {
+                showToast('Share URL copied to clipboard!');
+            });
+        }
+    }
+
+    function resetForm() {
+        $('.tool-resource-form input[type="text"], .tool-resource-form input[type="number"]').val('');
+        $('.tool-resource-form input[type="checkbox"]').prop('checked', false);
+        $('.tool-resource-form select').each(function() {
+            $(this).val($(this).find('option:first').val());
+        });
+        $('#namespace, #svcNamespace, #cmNamespace, #secretNamespace, #jobNamespace, #cronNamespace, #ssNamespace').val('default');
+        $('#replicas, #jobCompletions, #ssReplicas').val('1');
+        $('#jobBackoffLimit').val('6');
+        $('#restartPolicy').val('');
+
+        // Reset volume mounts to single empty row
+        $('#volumeMountsContainer').html(
+            '<div class="volume-mount-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+            '<select class="tool-select" style="width: 100px;" onchange="updatePreview()">' +
+            '<option value="emptyDir">EmptyDir</option>' +
+            '<option value="configMap">ConfigMap</option>' +
+            '<option value="secret">Secret</option>' +
+            '<option value="pvc">PVC</option>' +
+            '<option value="hostPath">HostPath</option>' +
+            '</select>' +
+            '<input type="text" class="kv-key" placeholder="Volume Name" style="flex: 1; min-width: 80px;" oninput="updatePreview()">' +
+            '<input type="text" class="kv-value" placeholder="Mount Path" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+            '<input type="text" class="kv-extra" placeholder="Source (ConfigMap/Secret/PVC name)" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+            '<button type="button" class="btn-remove-kv" onclick="removeVolumeMountRow(this)">&#10005;</button>' +
+            '</div>'
+        );
+
+        // Reset tolerations to single empty row
+        $('#tolerationsContainer').html(
+            '<div class="toleration-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+            '<input type="text" class="kv-key" placeholder="Key" style="flex: 1; min-width: 60px;" oninput="updatePreview()">' +
+            '<select class="tool-select" style="width: 80px;" onchange="updatePreview()">' +
+            '<option value="Equal">Equal</option>' +
+            '<option value="Exists">Exists</option>' +
+            '</select>' +
+            '<input type="text" class="kv-value" placeholder="Value" style="flex: 1; min-width: 60px;" oninput="updatePreview()">' +
+            '<select class="tool-select effect-select" style="width: 100px;" onchange="updatePreview()">' +
+            '<option value="NoSchedule">NoSchedule</option>' +
+            '<option value="PreferNoSchedule">PreferNoSchedule</option>' +
+            '<option value="NoExecute">NoExecute</option>' +
+            '</select>' +
+            '<button type="button" class="btn-remove-kv" onclick="removeTolerationRow(this)">&#10005;</button>' +
+            '</div>'
+        );
+
+        // Reset node selector to single empty row
+        $('#nodeSelectorContainer').html(
+            '<div class="kv-pair">' +
+            '<input type="text" class="kv-key" placeholder="Key" oninput="updatePreview()">' +
+            '<input type="text" class="kv-value" placeholder="Value" oninput="updatePreview()">' +
+            '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+            '</div>'
+        );
+
+        updatePreview();
+        showToast('Form reset');
+    }
+
+    function generateManifest() {
+        updatePreview();
+        downloadOutput();
+    }
+
+    function applyPreset(presetName) {
+        var p = presets[presetName];
+        if (!p) return;
+
+        // Basic fields
+        $('#name').val(p.name);
+        $('#image').val(p.image);
+        $('#replicas').val(p.replicas);
+        $('#containerPorts').val(p.ports);
+
+        // Resources
+        $('#cpuRequest').val(p.cpuRequest || '');
+        $('#cpuLimit').val(p.cpuLimit || '');
+        $('#memoryRequest').val(p.memoryRequest || '');
+        $('#memoryLimit').val(p.memoryLimit || '');
+
+        // Health Checks
+        $('#livenessPath').val(p.livenessPath || '');
+        $('#livenessPort').val(p.livenessPort || '');
+        $('#readinessPath').val(p.readinessPath || '');
+        $('#readinessPort').val(p.readinessPort || '');
+
+        // Security Context
+        $('#runAsUser').val(p.runAsUser || '');
+        $('#runAsGroup').val(p.runAsGroup || '');
+        $('#fsGroup').val(p.fsGroup || '');
+        $('#runAsNonRoot').prop('checked', p.runAsNonRoot || false);
+        $('#privileged').prop('checked', p.privileged || false);
+        $('#readOnlyRootFs').prop('checked', p.readOnlyRootFs || false);
+        $('#allowPrivilegeEscalation').prop('checked', p.allowPrivilegeEscalation || false);
+        $('#capAdd').val(p.capAdd || '');
+        $('#capDrop').val(p.capDrop || '');
+
+        // Service Account
+        $('#serviceAccount').val(p.serviceAccount || '');
+
+        // Update labels
+        var labelsHtml = '';
+        if (p.labels) {
+            for (var k in p.labels) {
+                labelsHtml += '<div class="kv-pair">' +
+                    '<input type="text" class="kv-key" value="' + k + '" oninput="updatePreview()">' +
+                    '<input type="text" class="kv-value" value="' + p.labels[k] + '" oninput="updatePreview()">' +
+                    '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+                    '</div>';
             }
         }
-    });
-
-    // Toggle between different Kubernetes resource forms
-    $('#selectkubeobject').on('change', function(e) {
-        e.stopPropagation();
-        var val = $(this).val();
-        // Hide all forms first
-        $('#form, #service, #statefulsetForm, #jobForm, #cronjobForm, #configmapForm, #secretForm').hide();
-        // Show the selected form
-        switch(val) {
-            case '1': $('#form').show(); break;
-            case '2': $('#service').show(); break;
-            case '3': $('#statefulsetForm').show(); break;
-            case '4': $('#jobForm').show(); break;
-            case '5': $('#cronjobForm').show(); break;
-            case '6': $('#configmapForm').show(); break;
-            case '7': $('#secretForm').show(); break;
+        if (!labelsHtml) {
+            labelsHtml = '<div class="kv-pair">' +
+                '<input type="text" class="kv-key" value="app" oninput="updatePreview()">' +
+                '<input type="text" class="kv-value" value="' + p.name + '" oninput="updatePreview()">' +
+                '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+                '</div>';
         }
-    });
+        $('#labelsContainer').html(labelsHtml);
 
-    // Secret type change handler
-    $('#secretType').on('change', function(e) {
-        e.stopPropagation();
-        var secretType = $(this).val();
-        // Hide all secret type fields
-        $('.secret-type-field').hide();
-        // Show relevant field based on type
-        switch(secretType) {
-            case 'Opaque':
-                $('#secretOpaqueFields').show();
-                break;
-            case 'kubernetes.io/basic-auth':
-                $('#secretBasicAuthFields').show();
-                break;
-            case 'kubernetes.io/ssh-auth':
-                $('#secretSSHFields').show();
-                break;
-            case 'kubernetes.io/tls':
-                $('#secretTLSFields').show();
-                break;
-            case 'kubernetes.io/dockerconfigjson':
-                $('#secretDockerFields').show();
-                break;
+        // Update environment variables
+        var envHtml = '';
+        if (p.env) {
+            for (var ek in p.env) {
+                envHtml += '<div class="kv-pair">' +
+                    '<input type="text" class="kv-key" value="' + ek + '" oninput="updatePreview()">' +
+                    '<input type="text" class="kv-value" value="' + p.env[ek] + '" oninput="updatePreview()">' +
+                    '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+                    '</div>';
+            }
         }
-    });
-
-    // Service type change handler
-    $('#type').on('change', function(e) {
-        e.stopPropagation();
-        var type = $(this).val();
-        if (type === 'NodePort' || type === 'LoadBalancer') {
-            $('#nodePortRow').show();
-        } else {
-            $('#nodePortRow').hide();
+        if (!envHtml) {
+            envHtml = '<div class="kv-pair">' +
+                '<input type="text" class="kv-key" placeholder="Key" oninput="updatePreview()">' +
+                '<input type="text" class="kv-value" placeholder="Value" oninput="updatePreview()">' +
+                '<button type="button" class="btn-remove-kv" onclick="removeKVPair(this)">&#10005;</button>' +
+                '</div>';
         }
-        if (type === 'LoadBalancer') {
-            $('#loadBalancerIPField').show();
-        } else {
-            $('#loadBalancerIPField').hide();
+        $('#envContainer').html(envHtml);
+
+        // Update volume mounts
+        var volHtml = '';
+        if (p.volumes && p.volumes.length > 0) {
+            p.volumes.forEach(function(v) {
+                volHtml += '<div class="volume-mount-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+                    '<select class="tool-select" style="width: 100px;" onchange="updatePreview()">' +
+                    '<option value="emptyDir"' + (v.type === 'emptyDir' ? ' selected' : '') + '>EmptyDir</option>' +
+                    '<option value="configMap"' + (v.type === 'configMap' ? ' selected' : '') + '>ConfigMap</option>' +
+                    '<option value="secret"' + (v.type === 'secret' ? ' selected' : '') + '>Secret</option>' +
+                    '<option value="pvc"' + (v.type === 'pvc' ? ' selected' : '') + '>PVC</option>' +
+                    '<option value="hostPath"' + (v.type === 'hostPath' ? ' selected' : '') + '>HostPath</option>' +
+                    '</select>' +
+                    '<input type="text" class="kv-key" placeholder="Volume Name" style="flex: 1; min-width: 80px;" value="' + v.name + '" oninput="updatePreview()">' +
+                    '<input type="text" class="kv-value" placeholder="Mount Path" style="flex: 1; min-width: 100px;" value="' + v.mountPath + '" oninput="updatePreview()">' +
+                    '<input type="text" class="kv-extra" placeholder="Source" style="flex: 1; min-width: 100px;" value="' + (v.source || '') + '" oninput="updatePreview()">' +
+                    '<button type="button" class="btn-remove-kv" onclick="removeVolumeMountRow(this)">&#10005;</button>' +
+                    '</div>';
+            });
         }
-        if (type === 'ExternalName') {
-            $('#externalNameField').show();
-            $('#clusterIPField').hide();
-            $('#servicePorts').closest('.form-section').hide();
-        } else {
-            $('#externalNameField').hide();
-            $('#clusterIPField').show();
-            $('#servicePorts').closest('.form-section').show();
+        if (!volHtml) {
+            volHtml = '<div class="volume-mount-row" style="display: flex; gap: 0.375rem; margin-bottom: 0.375rem; align-items: center; flex-wrap: wrap;">' +
+                '<select class="tool-select" style="width: 100px;" onchange="updatePreview()">' +
+                '<option value="emptyDir">EmptyDir</option>' +
+                '<option value="configMap">ConfigMap</option>' +
+                '<option value="secret">Secret</option>' +
+                '<option value="pvc">PVC</option>' +
+                '<option value="hostPath">HostPath</option>' +
+                '</select>' +
+                '<input type="text" class="kv-key" placeholder="Volume Name" style="flex: 1; min-width: 80px;" oninput="updatePreview()">' +
+                '<input type="text" class="kv-value" placeholder="Mount Path" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+                '<input type="text" class="kv-extra" placeholder="Source" style="flex: 1; min-width: 100px;" oninput="updatePreview()">' +
+                '<button type="button" class="btn-remove-kv" onclick="removeVolumeMountRow(this)">&#10005;</button>' +
+                '</div>';
         }
-    });
+        $('#volumeMountsContainer').html(volHtml);
 
-    // Generate Pod
-    $('#generatePod').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $('#deployment').val('pod');
-        submitPodForm();
-    });
+        // Expand relevant sections to show the preset config
+        expandSectionsForPreset(p);
 
-    // Generate Deployment
-    $('#generateDeployment').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $('#deployment').val('deployment');
-        submitPodForm();
-    });
+        updatePreview();
+        showToast('Applied ' + presetName + ' preset');
+    }
 
-    function submitPodForm() {
-        // Collect all KV pairs into hidden fields before submission
-        updateHiddenKVFields();
+    function expandSectionsForPreset(p) {
+        // Expand sections that have values
+        if (p.cpuRequest || p.cpuLimit || p.memoryRequest || p.memoryLimit) {
+            expandSection('Resources');
+        }
+        if (p.livenessPath || p.readinessPath) {
+            expandSection('Health Checks');
+        }
+        if (p.runAsUser || p.runAsNonRoot || p.capDrop) {
+            expandSection('Security Context');
+        }
+        if (p.volumes && p.volumes.length > 0) {
+            expandSection('Volumes & Mounts');
+        }
+        if (p.env && Object.keys(p.env).length > 0) {
+            expandSection('Environment Variables');
+        }
+    }
 
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating Kubernetes manifest...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#form").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating manifest. Please try again.</p></div>');
-                showToast('Error: ' + error);
+    function expandSection(sectionName) {
+        $('.tool-section-header').each(function() {
+            if ($(this).find('span').first().text().trim() === sectionName) {
+                if ($(this).hasClass('collapsed')) {
+                    $(this).removeClass('collapsed');
+                    $(this).next('.tool-section-content').removeClass('hidden');
+                }
             }
         });
     }
 
-    // Service form submission
-    $('#service').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+    // ========== EVENT HANDLERS ==========
+    $(document).ready(function() {
+        // Tab switching
+        $('.tool-tab').on('click', function() {
+            $('.tool-tab').removeClass('active');
+            $(this).addClass('active');
+            currentResource = $(this).data('resource');
+            $('#resourceType').val(currentResource);
 
-        // Collect service selector labels
-        $('#svcLabel').val(collectKVPairs('svcLabelsContainer'));
-
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating Kubernetes Service...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#service").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating service. Please try again.</p></div>');
-                showToast('Error: ' + error);
+            // Show/hide forms
+            $('.tool-resource-form').hide();
+            if (currentResource === 'deployment' || currentResource === 'pod') {
+                $('#formDeployment').show();
+            } else {
+                $('#form' + currentResource.charAt(0).toUpperCase() + currentResource.slice(1)).show();
             }
+
+            // Update presets visibility
+            $('#presetsBar').toggle(currentResource === 'deployment' || currentResource === 'pod');
+
+            updatePreview();
         });
+
+        // Format toggle
+        $('.tool-format-btn').on('click', function() {
+            $('.tool-format-btn').removeClass('active');
+            $(this).addClass('active');
+            currentFormat = $(this).data('format');
+            updatePreview();
+        });
+
+        // Preset buttons
+        $('.tool-preset-btn').on('click', function() {
+            applyPreset($(this).data('preset'));
+        });
+
+        // Initial preview
+        updatePreview();
+
+        // Load shared manifest from URL if present
+        loadSharedManifest();
     });
 
-    // StatefulSet form submission
-    $('#statefulsetForm').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+    // ========== LOAD SHARED MANIFEST ==========
+    function loadSharedManifest() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var manifestData = urlParams.get('manifest');
 
-        // Collect KV pairs
-        $('#ssLabel').val(collectKVPairs('ssLabelsContainer'));
-        $('#ssEnvironment').val(collectKVPairs('ssEnvContainer'));
+        if (!manifestData) return;
 
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating StatefulSet...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
+        try {
+            var encoding = urlParams.get('enc');
+            var decoded;
 
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#statefulsetForm").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating StatefulSet. Please try again.</p></div>');
-                showToast('Error: ' + error);
+            if (encoding === 'base64') {
+                // Decode base64
+                decoded = decodeURIComponent(escape(atob(manifestData)));
+            } else {
+                decoded = decodeURIComponent(manifestData);
             }
-        });
-    });
 
-    // Job form submission
-    $('#jobForm').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+            if (!decoded) return;
 
-        // Collect KV pairs
-        $('#jobLabel').val(collectKVPairs('jobLabelsContainer'));
-        $('#jobEnvironment').val(collectKVPairs('jobEnvContainer'));
+            // Get format and type from URL
+            var format = urlParams.get('format') || 'yaml';
+            var type = urlParams.get('type') || 'deployment';
 
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating Job...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
+            // Set format
+            currentFormat = format;
+            $('.tool-format-btn').removeClass('active');
+            $('.tool-format-btn[data-format="' + format + '"]').addClass('active');
 
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#jobForm").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating Job. Please try again.</p></div>');
-                showToast('Error: ' + error);
+            // Set resource type
+            currentResource = type;
+            $('.tool-tab').removeClass('active');
+            $('.tool-tab[data-resource="' + type + '"]').addClass('active');
+            $('#resourceType').val(type);
+
+            // Show appropriate form
+            $('.tool-resource-form').hide();
+            if (type === 'deployment' || type === 'pod') {
+                $('#formDeployment').show();
+            } else {
+                $('#form' + type.charAt(0).toUpperCase() + type.slice(1)).show();
             }
-        });
-    });
 
-    // CronJob form submission
-    $('#cronjobForm').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        // Collect KV pairs
-        $('#cronjobLabel').val(collectKVPairs('cronjobLabelsContainer'));
-        $('#cronjobEnvironment').val(collectKVPairs('cronjobEnvContainer'));
-
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating CronJob...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#cronjobForm").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating CronJob. Please try again.</p></div>');
-                showToast('Error: ' + error);
+            // Display the shared manifest directly in output
+            if (format === 'yaml') {
+                currentYaml = decoded;
+                currentJson = ''; // Would need to parse YAML to get JSON
+            } else {
+                currentJson = decoded;
+                currentYaml = ''; // Would need to convert JSON to YAML
             }
-        });
-    });
 
-    // ConfigMap form submission
-    $('#configmapForm').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+            $('#outputEmpty').hide();
+            $('#outputPre').show().html(format === 'yaml' ? highlightYaml(decoded) : decoded);
+            $('#copyBtn, #shareBtn, #downloadBtn').prop('disabled', false);
+            $('#statusBar').show();
+            $('#statusText').text('Loaded shared ' + type.charAt(0).toUpperCase() + type.slice(1) + ' manifest');
 
-        // Collect KV pairs
-        $('#configmapData').val(collectKVPairs('configmapDataContainer'));
-        $('#configmapLabel').val(collectKVPairs('configmapLabelsContainer'));
+            showToast('Shared manifest loaded!', 'success');
 
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating ConfigMap...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#configmapForm").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating ConfigMap. Please try again.</p></div>');
-                showToast('Error: ' + error);
-            }
-        });
-    });
-
-    // Secret form submission
-    $('#secretForm').on('submit', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        // Collect labels
-        $('#secretLabel').val(collectKVPairs('secretLabelsContainer'));
-
-        // Build data based on secret type
-        var secretType = $('#secretType').val();
-        var secretData = '';
-
-        switch(secretType) {
-            case 'Opaque':
-                // Generic KV pairs
-                secretData = collectKVPairs('secretDataContainer');
-                break;
-            case 'kubernetes.io/basic-auth':
-                // Basic auth: username and password
-                var username = $('#secretBasicUsername').val().trim();
-                var password = $('#secretBasicPassword').val().trim();
-                if (username) secretData += 'username=' + username;
-                if (password) secretData += (secretData ? ',' : '') + 'password=' + password;
-                break;
-            case 'kubernetes.io/ssh-auth':
-                // SSH auth: ssh-privatekey
-                var sshKey = $('#secretSSHKey').val().trim();
-                if (sshKey) secretData = 'ssh-privatekey=' + sshKey;
-                break;
-            case 'kubernetes.io/tls':
-                // TLS: tls.crt and tls.key
-                var tlsCert = $('#secretTLSCert').val().trim();
-                var tlsKey = $('#secretTLSKey').val().trim();
-                if (tlsCert) secretData += 'tls.crt=' + tlsCert;
-                if (tlsKey) secretData += (secretData ? ',' : '') + 'tls.key=' + tlsKey;
-                break;
-            case 'kubernetes.io/dockerconfigjson':
-                // Docker registry: build dockerconfigjson structure
-                var server = $('#secretDockerServer').val().trim() || 'https://index.docker.io/v1/';
-                var email = $('#secretDockerEmail').val().trim();
-                var dockerUser = $('#secretDockerUsername').val().trim();
-                var dockerPass = $('#secretDockerPassword').val().trim();
-                // Build the docker config JSON
-                var dockerConfig = {
-                    auths: {}
-                };
-                dockerConfig.auths[server] = {
-                    username: dockerUser,
-                    password: dockerPass,
-                    email: email,
-                    auth: btoa(dockerUser + ':' + dockerPass)
-                };
-                secretData = '.dockerconfigjson=' + JSON.stringify(dockerConfig);
-                break;
+        } catch (e) {
+            console.error('Failed to load shared manifest:', e);
+            showToast('Failed to load shared manifest', 'error');
         }
-
-        $('#secretData').val(secretData);
-
-        $('#resultPlaceholder').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x mb-2" style="color: var(--theme-primary);"></i><p class="text-muted">Generating Secret...</p></div>');
-        $('#resultPlaceholder').show();
-        $('#resultContent').hide();
-
-        $.ajax({
-            type: "POST",
-            url: "KubeFunctionality",
-            data: $("#secretForm").serialize(),
-            dataType: "json",
-            success: function(response) {
-                displayResult(response);
-            },
-            error: function(xhr, status, error) {
-                $('#resultPlaceholder').html('<div class="text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error generating Secret. Please try again.</p></div>');
-                showToast('Error: ' + error);
-            }
-        });
-    });
-});
-</script>
-</div>
-<%@ include file="body-close.jsp"%>
+    }
+    </script>
+</body>
+</html>
