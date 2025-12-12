@@ -252,3 +252,54 @@
 </script>
 <% } %>
 
+<!-- FAQ Schema (for rich snippets - high CTR) -->
+<%
+    String faq1q = request.getParameter("faq1q");
+    String faq1a = request.getParameter("faq1a");
+    String faq2q = request.getParameter("faq2q");
+    String faq2a = request.getParameter("faq2a");
+    String faq3q = request.getParameter("faq3q");
+    String faq3a = request.getParameter("faq3a");
+    boolean hasFaq = (faq1q != null && faq1a != null);
+%>
+<% if (hasFaq) { %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    <% if (faq1q != null && faq1a != null) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq1q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq1a) %>"
+      }
+    }<% if (faq2q != null && faq2a != null) { %>,<% } %>
+    <% } %>
+    <% if (faq2q != null && faq2a != null) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq2q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq2a) %>"
+      }
+    }<% if (faq3q != null && faq3a != null) { %>,<% } %>
+    <% } %>
+    <% if (faq3q != null && faq3a != null) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq3q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq3a) %>"
+      }
+    }
+    <% } %>
+  ]
+}
+</script>
+<% } %>
+
