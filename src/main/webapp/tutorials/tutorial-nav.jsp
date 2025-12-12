@@ -64,6 +64,11 @@
 
                         TutorialProgress.markComplete(tutorial, lessonId);
 
+                        // Track lesson completion in analytics
+                        if (typeof trackLessonComplete === 'function') {
+                            trackLessonComplete(lessonId);
+                        }
+
                         // Show feedback
                         const btn = document.querySelector('.nav-center .btn');
                         const originalText = btn.innerHTML;

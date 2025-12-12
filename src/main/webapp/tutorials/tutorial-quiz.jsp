@@ -63,17 +63,17 @@
                         const isCorrect = window.checkQuizAnswer(quizId, selectedIndex, correctIndex);
                         const feedback = document.getElementById(quizId + '-feedback');
 
+                        // Track quiz answer in analytics
+                        if (typeof trackQuizAnswer === 'function') {
+                            trackQuizAnswer(quizId, isCorrect);
+                        }
+
                         if (feedback) {
                             feedback.style.display = 'block';
                             if (isCorrect) {
                                 feedback.style.background = 'var(--success-light)';
                                 feedback.style.color = 'var(--success)';
                                 feedback.textContent = 'Correct! Well done.';
-
-                                // Save progress if TutorialProgress exists
-                                if (typeof TutorialProgress !== 'undefined') {
-                                    // Assuming we want to track quiz completion too, but for now just local feedback
-                                }
                             } else {
                                 feedback.style.background = 'var(--error-light)';
                                 feedback.style.color = 'var(--error)';

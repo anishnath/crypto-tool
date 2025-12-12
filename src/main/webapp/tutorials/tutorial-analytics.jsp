@@ -38,6 +38,18 @@
             'content_type': 'tutorial'
         });
     }
+
+    // Auto-track lesson view on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Extract lesson and module from page
+        const path = window.location.pathname;
+        const match = path.match(/\/tutorials\/([^\/]+)\/([^\/]+)\.jsp/);
+        if (match) {
+            const moduleName = match[1];  // e.g., 'java', 'python', 'bash'
+            const lessonName = match[2];  // e.g., 'intro', 'variables', 'loops'
+            trackLessonView(lessonName, moduleName);
+        }
+    });
 </script>
 
 <!-- Default Statcounter code for 8gwifi.org
