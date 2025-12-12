@@ -6,15 +6,15 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Free Coding Tutorials 2025 - Learn HTML, CSS, JavaScript, Python, Rust | 8gwifi.org</title>
+            <title>Free Coding Tutorials 2025 - Learn HTML, CSS, JavaScript, Python, Lua, Rust | 8gwifi.org</title>
             <meta name="description"
-                content="[Free] Learn to code with interactive tutorials. Master HTML, CSS, JavaScript, TypeScript, Python, Bash, Java, Rust with live editor. No signup. Practice instantly in browser. 80+ lessons.">
+                content="[Free] Learn to code with interactive tutorials. Master HTML, CSS, JavaScript, TypeScript, Python, Lua, Bash, Java, Rust with live editor. No signup. Practice instantly in browser. 100+ lessons.">
             <link rel="canonical" href="https://8gwifi.org/tutorials/">
 
             <%-- Open Graph Tags --%>
                 <meta property="og:title" content="Free Programming Tutorials - Learn to Code Online | 8gwifi.org">
                 <meta property="og:description"
-                    content="Interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java, Rust by doing - not just reading.">
+                    content="Interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Lua, Bash, Java, Rust by doing - not just reading.">
                 <meta property="og:type" content="website">
                 <meta property="og:url" content="https://8gwifi.org/tutorials/">
                 <meta property="og:site_name" content="8gwifi.org">
@@ -23,7 +23,7 @@
                     <meta name="twitter:card" content="summary_large_image">
                     <meta name="twitter:title" content="Free Programming Tutorials - Learn to Code">
                     <meta name="twitter:description"
-                        content="Learn HTML, CSS, JavaScript, Python with interactive code editor. Practice instantly in your browser.">
+                        content="Learn HTML, CSS, JavaScript, Python, Lua with interactive code editor. Practice instantly in your browser.">
 
                     <link rel="icon" type="image/svg+xml"
                         href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
@@ -36,7 +36,7 @@
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "name": "Free Programming Tutorials - Learn to Code Online",
-        "description": "Free interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Bash, Java, Rust from scratch.",
+        "description": "Free interactive coding tutorials with live editor. Learn HTML, CSS, JavaScript, Python, Lua, Bash, Java, Rust from scratch.",
         "url": "https://8gwifi.org/tutorials/",
         "mainEntity": {
             "@type": "ItemList",
@@ -93,6 +93,13 @@
                 {
                     "@type": "ListItem",
                     "position": 8,
+                    "name": "Lua Tutorial",
+                    "description": "Lightweight scripting for games, embedded systems, and more.",
+                    "url": "https://8gwifi.org/tutorials/lua/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 9,
                     "name": "Rust Tutorial",
                     "description": "Memory-safe systems programming. Performance without compromise.",
                     "url": "https://8gwifi.org/tutorials/rust/"
@@ -235,6 +242,17 @@
             {
                 "@type": "Course",
                 "position": 8,
+                "name": "Lua Tutorial for Beginners",
+                "description": "Learn Lua for game development, embedded systems, and scripting.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/lua/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 9,
                 "name": "Rust Tutorial for Beginners",
                 "description": "Learn Rust for memory-safe systems programming. Performance without compromise.",
                 "provider": {"@type": "Organization", "name": "8gwifi.org"},
@@ -752,6 +770,22 @@
                                                         </a>
 
                                                         <%-- Rust Tutorial --%>
+                                                            <a href="<%=request.getContextPath()%>/tutorials/lua/"
+                                                                class="tutorial-card">
+                                                                <div class="tutorial-card-header">
+                                                                    <div class="tutorial-card-icon"
+                                                                        style="background: #000080 15;">
+                                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/lua-logo.svg"
+                                                                            alt="Lua">
+                                                                    </div>
+                                                                    <h3>Lua</h3>
+                                                                </div>
+                                                                <p>Lightweight scripting for games, embedded systems,
+                                                                    and more.</p>
+                                                                <span
+                                                                    class="tutorial-card-badge badge-available">Available</span>
+                                                            </a>
+
                                                             <a href="<%=request.getContextPath()%>/tutorials/rust/"
                                                                 class="tutorial-card">
                                                                 <div class="tutorial-card-header">
@@ -792,62 +826,61 @@
                                     </div>
 
                                     <%-- C++ Tutorial --%>
+                                        <div class="tutorial-card disabled">
+                                            <div class="tutorial-card-header">
+                                                <div class="tutorial-card-icon" style="background: #00599c15;">
+                                                    <img src="<%=request.getContextPath()%>/tutorials/assets/images/cpp-logo.svg"
+                                                        alt="C++">
+                                                </div>
+                                                <h3>C++</h3>
+                                            </div>
+                                            <p>High-performance programming for games and systems.</p>
+                                            <span class="tutorial-card-badge badge-coming">Coming Soon</span>
+                                        </div>
+
+                                        <%-- SQL Tutorial --%>
                                             <div class="tutorial-card disabled">
                                                 <div class="tutorial-card-header">
-                                                    <div class="tutorial-card-icon" style="background: #00599c15;">
-                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/cpp-logo.svg"
-                                                            alt="C++">
+                                                    <div class="tutorial-card-icon" style="background: #33679115;">
+                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/sql-logo.svg"
+                                                            alt="SQL">
                                                     </div>
-                                                    <h3>C++</h3>
+                                                    <h3>SQL</h3>
                                                 </div>
-                                                <p>High-performance programming for games and systems.</p>
-                                                <span class="tutorial-card-badge badge-coming">Coming Soon</span>
+                                                <p>Query and manage databases. Essential data skill.</p>
+                                                <span class="tutorial-card-badge badge-coming">Coming
+                                                    Soon</span>
                                             </div>
 
-                                            <%-- SQL Tutorial --%>
+                                            <%-- PHP Tutorial --%>
                                                 <div class="tutorial-card disabled">
                                                     <div class="tutorial-card-header">
-                                                        <div class="tutorial-card-icon" style="background: #33679115;">
-                                                            <img src="<%=request.getContextPath()%>/tutorials/assets/images/sql-logo.svg"
-                                                                alt="SQL">
+                                                        <div class="tutorial-card-icon" style="background: #777bb315;">
+                                                            <img src="<%=request.getContextPath()%>/tutorials/assets/images/php-logo.svg"
+                                                                alt="PHP">
                                                         </div>
-                                                        <h3>SQL</h3>
+                                                        <h3>PHP</h3>
                                                     </div>
-                                                    <p>Query and manage databases. Essential data skill.</p>
+                                                    <p>Server-side web development. Powers most of the web.</p>
                                                     <span class="tutorial-card-badge badge-coming">Coming
                                                         Soon</span>
                                                 </div>
 
-                                                <%-- PHP Tutorial --%>
+                                                <%-- Ruby Tutorial --%>
                                                     <div class="tutorial-card disabled">
                                                         <div class="tutorial-card-header">
                                                             <div class="tutorial-card-icon"
-                                                                style="background: #777bb315;">
-                                                                <img src="<%=request.getContextPath()%>/tutorials/assets/images/php-logo.svg"
-                                                                    alt="PHP">
+                                                                style="background: #cc342d15;">
+                                                                <img src="<%=request.getContextPath()%>/tutorials/assets/images/ruby-logo.svg"
+                                                                    alt="Ruby">
                                                             </div>
-                                                            <h3>PHP</h3>
+                                                            <h3>Ruby</h3>
                                                         </div>
-                                                        <p>Server-side web development. Powers most of the web.</p>
+                                                        <p>Elegant and productive. Build web apps with Rails.
+                                                        </p>
                                                         <span class="tutorial-card-badge badge-coming">Coming
                                                             Soon</span>
                                                     </div>
-
-                                                    <%-- Ruby Tutorial --%>
-                                                        <div class="tutorial-card disabled">
-                                                            <div class="tutorial-card-header">
-                                                                <div class="tutorial-card-icon"
-                                                                    style="background: #cc342d15;">
-                                                                    <img src="<%=request.getContextPath()%>/tutorials/assets/images/ruby-logo.svg"
-                                                                        alt="Ruby">
-                                                                </div>
-                                                                <h3>Ruby</h3>
-                                                            </div>
-                                                            <p>Elegant and productive. Build web apps with Rails.
-                                                            </p>
-                                                            <span class="tutorial-card-badge badge-coming">Coming
-                                                                Soon</span>
-                                                        </div>
                             </section>
 
                             <div class="divider">
@@ -935,6 +968,20 @@
                                             <a href="<%=request.getContextPath()%>/tutorials/bash/">Bash</a>
                                         </div>
                                         <span class="path-badge">High Performance</span>
+                                    </div>
+
+                                    <div class="path-card">
+                                        <div class="path-header">
+                                            <span class="path-icon">🎮</span>
+                                            <h3>Game Developer</h3>
+                                        </div>
+                                        <p>Script game logic and mechanics</p>
+                                        <div class="path-steps">
+                                            <a href="<%=request.getContextPath()%>/tutorials/lua/">Lua</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/javascript/">JavaScript</a>
+                                        </div>
+                                        <span class="path-badge">Game Development</span>
                                     </div>
                                 </section>
 
