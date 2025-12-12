@@ -2,7 +2,7 @@
 <%--
     SEO Component for Individual Tool Pages
     Generates comprehensive JSON-LD and meta tags for maximum CTR
-    
+
     Usage:
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Base64 Encoder/Decoder" />
@@ -11,13 +11,19 @@
         <jsp:param name="toolUrl" value="Base64Functions.jsp" />
         <jsp:param name="toolKeywords" value="base64, encode, decode, converter, online" />
         <jsp:param name="toolImage" value="logo.png" /> <!-- Optional: defaults to logo.png -->
+        <jsp:param name="toolFeatures" value="Encode text to Base64,Decode Base64 to text,File encoding support" /> <!-- Optional: comma-separated list -->
     </jsp:include>
-    
+
     Image parameter options:
     - "logo.png" (default) - Uses /images/site/logo.png
     - "custom-image.png" - Uses /images/site/custom-image.png
     - "/images/custom/path.png" - Uses absolute path from site root
     - "https://example.com/image.png" - Uses full URL
+
+    Features parameter:
+    - Comma-separated list of tool-specific features
+    - If not provided, uses default generic features
+    - Example: "Live YAML preview,8 resource types,Production-ready presets"
 --%>
 
 <%
@@ -27,6 +33,7 @@
     String toolUrl = request.getParameter("toolUrl") != null ? request.getParameter("toolUrl") : "";
     String toolKeywords = request.getParameter("toolKeywords") != null ? request.getParameter("toolKeywords") : toolName.toLowerCase();
     String toolImage = request.getParameter("toolImage") != null ? request.getParameter("toolImage") : "logo.png";
+    String toolFeatures = request.getParameter("toolFeatures"); // Optional: comma-separated features
     
     String baseUrl = "https://8gwifi.org";
     String fullUrl = baseUrl + (toolUrl.startsWith("/") ? toolUrl : "/" + toolUrl);
@@ -112,12 +119,20 @@
 <meta property="og:title" content="<%= escapeJson(pageTitle) %>">
 <meta property="og:description" content="<%= escapeJson(toolDescription) %>">
 <meta property="og:image" content="<%= imageUrl %>">
+<meta property="og:site_name" content="8gwifi.org">
+<meta property="og:locale" content="en_US">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@anish2good">
+<meta name="twitter:creator" content="@anish2good">
 <meta name="twitter:title" content="<%= escapeJson(pageTitle) %>">
 <meta name="twitter:description" content="<%= escapeJson(toolDescription) %>">
 <meta name="twitter:image" content="<%= imageUrl %>">
+
+<!-- Additional Meta -->
+<meta name="author" content="8gwifi.org">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
 <!-- WebApplication Schema (High CTR) -->
 <script type="application/ld+json">
@@ -129,12 +144,28 @@
   "url": "<%= fullUrl %>",
   "applicationCategory": "<%= escapeJson(toolCategory) %>",
   "operatingSystem": "Web Browser",
+  "browserRequirements": "Requires JavaScript. Works on Chrome, Firefox, Safari, Edge.",
+  "softwareVersion": "1.0",
+  "author": {
+    "@type": "Organization",
+    "name": "8gwifi.org",
+    "url": "<%= baseUrl %>"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "8gwifi.org",
+    "url": "<%= baseUrl %>",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "<%= baseUrl %>/images/site/logo.png"
+    }
+  },
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
-    "priceValidUntil": "2025-12-31"
+    "priceValidUntil": "2026-12-31"
   },
   "aggregateRating": {
     "@type": "AggregateRating",
@@ -144,12 +175,20 @@
     "worstRating": "1"
   },
   "featureList": [
+<% if (toolFeatures != null && !toolFeatures.trim().isEmpty()) {
+    String[] features = toolFeatures.split(",");
+    for (int i = 0; i < features.length; i++) {
+        out.print("    \"" + escapeJson(features[i].trim()) + "\"");
+        if (i < features.length - 1) out.print(",");
+        out.println();
+    }
+} else { %>
     "Free to use",
     "Client-side processing",
     "No registration required",
     "Secure and private",
     "Fast performance"
-  ],
+<% } %>  ],
   "screenshot": "<%= imageUrl %>"
 }
 </script>
@@ -191,10 +230,17 @@
   "description": "<%= escapeJson(toolDescription) %>",
   "url": "<%= fullUrl %>",
   "inLanguage": "en-US",
+  "datePublished": "2024-01-01",
+  "dateModified": "<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>",
   "isPartOf": {
     "@type": "WebSite",
     "name": "8gwifi.org",
-    "url": "<%= baseUrl %>"
+    "url": "<%= baseUrl %>",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "<%= baseUrl %>/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
   },
   "breadcrumb": {
     "@type": "BreadcrumbList",

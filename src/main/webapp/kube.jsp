@@ -30,6 +30,7 @@
         <jsp:param name="toolUrl" value="kube.jsp" />
         <jsp:param name="toolKeywords" value="kubernetes yaml generator, k8s yaml generator online, kubernetes manifest generator, kubernetes deployment yaml generator, kubectl yaml generator, k8s config generator, kubernetes service yaml, kubernetes pod yaml, configmap generator, kubernetes secret generator, statefulset yaml, cronjob yaml kubernetes, kubernetes job yaml, helm alternative, k8s yaml online, kubernetes yaml builder, free kubernetes tool, yaml generator online, k8s deployment generator, kubernetes yaml creator" />
         <jsp:param name="toolImage" value="kube.png" />
+        <jsp:param name="toolFeatures" value="Live YAML/JSON preview,8 resource types (Deployment Pod Service StatefulSet Job CronJob ConfigMap Secret),Production-ready presets (Nginx Redis PostgreSQL Node.js Python Go MongoDB Elasticsearch),Security Context configuration,Volume mounts and tolerations,Copy download and share output,Client-side processing,No registration required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is a Kubernetes YAML generator?" />
         <jsp:param name="faq1a" value="A Kubernetes YAML generator creates properly formatted manifest files for K8s resources like Deployments, Pods, Services, and ConfigMaps without manual coding." />
@@ -51,10 +52,12 @@
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
@@ -99,7 +102,7 @@
                 <h1 class="tool-page-title">Kubernetes YAML Generator</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/devops.jsp">DevOps</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#devops">DevOps</a> /
                     Kubernetes Generator
                 </nav>
             </div>
@@ -795,6 +798,7 @@
 
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
     <script>
     // ========== GLOBAL STATE ==========
