@@ -458,6 +458,151 @@ pre code {
     transition: width var(--transition-slow);
 }
 
+/* Header Social Buttons */
+.header-social {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 34px;
+    padding: 0 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 17px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.header-btn .btn-icon {
+    font-size: 0.9375rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-btn .btn-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Coffee Button - Warm, inviting */
+.header-btn-coffee {
+    background: #FFDD00;
+    color: #000000;
+    border-color: #FFDD00;
+}
+
+.header-btn-coffee:hover {
+    background: #FFE333;
+    border-color: #FFE333;
+    box-shadow: 0 2px 8px rgba(255, 221, 0, 0.4);
+}
+
+.header-btn-coffee:active {
+    transform: scale(0.98);
+}
+
+/* Twitter/X Button - Clean monochrome */
+.header-btn-twitter {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+.header-btn-twitter:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
+}
+
+.header-btn-twitter:active {
+    transform: scale(0.98);
+}
+
+/* Share Button - Subtle, action-oriented */
+.header-btn-share {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
+.header-btn-share:hover {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary);
+}
+
+.header-btn-share:active {
+    transform: scale(0.98);
+}
+
+/* Tablet: Show icons + text */
+@media (max-width: 900px) {
+    .header-btn {
+        padding: 0 0.75rem;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .header-btn .btn-icon {
+        font-size: 0.875rem;
+    }
+}
+
+/* Mobile: Icons only */
+@media (max-width: 640px) {
+    .header-social {
+        gap: 0.375rem;
+    }
+
+    .header-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 50%;
+    }
+
+    .header-btn .btn-text {
+        display: none;
+    }
+
+    .header-btn .btn-icon {
+        font-size: 1rem;
+    }
+}
+
+/* Very small screens: Keep buttons but smaller */
+@media (max-width: 400px) {
+    .header-social {
+        gap: 0.25rem;
+    }
+
+    .header-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .header-btn .btn-icon {
+        font-size: 0.875rem;
+    }
+
+    .header-btn .btn-icon svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
 /* Theme Toggle */
 .theme-toggle {
     display: flex;
