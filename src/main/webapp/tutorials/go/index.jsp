@@ -133,7 +133,7 @@
                                 <div class="lesson-body">
                                     <div style="display: grid; gap: var(--space-4); margin-top: var(--space-8);">
                                         <%-- Start Learning Card --%>
-                                            <a href="<%=request.getContextPath()%>/tutorials/go/introduction.jsp"
+                                            <a href="<%=request.getContextPath()%>/tutorials/go/intro.jsp"
                                                 class="card"
                                                 style="text-decoration: none; display: flex; align-items: center; gap: var(--space-4);">
                                                 <div
