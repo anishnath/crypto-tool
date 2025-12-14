@@ -37,6 +37,7 @@ const SOCIAL_POPUP_CONFIG = {
 const SocialPopupState = {
     sessionShowCount: 0,
     runClickCount: 0,
+    runClicksSinceLastPopup: 0,  // Track clicks since last popup shown
     pageLoadTime: Date.now(),
     hasInteracted: false,
     popupShown: false,
@@ -191,7 +192,8 @@ function checkTimeBasedTrigger() {
 
 function checkRunClickTrigger() {
     SocialPopupState.runClickCount++;
-    log('Run click count:', SocialPopupState.runClickCount);
+    SocialPopupState.runClicksSinceLastPopup++;
+    log('Run click count:', SocialPopupState.runClickCount, 'Since last popup:', SocialPopupState.runClicksSinceLastPopup);
 
     // Track every run click for analytics
     trackRunClick();
@@ -213,9 +215,9 @@ function checkRunClickTrigger() {
             Storage.set(Storage.KEY_NEVER_SHOW, '');
         }
 
-        // Trigger every N clicks (4, 8, 12, etc.)
-        if (SocialPopupState.runClickCount % SOCIAL_POPUP_CONFIG.minRunClicks === 0) {
-            log('Run click repeat trigger at:', SocialPopupState.runClickCount);
+        // Trigger every N clicks since last popup (not total clicks)
+        if (SocialPopupState.runClicksSinceLastPopup >= SOCIAL_POPUP_CONFIG.minRunClicks) {
+            log('Run click repeat trigger at:', SocialPopupState.runClicksSinceLastPopup, 'clicks since last popup');
             SocialPopupState.popupShown = false; // Reset to allow showing again
             SocialPopupState.lastTrigger = 'run_click';
             showSocialPopup();
@@ -258,6 +260,9 @@ function showSocialPopup() {
     popup.classList.add('active');
     overlay.classList.add('active');
     SocialPopupState.popupShown = true;
+
+    // Reset run click counter so next popup triggers after another N clicks
+    SocialPopupState.runClicksSinceLastPopup = 0;
 
     // Increment session count
     const count = Storage.getNumber(Storage.KEY_SESSION_COUNT) + 1;
