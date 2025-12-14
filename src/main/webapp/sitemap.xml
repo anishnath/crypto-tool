@@ -2159,6 +2159,45 @@
   <url><loc>https://8gwifi.org/tutorials/python/prof-args.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/prof-sqlite.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+  <!-- Go Tutorial -->
+  <url><loc>https://8gwifi.org/tutorials/go/</loc><lastmod>2025-12-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/hello-world.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/variables-types.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/constants-operators.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/strings.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/if-switch.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/loops-range.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/functions-returns.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/closures-defer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/panic-recover.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/pointers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/arrays-slices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/maps.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/structs-methods.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/interfaces-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/errors-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/errors-wrapping.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/goroutines.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/channels.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/select-patterns.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/sync-context.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/goroutines-waitgroups.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/packages-modules.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/file-io.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/json-http.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/benchmarking.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/best-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/generics-reflection.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/memory-management.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/escape-analysis.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/cgo-basics.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/unsafe-package.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/compiler-flags.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/go/plugins-loading.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
   <!-- Bash Tutorial -->
   <url><loc>https://8gwifi.org/tutorials/bash/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/bash/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
