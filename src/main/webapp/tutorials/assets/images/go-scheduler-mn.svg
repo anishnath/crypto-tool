@@ -1,0 +1,57 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- Title -->
+    <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Go Scheduler: M:N Model</text>
+    
+    <!-- Goroutines (top) -->
+    <text x="400" y="65" text-anchor="middle" font-size="14" fill="#27AE60" font-weight="bold">Goroutines (G)</text>
+    <circle cx="150" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="150" y="105" text-anchor="middle" font-size="12" fill="#333">G1</text>
+    
+    <circle cx="250" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="250" y="105" text-anchor="middle" font-size="12" fill="#333">G2</text>
+    
+    <circle cx="350" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="350" y="105" text-anchor="middle" font-size="12" fill="#333">G3</text>
+    
+    <circle cx="450" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="450" y="105" text-anchor="middle" font-size="12" fill="#333">G4</text>
+    
+    <circle cx="550" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="550" y="105" text-anchor="middle" font-size="12" fill="#333">G5</text>
+    
+    <circle cx="650" cy="100" r="20" fill="#27AE60" opacity="0.3" stroke="#27AE60" stroke-width="2"/>
+    <text x="650" y="105" text-anchor="middle" font-size="12" fill="#333">G6</text>
+    
+    <!-- Arrows down -->
+    <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#666" />
+        </marker>
+    </defs>
+    <path d="M 200 130 L 200 180" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 400 130 L 400 180" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 600 130 L 600 180" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+    
+    <!-- Go Runtime / Scheduler (middle) -->
+    <rect x="100" y="190" width="600" height="60" fill="#3498DB" opacity="0.2" stroke="#3498DB" stroke-width="2" rx="5"/>
+    <text x="400" y="215" text-anchor="middle" font-size="14" fill="#3498DB" font-weight="bold">Go Runtime Scheduler</text>
+    <text x="400" y="235" text-anchor="middle" font-size="12" fill="#333">Multiplexes M goroutines onto N OS threads</text>
+    
+    <!-- Arrows down -->
+    <path d="M 250 260 L 250 290" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 550 260 L 550 290" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+    
+    <!-- OS Threads (bottom) -->
+    <text x="400" y="315" text-anchor="middle" font-size="14" fill="#E74C3C" font-weight="bold">OS Threads (M)</text>
+    <rect x="150" y="330" width="150" height="50" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="225" y="360" text-anchor="middle" font-size="12" fill="#333">Thread 1</text>
+    
+    <rect x="350" y="330" width="150" height="50" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="425" y="360" text-anchor="middle" font-size="12" fill="#333">Thread 2</text>
+    
+    <rect x="550" y="330" width="150" height="50" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="625" y="360" text-anchor="middle" font-size="12" fill="#333">Thread 3</text>
+
+    <text x="98%" y="96%" text-anchor="end" font-size="10" fill="#666" opacity="0.5" font-family="sans-serif">8gwifi.org/tutorials/go</text>
+
+</svg>

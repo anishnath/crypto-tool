@@ -1,0 +1,130 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+    Why Go?
+  </text>
+  
+  <!-- Central Go Logo Circle -->
+  <circle cx="400" cy="180" r="60" fill="#00ADD8" opacity="0.1"/>
+  <text x="400" y="190" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#00ADD8" text-anchor="middle">
+    Go
+  </text>
+  
+  <!-- Feature 1: Simple & Fast -->
+  <g>
+    <rect x="50" y="280" width="200" height="120" rx="8" fill="#3498DB" opacity="0.1" stroke="#3498DB" stroke-width="2"/>
+    <text x="150" y="310" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      ⚡ Simple &amp; Fast
+    </text>
+    <text x="150" y="335" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Clean syntax
+    </text>
+    <text x="150" y="355" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Fast compilation
+    </text>
+    <text x="150" y="375" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Static typing
+    </text>
+  </g>
+  
+  <!-- Feature 2: Concurrent -->
+  <g>
+    <rect x="300" y="280" width="200" height="120" rx="8" fill="#27AE60" opacity="0.1" stroke="#27AE60" stroke-width="2"/>
+    <text x="400" y="310" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      🚀 Concurrent
+    </text>
+    <text x="400" y="335" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Goroutines
+    </text>
+    <text x="400" y="355" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Channels
+    </text>
+    <text x="400" y="375" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Built-in parallelism
+    </text>
+  </g>
+  
+  <!-- Feature 3: Productive -->
+  <g>
+    <rect x="550" y="280" width="200" height="120" rx="8" fill="#9B59B6" opacity="0.1" stroke="#9B59B6" stroke-width="2"/>
+    <text x="650" y="310" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      💡 Productive
+    </text>
+    <text x="650" y="335" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Standard library
+    </text>
+    <text x="650" y="355" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Built-in tooling
+    </text>
+    <text x="650" y="375" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Cross-platform
+    </text>
+  </g>
+  
+  <!-- Feature 4: Reliable -->
+  <g>
+    <rect x="50" y="430" width="200" height="120" rx="8" fill="#E67E22" opacity="0.1" stroke="#E67E22" stroke-width="2"/>
+    <text x="150" y="460" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      🛡️ Reliable
+    </text>
+    <text x="150" y="485" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Memory safety
+    </text>
+    <text x="150" y="505" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Garbage collection
+    </text>
+    <text x="150" y="525" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Error handling
+    </text>
+  </g>
+  
+  <!-- Feature 5: Scalable -->
+  <g>
+    <rect x="300" y="430" width="200" height="120" rx="8" fill="#E74C3C" opacity="0.1" stroke="#E74C3C" stroke-width="2"/>
+    <text x="400" y="460" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      📈 Scalable
+    </text>
+    <text x="400" y="485" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Microservices
+    </text>
+    <text x="400" y="505" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Cloud native
+    </text>
+    <text x="400" y="525" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • High performance
+    </text>
+  </g>
+  
+  <!-- Feature 6: Modern -->
+  <g>
+    <rect x="550" y="430" width="200" height="120" rx="8" fill="#1ABC9C" opacity="0.1" stroke="#1ABC9C" stroke-width="2"/>
+    <text x="650" y="460" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      ✨ Modern
+    </text>
+    <text x="650" y="485" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Interfaces
+    </text>
+    <text x="650" y="505" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Composition
+    </text>
+    <text x="650" y="525" font-family="Arial, sans-serif" font-size="13" fill="#555" text-anchor="middle">
+      • Generics (1.18+)
+    </text>
+  </g>
+  
+  <!-- Connecting lines from center -->
+  <line x1="400" y1="240" x2="150" y2="280" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="400" y1="240" x2="400" y2="280" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="400" y1="240" x2="650" y2="280" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="400" y1="240" x2="150" y2="430" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="400" y1="240" x2="400" y2="430" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="400" y1="240" x2="650" y2="430" stroke="#95A5A6" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+  
+  <!-- Watermark -->
+  <text x="780" y="590" font-family="Arial, sans-serif" font-size="12" fill="#95A5A6" text-anchor="end">
+    8gwifi.org/tutorials/go
+  </text>
+</svg>

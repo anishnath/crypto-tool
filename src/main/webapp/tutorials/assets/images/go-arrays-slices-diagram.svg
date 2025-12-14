@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <style>
+      .title { font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold; fill: #2C3E50; }
+      .subtitle { font-family: 'Arial', sans-serif; font-size: 16px; font-weight: 600; fill: #34495E; }
+      .label { font-family: 'Arial', sans-serif; font-size: 14px; fill: #7F8C8D; }
+      .value { font-family: 'Courier New', monospace; font-size: 14px; fill: #2C3E50; }
+      .watermark { font-family: 'Arial', sans-serif; font-size: 12px; fill: #BDC3C7; }
+      .array-box { fill: #4A90E2; stroke: #2980B9; stroke-width: 2; }
+      .slice-box { fill: #7ED321; stroke: #27AE60; stroke-width: 2; }
+      .pointer-line { stroke: #E74C3C; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title" text-anchor="middle">Arrays vs Slices in Go</text>
+  
+  <!-- Array Section -->
+  <text x="150" y="70" class="subtitle">Array [5]int - Fixed Size</text>
+  
+  <!-- Array boxes -->
+  <rect x="50" y="90" width="60" height="50" class="array-box" rx="4"/>
+  <rect x="120" y="90" width="60" height="50" class="array-box" rx="4"/>
+  <rect x="190" y="90" width="60" height="50" class="array-box" rx="4"/>
+  <rect x="260" y="90" width="60" height="50" class="array-box" rx="4"/>
+  <rect x="330" y="90" width="60" height="50" class="array-box" rx="4"/>
+  
+  <!-- Array indices -->
+  <text x="80" y="110" class="label" text-anchor="middle">[0]</text>
+  <text x="150" y="110" class="label" text-anchor="middle">[1]</text>
+  <text x="220" y="110" class="label" text-anchor="middle">[2]</text>
+  <text x="290" y="110" class="label" text-anchor="middle">[3]</text>
+  <text x="360" y="110" class="label" text-anchor="middle">[4]</text>
+  
+  <!-- Array values -->
+  <text x="80" y="130" class="value" text-anchor="middle">10</text>
+  <text x="150" y="130" class="value" text-anchor="middle">20</text>
+  <text x="220" y="130" class="value" text-anchor="middle">30</text>
+  <text x="290" y="130" class="value" text-anchor="middle">40</text>
+  <text x="360" y="130" class="value" text-anchor="middle">50</text>
+  
+  <!-- Array properties -->
+  <text x="200" y="170" class="label" text-anchor="middle">✗ Cannot grow</text>
+  <text x="200" y="190" class="label" text-anchor="middle">✗ Size is part of type</text>
+  
+  <!-- Slice Section -->
+  <text x="550" y="70" class="subtitle">Slice []int - Dynamic</text>
+  
+  <!-- Slice boxes (initial) -->
+  <rect x="450" y="90" width="60" height="50" class="slice-box" rx="4"/>
+  <rect x="520" y="90" width="60" height="50" class="slice-box" rx="4"/>
+  <rect x="590" y="90" width="60" height="50" class="slice-box" rx="4"/>
+  
+  <!-- Slice indices -->
+  <text x="480" y="110" class="label" text-anchor="middle">[0]</text>
+  <text x="550" y="110" class="label" text-anchor="middle">[1]</text>
+  <text x="620" y="110" class="label" text-anchor="middle">[2]</text>
+  
+  <!-- Slice values -->
+  <text x="480" y="130" class="value" text-anchor="middle">10</text>
+  <text x="550" y="130" class="value" text-anchor="middle">20</text>
+  <text x="620" y="130" class="value" text-anchor="middle">30</text>
+  
+  <!-- Append operation -->
+  <text x="670" y="115" class="label">append()</text>
+  <path d="M 660 115 L 680 115" class="pointer-line"/>
+  <rect x="690" y="90" width="60" height="50" class="slice-box" rx="4" opacity="0.5"/>
+  <text x="720" y="110" class="label" text-anchor="middle">[3]</text>
+  <text x="720" y="130" class="value" text-anchor="middle">40</text>
+  
+  <!-- Slice properties -->
+  <text x="600" y="170" class="label" text-anchor="middle">✓ Can grow</text>
+  <text x="600" y="190" class="label" text-anchor="middle">✓ Flexible size</text>
+  
+  <!-- Slice Internals -->
+  <text x="400" y="240" class="subtitle" text-anchor="middle">Slice Internals</text>
+  
+  <!-- Underlying array -->
+  <rect x="200" y="270" width="60" height="40" class="array-box" rx="4"/>
+  <rect x="270" y="270" width="60" height="40" class="array-box" rx="4"/>
+  <rect x="340" y="270" width="60" height="40" class="array-box" rx="4"/>
+  <rect x="410" y="270" width="60" height="40" class="array-box" rx="4"/>
+  <rect x="480" y="270" width="60" height="40" class="array-box" rx="4"/>
+  
+  <text x="230" y="295" class="value" text-anchor="middle">10</text>
+  <text x="300" y="295" class="value" text-anchor="middle">20</text>
+  <text x="370" y="295" class="value" text-anchor="middle">30</text>
+  <text x="440" y="295" class="value" text-anchor="middle">0</text>
+  <text x="510" y="295" class="value" text-anchor="middle">0</text>
+  
+  <text x="350" y="330" class="label" text-anchor="middle">Underlying Array (Capacity: 5)</text>
+  
+  <!-- Slice structure -->
+  <rect x="150" y="360" width="500" height="80" fill="none" stroke="#34495E" stroke-width="2" rx="8"/>
+  
+  <text x="200" y="385" class="label">Pointer:</text>
+  <path d="M 280 380 L 230 270" class="pointer-line"/>
+  <text x="290" y="385" class="value">→ Array[0]</text>
+  
+  <text x="200" y="410" class="label">Length:</text>
+  <text x="280" y="410" class="value">3</text>
+  <text x="320" y="410" class="label">(current elements)</text>
+  
+  <text x="200" y="430" class="label">Capacity:</text>
+  <text x="280" y="430" class="value">5</text>
+  <text x="320" y="430" class="label">(max before reallocation)</text>
+  
+  <!-- Watermark -->
+  <text x="750" y="490" class="watermark" text-anchor="end">8gwifi.org/tutorials/go</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Title -->
+    <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Goroutine Execution Flow</text>
+    
+    <!-- Main goroutine -->
+    <rect x="50" y="60" width="150" height="200" fill="#3498DB" opacity="0.2" stroke="#3498DB" stroke-width="2" rx="5"/>
+    <text x="125" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#3498DB">Main Goroutine</text>
+    
+    <circle cx="125" cy="110" r="15" fill="#3498DB"/>
+    <text x="125" y="115" text-anchor="middle" font-size="10" fill="white">1</text>
+    <text x="210" y="115" text-anchor="start" font-size="12" fill="#333">Start</text>
+    
+    <circle cx="125" cy="150" r="15" fill="#3498DB"/>
+    <text x="125" y="155" text-anchor="middle" font-size="10" fill="white">2</text>
+    <text x="210" y="155" text-anchor="start" font-size="12" fill="#333">go func()</text>
+    
+    <circle cx="125" cy="190" r="15" fill="#3498DB"/>
+    <text x="125" y="195" text-anchor="middle" font-size="10" fill="white">3</text>
+    <text x="210" y="195" text-anchor="start" font-size="12" fill="#333">Continue</text>
+    
+    <circle cx="125" cy="230" r="15" fill="#3498DB"/>
+    <text x="125" y="235" text-anchor="middle" font-size="10" fill="white">4</text>
+    <text x="210" y="235" text-anchor="start" font-size="12" fill="#333">End</text>
+    
+    <!-- Arrow from main to goroutine -->
+    <defs>
+        <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#27AE60" />
+        </marker>
+    </defs>
+    <path d="M 200 150 L 400 110" stroke="#27AE60" stroke-width="2" fill="none" marker-end="url(#arrowgreen)"/>
+    <text x="300" y="120" text-anchor="middle" font-size="12" fill="#27AE60">spawns</text>
+    
+    <!-- New goroutines -->
+    <rect x="420" y="60" width="150" height="80" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="495" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#27AE60">Goroutine 1</text>
+    <text x="495" y="110" text-anchor="middle" font-size="12" fill="#333">Runs concurrently</text>
+    <text x="495" y="130" text-anchor="middle" font-size="12" fill="#333">with main</text>
+    
+    <rect x="420" y="160" width="150" height="80" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="495" y="185" text-anchor="middle" font-size="14" font-weight="bold" fill="#27AE60">Goroutine 2</text>
+    <text x="495" y="210" text-anchor="middle" font-size="12" fill="#333">Independent</text>
+    <text x="495" y="230" text-anchor="middle" font-size="12" fill="#333">execution</text>
+    <text x="98%" y="96%" text-anchor="end" font-size="10" fill="#666" opacity="0.5" font-family="sans-serif">8gwifi.org/tutorials/go</text>
+
+</svg>

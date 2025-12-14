@@ -1,0 +1,167 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+    Closures &amp; Defer in Go
+  </text>
+  
+  <!-- Left Side: Closures -->
+  <g>
+    <!-- Closures Section -->
+    <rect x="30" y="70" width="350" height="480" rx="8" fill="#3498DB" opacity="0.05" stroke="#3498DB" stroke-width="2"/>
+    
+    <text x="205" y="100" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#3498DB" text-anchor="middle">
+      Closures
+    </text>
+    
+    <!-- Closure Concept -->
+    <rect x="50" y="120" width="310" height="100" rx="6" fill="#3498DB" opacity="0.1" stroke="#3498DB" stroke-width="2"/>
+    <text x="205" y="145" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      Function + Environment
+    </text>
+    <text x="205" y="170" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+      func counter() func() int {
+    </text>
+    <text x="205" y="190" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+        count := 0  // captured
+    </text>
+    <text x="205" y="210" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+        return func() int { ... }
+    </text>
+    
+    <!-- Closure Features -->
+    <text x="60" y="245" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      ✓ Key Features:
+    </text>
+    
+    <circle cx="70" cy="270" r="4" fill="#27AE60"/>
+    <text x="85" y="275" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Captures outer variables
+    </text>
+    
+    <circle cx="70" cy="295" r="4" fill="#27AE60"/>
+    <text x="85" y="300" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Maintains state
+    </text>
+    
+    <circle cx="70" cy="320" r="4" fill="#27AE60"/>
+    <text x="85" y="325" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Returns functions
+    </text>
+    
+    <circle cx="70" cy="345" r="4" fill="#27AE60"/>
+    <text x="85" y="350" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Each closure has own state
+    </text>
+    
+    <!-- Use Cases -->
+    <text x="60" y="385" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      💡 Common Uses:
+    </text>
+    
+    <rect x="60" y="395" width="290" height="25" rx="4" fill="#E8F5E9"/>
+    <text x="70" y="412" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Callbacks &amp; Event Handlers
+    </text>
+    
+    <rect x="60" y="425" width="290" height="25" rx="4" fill="#E8F5E9"/>
+    <text x="70" y="442" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Factory Functions
+    </text>
+    
+    <rect x="60" y="455" width="290" height="25" rx="4" fill="#E8F5E9"/>
+    <text x="70" y="472" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Encapsulation &amp; Privacy
+    </text>
+    
+    <rect x="60" y="485" width="290" height="25" rx="4" fill="#E8F5E9"/>
+    <text x="70" y="502" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Iterators &amp; Generators
+    </text>
+  </g>
+  
+  <!-- Right Side: Defer -->
+  <g>
+    <!-- Defer Section -->
+    <rect x="420" y="70" width="350" height="480" rx="8" fill="#E67E22" opacity="0.05" stroke="#E67E22" stroke-width="2"/>
+    
+    <text x="595" y="100" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#E67E22" text-anchor="middle">
+      Defer
+    </text>
+    
+    <!-- Defer Concept -->
+    <rect x="440" y="120" width="310" height="100" rx="6" fill="#E67E22" opacity="0.1" stroke="#E67E22" stroke-width="2"/>
+    <text x="595" y="145" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">
+      Delayed Execution
+    </text>
+    <text x="595" y="170" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+      defer file.Close()
+    </text>
+    <text x="595" y="190" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+      // Runs when function exits
+    </text>
+    <text x="595" y="210" font-family="Courier New, monospace" font-size="13" fill="#555" text-anchor="middle">
+      // LIFO order (stack)
+    </text>
+    
+    <!-- Defer Features -->
+    <text x="450" y="245" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      ✓ Key Features:
+    </text>
+    
+    <circle cx="460" cy="270" r="4" fill="#27AE60"/>
+    <text x="475" y="275" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Runs on function exit
+    </text>
+    
+    <circle cx="460" cy="295" r="4" fill="#27AE60"/>
+    <text x="475" y="300" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      LIFO order (Last In, First Out)
+    </text>
+    
+    <circle cx="460" cy="320" r="4" fill="#27AE60"/>
+    <text x="475" y="325" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Arguments evaluated immediately
+    </text>
+    
+    <circle cx="460" cy="345" r="4" fill="#27AE60"/>
+    <text x="475" y="350" font-family="Arial, sans-serif" font-size="13" fill="#555">
+      Runs even on panic
+    </text>
+    
+    <!-- Use Cases -->
+    <text x="450" y="385" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      💡 Common Uses:
+    </text>
+    
+    <rect x="450" y="395" width="290" height="25" rx="4" fill="#FFF3E0"/>
+    <text x="460" y="412" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Close files &amp; connections
+    </text>
+    
+    <rect x="450" y="425" width="290" height="25" rx="4" fill="#FFF3E0"/>
+    <text x="460" y="442" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Unlock mutexes
+    </text>
+    
+    <rect x="450" y="455" width="290" height="25" rx="4" fill="#FFF3E0"/>
+    <text x="460" y="472" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Cleanup resources
+    </text>
+    
+    <rect x="450" y="485" width="290" height="25" rx="4" fill="#FFF3E0"/>
+    <text x="460" y="502" font-family="Arial, sans-serif" font-size="12" fill="#555">
+      • Recover from panics
+    </text>
+  </g>
+  
+  <!-- Divider -->
+  <line x1="400" y1="80" x2="400" y2="540" stroke="#95A5A6" stroke-width="2" stroke-dasharray="5,5" opacity="0.3"/>
+  
+  <!-- Watermark -->
+  <text x="780" y="590" font-family="Arial, sans-serif" font-size="12" fill="#95A5A6" text-anchor="end">
+    8gwifi.org/tutorials/go
+  </text>
+</svg>

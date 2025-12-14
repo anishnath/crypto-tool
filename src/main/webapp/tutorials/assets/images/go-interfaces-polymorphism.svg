@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <defs>
+    <style>
+      .title { font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold; fill: #2C3E50; }
+      .subtitle { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: 600; fill: #34495E; }
+      .label { font-family: 'Arial', sans-serif; font-size: 14px; fill: #7F8C8D; }
+      .code { font-family: 'Courier New', monospace; font-size: 13px; fill: #2C3E50; }
+      .watermark { font-family: 'Arial', sans-serif; font-size: 12px; fill: #BDC3C7; }
+      .interface-box { fill: #8E44AD; stroke: #7D3C98; stroke-width: 2; }
+      .impl-box { fill: #3498DB; stroke: #2980B9; stroke-width: 2; }
+      .impl-box2 { fill: #27AE60; stroke: #229954; stroke-width: 2; }
+      .arrow { stroke: #E74C3C; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .impl-arrow { stroke: #95A5A6; stroke-width: 2; fill: none; stroke-dasharray: 5,5; marker-end: url(#impl-arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+    <marker id="impl-arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#95A5A6" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title" text-anchor="middle">Interfaces and Polymorphism in Go</text>
+  
+  <!-- Interface Definition -->
+  <text x="400" y="70" class="subtitle" text-anchor="middle">Interface Definition</text>
+  <rect x="250" y="80" width="300" height="80" class="interface-box" rx="8"/>
+  <text x="400" y="105" class="code" text-anchor="middle" fill="white">type Shape interface {</text>
+  <text x="400" y="130" class="code" text-anchor="middle" fill="white">    Area() float64</text>
+  <text x="400" y="150" class="code" text-anchor="middle" fill="white">}</text>
+  
+  <!-- Concrete Types -->
+  <text x="400" y="200" class="subtitle" text-anchor="middle">Concrete Types Implementing Shape</text>
+  
+  <!-- Circle -->
+  <rect x="100" y="220" width="250" height="120" class="impl-box" rx="8"/>
+  <text x="225" y="245" class="subtitle" text-anchor="middle" fill="white">Circle</text>
+  <text x="225" y="270" class="code" text-anchor="middle" fill="white" font-size="12">type Circle struct {</text>
+  <text x="225" y="290" class="code" text-anchor="middle" fill="white" font-size="12">    Radius float64</text>
+  <text x="225" y="310" class="code" text-anchor="middle" fill="white" font-size="12">}</text>
+  <text x="225" y="330" class="code" text-anchor="middle" fill="white" font-size="12">func (c Circle) Area() float64</text>
+  
+  <!-- Rectangle -->
+  <rect x="450" y="220" width="250" height="120" class="impl-box2" rx="8"/>
+  <text x="575" y="245" class="subtitle" text-anchor="middle" fill="white">Rectangle</text>
+  <text x="575" y="270" class="code" text-anchor="middle" fill="white" font-size="12">type Rectangle struct {</text>
+  <text x="575" y="290" class="code" text-anchor="middle" fill="white" font-size="12">    Width, Height float64</text>
+  <text x="575" y="310" class="code" text-anchor="middle" fill="white" font-size="12">}</text>
+  <text x="575" y="330" class="code" text-anchor="middle" fill="white" font-size="12">func (r Rectangle) Area() float64</text>
+  
+  <!-- Implementation arrows -->
+  <path d="M 225 220 L 350 160" class="impl-arrow"/>
+  <text x="270" y="185" class="label">implements</text>
+  
+  <path d="M 575 220 L 450 160" class="impl-arrow"/>
+  <text x="490" y="185" class="label">implements</text>
+  
+  <!-- Polymorphism Section -->
+  <text x="400" y="380" class="subtitle" text-anchor="middle">Polymorphism in Action</text>
+  
+  <rect x="50" y="395" width="700" height="130" fill="#ECF0F1" stroke="#34495E" stroke-width="2" rx="8"/>
+  
+  <!-- Variable declaration -->
+  <text x="400" y="420" class="code" text-anchor="middle">var s Shape  // Interface variable</text>
+  
+  <!-- Can hold Circle -->
+  <rect x="100" y="440" width="250" height="35" fill="#3498DB" stroke="#2980B9" stroke-width="2" rx="4"/>
+  <text x="225" y="462" class="code" text-anchor="middle" fill="white">s = Circle{Radius: 5}</text>
+  
+  <!-- Can hold Rectangle -->
+  <rect x="450" y="440" width="250" height="35" fill="#27AE60" stroke="#229954" stroke-width="2" rx="4"/>
+  <text x="575" y="462" class="code" text-anchor="middle" fill="white">s = Rectangle{Width: 4, Height: 3}</text>
+  
+  <!-- Method call -->
+  <rect x="250" y="490" width="300" height="25" fill="#E74C3C" stroke="#C0392B" stroke-width="2" rx="4"/>
+  <text x="400" y="508" class="code" text-anchor="middle" fill="white">area := s.Area()  // Works for both!</text>
+  
+  <!-- Watermark -->
+  <text x="750" y="540" class="watermark" text-anchor="end">8gwifi.org/tutorials/go</text>
+</svg>

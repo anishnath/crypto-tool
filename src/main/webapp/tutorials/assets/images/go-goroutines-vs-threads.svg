@@ -1,0 +1,37 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- Title -->
+    <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Goroutines vs OS Threads</text>
+    
+    <!-- OS Threads (Left) -->
+    <text x="200" y="70" text-anchor="middle" font-size="16" font-weight="bold" fill="#E74C3C">OS Threads</text>
+    <rect x="100" y="90" width="200" height="80" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="200" y="120" text-anchor="middle" font-size="14" fill="#333">Heavy (~1-2 MB)</text>
+    <text x="200" y="145" text-anchor="middle" font-size="14" fill="#333">OS Managed</text>
+    
+    <rect x="100" y="190" width="200" height="80" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="200" y="220" text-anchor="middle" font-size="14" fill="#333">Expensive to create</text>
+    <text x="200" y="245" text-anchor="middle" font-size="14" fill="#333">Context switching</text>
+    
+    <!-- Goroutines (Right) -->
+    <text x="600" y="70" text-anchor="middle" font-size="16" font-weight="bold" fill="#27AE60">Goroutines</text>
+    <rect x="500" y="90" width="200" height="40" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="600" y="115" text-anchor="middle" font-size="14" fill="#333">Lightweight (~2 KB)</text>
+    
+    <rect x="500" y="140" width="200" height="40" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="600" y="165" text-anchor="middle" font-size="14" fill="#333">Go Runtime Managed</text>
+    
+    <rect x="500" y="190" width="200" height="40" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="600" y="215" text-anchor="middle" font-size="14" fill="#333">Cheap to create</text>
+    
+    <rect x="500" y="240" width="200" height="40" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="600" y="265" text-anchor="middle" font-size="14" fill="#333">Efficient scheduling</text>
+    
+    <!-- Comparison -->
+    <text x="400" y="320" text-anchor="middle" font-size="14" fill="#666">Thousands of goroutines = Few OS threads</text>
+    <line x1="150" y1="330" x2="350" y2="330" stroke="#E74C3C" stroke-width="3"/>
+    <line x1="450" y1="330" x2="650" y2="330" stroke="#27AE60" stroke-width="3"/>
+    <text x="200" y="355" text-anchor="middle" font-size="12" fill="#E74C3C">1 Thread</text>
+    <text x="550" y="355" text-anchor="middle" font-size="12" fill="#27AE60">1000s Goroutines</text>
+    <text x="98%" y="96%" text-anchor="end" font-size="10" fill="#666" opacity="0.5" font-family="sans-serif">8gwifi.org/tutorials/go</text>
+
+</svg>

@@ -1,0 +1,43 @@
+<svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Title -->
+    <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">Pipeline Pattern</text>
+    
+    <!-- Stage 1 -->
+    <rect x="50" y="70" width="120" height="60" fill="#27AE60" opacity="0.2" stroke="#27AE60" stroke-width="2" rx="5"/>
+    <text x="110" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="#27AE60">Generator</text>
+    <text x="110" y="115" text-anchor="middle" font-size="11" fill="#333">Produces data</text>
+    
+    <!-- Channel 1 -->
+    <rect x="190" y="90" width="80" height="20" fill="#3498DB" opacity="0.3" stroke="#3498DB" stroke-width="2" rx="3"/>
+    <text x="230" y="105" text-anchor="middle" font-size="10" fill="#333">ch1</text>
+    
+    <!-- Stage 2 -->
+    <rect x="290" y="70" width="120" height="60" fill="#F39C12" opacity="0.2" stroke="#F39C12" stroke-width="2" rx="5"/>
+    <text x="350" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="#F39C12">Processor</text>
+    <text x="350" y="115" text-anchor="middle" font-size="11" fill="#333">Transforms data</text>
+    
+    <!-- Channel 2 -->
+    <rect x="430" y="90" width="80" height="20" fill="#3498DB" opacity="0.3" stroke="#3498DB" stroke-width="2" rx="3"/>
+    <text x="470" y="105" text-anchor="middle" font-size="10" fill="#333">ch2</text>
+    
+    <!-- Stage 3 -->
+    <rect x="530" y="70" width="120" height="60" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="590" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="#E74C3C">Consumer</text>
+    <text x="590" y="115" text-anchor="middle" font-size="11" fill="#333">Uses data</text>
+    
+    <!-- Arrows -->
+    <defs>
+        <marker id="arrow3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#666" />
+        </marker>
+    </defs>
+    <path d="M 170 100 L 185 100" stroke="#666" stroke-width="2" marker-end="url(#arrow3)"/>
+    <path d="M 270 100 L 285 100" stroke="#666" stroke-width="2" marker-end="url(#arrow3)"/>
+    <path d="M 410 100 L 425 100" stroke="#666" stroke-width="2" marker-end="url(#arrow3)"/>
+    <path d="M 510 100 L 525 100" stroke="#666" stroke-width="2" marker-end="url(#arrow3)"/>
+    
+    <text x="400" y="170" text-anchor="middle" font-size="12" fill="#666">Data flows through stages via channels</text>
+    <text x="98%" y="96%" text-anchor="end" font-size="10" fill="#666" opacity="0.5" font-family="sans-serif">8gwifi.org/tutorials/go</text>
+
+
+</svg>

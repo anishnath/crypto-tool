@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <style>
+      .title { font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold; fill: #2C3E50; }
+      .subtitle { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: 600; fill: #34495E; }
+      .label { font-family: 'Arial', sans-serif; font-size: 14px; fill: #7F8C8D; }
+      .code { font-family: 'Courier New', monospace; font-size: 12px; fill: #2C3E50; }
+      .watermark { font-family: 'Arial', sans-serif; font-size: 12px; fill: #BDC3C7; }
+      .interface-box { fill: #E67E22; stroke: #D35400; stroke-width: 2; }
+      .string-box { fill: #3498DB; stroke: #2980B9; stroke-width: 2; }
+      .int-box { fill: #27AE60; stroke: #229954; stroke-width: 2; }
+      .bool-box { fill: #9B59B6; stroke: #8E44AD; stroke-width: 2; }
+      .default-box { fill: #95A5A6; stroke: #7F8C8D; stroke-width: 2; }
+      .arrow { stroke: #E74C3C; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title" text-anchor="middle">Type Assertion & Type Switch in Go</text>
+  
+  <!-- Type Assertion Section -->
+  <text x="400" y="70" class="subtitle" text-anchor="middle">Type Assertion</text>
+  
+  <rect x="50" y="85" width="700" height="140" fill="#ECF0F1" stroke="#34495E" stroke-width="2" rx="8"/>
+  
+  <!-- Variable -->
+  <rect x="100" y="105" width="250" height="35" class="interface-box" rx="4"/>
+  <text x="225" y="127" class="code" text-anchor="middle" fill="white">var i interface{} = "hello"</text>
+  
+  <!-- Safe assertion -->
+  <text x="100" y="165" class="label">Safe Type Assertion:</text>
+  <rect x="100" y="175" width="300" height="35" fill="#27AE60" stroke="#229954" stroke-width="2" rx="4"/>
+  <text x="250" y="197" class="code" text-anchor="middle" fill="white">s, ok := i.(string)</text>
+  <text x="450" y="197" class="code">→ ok = true, s = "hello"</text>
+  
+  <!-- Unsafe assertion -->
+  <text x="100" y="230" class="label">Unsafe Type Assertion:</text>
+  <rect x="100" y="240" width="300" height="35" fill="#E74C3C" stroke="#C0392B" stroke-width="2" rx="4"/>
+  <text x="250" y="262" class="code" text-anchor="middle" fill="white">s := i.(string)</text>
+  <text x="450" y="262" class="code">→ May panic if wrong type!</text>
+  
+  <text x="400" y="300" class="label" text-anchor="middle" fill="#E67E22">⚠️ Always use the safe form with ok check</text>
+  
+  <!-- Type Switch Section -->
+  <text x="400" y="340" class="subtitle" text-anchor="middle">Type Switch</text>
+  
+  <rect x="50" y="355" width="700" height="220" fill="#ECF0F1" stroke="#34495E" stroke-width="2" rx="8"/>
+  
+  <!-- Switch statement -->
+  <text x="100" y="380" class="code">switch v := i.(type) {</text>
+  
+  <!-- String case -->
+  <rect x="120" y="395" width="280" height="35" class="string-box" rx="4"/>
+  <text x="260" y="417" class="code" text-anchor="middle" fill="white">case string:</text>
+  <path d="M 400 412 L 450 412" class="arrow"/>
+  <rect x="460" y="395" width="250" height="35" fill="#3498DB" stroke="#2980B9" stroke-width="1" rx="4"/>
+  <text x="585" y="417" class="code" text-anchor="middle" fill="white">"It's a string: " + v</text>
+  
+  <!-- Int case -->
+  <rect x="120" y="440" width="280" height="35" class="int-box" rx="4"/>
+  <text x="260" y="462" class="code" text-anchor="middle" fill="white">case int:</text>
+  <path d="M 400 457 L 450 457" class="arrow"/>
+  <rect x="460" y="440" width="250" height="35" fill="#27AE60" stroke="#229954" stroke-width="1" rx="4"/>
+  <text x="585" y="462" class="code" text-anchor="middle" fill="white">"It's an int: " + v</text>
+  
+  <!-- Bool case -->
+  <rect x="120" y="485" width="280" height="35" class="bool-box" rx="4"/>
+  <text x="260" y="507" class="code" text-anchor="middle" fill="white">case bool:</text>
+  <path d="M 400 502 L 450 502" class="arrow"/>
+  <rect x="460" y="485" width="250" height="35" fill="#9B59B6" stroke="#8E44AD" stroke-width="1" rx="4"/>
+  <text x="585" y="507" class="code" text-anchor="middle" fill="white">"It's a bool: " + v</text>
+  
+  <!-- Default case -->
+  <rect x="120" y="530" width="280" height="35" class="default-box" rx="4"/>
+  <text x="260" y="552" class="code" text-anchor="middle" fill="white">default:</text>
+  <path d="M 400 547 L 450 547" class="arrow"/>
+  <rect x="460" y="530" width="250" height="35" fill="#95A5A6" stroke="#7F8C8D" stroke-width="1" rx="4"/>
+  <text x="585" y="552" class="code" text-anchor="middle" fill="white">"Unknown type"</text>
+  
+  <text x="100" y="575" class="code">}</text>
+  
+  <!-- Watermark -->
+  <text x="750" y="590" class="watermark" text-anchor="end">8gwifi.org/tutorials/go</text>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <defs>
+    <style>
+      .title { font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold; fill: #2C3E50; }
+      .subtitle { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: 600; fill: #34495E; }
+      .label { font-family: 'Arial', sans-serif; font-size: 14px; fill: #7F8C8D; }
+      .code { font-family: 'Courier New', monospace; font-size: 13px; fill: #2C3E50; }
+      .watermark { font-family: 'Arial', sans-serif; font-size: 12px; fill: #BDC3C7; }
+      .struct-box { fill: #1ABC9C; stroke: #16A085; stroke-width: 2; }
+      .value-box { fill: #3498DB; stroke: #2980B9; stroke-width: 2; }
+      .pointer-box { fill: #E74C3C; stroke: #C0392B; stroke-width: 2; }
+      .arrow { stroke: #E74C3C; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .copy-arrow { stroke: #95A5A6; stroke-width: 2; fill: none; stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title" text-anchor="middle">Structs and Methods in Go</text>
+  
+  <!-- Struct Definition -->
+  <text x="400" y="70" class="subtitle" text-anchor="middle">Struct Definition</text>
+  <rect x="250" y="80" width="300" height="100" class="struct-box" rx="8"/>
+  <text x="400" y="105" class="code" text-anchor="middle" fill="white">type Person struct {</text>
+  <text x="400" y="125" class="code" text-anchor="middle" fill="white">    Name string</text>
+  <text x="400" y="145" class="code" text-anchor="middle" fill="white">    Age  int</text>
+  <text x="400" y="165" class="code" text-anchor="middle" fill="white">}</text>
+  
+  <!-- Value vs Pointer Receivers -->
+  <text x="400" y="220" class="subtitle" text-anchor="middle">Value vs Pointer Receivers</text>
+  
+  <!-- Value Receiver -->
+  <rect x="50" y="240" width="320" height="80" fill="#ECF0F1" stroke="#34495E" stroke-width="2" rx="8"/>
+  <text x="210" y="265" class="subtitle" text-anchor="middle">Value Receiver</text>
+  <text x="210" y="290" class="code" text-anchor="middle">func (p Person) GetName() string {</text>
+  <text x="210" y="310" class="code" text-anchor="middle">    return p.Name</text>
+  
+  <!-- Pointer Receiver -->
+  <rect x="430" y="240" width="320" height="80" fill="#ECF0F1" stroke="#34495E" stroke-width="2" rx="8"/>
+  <text x="590" y="265" class="subtitle" text-anchor="middle">Pointer Receiver</text>
+  <text x="590" y="290" class="code" text-anchor="middle">func (p *Person) SetAge(age int) {</text>
+  <text x="590" y="310" class="code" text-anchor="middle">    p.Age = age</text>
+  
+  <!-- Memory Representation -->
+  <text x="400" y="360" class="subtitle" text-anchor="middle">Memory Representation</text>
+  
+  <!-- Value Receiver Memory -->
+  <text x="210" y="390" class="label" text-anchor="middle">Value Receiver (Copy)</text>
+  
+  <!-- Original -->
+  <rect x="100" y="400" width="100" height="60" class="value-box" rx="4"/>
+  <text x="150" y="420" class="label" text-anchor="middle" fill="white">Original</text>
+  <text x="150" y="440" class="code" text-anchor="middle" fill="white" font-size="11">Name: "Alice"</text>
+  <text x="150" y="455" class="code" text-anchor="middle" fill="white" font-size="11">Age: 25</text>
+  
+  <!-- Copy -->
+  <path d="M 200 430 L 240 430" class="copy-arrow"/>
+  <text x="220" y="420" class="label" font-size="12">copy</text>
+  
+  <rect x="250" y="400" width="100" height="60" class="value-box" rx="4" opacity="0.7"/>
+  <text x="300" y="420" class="label" text-anchor="middle" fill="white">Copy</text>
+  <text x="300" y="440" class="code" text-anchor="middle" fill="white" font-size="11">Name: "Alice"</text>
+  <text x="300" y="455" class="code" text-anchor="middle" fill="white" font-size="11">Age: 25</text>
+  
+  <text x="210" y="485" class="label" text-anchor="middle" fill="#E67E22">✗ Changes don't affect original</text>
+  
+  <!-- Pointer Receiver Memory -->
+  <text x="590" y="390" class="label" text-anchor="middle">Pointer Receiver (Reference)</text>
+  
+  <!-- Original -->
+  <rect x="480" y="400" width="100" height="60" class="pointer-box" rx="4"/>
+  <text x="530" y="420" class="label" text-anchor="middle" fill="white">Original</text>
+  <text x="530" y="440" class="code" text-anchor="middle" fill="white" font-size="11">Name: "Bob"</text>
+  <text x="530" y="455" class="code" text-anchor="middle" fill="white" font-size="11">Age: 30</text>
+  
+  <!-- Pointer -->
+  <rect x="630" y="410" width="80" height="40" fill="#95A5A6" stroke="#7F8C8D" stroke-width="2" rx="4"/>
+  <text x="670" y="435" class="code" text-anchor="middle" fill="white" font-size="11">*p</text>
+  <path d="M 630 430 L 580 430" class="arrow"/>
+  
+  <text x="590" y="485" class="label" text-anchor="middle" fill="#27AE60">✓ Changes affect original</text>
+  
+  <!-- Summary -->
+  <rect x="50" y="510" width="700" height="30" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1" rx="4"/>
+  <text x="400" y="530" class="label" text-anchor="middle">Use value receivers for read-only, pointer receivers for modifications</text>
+  
+  <!-- Watermark -->
+  <text x="750" y="545" class="watermark" text-anchor="end">8gwifi.org/tutorials/go</text>
+</svg>

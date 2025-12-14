@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <style>
+      .title { font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold; fill: #2C3E50; }
+      .subtitle { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: 600; fill: #34495E; }
+      .label { font-family: 'Arial', sans-serif; font-size: 14px; fill: #7F8C8D; }
+      .code { font-family: 'Courier New', monospace; font-size: 13px; fill: #2C3E50; }
+      .address { font-family: 'Courier New', monospace; font-size: 12px; fill: #95A5A6; }
+      .watermark { font-family: 'Arial', sans-serif; font-size: 12px; fill: #BDC3C7; }
+      .value-box { fill: #27AE60; stroke: #229954; stroke-width: 2; }
+      .pointer-box { fill: #2980B9; stroke: #1F618D; stroke-width: 2; }
+      .memory-box { fill: #ECF0F1; stroke: #BDC3C7; stroke-width: 1; }
+      .arrow { stroke: #E74C3C; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title" text-anchor="middle">Pointers in Go</text>
+  
+  <!-- Value Type Section -->
+  <text x="200" y="80" class="subtitle" text-anchor="middle">Value Type</text>
+  
+  <!-- Variable declaration -->
+  <rect x="80" y="100" width="240" height="50" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2" rx="4"/>
+  <text x="200" y="130" class="code" text-anchor="middle">var x int = 42</text>
+  
+  <!-- Memory representation -->
+  <rect x="80" y="180" width="240" height="120" class="memory-box" rx="8"/>
+  <text x="200" y="205" class="label" text-anchor="middle">Memory</text>
+  
+  <rect x="120" y="220" width="160" height="60" class="value-box" rx="4"/>
+  <text x="200" y="240" class="label" text-anchor="middle" fill="white">Variable: x</text>
+  <text x="200" y="260" class="code" text-anchor="middle" fill="white" font-size="18">42</text>
+  
+  <text x="200" y="295" class="address" text-anchor="middle">Address: 0x1000</text>
+  
+  <!-- Pointer Type Section -->
+  <text x="600" y="80" class="subtitle" text-anchor="middle">Pointer Type</text>
+  
+  <!-- Pointer declaration -->
+  <rect x="480" y="100" width="240" height="50" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2" rx="4"/>
+  <text x="600" y="130" class="code" text-anchor="middle">var ptr *int = &x</text>
+  
+  <!-- Pointer memory -->
+  <rect x="480" y="180" width="240" height="120" class="memory-box" rx="8"/>
+  <text x="600" y="205" class="label" text-anchor="middle">Memory</text>
+  
+  <rect x="520" y="220" width="160" height="60" class="pointer-box" rx="4"/>
+  <text x="600" y="240" class="label" text-anchor="middle" fill="white">Pointer: ptr</text>
+  <text x="600" y="260" class="code" text-anchor="middle" fill="white" font-size="14">0x1000</text>
+  
+  <text x="600" y="295" class="address" text-anchor="middle">Address: 0x2000</text>
+  
+  <!-- Arrow from pointer to value -->
+  <path d="M 520 250 Q 400 250 320 250" class="arrow"/>
+  <text x="420" y="240" class="label">points to</text>
+  
+  <!-- Dereference -->
+  <text x="600" y="320" class="code" text-anchor="middle" fill="#E74C3C">*ptr = 42</text>
+  <text x="600" y="335" class="label" text-anchor="middle">(dereference to get value)</text>
+  
+  <!-- Operations Section -->
+  <text x="400" y="380" class="subtitle" text-anchor="middle">Pointer Operations</text>
+  
+  <rect x="50" y="395" width="700" height="80" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2" rx="8"/>
+  
+  <!-- Address-of operator -->
+  <rect x="70" y="410" width="200" height="50" fill="#27AE60" stroke="#229954" stroke-width="2" rx="4"/>
+  <text x="170" y="430" class="code" text-anchor="middle" fill="white">&x</text>
+  <text x="170" y="450" class="label" text-anchor="middle" fill="white">Address-of operator</text>
+  
+  <!-- Dereference operator -->
+  <rect x="300" y="410" width="200" height="50" fill="#2980B9" stroke="#1F618D" stroke-width="2" rx="4"/>
+  <text x="400" y="430" class="code" text-anchor="middle" fill="white">*ptr</text>
+  <text x="400" y="450" class="label" text-anchor="middle" fill="white">Dereference operator</text>
+  
+  <!-- Assignment -->
+  <rect x="530" y="410" width="200" height="50" fill="#8E44AD" stroke="#7D3C98" stroke-width="2" rx="4"/>
+  <text x="630" y="430" class="code" text-anchor="middle" fill="white">ptr = &x</text>
+  <text x="630" y="450" class="label" text-anchor="middle" fill="white">Pointer assignment</text>
+  
+  <!-- Watermark -->
+  <text x="750" y="490" class="watermark" text-anchor="end">8gwifi.org/tutorials/go</text>
+</svg>
