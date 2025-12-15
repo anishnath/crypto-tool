@@ -110,6 +110,13 @@
                     "name": "Rust Tutorial",
                     "description": "Memory-safe systems programming. Performance without compromise.",
                     "url": "https://8gwifi.org/tutorials/rust/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 11,
+                    "name": "PHP Tutorial",
+                    "description": "Server-side web development. Build dynamic websites and databases.",
+                    "url": "https://8gwifi.org/tutorials/php/"
                 }
             ]
         },
@@ -275,6 +282,17 @@
                 "description": "Learn Rust for memory-safe systems programming. Performance without compromise.",
                 "provider": {"@type": "Organization", "name": "8gwifi.org"},
                 "url": "https://8gwifi.org/tutorials/rust/",
+                "educationalLevel": "Beginner",
+                "isAccessibleForFree": true,
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "Course",
+                "position": 11,
+                "name": "PHP Tutorial for Beginners",
+                "description": "Learn PHP for server-side web development, databases, and dynamic websites.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/php/",
                 "educationalLevel": "Beginner",
                 "isAccessibleForFree": true,
                 "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
@@ -835,6 +853,23 @@
                                                                 <span
                                                                     class="tutorial-card-badge badge-available">Available</span>
                                                             </a>
+
+                                                            <%-- PHP Tutorial --%>
+                                                                <a href="<%=request.getContextPath()%>/tutorials/php/"
+                                                                    class="tutorial-card">
+                                                                    <div class="tutorial-card-header">
+                                                                        <div class="tutorial-card-icon"
+                                                                            style="background: #777bb315;">
+                                                                            <img src="<%=request.getContextPath()%>/tutorials/assets/images/php-logo.svg"
+                                                                                alt="PHP">
+                                                                        </div>
+                                                                        <h3>PHP</h3>
+                                                                    </div>
+                                                                    <p>Server-side web development. Build dynamic
+                                                                        websites and databases.</p>
+                                                                    <span
+                                                                        class="tutorial-card-badge badge-available">Available</span>
+                                                                </a>
                         </section>
 
                         <div class="divider">
@@ -875,34 +910,22 @@
                                                 Soon</span>
                                         </div>
 
-                                        <%-- PHP Tutorial --%>
+
+
+                                        <%-- Ruby Tutorial --%>
                                             <div class="tutorial-card disabled">
                                                 <div class="tutorial-card-header">
-                                                    <div class="tutorial-card-icon" style="background: #777bb315;">
-                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/php-logo.svg"
-                                                            alt="PHP">
+                                                    <div class="tutorial-card-icon" style="background: #cc342d15;">
+                                                        <img src="<%=request.getContextPath()%>/tutorials/assets/images/ruby-logo.svg"
+                                                            alt="Ruby">
                                                     </div>
-                                                    <h3>PHP</h3>
+                                                    <h3>Ruby</h3>
                                                 </div>
-                                                <p>Server-side web development. Powers most of the web.</p>
+                                                <p>Elegant and productive. Build web apps with Rails.
+                                                </p>
                                                 <span class="tutorial-card-badge badge-coming">Coming
                                                     Soon</span>
                                             </div>
-
-                                            <%-- Ruby Tutorial --%>
-                                                <div class="tutorial-card disabled">
-                                                    <div class="tutorial-card-header">
-                                                        <div class="tutorial-card-icon" style="background: #cc342d15;">
-                                                            <img src="<%=request.getContextPath()%>/tutorials/assets/images/ruby-logo.svg"
-                                                                alt="Ruby">
-                                                        </div>
-                                                        <h3>Ruby</h3>
-                                                    </div>
-                                                    <p>Elegant and productive. Build web apps with Rails.
-                                                    </p>
-                                                    <span class="tutorial-card-badge badge-coming">Coming
-                                                        Soon</span>
-                                                </div>
                             </section>
 
                             <div class="divider">
@@ -945,7 +968,7 @@
                                             <span class="path-arrow">→</span>
                                             <a href="<%=request.getContextPath()%>/tutorials/typescript/">TypeScript</a>
                                             <span class="path-arrow">→</span>
-                                            <a href="<%=request.getContextPath()%>/tutorials/python/">Python</a>
+                                            <a href="<%=request.getContextPath()%>/tutorials/php/">PHP</a>
                                         </div>
                                         <span class="path-badge">Professional</span>
                                     </div>
@@ -1004,6 +1027,24 @@
                                             <a href="<%=request.getContextPath()%>/tutorials/bash/">Bash</a>
                                         </div>
                                         <span class="path-badge">Cloud Native</span>
+                                    </div>
+
+                                    <div class="path-card">
+                                        <div class="path-header">
+                                            <span class="path-icon">🌐</span>
+                                            <h3>PHP Web Developer</h3>
+                                        </div>
+                                        <p>Build dynamic websites with databases</p>
+                                        <div class="path-steps">
+                                            <a href="<%=request.getContextPath()%>/tutorials/html/">HTML</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/css/">CSS</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/javascript/">JavaScript</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/php/">PHP</a>
+                                        </div>
+                                        <span class="path-badge">Popular Stack</span>
                                     </div>
 
                                     <div class="path-card">
