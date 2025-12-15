@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <style>
+      .title { font: bold 24px 'Inter', sans-serif; fill: #2c3e50; }
+      .subtitle { font: 16px 'Inter', sans-serif; fill: #7f8c8d; }
+      .class-box { fill: #fff; stroke: #777BB3; stroke-width: 2; }
+      .interface-box { fill: #fff; stroke: #9b59b6; stroke-width: 2; stroke-dasharray: 8,4; }
+      .class-header { fill: #777BB3; }
+      .interface-header { fill: #9b59b6; }
+      .class-title { font: bold 16px 'Courier New', monospace; fill: #fff; }
+      .method { font: 14px 'Courier New', monospace; fill: #27ae60; }
+      .abstract-method { font: 14px 'Courier New', monospace; fill: #e67e22; font-style: italic; }
+      .section-label { font: 12px 'Inter', sans-serif; fill: #95a5a6; }
+      .divider { stroke: #bdc3c7; stroke-width: 1; }
+      .watermark { font: 12px 'Inter', sans-serif; fill: #bdc3c7; opacity: 0.6; }
+      .arrow { stroke: #9b59b6; stroke-width: 3; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 8,4; }
+      .arrow-label { font: bold 14px 'Inter', sans-serif; fill: #9b59b6; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="11" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#9b59b6" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" class="title">PHP Interfaces</text>
+  <text x="400" y="65" text-anchor="middle" class="subtitle">Contract Definition  Implementation</text>
+  
+  <!-- Interface -->
+  <g transform="translate(275, 100)">
+    <rect class="interface-box" width="250" height="160" rx="8"/>
+    <rect class="interface-header" width="250" height="40" rx="8"/>
+    <rect fill="#9b59b6" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">«interface» Payable</text>
+    
+    <text x="10" y="65" class="section-label">CONTRACT (MUST IMPLEMENT):</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="abstract-method">+ calculatePay()</text>
+    <text x="20" y="110" class="abstract-method">+ processPayment()</text>
+    <text x="20" y="130" class="abstract-method">+ getPaymentStatus()</text>
+  </g>
+  
+  <!-- Implementation Arrows -->
+  <path d="M 350 260 Q 225 315 225 350" class="arrow"/>
+  <text x="250" y="310" class="arrow-label">implements</text>
+  
+  <path d="M 450 260 Q 575 315 575 350" class="arrow"/>
+  <text x="500" y="310" class="arrow-label">implements</text>
+  
+  <!-- Implementing Class 1 -->
+  <g transform="translate(100, 350)">
+    <rect class="class-box" width="250" height="180" rx="8"/>
+    <rect class="class-header" width="250" height="40" rx="8"/>
+    <rect fill="#777BB3" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">Employee</text>
+    
+    <text x="10" y="65" class="section-label">IMPLEMENTED METHODS:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="method">+ calculatePay() { ... }</text>
+    <text x="20" y="110" class="method">+ processPayment() { ... }</text>
+    <text x="20" y="130" class="method">+ getPaymentStatus() { ... }</text>
+    
+    <text x="10" y="155" class="section-label">OWN METHODS:</text>
+    <line x1="10" y1="160" x2="240" y2="160" class="divider"/>
+    <text x="20" y="175" class="method">+ getEmployeeId()</text>
+  </g>
+  
+  <!-- Implementing Class 2 -->
+  <g transform="translate(450, 350)">
+    <rect class="class-box" width="250" height="180" rx="8"/>
+    <rect class="class-header" width="250" height="40" rx="8"/>
+    <rect fill="#777BB3" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">Contractor</text>
+    
+    <text x="10" y="65" class="section-label">IMPLEMENTED METHODS:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="method">+ calculatePay() { ... }</text>
+    <text x="20" y="110" class="method">+ processPayment() { ... }</text>
+    <text x="20" y="130" class="method">+ getPaymentStatus() { ... }</text>
+    
+    <text x="10" y="155" class="section-label">OWN METHODS:</text>
+    <line x1="10" y1="160" x2="240" y2="160" class="divider"/>
+    <text x="20" y="175" class="method">+ getContractId()</text>
+  </g>
+  
+  <!-- Info Box -->
+  <g transform="translate(50, 550)">
+    <text x="0" y="0" class="section-label">Key: Interface (dashed) defines contract, Classes (solid) implement it</text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="400" y="585" text-anchor="middle" class="watermark">8gwifi.org - PHP Tutorial</text>
+</svg>

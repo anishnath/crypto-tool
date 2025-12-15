@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <style>
+      .title { font: bold 24px 'Inter', sans-serif; fill: #2c3e50; }
+      .subtitle { font: 16px 'Inter', sans-serif; fill: #7f8c8d; }
+      .class-box { fill: #fff; stroke: #777BB3; stroke-width: 2; }
+      .class-header { fill: #777BB3; }
+      .class-title { font: bold 16px 'Courier New', monospace; fill: #fff; }
+      .property { font: 14px 'Courier New', monospace; fill: #2c3e50; }
+      .method { font: 14px 'Courier New', monospace; fill: #27ae60; }
+      .section-label { font: 12px 'Inter', sans-serif; fill: #95a5a6; }
+      .divider { stroke: #bdc3c7; stroke-width: 1; }
+      .watermark { font: 12px 'Inter', sans-serif; fill: #bdc3c7; opacity: 0.6; }
+      .arrow { stroke: #3498db; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font: 14px 'Inter', sans-serif; fill: #3498db; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3498db" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" class="title">PHP Classes  Objects</text>
+  <text x="400" y="65" text-anchor="middle" class="subtitle">Blueprint and Instance Relationship</text>
+  
+  <!-- Class (Blueprint) -->
+  <g transform="translate(100, 100)">
+    <rect class="class-box" width="250" height="280" rx="8"/>
+    <rect class="class-header" width="250" height="40" rx="8"/>
+    <rect fill="#777BB3" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">User (Class)</text>
+    
+    <!-- Properties Section -->
+    <text x="10" y="65" class="section-label">PROPERTIES:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="property">- $name</text>
+    <text x="20" y="110" class="property">- $email</text>
+    <text x="20" y="130" class="property">- $age</text>
+    
+    <!-- Methods Section -->
+    <text x="10" y="160" class="section-label">METHODS:</text>
+    <line x1="10" y1="165" x2="240" y2="165" class="divider"/>
+    <text x="20" y="185" class="method">+ __construct()</text>
+    <text x="20" y="205" class="method">+ getName()</text>
+    <text x="20" y="225" class="method">+ setEmail()</text>
+    <text x="20" y="245" class="method">+ getAge()</text>
+    
+    <text x="125" y="270" text-anchor="middle" class="section-label">Blueprint/Template</text>
+  </g>
+  
+  <!-- Arrow -->
+  <path d="M 350 240 Q 400 240 450 240" class="arrow"/>
+  <text x="400" y="230" text-anchor="middle" class="label">instantiate</text>
+  
+  <!-- Object 1 (Instance) -->
+  <g transform="translate(450, 100)">
+    <rect class="class-box" width="250" height="140" rx="8"/>
+    <rect fill="#e8f4f8" width="250" height="40" rx="8"/>
+    <rect fill="#3498db" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title" fill="#2c3e50">$user1 (Object)</text>
+    
+    <text x="10" y="65" class="section-label">ACTUAL DATA:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="property">name: "John Doe"</text>
+    <text x="20" y="110" class="property">email: "john@example.com"</text>
+    <text x="20" y="130" class="property">age: 30</text>
+  </g>
+  
+  <!-- Object 2 (Instance) -->
+  <g transform="translate(450, 270)">
+    <rect class="class-box" width="250" height="140" rx="8"/>
+    <rect fill="#e8f4f8" width="250" height="40" rx="8"/>
+    <rect fill="#3498db" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title" fill="#2c3e50">$user2 (Object)</text>
+    
+    <text x="10" y="65" class="section-label">ACTUAL DATA:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="property">name: "Jane Smith"</text>
+    <text x="20" y="110" class="property">email: "jane@example.com"</text>
+    <text x="20" y="130" class="property">age: 25</text>
+  </g>
+  
+  <!-- Arrow to second object -->
+  <path d="M 350 300 Q 400 340 450 340" class="arrow"/>
+  
+  <!-- Info Box -->
+  <g transform="translate(100, 440)">
+    <rect fill="#ecf0f1" width="600" height="80" rx="8" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="20" y="25" class="property" font-weight="bold">Key Concept:</text>
+    <text x="20" y="45" class="property">• A <tspan fill="#777BB3" font-weight="bold">class</tspan> is a blueprint that defines properties and methods</text>
+    <text x="20" y="65" class="property">• An <tspan fill="#3498db" font-weight="bold">object</tspan> is an instance of a class with actual data</text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="400" y="585" text-anchor="middle" class="watermark">8gwifi.org - PHP Tutorial</text>
+</svg>

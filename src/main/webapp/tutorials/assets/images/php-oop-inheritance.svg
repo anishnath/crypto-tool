@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <style>
+      .title { font: bold 24px 'Inter', sans-serif; fill: #2c3e50; }
+      .subtitle { font: 16px 'Inter', sans-serif; fill: #7f8c8d; }
+      .class-box { fill: #fff; stroke: #777BB3; stroke-width: 2; }
+      .class-header { fill: #777BB3; }
+      .class-title { font: bold 16px 'Courier New', monospace; fill: #fff; }
+      .property { font: 14px 'Courier New', monospace; fill: #2c3e50; }
+      .method { font: 14px 'Courier New', monospace; fill: #27ae60; }
+      .section-label { font: 12px 'Inter', sans-serif; fill: #95a5a6; }
+      .divider { stroke: #bdc3c7; stroke-width: 1; }
+      .watermark { font: 12px 'Inter', sans-serif; fill: #bdc3c7; opacity: 0.6; }
+      .arrow { stroke: #e74c3c; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .arrow-label { font: bold 14px 'Inter', sans-serif; fill: #e74c3c; }
+      .inherited { fill: #e8f4f8; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="11" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#e74c3c" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" class="title">PHP Inheritance</text>
+  <text x="400" y="65" text-anchor="middle" class="subtitle">Parent Class → Child Class Relationship</text>
+  
+  <!-- Parent Class -->
+  <g transform="translate(275, 100)">
+    <rect class="class-box" width="250" height="200" rx="8"/>
+    <rect class="class-header" width="250" height="40" rx="8"/>
+    <rect fill="#777BB3" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">Animal (Parent)</text>
+    
+    <!-- Properties -->
+    <text x="10" y="65" class="section-label">PROPERTIES:</text>
+    <line x1="10" y1="70" x2="240" y2="70" class="divider"/>
+    <text x="20" y="90" class="property">+ $name</text>
+    <text x="20" y="110" class="property">+ $age</text>
+    
+    <!-- Methods -->
+    <text x="10" y="140" class="section-label">METHODS:</text>
+    <line x1="10" y1="145" x2="240" y2="145" class="divider"/>
+    <text x="20" y="165" class="method">+ eat()</text>
+    <text x="20" y="185" class="method">+ sleep()</text>
+  </g>
+  
+  <!-- Inheritance Arrow -->
+  <path d="M 400 300 L 400 350" class="arrow"/>
+  <text x="420" y="330" class="arrow-label">extends</text>
+  
+  <!-- Child Class 1 -->
+  <g transform="translate(100, 370)">
+    <rect class="class-box" width="250" height="180" rx="8"/>
+    <rect fill="#3498db" width="250" height="40" rx="8"/>
+    <rect fill="#2980b9" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">Dog (Child)</text>
+    
+    <!-- Inherited -->
+    <rect class="inherited" x="10" y="50" width="230" height="70" rx="4" stroke="#3498db" stroke-width="1" stroke-dasharray="4"/>
+    <text x="20" y="70" class="property" opacity="0.7">↑ $name (inherited)</text>
+    <text x="20" y="90" class="property" opacity="0.7">↑ $age (inherited)</text>
+    <text x="20" y="110" class="method" opacity="0.7">↑ eat() (inherited)</text>
+    
+    <!-- Own properties -->
+    <text x="10" y="140" class="section-label">OWN METHODS:</text>
+    <line x1="10" y1="145" x2="240" y2="145" class="divider"/>
+    <text x="20" y="165" class="method">+ bark()</text>
+  </g>
+  
+  <!-- Child Class 2 -->
+  <g transform="translate(450, 370)">
+    <rect class="class-box" width="250" height="180" rx="8"/>
+    <rect fill="#3498db" width="250" height="40" rx="8"/>
+    <rect fill="#2980b9" width="250" height="8" y="32"/>
+    <text x="125" y="27" text-anchor="middle" class="class-title">Cat (Child)</text>
+    
+    <!-- Inherited -->
+    <rect class="inherited" x="10" y="50" width="230" height="70" rx="4" stroke="#3498db" stroke-width="1" stroke-dasharray="4"/>
+    <text x="20" y="70" class="property" opacity="0.7">↑ $name (inherited)</text>
+    <text x="20" y="90" class="property" opacity="0.7">↑ $age (inherited)</text>
+    <text x="20" y="110" class="method" opacity="0.7">↑ eat() (inherited)</text>
+    
+    <!-- Own properties -->
+    <text x="10" y="140" class="section-label">OWN METHODS:</text>
+    <line x1="10" y1="145" x2="240" y2="145" class="divider"/>
+    <text x="20" y="165" class="method">+ meow()</text>
+  </g>
+  
+  <!-- Arrow to Dog -->
+  <path d="M 350 320 Q 225 345 225 370" class="arrow"/>
+  
+  <!-- Arrow to Cat -->
+  <path d="M 450 320 Q 575 345 575 370" class="arrow"/>
+  
+  <!-- Watermark -->
+  <text x="400" y="585" text-anchor="middle" class="watermark">8gwifi.org - PHP Tutorial</text>
+</svg>

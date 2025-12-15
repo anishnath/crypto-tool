@@ -1,0 +1,158 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="phpPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#777BB4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F5B93;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="scalarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="compoundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#50C878;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3DA35D;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="specialGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E67E22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D35400;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#333" text-anchor="middle">PHP Data Types Hierarchy</text>
+  
+  <!-- Root: PHP Data Types -->
+  <g id="root">
+    <rect x="325" y="60" width="250" height="60" rx="10" fill="url(#phpPurple)" stroke="#4F5B93" stroke-width="3"/>
+    <text x="450" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">PHP Data Types</text>
+    <text x="450" y="105" font-family="Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" opacity="0.9">10 Built-in Types</text>
+  </g>
+  
+  <!-- Category 1: Scalar Types -->
+  <g id="scalar">
+    <rect x="40" y="180" width="200" height="50" rx="8" fill="url(#scalarGrad)" stroke="#357ABD" stroke-width="2"/>
+    <text x="140" y="202" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Scalar Types</text>
+    <text x="140" y="220" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle" opacity="0.9">Single Values</text>
+    
+    <!-- Scalar subtypes -->
+    <rect x="20" y="260" width="90" height="45" rx="6" fill="#5DADE2" stroke="#3498DB" stroke-width="2"/>
+    <text x="65" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">int</text>
+    <text x="65" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">42, -10</text>
+    
+    <rect x="125" y="260" width="90" height="45" rx="6" fill="#5DADE2" stroke="#3498DB" stroke-width="2"/>
+    <text x="170" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">float</text>
+    <text x="170" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">3.14, 2.5</text>
+    
+    <rect x="20" y="320" width="90" height="45" rx="6" fill="#5DADE2" stroke="#3498DB" stroke-width="2"/>
+    <text x="65" y="338" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">string</text>
+    <text x="65" y="355" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">"Hello"</text>
+    
+    <rect x="125" y="320" width="90" height="45" rx="6" fill="#5DADE2" stroke="#3498DB" stroke-width="2"/>
+    <text x="170" y="338" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">bool</text>
+    <text x="170" y="355" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">true, false</text>
+  </g>
+  
+  <!-- Category 2: Compound Types -->
+  <g id="compound">
+    <rect x="300" y="180" width="200" height="50" rx="8" fill="url(#compoundGrad)" stroke="#3DA35D" stroke-width="2"/>
+    <text x="400" y="202" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Compound Types</text>
+    <text x="400" y="220" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle" opacity="0.9">Multiple Values</text>
+    
+    <!-- Compound subtypes -->
+    <rect x="270" y="260" width="110" height="45" rx="6" fill="#52BE80" stroke="#27AE60" stroke-width="2"/>
+    <text x="325" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">array</text>
+    <text x="325" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">[1, 2, 3]</text>
+    
+    <rect x="395" y="260" width="110" height="45" rx="6" fill="#52BE80" stroke="#27AE60" stroke-width="2"/>
+    <text x="450" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">object</text>
+    <text x="450" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">new Class()</text>
+    
+    <rect x="270" y="320" width="110" height="45" rx="6" fill="#52BE80" stroke="#27AE60" stroke-width="2"/>
+    <text x="325" y="338" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">callable</text>
+    <text x="325" y="355" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">function()</text>
+    
+    <rect x="395" y="320" width="110" height="45" rx="6" fill="#52BE80" stroke="#27AE60" stroke-width="2"/>
+    <text x="450" y="338" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">iterable</text>
+    <text x="450" y="355" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">foreach</text>
+  </g>
+  
+  <!-- Category 3: Special Types -->
+  <g id="special">
+    <rect x="560" y="180" width="200" height="50" rx="8" fill="url(#specialGrad)" stroke="#D35400" stroke-width="2"/>
+    <text x="660" y="202" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Special Types</text>
+    <text x="660" y="220" font-family="Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle" opacity="0.9">Unique Values</text>
+    
+    <!-- Special subtypes -->
+    <rect x="575" y="260" width="110" height="45" rx="6" fill="#EB984E" stroke="#E67E22" stroke-width="2"/>
+    <text x="630" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">resource</text>
+    <text x="630" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">file, db</text>
+    
+    <rect x="700" y="260" width="110" height="45" rx="6" fill="#EB984E" stroke="#E67E22" stroke-width="2"/>
+    <text x="755" y="278" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">NULL</text>
+    <text x="755" y="295" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle">null</text>
+  </g>
+  
+  <!-- Connection lines from root -->
+  <line x1="400" y1="120" x2="140" y2="180" stroke="#666" stroke-width="2"/>
+  <line x1="450" y1="120" x2="400" y2="180" stroke="#666" stroke-width="2"/>
+  <line x1="500" y1="120" x2="660" y2="180" stroke="#666" stroke-width="2"/>
+  
+  <!-- Connection lines to subtypes - Scalar -->
+  <line x1="140" y1="230" x2="65" y2="260" stroke="#357ABD" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="140" y1="230" x2="170" y2="260" stroke="#357ABD" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="140" y1="230" x2="65" y2="320" stroke="#357ABD" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="140" y1="230" x2="170" y2="320" stroke="#357ABD" stroke-width="1.5" stroke-dasharray="3,3"/>
+  
+  <!-- Connection lines to subtypes - Compound -->
+  <line x1="400" y1="230" x2="325" y2="260" stroke="#3DA35D" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="400" y1="230" x2="450" y2="260" stroke="#3DA35D" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="400" y1="230" x2="325" y2="320" stroke="#3DA35D" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="400" y1="230" x2="450" y2="320" stroke="#3DA35D" stroke-width="1.5" stroke-dasharray="3,3"/>
+  
+  <!-- Connection lines to subtypes - Special -->
+  <line x1="660" y1="230" x2="630" y2="260" stroke="#D35400" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="660" y1="230" x2="755" y2="260" stroke="#D35400" stroke-width="1.5" stroke-dasharray="3,3"/>
+  
+  <!-- Info boxes -->
+  <g id="infoBoxes">
+    <rect x="30" y="400" width="250" height="170" rx="8" fill="#E8F4F8" stroke="#4A90E2" stroke-width="2"/>
+    <text x="155" y="425" font-family="Arial, sans-serif" font-size="14" fill="#2C5F7C" text-anchor="middle" font-weight="bold">Scalar Types</text>
+    <text x="155" y="445" font-family="Arial, sans-serif" font-size="11" fill="#2C5F7C" text-anchor="middle">✓ Hold single values</text>
+    <text x="155" y="462" font-family="Arial, sans-serif" font-size="11" fill="#2C5F7C" text-anchor="middle">✓ Immutable (value types)</text>
+    <text x="155" y="479" font-family="Arial, sans-serif" font-size="11" fill="#2C5F7C" text-anchor="middle">✓ Passed by value</text>
+    <text x="155" y="496" font-family="Arial, sans-serif" font-size="11" fill="#2C5F7C" text-anchor="middle">✓ Most commonly used</text>
+    <text x="155" y="520" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Examples: 42, "hello", true</text>
+    <text x="155" y="540" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Use: Variables, calculations</text>
+    <text x="155" y="560" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Memory: Stack</text>
+  </g>
+  
+  <g id="compoundInfo">
+    <rect x="310" y="400" width="250" height="170" rx="8" fill="#E8F8F0" stroke="#50C878" stroke-width="2"/>
+    <text x="435" y="425" font-family="Arial, sans-serif" font-size="14" fill="#1E5631" text-anchor="middle" font-weight="bold">Compound Types</text>
+    <text x="435" y="445" font-family="Arial, sans-serif" font-size="11" fill="#1E5631" text-anchor="middle">✓ Hold multiple values</text>
+    <text x="435" y="462" font-family="Arial, sans-serif" font-size="11" fill="#1E5631" text-anchor="middle">✓ Mutable (reference types)</text>
+    <text x="435" y="479" font-family="Arial, sans-serif" font-size="11" fill="#1E5631" text-anchor="middle">✓ Passed by reference</text>
+    <text x="435" y="496" font-family="Arial, sans-serif" font-size="11" fill="#1E5631" text-anchor="middle">✓ Complex data structures</text>
+    <text x="435" y="520" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Examples: [1,2,3], new User()</text>
+    <text x="435" y="540" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Use: Collections, objects</text>
+    <text x="435" y="560" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Memory: Heap</text>
+  </g>
+  
+  <g id="specialInfo">
+    <rect x="590" y="400" width="250" height="170" rx="8" fill="#FFF3E0" stroke="#E67E22" stroke-width="2"/>
+    <text x="715" y="425" font-family="Arial, sans-serif" font-size="14" fill="#7D4E1F" text-anchor="middle" font-weight="bold">Special Types</text>
+    <text x="715" y="445" font-family="Arial, sans-serif" font-size="11" fill="#7D4E1F" text-anchor="middle">✓ Unique purposes</text>
+    <text x="715" y="462" font-family="Arial, sans-serif" font-size="11" fill="#7D4E1F" text-anchor="middle">✓ External resources</text>
+    <text x="715" y="479" font-family="Arial, sans-serif" font-size="11" fill="#7D4E1F" text-anchor="middle">✓ Absence of value</text>
+    <text x="715" y="496" font-family="Arial, sans-serif" font-size="11" fill="#7D4E1F" text-anchor="middle">✓ Less frequently used</text>
+    <text x="715" y="520" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Examples: fopen(), null</text>
+    <text x="715" y="540" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Use: Files, databases, unset</text>
+    <text x="715" y="560" font-family="Arial, sans-serif" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Memory: External/None</text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="450" y="593" font-family="Arial, sans-serif" font-size="11" fill="#999" text-anchor="middle" opacity="0.7">8gwifi.org/tutorials/php</text>
+</svg>
