@@ -2198,6 +2198,76 @@
   <url><loc>https://8gwifi.org/tutorials/go/compiler-flags.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/go/plugins-loading.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+  <!-- PHP Tutorial -->
+  <url><loc>https://8gwifi.org/tutorials/php/</loc><lastmod>2025-12-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/installation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/first-program.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/syntax-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/variables-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/types-overview.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/types-juggling.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/constants-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-arithmetic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-comparison.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-logical.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-assignment.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-increment.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-ternary.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/operators-array.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/strings-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/strings-functions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/control-if.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/control-switch.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/loops-while.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/loops-for.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/loops-foreach.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/loops-control.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-multidimensional.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-functions-basic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-functions-advanced.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-iteration.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/arrays-sorting.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-parameters.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-scope.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-arrow.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-variable.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/functions-variadic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/superglobals-overview.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/forms-get.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/forms-validation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/files-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/files-advanced.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/files-csv.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/files-json.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/files-permissions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/uploads-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/directories-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/cookies-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/sessions-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/errors-exceptions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-classes.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-constructor.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-access-modifiers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-inheritance.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-abstract.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-interfaces.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-traits.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-static.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/oop-magic-methods.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/database-mysqli.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/database-pdo.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/database-security.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/regex-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/datetime-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/apis-json.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/composer-packages.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/security-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/php/testing-deployment.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
   <!-- Bash Tutorial -->
   <url><loc>https://8gwifi.org/tutorials/bash/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/bash/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
