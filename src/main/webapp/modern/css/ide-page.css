@@ -1,0 +1,1033 @@
+/**
+ * IDE Page Layout - Styles for Online Compiler / IDE Pages
+ *
+ * This file provides:
+ * 1. IDE-specific layout that keeps Monaco editor in viewport
+ * 2. VS Code-style dark theme for IDE workspace
+ * 3. Light theme SEO content section below IDE
+ * 4. Responsive adjustments for mobile/tablet
+ *
+ * Usage: Include after design-system.css and navigation.css
+ */
+
+/* ============================================
+   IDE Theme Variables
+   ============================================ */
+:root {
+    --oc-primary: #007acc;
+    --oc-primary-hover: #005a9e;
+    --oc-bg-dark: #1e1e1e;
+    --oc-bg-darker: #252526;
+    --oc-bg-sidebar: #333333;
+    --oc-border: #3c3c3c;
+    --oc-text: #cccccc;
+    --oc-text-bright: #ffffff;
+    --oc-success: #4ec9b0;
+    --oc-error: #f48771;
+    --oc-warning: #dcdcaa;
+    --toolbar-height: 40px;
+    --panel-height: 280px;
+    /* Match navigation heights from navigation.css */
+    --nav-height: 72px; /* Desktop: matches --header-height-desktop */
+    --nav-height-mobile: 64px; /* Mobile: matches --header-height-mobile */
+}
+
+/* ============================================
+   IDE Page Body Override
+   ============================================ */
+body.ide-layout {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: var(--oc-bg-dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ============================================
+   IDE Container - Full Viewport
+   ============================================ */
+.ide-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+}
+
+.ide-workspace {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--nav-height));
+    min-height: 500px;
+    background: var(--oc-bg-dark);
+}
+
+/* ============================================
+   IDE Toolbar
+   ============================================ */
+.ide-toolbar {
+    height: var(--toolbar-height);
+    min-height: var(--toolbar-height);
+    background: var(--oc-bg-darker);
+    border-bottom: 1px solid var(--oc-border);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 8px;
+}
+
+.ide-toolbar select {
+    background: var(--oc-bg-sidebar);
+    color: var(--oc-text);
+    border: 1px solid var(--oc-border);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.ide-toolbar select:focus {
+    outline: none;
+    border-color: var(--oc-primary);
+}
+
+.ide-toolbar-btn {
+    background: transparent;
+    color: var(--oc-text);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+}
+
+.ide-toolbar-btn:hover {
+    background: var(--oc-bg-sidebar);
+}
+
+.ide-toolbar-btn.run-btn {
+    background: var(--oc-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.ide-toolbar-btn.run-btn:hover {
+    background: var(--oc-primary-hover);
+}
+
+.ide-toolbar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--oc-border);
+    margin: 0 4px;
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+.toolbar-input {
+    background: var(--oc-bg-sidebar);
+    color: var(--oc-text);
+    border: 1px solid var(--oc-border);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 150px;
+}
+
+.toolbar-input::placeholder {
+    color: #666;
+}
+
+/* ============================================
+   Editor Section
+   ============================================ */
+.ide-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ide-editor-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ide-editor-tabs {
+    height: 35px;
+    background: var(--oc-bg-darker);
+    display: flex;
+    align-items: flex-end;
+    padding-left: 8px;
+    border-bottom: 1px solid var(--oc-border);
+}
+
+.ide-tab {
+    background: var(--oc-bg-darker);
+    color: var(--oc-text);
+    padding: 6px 12px;
+    font-size: 13px;
+    border: 1px solid var(--oc-border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    margin-right: 2px;
+}
+
+.ide-tab:hover {
+    background: var(--oc-bg-sidebar);
+}
+
+.ide-tab.active {
+    background: var(--oc-bg-dark);
+    color: var(--oc-text-bright);
+    border-bottom: 1px solid var(--oc-bg-dark);
+    margin-bottom: -1px;
+}
+
+.ide-tab .tab-name {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ide-tab .tab-close {
+    opacity: 0;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+    transition: opacity 0.15s;
+}
+
+.ide-tab:hover .tab-close,
+.ide-tab.active .tab-close {
+    opacity: 0.7;
+}
+
+.ide-tab .tab-close:hover {
+    opacity: 1;
+    background: var(--oc-error);
+    color: white;
+}
+
+.ide-tab-add {
+    background: transparent;
+    border: 1px dashed var(--oc-border);
+    color: var(--oc-text);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.ide-tab-add:hover {
+    background: var(--oc-bg-sidebar);
+    border-style: solid;
+    color: var(--oc-text-bright);
+}
+
+.tab-rename-input {
+    background: var(--oc-bg-dark);
+    color: var(--oc-text-bright);
+    border: 1px solid var(--oc-primary);
+    padding: 2px 6px;
+    font-size: 12px;
+    width: 100px;
+    border-radius: 2px;
+}
+
+.tab-rename-input:focus {
+    outline: none;
+}
+
+.ide-editor-container {
+    flex: 1;
+    overflow: hidden;
+}
+
+#codeEditor {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================
+   Bottom Panel (Output/Input/Problems)
+   ============================================ */
+.ide-panel {
+    height: var(--panel-height);
+    min-height: 100px;
+    background: var(--oc-bg-dark);
+    border-top: 1px solid var(--oc-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.ide-panel-header {
+    height: 35px;
+    min-height: 35px;
+    background: var(--oc-bg-darker);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--oc-border);
+}
+
+.ide-panel-tabs {
+    display: flex;
+    gap: 0;
+}
+
+.ide-panel-tab {
+    background: transparent;
+    color: var(--oc-text);
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+}
+
+.ide-panel-tab:hover {
+    color: var(--oc-text-bright);
+}
+
+.ide-panel-tab.active {
+    color: var(--oc-text-bright);
+    border-bottom-color: var(--oc-primary);
+}
+
+.ide-panel-tab .badge {
+    background: var(--oc-error);
+    color: white;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    margin-left: 6px;
+}
+
+.ide-panel-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+}
+
+.ide-panel-btn {
+    background: transparent;
+    color: var(--oc-text);
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.ide-panel-btn:hover {
+    color: var(--oc-text-bright);
+}
+
+.ide-panel-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.ide-panel-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    display: none;
+}
+
+.ide-panel-pane.active {
+    display: block;
+}
+
+/* Output Styling */
+.output-content {
+    padding: 8px 12px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--oc-text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.output-content.stdout {
+    color: var(--oc-success);
+}
+
+.output-content.stderr {
+    color: var(--oc-error);
+}
+
+.output-content.system {
+    color: var(--oc-text);
+    font-style: italic;
+}
+
+/* Input Textarea */
+.input-textarea {
+    width: 100%;
+    height: 100%;
+    background: var(--oc-bg-dark);
+    color: var(--oc-text);
+    border: none;
+    padding: 8px 12px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    resize: none;
+}
+
+.input-textarea:focus {
+    outline: none;
+}
+
+/* ============================================
+   Status Bar
+   ============================================ */
+.ide-statusbar {
+    height: 22px;
+    background: var(--oc-primary);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+    color: white;
+}
+
+.status-item {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-item.clickable {
+    cursor: pointer;
+}
+
+.status-item.clickable:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.status-spacer {
+    flex: 1;
+}
+
+/* ============================================
+   Resize Handle
+   ============================================ */
+.resize-handle {
+    height: 4px;
+    background: var(--oc-border);
+    cursor: ns-resize;
+    transition: background 0.15s;
+}
+
+.resize-handle:hover {
+    background: var(--oc-primary);
+}
+
+/* ============================================
+   Panel Scrollbar Styling
+   ============================================ */
+.ide-panel-pane::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ide-panel-pane::-webkit-scrollbar-track {
+    background: var(--oc-bg-dark);
+}
+
+.ide-panel-pane::-webkit-scrollbar-thumb {
+    background: var(--oc-bg-sidebar);
+    border-radius: 4px;
+}
+
+.ide-panel-pane::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ============================================
+   SEO Content Section (Below IDE)
+   Light Theme for Content
+   ============================================ */
+.ide-seo-content {
+    background: var(--bg-primary, #ffffff);
+    color: var(--text-primary, #0f172a);
+}
+
+/* Description + Ad Row */
+.ide-description-section {
+    background: var(--bg-secondary, #f8fafc);
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    padding: 2rem 1.5rem;
+}
+
+.ide-description-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.ide-description-content {
+    flex: 1;
+}
+
+.ide-description-content h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-primary, #0f172a);
+    letter-spacing: -0.02em;
+}
+
+.ide-description-content p {
+    font-size: 1rem;
+    color: var(--text-secondary, #475569);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ide-description-ad {
+    flex-shrink: 0;
+}
+
+/* Info Section */
+.ide-info-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.ide-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.ide-info-card {
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.ide-info-card h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--oc-primary);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ide-info-card p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary, #475569);
+    line-height: 1.6;
+    margin: 0 0 0.5rem 0;
+}
+
+.ide-info-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-secondary, #475569);
+}
+
+.ide-info-card li {
+    margin-bottom: 0.375rem;
+    font-size: 0.9375rem;
+}
+
+.ide-info-card a {
+    color: var(--oc-primary);
+    text-decoration: none;
+}
+
+.ide-info-card a:hover {
+    text-decoration: underline;
+}
+
+/* Full Width Cards */
+.ide-info-card.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Highlight Card */
+.ide-info-card.highlight {
+    background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 100%);
+    border-color: rgba(0, 122, 204, 0.2);
+}
+
+[data-theme="dark"] .ide-info-card.highlight {
+    background: linear-gradient(135deg, rgba(0, 122, 204, 0.15) 0%, rgba(0, 122, 204, 0.08) 100%);
+}
+
+/* Ad Container */
+.ide-ad-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+/* How to Use Steps */
+.ide-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.ide-step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.ide-step-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--oc-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.ide-step-content strong {
+    display: block;
+    color: var(--text-primary, #0f172a);
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.ide-step-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary, #64748b);
+    line-height: 1.5;
+}
+
+/* Embed Features */
+.ide-embed-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.ide-embed-feature {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-primary, #ffffff);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.ide-embed-feature i {
+    font-size: 1.5rem;
+    color: var(--oc-primary);
+    margin-bottom: 0.5rem;
+}
+
+.ide-embed-feature strong {
+    display: block;
+    color: var(--text-primary, #0f172a);
+    margin-bottom: 0.25rem;
+    font-size: 0.9375rem;
+}
+
+.ide-embed-feature p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--text-secondary, #64748b);
+}
+
+/* Code Example */
+.ide-code-example {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+}
+
+/* Related Links */
+.ide-related-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.ide-related-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary, #ffffff);
+    color: var(--text-primary, #0f172a);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.ide-related-links a:hover {
+    border-color: var(--oc-primary);
+    color: var(--oc-primary);
+}
+
+/* Breadcrumb in SEO Section */
+.ide-breadcrumb {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #475569);
+    margin-bottom: 1.5rem;
+}
+
+.ide-breadcrumb a {
+    color: var(--oc-primary);
+    text-decoration: none;
+}
+
+.ide-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   Modals (Share, Embed)
+   ============================================ */
+.embed-modal-overlay,
+.share-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.embed-modal-overlay.show,
+.share-modal-overlay.show {
+    display: flex;
+}
+
+.embed-modal,
+.share-modal {
+    background: var(--oc-bg-darker);
+    border: 1px solid var(--oc-border);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.embed-modal-header,
+.share-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--oc-border);
+    background: var(--oc-bg-sidebar);
+}
+
+.embed-modal-header h3,
+.share-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--oc-text-bright);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.embed-modal-close,
+.share-modal-close {
+    background: transparent;
+    border: none;
+    color: var(--oc-text);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+.embed-modal-close:hover,
+.share-modal-close:hover {
+    color: var(--oc-text-bright);
+}
+
+.embed-modal-body,
+.share-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* ============================================
+   Mobile Responsive
+   ============================================ */
+@media (max-width: 991px) {
+    .ide-description-ad {
+        display: none;
+    }
+
+    .ide-description-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 991px) {
+    :root {
+        --nav-height: var(--nav-height-mobile, 64px);
+    }
+
+    .ide-container {
+        padding-top: var(--nav-height-mobile, 64px);
+    }
+
+    .ide-workspace {
+        height: calc(100vh - var(--nav-height-mobile, 64px));
+    }
+}
+
+@media (max-width: 768px) {
+    .ide-container {
+        padding-top: var(--nav-height-mobile, 64px);
+    }
+
+    .ide-workspace {
+        height: calc(100vh - var(--nav-height-mobile, 64px));
+    }
+
+    .ide-toolbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .toolbar-divider {
+        display: none;
+    }
+
+    .toolbar-input {
+        width: 100%;
+        order: 10;
+    }
+
+    .ide-toolbar select {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .ide-toolbar-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .ide-toolbar-btn span {
+        display: none;
+    }
+
+    .ide-panel {
+        height: 280px;
+    }
+
+    .ide-tab {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .ide-panel-tab {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .ide-statusbar {
+        font-size: 11px;
+    }
+
+    .status-item {
+        padding: 0 6px;
+    }
+
+    /* SEO Content Section */
+    .ide-description-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .ide-description-content h1 {
+        font-size: 1.375rem;
+    }
+
+    .ide-info-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .ide-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .ide-toolbar-btn.run-btn span {
+        display: inline;
+    }
+
+    .toolbar-spacer {
+        display: none;
+    }
+
+    .ide-panel {
+        height: 350px;
+    }
+}
+
+/* ============================================
+   Dark Mode Adjustments for SEO Content
+   ============================================ */
+[data-theme="dark"] .ide-seo-content {
+    background: var(--bg-primary, #0f172a);
+}
+
+[data-theme="dark"] .ide-description-section {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ide-info-card {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ide-embed-feature {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ide-related-links a {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+/* ============================================
+   Floating Sidebar Ad (Desktop >1400px)
+   ============================================ */
+.ide-floating-ad-container {
+    display: none;
+}
+
+@media (min-width: 1400px) {
+    .ide-floating-ad-container {
+        display: block;
+        position: fixed;
+        top: calc(var(--nav-height) + 20px);
+        right: 20px;
+        z-index: 100;
+        width: 336px;
+    }
+
+    .ide-floating-ad-container .ad-container {
+        background: transparent;
+    }
+
+    /* Ensure IDE content doesn't get hidden behind floating ad */
+    .ide-workspace {
+        margin-right: 0; /* Let the ad float over if needed */
+    }
+}
+
+@media (min-width: 1600px) {
+    .ide-floating-ad-container {
+        right: calc((100vw - 1400px) / 2 - 360px);
+    }
+}
+
+/* ============================================
+   Transition Ad (Between IDE and SEO Content)
+   ============================================ */
+.ide-transition-ad {
+    background: linear-gradient(180deg, var(--oc-bg-dark) 0%, var(--bg-secondary, #f8fafc) 100%);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.ide-transition-ad .ad-container {
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+[data-theme="dark"] .ide-transition-ad {
+    background: linear-gradient(180deg, var(--oc-bg-dark) 0%, var(--bg-secondary, #1e293b) 100%);
+    border-color: var(--border, #334155);
+}
+
+/* ============================================
+   Bottom Ad (Before Support Section)
+   ============================================ */
+.ide-bottom-ad {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+
+.ide-bottom-ad .ad-container {
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+[data-theme="dark"] .ide-bottom-ad {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
