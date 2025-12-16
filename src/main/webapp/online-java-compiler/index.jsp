@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Java Compiler & IDE - Run Java Code Online | Free");
+request.setAttribute("pageTitle", "Online Java Compiler & IDE - Run Java Code Online Free | 8gwifi.org");
 request.setAttribute("pageDescription", "Run Java online with a fast, free compiler and IDE. Write, execute, and share Java code with versions, stdin, and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-java-compiler/");
 request.setAttribute("preferredLanguage", "java");
@@ -11,28 +11,15 @@ request.setAttribute("languageFaqHtml",
     "<p><strong>Which versions?</strong> Java 11, 17, 21.</p>" +
     "<p><strong>How do I set the main class?</strong> Use a file named <code>Main.java</code> with <code>public static void main</code>.</p>" +
     "<p><strong>Share?</strong> Click Share for a snippet link.</p>");
-request.setAttribute("softwareAppJsonLd",
+request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +
-    "  \"@type\": \"SoftwareApplication\",\n" +
-    "  \"name\": \"Online Java Compiler\",\n" +
-    "  \"applicationCategory\": \"DeveloperApplication\",\n" +
-    "  \"operatingSystem\": \"Web\",\n" +
-    "  \"programmingLanguage\": \"Java\",\n" +
-    "  \"url\": \"https://8gwifi.org/online-java-compiler/\",\n" +
-    "  \"offers\": { \"@type\": \"Offer\", \"price\": \"0\", \"priceCurrency\": \"USD\" },\n" +
-    "  \"featureList\": [\"Run Java online\", \"Multi-file support\", \"Shareable snippets\"]\n" +
+    "  \"@type\": \"FAQPage\",\n" +
+    "  \"mainEntity\": [\n" +
+    "    {\"@type\":\"Question\",\"name\":\"Which Java versions are available?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Java 11, 17, and 21 are available.\"}},\n" +
+    "    {\"@type\":\"Question\",\"name\":\"How do I set the main class?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Use a file named Main.java with public static void main.\"}},\n" +
+    "    {\"@type\":\"Question\",\"name\":\"How do I share code?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Click Share to get a snippet URL.\"}}\n" +
+    "  ]\n" +
     "}");
 %>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type":"Question","name":"Which Java versions are available?","acceptedAnswer":{"@type":"Answer","text":"Java 11, 17, and 21 are available."}},
-    {"@type":"Question","name":"How do I set the main class?","acceptedAnswer":{"@type":"Answer","text":"Use a file named Main.java with public static void main."}},
-    {"@type":"Question","name":"How do I share code?","acceptedAnswer":{"@type":"Answer","text":"Click Share to get a snippet URL."}}
-  ]
-}
-</script>
 <%@ include file="../onecompiler.jsp" %>

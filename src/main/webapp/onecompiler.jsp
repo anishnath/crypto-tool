@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" isELIgnored="true" %>
 <%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+
+    // 301 redirect for direct access to onecompiler.jsp
     String uri = request.getRequestURI();
     if (uri != null && uri.endsWith("/onecompiler.jsp")) {
         String target = request.getContextPath() + "/online-compiler/";
@@ -7,46 +10,47 @@
         response.setHeader("Location", target);
         return;
     }
+
+    // Get SEO attributes with defaults
+    String pageTitle = (request.getAttribute("pageTitle") != null)
+        ? (String) request.getAttribute("pageTitle")
+        : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free";
+    String pageDescription = (request.getAttribute("pageDescription") != null)
+        ? (String) request.getAttribute("pageDescription")
+        : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required.";
+    String pageUrl = (request.getAttribute("pageUrl") != null)
+        ? (String) request.getAttribute("pageUrl")
+        : "https://8gwifi.org/online-compiler/";
+    // Extract URL path for seo-tool-page (e.g., "online-java-compiler/" from full URL)
+    String toolUrlPath = pageUrl.replace("https://8gwifi.org/", "");
 %>
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-image-preview:large">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO Component (absolute path needed since this file is included from subdirectories) -->
+    <jsp:include page="/modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="<%= pageTitle %>" />
+        <jsp:param name="toolDescription" value="<%= pageDescription %>" />
+        <jsp:param name="toolCategory" value="DeveloperApplication" />
+        <jsp:param name="toolUrl" value="<%= toolUrlPath %>" />
+        <jsp:param name="toolKeywords" value="online compiler, run code online, online ide, compile code online, execute code online, code editor online, run python online, run java online, run javascript online, free compiler, code playground, programming online, write code online" />
+        <jsp:param name="toolImage" value="onecompiler-preview.png" />
+        <jsp:param name="toolFeatures" value="Run code in 60+ programming languages,VS Code editor (Monaco) with IntelliSense,Instant code execution with real-time output,Share code snippets via unique URLs,Embed runnable code in websites and blogs,Multi-file project support,Stdin/stdout and compiler flags,No installation or signup required" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="How do I run code online without installing anything?" />
+        <jsp:param name="faq1a" value="Simply visit our online compiler, select your programming language (Python, Java, C++, JavaScript, etc.), write or paste your code, and click Run. Your code executes instantly in a secure cloud sandbox - no downloads, no installation, no signup required." />
+        <jsp:param name="faq2q" value="What programming languages can I compile online?" />
+        <jsp:param name="faq2a" value="You can compile and run 60+ languages online including Python, Java, C, C++, JavaScript, TypeScript, Go, Rust, Ruby, PHP, Swift, Kotlin, Scala, R, and many more. Each language supports multiple versions and compiler flags." />
+        <jsp:param name="faq3q" value="Can I embed code examples in my website or blog?" />
+        <jsp:param name="faq3a" value="Yes! Click the Embed button to generate an iframe code. Readers can view, edit, and run your code examples directly on your page. Perfect for programming tutorials, technical documentation, and online courses." />
+    </jsp:include>
 
-        <!-- SEO Meta Tags -->
-        <title><%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %></title>
-        <meta name="description"
-            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required. Intelligent code completion, execution history, and embeddable widgets. Perfect for developers, educators, and interviews." %>">
-        <meta name="keywords"
-            content="online compiler, online ide, run code online, code playground, online code editor, online debugger, run code free, python compiler, java compiler, c++ compiler, javascript compiler, embeddable code editor, programming tutorials, code snippets, technical documentation">
-        <meta name="author" content="8gwifi.org">
-        <meta name="robots" content="index, follow, max-image-preview:large">
-
-        <!-- Open Graph Meta Tags -->
-        <meta property="og:title" content="<%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %>">
-        <meta property="og:description"
-            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required." %>">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>">
-        <meta property="og:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
-        <meta property="og:image:alt" content="Run code online in 60+ languages with a free compiler and IDE">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:site_name" content="8gwifi.org">
-
-        <!-- Twitter Card Meta Tags -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@anish2good">
-        <meta name="twitter:creator" content="@anish2good">
-        <meta name="twitter:title" content="<%= (request.getAttribute("pageTitle") != null) ? request.getAttribute("pageTitle") : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free" %>">
-        <meta name="twitter:description"
-            content="<%= (request.getAttribute("pageDescription") != null) ? request.getAttribute("pageDescription") : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required." %>">
-        <meta name="twitter:image" content="https://8gwifi.org/images/site/onecompiler-preview.png">
-
-        <!-- Canonical -->
-        <link rel="canonical" href="<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>">
+    <!-- Canonical (may be overridden by wrapper pages) -->
+    <link rel="canonical" href="<%= pageUrl %>">
 
         <% if (request.getAttribute("preferredLanguage") != null) { %>
         <script>
@@ -54,176 +58,64 @@
         </script>
         <% } %>
 
-        <!-- JSON-LD Structured Data - WebApplication -->
-        <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Online Compiler & IDE",
-      "description": "Free online compiler and integrated development environment (IDE) supporting 60+ programming languages. Features intelligent code completion, execution history, and embeddable widgets.",
-      "url": "<%= (request.getAttribute("pageUrl") != null) ? request.getAttribute("pageUrl") : "https://8gwifi.org/online-compiler/" %>",
-      "applicationCategory": "DeveloperApplication",
-      "applicationSubCategory": "Integrated Development Environment (IDE)",
-      "operatingSystem": "Web",
-      "softwareRequirements": "Modern Web Browser",
-      "author": { "@type": "Person", "name": "Anish Nath" },
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": [
-        "Online code execution",
-        "60+ programming languages",
-        "Multi-file project support",
-        "Monaco editor (VS Code engine)",
-        "Intelligent code completion",
-        "Syntax highlighting",
-        "Real-time output",
-        "Execution history",
-        "Stdin/Stdout support",
-        "Code formatting",
-        "Code sharing with unique URLs",
-        "Embeddable code widgets",
-        "Compiler flags support",
-        "Dark/Light theme options",
-        "Read-only mode",
-        "Auto-run code on page load",
-        "Keyboard shortcuts",
-        "Download code",
-        "No signup required",
-        "No installation required"
-      ]
-    }
-        </script>
-
-        <!-- JSON-LD Structured Data - Breadcrumbs -->
-        <script type="application/ld+json">
-        <%
-          String baseUrl = "https://8gwifi.org";
-          String langSlug = (String) request.getAttribute("preferredLanguage");
-          boolean isLang = (langSlug != null && !langSlug.isEmpty());
-        %>
-        {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "<%= baseUrl %>/"},
-            {"@type": "ListItem", "position": 2, "name": "Online Compiler", "item": "<%= baseUrl %>/online-compiler/"}
-            <% if (isLang) { %>
-            , {"@type": "ListItem", "position": 3, "name": "Online <%= ((String)request.getAttribute("pageTitle")).toString().replace("Online ", "").replace(" & IDE", "") %>", "item": "<%= request.getAttribute("pageUrl") %>"}
-            <% } %>
-          ]
-        }
-        </script>
-
-        <% if (request.getAttribute("softwareAppJsonLd") != null) { %>
-        <script type="application/ld+json">
-<%= request.getAttribute("softwareAppJsonLd") %>
-        </script>
-        <% } %>
-
-        <!-- JSON-LD Structured Data - FAQPage -->
-        <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is an online compiler?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "An online compiler is a web-based tool that allows you to write, compile, and run code in various programming languages directly in your browser without installing any software."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which programming languages are supported?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our online compiler supports 60+ programming languages including Python, Java, C++, JavaScript, Go, Rust, PHP, Ruby, Swift, Kotlin, Scala, TypeScript, C#, and many more."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is the online compiler free to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, our online compiler is completely free to use. No sign-up or registration required."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is it safe to run code online?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, all code runs in isolated sandbox environments with strict security measures."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I share my code with others?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, click the Share button to generate a unique URL that others can use to view and run your code."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I embed code snippets in my blog or website?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes! Click the Embed button to generate an iframe code that you can paste into any blog, website, or CMS. Readers can view and run the code directly on your page."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is this suitable for programming books and tutorials?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Absolutely! Authors and educators can embed interactive code examples in their books, tutorials, and documentation. Options include read-only mode, auto-run on page load, and dark/light themes to match your content."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use this for technical documentation?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, our embeddable code widgets are perfect for API documentation, SDK guides, and technical manuals. Readers can test code examples without leaving your documentation."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does the embed support multiple files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, you can create multi-file projects (like Go packages or Java classes) and share them. The embed will show all files in tabs."
-          }
-        }
-      ]
-    }
+    <!-- Language-specific FAQ JSON-LD (from wrapper pages) -->
+    <% if (request.getAttribute("languageFaqJsonLd") != null) { %>
+    <script type="application/ld+json">
+<%= request.getAttribute("languageFaqJsonLd") %>
     </script>
+    <% } %>
 
-        <%@ include file="header-script.jsp" %>
-            <link rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/editor/editor.main.min.css">
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
-            <style>
-                * {
-                    box-sizing: border-box;
-                }
+    <!-- Modern CSS - Critical -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ide-page.css?v=<%=cacheVersion%>">
 
-                :root {
-                    --oc-primary: #007acc;
-                    --oc-primary-hover: #005a9e;
-                    --oc-bg-dark: #1e1e1e;
-                    --oc-bg-darker: #252526;
-                    --oc-bg-sidebar: #333333;
-                    --oc-border: #3c3c3c;
-                    --oc-text: #cccccc;
-                    --oc-text-bright: #ffffff;
-                    --oc-success: #4ec9b0;
+    <!-- Deferred CSS -->
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+
+    <!-- Monaco Editor CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/editor/editor.main.min.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Ad System (absolute paths needed since this file is included from subdirectories) -->
+    <%@ include file="/modern/ads/ad-init.jsp" %>
+
+    <!-- Analytics -->
+    <%@ include file="/modern/components/analytics.jsp" %>
+
+    <style>
+        /* IDE-specific overrides (minimal - most styles in ide-page.css) */
+        :root {
+            --oc-primary: #007acc;
+            --oc-primary-hover: #005a9e;
+            --oc-bg-dark: #1e1e1e;
+            --oc-bg-darker: #252526;
+            --oc-bg-sidebar: #333333;
+            --oc-border: #3c3c3c;
+            --oc-text: #cccccc;
+            --oc-text-bright: #ffffff;
+            --oc-success: #4ec9b0;
                     --oc-error: #f48771;
                     --oc-warning: #dcdcaa;
                     --toolbar-height: 40px;
                     --panel-height: 280px;
+                    --header-bar-height: 90px;
                 }
 
                 body {
@@ -240,15 +132,48 @@
                     display: flex;
                     flex-direction: column;
                     min-height: 100vh;
-                    padding-top: 56px;
-                    /* navbar height */
+                    padding-top: var(--nav-height, 72px);
+                }
+
+                /* Header Bar with H1 and Ad - Always visible above fold */
+                .ide-header-bar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    padding: 0.5rem 1rem;
+                    background: var(--oc-bg-darker);
+                    border-bottom: 1px solid var(--oc-border);
+                    min-height: var(--header-bar-height);
+                }
+
+                .ide-header-bar h1 {
+                    margin: 0;
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    color: var(--oc-text-bright);
+                    flex: 1;
+                    line-height: 1.3;
+                }
+
+                .ide-header-ad {
+                    flex-shrink: 0;
+                    min-width: 728px;
+                    height: 90px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .ide-header-ad-mobile {
+                    display: none;
                 }
 
                 .ide-workspace {
                     display: flex;
                     flex-direction: column;
-                    height: calc(100vh - 56px);
-                    min-height: 500px;
+                    height: calc(100vh - var(--nav-height, 72px) - var(--header-bar-height, 90px));
+                    min-height: 400px;
                 }
 
                 /* Top Toolbar */
@@ -879,10 +804,47 @@
                     }
                 }
 
+                /* Tablet - hide leaderboard ad, show mobile ad */
+                @media (max-width: 991px) {
+                    .ide-header-ad {
+                        display: none;
+                    }
+
+                    .ide-header-ad-mobile {
+                        display: block;
+                        width: 100%;
+                        text-align: center;
+                        padding: 0.5rem 0;
+                    }
+
+                    .ide-header-bar {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        min-height: auto;
+                        --header-bar-height: 120px;
+                    }
+
+                    .ide-header-bar h1 {
+                        font-size: 1rem;
+                    }
+                }
+
                 /* Mobile Responsive */
                 @media (max-width: 768px) {
+                    :root {
+                        --header-bar-height: 140px;
+                    }
+
                     .ide-container {
-                        padding-top: 50px;
+                        padding-top: var(--nav-height-mobile, 64px);
+                    }
+
+                    .ide-workspace {
+                        height: calc(100vh - var(--nav-height-mobile, 64px) - var(--header-bar-height, 140px));
+                    }
+
+                    .ide-header-bar h1 {
+                        font-size: 0.9375rem;
                     }
 
                     .ide-toolbar {
@@ -1375,15 +1337,35 @@
                     text-decoration: underline;
                 }
             </style>
-    </head>
 
-    <div>
-        <%@ include file="body-script.jsp" %>
-            <%@ include file="navigation.jsp" %>
+    <!-- jQuery (required for some functionality) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body class="ide-layout">
+    <!-- Modern Navigation -->
+    <%@ include file="/modern/components/nav-header.jsp" %>
 
-                <div class="ide-container">
-                    <!-- IDE Workspace (viewport-fitting) -->
-                    <div class="ide-workspace">
+    <div class="ide-container">
+        <!-- Floating Sidebar Ad (Desktop >1400px only) -->
+        <div class="ide-floating-ad-container">
+            <%@ include file="/modern/ads/ad-floating-right.jsp" %>
+        </div>
+
+        <!-- Header Bar with H1 and Ad - Always visible above fold -->
+        <div class="ide-header-bar">
+            <h1><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Online Compiler - Run Code in 60+ Languages" %></h1>
+            <!-- Desktop Leaderboard Ad (728x90) -->
+            <div class="ide-header-ad">
+                <%@ include file="/modern/ads/ad-leaderboard.jsp" %>
+            </div>
+            <!-- Mobile Ad (320x100 or 300x250) -->
+            <div class="ide-header-ad-mobile">
+                <%@ include file="/modern/ads/ad-mobile-banner.jsp" %>
+            </div>
+        </div>
+
+        <!-- IDE Workspace (viewport-fitting) -->
+        <div class="ide-workspace">
                         <!-- Toolbar -->
                         <div class="ide-toolbar">
                             <select id="languageSelect" onchange="onLanguageChange()">
@@ -1614,109 +1596,124 @@
                         </div>
                     </div>
 
-                    <!-- SEO Content (Always visible for crawlers, scrollable below IDE) -->
-                    <div class="seo-section" id="seoSection">
-                        <!-- H1 for SEO -->
-                        <h1 class="seo-h1"><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h1>
+            </div><!-- End IDE Workspace -->
 
-                        <div class="seo-grid">
-                            <!-- About Section -->
-                            <div class="seo-card">
-                                <h2><i class="fas fa-info-circle"></i> About Online Compiler</h2>
-                                <p>Our <strong>free online compiler</strong> lets you write, compile, and run code
-                                    instantly in your browser. Supports <a href="/online-python-compiler/"
-                                        title="Online Python Compiler">Python</a>, <a href="/online-java-compiler/"
-                                        title="Online Java Compiler">Java</a>, <a href="/online-cpp-compiler/"
-                                        title="Online C++ Compiler">C++</a>, JavaScript, Go, Rust, and many more
-                                    languages. No installation required.</p>
-                            </div>
+            <!-- Transition Ad (Between IDE and SEO Content) -->
+            <section class="ide-transition-ad">
+                <%@ include file="/modern/ads/ad-in-content-top.jsp" %>
+            </section>
 
-                            <!-- Supported Languages -->
-                            <div class="seo-card">
-                                <h2><i class="fas fa-code"></i> Supported Languages</h2>
-                                <p><strong>Popular:</strong> Python, Java, C++, C, JavaScript, TypeScript, Go, Rust</p>
-                                <p><strong>Web:</strong> PHP, Ruby, Node.js, HTML/CSS</p>
-                                <p><strong>Systems:</strong> C, C++, Rust, Go, Swift</p>
-                                <p><strong>Functional:</strong> Haskell, Scala, Kotlin, F#, Clojure</p>
-                            </div>
+            <!-- SEO Content Section (scrollable below IDE) -->
+            <main class="ide-seo-content" id="seoSection">
+                <!-- Description Section -->
+                <section class="ide-description-section">
+                    <div class="ide-description-inner">
+                        <div class="ide-description-content">
+                            <h1><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h1>
+                            <p>Write, compile, and run code instantly in your browser. Our free online compiler supports <strong>60+ programming languages</strong> including Python, Java, C++, JavaScript, Go, Rust, and many more. No installation required.</p>
+                        </div>
+                    </div>
+                </section>
 
-                            <!-- Features -->
-                            <div class="seo-card">
-                                <h2><i class="fas fa-star"></i> Features</h2>
-                                <ul>
-                                    <li>Monaco Editor (VS Code) with syntax highlighting</li>
-                                    <li>Real-time code execution with output streaming</li>
-                                    <li>Custom compiler flags support (-O2, -Wall, etc.)</li>
-                                    <li>Share code via unique snippet URLs</li>
-                                    <li>Keyboard shortcuts (Ctrl+Enter to run)</li>
-                                </ul>
-                            </div>
+                <!-- Info Section -->
+                <section class="ide-info-section">
+                    <!-- Breadcrumb -->
+                    <nav class="ide-breadcrumb" aria-label="Breadcrumb">
+                        <a href="/">Home</a> &raquo; <a href="/online-compiler/">Online Compiler</a>
+                        <% if (request.getAttribute("preferredLanguage") != null) { %>
+                            &raquo; <span><%= pageTitle.replace("Online ", "").replace(" & IDE", "").replace(" | Free", "") %></span>
+                        <% } %>
+                    </nav>
 
-                            <!-- FAQ -->
-                            <div class="seo-card">
-                                <h2><i class="fas fa-question-circle"></i> FAQ</h2>
-                                <p><strong>Is it free?</strong> Yes, completely free with no registration.</p>
-                                <p><strong>Is my code secure?</strong> Yes, runs in isolated sandbox containers.</p>
-                                <p><strong>Execution time limit?</strong> Programs have a 30-second limit.</p>
-                                <p><strong>Can I share code?</strong> Yes, click Share to get a unique URL.</p>
-                            </div>
+                    <div class="ide-info-grid">
+                        <!-- About Section -->
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-info-circle"></i> About Online Compiler</h2>
+                            <p>Our <strong>free online compiler</strong> lets you write, compile, and run code
+                                instantly in your browser. Supports <a href="/online-python-compiler/"
+                                    title="Online Python Compiler">Python</a>, <a href="/online-java-compiler/"
+                                    title="Online Java Compiler">Java</a>, <a href="/online-cpp-compiler/"
+                                    title="Online C++ Compiler">C++</a>, JavaScript, Go, Rust, and many more
+                                languages. No installation required.</p>
                         </div>
 
-                        <!-- Breadcrumb UI -->
-                        <div class="seo-card">
-                            <nav aria-label="Breadcrumb" style="font-size:14px;">
-                                <a href="/">Home</a> &raquo; <a href="/online-compiler/">Online Compiler</a>
-                                <% if (request.getAttribute("preferredLanguage") != null) { %>
-                                    &raquo; <span>Online <%= ((String)request.getAttribute("pageTitle")).toString().replace("Online ", "").replace(" & IDE", "") %></span>
-                                <% } %>
-                            </nav>
+                        <!-- Supported Languages -->
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-code"></i> Supported Languages</h2>
+                            <p><strong>Popular:</strong> Python, Java, C++, C, JavaScript, TypeScript, Go, Rust</p>
+                            <p><strong>Web:</strong> PHP, Ruby, Node.js, HTML/CSS</p>
+                            <p><strong>Systems:</strong> C, C++, Rust, Go, Swift</p>
+                            <p><strong>Functional:</strong> Haskell, Scala, Kotlin, F#, Clojure</p>
+                        </div>
+
+                        <!-- Features -->
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-star"></i> Features</h2>
+                            <ul>
+                                <li>Monaco Editor (VS Code) with syntax highlighting</li>
+                                <li>Real-time code execution with output streaming</li>
+                                <li>Custom compiler flags support (-O2, -Wall, etc.)</li>
+                                <li>Share code via unique snippet URLs</li>
+                                <li>Keyboard shortcuts (Ctrl+Enter to run)</li>
+                            </ul>
+                        </div>
+
+                        <!-- FAQ -->
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-question-circle"></i> FAQ</h2>
+                            <p><strong>Is it free?</strong> Yes, completely free with no registration.</p>
+                            <p><strong>Is my code secure?</strong> Yes, runs in isolated sandbox containers.</p>
+                            <p><strong>Execution time limit?</strong> Programs have a 30-second limit.</p>
+                            <p><strong>Can I share code?</strong> Yes, click Share to get a unique URL.</p>
                         </div>
 
                         <% if (request.getAttribute("seoIntroTitle") != null) { %>
-                        <div class="seo-card seo-full-width">
+                        <!-- Language-specific intro (from wrapper pages) -->
+                        <div class="ide-info-card full-width">
                             <h2><i class="fas fa-terminal"></i> <%= request.getAttribute("seoIntroTitle") %></h2>
                             <p><%= request.getAttribute("seoIntroBody") %></p>
                         </div>
                         <% } %>
 
                         <% if (request.getAttribute("languageFaqHtml") != null) { %>
-                        <div class="seo-card">
-                            <h2><i class="fas fa-question-circle"></i> FAQ</h2>
+                        <!-- Language-specific FAQ (from wrapper pages) -->
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-question-circle"></i> Language FAQ</h2>
                             <div><%= request.getAttribute("languageFaqHtml") %></div>
                         </div>
                         <% } %>
 
                         <!-- How to Use -->
-                        <div class="seo-card seo-full-width">
+                        <div class="ide-info-card full-width">
                             <h2><i class="fas fa-play-circle"></i> How to Use Online Compiler</h2>
-                            <div class="seo-steps">
-                                <div class="seo-step">
-                                    <span class="step-number">1</span>
-                                    <div class="step-content">
+                            <div class="ide-steps">
+                                <div class="ide-step">
+                                    <span class="ide-step-number">1</span>
+                                    <div class="ide-step-content">
                                         <strong>Select Language</strong>
                                         <p>Choose from 60+ programming languages including Python, Java, C++,
                                             JavaScript, Go, Rust, and more.</p>
                                     </div>
                                 </div>
-                                <div class="seo-step">
-                                    <span class="step-number">2</span>
-                                    <div class="step-content">
+                                <div class="ide-step">
+                                    <span class="ide-step-number">2</span>
+                                    <div class="ide-step-content">
                                         <strong>Write Your Code</strong>
                                         <p>Use our Monaco editor (same as VS Code) with syntax highlighting,
                                             auto-completion, and error detection.</p>
                                     </div>
                                 </div>
-                                <div class="seo-step">
-                                    <span class="step-number">3</span>
-                                    <div class="step-content">
+                                <div class="ide-step">
+                                    <span class="ide-step-number">3</span>
+                                    <div class="ide-step-content">
                                         <strong>Run & See Output</strong>
                                         <p>Click Run or press Ctrl+Enter. Your code executes in a secure sandbox and
                                             output appears instantly.</p>
                                     </div>
                                 </div>
-                                <div class="seo-step">
-                                    <span class="step-number">4</span>
-                                    <div class="step-content">
+                                <div class="ide-step">
+                                    <span class="ide-step-number">4</span>
+                                    <div class="ide-step-content">
                                         <strong>Share or Embed</strong>
                                         <p>Share your code via unique URL or embed interactive code snippets in your
                                             blog, book, or documentation.</p>
@@ -1726,30 +1723,28 @@
                         </div>
 
                         <!-- For Authors & Educators -->
-                        <div class="seo-card seo-full-width seo-highlight">
+                        <div class="ide-info-card full-width highlight">
                             <h2><i class="fas fa-book"></i> For Authors, Educators & Technical Writers</h2>
                             <p>Perfect for <strong>programming books</strong>, <strong>online tutorials</strong>,
                                 <strong>technical documentation</strong>, and <strong>educational content</strong>.
                                 Embed interactive, runnable code examples directly in your content.</p>
-                            <div class="seo-embed-features">
-                                <div class="embed-feature">
+                            <div class="ide-embed-features">
+                                <div class="ide-embed-feature">
                                     <i class="fas fa-code"></i>
                                     <strong>Embeddable Widgets</strong>
                                     <p>Copy iframe code and paste into any website, blog, CMS, or e-book platform.</p>
                                 </div>
-                                <div class="embed-feature">
+                                <div class="ide-embed-feature">
                                     <i class="fas fa-eye"></i>
                                     <strong>Read-Only Mode</strong>
-                                    <p>Show code without allowing edits - perfect for displaying solutions or examples.
-                                    </p>
+                                    <p>Show code without allowing edits - perfect for displaying solutions or examples.</p>
                                 </div>
-                                <div class="embed-feature">
+                                <div class="ide-embed-feature">
                                     <i class="fas fa-play"></i>
                                     <strong>Auto-Run on Load</strong>
-                                    <p>Code executes automatically when readers view your page - instant demonstrations.
-                                    </p>
+                                    <p>Code executes automatically when readers view your page - instant demonstrations.</p>
                                 </div>
-                                <div class="embed-feature">
+                                <div class="ide-embed-feature">
                                     <i class="fas fa-palette"></i>
                                     <strong>Theme Options</strong>
                                     <p>Choose dark or light theme to match your website or publication design.</p>
@@ -1760,9 +1755,9 @@
                         </div>
 
                         <!-- Code Example -->
-                        <div class="seo-card seo-full-width">
+                        <div class="ide-info-card full-width">
                             <h2><i class="fas fa-file-code"></i> Example: Hello World in Python</h2>
-                            <pre class="seo-code-example"><code># Simple Python example - try it above!
+                            <pre class="ide-code-example"><code># Simple Python example - try it above!
 def greet(name):
     return f"Hello, {name}!"
 
@@ -1772,68 +1767,63 @@ print("Welcome to 8gwifi.org Online Compiler")
 # Output:
 # Hello, World!
 # Welcome to 8gwifi.org Online Compiler</code></pre>
-                            <p>Copy this code into the editor above and click <strong>Run</strong> to see it in action!
-                            </p>
+                            <p>Copy this code into the editor above and click <strong>Run</strong> to see it in action!</p>
                         </div>
 
                         <!-- Popular Online Compilers -->
-                        <div class="seo-card seo-full-width">
+                        <div class="ide-info-card full-width">
                             <h2><i class="fas fa-code"></i> Popular Online Compilers</h2>
-                            <p>Jump straight to a language‑specific page:</p>
-                            <p>
-                                <a href="/online-python-compiler/">Python</a> ·
-                                <a href="/online-javascript-compiler/">JavaScript</a> ·
-                                <a href="/online-typescript-compiler/">TypeScript</a> ·
-                                <a href="/online-ruby-compiler/">Ruby</a> ·
-                                <a href="/online-php-compiler/">PHP</a> ·
-                                <a href="/online-go-compiler/">Go</a> ·
-                                <a href="/online-java-compiler/">Java</a> ·
-                                <a href="/online-c-compiler/">C</a> ·
-                                <a href="/online-cpp-compiler/">C++</a> ·
-                                <a href="/online-csharp-compiler/">C#</a> ·
-                                <a href="/online-rust-compiler/">Rust</a> ·
-                                <a href="/online-swift-compiler/">Swift</a> ·
-                                <a href="/online-scala-compiler/">Scala</a> ·
-                                <a href="/online-dart-compiler/">Dart</a> ·
-                                <a href="/online-kotlin-compiler/">Kotlin</a> ·
-                                <a href="/online-r-compiler/">R</a> ·
-                                <a href="/online-lua-compiler/">Lua</a> ·
+                            <p>Jump straight to a language-specific page:</p>
+                            <div class="ide-related-links">
+                                <a href="/online-python-compiler/">Python</a>
+                                <a href="/online-javascript-compiler/">JavaScript</a>
+                                <a href="/online-typescript-compiler/">TypeScript</a>
+                                <a href="/online-ruby-compiler/">Ruby</a>
+                                <a href="/online-php-compiler/">PHP</a>
+                                <a href="/online-go-compiler/">Go</a>
+                                <a href="/online-java-compiler/">Java</a>
+                                <a href="/online-c-compiler/">C</a>
+                                <a href="/online-cpp-compiler/">C++</a>
+                                <a href="/online-csharp-compiler/">C#</a>
+                                <a href="/online-rust-compiler/">Rust</a>
+                                <a href="/online-swift-compiler/">Swift</a>
+                                <a href="/online-scala-compiler/">Scala</a>
+                                <a href="/online-dart-compiler/">Dart</a>
+                                <a href="/online-kotlin-compiler/">Kotlin</a>
+                                <a href="/online-r-compiler/">R</a>
+                                <a href="/online-lua-compiler/">Lua</a>
                                 <a href="/online-bash-compiler/">Bash</a>
-                            </p>
-                            <p>Need embeds? See <a href="/embed-online-compiler/">Embed Online Compiler</a>.</p>
+                            </div>
+                            <p style="margin-top: 1rem;">Need embeds? See <a href="/embed-online-compiler/">Embed Online Compiler</a>.</p>
                         </div>
 
-                        <!-- Related Tools -->
-                        <div class="seo-related">
+                        <!-- Related Developer Tools -->
+                        <div class="ide-info-card full-width">
                             <h2><i class="fas fa-link"></i> Related Developer Tools</h2>
-                            <div class="seo-links">
-                                <a href="/regex.jsp" title="Online Regex Tester"><i class="fas fa-code"></i> Regex
-                                    Tester</a>
-                                <a href="/jsonparser.jsp" title="JSON Formatter"><i class="fas fa-file-code"></i> JSON
-                                    Formatter</a>
-                                <a href="/Base64Functions.jsp" title="Base64 Encoder"><i class="fas fa-lock"></i> Base64
-                                    Encoder</a>
-                                <a href="/diff.jsp" title="Text Diff Tool"><i class="fas fa-exchange-alt"></i> Diff
-                                    Tool</a>
-                                <a href="/MessageDigest.jsp" title="Hash Calculator"><i class="fas fa-hashtag"></i> Hash
-                                    Calculator</a>
-                                <a href="/curlfunctions.jsp" title="cURL Builder"><i class="fas fa-terminal"></i> cURL
-                                    Builder</a>
-                                <a href="/jwt-debugger.jsp" title="JWT Debugger"><i class="fas fa-key"></i> JWT
-                                    Debugger</a>
-                                <a href="/uuid.jsp" title="UUID Generator"><i class="fas fa-random"></i> UUID
-                                    Generator</a>
+                            <div class="ide-related-links">
+                                <a href="/regex.jsp" title="Online Regex Tester"><i class="fas fa-code"></i> Regex Tester</a>
+                                <a href="/jsonparser.jsp" title="JSON Formatter"><i class="fas fa-file-code"></i> JSON Formatter</a>
+                                <a href="/Base64Functions.jsp" title="Base64 Encoder"><i class="fas fa-lock"></i> Base64 Encoder</a>
+                                <a href="/diff.jsp" title="Text Diff Tool"><i class="fas fa-exchange-alt"></i> Diff Tool</a>
+                                <a href="/MessageDigest.jsp" title="Hash Calculator"><i class="fas fa-hashtag"></i> Hash Calculator</a>
+                                <a href="/curlfunctions.jsp" title="cURL Builder"><i class="fas fa-terminal"></i> cURL Builder</a>
+                                <a href="/jwt-debugger.jsp" title="JWT Debugger"><i class="fas fa-key"></i> JWT Debugger</a>
+                                <a href="/uuid.jsp" title="UUID Generator"><i class="fas fa-random"></i> UUID Generator</a>
                             </div>
                         </div>
+                    </div><!-- End ide-info-grid -->
+                </section><!-- End ide-info-section -->
 
-                        <%@ include file="thanks.jsp" %>
-
-                            <!-- Footer Ad -->
-                            <div class="seo-ad">
-                                <%@ include file="footer_adsense.jsp" %>
-                            </div>
-                    </div>
+                <!-- Mid-Content Ad -->
+                <div class="ide-ad-container">
+                    <%@ include file="/modern/ads/ad-in-content-mid.jsp" %>
                 </div>
+
+                <!-- Support Section -->
+                <%@ include file="/modern/components/support-section.jsp" %>
+
+            </main><!-- End ide-seo-content -->
+        </div><!-- End ide-container -->
 
                 <!-- Monaco Editor -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
@@ -2911,5 +2901,14 @@ print("Welcome to 8gwifi.org Online Compiler")
 
                     loadFromURL();
                 </script>
-    </div>
-    <%@ include file="body-close.jsp" %>
+
+    <!-- Sticky Footer Ad -->
+    <%@ include file="/modern/ads/ad-sticky-footer.jsp" %>
+
+    <!-- Navigation Scripts -->
+    <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>"></script>
+
+</body>
+</html>
