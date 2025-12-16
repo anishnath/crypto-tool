@@ -3,7 +3,7 @@
 request.setAttribute("pageTitle", "Online Bash Shell & IDE - Run Bash Scripts Online Free | 8gwifi.org");
 request.setAttribute("pageDescription", "Run Bash scripts online with a free shell environment. Write, execute, and share Bash code with stdin support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-bash-compiler/");
-request.setAttribute("preferredLanguage", "test");
+request.setAttribute("preferredLanguage", "bash");
 request.setAttribute("h1Text", "Online Bash Shell – Run Bash Scripts Online (Test Environment)");
 request.setAttribute("seoIntroTitle", "Run Bash Online (Test Environment)");
 request.setAttribute("seoIntroBody", "Execute simple Bash scripts in a sandboxed environment. Great for shell snippets and small demonstrations.");
