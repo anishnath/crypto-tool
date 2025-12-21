@@ -527,29 +527,63 @@
             
             let tools = data.tools || [];
             
+            // Get current tool's keywords for relevance scoring
+            const currentTool = tools.find(t => t && t.url === config.currentToolUrl);
+            const currentKeywords = currentTool && currentTool.keywords
+                ? currentTool.keywords.toLowerCase().split(/\s+/)
+                : [];
+
             // Filter tools
             tools = tools.filter(tool => {
                 if (!tool || !tool.url) {
                     return false;
                 }
-                
-                // Exclude current tool and specified exclusions
+
+                // Exclude current tool
+                if (tool.url === config.currentToolUrl) {
+                    return false;
+                }
+
+                // Exclude specified exclusions
                 if (config.excludeUrls && config.excludeUrls.length > 0) {
                     if (config.excludeUrls.includes(tool.url)) {
                         return false;
                     }
                 }
-                
+
                 // Filter by category if specified
                 if (config.category && config.category.trim() !== '') {
                     if (tool.category !== config.category) {
                         return false;
                     }
                 }
-                
+
                 return true;
             });
-            
+
+            // Score tools by keyword relevance
+            if (currentKeywords.length > 0) {
+                tools = tools.map(tool => {
+                    const toolKeywords = (tool.keywords || '').toLowerCase().split(/\s+/);
+                    let score = 0;
+                    currentKeywords.forEach(kw => {
+                        if (kw.length > 2 && toolKeywords.includes(kw)) {
+                            score += 10; // Exact match
+                        } else if (kw.length > 2) {
+                            toolKeywords.forEach(tk => {
+                                if (tk.includes(kw) || kw.includes(tk)) {
+                                    score += 3; // Partial match
+                                }
+                            });
+                        }
+                    });
+                    return { ...tool, relevanceScore: score };
+                });
+
+                // Sort by relevance score (highest first)
+                tools.sort((a, b) => b.relevanceScore - a.relevanceScore);
+            }
+
             // Limit results
             if (config.limit && config.limit > 0) {
                 tools = tools.slice(0, config.limit);
