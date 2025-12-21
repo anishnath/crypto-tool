@@ -1329,8 +1329,15 @@
       "name": "LaTeX Document Editor",
       "url": "latex-document-editor.jsp",
       "category": "Mathematics",
-      "keywords": "latex document editor mathematics",
+      "keywords": "latex document editor tikz diagram equation mathematics",
       "description": "LaTeX Document Editor - Free online mathematics tool"
+    },
+    {
+      "name": "LaTeX Equation Editor",
+      "url": "latex-equation-editor.jsp",
+      "category": "Mathematics",
+      "keywords": "latex equation editor tikz formula mathematics",
+      "description": "LaTeX Equation Editor - Free online mathematics tool"
     },
     {
       "name": "LCM/GCD Finder",
@@ -1399,12 +1406,12 @@
       "name": "Math Art Gallery - Fractal Generator & Parametric Plotter",
       "url": "math-art-gallery.jsp",
       "category": "Mathematics",
-      "keywords": "math art gallery fractal generator parametric plotter mathematics",
+      "keywords": "math art gallery fractal generator parametric plotter visualization diagram graphics mathematics",
       "description": "Math Art Gallery - Fractal Generator & Parametric Plotter - Free online mathematics tool"
     },
     {
       "name": "Math Equation Editor",
-      "url": "latex-equation-editor.jsp",
+      "url": "math-equation-editor.jsp",
       "category": "Mathematics",
       "keywords": "math equation editor mathematics",
       "description": "Math Equation Editor - Free online mathematics tool"
@@ -1700,7 +1707,7 @@
       "name": "TikZ Viewer & Editor",
       "url": "tikz-viewer.jsp",
       "category": "Mathematics",
-      "keywords": "tikz viewer editor mathematics",
+      "keywords": "tikz viewer editor latex diagram equation graphics mathematics",
       "description": "TikZ Viewer & Editor - Free online mathematics tool"
     },
     {

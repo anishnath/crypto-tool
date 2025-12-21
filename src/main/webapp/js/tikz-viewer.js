@@ -433,8 +433,50 @@ ${bodyTikz}
     const iframe = $('viewer');
     iframe.srcdoc = html;
 
-    // Hide loading after a short delay (TikZJax loads async)
-    setTimeout(() => showLoading(false), 800);
+    // Wait for iframe to load, then poll for SVG (TikZJax renders async)
+    iframe.onload = function() {
+      waitForTikzRender(iframe, 50, 10000); // Check every 50ms, timeout after 10s
+    };
+  }
+
+  // Poll for SVG element to appear (TikZJax renders asynchronously)
+  function waitForTikzRender(iframe, interval, timeout) {
+    const startTime = Date.now();
+
+    function checkSvg() {
+      try {
+        const doc = iframe.contentDocument;
+        const svg = doc && doc.querySelector('svg');
+
+        if (svg) {
+          // SVG found - rendering complete
+          showLoading(false);
+          return;
+        }
+
+        // Check for error message in iframe
+        const errorText = doc && doc.body && doc.body.textContent;
+        if (errorText && errorText.toLowerCase().includes('error')) {
+          showLoading(false);
+          return;
+        }
+
+        // Timeout check
+        if (Date.now() - startTime > timeout) {
+          showLoading(false);
+          return;
+        }
+
+        // Keep polling
+        setTimeout(checkSvg, interval);
+      } catch (e) {
+        // Cross-origin or other error - hide loading
+        showLoading(false);
+      }
+    }
+
+    // Start polling after a brief delay to let TikZJax initialize
+    setTimeout(checkSvg, 200);
   }
 
   function debouncedRender() {
@@ -465,6 +507,13 @@ ${bodyTikz}
     a.download = '8gwifi.org-tikz-diagram-' + Date.now() + '.svg';
     a.click();
     URL.revokeObjectURL(url);
+    // Toast notification and support popup
+    if (window.ToolUtils) {
+      if (ToolUtils.showToast) ToolUtils.showToast('SVG downloaded!', 2000, 'success');
+      setTimeout(function() {
+        if (ToolUtils.showSupportPopup) ToolUtils.showSupportPopup('TikZ Viewer', 'Downloaded SVG diagram');
+      }, 500);
+    }
   }
 
   function exportPNG() {
@@ -495,6 +544,13 @@ ${bodyTikz}
         a.download = '8gwifi.org-tikz-diagram-' + Date.now() + '.png';
         a.click();
         URL.revokeObjectURL(dl);
+        // Toast notification and support popup
+        if (window.ToolUtils) {
+          if (ToolUtils.showToast) ToolUtils.showToast('PNG downloaded!', 2000, 'success');
+          setTimeout(function() {
+            if (ToolUtils.showSupportPopup) ToolUtils.showSupportPopup('TikZ Viewer', 'Downloaded PNG diagram');
+          }, 500);
+        }
       });
       URL.revokeObjectURL(url);
     };
@@ -535,40 +591,45 @@ ${bodyTikz}
       pdf.addImage(imgData, 'PNG', 0, 0, w, h);
       pdf.save('8gwifi.org-tikz-diagram-' + Date.now() + '.pdf');
       URL.revokeObjectURL(url);
+      // Toast notification and support popup
+      if (window.ToolUtils) {
+        if (ToolUtils.showToast) ToolUtils.showToast('PDF downloaded!', 2000, 'success');
+        setTimeout(function() {
+          if (ToolUtils.showSupportPopup) ToolUtils.showSupportPopup('TikZ Viewer', 'Downloaded PDF diagram');
+        }, 500);
+      }
     };
     img.src = url;
   }
 
   function copyLatexToClipboard() {
     const input = editor ? editor.getValue() : $('tikzInput').value;
-    const fullLatex = input;
 
-
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(fullLatex).then(() => {
-        // Visual feedback
-        const btn = $('btn-copy-latex');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '✓';
-        btn.classList.add('btn-success');
-        btn.classList.remove('btn-outline-success');
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-          btn.classList.remove('btn-success');
-          btn.classList.add('btn-outline-success');
-        }, 1500);
-      }).catch(() => {
-        alert('Failed to copy to clipboard');
+    // Use ToolUtils if available, fallback to basic copy
+    if (window.ToolUtils && ToolUtils.copyToClipboard) {
+      ToolUtils.copyToClipboard(input, {
+        toastMessage: 'LaTeX code copied!',
+        showSupportPopup: true,
+        toolName: 'TikZ Viewer',
+        resultText: 'Copied LaTeX code'
       });
     } else {
-      // Fallback for older browsers
-      const textarea = document.createElement('textarea');
-      textarea.value = fullLatex;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      alert('LaTeX code copied to clipboard!');
+      // Fallback
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(input).then(() => {
+          alert('LaTeX code copied to clipboard!');
+        }).catch(() => {
+          alert('Failed to copy to clipboard');
+        });
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = input;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('LaTeX code copied to clipboard!');
+      }
     }
   }
 
@@ -665,15 +726,24 @@ ${bodyTikz}
 
     const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
 
-    // Copy to clipboard
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        alert('Shareable URL copied to clipboard!');
-      }).catch(() => {
-        prompt('Copy this URL to share:', shareUrl);
+    // Use ToolUtils if available
+    if (window.ToolUtils && ToolUtils.copyToClipboard) {
+      ToolUtils.copyToClipboard(shareUrl, {
+        toastMessage: 'Share URL copied to clipboard!',
+        showSupportPopup: true,
+        toolName: 'TikZ Viewer'
       });
     } else {
-      prompt('Copy this URL to share:', shareUrl);
+      // Fallback
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert('Shareable URL copied to clipboard!');
+        }).catch(() => {
+          prompt('Copy this URL to share:', shareUrl);
+        });
+      } else {
+        prompt('Copy this URL to share:', shareUrl);
+      }
     }
   }
 
