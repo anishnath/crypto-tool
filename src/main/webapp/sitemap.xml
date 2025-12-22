@@ -2521,4 +2521,61 @@
   <url><loc>https://8gwifi.org/tutorials/lua/file-io.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/lua/performance.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+  <!-- DSA Tutorials -->
+  <url><loc>https://8gwifi.org/tutorials/dsa/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/complexity.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/algorithm-analysis.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/array-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/two-pointers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/sliding-window.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/string-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/bubble-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/selection-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/insertion-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/merge-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/quick-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/heap-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/counting-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/radix-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/tim-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/binary-search.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linear-search.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/binary-search-variants.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/interpolation-search.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/exponential-search.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linked-list-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linked-list-reversal.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linked-list-cycle.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linked-list-two-pointers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/doubly-linked-list.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/circular-linked-list.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/linked-list-advanced.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/stack-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/stack-applications.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/queue-basics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/queue-variations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/stack-queue-combined.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/hash-tables.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/hash-maps-sets.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/advanced-hashing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/binary-tree.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/tree-traversals.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/binary-search-tree.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/tree-problems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/heaps.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/heap-applications.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/tries.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/graph-representation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/bfs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/dfs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/topological-sort.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/dijkstra.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/bellman-ford.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/mst.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/advanced-graphs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/dp-fundamentals.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/dp-problems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://8gwifi.org/tutorials/dsa/dp-advanced.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
 </urlset>
