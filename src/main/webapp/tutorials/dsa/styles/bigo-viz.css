@@ -1,0 +1,259 @@
+/* Big O Complexity Visualization Styles - Compact & Consistent */
+
+.bigo-viz {
+    background: var(--code-bg, #1e1e1e);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    max-width: 100%;
+}
+
+[data-theme="dark"] .bigo-viz {
+    background: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.bigo-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.bigo-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary, #fff);
+    font-size: 1.2rem;
+}
+
+.bigo-header p {
+    margin: 0;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* Canvas Container - Compact */
+.bigo-canvas-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: center;
+}
+
+.bigo-canvas-container canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.bigo-watermark {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Controls - Compact */
+.bigo-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+/* Legend - Compact */
+.bigo-legend {
+    margin-bottom: 0.75rem;
+}
+
+.bigo-legend-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+}
+
+.bigo-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.bigo-legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.bigo-legend-name {
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+    font-size: 0.85rem;
+}
+
+.bigo-legend-label {
+    color: #888;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+/* Values Display - Compact */
+.bigo-values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+}
+
+.bigo-value-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.5rem;
+    border-left: 3px solid;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bigo-value-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bigo-value-name {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.7rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.bigo-value-number {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary, #fff);
+    margin-bottom: 0.25rem;
+}
+
+.bigo-value-ops {
+    font-size: 0.65rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive - Mobile & Tablet */
+@media (max-width: 768px) {
+    .bigo-viz {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    .bigo-header h3 {
+        font-size: 1rem;
+    }
+
+    .bigo-header p {
+        font-size: 0.75rem;
+    }
+
+    .bigo-canvas-container {
+        padding: 0.5rem;
+    }
+
+    .bigo-canvas-container canvas {
+        width: 100%;
+    }
+
+    .bigo-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .viz-slider-group {
+        width: 100%;
+    }
+
+    .bigo-legend-items {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.4rem;
+    }
+
+    .bigo-legend-item {
+        padding: 0.4rem;
+        gap: 0.4rem;
+    }
+
+    .bigo-legend-color {
+        width: 16px;
+        height: 16px;
+    }
+
+    .bigo-legend-name {
+        font-size: 0.75rem;
+    }
+
+    .bigo-legend-label {
+        font-size: 0.65rem;
+    }
+
+    .bigo-values-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.4rem;
+    }
+
+    .bigo-value-card {
+        padding: 0.4rem;
+    }
+
+    .bigo-value-name {
+        font-size: 0.65rem;
+    }
+
+    .bigo-value-number {
+        font-size: 1rem;
+    }
+
+    .bigo-value-ops {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bigo-legend-items {
+        grid-template-columns: 1fr;
+    }
+
+    .bigo-values-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bigo-value-card {
+    animation: fadeIn 0.3s ease-out;
+}

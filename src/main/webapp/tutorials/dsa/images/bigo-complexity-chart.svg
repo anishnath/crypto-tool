@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">
+    Big O Complexity Growth Comparison
+  </text>
+  
+  <!-- Background -->
+  <rect x="60" y="60" width="680" height="360" fill="#f8f9fa" stroke="#ddd" stroke-width="1"/>
+  
+  <!-- Grid Lines -->
+  <g stroke="#e0e0e0" stroke-width="1">
+    <!-- Horizontal grid -->
+    <line x1="60" y1="132" x2="740" y2="132"/>
+    <line x1="60" y1="204" x2="740" y2="204"/>
+    <line x1="60" y1="276" x2="740" y2="276"/>
+    <line x1="60" y1="348" x2="740" y2="348"/>
+    
+    <!-- Vertical grid -->
+    <line x1="128" y1="60" x2="128" y2="420"/>
+    <line x1="196" y1="60" x2="196" y2="420"/>
+    <line x1="264" y1="60" x2="264" y2="420"/>
+    <line x1="332" y1="60" x2="332" y2="420"/>
+    <line x1="400" y1="60" x2="400" y2="420"/>
+    <line x1="468" y1="60" x2="468" y2="420"/>
+    <line x1="536" y1="60" x2="536" y2="420"/>
+    <line x1="604" y1="60" x2="604" y2="420"/>
+    <line x1="672" y1="60" x2="672" y2="420"/>
+  </g>
+  
+  <!-- Axes -->
+  <line x1="60" y1="60" x2="60" y2="420" stroke="#333" stroke-width="2"/>
+  <line x1="60" y1="420" x2="740" y2="420" stroke="#333" stroke-width="2"/>
+  
+  <!-- Y-axis label -->
+  <text x="20" y="240" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" transform="rotate(-90 20 240)" fill="#666">
+    Operations
+  </text>
+  
+  <!-- X-axis label -->
+  <text x="400" y="455" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+    Input Size (n)
+  </text>
+  
+  <!-- X-axis ticks -->
+  <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">
+    <text x="60" y="440">0</text>
+    <text x="128" y="440">10</text>
+    <text x="196" y="440">20</text>
+    <text x="264" y="440">30</text>
+    <text x="332" y="440">40</text>
+    <text x="400" y="440">50</text>
+    <text x="468" y="440">60</text>
+    <text x="536" y="440">70</text>
+    <text x="604" y="440">80</text>
+    <text x="672" y="440">90</text>
+    <text x="740" y="440">100</text>
+  </g>
+  
+  <!-- Complexity Curves -->
+  
+  <!-- O(1) - Constant - Green -->
+  <path d="M 60 415 L 740 415" stroke="#10b981" stroke-width="3" fill="none"/>
+  
+  <!-- O(log n) - Logarithmic - Blue -->
+  <path d="M 60 420 Q 200 380, 400 360 T 740 340" stroke="#3b82f6" stroke-width="3" fill="none"/>
+  
+  <!-- O(n) - Linear - Purple -->
+  <path d="M 60 420 L 740 60" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+  
+  <!-- O(n log n) - Linearithmic - Amber -->
+  <path d="M 60 420 Q 300 300, 500 150 T 740 60" stroke="#f59e0b" stroke-width="3" fill="none"/>
+  
+  <!-- O(n²) - Quadratic - Red -->
+  <path d="M 60 420 Q 200 350, 400 150 Q 600 80, 740 60" stroke="#ef4444" stroke-width="3" fill="none"/>
+  
+  <!-- O(2ⁿ) - Exponential - Dark Red -->
+  <path d="M 60 420 L 300 400 Q 400 300, 500 100 L 600 60" stroke="#dc2626" stroke-width="3" fill="none"/>
+  
+  <!-- Legend -->
+  <g font-family="Arial, sans-serif" font-size="13">
+    <!-- O(1) -->
+    <rect x="60" y="465" width="20" height="4" fill="#10b981"/>
+    <text x="85" y="472" fill="#333">O(1) - Constant</text>
+    
+    <!-- O(log n) -->
+    <rect x="210" y="465" width="20" height="4" fill="#3b82f6"/>
+    <text x="235" y="472" fill="#333">O(log n) - Logarithmic</text>
+    
+    <!-- O(n) -->
+    <rect x="400" y="465" width="20" height="4" fill="#8b5cf6"/>
+    <text x="425" y="472" fill="#333">O(n) - Linear</text>
+    
+    <!-- O(n log n) -->
+    <rect x="550" y="465" width="20" height="4" fill="#f59e0b"/>
+    <text x="575" y="472" fill="#333">O(n log n)</text>
+    
+    <!-- O(n²) -->
+    <rect x="160" y="485" width="20" height="4" fill="#ef4444"/>
+    <text x="185" y="492" fill="#333">O(n²) - Quadratic</text>
+    
+    <!-- O(2ⁿ) -->
+    <rect x="340" y="485" width="20" height="4" fill="#dc2626"/>
+    <text x="365" y="492" fill="#333">O(2ⁿ) - Exponential</text>
+  </g>
+  
+  <!-- Watermark -->
+  <text x="720" y="410" font-family="Arial, sans-serif" font-size="11" text-anchor="end" fill="#999" opacity="0.6">
+    8gwifi.org/tutorials
+  </text>
+  
+  <!-- Key Insight Box -->
+  <rect x="550" y="80" width="180" height="80" fill="#fff" stroke="#ddd" stroke-width="1" rx="4"/>
+  <text x="640" y="100" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">
+    Key Insight
+  </text>
+  <text x="560" y="120" font-family="Arial, sans-serif" font-size="10" fill="#666">
+    <tspan x="560" dy="0">As input size grows,</tspan>
+    <tspan x="560" dy="14">algorithm choice becomes</tspan>
+    <tspan x="560" dy="14">increasingly critical!</tspan>
+  </text>
+</svg>

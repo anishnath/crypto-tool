@@ -1,0 +1,156 @@
+/* Recursion Tree Visualization Styles - Compact & Consistent */
+
+.recursion-viz {
+    background: var(--code-bg, #1e1e1e);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    max-width: 100%;
+}
+
+[data-theme="dark"] .recursion-viz {
+    background: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.recursion-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.recursion-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary, #fff);
+    font-size: 1.2rem;
+}
+
+.recursion-formula {
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    color: #3b82f6;
+    margin: 0;
+    font-weight: 600;
+}
+
+.recursion-canvas-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: center;
+}
+
+.recursion-canvas-container canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.recursion-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.recursion-explanation {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 3px solid #3b82f6;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.explanation-content h4 {
+    margin: 0 0 0.75rem 0;
+    color: #3b82f6;
+    font-size: 1rem;
+}
+
+.explanation-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem 0;
+}
+
+.explanation-content li {
+    padding: 0.4rem 0;
+    color: var(--text-primary, #fff);
+    font-size: 0.85rem;
+}
+
+.explanation-content li strong {
+    color: #3b82f6;
+}
+
+.explanation-insight {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 3px solid #10b981;
+    padding: 0.75rem;
+    margin: 0.75rem 0 0 0;
+    border-radius: 4px;
+    color: var(--text-primary, #fff);
+    font-size: 0.85rem;
+}
+
+.explanation-insight strong {
+    color: #10b981;
+}
+
+/* Responsive - Mobile & Tablet */
+@media (max-width: 768px) {
+    .recursion-viz {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    .recursion-header h3 {
+        font-size: 1rem;
+    }
+
+    .recursion-formula {
+        font-size: 0.9rem;
+    }
+
+    .recursion-canvas-container {
+        padding: 0.5rem;
+    }
+
+    .recursion-canvas-container canvas {
+        width: 100%;
+    }
+
+    .recursion-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .viz-slider-group {
+        width: 100%;
+    }
+
+    .recursion-explanation {
+        padding: 0.75rem;
+    }
+
+    .explanation-content h4 {
+        font-size: 0.9rem;
+    }
+
+    .explanation-content li {
+        font-size: 0.75rem;
+        padding: 0.3rem 0;
+    }
+
+    .explanation-insight {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+}
