@@ -870,6 +870,24 @@
                                                                     <span
                                                                         class="tutorial-card-badge badge-available">Available</span>
                                                                 </a>
+
+                                                                <%-- DSA Tutorial --%>
+                                                                    <a href="<%=request.getContextPath()%>/tutorials/dsa/"
+                                                                        class="tutorial-card">
+                                                                        <div class="tutorial-card-header">
+                                                                            <div class="tutorial-card-icon"
+                                                                                style="background: #ff6b6b15;">
+                                                                                <img src="<%=request.getContextPath()%>/tutorials/assets/images/dsa-logo.svg"
+                                                                                    alt="DSA">
+                                                                            </div>
+                                                                            <h3>DSA</h3>
+                                                                        </div>
+                                                                        <p>Master data structures and algorithms.
+                                                                            Essential for interviews and
+                                                                            problem-solving.</p>
+                                                                        <span
+                                                                            class="tutorial-card-badge badge-available">Available</span>
+                                                                    </a>
                         </section>
 
                         <div class="divider">
@@ -1059,6 +1077,20 @@
                                             <a href="<%=request.getContextPath()%>/tutorials/javascript/">JavaScript</a>
                                         </div>
                                         <span class="path-badge">Game Development</span>
+                                    </div>
+
+                                    <div class="path-card">
+                                        <div class="path-header">
+                                            <span class="path-icon">🎯</span>
+                                            <h3>Interview Prep</h3>
+                                        </div>
+                                        <p>Master algorithms for technical interviews</p>
+                                        <div class="path-steps">
+                                            <a href="<%=request.getContextPath()%>/tutorials/python/">Python</a>
+                                            <span class="path-arrow">→</span>
+                                            <a href="<%=request.getContextPath()%>/tutorials/dsa/">DSA</a>
+                                        </div>
+                                        <span class="path-badge">FAANG Ready</span>
                                     </div>
                                 </section>
 
