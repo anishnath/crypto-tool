@@ -413,16 +413,75 @@ function init() {
         }
     });
 
+    // Bind button event listeners
+    bindEventListeners();
+
     // Initial compile
     setTimeout(compilePreview, 500);
-
-    // Load saved documents count
-    updateSavedDocsCount();
 
     // Keyboard shortcuts info
     console.log('Keyboard Shortcuts:');
     console.log('  Ctrl/Cmd + Enter: Compile Preview');
     console.log('  Ctrl/Cmd + S: Save Document');
+}
+
+/**
+ * Bind event listeners for buttons
+ */
+function bindEventListeners() {
+    // Template selector
+    const templateSelect = document.getElementById('templateSelect');
+    if (templateSelect) {
+        templateSelect.addEventListener('change', loadTemplate);
+    }
+
+    // Compile button
+    const btnCompile = document.getElementById('btn-compile');
+    if (btnCompile) {
+        btnCompile.addEventListener('click', compilePreview);
+    }
+
+    // Clear button
+    const btnClear = document.getElementById('btn-clear');
+    if (btnClear) {
+        btnClear.addEventListener('click', clearEditor);
+    }
+
+    // Auto-compile checkbox
+    const autoCompileCheckbox = document.getElementById('autoCompile');
+    if (autoCompileCheckbox) {
+        autoCompileCheckbox.addEventListener('change', toggleAutoCompile);
+    }
+
+    // Download PDF button
+    const btnDownloadPdf = document.getElementById('btn-download-pdf');
+    if (btnDownloadPdf) {
+        btnDownloadPdf.addEventListener('click', downloadPDF);
+    }
+
+    // Copy LaTeX button
+    const btnCopyLatex = document.getElementById('btn-copy-latex');
+    if (btnCopyLatex) {
+        btnCopyLatex.addEventListener('click', copyLatex);
+    }
+
+    // Download .tex button
+    const btnDownloadTex = document.getElementById('btn-download-tex');
+    if (btnDownloadTex) {
+        btnDownloadTex.addEventListener('click', downloadTex);
+    }
+
+    // Save button
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) {
+        btnSave.addEventListener('click', saveDocument);
+    }
+
+    // Load button
+    const btnLoad = document.getElementById('btn-load');
+    if (btnLoad) {
+        btnLoad.addEventListener('click', showLoadModal);
+    }
 }
 
 /**
@@ -453,41 +512,44 @@ function loadTemplate() {
 function compilePreview() {
     const latexCode = editor.getValue();
     const previewContent = document.getElementById('previewContent');
-    const status = document.getElementById('previewStatus');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const liveIndicator = document.querySelector('.tool-live-indicator');
 
     if (!latexCode.trim()) {
         previewContent.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-file-code" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
-                <p>Select a template or start typing to see preview...</p>
+            <div class="latex-content">
+                <div style="text-align:center;padding:3rem;color:var(--text-secondary);">
+                    <svg width="48" height="48" fill="currentColor" opacity="0.3" viewBox="0 0 16 16"><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+                    <p style="margin-top:1rem;">Select a template or start typing to see preview...</p>
+                </div>
             </div>
         `;
         return;
     }
 
-    // Update status
-    status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compiling...';
+    // Show loading
+    if (loadingOverlay) loadingOverlay.classList.add('show');
+    if (liveIndicator) liveIndicator.innerHTML = '<span class="tool-live-dot" style="background:#f59e0b;"></span> Compiling...';
 
     try {
         // Convert LaTeX to HTML using LaTeX.js (handles math rendering internally)
         const html = convertLatexToHTML(latexCode);
-        previewContent.innerHTML = html;
+        previewContent.innerHTML = `<div class="latex-content">${html}</div>`;
 
-        status.innerHTML = '<i class="fas fa-circle" style="color: #28a745; font-size: 0.6rem;"></i> Compiled';
-
-        setTimeout(() => {
-            status.innerHTML = '<i class="fas fa-circle" style="color: #28a745; font-size: 0.6rem;"></i> Ready';
-        }, 2000);
+        // Hide loading
+        if (loadingOverlay) loadingOverlay.classList.remove('show');
+        if (liveIndicator) liveIndicator.innerHTML = '<span class="tool-live-dot"></span> Ready';
 
     } catch (error) {
         console.error('Compilation error:', error);
         previewContent.innerHTML = `
-            <div style="color: #dc3545; padding: 2rem;">
-                <h4><i class="fas fa-exclamation-triangle"></i> Compilation Error</h4>
+            <div class="latex-content" style="color: #dc3545; padding: 2rem;">
+                <h4>Compilation Error</h4>
                 <p>${error.message}</p>
             </div>
         `;
-        status.innerHTML = '<i class="fas fa-circle" style="color: #dc3545; font-size: 0.6rem;"></i> Error';
+        if (loadingOverlay) loadingOverlay.classList.remove('show');
+        if (liveIndicator) liveIndicator.innerHTML = '<span class="tool-live-dot" style="background:#dc2626;"></span> Error';
     }
 }
 
@@ -536,38 +598,53 @@ function convertLatexToHTML(latex) {
  * Download as PDF
  */
 function downloadPDF() {
-    const element = document.getElementById('previewContent');
     const latexCode = editor.getValue();
 
-    // Extract title for filename
-    const titleMatch = latexCode.match(/\\title\{([^}]+)\}/);
-    const baseFilename = titleMatch ? titleMatch[1].replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'document';
+    if (!latexCode.trim()) {
+        showToast('Nothing to export', 'error');
+        return;
+    }
 
-    // Get current date in YYYY-MM-DD format
-    const today = new Date();
-    const dateStr = today.getFullYear() + '-' +
-                    String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                    String(today.getDate()).padStart(2, '0');
+    // Force compile to ensure preview is current
+    compilePreview();
 
-    // Create filename with prefix: 8gwifi.org-LaTeX-{date}-{title}.pdf
-    const filename = `8gwifi.org-LaTeX-${dateStr}-${baseFilename}.pdf`;
+    // Small delay to ensure DOM is updated after compile
+    setTimeout(function() {
+        const element = document.getElementById('previewContent');
 
-    showToast('Generating PDF...', 'info');
+        // Extract title for filename
+        const titleMatch = latexCode.match(/\\title\{([^}]+)\}/);
+        const baseFilename = titleMatch ? titleMatch[1].replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'document';
 
-    const opt = {
-        margin: 15,
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+        // Get current date in YYYY-MM-DD format
+        const today = new Date();
+        const dateStr = today.getFullYear() + '-' +
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(today.getDate()).padStart(2, '0');
 
-    html2pdf().set(opt).from(element).save().then(() => {
-        showToast('PDF downloaded successfully!', 'success');
-    }).catch(error => {
-        console.error('PDF generation error:', error);
-        showToast('Error generating PDF', 'error');
-    });
+        // Create filename with prefix: 8gwifi.org-LaTeX-{date}-{title}.pdf
+        const filename = `8gwifi.org-LaTeX-${dateStr}-${baseFilename}.pdf`;
+
+        showToast('Generating PDF...', 'info');
+
+        const opt = {
+            margin: 15,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            showToast('PDF downloaded successfully!', 'success');
+            if (typeof ToolUtils !== 'undefined' && ToolUtils.showSupportPopup) {
+                ToolUtils.showSupportPopup();
+            }
+        }).catch(error => {
+            console.error('PDF generation error:', error);
+            showToast('Error generating PDF', 'error');
+        });
+    }, 100);
 }
 
 /**
@@ -688,8 +765,8 @@ function loadDocument(id) {
         compilePreview();
         showToast('Document loaded!', 'success');
 
-        // Close dropdown
-        document.getElementById('savedDocsList').classList.remove('show');
+        // Close modal
+        closeLoadModal();
     }
 }
 
@@ -719,8 +796,8 @@ function deleteDocument(id) {
  * Update saved documents count
  */
 function updateSavedDocsCount() {
-    const count = getSavedDocuments().length;
-    document.getElementById('savedCount').textContent = count;
+    // No longer needed in new layout - function kept for compatibility
+    // The count was displayed in old layout's savedCount element
 }
 
 /**
@@ -750,9 +827,12 @@ function setupAutoSave() {
         const content = editor.getValue();
         if (content.trim()) {
             sessionStorage.setItem(AUTO_SAVE_KEY, content);
-            document.getElementById('autoSaveStatus').innerHTML =
-                '<i class="fas fa-check-circle" style="color: #28a745;"></i> Auto-saved at ' +
-                new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            const statusEl = document.getElementById('autoSaveStatus');
+            if (statusEl) {
+                statusEl.innerHTML =
+                    '<svg width="10" height="10" fill="#10b981" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> ' +
+                    new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            }
         }
     }, 10000); // Auto-save every 10 seconds
 }
@@ -1091,22 +1171,271 @@ function updateStats() {
     const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
     const chars = content.length;
 
-    document.getElementById('lineCount').textContent = `Lines: ${lines}`;
-    document.getElementById('wordCount').textContent = `Words: ${words}`;
-    document.getElementById('charCount').textContent = `Characters: ${chars}`;
+    const lineCountEl = document.getElementById('lineCount');
+    const wordCountEl = document.getElementById('wordCount');
+    const charCountEl = document.getElementById('charCount');
+
+    if (lineCountEl) lineCountEl.textContent = `Lines: ${lines}`;
+    if (wordCountEl) wordCountEl.textContent = `Words: ${words}`;
+    if (charCountEl) charCountEl.textContent = `Chars: ${chars}`;
 }
 
 /**
- * Show toast notification
+ * Show toast notification - uses ToolUtils if available
  */
 function showToast(message, type = 'info') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast-notification ${type} show`;
+    if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+        ToolUtils.showToast(message, type);
+    } else {
+        // Fallback: console log
+        console.log(`[${type}] ${message}`);
+    }
+}
 
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
+/**
+ * Copy LaTeX source to clipboard
+ */
+function copyLatex() {
+    const latexCode = editor.getValue();
+    if (!latexCode.trim()) {
+        showToast('Nothing to copy', 'error');
+        return;
+    }
+
+    if (typeof ToolUtils !== 'undefined' && ToolUtils.copyToClipboard) {
+        ToolUtils.copyToClipboard(latexCode, 'LaTeX code copied to clipboard!');
+        ToolUtils.showSupportPopup();
+    } else {
+        navigator.clipboard.writeText(latexCode).then(() => {
+            showToast('LaTeX code copied to clipboard!', 'success');
+        }).catch(() => {
+            showToast('Failed to copy', 'error');
+        });
+    }
+}
+
+/**
+ * Download LaTeX source as .tex file
+ */
+function downloadTex() {
+    const latexCode = editor.getValue();
+    if (!latexCode.trim()) {
+        showToast('Nothing to download', 'error');
+        return;
+    }
+
+    // Extract title for filename
+    const titleMatch = latexCode.match(/\\title\{([^}]+)\}/);
+    const baseFilename = titleMatch ? titleMatch[1].replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'document';
+
+    // Create filename with date
+    const today = new Date();
+    const dateStr = today.getFullYear() + '-' +
+                    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(today.getDate()).padStart(2, '0');
+
+    const filename = `8gwifi.org-LaTeX-${dateStr}-${baseFilename}.tex`;
+
+    // Download file
+    const blob = new Blob([latexCode], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('LaTeX file downloaded!', 'success');
+
+    if (typeof ToolUtils !== 'undefined' && ToolUtils.showSupportPopup) {
+        ToolUtils.showSupportPopup();
+    }
+}
+
+/**
+ * Show load documents modal
+ */
+function showLoadModal() {
+    const documents = getSavedDocuments();
+
+    if (documents.length === 0) {
+        showToast('No saved documents found', 'info');
+        return;
+    }
+
+    // Create modal HTML
+    const modalHtml = `
+        <div id="loadModal" class="latex-modal-overlay" onclick="closeLoadModal(event)">
+            <div class="latex-modal" onclick="event.stopPropagation()">
+                <div class="latex-modal-header">
+                    <h3>Saved Documents</h3>
+                    <button class="latex-modal-close" onclick="closeLoadModal()">&times;</button>
+                </div>
+                <div class="latex-modal-body">
+                    ${documents.map(doc => {
+                        const date = new Date(doc.timestamp);
+                        return `
+                            <div class="latex-doc-item" onclick="loadDocument(${doc.id})">
+                                <div class="latex-doc-info">
+                                    <div class="latex-doc-title">${escapeHtml(doc.title)}</div>
+                                    <div class="latex-doc-meta">${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</div>
+                                </div>
+                                <button class="latex-doc-delete" onclick="event.stopPropagation(); deleteDocumentFromModal(${doc.id})" title="Delete">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+                                </button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add modal styles if not already added
+    if (!document.getElementById('latexModalStyles')) {
+        const styles = document.createElement('style');
+        styles.id = 'latexModalStyles';
+        styles.textContent = `
+            .latex-modal-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            }
+            .latex-modal {
+                background: var(--bg-primary, #fff);
+                border-radius: 0.75rem;
+                width: 90%;
+                max-width: 500px;
+                max-height: 80vh;
+                overflow: hidden;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            }
+            .latex-modal-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1rem 1.5rem;
+                border-bottom: 1px solid var(--border, #e2e8f0);
+                background: var(--bg-secondary, #f8fafc);
+            }
+            .latex-modal-header h3 {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+            .latex-modal-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--text-secondary, #64748b);
+                line-height: 1;
+            }
+            .latex-modal-close:hover {
+                color: var(--text-primary, #0f172a);
+            }
+            .latex-modal-body {
+                padding: 1rem;
+                overflow-y: auto;
+                max-height: 60vh;
+            }
+            .latex-doc-item {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: background 0.2s;
+                border: 1px solid var(--border, #e2e8f0);
+                margin-bottom: 0.5rem;
+            }
+            .latex-doc-item:hover {
+                background: var(--bg-secondary, #f8fafc);
+            }
+            .latex-doc-info {
+                flex: 1;
+            }
+            .latex-doc-title {
+                font-weight: 600;
+                color: var(--text-primary, #0f172a);
+            }
+            .latex-doc-meta {
+                font-size: 0.75rem;
+                color: var(--text-secondary, #64748b);
+                margin-top: 0.25rem;
+            }
+            .latex-doc-delete {
+                background: none;
+                border: none;
+                color: var(--text-secondary, #64748b);
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 0.25rem;
+            }
+            .latex-doc-delete:hover {
+                color: #dc2626;
+                background: #fee2e2;
+            }
+            [data-theme="dark"] .latex-modal {
+                background: var(--bg-secondary, #1e293b);
+            }
+            [data-theme="dark"] .latex-modal-header {
+                background: var(--bg-primary, #0f172a);
+            }
+            [data-theme="dark"] .latex-doc-item:hover {
+                background: var(--bg-primary, #0f172a);
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+
+    // Remove existing modal if any
+    const existingModal = document.getElementById('loadModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+/**
+ * Close load modal
+ */
+function closeLoadModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    const modal = document.getElementById('loadModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+/**
+ * Delete document from modal view
+ */
+function deleteDocumentFromModal(id) {
+    if (!confirm('Are you sure you want to delete this document?')) {
+        return;
+    }
+
+    let documents = getSavedDocuments();
+    documents = documents.filter(d => d.id !== id);
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+
+    showToast('Document deleted', 'info');
+
+    // Refresh modal
+    closeLoadModal();
+    if (documents.length > 0) {
+        showLoadModal();
+    }
 }
 
 /**
@@ -1119,12 +1448,11 @@ function escapeHtml(text) {
 }
 
 /**
- * Close dropdowns when clicking outside
+ * Close modal when pressing Escape key
  */
-document.addEventListener('click', function(event) {
-    const savedDropdown = document.querySelector('.saved-docs-dropdown');
-    if (savedDropdown && !savedDropdown.contains(event.target)) {
-        document.getElementById('savedDocsList').classList.remove('show');
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeLoadModal();
     }
 });
 

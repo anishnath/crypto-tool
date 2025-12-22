@@ -1,223 +1,62 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    String cacheVersion = "2.1";
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow" />
 
-    <!-- SEO Meta Tags -->
-    <title>LaTeX Document Editor Online – Free | 8gwifi.org</title>
-    <meta name="description" content="Professional LaTeX document editor by cryptography & security experts at 8gwifi.org. Trusted by researchers & students since 2010. Write complete LaTeX documents with live preview, PDF export, auto-save. 100% browser-based, secure, no data collection.">
-    <meta name="keywords" content="latex editor online, latex document editor, latex to pdf, online latex compiler, write latex online, latex preview, latex pdf generator, academic paper editor, latex document creator">
-    <meta name="author" content="8gwifi.org - Cryptography & Security Tools">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://8gwifi.org/latex-document-editor.jsp">
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-    <!-- EEAT Signals -->
-    <meta name="publisher" content="8gwifi.org">
-    <meta name="date.created" content="2024-01-15">
-    <meta name="last-modified" content="2025-01-26">
-    <meta name="content-category" content="Educational Tools, Academic Software">
-    <meta name="rating" content="General">
+    <!-- Critical CSS -->
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
+        :root{--primary:#6366f1;--primary-dark:#4f46e5;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
+    </style>
 
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="LaTeX Document Editor Online – Free | 8gwifi.org">
-    <meta property="og:description" content="Professional LaTeX editor by cryptography experts. Trusted since 2010. Write complete LaTeX documents with live preview, PDF download, auto-save. 100% secure, browser-based.">
-    <meta property="og:url" content="https://8gwifi.org/latex-document-editor.jsp">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="8gwifi.org">
-    <meta property="article:publisher" content="8gwifi.org">
-    <meta property="article:author" content="8gwifi.org Cryptography Team">
-    <meta property="article:published_time" content="2024-01-15T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-01-26T00:00:00+00:00">
+    <!-- SEO -->
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="LaTeX Document Editor Online - Free PDF Export"/>
+        <jsp:param name="toolDescription" value="Professional LaTeX document editor with live preview and PDF export. Write complete LaTeX documents in your browser with syntax highlighting, auto-save, and multiple templates."/>
+        <jsp:param name="toolCategory" value="Math"/>
+        <jsp:param name="toolUrl" value="latex-document-editor.jsp"/>
+        <jsp:param name="toolImage" value="images/site/latex-editor.png"/>
+        <jsp:param name="toolFeatures" value="Live LaTeX preview,PDF export,Auto-save functionality,Multiple document templates (Article Report Letter CV),Syntax highlighting with CodeMirror,Session storage,100% client-side processing,No registration required"/>
+        <jsp:param name="toolHowToSteps" value="Choose a template (Article Report Letter Presentation CV)|Write LaTeX code with syntax highlighting|Preview in real-time as you type|Export to PDF with automatic date-stamped filename"/>
+        <jsp:param name="faq1Question" value="Is this LaTeX editor free to use?"/>
+        <jsp:param name="faq1Answer" value="Yes, the LaTeX Document Editor is completely free with no registration required. All features including PDF export are available at no cost."/>
+        <jsp:param name="faq2Question" value="Is my LaTeX document data secure and private?"/>
+        <jsp:param name="faq2Answer" value="Absolutely. All processing happens entirely in your browser (client-side). We do not upload, store, track, or analyze your documents. Your data never leaves your device."/>
+        <jsp:param name="faq3Question" value="What LaTeX features are supported?"/>
+        <jsp:param name="faq3Answer" value="The editor supports mathematical equations (via KaTeX), document classes (article, report), sections, lists, tables, text formatting, and more. Templates for various document types are included."/>
+    </jsp:include>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="LaTeX Document Editor Online – Free | 8gwifi.org">
-    <meta name="twitter:description" content="Professional LaTeX editor by cryptography experts. Trusted since 2010. Write LaTeX documents with live preview, PDF download, auto-save.">
-    <meta name="twitter:site" content="@anish2good">
-    <meta name="twitter:creator" content="@anish2good">
+    <!-- CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
 
-    <!-- Trust & Security Signals -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-
-    <!-- JSON-LD Schema Markup for EEAT -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "LaTeX Document Editor",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web Browser",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "description": "Professional online LaTeX document editor with live preview, PDF export, and auto-save. Write complete LaTeX documents directly in your browser.",
-        "url": "https://8gwifi.org/latex-document-editor.jsp",
-        "author": {
-            "@type": "Organization",
-            "name": "8gwifi.org",
-            "url": "https://8gwifi.org",
-            "description": "Professional cryptography and security tools provider since 2010",
-            "foundingDate": "2010",
-            "sameAs": [
-                "https://twitter.com/8gwifi_org"
-            ]
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "8gwifi.org",
-            "url": "https://8gwifi.org"
-        },
-        "datePublished": "2024-01-15",
-        "dateModified": "2025-01-26",
-        "inLanguage": "en-US",
-        "isAccessibleForFree": true,
-        "browserRequirements": "Requires JavaScript. Modern web browser recommended.",
-        "featureList": [
-            "Live LaTeX Preview",
-            "PDF Export",
-            "Auto-save functionality",
-            "Multiple document templates",
-            "Syntax highlighting",
-            "Session storage",
-            "100% client-side processing"
-        ],
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.7",
-            "ratingCount": "1250",
-            "bestRating": "5",
-            "worstRating": "1"
-        },
-        "softwareVersion": "2.0",
-        "keywords": "latex editor, latex online, latex to pdf, online latex compiler, latex preview, academic paper editor",
-        "audience": {
-            "@type": "Audience",
-            "audienceType": "Researchers, Students, Academics, Scientists, Professionals"
-        }
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "How to Use LaTeX Document Editor",
-        "description": "Learn how to create professional LaTeX documents online with live preview and PDF export",
-        "step": [
-            {
-                "@type": "HowToStep",
-                "position": 1,
-                "name": "Choose a Template",
-                "text": "Select from pre-built templates including Article, Report, Letter, Presentation, Exam, or CV"
-            },
-            {
-                "@type": "HowToStep",
-                "position": 2,
-                "name": "Write LaTeX Code",
-                "text": "Edit the LaTeX code in the left editor pane with syntax highlighting and auto-completion"
-            },
-            {
-                "@type": "HowToStep",
-                "position": 3,
-                "name": "Preview in Real-time",
-                "text": "See live preview of your document in the right pane as you type"
-            },
-            {
-                "@type": "HowToStep",
-                "position": 4,
-                "name": "Export to PDF",
-                "text": "Click Download PDF to export your LaTeX document with automatic date-stamped filename"
-            }
-        ]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "Is this LaTeX editor free to use?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, the LaTeX Document Editor is completely free to use with no registration or payment required. All features are available at no cost."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is my LaTeX document data secure and private?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Absolutely. All processing happens entirely in your browser (client-side). We do not upload, store, track, or analyze your documents. Your data never leaves your device. Documents are stored only in your browser's session storage and are automatically cleared when you close the tab."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What LaTeX features are supported?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The editor supports most common LaTeX features including mathematical equations (via KaTeX), document classes (article, report), sections, lists, tables, text formatting, and more. It uses LaTeX.js for rendering and provides templates for various document types."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I save my LaTeX documents?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, you can save documents to your browser's session storage for the current session. The editor also features auto-save functionality that preserves your work every 10 seconds. You can export finished documents as PDF files."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Who created this LaTeX editor?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "This LaTeX editor was created by the cryptography and security experts at 8gwifi.org, a trusted provider of professional development and security tools since 2010, serving over 100,000 users worldwide."
-                }
-            }
-        ]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://8gwifi.org/"
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "Math Tools",
-                "item": "https://8gwifi.org/math-tools.jsp"
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "name": "LaTeX Document Editor",
-                "item": "https://8gwifi.org/latex-document-editor.jsp"
-            }
-        ]
-    }
-    </script>
-
-    <!-- Bootstrap & Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- CodeMirror CSS -->
+    <!-- CodeMirror -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
 
@@ -227,1043 +66,543 @@
     <!-- LaTeX.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/latex.js@0.12.6/dist/css/latex.css">
 
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <style>
+        /* LaTeX Tool Theme Variables */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --light-bg: #f8f9fc;
-            --editor-bg: #272822;
-            --preview-bg: #ffffff;
+            --tool-primary: #6366f1;
+            --tool-primary-dark: #4f46e5;
+            --tool-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --tool-light: #f0f4ff;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--light-bg);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .app-header {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .app-header h1 {
-            font-size: 1.25rem;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .app-header p {
-            font-size: 0.875rem;
-            margin: 0.25rem 0 0;
-            opacity: 0.95;
-        }
-
-        .toolbar {
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-            padding: 0.75rem 1rem;
+        /* Editor/Preview Layout */
+        .latex-editor-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            gap: 0;
+            min-height: 500px;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: var(--bg-primary, #fff);
         }
 
-        .btn-modern {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            min-height: 38px;
-        }
-
-        .btn-primary-modern {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .btn-primary-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-outline-modern {
-            background: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-
-        .btn-outline-modern:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-success-modern {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-
-        .btn-danger-modern {
-            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
-            color: white;
-        }
-
-        .editor-container {
-            display: flex;
-            min-height: calc(100vh - 140px);
-            height: calc(100vh - 140px);
-        }
-
-        @media (max-width: 768px) {
-            .editor-container {
-                min-height: auto;
-                height: auto;
-            }
-        }
-
-        .editor-pane {
+        .latex-editor-pane {
             flex: 1;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #e9ecef;
-            background: var(--editor-bg);
-            overflow: hidden;
-        }
-
-        .preview-pane {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #f5f5f5;
-            overflow: hidden;
-        }
-
-        .pane-header {
-            background: white;
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e9ecef;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .editor-pane .pane-header {
+            border-right: 1px solid var(--border, #e2e8f0);
             background: #1e1e1e;
-            color: white;
-            border-bottom: 1px solid #333;
+            min-width: 0;
         }
 
-        .CodeMirror {
-            height: 100% !important;
-            font-size: 14px;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        .latex-preview-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary, #fff);
+            min-width: 0;
         }
 
-        .preview-content {
+        .latex-pane-header {
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+
+        .latex-editor-pane .latex-pane-header {
+            background: #272822;
+            color: #fff;
+            border-bottom-color: #333;
+        }
+
+        .latex-preview-pane .latex-pane-header {
+            background: var(--bg-secondary, #f8fafc);
+        }
+
+        /* CodeMirror */
+        .latex-editor-wrapper {
+            flex: 1;
+            overflow: auto;
+            min-height: 500px;
+            max-height: 700px;
+            position: relative;
+        }
+
+        .latex-editor-wrapper .CodeMirror {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: auto !important;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            background: #272822;
+        }
+
+        .latex-editor-wrapper .CodeMirror-scroll {
+            overflow-y: auto !important;
+            overflow-x: auto !important;
+        }
+
+        /* Preview Content */
+        .latex-preview-content {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
-            padding: 2rem;
-            background: white;
-            margin: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            -webkit-overflow-scrolling: touch;
+            padding: 1.5rem;
+            background: #ffffff;
         }
 
-        .preview-content .latex-content {
+        .latex-preview-content .latex-content {
             max-width: 800px;
             margin: 0 auto;
+            font-family: 'Georgia', 'Times New Roman', serif;
             line-height: 1.8;
         }
 
-        .preview-content h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .preview-content h2 {
-            font-size: 1.5rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .preview-content p {
-            margin-bottom: 1rem;
-        }
-
-        .template-selector {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .template-selector select {
-            padding: 0.5rem;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            cursor: pointer;
-        }
-
-        .saved-docs-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .saved-docs-list {
+        /* Loading */
+        .latex-loading {
             position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 300px;
-            max-height: 400px;
-            overflow-y: auto;
+            inset: 0;
+            background: rgba(255,255,255,0.95);
             display: none;
-            z-index: 1000;
-            margin-top: 0.5rem;
-        }
-
-        .saved-docs-list.show {
-            display: block;
-        }
-
-        .saved-doc-item {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e9ecef;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .saved-doc-item:hover {
-            background: #f8f9fc;
-        }
-
-        .saved-doc-item:last-child {
-            border-bottom: none;
-        }
-
-        .saved-doc-title {
-            font-weight: 600;
-            font-size: 0.875rem;
-            color: #212529;
-            margin-bottom: 0.25rem;
-        }
-
-        .saved-doc-meta {
-            font-size: 0.75rem;
-            color: #6c757d;
-        }
-
-        .btn-delete-doc {
-            background: transparent;
-            border: none;
-            color: #dc3545;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            opacity: 0.7;
+            gap: 1rem;
+            z-index: 20;
         }
 
-        .btn-delete-doc:hover {
-            background: #dc3545;
-            color: white;
-            opacity: 1;
-        }
-
-        .btn-delete-doc i {
-            font-size: 0.875rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: #6c757d;
-        }
-
-        .badge-count {
-            background: #dc3545;
-            color: white;
-            border-radius: 10px;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 0.5rem;
-        }
-
-        .status-bar {
-            background: white;
-            border-top: 1px solid #e9ecef;
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            color: #6c757d;
+        .latex-loading.show {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .toast-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            padding: 1rem;
-            display: none;
-            z-index: 2000;
-            min-width: 250px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast-notification.show {
-            display: block;
-        }
-
-        .toast-notification.success {
-            border-left: 4px solid #28a745;
-        }
-
-        .toast-notification.error {
-            border-left: 4px solid #dc3545;
-        }
-
-        .toast-notification.info {
-            border-left: 4px solid #17a2b8;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            body {
-                overflow-y: auto;
-            }
-
-            .editor-container {
-                flex-direction: column;
-                height: auto;
-                min-height: auto;
-            }
-
-            .editor-pane {
-                height: 50vh;
-                min-height: 400px;
-                border-right: none;
-                border-bottom: 2px solid #e9ecef;
-            }
-
-            .preview-pane {
-                height: 50vh;
-                min-height: 400px;
-                border-top: 1px solid #e9ecef;
-            }
-
-            .toolbar {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .preview-content {
-                margin: 0.5rem;
-                padding: 1rem;
-            }
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid rgba(255,255,255,0.3);
+        .latex-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border, #e2e8f0);
+            border-top-color: var(--tool-primary, #6366f1);
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
+            animation: latexSpin 0.8s linear infinite;
         }
 
-        @keyframes spin {
+        @keyframes latexSpin {
             to { transform: rotate(360deg); }
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Status bar */
+        .latex-status-bar {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary, #f8fafc);
+            border-top: 1px solid var(--border, #e2e8f0);
+            font-size: 0.75rem;
+            color: var(--text-secondary, #64748b);
+            display: flex;
+            justify-content: space-between;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        /* Template selector */
+        .latex-template-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: var(--bg-primary, #fff);
+            cursor: pointer;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
+        /* Mobile responsive */
+        @media (max-width: 991px) {
+            .latex-editor-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .latex-editor-pane {
+                border-right: none;
+                border-bottom: 1px solid var(--border, #e2e8f0);
+                height: 350px;
+            }
+
+            .latex-preview-pane {
+                height: 400px;
+            }
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-color);
+        /* Dark mode */
+        [data-theme="dark"] .latex-preview-pane {
+            background: var(--bg-secondary, #1e293b);
         }
 
-        /* LaTeX Content Styling */
-        .latex-content {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 1rem;
-            color: #212529;
+        [data-theme="dark"] .latex-preview-content {
+            background: var(--bg-primary, #0f172a);
+            color: var(--text-primary, #f1f5f9);
         }
 
-        .latex-content .document-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 1.5rem 0 0.5rem;
-            color: #212529;
+        [data-theme="dark"] .latex-pane-header {
+            border-bottom-color: var(--border, #334155);
         }
 
-        .latex-content .document-author {
-            text-align: center;
-            font-size: 1.1rem;
-            margin: 0.5rem 0;
-            color: #495057;
+        /* Content sections */
+        .tool-content-section {
+            padding: 2rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .latex-content .document-date {
-            text-align: center;
-            font-size: 1rem;
-            margin: 0.5rem 0 2rem;
-            color: #6c757d;
+        .tool-content-container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .latex-content .abstract {
-            background: #f8f9fa;
-            border-left: 4px solid var(--primary-color);
+        .tool-content-section .tool-card {
+            background: var(--bg-primary, #fff);
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .tool-content-section .tool-card-header {
+            background: linear-gradient(135deg, var(--tool-primary, #6366f1) 0%, var(--tool-primary-dark, #4f46e5) 100%);
+            color: white;
             padding: 1rem 1.5rem;
-            margin: 2rem 0;
-            font-size: 0.95rem;
-        }
-
-        .latex-content .toc {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 1rem 1.5rem;
-            margin: 2rem 0;
-            border-radius: 4px;
-        }
-
-        .latex-content h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #dee2e6;
-            color: #212529;
-        }
-
-        .latex-content h2 {
-            font-size: 1.6rem;
-            font-weight: bold;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #212529;
-        }
-
-        .latex-content h3 {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #212529;
-        }
-
-        .latex-content h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
             font-size: 1.1rem;
-            font-weight: bold;
-            margin-top: 1.25rem;
+        }
+
+        .tool-content-section .tool-card-body {
+            padding: 1.5rem;
+        }
+
+        .tool-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 1rem;
+        }
+
+        .tool-subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary, #0f172a);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .tool-feature-list {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-feature-list li {
             margin-bottom: 0.5rem;
-            color: #212529;
-        }
-
-        .latex-content p {
-            margin: 0.75rem 0;
-            line-height: 1.8;
-            text-align: justify;
-        }
-
-        .latex-content ul,
-        .latex-content ol {
-            margin: 0.5rem 0;
-            padding-left: 2rem;
-        }
-
-        .latex-content li {
-            margin: 0.25rem 0;
+            color: var(--text-secondary, #475569);
             line-height: 1.6;
         }
 
-        .latex-content code {
-            font-family: 'Courier New', monospace;
-            background: #f5f5f5;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.9em;
+        .tool-feature-list li strong {
+            color: var(--text-primary, #0f172a);
         }
 
-        .latex-content .latex-quote {
-            margin: 1rem 2rem;
-            padding: 0.5rem 1rem;
-            border-left: 3px solid #6c757d;
-            background: #f8f9fa;
-            font-style: italic;
+        [data-theme="dark"] .tool-content-section .tool-card {
+            background: var(--bg-secondary, #1e293b);
+            border-color: var(--border, #334155);
         }
 
-        .latex-content .latex-verbatim {
-            background: #f5f5f5;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            white-space: pre;
+        [data-theme="dark"] .tool-section-title,
+        [data-theme="dark"] .tool-subsection-title,
+        [data-theme="dark"] .tool-feature-list li strong {
+            color: var(--text-primary, #f1f5f9);
         }
 
-        .latex-content .latex-table {
-            margin: 1rem auto;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        .latex-content .latex-table th {
-            background: #f0f0f0;
-            font-weight: bold;
-            padding: 8px;
-            border: 1px solid #999;
-        }
-
-        .latex-content .latex-table td {
-            padding: 8px;
-            border: 1px solid #999;
-        }
-
-        .latex-content a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        .latex-content a:hover {
-            text-decoration: underline;
-        }
-
-        /* Math equations styling (KaTeX) */
-        .latex-content .katex {
-            font-size: 1.1em;
-        }
-
-        .latex-content .katex-display {
-            margin: 1rem 0;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-
-        /* LaTeX.js Output Styling */
-        .latex-js-output {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: white;
-        }
-
-        .latex-js-output body {
-            max-width: 100%;
-        }
-
-        .latex-js-output .body {
-            max-width: 100%;
-            padding: 0;
-        }
-
-        /* Error display */
-        .latex-error {
-            padding: 2rem;
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            margin: 1rem;
-        }
-
-        .latex-error h4 {
-            color: #856404;
-            margin-bottom: 1rem;
-        }
-
-        .latex-error details {
-            margin-top: 1rem;
-        }
-
-        .latex-error summary {
-            cursor: pointer;
-            color: #0066cc;
-            font-weight: 600;
-        }
-
-        /* Override latex.js default max-width for better fit */
-        .preview-content .latex-js-output .body,
-        .preview-content .latex-js-output body {
-            max-width: 100% !important;
-            margin: 0 !important;
-        }
-
-        /* PDF Download Dropdown */
-        .pdf-download-dropdown {
-            position: relative;
-            display: inline-flex;
-            gap: 0;
-        }
-
-        .pdf-download-dropdown .dropdown-arrow {
-            padding: 0.5rem 0.75rem;
-            border-left: 1px solid rgba(255,255,255,0.3);
-            border-radius: 0 8px 8px 0;
-        }
-
-        .pdf-download-dropdown .btn-modern:first-child {
-            border-radius: 8px 0 0 8px;
-        }
-
-        .pdf-dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 200px;
-            margin-top: 0.5rem;
-            display: none;
-            z-index: 1000;
-        }
-
-        .pdf-dropdown-menu.show {
-            display: block;
-        }
-
-        .pdf-menu-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .pdf-menu-item:hover {
-            background: #f8f9fc;
-        }
-
-        .pdf-menu-item:first-child {
-            border-radius: 6px 6px 0 0;
-        }
-
-        .pdf-menu-item:last-child {
-            border-radius: 0 0 6px 6px;
-        }
-
-        .pdf-menu-item i {
-            width: 20px;
-            color: var(--primary-color);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-dialog {
-            background: white;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 2001;
-        }
-
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid #e9ecef;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: #212529;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6c757d;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .modal-close:hover {
-            background: #f8f9fc;
-            color: #212529;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .modal-footer {
-            padding: 1rem 1.5rem;
-            border-top: 2px solid #e9ecef;
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #212529;
-        }
-
-        .form-group .key-textarea {
-            width: 100%;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            padding: 0.75rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            resize: vertical;
-        }
-
-        .form-group .key-textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-group .form-control {
-            width: 100%;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            padding: 0.75rem;
-            font-size: 0.875rem;
-        }
-
-        .form-group .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-
-        .alert-info {
-            background: #e7f3ff;
-            border: 1px solid #b3d9ff;
-            color: #004085;
-        }
-
-        .small-muted {
-            font-size: 0.875rem;
-            color: #6c757d;
-            margin-bottom: 1rem;
+        [data-theme="dark"] .tool-feature-list li {
+            color: var(--text-secondary, #94a3b8);
         }
     </style>
-    <%@ include file="header-script.jsp"%>
 </head>
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
+<body>
+    <!-- Navigation -->
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<!-- Header -->
-<div class="app-header">
-    <div class="container-fluid">
-        <h1><i class="fas fa-file-code"></i> LaTeX Document Editor</h1>
-        <p>Write complete LaTeX documents in browser - Live preview, PDF export, auto-save</p>
-        <div style="font-size: 0.75rem; opacity: 0.9; margin-top: 0.5rem;">
-            <i class="fas fa-shield-alt"></i> Trusted by 100,000+ users since 2010
-            <span style="margin: 0 0.5rem;">•</span>
-            <i class="fas fa-lock"></i> 100% Client-Side Processing
-            <span style="margin: 0 0.5rem;">•</span>
-            <i class="fas fa-user-secret"></i> Zero Data Collection
+    <!-- Page Header -->
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">LaTeX Document Editor</h1>
+                <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="<%=request.getContextPath()%>/">Home</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#math">Math Tools</a> /
+                    <span>LaTeX Editor</span>
+                </nav>
+            </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg> Free</span>
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg> No Login</span>
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg> PDF Export</span>
+            </div>
         </div>
-    </div>
-</div>
+    </header>
 
-<!-- Toolbar -->
-<div class="toolbar">
-    <div class="template-selector">
-        <label for="templateSelect" style="font-size: 0.875rem; font-weight: 600;">
-            <i class="fas fa-file-alt"></i> Template:
-        </label>
-        <select id="templateSelect" onchange="loadTemplate()">
-            <option value="">Select a template...</option>
-            <option value="article">Article</option>
-            <option value="report">Report</option>
-            <option value="letter">Letter</option>
-            <option value="beamer">Presentation (Beamer)</option>
-            <option value="exam">Exam/Homework</option>
-            <option value="cv">CV/Resume</option>
-        </select>
-    </div>
-
-    <div style="flex: 1;"></div>
-
-    <button class="btn-modern btn-primary-modern" onclick="compilePreview()">
-        <i class="fas fa-sync-alt"></i> Compile
-    </button>
-
-    <button class="btn-modern btn-success-modern" onclick="downloadPDF()">
-        <i class="fas fa-file-pdf"></i> Download PDF
-    </button>
-
-    <button class="btn-modern btn-outline-modern" onclick="saveDocument()">
-        <i class="fas fa-save"></i> Save
-    </button>
-
-    <div class="saved-docs-dropdown">
-        <button class="btn-modern btn-outline-modern" onclick="toggleSavedDocs()">
-            <i class="fas fa-folder-open"></i> Saved
-            <span class="badge-count" id="savedCount">0</span>
-        </button>
-        <div class="saved-docs-list" id="savedDocsList"></div>
-    </div>
-
-    <button class="btn-modern btn-danger-modern" onclick="clearEditor()">
-        <i class="fas fa-trash"></i> Clear
-    </button>
-</div>
-
-<!-- Editor Container -->
-<div class="editor-container">
-    <!-- Editor Pane -->
-    <div class="editor-pane">
-        <div class="pane-header">
-            <i class="fas fa-code"></i> LaTeX Source Code
-            <div style="flex: 1;"></div>
-            <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
-                <input type="checkbox" id="autoCompile" checked onchange="toggleAutoCompile()">
-                Auto-compile
-            </label>
+    <!-- Description with Ad -->
+    <section class="tool-description-section">
+        <div class="tool-description-content">
+            <p>Write complete LaTeX documents in your browser with <strong>live preview</strong> and <strong>PDF export</strong>. Choose from templates for articles, reports, letters, presentations, and CVs. Features syntax highlighting, auto-save, and 100% client-side processing for privacy.</p>
         </div>
-        <textarea id="latexEditor"></textarea>
-    </div>
-
-    <!-- Preview Pane -->
-    <div class="preview-pane">
-        <div class="pane-header">
-            <i class="fas fa-eye"></i> Live Preview
-            <div style="flex: 1;"></div>
-            <span id="previewStatus" style="font-size: 0.8rem; color: #6c757d;">
-                <i class="fas fa-circle" style="color: #28a745; font-size: 0.6rem;"></i> Ready
-            </span>
+        <div class="tool-description-ad">
+            <%@ include file="modern/ads/ad-in-content-top.jsp" %>
         </div>
-        <div class="preview-content">
-            <div class="latex-content" id="previewContent">
-                <div class="empty-state">
-                    <i class="fas fa-file-code" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
-                    <p>Select a template or start typing to see preview...</p>
+    </section>
+
+    <!-- Main Tool Area -->
+    <main class="tool-page-container">
+        <!-- INPUT COLUMN: Editor -->
+        <div class="tool-input-column">
+            <div class="tool-card" style="display:flex;flex-direction:column;">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+                    LaTeX Source
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Status Bar -->
-<div class="status-bar">
-    <div>
-        <span id="lineCount">Lines: 0</span> |
-        <span id="wordCount">Words: 0</span> |
-        <span id="charCount">Characters: 0</span>
-    </div>
-    <div>
-        <span id="autoSaveStatus">
-            <i class="fas fa-check-circle" style="color: #28a745;"></i> Auto-saved
-        </span>
-    </div>
-</div>
+                <!-- Toolbar -->
+                <div class="tool-actions-bar">
+                    <select id="templateSelect" class="latex-template-select" aria-label="Select template">
+                        <option value="">Template...</option>
+                        <option value="article">Article</option>
+                        <option value="report">Report</option>
+                        <option value="letter">Letter</option>
+                        <option value="beamer">Presentation</option>
+                        <option value="exam">Exam</option>
+                        <option value="cv">CV/Resume</option>
+                    </select>
 
-<!-- Toast Notification -->
-<div class="toast-notification" id="toast"></div>
+                    <button id="btn-compile" class="tool-btn tool-btn-primary" aria-label="Compile">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>
+                        Compile
+                    </button>
 
-<!-- EEAT & Trust Signals Section -->
-<div style="background: #f8f9fc; border-top: 2px solid #e9ecef; padding: 2rem 1rem; margin-top: 2rem;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center; color: #212529;">
-                    <i class="fas fa-award"></i> Professional LaTeX Editor by Cryptography Experts
-                </h2>
-            </div>
-        </div>
+                    <button id="btn-clear" class="tool-btn" aria-label="Clear">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/></svg>
+                        Clear
+                    </button>
 
-        <div class="row" style="margin-bottom: 2rem;">
-            <!-- Expertise -->
-            <div class="col-md-3 col-sm-6" style="margin-bottom: 1rem;">
-                <div style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; height: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Expertise</h3>
-                    <p style="font-size: 0.875rem; color: #6c757d; margin: 0;">Built by cryptography & security professionals with 15+ years experience</p>
+                    <div class="tool-actions-spacer"></div>
+
+                    <label class="tool-checkbox">
+                        <input type="checkbox" id="autoCompile" checked>
+                        Auto
+                    </label>
                 </div>
-            </div>
 
-            <!-- Experience -->
-            <div class="col-md-3 col-sm-6" style="margin-bottom: 1rem;">
-                <div style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; height: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <i class="fas fa-clock" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Experience</h3>
-                    <p style="font-size: 0.875rem; color: #6c757d; margin: 0;">Serving 100,000+ researchers, students & professionals since 2010</p>
+                <!-- Editor -->
+                <div class="tool-card-body" style="padding:0;flex:1;display:flex;flex-direction:column;">
+                    <div class="latex-editor-wrapper">
+                        <textarea id="latexEditor" style="display:none;"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Authority -->
-            <div class="col-md-3 col-sm-6" style="margin-bottom: 1rem;">
-                <div style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; height: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <i class="fas fa-certificate" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Authority</h3>
-                    <p style="font-size: 0.875rem; color: #6c757d; margin: 0;">Part of 8gwifi.org suite - trusted source for cryptographic tools</p>
+                <!-- File Actions -->
+                <div class="tool-actions-bar" style="border-top: 1px solid var(--border);">
+                    <button id="btn-download-pdf" class="tool-btn tool-btn-sm tool-btn-primary" aria-label="Download PDF">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                        PDF
+                    </button>
+                    <button id="btn-copy-latex" class="tool-btn tool-btn-sm" aria-label="Copy LaTeX">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                        Copy
+                    </button>
+                    <button id="btn-download-tex" class="tool-btn tool-btn-sm" aria-label="Download .tex">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                        .tex
+                    </button>
+
+                    <span class="tool-actions-divider"></span>
+
+                    <button id="btn-save" class="tool-btn tool-btn-sm" aria-label="Save" title="Save to browser">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/></svg>
+                        Save
+                    </button>
+                    <button id="btn-load" class="tool-btn tool-btn-sm" aria-label="Load" title="Load saved documents">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/></svg>
+                        Load
+                    </button>
+
+                    <div class="tool-actions-spacer"></div>
+
+                    <span id="autoSaveStatus" style="font-size:0.75rem;color:var(--text-secondary);">
+                        <svg width="10" height="10" fill="#10b981" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                        Saved
+                    </span>
                 </div>
-            </div>
 
-            <!-- Trust -->
-            <div class="col-md-3 col-sm-6" style="margin-bottom: 1rem;">
-                <div style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; height: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <i class="fas fa-shield-alt" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Trust</h3>
-                    <p style="font-size: 0.875rem; color: #6c757d; margin: 0;">100% client-side processing, zero data collection, open-source libraries</p>
+                <!-- Status Bar -->
+                <div class="latex-status-bar">
+                    <div>
+                        <span id="lineCount">Lines: 0</span> |
+                        <span id="wordCount">Words: 0</span> |
+                        <span id="charCount">Chars: 0</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Additional Trust Signals -->
-        <div class="row">
-            <div class="col-md-12">
-                <div style="background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #212529;">
-                        <i class="fas fa-lock"></i> Privacy & Security Commitment
-                    </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; font-size: 0.875rem;">
-                        <div>
-                            <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                            <strong>No Server Upload:</strong> All processing happens in your browser
-                        </div>
-                        <div>
-                            <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                            <strong>Zero Data Collection:</strong> We don't track, store, or analyze your documents
-                        </div>
-                        <div>
-                            <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                            <strong>Open Source:</strong> Built with LaTeX.js, KaTeX, CodeMirror
-                        </div>
-                        <div>
-                            <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                            <strong>Session Storage Only:</strong> Data stays on your device, cleared when you close tab
+        <!-- OUTPUT COLUMN: Preview -->
+        <div class="tool-output-column">
+            <div class="tool-card" style="flex:1;display:flex;flex-direction:column;">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/></svg>
+                    Live Preview
+                    <div class="tool-live-indicator" style="margin-left:auto;">
+                        <span class="tool-live-dot"></span> Ready
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="tool-output-wrapper" style="flex:1;position:relative;">
+                    <div class="latex-loading" id="loading-overlay">
+                        <div class="latex-spinner" role="status" aria-hidden="true"></div>
+                        <span style="font-size:0.875rem;color:var(--text-secondary);">Compiling...</span>
+                    </div>
+                    <div class="latex-preview-content" id="previewContent">
+                        <div class="latex-content">
+                            <div style="text-align:center;padding:3rem;color:var(--text-secondary);">
+                                <svg width="48" height="48" fill="currentColor" opacity="0.3" viewBox="0 0 16 16"><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+                                <p style="margin-top:1rem;">Select a template or start typing to see preview...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ADS COLUMN -->
+        <aside class="tool-ads-column">
+            <%@ include file="modern/ads/ad-three-column.jsp" %>
+        </aside>
+
+    </main>
+
+    <!-- Mobile Ad (hidden on desktop) -->
+    <div class="tool-mobile-ad-container">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
     </div>
-</div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Related Tools -->
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="latex-document-editor.jsp"/>
+        <jsp:param name="category" value="Mathematics"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
 
-<!-- CodeMirror -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/stex/stex.min.js"></script>
+    <!-- About Section -->
+    <section class="tool-content-section">
+        <div class="tool-content-container">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                    About LaTeX Document Editor
+                </div>
+                <div class="tool-card-body">
+                    <h2 class="tool-section-title">Professional LaTeX Editor for Documents</h2>
+                    <p>Create professional LaTeX documents directly in your browser without any installation. Perfect for academic papers, research articles, reports, presentations, CVs, and more.</p>
 
-<!-- KaTeX -->
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+                    <h3 class="tool-subsection-title">Key Features</h3>
+                    <ul class="tool-feature-list">
+                        <li><strong>Live Preview:</strong> See your document rendered in real-time as you type</li>
+                        <li><strong>PDF Export:</strong> Download your finished document as a professional PDF file</li>
+                        <li><strong>Template Library:</strong> Pre-built templates for articles, reports, letters, presentations, exams, and CVs</li>
+                        <li><strong>Syntax Highlighting:</strong> CodeMirror-powered editor with LaTeX syntax highlighting</li>
+                        <li><strong>Auto-Save:</strong> Your work is automatically saved to browser storage</li>
+                        <li><strong>Math Support:</strong> Full mathematical equation support via KaTeX</li>
+                        <li><strong>100% Private:</strong> All processing happens in your browser - no data uploaded</li>
+                    </ul>
 
-<!-- LaTeX.js -->
-<script src="https://cdn.jsdelivr.net/npm/latex.js@0.12.6/dist/latex.min.js"></script>
+                    <h3 class="tool-subsection-title">Supported LaTeX Features</h3>
+                    <ul class="tool-feature-list">
+                        <li>Document classes: article, report, book, letter, beamer</li>
+                        <li>Mathematical equations (inline and display)</li>
+                        <li>Sections, subsections, paragraphs</li>
+                        <li>Lists (itemize, enumerate, description)</li>
+                        <li>Tables and figures</li>
+                        <li>Text formatting (bold, italic, underline)</li>
+                        <li>Bibliographies and citations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- html2pdf.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- E-E-A-T Section -->
+    <section class="tool-content-section">
+        <div class="tool-content-container">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"/></svg>
+                    Trust & Privacy
+                </div>
+                <div class="tool-card-body">
+                    <p>This LaTeX editor uses client-side rendering powered by LaTeX.js and KaTeX. All processing happens in your browser - your documents are never uploaded to any server.</p>
 
-<script src="js/latex-document-editor.js"></script>
+                    <h3 class="tool-subsection-title">Privacy Commitment</h3>
+                    <ul class="tool-feature-list">
+                        <li><strong>No Server Upload:</strong> All LaTeX compilation happens in your browser</li>
+                        <li><strong>Zero Data Collection:</strong> We don't track, store, or analyze your documents</li>
+                        <li><strong>Session Storage Only:</strong> Saved documents stay on your device only</li>
+                        <li><strong>Open Source Libraries:</strong> Built with LaTeX.js, KaTeX, CodeMirror</li>
+                    </ul>
 
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="thanks.jsp"%>
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="body-close.jsp"%>
+                    <h3 class="tool-subsection-title">References</h3>
+                    <ul class="tool-feature-list">
+                        <li><a href="https://latex.js.org/" rel="nofollow noopener" target="_blank">LaTeX.js Documentation</a></li>
+                        <li><a href="https://katex.org/" rel="nofollow noopener" target="_blank">KaTeX - Fast Math Typesetting</a></li>
+                        <li><a href="https://codemirror.net/" rel="nofollow noopener" target="_blank">CodeMirror Editor</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Support Section -->
+    <%@ include file="modern/components/support-section.jsp" %>
+
+    <!-- Sticky Footer Ad -->
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/stex/stex.min.js"></script>
+
+    <!-- KaTeX -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- LaTeX.js -->
+    <script src="https://cdn.jsdelivr.net/npm/latex.js@0.12.6/dist/latex.min.js"></script>
+
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Tool Utilities -->
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+    <!-- LaTeX Editor JS -->
+    <script src="<%=request.getContextPath()%>/js/latex-document-editor.js"></script>
+
+</body>
+</html>
