@@ -381,6 +381,13 @@
       "description": "HTML/CSS/JS Editor - Free online developer tools tool"
     },
     {
+      "name": "Mermaid Diagram Generator",
+      "url": "mermaid.jsp",
+      "category": "Developer Tools",
+      "keywords": "mermaid diagram generator flowcharts sequence diagrams charts developer tools",
+      "description": "Mermaid Diagram Generator - Free online developer tools tool"
+    },
+    {
       "name": "Online Compiler (60+ Languages)",
       "url": "onecompiler.jsp",
       "category": "Developer Tools",

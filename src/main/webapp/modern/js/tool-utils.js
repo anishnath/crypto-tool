@@ -4,7 +4,7 @@
  * Version: 1.0
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Prevent multiple initializations
@@ -17,7 +17,7 @@
      * All utility functions are exposed through this object
      */
     window.ToolUtils = {
-        
+
         /**
          * Copy text to clipboard
          * Uses modern Clipboard API with fallback to execCommand
@@ -29,7 +29,7 @@
          * @param {number} options.toastDuration - Toast duration in ms (default: 2000)
          * @returns {Promise<Object>} Promise that resolves with {success: boolean, method: string}
          */
-        copyToClipboard: async function(text, options = {}) {
+        copyToClipboard: async function (text, options = {}) {
             const {
                 showToast = true,
                 toastMessage = 'Copied to clipboard!',
@@ -46,27 +46,27 @@
                     if (showToast) {
                         this.showToast(toastMessage, toastDuration);
                     }
-                    
+
                     // Show support popup after successful copy
                     if (showSupportPopup) {
                         setTimeout(() => {
                             this.showSupportPopup(toolName, resultText || text);
                         }, 500);
                     }
-                    
+
                     return { success: true, method: 'clipboard-api' };
                 }
 
                 // Fallback for older browsers
                 const result = this._fallbackCopy(text, showToast, toastMessage, toastDuration);
-                
+
                 // Show support popup after successful copy
                 if (result.success && showSupportPopup) {
                     setTimeout(() => {
                         this.showSupportPopup(toolName, resultText || text);
                     }, 500);
                 }
-                
+
                 return result;
             } catch (err) {
                 console.error('Copy failed:', err);
@@ -81,7 +81,7 @@
          * Fallback copy method using execCommand
          * @private
          */
-        _fallbackCopy: function(text, showToast, toastMessage, toastDuration) {
+        _fallbackCopy: function (text, showToast, toastMessage, toastDuration) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
@@ -94,11 +94,11 @@
             try {
                 const successful = document.execCommand('copy');
                 document.body.removeChild(textarea);
-                
+
                 if (successful && showToast) {
                     this.showToast(toastMessage, toastDuration);
                 }
-                
+
                 return { success: successful, method: 'execCommand' };
             } catch (err) {
                 document.body.removeChild(textarea);
@@ -113,7 +113,7 @@
          * @param {number} duration - Duration in ms (default: 2000)
          * @param {string} type - Toast type: 'success', 'error', 'info', 'warning' (default: 'success')
          */
-        showToast: function(message, duration = 2000, type = 'success') {
+        showToast: function (message, duration = 2000, type = 'success') {
             // Remove existing toast
             const existing = document.querySelector('.tool-toast');
             if (existing) existing.remove();
@@ -138,7 +138,7 @@
                     <span>${this.escapeHtml(message)}</span>
                 </div>
             `;
-            
+
             document.body.appendChild(toast);
 
             // Show toast
@@ -157,7 +157,7 @@
          * @param {string} text - Text to escape
          * @returns {string} Escaped HTML string
          */
-        escapeHtml: function(text) {
+        escapeHtml: function (text) {
             if (text == null) return '';
             const div = document.createElement('div');
             div.textContent = text;
@@ -172,17 +172,17 @@
          * @param {string} errorMessage - Error message to show
          * @returns {boolean} True if valid
          */
-        validateInput: function(inputId, validatorFn, errorMessage) {
+        validateInput: function (inputId, validatorFn, errorMessage) {
             const input = document.getElementById(inputId);
             if (!input) return false;
-            
+
             const value = input.value.trim();
             const isValid = validatorFn(value);
-            
+
             // Update visual state
             input.classList.toggle('field-invalid', !isValid);
             input.classList.toggle('field-valid', isValid && value.length > 0);
-            
+
             // Show/hide error message
             let errorEl = input.parentElement.querySelector('.field-error');
             if (!isValid && errorMessage) {
@@ -195,7 +195,7 @@
             } else if (errorEl) {
                 errorEl.remove();
             }
-            
+
             return isValid;
         },
 
@@ -205,7 +205,7 @@
          * @param {string} message - Loading message (default: 'Processing...')
          * @param {string} targetElement - Target element selector (default: '#output')
          */
-        showLoading: function(message = 'Processing...', targetElement = '#output') {
+        showLoading: function (message = 'Processing...', targetElement = '#output') {
             const html = `
                 <div class="result-card">
                     <div class="result-header">
@@ -213,7 +213,7 @@
                     </div>
                 </div>
             `;
-            
+
             const target = document.querySelector(targetElement);
             if (target) {
                 if (typeof jQuery !== 'undefined' && jQuery) {
@@ -231,7 +231,7 @@
          * @param {string} targetElement - Target element selector (default: '#output')
          * @param {Array<string>} suggestions - Optional suggestions array
          */
-        showError: function(errorMessage, targetElement = '#output', suggestions = []) {
+        showError: function (errorMessage, targetElement = '#output', suggestions = []) {
             let suggestionsHtml = '';
             if (suggestions && suggestions.length > 0) {
                 suggestionsHtml = `
@@ -255,7 +255,7 @@
                     </div>
                 </div>
             `;
-            
+
             const target = document.querySelector(targetElement);
             if (target) {
                 if (typeof jQuery !== 'undefined' && jQuery) {
@@ -277,7 +277,7 @@
          * @param {string} message - Success message
          * @param {string} targetElement - Target element selector (default: '#output')
          */
-        showSuccess: function(message, targetElement = '#output') {
+        showSuccess: function (message, targetElement = '#output') {
             const html = `
                 <div class="result-card success">
                     <div class="result-header">
@@ -285,7 +285,7 @@
                     </div>
                 </div>
             `;
-            
+
             const target = document.querySelector(targetElement);
             if (target) {
                 if (typeof jQuery !== 'undefined' && jQuery) {
@@ -302,7 +302,7 @@
          * @param {number} bytes - Size in bytes
          * @returns {string} Formatted size string
          */
-        formatFileSize: function(bytes) {
+        formatFileSize: function (bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -317,7 +317,7 @@
          * @param {number} wait - Wait time in ms
          * @returns {Function} Debounced function
          */
-        debounce: function(func, wait) {
+        debounce: function (func, wait) {
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {
@@ -336,9 +336,9 @@
          * @param {number} limit - Time limit in ms
          * @returns {Function} Throttled function
          */
-        throttle: function(func, limit) {
+        throttle: function (func, limit) {
             let inThrottle;
-            return function(...args) {
+            return function (...args) {
                 if (!inThrottle) {
                     func.apply(this, args);
                     inThrottle = true;
@@ -353,7 +353,7 @@
          * @param {Element} element - DOM element
          * @returns {boolean} True if element is in viewport
          */
-        isInViewport: function(element) {
+        isInViewport: function (element) {
             const rect = element.getBoundingClientRect();
             return (
                 rect.top >= 0 &&
@@ -373,31 +373,31 @@
          * @param {string} options.toolName - Tool name for popup
          * @returns {string} Shareable URL
          */
-        generateShareUrl: function(params, options = {}) {
+        generateShareUrl: function (params, options = {}) {
             const {
                 baseUrl = null,
                 showSupportPopup = true,
                 toolName = null
             } = typeof options === 'string' ? { baseUrl: options } : options;
-            
+
             const urlBase = baseUrl || (window.location.origin + window.location.pathname);
-            
+
             const urlParams = new URLSearchParams();
             for (const [key, value] of Object.entries(params)) {
                 if (value != null && value !== '') {
                     urlParams.append(key, encodeURIComponent(value));
                 }
             }
-            
+
             const shareUrl = urlBase + '?' + urlParams.toString();
-            
+
             // Show support popup after generating URL
             if (showSupportPopup) {
                 setTimeout(() => {
                     this.showSupportPopup(toolName, shareUrl);
                 }, 500);
             }
-            
+
             return shareUrl;
         },
 
@@ -415,15 +415,15 @@
          *   operation: 'encryptorDecrypt'
          * });
          */
-        loadFromUrl: function(mappings, callback = null) {
+        loadFromUrl: function (mappings, callback = null) {
             const urlParams = new URLSearchParams(window.location.search);
             const loaded = {};
-            
+
             for (const [urlParam, inputId] of Object.entries(mappings)) {
                 if (urlParams.has(urlParam)) {
                     const value = urlParams.get(urlParam);
                     const input = document.getElementById(inputId);
-                    
+
                     if (input) {
                         if (input.type === 'radio') {
                             // For radio buttons, find the one with matching value
@@ -441,7 +441,7 @@
                             input.value = decodeURIComponent(value);
                             loaded[urlParam] = input.value;
                         }
-                        
+
                         // Trigger change event
                         if (input.dispatchEvent) {
                             input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -449,11 +449,11 @@
                     }
                 }
             }
-            
+
             if (callback && typeof callback === 'function') {
                 callback(loaded);
             }
-            
+
             return loaded;
         },
 
@@ -464,7 +464,7 @@
          * @param {Element|string} element - Element or selector
          * @param {Object} options - Copy options
          */
-        copyFromElement: function(element, options = {}) {
+        copyFromElement: function (element, options = {}) {
             const el = typeof element === 'string'
                 ? document.querySelector(element)
                 : element;
@@ -490,7 +490,7 @@
          * @param {string} options.toolName - Tool name for support popup
          * @returns {boolean} Success status
          */
-        downloadAsFile: function(content, filename, options = {}) {
+        downloadAsFile: function (content, filename, options = {}) {
             const {
                 mimeType = null,
                 showToast = true,
@@ -559,7 +559,7 @@
          * @param {string} options.toolName - Tool name for popup
          * @returns {string} Shareable URL
          */
-        shareResult: function(content, options = {}) {
+        shareResult: function (content, options = {}) {
             const {
                 paramName = 'data',
                 encode = true,
@@ -618,7 +618,7 @@
          * @param {string} paramName - URL parameter name (default: 'data')
          * @returns {string|null} Decoded content or null if not found
          */
-        loadSharedResult: function(paramName = 'data') {
+        loadSharedResult: function (paramName = 'data') {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const data = urlParams.get(paramName);
@@ -647,7 +647,7 @@
          * @param {string} filename - Filename with extension
          * @param {Object} options - Download options
          */
-        downloadFromElement: function(element, filename, options = {}) {
+        downloadFromElement: function (element, filename, options = {}) {
             const el = typeof element === 'string'
                 ? document.querySelector(element)
                 : element;
@@ -670,7 +670,7 @@
          * Get MIME type from filename extension
          * @private
          */
-        _getMimeType: function(filename) {
+        _getMimeType: function (filename) {
             const ext = filename.split('.').pop().toLowerCase();
             const mimeTypes = {
                 // Text formats
@@ -726,7 +726,7 @@
          * @param {string} toolName - Name of the tool (optional)
          * @param {string} resultText - Result text or URL to include in tweet (optional)
          */
-        showSupportPopup: function(toolName = null, resultText = null) {
+        showSupportPopup: function (toolName = null, resultText = null) {
             // Check if user has dismissed this popup in this session
             const dismissedKey = 'tool_support_popup_dismissed';
             if (sessionStorage.getItem(dismissedKey) === 'true') {
@@ -742,8 +742,8 @@
             // Truncate result text for tweet (max 100 chars)
             let tweetText = '';
             if (resultText) {
-                const truncated = resultText.length > 100 
-                    ? resultText.substring(0, 97) + '...' 
+                const truncated = resultText.length > 100
+                    ? resultText.substring(0, 97) + '...'
                     : resultText;
                 tweetText = `\n\nResults: ${truncated}`;
             }
@@ -807,14 +807,14 @@
             }, 10);
 
             // Close on backdrop click
-            backdrop.addEventListener('click', function(e) {
+            backdrop.addEventListener('click', function (e) {
                 if (e.target === backdrop) {
                     ToolUtils.closeSupportPopup();
                 }
             });
 
             // Close on Escape key
-            const escapeHandler = function(e) {
+            const escapeHandler = function (e) {
                 if (e.key === 'Escape') {
                     ToolUtils.closeSupportPopup();
                     document.removeEventListener('keydown', escapeHandler);
@@ -828,12 +828,12 @@
          * 
          * @param {boolean} rememberDismissal - Remember dismissal for this session
          */
-        closeSupportPopup: function(rememberDismissal = false) {
+        closeSupportPopup: function (rememberDismissal = false) {
             const backdrop = document.querySelector('.support-popup-backdrop');
             if (!backdrop) return;
 
             backdrop.classList.remove('show');
-            
+
             setTimeout(() => {
                 backdrop.remove();
                 document.body.style.overflow = '';
@@ -849,7 +849,7 @@
          * 
          * @param {string} action - Action type: 'follow' or 'tweet'
          */
-        trackSupportAction: function(action) {
+        trackSupportAction: function (action) {
             // Track with analytics if available
             if (typeof trackToolUsage === 'function') {
                 const toolName = document.querySelector('.tool-page-title, h1')?.textContent.trim() || 'Unknown Tool';
@@ -870,15 +870,15 @@
          * @returns {string} Tweet URL
          * @private
          */
-        _generateTweetUrl: function(toolName, resultText) {
+        _generateTweetUrl: function (toolName, resultText) {
             const baseText = `Just used ${toolName} 🚀 Amazing free tool on 8gwifi.org! 💪`;
             const pageUrl = window.location.href;
             const fullText = `${baseText}${resultText}\n\n${pageUrl}\n\nFollow @anish2good for more free tools! 🎉`;
-            
+
             // Twitter URL length limit is 280 chars, but we need to account for URL shortening
             const maxLength = 200; // Conservative limit
             let tweetText = fullText;
-            
+
             if (tweetText.length > maxLength) {
                 // Truncate result text if needed
                 const availableLength = maxLength - baseText.length - pageUrl.length - 60; // Buffer for ellipsis and mentions
@@ -887,8 +887,165 @@
                     tweetText = `${baseText}${truncatedResult}\n\n${pageUrl}\n\nFollow @anish2good for more free tools! 🎉`;
                 }
             }
-            
+
             return `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        },
+
+        /**
+         * Storage Utilities
+         */
+        storage: {
+            /**
+             * Save data to local storage
+             * @param {string} key - Storage key
+             * @param {any} data - Data to save (will be JSON stringified)
+             * @returns {boolean} Success status
+             */
+            save: function (key, data) {
+                try {
+                    const payload = {
+                        timestamp: Date.now(),
+                        data: data
+                    };
+                    localStorage.setItem(key, JSON.stringify(payload));
+                    return true;
+                } catch (e) {
+                    console.error('Storage save failed:', e);
+                    return false;
+                }
+            },
+
+            /**
+             * Get data from local storage
+             * @param {string} key - Storage key
+             * @returns {any|null} Saved data or null
+             */
+            get: function (key) {
+                try {
+                    const item = localStorage.getItem(key);
+                    if (!item) return null;
+                    const payload = JSON.parse(item);
+                    return payload.data; // Return actual data, strip metadata
+                } catch (e) {
+                    console.error('Storage get failed:', e);
+                    return null;
+                }
+            },
+
+            /**
+             * Remove data from local storage
+             * @param {string} key - Storage key
+             */
+            remove: function (key) {
+                localStorage.removeItem(key);
+            },
+
+            /**
+             * List all keys with prefix
+             * @param {string} prefix - Key prefix
+             * @returns {Array} Array of {key, timestamp, name}
+             */
+            list: function (prefix) {
+                const items = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith(prefix)) {
+                        try {
+                            const item = localStorage.getItem(key);
+                            const payload = JSON.parse(item);
+                            items.push({
+                                key: key,
+                                name: key.substring(prefix.length),
+                                timestamp: payload.timestamp || 0
+                            });
+                        } catch (e) {
+                            // Ignore invalid items
+                        }
+                    }
+                }
+                return items.sort((a, b) => b.timestamp - a.timestamp); // Newest first
+            },
+
+            /**
+             * Open Storage Manager Modal
+             * @param {Object} options
+             * @param {string} options.toolName - Tool name for display
+             * @param {string} options.keyPrefix - Prefix for storage keys
+             * @param {Function} options.onLoad - Callback when item is loaded (data) => void
+             */
+            openManager: function (options) {
+                const { toolName, keyPrefix, onLoad } = options;
+
+                // Remove existing modal if any
+                const existing = document.querySelector('.storage-modal-backdrop');
+                if (existing) existing.remove();
+
+                const items = this.list(keyPrefix);
+
+                const backdrop = document.createElement('div');
+                backdrop.className = 'storage-modal-backdrop';
+                backdrop.innerHTML = `
+                    <div class="storage-modal">
+                        <div class="storage-header">
+                            <h3>Saved ${ToolUtils.escapeHtml(toolName)}</h3>
+                            <button class="storage-close">&times;</button>
+                        </div>
+                        <div class="storage-body">
+                            ${items.length === 0 ? '<p class="storage-empty">No saved items found.</p>' : ''}
+                            <div class="storage-list">
+                                ${items.map(item => `
+                                    <div class="storage-item" data-key="${item.key}">
+                                        <div class="storage-info">
+                                            <span class="storage-name">${ToolUtils.escapeHtml(item.name)}</span>
+                                            <span class="storage-date">${new Date(item.timestamp).toLocaleString()}</span>
+                                        </div>
+                                        <div class="storage-actions">
+                                            <button class="storage-btn load-btn">Load</button>
+                                            <button class="storage-btn delete-btn">&times;</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(backdrop);
+                setTimeout(() => backdrop.classList.add('show'), 10);
+
+                // Event Listeners
+                const close = () => {
+                    backdrop.classList.remove('show');
+                    setTimeout(() => backdrop.remove(), 300);
+                };
+
+                backdrop.querySelector('.storage-close').onclick = close;
+                backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+
+                // Delegate clicks
+                backdrop.querySelector('.storage-list')?.addEventListener('click', (e) => {
+                    const itemEl = e.target.closest('.storage-item');
+                    if (!itemEl) return;
+                    const key = itemEl.getAttribute('data-key');
+
+                    if (e.target.classList.contains('load-btn')) {
+                        const data = this.get(key);
+                        if (data && onLoad) {
+                            onLoad(data);
+                            ToolUtils.showToast('Loaded successfully!');
+                            close();
+                        }
+                    } else if (e.target.classList.contains('delete-btn')) {
+                        if (confirm('Are you sure you want to delete this item?')) {
+                            this.remove(key);
+                            itemEl.remove();
+                            if (backdrop.querySelectorAll('.storage-item').length === 0) {
+                                backdrop.querySelector('.storage-body').innerHTML = '<p class="storage-empty">No saved items found.</p>';
+                            }
+                        }
+                    }
+                });
+            }
         }
     };
 
@@ -1197,6 +1354,151 @@
                     flex-direction: column;
                 }
             }
+
+            /* Storage Modal */
+            .storage-modal-backdrop {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    backdrop-filter: blur(4px);
+                    z-index: 1050;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+
+                .storage-modal-backdrop.show {
+                    opacity: 1;
+                }
+
+                .storage-modal {
+                    background: var(--bg-primary, #ffffff);
+                    border-radius: 1rem;
+                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+                    width: 100%;
+                    max-width: 600px;
+                    max-height: 80vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .storage-header {
+                    padding: 1.5rem;
+                    border-bottom: 1px solid var(--border, #e2e8f0);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .storage-header h3 {
+                    margin: 0;
+                    font-size: 1.25rem;
+                    color: var(--text-primary, #0f172a);
+                }
+
+                .storage-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.5rem;
+                    color: var(--text-secondary, #475569);
+                    cursor: pointer;
+                    padding: 0.5rem;
+                    line-height: 1;
+                }
+
+                .storage-body {
+                    padding: 1.5rem;
+                    overflow-y: auto;
+                }
+
+                .storage-empty {
+                    text-align: center;
+                    color: var(--text-secondary, #475569);
+                    padding: 2rem;
+                }
+
+                .storage-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem;
+                    border: 1px solid var(--border, #e2e8f0);
+                    border-radius: 0.5rem;
+                    margin-bottom: 0.75rem;
+                    background: var(--bg-secondary, #f8fafc);
+                    transition: all 0.2s;
+                }
+
+                .storage-item:hover {
+                    border-color: var(--tool-primary, #875afb);
+                }
+
+                .storage-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+                }
+
+                .storage-name {
+                    font-weight: 600;
+                    color: var(--text-primary, #0f172a);
+                }
+
+                .storage-date {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary, #475569);
+                }
+
+                .storage-actions {
+                    display: flex;
+                    gap: 0.5rem;
+                }
+
+                .storage-btn {
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.375rem;
+                    font-weight: 500;
+                    font-size: 0.875rem;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    border: 1px solid transparent;
+                }
+
+                .load-btn {
+                    background: var(--tool-primary, #875afb);
+                    color: white;
+                }
+
+                .load-btn:hover {
+                    background: var(--tool-primary-dark, #7c3aed);
+                }
+
+                .delete-btn {
+                    background: transparent;
+                    color: var(--error, #ef4444);
+                    font-size: 1.25rem;
+                    padding: 0.5rem;
+                    line-height: 1;
+                }
+
+                .delete-btn:hover {
+                    background: rgba(239, 68, 68, 0.1);
+                }
+
+                [data-theme="dark"] .storage-modal {
+                    background: var(--bg-secondary, #1e293b);
+                }
+
+                [data-theme="dark"] .storage-item {
+                    background: var(--bg-tertiary, #334155);
+                    border-color: var(--border, #475569);
+                }
         `;
         document.head.appendChild(style);
     }

@@ -453,6 +453,7 @@
                                         <li><a href="word-character-counter.jsp">Word & Character Counter</a></li>
                                         <li><a href="base-converter.jsp">Base Converter (All Bases)</a></li>
                                         <li><a href="graph-easy.jsp">Graph-Easy ASCII Diagram Generator</a></li>
+                                        <li><a href="mermaid.jsp">Mermaid Live digram Generator</a></li>
                                     </ul>
                                 </div>
                             </div>
