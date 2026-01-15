@@ -550,6 +550,15 @@
         <url-pattern>/OneCompilerFunctionality</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>GoogleOAuthFunctionality</servlet-name>
+        <servlet-class>z.y.x.Security.GoogleOAuthFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GoogleOAuthFunctionality</servlet-name>
+        <url-pattern>/GoogleOAuthFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
