@@ -167,6 +167,25 @@ const ExamAPI = (function() {
     }
 
     /**
+     * Upsert user (create or update on login)
+     * @param {string} userId - User ID (Google sub)
+     * @param {string} email - User email
+     * @param {string} name - User name
+     * @param {string} authProvider - Auth provider (google, email, etc.)
+     */
+    async function upsertUser(userId, email, name, authProvider = 'google') {
+        return apiRequest(getApiUrl('upsert_user'), {
+            method: 'POST',
+            body: JSON.stringify({
+                user_id: userId,
+                email: email,
+                name: name,
+                auth_provider: authProvider
+            })
+        });
+    }
+
+    /**
      * Mark full exam (for subjective questions only)
      * @param {string} attemptId - The attempt ID to save evaluations to (optional)
      * @param {object} answers - Map of question_id to answer
@@ -236,6 +255,7 @@ const ExamAPI = (function() {
         saveAnswers,
         submitAttempt,
         getUserAttempts,
+        upsertUser,
         listChapters,
         listTopics,
         markExam,
