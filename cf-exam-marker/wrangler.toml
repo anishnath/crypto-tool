@@ -1,0 +1,24 @@
+name = "exam-marker"
+main = "index.js"
+compatibility_date = "2024-05-01"
+workers_dev = true
+account_id = "7e50090f0972664d8e6985f1e83131a3"
+
+# Uncomment and configure when ready for production
+routes = [
+  { pattern = "exam-marker.8gwifi.org/*", zone_name = "8gwifi.org" }
+]
+
+# Environment variables (non-secret)
+[vars]
+# Add any non-secret config here
+
+# Secrets (add via: wrangler secret put OPENAI_API_KEY, wrangler secret put API_KEY)
+# OPENAI_API_KEY = "sk-..." (don't put here, use wrangler secret put)
+# API_KEY = "client-shared-key" (don't put here, use wrangler secret put)
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "exam-marker-db"
+database_id = "b146fd57-6fcc-4847-8b3f-17a9e747758b"
