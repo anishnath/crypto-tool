@@ -1,0 +1,587 @@
+/**
+ * Dashboard Styles
+ * Styles specific to the user dashboard page
+ */
+
+/* ============================================
+   DASHBOARD HEADER
+   ============================================ */
+.dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 640px) {
+    .dashboard-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.dashboard-welcome {
+    flex: 1;
+}
+
+.dashboard-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+@media (min-width: 768px) {
+    .dashboard-title {
+        font-size: var(--text-3xl);
+    }
+}
+
+.dashboard-subtitle {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   STATS GRID
+   ============================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+@media (min-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .stats-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.stat-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-content {
+    min-width: 0;
+}
+
+.stat-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================
+   CHARTS SECTION
+   ============================================ */
+.charts-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+@media (min-width: 768px) {
+    .charts-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .charts-section {
+        grid-template-columns: 2fr 1fr 1fr;
+    }
+}
+
+.chart-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.chart-card-wide {
+    grid-column: 1 / -1;
+}
+
+@media (min-width: 992px) {
+    .chart-card-wide {
+        grid-column: 1 / 2;
+    }
+}
+
+.chart-header {
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border);
+}
+
+.chart-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.chart-title svg {
+    color: var(--accent-primary);
+}
+
+.chart-body {
+    padding: var(--space-4);
+    position: relative;
+    min-height: 200px;
+}
+
+.chart-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--bg-primary);
+}
+
+.chart-empty svg {
+    margin-bottom: var(--space-3);
+    opacity: 0.5;
+}
+
+.chart-empty p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ============================================
+   ATTEMPTS SECTION
+   ============================================ */
+.attempts-section {
+    margin-bottom: var(--space-8);
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+@media (min-width: 640px) {
+    .section-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-title svg {
+    color: var(--accent-primary);
+}
+
+.section-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.filter-select {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    min-width: 140px;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* ============================================
+   ATTEMPTS TABLE
+   ============================================ */
+.table-container {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.attempts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attempts-table th,
+.attempts-table td {
+    padding: var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.attempts-table th {
+    background: var(--bg-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.attempts-table tr:last-child td {
+    border-bottom: none;
+}
+
+.attempts-table tr:hover td {
+    background: var(--bg-secondary);
+}
+
+.attempt-set-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.attempt-set-meta {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+}
+
+.attempt-score {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.attempt-score-pct {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    margin-top: var(--space-1);
+}
+
+.score-excellent {
+    color: var(--success);
+}
+
+.score-good {
+    color: var(--info);
+}
+
+.score-average {
+    color: var(--warning);
+}
+
+.score-low {
+    color: var(--error);
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+}
+
+.status-completed {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.status-in-progress {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+/* Responsive Table */
+@media (max-width: 767px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .attempts-table {
+        min-width: 600px;
+    }
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.pagination-info {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ============================================
+   LOADING SPINNER (ensure it's available)
+   ============================================ */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   SUBJECT PROGRESS CARD (for index pages)
+   ============================================ */
+.subject-progress-card {
+    background: linear-gradient(135deg, var(--accent-light), var(--bg-secondary));
+    border: 1px solid var(--accent-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-6);
+}
+
+[data-theme="dark"] .subject-progress-card {
+    background: linear-gradient(135deg, var(--accent-light), var(--bg-tertiary));
+}
+
+.subject-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.subject-progress-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.subject-progress-title svg {
+    width: 20px;
+    height: 20px;
+}
+
+.subject-progress-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+}
+
+@media (min-width: 480px) {
+    .subject-progress-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.progress-stat-mini {
+    text-align: center;
+    padding: var(--space-3);
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+}
+
+.progress-stat-mini-value {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.progress-stat-mini-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ============================================
+   SET CARD ATTEMPT INFO
+   ============================================ */
+.set-attempt-info {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+}
+
+.set-attempt-info.has-attempts {
+    background: var(--success-light);
+    border: 1px solid var(--success);
+}
+
+[data-theme="dark"] .set-attempt-info.has-attempts {
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.set-attempt-info.in-progress {
+    background: var(--warning-light);
+    border: 1px solid var(--warning);
+}
+
+[data-theme="dark"] .set-attempt-info.in-progress {
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.set-attempt-info-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+}
+
+.set-attempt-info-row svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.set-attempt-info.has-attempts .set-attempt-info-row {
+    color: var(--success-dark);
+}
+
+.set-attempt-info.in-progress .set-attempt-info-row {
+    color: var(--warning);
+}
+
+.set-attempt-info .attempt-count {
+    font-weight: 600;
+}
+
+.set-attempt-info .best-score {
+    font-weight: 600;
+}
+
+/* ============================================
+   USER HEADER STATS
+   ============================================ */
+.user-stats-mini {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+@media (min-width: 768px) {
+    .user-stats-mini {
+        display: flex;
+    }
+}
+
+.user-stats-mini svg {
+    width: 14px;
+    height: 14px;
+    color: var(--accent-primary);
+}
+
+.user-stats-mini .stat-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--text-xs);
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+[data-theme="dark"] .stat-card {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .chart-card {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .table-container {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .attempts-table th {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .attempts-table tr:hover td {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .filter-select {
+    background: var(--bg-secondary);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .progress-stat-mini {
+    background: var(--bg-secondary);
+}
