@@ -26,12 +26,22 @@
     });
 </script>
 
-<!-- Setupad Integration -->
-<script src="https://cdn.intergient.com/ramp_core.js"></script>
+<!-- SetupAds Optimization Service -->
 <script>
-    var defined = defined || {};
-    defined.playerId = '65a3d80a93a76c32ced9bb23';
-    var stpd = stpd || { que: [] };
+    // Initialize stpd queue before SetupAds script loads
+    window.stpd = window.stpd || { que: [] };
+    
+    // Load SetupAds script (silently fail if blocked by ad blocker)
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://stpd.cloud/saas/5796';
+        script.async = true;
+        script.onerror = function() {
+            // Silently handle ad blocker - this is expected behavior
+            console.debug('SetupAds script blocked by ad blocker (expected)');
+        };
+        document.head.appendChild(script);
+    })();
 </script>
 
 <!-- InView for lazy loading (using jsdelivr) -->

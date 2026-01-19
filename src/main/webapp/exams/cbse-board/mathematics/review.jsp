@@ -697,9 +697,20 @@
                 if (typeof inView !== 'undefined') {
                     inView('#review-ad-footer').once('enter', function() {
                         if (typeof googletag !== 'undefined' && typeof stpd !== 'undefined') {
-                            stpd.que.push(function() {
-                                stpd.refreshAd('exam_leaderboard');
-                            });
+                            try {
+                                if (typeof stpd.refreshAd === 'function') {
+                                    stpd.refreshAd('exam_leaderboard');
+                                } else if (stpd.que) {
+                                    // Queue the call if SetupAds is still loading
+                                    stpd.que.push(function() {
+                                        if (typeof stpd.refreshAd === 'function') {
+                                            stpd.refreshAd('exam_leaderboard');
+                                        }
+                                    });
+                                }
+                            } catch(e) {
+                                console.debug('Ad refresh error (expected if ad blocker active):', e);
+                            }
                         }
                     });
                 }

@@ -90,6 +90,9 @@
     <link rel="canonical" href="<%= request.getAttribute("canonicalUrl") %>">
     <% } %>
 
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="<%=request.getContextPath()%>/sitemap.xml">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
 
