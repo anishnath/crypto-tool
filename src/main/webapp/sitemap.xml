@@ -2583,4 +2583,27 @@
   <url><loc>https://8gwifi.org/tutorials/dsa/dp-problems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/dsa/dp-advanced.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
+    <url>
+        <loc>https://8gwifi.org/exams/</loc>
+        <lastmod>2026-01-17</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- CBSE Board Landing Page -->
+    <url>
+        <loc>https://8gwifi.org/exams/cbse-board/</loc>
+        <lastmod>2026-01-17</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- CBSE Class 10 Mathematics Practice Sets -->
+    <url>
+        <loc>https://8gwifi.org/exams/cbse-board/mathematics/</loc>
+        <lastmod>2026-01-17</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
 </urlset>
