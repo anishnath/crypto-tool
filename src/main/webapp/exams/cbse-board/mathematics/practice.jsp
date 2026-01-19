@@ -22,12 +22,34 @@
     // Check if user is logged in
     String userSub = null;
     String userEmail = null;
+    String userName = null;
     boolean isLoggedIn = false;
-    
+
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj != null) {
         userSub = (String) sessionObj.getAttribute("oauth_user_sub");
         userEmail = (String) sessionObj.getAttribute("oauth_user_email");
+
+        // Also try to get user info from oauth_user_info Map
+        @SuppressWarnings("unchecked")
+        java.util.Map<String, Object> userInfo = (java.util.Map<String, Object>) sessionObj.getAttribute("oauth_user_info");
+        if (userInfo != null) {
+            // Get name if available
+            Object nameObj = userInfo.get("name");
+            if (nameObj != null) userName = nameObj.toString();
+
+            // Fallback for sub/email if not set
+            if (userSub == null || userSub.isEmpty()) {
+                Object subObj = userInfo.get("sub");
+                if (subObj == null) subObj = userInfo.get("id");
+                if (subObj != null) userSub = subObj.toString();
+            }
+            if (userEmail == null || userEmail.isEmpty()) {
+                Object emailObj = userInfo.get("email");
+                if (emailObj != null) userEmail = emailObj.toString();
+            }
+        }
+
         // User is logged in if either userSub OR userEmail exists (some OAuth flows may only set email)
         isLoggedIn = (userSub != null && !userSub.isEmpty()) || (userEmail != null && !userEmail.isEmpty());
     }
@@ -308,9 +330,12 @@
         const SET_ID = '<%= setId %>'; // API format: "cbse-10-math-full-01"
         const API_BASE = '<%=request.getContextPath()%>/CFExamMarkerFunctionality';
         const IS_LOGGED_IN = <%= isLoggedIn %>; // Check login status from server
-        console.log('Page load - IS_LOGGED_IN:', IS_LOGGED_IN, 'userSub:', '<%= userSub != null ? userSub : "null" %>', 'userEmail:', '<%= userEmail != null ? userEmail : "null" %>');
+        const USER_SUB = '<%= userSub != null ? userSub : "" %>';
+        const USER_EMAIL = '<%= userEmail != null ? userEmail : "" %>';
+        const USER_NAME = '<%= userName != null ? userName : "" %>';
+        console.log('Page load - IS_LOGGED_IN:', IS_LOGGED_IN, 'userSub:', USER_SUB, 'userEmail:', USER_EMAIL, 'userName:', USER_NAME);
         const CONTEXT_PATH = '<%=request.getContextPath()%>';
-        
+
         // Duration will be loaded from API
         let DURATION_MINUTES = 90; // Default, will be overridden by API response
 
@@ -322,6 +347,13 @@
 
         // Initialize API
         ExamAPI.setApiBase(API_BASE);
+
+        // Upsert user to CF Worker DB when logged in (async, fire-and-forget)
+        if (IS_LOGGED_IN && USER_SUB) {
+            ExamAPI.upsertUser(USER_SUB, USER_EMAIL || null, USER_NAME || null, 'google')
+                .then(result => console.log('User upsert:', result))
+                .catch(err => console.warn('User upsert failed (non-critical):', err));
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
