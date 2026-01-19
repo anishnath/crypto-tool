@@ -559,6 +559,15 @@
         <url-pattern>/GoogleOAuthFunctionality</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CFExamMarkerFunctionality</servlet-name>
+        <servlet-class>z.y.x.exam.CFExamMarkerFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CFExamMarkerFunctionality</servlet-name>
+        <url-pattern>/CFExamMarkerFunctionality</url-pattern>
+    </servlet-mapping>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>8gwifi APP on HTTPS</web-resource-name>
