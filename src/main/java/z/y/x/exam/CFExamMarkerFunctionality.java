@@ -170,6 +170,9 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                 case "mark_exam":
                     handleMarkExam(request, response);
                     break;
+                case "upsert_user":
+                    handleUpsertUser(request, response);
+                    break;
                 default:
                     Map<String, Object> error = new HashMap<>();
                     error.put("error", "invalid_action");
@@ -443,12 +446,21 @@ public class CFExamMarkerFunctionality extends HttpServlet {
     /**
      * Mark full exam
      */
-    private void handleMarkExam(HttpServletRequest request, HttpServletResponse response) 
+    private void handleMarkExam(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String requestBody = readRequestBody(request);
         makeApiRequest(getApiBaseUrl() + "/api/mark-exam", "POST", requestBody, response, true);
     }
-    
+
+    /**
+     * Upsert user (create or update)
+     */
+    private void handleUpsertUser(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String requestBody = readRequestBody(request);
+        makeApiRequest(getApiBaseUrl() + "/api/users/upsert", "POST", requestBody, response, true);
+    }
+
     /**
      * Build query string from request parameters, excluding specified parameters
      */
