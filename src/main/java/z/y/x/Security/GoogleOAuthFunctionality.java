@@ -597,6 +597,11 @@ public class GoogleOAuthFunctionality extends HttpServlet {
             }
         }
         
+        // Ensure redirectPath starts with / (consistent with getRedirectPath method)
+        if (!redirectPath.startsWith("/")) {
+            redirectPath = "/" + redirectPath;
+        }
+        
         // Clear session
         session.removeAttribute(SESSION_ACCESS_TOKEN);
         session.removeAttribute(SESSION_REFRESH_TOKEN);
