@@ -147,8 +147,8 @@ public class GoogleOAuthFunctionality extends HttpServlet {
             action = "login"; // Default action
         }
         
-        // For login action, we redirect, so don't set content type yet
-        if (!"login".equalsIgnoreCase(action)) {
+        // For login and logout actions, we redirect, so don't set content type yet
+        if (!"login".equalsIgnoreCase(action) && !"logout".equalsIgnoreCase(action)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
         }
@@ -162,11 +162,14 @@ public class GoogleOAuthFunctionality extends HttpServlet {
                 case "callback":
                     handleCallback(request, response);
                     return; // Already redirected or handled
+                case "logout":
+                    handleLogout(request, response);
+                    return; // Already redirected
                 case "userinfo":
                     handleUserInfo(request, response);
                     break;
-                case "logout":
-                    handleLogout(request, response);
+                case "check_session":
+                    handleCheckSession(request, response);
                     break;
                 default:
                     Map<String, Object> error = new HashMap<>();
@@ -328,17 +331,41 @@ public class GoogleOAuthFunctionality extends HttpServlet {
                             // Store full user info in session
                             session.setAttribute(SESSION_USER_INFO, userInfo);
                             
-                            // Store sub and email separately for easy access
+                            // Store user ID and email separately for easy access
+                            // Google OAuth returns 'id' field, OIDC returns 'sub' - check both
+                            String visitorId = null;
                             if (userInfo.containsKey("sub")) {
-                                session.setAttribute(SESSION_USER_SUB, userInfo.get("sub"));
+                                Object subValue = userInfo.get("sub");
+                                if (subValue != null) {
+                                    visitorId = subValue.toString();
+                                }
+                            }
+                            if (visitorId == null && userInfo.containsKey("id")) {
+                                Object idValue = userInfo.get("id");
+                                if (idValue != null) {
+                                    visitorId = idValue.toString();
+                                }
+                            }
+                            if (visitorId != null) {
+                                session.setAttribute(SESSION_USER_SUB, visitorId);
+                                System.out.println("OAuth: Stored userId (sub/id): " + visitorId);
+                            } else {
+                                System.out.println("OAuth: No 'sub' or 'id' found. Available keys: " + userInfo.keySet());
                             }
                             if (userInfo.containsKey("email")) {
-                                session.setAttribute(SESSION_USER_EMAIL, userInfo.get("email"));
+                                Object emailValue = userInfo.get("email");
+                                if (emailValue != null) {
+                                    session.setAttribute(SESSION_USER_EMAIL, emailValue.toString());
+                                    System.out.println("OAuth: Stored userEmail: " + emailValue.toString());
+                                }
                             }
+                        } else {
+                            System.out.println("OAuth: fetchUserInfo returned null");
                         }
                     } catch (Exception e) {
                         // Log error but don't fail the authentication flow
                         System.err.println("Failed to fetch user info: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
                 
@@ -421,6 +448,7 @@ public class GoogleOAuthFunctionality extends HttpServlet {
             // Parse and return user info
             @SuppressWarnings("unchecked")
             Map<String, Object> userInfo = gson.fromJson(responseBody.toString(), Map.class);
+            System.out.println("OAuth: Fetched user info: " + userInfo);
             return userInfo;
         } else {
             // Read error response for debugging
@@ -476,8 +504,16 @@ public class GoogleOAuthFunctionality extends HttpServlet {
             
             // Store in session for future use
             session.setAttribute(SESSION_USER_INFO, userInfo);
+            // Google OAuth returns 'id' field, OIDC returns 'sub' - check both
+            String visitorId = null;
             if (userInfo.containsKey("sub")) {
-                session.setAttribute(SESSION_USER_SUB, userInfo.get("sub"));
+                visitorId = (String) userInfo.get("sub");
+            }
+            if (visitorId == null && userInfo.containsKey("id")) {
+                visitorId = String.valueOf(userInfo.get("id"));
+            }
+            if (visitorId != null) {
+                session.setAttribute(SESSION_USER_SUB, visitorId);
             }
             if (userInfo.containsKey("email")) {
                 session.setAttribute(SESSION_USER_EMAIL, userInfo.get("email"));
@@ -495,12 +531,73 @@ public class GoogleOAuthFunctionality extends HttpServlet {
     }
     
     /**
-     * Handle logout - clear session
+     * Handle session check request
+     * Returns JSON with logged_in status
+     */
+    private void handleCheckSession(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        HttpSession session = request.getSession(false);
+        Map<String, Object> result = new HashMap<>();
+        
+        if (session != null) {
+            String userSub = (String) session.getAttribute(SESSION_USER_SUB);
+            String userEmail = (String) session.getAttribute(SESSION_USER_EMAIL);
+            // User is logged in if either userSub OR userEmail exists (some OAuth flows may only set email)
+            boolean isLoggedIn = (userSub != null && !userSub.isEmpty()) || (userEmail != null && !userEmail.isEmpty());
+            result.put("logged_in", isLoggedIn);
+            if (isLoggedIn) {
+                if (userSub != null) {
+                    result.put("user_sub", userSub);
+                }
+                if (userEmail != null) {
+                    result.put("user_email", userEmail);
+                }
+            }
+        } else {
+            result.put("logged_in", false);
+        }
+        
+        PrintWriter out = response.getWriter();
+        out.println(gson.toJson(result));
+    }
+    
+    /**
+     * Handle logout - clear session and redirect
      */
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) 
             throws IOException {
         
         HttpSession session = request.getSession();
+        
+        // Get redirect path from request parameter or default to root
+        String redirectPath = request.getParameter("redirect_path");
+        if (redirectPath == null || redirectPath.trim().isEmpty()) {
+            // Try to get from referrer
+            String referer = request.getHeader("Referer");
+            if (referer != null) {
+                try {
+                    java.net.URL refererUrl = new java.net.URL(referer);
+                    String path = refererUrl.getPath();
+                    String contextPath = request.getContextPath();
+                    if (path.startsWith(contextPath)) {
+                        redirectPath = path.substring(contextPath.length());
+                        if (redirectPath.isEmpty()) {
+                            redirectPath = "/";
+                        }
+                    }
+                } catch (Exception e) {
+                    // Ignore, use default
+                }
+            }
+            if (redirectPath == null || redirectPath.trim().isEmpty()) {
+                redirectPath = "/";
+            }
+        }
+        
+        // Clear session
         session.removeAttribute(SESSION_ACCESS_TOKEN);
         session.removeAttribute(SESSION_REFRESH_TOKEN);
         session.removeAttribute(SESSION_STATE);
@@ -509,12 +606,22 @@ public class GoogleOAuthFunctionality extends HttpServlet {
         session.removeAttribute(SESSION_USER_EMAIL);
         session.removeAttribute(SESSION_REDIRECT_PATH);
         
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("message", "Logged out successfully");
+        // Build full redirect URL
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        String contextPath = request.getContextPath();
         
-        PrintWriter out = response.getWriter();
-        out.println(gson.toJson(result));
+        StringBuilder fullRedirectUrl = new StringBuilder();
+        fullRedirectUrl.append(scheme).append("://").append(serverName);
+        if ((scheme.equals("http") && serverPort != 80) || 
+            (scheme.equals("https") && serverPort != 443)) {
+            fullRedirectUrl.append(":").append(serverPort);
+        }
+        fullRedirectUrl.append(contextPath).append(redirectPath);
+        
+        // Redirect to the original path
+        response.sendRedirect(fullRedirectUrl.toString());
     }
     
     @Override
