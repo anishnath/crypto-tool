@@ -1336,6 +1336,84 @@ async function handleSubmitAttempt(attemptId, request, env) {
 }
 
 /**
+ * POST /api/users/upsert
+ * Create or update a user (called on login)
+ * Body: { user_id, email, name, auth_provider }
+ */
+async function handleUpsertUser(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const { user_id, email, name, auth_provider } = payload;
+
+  if (!user_id) {
+    return jsonResponse({ error: 'Missing required field: user_id' }, { status: 400 });
+  }
+
+  const now = new Date().toISOString();
+  const provider = auth_provider || 'unknown';
+
+  // Check if user exists
+  const existingUser = await env.DB.prepare(
+    'SELECT id, email, name FROM users WHERE id = ?'
+  ).bind(user_id).first();
+
+  if (existingUser) {
+    // Update existing user - only update fields that are provided and not already set
+    const updates = [];
+    const values = [];
+
+    // Update email if provided and different
+    if (email && email !== 'null' && email !== existingUser.email) {
+      updates.push('email = ?');
+      values.push(email);
+    }
+
+    // Update name if provided and different
+    if (name && name !== 'null' && name !== existingUser.name) {
+      updates.push('name = ?');
+      values.push(name);
+    }
+
+    // Always update last_active_at
+    updates.push('last_active_at = ?');
+    values.push(now);
+
+    if (updates.length > 0) {
+      values.push(user_id);
+      await env.DB.prepare(
+        `UPDATE users SET ${updates.join(', ')} WHERE id = ?`
+      ).bind(...values).run();
+    }
+
+    console.log(`Updated user: ${user_id} (email: ${email}, name: ${name})`);
+
+    return jsonResponse({
+      success: true,
+      action: 'updated',
+      user_id: user_id
+    });
+  } else {
+    // Create new user
+    await env.DB.prepare(
+      'INSERT INTO users (id, email, name, auth_provider, auth_id, created_at, last_active_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind(user_id, email || null, name || null, provider, user_id, now, now).run();
+
+    console.log(`Created new user: ${user_id} (email: ${email}, name: ${name}, provider: ${provider})`);
+
+    return jsonResponse({
+      success: true,
+      action: 'created',
+      user_id: user_id
+    });
+  }
+}
+
+/**
  * GET /api/user/:user_id/attempts
  * Get all attempts for a user (requires API key)
  */
@@ -1468,6 +1546,16 @@ export default {
       // =============================================
       // PROTECTED ENDPOINTS (API key required)
       // =============================================
+
+      // POST /api/users/upsert - Create or update user (called on login)
+      if (pathname === '/api/users/upsert' && request.method === 'POST') {
+        const authError = requireApiKey(request, env);
+        if (authError) {
+          return withCors(authError, reqOrigin);
+        }
+        const r = await handleUpsertUser(request, env);
+        return withCors(r, reqOrigin);
+      }
 
       // GET /api/user/:user_id/attempts - Get user's test history
       const userAttemptsMatch = pathname.match(/^\/api\/user\/([^/]+)\/attempts$/);
