@@ -782,6 +782,16 @@
             }
             setData = setResponse.set;
 
+            // Track review view
+            if (typeof trackReviewView === 'function') {
+                trackReviewView(
+                    ATTEMPT_ID,
+                    attemptData.set_id,
+                    attemptData.total_marks_obtained || 0,
+                    attemptData.percentage || 0
+                );
+            }
+
             // Render review
             renderReview();
         } catch (error) {

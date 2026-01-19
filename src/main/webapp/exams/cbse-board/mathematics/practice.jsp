@@ -397,6 +397,11 @@
                         throw new Error('Failed to start attempt');
                     }
                     attemptId = attemptResponse.attempt_id;
+                    
+                    // Track test start
+                    if (typeof trackTestStart === 'function') {
+                        trackTestStart(SET_ID, attemptId, 'CBSE', '10', 'mathematics');
+                    }
                 }
 
                 // Get attempt details
@@ -854,6 +859,19 @@
 
                 // Mark as submitted in ExamCore
                 ExamCore.submit();
+
+                // Track test submission
+                if (typeof trackTestSubmit === 'function') {
+                    const timeSpent = ExamPractice.getTimeSpent ? ExamPractice.getTimeSpent() : 0;
+                    trackTestSubmit(
+                        SET_ID,
+                        attemptId,
+                        obtainedMarksAll,
+                        totalMarksAll,
+                        finalResults.percentage,
+                        timeSpent
+                    );
+                }
 
                 // Hide overlay before showing results
                 hideEvaluationOverlay();
