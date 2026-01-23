@@ -145,7 +145,7 @@
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <!-- Analytics -->
-    <%-- <%@ include file="exam-analytics.jsp" %>--%>
+     <%@ include file="exam-analytics.jsp" %>
 
     <!-- Ad Scripts -->
     <%@ include file="ads-head.jsp" %>
