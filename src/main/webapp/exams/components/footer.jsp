@@ -22,6 +22,9 @@
         </div>
     </footer>
 
+    <!-- Social Popup Component -->
+    <%@ include file="social-popup.jsp" %>
+
     <!-- Core JavaScript -->
     <script src="<%=request.getContextPath()%>/exams/js/exams-core.js"></script>
 
