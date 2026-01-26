@@ -535,17 +535,10 @@
 
 <!-- Three Column Layout -->
 <div class="three-col-layout">
-    <!-- Left Sidebar Ads (Desktop Only) -->
+    <!-- Left Sidebar Ads (Large Desktop >=1400px) -->
     <aside class="ad-sidebar ad-sidebar-left">
         <div class="ad-sidebar-inner">
-            <div class="sidebar-ad-unit">
-                <!-- Ad Unit: Left Sidebar 160x600 -->
-                Ad
-            </div>
-            <div class="sidebar-ad-unit tall">
-                <!-- Ad Unit: Left Sidebar Tall -->
-                Ad
-            </div>
+            <%@ include file="../../../../components/ad-sidebar-left.jsp" %>
         </div>
     </aside>
 
@@ -574,17 +567,10 @@
         </div>
     </main>
 
-    <!-- Right Sidebar Ads (Desktop Only) -->
+    <!-- Right Sidebar Ads (Desktop >=992px) -->
     <aside class="ad-sidebar ad-sidebar-right">
         <div class="ad-sidebar-inner">
-            <div class="sidebar-ad-unit">
-                <!-- Ad Unit: Right Sidebar 160x600 -->
-                Ad
-            </div>
-            <div class="sidebar-ad-unit tall">
-                <!-- Ad Unit: Right Sidebar Tall -->
-                Ad
-            </div>
+            <%@ include file="../../../../components/ad-sidebar.jsp" %>
         </div>
     </aside>
 </div>
