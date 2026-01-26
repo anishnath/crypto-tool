@@ -211,7 +211,7 @@
                         transition: opacity 0.5s;
                     }
 
-                    .legend-item.hidden .legend-value {
+                    .legend-item.values-obscured .legend-value {
                         opacity: 0;
                     }
 
@@ -660,26 +660,25 @@
                             }
 
                             function renderSolvePhase() {
-                                // Hide values in legend
+                                // Hide values in legend (use values-obscured to avoid global .hidden CSS)
                                 const items = gameArea.querySelectorAll('.legend-item');
-                                items.forEach(item => item.classList.add('hidden'));
+                                items.forEach(item => item.classList.add('values-obscured'));
 
                                 // Generate Problem
                                 const problem = generateProblem();
 
                                 const problemDiv = document.createElement('div');
                                 problemDiv.className = 'problem-container';
-                                problemDiv.innerHTML = `
-            <div class="problem-equation">
-                ${problem.html}
-                <div class="problem-op">=</div>
-                <div class="problem-symbol">?</div>
-            </div>
-            <div class="answer-input-container">
-                <input type="number" class="answer-input" id="answerInput" placeholder="?" autofocus>
-                <button class="submit-btn" id="submitBtn">Solve</button>
-            </div>
-        `;
+                                problemDiv.innerHTML =
+                                    '<div class="problem-equation">' +
+                                        problem.html +
+                                        '<div class="problem-op">=</div>' +
+                                        '<div class="problem-symbol">?</div>' +
+                                    '</div>' +
+                                    '<div class="answer-input-container">' +
+                                        '<input type="number" class="answer-input" id="answerInput" placeholder="?" autofocus>' +
+                                        '<button class="submit-btn" id="submitBtn">Solve</button>' +
+                                    '</div>';
 
                                 gameArea.appendChild(problemDiv);
 
@@ -728,7 +727,7 @@
 
                                 // Reveal values
                                 gameArea.querySelectorAll('.legend-item').forEach(item => {
-                                    item.classList.remove('hidden');
+                                    item.classList.remove('values-obscured');
                                     item.classList.add('revealed');
                                 });
 

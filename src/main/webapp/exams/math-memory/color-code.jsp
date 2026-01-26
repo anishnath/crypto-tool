@@ -195,7 +195,7 @@
                         transition: all 0.3s;
                     }
 
-                    .color-item.hidden {
+                    .color-item.values-obscured {
                         color: transparent;
                     }
 
@@ -618,9 +618,9 @@
                             }
 
                             function renderActionPhase() {
-                                // Hide Numbers in Legend
+                                // Hide Numbers in Legend (use values-obscured to avoid global .hidden CSS)
                                 const items = gameArea.querySelectorAll('.color-item');
-                                items.forEach(item => item.classList.add('hidden'));
+                                items.forEach(item => item.classList.add('values-obscured'));
 
                                 // Show Challenge Sequence
                                 let seqHtml = '';
@@ -662,7 +662,7 @@
 
                                 const legendHtml = gameArea.querySelector('.color-legend').outerHTML;
                                 gameArea.innerHTML = legendHtml + html;
-                                gameArea.querySelector('.color-legend').querySelectorAll('.color-item').forEach(el => el.classList.add('hidden'));
+                                gameArea.querySelector('.color-legend').querySelectorAll('.color-item').forEach(el => el.classList.add('values-obscured'));
 
                                 updateDisplay('_');
 
@@ -712,7 +712,7 @@
                                 }
 
                                 // Reveal Legend
-                                gameArea.querySelectorAll('.color-item').forEach(el => el.classList.remove('hidden'));
+                                gameArea.querySelectorAll('.color-item').forEach(el => el.classList.remove('values-obscured'));
 
                                 updateStats();
 

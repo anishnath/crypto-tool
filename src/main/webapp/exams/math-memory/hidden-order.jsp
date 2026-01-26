@@ -208,7 +208,7 @@
                         box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
                     }
 
-                    .number-cell.hidden {
+                    .number-cell.obscured {
                         color: transparent;
                         background: #2d2255;
                         border-color: #4b5563;
@@ -632,7 +632,7 @@
                                 setTimeout(() => {
                                     if (!gameActive) return;
                                     const cells = document.querySelectorAll('.number-cell');
-                                    cells.forEach(cell => cell.classList.add('hidden'));
+                                    cells.forEach(cell => cell.classList.add('obscured'));
                                 }, timeToMemorize);
                             }
 
@@ -654,14 +654,14 @@
 
                             function handleCellClick(cell, num) {
                                 if (!gameActive) return;
-                                if (!cell.classList.contains('hidden')) {
-                                    // If they click before hidden (optional: allow or ignore? usually wait)
+                                if (!cell.classList.contains('obscured')) {
+                                    // If they click before obscured (optional: allow or ignore? usually wait)
                                     // Let's allow it but it doesn't really matter
                                 }
 
                                 if (num === nextExpected) {
                                     // Correct
-                                    cell.classList.remove('hidden');
+                                    cell.classList.remove('obscured');
                                     cell.classList.add('correct');
                                     // Play sound?
                                     nextExpected++;
@@ -673,7 +673,7 @@
                                     }
                                 } else {
                                     // Wrong
-                                    cell.classList.remove('hidden'); // Reveal mistake
+                                    cell.classList.remove('obscured'); // Reveal mistake
                                     cell.classList.add('wrong');
                                     handleMistake();
                                 }
@@ -696,7 +696,7 @@
 
                                 // Show correct order briefly?
                                 const cells = document.querySelectorAll('.number-cell');
-                                cells.forEach(c => c.classList.remove('hidden'));
+                                cells.forEach(c => c.classList.remove('obscured'));
 
                                 if (lives <= 0) {
                                     endGame();

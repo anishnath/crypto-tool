@@ -209,7 +209,7 @@
                         transition: all 0.3s;
                     }
 
-                    .grid-cell.hidden {
+                    .grid-cell.obscured {
                         background: linear-gradient(135deg, var(--arcade-card), #251a4a);
                         border-color: var(--arcade-border);
                         color: transparent;
@@ -955,7 +955,7 @@
 
                                 for (var i = 0; i < gridNumbers.length; i++) {
                                     var cell = document.createElement('div');
-                                    cell.className = 'grid-cell' + (showNumbers ? '' : ' hidden');
+                                    cell.className = 'grid-cell' + (showNumbers ? '' : ' obscured');
                                     cell.textContent = gridNumbers[i];
                                     cell.dataset.index = i;
                                     numberGrid.appendChild(cell);
@@ -1080,7 +1080,7 @@
 
                                 // Show result
                                 cells[correctIndex].classList.add('correct');
-                                cells[correctIndex].classList.remove('hidden');
+                                cells[correctIndex].classList.remove('obscured');
 
                                 if (clickedIndex !== correctIndex) {
                                     cells[clickedIndex].classList.add('wrong');
