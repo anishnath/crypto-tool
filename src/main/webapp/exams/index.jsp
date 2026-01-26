@@ -92,6 +92,26 @@
                                 <p class="text-sm text-muted mt-4">Memory • Speed • Logic</p>
                             </a>
 
+                            <!-- NCERT Books Card -->
+                            <a href="<%=request.getContextPath()%>/exams/books/ncert/"
+                                class="card card-clickable board-card" style="border-color: #22c55e; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        <line x1="9" y1="7" x2="15" y2="7"></line>
+                                        <line x1="9" y1="11" x2="15" y2="11"></line>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">NCERT Solutions</h3>
+                                <p class="board-card-subtitle">Textbook Exercise Solutions</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">244 Questions</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Class 9 Mathematics</p>
+                            </a>
+
                             <!-- CBSE Board Card -->
                             <a href="<%=request.getContextPath()%>/exams/cbse-board/"
                                 class="card card-clickable board-card">
