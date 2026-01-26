@@ -72,6 +72,26 @@
                                 <p class="text-sm text-muted mt-4">SSC • Bank • CAT • GRE</p>
                             </a>
 
+                            <!-- Math Memory Games Card -->
+                            <a href="<%=request.getContextPath()%>/exams/math-memory/"
+                                class="card card-clickable board-card" style="border-color: #22d3ee; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">Math Memory</h3>
+                                <p class="board-card-subtitle">Brain Training Games</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #a855f7, #7c3aed); color: white;">16 Games</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Memory • Speed • Logic</p>
+                            </a>
+
                             <!-- CBSE Board Card -->
                             <a href="<%=request.getContextPath()%>/exams/cbse-board/"
                                 class="card card-clickable board-card">
@@ -252,7 +272,7 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 2,
+    "numberOfItems": 3,
     "itemListElement": [
         {
             "@type": "ListItem",
@@ -270,6 +290,19 @@
         {
             "@type": "ListItem",
             "position": 2,
+            "item": {
+                "@type": "WebApplication",
+                "name": "Math Memory Games - Brain Training",
+                "applicationCategory": "GameApplication",
+                "description": "16 free brain training games to improve working memory, mental calculation, and cognitive skills",
+                "url": "https://8gwifi.org/exams/math-memory/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",
