@@ -482,27 +482,52 @@
 
 <!-- Three Column Layout -->
 <div class="three-col-layout">
-    <!-- Left Sidebar Ads -->
+    <!-- Left Sidebar Ads (Desktop Only) -->
     <aside class="ad-sidebar ad-sidebar-left">
         <div class="ad-sidebar-inner">
-            <div class="sidebar-ad-unit">Ad</div>
+            <div class="sidebar-ad-unit">
+                <!-- Ad Unit: Left Sidebar 160x600 -->
+                Ad
+            </div>
+            <div class="sidebar-ad-unit tall">
+                <!-- Ad Unit: Left Sidebar Tall -->
+                Ad
+            </div>
         </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content-area">
+        <!-- Ad: Header (Mobile/Tablet) -->
+        <div class="mobile-ad-container">
+            <%@ include file="../../../../components/ad-leaderboard.jsp" %>
+        </div>
+
+        <!-- Question Container -->
         <div id="questionContainer">
             <div class="loading-container">
                 <div class="loading-spinner"></div>
                 <p>Loading question...</p>
             </div>
         </div>
+
+        <!-- Ad: After Question (Mobile/Tablet) -->
+        <div class="mobile-ad-container" style="margin-top: var(--space-6);">
+            <%@ include file="../../../../components/ad-leaderboard.jsp" %>
+        </div>
     </main>
 
-    <!-- Right Sidebar Ads -->
+    <!-- Right Sidebar Ads (Desktop Only) -->
     <aside class="ad-sidebar ad-sidebar-right">
         <div class="ad-sidebar-inner">
-            <div class="sidebar-ad-unit">Ad</div>
+            <div class="sidebar-ad-unit">
+                <!-- Ad Unit: Right Sidebar 160x600 -->
+                Ad
+            </div>
+            <div class="sidebar-ad-unit tall">
+                <!-- Ad Unit: Right Sidebar Tall -->
+                Ad
+            </div>
         </div>
     </aside>
 </div>
