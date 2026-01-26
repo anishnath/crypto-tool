@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300" width="450" height="300">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { fill: #f97316; stroke: #ea580c; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+    .note { font-family: Arial, sans-serif; font-size: 8px; fill: #6b7280; font-style: italic; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Histogram: Surname Lengths (Varying Class Widths)</text>
+
+  <!-- Y-axis (Frequency Density) -->
+  <line x1="70" y1="40" x2="70" y2="230" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="230" x2="400" y2="230" class="axis"/>
+
+  <!-- Grid lines (scale: 0-25 for frequency density) -->
+  <text x="60" y="234" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="192" x2="400" y2="192" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="196" class="value" text-anchor="end">5</text>
+
+  <line x1="70" y1="154" x2="400" y2="154" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="158" class="value" text-anchor="end">10</text>
+
+  <line x1="70" y1="116" x2="400" y2="116" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="120" class="value" text-anchor="end">15</text>
+
+  <line x1="70" y1="78" x2="400" y2="78" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="82" class="value" text-anchor="end">20</text>
+
+  <line x1="70" y1="40" x2="400" y2="40" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="44" class="value" text-anchor="end">25</text>
+
+  <!-- Histogram bars with varying widths (adjusted frequency = freq/width) -->
+  <!-- Data: 1-4(6), 4-6(30), 6-8(44), 8-12(16), 12-20(4) -->
+  <!-- Scale: 15 pixels per letter, height = (freq/width) * 7.6 -->
+
+  <!-- 1-4 letters (width=3): freq=6, adj_freq=2 -->
+  <rect x="85" y="215" width="45" height="15" class="bar"/>
+  <text x="107" y="211" class="value" text-anchor="middle">6</text>
+
+  <!-- 4-6 letters (width=2): freq=30, adj_freq=15 -->
+  <rect x="130" y="116" width="30" height="114" class="bar"/>
+  <text x="145" y="111" class="value" text-anchor="middle">30</text>
+
+  <!-- 6-8 letters (width=2): freq=44, adj_freq=22 (maximum) -->
+  <rect x="160" y="63" width="30" height="167" class="bar" fill="#ea580c"/>
+  <text x="175" y="58" class="value" text-anchor="middle">44</text>
+
+  <!-- 8-12 letters (width=4): freq=16, adj_freq=4 -->
+  <rect x="190" y="199" width="60" height="31" class="bar"/>
+  <text x="220" y="195" class="value" text-anchor="middle">16</text>
+
+  <!-- 12-20 letters (width=8): freq=4, adj_freq=0.5 -->
+  <rect x="250" y="226" width="120" height="4" class="bar"/>
+  <text x="310" y="222" class="value" text-anchor="middle">4</text>
+
+  <!-- X-axis labels -->
+  <text x="85" y="245" class="label" text-anchor="middle">1</text>
+  <text x="130" y="245" class="label" text-anchor="middle">4</text>
+  <text x="160" y="245" class="label" text-anchor="middle">6</text>
+  <text x="190" y="245" class="label" text-anchor="middle">8</text>
+  <text x="250" y="245" class="label" text-anchor="middle">12</text>
+  <text x="370" y="245" class="label" text-anchor="middle">20</text>
+
+  <!-- Axis labels -->
+  <text x="15" y="140" class="axis-label" text-anchor="middle" transform="rotate(-90, 15, 140)">Frequency Density</text>
+  <text x="230" y="265" class="axis-label" text-anchor="middle">Number of Letters</text>
+
+  <!-- Note -->
+  <text x="225" y="283" class="note" text-anchor="middle">Note: Bar heights = frequency ÷ class width (for varying widths)</text>
+  <text x="225" y="296" class="label" text-anchor="middle" font-size="9">Maximum surnames (44) in the 6-8 letters class</text>
+</svg>

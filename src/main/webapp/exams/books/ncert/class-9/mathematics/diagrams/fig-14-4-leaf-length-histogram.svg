@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300" width="450" height="300">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { fill: #22c55e; stroke: #16a34a; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Histogram: Length of 40 Leaves</text>
+
+  <!-- Y-axis -->
+  <line x1="70" y1="40" x2="70" y2="230" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="230" x2="420" y2="230" class="axis"/>
+
+  <!-- Grid lines (scale: 0-14) -->
+  <text x="60" y="234" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="216" x2="420" y2="216" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="220" class="value" text-anchor="end">2</text>
+
+  <line x1="70" y1="203" x2="420" y2="203" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="207" class="value" text-anchor="end">4</text>
+
+  <line x1="70" y1="189" x2="420" y2="189" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="193" class="value" text-anchor="end">6</text>
+
+  <line x1="70" y1="175" x2="420" y2="175" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="179" class="value" text-anchor="end">8</text>
+
+  <line x1="70" y1="162" x2="420" y2="162" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="166" class="value" text-anchor="end">10</text>
+
+  <line x1="70" y1="148" x2="420" y2="148" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="152" class="value" text-anchor="end">12</text>
+
+  <line x1="70" y1="135" x2="420" y2="135" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="139" class="value" text-anchor="end">14</text>
+
+  <!-- Histogram bars (continuous intervals: 117.5-126.5, 126.5-135.5, etc.) -->
+  <!-- Width = 45 pixels per 9mm interval, Height = frequency * 6.8 -->
+
+  <!-- 117.5-126.5: 3 leaves -->
+  <rect x="80" y="209" width="45" height="21" class="bar"/>
+  <text x="102" y="205" class="value" text-anchor="middle">3</text>
+
+  <!-- 126.5-135.5: 5 leaves -->
+  <rect x="125" y="195" width="45" height="35" class="bar"/>
+  <text x="147" y="191" class="value" text-anchor="middle">5</text>
+
+  <!-- 135.5-144.5: 9 leaves -->
+  <rect x="170" y="168" width="45" height="62" class="bar"/>
+  <text x="192" y="164" class="value" text-anchor="middle">9</text>
+
+  <!-- 144.5-153.5: 12 leaves (maximum) -->
+  <rect x="215" y="148" width="45" height="82" class="bar" fill="#16a34a"/>
+  <text x="237" y="144" class="value" text-anchor="middle">12</text>
+
+  <!-- 153.5-162.5: 5 leaves -->
+  <rect x="260" y="195" width="45" height="35" class="bar"/>
+  <text x="282" y="191" class="value" text-anchor="middle">5</text>
+
+  <!-- 162.5-171.5: 4 leaves -->
+  <rect x="305" y="202" width="45" height="28" class="bar"/>
+  <text x="327" y="198" class="value" text-anchor="middle">4</text>
+
+  <!-- 171.5-180.5: 2 leaves -->
+  <rect x="350" y="216" width="45" height="14" class="bar"/>
+  <text x="372" y="212" class="value" text-anchor="middle">2</text>
+
+  <!-- X-axis labels (class boundaries) -->
+  <text x="80" y="245" class="label" text-anchor="middle" font-size="8">117.5</text>
+  <text x="125" y="245" class="label" text-anchor="middle" font-size="8">126.5</text>
+  <text x="170" y="245" class="label" text-anchor="middle" font-size="8">135.5</text>
+  <text x="215" y="245" class="label" text-anchor="middle" font-size="8">144.5</text>
+  <text x="260" y="245" class="label" text-anchor="middle" font-size="8">153.5</text>
+  <text x="305" y="245" class="label" text-anchor="middle" font-size="8">162.5</text>
+  <text x="350" y="245" class="label" text-anchor="middle" font-size="8">171.5</text>
+  <text x="395" y="245" class="label" text-anchor="middle" font-size="8">180.5</text>
+
+  <!-- Axis labels -->
+  <text x="20" y="140" class="axis-label" text-anchor="middle" transform="rotate(-90, 20, 140)">Number of Leaves</text>
+  <text x="237" y="265" class="axis-label" text-anchor="middle">Length (in mm)</text>
+
+  <text x="225" y="285" class="label" text-anchor="middle" font-size="9">Maximum leaves (12) are in the 145-153 mm range</text>
+</svg>

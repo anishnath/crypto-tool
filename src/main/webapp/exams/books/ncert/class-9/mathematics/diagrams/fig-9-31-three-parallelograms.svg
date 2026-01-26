@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <style>
+    .quad { fill: none; stroke: #374151; stroke-width: 2; }
+    .triangle { fill: rgba(99, 102, 241, 0.1); stroke: #6366f1; stroke-width: 1.5; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+  </style>
+
+  <!-- Parallelogram ABCD -->
+  <polygon points="60,40 180,40 220,140 100,140" class="quad"/>
+
+  <!-- Parallelogram DCFE -->
+  <polygon points="220,140 100,140 60,40 180,40" class="quad" stroke-dasharray="4"/>
+
+  <!-- Points -->
+  <circle cx="60" cy="40" r="4" class="point"/>
+  <text x="45" y="38" class="label">A</text>
+
+  <circle cx="180" cy="40" r="4" class="point"/>
+  <text x="185" y="35" class="label">B</text>
+
+  <circle cx="220" cy="140" r="4" class="point"/>
+  <text x="228" y="145" class="label">C</text>
+
+  <circle cx="100" cy="140" r="4" class="point"/>
+  <text x="88" y="155" class="label">D</text>
+
+  <circle cx="260" cy="40" r="4" class="point"/>
+  <text x="265" y="38" class="label">E</text>
+
+  <circle cx="300" cy="140" r="4" class="point"/>
+  <text x="305" y="145" class="label">F</text>
+
+  <!-- Triangles ADE and BCF -->
+  <polygon points="60,40 100,140 260,40" class="triangle"/>
+  <polygon points="180,40 220,140 300,140" class="triangle"/>
+
+  <text x="160" y="172" class="label" text-anchor="middle" font-size="10">Three parallelograms ABCD, DCFE, ABFE sharing elements</text>
+</svg>

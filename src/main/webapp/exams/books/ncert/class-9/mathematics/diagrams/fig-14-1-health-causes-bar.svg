@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 320" width="450" height="320">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { stroke: #374151; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Causes of Women's Ill Health (15-44 years)</text>
+
+  <!-- Y-axis -->
+  <line x1="80" y1="40" x2="80" y2="250" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="80" y1="250" x2="420" y2="250" class="axis"/>
+
+  <!-- Grid lines and Y-axis labels -->
+  <line x1="80" y1="250" x2="420" y2="250" class="grid"/>
+  <text x="70" y="254" class="value" text-anchor="end">0</text>
+
+  <line x1="80" y1="216" x2="420" y2="216" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="220" class="value" text-anchor="end">5</text>
+
+  <line x1="80" y1="182" x2="420" y2="182" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="186" class="value" text-anchor="end">10</text>
+
+  <line x1="80" y1="148" x2="420" y2="148" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="152" class="value" text-anchor="end">15</text>
+
+  <line x1="80" y1="114" x2="420" y2="114" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="118" class="value" text-anchor="end">20</text>
+
+  <line x1="80" y1="80" x2="420" y2="80" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="84" class="value" text-anchor="end">25</text>
+
+  <line x1="80" y1="46" x2="420" y2="46" class="grid" stroke-dasharray="3"/>
+  <text x="70" y="50" class="value" text-anchor="end">30</text>
+
+  <!-- Bars (height = value * 6.8 for scale 0-35%) -->
+  <!-- Reproductive: 31.8% -->
+  <rect x="95" y="34" width="40" height="216" fill="#ef4444" class="bar"/>
+  <text x="115" y="28" class="value" text-anchor="middle">31.8%</text>
+
+  <!-- Neuropsychiatric: 25.4% -->
+  <rect x="150" y="77" width="40" height="173" fill="#f97316" class="bar"/>
+  <text x="170" y="71" class="value" text-anchor="middle">25.4%</text>
+
+  <!-- Other: 22.0% -->
+  <rect x="205" y="100" width="40" height="150" fill="#eab308" class="bar"/>
+  <text x="225" y="94" class="value" text-anchor="middle">22.0%</text>
+
+  <!-- Injuries: 12.4% -->
+  <rect x="260" y="166" width="40" height="84" fill="#22c55e" class="bar"/>
+  <text x="280" y="160" class="value" text-anchor="middle">12.4%</text>
+
+  <!-- Cardiovascular: 4.3% -->
+  <rect x="315" y="221" width="40" height="29" fill="#3b82f6" class="bar"/>
+  <text x="335" y="215" class="value" text-anchor="middle">4.3%</text>
+
+  <!-- Respiratory: 4.1% -->
+  <rect x="370" y="222" width="40" height="28" fill="#8b5cf6" class="bar"/>
+  <text x="390" y="216" class="value" text-anchor="middle">4.1%</text>
+
+  <!-- X-axis labels -->
+  <text x="115" y="265" class="label" text-anchor="middle" font-size="8">Repro-</text>
+  <text x="115" y="275" class="label" text-anchor="middle" font-size="8">ductive</text>
+
+  <text x="170" y="265" class="label" text-anchor="middle" font-size="8">Neuro-</text>
+  <text x="170" y="275" class="label" text-anchor="middle" font-size="8">psych.</text>
+
+  <text x="225" y="265" class="label" text-anchor="middle" font-size="8">Other</text>
+  <text x="225" y="275" class="label" text-anchor="middle" font-size="8">causes</text>
+
+  <text x="280" y="265" class="label" text-anchor="middle" font-size="8">Injuries</text>
+
+  <text x="335" y="265" class="label" text-anchor="middle" font-size="8">Cardio-</text>
+  <text x="335" y="275" class="label" text-anchor="middle" font-size="8">vascular</text>
+
+  <text x="390" y="265" class="label" text-anchor="middle" font-size="8">Respi-</text>
+  <text x="390" y="275" class="label" text-anchor="middle" font-size="8">ratory</text>
+
+  <!-- Axis labels -->
+  <text x="20" y="150" class="axis-label" text-anchor="middle" transform="rotate(-90, 20, 150)">Female Fatality Rate (%)</text>
+  <text x="250" y="300" class="axis-label" text-anchor="middle">Causes of Illness</text>
+
+  <text x="225" y="315" class="label" text-anchor="middle" font-size="9">Bar graph showing causes of women's ill health and death worldwide</text>
+</svg>

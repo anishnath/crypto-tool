@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <style>
+    .triangle { fill: none; stroke: #374151; stroke-width: 2; }
+    .altitude { stroke: #6366f1; stroke-width: 1.5; stroke-dasharray: 5; }
+    .equal-mark { stroke: #22c55e; stroke-width: 2; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+    .right-angle { fill: none; stroke: #6366f1; stroke-width: 1; }
+  </style>
+
+  <!-- Isosceles triangle ABC -->
+  <polygon points="150,30 50,170 250,170" class="triangle"/>
+
+  <!-- Points -->
+  <circle cx="150" cy="30" r="4" class="point"/>
+  <text x="145" y="20" class="label">A</text>
+
+  <circle cx="50" cy="170" r="4" class="point"/>
+  <text x="35" y="178" class="label">B</text>
+
+  <circle cx="250" cy="170" r="4" class="point"/>
+  <text x="258" y="178" class="label">C</text>
+
+  <!-- Point E (foot of altitude from B) -->
+  <circle cx="200" cy="100" r="3" class="point"/>
+  <text x="208" y="98" class="label">E</text>
+
+  <!-- Point F (foot of altitude from C) -->
+  <circle cx="100" cy="100" r="3" class="point"/>
+  <text x="82" y="98" class="label">F</text>
+
+  <!-- Altitude BE -->
+  <line x1="50" y1="170" x2="200" y2="100" class="altitude"/>
+
+  <!-- Altitude CF -->
+  <line x1="250" y1="170" x2="100" y2="100" class="altitude"/>
+
+  <!-- Right angle markers -->
+  <rect x="192" y="100" width="8" height="8" class="right-angle" transform="rotate(-35 200 100)"/>
+  <rect x="100" y="92" width="8" height="8" class="right-angle" transform="rotate(35 100 100)"/>
+
+  <!-- Equal marks on AB and AC -->
+  <line x1="93" y1="95" x2="103" y2="105" class="equal-mark"/>
+  <line x1="197" y1="105" x2="207" y2="95" class="equal-mark"/>
+
+  <text x="150" y="195" class="label" text-anchor="middle" font-size="11">Isosceles triangle ABC with altitudes BE and CF</text>
+</svg>

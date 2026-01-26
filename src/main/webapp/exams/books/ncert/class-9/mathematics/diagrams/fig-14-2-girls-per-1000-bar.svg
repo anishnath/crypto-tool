@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300" width="450" height="300">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { stroke: #374151; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Number of Girls per 1000 Boys in Indian Society</text>
+
+  <!-- Y-axis -->
+  <line x1="90" y1="40" x2="90" y2="230" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="90" y1="230" x2="420" y2="230" class="axis"/>
+
+  <!-- Grid lines (scale: 900-980) -->
+  <line x1="90" y1="230" x2="420" y2="230" class="grid"/>
+  <text x="80" y="234" class="value" text-anchor="end">900</text>
+
+  <line x1="90" y1="182" x2="420" y2="182" class="grid" stroke-dasharray="3"/>
+  <text x="80" y="186" class="value" text-anchor="end">920</text>
+
+  <line x1="90" y1="134" x2="420" y2="134" class="grid" stroke-dasharray="3"/>
+  <text x="80" y="138" class="value" text-anchor="end">940</text>
+
+  <line x1="90" y1="86" x2="420" y2="86" class="grid" stroke-dasharray="3"/>
+  <text x="80" y="90" class="value" text-anchor="end">960</text>
+
+  <line x1="90" y1="38" x2="420" y2="38" class="grid" stroke-dasharray="3"/>
+  <text x="80" y="42" class="value" text-anchor="end">980</text>
+
+  <!-- Bars (height = (value-900) * 2.4) -->
+  <!-- SC: 940 -->
+  <rect x="105" y="134" width="38" height="96" fill="#6366f1" class="bar"/>
+  <text x="124" y="128" class="value" text-anchor="middle">940</text>
+
+  <!-- ST: 970 -->
+  <rect x="153" y="62" width="38" height="168" fill="#8b5cf6" class="bar"/>
+  <text x="172" y="56" class="value" text-anchor="middle">970</text>
+
+  <!-- Non SC/ST: 920 -->
+  <rect x="201" y="182" width="38" height="48" fill="#a855f7" class="bar"/>
+  <text x="220" y="176" class="value" text-anchor="middle">920</text>
+
+  <!-- Backward: 950 -->
+  <rect x="249" y="110" width="38" height="120" fill="#d946ef" class="bar"/>
+  <text x="268" y="104" class="value" text-anchor="middle">950</text>
+
+  <!-- Non-backward: 920 -->
+  <rect x="297" y="182" width="38" height="48" fill="#ec4899" class="bar"/>
+  <text x="316" y="176" class="value" text-anchor="middle">920</text>
+
+  <!-- Rural: 930 -->
+  <rect x="345" y="158" width="38" height="72" fill="#f43f5e" class="bar"/>
+  <text x="364" y="152" class="value" text-anchor="middle">930</text>
+
+  <!-- Urban: 910 -->
+  <rect x="393" y="206" width="38" height="24" fill="#ef4444" class="bar"/>
+  <text x="412" y="200" class="value" text-anchor="middle">910</text>
+
+  <!-- X-axis labels -->
+  <text x="124" y="245" class="label" text-anchor="middle" font-size="8">SC</text>
+  <text x="172" y="245" class="label" text-anchor="middle" font-size="8">ST</text>
+  <text x="220" y="245" class="label" text-anchor="middle" font-size="8">Non</text>
+  <text x="220" y="255" class="label" text-anchor="middle" font-size="8">SC/ST</text>
+  <text x="268" y="245" class="label" text-anchor="middle" font-size="8">Backward</text>
+  <text x="316" y="245" class="label" text-anchor="middle" font-size="8">Non-</text>
+  <text x="316" y="255" class="label" text-anchor="middle" font-size="8">backward</text>
+  <text x="364" y="245" class="label" text-anchor="middle" font-size="8">Rural</text>
+  <text x="412" y="245" class="label" text-anchor="middle" font-size="8">Urban</text>
+
+  <!-- Axis labels -->
+  <text x="25" y="140" class="axis-label" text-anchor="middle" transform="rotate(-90, 25, 140)">Girls per 1000 Boys</text>
+  <text x="255" y="280" class="axis-label" text-anchor="middle">Section of Society</text>
+
+  <text x="225" y="295" class="label" text-anchor="middle" font-size="9">Bar graph comparing gender ratio across different sections</text>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300" width="450" height="300">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { fill: #8b5cf6; stroke: #7c3aed; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+    .note { font-family: Arial, sans-serif; font-size: 8px; fill: #6b7280; font-style: italic; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Histogram: Children Playing in Park (Varying Class Widths)</text>
+
+  <!-- Y-axis (Frequency Density) -->
+  <line x1="70" y1="40" x2="70" y2="230" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="230" x2="400" y2="230" class="axis"/>
+
+  <!-- Grid lines (scale: 0-6 for frequency density) -->
+  <text x="60" y="234" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="198" x2="400" y2="198" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="202" class="value" text-anchor="end">1</text>
+
+  <line x1="70" y1="166" x2="400" y2="166" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="170" class="value" text-anchor="end">2</text>
+
+  <line x1="70" y1="134" x2="400" y2="134" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="138" class="value" text-anchor="end">3</text>
+
+  <line x1="70" y1="102" x2="400" y2="102" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="106" class="value" text-anchor="end">4</text>
+
+  <line x1="70" y1="70" x2="400" y2="70" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="74" class="value" text-anchor="end">5</text>
+
+  <line x1="70" y1="38" x2="400" y2="38" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="42" class="value" text-anchor="end">6</text>
+
+  <!-- Histogram bars with varying widths (adjusted frequency = freq/width) -->
+  <!-- Scale: 20 pixels per year, height = adjusted freq * 32 -->
+
+  <!-- 1-2 years (width=1): freq=5, adj_freq=5 -->
+  <rect x="90" y="70" width="20" height="160" class="bar"/>
+  <text x="100" y="65" class="value" text-anchor="middle">5</text>
+
+  <!-- 2-3 years (width=1): freq=3, adj_freq=3 -->
+  <rect x="110" y="134" width="20" height="96" class="bar"/>
+  <text x="120" y="129" class="value" text-anchor="middle">3</text>
+
+  <!-- 3-5 years (width=2): freq=6, adj_freq=3 -->
+  <rect x="130" y="134" width="40" height="96" class="bar"/>
+  <text x="150" y="129" class="value" text-anchor="middle">6</text>
+
+  <!-- 5-7 years (width=2): freq=12, adj_freq=6 -->
+  <rect x="170" y="38" width="40" height="192" class="bar" fill="#7c3aed"/>
+  <text x="190" y="33" class="value" text-anchor="middle">12</text>
+
+  <!-- 7-10 years (width=3): freq=9, adj_freq=3 -->
+  <rect x="210" y="134" width="60" height="96" class="bar"/>
+  <text x="240" y="129" class="value" text-anchor="middle">9</text>
+
+  <!-- 10-15 years (width=5): freq=10, adj_freq=2 -->
+  <rect x="270" y="166" width="100" height="64" class="bar"/>
+  <text x="320" y="161" class="value" text-anchor="middle">10</text>
+
+  <!-- 15-17 years (width=2): freq=4, adj_freq=2 -->
+  <rect x="370" y="166" width="40" height="64" class="bar"/>
+  <text x="390" y="161" class="value" text-anchor="middle">4</text>
+
+  <!-- X-axis labels (age boundaries) -->
+  <text x="90" y="245" class="label" text-anchor="middle">1</text>
+  <text x="110" y="245" class="label" text-anchor="middle">2</text>
+  <text x="130" y="245" class="label" text-anchor="middle">3</text>
+  <text x="170" y="245" class="label" text-anchor="middle">5</text>
+  <text x="210" y="245" class="label" text-anchor="middle">7</text>
+  <text x="270" y="245" class="label" text-anchor="middle">10</text>
+  <text x="370" y="245" class="label" text-anchor="middle">15</text>
+  <text x="410" y="245" class="label" text-anchor="middle">17</text>
+
+  <!-- Axis labels -->
+  <text x="15" y="140" class="axis-label" text-anchor="middle" transform="rotate(-90, 15, 140)">Frequency Density</text>
+  <text x="240" y="265" class="axis-label" text-anchor="middle">Age (in years)</text>
+
+  <!-- Note about varying widths -->
+  <text x="225" y="285" class="note" text-anchor="middle">Note: Bar heights represent frequency density (frequency ÷ class width)</text>
+  <text x="225" y="296" class="label" text-anchor="middle" font-size="9">Maximum children (12) in age group 5-7 years</text>
+</svg>

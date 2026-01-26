@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="340" height="220">
+  <style>
+    .circle { fill: none; stroke: #6366f1; stroke-width: 2; }
+    .circle2 { fill: none; stroke: #8b5cf6; stroke-width: 2; }
+    .line { stroke: #374151; stroke-width: 1.5; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+  </style>
+
+  <!-- Circle 1 (left) -->
+  <circle cx="120" cy="110" r="70" class="circle"/>
+
+  <!-- Circle 2 (right) -->
+  <circle cx="200" cy="110" r="70" class="circle2"/>
+
+  <!-- Intersection points B and C -->
+  <circle cx="160" cy="60" r="4" class="point"/>
+  <text x="155" y="48" class="label">B</text>
+
+  <circle cx="160" cy="160" r="4" class="point"/>
+  <text x="155" y="178" class="label">C</text>
+
+  <!-- Point A (on circle 1, left) -->
+  <circle cx="55" cy="90" r="4" class="point"/>
+  <text x="38" y="90" class="label">A</text>
+
+  <!-- Point D (on circle 1, extended through B) -->
+  <circle cx="265" cy="90" r="4" class="point"/>
+  <text x="272" y="90" class="label">D</text>
+
+  <!-- Point P (on circle 2, through B) -->
+  <circle cx="55" cy="130" r="4" class="point"/>
+  <text x="38" y="135" class="label">P</text>
+
+  <!-- Point Q (on circle 2, right) -->
+  <circle cx="265" cy="130" r="4" class="point"/>
+  <text x="272" y="135" class="label">Q</text>
+
+  <!-- Lines ABD and PBQ through B -->
+  <line x1="55" y1="90" x2="265" y2="90" class="line"/>
+  <line x1="55" y1="130" x2="265" y2="130" class="line"/>
+
+  <!-- Line connecting B and C (common chord) -->
+  <line x1="160" y1="60" x2="160" y2="160" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+
+  <text x="160" y="205" class="label" text-anchor="middle" font-size="11">Two circles intersecting at B and C</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="400" height="280">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { stroke: #374151; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+  </style>
+
+  <!-- Title -->
+  <text x="200" y="20" class="title" text-anchor="middle">Seats Won by Political Parties</text>
+
+  <!-- Y-axis -->
+  <line x1="70" y1="40" x2="70" y2="220" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="220" x2="370" y2="220" class="axis"/>
+
+  <!-- Grid lines (scale: 0-80) -->
+  <text x="60" y="224" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="197" x2="370" y2="197" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="201" class="value" text-anchor="end">10</text>
+
+  <line x1="70" y1="175" x2="370" y2="175" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="179" class="value" text-anchor="end">20</text>
+
+  <line x1="70" y1="152" x2="370" y2="152" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="156" class="value" text-anchor="end">30</text>
+
+  <line x1="70" y1="130" x2="370" y2="130" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="134" class="value" text-anchor="end">40</text>
+
+  <line x1="70" y1="107" x2="370" y2="107" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="111" class="value" text-anchor="end">50</text>
+
+  <line x1="70" y1="85" x2="370" y2="85" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="89" class="value" text-anchor="end">60</text>
+
+  <line x1="70" y1="62" x2="370" y2="62" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="66" class="value" text-anchor="end">70</text>
+
+  <line x1="70" y1="40" x2="370" y2="40" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="44" class="value" text-anchor="end">80</text>
+
+  <!-- Bars (height = value * 2.25) -->
+  <!-- A: 75 -->
+  <rect x="90" y="51" width="40" height="169" fill="#ef4444" class="bar"/>
+  <text x="110" y="45" class="value" text-anchor="middle">75</text>
+
+  <!-- B: 55 -->
+  <rect x="140" y="96" width="40" height="124" fill="#3b82f6" class="bar"/>
+  <text x="160" y="90" class="value" text-anchor="middle">55</text>
+
+  <!-- C: 37 -->
+  <rect x="190" y="137" width="40" height="83" fill="#22c55e" class="bar"/>
+  <text x="210" y="131" class="value" text-anchor="middle">37</text>
+
+  <!-- D: 29 -->
+  <rect x="240" y="155" width="40" height="65" fill="#f97316" class="bar"/>
+  <text x="260" y="149" class="value" text-anchor="middle">29</text>
+
+  <!-- E: 10 -->
+  <rect x="290" y="197" width="40" height="23" fill="#8b5cf6" class="bar"/>
+  <text x="310" y="191" class="value" text-anchor="middle">10</text>
+
+  <!-- F: 37 -->
+  <rect x="340" y="137" width="40" height="83" fill="#eab308" class="bar"/>
+  <text x="360" y="131" class="value" text-anchor="middle">37</text>
+
+  <!-- X-axis labels -->
+  <text x="110" y="238" class="label" text-anchor="middle">A</text>
+  <text x="160" y="238" class="label" text-anchor="middle">B</text>
+  <text x="210" y="238" class="label" text-anchor="middle">C</text>
+  <text x="260" y="238" class="label" text-anchor="middle">D</text>
+  <text x="310" y="238" class="label" text-anchor="middle">E</text>
+  <text x="360" y="238" class="label" text-anchor="middle">F</text>
+
+  <!-- Axis labels -->
+  <text x="20" y="130" class="axis-label" text-anchor="middle" transform="rotate(-90, 20, 130)">Seats Won</text>
+  <text x="220" y="258" class="axis-label" text-anchor="middle">Political Party</text>
+
+  <text x="200" y="275" class="label" text-anchor="middle" font-size="9">Party A won maximum seats (75)</text>
+</svg>

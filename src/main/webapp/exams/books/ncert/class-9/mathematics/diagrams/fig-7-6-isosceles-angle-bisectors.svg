@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <style>
+    .triangle { fill: none; stroke: #374151; stroke-width: 2; }
+    .bisector { stroke: #6366f1; stroke-width: 1.5; stroke-dasharray: 5; }
+    .line-ao { stroke: #22c55e; stroke-width: 1.5; stroke-dasharray: 5; }
+    .equal-mark { stroke: #f59e0b; stroke-width: 2; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+  </style>
+
+  <!-- Isosceles triangle ABC -->
+  <polygon points="150,30 60,170 240,170" class="triangle"/>
+
+  <!-- Points -->
+  <circle cx="150" cy="30" r="4" class="point"/>
+  <text x="145" y="20" class="label">A</text>
+
+  <circle cx="60" cy="170" r="4" class="point"/>
+  <text x="45" y="180" class="label">B</text>
+
+  <circle cx="240" cy="170" r="4" class="point"/>
+  <text x="248" y="180" class="label">C</text>
+
+  <!-- Point O (where angle bisectors meet) -->
+  <circle cx="150" cy="120" r="4" class="point"/>
+  <text x="158" y="118" class="label">O</text>
+
+  <!-- Angle bisectors from B and C meeting at O -->
+  <line x1="60" y1="170" x2="150" y2="120" class="bisector"/>
+  <line x1="240" y1="170" x2="150" y2="120" class="bisector"/>
+
+  <!-- Line AO -->
+  <line x1="150" y1="30" x2="150" y2="120" class="line-ao"/>
+
+  <!-- Equal marks on AB and AC -->
+  <line x1="98" y1="95" x2="108" y2="105" class="equal-mark"/>
+  <line x1="192" y1="105" x2="202" y2="95" class="equal-mark"/>
+
+  <text x="150" y="195" class="label" text-anchor="middle" font-size="11">Isosceles triangle ABC with AB = AC, bisectors meet at O</text>
+</svg>

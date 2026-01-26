@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="380" height="180">
+  <style>
+    .line { stroke: #374151; stroke-width: 2; }
+    .construction { stroke: #6366f1; stroke-width: 1.5; }
+    .semicircle { fill: none; stroke: #22c55e; stroke-width: 1.5; }
+    .perp { stroke: #ef4444; stroke-width: 1.5; }
+    .arc { fill: none; stroke: #f59e0b; stroke-width: 1.5; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .tick { stroke: #374151; stroke-width: 1; }
+  </style>
+
+  <!-- Number line -->
+  <line x1="20" y1="120" x2="360" y2="120" class="line"/>
+
+  <!-- Point A at origin -->
+  <circle cx="40" cy="120" r="3" class="point"/>
+  <text x="35" y="138" class="label">A(0)</text>
+
+  <!-- Point B at 9.3 -->
+  <circle cx="226" cy="120" r="4" class="point"/>
+  <text x="218" y="138" class="label">B(9.3)</text>
+
+  <!-- Point C at 10.3 (1 unit beyond B) -->
+  <circle cx="246" cy="120" r="3" class="point"/>
+  <text x="235" y="138" class="label">C(10.3)</text>
+
+  <!-- Point O at midpoint of AC = 5.15 -->
+  <circle cx="143" cy="120" r="3" fill="#6366f1"/>
+  <text x="138" y="138" class="label">O</text>
+
+  <!-- Semicircle with center O and radius OC -->
+  <path d="M 40 120 A 103 103 0 0 1 246 120" class="semicircle"/>
+
+  <!-- Perpendicular from B meeting semicircle at D -->
+  <line x1="226" y1="120" x2="226" y2="30" class="perp"/>
+
+  <!-- Point D on semicircle -->
+  <circle cx="226" cy="30" r="4" class="point"/>
+  <text x="232" y="28" class="label">D</text>
+
+  <!-- Label BD = sqrt(9.3) -->
+  <text x="235" y="75" class="label">sqrt(9.3)</text>
+
+  <!-- Arc from B with radius BD to number line -->
+  <path d="M 226 30 A 90 90 0 0 1 316 120" class="arc"/>
+
+  <!-- Point E on number line representing sqrt(9.3) -->
+  <circle cx="316" cy="120" r="4" fill="#f59e0b"/>
+  <text x="305" y="138" class="label">E</text>
+
+  <text x="190" y="165" class="label" text-anchor="middle" font-size="10">Construction of sqrt(9.3) using semicircle method</text>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <style>
+    .quad1 { fill: rgba(99, 102, 241, 0.1); stroke: #374151; stroke-width: 2; }
+    .quad2 { fill: rgba(34, 197, 94, 0.1); stroke: #22c55e; stroke-width: 2; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+  </style>
+
+  <!-- Quadrilateral ABCD -->
+  <polygon points="80,50 200,50 220,130 60,130" class="quad1"/>
+
+  <!-- Quadrilateral DCPR (sharing DC) -->
+  <polygon points="220,130 60,130 40,180 240,180" class="quad2"/>
+
+  <!-- Points -->
+  <circle cx="80" cy="50" r="4" class="point"/>
+  <text x="65" y="45" class="label">A</text>
+
+  <circle cx="200" cy="50" r="4" class="point"/>
+  <text x="208" y="45" class="label">B</text>
+
+  <circle cx="220" cy="130" r="4" class="point"/>
+  <text x="228" y="128" class="label">C</text>
+
+  <circle cx="60" cy="130" r="4" class="point"/>
+  <text x="45" y="128" class="label">D</text>
+
+  <circle cx="240" cy="180" r="4" class="point"/>
+  <text x="248" y="185" class="label">R</text>
+
+  <circle cx="40" cy="180" r="4" class="point"/>
+  <text x="25" y="185" class="label">P</text>
+
+  <text x="150" y="195" class="label" text-anchor="middle" font-size="11">Quadrilaterals ABCD and DCPR sharing side DC</text>
+</svg>

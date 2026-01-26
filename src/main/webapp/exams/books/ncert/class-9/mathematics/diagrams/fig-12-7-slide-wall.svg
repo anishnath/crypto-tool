@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <style>
+    .triangle { fill: rgba(34, 197, 94, 0.2); stroke: #374151; stroke-width: 2; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+    .dimension { font-family: Arial, sans-serif; font-size: 10px; fill: #6366f1; }
+    .text-msg { font-family: Arial, sans-serif; font-size: 8px; fill: #22c55e; }
+  </style>
+
+  <!-- Triangular slide wall -->
+  <polygon points="150,30 50,170 250,170" class="triangle"/>
+
+  <!-- Side labels -->
+  <text x="85" y="95" class="dimension" transform="rotate(-55 85 95)">15 m</text>
+  <text x="210" y="95" class="dimension" transform="rotate(55 210 95)">11 m</text>
+  <text x="150" y="188" class="dimension" text-anchor="middle">6 m</text>
+
+  <!-- Message text -->
+  <text x="150" y="100" class="text-msg" text-anchor="middle">KEEP THE</text>
+  <text x="150" y="115" class="text-msg" text-anchor="middle">PARK</text>
+  <text x="150" y="130" class="text-msg" text-anchor="middle">GREEN AND</text>
+  <text x="150" y="145" class="text-msg" text-anchor="middle">CLEAN</text>
+
+  <text x="150" y="198" class="label" text-anchor="middle" font-size="10">Triangular slide wall with message (Find area using Heron's Formula)</text>
+</svg>

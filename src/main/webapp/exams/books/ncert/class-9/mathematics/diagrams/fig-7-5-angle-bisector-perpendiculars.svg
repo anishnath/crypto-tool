@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <style>
+    .line { stroke: #374151; stroke-width: 2; }
+    .bisector { stroke: #6366f1; stroke-width: 2; }
+    .perp { stroke: #22c55e; stroke-width: 1.5; stroke-dasharray: 4; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+    .right-angle { fill: none; stroke: #22c55e; stroke-width: 1; }
+  </style>
+
+  <!-- Point A (vertex of angle) -->
+  <circle cx="40" cy="100" r="4" class="point"/>
+  <text x="25" y="105" class="label">A</text>
+
+  <!-- Two arms of angle A -->
+  <line x1="40" y1="100" x2="270" y2="40" class="line"/>
+  <line x1="40" y1="100" x2="270" y2="160" class="line"/>
+
+  <!-- Angle bisector l -->
+  <line x1="40" y1="100" x2="270" y2="100" class="bisector"/>
+  <text x="275" y="105" class="label">l</text>
+
+  <!-- Point B on bisector -->
+  <circle cx="180" cy="100" r="4" class="point"/>
+  <text x="175" y="88" class="label">B</text>
+
+  <!-- Perpendicular BP to upper arm -->
+  <line x1="180" y1="100" x2="200" y2="60" class="perp"/>
+  <circle cx="200" cy="60" r="3" class="point"/>
+  <text x="205" y="55" class="label">P</text>
+
+  <!-- Perpendicular BQ to lower arm -->
+  <line x1="180" y1="100" x2="200" y2="140" class="perp"/>
+  <circle cx="200" cy="140" r="3" class="point"/>
+  <text x="205" y="150" class="label">Q</text>
+
+  <!-- Right angle markers -->
+  <rect x="192" y="60" width="8" height="8" class="right-angle" transform="rotate(-20 200 60)"/>
+  <rect x="192" y="132" width="8" height="8" class="right-angle" transform="rotate(20 200 140)"/>
+
+  <text x="150" y="190" class="label" text-anchor="middle" font-size="11">Angle A with bisector l, point B, perpendiculars BP and BQ</text>
+</svg>

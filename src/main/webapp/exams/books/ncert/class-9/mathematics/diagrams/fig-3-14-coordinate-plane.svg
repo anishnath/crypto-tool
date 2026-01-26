@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .coord { font-family: Arial, sans-serif; font-size: 9px; fill: #6366f1; }
+    .arrow { fill: #374151; }
+  </style>
+
+  <!-- Grid lines -->
+  <g class="grid">
+    <line x1="20" y1="40" x2="320" y2="40"/>
+    <line x1="20" y1="80" x2="320" y2="80"/>
+    <line x1="20" y1="120" x2="320" y2="120"/>
+    <line x1="20" y1="160" x2="320" y2="160"/>
+    <line x1="20" y1="200" x2="320" y2="200"/>
+    <line x1="20" y1="240" x2="320" y2="240"/>
+    <line x1="40" y1="20" x2="40" y2="260"/>
+    <line x1="80" y1="20" x2="80" y2="260"/>
+    <line x1="120" y1="20" x2="120" y2="260"/>
+    <line x1="160" y1="20" x2="160" y2="260"/>
+    <line x1="200" y1="20" x2="200" y2="260"/>
+    <line x1="240" y1="20" x2="240" y2="260"/>
+    <line x1="280" y1="20" x2="280" y2="260"/>
+  </g>
+
+  <!-- X-axis -->
+  <line x1="20" y1="160" x2="320" y2="160" class="axis"/>
+  <polygon points="320,160 310,155 310,165" class="arrow"/>
+  <text x="325" y="163" class="label">X</text>
+
+  <!-- Y-axis -->
+  <line x1="160" y1="260" x2="160" y2="20" class="axis"/>
+  <polygon points="160,20 155,30 165,30" class="arrow"/>
+  <text x="163" y="15" class="label">Y</text>
+
+  <!-- Origin -->
+  <text x="165" y="175" class="label">O</text>
+
+  <!-- Axis labels -->
+  <text x="77" y="175" class="label">-5</text>
+  <text x="197" y="175" class="label">5</text>
+  <text x="145" y="85" class="label">5</text>
+  <text x="145" y="245" class="label">-5</text>
+
+  <!-- Point B (-5, 2) -->
+  <circle cx="80" cy="120" r="5" class="point"/>
+  <text x="60" y="115" class="label">B(-5,2)</text>
+
+  <!-- Point C (5, -5) -->
+  <circle cx="240" cy="240" r="5" class="point"/>
+  <text x="245" y="250" class="label">C(5,-5)</text>
+
+  <!-- Point D (6, 2) -->
+  <circle cx="260" cy="120" r="5" class="point"/>
+  <text x="265" y="115" class="label">D(6,2)</text>
+
+  <!-- Point E (-3, -5) -->
+  <circle cx="120" cy="240" r="5" class="point"/>
+  <text x="95" y="250" class="label">E(-3,-5)</text>
+
+  <!-- Point G (2, -4) -->
+  <circle cx="200" cy="220" r="5" class="point"/>
+  <text x="205" y="230" class="label">G(2,-4)</text>
+
+  <!-- Point H (-5, -3) -->
+  <circle cx="80" cy="200" r="5" class="point"/>
+  <text x="55" y="210" class="label">H(-5,-3)</text>
+
+  <!-- Point L (0, 5) -->
+  <circle cx="160" cy="80" r="5" class="point"/>
+  <text x="165" y="75" class="label">L(0,5)</text>
+
+  <!-- Point M (-3, 0) -->
+  <circle cx="120" cy="160" r="5" class="point"/>
+  <text x="95" y="155" class="label">M(-3,0)</text>
+
+  <text x="170" y="275" class="label" text-anchor="middle" font-size="9">Cartesian coordinate plane with labeled points</text>
+</svg>

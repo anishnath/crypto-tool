@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 180" width="340" height="180">
+  <style>
+    .rect { fill: rgba(99, 102, 241, 0.1); stroke: #374151; stroke-width: 2; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+    .area { font-family: Arial, sans-serif; font-size: 10px; fill: #6366f1; }
+  </style>
+
+  <!-- Rectangle (i) -->
+  <rect x="30" y="40" width="120" height="80" class="rect"/>
+  <text x="90" y="85" class="area" text-anchor="middle">Area:</text>
+  <text x="90" y="100" class="area" text-anchor="middle">25a² - 35a + 12</text>
+
+  <text x="30" y="35" class="label">(i)</text>
+  <text x="90" y="145" class="label" text-anchor="middle">Length = ?</text>
+  <text x="90" y="160" class="label" text-anchor="middle">Breadth = ?</text>
+
+  <!-- Rectangle (ii) -->
+  <rect x="190" y="40" width="120" height="80" class="rect"/>
+  <text x="250" y="85" class="area" text-anchor="middle">Area:</text>
+  <text x="250" y="100" class="area" text-anchor="middle">35y² + 13y - 12</text>
+
+  <text x="190" y="35" class="label">(ii)</text>
+  <text x="250" y="145" class="label" text-anchor="middle">Length = ?</text>
+  <text x="250" y="160" class="label" text-anchor="middle">Breadth = ?</text>
+
+  <text x="170" y="175" class="label" text-anchor="middle" font-size="10">Find dimensions by factorizing the area expressions</text>
+</svg>

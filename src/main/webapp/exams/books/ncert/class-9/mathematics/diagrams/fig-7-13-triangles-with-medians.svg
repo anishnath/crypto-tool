@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 180" width="340" height="180">
+  <style>
+    .triangle { fill: none; stroke: #374151; stroke-width: 2; }
+    .median { stroke: #6366f1; stroke-width: 1.5; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+  </style>
+
+  <!-- Triangle ABC (left) -->
+  <polygon points="80,30 30,140 130,140" class="triangle"/>
+
+  <circle cx="80" cy="30" r="3" class="point"/>
+  <text x="75" y="22" class="label">A</text>
+
+  <circle cx="30" cy="140" r="3" class="point"/>
+  <text x="15" y="148" class="label">B</text>
+
+  <circle cx="130" cy="140" r="3" class="point"/>
+  <text x="135" y="148" class="label">C</text>
+
+  <!-- Median AM -->
+  <line x1="80" y1="30" x2="80" y2="140" class="median"/>
+  <circle cx="80" cy="140" r="3" class="point"/>
+  <text x="75" y="158" class="label">M</text>
+
+  <!-- Triangle PQR (right) -->
+  <polygon points="260,30 210,140 310,140" class="triangle"/>
+
+  <circle cx="260" cy="30" r="3" class="point"/>
+  <text x="255" y="22" class="label">P</text>
+
+  <circle cx="210" cy="140" r="3" class="point"/>
+  <text x="195" y="148" class="label">Q</text>
+
+  <circle cx="310" cy="140" r="3" class="point"/>
+  <text x="315" y="148" class="label">R</text>
+
+  <!-- Median PN -->
+  <line x1="260" y1="30" x2="260" y2="140" class="median"/>
+  <circle cx="260" cy="140" r="3" class="point"/>
+  <text x="255" y="158" class="label">N</text>
+
+  <text x="170" y="175" class="label" text-anchor="middle" font-size="10">Triangles ABC and PQR with medians AM and PN</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="300" height="180">
+  <style>
+    .quad1 { fill: rgba(99, 102, 241, 0.1); stroke: #6366f1; stroke-width: 2; }
+    .quad2 { fill: rgba(34, 197, 94, 0.1); stroke: #22c55e; stroke-width: 2; }
+    .base { stroke: #374151; stroke-width: 2; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+  </style>
+
+  <!-- Parallelogram PQRS -->
+  <polygon points="50,40 180,40 230,140 100,140" class="quad1"/>
+
+  <!-- Parallelogram ABRS (sharing SR) -->
+  <polygon points="120,40 180,40 230,140 100,140" class="quad2"/>
+
+  <!-- Points -->
+  <circle cx="50" cy="40" r="4" class="point"/>
+  <text x="35" y="38" class="label">P</text>
+
+  <circle cx="180" cy="40" r="4" class="point"/>
+  <text x="185" y="35" class="label">Q</text>
+
+  <circle cx="120" cy="40" r="4" class="point"/>
+  <text x="115" y="28" class="label">A</text>
+
+  <circle cx="230" cy="140" r="4" class="point"/>
+  <text x="238" y="145" class="label">R</text>
+
+  <circle cx="100" cy="140" r="4" class="point"/>
+  <text x="88" y="155" class="label">S</text>
+
+  <!-- Point X on BR -->
+  <circle cx="200" cy="90" r="3" class="point"/>
+  <text x="208" y="88" class="label">X</text>
+
+  <text x="150" y="172" class="label" text-anchor="middle" font-size="11">Parallelograms PQRS and ABRS on same base SR</text>
+</svg>

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 320" width="450" height="320">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .line-a { stroke: #3b82f6; stroke-width: 2; fill: none; }
+    .line-b { stroke: #ef4444; stroke-width: 2; fill: none; }
+    .point-a { fill: #3b82f6; }
+    .point-b { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+    .legend { font-family: Arial, sans-serif; font-size: 10px; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Frequency Polygon: Student Marks (Section A vs B)</text>
+
+  <!-- Y-axis -->
+  <line x1="70" y1="50" x2="70" y2="250" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="250" x2="400" y2="250" class="axis"/>
+
+  <!-- Grid lines (scale: 0-20) -->
+  <text x="60" y="254" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="230" x2="400" y2="230" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="234" class="value" text-anchor="end">4</text>
+
+  <line x1="70" y1="210" x2="400" y2="210" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="214" class="value" text-anchor="end">8</text>
+
+  <line x1="70" y1="190" x2="400" y2="190" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="194" class="value" text-anchor="end">12</text>
+
+  <line x1="70" y1="170" x2="400" y2="170" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="174" class="value" text-anchor="end">16</text>
+
+  <line x1="70" y1="150" x2="400" y2="150" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="154" class="value" text-anchor="end">20</text>
+
+  <!-- X-axis labels (class marks: -5, 5, 15, 25, 35, 45, 55) -->
+  <text x="90" y="265" class="label" text-anchor="middle">-5</text>
+  <text x="140" y="265" class="label" text-anchor="middle">5</text>
+  <text x="190" y="265" class="label" text-anchor="middle">15</text>
+  <text x="240" y="265" class="label" text-anchor="middle">25</text>
+  <text x="290" y="265" class="label" text-anchor="middle">35</text>
+  <text x="340" y="265" class="label" text-anchor="middle">45</text>
+  <text x="390" y="265" class="label" text-anchor="middle">55</text>
+
+  <!-- Section A frequency polygon (Blue): 0, 3, 9, 17, 12, 9, 0 -->
+  <!-- Points at class marks: (-5,0), (5,3), (15,9), (25,17), (35,12), (45,9), (55,0) -->
+  <!-- Y position = 250 - (freq * 5) -->
+  <polyline points="90,250 140,235 190,205 240,165 290,190 340,205 390,250" class="line-a"/>
+  <circle cx="90" cy="250" r="4" class="point-a"/>
+  <circle cx="140" cy="235" r="4" class="point-a"/>
+  <circle cx="190" cy="205" r="4" class="point-a"/>
+  <circle cx="240" cy="165" r="4" class="point-a"/>
+  <circle cx="290" cy="190" r="4" class="point-a"/>
+  <circle cx="340" cy="205" r="4" class="point-a"/>
+  <circle cx="390" cy="250" r="4" class="point-a"/>
+
+  <!-- Section A values -->
+  <text x="140" y="228" class="value" fill="#3b82f6">3</text>
+  <text x="190" y="198" class="value" fill="#3b82f6">9</text>
+  <text x="240" y="158" class="value" fill="#3b82f6">17</text>
+  <text x="290" y="183" class="value" fill="#3b82f6">12</text>
+  <text x="340" y="198" class="value" fill="#3b82f6">9</text>
+
+  <!-- Section B frequency polygon (Red): 0, 5, 19, 15, 10, 1, 0 -->
+  <polyline points="90,250 140,225 190,155 240,175 290,200 340,245 390,250" class="line-b"/>
+  <circle cx="90" cy="250" r="4" class="point-b"/>
+  <circle cx="140" cy="225" r="4" class="point-b"/>
+  <circle cx="190" cy="155" r="4" class="point-b"/>
+  <circle cx="240" cy="175" r="4" class="point-b"/>
+  <circle cx="290" cy="200" r="4" class="point-b"/>
+  <circle cx="340" cy="245" r="4" class="point-b"/>
+  <circle cx="390" cy="250" r="4" class="point-b"/>
+
+  <!-- Section B values -->
+  <text x="147" y="218" class="value" fill="#ef4444">5</text>
+  <text x="197" y="148" class="value" fill="#ef4444">19</text>
+  <text x="247" y="168" class="value" fill="#ef4444">15</text>
+  <text x="297" y="193" class="value" fill="#ef4444">10</text>
+  <text x="347" y="238" class="value" fill="#ef4444">1</text>
+
+  <!-- Axis labels -->
+  <text x="20" y="155" class="axis-label" text-anchor="middle" transform="rotate(-90, 20, 155)">Frequency</text>
+  <text x="240" y="285" class="axis-label" text-anchor="middle">Marks (Class Mark)</text>
+
+  <!-- Legend -->
+  <line x1="100" y1="40" x2="130" y2="40" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="115" cy="40" r="4" class="point-a"/>
+  <text x="135" y="44" class="legend">Section A (Peak at 25 marks)</text>
+
+  <line x1="260" y1="40" x2="290" y2="40" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="275" cy="40" r="4" class="point-b"/>
+  <text x="295" y="44" class="legend">Section B (Peak at 15 marks)</text>
+
+  <text x="225" y="305" class="label" text-anchor="middle" font-size="9">Section A performed better (peak at higher marks)</text>
+</svg>

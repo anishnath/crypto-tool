@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300" width="450" height="300">
+  <style>
+    .axis { stroke: #374151; stroke-width: 2; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .bar { fill: #f59e0b; stroke: #d97706; stroke-width: 1; }
+    .label { font-family: Arial, sans-serif; font-size: 10px; fill: #1f2937; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+    .value { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 11px; fill: #6366f1; }
+    .highlight { fill: #22c55e; stroke: #16a34a; }
+  </style>
+
+  <!-- Title -->
+  <text x="225" y="20" class="title" text-anchor="middle">Histogram: Life Times of 400 Neon Lamps</text>
+
+  <!-- Y-axis -->
+  <line x1="70" y1="40" x2="70" y2="230" class="axis"/>
+
+  <!-- X-axis -->
+  <line x1="70" y1="230" x2="420" y2="230" class="axis"/>
+
+  <!-- Grid lines (scale: 0-100) -->
+  <text x="60" y="234" class="value" text-anchor="end">0</text>
+
+  <line x1="70" y1="211" x2="420" y2="211" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="215" class="value" text-anchor="end">20</text>
+
+  <line x1="70" y1="192" x2="420" y2="192" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="196" class="value" text-anchor="end">40</text>
+
+  <line x1="70" y1="173" x2="420" y2="173" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="177" class="value" text-anchor="end">60</text>
+
+  <line x1="70" y1="154" x2="420" y2="154" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="158" class="value" text-anchor="end">80</text>
+
+  <line x1="70" y1="135" x2="420" y2="135" class="grid" stroke-dasharray="3"/>
+  <text x="60" y="139" class="value" text-anchor="end">100</text>
+
+  <!-- Histogram bars (intervals: 300-400, 400-500, etc.) -->
+  <!-- Width = 45 pixels per 100hr interval, Height = frequency * 0.95 -->
+
+  <!-- 300-400: 14 lamps -->
+  <rect x="85" y="217" width="45" height="13" class="bar"/>
+  <text x="107" y="213" class="value" text-anchor="middle">14</text>
+
+  <!-- 400-500: 56 lamps -->
+  <rect x="130" y="177" width="45" height="53" class="bar"/>
+  <text x="152" y="173" class="value" text-anchor="middle">56</text>
+
+  <!-- 500-600: 60 lamps -->
+  <rect x="175" y="173" width="45" height="57" class="bar"/>
+  <text x="197" y="169" class="value" text-anchor="middle">60</text>
+
+  <!-- 600-700: 86 lamps (maximum) -->
+  <rect x="220" y="148" width="45" height="82" class="bar" fill="#d97706"/>
+  <text x="242" y="144" class="value" text-anchor="middle">86</text>
+
+  <!-- 700-800: 74 lamps (green - more than 700 hours) -->
+  <rect x="265" y="160" width="45" height="70" class="highlight"/>
+  <text x="287" y="156" class="value" text-anchor="middle">74</text>
+
+  <!-- 800-900: 62 lamps (green - more than 700 hours) -->
+  <rect x="310" y="171" width="45" height="59" class="highlight"/>
+  <text x="332" y="167" class="value" text-anchor="middle">62</text>
+
+  <!-- 900-1000: 48 lamps (green - more than 700 hours) -->
+  <rect x="355" y="184" width="45" height="46" class="highlight"/>
+  <text x="377" y="180" class="value" text-anchor="middle">48</text>
+
+  <!-- X-axis labels -->
+  <text x="85" y="245" class="label" text-anchor="middle" font-size="8">300</text>
+  <text x="130" y="245" class="label" text-anchor="middle" font-size="8">400</text>
+  <text x="175" y="245" class="label" text-anchor="middle" font-size="8">500</text>
+  <text x="220" y="245" class="label" text-anchor="middle" font-size="8">600</text>
+  <text x="265" y="245" class="label" text-anchor="middle" font-size="8">700</text>
+  <text x="310" y="245" class="label" text-anchor="middle" font-size="8">800</text>
+  <text x="355" y="245" class="label" text-anchor="middle" font-size="8">900</text>
+  <text x="400" y="245" class="label" text-anchor="middle" font-size="8">1000</text>
+
+  <!-- Axis labels -->
+  <text x="20" y="140" class="axis-label" text-anchor="middle" transform="rotate(-90, 20, 140)">Number of Lamps</text>
+  <text x="237" y="265" class="axis-label" text-anchor="middle">Life Time (in hours)</text>
+
+  <!-- Legend -->
+  <rect x="280" y="50" width="12" height="12" class="highlight"/>
+  <text x="297" y="60" class="label" font-size="9">More than 700 hrs: 74+62+48 = 184 lamps</text>
+
+  <text x="225" y="285" class="label" text-anchor="middle" font-size="9">184 lamps have lifetime more than 700 hours</text>
+</svg>

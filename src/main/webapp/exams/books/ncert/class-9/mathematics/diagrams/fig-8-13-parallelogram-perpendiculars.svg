@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="300" height="180">
+  <style>
+    .quad { fill: none; stroke: #374151; stroke-width: 2; }
+    .diagonal { stroke: #6366f1; stroke-width: 1.5; }
+    .perp { stroke: #22c55e; stroke-width: 1.5; stroke-dasharray: 4; }
+    .point { fill: #ef4444; }
+    .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; }
+    .right-angle { fill: none; stroke: #22c55e; stroke-width: 1; }
+  </style>
+
+  <!-- Parallelogram ABCD -->
+  <polygon points="70,50 250,50 210,140 30,140" class="quad"/>
+
+  <!-- Diagonal BD -->
+  <line x1="250" y1="50" x2="30" y2="140" class="diagonal"/>
+
+  <!-- Perpendicular AP -->
+  <line x1="70" y1="50" x2="125" y2="105" class="perp"/>
+  <circle cx="125" cy="105" r="3" class="point"/>
+  <text x="130" y="118" class="label">P</text>
+
+  <!-- Perpendicular CQ -->
+  <line x1="210" y1="140" x2="155" y2="85" class="perp"/>
+  <circle cx="155" cy="85" r="3" class="point"/>
+  <text x="160" y="78" class="label">Q</text>
+
+  <!-- Points -->
+  <circle cx="70" cy="50" r="4" class="point"/>
+  <text x="55" y="45" class="label">A</text>
+
+  <circle cx="250" cy="50" r="4" class="point"/>
+  <text x="255" y="45" class="label">B</text>
+
+  <circle cx="210" cy="140" r="4" class="point"/>
+  <text x="218" y="150" class="label">C</text>
+
+  <circle cx="30" cy="140" r="4" class="point"/>
+  <text x="15" y="150" class="label">D</text>
+
+  <text x="150" y="172" class="label" text-anchor="middle" font-size="11">Parallelogram ABCD with perpendiculars AP and CQ to BD</text>
+</svg>
