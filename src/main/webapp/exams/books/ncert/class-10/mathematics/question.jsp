@@ -645,13 +645,20 @@
                 // Convert actual newline characters to <br>
                 formatted = formatted.replace(/\n/g, '<br>');
 
-                // Put (i), (ii), (iii), (iv), etc. on separate lines if they follow text
-                formatted = formatted.replace(/([.?!])\s*(\([ivxlcdm]+\))/gi, '$1<br><br>$2');
-                formatted = formatted.replace(/([.?!])\s*(\([a-z]\))/gi, '$1<br><br>$2');
+                // Add line breaks before question part numbers (i), (ii), (iii), (iv), (v), etc.
+                // Use whitespace before to distinguish from LaTeX \( which has no space
+                // Match: "content (ii)" -> "content<br>(ii)"
+                formatted = formatted.replace(/\s+(\(i\))/gi, '<br><br>$1');  // First item gets double break
+                formatted = formatted.replace(/\s+(\((?:ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii)\))/gi, '<br>$1');
 
-                // Also handle when (ii), (iii) etc. follow (i) without proper break
-                formatted = formatted.replace(/(\([ivxlcdm]+\)[^(]+?)(\([ivxlcdm]+\))/gi, '$1<br>$2');
-                formatted = formatted.replace(/(\([a-z]\)[^(]+?)(\([a-z]\))/gi, '$1<br>$2');
+                // Handle (a), (b), (c), (d) style
+                formatted = formatted.replace(/\s+(\(a\))/gi, '<br><br>$1');
+                formatted = formatted.replace(/\s+(\([b-z]\))/gi, '<br>$1');
+
+                // Handle numbered items: (1), (2), (3) etc.
+                formatted = formatted.replace(/\s+(\(1\))/g, '<br><br>$1');
+                formatted = formatted.replace(/\s+(\([2-9]\))/g, '<br>$1');
+                formatted = formatted.replace(/\s+(\(\d{2,}\))/g, '<br>$1');
 
                 return formatted;
             }
