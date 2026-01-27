@@ -1019,4 +1019,54 @@ function generateFAQSchema(questions) {
 }
 </script>
 
+<!-- Ad Blocker Layout Fix -->
+<script>
+// Detect if ad sidebars are blocked and adjust layout
+(function() {
+    function checkAdBlockerLayout() {
+        var leftSidebar = document.querySelector('.ad-sidebar-left');
+        var rightSidebar = document.querySelector('.ad-sidebar-right');
+        var layout = document.querySelector('.three-col-layout');
+
+        if (!layout) return;
+
+        // Check if sidebars are hidden (height 0 or display none)
+        var leftHidden = !leftSidebar ||
+            leftSidebar.offsetHeight === 0 ||
+            leftSidebar.offsetWidth === 0 ||
+            getComputedStyle(leftSidebar).display === 'none' ||
+            getComputedStyle(leftSidebar).visibility === 'hidden';
+
+        var rightHidden = !rightSidebar ||
+            rightSidebar.offsetHeight === 0 ||
+            rightSidebar.offsetWidth === 0 ||
+            getComputedStyle(rightSidebar).display === 'none' ||
+            getComputedStyle(rightSidebar).visibility === 'hidden';
+
+        // If either sidebar is blocked, switch to single-column centered layout
+        if ((leftHidden || rightHidden) && window.innerWidth >= 1200) {
+            layout.style.gridTemplateColumns = '1fr';
+            layout.style.maxWidth = '1000px';
+
+            var mainContent = layout.querySelector('.main-content-area');
+            if (mainContent) {
+                mainContent.style.maxWidth = '100%';
+            }
+        }
+    }
+
+    // Run after page loads and on resize
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkAdBlockerLayout, 100);
+        });
+    } else {
+        setTimeout(checkAdBlockerLayout, 100);
+    }
+
+    // Also check on resize
+    window.addEventListener('resize', checkAdBlockerLayout);
+})();
+</script>
+
 <%@ include file="../../../../components/footer.jsp" %>

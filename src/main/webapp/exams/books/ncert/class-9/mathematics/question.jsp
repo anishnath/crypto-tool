@@ -915,4 +915,30 @@ function injectQASchema(q) {
 }
 </script>
 
+<!-- Ad Blocker Layout Fix -->
+<script>
+(function() {
+    function checkAdBlockerLayout() {
+        var leftSidebar = document.querySelector('.ad-sidebar-left');
+        var rightSidebar = document.querySelector('.ad-sidebar-right');
+        var layout = document.querySelector('.three-col-layout');
+        if (!layout) return;
+        var leftHidden = !leftSidebar || leftSidebar.offsetHeight === 0 || leftSidebar.offsetWidth === 0 ||
+            getComputedStyle(leftSidebar).display === 'none' || getComputedStyle(leftSidebar).visibility === 'hidden';
+        var rightHidden = !rightSidebar || rightSidebar.offsetHeight === 0 || rightSidebar.offsetWidth === 0 ||
+            getComputedStyle(rightSidebar).display === 'none' || getComputedStyle(rightSidebar).visibility === 'hidden';
+        if ((leftHidden || rightHidden) && window.innerWidth >= 1200) {
+            layout.style.gridTemplateColumns = '1fr';
+            layout.style.maxWidth = '1000px';
+            var mainContent = layout.querySelector('.main-content-area');
+            if (mainContent) mainContent.style.maxWidth = '100%';
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(checkAdBlockerLayout, 100); });
+    } else { setTimeout(checkAdBlockerLayout, 100); }
+    window.addEventListener('resize', checkAdBlockerLayout);
+})();
+</script>
+
 <%@ include file="../../../../components/footer.jsp" %>

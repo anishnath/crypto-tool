@@ -708,6 +708,8 @@
     .three-col-layout {
         grid-template-columns: 160px 1fr 160px;
         gap: var(--space-6);
+        /* Center content even if sidebars are blocked by ad blockers */
+        justify-content: center;
     }
 }
 
@@ -731,11 +733,33 @@
         height: fit-content;
         max-height: calc(100vh - 100px);
         overflow-y: auto;
+        /* Ensure minimum width even when content is blocked */
+        min-width: 160px;
     }
 
     .ad-sidebar::-webkit-scrollbar {
         width: 0;
         display: none;
+    }
+}
+
+/* Fallback: If sidebars are hidden by ad blockers, center the main content */
+@media (min-width: 1200px) {
+    .three-col-layout:has(.ad-sidebar:empty),
+    .three-col-layout:has(.ad-sidebar[style*="display: none"]),
+    .three-col-layout:has(.ad-sidebar[style*="display:none"]) {
+        grid-template-columns: 1fr;
+        max-width: 1000px;
+    }
+}
+
+/* Additional fallback using :not(:visible) simulation for ad blockers */
+@supports (grid-template-columns: subgrid) {
+    @media (min-width: 1200px) {
+        .three-col-layout {
+            /* Modern browsers: ensure grid doesn't collapse awkwardly */
+            grid-auto-columns: minmax(0, 1fr);
+        }
     }
 }
 
@@ -774,6 +798,17 @@
 @media (min-width: 1200px) {
     .main-content-area {
         max-width: none;
+        /* Ensure content stays centered even if sidebars are blocked */
+        justify-self: center;
+    }
+}
+
+/* When parent grid has only main content visible (sidebars blocked), ensure proper width */
+@media (min-width: 1200px) {
+    .three-col-layout > .main-content-area:only-child,
+    .three-col-layout > .main-content-area:first-child:last-child {
+        max-width: 1000px;
+        margin: 0 auto;
     }
 }
 
