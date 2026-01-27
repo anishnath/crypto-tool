@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 420">
+  <defs>
+    <linearGradient id="ogiveGrad8" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="225" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#1f2937" font-weight="bold">Ex 13.2 Q8: Marks of 80 Students</text>
+  <text x="225" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Less Than Ogive - Finding Median and Students Above 70</text>
+
+  <!-- Graph area -->
+  <rect x="55" y="50" width="340" height="240" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- Grid lines -->
+  <g stroke="#e5e7eb" stroke-width="0.5">
+    <!-- Horizontal at 10, 20, 30, 40, 50, 60, 70, 80 -->
+    <line x1="55" y1="80" x2="395" y2="80"/>
+    <line x1="55" y1="110" x2="395" y2="110"/>
+    <line x1="55" y1="140" x2="395" y2="140"/>
+    <line x1="55" y1="170" x2="395" y2="170"/>
+    <line x1="55" y1="200" x2="395" y2="200"/>
+    <line x1="55" y1="230" x2="395" y2="230"/>
+    <line x1="55" y1="260" x2="395" y2="260"/>
+    <!-- Vertical at 10, 20, ..., 100 -->
+    <line x1="89" y1="50" x2="89" y2="290"/>
+    <line x1="123" y1="50" x2="123" y2="290"/>
+    <line x1="157" y1="50" x2="157" y2="290"/>
+    <line x1="191" y1="50" x2="191" y2="290"/>
+    <line x1="225" y1="50" x2="225" y2="290"/>
+    <line x1="259" y1="50" x2="259" y2="290"/>
+    <line x1="293" y1="50" x2="293" y2="290"/>
+    <line x1="327" y1="50" x2="327" y2="290"/>
+    <line x1="361" y1="50" x2="361" y2="290"/>
+  </g>
+
+  <!-- Axes -->
+  <line x1="55" y1="290" x2="405" y2="290" stroke="#374151" stroke-width="2"/>
+  <line x1="55" y1="290" x2="55" y2="45" stroke="#374151" stroke-width="2"/>
+  <polygon points="405,290 397,286 397,294" fill="#374151"/>
+  <polygon points="55,45 51,53 59,53" fill="#374151"/>
+
+  <!-- X-axis labels -->
+  <text x="55" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">0</text>
+  <text x="89" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">10</text>
+  <text x="123" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">20</text>
+  <text x="157" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">30</text>
+  <text x="191" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">40</text>
+  <text x="225" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">50</text>
+  <text x="259" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">60</text>
+  <text x="293" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">70</text>
+  <text x="327" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">80</text>
+  <text x="361" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">90</text>
+  <text x="395" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">100</text>
+  <text x="225" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Upper Class Boundary (Marks)</text>
+
+  <!-- Y-axis labels -->
+  <text x="45" y="294" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">0</text>
+  <text x="45" y="264" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">10</text>
+  <text x="45" y="234" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">20</text>
+  <text x="45" y="204" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">30</text>
+  <text x="45" y="174" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">40</text>
+  <text x="45" y="144" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">50</text>
+  <text x="45" y="114" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">60</text>
+  <text x="45" y="84" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">70</text>
+  <text x="45" y="54" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">80</text>
+  <text x="20" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold" transform="rotate(-90, 20, 170)">Cumulative Frequency</text>
+
+  <!-- Data: cf at upper limits -->
+  <!-- 10→3, 20→8, 30→16, 40→28, 50→43, 60→53, 70→62, 80→69, 90→75, 100→80 -->
+  <!-- Y scale: 80 units = 240 pixels, so 1 unit = 3 pixels -->
+  <!-- 3→290-9=281, 8→290-24=266, 16→290-48=242, 28→290-84=206, 43→290-129=161 -->
+  <!-- 53→290-159=131, 62→290-186=104, 69→290-207=83, 75→290-225=65, 80→290-240=50 -->
+
+  <!-- Ogive curve -->
+  <path d="M 55 290
+           Q 72 288, 89 281
+           Q 106 273, 123 266
+           Q 140 253, 157 242
+           Q 174 222, 191 206
+           Q 208 180, 225 161
+           Q 242 145, 259 131
+           Q 276 117, 293 104
+           Q 310 92, 327 83
+           Q 344 72, 361 65
+           Q 378 56, 395 50"
+        fill="none" stroke="url(#ogiveGrad8)" stroke-width="3"/>
+
+  <!-- Ogive points -->
+  <circle cx="89" cy="281" r="3" fill="#8b5cf6"/>
+  <circle cx="123" cy="266" r="3" fill="#8b5cf6"/>
+  <circle cx="157" cy="242" r="3" fill="#8b5cf6"/>
+  <circle cx="191" cy="206" r="3" fill="#8b5cf6"/>
+  <circle cx="225" cy="161" r="3" fill="#8b5cf6"/>
+  <circle cx="259" cy="131" r="3" fill="#8b5cf6"/>
+  <circle cx="293" cy="104" r="4" fill="#ef4444"/>
+  <circle cx="327" cy="83" r="3" fill="#8b5cf6"/>
+  <circle cx="361" cy="65" r="3" fill="#8b5cf6"/>
+  <circle cx="395" cy="50" r="3" fill="#8b5cf6"/>
+
+  <!-- Median line (n/2 = 40) -->
+  <!-- 40→290-120=170, at x around 48 marks -->
+  <line x1="55" y1="170" x2="213" y2="170" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="213" y1="170" x2="213" y2="290" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="213" cy="170" r="5" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+  <text x="35" y="174" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">40</text>
+  <text x="35" y="184" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">(n/2)</text>
+  <text x="213" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">48</text>
+
+  <!-- Mark 70 line for students above 70 -->
+  <line x1="293" y1="104" x2="293" y2="290" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="55" y1="104" x2="293" y2="104" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="35" y="108" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">62</text>
+  <text x="293" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">70</text>
+
+  <!-- Data Table -->
+  <rect x="55" y="330" width="340" height="85" fill="#f3f4f6" stroke="#d1d5db" rx="3"/>
+  <text x="225" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Cumulative Frequency Table</text>
+  <line x1="55" y1="350" x2="395" y2="350" stroke="#d1d5db"/>
+
+  <!-- Row 1 -->
+  <text x="70" y="365" font-family="Arial, sans-serif" font-size="8" fill="#374151" font-weight="bold">Marks:</text>
+  <text x="115" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">0-10</text>
+  <text x="145" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">10-20</text>
+  <text x="175" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">20-30</text>
+  <text x="205" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">30-40</text>
+  <text x="235" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">40-50</text>
+  <text x="265" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">50-60</text>
+  <text x="295" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">60-70</text>
+  <text x="325" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">70-80</text>
+  <text x="355" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">80-90</text>
+  <text x="380" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">90-100</text>
+
+  <!-- Row 2: Frequency -->
+  <text x="70" y="380" font-family="Arial, sans-serif" font-size="8" fill="#374151" font-weight="bold">Freq:</text>
+  <text x="115" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">3</text>
+  <text x="145" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">5</text>
+  <text x="175" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">8</text>
+  <text x="205" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">12</text>
+  <text x="235" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">15</text>
+  <text x="265" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">10</text>
+  <text x="295" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">9</text>
+  <text x="325" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">7</text>
+  <text x="355" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">6</text>
+  <text x="380" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">5</text>
+
+  <!-- Row 3: CF -->
+  <text x="70" y="395" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6" font-weight="bold">cf:</text>
+  <text x="115" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">3</text>
+  <text x="145" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">8</text>
+  <text x="175" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">16</text>
+  <text x="205" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">28</text>
+  <text x="235" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">43</text>
+  <text x="265" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">53</text>
+  <text x="295" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444" font-weight="bold">62</text>
+  <text x="325" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">69</text>
+  <text x="355" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">75</text>
+  <text x="380" y="395" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">80</text>
+
+  <!-- Answer boxes -->
+  <rect x="400" y="120" width="45" height="90" fill="#ecfdf5" stroke="#22c55e" stroke-width="1" rx="3"/>
+  <text x="422" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#15803d" font-weight="bold">Answers</text>
+  <line x1="402" y1="140" x2="443" y2="140" stroke="#22c55e"/>
+  <text x="422" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Median:</text>
+  <text x="422" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">48</text>
+  <text x="422" y="185" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">>70 marks:</text>
+  <text x="422" y="198" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">18</text>
+  <text x="422" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#6b7280">(80-62)</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

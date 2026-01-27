@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 280">
+  <defs>
+    <linearGradient id="circleGrad10" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.25"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="160" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Tangent Length using Pythagoras</text>
+  <text x="160" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Radius ⊥ Tangent at Point of Contact</text>
+
+  <!-- Circle -->
+  <circle cx="120" cy="140" r="60" fill="url(#circleGrad10)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Centre O -->
+  <circle cx="120" cy="140" r="4" fill="#3b82f6"/>
+  <text x="108" y="150" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">O</text>
+
+  <!-- Point P (on circle, top-right) -->
+  <circle cx="168" cy="104" r="3" fill="#22c55e"/>
+  <text x="175" y="100" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">P</text>
+
+  <!-- Point Q (external, on tangent) -->
+  <circle cx="264" cy="56" r="3" fill="#ef4444"/>
+  <text x="272" y="58" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" font-weight="bold">Q</text>
+
+  <!-- Radius OP -->
+  <line x1="120" y1="140" x2="168" y2="104" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Tangent PQ -->
+  <line x1="168" y1="104" x2="264" y2="56" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Line OQ (hypotenuse) -->
+  <line x1="120" y1="140" x2="264" y2="56" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- Right angle at P -->
+  <path d="M 160 97 L 153 104 L 160 111" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Dimension: OP = 5 cm -->
+  <text x="130" y="115" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">r = 5 cm</text>
+
+  <!-- Dimension: OQ = 12 cm -->
+  <text x="175" y="115" font-family="Arial, sans-serif" font-size="10" fill="#ef4444">OQ = 12 cm</text>
+
+  <!-- Dimension: PQ = ? -->
+  <text x="220" y="70" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">PQ = ?</text>
+
+  <!-- Key insight box -->
+  <rect x="10" y="200" width="140" height="70" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" rx="5"/>
+  <text x="80" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Key Property:</text>
+  <text x="80" y="233" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Radius ⊥ Tangent</text>
+  <text x="80" y="246" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">at point of contact</text>
+  <text x="80" y="259" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">∠OPQ = 90°</text>
+
+  <!-- Calculation box -->
+  <rect x="160" y="200" width="150" height="70" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="235" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Pythagoras Theorem:</text>
+  <text x="235" y="233" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">PQ² + OP² = OQ²</text>
+  <text x="235" y="246" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">PQ² + 25 = 144</text>
+  <text x="235" y="259" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">PQ = √119 cm</text>
+
+  <!-- Triangle highlight -->
+  <polygon points="120,140 168,104 264,56" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="190" y="145" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">Right △OPQ</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

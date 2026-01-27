@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320">
+  <defs>
+    <linearGradient id="canalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="190" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">TV Tower Across Canal</text>
+  <text x="190" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Two observation points: angles 60° and 30°</text>
+
+  <!-- Banks and canal -->
+  <!-- Left bank -->
+  <rect x="0" y="220" width="110" height="100" fill="#d1fae5"/>
+
+  <!-- Canal (water) -->
+  <rect x="110" y="220" width="80" height="100" fill="url(#canalGrad)"/>
+
+  <!-- Right bank -->
+  <rect x="190" y="220" width="190" height="100" fill="#d1fae5"/>
+
+  <!-- Ground line -->
+  <line x1="0" y1="220" x2="380" y2="220" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- TV Tower -->
+  <rect x="195" y="90" width="12" height="130" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <!-- Tower antenna -->
+  <line x1="201" y1="90" x2="201" y2="70" stroke="#ef4444" stroke-width="3"/>
+  <circle cx="201" cy="67" r="5" fill="#ef4444"/>
+  <!-- Tower cross-beams -->
+  <line x1="195" y1="110" x2="207" y2="125" stroke="#6b7280" stroke-width="1"/>
+  <line x1="207" y1="110" x2="195" y2="125" stroke="#6b7280" stroke-width="1"/>
+  <line x1="195" y1="145" x2="207" y2="160" stroke="#6b7280" stroke-width="1"/>
+  <line x1="207" y1="145" x2="195" y2="160" stroke="#6b7280" stroke-width="1"/>
+  <line x1="195" y1="180" x2="207" y2="195" stroke="#6b7280" stroke-width="1"/>
+  <line x1="207" y1="180" x2="195" y2="195" stroke="#6b7280" stroke-width="1"/>
+
+  <!-- Points -->
+  <!-- A - top of tower -->
+  <circle cx="201" cy="70" r="3" fill="#ef4444"/>
+  <text x="210" y="68" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">A</text>
+
+  <!-- B - foot of tower -->
+  <circle cx="201" cy="220" r="3" fill="#3b82f6"/>
+  <text x="210" y="235" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- C - first observation point (directly opposite) -->
+  <circle cx="110" cy="220" r="5" fill="#22c55e"/>
+  <text x="105" y="240" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">C</text>
+
+  <!-- D - second observation point (20 m away) -->
+  <circle cx="50" cy="220" r="5" fill="#8b5cf6"/>
+  <text x="45" y="240" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">D</text>
+
+  <!-- Person at C -->
+  <circle cx="110" cy="208" r="6" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <line x1="110" y1="214" x2="110" y2="220" stroke="#d97706" stroke-width="2"/>
+
+  <!-- Person at D -->
+  <circle cx="50" cy="208" r="6" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <line x1="50" y1="214" x2="50" y2="220" stroke="#d97706" stroke-width="2"/>
+
+  <!-- Line of sight from C (60°) -->
+  <line x1="110" y1="220" x2="201" y2="70" stroke="#22c55e" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Line of sight from D (30°) -->
+  <line x1="50" y1="220" x2="201" y2="70" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Angle at C = 60° -->
+  <path d="M 130 220 A 20 20 0 0 0 120 202" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <text x="135" y="205" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">60°</text>
+
+  <!-- Angle at D = 30° -->
+  <path d="M 75 220 A 25 25 0 0 0 68 200" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="80" y="200" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">30°</text>
+
+  <!-- Canal width = x -->
+  <line x1="110" y1="250" x2="201" y2="250" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="110" y1="245" x2="110" y2="255" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="201" y1="245" x2="201" y2="255" stroke="#3b82f6" stroke-width="1"/>
+  <text x="155" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">x = ?</text>
+
+  <!-- Distance CD = 20 m -->
+  <line x1="50" y1="270" x2="110" y2="270" stroke="#8b5cf6" stroke-width="1"/>
+  <line x1="50" y1="265" x2="50" y2="275" stroke="#8b5cf6" stroke-width="1"/>
+  <line x1="110" y1="265" x2="110" y2="275" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="80" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">20 m</text>
+
+  <!-- Tower height = h -->
+  <line x1="225" y1="70" x2="225" y2="220" stroke="#ef4444" stroke-width="1"/>
+  <line x1="220" y1="70" x2="230" y2="70" stroke="#ef4444" stroke-width="1"/>
+  <line x1="220" y1="220" x2="230" y2="220" stroke="#ef4444" stroke-width="1"/>
+  <text x="235" y="150" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">h = ?</text>
+
+  <!-- Solution box -->
+  <rect x="250" y="50" width="125" height="95" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="312" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Solution:</text>
+  <text x="312" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">From C: tan 60° = h/x</text>
+  <text x="312" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">→ h = x√3 ... (1)</text>
+  <text x="312" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">From D: tan 30° = h/(x+20)</text>
+  <text x="312" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Solving: x = 10 m</text>
+  <text x="312" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">h = 10√3 ≈ 17.32 m</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

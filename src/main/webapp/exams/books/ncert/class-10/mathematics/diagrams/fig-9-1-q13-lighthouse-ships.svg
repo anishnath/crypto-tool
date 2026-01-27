@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 340">
+  <defs>
+    <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0.6"/>
+    </linearGradient>
+    <linearGradient id="lighthouseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="190" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Lighthouse and Two Ships</text>
+  <text x="190" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Lighthouse = 75 m, Angles of Depression: 45° and 30°</text>
+
+  <!-- Sky -->
+  <rect x="0" y="40" width="380" height="130" fill="#e0f2fe"/>
+
+  <!-- Sea -->
+  <rect x="0" y="170" width="380" height="110" fill="url(#seaGrad)"/>
+  <line x1="0" y1="170" x2="380" y2="170" stroke="#0284c7" stroke-width="2"/>
+
+  <!-- Wave patterns -->
+  <path d="M 0 190 Q 20 185, 40 190 T 80 190 T 120 190 T 160 190 T 200 190 T 240 190 T 280 190 T 320 190 T 360 190 T 400 190" fill="none" stroke="#7dd3fc" stroke-width="1" opacity="0.5"/>
+  <path d="M 0 210 Q 25 205, 50 210 T 100 210 T 150 210 T 200 210 T 250 210 T 300 210 T 350 210 T 400 210" fill="none" stroke="#7dd3fc" stroke-width="1" opacity="0.5"/>
+
+  <!-- Land/Shore -->
+  <rect x="0" y="170" width="70" height="110" fill="#d1fae5"/>
+
+  <!-- Lighthouse -->
+  <polygon points="30,95 50,95 55,170 25,170" fill="url(#lighthouseGrad)" stroke="#d97706" stroke-width="2"/>
+  <!-- Lighthouse stripes -->
+  <rect x="28" y="110" width="24" height="10" fill="#ef4444"/>
+  <rect x="27" y="130" width="26" height="10" fill="#ef4444"/>
+  <rect x="26" y="150" width="28" height="10" fill="#ef4444"/>
+  <!-- Lighthouse top (light) -->
+  <rect x="32" y="85" width="16" height="10" fill="#1f2937"/>
+  <polygon points="40,75 32,85 48,85" fill="#fbbf24"/>
+  <!-- Light beam -->
+  <path d="M 48 80 L 350 150" stroke="#fbbf24" stroke-width="2" opacity="0.3"/>
+
+  <!-- Ship 1 (nearer, 45°) -->
+  <ellipse cx="145" cy="175" rx="25" ry="8" fill="#6b7280"/>
+  <rect x="138" y="160" width="14" height="15" fill="#374151"/>
+  <polygon points="145,145 138,160 152,160" fill="#ef4444"/>
+  <text x="145" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Ship 1</text>
+
+  <!-- Ship 2 (farther, 30°) -->
+  <ellipse cx="290" cy="175" rx="25" ry="8" fill="#6b7280"/>
+  <rect x="283" y="160" width="14" height="15" fill="#374151"/>
+  <polygon points="290,145 283,160 297,160" fill="#3b82f6"/>
+  <text x="290" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Ship 2</text>
+
+  <!-- Points -->
+  <!-- A - top of lighthouse -->
+  <circle cx="40" cy="95" r="3" fill="#ef4444"/>
+  <text x="25" y="90" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">A</text>
+
+  <!-- B - base of lighthouse at sea level -->
+  <circle cx="40" cy="170" r="3" fill="#3b82f6"/>
+  <text x="48" y="180" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- C - Ship 1 -->
+  <circle cx="145" cy="170" r="3" fill="#22c55e"/>
+  <text x="145" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">C</text>
+
+  <!-- D - Ship 2 -->
+  <circle cx="290" cy="170" r="3" fill="#8b5cf6"/>
+  <text x="290" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">D</text>
+
+  <!-- Horizontal reference line -->
+  <line x1="40" y1="95" x2="320" y2="95" stroke="#6b7280" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Line of sight to Ship 1 (depression 45°) -->
+  <line x1="40" y1="95" x2="145" y2="170" stroke="#22c55e" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Line of sight to Ship 2 (depression 30°) -->
+  <line x1="40" y1="95" x2="290" y2="170" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Angle of depression 45° -->
+  <path d="M 70 95 A 30 30 0 0 1 58 115" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <text x="75" y="112" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">45°</text>
+
+  <!-- Angle of depression 30° -->
+  <path d="M 85 95 A 45 45 0 0 1 78 108" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="90" y="105" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6" font-weight="bold">30°</text>
+
+  <!-- Height = 75 m -->
+  <line x1="15" y1="95" x2="15" y2="170" stroke="#f59e0b" stroke-width="1"/>
+  <line x1="10" y1="95" x2="20" y2="95" stroke="#f59e0b" stroke-width="1"/>
+  <line x1="10" y1="170" x2="20" y2="170" stroke="#f59e0b" stroke-width="1"/>
+  <text x="5" y="135" font-family="Arial, sans-serif" font-size="9" fill="#f59e0b" font-weight="bold">75m</text>
+
+  <!-- Distance between ships -->
+  <line x1="145" y1="220" x2="290" y2="220" stroke="#ef4444" stroke-width="2"/>
+  <line x1="145" y1="215" x2="145" y2="225" stroke="#ef4444" stroke-width="2"/>
+  <line x1="290" y1="215" x2="290" y2="225" stroke="#ef4444" stroke-width="2"/>
+  <text x="217" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">Distance = ?</text>
+
+  <!-- Solution box -->
+  <rect x="100" y="250" width="250" height="85" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="225" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Solution:</text>
+  <text x="225" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Ship 1: tan 45° = 75/BC → BC = 75 m</text>
+  <text x="225" y="298" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Ship 2: tan 30° = 75/BD → BD = 75√3 m</text>
+  <text x="225" y="313" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Distance CD = BD - BC = 75√3 - 75</text>
+  <text x="225" y="328" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">= 75(√3-1) ≈ 54.9 m</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

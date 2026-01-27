@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380">
+  <defs>
+    <linearGradient id="triGrad67" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dbeafe;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#1f2937" font-weight="bold">Ex 6.3 Q7: Altitudes of a Triangle</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">AD and CE are altitudes intersecting at P (orthocentre)</text>
+
+  <!-- Main Triangle ABC -->
+  <polygon points="200,60 60,260 340,260" fill="url(#triGrad67)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Altitude AD (from A to BC) -->
+  <line x1="200" y1="60" x2="200" y2="260" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Altitude CE (from C to AB) -->
+  <line x1="340" y1="260" x2="130" y2="155" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Right angle markers -->
+  <!-- At D (foot of altitude AD) -->
+  <rect x="190" y="248" width="10" height="10" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <!-- At E (foot of altitude CE) -->
+  <polygon points="135,150 140,157 133,162 128,155" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+
+  <!-- Points -->
+  <!-- A -->
+  <circle cx="200" cy="60" r="5" fill="#3b82f6"/>
+  <text x="200" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- B -->
+  <circle cx="60" cy="260" r="5" fill="#3b82f6"/>
+  <text x="45" y="270" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- C -->
+  <circle cx="340" cy="260" r="5" fill="#3b82f6"/>
+  <text x="355" y="270" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">C</text>
+
+  <!-- D (foot of altitude from A) -->
+  <circle cx="200" cy="260" r="4" fill="#ef4444"/>
+  <text x="200" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" font-weight="bold">D</text>
+
+  <!-- E (foot of altitude from C) -->
+  <circle cx="130" cy="155" r="4" fill="#22c55e"/>
+  <text x="115" y="150" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">E</text>
+
+  <!-- P (orthocentre - intersection) -->
+  <circle cx="200" cy="195" r="6" fill="#8b5cf6" stroke="#6d28d9" stroke-width="2"/>
+  <text x="215" y="192" font-family="Arial, sans-serif" font-size="14" fill="#8b5cf6" font-weight="bold">P</text>
+
+  <!-- Labels for triangles -->
+  <text x="185" y="110" font-family="Arial, sans-serif" font-size="10" fill="#ef4444">AD⊥BC</text>
+  <text x="245" y="200" font-family="Arial, sans-serif" font-size="10" fill="#22c55e">CE⊥AB</text>
+
+  <!-- Similarity results box -->
+  <rect x="20" y="290" width="360" height="85" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" rx="5"/>
+  <text x="200" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">Similar Triangles Formed:</text>
+  <line x1="30" y1="318" x2="370" y2="318" stroke="#d1d5db"/>
+
+  <text x="30" y="335" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">(i) △AEP ~ △CDP</text>
+  <text x="130" y="335" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">(∠AEP=∠CDP=90°, ∠APE=∠DPC)</text>
+
+  <text x="30" y="350" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">(ii) △ABD ~ △CBE</text>
+  <text x="130" y="350" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">(∠ADB=∠CEB=90°, ∠B common)</text>
+
+  <text x="30" y="365" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6" font-weight="bold">(iii) △AEP ~ △ADB</text>
+  <text x="260" y="365" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6" font-weight="bold">(iv) △PDC ~ △BEC</text>
+
+  <!-- Orthocentre note -->
+  <rect x="280" y="50" width="115" height="55" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" rx="3"/>
+  <text x="337" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#d97706" font-weight="bold">Orthocentre (P)</text>
+  <text x="337" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Point where all</text>
+  <text x="337" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">3 altitudes meet</text>
+
+  <!-- AA similarity key -->
+  <rect x="280" y="115" width="115" height="40" fill="#dcfce7" stroke="#22c55e" stroke-width="1" rx="3"/>
+  <text x="337" y="132" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#15803d" font-weight="bold">Key: AA Similarity</text>
+  <text x="337" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">90° + common angle</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

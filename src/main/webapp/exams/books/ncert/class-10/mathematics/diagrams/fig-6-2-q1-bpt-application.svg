@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+  <defs>
+    <linearGradient id="triGradQ1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dbeafe;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#1f2937" font-weight="bold">Ex 6.2 Q1: Basic Proportionality Theorem</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">DE || BC, find the unknown length</text>
+
+  <!-- Triangle ABC -->
+  <polygon points="180,60 50,230 310,230" fill="url(#triGradQ1)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Line DE parallel to BC -->
+  <line x1="115" y1="145" x2="245" y2="145" stroke="#ef4444" stroke-width="3"/>
+
+  <!-- Parallel markers -->
+  <line x1="175" y1="141" x2="185" y2="149" stroke="#ef4444" stroke-width="2"/>
+  <line x1="180" y1="141" x2="190" y2="149" stroke="#ef4444" stroke-width="2"/>
+  <line x1="175" y1="226" x2="185" y2="234" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="180" y1="226" x2="190" y2="234" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Points -->
+  <circle cx="180" cy="60" r="5" fill="#3b82f6"/>
+  <text x="180" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">A</text>
+
+  <circle cx="50" cy="230" r="5" fill="#3b82f6"/>
+  <text x="35" y="240" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">B</text>
+
+  <circle cx="310" cy="230" r="5" fill="#3b82f6"/>
+  <text x="325" y="240" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">C</text>
+
+  <circle cx="115" cy="145" r="5" fill="#ef4444"/>
+  <text x="95" y="145" font-family="Arial, sans-serif" font-size="14" fill="#ef4444" font-weight="bold">D</text>
+
+  <circle cx="245" cy="145" r="5" fill="#ef4444"/>
+  <text x="260" y="145" font-family="Arial, sans-serif" font-size="14" fill="#ef4444" font-weight="bold">E</text>
+
+  <!-- Dimension labels with values -->
+  <!-- AD = 1.5 cm -->
+  <line x1="130" y1="90" x2="130" y2="135" stroke="#22c55e" stroke-width="1"/>
+  <text x="108" y="115" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">AD=1.5</text>
+
+  <!-- DB = 3 cm -->
+  <line x1="80" y1="165" x2="80" y2="220" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="60" y="195" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">DB=3</text>
+
+  <!-- AE = 1 cm -->
+  <line x1="230" y1="90" x2="230" y2="135" stroke="#22c55e" stroke-width="1"/>
+  <text x="250" y="115" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">AE=1</text>
+
+  <!-- EC = ? -->
+  <line x1="280" y1="165" x2="280" y2="220" stroke="#f59e0b" stroke-width="1"/>
+  <text x="300" y="195" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b" font-weight="bold">EC=?</text>
+
+  <!-- DE || BC label -->
+  <rect x="155" y="150" width="55" height="18" fill="#fef2f2" stroke="#ef4444" rx="3"/>
+  <text x="182" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">DE || BC</text>
+
+  <!-- Solution Box -->
+  <rect x="20" y="250" width="360" height="65" fill="#ecfdf5" stroke="#22c55e" stroke-width="2" rx="5"/>
+  <text x="200" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#15803d" font-weight="bold">Solution using BPT:</text>
+  <text x="200" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151">AD/DB = AE/EC → 1.5/3 = 1/EC → 1/2 = 1/EC</text>
+  <text x="200" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#22c55e" font-weight="bold">EC = 2 cm ✓</text>
+
+  <!-- BPT formula reminder -->
+  <rect x="315" y="55" width="80" height="50" fill="#fef3c7" stroke="#f59e0b" rx="3"/>
+  <text x="355" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#d97706" font-weight="bold">BPT:</text>
+  <text x="355" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">AD/DB</text>
+  <text x="355" y="102" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">= AE/EC</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

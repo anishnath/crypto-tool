@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340">
+  <defs>
+    <linearGradient id="tableGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#fde68a;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="designGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f472b6;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="160" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Round Table Cover with 6 Designs</text>
+  <text x="160" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Radius = 28 cm, 6 Equal Segments</text>
+
+  <!-- Table cover (circle) -->
+  <circle cx="160" cy="155" r="95" fill="url(#tableGrad)" stroke="#d97706" stroke-width="2"/>
+
+  <!-- 6 Segment designs (floral/decorative) -->
+  <!-- Segment 1: 0° to 60° -->
+  <path d="M 255 155 A 95 95 0 0 0 207.5 72.7 L 255 155 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+  <!-- Segment 2: 60° to 120° -->
+  <path d="M 207.5 72.7 A 95 95 0 0 0 112.5 72.7 L 207.5 72.7 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+  <!-- Segment 3: 120° to 180° -->
+  <path d="M 112.5 72.7 A 95 95 0 0 0 65 155 L 112.5 72.7 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+  <!-- Segment 4: 180° to 240° -->
+  <path d="M 65 155 A 95 95 0 0 0 112.5 237.3 L 65 155 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+  <!-- Segment 5: 240° to 300° -->
+  <path d="M 112.5 237.3 A 95 95 0 0 0 207.5 237.3 L 112.5 237.3 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+  <!-- Segment 6: 300° to 360° -->
+  <path d="M 207.5 237.3 A 95 95 0 0 0 255 155 L 207.5 237.3 Z" fill="url(#designGrad)" stroke="#ec4899" stroke-width="1.5"/>
+
+  <!-- Radii lines creating sectors -->
+  <line x1="160" y1="155" x2="255" y2="155" stroke="#92400e" stroke-width="1.5"/>
+  <line x1="160" y1="155" x2="207.5" y2="72.7" stroke="#92400e" stroke-width="1.5"/>
+  <line x1="160" y1="155" x2="112.5" y2="72.7" stroke="#92400e" stroke-width="1.5"/>
+  <line x1="160" y1="155" x2="65" y2="155" stroke="#92400e" stroke-width="1.5"/>
+  <line x1="160" y1="155" x2="112.5" y2="237.3" stroke="#92400e" stroke-width="1.5"/>
+  <line x1="160" y1="155" x2="207.5" y2="237.3" stroke="#92400e" stroke-width="1.5"/>
+
+  <!-- Chord lines (forming hexagon) -->
+  <polygon points="255,155 207.5,72.7 112.5,72.7 65,155 112.5,237.3 207.5,237.3"
+           fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+  <!-- Centre point -->
+  <circle cx="160" cy="155" r="4" fill="#92400e"/>
+
+  <!-- One sector highlighted with angle -->
+  <path d="M 180 155 A 20 20 0 0 0 170 137.7" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="188" y="142" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">60°</text>
+
+  <!-- Dimension: radius -->
+  <line x1="160" y1="155" x2="255" y2="155" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="207" y="145" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">r = 28 cm</text>
+
+  <!-- Diameter dimension -->
+  <line x1="65" y1="265" x2="255" y2="265" stroke="#374151" stroke-width="1"/>
+  <line x1="65" y1="260" x2="65" y2="270" stroke="#374151" stroke-width="1"/>
+  <line x1="255" y1="260" x2="255" y2="270" stroke="#374151" stroke-width="1"/>
+  <text x="160" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">d = 56 cm</text>
+
+  <!-- Labels -->
+  <text x="220" y="130" font-family="Arial, sans-serif" font-size="9" fill="#ec4899" font-weight="bold">Design</text>
+  <text x="220" y="142" font-family="Arial, sans-serif" font-size="9" fill="#ec4899" font-weight="bold">(Segment)</text>
+
+  <!-- Triangle label -->
+  <text x="190" y="115" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">Equilateral △</text>
+
+  <!-- Cost calculation box -->
+  <rect x="260" y="70" width="55" height="50" fill="#fdf2f8" stroke="#ec4899" stroke-width="1" rx="5"/>
+  <text x="287" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ec4899" font-weight="bold">Cost Rate:</text>
+  <text x="287" y="98" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">₹0.35</text>
+  <text x="287" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">per cm²</text>
+
+  <!-- Formulas -->
+  <text x="160" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Area of One Design (Segment):</text>
+  <text x="160" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Sector = (60/360)×πr² = (1/6)×(22/7)×784 ≈ 410.67 cm²</text>
+  <text x="160" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#22c55e">△ = (√3/4)×28² = (1.7/4)×784 ≈ 333.2 cm²</text>
+  <text x="160" y="334" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ec4899" font-weight="bold">6 Designs × (410.67-333.2) = 6 × 77.47 ≈ 464.8 cm² → Cost ≈ ₹162.68</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

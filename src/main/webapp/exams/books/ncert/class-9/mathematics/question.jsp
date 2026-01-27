@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.FileReader" %>
+<%@ page import="java.io.File" %>
 <%
     // Chapter slug to data mapping (same as chapter.jsp)
     Map<String, String[]> chapterMap = new HashMap<>();
@@ -58,9 +61,92 @@
     request.setAttribute("exerciseNum", exerciseNum);
     request.setAttribute("questionNum", questionNum);
 
-    // Placeholder title - will be updated by JavaScript with actual question
-    String pageTitle = "NCERT Class 9 Maths Exercise " + exerciseNum + " " + questionNum + " Solution | " + chapterName;
-    String metaDesc = "Step-by-step solution for NCERT Class 9 Mathematics " + chapterName + " Exercise " + exerciseNum + " " + questionNum + " with hints, detailed explanation and final answer.";
+    // Read actual question text from JSON for SEO meta description
+    String questionPlainText = "";
+    try {
+        String jsonPath = application.getRealPath("/exams/books/ncert/class-9/mathematics/data/chapters.json");
+        File jsonFile = new File(jsonPath);
+        if (jsonFile.exists()) {
+            BufferedReader reader = new BufferedReader(new FileReader(jsonFile));
+            StringBuilder jsonContent = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonContent.append(line);
+            }
+            reader.close();
+
+            // Build the search pattern for this specific question
+            String searchExercise = "Exercise " + exerciseNum;
+            String searchQuestion = questionNum;
+
+            String json = jsonContent.toString();
+
+            // Find the question entry by looking for matching exercise and question_number
+            int searchStart = 0;
+            while (searchStart < json.length()) {
+                int exIdx = json.indexOf("\"exercise\"", searchStart);
+                if (exIdx == -1) break;
+
+                // Find the exercise value
+                int exValStart = json.indexOf("\"", exIdx + 11) + 1;
+                int exValEnd = json.indexOf("\"", exValStart);
+                String exValue = json.substring(exValStart, exValEnd);
+
+                // Check if this matches our exercise (handle optional text like "(Optional)")
+                if (exValue.startsWith(searchExercise)) {
+                    // Look for question_number nearby (within 500 chars)
+                    int qnIdx = json.indexOf("\"question_number\"", exIdx);
+                    if (qnIdx != -1 && qnIdx < exIdx + 500) {
+                        int qnValStart = json.indexOf("\"", qnIdx + 18) + 1;
+                        int qnValEnd = json.indexOf("\"", qnValStart);
+                        String qnValue = json.substring(qnValStart, qnValEnd);
+
+                        if (qnValue.equalsIgnoreCase(searchQuestion)) {
+                            // Found the question! Now extract question_plain
+                            int qpIdx = json.indexOf("\"question_plain\"", exIdx);
+                            if (qpIdx != -1 && qpIdx < exIdx + 2000) {
+                                int qpValStart = json.indexOf("\"", qpIdx + 17) + 1;
+                                int qpValEnd = qpValStart;
+                                // Handle escaped quotes in the value
+                                while (qpValEnd < json.length()) {
+                                    qpValEnd = json.indexOf("\"", qpValEnd);
+                                    if (qpValEnd > 0 && json.charAt(qpValEnd - 1) != '\\') {
+                                        break;
+                                    }
+                                    qpValEnd++;
+                                }
+                                questionPlainText = json.substring(qpValStart, qpValEnd);
+                                // Unescape common escape sequences
+                                questionPlainText = questionPlainText.replace("\\\"", "\"").replace("\\n", " ").replace("\\\\", "\\");
+                                break;
+                            }
+                        }
+                    }
+                }
+                searchStart = exIdx + 1;
+            }
+        }
+    } catch (Exception e) {
+        // Silently fail - will use fallback description
+    }
+
+    // Build page title and meta description
+    String pageTitle;
+    String metaDesc;
+
+    if (questionPlainText != null && !questionPlainText.isEmpty()) {
+        // Use actual question text for better SEO/CTR
+        String truncatedQuestion = questionPlainText.length() > 60 ? questionPlainText.substring(0, 60) + "..." : questionPlainText;
+        pageTitle = truncatedQuestion + " | NCERT Class 9 " + chapterName + " " + exerciseNum + " " + questionNum;
+
+        // Meta description: question text + context (max ~155 chars for SERP)
+        String questionForMeta = questionPlainText.length() > 120 ? questionPlainText.substring(0, 120) : questionPlainText;
+        metaDesc = questionForMeta + " - Step-by-step NCERT Class 9 " + chapterName + " solution with explanation.";
+    } else {
+        // Fallback if JSON parsing fails
+        pageTitle = "NCERT Class 9 Maths Exercise " + exerciseNum + " " + questionNum + " Solution | " + chapterName;
+        metaDesc = "Step-by-step solution for NCERT Class 9 Mathematics " + chapterName + " Exercise " + exerciseNum + " " + questionNum + " with hints, detailed explanation and final answer.";
+    }
 
     request.setAttribute("pageTitle", pageTitle);
     request.setAttribute("pageDescription", metaDesc);

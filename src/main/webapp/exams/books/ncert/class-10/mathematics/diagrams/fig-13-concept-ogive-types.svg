@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 380">
+  <defs>
+    <linearGradient id="lessOgiveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.6"/>
+    </linearGradient>
+    <linearGradient id="moreOgiveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="225" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#1f2937" font-weight="bold">Types of Ogives (Cumulative Frequency Curves)</text>
+
+  <!-- Graph area background -->
+  <rect x="60" y="50" width="320" height="220" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- Grid lines -->
+  <g stroke="#e5e7eb" stroke-width="0.5">
+    <!-- Horizontal grid -->
+    <line x1="60" y1="94" x2="380" y2="94"/>
+    <line x1="60" y1="138" x2="380" y2="138"/>
+    <line x1="60" y1="182" x2="380" y2="182"/>
+    <line x1="60" y1="226" x2="380" y2="226"/>
+    <!-- Vertical grid -->
+    <line x1="124" y1="50" x2="124" y2="270"/>
+    <line x1="188" y1="50" x2="188" y2="270"/>
+    <line x1="252" y1="50" x2="252" y2="270"/>
+    <line x1="316" y1="50" x2="316" y2="270"/>
+  </g>
+
+  <!-- Axes -->
+  <line x1="60" y1="270" x2="390" y2="270" stroke="#374151" stroke-width="2"/>
+  <line x1="60" y1="270" x2="60" y2="45" stroke="#374151" stroke-width="2"/>
+
+  <!-- Axis arrows -->
+  <polygon points="390,270 382,266 382,274" fill="#374151"/>
+  <polygon points="60,45 56,53 64,53" fill="#374151"/>
+
+  <!-- X-axis labels (Class boundaries) -->
+  <text x="60" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="124" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">10</text>
+  <text x="188" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">20</text>
+  <text x="252" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">30</text>
+  <text x="316" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">40</text>
+  <text x="380" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">50</text>
+  <text x="225" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">Class Boundaries (Upper/Lower Limits)</text>
+
+  <!-- Y-axis labels (Cumulative Frequency) -->
+  <text x="50" y="274" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="50" y="230" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">10</text>
+  <text x="50" y="186" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">20</text>
+  <text x="50" y="142" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">30</text>
+  <text x="50" y="98" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">40</text>
+  <text x="50" y="54" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">50</text>
+  <text x="25" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold" transform="rotate(-90, 25, 160)">Cumulative Frequency</text>
+
+  <!-- Less Than Ogive (S-curve rising from left) -->
+  <path d="M 60 270
+           Q 92 265, 124 250
+           Q 156 220, 188 182
+           Q 220 130, 252 94
+           Q 284 65, 316 58
+           Q 348 52, 380 50"
+        fill="none" stroke="url(#lessOgiveGrad)" stroke-width="3"/>
+
+  <!-- Less Than Ogive points -->
+  <circle cx="124" cy="250" r="4" fill="#3b82f6"/>
+  <circle cx="188" cy="182" r="4" fill="#3b82f6"/>
+  <circle cx="252" cy="94" r="4" fill="#3b82f6"/>
+  <circle cx="316" cy="58" r="4" fill="#3b82f6"/>
+  <circle cx="380" cy="50" r="4" fill="#3b82f6"/>
+
+  <!-- More Than Ogive (S-curve falling from left) -->
+  <path d="M 60 50
+           Q 92 52, 124 58
+           Q 156 70, 188 94
+           Q 220 140, 252 182
+           Q 284 230, 316 250
+           Q 348 265, 380 270"
+        fill="none" stroke="url(#moreOgiveGrad)" stroke-width="3"/>
+
+  <!-- More Than Ogive points -->
+  <circle cx="60" cy="50" r="4" fill="#ef4444"/>
+  <circle cx="124" cy="58" r="4" fill="#ef4444"/>
+  <circle cx="188" cy="94" r="4" fill="#ef4444"/>
+  <circle cx="252" cy="182" r="4" fill="#ef4444"/>
+  <circle cx="316" cy="250" r="4" fill="#ef4444"/>
+
+  <!-- Intersection point (Median) -->
+  <circle cx="220" cy="138" r="6" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+
+  <!-- Median lines -->
+  <line x1="220" y1="138" x2="220" y2="270" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="60" y1="138" x2="220" y2="138" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- Median labels -->
+  <text x="220" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Median = 25</text>
+  <text x="45" y="142" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#22c55e">n/2</text>
+
+  <!-- Legend -->
+  <rect x="100" y="320" width="250" height="55" fill="#f3f4f6" stroke="#d1d5db" rx="5"/>
+  <text x="225" y="337" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">Legend</text>
+
+  <!-- Less than ogive legend -->
+  <line x1="115" y1="352" x2="145" y2="352" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="130" cy="352" r="3" fill="#3b82f6"/>
+  <text x="155" y="356" font-family="Arial, sans-serif" font-size="10" fill="#374151">Less Than Ogive (↗)</text>
+
+  <!-- More than ogive legend -->
+  <line x1="115" y1="367" x2="145" y2="367" stroke="#ef4444" stroke-width="3"/>
+  <circle cx="130" cy="367" r="3" fill="#ef4444"/>
+  <text x="155" y="371" font-family="Arial, sans-serif" font-size="10" fill="#374151">More Than Ogive (↘)</text>
+
+  <!-- Intersection marker -->
+  <circle cx="290" cy="359" r="4" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+  <text x="300" y="363" font-family="Arial, sans-serif" font-size="10" fill="#374151">Intersection = Median</text>
+
+  <!-- Key insight box -->
+  <rect x="390" y="80" width="55" height="100" fill="#ecfdf5" stroke="#22c55e" stroke-width="1" rx="3"/>
+  <text x="417" y="98" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#15803d" font-weight="bold">KEY</text>
+  <text x="417" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Both</text>
+  <text x="417" y="127" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">ogives</text>
+  <text x="417" y="139" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">intersect</text>
+  <text x="417" y="151" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">at the</text>
+  <text x="417" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">MEDIAN</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

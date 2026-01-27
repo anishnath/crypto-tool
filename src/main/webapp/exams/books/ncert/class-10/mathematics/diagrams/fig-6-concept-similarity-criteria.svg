@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400">
+  <!-- Title -->
+  <text x="240" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#1f2937" font-weight="bold">Three Criteria for Triangle Similarity</text>
+
+  <!-- AAA Criterion -->
+  <rect x="10" y="45" width="145" height="170" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="82" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d4ed8" font-weight="bold">AAA (or AA)</text>
+  <text x="82" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Angle-Angle-Angle</text>
+
+  <!-- AAA Triangle 1 -->
+  <polygon points="40,100 25,150 75,150" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="40" y="96" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">60°</text>
+  <text x="28" y="158" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">50°</text>
+  <text x="68" y="158" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">70°</text>
+
+  <!-- AAA Triangle 2 (larger, similar) -->
+  <polygon points="110,95 85,165 145,165" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="110" y="91" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">60°</text>
+  <text x="90" y="173" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">50°</text>
+  <text x="138" y="173" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">70°</text>
+
+  <!-- ~ symbol -->
+  <text x="82" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">~</text>
+
+  <text x="82" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">All 3 angles equal</text>
+  <text x="82" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">(Only 2 needed - AA)</text>
+
+  <!-- SAS Criterion -->
+  <rect x="165" y="45" width="150" height="170" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="240" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#16a34a" font-weight="bold">SAS</text>
+  <text x="240" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Side-Angle-Side</text>
+
+  <!-- SAS Triangle 1 -->
+  <polygon points="195,105 180,155 225,155" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="185" y="135" font-family="Arial, sans-serif" font-size="7" fill="#374151">3</text>
+  <text x="195" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">50°</text>
+  <text x="210" y="135" font-family="Arial, sans-serif" font-size="7" fill="#374151">4</text>
+
+  <!-- SAS Triangle 2 (larger, similar) -->
+  <polygon points="280,100 255,170 315,170" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="265" y="140" font-family="Arial, sans-serif" font-size="7" fill="#374151">6</text>
+  <text x="280" y="96" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">50°</text>
+  <text x="302" y="140" font-family="Arial, sans-serif" font-size="7" fill="#374151">8</text>
+
+  <!-- ~ symbol -->
+  <text x="240" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#22c55e" font-weight="bold">~</text>
+
+  <text x="240" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">2 sides proportional</text>
+  <text x="240" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">+ included angle equal</text>
+
+  <!-- SSS Criterion -->
+  <rect x="325" y="45" width="145" height="170" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
+  <text x="397" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#d97706" font-weight="bold">SSS</text>
+  <text x="397" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Side-Side-Side</text>
+
+  <!-- SSS Triangle 1 -->
+  <polygon points="355,110 345,155 385,155" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="347" y="137" font-family="Arial, sans-serif" font-size="7" fill="#374151">2</text>
+  <text x="367" y="167" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">3</text>
+  <text x="375" y="137" font-family="Arial, sans-serif" font-size="7" fill="#374151">2.5</text>
+
+  <!-- SSS Triangle 2 (larger, similar) -->
+  <polygon points="430,100 410,170 465,170" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="417" y="140" font-family="Arial, sans-serif" font-size="7" fill="#374151">4</text>
+  <text x="440" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">6</text>
+  <text x="452" y="140" font-family="Arial, sans-serif" font-size="7" fill="#374151">5</text>
+
+  <!-- ~ symbol -->
+  <text x="397" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#f59e0b" font-weight="bold">~</text>
+
+  <text x="397" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">All 3 sides</text>
+  <text x="397" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">proportional</text>
+
+  <!-- Comparison Table -->
+  <rect x="20" y="230" width="440" height="165" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" rx="5"/>
+  <text x="240" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">Quick Comparison</text>
+  <line x1="30" y1="260" x2="450" y2="260" stroke="#9ca3af"/>
+
+  <!-- Table headers -->
+  <text x="100" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Criterion</text>
+  <text x="240" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">What to Check</text>
+  <text x="400" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Formula</text>
+  <line x1="30" y1="285" x2="450" y2="285" stroke="#d1d5db"/>
+
+  <!-- AAA row -->
+  <rect x="50" y="292" width="60" height="18" fill="#dbeafe" rx="3"/>
+  <text x="80" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1d4ed8" font-weight="bold">AAA</text>
+  <text x="240" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">All corresponding angles equal</text>
+  <text x="400" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">∠A=∠P, ∠B=∠Q, ∠C=∠R</text>
+
+  <!-- SAS row -->
+  <rect x="50" y="318" width="60" height="18" fill="#dcfce7" rx="3"/>
+  <text x="80" y="331" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">SAS</text>
+  <text x="240" y="331" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Two sides proportional + included angle</text>
+  <text x="400" y="331" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AB/PQ=AC/PR, ∠A=∠P</text>
+
+  <!-- SSS row -->
+  <rect x="50" y="344" width="60" height="18" fill="#fef3c7" rx="3"/>
+  <text x="80" y="357" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d97706" font-weight="bold">SSS</text>
+  <text x="240" y="357" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">All three sides proportional</text>
+  <text x="400" y="357" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AB/PQ=BC/QR=CA/RP</text>
+
+  <!-- Note -->
+  <text x="240" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280" font-style="italic">Note: For similarity, sides must be PROPORTIONAL (not equal like congruence)</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

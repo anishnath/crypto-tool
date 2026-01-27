@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300">
+  <defs>
+    <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#92400e;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#78350f;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#bfdbfe;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#dbeafe;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Circus Artist Climbing Rope</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Rope = 20 m, Angle = 30°</text>
+
+  <!-- Sky background -->
+  <rect x="0" y="40" width="340" height="200" fill="url(#skyGrad)"/>
+
+  <!-- Ground -->
+  <rect x="0" y="240" width="340" height="60" fill="#d1fae5" stroke="none"/>
+  <line x1="0" y1="240" x2="340" y2="240" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Vertical pole -->
+  <rect x="75" y="100" width="12" height="140" fill="url(#poleGrad)" stroke="#78350f" stroke-width="1"/>
+
+  <!-- Rope (hypotenuse) -->
+  <line x1="81" y1="100" x2="260" y2="240" stroke="#f59e0b" stroke-width="3"/>
+
+  <!-- Artist on rope (stick figure) -->
+  <circle cx="150" cy="157" r="8" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <line x1="150" y1="165" x2="150" y2="185" stroke="#d97706" stroke-width="2"/>
+  <line x1="150" y1="170" x2="140" y2="180" stroke="#d97706" stroke-width="2"/>
+  <line x1="150" y1="170" x2="160" y2="180" stroke="#d97706" stroke-width="2"/>
+  <line x1="150" y1="185" x2="143" y2="198" stroke="#d97706" stroke-width="2"/>
+  <line x1="150" y1="185" x2="157" y2="198" stroke="#d97706" stroke-width="2"/>
+
+  <!-- Points -->
+  <!-- Top of pole (A) -->
+  <circle cx="81" cy="100" r="4" fill="#3b82f6"/>
+  <text x="65" y="95" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- Bottom of pole (B) -->
+  <circle cx="81" cy="240" r="4" fill="#3b82f6"/>
+  <text x="65" y="250" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- Ground point (C) -->
+  <circle cx="260" cy="240" r="4" fill="#3b82f6"/>
+  <text x="268" y="250" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">C</text>
+
+  <!-- Right angle at B -->
+  <rect x="81" y="228" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+
+  <!-- Angle at C = 30° -->
+  <path d="M 235 240 A 25 25 0 0 0 250 222" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="215" y="230" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">30°</text>
+
+  <!-- Dimensions -->
+  <!-- Rope = 20 m (hypotenuse) -->
+  <text x="175" y="160" font-family="Arial, sans-serif" font-size="11" fill="#f59e0b" font-weight="bold" transform="rotate(-38, 175, 160)">Rope = 20 m</text>
+
+  <!-- Height = h (opposite) -->
+  <line x1="55" y1="100" x2="55" y2="240" stroke="#22c55e" stroke-width="1"/>
+  <line x1="50" y1="100" x2="60" y2="100" stroke="#22c55e" stroke-width="1"/>
+  <line x1="50" y1="240" x2="60" y2="240" stroke="#22c55e" stroke-width="1"/>
+  <text x="35" y="175" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">h = ?</text>
+
+  <!-- Solution box -->
+  <rect x="180" y="55" width="150" height="80" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="255" y="73" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Solution:</text>
+  <text x="255" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">sin 30° = AB/AC</text>
+  <text x="255" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">1/2 = h/20</text>
+  <text x="255" y="114" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">h = 20 × (1/2)</text>
+  <text x="255" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#22c55e" font-weight="bold">h = 10 m</text>
+
+  <!-- Triangle labels -->
+  <text x="120" y="265" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Right △ABC: ∠B = 90°, ∠C = 30°</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

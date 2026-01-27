@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 400">
+  <defs>
+    <linearGradient id="aSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.4"/>
+    </linearGradient>
+    <linearGradient id="bSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0.4"/>
+    </linearGradient>
+    <linearGradient id="cSquare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#16a34a;stop-opacity:0.4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="225" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#1f2937" font-weight="bold">Pythagoras Theorem</text>
+  <text x="225" y="43" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">In a right triangle, square on hypotenuse = sum of squares on other sides</text>
+
+  <!-- Main right triangle ABC -->
+  <polygon points="80,280 80,130 230,280" fill="#f9fafb" stroke="#374151" stroke-width="3"/>
+
+  <!-- Right angle marker -->
+  <rect x="80" y="260" width="20" height="20" fill="none" stroke="#374151" stroke-width="2"/>
+
+  <!-- Square on side a (BC - opposite to A) -->
+  <rect x="80" y="280" width="150" height="150" fill="url(#aSquare)" stroke="#ef4444" stroke-width="2" transform="rotate(0)"/>
+
+  <!-- Square on side b (AC - opposite to B) - rotated -->
+  <polygon points="80,130 -70,130 -70,280 80,280" fill="url(#bSquare)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Square on side c (AB - hypotenuse) - at angle -->
+  <!-- Hypotenuse goes from (80,130) to (230,280), length ~180 -->
+  <polygon points="80,130 230,280 380,130 230,-20" fill="url(#cSquare)" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Points -->
+  <circle cx="80" cy="280" r="5" fill="#374151"/>
+  <text x="65" y="295" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">C</text>
+
+  <circle cx="80" cy="130" r="5" fill="#374151"/>
+  <text x="60" y="125" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">A</text>
+
+  <circle cx="230" cy="280" r="5" fill="#374151"/>
+  <text x="240" y="295" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">B</text>
+
+  <!-- Side labels -->
+  <text x="155" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#ef4444" font-weight="bold">a</text>
+  <text x="70" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3b82f6" font-weight="bold">b</text>
+  <text x="170" y="195" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#22c55e" font-weight="bold">c</text>
+
+  <!-- Square labels -->
+  <text x="155" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" font-weight="bold">a²</text>
+  <text x="5" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">b²</text>
+  <text x="230" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">c²</text>
+
+  <!-- Formula box -->
+  <rect x="280" y="280" width="165" height="115" fill="#ecfdf5" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="362" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#15803d" font-weight="bold">Pythagoras Theorem</text>
+  <line x1="290" y1="312" x2="435" y2="312" stroke="#22c55e"/>
+
+  <text x="362" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#1f2937" font-weight="bold">c² = a² + b²</text>
+
+  <text x="362" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">or equivalently:</text>
+  <text x="362" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">AB² = BC² + CA²</text>
+
+  <!-- Converse box -->
+  <rect x="280" y="55" width="165" height="75" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" rx="5"/>
+  <text x="362" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d97706" font-weight="bold">Converse:</text>
+  <text x="362" y="93" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">If c² = a² + b² in a</text>
+  <text x="362" y="106" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">triangle, then the angle</text>
+  <text x="362" y="119" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">opposite to c is 90°</text>
+
+  <!-- Visual proof hint -->
+  <rect x="280" y="140" width="165" height="55" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="362" y="158" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#1d4ed8" font-weight="bold">Visual Proof:</text>
+  <text x="362" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Area of green square =</text>
+  <text x="362" y="186" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">Area of red + blue squares</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280">
+  <defs>
+    <linearGradient id="circleGrad10d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.25"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Tangents at Ends of Diameter</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Prove: Tangents are Parallel</text>
+
+  <!-- Circle -->
+  <circle cx="170" cy="140" r="65" fill="url(#circleGrad10d)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Centre O -->
+  <circle cx="170" cy="140" r="4" fill="#3b82f6"/>
+  <text x="175" y="155" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">O</text>
+
+  <!-- Point A (left end of diameter) -->
+  <circle cx="105" cy="140" r="4" fill="#22c55e"/>
+  <text x="95" y="155" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">A</text>
+
+  <!-- Point B (right end of diameter) -->
+  <circle cx="235" cy="140" r="4" fill="#22c55e"/>
+  <text x="240" y="155" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">B</text>
+
+  <!-- Diameter AB -->
+  <line x1="105" y1="140" x2="235" y2="140" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Tangent at A (vertical) -->
+  <line x1="105" y1="60" x2="105" y2="220" stroke="#22c55e" stroke-width="2"/>
+  <text x="85" y="58" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Tangent at A</text>
+
+  <!-- Tangent at B (vertical) -->
+  <line x1="235" y1="60" x2="235" y2="220" stroke="#22c55e" stroke-width="2"/>
+  <text x="245" y="58" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Tangent at B</text>
+
+  <!-- Right angle at A -->
+  <rect x="105" y="140" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="120" y="138" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">90°</text>
+
+  <!-- Right angle at B -->
+  <rect x="223" y="140" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="208" y="138" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">90°</text>
+
+  <!-- Parallel indicators -->
+  <path d="M 100 90 L 105 85 L 110 90" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <path d="M 100 95 L 105 90 L 110 95" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <path d="M 230 90 L 235 85 L 240 90" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <path d="M 230 95 L 235 90 L 240 95" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+
+  <!-- "Parallel" label -->
+  <text x="170" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">PARALLEL</text>
+  <line x1="130" y1="75" x2="145" y2="75" stroke="#ef4444" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="195" y1="75" x2="210" y2="75" stroke="#ef4444" stroke-width="1.5"/>
+
+  <!-- Proof box -->
+  <rect x="30" y="230" width="280" height="45" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" rx="5"/>
+  <text x="170" y="248" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Proof:</text>
+  <text x="170" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Tangent at A ⊥ OA, Tangent at B ⊥ OB</text>
+  <text x="170" y="273" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Both ⊥ to same line (diameter) → Both parallel</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

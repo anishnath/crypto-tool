@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 400">
+  <!-- Title -->
+  <text x="225" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#1f2937" font-weight="bold">Three Methods to Find Mean of Grouped Data</text>
+
+  <!-- Method 1: Direct Method -->
+  <rect x="20" y="50" width="130" height="160" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="85" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1d4ed8" font-weight="bold">Direct Method</text>
+  <line x1="30" y1="80" x2="140" y2="80" stroke="#3b82f6" stroke-width="1"/>
+
+  <text x="85" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#1d4ed8" font-weight="bold">x̄ = Σfᵢxᵢ/Σfᵢ</text>
+
+  <text x="30" y="125" font-family="Arial, sans-serif" font-size="9" fill="#374151">Steps:</text>
+  <text x="30" y="140" font-family="Arial, sans-serif" font-size="8" fill="#374151">1. Find class marks xᵢ</text>
+  <text x="30" y="153" font-family="Arial, sans-serif" font-size="8" fill="#374151">2. Calculate fᵢxᵢ</text>
+  <text x="30" y="166" font-family="Arial, sans-serif" font-size="8" fill="#374151">3. Sum all fᵢxᵢ</text>
+  <text x="30" y="179" font-family="Arial, sans-serif" font-size="8" fill="#374151">4. Divide by Σfᵢ</text>
+
+  <rect x="30" y="188" width="110" height="18" fill="#bfdbfe" rx="3"/>
+  <text x="85" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1d4ed8" font-weight="bold">Best for: Small values</text>
+
+  <!-- Method 2: Assumed Mean -->
+  <rect x="160" y="50" width="130" height="160" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
+  <text x="225" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#d97706" font-weight="bold">Assumed Mean</text>
+  <line x1="170" y1="80" x2="280" y2="80" stroke="#f59e0b" stroke-width="1"/>
+
+  <text x="225" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#d97706" font-weight="bold">x̄ = A + Σfᵢdᵢ/Σfᵢ</text>
+
+  <text x="170" y="120" font-family="Arial, sans-serif" font-size="9" fill="#374151">Steps:</text>
+  <text x="170" y="133" font-family="Arial, sans-serif" font-size="8" fill="#374151">1. Choose A (assumed)</text>
+  <text x="170" y="146" font-family="Arial, sans-serif" font-size="8" fill="#374151">2. dᵢ = xᵢ - A</text>
+  <text x="170" y="159" font-family="Arial, sans-serif" font-size="8" fill="#374151">3. Calculate fᵢdᵢ</text>
+  <text x="170" y="172" font-family="Arial, sans-serif" font-size="8" fill="#374151">4. Apply formula</text>
+
+  <rect x="170" y="188" width="110" height="18" fill="#fde68a" rx="3"/>
+  <text x="225" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#d97706" font-weight="bold">Best for: Large values</text>
+
+  <!-- Method 3: Step Deviation -->
+  <rect x="300" y="50" width="130" height="160" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="365" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#16a34a" font-weight="bold">Step Deviation</text>
+  <line x1="310" y1="80" x2="420" y2="80" stroke="#22c55e" stroke-width="1"/>
+
+  <text x="365" y="98" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#16a34a" font-weight="bold">x̄ = A + h(Σfᵢuᵢ/Σfᵢ)</text>
+
+  <text x="310" y="118" font-family="Arial, sans-serif" font-size="9" fill="#374151">Steps:</text>
+  <text x="310" y="131" font-family="Arial, sans-serif" font-size="8" fill="#374151">1. Choose A, h = class size</text>
+  <text x="310" y="144" font-family="Arial, sans-serif" font-size="8" fill="#374151">2. uᵢ = (xᵢ - A)/h</text>
+  <text x="310" y="157" font-family="Arial, sans-serif" font-size="8" fill="#374151">3. Calculate fᵢuᵢ</text>
+  <text x="310" y="170" font-family="Arial, sans-serif" font-size="8" fill="#374151">4. Apply formula</text>
+
+  <rect x="310" y="188" width="110" height="18" fill="#bbf7d0" rx="3"/>
+  <text x="365" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#16a34a" font-weight="bold">Best for: Equal intervals</text>
+
+  <!-- Comparison arrows -->
+  <path d="M 85 215 L 85 235 L 225 235" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 365 215 L 365 235 L 225 235" fill="none" stroke="#6b7280" stroke-width="1.5"/>
+  <circle cx="225" cy="235" r="4" fill="#6b7280"/>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- Comparison box -->
+  <rect x="70" y="250" width="310" height="140" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" rx="5"/>
+  <text x="225" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">Comparison: All Three Give Same Answer!</text>
+  <line x1="80" y1="278" x2="370" y2="278" stroke="#9ca3af"/>
+
+  <!-- Example data -->
+  <text x="225" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Example: Class 0-10, 10-20, 20-30 with freq 5, 10, 15</text>
+
+  <!-- Direct calc -->
+  <rect x="80" y="305" width="95" height="35" fill="#dbeafe" rx="3"/>
+  <text x="127" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1d4ed8">Direct: Σfᵢxᵢ = 550</text>
+  <text x="127" y="333" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1d4ed8">Mean = 550/30</text>
+
+  <!-- Assumed mean calc -->
+  <rect x="180" y="305" width="95" height="35" fill="#fef3c7" rx="3"/>
+  <text x="227" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#d97706">A=15: Σfᵢdᵢ = 50</text>
+  <text x="227" y="333" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#d97706">Mean = 15 + 50/30</text>
+
+  <!-- Step deviation calc -->
+  <rect x="280" y="305" width="95" height="35" fill="#dcfce7" rx="3"/>
+  <text x="327" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#16a34a">A=15,h=10: Σfᵢuᵢ=5</text>
+  <text x="327" y="333" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#16a34a">Mean=15+10(5/30)</text>
+
+  <!-- Final answer -->
+  <rect x="145" y="350" width="160" height="30" fill="#4ade80" stroke="#16a34a" stroke-width="2" rx="5"/>
+  <text x="225" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white" font-weight="bold">All = 18.33</text>
+
+  <!-- Recommendation box -->
+  <rect x="330" y="250" width="110" height="50" fill="#fef2f2" stroke="#ef4444" stroke-width="1" rx="3"/>
+  <text x="385" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#dc2626" font-weight="bold">Recommended:</text>
+  <text x="385" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#dc2626" font-weight="bold">Step Deviation</text>
+  <text x="385" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#374151">(fastest calculation)</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

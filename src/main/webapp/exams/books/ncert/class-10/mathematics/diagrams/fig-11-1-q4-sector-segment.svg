@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300">
+  <defs>
+    <linearGradient id="sectorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.4"/>
+    </linearGradient>
+    <linearGradient id="segmentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="160" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Sector and Segment (90° at Centre)</text>
+  <text x="160" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">r = 10 cm, θ = 90°</text>
+
+  <!-- Full circle (light) -->
+  <circle cx="160" cy="160" r="90" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- Major sector (rest of circle) -->
+  <path d="M 160 160 L 250 160 A 90 90 0 1 0 160 70 Z" fill="#e0f2fe" stroke="none"/>
+
+  <!-- Minor sector (90°) -->
+  <path d="M 160 160 L 160 70 A 90 90 0 0 1 250 160 Z" fill="url(#sectorGrad)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Minor segment (highlighted) -->
+  <path d="M 160 70 A 90 90 0 0 1 250 160 L 160 70 Z" fill="url(#segmentGrad)" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Triangle OAB -->
+  <polygon points="160,160 160,70 250,160" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- Centre point O -->
+  <circle cx="160" cy="160" r="4" fill="#374151"/>
+  <text x="148" y="175" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">O</text>
+
+  <!-- Point A (top) -->
+  <circle cx="160" cy="70" r="3" fill="#3b82f6"/>
+  <text x="155" y="60" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- Point B (right) -->
+  <circle cx="250" cy="160" r="3" fill="#3b82f6"/>
+  <text x="258" y="165" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- Chord AB -->
+  <line x1="160" y1="70" x2="250" y2="160" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Radius OA -->
+  <line x1="160" y1="160" x2="160" y2="70" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Radius OB -->
+  <line x1="160" y1="160" x2="250" y2="160" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- 90° angle arc -->
+  <path d="M 160 140 A 20 20 0 0 1 180 160" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="175" y="145" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6">90°</text>
+
+  <!-- Right angle square -->
+  <rect x="160" y="140" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1"/>
+
+  <!-- Dimension: radius -->
+  <line x1="60" y1="160" x2="60" y2="70" stroke="#374151" stroke-width="1"/>
+  <line x1="55" y1="160" x2="65" y2="160" stroke="#374151" stroke-width="1"/>
+  <line x1="55" y1="70" x2="65" y2="70" stroke="#374151" stroke-width="1"/>
+  <text x="45" y="120" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">r = 10</text>
+
+  <!-- Labels with formulas -->
+  <!-- Minor Sector label -->
+  <line x1="190" y1="100" x2="220" y2="55" stroke="#3b82f6" stroke-width="1"/>
+  <text x="225" y="52" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Minor Sector</text>
+  <text x="225" y="63" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">= (90/360)πr²</text>
+
+  <!-- Minor Segment label -->
+  <text x="200" y="95" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">Segment</text>
+
+  <!-- Triangle label -->
+  <text x="185" y="140" font-family="Arial, sans-serif" font-size="9" fill="#22c55e">△OAB</text>
+
+  <!-- Major Sector label -->
+  <text x="100" y="200" font-family="Arial, sans-serif" font-size="10" fill="#0ea5e9">Major Sector</text>
+  <text x="100" y="212" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">(270°)</text>
+
+  <!-- Formulas at bottom -->
+  <text x="160" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Formulas:</text>
+  <text x="160" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">Minor Sector = (1/4)πr² = 78.5 cm²</text>
+  <text x="160" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">Minor Segment = Sector − △ = 78.5 − 50 = 28.5 cm²</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

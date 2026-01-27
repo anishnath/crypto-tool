@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+  <defs>
+    <linearGradient id="balloonGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="sky14Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7dd3fc;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Balloon Moving Horizontally</text>
+  <text x="200" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Girl = 1.2 m, Balloon height = 88.2 m, Angles: 60° → 30°</text>
+
+  <!-- Sky -->
+  <rect x="0" y="40" width="400" height="180" fill="url(#sky14Grad)"/>
+
+  <!-- Ground -->
+  <rect x="0" y="220" width="400" height="100" fill="#d1fae5"/>
+  <line x1="0" y1="220" x2="400" y2="220" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Horizontal line at balloon height (88.2 m) -->
+  <line x1="0" y1="75" x2="400" y2="75" stroke="#6b7280" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="5" y="70" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Height = 88.2 m</text>
+
+  <!-- Eye level line (1.2 m from ground, scaled) -->
+  <line x1="50" y1="210" x2="380" y2="210" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="385" y="214" font-family="Arial, sans-serif" font-size="8" fill="#f59e0b">Eye level</text>
+
+  <!-- Girl standing -->
+  <circle cx="60" cy="195" r="8" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <line x1="60" y1="203" x2="60" y2="230" stroke="#d97706" stroke-width="3"/>
+  <line x1="60" y1="210" x2="50" y2="225" stroke="#d97706" stroke-width="2"/>
+  <line x1="60" y1="210" x2="70" y2="225" stroke="#d97706" stroke-width="2"/>
+  <line x1="60" y1="230" x2="52" y2="250" stroke="#d97706" stroke-width="2"/>
+  <line x1="60" y1="230" x2="68" y2="250" stroke="#d97706" stroke-width="2"/>
+
+  <!-- Girl height indicator -->
+  <line x1="40" y1="210" x2="40" y2="220" stroke="#d97706" stroke-width="1"/>
+  <text x="25" y="218" font-family="Arial, sans-serif" font-size="8" fill="#d97706">1.2m</text>
+
+  <!-- Balloon at position 1 (closer, 60°) -->
+  <ellipse cx="150" cy="75" rx="18" ry="22" fill="url(#balloonGrad)" stroke="#dc2626" stroke-width="1"/>
+  <line x1="150" y1="97" x2="150" y2="115" stroke="#374151" stroke-width="1"/>
+  <rect x="145" y="115" width="10" height="8" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  <text x="150" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">B₁</text>
+
+  <!-- Balloon at position 2 (farther, 30°) - shown with dashed outline -->
+  <ellipse cx="320" cy="75" rx="18" ry="22" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,2"/>
+  <line x1="320" y1="97" x2="320" y2="115" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2"/>
+  <rect x="315" y="115" width="10" height="8" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,1"/>
+  <text x="320" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6" font-weight="bold">B₂</text>
+
+  <!-- Arrow showing balloon movement -->
+  <line x1="175" y1="75" x2="295" y2="75" stroke="#22c55e" stroke-width="2"/>
+  <polygon points="295,75 285,70 285,80" fill="#22c55e"/>
+  <text x="235" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">Distance = ?</text>
+
+  <!-- Girl's eye point A -->
+  <circle cx="60" cy="210" r="3" fill="#3b82f6"/>
+  <text x="45" y="205" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- Points below balloons -->
+  <circle cx="150" cy="210" r="3" fill="#ef4444"/>
+  <text x="150" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">C₁</text>
+
+  <circle cx="320" cy="210" r="3" fill="#8b5cf6"/>
+  <text x="320" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">C₂</text>
+
+  <!-- Effective height = 87 m -->
+  <line x1="130" y1="75" x2="130" y2="210" stroke="#22c55e" stroke-width="1"/>
+  <line x1="125" y1="75" x2="135" y2="75" stroke="#22c55e" stroke-width="1"/>
+  <line x1="125" y1="210" x2="135" y2="210" stroke="#22c55e" stroke-width="1"/>
+  <text x="110" y="145" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">87 m</text>
+  <text x="110" y="157" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">(88.2-1.2)</text>
+
+  <!-- Line of sight to B1 (60°) -->
+  <line x1="60" y1="210" x2="150" y2="75" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Line of sight to B2 (30°) -->
+  <line x1="60" y1="210" x2="320" y2="75" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,2"/>
+
+  <!-- Angle 60° -->
+  <path d="M 85 210 A 25 25 0 0 0 73 190" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="90" y="195" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">60°</text>
+
+  <!-- Angle 30° -->
+  <path d="M 100 210 A 40 40 0 0 0 95 195" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="105" y="202" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">30°</text>
+
+  <!-- Distances -->
+  <line x1="60" y1="260" x2="150" y2="260" stroke="#ef4444" stroke-width="1"/>
+  <text x="105" y="273" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">x₁ = 29√3</text>
+
+  <line x1="60" y1="280" x2="320" y2="280" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="190" y="293" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">x₂ = 87√3</text>
+
+  <!-- Solution -->
+  <text x="200" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Distance travelled = x₂ - x₁ = 58√3 ≈ 100.44 m</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

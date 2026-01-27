@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 320">
+  <defs>
+    <linearGradient id="treeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#92400e;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#78350f;stop-opacity:0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Broken Tree Problem</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Distance AB = 8 m, Angle = 30°</text>
+
+  <!-- Ground -->
+  <rect x="0" y="235" width="340" height="85" fill="#d1fae5" stroke="none"/>
+  <line x1="0" y1="235" x2="340" y2="235" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Standing part of tree (AC) -->
+  <rect x="75" y="150" width="14" height="85" fill="url(#treeGrad)" stroke="#78350f" stroke-width="1"/>
+
+  <!-- Break point indicator -->
+  <path d="M 75 150 L 82 145 L 89 155 L 75 150" fill="#ef4444"/>
+
+  <!-- Broken part (CB) - bent to ground -->
+  <line x1="82" y1="150" x2="240" y2="235" stroke="#92400e" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Tree top (leaves) at ground -->
+  <ellipse cx="245" cy="230" rx="20" ry="15" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+
+  <!-- Points -->
+  <!-- A - foot of tree -->
+  <circle cx="82" cy="235" r="4" fill="#3b82f6"/>
+  <text x="72" y="255" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- C - break point -->
+  <circle cx="82" cy="150" r="4" fill="#ef4444"/>
+  <text x="60" y="150" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">C</text>
+
+  <!-- B - where top touches ground -->
+  <circle cx="240" cy="235" r="4" fill="#3b82f6"/>
+  <text x="248" y="255" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- Right angle at A -->
+  <rect x="82" y="223" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+
+  <!-- Angle at B = 30° -->
+  <path d="M 215 235 A 25 25 0 0 0 228 215" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="195" y="225" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">30°</text>
+
+  <!-- Dimensions -->
+  <!-- AB = 8 m (base) -->
+  <line x1="82" y1="260" x2="240" y2="260" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="82" y1="255" x2="82" y2="265" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="240" y1="255" x2="240" y2="265" stroke="#3b82f6" stroke-width="1"/>
+  <text x="161" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">AB = 8 m</text>
+
+  <!-- AC = standing part -->
+  <line x1="55" y1="150" x2="55" y2="235" stroke="#22c55e" stroke-width="1"/>
+  <line x1="50" y1="150" x2="60" y2="150" stroke="#22c55e" stroke-width="1"/>
+  <line x1="50" y1="235" x2="60" y2="235" stroke="#22c55e" stroke-width="1"/>
+  <text x="30" y="200" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">AC</text>
+
+  <!-- CB = broken part -->
+  <text x="170" y="180" font-family="Arial, sans-serif" font-size="9" fill="#92400e" font-weight="bold" transform="rotate(-28, 170, 180)">CB (broken)</text>
+
+  <!-- Original tree height indicator -->
+  <line x1="95" y1="60" x2="95" y2="235" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="100" y="55" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">Original</text>
+  <text x="100" y="67" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">height</text>
+
+  <!-- Solution box -->
+  <rect x="170" y="55" width="160" height="95" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" rx="5"/>
+  <text x="250" y="73" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d97706" font-weight="bold">Solution:</text>
+  <text x="250" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan 30° = AC/AB</text>
+  <text x="250" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AC = 8/√3 = 8√3/3 m</text>
+  <text x="250" y="116" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">cos 30° = AB/CB → CB = 16√3/3</text>
+  <text x="250" y="131" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Total = AC + CB</text>
+  <text x="250" y="146" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">= 8√3 m ≈ 13.86 m</text>
+
+  <!-- Key insight -->
+  <text x="170" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Key: Total height = Standing part + Broken part</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

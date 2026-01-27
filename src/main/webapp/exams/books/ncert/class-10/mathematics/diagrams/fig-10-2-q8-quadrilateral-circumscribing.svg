@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+  <defs>
+    <linearGradient id="circleGrad10e" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Quadrilateral Circumscribing Circle</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Prove: AB + CD = AD + BC</text>
+
+  <!-- Circle (inscribed) -->
+  <circle cx="170" cy="155" r="55" fill="url(#circleGrad10e)" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Quadrilateral ABCD -->
+  <polygon points="85,80 255,80 285,220 55,220" fill="none" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Vertices -->
+  <circle cx="85" cy="80" r="4" fill="#3b82f6"/>
+  <text x="75" y="70" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">A</text>
+
+  <circle cx="255" cy="80" r="4" fill="#3b82f6"/>
+  <text x="260" y="70" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">B</text>
+
+  <circle cx="285" cy="220" r="4" fill="#3b82f6"/>
+  <text x="292" y="225" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">C</text>
+
+  <circle cx="55" cy="220" r="4" fill="#3b82f6"/>
+  <text x="40" y="225" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">D</text>
+
+  <!-- Points of contact -->
+  <!-- P on AB -->
+  <circle cx="170" cy="100" r="3" fill="#22c55e"/>
+  <text x="170" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">P</text>
+
+  <!-- Q on BC -->
+  <circle cx="225" cy="155" r="3" fill="#22c55e"/>
+  <text x="235" y="155" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Q</text>
+
+  <!-- R on CD -->
+  <circle cx="170" cy="210" r="3" fill="#22c55e"/>
+  <text x="170" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">R</text>
+
+  <!-- S on DA -->
+  <circle cx="115" cy="155" r="3" fill="#22c55e"/>
+  <text x="105" y="155" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">S</text>
+
+  <!-- Equal tangent segments -->
+  <!-- From A: AP = AS -->
+  <line x1="85" y1="80" x2="170" y2="100" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="85" y1="80" x2="115" y2="155" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="60" y="115" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">AP=AS</text>
+
+  <!-- From B: BP = BQ -->
+  <text x="245" y="115" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">BP=BQ</text>
+
+  <!-- From C: CQ = CR -->
+  <text x="260" y="190" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">CQ=CR</text>
+
+  <!-- From D: DR = DS -->
+  <text x="85" y="190" font-family="Arial, sans-serif" font-size="8" fill="#ef4444">DR=DS</text>
+
+  <!-- Centre O -->
+  <circle cx="170" cy="155" r="3" fill="#f59e0b"/>
+  <text x="175" y="165" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b" font-weight="bold">O</text>
+
+  <!-- Proof box -->
+  <rect x="20" y="250" width="300" height="85" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" rx="5"/>
+  <text x="170" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Proof using Equal Tangents:</text>
+  <text x="170" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AB + CD = (AP + PB) + (CR + RD)</text>
+  <text x="170" y="296" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AD + BC = (AS + SD) + (BQ + QC)</text>
+  <text x="170" y="309" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Since AP=AS, PB=BQ, CR=CQ, RD=DS</text>
+  <text x="170" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">∴ AB + CD = AD + BC ✓</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

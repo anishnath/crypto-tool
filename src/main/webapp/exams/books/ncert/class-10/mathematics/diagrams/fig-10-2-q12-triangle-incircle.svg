@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 340">
+  <defs>
+    <linearGradient id="incircleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="180" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Triangle Circumscribing Circle</text>
+  <text x="180" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Incircle radius = 4 cm, BD = 8 cm, DC = 6 cm</text>
+
+  <!-- Triangle ABC -->
+  <polygon points="180,55 80,230 290,230" fill="none" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Incircle -->
+  <circle cx="180" cy="175" r="45" fill="url(#incircleGrad)" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Centre I -->
+  <circle cx="180" cy="175" r="3" fill="#8b5cf6"/>
+  <text x="188" y="180" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">I</text>
+
+  <!-- Vertices -->
+  <circle cx="180" cy="55" r="4" fill="#3b82f6"/>
+  <text x="180" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">A</text>
+
+  <circle cx="80" cy="230" r="4" fill="#3b82f6"/>
+  <text x="65" y="235" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">B</text>
+
+  <circle cx="290" cy="230" r="4" fill="#3b82f6"/>
+  <text x="300" y="235" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">C</text>
+
+  <!-- Point of contact D on BC -->
+  <circle cx="180" cy="230" r="4" fill="#ef4444"/>
+  <text x="180" y="248" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">D</text>
+
+  <!-- Point of contact E on AC -->
+  <circle cx="240" cy="135" r="3" fill="#22c55e"/>
+  <text x="250" y="130" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">E</text>
+
+  <!-- Point of contact F on AB -->
+  <circle cx="125" cy="135" r="3" fill="#22c55e"/>
+  <text x="110" y="130" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">F</text>
+
+  <!-- Radius to D -->
+  <line x1="180" y1="175" x2="180" y2="220" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="188" y="200" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">r=4</text>
+
+  <!-- BD = 8 cm -->
+  <line x1="80" y1="245" x2="180" y2="245" stroke="#ef4444" stroke-width="1"/>
+  <line x1="80" y1="240" x2="80" y2="250" stroke="#ef4444" stroke-width="1"/>
+  <line x1="180" y1="240" x2="180" y2="250" stroke="#ef4444" stroke-width="1"/>
+  <text x="130" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">BD = 8 cm</text>
+
+  <!-- DC = 6 cm -->
+  <line x1="180" y1="245" x2="290" y2="245" stroke="#ef4444" stroke-width="1"/>
+  <line x1="290" y1="240" x2="290" y2="250" stroke="#ef4444" stroke-width="1"/>
+  <text x="235" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">DC = 6 cm</text>
+
+  <!-- Equal tangent labels -->
+  <text x="95" y="180" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">BF = BD = 8</text>
+  <text x="260" y="180" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">CE = CD = 6</text>
+  <text x="140" y="85" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">AF = AE = x</text>
+
+  <!-- Solution box -->
+  <rect x="20" y="270" width="320" height="65" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1" rx="5"/>
+  <text x="180" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">Solution:</text>
+  <text x="180" y="303" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Let AF = AE = x. Then AB = x+8, AC = x+6, BC = 14</text>
+  <text x="180" y="318" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Using Area = r × s formula: x = 12 cm</text>
+  <text x="180" y="333" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">AB = 20 cm, AC = 18 cm</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

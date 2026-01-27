@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+  <defs>
+    <linearGradient id="windshieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#bfdbfe;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.6"/>
+    </linearGradient>
+    <linearGradient id="wipeAreaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#16a34a;stop-opacity:0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Car Windshield Wipers</text>
+  <text x="200" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Blade length = 25 cm, Sweep angle = 115°</text>
+
+  <!-- Windshield (trapezoid) -->
+  <polygon points="50,80 350,80 320,250 80,250" fill="url(#windshieldGrad)" stroke="#64748b" stroke-width="2"/>
+
+  <!-- Left wiper sweep area -->
+  <path d="M 130 230 L 130 140 A 90 90 0 0 1 205.6 184.5 Z" fill="url(#wipeAreaGrad)" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Right wiper sweep area -->
+  <path d="M 270 230 L 194.4 184.5 A 90 90 0 0 1 270 140 Z" fill="url(#wipeAreaGrad)" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Left wiper arm and blade -->
+  <line x1="130" y1="230" x2="130" y2="140" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
+  <line x1="130" y1="140" x2="130" y2="145" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Right wiper arm and blade -->
+  <line x1="270" y1="230" x2="270" y2="140" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
+  <line x1="270" y1="140" x2="270" y2="145" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Pivot points -->
+  <circle cx="130" cy="230" r="5" fill="#374151" stroke="#1f2937" stroke-width="2"/>
+  <circle cx="270" cy="230" r="5" fill="#374151" stroke="#1f2937" stroke-width="2"/>
+
+  <!-- Angle indicators -->
+  <!-- Left wiper angle -->
+  <path d="M 130 210 A 20 20 0 0 1 147 217" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="148" y="207" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6" font-weight="bold">115°</text>
+
+  <!-- Right wiper angle -->
+  <path d="M 253 217 A 20 20 0 0 1 270 210" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="240" y="207" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6" font-weight="bold">115°</text>
+
+  <!-- Blade length dimension (left) -->
+  <line x1="100" y1="230" x2="100" y2="140" stroke="#374151" stroke-width="1"/>
+  <line x1="95" y1="230" x2="105" y2="230" stroke="#374151" stroke-width="1"/>
+  <line x1="95" y1="140" x2="105" y2="140" stroke="#374151" stroke-width="1"/>
+  <text x="70" y="190" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">25 cm</text>
+
+  <!-- Labels -->
+  <text x="150" y="175" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">Cleaned</text>
+  <text x="150" y="187" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">Area</text>
+
+  <text x="230" y="175" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">Cleaned</text>
+  <text x="230" y="187" font-family="Arial, sans-serif" font-size="10" fill="#16a34a" font-weight="bold">Area</text>
+
+  <!-- Wiper labels -->
+  <text x="130" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Left Wiper</text>
+  <text x="270" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">Right Wiper</text>
+
+  <!-- No overlap note -->
+  <text x="200" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">No Overlap</text>
+
+  <!-- Formula and calculation -->
+  <text x="200" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Total Area Cleaned:</text>
+  <text x="200" y="293" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">= 2 × (115°/360°) × πr² = 2 × (115/360) × (22/7) × 25²</text>
+  <text x="200" y="306" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">≈ 1254.96 cm² (or 1115.625 cm² per NCERT)</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

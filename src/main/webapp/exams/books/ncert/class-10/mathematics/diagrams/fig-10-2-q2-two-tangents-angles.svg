@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 320">
+  <defs>
+    <linearGradient id="circleGrad10c" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.25"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Two Tangents from External Point</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">∠POQ = 110°, Find ∠PTQ</text>
+
+  <!-- Circle -->
+  <circle cx="170" cy="140" r="70" fill="url(#circleGrad10c)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Centre O -->
+  <circle cx="170" cy="140" r="4" fill="#3b82f6"/>
+  <text x="175" y="150" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">O</text>
+
+  <!-- Point P (top, on circle) -->
+  <circle cx="130" cy="80" r="3" fill="#22c55e"/>
+  <text x="118" y="73" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">P</text>
+
+  <!-- Point Q (right, on circle) -->
+  <circle cx="235" cy="115" r="3" fill="#22c55e"/>
+  <text x="245" y="115" font-family="Arial, sans-serif" font-size="12" fill="#22c55e" font-weight="bold">Q</text>
+
+  <!-- External Point T -->
+  <circle cx="280" cy="40" r="4" fill="#ef4444"/>
+  <text x="288" y="45" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" font-weight="bold">T</text>
+
+  <!-- Tangent TP -->
+  <line x1="280" y1="40" x2="130" y2="80" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Tangent TQ -->
+  <line x1="280" y1="40" x2="235" y2="115" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Radius OP -->
+  <line x1="170" y1="140" x2="130" y2="80" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Radius OQ -->
+  <line x1="170" y1="140" x2="235" y2="115" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Right angle at P -->
+  <path d="M 137 87 L 130 94 L 123 87" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="110" y="95" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">90°</text>
+
+  <!-- Right angle at Q -->
+  <path d="M 228 108 L 235 101 L 242 108" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="248" y="100" font-family="Arial, sans-serif" font-size="8" fill="#8b5cf6">90°</text>
+
+  <!-- Angle POQ = 110° -->
+  <path d="M 155 125 A 20 20 0 0 1 185 125" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <text x="170" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b" font-weight="bold">110°</text>
+
+  <!-- Angle PTQ = ? -->
+  <path d="M 260 48 A 20 20 0 0 0 272 58" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="250" y="55" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">?</text>
+
+  <!-- Quadrilateral OPTQ highlight -->
+  <polygon points="170,140 130,80 280,40 235,115" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="200" y="95" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">Quad OPTQ</text>
+
+  <!-- Solution box -->
+  <rect x="20" y="225" width="300" height="90" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="170" y="243" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#3b82f6" font-weight="bold">Solution: Sum of angles in quadrilateral = 360°</text>
+  <text x="170" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">∠OPT = 90° (radius ⊥ tangent)</text>
+  <text x="170" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">∠OQT = 90° (radius ⊥ tangent)</text>
+  <text x="170" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">110° + 90° + 90° + ∠PTQ = 360°</text>
+  <text x="170" y="307" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">∠PTQ = 70°</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300">
+  <defs>
+    <linearGradient id="outerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.2"/>
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Concentric Circles</text>
+  <text x="170" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Chord of larger tangent to smaller</text>
+
+  <!-- Outer circle (radius 5 cm) -->
+  <circle cx="170" cy="145" r="85" fill="url(#outerGrad)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Inner circle (radius 3 cm) -->
+  <circle cx="170" cy="145" r="51" fill="url(#innerGrad)" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Centre O -->
+  <circle cx="170" cy="145" r="4" fill="#374151"/>
+  <text x="175" y="158" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">O</text>
+
+  <!-- Chord AB (tangent to inner circle) -->
+  <line x1="85" y1="94" x2="255" y2="94" stroke="#22c55e" stroke-width="3"/>
+
+  <!-- Point M (midpoint of chord, on inner circle) -->
+  <circle cx="170" cy="94" r="4" fill="#ef4444"/>
+  <text x="175" y="85" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">M</text>
+
+  <!-- Point A -->
+  <circle cx="85" cy="94" r="3" fill="#22c55e"/>
+  <text x="75" y="90" font-family="Arial, sans-serif" font-size="11" fill="#22c55e" font-weight="bold">A</text>
+
+  <!-- Point B -->
+  <circle cx="255" cy="94" r="3" fill="#22c55e"/>
+  <text x="260" y="90" font-family="Arial, sans-serif" font-size="11" fill="#22c55e" font-weight="bold">B</text>
+
+  <!-- OM perpendicular to chord -->
+  <line x1="170" y1="145" x2="170" y2="94" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- OA (radius of larger) -->
+  <line x1="170" y1="145" x2="85" y2="94" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+  <!-- Right angle at M -->
+  <rect x="158" y="94" width="12" height="12" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+
+  <!-- Dimensions -->
+  <!-- Outer radius = 5 -->
+  <text x="120" y="125" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6">OA = 5 cm</text>
+
+  <!-- Inner radius = 3 -->
+  <text x="175" y="125" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b">OM = 3 cm</text>
+
+  <!-- AM = 4 -->
+  <line x1="85" y1="78" x2="170" y2="78" stroke="#22c55e" stroke-width="1"/>
+  <line x1="85" y1="73" x2="85" y2="83" stroke="#22c55e" stroke-width="1"/>
+  <line x1="170" y1="73" x2="170" y2="83" stroke="#22c55e" stroke-width="1"/>
+  <text x="127" y="73" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">AM = 4 cm</text>
+
+  <!-- Triangle OMA -->
+  <polygon points="170,145 170,94 85,94" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="130" y="112" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">△OMA</text>
+
+  <!-- Solution box -->
+  <rect x="30" y="230" width="280" height="65" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="170" y="248" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Solution (Pythagoras in △OMA):</text>
+  <text x="170" y="263" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AM² + OM² = OA² → AM² + 9 = 25</text>
+  <text x="170" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">AM = √16 = 4 cm</text>
+  <text x="170" y="293" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" font-weight="bold">Chord AB = 2 × AM = 8 cm</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

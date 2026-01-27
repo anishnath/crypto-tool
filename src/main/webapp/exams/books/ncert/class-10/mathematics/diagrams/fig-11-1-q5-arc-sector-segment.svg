@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 320">
+  <defs>
+    <linearGradient id="sector60Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.4"/>
+    </linearGradient>
+    <linearGradient id="segment60Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="175" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Arc, Sector and Segment (60° Angle)</text>
+  <text x="175" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">r = 21 cm, θ = 60°</text>
+
+  <!-- Full circle (light outline) -->
+  <circle cx="160" cy="165" r="100" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- Sector (60°) -->
+  <path d="M 160 165 L 260 165 A 100 100 0 0 0 210 78.4 Z" fill="url(#sector60Grad)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Segment (highlighted separately) -->
+  <path d="M 260 165 A 100 100 0 0 0 210 78.4 L 260 165 Z" fill="url(#segment60Grad)" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Equilateral triangle OAB (dashed) -->
+  <polygon points="160,165 260,165 210,78.4" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="5,3"/>
+
+  <!-- Arc (thick, highlighted) -->
+  <path d="M 260 165 A 100 100 0 0 0 210 78.4" fill="none" stroke="#8b5cf6" stroke-width="4"/>
+
+  <!-- Centre point O -->
+  <circle cx="160" cy="165" r="4" fill="#374151"/>
+  <text x="145" y="180" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">O</text>
+
+  <!-- Point A -->
+  <circle cx="210" cy="78.4" r="3" fill="#3b82f6"/>
+  <text x="215" y="70" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">A</text>
+
+  <!-- Point B -->
+  <circle cx="260" cy="165" r="3" fill="#3b82f6"/>
+  <text x="268" y="170" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">B</text>
+
+  <!-- Chord AB -->
+  <line x1="210" y1="78.4" x2="260" y2="165" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Radius OA -->
+  <line x1="160" y1="165" x2="210" y2="78.4" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Radius OB -->
+  <line x1="160" y1="165" x2="260" y2="165" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- 60° angle arc -->
+  <path d="M 180 165 A 20 20 0 0 0 170 147.7" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="182" y="150" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">60°</text>
+
+  <!-- Dimension: radius -->
+  <line x1="55" y1="165" x2="55" y2="65" stroke="#374151" stroke-width="1"/>
+  <line x1="50" y1="165" x2="60" y2="165" stroke="#374151" stroke-width="1"/>
+  <line x1="50" y1="65" x2="60" y2="65" stroke="#374151" stroke-width="1"/>
+  <text x="40" y="120" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#374151">r = 21 cm</text>
+
+  <!-- Labels -->
+  <!-- Arc label -->
+  <line x1="240" y1="110" x2="270" y2="70" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="275" y="65" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold">Arc AB</text>
+  <text x="275" y="77" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">= (60/360)×2πr</text>
+  <text x="275" y="88" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">= 22 cm</text>
+
+  <!-- Sector label -->
+  <text x="200" y="145" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6" font-weight="bold">Sector</text>
+
+  <!-- Segment label -->
+  <text x="235" y="125" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">Segment</text>
+
+  <!-- Triangle label -->
+  <text x="210" y="140" font-family="Arial, sans-serif" font-size="9" fill="#22c55e">△OAB</text>
+  <text x="195" y="152" font-family="Arial, sans-serif" font-size="8" fill="#22c55e">(Equilateral)</text>
+
+  <!-- Key insight: equilateral triangle -->
+  <rect x="270" y="130" width="75" height="55" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" rx="5"/>
+  <text x="307" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#22c55e" font-weight="bold">Key Insight:</text>
+  <text x="307" y="158" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">60° at centre</text>
+  <text x="307" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">→ OA = OB = AB</text>
+  <text x="307" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">= 21 cm (equil.)</text>
+
+  <!-- Formulas at bottom -->
+  <text x="175" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151" font-weight="bold">Calculations:</text>
+  <text x="175" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#8b5cf6">(i) Arc length = (60/360) × 2πr = (1/6) × 2 × (22/7) × 21 = 22 cm</text>
+  <text x="175" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#3b82f6">(ii) Sector area = (60/360) × πr² = (1/6) × (22/7) × 441 = 231 cm²</text>
+  <text x="175" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#22c55e">(iii) △ area = (√3/4) × 21² = (441√3)/4 cm²</text>
+  <text x="175" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">(iv) Segment = 231 − (441√3)/4 cm²</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

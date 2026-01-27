@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 290">
+  <!-- Title -->
+  <text x="190" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#1f2937" font-weight="bold">Exercise 8.1 Q2: Find tan P − cot R</text>
+  <text x="190" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Right Triangle PQR (Fig. 8.13)</text>
+
+  <!-- Right Triangle PQR - right angled at Q -->
+  <polygon points="70,240 70,80 270,240" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2"/>
+
+  <!-- Right angle marker at Q -->
+  <rect x="70" y="220" width="20" height="20" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Angle P arc -->
+  <path d="M 70 105 A 25 25 0 0 0 90 80" fill="none" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Angle R arc -->
+  <path d="M 240 240 A 30 30 0 0 0 258 218" fill="none" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Vertex labels -->
+  <circle cx="70" cy="80" r="5" fill="#0ea5e9"/>
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="16" fill="#0ea5e9" font-weight="bold">P</text>
+
+  <circle cx="70" cy="240" r="5" fill="#0ea5e9"/>
+  <text x="45" y="255" font-family="Arial, sans-serif" font-size="16" fill="#0ea5e9" font-weight="bold">Q</text>
+
+  <circle cx="270" cy="240" r="5" fill="#0ea5e9"/>
+  <text x="275" y="255" font-family="Arial, sans-serif" font-size="16" fill="#0ea5e9" font-weight="bold">R</text>
+
+  <!-- Side labels -->
+  <!-- PQ = 12 cm (vertical - opposite to R) -->
+  <line x1="40" y1="80" x2="40" y2="240" stroke="#22c55e" stroke-width="1"/>
+  <line x1="35" y1="80" x2="45" y2="80" stroke="#22c55e" stroke-width="1"/>
+  <line x1="35" y1="240" x2="45" y2="240" stroke="#22c55e" stroke-width="1"/>
+  <text x="20" y="165" font-family="Arial, sans-serif" font-size="11" fill="#22c55e" font-weight="bold">12</text>
+
+  <!-- QR = 5 cm (horizontal - opposite to P) -->
+  <line x1="70" y1="265" x2="270" y2="265" stroke="#ef4444" stroke-width="1"/>
+  <line x1="70" y1="260" x2="70" y2="270" stroke="#ef4444" stroke-width="1"/>
+  <line x1="270" y1="260" x2="270" y2="270" stroke="#ef4444" stroke-width="1"/>
+  <text x="165" y="280" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">5</text>
+
+  <!-- PR = 13 (hypotenuse) -->
+  <text x="155" y="145" font-family="Arial, sans-serif" font-size="11" fill="#8b5cf6" font-weight="bold" transform="rotate(-39, 155, 145)">13</text>
+
+  <!-- Labels for sides relative to angles -->
+  <text x="85" y="165" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">opp to R</text>
+  <text x="155" y="252" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">opp to P</text>
+
+  <!-- Solution Box -->
+  <rect x="195" y="55" width="175" height="145" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" rx="5"/>
+  <text x="282" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d97706" font-weight="bold">Solution:</text>
+
+  <text x="205" y="95" font-family="Arial, sans-serif" font-size="9" fill="#374151">For angle P:</text>
+  <text x="215" y="108" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan P = QR/PQ = 5/12</text>
+
+  <text x="205" y="128" font-family="Arial, sans-serif" font-size="9" fill="#374151">For angle R:</text>
+  <text x="215" y="141" font-family="Arial, sans-serif" font-size="9" fill="#374151">cot R = QR/PQ = 5/12</text>
+
+  <line x1="205" y1="152" x2="360" y2="152" stroke="#d1d5db" stroke-width="1"/>
+
+  <text x="205" y="168" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan P − cot R = 5/12 − 5/12</text>
+  <text x="282" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#16a34a" font-weight="bold">= 0</text>
+
+  <!-- Key insight -->
+  <rect x="70" y="55" width="115" height="35" fill="#dcfce7" stroke="#22c55e" rx="3"/>
+  <text x="127" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#15803d" font-weight="bold">5-12-13 triplet</text>
+  <text x="127" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#374151">tan P = cot R always!</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

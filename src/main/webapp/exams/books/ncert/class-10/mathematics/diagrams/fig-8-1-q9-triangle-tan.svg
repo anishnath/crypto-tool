@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Title -->
+  <text x="200" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#1f2937" font-weight="bold">Exercise 8.1 Q9: tan A = 1/√3</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Right Triangle ABC with ∠B = 90°</text>
+
+  <!-- Right Triangle ABC -->
+  <polygon points="80,250 80,100 230,250" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Right angle marker at B -->
+  <rect x="80" y="230" width="20" height="20" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+
+  <!-- Angle A arc (30°) -->
+  <path d="M 80 125 A 25 25 0 0 0 100 100" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="105" y="125" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">30°</text>
+
+  <!-- Angle C arc (60°) -->
+  <path d="M 200 250 A 30 30 0 0 0 218 225" fill="none" stroke="#3b82f6" stroke-width="2"/>
+  <text x="188" y="238" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">60°</text>
+
+  <!-- Vertex labels -->
+  <circle cx="80" cy="100" r="5" fill="#22c55e"/>
+  <text x="60" y="95" font-family="Arial, sans-serif" font-size="16" fill="#22c55e" font-weight="bold">A</text>
+
+  <circle cx="80" cy="250" r="5" fill="#22c55e"/>
+  <text x="55" y="265" font-family="Arial, sans-serif" font-size="16" fill="#22c55e" font-weight="bold">B</text>
+
+  <circle cx="230" cy="250" r="5" fill="#22c55e"/>
+  <text x="235" y="265" font-family="Arial, sans-serif" font-size="16" fill="#22c55e" font-weight="bold">C</text>
+
+  <!-- Side labels -->
+  <!-- AB (adjacent to A) -->
+  <text x="50" y="180" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b" font-weight="bold">√3k</text>
+
+  <!-- BC (opposite to A) -->
+  <text x="145" y="275" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">k</text>
+
+  <!-- AC (hypotenuse) -->
+  <text x="145" y="160" font-family="Arial, sans-serif" font-size="10" fill="#8b5cf6" font-weight="bold" transform="rotate(-45, 145, 160)">2k</text>
+
+  <!-- Given info box -->
+  <rect x="55" y="55" width="100" height="30" fill="#fef2f2" stroke="#ef4444" rx="3"/>
+  <text x="105" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" font-weight="bold">tan A = 1/√3</text>
+
+  <!-- Solution Box -->
+  <rect x="220" y="55" width="170" height="195" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" rx="5"/>
+  <text x="305" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#2563eb" font-weight="bold">Solution:</text>
+
+  <text x="230" y="95" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan A = 1/√3 → A = 30°</text>
+  <text x="230" y="110" font-family="Arial, sans-serif" font-size="9" fill="#374151">So C = 90° - 30° = 60°</text>
+
+  <line x1="230" y1="118" x2="380" y2="118" stroke="#d1d5db" stroke-width="1"/>
+
+  <text x="230" y="133" font-family="Arial, sans-serif" font-size="9" fill="#374151">sin A = 1/2, cos A = √3/2</text>
+  <text x="230" y="148" font-family="Arial, sans-serif" font-size="9" fill="#374151">sin C = √3/2, cos C = 1/2</text>
+
+  <line x1="230" y1="156" x2="380" y2="156" stroke="#d1d5db" stroke-width="1"/>
+
+  <text x="230" y="172" font-family="Arial, sans-serif" font-size="9" fill="#374151" font-weight="bold">(i) sin A cos C + cos A sin C</text>
+  <text x="240" y="186" font-family="Arial, sans-serif" font-size="9" fill="#374151">= (1/2)(1/2) + (√3/2)(√3/2)</text>
+  <text x="240" y="200" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">= 1/4 + 3/4 = 1</text>
+
+  <text x="230" y="218" font-family="Arial, sans-serif" font-size="9" fill="#374151" font-weight="bold">(ii) cos A cos C − sin A sin C</text>
+  <text x="240" y="232" font-family="Arial, sans-serif" font-size="9" fill="#374151">= (√3/2)(1/2) − (1/2)(√3/2)</text>
+  <text x="240" y="246" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" font-weight="bold">= 0</text>
+
+  <!-- Key insight -->
+  <rect x="55" y="260" width="155" height="30" fill="#fef3c7" stroke="#f59e0b" rx="3"/>
+  <text x="132" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#d97706">sin(A+C) = 1, cos(A+C) = 0 when A+C = 90°</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

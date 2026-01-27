@@ -214,7 +214,7 @@
         </div>
     </section>
 
-    <!-- Class 10 Section (Coming Soon) -->
+    <!-- Class 10 Section -->
     <section class="class-section">
         <div class="class-header">
             <span class="class-badge" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">Class 10</span>
@@ -222,13 +222,13 @@
         </div>
 
         <div class="subjects-grid">
-            <div class="subject-card coming-soon">
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-10/mathematics/" class="subject-card">
                 <div class="subject-icon math">&#128202;</div>
                 <div class="subject-info">
-                    <h3>Mathematics <span class="coming-badge">Soon</span></h3>
-                    <p>Coming soon</p>
+                    <h3>Mathematics</h3>
+                    <p>14 Chapters &bull; 354 Questions</p>
                 </div>
-            </div>
+            </a>
 
             <div class="subject-card coming-soon">
                 <div class="subject-icon science">&#128300;</div>
@@ -319,6 +319,12 @@
                 "position": 1,
                 "name": "Class 9 Mathematics",
                 "url": "https://8gwifi.org/exams/books/ncert/class-9/mathematics/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Class 10 Mathematics",
+                "url": "https://8gwifi.org/exams/books/ncert/class-10/mathematics/"
             }
         ]
     }

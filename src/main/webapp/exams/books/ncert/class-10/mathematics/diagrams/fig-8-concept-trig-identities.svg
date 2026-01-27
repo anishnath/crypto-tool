@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 380">
+  <!-- Title -->
+  <text x="225" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#1f2937" font-weight="bold">Trigonometric Identities</text>
+  <text x="225" y="43" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">Essential formulas for Class 10</text>
+
+  <!-- Pythagorean Identities Box -->
+  <rect x="20" y="55" width="200" height="130" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="120" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#15803d" font-weight="bold">Pythagorean Identities</text>
+  <line x1="30" y1="88" x2="210" y2="88" stroke="#22c55e" stroke-width="1"/>
+
+  <text x="120" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">sin²θ + cos²θ = 1</text>
+
+  <text x="120" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">1 + tan²θ = sec²θ</text>
+
+  <text x="120" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">1 + cot²θ = cosec²θ</text>
+
+  <!-- Reciprocal Identities Box -->
+  <rect x="230" y="55" width="200" height="130" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="330" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#2563eb" font-weight="bold">Reciprocal Identities</text>
+  <line x1="240" y1="88" x2="420" y2="88" stroke="#3b82f6" stroke-width="1"/>
+
+  <text x="330" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#374151">cosec θ = 1/sin θ</text>
+
+  <text x="330" y="136" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#374151">sec θ = 1/cos θ</text>
+
+  <text x="330" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#374151">cot θ = 1/tan θ = cos θ/sin θ</text>
+
+  <text x="330" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#374151">tan θ = sin θ/cos θ</text>
+
+  <!-- Complementary Angles Box -->
+  <rect x="20" y="195" width="200" height="100" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
+  <text x="120" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#d97706" font-weight="bold">Complementary Angles</text>
+  <line x1="30" y1="228" x2="210" y2="228" stroke="#f59e0b" stroke-width="1"/>
+
+  <text x="120" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151">sin(90° - θ) = cos θ</text>
+  <text x="120" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151">tan(90° - θ) = cot θ</text>
+  <text x="120" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151">sec(90° - θ) = cosec θ</text>
+
+  <!-- Quotient Relations Box -->
+  <rect x="230" y="195" width="200" height="100" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="8"/>
+  <text x="330" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#be185d" font-weight="bold">Useful Transformations</text>
+  <line x1="240" y1="228" x2="420" y2="228" stroke="#ec4899" stroke-width="1"/>
+
+  <text x="330" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">sin²θ = 1 - cos²θ</text>
+  <text x="330" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">tan²θ = sec²θ - 1</text>
+  <text x="330" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">cot²θ = cosec²θ - 1</text>
+
+  <!-- Key Memory Tip -->
+  <rect x="20" y="305" width="410" height="65" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" rx="8"/>
+  <text x="225" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">Memory Tips</text>
+
+  <text x="30" y="345" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">• The three Pythagorean identities all equal 1 (when isolated)</text>
+  <text x="30" y="360" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">• Complementary: "co" functions swap → sin↔cos, tan↔cot, sec↔cosec</text>
+
+  <!-- Central connection diagram -->
+  <circle cx="225" y="150" r="3" fill="#8b5cf6"/>
+
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>

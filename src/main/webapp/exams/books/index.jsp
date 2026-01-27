@@ -157,15 +157,15 @@
                 <p>National Council of Educational Research and Training textbooks. Official books for CBSE curriculum, Class 6-12.</p>
                 <div class="publisher-stats">
                     <div class="stat">
-                        <div class="stat-value">1</div>
+                        <div class="stat-value">2</div>
                         <div class="stat-label">Classes</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">1</div>
-                        <div class="stat-label">Subjects</div>
+                        <div class="stat-label">Subject</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">244</div>
+                        <div class="stat-value">598</div>
                         <div class="stat-label">Questions</div>
                     </div>
                 </div>
@@ -231,7 +231,8 @@
                 "@type": "ListItem",
                 "position": 1,
                 "name": "NCERT Solutions",
-                "url": "https://8gwifi.org/exams/books/ncert/"
+                "url": "https://8gwifi.org/exams/books/ncert/",
+                "description": "Class 9 & 10 Mathematics with 598 solved questions"
             }
         ]
     }

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 280">
+  <defs>
+    <linearGradient id="smallConeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.4"/>
+    </linearGradient>
+    <linearGradient id="smallHemiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="125" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Cone on Hemisphere</text>
+  <text x="125" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">(Both radius = 1 cm)</text>
+
+  <!-- Cone -->
+  <polygon points="125,70 85,150 165,150" fill="url(#smallConeGrad)" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Cone base ellipse -->
+  <ellipse cx="125" cy="150" rx="40" ry="10" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Hemisphere -->
+  <path d="M 85 150 Q 85 190, 125 190 Q 165 190, 165 150" fill="url(#smallHemiGrad)" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Center line (axis) -->
+  <line x1="125" y1="60" x2="125" y2="200" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Dimension lines -->
+  <!-- Cone height -->
+  <line x1="55" y1="70" x2="55" y2="150" stroke="#ef4444" stroke-width="1"/>
+  <line x1="50" y1="70" x2="60" y2="70" stroke="#ef4444" stroke-width="1"/>
+  <line x1="50" y1="150" x2="60" y2="150" stroke="#ef4444" stroke-width="1"/>
+  <text x="40" y="115" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#ef4444">h=1 cm</text>
+
+  <!-- Hemisphere radius -->
+  <line x1="55" y1="150" x2="55" y2="190" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="50" y1="150" x2="60" y2="150" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="50" y1="190" x2="60" y2="190" stroke="#3b82f6" stroke-width="1"/>
+  <text x="40" y="175" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6">r=1 cm</text>
+
+  <!-- Radius line -->
+  <line x1="125" y1="150" x2="165" y2="150" stroke="#374151" stroke-width="1"/>
+  <circle cx="125" cy="150" r="2" fill="#374151"/>
+  <text x="150" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#374151">r = 1 cm</text>
+
+  <!-- Diameter -->
+  <line x1="85" y1="210" x2="165" y2="210" stroke="#374151" stroke-width="1"/>
+  <line x1="85" y1="205" x2="85" y2="215" stroke="#374151" stroke-width="1"/>
+  <line x1="165" y1="205" x2="165" y2="215" stroke="#374151" stroke-width="1"/>
+  <text x="125" y="228" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">d = 2 cm</text>
+
+  <!-- Labels -->
+  <text x="125" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">Cone</text>
+  <text x="125" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">Hemi</text>
+
+  <!-- Volume formula -->
+  <text x="125" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Volume = (1/3)πr²h + (2/3)πr³</text>
+  <text x="125" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">= πr²(h + 2r)/3 = π cm³</text>
+  <!-- Watermark -->
+  <text x="50%" y="98%" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.7">8gwifi.org/exams/books/ncert/class-10/mathematics/</text>
+</svg>
