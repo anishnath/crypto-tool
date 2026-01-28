@@ -117,6 +117,13 @@
                     "name": "PHP Tutorial",
                     "description": "Server-side web development. Build dynamic websites and databases.",
                     "url": "https://8gwifi.org/tutorials/php/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 12,
+                    "name": "PHP Functions Reference",
+                    "description": "Interactive PHP function reference. Browse and execute 40+ functions online.",
+                    "url": "https://8gwifi.org/tutorials/php-functions/"
                 }
             ]
         },
@@ -296,6 +303,15 @@
                 "educationalLevel": "Beginner",
                 "isAccessibleForFree": true,
                 "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            },
+            {
+                "@type": "WebPage",
+                "position": 12,
+                "name": "PHP Functions Reference",
+                "description": "Interactive PHP function reference with live examples. Browse, learn, and execute 40+ PHP functions online.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/php-functions/",
+                "isAccessibleForFree": true
             }
         ]
     }
@@ -889,6 +905,30 @@
                                                                             class="tutorial-card-badge badge-available">Available</span>
                                                                     </a>
                         </section>
+
+                        <div class="divider">
+                            <hr>
+                        </div>
+
+                        <%-- Quick References Section --%>
+                            <h2 class="section-title">Quick References</h2>
+                            <p class="section-subtitle">Interactive function references with live examples</p>
+
+                            <section class="tutorials-grid">
+                                <%-- PHP Functions Reference --%>
+                                    <a href="<%=request.getContextPath()%>/tutorials/php-functions/"
+                                        class="tutorial-card">
+                                        <div class="tutorial-card-header">
+                                            <div class="tutorial-card-icon" style="background: #777bb315;">
+                                                <img src="<%=request.getContextPath()%>/tutorials/assets/images/php-logo.svg"
+                                                    alt="PHP">
+                                            </div>
+                                            <h3>PHP Functions</h3>
+                                        </div>
+                                        <p>Browse and run 40+ PHP functions. Strings, arrays, JSON, dates, and more.</p>
+                                        <span class="tutorial-card-badge badge-available">Interactive</span>
+                                    </a>
+                            </section>
 
                         <div class="divider">
                             <hr>
