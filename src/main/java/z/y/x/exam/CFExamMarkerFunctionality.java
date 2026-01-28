@@ -44,6 +44,7 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1);
         }
+        //System.out.println("CFExamMarkerFunctionality: resolved CF_EXAM_MARKER_API=" + apiUrl);
         return apiUrl;
     }
     
@@ -55,6 +56,8 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         if (apiKey == null || apiKey.trim().isEmpty()) {
             throw new IllegalStateException("CF_EXAM_MARKER_API_KEY environment variable is not set");
         }
+        String keySuffix = apiKey.length() > 4 ? apiKey.substring(apiKey.length() - 4) : apiKey;
+        System.out.println("CFExamMarkerFunctionality: resolved CF_EXAM_MARKER_API_KEY=****" + keySuffix);
         return apiKey;
     }
     
@@ -283,6 +286,7 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         if (queryString.length() > 0) {
             url.append("?").append(queryString);
         }
+        System.out.println("CFExamMarkerFunctionality: handleSets -> " + url);
         makeApiRequest(url.toString(), "GET", request, response, false);
     }
     
@@ -534,11 +538,13 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                                 HttpServletResponse response, boolean requiresAuth) throws IOException {
         
         try {
+            System.out.println("CFExamMarkerFunctionality: outbound " + method + " " + url + " auth=" + requiresAuth);
             URL apiUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
             conn.setRequestMethod(method);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
             
             // Add API key if required
             if (requiresAuth) {
@@ -594,4 +600,3 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         }
     }
 }
-
