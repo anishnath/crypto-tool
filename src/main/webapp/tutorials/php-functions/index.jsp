@@ -386,13 +386,40 @@
                                             </div>
                                         </div>
 
+                                        <!-- Multibyte String Functions -->
+                                        <div class="category-card" data-category="mbstrings">
+                                            <div class="category-header">
+                                                <div class="category-icon strings">UTF</div>
+                                                <div>
+                                                    <div class="category-title">Multibyte String Functions</div>
+                                                    <div class="category-count">10 functions</div>
+                                                </div>
+                                            </div>
+                                            <div class="function-list">
+                                                <a href="mb_strlen.jsp" class="function-chip">mb_strlen()</a>
+                                                <a href="mb_substr.jsp" class="function-chip">mb_substr()</a>
+                                                <a href="mb_strtolower.jsp" class="function-chip">mb_strtolower()</a>
+                                                <a href="mb_strtoupper.jsp" class="function-chip">mb_strtoupper()</a>
+                                                <a href="mb_strpos.jsp" class="function-chip">mb_strpos()</a>
+                                                <a href="mb_convert_encoding.jsp"
+                                                    class="function-chip">mb_convert_encoding()</a>
+                                                <a href="mb_detect_encoding.jsp"
+                                                    class="function-chip">mb_detect_encoding()</a>
+                                                <a href="mb_str_split.jsp" class="function-chip">mb_str_split()</a>
+                                                <a href="mb_internal_encoding.jsp"
+                                                    class="function-chip">mb_internal_encoding()</a>
+                                                <a href="mb_check_encoding.jsp"
+                                                    class="function-chip">mb_check_encoding()</a>
+                                            </div>
+                                        </div>
+
                                         <!-- Array Functions -->
                                         <div class="category-card" data-category="arrays">
                                             <div class="category-header">
                                                 <div class="category-icon arrays">[]</div>
                                                 <div>
                                                     <div class="category-title">Array Functions</div>
-                                                    <div class="category-count">10 functions</div>
+                                                    <div class="category-count">29 functions</div>
                                                 </div>
                                             </div>
                                             <div class="function-list">
@@ -406,6 +433,26 @@
                                                 <a href="array_keys.jsp" class="function-chip">array_keys()</a>
                                                 <a href="array_values.jsp" class="function-chip">array_values()</a>
                                                 <a href="sort.jsp" class="function-chip">sort()</a>
+                                                <a href="array_splice.jsp" class="function-chip">array_splice()</a>
+                                                <a href="count.jsp" class="function-chip">count()</a>
+                                                <a href="krsort.jsp" class="function-chip">krsort()</a>
+                                                <a href="ksort.jsp" class="function-chip">ksort()</a>
+                                                <a href="natcasesort.jsp" class="function-chip">natcasesort()</a>
+                                                <a href="natsort.jsp" class="function-chip">natsort()</a>
+                                                <a href="range.jsp" class="function-chip">range()</a>
+                                                <a href="rsort.jsp" class="function-chip">rsort()</a>
+                                                <a href="shuffle.jsp" class="function-chip">shuffle()</a>
+                                                <a href="array_shift.jsp" class="function-chip">array_shift()</a>
+                                                <a href="array_unshift.jsp" class="function-chip">array_unshift()</a>
+                                                <a href="array_slice.jsp" class="function-chip">array_slice()</a>
+                                                <a href="array_chunk.jsp" class="function-chip">array_chunk()</a>
+                                                <a href="array_unique.jsp" class="function-chip">array_unique()</a>
+                                                <a href="array_reverse.jsp" class="function-chip">array_reverse()</a>
+                                                <a href="array_column.jsp" class="function-chip">array_column()</a>
+                                                <a href="array_combine.jsp" class="function-chip">array_combine()</a>
+                                                <a href="array_diff.jsp" class="function-chip">array_diff()</a>
+                                                <a href="array_intersect.jsp"
+                                                    class="function-chip">array_intersect()</a>
                                             </div>
                                         </div>
 
@@ -855,7 +902,16 @@
                                                     <td><span class="func-category">Array</span></td>
                                                 </tr>
                                                 <tr data-func="sort" data-cat="arrays">
-                                                    <td class="func-name"><a href="sort.jsp">sort()</a>, <a href="array_splice.jsp">array_splice()</a>, <a href="count.jsp">count()</a>, <a href="krsort.jsp">krsort()</a>, <a href="ksort.jsp">ksort()</a>, <a href="natcasesort.jsp">natcasesort()</a>, <a href="natsort.jsp">natsort()</a>, <a href="range.jsp">range()</a>, <a href="rsort.jsp">rsort()</a>, <a href="shuffle.jsp">shuffle()</a></td>
+                                                    <td class="func-name"><a href="sort.jsp">sort()</a>, <a
+                                                            href="array_splice.jsp">array_splice()</a>, <a
+                                                            href="count.jsp">count()</a>, <a
+                                                            href="krsort.jsp">krsort()</a>, <a
+                                                            href="ksort.jsp">ksort()</a>, <a
+                                                            href="natcasesort.jsp">natcasesort()</a>, <a
+                                                            href="natsort.jsp">natsort()</a>, <a
+                                                            href="range.jsp">range()</a>, <a
+                                                            href="rsort.jsp">rsort()</a>, <a
+                                                            href="shuffle.jsp">shuffle()</a></td>
                                                     <td class="func-desc">Sort an array in ascending order</td>
                                                     <td><span class="func-category">Array</span></td>
                                                 </tr>
@@ -1453,7 +1509,7 @@
                             </article>
 
                             <%-- Right Ad Rail (desktop only) --%>
-                            <%@ include file="../tutorial-ad-rail.jsp" %>
+                                <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>
