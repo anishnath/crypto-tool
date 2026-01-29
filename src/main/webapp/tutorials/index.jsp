@@ -124,6 +124,13 @@
                     "name": "PHP Functions Reference",
                     "description": "Interactive PHP function reference. Browse and execute 40+ functions online.",
                     "url": "https://8gwifi.org/tutorials/php-functions/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 13,
+                    "name": "Python Functions Reference",
+                    "description": "Interactive Python function and method reference. Browse and execute 50+ functions online.",
+                    "url": "https://8gwifi.org/tutorials/python-functions/"
                 }
             ]
         },
@@ -311,6 +318,15 @@
                 "description": "Interactive PHP function reference with live examples. Browse, learn, and execute 40+ PHP functions online.",
                 "provider": {"@type": "Organization", "name": "8gwifi.org"},
                 "url": "https://8gwifi.org/tutorials/php-functions/",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "WebPage",
+                "position": 13,
+                "name": "Python Functions Reference",
+                "description": "Interactive Python function and method reference with live examples. Browse, learn, and execute 50+ Python functions online.",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "url": "https://8gwifi.org/tutorials/python-functions/",
                 "isAccessibleForFree": true
             }
         ]
@@ -926,6 +942,20 @@
                                             <h3>PHP Functions</h3>
                                         </div>
                                         <p>Browse and run 40+ PHP functions. Strings, arrays, JSON, dates, and more.</p>
+                                        <span class="tutorial-card-badge badge-available">Interactive</span>
+                                    </a>
+
+                                <%-- Python Functions Reference --%>
+                                    <a href="<%=request.getContextPath()%>/tutorials/python-functions/"
+                                        class="tutorial-card">
+                                        <div class="tutorial-card-header">
+                                            <div class="tutorial-card-icon" style="background: #3776ab15;">
+                                                <img src="<%=request.getContextPath()%>/tutorials/assets/images/python-logo.svg"
+                                                    alt="Python">
+                                            </div>
+                                            <h3>Python Functions</h3>
+                                        </div>
+                                        <p>Browse and run 50+ Python functions and methods. Strings, lists, dicts, and more.</p>
                                         <span class="tutorial-card-badge badge-available">Interactive</span>
                                     </a>
                             </section>
