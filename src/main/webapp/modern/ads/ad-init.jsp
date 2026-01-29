@@ -98,23 +98,23 @@
         }
         
         // ============================================
-        // AD SLOT 5: Right Sidebar Top (Desktop Only, > 1300px)
-        // Placement: Fixed right sidebar, top position
+        // AD SLOT 5: Right Sidebar Top (Desktop Only, >= 1025px)
+        // Placement: Three-column layout sidebar, top position
         // ============================================
-        if (width >= 1300) {
-            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_top', 
-                [[336,280],[300,250],[250,250]], 
+        if (width >= 1025) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_top',
+                [[336,280],[300,250],[250,250]],
                 'site_8gwifi_org_sidebar_top')
                 .addService(googletag.pubads());
         }
-        
+
         // ============================================
-        // AD SLOT 6: Right Sidebar Mid (Desktop Only, > 1300px)
-        // Placement: Fixed right sidebar, middle position (displays immediately)
+        // AD SLOT 6: Right Sidebar Mid (Desktop Only, >= 1025px)
+        // Placement: Three-column layout sidebar, middle position
         // ============================================
-        if (width >= 1300) {
-            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_mid', 
-                [[336,280],[300,250],[250,250]], 
+        if (width >= 1025) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_sidebar_mid',
+                [[336,280],[300,250],[250,250]],
                 'site_8gwifi_org_sidebar_mid')
                 .addService(googletag.pubads());
         }
