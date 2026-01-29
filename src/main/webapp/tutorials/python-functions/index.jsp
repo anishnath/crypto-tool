@@ -230,13 +230,13 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="python-functions-index">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-python-functions.jsp" %>
                             <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-                            <article class="tutorial-content" style="margin-right: 0;">
+                            <article class="tutorial-content">
                                 <nav class="breadcrumb">
                                     <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
                                     <span class="breadcrumb-separator">/</span>
@@ -269,10 +269,6 @@
                                         <div class="stat-label">Standard Library</div>
                                     </div>
                                 </div>
-
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
 
                                 <div class="lesson-body">
                                     <!-- Search -->
@@ -619,10 +615,6 @@
                                         </div>
                                     </div>
 
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
-
                                     <!-- Quick Links -->
                                     <div
                                         style="margin-top: var(--space-8); padding: var(--space-6); background: var(--bg-secondary); border-radius: var(--radius-lg);">
@@ -668,11 +660,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>
