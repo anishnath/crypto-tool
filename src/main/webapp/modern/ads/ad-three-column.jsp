@@ -27,9 +27,9 @@
 --%>
 
 <div class="ad-three-column-stack" id="adThreeColumnStack">
-    <!-- Ad Slot 1: Primary Rectangle -->
+    <!-- Ad Slot 1: Primary Rectangle (Sidebar Top) -->
     <div class="ad-container ad-three-column-slot"
-         id="site_8gwifi_org_three_col_primary"
+         id="site_8gwifi_org_sidebar_top"
          data-ad-type="three-column-rectangle"
          role="complementary"
          aria-label="Advertisement">
@@ -39,7 +39,7 @@
         <div class="ad-content">
             <script>
                 (function() {
-                    var adContainer = document.getElementById('site_8gwifi_org_three_col_primary');
+                    var adContainer = document.getElementById('site_8gwifi_org_sidebar_top');
                     if (!adContainer) return;
 
                     // Load immediately on desktop
@@ -49,7 +49,6 @@
 
                             if (typeof googletag !== 'undefined' && googletag.cmd) {
                                 googletag.cmd.push(function() {
-                                    // Reuse sidebar_top slot definition from ad-init.jsp
                                     googletag.display('site_8gwifi_org_sidebar_top');
                                 });
                             }
@@ -60,9 +59,9 @@
         </div>
     </div>
 
-    <!-- Ad Slot 2: Secondary Rectangle -->
+    <!-- Ad Slot 2: Secondary Rectangle (Sidebar Mid) -->
     <div class="ad-container ad-three-column-slot ad-three-column-secondary"
-         id="site_8gwifi_org_three_col_secondary"
+         id="site_8gwifi_org_sidebar_mid"
          data-ad-type="three-column-rectangle"
          role="complementary"
          aria-label="Advertisement">
@@ -72,7 +71,7 @@
         <div class="ad-content">
             <script>
                 (function() {
-                    var adContainer = document.getElementById('site_8gwifi_org_three_col_secondary');
+                    var adContainer = document.getElementById('site_8gwifi_org_sidebar_mid');
                     if (!adContainer) return;
 
                     // Lazy load second ad using IntersectionObserver
@@ -84,7 +83,6 @@
 
                                     if (typeof googletag !== 'undefined' && googletag.cmd) {
                                         googletag.cmd.push(function() {
-                                            // Reuse sidebar_mid slot definition from ad-init.jsp
                                             googletag.display('site_8gwifi_org_sidebar_mid');
                                         });
                                     }
