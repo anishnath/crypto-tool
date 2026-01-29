@@ -168,6 +168,69 @@
                                                 sort()
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/array_splice.jsp"
+                                                class="nav-link <%= "array_splice".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                array_splice()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/count.jsp"
+                                                class="nav-link <%= "count".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                count()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/krsort.jsp"
+                                                class="nav-link <%= "krsort".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                krsort()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/ksort.jsp"
+                                                class="nav-link <%= "ksort".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                ksort()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/natcasesort.jsp"
+                                                class="nav-link <%= "natcasesort".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                natcasesort()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/natsort.jsp"
+                                                class="nav-link <%= "natsort".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                natsort()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/range.jsp"
+                                                class="nav-link <%= "range".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                range()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/rsort.jsp"
+                                                class="nav-link <%= "rsort".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                rsort()
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<%=request.getContextPath()%>/tutorials/php-functions/shuffle.jsp"
+                                                class="nav-link <%= "shuffle".equals(currentFunction) ? "active" : ""
+                                                %>">
+                                                shuffle()
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
 
