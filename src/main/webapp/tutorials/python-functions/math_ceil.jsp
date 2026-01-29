@@ -18,12 +18,12 @@
     <%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-python-functions.jsp" %>
             <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-            <article class="tutorial-content" style="margin-right: 0;">
+            <article class="tutorial-content" >
                 <nav class="breadcrumb">
                     <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
                     <span class="breadcrumb-separator">/</span>
@@ -49,10 +49,6 @@
                         <jsp:param name="codeFile" value="python-functions/math_ceil.py" />
                     </jsp:include>
                 </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-            </article>
-        </main>
-        <%@ include file="../tutorial-footer.jsp" %>
     </div>
     <script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror.min.js"></script>
     <script src="<%=request.getContextPath()%>/tutorials/assets/js/codemirror-modes/python.min.js"></script>

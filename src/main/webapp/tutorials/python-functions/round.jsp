@@ -47,13 +47,13 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="python-functions-round">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-python-functions.jsp" %>
                             <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-                            <article class="tutorial-content" style="margin-right: 0;">
+                            <article class="tutorial-content" >
                                 <nav class="breadcrumb">
                                     <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
                                     <span class="breadcrumb-separator">/</span>
@@ -140,10 +140,11 @@
                                     </div>
                                 </div>
 
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
-                            </article>
+
+                                                        </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>
