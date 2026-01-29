@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python os.mkdir() - Create Directory | 8gwifi.org</title>
-    <meta name="description" content="Create a new directory">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_mkdir.jsp">
+    <title>Python os.mkdir() - Create Directory | Try Free</title>
+    <meta name="description" content="Python os.mkdir() creates a directory with specified mode. Interactive examples with live code. Syntax: os.mkdir(path, mode). Make folders easily. Try now!">
+    <meta name="keywords" content="python os mkdir, os.mkdir, create directory, python make folder, os mkdir example, python create folder">
+    <meta property="og:title" content="Python os.mkdir() - Create Directory | Try Free">
+    <meta property="og:description" content="Python os.mkdir() creates a directory with specified mode. Interactive examples with live code. Syntax: os.mkdir(path, mode). Make folders easily. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python os.mkdir() creates a directory with specified mode. Interactive examples with live code. Syntax: os.mkdir(path, mode). Make folders easily. Try now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_mkdir.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

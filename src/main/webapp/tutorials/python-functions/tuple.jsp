@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python tuple() Function - Create Tuples | 8gwifi.org</title>
+            <title>Python tuple() Function - Create Tuple | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python tuple() function. Converts an iterable (list, string, set) to a tuple. Syntax and examples.">
             <meta name="keywords"
                 content="python tuple function, python create tuple, python convert to tuple, python list to tuple">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/tuple.jsp">
+    <meta property="og:title" content="Python tuple() Function - Create Tuple | Live Demo">
+    <meta property="og:description" content="Python tuple() creates an immutable tuple from iterable. Interactive examples. Syntax: tuple(iterable). Immutable sequences. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python tuple() creates an immutable tuple from iterable. Interactive examples. Syntax: tuple(iterable). Immutable sequences. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/tuple.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

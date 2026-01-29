@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python hashlib.sha1() - SHA-1 Hash | 8gwifi.org</title>
-    <meta name="description" content="Calculate SHA-1 cryptographic hash (deprecated for security, use SHA-256 or SHA-512 instead)">
-    <meta name="keywords" content="python hashlib, sha1, sha-1, cryptographic hash, legacy hash, deprecated">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_sha1.jsp">
+    <title>Python hashlib.sha1() - SHA1 Hash Function | Try Online</title>
+    <meta name="description" content="Python hashlib.sha1() creates SHA1 hash object. Interactive examples with live code. Syntax: hashlib.sha1(data). Generate SHA1 hashes. Try free!">
+    <meta name="keywords" content="python hashlib sha1, hashlib.sha1, sha1 hash, python sha1, sha1 example, python hash sha1">
+    <meta property="og:title" content="Python hashlib.sha1() - SHA1 Hash Function | Try Online">
+    <meta property="og:description" content="Python hashlib.sha1() creates SHA1 hash object. Interactive examples with live code. Syntax: hashlib.sha1(data). Generate SHA1 hashes. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python hashlib.sha1() creates SHA1 hash object. Interactive examples with live code. Syntax: hashlib.sha1(data). Generate SHA1 hashes. Try free!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_sha1.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

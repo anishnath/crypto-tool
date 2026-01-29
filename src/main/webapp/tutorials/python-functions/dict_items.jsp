@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.items() Method - Get Dictionary Items | 8gwifi.org</title>
+            <title>Python dict.items() - Get Key-Value Pairs | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python dict.items() method. Returns a view object containing the key-value pairs of the dictionary. Syntax and examples.">
             <meta name="keywords"
                 content="python items method, python dict items, get all items python, iterate dictionary items">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_items.jsp">
+    <meta property="og:title" content="Python dict.items() - Get Key-Value Pairs | Live Demo">
+    <meta property="og:description" content="Python dict.items() returns view of dictionary key-value pairs as tuples. Interactive examples with live editor. Syntax: dict.items(). Iterate pairs. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.items() returns view of dictionary key-value pairs as tuples. Interactive examples with live editor. Syntax: dict.items(). Iterate pairs. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_items.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

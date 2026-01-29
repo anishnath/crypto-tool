@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python re.match() - Match Pattern at Start | 8gwifi.org</title>
+            <title>Python re.match() - Match Pattern at Start | Live Examples</title>
             <meta name="description"
                 content="Learn how to use Python's re.match() method. Matches a regular expression pattern at the beginning of a string. Syntax and examples.">
             <meta name="keywords"
                 content="python re.match, python regex match, python pattern matching, python regular expressions">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_match.jsp">
+    <meta property="og:title" content="Python re.match() - Match Pattern at Start | Live Examples">
+    <meta property="og:description" content="Python re.match() checks if pattern matches at beginning of string. Interactive examples. Syntax: re.match(pattern, string). Regex matching. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python re.match() checks if pattern matches at beginning of string. Interactive examples. Syntax: re.match(pattern, string). Regex matching. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_match.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

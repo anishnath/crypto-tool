@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.readline() Method - Read Single Line | 8gwifi.org</title>
+            <title>Python file.readline() - Read Single Line | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python file.readline() method. Returns one line from the file. Syntax and examples.">
             <meta name="keywords"
                 content="python file readline, python read line, read single line python, python file io">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_readline.jsp">
+    <meta property="og:title" content="Python file.readline() - Read Single Line | Try Free">
+    <meta property="og:description" content="Python file.readline() reads one line from file. Interactive examples with live code. Syntax: file.readline(size). Read line by line. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.readline() reads one line from file. Interactive examples with live code. Syntax: file.readline(size). Read line by line. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_readline.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

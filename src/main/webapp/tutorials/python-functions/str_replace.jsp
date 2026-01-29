@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.replace() Method - Replace Substring | 8gwifi.org</title>
+            <title>Python str.replace() - Replace Substring | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python str.replace() method. Replaces a specified phrase with another specified phrase. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python replace method, python string replace, replace substring python, python replace all strings">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_replace.jsp">
+    <meta property="og:title" content="Python str.replace() - Replace Substring | Live Examples">
+    <meta property="og:description" content="Python str.replace() replaces occurrences of substring with another. Interactive examples with live code. Syntax: string.replace(old, new, count). Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.replace() replaces occurrences of substring with another. Interactive examples with live code. Syntax: string.replace(old, new, count). Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_replace.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

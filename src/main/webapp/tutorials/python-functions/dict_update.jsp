@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.update() Method - Update Dictionary | 8gwifi.org</title>
+            <title>Python dict.update() - Update Dictionary | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python dict.update() method. Updates the dictionary with the specified key-value pairs. Syntax and examples.">
             <meta name="keywords"
                 content="python update method, python dict update, update dictionary python, python add to dict">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_update.jsp">
+    <meta property="og:title" content="Python dict.update() - Update Dictionary | Try Free">
+    <meta property="og:description" content="Python dict.update() updates dictionary with key-value pairs from another dict. Interactive examples. Syntax: dict.update(other). Merge dicts easily. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.update() updates dictionary with key-value pairs from another dict. Interactive examples. Syntax: dict.update(other). Merge dicts easily. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_update.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

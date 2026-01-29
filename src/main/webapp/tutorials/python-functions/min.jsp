@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python min() Function - Find Smallest Item | 8gwifi.org</title>
+            <title>Python min() Function - Find Minimum Value | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python min() function. Returns the smallest item in an iterable or the smallest of two or more arguments. Syntax and examples.">
             <meta name="keywords"
                 content="python min function, python minimum value, min list python, find smallest number python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/min.jsp">
+    <meta property="og:title" content="Python min() Function - Find Minimum Value | Try Online">
+    <meta property="og:description" content="Python min() returns the smallest item in iterable. Interactive examples with live editor. Syntax: min(iterable, key). Find min values easily. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python min() returns the smallest item in iterable. Interactive examples with live editor. Syntax: min(iterable, key). Find min values easily. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/min.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

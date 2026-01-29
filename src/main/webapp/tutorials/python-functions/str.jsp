@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str() Function - Convert to String | 8gwifi.org</title>
+            <title>Python str() Function - Convert to String | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python str() function. Converts an object into a string. Syntax, parameters, and examples for string conversion.">
             <meta name="keywords"
                 content="python str function, python convert to string, python object to string, python string conversion">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str.jsp">
+    <meta property="og:title" content="Python str() Function - Convert to String | Try Free">
+    <meta property="og:description" content="Python str() converts object to string representation. Interactive examples with live code. Syntax: str(object, encoding). Type conversion made easy. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str() converts object to string representation. Interactive examples with live code. Syntax: str(object, encoding). Type conversion made easy. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

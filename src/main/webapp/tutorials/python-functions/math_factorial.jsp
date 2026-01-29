@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python math.factorial() - Factorial | 8gwifi.org</title>
-    <meta name="description" content="Calculate factorial">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_factorial.jsp">
+    <title>Python math.factorial() - Calculate Factorial | Live Demo</title>
+    <meta name="description" content="Python math.factorial() returns factorial of non-negative integer. Interactive examples. Syntax: math.factorial(x). Calculate n! easily. Try it online!">
+    <meta name="keywords" content="python math factorial, math.factorial, factorial python, python factorial, math factorial example, calculate factorial">
+    <meta property="og:title" content="Python math.factorial() - Calculate Factorial | Live Demo">
+    <meta property="og:description" content="Python math.factorial() returns factorial of non-negative integer. Interactive examples. Syntax: math.factorial(x). Calculate n! easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python math.factorial() returns factorial of non-negative integer. Interactive examples. Syntax: math.factorial(x). Calculate n! easily. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_factorial.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

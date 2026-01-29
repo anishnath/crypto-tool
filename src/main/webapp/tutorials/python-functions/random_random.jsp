@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python random.random() - Random Float | 8gwifi.org</title>
-    <meta name="description" content="Generate random float between 0 and 1">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_random.jsp">
+    <title>Python random.random() - Random Float 0-1 | Live Examples</title>
+    <meta name="description" content="Python random.random() returns random float between 0.0 and 1.0. Interactive examples. Syntax: random.random(). Generate random numbers easily. Try online!">
+    <meta name="keywords" content="python random random, random.random, random float, python random number, random example, python random">
+    <meta property="og:title" content="Python random.random() - Random Float 0-1 | Live Examples">
+    <meta property="og:description" content="Python random.random() returns random float between 0.0 and 1.0. Interactive examples. Syntax: random.random(). Generate random numbers easily. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python random.random() returns random float between 0.0 and 1.0. Interactive examples. Syntax: random.random(). Generate random numbers easily. Try online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_random.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

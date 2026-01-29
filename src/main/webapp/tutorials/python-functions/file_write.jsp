@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.write() Method - Write to File | 8gwifi.org</title>
+            <title>Python file.write() - Write to File | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python file.write() method. Writes a specified string to the file. Syntax and examples.">
             <meta name="keywords"
                 content="python file write, python write file, python write text, python append to file">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_write.jsp">
+    <meta property="og:title" content="Python file.write() - Write to File | Live Examples">
+    <meta property="og:description" content="Python file.write() writes string to file. Interactive examples. Syntax: file.write(string). Write files easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.write() writes string to file. Interactive examples. Syntax: file.write(string). Write files easily. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_write.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

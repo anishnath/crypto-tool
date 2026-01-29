@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.pop() Method - Remove Dictionary Item | 8gwifi.org</title>
+            <title>Python dict.pop() - Remove and Return Value | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python dict.pop() method. Removes the element with the specified key. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python pop method, python dict pop, remove item dictionary python, python delete dict key">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_pop.jsp">
+    <meta property="og:title" content="Python dict.pop() - Remove and Return Value | Live Examples">
+    <meta property="og:description" content="Python dict.pop() removes key and returns its value with optional default. Interactive examples. Syntax: dict.pop(key, default). Safe key removal. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.pop() removes key and returns its value with optional default. Interactive examples. Syntax: dict.pop(key, default). Safe key removal. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_pop.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

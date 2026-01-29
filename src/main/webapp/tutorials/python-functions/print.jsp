@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python print() Function - Output to Console | 8gwifi.org</title>
+            <title>Python print() Function - Output to Console | Try Online Free</title>
             <meta name="description"
                 content="Learn how to use the Python print() function. Syntax, parameters, examples, and how to format output, change separators, and end characters.">
             <meta name="keywords"
                 content="python print function, python print example, print syntax python, python output, sep parameter, end parameter">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/print.jsp">
+    <meta property="og:title" content="Python print() Function - Output to Console | Try Online Free">
+    <meta property="og:description" content="Python print() outputs text to console. Interactive examples with live code editor. Syntax: print(*objects, sep, end, file). Essential for debugging. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python print() outputs text to console. Interactive examples with live code editor. Syntax: print(*objects, sep, end, file). Essential for debugging. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/print.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

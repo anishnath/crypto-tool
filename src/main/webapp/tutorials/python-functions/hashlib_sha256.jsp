@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python hashlib.sha256() - SHA256 Hashing | 8gwifi.org</title>
+            <title>Python hashlib.sha256() - SHA256 Hash Function | Live Examples</title>
             <meta name="description"
                 content="Learn how to use Python's hashlib.sha256() for creating SHA256 hashes. Syntax and examples.">
             <meta name="keywords"
                 content="python sha256, python hashlib sha256, python secure hash, python cryptography">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_sha256.jsp">
+    <meta property="og:title" content="Python hashlib.sha256() - SHA256 Hash Function | Live Examples">
+    <meta property="og:description" content="Python hashlib.sha256() creates SHA256 hash object. Interactive examples. Syntax: hashlib.sha256(data). Secure hashing. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python hashlib.sha256() creates SHA256 hash object. Interactive examples. Syntax: hashlib.sha256(data). Secure hashing. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_sha256.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

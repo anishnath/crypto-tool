@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python itertools.permutations() - Generate Permutations | 8gwifi.org</title>
-    <meta name="description" content="Generate all r-length permutations of elements for combinatorial algorithms and puzzles">
-    <meta name="keywords" content="python itertools, permutations, combinatorics, arrangements, algorithm, math">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_permutations.jsp">
+    <title>Python itertools.permutations() - Generate Permutations | Live Demo</title>
+    <meta name="description" content="Python itertools.permutations() generates r-length permutations. Interactive examples. Syntax: permutations(iterable, r). All permutations. Try online!">
+    <meta name="keywords" content="python permutations, itertools.permutations, generate permutations, python permutations example">
+    <meta property="og:title" content="Python itertools.permutations() - Generate Permutations | Live Demo">
+    <meta property="og:description" content="Python itertools.permutations() generates r-length permutations. Interactive examples. Syntax: permutations(iterable, r). All permutations. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python itertools.permutations() generates r-length permutations. Interactive examples. Syntax: permutations(iterable, r). All permutations. Try online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_permutations.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

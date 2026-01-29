@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.startswith() Method - Check String Start | 8gwifi.org</title>
+            <title>Python str.startswith() - Check String Prefix | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python str.startswith() method. Returns True if the string starts with the specified value. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python startswith method, python string startswith, check string start python, python string check">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_startswith.jsp">
+    <meta property="og:title" content="Python str.startswith() - Check String Prefix | Live Examples">
+    <meta property="og:description" content="Python str.startswith() checks if string starts with specified prefix. Interactive examples. Syntax: string.startswith(prefix, start, end). Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.startswith() checks if string starts with specified prefix. Interactive examples. Syntax: string.startswith(prefix, start, end). Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_startswith.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

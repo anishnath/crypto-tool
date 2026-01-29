@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python re.split() - Split by Pattern | 8gwifi.org</title>
-    <meta name="description" content="Split string by regex pattern">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_split.jsp">
+    <title>Python re.split() - Split by Pattern | Live Examples</title>
+    <meta name="description" content="Python re.split() splits string by pattern occurrences. Interactive examples. Syntax: re.split(pattern, string). Regex split. Try it online!">
+    <meta name="keywords" content="python re split, re.split, regex split, python regex split, split pattern, python re.split">
+    <meta property="og:title" content="Python re.split() - Split by Pattern | Live Examples">
+    <meta property="og:description" content="Python re.split() splits string by pattern occurrences. Interactive examples. Syntax: re.split(pattern, string). Regex split. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python re.split() splits string by pattern occurrences. Interactive examples. Syntax: re.split(pattern, string). Regex split. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_split.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python random.choice() - Random Element | 8gwifi.org</title>
-    <meta name="description" content="Choose random element from sequence">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_choice.jsp">
+    <title>Python random.choice() - Random Element from Sequence | Live Demo</title>
+    <meta name="description" content="Python random.choice() returns random element from non-empty sequence. Interactive examples. Syntax: random.choice(seq). Pick random items. Try it online!">
+    <meta name="keywords" content="python random choice, random.choice, random element, python choice, random pick, python random choice">
+    <meta property="og:title" content="Python random.choice() - Random Element from Sequence | Live Demo">
+    <meta property="og:description" content="Python random.choice() returns random element from non-empty sequence. Interactive examples. Syntax: random.choice(seq). Pick random items. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python random.choice() returns random element from non-empty sequence. Interactive examples. Syntax: random.choice(seq). Pick random items. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_choice.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

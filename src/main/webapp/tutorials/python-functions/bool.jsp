@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python bool() Function - Convert to Boolean | 8gwifi.org</title>
+            <title>Python bool() Function - Convert to Boolean | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python bool() function. Converts a value to a boolean (True or False). Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python bool function, python convert to boolean, python boolean values, python truthy falsy">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/bool.jsp">
+    <meta property="og:title" content="Python bool() Function - Convert to Boolean | Live Examples">
+    <meta property="og:description" content="Python bool() converts value to boolean (True/False). Interactive examples. Syntax: bool(value). Truth value testing. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python bool() converts value to boolean (True/False). Interactive examples. Syntax: bool(value). Truth value testing. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/bool.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

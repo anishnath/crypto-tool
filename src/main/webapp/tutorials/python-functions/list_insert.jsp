@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.insert() Method - Insert Item at Index | 8gwifi.org</title>
+            <title>Python list.insert() - Insert Item at Position | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python list.insert() method. Inserts the specified value at the specified position. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python insert method, python list insert, insert item list python, python list add at index">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_insert.jsp">
+    <meta property="og:title" content="Python list.insert() - Insert Item at Position | Try Free">
+    <meta property="og:description" content="Python list.insert() inserts an item at specified position. Interactive examples with live code. Syntax: list.insert(index, item). Precise list modification. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.insert() inserts an item at specified position. Interactive examples with live code. Syntax: list.insert(index, item). Precise list modification. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_insert.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

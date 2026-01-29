@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python itertools.combinations() - Generate Combinations | 8gwifi.org</title>
-    <meta name="description" content="Generate all r-length combinations of elements for combinatorial problems and algorithms">
-    <meta name="keywords" content="python itertools, combinations, combinatorics, permutations, algorithm, math">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_combinations.jsp">
+    <title>Python itertools.combinations() - Generate Combinations | Try Free</title>
+    <meta name="description" content="Python itertools.combinations() generates r-length combinations. Interactive examples. Syntax: combinations(iterable, r). All combinations. Try now!">
+    <meta name="keywords" content="python combinations, itertools.combinations, generate combinations, python combinations example">
+    <meta property="og:title" content="Python itertools.combinations() - Generate Combinations | Try Free">
+    <meta property="og:description" content="Python itertools.combinations() generates r-length combinations. Interactive examples. Syntax: combinations(iterable, r). All combinations. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python itertools.combinations() generates r-length combinations. Interactive examples. Syntax: combinations(iterable, r). All combinations. Try now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_combinations.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

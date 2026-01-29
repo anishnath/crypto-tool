@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python abs() Function - Absolute Value | 8gwifi.org</title>
+            <title>Python abs() Function - Absolute Value | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python abs() function. Returns the absolute value of a number. Syntax and examples.">
-            <meta name="keywords" content="python abs function, python absolute value, python math abs, abs example">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/abs.jsp">
+            <meta name="keywords" content="python abs, abs function, absolute value, python absolute, abs example, python math abs">
+    <meta property="og:title" content="Python abs() Function - Absolute Value | Live Demo">
+    <meta property="og:description" content="Python abs() returns absolute value of a number. Interactive examples. Syntax: abs(number). Remove negative sign. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python abs() returns absolute value of a number. Interactive examples. Syntax: abs(number). Remove negative sign. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/abs.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

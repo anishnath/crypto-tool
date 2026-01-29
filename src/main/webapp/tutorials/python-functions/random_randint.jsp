@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python random.randint() - Random Integer | 8gwifi.org</title>
-    <meta name="description" content="Generate random integer in range">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_randint.jsp">
+    <title>Python random.randint() - Random Integer | Try Free</title>
+    <meta name="description" content="Python random.randint() returns random integer between two values (inclusive). Interactive examples. Syntax: random.randint(a, b). Random int generation. Try now!">
+    <meta name="keywords" content="python random randint, random.randint, random integer, python randint, random int, python random integer">
+    <meta property="og:title" content="Python random.randint() - Random Integer | Try Free">
+    <meta property="og:description" content="Python random.randint() returns random integer between two values (inclusive). Interactive examples. Syntax: random.randint(a, b). Random int generation. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python random.randint() returns random integer between two values (inclusive). Interactive examples. Syntax: random.randint(a, b). Random int generation. Try now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_randint.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

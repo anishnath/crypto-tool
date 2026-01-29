@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.get() Method - Access Dictionary Item | 8gwifi.org</title>
+            <title>Python dict.get() - Get Dictionary Value Safely | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python dict.get() method. Returns the value of the specified key. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python dict get, python get method dictionary, access dict item python, get value by key python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_get.jsp">
+    <meta property="og:title" content="Python dict.get() - Get Dictionary Value Safely | Try Free">
+    <meta property="og:description" content="Python dict.get() returns value for key with optional default. Interactive examples. Syntax: dict.get(key, default). Avoid KeyError exceptions. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.get() returns value for key with optional default. Interactive examples. Syntax: dict.get(key, default). Avoid KeyError exceptions. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_get.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

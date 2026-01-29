@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.add() Method - Add Element to Set | 8gwifi.org</title>
+            <title>Python set.add() - Add Element to Set | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python set.add() method. Adds an element to the set. Syntax and examples.">
-            <meta name="keywords" content="python set add, python add to set, set add method, python set insert">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_add.jsp">
+            <meta name="keywords" content="python set add, set.add, add to set, python set add element, set add example, python add set">
+    <meta property="og:title" content="Python set.add() - Add Element to Set | Live Demo">
+    <meta property="og:description" content="Python set.add() adds an element to set. Interactive examples with live code. Syntax: set.add(elem). Modify sets easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.add() adds an element to set. Interactive examples with live code. Syntax: set.add(elem). Modify sets easily. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_add.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

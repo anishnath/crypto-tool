@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python base64.b64encode() - Encode to Base64 | 8gwifi.org</title>
+            <title>Python base64.b64encode() - Encode to Base64 | Live Examples</title>
             <meta name="description"
                 content="Learn how to use Python's base64.b64encode() method. Encodes bytes using Base64. Syntax and examples.">
             <meta name="keywords"
                 content="python base64 encode, python b64encode, python string to base64, python encoding">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/base64_b64encode.jsp">
+    <meta property="og:title" content="Python base64.b64encode() - Encode to Base64 | Live Examples">
+    <meta property="og:description" content="Python base64.b64encode() encodes bytes to base64. Interactive examples with live code. Syntax: base64.b64encode(s). Encode data easily. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python base64.b64encode() encodes bytes to base64. Interactive examples with live code. Syntax: base64.b64encode(s). Encode data easily. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/base64_b64encode.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python os.path.exists() - Check Path | 8gwifi.org</title>
-    <meta name="description" content="Check if file or directory exists">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_path_exists.jsp">
+    <title>Python os.path.exists() - Check Path Exists | Try Free</title>
+    <meta name="description" content="Python os.path.exists() checks if path exists. Interactive examples with live code. Syntax: os.path.exists(path). Verify files/folders exist. Try now!">
+    <meta name="keywords" content="python os path exists, os.path.exists, check file exists, python path exists, file exists, python check path">
+    <meta property="og:title" content="Python os.path.exists() - Check Path Exists | Try Free">
+    <meta property="og:description" content="Python os.path.exists() checks if path exists. Interactive examples with live code. Syntax: os.path.exists(path). Verify files/folders exist. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python os.path.exists() checks if path exists. Interactive examples with live code. Syntax: os.path.exists(path). Verify files/folders exist. Try now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_path_exists.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python zip() Function - Loop Over Parallel Lists | 8gwifi.org</title>
+            <title>Python zip() Function - Combine Iterables | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python zip() function. Combine multiple iterables element by element. Syntax, parameters, and examples for parallel iteration.">
             <meta name="keywords"
                 content="python zip function, zip lists python, python parallel iteration, zip example python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/zip.jsp">
+    <meta property="og:title" content="Python zip() Function - Combine Iterables | Live Demo">
+    <meta property="og:description" content="Python zip() combines multiple iterables into tuples. Interactive examples with live code. Syntax: zip(*iterables). Parallel iteration. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python zip() combines multiple iterables into tuples. Interactive examples with live code. Syntax: zip(*iterables). Parallel iteration. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/zip.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python tuple.count() Method - Count Tuple Items | 8gwifi.org</title>
+            <title>Python tuple.count() - Count Element Occurrences | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python tuple.count() method. Returns the number of times a specified value occurs in a tuple. Syntax and examples.">
             <meta name="keywords"
                 content="python tuple count, python count method tuple, count occurrences python tuple">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/tuple_count.jsp">
+    <meta property="og:title" content="Python tuple.count() - Count Element Occurrences | Live Demo">
+    <meta property="og:description" content="Python tuple.count() returns number of times value appears. Interactive examples. Syntax: tuple.count(value). Count tuple items. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python tuple.count() returns number of times value appears. Interactive examples. Syntax: tuple.count(value). Count tuple items. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/tuple_count.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

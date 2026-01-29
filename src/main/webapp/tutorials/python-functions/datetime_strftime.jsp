@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python datetime.strftime() Method - Format Date String | 8gwifi.org</title>
+            <title>Python datetime.strftime() - Format DateTime | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python datetime.strftime() method. Formats date objects into readable strings. Syntax, format codes, and examples.">
             <meta name="keywords"
                 content="python strftime, python format date, python date to string, python date formatting codes">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/datetime_strftime.jsp">
+    <meta property="og:title" content="Python datetime.strftime() - Format DateTime | Live Demo">
+    <meta property="og:description" content="Python datetime.strftime() formats datetime as string. Interactive examples. Syntax: dt.strftime(format). Custom date formatting. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python datetime.strftime() formats datetime as string. Interactive examples. Syntax: dt.strftime(format). Custom date formatting. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/datetime_strftime.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

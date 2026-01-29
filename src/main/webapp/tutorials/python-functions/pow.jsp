@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python pow() Function - Power of a Number | 8gwifi.org</title>
+            <title>Python pow() Function - Power/Exponentiation | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python pow() function. Returns the value of x to the power of y. Syntax, parameters, and examples.">
-            <meta name="keywords" content="python pow function, python power, python math power, pow example python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/pow.jsp">
+            <meta name="keywords" content="python pow, pow function, power function, python exponent, python power, calculate power">
+    <meta property="og:title" content="Python pow() Function - Power/Exponentiation | Live Examples">
+    <meta property="og:description" content="Python pow() returns base raised to power. Interactive examples. Syntax: pow(base, exp, mod). Calculate powers easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python pow() returns base raised to power. Interactive examples. Syntax: pow(base, exp, mod). Calculate powers easily. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/pow.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

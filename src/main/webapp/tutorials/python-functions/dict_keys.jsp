@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.keys() Method - Get Dictionary Keys | 8gwifi.org</title>
+            <title>Python dict.keys() - Get All Dictionary Keys | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python dict.keys() method. Returns a view object containing the keys of the dictionary. Syntax and examples.">
             <meta name="keywords"
                 content="python keys method, python dict keys, get all keys python, iterate dictionary keys">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_keys.jsp">
+    <meta property="og:title" content="Python dict.keys() - Get All Dictionary Keys | Live Examples">
+    <meta property="og:description" content="Python dict.keys() returns a view of all dictionary keys. Interactive examples with live code. Syntax: dict.keys(). Iterate over keys easily. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.keys() returns a view of all dictionary keys. Interactive examples with live code. Syntax: dict.keys(). Iterate over keys easily. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_keys.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

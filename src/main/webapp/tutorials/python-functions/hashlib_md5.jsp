@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python hashlib.md5() - MD5 Hashing | 8gwifi.org</title>
+            <title>Python hashlib.md5() - MD5 Hash Function | Live Demo</title>
             <meta name="description"
                 content="Learn how to use Python's hashlib.md5() for creating MD5 hashes. Syntax and examples.">
-            <meta name="keywords" content="python md5, python hashlib md5, python hash string, python cryptography">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_md5.jsp">
+            <meta name="keywords" content="python hashlib md5, hashlib.md5, md5 hash, python md5, md5 example, python hash md5">
+    <meta property="og:title" content="Python hashlib.md5() - MD5 Hash Function | Live Demo">
+    <meta property="og:description" content="Python hashlib.md5() creates MD5 hash object. Interactive examples. Syntax: hashlib.md5(data). Generate MD5 hashes. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python hashlib.md5() creates MD5 hash object. Interactive examples. Syntax: hashlib.md5(data). Generate MD5 hashes. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/hashlib_md5.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

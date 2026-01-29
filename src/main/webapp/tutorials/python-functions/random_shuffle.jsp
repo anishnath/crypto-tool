@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python random.shuffle() - Shuffle List | 8gwifi.org</title>
-    <meta name="description" content="Shuffle list in place">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_shuffle.jsp">
+    <title>Python random.shuffle() - Shuffle List In-Place | Try Online</title>
+    <meta name="description" content="Python random.shuffle() shuffles sequence in-place. Interactive examples with live code. Syntax: random.shuffle(x). Randomize list order. Try it free!">
+    <meta name="keywords" content="python random shuffle, random.shuffle, shuffle list, python shuffle, randomize list, python random shuffle">
+    <meta property="og:title" content="Python random.shuffle() - Shuffle List In-Place | Try Online">
+    <meta property="og:description" content="Python random.shuffle() shuffles sequence in-place. Interactive examples with live code. Syntax: random.shuffle(x). Randomize list order. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python random.shuffle() shuffles sequence in-place. Interactive examples with live code. Syntax: random.shuffle(x). Randomize list order. Try it free!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/random_shuffle.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

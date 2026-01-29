@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.reverse() Method - Reverse List Order | 8gwifi.org</title>
+            <title>Python list.reverse() - Reverse List Order | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python list.reverse() method. Reverses the sorting order of the elements. Syntax and examples.">
             <meta name="keywords"
                 content="python reverse method, python list reverse, reverse list python, python array reverse">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_reverse.jsp">
+    <meta property="og:title" content="Python list.reverse() - Reverse List Order | Try Free">
+    <meta property="og:description" content="Python list.reverse() reverses the order of list elements in-place. Interactive examples with live code. Syntax: list.reverse(). Simple list reversal. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.reverse() reverses the order of list elements in-place. Interactive examples with live code. Syntax: list.reverse(). Simple list reversal. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_reverse.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

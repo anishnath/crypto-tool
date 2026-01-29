@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.split() Method - Split String into List | 8gwifi.org</title>
+            <title>Python str.split() - Split String into List | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python str.split() method. Splits a string into a list where each word is a list item. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python split method, python string split, split string to list python, python split string by space">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_split.jsp">
+    <meta property="og:title" content="Python str.split() - Split String into List | Live Demo">
+    <meta property="og:description" content="Python str.split() splits a string into a list using a delimiter. Interactive examples with live editor. Syntax: string.split(separator, maxsplit). Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.split() splits a string into a list using a delimiter. Interactive examples with live editor. Syntax: string.split(separator, maxsplit). Try it free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_split.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

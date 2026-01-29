@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python math.pi - Pi Constant | 8gwifi.org</title>
-    <meta name="description" content="Mathematical constant Pi">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_pi.jsp">
+    <title>Python math.pi - Pi Constant Value | Try Online</title>
+    <meta name="description" content="Python math.pi provides mathematical constant π (pi) with high precision. Interactive examples with live editor. Value: 3.141592653589793. Use in calculations. Try free!">
+    <meta name="keywords" content="python math pi, math.pi, pi constant, python pi value, math pi example, python pi constant">
+    <meta property="og:title" content="Python math.pi - Pi Constant Value | Try Online">
+    <meta property="og:description" content="Python math.pi provides mathematical constant π (pi) with high precision. Interactive examples with live editor. Value: 3.141592653589793. Use in calculations. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python math.pi provides mathematical constant π (pi) with high precision. Interactive examples with live editor. Value: 3.141592653589793. Use in calculations. Try free!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_pi.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

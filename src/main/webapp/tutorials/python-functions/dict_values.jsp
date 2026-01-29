@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.values() Method - Get Dictionary Values | 8gwifi.org</title>
+            <title>Python dict.values() - Get All Dictionary Values | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python dict.values() method. Returns a view object containing the values of the dictionary. Syntax and examples.">
             <meta name="keywords"
                 content="python values method, python dict values, get all values python, iterate dictionary values">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_values.jsp">
+    <meta property="og:title" content="Python dict.values() - Get All Dictionary Values | Try Online">
+    <meta property="og:description" content="Python dict.values() returns a view of all dictionary values. Interactive examples. Syntax: dict.values(). Access all values quickly. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.values() returns a view of all dictionary values. Interactive examples. Syntax: dict.values(). Access all values quickly. Try it free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_values.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

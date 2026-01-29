@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python itertools.chain() - Chain Iterables | 8gwifi.org</title>
-    <meta name="description" content="Chain multiple iterables together into a single iterator for efficient iteration">
-    <meta name="keywords" content="python itertools, chain, combine iterables, flatten lists, iterator, functional programming">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_chain.jsp">
+    <title>Python itertools.chain() - Chain Iterables | Live Examples</title>
+    <meta name="description" content="Python itertools.chain() chains multiple iterables together. Interactive examples. Syntax: chain(*iterables). Combine sequences. Try it online!">
+    <meta name="keywords" content="python itertools chain, itertools.chain, chain iterables, python chain, chain example">
+    <meta property="og:title" content="Python itertools.chain() - Chain Iterables | Live Examples">
+    <meta property="og:description" content="Python itertools.chain() chains multiple iterables together. Interactive examples. Syntax: chain(*iterables). Combine sequences. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python itertools.chain() chains multiple iterables together. Interactive examples. Syntax: chain(*iterables). Combine sequences. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/itertools_chain.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

@@ -5,9 +5,15 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Python re.sub() - Replace Pattern | 8gwifi.org</title>
-            <meta name="description" content="Learn Python re.sub() to replace pattern matches in strings.">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_sub.jsp">
+            <title>Python re.sub() - Replace Pattern Matches | Try Online</title>
+            <meta name="description" content="Python re.sub() replaces pattern matches with replacement string. Interactive examples. Syntax: re.sub(pattern, repl, string). Regex replace. Try free!">
+    <meta name="keywords" content="python re sub, re.sub, regex replace, python regex sub, replace pattern, python re.sub example">
+    <meta property="og:title" content="Python re.sub() - Replace Pattern Matches | Try Online">
+    <meta property="og:description" content="Python re.sub() replaces pattern matches with replacement string. Interactive examples. Syntax: re.sub(pattern, repl, string). Regex replace. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python re.sub() replaces pattern matches with replacement string. Interactive examples. Syntax: re.sub(pattern, repl, string). Regex replace. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_sub.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

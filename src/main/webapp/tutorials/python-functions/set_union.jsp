@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.union() Method - Combine Sets | 8gwifi.org</title>
+            <title>Python set.union() - Combine Sets | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python set.union() method. Returns a set containing the union of sets. Syntax and examples.">
             <meta name="keywords"
                 content="python set union, python union method, merge sets python, combine sets python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_union.jsp">
+    <meta property="og:title" content="Python set.union() - Combine Sets | Live Demo">
+    <meta property="og:description" content="Python set.union() returns union of sets. Interactive examples. Syntax: set.union(*others). Combine sets without duplicates. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.union() returns union of sets. Interactive examples. Syntax: set.union(*others). Combine sets without duplicates. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_union.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

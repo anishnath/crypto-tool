@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.tell() Method - Get Stream Position | 8gwifi.org</title>
+            <title>Python file.tell() - Get Current File Position | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python file.tell() method. Returns the current file position. Syntax and examples.">
             <meta name="keywords"
                 content="python file tell, python tell method, get cursor position python file, file io python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_tell.jsp">
+    <meta property="og:title" content="Python file.tell() - Get Current File Position | Try Online">
+    <meta property="og:description" content="Python file.tell() returns current file position. Interactive examples with live editor. Syntax: file.tell(). Get file pointer position. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.tell() returns current file position. Interactive examples with live editor. Syntax: file.tell(). Get file pointer position. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_tell.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

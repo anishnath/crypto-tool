@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python enumerate() Function - Loop with Index | 8gwifi.org</title>
+            <title>Python enumerate() - Add Counter to Iterable | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python enumerate() function. Adds a counter to an iterable and returns it as an enumerate object.">
             <meta name="keywords"
                 content="python enumerate function, look with index python, python enumerate list, python enumerate example">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/enumerate.jsp">
+    <meta property="og:title" content="Python enumerate() - Add Counter to Iterable | Try Online">
+    <meta property="og:description" content="Python enumerate() adds counter to iterable returning enumerate object. Interactive examples. Syntax: enumerate(iterable, start). Loop with index. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python enumerate() adds counter to iterable returning enumerate object. Interactive examples. Syntax: enumerate(iterable, start). Loop with index. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/enumerate.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python dict.clear() Method - Remove All Items | 8gwifi.org</title>
+            <title>Python dict.clear() - Remove All Items | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python dict.clear() method. Removes all elements from the dictionary. Syntax and examples.">
             <meta name="keywords"
                 content="python clear method, python dict clear, clear dictionary python, empty dict python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_clear.jsp">
+    <meta property="og:title" content="Python dict.clear() - Remove All Items | Try Online">
+    <meta property="og:description" content="Python dict.clear() removes all items from dictionary. Interactive examples with live code. Syntax: dict.clear(). Empty dictionaries quickly. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python dict.clear() removes all items from dictionary. Interactive examples with live code. Syntax: dict.clear(). Empty dictionaries quickly. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/dict_clear.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

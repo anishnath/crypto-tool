@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python len() Function - Get Length of Object | 8gwifi.org</title>
+            <title>Python len() Function - Get Length of Object | Try Online Free</title>
             <meta name="description"
                 content="Learn how to use the Python len() function. Return the length (the number of items) of an object. Examples with strings, lists, dictionaries.">
             <meta name="keywords"
                 content="python len function, python length string, python length list, python len example">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/len.jsp">
+    <meta property="og:title" content="Python len() Function - Get Length of Object | Try Online Free">
+    <meta property="og:description" content="Python len() returns the length of an object (string, list, tuple, etc). Interactive examples with live code editor. Syntax: len(object). Works with all sequences. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python len() returns the length of an object (string, list, tuple, etc). Interactive examples with live code editor. Syntax: len(object). Works with all sequences. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/len.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

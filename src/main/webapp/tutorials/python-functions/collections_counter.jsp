@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python collections.Counter() - Count Elements | 8gwifi.org</title>
-    <meta name="description" content="Count hashable objects in collections, find most common elements, and perform set operations">
-    <meta name="keywords" content="python collections, Counter, count elements, frequency, most common, data analysis">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_counter.jsp">
+    <title>Python collections.Counter - Count Elements | Try Free</title>
+    <meta name="description" content="Python collections.Counter counts hashable objects. Interactive examples with live code. Syntax: Counter(iterable). Count occurrences easily. Try now!">
+    <meta name="keywords" content="python counter, collections.Counter, count elements, python counter example, collections counter">
+    <meta property="og:title" content="Python collections.Counter - Count Elements | Try Free">
+    <meta property="og:description" content="Python collections.Counter counts hashable objects. Interactive examples with live code. Syntax: Counter(iterable). Count occurrences easily. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python collections.Counter counts hashable objects. Interactive examples with live code. Syntax: Counter(iterable). Count occurrences easily. Try now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_counter.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.discard() Method - Remove Set Element Safely | 8gwifi.org</title>
+            <title>Python set.discard() - Remove Element Safely | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python set.discard() method. Removes the specified item from the set. Syntax and examples.">
             <meta name="keywords"
                 content="python set discard, python discard method, remove from set python, safe remove python set">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_discard.jsp">
+    <meta property="og:title" content="Python set.discard() - Remove Element Safely | Live Examples">
+    <meta property="og:description" content="Python set.discard() removes element if present, no error if missing. Interactive examples. Syntax: set.discard(elem). Safe removal. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.discard() removes element if present, no error if missing. Interactive examples. Syntax: set.discard(elem). Safe removal. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_discard.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

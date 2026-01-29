@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python math.ceil() - Round Up | 8gwifi.org</title>
-    <meta name="description" content="Round up to nearest integer">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_ceil.jsp">
+    <title>Python math.ceil() - Round Up to Integer | Try Online Free</title>
+    <meta name="description" content="Python math.ceil() rounds number up to nearest integer. Interactive examples with live code editor. Syntax: math.ceil(x). Ceiling function for rounding. Try it now!">
+    <meta name="keywords" content="python math ceil, math.ceil, ceiling function, round up python, python ceil, math ceil example, python round up">
+    <meta property="og:title" content="Python math.ceil() - Round Up to Integer | Try Online Free">
+    <meta property="og:description" content="Python math.ceil() rounds number up to nearest integer. Interactive examples with live code editor. Syntax: math.ceil(x). Ceiling function for rounding. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python math.ceil() rounds number up to nearest integer. Interactive examples with live code editor. Syntax: math.ceil(x). Ceiling function for rounding. Try it now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_ceil.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

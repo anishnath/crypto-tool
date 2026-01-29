@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.difference() Method - Set Difference | 8gwifi.org</title>
+            <title>Python set.difference() - Elements Not in Other | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python set.difference() method. Returns a set containing the difference between two or more sets. Syntax and examples.">
             <meta name="keywords"
                 content="python set difference, python difference method, subtract sets python, set minus python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_difference.jsp">
+    <meta property="og:title" content="Python set.difference() - Elements Not in Other | Live Examples">
+    <meta property="og:description" content="Python set.difference() returns elements in set but not in others. Interactive examples. Syntax: set.difference(*others). Set subtraction. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.difference() returns elements in set but not in others. Interactive examples. Syntax: set.difference(*others). Set subtraction. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_difference.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

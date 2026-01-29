@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.sort() Method - Sort List | 8gwifi.org</title>
+            <title>Python list.sort() - Sort List In-Place | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python list.sort() method. Sorts the list ascending by default. as well as how to use a function to specify the sorting criteria(s). Syntax and examples.">
-            <meta name="keywords" content="python sort method, python list sort, sort list python, python custom sort">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_sort.jsp">
+            <meta name="keywords" content="python sort, list sort, sort list, python list sort, sort method, python sort ascending, sort descending">
+    <meta property="og:title" content="Python list.sort() - Sort List In-Place | Live Demo">
+    <meta property="og:description" content="Python list.sort() sorts list in ascending order in-place. Interactive examples. Syntax: list.sort(key, reverse). Customize sorting easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.sort() sorts list in ascending order in-place. Interactive examples. Syntax: list.sort(key, reverse). Customize sorting easily. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_sort.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

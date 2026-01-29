@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python datetime.now() - Current Date and Time | 8gwifi.org</title>
+            <title>Python datetime.now() - Get Current DateTime | Live Examples</title>
             <meta name="description"
                 content="Learn how to use Python's datetime.now() method to get the current date and time. Syntax and examples.">
             <meta name="keywords"
                 content="python datetime now, python current timestamp, python date and time, python now">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/datetime_now.jsp">
+    <meta property="og:title" content="Python datetime.now() - Get Current DateTime | Live Examples">
+    <meta property="og:description" content="Python datetime.now() returns current local date and time. Interactive examples. Syntax: datetime.now(tz). Get current timestamp. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python datetime.now() returns current local date and time. Interactive examples. Syntax: datetime.now(tz). Get current timestamp. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/datetime_now.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

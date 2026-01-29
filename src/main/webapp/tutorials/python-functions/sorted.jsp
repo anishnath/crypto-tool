@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python sorted() Function - Sort Iterables | 8gwifi.org</title>
+            <title>Python sorted() Function - Sort Iterable | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python sorted() function. Returns a sorted list from an iterable object. Sort by key, reverse sort examples.">
             <meta name="keywords"
                 content="python sorted function, python sort list, python sort by key, python reverse sort">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/sorted.jsp">
+    <meta property="og:title" content="Python sorted() Function - Sort Iterable | Live Demo">
+    <meta property="og:description" content="Python sorted() returns new sorted list from iterable. Interactive examples. Syntax: sorted(iterable, key, reverse). Non-destructive sorting. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python sorted() returns new sorted list from iterable. Interactive examples. Syntax: sorted(iterable, key, reverse). Non-destructive sorting. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/sorted.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

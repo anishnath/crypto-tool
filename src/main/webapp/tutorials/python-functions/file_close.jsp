@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.close() Method - Close File | 8gwifi.org</title>
+            <title>Python file.close() - Close File | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python file.close() method. Closes the file. Syntax and examples.">
-            <meta name="keywords" content="python file close, python close file, close method python, file io python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_close.jsp">
+            <meta name="keywords" content="python file close, file.close, close file, python close file, file close example, python close">
+    <meta property="og:title" content="Python file.close() - Close File | Live Examples">
+    <meta property="og:description" content="Python file.close() closes an open file. Interactive examples with live code. Syntax: file.close(). Release file resources. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.close() closes an open file. Interactive examples with live code. Syntax: file.close(). Release file resources. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_close.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

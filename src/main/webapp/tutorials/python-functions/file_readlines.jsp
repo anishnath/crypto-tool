@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.readlines() Method - Read All Lines | 8gwifi.org</title>
+            <title>Python file.readlines() - Read All Lines | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python file.readlines() method. Returns a list containing each line in the file as a list item. Syntax and examples.">
             <meta name="keywords"
                 content="python file readlines, python read lines list, python file to list, python read text file">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_readlines.jsp">
+    <meta property="og:title" content="Python file.readlines() - Read All Lines | Live Demo">
+    <meta property="og:description" content="Python file.readlines() reads all lines into list. Interactive examples. Syntax: file.readlines(hint). Get all lines at once. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.readlines() reads all lines into list. Interactive examples. Syntax: file.readlines(hint). Get all lines at once. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_readlines.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

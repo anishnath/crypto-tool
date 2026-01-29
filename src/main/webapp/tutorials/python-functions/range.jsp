@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python range() Function - Generate Number Sequence | 8gwifi.org</title>
+            <title>Python range() Function - Generate Number Sequence | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python range() function. Generate a sequence of numbers, specifying start, stop, and step. Perfect for loops.">
             <meta name="keywords"
                 content="python range function, python range loop, python range start stop step, sequence generation python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/range.jsp">
+    <meta property="og:title" content="Python range() Function - Generate Number Sequence | Try Online">
+    <meta property="og:description" content="Python range() generates sequence of numbers. Interactive examples with live editor. Syntax: range(start, stop, step). Perfect for loops. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python range() generates sequence of numbers. Interactive examples with live editor. Syntax: range(start, stop, step). Perfect for loops. Try it free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/range.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

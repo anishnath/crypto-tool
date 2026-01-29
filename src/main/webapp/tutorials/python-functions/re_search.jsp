@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python re.search() - Search Pattern Anywhere | 8gwifi.org</title>
+            <title>Python re.search() - Search Pattern in String | Try Free</title>
             <meta name="description"
                 content="Learn how to use Python's re.search() method. Searches for a pattern anywhere in the string.">
-            <meta name="keywords" content="python re.search, python regex search, python pattern search">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_search.jsp">
+            <meta name="keywords" content="python re search, re.search, regex search, python regex search, search pattern, python re.search">
+    <meta property="og:title" content="Python re.search() - Search Pattern in String | Try Free">
+    <meta property="og:description" content="Python re.search() searches for pattern anywhere in string. Interactive examples with live code. Syntax: re.search(pattern, string). Find patterns. Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python re.search() searches for pattern anywhere in string. Interactive examples with live code. Syntax: re.search(pattern, string). Find patterns. Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_search.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

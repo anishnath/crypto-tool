@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.strip() Method - Trim Whitespace | 8gwifi.org</title>
+            <title>Python str.strip() - Remove Whitespace | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python str.strip() method. Remove spaces at the beginning and at the end of the string. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python strip method, python trim string, strip characters python, python remove whitespace">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_strip.jsp">
+    <meta property="og:title" content="Python str.strip() - Remove Whitespace | Try Free">
+    <meta property="og:description" content="Python str.strip() removes leading and trailing whitespace from string. Interactive examples. Syntax: string.strip(chars). Clean strings easily. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.strip() removes leading and trailing whitespace from string. Interactive examples. Syntax: string.strip(chars). Clean strings easily. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_strip.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

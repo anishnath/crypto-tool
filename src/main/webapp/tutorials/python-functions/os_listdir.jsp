@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python os.listdir() - List Directory | 8gwifi.org</title>
-    <meta name="description" content="List directory contents">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_listdir.jsp">
+    <title>Python os.listdir() - List Directory Contents | Live Examples</title>
+    <meta name="description" content="Python os.listdir() returns list of entries in directory. Interactive examples. Syntax: os.listdir(path). List files and folders. Try it online!">
+    <meta name="keywords" content="python os listdir, os.listdir, list directory, python list files, os listdir example, python directory listing">
+    <meta property="og:title" content="Python os.listdir() - List Directory Contents | Live Examples">
+    <meta property="og:description" content="Python os.listdir() returns list of entries in directory. Interactive examples. Syntax: os.listdir(path). List files and folders. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python os.listdir() returns list of entries in directory. Interactive examples. Syntax: os.listdir(path). List files and folders. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_listdir.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

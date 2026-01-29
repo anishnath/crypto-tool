@@ -6,11 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.read() Method - Read File Content | 8gwifi.org</title>
+            <title>Python file.read() - Read File Content | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python file.read() method. Returns the file content. Syntax and examples.">
-            <meta name="keywords" content="python file read, python read file, read method python, file io python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_read.jsp">
+            <meta name="keywords" content="python file read, file.read, read file, python read file, file read example, python read content">
+    <meta property="og:title" content="Python file.read() - Read File Content | Try Online">
+    <meta property="og:description" content="Python file.read() reads entire file or specified bytes. Interactive examples with live editor. Syntax: file.read(size). Read files easily. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.read() reads entire file or specified bytes. Interactive examples with live editor. Syntax: file.read(size). Read files easily. Try it free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_read.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

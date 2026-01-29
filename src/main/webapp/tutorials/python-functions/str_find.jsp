@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.find() Method - Search Substring | 8gwifi.org</title>
+            <title>Python str.find() - Find Substring Position | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python str.find() method. Searches the string for a specified value and returns the position of where it was found.">
             <meta name="keywords"
                 content="python find method, python string find, search string python, find substring python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_find.jsp">
+    <meta property="og:title" content="Python str.find() - Find Substring Position | Live Demo">
+    <meta property="og:description" content="Python str.find() returns the index of first occurrence of substring. Interactive examples with live editor. Syntax: string.find(sub, start, end). Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.find() returns the index of first occurrence of substring. Interactive examples with live editor. Syntax: string.find(sub, start, end). Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_find.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

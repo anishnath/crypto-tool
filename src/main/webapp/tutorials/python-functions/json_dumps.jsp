@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python json.dumps() Method - Object to JSON String | 8gwifi.org</title>
+            <title>Python json.dumps() - Convert to JSON String | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python json.dumps() method. Converts a Python object into a JSON string. Syntax and examples.">
             <meta name="keywords"
                 content="python json dumps, python dict to json, python object to json string, python serialize json">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/json_dumps.jsp">
+    <meta property="og:title" content="Python json.dumps() - Convert to JSON String | Live Demo">
+    <meta property="og:description" content="Python json.dumps() serializes Python object to JSON string. Interactive examples. Syntax: json.dumps(obj, indent). Object to JSON. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python json.dumps() serializes Python object to JSON string. Interactive examples. Syntax: json.dumps(obj, indent). Object to JSON. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/json_dumps.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

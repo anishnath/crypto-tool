@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.remove() Method - Remove Element from Set | 8gwifi.org</title>
+            <title>Python set.remove() - Remove Element from Set | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python set.remove() method. Removes the specified element from the set. Syntax and examples.">
             <meta name="keywords"
                 content="python set remove, python remove from set, set remove method, delete set item">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_remove.jsp">
+    <meta property="og:title" content="Python set.remove() - Remove Element from Set | Try Online">
+    <meta property="og:description" content="Python set.remove() removes element from set, raises KeyError if not found. Interactive examples. Syntax: set.remove(elem). Delete set items. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.remove() removes element from set, raises KeyError if not found. Interactive examples. Syntax: set.remove(elem). Delete set items. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_remove.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

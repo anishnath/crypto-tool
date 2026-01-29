@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python set.clear() Method - Clear Set | 8gwifi.org</title>
+            <title>Python set.clear() - Remove All Elements | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python set.clear() method. Removes all elements from the set. Syntax and examples.">
             <meta name="keywords"
                 content="python set clear, python clear method set, empty set python, delete all set items">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_clear.jsp">
+    <meta property="og:title" content="Python set.clear() - Remove All Elements | Try Free">
+    <meta property="og:description" content="Python set.clear() removes all elements from set. Interactive examples with live code. Syntax: set.clear(). Empty sets quickly. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python set.clear() removes all elements from set. Interactive examples with live code. Syntax: set.clear(). Empty sets quickly. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/set_clear.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

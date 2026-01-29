@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python divmod() Function - Quotient and Remainder | 8gwifi.org</title>
+            <title>Python divmod() - Division and Modulo | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python divmod() function. Returns a tuple containing the quotient and the remainder when argument1 is divided by argument2. Syntax and examples.">
             <meta name="keywords"
                 content="python divmod function, python quotient remainder, python division with remainder">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/divmod.jsp">
+    <meta property="og:title" content="Python divmod() - Division and Modulo | Try Free">
+    <meta property="og:description" content="Python divmod() returns quotient and remainder as tuple. Interactive examples with live code. Syntax: divmod(a, b). Division in one call. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python divmod() returns quotient and remainder as tuple. Interactive examples with live code. Syntax: divmod(a, b). Division in one call. Try it now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/divmod.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

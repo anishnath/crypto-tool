@@ -5,9 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python re.findall() - Find All Matches | 8gwifi.org</title>
-    <meta name="description" content="Learn Python re.findall() to find all pattern matches in a string.">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_findall.jsp">
+    <title>Python re.findall() - Find All Matches | Live Demo</title>
+    <meta name="description" content="Python re.findall() returns all non-overlapping matches as list. Interactive examples. Syntax: re.findall(pattern, string). Find all occurrences. Try online!">
+    <meta name="keywords" content="python re findall, re.findall, regex findall, python find all, findall example, python re.findall">
+    <meta property="og:title" content="Python re.findall() - Find All Matches | Live Demo">
+    <meta property="og:description" content="Python re.findall() returns all non-overlapping matches as list. Interactive examples. Syntax: re.findall(pattern, string). Find all occurrences. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python re.findall() returns all non-overlapping matches as list. Interactive examples. Syntax: re.findall(pattern, string). Find all occurrences. Try online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/re_findall.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python math.sqrt() - Square Root | 8gwifi.org</title>
-    <meta name="description" content="Calculate square root">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_sqrt.jsp">
+    <title>Python math.sqrt() - Square Root Function | Try Free</title>
+    <meta name="description" content="Python math.sqrt() returns square root of a number. Interactive examples with live code. Syntax: math.sqrt(x). Calculate square roots easily. Try it now!">
+    <meta name="keywords" content="python math sqrt, math.sqrt, square root python, python sqrt, math sqrt example, python square root">
+    <meta property="og:title" content="Python math.sqrt() - Square Root Function | Try Free">
+    <meta property="og:description" content="Python math.sqrt() returns square root of a number. Interactive examples with live code. Syntax: math.sqrt(x). Calculate square roots easily. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python math.sqrt() returns square root of a number. Interactive examples with live code. Syntax: math.sqrt(x). Calculate square roots easily. Try it now!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_sqrt.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

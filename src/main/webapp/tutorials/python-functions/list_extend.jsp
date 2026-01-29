@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.extend() Method - Add Elements to List | 8gwifi.org</title>
+            <title>Python list.extend() - Extend List with Iterable | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python list.extend() method. Adds the specified list elements (or any iterable) to the end of the current list. Syntax and examples.">
             <meta name="keywords"
                 content="python extend method, python list extend, combine lists python, merge lists python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_extend.jsp">
+    <meta property="og:title" content="Python list.extend() - Extend List with Iterable | Live Demo">
+    <meta property="og:description" content="Python list.extend() extends list by appending elements from iterable. Interactive examples. Syntax: list.extend(iterable). Combine lists easily. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.extend() extends list by appending elements from iterable. Interactive examples. Syntax: list.extend(iterable). Combine lists easily. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_extend.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

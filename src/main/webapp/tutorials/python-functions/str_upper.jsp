@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.upper() Method - Convert to Upper Case | 8gwifi.org</title>
+            <title>Python str.upper() - Convert String to Uppercase | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python str.upper() method. Converts a string into upper case. Syntax and examples.">
             <meta name="keywords"
                 content="python upper method, python string upper, convert to uppercase python, python uppercase string">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_upper.jsp">
+    <meta property="og:title" content="Python str.upper() - Convert String to Uppercase | Live Examples">
+    <meta property="og:description" content="Python str.upper() converts all characters in a string to uppercase. Interactive examples with live editor. Syntax: string.upper(). Case conversion made easy. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.upper() converts all characters in a string to uppercase. Interactive examples with live editor. Syntax: string.upper(). Case conversion made easy. Try it free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_upper.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

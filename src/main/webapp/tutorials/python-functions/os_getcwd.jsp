@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python os.getcwd() - Current Directory | 8gwifi.org</title>
-    <meta name="description" content="Get current working directory">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_getcwd.jsp">
+    <title>Python os.getcwd() - Get Current Directory | Live Examples</title>
+    <meta name="description" content="Python os.getcwd() returns current working directory as string. Interactive examples. Syntax: os.getcwd(). Get current path. Try it online!">
+    <meta name="keywords" content="python os getcwd, os.getcwd, current directory, python getcwd, os getcwd example, python working directory">
+    <meta property="og:title" content="Python os.getcwd() - Get Current Directory | Live Examples">
+    <meta property="og:description" content="Python os.getcwd() returns current working directory as string. Interactive examples. Syntax: os.getcwd(). Get current path. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python os.getcwd() returns current working directory as string. Interactive examples. Syntax: os.getcwd(). Get current path. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_getcwd.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

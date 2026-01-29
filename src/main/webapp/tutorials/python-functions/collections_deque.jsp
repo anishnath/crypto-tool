@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python collections.deque() - Double-Ended Queue | 8gwifi.org</title>
-    <meta name="description" content="Fast O(1) appends and pops from both ends for efficient queue and stack operations">
-    <meta name="keywords" content="python collections, deque, double-ended queue, stack, queue, data structures, performance">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_deque.jsp">
+    <title>Python collections.deque - Double-Ended Queue | Try Online</title>
+    <meta name="description" content="Python collections.deque provides fast appends/pops from both ends. Interactive examples. Syntax: deque(iterable, maxlen). Efficient queues. Try free!">
+    <meta name="keywords" content="python deque, collections.deque, double ended queue, python deque example, collections deque">
+    <meta property="og:title" content="Python collections.deque - Double-Ended Queue | Try Online">
+    <meta property="og:description" content="Python collections.deque provides fast appends/pops from both ends. Interactive examples. Syntax: deque(iterable, maxlen). Efficient queues. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python collections.deque provides fast appends/pops from both ends. Interactive examples. Syntax: deque(iterable, maxlen). Efficient queues. Try free!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_deque.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

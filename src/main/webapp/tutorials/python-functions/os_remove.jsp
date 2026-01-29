@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python os.remove() - Delete File | 8gwifi.org</title>
-    <meta name="description" content="Delete a file">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_remove.jsp">
+    <title>Python os.remove() - Delete File | Live Demo</title>
+    <meta name="description" content="Python os.remove() deletes a file at specified path. Interactive examples. Syntax: os.remove(path). Remove files safely. Try it online!">
+    <meta name="keywords" content="python os remove, os.remove, delete file, python remove file, os remove example, python delete file">
+    <meta property="og:title" content="Python os.remove() - Delete File | Live Demo">
+    <meta property="og:description" content="Python os.remove() deletes a file at specified path. Interactive examples. Syntax: os.remove(path). Remove files safely. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python os.remove() deletes a file at specified path. Interactive examples. Syntax: os.remove(path). Remove files safely. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/os_remove.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

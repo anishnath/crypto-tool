@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.index() Method - Find Item Index | 8gwifi.org</title>
+            <title>Python list.index() - Find Item Index | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python list.index() method. Returns the index of the first element with the specified value. Syntax and examples.">
             <meta name="keywords"
                 content="python index method, python list index, find index list python, search list python">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_index.jsp">
+    <meta property="og:title" content="Python list.index() - Find Item Index | Live Examples">
+    <meta property="og:description" content="Python list.index() returns index of first occurrence of value. Interactive examples. Syntax: list.index(value, start, end). Find items in lists. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.index() returns index of first occurrence of value. Interactive examples. Syntax: list.index(value, start, end). Find items in lists. Try online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_index.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

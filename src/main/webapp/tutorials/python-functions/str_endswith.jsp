@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python str.endswith() Method - Check String End | 8gwifi.org</title>
+            <title>Python str.endswith() - Check String Suffix | Try Free</title>
             <meta name="description"
                 content="Learn how to use the Python str.endswith() method. Returns True if the string ends with the specified value. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python endswith method, python string endswith, check string end python, python string check">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_endswith.jsp">
+    <meta property="og:title" content="Python str.endswith() - Check String Suffix | Try Free">
+    <meta property="og:description" content="Python str.endswith() checks if string ends with specified suffix. Interactive examples with live code. Syntax: string.endswith(suffix, start, end). Try now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python str.endswith() checks if string ends with specified suffix. Interactive examples with live code. Syntax: string.endswith(suffix, start, end). Try now!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/str_endswith.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

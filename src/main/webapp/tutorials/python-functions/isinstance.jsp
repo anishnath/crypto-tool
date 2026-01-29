@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python isinstance() Function - Check Object Type | 8gwifi.org</title>
+            <title>Python isinstance() - Check Object Type | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python isinstance() function. Returns True if an object is an instance of a specified class or type.">
             <meta name="keywords"
                 content="python isinstance function, check type python, python type checking, python inheritance check">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/isinstance.jsp">
+    <meta property="og:title" content="Python isinstance() - Check Object Type | Try Online">
+    <meta property="og:description" content="Python isinstance() checks if object is instance of class. Interactive examples with live editor. Syntax: isinstance(object, classinfo). Type checking. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python isinstance() checks if object is instance of class. Interactive examples with live editor. Syntax: isinstance(object, classinfo). Type checking. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/isinstance.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

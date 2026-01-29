@@ -4,9 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python math.floor() - Round Down | 8gwifi.org</title>
-    <meta name="description" content="Round down to nearest integer">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_floor.jsp">
+    <title>Python math.floor() - Round Down to Integer | Live Examples</title>
+    <meta name="description" content="Python math.floor() rounds number down to nearest integer. Interactive examples. Syntax: math.floor(x). Floor function for rounding. Try it online!">
+    <meta name="keywords" content="python math floor, math.floor, floor function, round down python, python floor, math floor example, python round down">
+    <meta property="og:title" content="Python math.floor() - Round Down to Integer | Live Examples">
+    <meta property="og:description" content="Python math.floor() rounds number down to nearest integer. Interactive examples. Syntax: math.floor(x). Floor function for rounding. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python math.floor() rounds number down to nearest integer. Interactive examples. Syntax: math.floor(x). Floor function for rounding. Try it online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/math_floor.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">

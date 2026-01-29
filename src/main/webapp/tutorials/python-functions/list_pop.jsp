@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.pop() Method - Remove Item by Index | 8gwifi.org</title>
+            <title>Python list.pop() - Remove and Return Item | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python list.pop() method. Removes the element at the specified position. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python pop method, python list pop, remove item by index python, python remove last item">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_pop.jsp">
+    <meta property="og:title" content="Python list.pop() - Remove and Return Item | Try Online">
+    <meta property="og:description" content="Python list.pop() removes and returns item at given index. Interactive examples with live editor. Syntax: list.pop(index). Default removes last item. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.pop() removes and returns item at given index. Interactive examples with live editor. Syntax: list.pop(index). Default removes last item. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_pop.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

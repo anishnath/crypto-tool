@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python list.remove() Method - Remove Item | 8gwifi.org</title>
+            <title>Python list.remove() - Remove Item from List | Live Examples</title>
             <meta name="description"
                 content="Learn how to use the Python list.remove() method. Removes the first item with the specified value. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python remove method, python list remove, remove item list python, python delete item list">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_remove.jsp">
+    <meta property="og:title" content="Python list.remove() - Remove Item from List | Live Examples">
+    <meta property="og:description" content="Python list.remove() removes first occurrence of specified value. Interactive examples. Syntax: list.remove(value). Delete list items easily. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python list.remove() removes first occurrence of specified value. Interactive examples. Syntax: list.remove(value). Delete list items easily. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/list_remove.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python file.writelines() Method - Write List to File | 8gwifi.org</title>
+            <title>Python file.writelines() - Write Multiple Lines | Try Online</title>
             <meta name="description"
                 content="Learn how to use the Python file.writelines() method. Writes a list of strings to the file. Syntax and examples.">
             <meta name="keywords"
                 content="python file writelines, python write list to file, python write multiple lines">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_writelines.jsp">
+    <meta property="og:title" content="Python file.writelines() - Write Multiple Lines | Try Online">
+    <meta property="og:description" content="Python file.writelines() writes list of lines to file. Interactive examples. Syntax: file.writelines(lines). Write multiple lines. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python file.writelines() writes list of lines to file. Interactive examples. Syntax: file.writelines(lines). Write multiple lines. Try free!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/file_writelines.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

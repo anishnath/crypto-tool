@@ -6,12 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Python float() Function - Convert to Float | 8gwifi.org</title>
+            <title>Python float() Function - Convert to Float | Live Demo</title>
             <meta name="description"
                 content="Learn how to use the Python float() function. Converts a string or number to a floating point number. Syntax, parameters, and examples.">
             <meta name="keywords"
                 content="python float function, python convert to float, python string to float, python floating point">
-            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/float.jsp">
+    <meta property="og:title" content="Python float() Function - Convert to Float | Live Demo">
+    <meta property="og:description" content="Python float() converts value to floating point number. Interactive examples. Syntax: float(value). String to decimal conversion. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python float() converts value to floating point number. Interactive examples. Syntax: float(value). String to decimal conversion. Try it online!">            <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/float.jsp">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

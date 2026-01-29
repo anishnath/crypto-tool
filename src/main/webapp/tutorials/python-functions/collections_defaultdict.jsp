@@ -4,10 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python collections.defaultdict() - Dict with Defaults | 8gwifi.org</title>
-    <meta name="description" content="Dictionary with default values for missing keys to avoid KeyError exceptions">
-    <meta name="keywords" content="python collections, defaultdict, default values, dictionary, no keyerror, data structures">
-    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_defaultdict.jsp">
+    <title>Python collections.defaultdict - Dict with Defaults | Live Demo</title>
+    <meta name="description" content="Python collections.defaultdict provides default values for missing keys. Interactive examples. Syntax: defaultdict(default_factory). Avoid KeyError. Try online!">
+    <meta name="keywords" content="python defaultdict, collections.defaultdict, default dict, python defaultdict example, collections">
+    <meta property="og:title" content="Python collections.defaultdict - Dict with Defaults | Live Demo">
+    <meta property="og:description" content="Python collections.defaultdict provides default values for missing keys. Interactive examples. Syntax: defaultdict(default_factory). Avoid KeyError. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/python-logo.svg">
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:description" content="Python collections.defaultdict provides default values for missing keys. Interactive examples. Syntax: defaultdict(default_factory). Avoid KeyError. Try online!">    <link rel="canonical" href="https://8gwifi.org/tutorials/python-functions/collections_defaultdict.jsp">
     <link rel="icon" type="image/svg+xml" href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/tutorial.css">
