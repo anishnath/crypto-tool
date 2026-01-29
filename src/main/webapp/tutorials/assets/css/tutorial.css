@@ -299,6 +299,60 @@ pre code {
     }
 }
 
+/* Right Ad Rail - Desktop only */
+.tutorial-ad-rail {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    bottom: 0;
+    width: 336px;
+    padding: var(--space-4);
+    overflow-y: auto;
+    z-index: 25;
+}
+
+@media (min-width: 1400px) {
+    .tutorial-ad-rail {
+        display: block;
+    }
+
+    /* Adjust content area when ad rail is visible */
+    .has-ad-rail .tutorial-content {
+        margin-right: 336px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .tutorial-ad-rail {
+        width: 360px;
+    }
+
+    .has-ad-rail .tutorial-content {
+        margin-right: 360px;
+    }
+}
+
+.ad-rail-inner {
+    position: sticky;
+    top: var(--space-4);
+}
+
+.ad-rail-slot {
+    margin-bottom: var(--space-4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.ad-rail-slot:empty {
+    display: none;
+}
+
 /* Preview Panel */
 .tutorial-preview {
     display: none;
