@@ -26,10 +26,17 @@ $inventory = array_combine($ids, $products);
 echo "\nInventory: ";
 print_r($inventory);
 
-// Different lengths cause error
+// Different lengths throw ValueError in PHP 8.0+
 $k = [1, 2];
 $v = [1, 2, 3];
-$result = @array_combine($k, $v);
-echo "\nDifferent lengths: ";
-var_dump($result);
+
+try {
+    $result = array_combine($k, $v);
+    echo "\nDifferent lengths result: ";
+    var_dump($result);
+} catch (ValueError $e) {
+    echo "\nError: " . $e->getMessage() . "\n";
+} catch (Exception $e) {
+    echo "\nError: Arrays have different lengths\n";
+}
 ?>
