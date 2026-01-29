@@ -1,10 +1,11 @@
 <%--
   Related Tools Component
   Dynamically loads related tools from tools-database.json based on current tool's category/keywords
-  
+
   Parameters:
   - currentToolUrl (required): Current tool's JSP filename (e.g., "CipherFunctions.jsp")
   - category (optional): Filter by category (e.g., "Cryptography")
+  - keyword (optional): Filter by keyword in name/keywords (e.g., "pgp" to show only PGP tools)
   - limit (optional): Number of tools to show (default: 6)
   - excludeUrls (optional): Comma-separated list of URLs to exclude (includes currentToolUrl automatically)
 --%>
@@ -40,7 +41,14 @@
     } else {
         category = category.trim();
     }
-    
+
+    String keyword = request.getParameter("keyword");
+    if (keyword == null || keyword.trim().isEmpty()) {
+        keyword = "";
+    } else {
+        keyword = keyword.trim().toLowerCase();
+    }
+
     int limit = 6;
     try {
         String limitStr = request.getParameter("limit");
@@ -105,6 +113,7 @@
     const config = {
         currentToolUrl: '<%=escapeJs(currentToolUrl)%>',
         category: '<%=escapeJs(category)%>',
+        keyword: '<%=escapeJs(keyword)%>',
         limit: <%=limit%>,
         excludeUrls: '<%=escapeJs(excludeUrls)%>'.split(',').map(function(url) { return url.trim(); }).filter(function(url) { return url !== ''; }),
         toolsDatabasePath: '<%=escapeJs(request.getContextPath() != null ? request.getContextPath() : "")%>/modern/data/tools-database.json'
@@ -558,6 +567,17 @@
                     }
                 }
 
+                // Filter by keyword if specified (matches name or keywords)
+                if (config.keyword && config.keyword.trim() !== '') {
+                    const toolName = (tool.name || '').toLowerCase();
+                    const toolKeywords = (tool.keywords || '').toLowerCase();
+                    const toolUrl = (tool.url || '').toLowerCase();
+                    const searchIn = toolName + ' ' + toolKeywords + ' ' + toolUrl;
+                    if (!searchIn.includes(config.keyword.toLowerCase())) {
+                        return false;
+                    }
+                }
+
                 return true;
             });
 
@@ -652,7 +672,9 @@
     // Update description
     function updateDescription(count) {
         const descEl = document.getElementById('relatedToolsDescription');
-        if (descEl && config.category) {
+        if (descEl && config.keyword) {
+            descEl.textContent = `Explore \${count} other \${config.keyword.toUpperCase()} tools`;
+        } else if (descEl && config.category) {
             descEl.textContent = `Explore \${count} other \${config.category.toLowerCase()} tools`;
         } else if (descEl) {
             descEl.textContent = `Explore \${count} related tools`;
