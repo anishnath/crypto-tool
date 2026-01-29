@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP gmstrftime() - Format GMT/UTC Time According to Locale | Example & Syntax</title>
+            <title>PHP gmstrftime() - Format GMT/UTC Time | Live Examples</title>
             <meta name="description"
                 content="PHP gmstrftime() formats a GMT/UTC time/date according to locale settings.">
+    <meta name="keywords" content="php gmstrftime, gmstrftime php, format gmt time, utc time format, php timezone, gmstrftime example, php time formatting">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/gmstrftime.jsp">
-            <meta property="og:title" content="PHP gmstrftime() - Format GMT Time">
+            <meta property="og:title" content="PHP gmstrftime() - Format GMT/UTC Time | Live Examples">
+    <meta property="og:description" content="PHP gmstrftime() formats GMT/UTC time based on locale settings. Interactive examples with live editor. Syntax: gmstrftime($format, $timestamp). Works with timezones. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP gmstrftime() formats GMT/UTC time based on locale settings. Interactive examples with live editor. Syntax: gmstrftime($format, $timestamp). Works with timezones. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

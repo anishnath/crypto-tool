@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP strftime() - Format Local Time According to Locale | Example & Syntax</title>
+            <title>PHP strftime() - Format Time Based on Locale | Try Free</title>
             <meta name="description"
                 content="PHP strftime() formats a local time/date according to locale settings. Learn how to format dates in different languages.">
+    <meta name="keywords" content="php strftime, strftime php, format time locale, php date format, locale time, strftime example, php time formatting">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/strftime.jsp">
-            <meta property="og:title" content="PHP strftime() - Format Local Time">
+            <meta property="og:title" content="PHP strftime() - Format Time Based on Locale | Try Free">
+    <meta property="og:description" content="PHP strftime() formats local time/date according to locale settings. Interactive examples with live code. Syntax: strftime($format, $timestamp). Locale-aware formatting. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP strftime() formats local time/date according to locale settings. Interactive examples with live code. Syntax: strftime($format, $timestamp). Locale-aware formatting. Try it now!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

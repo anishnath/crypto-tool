@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP gregoriantojd() - Gregorian to Julian Day Count | Example & Syntax</title>
+            <title>PHP gregoriantojd() - Gregorian to Julian Day | Try Free</title>
             <meta name="description"
                 content="PHP gregoriantojd() converts a Gregorian date to a Julian Day Count. Finds the Julian Day count for a date.">
+    <meta name="keywords" content="php gregoriantojd, gregorian to julian, julian day, calendar conversion, gregoriantojd example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/gregoriantojd.jsp">
-            <meta property="og:title" content="PHP gregoriantojd() - Gregorian to JD">
+            <meta property="og:title" content="PHP gregoriantojd() - Gregorian to Julian Day | Try Free">
+    <meta property="og:description" content="PHP gregoriantojd() converts Gregorian date to Julian Day Count. Interactive examples. Syntax: gregoriantojd($month, $day, $year). Calendar conversion made easy. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP gregoriantojd() converts Gregorian date to Julian Day Count. Interactive examples. Syntax: gregoriantojd($month, $day, $year). Calendar conversion made easy. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

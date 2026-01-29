@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP idate() - Format Date as Integer | Example & Syntax</title>
+            <title>PHP idate() - Format Date as Integer | Try Online</title>
             <meta name="description"
                 content="PHP idate() formats a local time/date as an integer. Useful for extracting specific parts of a date.">
+    <meta name="keywords" content="php idate, idate php, date as integer, format date integer, idate example, php date functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/idate.jsp">
-            <meta property="og:title" content="PHP idate() - Format Date as Integer">
+            <meta property="og:title" content="PHP idate() - Format Date as Integer | Try Online">
+    <meta property="og:description" content="PHP idate() formats local time/date as integer. Interactive examples with live editor. Syntax: idate($format, $timestamp). Fast integer date formatting. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP idate() formats local time/date as integer. Interactive examples with live editor. Syntax: idate($format, $timestamp). Fast integer date formatting. Try it now!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

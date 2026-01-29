@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP cal_days_in_month() - Get Days in Month | Example & Syntax</title>
+            <title>PHP cal_days_in_month() - Days in Month | Try Online</title>
             <meta name="description"
                 content="PHP cal_days_in_month() returns the number of days in a month for a given year and calendar.">
+    <meta name="keywords" content="php cal_days_in_month, days in month php, calendar days, month length php, cal_days_in_month example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/cal_days_in_month.jsp">
-            <meta property="og:title" content="PHP cal_days_in_month() - Get Days in Month">
+            <meta property="og:title" content="PHP cal_days_in_month() - Days in Month | Try Online">
+    <meta property="og:description" content="PHP cal_days_in_month() returns number of days in a month for a given calendar. Interactive examples. Syntax: cal_days_in_month($calendar, $month, $year). Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP cal_days_in_month() returns number of days in a month for a given calendar. Interactive examples. Syntax: cal_days_in_month($calendar, $month, $year). Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -855,7 +855,7 @@
                                                     <td><span class="func-category">Array</span></td>
                                                 </tr>
                                                 <tr data-func="sort" data-cat="arrays">
-                                                    <td class="func-name"><a href="sort.jsp">sort()</a></td>
+                                                    <td class="func-name"><a href="sort.jsp">sort()</a>, <a href="array_splice.jsp">array_splice()</a>, <a href="count.jsp">count()</a>, <a href="krsort.jsp">krsort()</a>, <a href="ksort.jsp">ksort()</a>, <a href="natcasesort.jsp">natcasesort()</a>, <a href="natsort.jsp">natsort()</a>, <a href="range.jsp">range()</a>, <a href="rsort.jsp">rsort()</a>, <a href="shuffle.jsp">shuffle()</a></td>
                                                     <td class="func-desc">Sort an array in ascending order</td>
                                                     <td><span class="func-category">Array</span></td>
                                                 </tr>

@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP unserialize() - Convert Serialized Data to Value | Example & Syntax</title>
-            <meta name="description" content="PHP unserialize() creates a PHP value from a stored representation.">
+            <title>PHP unserialize() - Convert String to Value | Live Demo</title>
+            <meta name="description" content="PHP unserialize() converts serialized data back to PHP values. Interactive examples with live editor. Syntax: unserialize($data, $options). Reverse of serialize(). Try online!">
+    <meta name="keywords" content="php unserialize, unserialize php, deserialize php, unserialize string, php unserialize array, unserialize example, php serialization">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/unserialize.jsp">
-            <meta property="og:title" content="PHP unserialize() - Unserialize Data">
+            <meta property="og:title" content="PHP unserialize() - Convert String to Value | Live Demo">
+    <meta property="og:description" content="PHP unserialize() converts serialized data back to PHP values. Interactive examples with live editor. Syntax: unserialize($data, $options). Reverse of serialize(). Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP unserialize() converts serialized data back to PHP values. Interactive examples with live editor. Syntax: unserialize($data, $options). Reverse of serialize(). Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP localtime() - Get Local Time Array | Example & Syntax</title>
+            <title>PHP localtime() - Get Local Time Components | Try Online</title>
             <meta name="description"
                 content="PHP localtime() returns the local time. It returns an array identical to the C library function localtime().">
+    <meta name="keywords" content="php localtime, localtime php, local time array, time components, localtime example, php time functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/localtime.jsp">
-            <meta property="og:title" content="PHP localtime() - Get Local Time">
+            <meta property="og:title" content="PHP localtime() - Get Local Time Components | Try Online">
+    <meta property="og:description" content="PHP localtime() returns local time as array of components. Interactive examples with live code. Syntax: localtime($timestamp, $associative). Detailed time info. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP localtime() returns local time as array of components. Interactive examples with live code. Syntax: localtime($timestamp, $associative). Detailed time info. Try free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

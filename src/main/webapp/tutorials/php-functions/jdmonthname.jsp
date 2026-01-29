@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jdmonthname() - Get Month Name | Example & Syntax</title>
+            <title>PHP jdmonthname() - Month Name from Julian | Live Demo</title>
             <meta name="description"
                 content="PHP jdmonthname() returns the month name for a Julian Day Count. Supports various calendars and formats.">
+    <meta name="keywords" content="php jdmonthname, julian month name, month from julian, jdmonthname example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jdmonthname.jsp">
-            <meta property="og:title" content="PHP jdmonthname() - Get Month Name">
+            <meta property="og:title" content="PHP jdmonthname() - Month Name from Julian | Live Demo">
+    <meta property="og:description" content="PHP jdmonthname() returns month name from Julian Day Count. Interactive examples with live code. Syntax: jdmonthname($jd, $mode). Multiple calendar support. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jdmonthname() returns month name from Julian Day Count. Interactive examples with live code. Syntax: jdmonthname($jd, $mode). Multiple calendar support. Try free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

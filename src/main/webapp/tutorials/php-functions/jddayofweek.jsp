@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jddayofweek() - Get Day of Week | Example & Syntax</title>
+            <title>PHP jddayofweek() - Day of Week from Julian | Try Free</title>
             <meta name="description"
                 content="PHP jddayofweek() returns the day of the week from a Julian Day Count. Can return int or string.">
+    <meta name="keywords" content="php jddayofweek, julian day of week, weekday from julian, jddayofweek example, php calendar functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jddayofweek.jsp">
-            <meta property="og:title" content="PHP jddayofweek() - Get Day of Week">
+            <meta property="og:title" content="PHP jddayofweek() - Day of Week from Julian | Try Free">
+    <meta property="og:description" content="PHP jddayofweek() returns day of week from Julian Day Count. Interactive examples. Syntax: jddayofweek($jd, $mode). Get weekday name or number. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jddayofweek() returns day of week from Julian Day Count. Interactive examples. Syntax: jddayofweek($jd, $mode). Get weekday name or number. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

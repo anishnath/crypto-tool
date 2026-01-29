@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP gmdate() - Format GMT/UTC Date | Example & Syntax</title>
+            <title>PHP gmdate() - Format GMT/UTC Date | Try Online Free</title>
             <meta name="description"
                 content="PHP gmdate() formats a GMT/UTC date and time. Identical to date() but uses Greenwich Mean Time.">
+    <meta name="keywords" content="php gmdate, gmdate php, format gmt date, utc date, php timezone, gmdate example, php date formatting">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/gmdate.jsp">
-            <meta property="og:title" content="PHP gmdate() - Format GMT Date">
+            <meta property="og:title" content="PHP gmdate() - Format GMT/UTC Date | Try Online Free">
+    <meta property="og:description" content="PHP gmdate() formats GMT/UTC date without timezone conversion. Interactive examples with live editor. Syntax: gmdate($format, $timestamp). UTC time formatting. Try it now!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP gmdate() formats GMT/UTC date without timezone conversion. Interactive examples with live editor. Syntax: gmdate($format, $timestamp). UTC time formatting. Try it now!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

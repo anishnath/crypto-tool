@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP unixtojd() - Unix Timestamp to JD | Example & Syntax</title>
-            <meta name="description" content="PHP unixtojd() converts a Unix timestamp to Julian Day Count.">
+            <title>PHP unixtojd() - Unix Timestamp to Julian Day | Try Free</title>
+            <meta name="description" content="PHP unixtojd() converts Unix timestamp to Julian Day Count. Interactive examples with live code. Syntax: unixtojd($timestamp). Easy calendar conversion. Try online!">
+    <meta name="keywords" content="php unixtojd, unix to julian, julian day, timestamp conversion, unixtojd example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/unixtojd.jsp">
-            <meta property="og:title" content="PHP unixtojd() - Unix Timestamp to JD">
+            <meta property="og:title" content="PHP unixtojd() - Unix Timestamp to Julian Day | Try Free">
+    <meta property="og:description" content="PHP unixtojd() converts Unix timestamp to Julian Day Count. Interactive examples with live code. Syntax: unixtojd($timestamp). Easy calendar conversion. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP unixtojd() converts Unix timestamp to Julian Day Count. Interactive examples with live code. Syntax: unixtojd($timestamp). Easy calendar conversion. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

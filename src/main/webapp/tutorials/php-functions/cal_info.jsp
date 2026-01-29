@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP cal_info() - Get Calendar Info | Example & Syntax</title>
-            <meta name="description" content="PHP cal_info() returns information about a particular calendar.">
+            <title>PHP cal_info() - Get Calendar Information | Live Examples</title>
+            <meta name="description" content="PHP cal_info() returns information about a calendar system. Interactive examples. Syntax: cal_info($calendar). Calendar details and properties. Try it free!">
+    <meta name="keywords" content="php cal_info, calendar info, calendar system, cal_info example, php calendar functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/cal_info.jsp">
-            <meta property="og:title" content="PHP cal_info() - Get Calendar Info">
+            <meta property="og:title" content="PHP cal_info() - Get Calendar Information | Live Examples">
+    <meta property="og:description" content="PHP cal_info() returns information about a calendar system. Interactive examples. Syntax: cal_info($calendar). Calendar details and properties. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP cal_info() returns information about a calendar system. Interactive examples. Syntax: cal_info($calendar). Calendar details and properties. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

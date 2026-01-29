@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP frenchtojd() - French Republican to JD | Example & Syntax</title>
+            <title>PHP frenchtojd() - French to Julian Day | Live Examples</title>
             <meta name="description"
                 content="PHP frenchtojd() converts a date from the French Republican Calendar to a Julian Day Count.">
+    <meta name="keywords" content="php frenchtojd, french calendar, julian day, calendar conversion, frenchtojd example, php calendar functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/frenchtojd.jsp">
-            <meta property="og:title" content="PHP frenchtojd() - French Republican to JD">
+            <meta property="og:title" content="PHP frenchtojd() - French to Julian Day | Live Examples">
+    <meta property="og:description" content="PHP frenchtojd() converts French Republican Calendar to Julian Day Count. Interactive examples. Syntax: frenchtojd($month, $day, $year). Historical calendar conversion. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP frenchtojd() converts French Republican Calendar to Julian Day Count. Interactive examples. Syntax: frenchtojd($month, $day, $year). Historical calendar conversion. Try free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

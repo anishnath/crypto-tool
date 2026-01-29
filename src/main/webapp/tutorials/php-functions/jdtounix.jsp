@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jdtounix() - JD to Unix Timestamp | Example & Syntax</title>
-            <meta name="description" content="PHP jdtounix() converts Julian Day to Unix timestamp.">
+            <title>PHP jdtounix() - Julian Day to Unix Timestamp | Try Free</title>
+            <meta name="description" content="PHP jdtounix() converts Julian Day to Unix timestamp. Interactive examples with live code. Syntax: jdtounix($jd). Easy timestamp conversion. Try it online!">
+    <meta name="keywords" content="php jdtounix, julian to unix, unix timestamp, jdtounix example, php time conversion">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jdtounix.jsp">
-            <meta property="og:title" content="PHP jdtounix() - JD to Unix Timestamp">
+            <meta property="og:title" content="PHP jdtounix() - Julian Day to Unix Timestamp | Try Free">
+    <meta property="og:description" content="PHP jdtounix() converts Julian Day to Unix timestamp. Interactive examples with live code. Syntax: jdtounix($jd). Easy timestamp conversion. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jdtounix() converts Julian Day to Unix timestamp. Interactive examples with live code. Syntax: jdtounix($jd). Easy timestamp conversion. Try it online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

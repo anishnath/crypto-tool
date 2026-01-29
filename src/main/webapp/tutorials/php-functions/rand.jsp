@@ -31,6 +31,49 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>rand()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP rand() Function</h1><div class="lesson-meta"><span>Math Function</span><span>PHP 4+</span></div></header>
+
+
+                <div class="lesson-body">
+                    <p class="lead">The <code>rand()</code> function performs a specific operation.</p>
+
+                    <h2>Syntax</h2>
+                    <pre><code class="language-php">rand($param): mixed</code></pre>
+
+                    <h2>Parameters</h2>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$param</code></td>
+                                <td>mixed</td>
+                                <td>Function parameter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Return Value</h2>
+                    <p>Returns the result of the operation.</p>
+
+                    <h2>Try It Online</h2>
+                    <jsp:include page="../tutorial-compiler.jsp">
+                        <jsp:param name="codeFile" value="php-functions/rand.php" />
+                        <jsp:param name="language" value="php" />
+                        <jsp:param name="editorId" value="rand-demo" />
+                    </jsp:include>
+
+                    <h2>Common Use Cases</h2>
+                    <ul>
+                        <li>Data processing</li>
+                        <li>Common PHP operations</li>
+                    </ul>
+                </div>
+
             </article>
 
                             <%-- Right Ad Rail (desktop only) --%>

@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP gmmktime() - Get GMT Unix Timestamp | Example & Syntax</title>
+            <title>PHP gmmktime() - Get GMT Unix Timestamp | Live Demo</title>
             <meta name="description"
                 content="PHP gmmktime() returns the Unix timestamp for a GMT date. Identical to mktime() but expects values to represent a GMT date.">
+    <meta name="keywords" content="php gmmktime, gmmktime php, gmt timestamp, utc timestamp, php mktime, gmmktime example, php time functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/gmmktime.jsp">
-            <meta property="og:title" content="PHP gmmktime() - Get GMT Unix Timestamp">
+            <meta property="og:title" content="PHP gmmktime() - Get GMT Unix Timestamp | Live Demo">
+    <meta property="og:description" content="PHP gmmktime() returns Unix timestamp for GMT date. Interactive examples with live code. Syntax: gmmktime($hour, $min, $sec, $month, $day, $year). GMT time. Try free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP gmmktime() returns Unix timestamp for GMT date. Interactive examples with live code. Syntax: gmmktime($hour, $min, $sec, $month, $day, $year). GMT time. Try free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

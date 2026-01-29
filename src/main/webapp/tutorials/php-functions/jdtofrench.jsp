@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jdtofrench() - JD to French Republican | Example & Syntax</title>
+            <title>PHP jdtofrench() - Julian to French Calendar | Try Online</title>
             <meta name="description"
                 content="PHP jdtofrench() converts a Julian Day Count to the French Republican Calendar.">
+    <meta name="keywords" content="php jdtofrench, julian to french, french calendar, calendar conversion, jdtofrench example, php calendar functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jdtofrench.jsp">
-            <meta property="og:title" content="PHP jdtofrench() - JD to French Republican">
+            <meta property="og:title" content="PHP jdtofrench() - Julian to French Calendar | Try Online">
+    <meta property="og:description" content="PHP jdtofrench() converts Julian Day to French Republican Calendar. Interactive examples. Syntax: jdtofrench($jd). Historical calendar conversion. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jdtofrench() converts Julian Day to French Republican Calendar. Interactive examples. Syntax: jdtofrench($jd). Historical calendar conversion. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

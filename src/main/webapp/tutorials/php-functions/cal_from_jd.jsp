@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP cal_from_jd() - Convert JD to Calendar | Example & Syntax</title>
+            <title>PHP cal_from_jd() - Convert Julian Day to Calendar | Free</title>
             <meta name="description"
                 content="PHP cal_from_jd() converts a Julian Day Count to a supported calendar. Returns array with calendar information.">
+    <meta name="keywords" content="php cal_from_jd, julian day conversion, jd to date, calendar conversion php, cal_from_jd example, php julian">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/cal_from_jd.jsp">
-            <meta property="og:title" content="PHP cal_from_jd() - Convert JD to Calendar">
+            <meta property="og:title" content="PHP cal_from_jd() - Convert Julian Day to Calendar | Free">
+    <meta property="og:description" content="PHP cal_from_jd() converts Julian Day Count to calendar date. Interactive examples with live code. Syntax: cal_from_jd($jd, $calendar). Multiple calendar support. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP cal_from_jd() converts Julian Day Count to calendar date. Interactive examples with live code. Syntax: cal_from_jd($jd, $calendar). Multiple calendar support. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

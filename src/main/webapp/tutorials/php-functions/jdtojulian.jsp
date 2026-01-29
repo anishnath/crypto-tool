@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jdtojulian() - JD to Julian Calendar | Example & Syntax</title>
-            <meta name="description" content="PHP jdtojulian() converts a Julian Day Count to a Julian Calendar Date.">
+            <title>PHP jdtojulian() - Julian Day to Julian Calendar | Free</title>
+            <meta name="description" content="PHP jdtojulian() converts Julian Day Count to Julian Calendar date. Interactive examples. Syntax: jdtojulian($jd). Old calendar system support. Try it online!">
+    <meta name="keywords" content="php jdtojulian, julian day to julian, julian calendar, jdtojulian example, php calendar functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jdtojulian.jsp">
-            <meta property="og:title" content="PHP jdtojulian() - JD to Julian Calendar">
+            <meta property="og:title" content="PHP jdtojulian() - Julian Day to Julian Calendar | Free">
+    <meta property="og:description" content="PHP jdtojulian() converts Julian Day Count to Julian Calendar date. Interactive examples. Syntax: jdtojulian($jd). Old calendar system support. Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jdtojulian() converts Julian Day Count to Julian Calendar date. Interactive examples. Syntax: jdtojulian($jd). Old calendar system support. Try it online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

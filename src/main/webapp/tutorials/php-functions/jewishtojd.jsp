@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP jewishtojd() - Jewish Date to JD | Example & Syntax</title>
+            <title>PHP jewishtojd() - Jewish to Julian Day | Live Examples</title>
             <meta name="description"
                 content="PHP jewishtojd() converts a date in the Jewish Calendar to Julian Day Count.">
+    <meta name="keywords" content="php jewishtojd, jewish calendar, hebrew calendar, julian day, jewishtojd example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/jewishtojd.jsp">
-            <meta property="og:title" content="PHP jewishtojd() - Jewish Date to JD">
+            <meta property="og:title" content="PHP jewishtojd() - Jewish to Julian Day | Live Examples">
+    <meta property="og:description" content="PHP jewishtojd() converts Jewish Calendar to Julian Day Count. Interactive examples. Syntax: jewishtojd($month, $day, $year). Hebrew calendar support. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP jewishtojd() converts Jewish Calendar to Julian Day Count. Interactive examples. Syntax: jewishtojd($month, $day, $year). Hebrew calendar support. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

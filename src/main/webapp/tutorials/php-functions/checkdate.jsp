@@ -6,14 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP checkdate() - Validate Gregorian Date | Example & Syntax</title>
+            <title>PHP checkdate() - Validate Gregorian Date | Try Online</title>
             <meta name="description"
                 content="PHP checkdate() validates a Gregorian date. Checks if month, day, and year form a valid date. Syntax: checkdate($month, $day, $year).">
-            <meta name="keywords" content="php checkdate, validate date php, date validation, check date existence">
+            <meta name="keywords" content="php checkdate, validate date, checkdate php, date validation, valid date, checkdate example, php date functions">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/checkdate.jsp">
-            <meta property="og:title" content="PHP checkdate() - Validate Date">
+            <meta property="og:title" content="PHP checkdate() - Validate Gregorian Date | Try Online">
+    <meta property="og:description" content="PHP checkdate() validates Gregorian calendar date. Interactive examples with live editor. Syntax: checkdate($month, $day, $year). Date validation made easy. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP checkdate() validates Gregorian calendar date. Interactive examples with live editor. Syntax: checkdate($month, $day, $year). Date validation made easy. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

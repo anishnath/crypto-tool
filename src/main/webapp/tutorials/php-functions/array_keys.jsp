@@ -70,6 +70,49 @@
                 </header>
 
 
+                <div class="lesson-body">
+                    <p class="lead">The <code>array_keys()</code> function performs a specific operation.</p>
+
+                    <h2>Syntax</h2>
+                    <pre><code class="language-php">array_keys($param): mixed</code></pre>
+
+                    <h2>Parameters</h2>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$param</code></td>
+                                <td>mixed</td>
+                                <td>Function parameter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Return Value</h2>
+                    <p>Returns the result of the operation.</p>
+
+                    <h2>Try It Online</h2>
+                    <jsp:include page="../tutorial-compiler.jsp">
+                        <jsp:param name="codeFile" value="php-functions/array_keys.php" />
+                        <jsp:param name="language" value="php" />
+                        <jsp:param name="editorId" value="array_keys-demo" />
+                    </jsp:include>
+
+                    <h2>Common Use Cases</h2>
+                    <ul>
+                        <li>Data processing</li>
+                        <li>Common PHP operations</li>
+                    </ul>
+                </div>
+
+
+
             </article>
 
                             <%-- Right Ad Rail (desktop only) --%>

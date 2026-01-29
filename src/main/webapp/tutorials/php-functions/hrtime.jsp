@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP hrtime() - High Resolution Time | Example & Syntax</title>
+            <title>PHP hrtime() - High Resolution Time | Live Examples</title>
             <meta name="description"
                 content="PHP hrtime() returns the system's high resolution time, useful for performance profiling.">
+    <meta name="keywords" content="php hrtime, hrtime php, high resolution time, nanoseconds php, precise timing, hrtime example, php performance">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/hrtime.jsp">
-            <meta property="og:title" content="PHP hrtime() - High Resolution Time">
+            <meta property="og:title" content="PHP hrtime() - High Resolution Time | Live Examples">
+    <meta property="og:description" content="PHP hrtime() returns high resolution time for precise measurements. Interactive examples with live code. Syntax: hrtime($as_number). Nanosecond precision. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP hrtime() returns high resolution time for precise measurements. Interactive examples with live code. Syntax: hrtime($as_number). Nanosecond precision. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP cal_to_jd() - Convert Calendar to JD | Example & Syntax</title>
-            <meta name="description" content="PHP cal_to_jd() converts from a supported calendar to Julian Day Count.">
+            <title>PHP cal_to_jd() - Calendar to Julian Day | Try Online</title>
+            <meta name="description" content="PHP cal_to_jd() converts calendar date to Julian Day Count. Interactive examples with live code. Syntax: cal_to_jd($calendar, $month, $day, $year). Try it free!">
+    <meta name="keywords" content="php cal_to_jd, calendar to julian, julian day, cal_to_jd example, php calendar conversion">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/cal_to_jd.jsp">
-            <meta property="og:title" content="PHP cal_to_jd() - Convert Calendar to JD">
+            <meta property="og:title" content="PHP cal_to_jd() - Calendar to Julian Day | Try Online">
+    <meta property="og:description" content="PHP cal_to_jd() converts calendar date to Julian Day Count. Interactive examples with live code. Syntax: cal_to_jd($calendar, $month, $day, $year). Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP cal_to_jd() converts calendar date to Julian Day Count. Interactive examples with live code. Syntax: cal_to_jd($calendar, $month, $day, $year). Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

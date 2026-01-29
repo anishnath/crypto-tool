@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP getdate() - Get Date/Time Information | Example & Syntax</title>
+            <title>PHP getdate() - Get Date/Time Information | Try Online</title>
             <meta name="description"
                 content="PHP getdate() returns an associative array containing date and time information of the timestamp or current time.">
+    <meta name="keywords" content="php getdate, getdate php, get date info, php date array, getdate example, php time functions, date information">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/getdate.jsp">
-            <meta property="og:title" content="PHP getdate() - Get Date Info">
+            <meta property="og:title" content="PHP getdate() - Get Date/Time Information | Try Online">
+    <meta property="og:description" content="PHP getdate() returns associative array with date/time information. Interactive examples with live code. Syntax: getdate($timestamp). Get weekday, month, year. Try it free!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP getdate() returns associative array with date/time information. Interactive examples with live code. Syntax: getdate($timestamp). Get weekday, month, year. Try it free!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

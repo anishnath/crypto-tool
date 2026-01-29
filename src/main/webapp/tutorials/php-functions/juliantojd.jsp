@@ -6,12 +6,16 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP juliantojd() - Julian Date to JD | Example & Syntax</title>
-            <meta name="description" content="PHP juliantojd() converts a Julian Calendar date to Julian Day Count.">
+            <title>PHP juliantojd() - Julian Calendar to Julian Day | Free</title>
+            <meta name="description" content="PHP juliantojd() converts Julian Calendar to Julian Day Count. Interactive examples. Syntax: juliantojd($month, $day, $year). Historical dates. Try online!">
+    <meta name="keywords" content="php juliantojd, julian calendar, julian day, calendar conversion, juliantojd example, php calendar">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/juliantojd.jsp">
-            <meta property="og:title" content="PHP juliantojd() - Julian Date to JD">
+            <meta property="og:title" content="PHP juliantojd() - Julian Calendar to Julian Day | Free">
+    <meta property="og:description" content="PHP juliantojd() converts Julian Calendar to Julian Day Count. Interactive examples. Syntax: juliantojd($month, $day, $year). Historical dates. Try online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP juliantojd() converts Julian Calendar to Julian Day Count. Interactive examples. Syntax: juliantojd($month, $day, $year). Historical dates. Try online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">

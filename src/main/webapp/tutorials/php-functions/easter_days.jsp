@@ -6,13 +6,17 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PHP easter_days() - Get Number of Days After March 21 for Easter | Example & Syntax</title>
+            <title>PHP easter_days() - Calculate Easter Days | Try Online Free</title>
             <meta name="description"
                 content="PHP easter_days() returns the number of days after March 21 on which Easter falls for a given year.">
+    <meta name="keywords" content="php easter_days, easter_days php, calculate easter, easter date php, easter calculation, easter_days example, php easter function">
             <link rel="canonical" href="https://8gwifi.org/tutorials/php-functions/easter_days.jsp">
-            <meta property="og:title" content="PHP easter_days() - Get Easter Days">
+            <meta property="og:title" content="PHP easter_days() - Calculate Easter Days | Try Online Free">
+    <meta property="og:description" content="PHP easter_days() calculates days between March 21 and Easter for a given year. Interactive examples with live code editor. Syntax: easter_days($year, $method). Try it online!">
+    <meta property="og:image" content="https://8gwifi.org/tutorials/assets/images/php-logo.svg">
             <meta property="og:type" content="article">
             <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="PHP easter_days() calculates days between March 21 and Easter for a given year. Interactive examples with live code editor. Syntax: easter_days($year, $method). Try it online!">
             <link rel="icon" type="image/svg+xml"
                 href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
             <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
