@@ -396,14 +396,11 @@
         </div>
     </header>
 
-    <!-- Tool Description + Ad Section -->
+    <!-- Tool Description -->
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
                 <p>Secure your messages with military-grade PGP encryption. Encrypt using recipient's public key, decrypt with your private key and passphrase. Share encrypted messages via URL or email. All processing is server-side with no data retention.</p>
-            </div>
-            <div class="tool-description-ad">
-                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
     </section>
