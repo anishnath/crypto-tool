@@ -42,3 +42,7 @@ import inspect
 print("\nInspect signature (with wraps):")
 print(inspect.signature(example_function2))  # Works correctly
 
+
+
+
+

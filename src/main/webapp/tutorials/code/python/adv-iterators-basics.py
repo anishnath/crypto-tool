@@ -37,3 +37,7 @@ print("\nUsing for loop (automatic iteration):")
 for item in my_list:
     print(item)
 
+
+
+
+

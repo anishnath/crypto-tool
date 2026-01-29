@@ -68,3 +68,7 @@ print("\nFunction type hints:")
 result = apply_function(lambda x, y: x + y, 5, 3)
 print(f"apply_function(lambda x, y: x + y, 5, 3) = {result}")
 
+
+
+
+

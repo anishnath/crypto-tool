@@ -47,3 +47,7 @@ squared = (x**2 for x in numbers)
 filtered = (x for x in squared if x > 10)
 print("Squares > 10:", list(filtered))
 
+
+
+
+

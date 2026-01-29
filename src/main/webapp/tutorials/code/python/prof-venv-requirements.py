@@ -43,3 +43,7 @@ print("   ✓ Update it whenever you install/upgrade packages")
 print("   ✓ Use specific versions (not '>=', '~=') for production")
 print("   ✓ Never commit the venv/ directory itself")
 
+
+
+
+

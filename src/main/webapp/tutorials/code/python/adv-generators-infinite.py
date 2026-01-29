@@ -65,3 +65,7 @@ for i, value in enumerate(stream):
         break
     print(f"Data point {i+1}: {value}")
 
+
+
+
+

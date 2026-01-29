@@ -42,3 +42,7 @@ phone_pattern = r"\(?\d{3}\)?[- ]?\d{3}-\d{4}"
 phones = re.findall(phone_pattern, phone_text)
 print("Found phones:", phones)
 
+
+
+
+

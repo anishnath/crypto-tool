@@ -41,3 +41,7 @@ except Exception as e:
     print(f"Error: {e}")
 # File is still closed here automatically
 
+
+
+
+

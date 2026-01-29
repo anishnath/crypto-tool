@@ -44,3 +44,7 @@ print(next(it))  # 11
 print(next(it))  # 12
 # next(it) would raise StopIteration here
 
+
+
+
+

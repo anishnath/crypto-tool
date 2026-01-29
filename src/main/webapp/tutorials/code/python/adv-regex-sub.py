@@ -55,3 +55,7 @@ normalized = re.sub(r"\(?(\d{3})\)?[- ]?(\d{3})-(\d{4})", r"\1-\2-\3", phone_num
 print("\nPhone number normalization:")
 print(normalized)
 
+
+
+
+

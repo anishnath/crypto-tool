@@ -43,3 +43,7 @@ for num in counter(5):
     print(num, end=" ")  # 0 1 2 3 4
 print()
 
+
+
+
+

@@ -61,3 +61,7 @@ for result in process_with_iterator(numbers):
     print(result, end=" ")
 print("\n(Stopped early - didn't process all items)")
 
+
+
+
+

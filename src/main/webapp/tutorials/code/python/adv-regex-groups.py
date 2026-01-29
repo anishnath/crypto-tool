@@ -62,3 +62,7 @@ pattern = r"colou?r"
 matches = re.findall(pattern, text2)
 print("\nNon-capturing (both spellings):", matches)
 
+
+
+
+

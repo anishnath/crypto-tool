@@ -55,3 +55,7 @@ print("\nUnion types (Python 3.10+ syntax):")
 print(get_value("number"))  # int
 print(get_value("text"))    # str
 
+
+
+
+
