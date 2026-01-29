@@ -95,7 +95,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="explode">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -118,9 +118,6 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="top" />
-                </jsp:include>
 
                 <div class="lesson-body">
                     <p class="lead">The <code>explode()</code> function splits a string into an array using a delimiter.</p>
@@ -150,9 +147,6 @@
                         <jsp:param name="editorId" value="explode-demo" />
                     </jsp:include>
 
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="middle" />
-                    </jsp:include>
 
                     <h2>More Examples</h2>
 
@@ -200,9 +194,6 @@ print_r($parts);
                     </ul>
                 </div>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="bottom" />
-                </jsp:include>
 
                 <jsp:include page="../tutorial-nav.jsp">
                     <jsp:param name="prevLink" value="strpos.jsp" />
@@ -212,6 +203,9 @@ print_r($parts);
                     <jsp:param name="currentLessonId" value="explode" />
                 </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

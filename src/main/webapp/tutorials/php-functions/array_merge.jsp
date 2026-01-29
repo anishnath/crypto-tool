@@ -64,7 +64,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="array_merge">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -87,65 +87,11 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
 
-                <div class="lesson-body">
-                    <p class="lead">The <code>array_merge()</code> function merges two or more arrays into one.</p>
-
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">array_merge(array ...$arrays): array</code></pre>
-
-                    <h2>Parameters</h2>
-                    <table class="info-table">
-                        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
-                        <tbody>
-                            <tr><td><code>$arrays</code></td><td>array</td><td>Arrays to merge</td></tr>
-                        </tbody>
-                    </table>
-
-                    <h2>Return Value</h2>
-                    <p>Returns a new array containing all elements from the input arrays.</p>
-
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp">
-                        <jsp:param name="codeFile" value="php-functions/array_merge.php" />
-                        <jsp:param name="language" value="php" />
-                        <jsp:param name="editorId" value="array-merge-demo" />
-                    </jsp:include>
-
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-
-                    <h2>More Examples</h2>
-
-                    <h3>Merge with Defaults</h3>
-                    <pre><code class="language-php">&lt;?php
-$defaults = ["color" => "red", "size" => "M"];
-$custom = ["color" => "blue"];
-$result = array_merge($defaults, $custom);
-// ["color" => "blue", "size" => "M"]
-?&gt;</code></pre>
-
-                    <div class="tip-box">
-                        <strong>PHP 7.4+:</strong> Use spread operator: <code>[...$arr1, ...$arr2]</code>
-                    </div>
-
-                    <h2>Related Functions</h2>
-                    <ul>
-                        <li><code>array_merge_recursive()</code> - Merge recursively</li>
-                        <li><a href="array_push.jsp">array_push()</a> - Add elements to array</li>
-                    </ul>
-                </div>
-
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-
-                <jsp:include page="../tutorial-nav.jsp">
-                    <jsp:param name="prevLink" value="array_filter.jsp" />
-                    <jsp:param name="prevTitle" value="array_filter()" />
-                    <jsp:param name="nextLink" value="array_push.jsp" />
-                    <jsp:param name="nextTitle" value="array_push()" />
-                    <jsp:param name="currentLessonId" value="array_merge" />
-                </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

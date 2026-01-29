@@ -24,7 +24,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="round">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -32,25 +32,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>round()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP round() Function</h1><div class="lesson-meta"><span>Math Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>round()</code> function rounds a float to the nearest integer or specified decimal places.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">round(float $num, int $precision = 0, int $mode = PHP_ROUND_HALF_UP): float</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/round.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="round-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-echo round(4.5);        // 5
-echo round(3.14159, 2); // 3.14
-?&gt;</code></pre>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="floor.jsp">floor()</a> - Round down</li><li><a href="ceil.jsp">ceil()</a> - Round up</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="sort.jsp" /><jsp:param name="prevTitle" value="sort()" /><jsp:param name="nextLink" value="floor.jsp" /><jsp:param name="nextTitle" value="floor()" /><jsp:param name="currentLessonId" value="round" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

@@ -30,7 +30,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="hrtime">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -46,9 +46,6 @@
                                     <h1 class="lesson-title">PHP hrtime() Function</h1>
                                     <div class="lesson-meta"><span>Date/Time Function</span><span>PHP 7.3+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>hrtime()</code> function returns the system's high
                                         resolution time. It is monotonic (cannot go backwards) and is best for precise
@@ -65,18 +62,12 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="hrtime-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="microtime.jsp">microtime()</a> - Return current Unix timestamp with
                                             microseconds</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="microtime.jsp" />
                                     <jsp:param name="prevTitle" value="microtime()" />
@@ -85,6 +76,9 @@
                                     <jsp:param name="currentLessonId" value="hrtime" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

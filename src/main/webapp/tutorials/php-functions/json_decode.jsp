@@ -24,7 +24,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="json_decode">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -32,27 +32,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>json_decode()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP json_decode() Function</h1><div class="lesson-meta"><span>JSON Function</span><span>PHP 5.2.0+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>json_decode()</code> function decodes a JSON string into a PHP value.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">json_decode(string $json, ?bool $associative = null, int $depth = 512, int $flags = 0): mixed</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/json_decode.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="json-decode-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$json = '{"name": "John"}';
-$obj = json_decode($json);      // Object
-$arr = json_decode($json, true); // Array
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Tip:</strong> Use <code>json_last_error()</code> to check for parsing errors.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="json_encode.jsp">json_encode()</a> - Convert to JSON</li><li><code>json_last_error()</code> - Get error</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="json_encode.jsp" /><jsp:param name="prevTitle" value="json_encode()" /><jsp:param name="nextLink" value="file_get_contents.jsp" /><jsp:param name="nextTitle" value="file_get_contents()" /><jsp:param name="currentLessonId" value="json_decode" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

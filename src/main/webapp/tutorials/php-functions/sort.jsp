@@ -49,7 +49,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="sort">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -69,67 +69,11 @@
                     <div class="lesson-meta"><span>Array Function</span><span>PHP 4+</span></div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
 
-                <div class="lesson-body">
-                    <p class="lead">The <code>sort()</code> function sorts array elements in ascending order.</p>
-
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">sort(array &$array, int $flags = SORT_REGULAR): bool</code></pre>
-
-                    <h2>Sort Variants</h2>
-                    <table class="info-table">
-                        <thead><tr><th>Function</th><th>Order</th><th>Keys</th></tr></thead>
-                        <tbody>
-                            <tr><td><code>sort()</code></td><td>Ascending</td><td>Reindexed</td></tr>
-                            <tr><td><code>rsort()</code></td><td>Descending</td><td>Reindexed</td></tr>
-                            <tr><td><code>asort()</code></td><td>Ascending</td><td>Preserved</td></tr>
-                            <tr><td><code>arsort()</code></td><td>Descending</td><td>Preserved</td></tr>
-                            <tr><td><code>ksort()</code></td><td>By key asc</td><td>Preserved</td></tr>
-                        </tbody>
-                    </table>
-
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp">
-                        <jsp:param name="codeFile" value="php-functions/sort.php" />
-                        <jsp:param name="language" value="php" />
-                        <jsp:param name="editorId" value="sort-demo" />
-                    </jsp:include>
-
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-
-                    <h2>More Examples</h2>
-
-                    <h3>Sort Associative Array</h3>
-                    <pre><code class="language-php">&lt;?php
-$ages = ["John" => 25, "Jane" => 30, "Bob" => 20];
-asort($ages);  // Keep keys, sort by value
-print_r($ages);
-// Bob=>20, John=>25, Jane=>30
-?&gt;</code></pre>
-
-                    <div class="warning-box">
-                        <strong>Note:</strong> <code>sort()</code> modifies the original array and reindexes numeric keys.
-                    </div>
-
-                    <h2>Related Functions</h2>
-                    <ul>
-                        <li><code>rsort()</code> - Sort descending</li>
-                        <li><code>asort()</code> - Sort keeping keys</li>
-                        <li><code>usort()</code> - Sort with custom function</li>
-                    </ul>
-                </div>
-
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-
-                <jsp:include page="../tutorial-nav.jsp">
-                    <jsp:param name="prevLink" value="array_values.jsp" />
-                    <jsp:param name="prevTitle" value="array_values()" />
-                    <jsp:param name="nextLink" value="round.jsp" />
-                    <jsp:param name="nextTitle" value="round()" />
-                    <jsp:param name="currentLessonId" value="sort" />
-                </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

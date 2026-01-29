@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="gethostbyaddr">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,31 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>gethostbyaddr()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP gethostbyaddr() Function</h1><div class="lesson-meta"><span>Network Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>gethostbyaddr()</code> function gets the Internet host name corresponding to a given IP address (reverse DNS lookup).</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">gethostbyaddr(string $ip): string|false</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/gethostbyaddr.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="gethostbyaddr-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-// Reverse DNS lookup
-$hostname = gethostbyaddr('8.8.8.8');
-echo $hostname; // dns.google
-
-// If no PTR record, returns the IP
-$host = gethostbyaddr('192.168.1.1');
-// May return '192.168.1.1' if no reverse DNS
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Note:</strong> Returns the IP address on failure or if no reverse DNS record exists.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="gethostbyname.jsp">gethostbyname()</a> - Hostname to IP</li><li><a href="gethostbynamel.jsp">gethostbynamel()</a> - Get all IPs</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="get_meta_tags.jsp" /><jsp:param name="prevTitle" value="get_meta_tags()" /><jsp:param name="nextLink" value="gethostbyname.jsp" /><jsp:param name="nextTitle" value="gethostbyname()" /><jsp:param name="currentLessonId" value="gethostbyaddr" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

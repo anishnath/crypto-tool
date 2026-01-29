@@ -30,7 +30,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="easter_days">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -46,9 +46,6 @@
                                     <h1 class="lesson-title">PHP easter_days() Function</h1>
                                     <div class="lesson-meta"><span>Calendar Function</span><span>PHP 4+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>easter_days()</code> function returns the number of days
                                         after March 21 on which Easter falls for a given year.</p>
@@ -60,18 +57,12 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="easter_days-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="easter_date.jsp">easter_date()</a> - Get Unix timestamp for local
                                             midnight on Easter</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="easter_date.jsp" />
                                     <jsp:param name="prevTitle" value="easter_date()" />
@@ -80,6 +71,9 @@
                                     <jsp:param name="currentLessonId" value="easter_days" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

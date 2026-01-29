@@ -29,7 +29,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="zlib_decode">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -46,9 +46,6 @@
                                     <div class="lesson-meta"><span>Compression Function</span><span>PHP 5.4+</span>
                                     </div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>zlib_decode()</code> function uncompresses any
                                         raw/gzip/zlib encoded data.</p>
@@ -60,18 +57,12 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="zlib_decode-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="zlib_encode.jsp">zlib_encode()</a> - Compress data with the
                                             specified encoding</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="unserialize.jsp" />
                                     <jsp:param name="prevTitle" value="unserialize()" />
@@ -80,6 +71,9 @@
                                     <jsp:param name="currentLessonId" value="zlib_decode" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

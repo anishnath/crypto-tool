@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="parse_url">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,31 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>parse_url()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP parse_url() Function</h1><div class="lesson-meta"><span>URL Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>parse_url()</code> function parses a URL and returns its components.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">parse_url(string $url, int $component = -1): int|string|array|null|false</code></pre>
-                    <h2>Components</h2>
-                    <p><code>scheme</code>, <code>host</code>, <code>port</code>, <code>user</code>, <code>pass</code>, <code>path</code>, <code>query</code>, <code>fragment</code></p>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/parse_url.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="parse-url-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$url = "https://example.com/path?q=test#section";
-$parts = parse_url($url);
-// ['scheme' => 'https', 'host' => 'example.com', ...]
-
-// Get specific component
-$host = parse_url($url, PHP_URL_HOST);
-?&gt;</code></pre>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="http_build_query.jsp">http_build_query()</a> - Build query string</li><li><a href="urlencode.jsp">urlencode()</a> - URL encoding</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="base64_decode.jsp" /><jsp:param name="prevTitle" value="base64_decode()" /><jsp:param name="nextLink" value="http_build_query.jsp" /><jsp:param name="nextTitle" value="http_build_query()" /><jsp:param name="currentLessonId" value="parse_url" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

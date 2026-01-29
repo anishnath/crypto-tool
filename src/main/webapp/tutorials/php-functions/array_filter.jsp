@@ -147,7 +147,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="array_filter">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -170,9 +170,6 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="top" />
-                </jsp:include>
 
                 <div class="lesson-body">
                     <p class="lead">The <code>array_filter()</code> function filters elements of an array using a callback function, returning only elements that pass the test.</p>
@@ -222,9 +219,6 @@
                         <jsp:param name="editorId" value="array-filter-demo" />
                     </jsp:include>
 
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="middle" />
-                    </jsp:include>
 
                     <h2>More Examples</h2>
 
@@ -287,9 +281,6 @@ print_r($filtered);
                     </ul>
                 </div>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="bottom" />
-                </jsp:include>
 
                 <jsp:include page="../tutorial-nav.jsp">
                     <jsp:param name="prevLink" value="array_map.jsp" />
@@ -299,6 +290,9 @@ print_r($filtered);
                     <jsp:param name="currentLessonId" value="array_filter" />
                 </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

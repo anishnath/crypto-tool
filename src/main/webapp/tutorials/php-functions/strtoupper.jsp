@@ -90,7 +90,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="strtoupper">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -113,9 +113,6 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="top" />
-                </jsp:include>
 
                 <div class="lesson-body">
                     <p class="lead">The <code>strtoupper()</code> function converts all alphabetic characters in a string to uppercase.</p>
@@ -143,9 +140,6 @@
                         <jsp:param name="editorId" value="strtoupper-demo" />
                     </jsp:include>
 
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="middle" />
-                    </jsp:include>
 
                     <h2>More Examples</h2>
 
@@ -184,9 +178,6 @@ echo ucwords($str);   // "Hello World"
                     </ul>
                 </div>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="bottom" />
-                </jsp:include>
 
                 <jsp:include page="../tutorial-nav.jsp">
                     <jsp:param name="prevLink" value="strtolower.jsp" />
@@ -196,6 +187,9 @@ echo ucwords($str);   // "Hello World"
                     <jsp:param name="currentLessonId" value="strtoupper" />
                 </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

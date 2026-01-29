@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="urlencode">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,30 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>urlencode()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP urlencode() Function</h1><div class="lesson-meta"><span>URL Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>urlencode()</code> function URL-encodes a string for use in query strings.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">urlencode(string $string): string</code></pre>
-                    <h2>Encoding Rules</h2>
-                    <p>Spaces become <code>+</code>, special characters become <code>%XX</code></p>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/urlencode.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="urlencode-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$query = "hello world&foo=bar";
-$encoded = urlencode($query);
-// hello+world%26foo%3Dbar
-
-$url = "search.php?q=" . urlencode($userInput);
-?&gt;</code></pre>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="urldecode.jsp">urldecode()</a> - Decode URL string</li><li><a href="rawurlencode.jsp">rawurlencode()</a> - RFC 3986 encoding</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="preg_quote.jsp" /><jsp:param name="prevTitle" value="preg_quote()" /><jsp:param name="nextLink" value="urldecode.jsp" /><jsp:param name="nextTitle" value="urldecode()" /><jsp:param name="currentLessonId" value="urlencode" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

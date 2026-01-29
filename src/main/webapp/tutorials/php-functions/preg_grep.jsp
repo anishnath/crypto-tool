@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="preg_grep">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,29 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>preg_grep()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP preg_grep() Function</h1><div class="lesson-meta"><span>Regex Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>preg_grep()</code> function returns array entries that match the pattern.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">preg_grep(string $pattern, array $array, int $flags = 0): array|false</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/preg_grep.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="preg-grep-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$files = ['test.php', 'image.jpg', 'script.php', 'doc.pdf'];
-$phpFiles = preg_grep('/\.php$/', $files);
-// ['test.php', 'script.php']
-
-// Invert match (non-matching)
-$nonPhp = preg_grep('/\.php$/', $files, PREG_GREP_INVERT);
-?&gt;</code></pre>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="array_filter.jsp">array_filter()</a> - Filter with callback</li><li><a href="preg_match.jsp">preg_match()</a> - Match single string</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="preg_split.jsp" /><jsp:param name="prevTitle" value="preg_split()" /><jsp:param name="nextLink" value="preg_filter.jsp" /><jsp:param name="nextTitle" value="preg_filter()" /><jsp:param name="currentLessonId" value="preg_grep" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

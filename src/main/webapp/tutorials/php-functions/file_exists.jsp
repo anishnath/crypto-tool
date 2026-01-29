@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="file_exists">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,26 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>file_exists()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP file_exists() Function</h1><div class="lesson-meta"><span>File Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>file_exists()</code> function checks whether a file or directory exists.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">file_exists(string $filename): bool</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/file_exists.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="file-exists-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-if (file_exists("config.json")) {
-    $config = json_decode(file_get_contents("config.json"), true);
-}
-?&gt;</code></pre>
-                    <h2>Related Functions</h2>
-                    <ul><li><code>is_file()</code> - Check if file</li><li><code>is_dir()</code> - Check if directory</li><li><a href="file_get_contents.jsp">file_get_contents()</a> - Read file</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="file_put_contents.jsp" /><jsp:param name="prevTitle" value="file_put_contents()" /><jsp:param name="nextLink" value="isset.jsp" /><jsp:param name="nextTitle" value="isset()" /><jsp:param name="currentLessonId" value="file_exists" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

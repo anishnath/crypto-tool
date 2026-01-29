@@ -147,7 +147,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="str_replace">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -170,9 +170,6 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="top" />
-                </jsp:include>
 
                 <div class="lesson-body">
                     <p class="lead">The <code>str_replace()</code> function replaces all occurrences of a search string (or array of strings) with a replacement string (or array).</p>
@@ -228,9 +225,6 @@
                         <jsp:param name="editorId" value="str-replace-demo" />
                     </jsp:include>
 
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="middle" />
-                    </jsp:include>
 
                     <h2>More Examples</h2>
 
@@ -283,9 +277,6 @@ echo $result;
                     </ul>
                 </div>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="bottom" />
-                </jsp:include>
 
                 <jsp:include page="../tutorial-nav.jsp">
                     <jsp:param name="prevLink" value="strlen.jsp" />
@@ -295,6 +286,9 @@ echo $result;
                     <jsp:param name="currentLessonId" value="str_replace" />
                 </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

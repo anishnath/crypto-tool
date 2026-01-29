@@ -30,7 +30,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="uniqid">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -46,9 +46,6 @@
                                     <h1 class="lesson-title">PHP uniqid() Function</h1>
                                     <div class="lesson-meta"><span>Misc Function</span><span>PHP 4+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>uniqid()</code> function generates a unique ID based on
                                         the current time in microseconds.</p>
@@ -60,9 +57,6 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="uniqid-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="random_bytes.jsp">random_bytes()</a> - Cryptographically secure
@@ -71,9 +65,6 @@
                                             pseudo-random integers</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="token_name.jsp" />
                                     <jsp:param name="prevTitle" value="token_name()" />
@@ -82,6 +73,9 @@
                                     <jsp:param name="currentLessonId" value="uniqid" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

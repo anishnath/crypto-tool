@@ -147,7 +147,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="strlen">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -170,9 +170,6 @@
                     </div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="top" />
-                </jsp:include>
 
                 <div class="lesson-body">
                     <p class="lead">The <code>strlen()</code> function returns the length of a string (number of bytes).</p>
@@ -208,9 +205,6 @@
                         <jsp:param name="editorId" value="strlen-demo" />
                     </jsp:include>
 
-                    <jsp:include page="../tutorial-ad-slot.jsp">
-                        <jsp:param name="slot" value="middle" />
-                    </jsp:include>
 
                     <h2>More Examples</h2>
 
@@ -268,9 +262,6 @@ echo mb_strlen($emoji);   // 8 (characters)
                     </ul>
                 </div>
 
-                <jsp:include page="../tutorial-ad-slot.jsp">
-                    <jsp:param name="slot" value="bottom" />
-                </jsp:include>
 
                 <jsp:include page="../tutorial-nav.jsp">
                     <jsp:param name="prevLink" value="./" />
@@ -280,6 +271,9 @@ echo mb_strlen($emoji);   // 8 (characters)
                     <jsp:param name="currentLessonId" value="strlen" />
                 </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

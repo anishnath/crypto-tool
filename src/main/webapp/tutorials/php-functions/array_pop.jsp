@@ -49,7 +49,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="array_pop">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -69,54 +69,11 @@
                     <div class="lesson-meta"><span>Array Function</span><span>PHP 4+</span></div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
 
-                <div class="lesson-body">
-                    <p class="lead">The <code>array_pop()</code> function removes and returns the last element of an array.</p>
-
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">array_pop(array &$array): mixed</code></pre>
-
-                    <h2>Return Value</h2>
-                    <p>Returns the removed element, or <code>null</code> if the array is empty.</p>
-
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp">
-                        <jsp:param name="codeFile" value="php-functions/array_pop.php" />
-                        <jsp:param name="language" value="php" />
-                        <jsp:param name="editorId" value="array-pop-demo" />
-                    </jsp:include>
-
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-
-                    <h2>More Examples</h2>
-
-                    <h3>Stack Operations (LIFO)</h3>
-                    <pre><code class="language-php">&lt;?php
-$stack = [];
-array_push($stack, "first", "second", "third");
-echo array_pop($stack);  // "third"
-echo array_pop($stack);  // "second"
-?&gt;</code></pre>
-
-                    <h2>Related Functions</h2>
-                    <ul>
-                        <li><a href="array_push.jsp">array_push()</a> - Add to end</li>
-                        <li><code>array_shift()</code> - Remove from beginning</li>
-                        <li><code>array_unshift()</code> - Add to beginning</li>
-                    </ul>
-                </div>
-
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-
-                <jsp:include page="../tutorial-nav.jsp">
-                    <jsp:param name="prevLink" value="array_push.jsp" />
-                    <jsp:param name="prevTitle" value="array_push()" />
-                    <jsp:param name="nextLink" value="array_search.jsp" />
-                    <jsp:param name="nextTitle" value="array_search()" />
-                    <jsp:param name="currentLessonId" value="array_pop" />
-                </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

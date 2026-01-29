@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="preg_quote">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,32 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>preg_quote()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP preg_quote() Function</h1><div class="lesson-meta"><span>Regex Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>preg_quote()</code> function quotes regular expression characters, escaping special characters.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">preg_quote(string $str, string $delimiter = null): string</code></pre>
-                    <h2>Special Characters Escaped</h2>
-                    <p><code>. \ + * ? [ ^ ] $ ( ) { } = ! < > | : - #</code></p>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/preg_quote.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="preg-quote-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$userInput = "Price: $100 (USD)";
-$escaped = preg_quote($userInput, '/');
-// Price\:\ \$100\ \(USD\)
-
-// Safe to use in pattern
-preg_match('/' . $escaped . '/', $text);
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Security:</strong> Always use preg_quote() when including user input in regex patterns to prevent regex injection.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="preg_match.jsp">preg_match()</a> - Regex match</li><li><a href="preg_replace.jsp">preg_replace()</a> - Regex replace</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="preg_filter.jsp" /><jsp:param name="prevTitle" value="preg_filter()" /><jsp:param name="nextLink" value="urlencode.jsp" /><jsp:param name="nextTitle" value="urlencode()" /><jsp:param name="currentLessonId" value="preg_quote" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

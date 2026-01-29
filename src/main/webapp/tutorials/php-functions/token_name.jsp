@@ -29,7 +29,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="token_name">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -45,9 +45,6 @@
                                     <h1 class="lesson-title">PHP token_name() Function</h1>
                                     <div class="lesson-meta"><span>Tokenizer Function</span><span>PHP 4+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>token_name()</code> function gets the symbolic name of a
                                         given PHP token.</p>
@@ -59,13 +56,7 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="token_name-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="serialize.jsp" />
                                     <jsp:param name="prevTitle" value="serialize()" />
@@ -74,6 +65,9 @@
                                     <jsp:param name="currentLessonId" value="token_name" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

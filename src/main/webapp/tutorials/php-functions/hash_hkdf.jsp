@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="hash_hkdf">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,27 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>hash_hkdf()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP hash_hkdf() Function</h1><div class="lesson-meta"><span>Hash Function</span><span>PHP 7.1.2+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>hash_hkdf()</code> function generates a HKDF key derivation of a supplied key input (RFC 5869).</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">hash_hkdf(string $algo, string $key, int $length = 0, string $info = "", string $salt = ""): string</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/hash_hkdf.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="hash-hkdf-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$inputKey = random_bytes(32);
-$derivedKey = hash_hkdf('sha256', $inputKey, 32, 'encryption');
-echo bin2hex($derivedKey);
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Use Case:</strong> HKDF is used to derive multiple keys from a single master key, e.g., separate encryption and authentication keys.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="hash_pbkdf2.jsp">hash_pbkdf2()</a> - Password-based key derivation</li><li><a href="random_bytes.jsp">random_bytes()</a> - Generate random key</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="hash_equals.jsp" /><jsp:param name="prevTitle" value="hash_equals()" /><jsp:param name="nextLink" value="hash_hmac.jsp" /><jsp:param name="nextTitle" value="hash_hmac()" /><jsp:param name="currentLessonId" value="hash_hkdf" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

@@ -29,7 +29,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="unserialize">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -45,9 +45,6 @@
                                     <h1 class="lesson-title">PHP unserialize() Function</h1>
                                     <div class="lesson-meta"><span>Variable Function</span><span>PHP 4+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>unserialize()</code> function creates a PHP value from a
                                         stored representation.</p>
@@ -59,9 +56,6 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="unserialize-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="serialize.jsp">serialize()</a> - Generates a storable
@@ -69,9 +63,6 @@
                                         <li><a href="json_decode.jsp">json_decode()</a> - Decodes a JSON string</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="unpack.jsp" />
                                     <jsp:param name="prevTitle" value="unpack()" />
@@ -80,6 +71,9 @@
                                     <jsp:param name="currentLessonId" value="unserialize" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

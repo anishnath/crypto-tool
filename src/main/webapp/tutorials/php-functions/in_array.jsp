@@ -49,7 +49,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="in_array">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -69,57 +69,11 @@
                     <div class="lesson-meta"><span>Array Function</span><span>PHP 4+</span></div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
 
-                <div class="lesson-body">
-                    <p class="lead">The <code>in_array()</code> function checks if a value exists in an array.</p>
-
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">in_array(mixed $needle, array $haystack, bool $strict = false): bool</code></pre>
-
-                    <h2>Return Value</h2>
-                    <p>Returns <code>true</code> if found, <code>false</code> otherwise.</p>
-
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp">
-                        <jsp:param name="codeFile" value="php-functions/in_array.php" />
-                        <jsp:param name="language" value="php" />
-                        <jsp:param name="editorId" value="in-array-demo" />
-                    </jsp:include>
-
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-
-                    <h2>More Examples</h2>
-
-                    <h3>Strict Comparison</h3>
-                    <pre><code class="language-php">&lt;?php
-$arr = [1, 2, 3];
-var_dump(in_array("1", $arr));        // true (loose)
-var_dump(in_array("1", $arr, true));  // false (strict)
-?&gt;</code></pre>
-
-                    <div class="tip-box">
-                        <strong>Tip:</strong> Always use <code>strict = true</code> for security-sensitive checks.
-                    </div>
-
-                    <h2>Related Functions</h2>
-                    <ul>
-                        <li><a href="array_search.jsp">array_search()</a> - Find key by value</li>
-                        <li><a href="array_keys.jsp">array_keys()</a> - Get all keys</li>
-                        <li><code>array_key_exists()</code> - Check if key exists</li>
-                    </ul>
-                </div>
-
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-
-                <jsp:include page="../tutorial-nav.jsp">
-                    <jsp:param name="prevLink" value="array_search.jsp" />
-                    <jsp:param name="prevTitle" value="array_search()" />
-                    <jsp:param name="nextLink" value="array_keys.jsp" />
-                    <jsp:param name="nextTitle" value="array_keys()" />
-                    <jsp:param name="currentLessonId" value="in_array" />
-                </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

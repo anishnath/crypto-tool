@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="random_bytes">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,30 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>random_bytes()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP random_bytes() Function</h1><div class="lesson-meta"><span>CSPRNG Function</span><span>PHP 7.0.0+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>random_bytes()</code> function generates cryptographically secure pseudo-random bytes.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">random_bytes(int $length): string</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/random_bytes.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="random-bytes-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-// Generate 32-byte key (256 bits)
-$key = random_bytes(32);
-echo bin2hex($key);
-
-// Generate secure token
-$token = bin2hex(random_bytes(16));
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Security:</strong> Always use random_bytes() for security-sensitive operations. Never use rand() or mt_rand() for cryptographic purposes.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="random_int.jsp">random_int()</a> - Secure random integer</li><li><a href="hash_pbkdf2.jsp">hash_pbkdf2()</a> - Use for salts</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="hash_pbkdf2.jsp" /><jsp:param name="prevTitle" value="hash_pbkdf2()" /><jsp:param name="nextLink" value="random_int.jsp" /><jsp:param name="nextTitle" value="random_int()" /><jsp:param name="currentLessonId" value="random_bytes" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

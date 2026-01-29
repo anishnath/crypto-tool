@@ -30,7 +30,7 @@
         </head>
 
         <body class="tutorial-body no-preview" data-lesson="strftime">
-            <div class="tutorial-layout">
+            <div class="tutorial-layout has-ad-rail">
                 <%@ include file="../tutorial-header.jsp" %>
                     <main class="tutorial-main">
                         <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -46,9 +46,6 @@
                                     <h1 class="lesson-title">PHP strftime() Function</h1>
                                     <div class="lesson-meta"><span>Date/Time Function</span><span>PHP 4+</span></div>
                                 </header>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="top" />
-                                </jsp:include>
                                 <div class="lesson-body">
                                     <p class="lead">The <code>strftime()</code> function formats a local time/date
                                         according to locale settings. This is useful for displaying dates in different
@@ -65,9 +62,6 @@
                                         <jsp:param name="language" value="php" />
                                         <jsp:param name="editorId" value="strftime-demo" />
                                     </jsp:include>
-                                    <jsp:include page="../tutorial-ad-slot.jsp">
-                                        <jsp:param name="slot" value="middle" />
-                                    </jsp:include>
                                     <h2>Related Functions</h2>
                                     <ul>
                                         <li><a href="strptime.jsp">strptime()</a> - Parse a time/date generated with
@@ -75,9 +69,6 @@
                                         <li><a href="date.jsp">date()</a> - Format a local time/date</li>
                                     </ul>
                                 </div>
-                                <jsp:include page="../tutorial-ad-slot.jsp">
-                                    <jsp:param name="slot" value="bottom" />
-                                </jsp:include>
                                 <jsp:include page="../tutorial-nav.jsp">
                                     <jsp:param name="prevLink" value="microtime.jsp" />
                                     <jsp:param name="prevTitle" value="microtime()" />
@@ -86,6 +77,9 @@
                                     <jsp:param name="currentLessonId" value="strftime" />
                                 </jsp:include>
                             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
                     </main>
                     <%@ include file="../tutorial-footer.jsp" %>
             </div>

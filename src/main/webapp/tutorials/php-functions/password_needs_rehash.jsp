@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="password_needs_rehash">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,31 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>password_needs_rehash()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP password_needs_rehash() Function</h1><div class="lesson-meta"><span>Password Function</span><span>PHP 5.5.0+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>password_needs_rehash()</code> function checks if a hash was created with the given algorithm and options.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">password_needs_rehash(string $hash, string|int|null $algo, array $options = []): bool</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/password_needs_rehash.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="password-needs-rehash-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-// On login, check if rehash needed
-if (password_verify($password, $hash)) {
-    if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
-        $newHash = password_hash($password, PASSWORD_DEFAULT);
-        // Update hash in database
-    }
-}
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Use Case:</strong> Upgrade password hashes when algorithm or cost changes without requiring users to reset passwords.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="password_hash.jsp">password_hash()</a> - Create hash</li><li><a href="password_verify.jsp">password_verify()</a> - Verify password</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="password_get_info.jsp" /><jsp:param name="prevTitle" value="password_get_info()" /><jsp:param name="nextLink" value="preg_match.jsp" /><jsp:param name="nextTitle" value="preg_match()" /><jsp:param name="currentLessonId" value="password_needs_rehash" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="gettype">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,29 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>gettype()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP gettype() Function</h1><div class="lesson-meta"><span>Variable Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>gettype()</code> function returns the type of a variable as a string.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">gettype(mixed $value): string</code></pre>
-                    <h2>Return Values</h2>
-                    <p><code>"boolean"</code>, <code>"integer"</code>, <code>"double"</code>, <code>"string"</code>, <code>"array"</code>, <code>"object"</code>, <code>"resource"</code>, <code>"NULL"</code></p>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/gettype.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="gettype-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-echo gettype("Hello");  // string
-echo gettype(42);       // integer
-echo gettype([1, 2]);   // array
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Tip:</strong> For type checking, prefer <code>is_string()</code>, <code>is_array()</code>, etc. for better performance.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><code>is_string()</code>, <code>is_int()</code>, <code>is_array()</code> - Type checks</li><li><a href="var_dump.jsp">var_dump()</a> - Debug with type</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="print_r.jsp" /><jsp:param name="prevTitle" value="print_r()" /><jsp:param name="nextLink" value="hash.jsp" /><jsp:param name="nextTitle" value="hash()" /><jsp:param name="currentLessonId" value="gettype" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

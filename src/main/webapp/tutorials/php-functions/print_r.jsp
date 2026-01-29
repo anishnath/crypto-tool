@@ -23,7 +23,7 @@
     <%@ include file="../tutorial-ads.jsp" %><%@ include file="../tutorial-analytics.jsp" %>
 </head>
 <body class="tutorial-body no-preview" data-lesson="print_r">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -31,28 +31,10 @@
             <article class="tutorial-content">
                 <nav class="breadcrumb"><a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a><span class="breadcrumb-separator">/</span><a href="<%=request.getContextPath()%>/tutorials/php-functions/">PHP Functions</a><span class="breadcrumb-separator">/</span><span>print_r()</span></nav>
                 <header class="lesson-header"><h1 class="lesson-title">PHP print_r() Function</h1><div class="lesson-meta"><span>Variable Function</span><span>PHP 4+</span></div></header>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
-                <div class="lesson-body">
-                    <p class="lead">The <code>print_r()</code> function prints human-readable information about a variable.</p>
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">print_r(mixed $value, bool $return = false): string|bool</code></pre>
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp"><jsp:param name="codeFile" value="php-functions/print_r.php" /><jsp:param name="language" value="php" /><jsp:param name="editorId" value="print-r-demo" /></jsp:include>
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-                    <h2>Examples</h2>
-                    <pre><code class="language-php">&lt;?php
-$arr = ["a", "b", "c"];
-print_r($arr);
-// Return as string
-$str = print_r($arr, true);
-?&gt;</code></pre>
-                    <div class="tip-box"><strong>Tip:</strong> Use <code>print_r($var, true)</code> to return output as string instead of printing.</div>
-                    <h2>Related Functions</h2>
-                    <ul><li><a href="var_dump.jsp">var_dump()</a> - Detailed type info</li><li><code>var_export()</code> - Valid PHP code output</li></ul>
-                </div>
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-                <jsp:include page="../tutorial-nav.jsp"><jsp:param name="prevLink" value="var_dump.jsp" /><jsp:param name="prevTitle" value="var_dump()" /><jsp:param name="nextLink" value="gettype.jsp" /><jsp:param name="nextTitle" value="gettype()" /><jsp:param name="currentLessonId" value="print_r" /></jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>

@@ -49,7 +49,7 @@
 </head>
 
 <body class="tutorial-body no-preview" data-lesson="array_push">
-    <div class="tutorial-layout">
+    <div class="tutorial-layout has-ad-rail">
         <%@ include file="../tutorial-header.jsp" %>
         <main class="tutorial-main">
             <%@ include file="../tutorial-sidebar-php-functions.jsp" %>
@@ -69,57 +69,11 @@
                     <div class="lesson-meta"><span>Array Function</span><span>PHP 4+</span></div>
                 </header>
 
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="top" /></jsp:include>
 
-                <div class="lesson-body">
-                    <p class="lead">The <code>array_push()</code> function adds one or more elements to the end of an array.</p>
-
-                    <h2>Syntax</h2>
-                    <pre><code class="language-php">array_push(array &$array, mixed ...$values): int</code></pre>
-
-                    <h2>Return Value</h2>
-                    <p>Returns the new number of elements in the array.</p>
-
-                    <h2>Try It Online</h2>
-                    <jsp:include page="../tutorial-compiler.jsp">
-                        <jsp:param name="codeFile" value="php-functions/array_push.php" />
-                        <jsp:param name="language" value="php" />
-                        <jsp:param name="editorId" value="array-push-demo" />
-                    </jsp:include>
-
-                    <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="middle" /></jsp:include>
-
-                    <h2>More Examples</h2>
-
-                    <h3>Shorthand Syntax</h3>
-                    <pre><code class="language-php">&lt;?php
-$arr = [1, 2];
-$arr[] = 3;  // Faster for single element
-print_r($arr);  // [1, 2, 3]
-?&gt;</code></pre>
-
-                    <div class="tip-box">
-                        <strong>Tip:</strong> For single elements, <code>$arr[] = $value</code> is faster than <code>array_push()</code>.
-                    </div>
-
-                    <h2>Related Functions</h2>
-                    <ul>
-                        <li><a href="array_pop.jsp">array_pop()</a> - Remove from end</li>
-                        <li><code>array_unshift()</code> - Add to beginning</li>
-                        <li><a href="array_merge.jsp">array_merge()</a> - Merge arrays</li>
-                    </ul>
-                </div>
-
-                <jsp:include page="../tutorial-ad-slot.jsp"><jsp:param name="slot" value="bottom" /></jsp:include>
-
-                <jsp:include page="../tutorial-nav.jsp">
-                    <jsp:param name="prevLink" value="array_merge.jsp" />
-                    <jsp:param name="prevTitle" value="array_merge()" />
-                    <jsp:param name="nextLink" value="array_pop.jsp" />
-                    <jsp:param name="nextTitle" value="array_pop()" />
-                    <jsp:param name="currentLessonId" value="array_push" />
-                </jsp:include>
             </article>
+
+                            <%-- Right Ad Rail (desktop only) --%>
+                            <%@ include file="../tutorial-ad-rail.jsp" %>
         </main>
         <%@ include file="../tutorial-footer.jsp" %>
     </div>
