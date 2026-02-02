@@ -87,6 +87,115 @@
 .chord-search-input {
     display: flex;
     gap: 0.5rem;
+    position: relative;
+}
+
+/* ========================================
+   AUTOCOMPLETE DROPDOWN
+   ======================================== */
+.chord-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 50px;
+    background: var(--bg-primary, #fff);
+    border: 2px solid var(--tool-primary);
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+}
+
+.chord-autocomplete.active {
+    display: block;
+}
+
+.chord-autocomplete-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    transition: background 0.15s;
+}
+
+.chord-autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.chord-autocomplete-item:hover,
+.chord-autocomplete-item.selected {
+    background: var(--tool-light, #f0f4ff);
+}
+
+.chord-autocomplete-item .chord-name {
+    font-weight: 600;
+    color: var(--text-primary, #0f172a);
+    font-size: 0.95rem;
+}
+
+.chord-autocomplete-item .chord-full-name {
+    color: var(--text-secondary, #64748b);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.chord-autocomplete-item .chord-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chord-autocomplete-item .chord-difficulty {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.chord-autocomplete-item .chord-difficulty.beginner {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.chord-autocomplete-item .chord-difficulty.intermediate {
+    background: rgba(255, 193, 7, 0.15);
+    color: #d39e00;
+}
+
+.chord-autocomplete-item .chord-difficulty.advanced {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+}
+
+.chord-autocomplete-empty {
+    padding: 0.75rem;
+    text-align: center;
+    color: var(--text-secondary, #64748b);
+    font-size: 0.85rem;
+}
+
+.chord-autocomplete-hint {
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-secondary, #f8fafc);
+    font-size: 0.75rem;
+    color: var(--text-secondary, #64748b);
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+
+[data-theme="dark"] .chord-autocomplete {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--tool-primary);
+}
+
+[data-theme="dark"] .chord-autocomplete-item:hover,
+[data-theme="dark"] .chord-autocomplete-item.selected {
+    background: rgba(102, 126, 234, 0.2);
 }
 
 .chord-search-input input {
@@ -538,6 +647,84 @@
 }
 
 /* ========================================
+   STRING VIBRATION ANIMATION
+   ======================================== */
+.guitar-string {
+    transition: stroke 0.1s ease;
+}
+
+.guitar-string.vibrating {
+    animation: string-vibrate 0.6s ease-out;
+    stroke: var(--tool-primary) !important;
+    filter: drop-shadow(0 0 3px var(--tool-primary));
+}
+
+/* Thicker strings vibrate slower/wider, thinner strings faster/narrower */
+.guitar-string.vibrating.string-0 { animation-duration: 0.8s; }
+.guitar-string.vibrating.string-1 { animation-duration: 0.7s; }
+.guitar-string.vibrating.string-2 { animation-duration: 0.65s; }
+.guitar-string.vibrating.string-3 { animation-duration: 0.55s; }
+.guitar-string.vibrating.string-4 { animation-duration: 0.5s; }
+.guitar-string.vibrating.string-5 { animation-duration: 0.45s; }
+
+@keyframes string-vibrate {
+    0% { transform: translateX(0); }
+    10% { transform: translateX(-3px); }
+    20% { transform: translateX(3px); }
+    30% { transform: translateX(-2.5px); }
+    40% { transform: translateX(2.5px); }
+    50% { transform: translateX(-2px); }
+    60% { transform: translateX(2px); }
+    70% { transform: translateX(-1px); }
+    80% { transform: translateX(1px); }
+    90% { transform: translateX(-0.5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Strum sweep animation */
+.strum-indicator {
+    position: absolute;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--tool-primary), transparent);
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 2px;
+}
+
+.strum-indicator.active {
+    animation: strum-sweep 0.3s ease-out;
+}
+
+@keyframes strum-sweep {
+    0% {
+        opacity: 0.8;
+        left: 0;
+    }
+    100% {
+        opacity: 0;
+        left: 100%;
+    }
+}
+
+/* Glow effect on play button when playing */
+.play-btn.playing {
+    animation: pulse-glow 0.5s ease-out;
+}
+
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+/* ========================================
    FINGER POSITIONS SECTION
    ======================================== */
 .finger-positions-section {
@@ -708,6 +895,18 @@
 .multi-chord-card:hover {
     border-color: var(--tool-primary);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.multi-chord-card.playing {
+    border-color: var(--tool-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 4px 12px rgba(102, 126, 234, 0.3);
+    animation: card-pulse 0.4s ease-out;
+}
+
+@keyframes card-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
 
 .multi-chord-card .chord-info-box {

@@ -300,6 +300,668 @@ const CHORD_DATABASE = {
     frets: [-1, 0, 2, 4, 2, 3],
     fingers: [[5, 0, 0], [4, 2, 1], [3, 4, 3], [2, 2, 1], [1, 3, 2]],
     name: 'A 9th'
+  },
+
+  // ============================================
+  // SHARP/FLAT MAJOR CHORDS
+  // ============================================
+  'C#': {
+    frets: [-1, 4, 6, 6, 6, 4],
+    fingers: [[5, 4, 1], [4, 6, 2], [3, 6, 3], [2, 6, 4], [1, 4, 1]],
+    name: 'C# Major',
+    barre: true
+  },
+  'Db': {
+    frets: [-1, 4, 6, 6, 6, 4],
+    fingers: [[5, 4, 1], [4, 6, 2], [3, 6, 3], [2, 6, 4], [1, 4, 1]],
+    name: 'Db Major',
+    barre: true
+  },
+  'Eb': {
+    frets: [-1, 6, 8, 8, 8, 6],
+    fingers: [[5, 6, 1], [4, 8, 2], [3, 8, 3], [2, 8, 4], [1, 6, 1]],
+    name: 'Eb Major',
+    barre: true
+  },
+  'D#': {
+    frets: [-1, 6, 8, 8, 8, 6],
+    fingers: [[5, 6, 1], [4, 8, 2], [3, 8, 3], [2, 8, 4], [1, 6, 1]],
+    name: 'D# Major',
+    barre: true
+  },
+  'F#': {
+    frets: [2, 4, 4, 3, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 3], [4, 4, 4], [3, 3, 2], [2, 2, 1], [1, 2, 1]],
+    name: 'F# Major',
+    barre: true
+  },
+  'Gb': {
+    frets: [2, 4, 4, 3, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 3], [4, 4, 4], [3, 3, 2], [2, 2, 1], [1, 2, 1]],
+    name: 'Gb Major',
+    barre: true
+  },
+  'G#': {
+    frets: [4, 6, 6, 5, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 3], [4, 6, 4], [3, 5, 2], [2, 4, 1], [1, 4, 1]],
+    name: 'G# Major',
+    barre: true
+  },
+  'Ab': {
+    frets: [4, 6, 6, 5, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 3], [4, 6, 4], [3, 5, 2], [2, 4, 1], [1, 4, 1]],
+    name: 'Ab Major',
+    barre: true
+  },
+  'A#': {
+    frets: [-1, 1, 3, 3, 3, 1],
+    fingers: [[5, 1, 1], [4, 3, 2], [3, 3, 3], [2, 3, 4], [1, 1, 1]],
+    name: 'A# Major',
+    barre: true
+  },
+  'Bb': {
+    frets: [-1, 1, 3, 3, 3, 1],
+    fingers: [[5, 1, 1], [4, 3, 2], [3, 3, 3], [2, 3, 4], [1, 1, 1]],
+    name: 'Bb Major',
+    barre: true
+  },
+
+  // ============================================
+  // SHARP/FLAT MINOR CHORDS
+  // ============================================
+  'C#m': {
+    frets: [-1, 4, 6, 6, 5, 4],
+    fingers: [[5, 4, 1], [4, 6, 3], [3, 6, 4], [2, 5, 2], [1, 4, 1]],
+    name: 'C# Minor',
+    barre: true
+  },
+  'Dbm': {
+    frets: [-1, 4, 6, 6, 5, 4],
+    fingers: [[5, 4, 1], [4, 6, 3], [3, 6, 4], [2, 5, 2], [1, 4, 1]],
+    name: 'Db Minor',
+    barre: true
+  },
+  'D#m': {
+    frets: [-1, 6, 8, 8, 7, 6],
+    fingers: [[5, 6, 1], [4, 8, 3], [3, 8, 4], [2, 7, 2], [1, 6, 1]],
+    name: 'D# Minor',
+    barre: true
+  },
+  'Ebm': {
+    frets: [-1, 6, 8, 8, 7, 6],
+    fingers: [[5, 6, 1], [4, 8, 3], [3, 8, 4], [2, 7, 2], [1, 6, 1]],
+    name: 'Eb Minor',
+    barre: true
+  },
+  'F#m': {
+    frets: [2, 4, 4, 2, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 3], [4, 4, 4], [3, 2, 1], [2, 2, 1], [1, 2, 1]],
+    name: 'F# Minor',
+    barre: true
+  },
+  'Gbm': {
+    frets: [2, 4, 4, 2, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 3], [4, 4, 4], [3, 2, 1], [2, 2, 1], [1, 2, 1]],
+    name: 'Gb Minor',
+    barre: true
+  },
+  'G#m': {
+    frets: [4, 6, 6, 4, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 3], [4, 6, 4], [3, 4, 1], [2, 4, 1], [1, 4, 1]],
+    name: 'G# Minor',
+    barre: true
+  },
+  'Abm': {
+    frets: [4, 6, 6, 4, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 3], [4, 6, 4], [3, 4, 1], [2, 4, 1], [1, 4, 1]],
+    name: 'Ab Minor',
+    barre: true
+  },
+  'A#m': {
+    frets: [-1, 1, 3, 3, 2, 1],
+    fingers: [[5, 1, 1], [4, 3, 3], [3, 3, 4], [2, 2, 2], [1, 1, 1]],
+    name: 'A# Minor',
+    barre: true
+  },
+  'Bbm': {
+    frets: [-1, 1, 3, 3, 2, 1],
+    fingers: [[5, 1, 1], [4, 3, 3], [3, 3, 4], [2, 2, 2], [1, 1, 1]],
+    name: 'Bb Minor',
+    barre: true
+  },
+
+  // ============================================
+  // POWER CHORDS (5th chords)
+  // ============================================
+  'C5': {
+    frets: [-1, 3, 5, 5, -1, -1],
+    fingers: [[5, 3, 1], [4, 5, 3], [3, 5, 4]],
+    name: 'C Power Chord'
+  },
+  'D5': {
+    frets: [-1, -1, 0, 2, 3, -1],
+    fingers: [[4, 0, 0], [3, 2, 1], [2, 3, 2]],
+    name: 'D Power Chord'
+  },
+  'E5': {
+    frets: [0, 2, 2, -1, -1, -1],
+    fingers: [[6, 0, 0], [5, 2, 1], [4, 2, 2]],
+    name: 'E Power Chord'
+  },
+  'F5': {
+    frets: [1, 3, 3, -1, -1, -1],
+    fingers: [[6, 1, 1], [5, 3, 3], [4, 3, 4]],
+    name: 'F Power Chord'
+  },
+  'G5': {
+    frets: [3, 5, 5, -1, -1, -1],
+    fingers: [[6, 3, 1], [5, 5, 3], [4, 5, 4]],
+    name: 'G Power Chord'
+  },
+  'A5': {
+    frets: [-1, 0, 2, 2, -1, -1],
+    fingers: [[5, 0, 0], [4, 2, 1], [3, 2, 2]],
+    name: 'A Power Chord'
+  },
+  'B5': {
+    frets: [-1, 2, 4, 4, -1, -1],
+    fingers: [[5, 2, 1], [4, 4, 3], [3, 4, 4]],
+    name: 'B Power Chord'
+  },
+  'F#5': {
+    frets: [2, 4, 4, -1, -1, -1],
+    fingers: [[6, 2, 1], [5, 4, 3], [4, 4, 4]],
+    name: 'F# Power Chord'
+  },
+  'Bb5': {
+    frets: [-1, 1, 3, 3, -1, -1],
+    fingers: [[5, 1, 1], [4, 3, 3], [3, 3, 4]],
+    name: 'Bb Power Chord'
+  },
+
+  // ============================================
+  // ADD9 CHORDS
+  // ============================================
+  'Cadd9': {
+    frets: [-1, 3, 2, 0, 3, 0],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 0, 0], [2, 3, 3], [1, 0, 0]],
+    name: 'C Add 9'
+  },
+  'Dadd9': {
+    frets: [-1, -1, 0, 2, 3, 0],
+    fingers: [[4, 0, 0], [3, 2, 1], [2, 3, 2], [1, 0, 0]],
+    name: 'D Add 9'
+  },
+  'Eadd9': {
+    frets: [0, 2, 2, 1, 0, 2],
+    fingers: [[6, 0, 0], [5, 2, 2], [4, 2, 3], [3, 1, 1], [2, 0, 0], [1, 2, 4]],
+    name: 'E Add 9'
+  },
+  'Gadd9': {
+    frets: [3, 2, 0, 2, 0, 3],
+    fingers: [[6, 3, 2], [5, 2, 1], [4, 0, 0], [3, 2, 3], [2, 0, 0], [1, 3, 4]],
+    name: 'G Add 9'
+  },
+  'Aadd9': {
+    frets: [-1, 0, 2, 2, 2, 2],
+    fingers: [[5, 0, 0], [4, 2, 1], [3, 2, 2], [2, 2, 3], [1, 2, 4]],
+    name: 'A Add 9'
+  },
+  'Fadd9': {
+    frets: [-1, -1, 3, 2, 1, 3],
+    fingers: [[4, 3, 3], [3, 2, 2], [2, 1, 1], [1, 3, 4]],
+    name: 'F Add 9'
+  },
+
+  // ============================================
+  // 6TH CHORDS
+  // ============================================
+  'C6': {
+    frets: [-1, 3, 2, 2, 1, 0],
+    fingers: [[5, 3, 4], [4, 2, 2], [3, 2, 3], [2, 1, 1], [1, 0, 0]],
+    name: 'C 6th'
+  },
+  'D6': {
+    frets: [-1, -1, 0, 2, 0, 2],
+    fingers: [[4, 0, 0], [3, 2, 1], [2, 0, 0], [1, 2, 2]],
+    name: 'D 6th'
+  },
+  'E6': {
+    frets: [0, 2, 2, 1, 2, 0],
+    fingers: [[6, 0, 0], [5, 2, 2], [4, 2, 3], [3, 1, 1], [2, 2, 4], [1, 0, 0]],
+    name: 'E 6th'
+  },
+  'G6': {
+    frets: [3, 2, 0, 0, 0, 0],
+    fingers: [[6, 3, 3], [5, 2, 2], [4, 0, 0], [3, 0, 0], [2, 0, 0], [1, 0, 0]],
+    name: 'G 6th'
+  },
+  'A6': {
+    frets: [-1, 0, 2, 2, 2, 2],
+    fingers: [[5, 0, 0], [4, 2, 1], [3, 2, 1], [2, 2, 1], [1, 2, 1]],
+    name: 'A 6th'
+  },
+  'Am6': {
+    frets: [-1, 0, 2, 2, 1, 2],
+    fingers: [[5, 0, 0], [4, 2, 2], [3, 2, 3], [2, 1, 1], [1, 2, 4]],
+    name: 'A Minor 6th'
+  },
+  'Em6': {
+    frets: [0, 2, 2, 0, 2, 0],
+    fingers: [[6, 0, 0], [5, 2, 1], [4, 2, 2], [3, 0, 0], [2, 2, 3], [1, 0, 0]],
+    name: 'E Minor 6th'
+  },
+  'Dm6': {
+    frets: [-1, -1, 0, 2, 0, 1],
+    fingers: [[4, 0, 0], [3, 2, 2], [2, 0, 0], [1, 1, 1]],
+    name: 'D Minor 6th'
+  },
+
+  // ============================================
+  // MORE SUS2 CHORDS
+  // ============================================
+  'Esus2': {
+    frets: [0, 2, 4, 4, 0, 0],
+    fingers: [[6, 0, 0], [5, 2, 1], [4, 4, 3], [3, 4, 4], [2, 0, 0], [1, 0, 0]],
+    name: 'E Suspended 2nd'
+  },
+  'Fsus2': {
+    frets: [-1, -1, 3, 0, 1, 1],
+    fingers: [[4, 3, 3], [3, 0, 0], [2, 1, 1], [1, 1, 2]],
+    name: 'F Suspended 2nd'
+  },
+  'Gsus2': {
+    frets: [3, 0, 0, 0, 3, 3],
+    fingers: [[6, 3, 2], [5, 0, 0], [4, 0, 0], [3, 0, 0], [2, 3, 3], [1, 3, 4]],
+    name: 'G Suspended 2nd'
+  },
+  'Bsus2': {
+    frets: [-1, 2, 4, 4, 2, 2],
+    fingers: [[5, 2, 1], [4, 4, 3], [3, 4, 4], [2, 2, 1], [1, 2, 1]],
+    name: 'B Suspended 2nd',
+    barre: true
+  },
+
+  // ============================================
+  // MORE SUS4 CHORDS
+  // ============================================
+  'Fsus4': {
+    frets: [1, 3, 3, 3, 1, 1],
+    fingers: [[6, 1, 1], [5, 3, 2], [4, 3, 3], [3, 3, 4], [2, 1, 1], [1, 1, 1]],
+    name: 'F Suspended 4th',
+    barre: true
+  },
+  'Gsus4': {
+    frets: [3, 5, 5, 5, 3, 3],
+    fingers: [[6, 3, 1], [5, 5, 2], [4, 5, 3], [3, 5, 4], [2, 3, 1], [1, 3, 1]],
+    name: 'G Suspended 4th',
+    barre: true
+  },
+  'Bsus4': {
+    frets: [-1, 2, 4, 4, 5, 2],
+    fingers: [[5, 2, 1], [4, 4, 2], [3, 4, 3], [2, 5, 4], [1, 2, 1]],
+    name: 'B Suspended 4th',
+    barre: true
+  },
+
+  // ============================================
+  // DIMINISHED 7TH CHORDS
+  // ============================================
+  'Cdim7': {
+    frets: [-1, 3, 4, 2, 4, 2],
+    fingers: [[5, 3, 2], [4, 4, 3], [3, 2, 1], [2, 4, 4], [1, 2, 1]],
+    name: 'C Diminished 7th'
+  },
+  'Ddim7': {
+    frets: [-1, -1, 0, 1, 0, 1],
+    fingers: [[4, 0, 0], [3, 1, 1], [2, 0, 0], [1, 1, 2]],
+    name: 'D Diminished 7th'
+  },
+  'Edim7': {
+    frets: [0, 1, 2, 0, 2, 0],
+    fingers: [[6, 0, 0], [5, 1, 1], [4, 2, 2], [3, 0, 0], [2, 2, 3], [1, 0, 0]],
+    name: 'E Diminished 7th'
+  },
+  'Fdim7': {
+    frets: [1, 2, 3, 1, 3, 1],
+    fingers: [[6, 1, 1], [5, 2, 2], [4, 3, 3], [3, 1, 1], [2, 3, 4], [1, 1, 1]],
+    name: 'F Diminished 7th',
+    barre: true
+  },
+  'Gdim7': {
+    frets: [3, 4, 5, 3, 5, 3],
+    fingers: [[6, 3, 1], [5, 4, 2], [4, 5, 3], [3, 3, 1], [2, 5, 4], [1, 3, 1]],
+    name: 'G Diminished 7th',
+    barre: true
+  },
+  'Adim7': {
+    frets: [-1, 0, 1, 2, 1, 2],
+    fingers: [[5, 0, 0], [4, 1, 1], [3, 2, 2], [2, 1, 1], [1, 2, 3]],
+    name: 'A Diminished 7th'
+  },
+  'Bdim7': {
+    frets: [-1, 2, 3, 1, 3, 1],
+    fingers: [[5, 2, 2], [4, 3, 3], [3, 1, 1], [2, 3, 4], [1, 1, 1]],
+    name: 'B Diminished 7th'
+  },
+
+  // ============================================
+  // HALF-DIMINISHED (m7b5) CHORDS
+  // ============================================
+  'Cm7b5': {
+    frets: [-1, 3, 4, 3, 4, -1],
+    fingers: [[5, 3, 1], [4, 4, 2], [3, 3, 1], [2, 4, 3]],
+    name: 'C Half-Diminished'
+  },
+  'Dm7b5': {
+    frets: [-1, -1, 0, 1, 1, 1],
+    fingers: [[4, 0, 0], [3, 1, 1], [2, 1, 1], [1, 1, 1]],
+    name: 'D Half-Diminished',
+    barre: true
+  },
+  'Em7b5': {
+    frets: [0, 1, 2, 0, 3, 0],
+    fingers: [[6, 0, 0], [5, 1, 1], [4, 2, 2], [3, 0, 0], [2, 3, 3], [1, 0, 0]],
+    name: 'E Half-Diminished'
+  },
+  'Fm7b5': {
+    frets: [1, 2, 3, 1, 4, 1],
+    fingers: [[6, 1, 1], [5, 2, 2], [4, 3, 3], [3, 1, 1], [2, 4, 4], [1, 1, 1]],
+    name: 'F Half-Diminished',
+    barre: true
+  },
+  'Gm7b5': {
+    frets: [3, 4, 3, 3, -1, -1],
+    fingers: [[6, 3, 1], [5, 4, 3], [4, 3, 2], [3, 3, 1]],
+    name: 'G Half-Diminished'
+  },
+  'Am7b5': {
+    frets: [-1, 0, 1, 0, 1, 0],
+    fingers: [[5, 0, 0], [4, 1, 1], [3, 0, 0], [2, 1, 2], [1, 0, 0]],
+    name: 'A Half-Diminished'
+  },
+  'Bm7b5': {
+    frets: [-1, 2, 3, 2, 3, -1],
+    fingers: [[5, 2, 1], [4, 3, 2], [3, 2, 1], [2, 3, 3]],
+    name: 'B Half-Diminished'
+  },
+
+  // ============================================
+  // MINOR 9TH CHORDS
+  // ============================================
+  'Am9': {
+    frets: [-1, 0, 2, 4, 1, 0],
+    fingers: [[5, 0, 0], [4, 2, 2], [3, 4, 4], [2, 1, 1], [1, 0, 0]],
+    name: 'A Minor 9th'
+  },
+  'Dm9': {
+    frets: [-1, -1, 0, 2, 1, 0],
+    fingers: [[4, 0, 0], [3, 2, 2], [2, 1, 1], [1, 0, 0]],
+    name: 'D Minor 9th'
+  },
+  'Em9': {
+    frets: [0, 2, 0, 0, 0, 2],
+    fingers: [[6, 0, 0], [5, 2, 1], [4, 0, 0], [3, 0, 0], [2, 0, 0], [1, 2, 2]],
+    name: 'E Minor 9th'
+  },
+  'Bm9': {
+    frets: [-1, 2, 0, 2, 2, 2],
+    fingers: [[5, 2, 1], [4, 0, 0], [3, 2, 2], [2, 2, 3], [1, 2, 4]],
+    name: 'B Minor 9th'
+  },
+
+  // ============================================
+  // MINOR MAJOR 7TH CHORDS
+  // ============================================
+  'CmMaj7': {
+    frets: [-1, 3, 5, 4, 4, 3],
+    fingers: [[5, 3, 1], [4, 5, 4], [3, 4, 2], [2, 4, 3], [1, 3, 1]],
+    name: 'C Minor Major 7th',
+    barre: true
+  },
+  'AmMaj7': {
+    frets: [-1, 0, 2, 1, 1, 0],
+    fingers: [[5, 0, 0], [4, 2, 3], [3, 1, 1], [2, 1, 2], [1, 0, 0]],
+    name: 'A Minor Major 7th'
+  },
+  'EmMaj7': {
+    frets: [0, 2, 1, 0, 0, 0],
+    fingers: [[6, 0, 0], [5, 2, 2], [4, 1, 1], [3, 0, 0], [2, 0, 0], [1, 0, 0]],
+    name: 'E Minor Major 7th'
+  },
+  'DmMaj7': {
+    frets: [-1, -1, 0, 2, 2, 1],
+    fingers: [[4, 0, 0], [3, 2, 2], [2, 2, 3], [1, 1, 1]],
+    name: 'D Minor Major 7th'
+  },
+
+  // ============================================
+  // 11TH CHORDS
+  // ============================================
+  'C11': {
+    frets: [-1, 3, 3, 3, 3, 3],
+    fingers: [[5, 3, 1], [4, 3, 1], [3, 3, 1], [2, 3, 1], [1, 3, 1]],
+    name: 'C 11th',
+    barre: true
+  },
+  'G11': {
+    frets: [3, 3, 0, 0, 1, 1],
+    fingers: [[6, 3, 3], [5, 3, 4], [4, 0, 0], [3, 0, 0], [2, 1, 1], [1, 1, 2]],
+    name: 'G 11th'
+  },
+  'D11': {
+    frets: [-1, -1, 0, 0, 1, 0],
+    fingers: [[4, 0, 0], [3, 0, 0], [2, 1, 1], [1, 0, 0]],
+    name: 'D 11th'
+  },
+  'A11': {
+    frets: [-1, 0, 0, 0, 0, 0],
+    fingers: [],
+    name: 'A 11th'
+  },
+  'E11': {
+    frets: [0, 0, 0, 1, 0, 0],
+    fingers: [[6, 0, 0], [5, 0, 0], [4, 0, 0], [3, 1, 1], [2, 0, 0], [1, 0, 0]],
+    name: 'E 11th'
+  },
+
+  // ============================================
+  // 13TH CHORDS
+  // ============================================
+  'C13': {
+    frets: [-1, 3, 2, 3, 3, 5],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 3, 3], [2, 3, 3], [1, 5, 4]],
+    name: 'C 13th'
+  },
+  'G13': {
+    frets: [3, 2, 0, 0, 0, 0],
+    fingers: [[6, 3, 3], [5, 2, 2], [4, 0, 0], [3, 0, 0], [2, 0, 0], [1, 0, 0]],
+    name: 'G 13th'
+  },
+  'A13': {
+    frets: [-1, 0, 2, 0, 2, 2],
+    fingers: [[5, 0, 0], [4, 2, 1], [3, 0, 0], [2, 2, 2], [1, 2, 3]],
+    name: 'A 13th'
+  },
+  'D13': {
+    frets: [-1, -1, 0, 2, 1, 2],
+    fingers: [[4, 0, 0], [3, 2, 2], [2, 1, 1], [1, 2, 3]],
+    name: 'D 13th'
+  },
+  'E13': {
+    frets: [0, 2, 0, 1, 2, 0],
+    fingers: [[6, 0, 0], [5, 2, 2], [4, 0, 0], [3, 1, 1], [2, 2, 3], [1, 0, 0]],
+    name: 'E 13th'
+  },
+
+  // ============================================
+  // COMMON SLASH CHORDS
+  // ============================================
+  'C/G': {
+    frets: [3, 3, 2, 0, 1, 0],
+    fingers: [[6, 3, 3], [5, 3, 4], [4, 2, 2], [3, 0, 0], [2, 1, 1], [1, 0, 0]],
+    name: 'C/G (C with G bass)'
+  },
+  'C/E': {
+    frets: [0, 3, 2, 0, 1, 0],
+    fingers: [[6, 0, 0], [5, 3, 4], [4, 2, 3], [3, 0, 0], [2, 1, 1], [1, 0, 0]],
+    name: 'C/E (C with E bass)'
+  },
+  'D/F#': {
+    frets: [2, -1, 0, 2, 3, 2],
+    fingers: [[6, 2, 1], [4, 0, 0], [3, 2, 2], [2, 3, 4], [1, 2, 3]],
+    name: 'D/F# (D with F# bass)'
+  },
+  'G/B': {
+    frets: [-1, 2, 0, 0, 0, 3],
+    fingers: [[5, 2, 1], [4, 0, 0], [3, 0, 0], [2, 0, 0], [1, 3, 2]],
+    name: 'G/B (G with B bass)'
+  },
+  'G/D': {
+    frets: [-1, -1, 0, 0, 0, 3],
+    fingers: [[4, 0, 0], [3, 0, 0], [2, 0, 0], [1, 3, 1]],
+    name: 'G/D (G with D bass)'
+  },
+  'Am/G': {
+    frets: [3, 0, 2, 2, 1, 0],
+    fingers: [[6, 3, 4], [5, 0, 0], [4, 2, 2], [3, 2, 3], [2, 1, 1], [1, 0, 0]],
+    name: 'Am/G (Am with G bass)'
+  },
+  'Am/E': {
+    frets: [0, 0, 2, 2, 1, 0],
+    fingers: [[6, 0, 0], [5, 0, 0], [4, 2, 2], [3, 2, 3], [2, 1, 1], [1, 0, 0]],
+    name: 'Am/E (Am with E bass)'
+  },
+  'Em/D': {
+    frets: [-1, -1, 0, 0, 0, 0],
+    fingers: [],
+    name: 'Em/D (Em with D bass)'
+  },
+  'F/C': {
+    frets: [-1, 3, 3, 2, 1, 1],
+    fingers: [[5, 3, 3], [4, 3, 4], [3, 2, 2], [2, 1, 1], [1, 1, 1]],
+    name: 'F/C (F with C bass)',
+    barre: true
+  },
+
+  // ============================================
+  // MORE AUGMENTED CHORDS
+  // ============================================
+  'Faug': {
+    frets: [-1, -1, 3, 2, 2, 1],
+    fingers: [[4, 3, 4], [3, 2, 2], [2, 2, 3], [1, 1, 1]],
+    name: 'F Augmented'
+  },
+  'Gaug': {
+    frets: [3, 2, 1, 0, 0, 3],
+    fingers: [[6, 3, 4], [5, 2, 3], [4, 1, 2], [3, 0, 0], [2, 0, 0], [1, 3, 4]],
+    name: 'G Augmented'
+  },
+  'Aaug': {
+    frets: [-1, 0, 3, 2, 2, 1],
+    fingers: [[5, 0, 0], [4, 3, 4], [3, 2, 2], [2, 2, 3], [1, 1, 1]],
+    name: 'A Augmented'
+  },
+  'Baug': {
+    frets: [-1, 2, 1, 0, 0, 3],
+    fingers: [[5, 2, 2], [4, 1, 1], [3, 0, 0], [2, 0, 0], [1, 3, 4]],
+    name: 'B Augmented'
+  },
+
+  // ============================================
+  // MORE DIMINISHED CHORDS
+  // ============================================
+  'Fdim': {
+    frets: [-1, -1, 3, 1, 0, 1],
+    fingers: [[4, 3, 4], [3, 1, 1], [2, 0, 0], [1, 1, 2]],
+    name: 'F Diminished'
+  },
+  'Gdim': {
+    frets: [-1, -1, 5, 3, 2, 3],
+    fingers: [[4, 5, 4], [3, 3, 2], [2, 2, 1], [1, 3, 3]],
+    name: 'G Diminished'
+  },
+  'Adim': {
+    frets: [-1, 0, 1, 2, 1, -1],
+    fingers: [[5, 0, 0], [4, 1, 1], [3, 2, 3], [2, 1, 2]],
+    name: 'A Diminished'
+  },
+  'Bdim': {
+    frets: [-1, 2, 3, 4, 3, -1],
+    fingers: [[5, 2, 1], [4, 3, 2], [3, 4, 4], [2, 3, 3]],
+    name: 'B Diminished'
+  },
+
+  // ============================================
+  // SHARP/FLAT 7TH CHORDS
+  // ============================================
+  'F#7': {
+    frets: [2, 4, 2, 3, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 4], [4, 2, 1], [3, 3, 2], [2, 2, 1], [1, 2, 1]],
+    name: 'F# Dominant 7th',
+    barre: true
+  },
+  'Bb7': {
+    frets: [-1, 1, 3, 1, 3, 1],
+    fingers: [[5, 1, 1], [4, 3, 3], [3, 1, 1], [2, 3, 4], [1, 1, 1]],
+    name: 'Bb Dominant 7th',
+    barre: true
+  },
+  'Eb7': {
+    frets: [-1, -1, 1, 3, 2, 3],
+    fingers: [[4, 1, 1], [3, 3, 3], [2, 2, 2], [1, 3, 4]],
+    name: 'Eb Dominant 7th'
+  },
+  'Ab7': {
+    frets: [4, 6, 4, 5, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 4], [4, 4, 1], [3, 5, 2], [2, 4, 1], [1, 4, 1]],
+    name: 'Ab Dominant 7th',
+    barre: true
+  },
+  'C#7': {
+    frets: [-1, 4, 6, 4, 6, 4],
+    fingers: [[5, 4, 1], [4, 6, 2], [3, 4, 1], [2, 6, 3], [1, 4, 1]],
+    name: 'C# Dominant 7th',
+    barre: true
+  },
+
+  // ============================================
+  // SHARP/FLAT MINOR 7TH CHORDS
+  // ============================================
+  'F#m7': {
+    frets: [2, 4, 2, 2, 2, 2],
+    fingers: [[6, 2, 1], [5, 4, 4], [4, 2, 1], [3, 2, 1], [2, 2, 1], [1, 2, 1]],
+    name: 'F# Minor 7th',
+    barre: true
+  },
+  'C#m7': {
+    frets: [-1, 4, 6, 4, 5, 4],
+    fingers: [[5, 4, 1], [4, 6, 3], [3, 4, 1], [2, 5, 2], [1, 4, 1]],
+    name: 'C# Minor 7th',
+    barre: true
+  },
+  'Bbm7': {
+    frets: [-1, 1, 3, 1, 2, 1],
+    fingers: [[5, 1, 1], [4, 3, 4], [3, 1, 1], [2, 2, 2], [1, 1, 1]],
+    name: 'Bb Minor 7th',
+    barre: true
+  },
+  'Ebm7': {
+    frets: [-1, -1, 1, 3, 2, 2],
+    fingers: [[4, 1, 1], [3, 3, 4], [2, 2, 2], [1, 2, 3]],
+    name: 'Eb Minor 7th'
+  },
+  'Abm7': {
+    frets: [4, 6, 4, 4, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 4], [4, 4, 1], [3, 4, 1], [2, 4, 1], [1, 4, 1]],
+    name: 'Ab Minor 7th',
+    barre: true
+  },
+  'G#m7': {
+    frets: [4, 6, 4, 4, 4, 4],
+    fingers: [[6, 4, 1], [5, 6, 4], [4, 4, 1], [3, 4, 1], [2, 4, 1], [1, 4, 1]],
+    name: 'G# Minor 7th',
+    barre: true
   }
 };
 
@@ -414,14 +1076,24 @@ const PROGRESSIONS_DATABASE = [
 // CHORD DIFFICULTY RATINGS
 // ============================================
 const CHORD_DIFFICULTY = {
-  // Beginner - Open chords, no barre
+  // ============================================
+  // BEGINNER - Open chords, simple fingerings
+  // ============================================
   'C': 'beginner', 'G': 'beginner', 'D': 'beginner', 'A': 'beginner', 'E': 'beginner',
   'Am': 'beginner', 'Em': 'beginner', 'Dm': 'beginner',
   'A7': 'beginner', 'D7': 'beginner', 'E7': 'beginner', 'G7': 'beginner',
   'Asus2': 'beginner', 'Asus4': 'beginner', 'Dsus2': 'beginner', 'Dsus4': 'beginner',
   'Em7': 'beginner', 'Am7': 'beginner',
+  // Power chords (easy 2-3 finger shapes)
+  'E5': 'beginner', 'A5': 'beginner', 'D5': 'beginner',
+  // Simple add9
+  'Cadd9': 'beginner', 'Gadd9': 'beginner', 'Dadd9': 'beginner',
+  // Simple 6th
+  'G6': 'beginner',
 
-  // Intermediate - Some barre chords, extended chords
+  // ============================================
+  // INTERMEDIATE - Barre chords, extended chords
+  // ============================================
   'F': 'intermediate', 'B': 'intermediate', 'Bm': 'intermediate',
   'C7': 'intermediate', 'B7': 'intermediate', 'F7': 'intermediate',
   'Cmaj7': 'intermediate', 'Dmaj7': 'intermediate', 'Emaj7': 'intermediate',
@@ -430,12 +1102,69 @@ const CHORD_DIFFICULTY = {
   'Csus2': 'intermediate', 'Csus4': 'intermediate', 'Esus4': 'intermediate',
   'Caug': 'intermediate', 'Daug': 'intermediate', 'Eaug': 'intermediate',
   'Ddim': 'intermediate', 'Edim': 'intermediate',
+  // Sharp/flat majors
+  'Bb': 'intermediate', 'A#': 'intermediate',
+  'F#': 'intermediate', 'Gb': 'intermediate',
+  // Power chords (barre position)
+  'G5': 'intermediate', 'F5': 'intermediate', 'C5': 'intermediate', 'B5': 'intermediate',
+  'F#5': 'intermediate', 'Bb5': 'intermediate',
+  // More sus chords
+  'Gsus2': 'intermediate', 'Esus2': 'intermediate', 'Fsus2': 'intermediate',
+  'Fsus4': 'intermediate', 'Gsus4': 'intermediate', 'Bsus4': 'intermediate', 'Bsus2': 'intermediate',
+  // 6th chords
+  'C6': 'intermediate', 'D6': 'intermediate', 'E6': 'intermediate', 'A6': 'intermediate',
+  'Am6': 'intermediate', 'Em6': 'intermediate', 'Dm6': 'intermediate',
+  // Add9
+  'Eadd9': 'intermediate', 'Aadd9': 'intermediate', 'Fadd9': 'intermediate',
+  // Slash chords (common)
+  'C/G': 'intermediate', 'C/E': 'intermediate', 'G/B': 'intermediate', 'G/D': 'intermediate',
+  'D/F#': 'intermediate', 'Am/E': 'intermediate', 'Am/G': 'intermediate',
+  // Sharp/flat minors (barre)
+  'F#m': 'intermediate', 'Gbm': 'intermediate',
+  'Bbm': 'intermediate', 'A#m': 'intermediate',
+  // Common 7th variations
+  'F#7': 'intermediate', 'Bb7': 'intermediate',
 
-  // Advanced - Complex barre, jazz chords
+  // ============================================
+  // ADVANCED - Complex barre, jazz chords
+  // ============================================
   'Cm': 'advanced', 'Fm': 'advanced', 'Gm': 'advanced',
   'Bmaj7': 'advanced', 'Cm7': 'advanced', 'Fm7': 'advanced', 'Gm7': 'advanced',
   'Cdim': 'advanced',
-  'C9': 'advanced', 'D9': 'advanced', 'E9': 'advanced', 'G9': 'advanced', 'A9': 'advanced'
+  'C9': 'advanced', 'D9': 'advanced', 'E9': 'advanced', 'G9': 'advanced', 'A9': 'advanced',
+  // Sharp/flat major (higher positions)
+  'C#': 'advanced', 'Db': 'advanced',
+  'D#': 'advanced', 'Eb': 'advanced',
+  'G#': 'advanced', 'Ab': 'advanced',
+  // Sharp/flat minors (higher positions)
+  'C#m': 'advanced', 'Dbm': 'advanced',
+  'D#m': 'advanced', 'Ebm': 'advanced',
+  'G#m': 'advanced', 'Abm': 'advanced',
+  // Diminished 7th
+  'Cdim7': 'advanced', 'Ddim7': 'advanced', 'Edim7': 'advanced', 'Fdim7': 'advanced',
+  'Gdim7': 'advanced', 'Adim7': 'advanced', 'Bdim7': 'advanced',
+  // Half-diminished (m7b5)
+  'Cm7b5': 'advanced', 'Dm7b5': 'advanced', 'Em7b5': 'advanced', 'Fm7b5': 'advanced',
+  'Gm7b5': 'advanced', 'Am7b5': 'advanced', 'Bm7b5': 'advanced',
+  // Minor 9th
+  'Am9': 'advanced', 'Dm9': 'advanced', 'Em9': 'advanced', 'Bm9': 'advanced',
+  // Minor Major 7th
+  'CmMaj7': 'advanced', 'AmMaj7': 'advanced', 'EmMaj7': 'advanced', 'DmMaj7': 'advanced',
+  // 11th chords
+  'C11': 'advanced', 'G11': 'advanced', 'D11': 'advanced', 'A11': 'advanced', 'E11': 'advanced',
+  // 13th chords
+  'C13': 'advanced', 'G13': 'advanced', 'A13': 'advanced', 'D13': 'advanced', 'E13': 'advanced',
+  // More augmented
+  'Faug': 'advanced', 'Gaug': 'advanced', 'Aaug': 'advanced', 'Baug': 'advanced',
+  // More diminished
+  'Fdim': 'advanced', 'Gdim': 'advanced', 'Adim': 'advanced', 'Bdim': 'advanced',
+  // Slash chords (barre)
+  'Em/D': 'advanced', 'F/C': 'advanced',
+  // Sharp/flat 7ths
+  'Eb7': 'advanced', 'Ab7': 'advanced', 'C#7': 'advanced',
+  // Sharp/flat minor 7ths
+  'F#m7': 'advanced', 'C#m7': 'advanced', 'Bbm7': 'advanced', 'Ebm7': 'advanced',
+  'Abm7': 'advanced', 'G#m7': 'advanced'
 };
 
 // Global state
@@ -590,25 +1319,186 @@ function setupSearchAutocomplete() {
   if (!searchInput) return;
 
   const allChords = Object.keys(CHORD_DATABASE);
+  let selectedIndex = -1;
+  let currentMatches = [];
 
-  // Use debounce from ToolUtils if available
-  const debouncedSearch = typeof ToolUtils !== 'undefined'
-    ? ToolUtils.debounce(function (query) {
-        if (query.length > 0) {
-          const matches = allChords.filter(c => c.toLowerCase().startsWith(query.toLowerCase()));
-          // Could implement dropdown here
-        }
-      }, 150)
-    : function () {};
+  // Create autocomplete dropdown
+  const dropdown = document.createElement('div');
+  dropdown.className = 'chord-autocomplete';
+  dropdown.id = 'chordAutocomplete';
+  searchInput.parentElement.appendChild(dropdown);
 
+  // Get difficulty for a chord
+  function getDifficulty(chordName) {
+    return CHORD_DIFFICULTY[chordName] || 'intermediate';
+  }
+
+  // Render autocomplete items
+  function renderAutocomplete(matches) {
+    currentMatches = matches;
+    selectedIndex = -1;
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = '<div class="chord-autocomplete-empty">No matching chords found</div>';
+      dropdown.classList.add('active');
+      return;
+    }
+
+    // Limit to 10 results for performance
+    const displayMatches = matches.slice(0, 10);
+
+    let html = displayMatches.map((chord, index) => {
+      const chordData = CHORD_DATABASE[chord];
+      const difficulty = getDifficulty(chord);
+      return `
+        <div class="chord-autocomplete-item" data-chord="${chord}" data-index="${index}">
+          <div>
+            <span class="chord-name">${chord}</span>
+            <span class="chord-full-name">${chordData.name}</span>
+          </div>
+          <div class="chord-meta">
+            <span class="chord-difficulty ${difficulty}">${difficulty}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (matches.length > 10) {
+      html += `<div class="chord-autocomplete-hint">Showing 10 of ${matches.length} matches. Type more to refine...</div>`;
+    } else {
+      html += `<div class="chord-autocomplete-hint">↑↓ Navigate • Enter Select • Esc Close</div>`;
+    }
+
+    dropdown.innerHTML = html;
+    dropdown.classList.add('active');
+
+    // Add click handlers
+    dropdown.querySelectorAll('.chord-autocomplete-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const chord = item.dataset.chord;
+        searchInput.value = chord;
+        hideAutocomplete();
+        displayChord(chord);
+      });
+    });
+  }
+
+  // Hide autocomplete
+  function hideAutocomplete() {
+    dropdown.classList.remove('active');
+    selectedIndex = -1;
+    currentMatches = [];
+  }
+
+  // Update selection highlight
+  function updateSelection() {
+    dropdown.querySelectorAll('.chord-autocomplete-item').forEach((item, idx) => {
+      item.classList.toggle('selected', idx === selectedIndex);
+    });
+
+    // Scroll into view
+    const selectedItem = dropdown.querySelector('.chord-autocomplete-item.selected');
+    if (selectedItem) {
+      selectedItem.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  // Debounced search function
+  const debouncedSearch = function (query) {
+    if (query.length === 0) {
+      hideAutocomplete();
+      return;
+    }
+
+    // Smart matching: start with exact prefix, then contains
+    const queryLower = query.toLowerCase();
+    const exactMatches = allChords.filter(c => c.toLowerCase().startsWith(queryLower));
+    const containsMatches = allChords.filter(c =>
+      !c.toLowerCase().startsWith(queryLower) && c.toLowerCase().includes(queryLower)
+    );
+
+    const matches = [...exactMatches, ...containsMatches];
+    renderAutocomplete(matches);
+  };
+
+  // Debounce wrapper
+  let debounceTimer;
+  const debounce = (fn, delay) => {
+    return (...args) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const debouncedHandler = debounce(debouncedSearch, 100);
+
+  // Input event
   searchInput.addEventListener('input', function () {
     const query = this.value.trim();
-    debouncedSearch(query);
+    debouncedHandler(query);
   });
 
-  searchInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      searchChord();
+  // Keyboard navigation
+  searchInput.addEventListener('keydown', function (e) {
+    if (!dropdown.classList.contains('active')) {
+      if (e.key === 'Enter') {
+        searchChord();
+      }
+      return;
+    }
+
+    const items = dropdown.querySelectorAll('.chord-autocomplete-item');
+    const maxIndex = items.length - 1;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, maxIndex);
+        updateSelection();
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && currentMatches[selectedIndex]) {
+          searchInput.value = currentMatches[selectedIndex];
+          hideAutocomplete();
+          displayChord(currentMatches[selectedIndex]);
+        } else if (currentMatches.length > 0) {
+          // Select first match if nothing selected
+          searchInput.value = currentMatches[0];
+          hideAutocomplete();
+          displayChord(currentMatches[0]);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        hideAutocomplete();
+        break;
+      case 'Tab':
+        if (currentMatches.length > 0) {
+          e.preventDefault();
+          searchInput.value = currentMatches[selectedIndex >= 0 ? selectedIndex : 0];
+          hideAutocomplete();
+        }
+        break;
+    }
+  });
+
+  // Click outside to close
+  document.addEventListener('click', function (e) {
+    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+      hideAutocomplete();
+    }
+  });
+
+  // Focus to show suggestions if there's text
+  searchInput.addEventListener('focus', function () {
+    if (this.value.trim().length > 0) {
+      debouncedSearch(this.value.trim());
     }
   });
 }
@@ -634,10 +1524,16 @@ function populateChordTypes() {
   const types = [
     { name: 'Major', type: 'major' },
     { name: 'Minor', type: 'minor' },
+    { name: 'Power', type: 'power' },
     { name: '7th', type: '7th' },
+    { name: 'Maj7', type: 'maj7' },
+    { name: 'm7', type: 'm7' },
     { name: 'Sus', type: 'sus' },
+    { name: 'Add9', type: 'add9' },
     { name: 'Dim', type: 'dim' },
-    { name: 'Aug', type: 'aug' }
+    { name: 'Aug', type: 'aug' },
+    { name: '9th', type: '9th' },
+    { name: 'Slash', type: 'slash' }
   ];
 
   const container = document.getElementById('chordTypes');
@@ -664,12 +1560,18 @@ function filterAndDisplay(type) {
 function filterChordsByType(type) {
   return Object.keys(CHORD_DATABASE).filter(chord => {
     switch (type) {
-      case 'major': return /^[A-G]$/.test(chord);
-      case 'minor': return chord.endsWith('m') && !chord.includes('7');
-      case '7th': return chord.includes('7');
-      case 'sus': return chord.includes('sus');
-      case 'dim': return chord.includes('dim');
-      case 'aug': return chord.includes('aug');
+      case 'major': return /^[A-G][b#]?$/.test(chord); // C, D#, Bb, etc.
+      case 'minor': return /^[A-G][b#]?m$/.test(chord); // Am, F#m, Bbm (not m7, mMaj7)
+      case 'power': return chord.endsWith('5'); // C5, G5, etc.
+      case '7th': return /^[A-G][b#]?7$/.test(chord); // C7, F#7 (dominant 7th only)
+      case 'maj7': return chord.includes('maj7'); // Cmaj7, Dmaj7
+      case 'm7': return /m7$/.test(chord) && !chord.includes('dim') && !chord.includes('Maj'); // Am7, Fm7
+      case 'sus': return chord.includes('sus'); // Csus2, Dsus4
+      case 'add9': return chord.includes('add9'); // Cadd9, Gadd9
+      case 'dim': return chord.includes('dim'); // Cdim, Cdim7
+      case 'aug': return chord.includes('aug'); // Caug, Daug
+      case '9th': return /^[A-G][b#]?9$/.test(chord) || chord.includes('m9'); // C9, Am9
+      case 'slash': return chord.includes('/'); // C/G, D/F#
       default: return true;
     }
   });
@@ -884,15 +1786,24 @@ function drawFretboardForElement(chordData, elementId) {
   const numStrings = 6;
   const numFrets = 5;
 
+  // Helper function to calculate X position based on handedness (consistent with main fretboard)
+  const getStringX = (stringIndex) => {
+    if (leftHandedMode) {
+      return startX + (numStrings - 1 - stringIndex) * stringSpacing;
+    } else {
+      return startX + stringIndex * stringSpacing;
+    }
+  };
+
   // Draw strings (vertical lines)
-  // Standard orientation: Low E (index 0) on left, High E (index 5) on right
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = getStringX(i);
     const line = createSVGElement('line', {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
       stroke: '#333',
-      'stroke-width': i === 0 || i === numStrings - 1 ? 2 : 1.5
+      'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2), // Realistic string thickness
+      'class': `guitar-string string-${i}`
     });
     svg.appendChild(line);
   }
@@ -910,9 +1821,8 @@ function drawFretboardForElement(chordData, elementId) {
   }
 
   // Draw open/muted indicators
-  // Standard orientation: Low E (index 0) on left
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = getStringX(i);
     const fret = chordData.frets[i];
 
     if (fret === 0) {
@@ -941,10 +1851,11 @@ function drawFretboardForElement(chordData, elementId) {
 
   // Draw finger positions
   // Note: In fingers array, string is numbered 1-6 from High E to Low E
-  // For standard orientation (Low E left, High E right), convert to frets index
   chordData.fingers.forEach(([string, fret, finger]) => {
     if (fret > 0 && fret <= numFrets) {
-      const x = startX + (numStrings - string) * stringSpacing;
+      // Standard: Low E on left, so High E (string 1) at rightmost position
+      // Left-handed: flipped, High E (string 1) at leftmost position
+      const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
       const y = startY + fret * fretSpacing - fretSpacing / 2;
 
       // Finger circle
@@ -996,6 +1907,23 @@ function updateFingerPositionsForElement(chordData, elementId) {
 window.playSpecificChord = function (chordName) {
   const tempChord = currentChord;
   currentChord = chordName;
+
+  // Check if we're in multi-chord mode and animate that specific card
+  const multiChordSvgId = `fretboard-${chordName}`;
+  const multiChordSvg = document.getElementById(multiChordSvgId);
+
+  if (multiChordSvg && CHORD_DATABASE[chordName]) {
+    // Animate the specific multi-chord card
+    vibrateChordStrings(CHORD_DATABASE[chordName], multiChordSvgId);
+
+    // Add visual highlight to the card
+    const card = multiChordSvg.closest('.multi-chord-card');
+    if (card) {
+      card.classList.add('playing');
+      setTimeout(() => card.classList.remove('playing'), 800);
+    }
+  }
+
   playChord();
   currentChord = tempChord;
 };
@@ -1050,7 +1978,9 @@ function drawFretboard(chordData) {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
       stroke: '#333',
-      'stroke-width': i === 0 || i === numStrings - 1 ? 2 : 1.5
+      'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2), // Realistic string thickness
+      'class': `guitar-string string-${i}`,
+      'id': `string-${i}`
     });
     svg.appendChild(line);
   }
@@ -1306,6 +2236,58 @@ window.playChord = function () {
   }
 };
 
+// Trigger string vibration animation
+// svgId is optional - if provided, animates strings in that specific SVG (for multi-chord mode)
+function vibrateString(stringIndex, delay = 0, svgId = null) {
+  setTimeout(() => {
+    let string;
+    if (svgId) {
+      // Multi-chord mode: find string within specific SVG
+      const svg = document.getElementById(svgId);
+      if (svg) {
+        string = svg.querySelector(`.string-${stringIndex}`);
+      }
+    } else {
+      // Single chord mode: use main fretboard
+      string = document.getElementById(`string-${stringIndex}`);
+    }
+
+    if (string) {
+      // Remove class first to allow re-triggering
+      string.classList.remove('vibrating');
+      // Force reflow to restart animation
+      void string.offsetWidth;
+      string.classList.add('vibrating');
+
+      // Remove class after animation completes
+      setTimeout(() => {
+        string.classList.remove('vibrating');
+      }, 800);
+    }
+  }, delay);
+}
+
+// Vibrate all played strings in a chord
+function vibrateChordStrings(chordData, svgId = null) {
+  const strumDelay = arpeggioMode ? 0.4 : 0.05;
+  chordData.frets.forEach((fret, index) => {
+    if (fret >= 0) { // Not muted
+      vibrateString(index, index * strumDelay * 1000, svgId);
+    }
+  });
+}
+
+// Add pulse effect to play button
+function pulsePlayButton() {
+  const playBtn = document.querySelector('.play-btn');
+  if (playBtn) {
+    playBtn.classList.remove('playing');
+    void playBtn.offsetWidth;
+    playBtn.classList.add('playing');
+    setTimeout(() => playBtn.classList.remove('playing'), 500);
+  }
+}
+
 // Separate function to play the actual notes
 function playChordNotes(chordData) {
   const now = audioContext.currentTime;
@@ -1315,6 +2297,9 @@ function playChordNotes(chordData) {
 
   console.log('Playing chord:', currentChord, arpeggioMode ? '(arpeggio)' : '(strum)');
 
+  // Pulse the play button
+  pulsePlayButton();
+
   chordData.frets.forEach((fret, index) => {
     if (fret >= 0) { // Not muted
       const stringNumber = index + 1;
@@ -1323,6 +2308,9 @@ function playChordNotes(chordData) {
 
       console.log(`String ${stringNumber}: fret ${fret}, frequency ${frequency}Hz`);
       playNote(frequency, now + index * strumDelay, noteDuration);
+
+      // Trigger string vibration animation with matching delay
+      vibrateString(index, index * strumDelay * 1000);
     }
   });
 }
@@ -1804,10 +2792,15 @@ window.toggleLeftHandedMode = function () {
   const toggle = document.getElementById('leftHandedToggle');
   if (toggle) toggle.checked = leftHandedMode;
 
-  // Redraw fretboard if a chord is selected
+  // Redraw main fretboard if a chord is selected
   if (currentChord) {
     const chordData = CHORD_DATABASE[currentChord];
     drawFretboard(chordData);
+  }
+
+  // Re-render multi-chord display if in multi-chord mode
+  if (selectedChords.length > 0) {
+    renderMultiChordDisplay();
   }
 
   if (typeof ToolUtils !== 'undefined') {

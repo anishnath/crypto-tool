@@ -32,9 +32,9 @@
         <jsp:param name="toolDescription" value="Learn guitar chords fast with our free interactive chord chart. 2000+ chords with finger positions, audio playback, chord progressions, and left-handed mode. Perfect for beginners!" />
         <jsp:param name="toolCategory" value="Music" />
         <jsp:param name="toolUrl" value="guitar-chord-finder.jsp" />
-        <jsp:param name="toolKeywords" value="guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, free guitar chord finder, learn guitar chords online, guitar chord diagrams, guitar finger positions, chord progressions guitar, left handed guitar chords, acoustic guitar chords, beginner guitar lessons, guitar chord library, capo chord chart, guitar chord generator" />
+        <jsp:param name="toolKeywords" value="guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, free guitar chord finder, learn guitar chords online, guitar power chords, slash chords guitar, guitar chord diagrams, guitar finger positions, chord progressions guitar, left handed guitar chords, barre chords, 7th chords guitar, sus chords, add9 chords, capo chord chart, F# chord, Bb chord guitar" />
         <jsp:param name="toolImage" value="guitar-chord-tool.png" />
-        <jsp:param name="toolFeatures" value="2000+ guitar chord shapes for all skill levels,Easy-to-read fretboard diagrams with finger numbers,Audio playback - hear how chords sound,Chord progressions database with popular songs,Left-handed mode for lefty guitarists,Capo transpose (frets 0-12),Beginner to advanced chord difficulty ratings,Keyboard shortcuts for quick navigation,Save favorite chords for practice,Multi-chord comparison side-by-side" />
+        <jsp:param name="toolFeatures" value="160+ guitar chord shapes including power chords and slash chords,Major Minor 7th Sus Dim Aug Add9 and extended chords,Easy-to-read fretboard diagrams with finger numbers,Audio playback - hear how chords sound,Chord progressions database with popular songs,Left-handed mode for lefty guitarists,Capo transpose (frets 0-12),Sharp and flat chords (F# Bb Eb Ab),Beginner to advanced difficulty ratings,Keyboard shortcuts and multi-chord comparison" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What are the easiest guitar chords for beginners?" />
         <jsp:param name="faq1a" value="The 5 easiest chords are C, G, D, Am, and Em. These open chords use simple finger positions and are the foundation for thousands of songs. Start with these before learning barre chords." />
@@ -98,18 +98,18 @@
     "bestRating": "5"
   },
   "featureList": [
-    "2000+ guitar chord shapes for beginners to advanced",
+    "160+ chord shapes: Major, Minor, 7th, Power, Slash, Add9, Sus, Dim, Aug",
+    "Power chords for rock and punk (C5, G5, E5)",
+    "Slash chords with bass notes (C/G, D/F#, G/B)",
+    "Sharp and flat chords (F#, Bb, Eb, C#m, Abm)",
+    "Extended jazz chords (9th, 11th, 13th, m7b5, dim7)",
     "Interactive fretboard diagrams with finger numbers",
-    "Audio chord playback - hear how chords sound",
+    "Audio chord playback with strum and arpeggio modes",
     "Chord progressions database for popular songs",
     "Left-handed mode for lefty guitarists",
     "Capo transpose tool (frets 0-12)",
-    "Chord difficulty ratings (beginner/intermediate/advanced)",
-    "Arpeggio playback mode",
-    "Keyboard shortcuts for fast navigation",
-    "Save favorite chords",
-    "Multi-chord comparison mode",
-    "Downloadable chord diagrams"
+    "Difficulty ratings (beginner/intermediate/advanced)",
+    "Keyboard shortcuts and multi-chord comparison"
   ],
   "keywords": "guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, learn guitar chords, chord progressions"
 }
@@ -154,8 +154,8 @@
                 </nav>
             </div>
             <div class="tool-page-badges">
-                <span class="tool-badge">2000+ Chords</span>
-                <span class="tool-badge">Audio Playback</span>
+                <span class="tool-badge">160+ Chords</span>
+                <span class="tool-badge">Power & Slash Chords</span>
                 <span class="tool-badge">Left-Handed Mode</span>
             </div>
         </div>
@@ -165,7 +165,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p><strong>Learn guitar chords the easy way!</strong> Our free chord chart shows you exactly where to place your fingers with clear diagrams and audio playback. Features 2000+ chords, chord progressions for popular songs, left-handed mode, and difficulty ratings. Whether you're a complete beginner or experienced player, start playing your favorite songs today.</p>
+                <p><strong>Learn guitar chords the easy way!</strong> Our free chord chart shows you exactly where to place your fingers with clear diagrams and audio playback. Features 160+ chord shapes including power chords, slash chords, and jazz voicings. Chord progressions for popular songs, left-handed mode, and difficulty ratings. From beginner open chords to advanced barre chords - start playing today.</p>
             </div>
         </div>
     </section>
@@ -417,14 +417,14 @@
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
                 <div>
-                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Best Features for Learning Guitar</h3>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Complete Chord Library</h3>
                     <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-                        <li><strong>2000+ Chord Diagrams:</strong> Major, Minor, 7th, Sus, Dim, Aug, and extended chords</li>
-                        <li><strong>Audio Playback:</strong> Hear exactly how each chord should sound</li>
-                        <li><strong>Chord Progressions:</strong> Practice real progressions from popular songs</li>
-                        <li><strong>Left-Handed Mode:</strong> Flipped diagrams for left-handed guitarists</li>
-                        <li><strong>Difficulty Ratings:</strong> Know which chords are beginner-friendly</li>
-                        <li><strong>Arpeggio Mode:</strong> Hear individual notes for better ear training</li>
+                        <li><strong>160+ Chord Shapes:</strong> Major, Minor, 7th, Maj7, m7, Sus2, Sus4, Dim, Aug</li>
+                        <li><strong>Power Chords:</strong> E5, A5, G5, D5 - essential for rock and punk</li>
+                        <li><strong>Slash Chords:</strong> C/G, D/F#, G/B - smooth bass line transitions</li>
+                        <li><strong>Sharp/Flat Chords:</strong> F#, Bb, Eb, C#m, Abm and more</li>
+                        <li><strong>Jazz Chords:</strong> 9th, 11th, 13th, m7b5, dim7, mMaj7</li>
+                        <li><strong>Add9 Chords:</strong> Cadd9, Gadd9, Dadd9 - popular acoustic voicings</li>
                     </ul>
                 </div>
                 <div>
@@ -662,6 +662,30 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "With just G, C, and D you can play: Sweet Home Alabama, Bad Moon Rising, Twist and Shout, Ring of Fire, and dozens more. With Am, C, and G you can play: Horse With No Name, Boulevard of Broken Dreams. With D, A, and G you can play: Three Little Birds, Margaritaville, and many country songs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are power chords and how do I play them?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Power chords (also called '5' chords like E5, A5, G5) use only 2-3 fingers and contain just the root and fifth notes - no major or minor quality. They're essential for rock, punk, and metal. To play E5: press fret 2 on the A string and fret 2 on the D string, strum only those strings. Power chords are moveable - slide the same shape up the neck for different chords."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are slash chords like C/G or D/F#?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Slash chords (like C/G, D/F#, Am/E) indicate a chord with a specific bass note. The letter before the slash is the chord, the letter after is the bass note. C/G means play a C chord with G as the lowest note. They create smooth bass lines and are used in songs like 'Stairway to Heaven' (D/F#) and 'Let It Be' (C/G). Our tool shows finger positions for common slash chords."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I play F# and Bb chords?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "F# (F sharp) and Bb (B flat) are barre chords - you press multiple strings with one finger. For F#: barre all strings at fret 2, then add an E major shape. For Bb: barre strings 1-5 at fret 1, add an A major shape at frets 3. These chords take practice but unlock songs in any key. Start by practicing the barre position separately before adding other fingers."
       }
     }
   ]
