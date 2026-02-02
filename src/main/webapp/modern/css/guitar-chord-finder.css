@@ -1,0 +1,1475 @@
+/**
+ * Guitar Chord Finder - Tool-specific styles
+ * Uses three-column-tool.css as base
+ *
+ * Tool theming via CSS variables:
+ *   --tool-primary: #667eea (purple-blue gradient)
+ *   --tool-primary-dark: #5568d3
+ *   --tool-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+ *   --tool-light: #f0f4ff
+ */
+
+/* ========================================
+   TOOL THEME VARIABLES
+   ======================================== */
+:root {
+    --tool-primary: #667eea;
+    --tool-primary-dark: #5568d3;
+    --tool-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --tool-light: #f0f4ff;
+
+    /* Guitar-specific colors */
+    --guitar-accent: #764ba2;
+    --guitar-success: #28a745;
+    --guitar-warning: #ffc107;
+    --guitar-danger: #dc3545;
+}
+
+[data-theme="dark"] {
+    --tool-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+    --tool-light: rgba(102, 126, 234, 0.15);
+}
+
+/* ========================================
+   TWO-COLUMN LAYOUT (Override three-column)
+   ======================================== */
+.guitar-tool-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    min-height: calc(100vh - 180px);
+}
+
+@media (max-width: 991px) {
+    .guitar-tool-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+}
+
+/* ========================================
+   CONTROL PANEL (Left Column)
+   ======================================== */
+.guitar-control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+}
+
+@media (max-width: 991px) {
+    .guitar-control-panel {
+        position: relative;
+        top: auto;
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+
+/* ========================================
+   SEARCH CARD
+   ======================================== */
+.chord-search-card {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+}
+
+.chord-search-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chord-search-input input {
+    flex: 1;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    background: var(--bg-primary, #fff);
+    color: var(--text-primary, #0f172a);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chord-search-input input:focus {
+    outline: none;
+    border-color: var(--tool-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.chord-search-input button {
+    padding: 0.625rem 1rem;
+    background: var(--tool-gradient);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.chord-search-input button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ========================================
+   QUICK ACCESS SECTION
+   ======================================== */
+.quick-access-section {
+    margin-top: 1rem;
+    padding: 0.875rem;
+    background: var(--bg-secondary, #f8fafc);
+    border-radius: 0.5rem;
+}
+
+.quick-access-section strong {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #64748b);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.quick-chords-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.quick-chord-btn {
+    padding: 0.375rem 0.75rem;
+    border: 2px solid var(--border, #e2e8f0);
+    background: var(--bg-primary, #fff);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.quick-chord-btn:hover {
+    border-color: var(--tool-primary);
+    background: var(--tool-primary);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   CHORD TYPE SELECTOR
+   ======================================== */
+.chord-type-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.chord-type-selector .btn {
+    padding: 0.25rem 0.625rem;
+    border: 2px solid var(--border, #e2e8f0);
+    background: var(--bg-primary, #fff);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-primary, #0f172a);
+}
+
+.chord-type-selector .btn:hover {
+    border-color: var(--guitar-accent);
+    background: var(--guitar-accent);
+    color: white;
+}
+
+/* ========================================
+   CAPO SECTION
+   ======================================== */
+.capo-card {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid var(--guitar-warning);
+}
+
+[data-theme="dark"] .capo-card {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+.capo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.capo-header strong {
+    color: #856404;
+    font-size: 0.85rem;
+}
+
+[data-theme="dark"] .capo-header strong {
+    color: #fcd34d;
+}
+
+#capoDisplay {
+    background: var(--bg-primary, #fff);
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.25rem;
+    font-weight: 700;
+    color: #856404;
+    font-size: 0.85rem;
+}
+
+[data-theme="dark"] #capoDisplay {
+    background: rgba(0, 0, 0, 0.2);
+    color: #fcd34d;
+}
+
+.capo-slider {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 193, 7, 0.3);
+    border-radius: 3px;
+    outline: none;
+}
+
+.capo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--guitar-warning);
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.capo-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--guitar-warning);
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.capo-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+}
+
+.capo-labels small {
+    font-size: 0.7rem;
+    color: #856404;
+}
+
+[data-theme="dark"] .capo-labels small {
+    color: #fcd34d;
+}
+
+/* ========================================
+   MULTI-CHORD MODE TOGGLE
+   ======================================== */
+.multi-chord-toggle {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.multi-chord-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.multi-chord-toggle input[type="checkbox"] {
+    width: 40px;
+    height: 22px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border, #e2e8f0);
+    border-radius: 11px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.multi-chord-toggle input[type="checkbox"]:checked {
+    background: var(--tool-primary);
+}
+
+.multi-chord-toggle input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.multi-chord-toggle input[type="checkbox"]:checked::before {
+    transform: translateX(18px);
+}
+
+/* ========================================
+   DISPLAY PANEL (Right Column)
+   ======================================== */
+.guitar-display-panel {
+    min-height: 500px;
+}
+
+/* ========================================
+   SELECTED CHORDS BAR
+   ======================================== */
+.selected-chords-bar {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 0.875rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border, #e2e8f0);
+    display: none;
+}
+
+.selected-chords-bar.visible {
+    display: block;
+}
+
+.selected-chords-bar strong {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #64748b);
+    margin-right: 0.75rem;
+}
+
+.selected-chord-tag {
+    display: inline-block;
+    background: var(--tool-primary);
+    color: white;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.selected-chord-tag:hover {
+    background: var(--tool-primary-dark);
+    transform: translateY(-1px);
+}
+
+.selected-chord-tag .remove-chord {
+    margin-left: 0.5rem;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.selected-chords-actions {
+    float: right;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.selected-chords-actions button {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+}
+
+.selected-chords-actions button:hover {
+    opacity: 0.8;
+}
+
+/* ========================================
+   CHORD DISPLAY CARD
+   ======================================== */
+.chord-display-card {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
+   CHORD HEADER
+   ======================================== */
+.chord-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.chord-info-box {
+    background: linear-gradient(135deg, #e7f3ff 0%, #cfe5ff 100%);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 2px solid #b3d9ff;
+    flex: 1;
+}
+
+[data-theme="dark"] .chord-info-box {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.chord-info-box h3,
+.chord-info-box h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0056b3;
+    margin: 0;
+}
+
+[data-theme="dark"] .chord-info-box h3,
+[data-theme="dark"] .chord-info-box h4 {
+    color: #93c5fd;
+}
+
+/* ========================================
+   PLAY BUTTON
+   ======================================== */
+.play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--tool-gradient);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    margin-left: 1rem;
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.play-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary, #64748b);
+    text-align: center;
+    margin-top: 0.25rem;
+    font-weight: 600;
+}
+
+/* ========================================
+   CONTENT GRID
+   ======================================== */
+.chord-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .chord-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   FRETBOARD SECTION
+   ======================================== */
+.fretboard-section {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.fretboard-section h6 {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #64748b);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.fretboard-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ========================================
+   FINGER POSITIONS SECTION
+   ======================================== */
+.finger-positions-section {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.finger-positions-section strong {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #64748b);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.finger-guide > div {
+    background: var(--bg-primary, #fff);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    border-left: 3px solid var(--tool-primary);
+    margin-bottom: 0.375rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.finger-legend {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary, #64748b);
+}
+
+[data-theme="dark"] .finger-legend {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+/* ========================================
+   VARIATIONS SECTION
+   ======================================== */
+.variations-section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--border, #e2e8f0);
+}
+
+.variations-section h5 {
+    color: var(--text-primary, #0f172a);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.variation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.variation-card,
+.variation-grid .card {
+    border: 2px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg-primary, #fff);
+}
+
+.variation-card:hover,
+.variation-grid .card:hover {
+    border-color: var(--tool-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.variation-card strong,
+.variation-grid .card strong {
+    color: var(--tool-primary);
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
+.variation-card .position-text {
+    font-size: 0.7rem;
+    color: var(--text-secondary, #64748b);
+}
+
+/* ========================================
+   DOWNLOAD SECTION
+   ======================================== */
+.download-section {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.download-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--tool-primary);
+    background: transparent;
+    color: var(--tool-primary);
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.download-btn:hover {
+    background: var(--tool-primary);
+    color: white;
+}
+
+/* ========================================
+   WELCOME SECTION
+   ======================================== */
+.welcome-section {
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+
+.welcome-section h4 {
+    color: var(--tool-primary);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.welcome-section p {
+    color: var(--text-secondary, #64748b);
+}
+
+.welcome-tip {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #fff8e1;
+    border-left: 4px solid var(--guitar-warning);
+    border-radius: 0.375rem;
+    font-size: 0.9rem;
+    display: inline-block;
+    text-align: left;
+    color: var(--text-primary, #0f172a);
+}
+
+[data-theme="dark"] .welcome-tip {
+    background: rgba(255, 193, 7, 0.1);
+}
+
+/* ========================================
+   MULTI-CHORD GRID
+   ======================================== */
+.multi-chord-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.multi-chord-card {
+    background: var(--bg-primary, #fff);
+    border: 2px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: all 0.2s;
+}
+
+.multi-chord-card:hover {
+    border-color: var(--tool-primary);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.multi-chord-card .chord-info-box {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.multi-chord-card .chord-info-box h4 {
+    font-size: 1.1rem;
+}
+
+.multi-chord-card .play-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    margin-left: 0.5rem;
+}
+
+.multi-chord-card .fretboard {
+    background: var(--bg-secondary, #f8fafc);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.multi-chord-card .finger-positions {
+    margin-top: 0.5rem;
+}
+
+/* ========================================
+   MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .guitar-tool-container {
+        padding: 0.5rem;
+    }
+
+    .chord-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .chord-info-box {
+        text-align: center;
+    }
+
+    .play-btn {
+        margin: 0 auto;
+    }
+
+    .chord-display-card {
+        padding: 1rem;
+    }
+
+    .variation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .multi-chord-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+[data-theme="dark"] .chord-search-card,
+[data-theme="dark"] .multi-chord-toggle,
+[data-theme="dark"] .chord-display-card,
+[data-theme="dark"] .multi-chord-card {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .chord-search-input input {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #475569);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .chord-search-input input::placeholder {
+    color: var(--text-muted, #64748b);
+}
+
+[data-theme="dark"] .quick-access-section,
+[data-theme="dark"] .selected-chords-bar,
+[data-theme="dark"] .fretboard-section,
+[data-theme="dark"] .finger-positions-section {
+    background: var(--bg-tertiary, #334155);
+}
+
+[data-theme="dark"] .quick-chord-btn,
+[data-theme="dark"] .chord-type-selector .btn,
+[data-theme="dark"] .variation-card,
+[data-theme="dark"] .variation-grid .card {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #475569);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .quick-chord-btn:hover,
+[data-theme="dark"] .chord-type-selector .btn:hover,
+[data-theme="dark"] .variation-card:hover,
+[data-theme="dark"] .variation-grid .card:hover {
+    background: var(--tool-primary);
+    border-color: var(--tool-primary);
+    color: white;
+}
+
+[data-theme="dark"] .finger-guide > div {
+    background: var(--bg-secondary, #1e293b);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .download-btn {
+    color: var(--tool-primary);
+    border-color: var(--tool-primary);
+}
+
+[data-theme="dark"] .download-btn:hover {
+    background: var(--tool-primary);
+    color: white;
+}
+
+[data-theme="dark"] .multi-chord-toggle label {
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* ========================================
+   CHORD ACTION BUTTONS (Share, Copy, Favorite, Download)
+   ======================================== */
+.chord-actions-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--border, #e2e8f0);
+    justify-content: center;
+}
+
+.chord-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    border: 2px solid var(--border, #e2e8f0);
+    background: var(--bg-primary, #fff);
+    color: var(--text-secondary, #64748b);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chord-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chord-action-btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* Share Button */
+.chord-action-btn.action-share:hover {
+    border-color: #1DA1F2;
+    color: #1DA1F2;
+    background: rgba(29, 161, 242, 0.08);
+}
+
+.chord-action-btn.action-share:hover svg {
+    fill: #1DA1F2;
+}
+
+/* Copy Button */
+.chord-action-btn.action-copy:hover {
+    border-color: var(--tool-primary);
+    color: var(--tool-primary);
+    background: rgba(102, 126, 234, 0.08);
+}
+
+.chord-action-btn.action-copy:hover svg {
+    fill: var(--tool-primary);
+}
+
+/* Favorite Button */
+.chord-action-btn.action-favorite:hover {
+    border-color: #ffc107;
+    color: #e6a800;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.chord-action-btn.action-favorite:hover svg {
+    fill: #ffc107;
+}
+
+/* Download Button */
+.chord-action-btn.action-download:hover {
+    border-color: #28a745;
+    color: #28a745;
+    background: rgba(40, 167, 69, 0.08);
+}
+
+.chord-action-btn.action-download:hover svg {
+    fill: #28a745;
+}
+
+/* Dark Mode - Action Buttons */
+[data-theme="dark"] .chord-action-btn {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #475569);
+    color: var(--text-secondary, #94a3b8);
+}
+
+[data-theme="dark"] .chord-action-btn:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .chord-action-btn.action-share:hover {
+    background: rgba(29, 161, 242, 0.15);
+}
+
+[data-theme="dark"] .chord-action-btn.action-copy:hover {
+    background: rgba(102, 126, 234, 0.15);
+}
+
+[data-theme="dark"] .chord-action-btn.action-favorite:hover {
+    background: rgba(255, 193, 7, 0.15);
+}
+
+[data-theme="dark"] .chord-action-btn.action-download:hover {
+    background: rgba(40, 167, 69, 0.15);
+}
+
+/* Mobile - Action Buttons */
+@media (max-width: 480px) {
+    .chord-actions-section {
+        gap: 0.375rem;
+    }
+
+    .chord-action-btn {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.75rem;
+    }
+
+    .chord-action-btn span {
+        display: none;
+    }
+
+    .chord-action-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Favorite chord tag styling */
+.favorite-chord {
+    position: relative;
+}
+
+.favorite-chord .remove-fav {
+    font-size: 0.9em;
+    margin-left: 0.25rem;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.favorite-chord .remove-fav:hover {
+    opacity: 1;
+    color: var(--guitar-danger);
+}
+
+/* ========================================
+   FAVORITES SECTION
+   ======================================== */
+.favorites-section {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.favorites-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%);
+    border: none;
+    border-radius: 0.5rem;
+    color: #000;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.favorites-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+}
+
+.favorites-btn svg {
+    fill: #000;
+}
+
+[data-theme="dark"] .favorites-section {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .favorites-btn {
+    background: linear-gradient(135deg, #ffc107 0%, #e6a800 100%);
+}
+
+/* ========================================
+   CHORD PROGRESSIONS SECTION (Full Width)
+   ======================================== */
+.progressions-section-full {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.progressions-section-inner {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.progressions-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border, #e2e8f0);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.progressions-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.progressions-title svg {
+    color: var(--tool-primary);
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.progressions-title h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary, #0f172a);
+}
+
+.progressions-title p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary, #64748b);
+}
+
+.key-selector-large {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-secondary, #f8fafc);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.key-selector-large label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary, #64748b);
+    white-space: nowrap;
+}
+
+.key-selector-large select {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--tool-primary);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    background: var(--bg-primary, #fff);
+    color: var(--tool-primary);
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.key-selector-large select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.progressions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+/* Progression Card */
+.progression-card {
+    background: var(--bg-secondary, #f8fafc);
+    border: 2px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.progression-card:hover {
+    border-color: var(--tool-primary);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+    transform: translateY(-2px);
+}
+
+.progression-card.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.progression-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.progression-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.progression-genre {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    background: var(--tool-primary);
+    color: white;
+    border-radius: 0.25rem;
+    letter-spacing: 0.03em;
+}
+
+.progression-numerals {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--tool-primary);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 0.5rem;
+    background: rgba(102, 126, 234, 0.08);
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.375rem;
+    display: inline-block;
+}
+
+.progression-chords {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary, #0f172a);
+    margin-bottom: 0.625rem;
+    letter-spacing: 0.02em;
+}
+
+.progression-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #64748b);
+    line-height: 1.5;
+    margin-bottom: 0.625rem;
+    flex-grow: 1;
+}
+
+.progression-songs {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.875rem;
+    padding: 0.5rem;
+    background: var(--bg-primary, #fff);
+    border-radius: 0.375rem;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.progression-songs strong {
+    color: var(--text-secondary, #64748b);
+}
+
+.progression-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.progression-actions button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.625rem 0.75rem;
+    border: 2px solid var(--border, #e2e8f0);
+    background: var(--bg-primary, #fff);
+    color: var(--text-secondary, #64748b);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.progression-actions button:hover:not(:disabled) {
+    border-color: var(--tool-primary);
+    color: white;
+    background: var(--tool-primary);
+}
+
+.progression-actions button:hover:not(:disabled) svg {
+    fill: white;
+}
+
+.progression-actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.progression-actions button svg {
+    flex-shrink: 0;
+}
+
+/* Dark Mode - Progressions */
+[data-theme="dark"] .progressions-section-inner {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .progressions-title h2 {
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .key-selector-large {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #475569);
+}
+
+[data-theme="dark"] .key-selector-large select {
+    background: var(--bg-secondary, #1e293b);
+    color: var(--tool-primary);
+}
+
+[data-theme="dark"] .progression-card {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #475569);
+}
+
+[data-theme="dark"] .progression-card:hover {
+    border-color: var(--tool-primary);
+}
+
+[data-theme="dark"] .progression-numerals {
+    background: rgba(102, 126, 234, 0.15);
+}
+
+[data-theme="dark"] .progression-songs {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #475569);
+}
+
+[data-theme="dark"] .progression-actions button {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #475569);
+    color: var(--text-secondary, #94a3b8);
+}
+
+[data-theme="dark"] .progression-actions button:hover:not(:disabled) {
+    background: var(--tool-primary);
+    color: white;
+}
+
+/* Mobile - Progressions */
+@media (max-width: 768px) {
+    .progressions-section-full {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+    }
+
+    .progressions-section-inner {
+        padding: 1rem;
+    }
+
+    .progressions-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .key-selector-large {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .progressions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progression-card {
+        padding: 1rem;
+    }
+
+    .progression-chords {
+        font-size: 1rem;
+    }
+}
+
+/* ========================================
+   SETTINGS PANEL
+   ======================================== */
+.settings-panel {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.settings-header strong {
+    font-size: 0.9rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.keyboard-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted, #94a3b8);
+    background: var(--bg-secondary, #f8fafc);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.settings-toggles {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.setting-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary, #64748b);
+    transition: all 0.2s ease;
+}
+
+.setting-toggle:hover {
+    border-color: var(--tool-primary);
+    color: var(--tool-primary);
+}
+
+.setting-toggle input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--tool-primary);
+    cursor: pointer;
+}
+
+.setting-toggle input[type="checkbox"]:checked + span {
+    color: var(--tool-primary);
+    font-weight: 600;
+}
+
+/* Dark Mode - Settings */
+[data-theme="dark"] .settings-panel {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .keyboard-hint {
+    background: var(--bg-tertiary, #334155);
+}
+
+[data-theme="dark"] .setting-toggle {
+    background: var(--bg-tertiary, #334155);
+    border-color: var(--border, #475569);
+    color: var(--text-secondary, #94a3b8);
+}
+
+/* ========================================
+   DIFFICULTY BADGES
+   ======================================== */
+.chord-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.chord-title-row h3 {
+    margin: 0;
+}
+
+.difficulty-badge {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.difficulty-beginner {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    color: white;
+}
+
+.difficulty-intermediate {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    color: #000;
+}
+
+.difficulty-advanced {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    color: white;
+}
+
+/* Dark Mode - Difficulty Badges (same colors work well) */
+[data-theme="dark"] .difficulty-beginner {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+[data-theme="dark"] .difficulty-intermediate {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+}
+
+[data-theme="dark"] .difficulty-advanced {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+}
