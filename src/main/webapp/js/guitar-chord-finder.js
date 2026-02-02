@@ -885,8 +885,9 @@ function drawFretboardForElement(chordData, elementId) {
   const numFrets = 5;
 
   // Draw strings (vertical lines)
+  // Standard orientation: Low E (index 0) on left, High E (index 5) on right
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + (numStrings - 1 - i) * stringSpacing;
+    const x = startX + i * stringSpacing;
     const line = createSVGElement('line', {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
@@ -909,8 +910,9 @@ function drawFretboardForElement(chordData, elementId) {
   }
 
   // Draw open/muted indicators
+  // Standard orientation: Low E (index 0) on left
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + (numStrings - 1 - i) * stringSpacing;
+    const x = startX + i * stringSpacing;
     const fret = chordData.frets[i];
 
     if (fret === 0) {
@@ -938,9 +940,11 @@ function drawFretboardForElement(chordData, elementId) {
   }
 
   // Draw finger positions
+  // Note: In fingers array, string is numbered 1-6 from High E to Low E
+  // For standard orientation (Low E left, High E right), convert to frets index
   chordData.fingers.forEach(([string, fret, finger]) => {
     if (fret > 0 && fret <= numFrets) {
-      const x = startX + (string - 1) * stringSpacing;
+      const x = startX + (numStrings - string) * stringSpacing;
       const y = startY + fret * fretSpacing - fretSpacing / 2;
 
       // Finger circle
@@ -1027,11 +1031,15 @@ function drawFretboard(chordData) {
   const numFrets = 5;
 
   // Helper function to calculate X position based on handedness
+  // Standard: Low E (string 0) on LEFT, High E (string 5) on RIGHT
+  // Left-handed: Flipped horizontally for lefty players
   const getStringX = (stringIndex) => {
     if (leftHandedMode) {
-      return startX + stringIndex * stringSpacing;
-    } else {
+      // Left-handed: flip from standard (Low E on right)
       return startX + (numStrings - 1 - stringIndex) * stringSpacing;
+    } else {
+      // Standard orientation: Low E on left, High E on right
+      return startX + stringIndex * stringSpacing;
     }
   };
 
@@ -1105,9 +1113,12 @@ function drawFretboard(chordData) {
   }
 
   // Draw finger positions
+  // Note: In fingers array, string is numbered 1-6 from High E to Low E
   chordData.fingers.forEach(([string, fret, finger]) => {
     if (fret > 0 && fret <= numFrets) {
-      const x = leftHandedMode ? startX + (numStrings - string) * stringSpacing : startX + (string - 1) * stringSpacing;
+      // Standard: Low E on left, so High E (string 1) at rightmost position
+      // Left-handed: flipped, High E (string 1) at leftmost position
+      const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
       const y = startY + fret * fretSpacing - fretSpacing / 2;
 
       // Finger circle
@@ -1141,8 +1152,8 @@ function drawFretboard(chordData) {
       const maxString = Math.max(...barreFingers.map(f => f[0]));
       const barreFret = barreFingers[0][1];
 
-      const x1 = leftHandedMode ? startX + (numStrings - minString) * stringSpacing : startX + (minString - 1) * stringSpacing;
-      const x2 = leftHandedMode ? startX + (numStrings - maxString) * stringSpacing : startX + (maxString - 1) * stringSpacing;
+      const x1 = leftHandedMode ? startX + (minString - 1) * stringSpacing : startX + (numStrings - minString) * stringSpacing;
+      const x2 = leftHandedMode ? startX + (maxString - 1) * stringSpacing : startX + (numStrings - maxString) * stringSpacing;
       const y = startY + barreFret * fretSpacing - fretSpacing / 2;
 
       const line = createSVGElement('line', {
