@@ -320,12 +320,134 @@ const CHORD_ALTERNATIVES = {
   ]
 };
 
+// ============================================
+// CHORD PROGRESSIONS DATABASE
+// ============================================
+
+// All 12 keys with their diatonic chords (I, ii, iii, IV, V, vi, vii°)
+const KEYS_DATABASE = {
+  'C':  { I: 'C',  ii: 'Dm', iii: 'Em', IV: 'F',  V: 'G',  vi: 'Am', vii: 'Bdim' },
+  'G':  { I: 'G',  ii: 'Am', iii: 'Bm', IV: 'C',  V: 'D',  vi: 'Em', vii: 'F#dim' },
+  'D':  { I: 'D',  ii: 'Em', iii: 'F#m', IV: 'G', V: 'A',  vi: 'Bm', vii: 'C#dim' },
+  'A':  { I: 'A',  ii: 'Bm', iii: 'C#m', IV: 'D', V: 'E',  vi: 'F#m', vii: 'G#dim' },
+  'E':  { I: 'E',  ii: 'F#m', iii: 'G#m', IV: 'A', V: 'B', vi: 'C#m', vii: 'D#dim' },
+  'F':  { I: 'F',  ii: 'Gm', iii: 'Am', IV: 'Bb', V: 'C',  vi: 'Dm', vii: 'Edim' },
+  'Bb': { I: 'Bb', ii: 'Cm', iii: 'Dm', IV: 'Eb', V: 'F',  vi: 'Gm', vii: 'Adim' },
+  'Eb': { I: 'Eb', ii: 'Fm', iii: 'Gm', IV: 'Ab', V: 'Bb', vi: 'Cm', vii: 'Ddim' }
+};
+
+// Common chord progressions with descriptions
+const PROGRESSIONS_DATABASE = [
+  {
+    name: 'Pop/Rock Classic',
+    numerals: ['I', 'V', 'vi', 'IV'],
+    description: 'The most popular progression in modern music',
+    songs: ['Let It Be', 'No Woman No Cry', 'With or Without You', 'Someone Like You'],
+    genre: 'Pop'
+  },
+  {
+    name: '50s Progression',
+    numerals: ['I', 'vi', 'IV', 'V'],
+    description: 'Classic doo-wop and oldies progression',
+    songs: ['Stand By Me', 'Earth Angel', 'Every Breath You Take'],
+    genre: 'Oldies'
+  },
+  {
+    name: 'Three Chord Rock',
+    numerals: ['I', 'IV', 'V'],
+    description: 'Simple but powerful rock/blues foundation',
+    songs: ['Twist and Shout', 'La Bamba', 'Wild Thing'],
+    genre: 'Rock'
+  },
+  {
+    name: '12-Bar Blues',
+    numerals: ['I', 'I', 'I', 'I', 'IV', 'IV', 'I', 'I', 'V', 'IV', 'I', 'V'],
+    description: 'The foundation of blues and rock n roll',
+    songs: ['Johnny B. Goode', 'Hound Dog', 'Sweet Home Chicago'],
+    genre: 'Blues'
+  },
+  {
+    name: 'Jazz ii-V-I',
+    numerals: ['ii', 'V', 'I'],
+    description: 'Essential jazz cadence',
+    songs: ['Autumn Leaves', 'All The Things You Are', 'Fly Me To The Moon'],
+    genre: 'Jazz'
+  },
+  {
+    name: 'Sad Progression',
+    numerals: ['vi', 'IV', 'I', 'V'],
+    description: 'Emotional minor-key feel starting on vi',
+    songs: ['Despacito', 'Grenade', 'Rolling in the Deep'],
+    genre: 'Pop'
+  },
+  {
+    name: 'Pachelbel Canon',
+    numerals: ['I', 'V', 'vi', 'iii', 'IV', 'I', 'IV', 'V'],
+    description: 'Classical progression used in many songs',
+    songs: ['Canon in D', 'Basket Case', 'Graduation'],
+    genre: 'Classical'
+  },
+  {
+    name: 'Folk/Country',
+    numerals: ['I', 'IV', 'I', 'V'],
+    description: 'Simple country and folk progression',
+    songs: ['Blowin in the Wind', 'Wagon Wheel', 'Country Roads'],
+    genre: 'Folk'
+  },
+  {
+    name: 'Minor Blues',
+    numerals: ['vi', 'ii', 'V', 'vi'],
+    description: 'Dark, moody minor progression',
+    songs: ['The Thrill Is Gone', 'Black Magic Woman'],
+    genre: 'Blues'
+  },
+  {
+    name: 'Andalusian Cadence',
+    numerals: ['vi', 'V', 'IV', 'iii'],
+    description: 'Descending Spanish/Flamenco feel',
+    songs: ['Hit The Road Jack', 'Smooth', 'Sultans of Swing'],
+    genre: 'Latin'
+  }
+];
+
+// ============================================
+// CHORD DIFFICULTY RATINGS
+// ============================================
+const CHORD_DIFFICULTY = {
+  // Beginner - Open chords, no barre
+  'C': 'beginner', 'G': 'beginner', 'D': 'beginner', 'A': 'beginner', 'E': 'beginner',
+  'Am': 'beginner', 'Em': 'beginner', 'Dm': 'beginner',
+  'A7': 'beginner', 'D7': 'beginner', 'E7': 'beginner', 'G7': 'beginner',
+  'Asus2': 'beginner', 'Asus4': 'beginner', 'Dsus2': 'beginner', 'Dsus4': 'beginner',
+  'Em7': 'beginner', 'Am7': 'beginner',
+
+  // Intermediate - Some barre chords, extended chords
+  'F': 'intermediate', 'B': 'intermediate', 'Bm': 'intermediate',
+  'C7': 'intermediate', 'B7': 'intermediate', 'F7': 'intermediate',
+  'Cmaj7': 'intermediate', 'Dmaj7': 'intermediate', 'Emaj7': 'intermediate',
+  'Fmaj7': 'intermediate', 'Gmaj7': 'intermediate', 'Amaj7': 'intermediate',
+  'Dm7': 'intermediate', 'Bm7': 'intermediate',
+  'Csus2': 'intermediate', 'Csus4': 'intermediate', 'Esus4': 'intermediate',
+  'Caug': 'intermediate', 'Daug': 'intermediate', 'Eaug': 'intermediate',
+  'Ddim': 'intermediate', 'Edim': 'intermediate',
+
+  // Advanced - Complex barre, jazz chords
+  'Cm': 'advanced', 'Fm': 'advanced', 'Gm': 'advanced',
+  'Bmaj7': 'advanced', 'Cm7': 'advanced', 'Fm7': 'advanced', 'Gm7': 'advanced',
+  'Cdim': 'advanced',
+  'C9': 'advanced', 'D9': 'advanced', 'E9': 'advanced', 'G9': 'advanced', 'A9': 'advanced'
+};
+
 // Global state
 let currentChord = null;
 let currentCapo = 0;
 let audioContext = null;
 let multiChordMode = false;
 let selectedChords = [];
+let currentKey = 'C';
+let leftHandedMode = false;
+let arpeggioMode = false;
+let soundEnabled = true;
 
 // Note frequencies (A4 = 440Hz standard tuning)
 const TUNING = {
@@ -337,15 +459,115 @@ const TUNING = {
   1: 329.63   // E4
 };
 
+// Storage key for favorite chords
+const FAVORITES_KEY = 'guitar_chord_favorites_';
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function () {
   populateQuickChords();
   populateChordTypes();
   setupSearchAutocomplete();
+  setupKeyboardShortcuts();
+  loadUserPreferences();
 
-  // Don't load default chord - let user explore first
-  // Users will see the welcome instructions instead
+  // Load chord from URL if shared link
+  loadChordFromUrl();
 });
+
+// Setup keyboard shortcuts
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', function (e) {
+    // Ignore if user is typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+      return;
+    }
+
+    const key = e.key.toUpperCase();
+
+    // Single letter chord shortcuts (A-G)
+    if (/^[A-G]$/.test(key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      // Check for modifier with shift for minor chords
+      if (e.shiftKey) {
+        const minorChord = key + 'm';
+        if (CHORD_DATABASE[minorChord]) {
+          displayChord(minorChord);
+          if (typeof ToolUtils !== 'undefined') {
+            ToolUtils.showToast(`Shortcut: ${minorChord}`, 1500, 'info');
+          }
+        }
+      } else {
+        if (CHORD_DATABASE[key]) {
+          displayChord(key);
+          if (typeof ToolUtils !== 'undefined') {
+            ToolUtils.showToast(`Shortcut: ${key}`, 1500, 'info');
+          }
+        }
+      }
+    }
+
+    // Space bar to play chord
+    if (e.key === ' ' && currentChord) {
+      e.preventDefault();
+      playChord();
+    }
+
+    // L for left-handed mode toggle
+    if (key === 'L' && !e.shiftKey && !e.ctrlKey) {
+      e.preventDefault();
+      toggleLeftHandedMode();
+    }
+
+    // P for arpeggio/strum toggle
+    if (key === 'P' && !e.shiftKey && !e.ctrlKey) {
+      e.preventDefault();
+      toggleArpeggioMode();
+    }
+
+    // M for mute/unmute
+    if (key === 'M' && !e.shiftKey && !e.ctrlKey) {
+      e.preventDefault();
+      toggleSound();
+    }
+  });
+}
+
+// Load user preferences from localStorage
+function loadUserPreferences() {
+  if (typeof ToolUtils !== 'undefined') {
+    const prefs = ToolUtils.storage.get('guitar_preferences');
+    if (prefs) {
+      leftHandedMode = prefs.leftHanded || false;
+      arpeggioMode = prefs.arpeggio || false;
+      soundEnabled = prefs.sound !== false;
+
+      // Update UI toggles
+      updateToggleUI();
+    }
+  }
+}
+
+// Save user preferences
+function saveUserPreferences() {
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.storage.save('guitar_preferences', {
+      leftHanded: leftHandedMode,
+      arpeggio: arpeggioMode,
+      sound: soundEnabled
+    });
+  }
+}
+
+// Update toggle UI states
+function updateToggleUI() {
+  const leftHandedToggle = document.getElementById('leftHandedToggle');
+  const arpeggioToggle = document.getElementById('arpeggioToggle');
+  const soundToggle = document.getElementById('soundToggle');
+
+  if (leftHandedToggle) leftHandedToggle.checked = leftHandedMode;
+  if (arpeggioToggle) arpeggioToggle.checked = arpeggioMode;
+  if (soundToggle) soundToggle.checked = soundEnabled;
+}
 
 // Populate quick access chord buttons
 function populateQuickChords() {
@@ -369,12 +591,19 @@ function setupSearchAutocomplete() {
 
   const allChords = Object.keys(CHORD_DATABASE);
 
+  // Use debounce from ToolUtils if available
+  const debouncedSearch = typeof ToolUtils !== 'undefined'
+    ? ToolUtils.debounce(function (query) {
+        if (query.length > 0) {
+          const matches = allChords.filter(c => c.toLowerCase().startsWith(query.toLowerCase()));
+          // Could implement dropdown here
+        }
+      }, 150)
+    : function () {};
+
   searchInput.addEventListener('input', function () {
     const query = this.value.trim();
-    if (query.length > 0) {
-      const matches = allChords.filter(c => c.toLowerCase().startsWith(query.toLowerCase()));
-      // Could implement dropdown here
-    }
+    debouncedSearch(query);
   });
 
   searchInput.addEventListener('keypress', function (e) {
@@ -392,7 +621,11 @@ window.searchChord = function () {
   if (CHORD_DATABASE[chord]) {
     displayChord(chord);
   } else {
-    alert(`Chord "${chord}" not found. Try: C, D, E, F, G, A, B, Am, Em, C7, Dm, etc.`);
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`Chord "${chord}" not found. Try: C, Am, G7, Dsus4`, 3000, 'warning');
+    } else {
+      alert(`Chord "${chord}" not found. Try: C, D, E, F, G, A, B, Am, Em, C7, Dm, etc.`);
+    }
   }
 };
 
@@ -445,7 +678,9 @@ function filterChordsByType(type) {
 // Main function to display a chord
 window.displayChord = function (chordName) {
   if (!CHORD_DATABASE[chordName]) {
-    alert(`Chord "${chordName}" not found in database.`);
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`Chord "${chordName}" not found`, 2000, 'error');
+    }
     return;
   }
 
@@ -470,10 +705,18 @@ window.displayChord = function (chordName) {
     chordDisplay.style.display = 'block';
   }
 
-  // Update chord name display
+  // Update chord name display with difficulty badge
   const chordNameElem = document.getElementById('chordName');
   if (chordNameElem) {
     chordNameElem.textContent = chordData.name;
+  }
+
+  // Update difficulty badge
+  const difficultyBadge = document.getElementById('difficultyBadge');
+  if (difficultyBadge) {
+    const difficulty = CHORD_DIFFICULTY[chordName] || 'intermediate';
+    difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    difficultyBadge.className = `difficulty-badge difficulty-${difficulty}`;
   }
 
   // Draw fretboard
@@ -532,12 +775,16 @@ window.toggleMultiChordMode = function () {
 // Add chord to multi-chord selection
 function addChordToSelection(chordName) {
   if (selectedChords.includes(chordName)) {
-    alert(`${chordName} is already selected!`);
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`${chordName} is already selected`, 2000, 'info');
+    }
     return;
   }
 
   if (selectedChords.length >= 6) {
-    alert('Maximum 6 chords can be selected at once!');
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Maximum 6 chords can be compared at once', 2000, 'warning');
+    }
     return;
   }
 
@@ -779,9 +1026,18 @@ function drawFretboard(chordData) {
   const numStrings = 6;
   const numFrets = 5;
 
+  // Helper function to calculate X position based on handedness
+  const getStringX = (stringIndex) => {
+    if (leftHandedMode) {
+      return startX + stringIndex * stringSpacing;
+    } else {
+      return startX + (numStrings - 1 - stringIndex) * stringSpacing;
+    }
+  };
+
   // Draw strings (vertical lines)
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + (numStrings - 1 - i) * stringSpacing;
+    const x = getStringX(i);
     const line = createSVGElement('line', {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
@@ -806,12 +1062,14 @@ function drawFretboard(chordData) {
   // Draw fret numbers
   for (let i = 1; i <= numFrets; i++) {
     const y = startY + i * fretSpacing - fretSpacing / 2;
+    const fretNumX = leftHandedMode ? startX + (numStrings - 1) * stringSpacing + 20 : startX - 20;
     const text = createSVGElement('text', {
-      x: startX - 20,
+      x: fretNumX,
       y: y + 5,
       'font-size': 14,
       'font-weight': 'bold',
-      fill: '#666'
+      fill: '#666',
+      'text-anchor': leftHandedMode ? 'start' : 'end'
     });
     text.textContent = i;
     svg.appendChild(text);
@@ -819,7 +1077,7 @@ function drawFretboard(chordData) {
 
   // Draw open/muted indicators
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + (numStrings - 1 - i) * stringSpacing;
+    const x = getStringX(i);
     const fret = chordData.frets[i];
 
     if (fret === 0) {
@@ -849,7 +1107,7 @@ function drawFretboard(chordData) {
   // Draw finger positions
   chordData.fingers.forEach(([string, fret, finger]) => {
     if (fret > 0 && fret <= numFrets) {
-      const x = startX + (string - 1) * stringSpacing;
+      const x = leftHandedMode ? startX + (numStrings - string) * stringSpacing : startX + (string - 1) * stringSpacing;
       const y = startY + fret * fretSpacing - fretSpacing / 2;
 
       // Finger circle
@@ -883,13 +1141,13 @@ function drawFretboard(chordData) {
       const maxString = Math.max(...barreFingers.map(f => f[0]));
       const barreFret = barreFingers[0][1];
 
-      const x1 = startX + (minString - 1) * stringSpacing;
-      const x2 = startX + (maxString - 1) * stringSpacing;
+      const x1 = leftHandedMode ? startX + (numStrings - minString) * stringSpacing : startX + (minString - 1) * stringSpacing;
+      const x2 = leftHandedMode ? startX + (numStrings - maxString) * stringSpacing : startX + (maxString - 1) * stringSpacing;
       const y = startY + barreFret * fretSpacing - fretSpacing / 2;
 
       const line = createSVGElement('line', {
-        x1: x1, y1: y,
-        x2: x2, y2: y,
+        x1: Math.min(x1, x2), y1: y,
+        x2: Math.max(x1, x2), y2: y,
         stroke: '#ffc107',
         'stroke-width': 22,
         'stroke-linecap': 'round',
@@ -985,6 +1243,14 @@ function displayAlternative(chordName, altIndex) {
 
 // Play chord audio
 window.playChord = function () {
+  // Check if sound is enabled
+  if (!soundEnabled) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Sound is muted. Press M to unmute.', 1500, 'info');
+    }
+    return;
+  }
+
   if (!currentChord) {
     console.log('No chord selected');
     return;
@@ -1032,9 +1298,11 @@ window.playChord = function () {
 // Separate function to play the actual notes
 function playChordNotes(chordData) {
   const now = audioContext.currentTime;
-  const strumDelay = 0.05; // 50ms between strings
+  // Arpeggio mode: longer delay between notes, Strum mode: quick strum
+  const strumDelay = arpeggioMode ? 0.4 : 0.05; // 400ms for arpeggio, 50ms for strum
+  const noteDuration = arpeggioMode ? 1.5 : 2.0;
 
-  console.log('Playing chord:', currentChord);
+  console.log('Playing chord:', currentChord, arpeggioMode ? '(arpeggio)' : '(strum)');
 
   chordData.frets.forEach((fret, index) => {
     if (fret >= 0) { // Not muted
@@ -1043,7 +1311,7 @@ function playChordNotes(chordData) {
       const frequency = baseFreq * Math.pow(2, (fret + currentCapo) / 12);
 
       console.log(`String ${stringNumber}: fret ${fret}, frequency ${frequency}Hz`);
-      playNote(frequency, now + index * strumDelay, 2.0);
+      playNote(frequency, now + index * strumDelay, noteDuration);
     }
   });
 }
@@ -1136,11 +1404,435 @@ window.downloadDiagram = function () {
     canvas.toBlob(function (blob) {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `8gwifi.org-${currentChord}-chord-diagram-${Date.now()}.png`;
+      const filename = `8gwifi.org-${currentChord}-chord-diagram.png`;
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+
+      // Show toast and support popup
+      if (typeof ToolUtils !== 'undefined') {
+        ToolUtils.showToast(`Downloaded ${currentChord} chord diagram!`, 2000, 'success');
+        setTimeout(() => {
+          ToolUtils.showSupportPopup('Guitar Chord Finder', `Downloaded: ${filename}`);
+        }, 500);
+      }
     });
   };
 
   img.src = url;
+};
+
+// ============================================
+// Tool Utils Integration - Shareable URLs, Favorites, Copy
+// ============================================
+
+// Load chord from URL parameters (for shared links)
+function loadChordFromUrl() {
+  if (typeof ToolUtils === 'undefined') return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const chord = urlParams.get('chord');
+  const capo = urlParams.get('capo');
+
+  if (chord && CHORD_DATABASE[chord]) {
+    // Set capo first if provided
+    if (capo) {
+      const capoValue = parseInt(capo);
+      if (capoValue >= 0 && capoValue <= 12) {
+        document.getElementById('capoSlider').value = capoValue;
+        updateCapo(capoValue);
+      }
+    }
+    // Display the chord
+    displayChord(chord);
+    ToolUtils.showToast(`Loaded shared chord: ${chord}`, 2000, 'info');
+  }
+}
+
+// Share current chord via URL
+window.shareChord = function () {
+  if (!currentChord) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Select a chord first to share', 2000, 'warning');
+    }
+    return;
+  }
+
+  const params = { chord: currentChord };
+  if (currentCapo > 0) {
+    params.capo = currentCapo;
+  }
+
+  if (typeof ToolUtils !== 'undefined') {
+    const url = ToolUtils.generateShareUrl(params, {
+      toolName: 'Guitar Chord Finder',
+      showSupportPopup: true
+    });
+    ToolUtils.copyToClipboard(url, {
+      toastMessage: `Share link copied for ${currentChord}!`,
+      showSupportPopup: false // Already shown by generateShareUrl
+    });
+  }
+};
+
+// Copy chord fingering info to clipboard
+window.copyChordInfo = function () {
+  if (!currentChord) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Select a chord first', 2000, 'warning');
+    }
+    return;
+  }
+
+  const chordData = CHORD_DATABASE[currentChord];
+  const fretString = chordData.frets.map(f => f === -1 ? 'x' : f).join('');
+  const stringNames = ['E', 'A', 'D', 'G', 'B', 'e'];
+  const fingerNames = ['', '1', '2', '3', '4'];
+
+  let info = `${chordData.name}\n`;
+  info += `Frets: ${fretString}\n`;
+  info += `Strings: ${stringNames.join(' ')}\n`;
+  info += `\nFinger positions:\n`;
+
+  chordData.fingers.forEach(([string, fret, finger]) => {
+    if (fret > 0) {
+      info += `  ${stringNames[string - 1]} string, fret ${fret} - finger ${fingerNames[finger]}\n`;
+    }
+  });
+
+  info += `\n🎸 via 8gwifi.org Guitar Chord Finder`;
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.copyToClipboard(info, {
+      toastMessage: `${currentChord} chord info copied!`,
+      toolName: 'Guitar Chord Finder'
+    });
+  }
+};
+
+// Save chord to favorites
+window.saveFavorite = function (chordName) {
+  const chord = chordName || currentChord;
+  if (!chord) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Select a chord first', 2000, 'warning');
+    }
+    return;
+  }
+
+  if (typeof ToolUtils !== 'undefined') {
+    const favorites = ToolUtils.storage.get('guitar_favorites') || [];
+    if (!favorites.includes(chord)) {
+      favorites.push(chord);
+      ToolUtils.storage.save('guitar_favorites', favorites);
+      ToolUtils.showToast(`${chord} added to favorites! ⭐`, 2000, 'success');
+    } else {
+      ToolUtils.showToast(`${chord} is already in favorites`, 2000, 'info');
+    }
+  }
+};
+
+// Remove chord from favorites
+window.removeFavorite = function (chordName) {
+  if (typeof ToolUtils !== 'undefined') {
+    let favorites = ToolUtils.storage.get('guitar_favorites') || [];
+    favorites = favorites.filter(c => c !== chordName);
+    ToolUtils.storage.save('guitar_favorites', favorites);
+    ToolUtils.showToast(`${chordName} removed from favorites`, 2000, 'info');
+    renderFavoritesPanel();
+  }
+};
+
+// Get favorites list
+window.getFavorites = function () {
+  if (typeof ToolUtils !== 'undefined') {
+    return ToolUtils.storage.get('guitar_favorites') || [];
+  }
+  return [];
+};
+
+// Render favorites in UI (can be called to update favorites display)
+window.renderFavoritesPanel = function () {
+  const container = document.getElementById('favoritesContainer');
+  if (!container) return;
+
+  const favorites = getFavorites();
+
+  if (favorites.length === 0) {
+    container.innerHTML = '<p class="text-muted small">No favorites saved yet. Click ⭐ to save chords.</p>';
+    return;
+  }
+
+  container.innerHTML = '';
+  favorites.forEach(chord => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-chord-btn favorite-chord';
+    btn.innerHTML = `${chord} <span class="remove-fav" onclick="event.stopPropagation(); removeFavorite('${chord}')">×</span>`;
+    btn.onclick = () => displayChord(chord);
+    container.appendChild(btn);
+  });
+};
+
+// Open favorites manager modal
+window.openFavoritesManager = function () {
+  if (typeof ToolUtils !== 'undefined') {
+    const favorites = getFavorites();
+
+    if (favorites.length === 0) {
+      ToolUtils.showToast('No favorites saved yet. Click ⭐ on a chord to save it.', 3000, 'info');
+      return;
+    }
+
+    // Use ToolUtils storage manager pattern
+    const backdrop = document.createElement('div');
+    backdrop.className = 'storage-modal-backdrop';
+    backdrop.innerHTML = `
+      <div class="storage-modal">
+        <div class="storage-header">
+          <h3>⭐ Favorite Chords</h3>
+          <button class="storage-close" onclick="this.closest('.storage-modal-backdrop').remove()">&times;</button>
+        </div>
+        <div class="storage-body">
+          <div class="storage-list">
+            ${favorites.map(chord => `
+              <div class="storage-item">
+                <div class="storage-info">
+                  <span class="storage-name">${chord}</span>
+                  <span class="storage-date">${CHORD_DATABASE[chord]?.name || chord}</span>
+                </div>
+                <div class="storage-actions">
+                  <button class="storage-btn load-btn" onclick="displayChord('${chord}'); this.closest('.storage-modal-backdrop').remove();">Load</button>
+                  <button class="storage-btn delete-btn" onclick="removeFavorite('${chord}'); this.closest('.storage-item').remove();">&times;</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+    setTimeout(() => backdrop.classList.add('show'), 10);
+
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) backdrop.remove();
+    };
+  }
+};
+
+// ============================================
+// CHORD PROGRESSIONS FUNCTIONS
+// ============================================
+
+// Change the selected key
+window.changeKey = function (key) {
+  if (KEYS_DATABASE[key]) {
+    currentKey = key;
+    renderProgressions();
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`Key changed to ${key} Major`, 1500, 'info');
+    }
+  }
+};
+
+// Get chords for a progression in current key
+function getProgressionChords(numerals) {
+  const keyChords = KEYS_DATABASE[currentKey];
+  if (!keyChords) return [];
+
+  return numerals.map(numeral => {
+    const chord = keyChords[numeral];
+    // Check if chord exists in database, otherwise try to find alternative
+    if (chord && CHORD_DATABASE[chord]) {
+      return chord;
+    }
+    // Handle sharp chords that might not be in database
+    return chord || numeral;
+  });
+}
+
+// Check if all chords in progression exist in database
+function progressionIsPlayable(numerals) {
+  const chords = getProgressionChords(numerals);
+  return chords.every(chord => CHORD_DATABASE[chord]);
+}
+
+// Load a progression into multi-chord mode
+window.loadProgression = function (progressionIndex) {
+  const progression = PROGRESSIONS_DATABASE[progressionIndex];
+  if (!progression) return;
+
+  const chords = getProgressionChords(progression.numerals);
+
+  // Check if all chords exist
+  const missingChords = chords.filter(c => !CHORD_DATABASE[c]);
+  if (missingChords.length > 0) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`Some chords not available: ${missingChords.join(', ')}. Try a different key.`, 3000, 'warning');
+    }
+    return;
+  }
+
+  // Enable multi-chord mode
+  const multiChordCheckbox = document.getElementById('multiChordMode');
+  if (multiChordCheckbox && !multiChordCheckbox.checked) {
+    multiChordCheckbox.checked = true;
+    toggleMultiChordMode();
+  }
+
+  // Clear and load new chords (limit to 6)
+  selectedChords = chords.slice(0, 6);
+  updateSelectedChordsList();
+  renderMultiChordDisplay();
+
+  // Show display
+  document.getElementById('welcomeInstructions').style.display = 'none';
+  document.getElementById('multiChordDisplay').style.display = 'block';
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(`Loaded: ${progression.name} (${chords.slice(0, 6).join(' → ')})`, 3000, 'success');
+  }
+};
+
+// Play a progression sequence
+window.playProgression = function (progressionIndex) {
+  const progression = PROGRESSIONS_DATABASE[progressionIndex];
+  if (!progression) return;
+
+  const chords = getProgressionChords(progression.numerals);
+  const playableChords = chords.filter(c => CHORD_DATABASE[c]).slice(0, 6);
+
+  if (playableChords.length === 0) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('No playable chords in this progression for this key', 2000, 'warning');
+    }
+    return;
+  }
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(`Playing: ${progression.name}`, 2000, 'info');
+  }
+
+  let delay = 0;
+  playableChords.forEach((chordName, index) => {
+    setTimeout(() => {
+      playSpecificChord(chordName);
+    }, delay);
+    delay += 2000; // 2 seconds between chords
+  });
+};
+
+// Render progressions UI
+window.renderProgressions = function () {
+  const container = document.getElementById('progressionsContainer');
+  if (!container) return;
+
+  const keyChords = KEYS_DATABASE[currentKey];
+
+  let html = '';
+
+  PROGRESSIONS_DATABASE.forEach((prog, index) => {
+    const chords = getProgressionChords(prog.numerals);
+    const displayChords = chords.slice(0, 6); // Limit display to 6
+    const isPlayable = progressionIsPlayable(prog.numerals.slice(0, 6));
+    const hasMore = prog.numerals.length > 6;
+
+    html += `
+      <div class="progression-card ${isPlayable ? '' : 'disabled'}">
+        <div class="progression-header">
+          <span class="progression-name">${prog.name}</span>
+          <span class="progression-genre">${prog.genre}</span>
+        </div>
+        <div class="progression-numerals">${prog.numerals.slice(0, 6).join(' - ')}${hasMore ? ' ...' : ''}</div>
+        <div class="progression-chords">${displayChords.join(' → ')}${hasMore ? ' ...' : ''}</div>
+        <div class="progression-description">${prog.description}</div>
+        ${prog.songs && prog.songs.length > 0 ? `
+          <div class="progression-songs">
+            <strong>Songs:</strong> ${prog.songs.slice(0, 2).join(', ')}${prog.songs.length > 2 ? '...' : ''}
+          </div>
+        ` : ''}
+        <div class="progression-actions">
+          <button onclick="loadProgression(${index})" ${isPlayable ? '' : 'disabled'} title="Load chords into comparison view">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Load
+          </button>
+          <button onclick="playProgression(${index})" ${isPlayable ? '' : 'disabled'} title="Play chord sequence">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            Play
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+};
+
+// Initialize progressions on page load
+document.addEventListener('DOMContentLoaded', function () {
+  // Render progressions if container exists
+  setTimeout(() => {
+    renderProgressions();
+  }, 100);
+});
+
+// ============================================
+// QUICK WIN FEATURES: Toggle Functions
+// ============================================
+
+// Toggle left-handed mode
+window.toggleLeftHandedMode = function () {
+  leftHandedMode = !leftHandedMode;
+  saveUserPreferences();
+
+  // Update toggle UI
+  const toggle = document.getElementById('leftHandedToggle');
+  if (toggle) toggle.checked = leftHandedMode;
+
+  // Redraw fretboard if a chord is selected
+  if (currentChord) {
+    const chordData = CHORD_DATABASE[currentChord];
+    drawFretboard(chordData);
+  }
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(leftHandedMode ? 'Left-handed mode ON 🎸' : 'Right-handed mode ON 🎸', 1500, 'info');
+  }
+};
+
+// Toggle arpeggio mode
+window.toggleArpeggioMode = function () {
+  arpeggioMode = !arpeggioMode;
+  saveUserPreferences();
+
+  // Update toggle UI
+  const toggle = document.getElementById('arpeggioToggle');
+  if (toggle) toggle.checked = arpeggioMode;
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(arpeggioMode ? 'Arpeggio mode ON 🎵' : 'Strum mode ON 🎶', 1500, 'info');
+  }
+};
+
+// Toggle sound on/off
+window.toggleSound = function () {
+  soundEnabled = !soundEnabled;
+  saveUserPreferences();
+
+  // Update toggle UI
+  const toggle = document.getElementById('soundToggle');
+  if (toggle) toggle.checked = soundEnabled;
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(soundEnabled ? 'Sound ON 🔊' : 'Sound OFF 🔇', 1500, 'info');
+  }
+};
+
+// Get chord difficulty
+window.getChordDifficulty = function (chordName) {
+  return CHORD_DIFFICULTY[chordName] || 'intermediate';
 };
