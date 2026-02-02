@@ -1178,7 +1178,12 @@ let leftHandedMode = false;
 let arpeggioMode = false;
 let soundEnabled = true;
 
-// Note frequencies (A4 = 440Hz standard tuning)
+// Tone.js guitar synth
+let guitarSynth = null;
+let toneInitialized = false;
+let useToneJs = false;
+
+// Note frequencies (A4 = 440Hz standard tuning) - for fallback
 const TUNING = {
   6: 82.41,   // E2
   5: 110.00,  // A2
@@ -1187,6 +1192,94 @@ const TUNING = {
   2: 246.94,  // B3
   1: 329.63   // E4
 };
+
+// Note names for Tone.js (standard tuning)
+const STRING_NOTES = {
+  6: 'E2',   // Low E
+  5: 'A2',   // A
+  4: 'D3',   // D
+  3: 'G3',   // G
+  2: 'B3',   // B
+  1: 'E4'    // High E
+};
+
+// Initialize Tone.js guitar synth
+async function initToneGuitar() {
+  if (toneInitialized) return true;
+
+  // Check if Tone.js is loaded
+  if (typeof Tone === 'undefined') {
+    console.log('Tone.js not loaded, using fallback audio');
+    return false;
+  }
+
+  try {
+    // Start Tone.js audio context
+    await Tone.start();
+    console.log('Tone.js audio context started');
+
+    // Create a polyphonic pluck synth with guitar-like settings
+    guitarSynth = new Tone.PolySynth(Tone.PluckSynth, {
+      attackNoise: 1.2,
+      dampening: 4000,
+      resonance: 0.98,
+      release: 1.5
+    }).toDestination();
+
+    // Add some effects for more realistic sound
+    const reverb = new Tone.Reverb({
+      decay: 1.5,
+      wet: 0.2
+    }).toDestination();
+
+    const chorus = new Tone.Chorus({
+      frequency: 1.5,
+      delayTime: 3.5,
+      depth: 0.3,
+      wet: 0.15
+    }).toDestination();
+
+    guitarSynth.connect(reverb);
+    guitarSynth.connect(chorus);
+
+    // Set volume
+    guitarSynth.volume.value = -6;
+
+    toneInitialized = true;
+    useToneJs = true;
+    console.log('Tone.js guitar synth initialized successfully');
+
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('🎸 Realistic guitar audio loaded!', 2000, 'success');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Failed to initialize Tone.js:', error);
+    return false;
+  }
+}
+
+// Convert fret position to note name for Tone.js
+function fretToNote(stringNumber, fret, capo = 0) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const baseNote = STRING_NOTES[stringNumber];
+
+  // Parse base note
+  const noteName = baseNote.slice(0, -1);
+  const octave = parseInt(baseNote.slice(-1));
+
+  // Find index of base note
+  let noteIndex = notes.indexOf(noteName);
+  if (noteIndex === -1) noteIndex = notes.indexOf(noteName.replace('#', '').replace('b', ''));
+
+  // Add fret and capo
+  const totalSemitones = fret + capo;
+  const newNoteIndex = (noteIndex + totalSemitones) % 12;
+  const newOctave = octave + Math.floor((noteIndex + totalSemitones) / 12);
+
+  return notes[newNoteIndex] + newOctave;
+}
 
 // Storage key for favorite chords
 const FAVORITES_KEY = 'guitar_chord_favorites_';
@@ -2183,7 +2276,7 @@ function displayAlternative(chordName, altIndex) {
 }
 
 // Play chord audio
-window.playChord = function () {
+window.playChord = async function () {
   // Check if sound is enabled
   if (!soundEnabled) {
     if (typeof ToolUtils !== 'undefined') {
@@ -2210,31 +2303,74 @@ window.playChord = function () {
     setTimeout(() => { playBtn.style.opacity = '1'; }, 300);
   }
 
+  // Try Tone.js first
+  if (typeof Tone !== 'undefined') {
+    try {
+      // Initialize Tone.js if not already done
+      if (!toneInitialized) {
+        await initToneGuitar();
+      }
+
+      if (useToneJs && guitarSynth) {
+        console.log('Playing chord with Tone.js:', currentChord);
+        playChordWithTone(chordData);
+        return;
+      }
+    } catch (error) {
+      console.error('Tone.js error, falling back:', error);
+    }
+  }
+
+  // Fallback to Web Audio API
   try {
-    // Create audio context if needed
     if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      console.log('Audio context created');
+      console.log('Fallback: Audio context created');
     }
 
-    // Resume audio context if suspended (required by modern browsers)
     if (audioContext.state === 'suspended') {
-      console.log('Audio context suspended, resuming...');
-      audioContext.resume().then(() => {
-        console.log('Audio context resumed successfully');
-        playChordNotes(chordData);
-      }).catch(err => {
-        console.error('Failed to resume audio context:', err);
-      });
-    } else {
-      console.log('Audio context ready, playing...');
-      playChordNotes(chordData);
+      await audioContext.resume();
     }
+
+    console.log('Playing chord with Web Audio fallback');
+    playChordNotes(chordData);
   } catch (error) {
     console.error('Error playing chord:', error);
-    alert('Unable to play audio. Your browser may not support Web Audio API.');
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('Unable to play audio', 2000, 'error');
+    }
   }
 };
+
+// Play chord using Tone.js PluckSynth
+function playChordWithTone(chordData) {
+  const strumDelay = arpeggioMode ? 0.35 : 0.04; // seconds
+  const noteDuration = arpeggioMode ? '2n' : '1n'; // half note or whole note
+
+  // Pulse the play button
+  pulsePlayButton();
+
+  // Release any currently playing notes
+  guitarSynth.releaseAll();
+
+  const now = Tone.now();
+
+  chordData.frets.forEach((fret, index) => {
+    if (fret >= 0) { // Not muted
+      const stringNumber = 6 - index; // Convert index to string number (6=low E, 1=high E)
+      const note = fretToNote(stringNumber, fret, currentCapo);
+
+      // Schedule note with strum delay
+      const time = now + (index * strumDelay);
+      guitarSynth.triggerAttackRelease(note, noteDuration, time);
+
+      console.log(`Tone.js: String ${stringNumber}, Fret ${fret} -> ${note}`);
+
+      // Trigger string vibration animation
+      vibrateString(index, index * strumDelay * 1000);
+    }
+  });
+}
 
 // Trigger string vibration animation
 // svgId is optional - if provided, animates strings in that specific SVG (for multi-chord mode)
@@ -2288,25 +2424,26 @@ function pulsePlayButton() {
   }
 }
 
-// Separate function to play the actual notes
+// Separate function to play the actual notes (Web Audio fallback)
 function playChordNotes(chordData) {
   const now = audioContext.currentTime;
   // Arpeggio mode: longer delay between notes, Strum mode: quick strum
   const strumDelay = arpeggioMode ? 0.4 : 0.05; // 400ms for arpeggio, 50ms for strum
   const noteDuration = arpeggioMode ? 1.5 : 2.0;
 
-  console.log('Playing chord:', currentChord, arpeggioMode ? '(arpeggio)' : '(strum)');
+  console.log('Playing chord (Web Audio fallback):', currentChord, arpeggioMode ? '(arpeggio)' : '(strum)');
 
   // Pulse the play button
   pulsePlayButton();
 
   chordData.frets.forEach((fret, index) => {
     if (fret >= 0) { // Not muted
-      const stringNumber = index + 1;
+      // frets array: index 0 = string 6 (low E), index 5 = string 1 (high E)
+      const stringNumber = 6 - index;
       const baseFreq = TUNING[stringNumber];
       const frequency = baseFreq * Math.pow(2, (fret + currentCapo) / 12);
 
-      console.log(`String ${stringNumber}: fret ${fret}, frequency ${frequency}Hz`);
+      console.log(`String ${stringNumber}: fret ${fret}, frequency ${frequency.toFixed(2)}Hz`);
       playNote(frequency, now + index * strumDelay, noteDuration);
 
       // Trigger string vibration animation with matching delay

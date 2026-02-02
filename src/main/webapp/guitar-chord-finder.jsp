@@ -509,6 +509,8 @@
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <!-- Tone.js for realistic guitar audio synthesis -->
+    <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
     <script src="<%=request.getContextPath()%>/js/guitar-chord-finder.js?v=<%=cacheVersion%>"></script>
 
     <!-- E-E-A-T JSON-LD Schemas -->
