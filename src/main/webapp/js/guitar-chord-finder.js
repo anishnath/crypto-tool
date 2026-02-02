@@ -338,7 +338,7 @@ const TUNING = {
 };
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   populateQuickChords();
   populateChordTypes();
   setupSearchAutocomplete();
@@ -369,7 +369,7 @@ function setupSearchAutocomplete() {
 
   const allChords = Object.keys(CHORD_DATABASE);
 
-  searchInput.addEventListener('input', function() {
+  searchInput.addEventListener('input', function () {
     const query = this.value.trim();
     if (query.length > 0) {
       const matches = allChords.filter(c => c.toLowerCase().startsWith(query.toLowerCase()));
@@ -377,7 +377,7 @@ function setupSearchAutocomplete() {
     }
   });
 
-  searchInput.addEventListener('keypress', function(e) {
+  searchInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       searchChord();
     }
@@ -385,7 +385,7 @@ function setupSearchAutocomplete() {
 }
 
 // Search chord function called by button
-window.searchChord = function() {
+window.searchChord = function () {
   const searchInput = document.getElementById('chordInput');
   const chord = searchInput.value.trim();
 
@@ -430,7 +430,7 @@ function filterAndDisplay(type) {
 // Filter chords by type
 function filterChordsByType(type) {
   return Object.keys(CHORD_DATABASE).filter(chord => {
-    switch(type) {
+    switch (type) {
       case 'major': return /^[A-G]$/.test(chord);
       case 'minor': return chord.endsWith('m') && !chord.includes('7');
       case '7th': return chord.includes('7');
@@ -443,7 +443,7 @@ function filterChordsByType(type) {
 }
 
 // Main function to display a chord
-window.displayChord = function(chordName) {
+window.displayChord = function (chordName) {
   if (!CHORD_DATABASE[chordName]) {
     alert(`Chord "${chordName}" not found in database.`);
     return;
@@ -492,7 +492,7 @@ window.displayChord = function(chordName) {
 };
 
 // Toggle multi-chord mode
-window.toggleMultiChordMode = function() {
+window.toggleMultiChordMode = function () {
   const checkbox = document.getElementById('multiChordMode');
   multiChordMode = checkbox.checked;
 
@@ -564,7 +564,7 @@ function updateSelectedChordsList() {
 }
 
 // Remove chord from selection
-window.removeChordFromSelection = function(chordName) {
+window.removeChordFromSelection = function (chordName) {
   selectedChords = selectedChords.filter(c => c !== chordName);
   updateSelectedChordsList();
   renderMultiChordDisplay();
@@ -576,7 +576,7 @@ window.removeChordFromSelection = function(chordName) {
 };
 
 // Clear all selected chords
-window.clearAllChords = function() {
+window.clearAllChords = function () {
   selectedChords = [];
   updateSelectedChordsList();
   document.getElementById('multiChordDisplay').style.display = 'none';
@@ -639,7 +639,7 @@ function drawFretboardForElement(chordData, elementId) {
 
   // Draw strings (vertical lines)
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = startX + (numStrings - 1 - i) * stringSpacing;
     const line = createSVGElement('line', {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
@@ -663,7 +663,7 @@ function drawFretboardForElement(chordData, elementId) {
 
   // Draw open/muted indicators
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = startX + (numStrings - 1 - i) * stringSpacing;
     const fret = chordData.frets[i];
 
     if (fret === 0) {
@@ -742,7 +742,7 @@ function updateFingerPositionsForElement(chordData, elementId) {
 }
 
 // Play specific chord in multi-chord mode
-window.playSpecificChord = function(chordName) {
+window.playSpecificChord = function (chordName) {
   const tempChord = currentChord;
   currentChord = chordName;
   playChord();
@@ -750,7 +750,7 @@ window.playSpecificChord = function(chordName) {
 };
 
 // Play all selected chords in sequence
-window.playAllChords = function() {
+window.playAllChords = function () {
   if (selectedChords.length === 0) return;
 
   let delay = 0;
@@ -781,7 +781,7 @@ function drawFretboard(chordData) {
 
   // Draw strings (vertical lines)
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = startX + (numStrings - 1 - i) * stringSpacing;
     const line = createSVGElement('line', {
       x1: x, y1: startY,
       x2: x, y2: startY + numFrets * fretSpacing,
@@ -819,7 +819,7 @@ function drawFretboard(chordData) {
 
   // Draw open/muted indicators
   for (let i = 0; i < numStrings; i++) {
-    const x = startX + i * stringSpacing;
+    const x = startX + (numStrings - 1 - i) * stringSpacing;
     const fret = chordData.frets[i];
 
     if (fret === 0) {
@@ -984,7 +984,7 @@ function displayAlternative(chordName, altIndex) {
 }
 
 // Play chord audio
-window.playChord = function() {
+window.playChord = function () {
   if (!currentChord) {
     console.log('No chord selected');
     return;
@@ -1070,7 +1070,7 @@ function playNote(frequency, startTime, duration) {
 }
 
 // Update capo position
-window.updateCapo = function(value) {
+window.updateCapo = function (value) {
   currentCapo = parseInt(value);
   const display = document.getElementById('capoDisplay');
 
@@ -1115,7 +1115,7 @@ function transposeChord(chordName, semitones) {
 }
 
 // Download chord diagram as image
-window.downloadDiagram = function() {
+window.downloadDiagram = function () {
   const svg = document.getElementById('fretboardSvg');
   const svgData = new XMLSerializer().serializeToString(svg);
   const canvas = document.createElement('canvas');
@@ -1128,12 +1128,12 @@ window.downloadDiagram = function() {
   const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(svgBlob);
 
-  img.onload = function() {
+  img.onload = function () {
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
 
-    canvas.toBlob(function(blob) {
+    canvas.toBlob(function (blob) {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = `8gwifi.org-${currentChord}-chord-diagram-${Date.now()}.png`;
