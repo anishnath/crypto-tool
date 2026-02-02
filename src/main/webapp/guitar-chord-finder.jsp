@@ -230,6 +230,10 @@
                             <input type="checkbox" id="leftHandedToggle" onchange="toggleLeftHandedMode()">
                             <span>Left-Handed</span>
                         </label>
+                        <label class="setting-toggle" title="Horizontal layout like TAB (H)">
+                            <input type="checkbox" id="horizontalToggle" onchange="toggleHorizontalMode()">
+                            <span>Horizontal</span>
+                        </label>
                         <label class="setting-toggle" title="Play notes one at a time instead of strumming (P)">
                             <input type="checkbox" id="arpeggioToggle" onchange="toggleArpeggioMode()">
                             <span>Arpeggio</span>
@@ -397,6 +401,28 @@
                 </div>
             </div>
             <div class="progressions-grid" id="progressionsContainer">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Songs Section (1B+ YouTube Views) -->
+    <section class="popular-songs-section-full">
+        <div class="popular-songs-section-inner">
+            <div class="popular-songs-section-header">
+                <div class="popular-songs-title">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13c0-1.104 1.12-2 2.5-2s2.5.896 2.5 2zm9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2z"/>
+                        <path fill-rule="evenodd" d="M14 11V2h1v9h-1zM6 3v10H5V3h1z"/>
+                        <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4V2.905z"/>
+                    </svg>
+                    <div>
+                        <h2>Popular Songs Chords - 1 Billion+ Views Hits</h2>
+                        <p>Learn to play the most-watched songs on YouTube. Click any song to load its chord progression and practice along!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="popular-songs-grid" id="popularSongsContainer">
                 <!-- Populated by JavaScript -->
             </div>
         </div>

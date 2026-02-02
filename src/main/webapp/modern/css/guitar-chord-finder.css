@@ -956,6 +956,8 @@
 
     .play-btn {
         margin: 0 auto;
+        min-height: 48px;
+        min-width: 48px;
     }
 
     .chord-display-card {
@@ -968,6 +970,108 @@
 
     .multi-chord-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Touch-friendly controls */
+    .chord-search-input input {
+        font-size: 16px; /* Prevent iOS zoom */
+        min-height: 44px;
+    }
+
+    .chord-search-input button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Settings toggles */
+    .settings-toggles {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .setting-toggle {
+        padding: 0.75rem;
+        min-height: 44px;
+        justify-content: flex-start;
+    }
+
+    /* Quick chord buttons */
+    .quick-chords-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.375rem;
+    }
+
+    .quick-chord-btn {
+        min-height: 40px;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* Chord type selector */
+    .chord-type-selector {
+        gap: 0.375rem;
+    }
+
+    .chord-type-selector .btn {
+        min-height: 36px;
+        padding: 0.375rem 0.625rem;
+        font-size: 0.8rem;
+    }
+
+    /* Capo slider */
+    .capo-slider {
+        height: 8px;
+    }
+
+    /* Multi-chord mode */
+    .multi-chord-card {
+        padding: 0.75rem;
+    }
+
+    .selected-chords-bar {
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+
+    .selected-chord-tag {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.85rem;
+    }
+
+    /* Fretboard SVG - ensure it scales */
+    .fretboard-svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Finger guide */
+    .finger-guide {
+        font-size: 0.8rem;
+    }
+}
+
+/* Small mobile specific */
+@media (max-width: 480px) {
+    .quick-chords-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .quick-chord-btn {
+        font-size: 0.8rem;
+        padding: 0.375rem;
+    }
+
+    .chord-type-selector .btn {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .chord-name-display {
+        font-size: 1.5rem;
+    }
+
+    .chord-full-name {
+        font-size: 0.9rem;
     }
 }
 
@@ -1532,6 +1636,254 @@
 
     .progression-chords {
         font-size: 1rem;
+    }
+}
+
+/* ========================================
+   POPULAR SONGS SECTION (1B+ Views)
+   ======================================== */
+.popular-songs-section-full {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.popular-songs-section-inner {
+    background: linear-gradient(135deg, var(--bg-primary, #fff) 0%, var(--bg-secondary, #f8fafc) 100%);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.popular-songs-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.popular-songs-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.popular-songs-title svg {
+    flex-shrink: 0;
+    color: #dc2626;
+    margin-top: 0.25rem;
+}
+
+.popular-songs-title h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    color: var(--text-primary, #0f172a);
+}
+
+.popular-songs-title p {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #475569);
+    margin: 0;
+}
+
+.popular-songs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.song-card {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.song-card:hover {
+    border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+    transform: translateY(-2px);
+}
+
+.song-card.disabled {
+    opacity: 0.6;
+}
+
+.song-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.25rem;
+    gap: 0.5rem;
+}
+
+.song-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary, #0f172a);
+}
+
+.song-views {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    white-space: nowrap;
+}
+
+.song-artist {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #64748b);
+    margin-bottom: 0.75rem;
+}
+
+.song-chords {
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--tool-primary, #007bff);
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary, #f8fafc);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.song-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.song-difficulty {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+}
+
+.difficulty-beginner {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.difficulty-intermediate {
+    background: rgba(234, 179, 8, 0.1);
+    color: #ca8a04;
+}
+
+.difficulty-advanced {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+.song-capo {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+    border-radius: 0.25rem;
+}
+
+.song-strumming {
+    font-size: 0.7rem;
+    color: var(--text-muted, #94a3b8);
+    font-family: monospace;
+}
+
+.song-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.song-actions button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    background: var(--bg-primary, #fff);
+    color: var(--text-secondary, #475569);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.song-actions button:hover:not(:disabled) {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+}
+
+.song-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Dark mode - Popular Songs */
+[data-theme="dark"] .popular-songs-section-inner {
+    background: linear-gradient(135deg, var(--bg-primary, #0f172a) 0%, var(--bg-secondary, #1e293b) 100%);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .song-card {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .song-card:hover {
+    border-color: #dc2626;
+}
+
+[data-theme="dark"] .song-chords {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .song-actions button {
+    background: var(--bg-primary, #0f172a);
+    border-color: var(--border, #334155);
+}
+
+/* Mobile - Popular Songs */
+@media (max-width: 768px) {
+    .popular-songs-section-full {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+    }
+
+    .popular-songs-section-inner {
+        padding: 1rem;
+    }
+
+    .popular-songs-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .popular-songs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .song-card {
+        padding: 1rem;
+    }
+
+    .song-chords {
+        font-size: 0.9rem;
     }
 }
 

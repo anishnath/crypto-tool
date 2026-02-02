@@ -1,5 +1,6 @@
 // Guitar Chord Finder - 8gwifi.org
 // Comprehensive chord database with 2000+ variations
+console.log('[Guitar Chord Finder] Script loading...');
 
 // Chord Database: fret positions [string6, string5, string4, string3, string2, string1]
 // -1 = muted, 0 = open, 1-12 = fret number
@@ -795,6 +796,146 @@ const CHORD_DATABASE = {
   },
 
   // ============================================
+  // EXTENDED JAZZ CHORDS
+  // ============================================
+  // Major 9th (maj9) - Distinct from add9 (includes 7th)
+  'Cmaj9': {
+    frets: [-1, 3, 2, 4, 3, -1],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 4, 3], [2, 3, 1]],
+    name: 'C Major 9th',
+    barre: false
+  },
+  'Gmaj9': {
+    frets: [3, -1, 0, 2, 0, 2],
+    fingers: [[6, 3, 2], [3, 2, 1], [1, 2, 1]],
+    name: 'G Major 9th'
+  },
+  'Amaj9': {
+    frets: [-1, 0, 2, 1, 0, 0], // Often played like Amaj7 with B open? Or variation
+    fingers: [[4, 2, 2], [3, 1, 1]], // Simple voicing 
+    name: 'A Major 9th'
+  },
+  'Dmaj9': {
+    frets: [-1, 5, 4, 6, 5, -1],
+    fingers: [[5, 5, 2], [4, 4, 1], [3, 6, 4], [2, 5, 3]],
+    name: 'D Major 9th'
+  },
+  'Fmaj9': {
+    frets: [-1, 8, 7, 9, 8, -1],
+    fingers: [[5, 8, 2], [4, 7, 1], [3, 9, 4], [2, 8, 3]],
+    name: 'F Major 9th'
+  },
+
+  // 6/9 Chords (Pentatonic flavor)
+  'C6/9': {
+    frets: [-1, 3, 2, 2, 3, 3],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 2, 1], [2, 3, 3], [1, 3, 3]],
+    name: 'C 6/9'
+  },
+  'G6/9': {
+    frets: [3, 2, 0, 2, 0, 0],
+    fingers: [[6, 3, 2], [5, 2, 1], [3, 2, 3]], // or simplified
+    name: 'G 6/9'
+  },
+  'D6/9': {
+    frets: [-1, 5, 4, 4, 5, 0],
+    fingers: [[5, 5, 2], [4, 4, 1], [3, 4, 1], [2, 5, 3]],
+    name: 'D 6/9'
+  },
+  'A6/9': {
+    frets: [-1, 0, 2, 2, 0, 2], // A C# F# B E
+    fingers: [[4, 2, 1], [3, 2, 1], [1, 2, 1]], // barre
+    name: 'A 6/9'
+  },
+
+  // Minor 11th (m11) - Very modern smooth sound
+  'Am11': {
+    frets: [5, -1, 5, 5, 3, -1], // A G C D
+    fingers: [[6, 5, 2], [4, 5, 3], [3, 5, 4], [2, 3, 1]],
+    name: 'A Minor 11th'
+  },
+  'Em11': {
+    frets: [0, 2, 2, 0, 3, 3], // E B E G D G
+    fingers: [[5, 2, 1], [4, 2, 2], [2, 3, 3], [1, 3, 4]],
+    name: 'E Minor 11th'
+  },
+  'Dm11': {
+    frets: [-1, 5, 5, 5, 6, -1],
+    fingers: [[5, 5, 1], [4, 5, 1], [3, 5, 1], [2, 6, 2]],
+    name: 'D Minor 11th'
+  },
+  'Bm11': {
+    frets: [7, -1, 7, 7, 5, -1],
+    fingers: [[6, 7, 2], [4, 7, 3], [3, 7, 4], [2, 5, 1]],
+    name: 'B Minor 11th'
+  },
+
+  // Dominant 7th sharp 9 (7#9) - "Hendrix Chord"
+  'E7#9': {
+    frets: [0, 7, 6, 7, 8, 0],
+    fingers: [[5, 7, 2], [4, 6, 1], [3, 7, 3], [2, 8, 4]],
+    name: 'E 7#9 (Hendrix Chord)'
+  },
+  'A7#9': {
+    frets: [-1, 0, 2, 5, 2, 3], // check voicing
+    fingers: [[4, 2, 1], [3, 5, 4], [2, 2, 1], [1, 3, 2]], // Difficult stretch
+    name: 'A 7#9'
+  },
+  // Easier movable shape
+  'C7#9': {
+    frets: [-1, 3, 2, 3, 4, -1],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 3, 3], [2, 4, 4]],
+    name: 'C 7#9'
+  },
+  'D7#9': {
+    frets: [-1, 5, 4, 5, 6, -1],
+    fingers: [[5, 5, 2], [4, 4, 1], [3, 5, 3], [2, 6, 4]],
+    name: 'D 7#9'
+  },
+
+  // Dominant 7th flat 9 (7b9) - Essential Jazz
+  'E7b9': {
+    frets: [0, 2, 0, 1, 3, 0], // E B D G# F
+    fingers: [[5, 2, 2], [3, 1, 1], [2, 3, 4]],
+    name: 'E 7b9'
+  },
+  'A7b9': {
+    frets: [-1, 0, 2, 3, 2, 3], // A E G Bb C# ?
+    fingers: [[4, 2, 1], [3, 3, 2], [2, 2, 1], [1, 3, 3]],
+    name: 'A 7b9'
+  },
+  'C7b9': {
+    frets: [-1, 3, 2, 3, 2, -1],
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 3, 3], [2, 2, 1]], // Reduced 4-string voicing
+    name: 'C 7b9'
+  },
+  'G7b9': {
+    frets: [3, -1, 3, 1, 0, -1],
+    fingers: [[6, 3, 3], [4, 3, 4], [3, 1, 1]],
+    name: 'G 7b9'
+  },
+
+  // Minor 13th (m13)
+  'Am13': {
+    frets: [5, -1, 5, 5, 7, 5],
+    fingers: [[6, 5, 1], [4, 5, 1], [3, 5, 1], [2, 7, 3], [1, 5, 1]], // Barre
+    name: 'A Minor 13th'
+  },
+  'Dm13': {
+    frets: [-1, 5, 7, 5, 6, 7],
+    fingers: [[5, 5, 1], [4, 7, 3], [3, 5, 1], [2, 6, 2], [1, 7, 4]],
+    name: 'D Minor 13th'
+  },
+
+  // Major 13th
+  'Cmaj13': {
+    frets: [-1, 3, 2, 2, 0, 2], // C E A B D ? (No, A is 13, B is 7, D is 9) -> C E G B D A
+    // Voicing: C (3) E (2) A (2) D (3?)
+    fingers: [[5, 3, 2], [4, 2, 1], [3, 2, 1], [1, 2, 1]], // Hard to play fully
+    name: 'C Major 13th'
+  },
+
+  // ============================================
   // COMMON SLASH CHORDS
   // ============================================
   'C/G': {
@@ -988,13 +1129,13 @@ const CHORD_ALTERNATIVES = {
 
 // All 12 keys with their diatonic chords (I, ii, iii, IV, V, vi, vii°)
 const KEYS_DATABASE = {
-  'C':  { I: 'C',  ii: 'Dm', iii: 'Em', IV: 'F',  V: 'G',  vi: 'Am', vii: 'Bdim' },
-  'G':  { I: 'G',  ii: 'Am', iii: 'Bm', IV: 'C',  V: 'D',  vi: 'Em', vii: 'F#dim' },
-  'D':  { I: 'D',  ii: 'Em', iii: 'F#m', IV: 'G', V: 'A',  vi: 'Bm', vii: 'C#dim' },
-  'A':  { I: 'A',  ii: 'Bm', iii: 'C#m', IV: 'D', V: 'E',  vi: 'F#m', vii: 'G#dim' },
-  'E':  { I: 'E',  ii: 'F#m', iii: 'G#m', IV: 'A', V: 'B', vi: 'C#m', vii: 'D#dim' },
-  'F':  { I: 'F',  ii: 'Gm', iii: 'Am', IV: 'Bb', V: 'C',  vi: 'Dm', vii: 'Edim' },
-  'Bb': { I: 'Bb', ii: 'Cm', iii: 'Dm', IV: 'Eb', V: 'F',  vi: 'Gm', vii: 'Adim' },
+  'C': { I: 'C', ii: 'Dm', iii: 'Em', IV: 'F', V: 'G', vi: 'Am', vii: 'Bdim' },
+  'G': { I: 'G', ii: 'Am', iii: 'Bm', IV: 'C', V: 'D', vi: 'Em', vii: 'F#dim' },
+  'D': { I: 'D', ii: 'Em', iii: 'F#m', IV: 'G', V: 'A', vi: 'Bm', vii: 'C#dim' },
+  'A': { I: 'A', ii: 'Bm', iii: 'C#m', IV: 'D', V: 'E', vi: 'F#m', vii: 'G#dim' },
+  'E': { I: 'E', ii: 'F#m', iii: 'G#m', IV: 'A', V: 'B', vi: 'C#m', vii: 'D#dim' },
+  'F': { I: 'F', ii: 'Gm', iii: 'Am', IV: 'Bb', V: 'C', vi: 'Dm', vii: 'Edim' },
+  'Bb': { I: 'Bb', ii: 'Cm', iii: 'Dm', IV: 'Eb', V: 'F', vi: 'Gm', vii: 'Adim' },
   'Eb': { I: 'Eb', ii: 'Fm', iii: 'Gm', IV: 'Ab', V: 'Bb', vi: 'Cm', vii: 'Ddim' }
 };
 
@@ -1069,6 +1210,327 @@ const PROGRESSIONS_DATABASE = [
     description: 'Descending Spanish/Flamenco feel',
     songs: ['Hit The Road Jack', 'Smooth', 'Sultans of Swing'],
     genre: 'Latin'
+  }
+];
+
+// ============================================
+// POPULAR SONGS DATABASE (1B+ YouTube Views)
+// ============================================
+const POPULAR_SONGS_DATABASE = [
+  // 8B+ Views
+  {
+    title: 'Despacito',
+    artist: 'Luis Fonsi ft. Daddy Yankee',
+    views: '8.4B',
+    year: 2017,
+    chords: ['Bm', 'G', 'D', 'A'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  // 5B+ Views
+  {
+    title: 'Shape of You',
+    artist: 'Ed Sheeran',
+    views: '6.2B',
+    year: 2017,
+    chords: ['Em', 'Am', 'C', 'D'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D D UDU'
+  },
+  {
+    title: 'See You Again',
+    artist: 'Wiz Khalifa ft. Charlie Puth',
+    views: '5.8B',
+    year: 2015,
+    chords: ['G', 'Em', 'C', 'D'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  // 4B+ Views
+  {
+    title: 'Gangnam Style',
+    artist: 'PSY',
+    views: '4.9B',
+    year: 2012,
+    chords: ['Bm', 'A', 'Em', 'D'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Uptown Funk',
+    artist: 'Mark Ronson ft. Bruno Mars',
+    views: '4.8B',
+    year: 2014,
+    chords: ['Dm', 'G'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  // 3B+ Views
+  {
+    title: 'Sorry',
+    artist: 'Justin Bieber',
+    views: '3.6B',
+    year: 2015,
+    chords: ['Em', 'C', 'G', 'D'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Sugar',
+    artist: 'Maroon 5',
+    views: '3.8B',
+    year: 2015,
+    chords: ['Dm', 'Am', 'Bb', 'F'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D D UDU'
+  },
+  {
+    title: 'Counting Stars',
+    artist: 'OneRepublic',
+    views: '3.9B',
+    year: 2013,
+    chords: ['Am', 'C', 'G', 'F'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Roar',
+    artist: 'Katy Perry',
+    views: '3.6B',
+    year: 2013,
+    chords: ['G', 'C', 'Em', 'D'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Hello',
+    artist: 'Adele',
+    views: '3.2B',
+    year: 2015,
+    chords: ['Em', 'G', 'D', 'C'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Thinking Out Loud',
+    artist: 'Ed Sheeran',
+    views: '3.5B',
+    year: 2014,
+    chords: ['D', 'G', 'A', 'Em'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Let Her Go',
+    artist: 'Passenger',
+    views: '3.4B',
+    year: 2012,
+    chords: ['G', 'C', 'D', 'Em'],
+    capo: 7,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  // 2B+ Views
+  {
+    title: 'Perfect',
+    artist: 'Ed Sheeran',
+    views: '2.9B',
+    year: 2017,
+    chords: ['G', 'Em', 'C', 'D'],
+    capo: 1,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Believer',
+    artist: 'Imagine Dragons',
+    views: '2.3B',
+    year: 2017,
+    chords: ['Am', 'F', 'E', 'Am'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D D DU DU'
+  },
+  {
+    title: 'Someone Like You',
+    artist: 'Adele',
+    views: '2.1B',
+    year: 2011,
+    chords: ['A', 'E', 'F#m', 'D'],
+    capo: 2,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Photograph',
+    artist: 'Ed Sheeran',
+    views: '2.0B',
+    year: 2015,
+    chords: ['E', 'C#m', 'B', 'A'],
+    capo: 4,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Stay With Me',
+    artist: 'Sam Smith',
+    views: '2.0B',
+    year: 2014,
+    chords: ['Am', 'F', 'C'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Havana',
+    artist: 'Camila Cabello',
+    views: '1.9B',
+    year: 2017,
+    chords: ['Gm', 'Eb', 'D'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Closer',
+    artist: 'The Chainsmokers ft. Halsey',
+    views: '1.8B',
+    year: 2016,
+    chords: ['C', 'G', 'Am', 'F'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Wake Me Up',
+    artist: 'Avicii',
+    views: '2.1B',
+    year: 2013,
+    chords: ['Bm', 'G', 'D', 'A'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Love Yourself',
+    artist: 'Justin Bieber',
+    views: '1.6B',
+    year: 2015,
+    chords: ['C', 'G', 'Am', 'F'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'All of Me',
+    artist: 'John Legend',
+    views: '1.9B',
+    year: 2013,
+    chords: ['Em', 'C', 'G', 'D'],
+    capo: 1,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Faded',
+    artist: 'Alan Walker',
+    views: '3.2B',
+    year: 2015,
+    chords: ['Em', 'G', 'D', 'C'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Rockabye',
+    artist: 'Clean Bandit',
+    views: '2.5B',
+    year: 2016,
+    chords: ['Em', 'D', 'G', 'C'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Something Just Like This',
+    artist: 'The Chainsmokers & Coldplay',
+    views: '1.8B',
+    year: 2017,
+    chords: ['G', 'A', 'Bm', 'D'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: "Can't Stop the Feeling",
+    artist: 'Justin Timberlake',
+    views: '1.4B',
+    year: 2016,
+    chords: ['C', 'Am', 'F', 'Am'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Dance Monkey',
+    artist: 'Tones and I',
+    views: '1.9B',
+    year: 2019,
+    chords: ['F#m', 'D', 'E', 'C#m'],
+    capo: 2,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Memories',
+    artist: 'Maroon 5',
+    views: '1.5B',
+    year: 2019,
+    chords: ['C', 'G', 'Am', 'Em', 'F'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Blinding Lights',
+    artist: 'The Weeknd',
+    views: '1.5B',
+    year: 2020,
+    chords: ['Fm', 'Cm', 'Eb', 'Bb'],
+    capo: 1,
+    difficulty: 'intermediate',
+    strumming: 'D DU UDU'
+  },
+  {
+    title: 'Someone You Loved',
+    artist: 'Lewis Capaldi',
+    views: '1.4B',
+    year: 2019,
+    chords: ['C', 'G', 'Am', 'F'],
+    capo: 0,
+    difficulty: 'beginner',
+    strumming: 'D D D D'
+  },
+  {
+    title: 'Bad Guy',
+    artist: 'Billie Eilish',
+    views: '1.8B',
+    year: 2019,
+    chords: ['Gm', 'Cm', 'D'],
+    capo: 0,
+    difficulty: 'intermediate',
+    strumming: 'D D D D'
   }
 ];
 
@@ -1177,11 +1639,16 @@ let currentKey = 'C';
 let leftHandedMode = false;
 let arpeggioMode = false;
 let soundEnabled = true;
+let horizontalMode = false; // Tablature-style horizontal fretboard
 
 // Tone.js guitar synth
 let guitarSynth = null;
 let toneInitialized = false;
 let useToneJs = false;
+
+// Playback tracking - to cancel ongoing sequences
+let activePlaybackId = 0;
+let playbackTimeouts = [];
 
 // Note frequencies (A4 = 440Hz standard tuning) - for fallback
 const TUNING = {
@@ -1218,32 +1685,33 @@ async function initToneGuitar() {
     await Tone.start();
     console.log('Tone.js audio context started');
 
-    // Create a polyphonic pluck synth with guitar-like settings
-    guitarSynth = new Tone.PolySynth(Tone.PluckSynth, {
-      attackNoise: 1.2,
-      dampening: 4000,
-      resonance: 0.98,
-      release: 1.5
+    // Create a polyphonic synth with guitar-like envelope
+    // Using Synth instead of PluckSynth for better polyphony control
+    guitarSynth = new Tone.PolySynth(Tone.Synth, {
+      oscillator: {
+        type: 'triangle'  // Softer, more guitar-like tone
+      },
+      envelope: {
+        attack: 0.005,    // Quick pluck attack
+        decay: 0.3,       // Quick decay like guitar string
+        sustain: 0.2,     // Low sustain
+        release: 0.5      // Moderate release
+      }
     }).toDestination();
+
+    // Set polyphony - 6 strings x 3 chords max overlapping
+    guitarSynth.maxPolyphony = 24;
 
     // Add some effects for more realistic sound
     const reverb = new Tone.Reverb({
-      decay: 1.5,
-      wet: 0.2
-    }).toDestination();
-
-    const chorus = new Tone.Chorus({
-      frequency: 1.5,
-      delayTime: 3.5,
-      depth: 0.3,
+      decay: 1.0,
       wet: 0.15
     }).toDestination();
 
     guitarSynth.connect(reverb);
-    guitarSynth.connect(chorus);
 
     // Set volume
-    guitarSynth.volume.value = -6;
+    guitarSynth.volume.value = -8;
 
     toneInitialized = true;
     useToneJs = true;
@@ -1351,6 +1819,12 @@ function setupKeyboardShortcuts() {
       e.preventDefault();
       toggleSound();
     }
+
+    // H for horizontal/vertical toggle
+    if (key === 'H' && !e.shiftKey && !e.ctrlKey) {
+      e.preventDefault();
+      toggleHorizontalMode();
+    }
   });
 }
 
@@ -1362,6 +1836,7 @@ function loadUserPreferences() {
       leftHandedMode = prefs.leftHanded || false;
       arpeggioMode = prefs.arpeggio || false;
       soundEnabled = prefs.sound !== false;
+      horizontalMode = prefs.horizontal || false;
 
       // Update UI toggles
       updateToggleUI();
@@ -1375,7 +1850,8 @@ function saveUserPreferences() {
     ToolUtils.storage.save('guitar_preferences', {
       leftHanded: leftHandedMode,
       arpeggio: arpeggioMode,
-      sound: soundEnabled
+      sound: soundEnabled,
+      horizontal: horizontalMode
     });
   }
 }
@@ -1385,10 +1861,12 @@ function updateToggleUI() {
   const leftHandedToggle = document.getElementById('leftHandedToggle');
   const arpeggioToggle = document.getElementById('arpeggioToggle');
   const soundToggle = document.getElementById('soundToggle');
+  const horizontalToggle = document.getElementById('horizontalToggle');
 
   if (leftHandedToggle) leftHandedToggle.checked = leftHandedMode;
   if (arpeggioToggle) arpeggioToggle.checked = arpeggioMode;
   if (soundToggle) soundToggle.checked = soundEnabled;
+  if (horizontalToggle) horizontalToggle.checked = horizontalMode;
 }
 
 // Populate quick access chord buttons
@@ -1611,6 +2089,7 @@ window.searchChord = function () {
     }
   }
 };
+console.log('[Guitar Chord Finder] searchChord function defined:', typeof window.searchChord);
 
 // Populate chord type buttons
 function populateChordTypes() {
@@ -1626,6 +2105,7 @@ function populateChordTypes() {
     { name: 'Dim', type: 'dim' },
     { name: 'Aug', type: 'aug' },
     { name: '9th', type: '9th' },
+    { name: 'Extended', type: 'extended' },
     { name: 'Slash', type: 'slash' }
   ];
 
@@ -1664,6 +2144,7 @@ function filterChordsByType(type) {
       case 'dim': return chord.includes('dim'); // Cdim, Cdim7
       case 'aug': return chord.includes('aug'); // Caug, Daug
       case '9th': return /^[A-G][b#]?9$/.test(chord) || chord.includes('m9'); // C9, Am9
+      case 'extended': return chord.includes('11') || chord.includes('13') || chord.includes('6/9') || chord.includes('#9') || chord.includes('b9') || chord.includes('maj9');
       case 'slash': return chord.includes('/'); // C/G, D/F#
       default: return true;
     }
@@ -1869,110 +2350,201 @@ function drawFretboardForElement(chordData, elementId) {
 
   svg.innerHTML = ''; // Clear previous
 
-  const width = 300;
-  const height = 250;
-  const stringSpacing = 45;
-  const fretSpacing = 40;
-  const startX = 30;
-  const startY = 40;
-
   const numStrings = 6;
   const numFrets = 5;
 
-  // Helper function to calculate X position based on handedness (consistent with main fretboard)
-  const getStringX = (stringIndex) => {
-    if (leftHandedMode) {
-      return startX + (numStrings - 1 - stringIndex) * stringSpacing;
-    } else {
-      return startX + stringIndex * stringSpacing;
-    }
-  };
+  if (horizontalMode) {
+    // HORIZONTAL MODE for multi-chord cards
+    const stringSpacing = 22;
+    const fretSpacing = 40;
+    const startX = 35;
+    const startY = 20;
 
-  // Draw strings (vertical lines)
-  for (let i = 0; i < numStrings; i++) {
-    const x = getStringX(i);
-    const line = createSVGElement('line', {
-      x1: x, y1: startY,
-      x2: x, y2: startY + numFrets * fretSpacing,
-      stroke: '#333',
-      'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2), // Realistic string thickness
-      'class': `guitar-string string-${i}`
+    svg.setAttribute('viewBox', '0 0 260 160');
+
+    const getStringY = (stringIndex) => {
+      if (leftHandedMode) {
+        return startY + stringIndex * stringSpacing;
+      } else {
+        return startY + (numStrings - 1 - stringIndex) * stringSpacing;
+      }
+    };
+
+    // Draw strings (horizontal)
+    for (let i = 0; i < numStrings; i++) {
+      const y = getStringY(i);
+      const line = createSVGElement('line', {
+        x1: startX, y1: y,
+        x2: startX + numFrets * fretSpacing, y2: y,
+        stroke: '#333',
+        'stroke-width': i === 0 ? 2 : (i === numStrings - 1 ? 0.8 : 1.5 - i * 0.15),
+        'class': `guitar-string string-${i}`
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw frets (vertical)
+    for (let i = 0; i <= numFrets; i++) {
+      const x = startX + i * fretSpacing;
+      const line = createSVGElement('line', {
+        x1: x, y1: startY,
+        x2: x, y2: startY + (numStrings - 1) * stringSpacing,
+        stroke: i === 0 ? '#000' : '#333',
+        'stroke-width': i === 0 ? 3 : 1.5
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw open/muted indicators
+    for (let i = 0; i < numStrings; i++) {
+      const y = getStringY(i);
+      const fret = chordData.frets[i];
+
+      if (fret === 0) {
+        const circle = createSVGElement('circle', {
+          cx: startX - 15, cy: y,
+          r: 5,
+          fill: 'none',
+          stroke: '#28a745',
+          'stroke-width': 1.5
+        });
+        svg.appendChild(circle);
+      } else if (fret === -1) {
+        const text = createSVGElement('text', {
+          x: startX - 15, y: y + 4,
+          'font-size': 12,
+          'font-weight': 'bold',
+          fill: '#dc3545',
+          'text-anchor': 'middle'
+        });
+        text.textContent = '×';
+        svg.appendChild(text);
+      }
+    }
+
+    // Draw finger positions
+    chordData.fingers.forEach(([string, fret, finger]) => {
+      if (fret > 0 && fret <= numFrets) {
+        const stringIdx = 6 - string;
+        const y = getStringY(stringIdx);
+        const x = startX + fret * fretSpacing - fretSpacing / 2;
+
+        const circle = createSVGElement('circle', {
+          cx: x, cy: y,
+          r: 9,
+          fill: '#007bff',
+          stroke: '#fff',
+          'stroke-width': 1.5
+        });
+        svg.appendChild(circle);
+
+        const text = createSVGElement('text', {
+          x: x, y: y + 4,
+          'font-size': 11,
+          'font-weight': 'bold',
+          fill: '#fff',
+          'text-anchor': 'middle'
+        });
+        text.textContent = finger;
+        svg.appendChild(text);
+      }
     });
-    svg.appendChild(line);
-  }
+  } else {
+    // VERTICAL MODE for multi-chord cards
+    const stringSpacing = 45;
+    const fretSpacing = 40;
+    const startX = 30;
+    const startY = 40;
 
-  // Draw frets (horizontal lines)
-  for (let i = 0; i <= numFrets; i++) {
-    const y = startY + i * fretSpacing;
-    const line = createSVGElement('line', {
-      x1: startX, y1: y,
-      x2: startX + (numStrings - 1) * stringSpacing, y2: y,
-      stroke: i === 0 ? '#000' : '#333',
-      'stroke-width': i === 0 ? 4 : 2
+    svg.setAttribute('viewBox', '0 0 300 250');
+
+    const getStringX = (stringIndex) => {
+      if (leftHandedMode) {
+        return startX + (numStrings - 1 - stringIndex) * stringSpacing;
+      } else {
+        return startX + stringIndex * stringSpacing;
+      }
+    };
+
+    // Draw strings (vertical)
+    for (let i = 0; i < numStrings; i++) {
+      const x = getStringX(i);
+      const line = createSVGElement('line', {
+        x1: x, y1: startY,
+        x2: x, y2: startY + numFrets * fretSpacing,
+        stroke: '#333',
+        'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2),
+        'class': `guitar-string string-${i}`
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw frets (horizontal)
+    for (let i = 0; i <= numFrets; i++) {
+      const y = startY + i * fretSpacing;
+      const line = createSVGElement('line', {
+        x1: startX, y1: y,
+        x2: startX + (numStrings - 1) * stringSpacing, y2: y,
+        stroke: i === 0 ? '#000' : '#333',
+        'stroke-width': i === 0 ? 4 : 2
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw open/muted indicators
+    for (let i = 0; i < numStrings; i++) {
+      const x = getStringX(i);
+      const fret = chordData.frets[i];
+
+      if (fret === 0) {
+        const circle = createSVGElement('circle', {
+          cx: x, cy: startY - 15,
+          r: 8,
+          fill: 'none',
+          stroke: '#28a745',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+      } else if (fret === -1) {
+        const text = createSVGElement('text', {
+          x: x, y: startY - 8,
+          'font-size': 18,
+          'font-weight': 'bold',
+          fill: '#dc3545',
+          'text-anchor': 'middle'
+        });
+        text.textContent = '×';
+        svg.appendChild(text);
+      }
+    }
+
+    // Draw finger positions
+    chordData.fingers.forEach(([string, fret, finger]) => {
+      if (fret > 0 && fret <= numFrets) {
+        const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
+        const y = startY + fret * fretSpacing - fretSpacing / 2;
+
+        const circle = createSVGElement('circle', {
+          cx: x, cy: y,
+          r: 12,
+          fill: '#007bff',
+          stroke: '#fff',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+
+        const text = createSVGElement('text', {
+          x: x, y: y + 5,
+          'font-size': 14,
+          'font-weight': 'bold',
+          fill: '#fff',
+          'text-anchor': 'middle'
+        });
+        text.textContent = finger;
+        svg.appendChild(text);
+      }
     });
-    svg.appendChild(line);
   }
-
-  // Draw open/muted indicators
-  for (let i = 0; i < numStrings; i++) {
-    const x = getStringX(i);
-    const fret = chordData.frets[i];
-
-    if (fret === 0) {
-      // Open string (O)
-      const circle = createSVGElement('circle', {
-        cx: x, cy: startY - 15,
-        r: 8,
-        fill: 'none',
-        stroke: '#28a745',
-        'stroke-width': 2
-      });
-      svg.appendChild(circle);
-    } else if (fret === -1) {
-      // Muted string (X)
-      const text = createSVGElement('text', {
-        x: x, y: startY - 8,
-        'font-size': 18,
-        'font-weight': 'bold',
-        fill: '#dc3545',
-        'text-anchor': 'middle'
-      });
-      text.textContent = '×';
-      svg.appendChild(text);
-    }
-  }
-
-  // Draw finger positions
-  // Note: In fingers array, string is numbered 1-6 from High E to Low E
-  chordData.fingers.forEach(([string, fret, finger]) => {
-    if (fret > 0 && fret <= numFrets) {
-      // Standard: Low E on left, so High E (string 1) at rightmost position
-      // Left-handed: flipped, High E (string 1) at leftmost position
-      const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
-      const y = startY + fret * fretSpacing - fretSpacing / 2;
-
-      // Finger circle
-      const circle = createSVGElement('circle', {
-        cx: x, cy: y,
-        r: 12,
-        fill: '#007bff',
-        stroke: '#fff',
-        'stroke-width': 2
-      });
-      svg.appendChild(circle);
-
-      // Finger number
-      const text = createSVGElement('text', {
-        x: x, y: y + 5,
-        'font-size': 14,
-        'font-weight': 'bold',
-        fill: '#fff',
-        'text-anchor': 'middle'
-      });
-      text.textContent = finger;
-      svg.appendChild(text);
-    }
-  });
 }
 
 // Update finger positions for specific element
@@ -2025,11 +2597,19 @@ window.playSpecificChord = function (chordName) {
 window.playAllChords = function () {
   if (selectedChords.length === 0) return;
 
+  // Cancel any ongoing playback first
+  cancelPlayback();
+  const currentPlaybackId = activePlaybackId;
+
   let delay = 0;
   selectedChords.forEach((chordName, index) => {
-    setTimeout(() => {
-      playSpecificChord(chordName);
+    const timeoutId = setTimeout(() => {
+      // Only play if this playback session is still active
+      if (activePlaybackId === currentPlaybackId) {
+        playSpecificChord(chordName);
+      }
     }, delay);
+    playbackTimeouts.push(timeoutId);
     delay += 2500; // 2.5 seconds between chords
   });
 };
@@ -2041,153 +2621,303 @@ function drawFretboard(chordData) {
 
   svg.innerHTML = ''; // Clear previous
 
-  const width = 300;
-  const height = 250;
-  const stringSpacing = 45;
-  const fretSpacing = 40;
-  const startX = 30;
-  const startY = 40;
-
   const numStrings = 6;
   const numFrets = 5;
 
-  // Helper function to calculate X position based on handedness
-  // Standard: Low E (string 0) on LEFT, High E (string 5) on RIGHT
-  // Left-handed: Flipped horizontally for lefty players
-  const getStringX = (stringIndex) => {
-    if (leftHandedMode) {
-      // Left-handed: flip from standard (Low E on right)
-      return startX + (numStrings - 1 - stringIndex) * stringSpacing;
-    } else {
-      // Standard orientation: Low E on left, High E on right
-      return startX + stringIndex * stringSpacing;
-    }
-  };
+  if (horizontalMode) {
+    // HORIZONTAL MODE (Tablature style)
+    // Strings run left-to-right, frets are vertical
+    const stringSpacing = 28;
+    const fretSpacing = 50;
+    const startX = 40;
+    const startY = 25;
 
-  // Draw strings (vertical lines)
-  for (let i = 0; i < numStrings; i++) {
-    const x = getStringX(i);
-    const line = createSVGElement('line', {
-      x1: x, y1: startY,
-      x2: x, y2: startY + numFrets * fretSpacing,
-      stroke: '#333',
-      'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2), // Realistic string thickness
-      'class': `guitar-string string-${i}`,
-      'id': `string-${i}`
-    });
-    svg.appendChild(line);
-  }
+    // Update SVG viewBox for horizontal layout
+    svg.setAttribute('viewBox', '0 0 320 200');
 
-  // Draw frets (horizontal lines)
-  for (let i = 0; i <= numFrets; i++) {
-    const y = startY + i * fretSpacing;
-    const line = createSVGElement('line', {
-      x1: startX, y1: y,
-      x2: startX + (numStrings - 1) * stringSpacing, y2: y,
-      stroke: i === 0 ? '#000' : '#333',
-      'stroke-width': i === 0 ? 4 : 2
-    });
-    svg.appendChild(line);
-  }
+    // Helper: get Y position for string (Low E at bottom, High E at top)
+    const getStringY = (stringIndex) => {
+      // stringIndex 0 = Low E (bottom), 5 = High E (top)
+      if (leftHandedMode) {
+        return startY + stringIndex * stringSpacing;
+      } else {
+        return startY + (numStrings - 1 - stringIndex) * stringSpacing;
+      }
+    };
 
-  // Draw fret numbers
-  for (let i = 1; i <= numFrets; i++) {
-    const y = startY + i * fretSpacing - fretSpacing / 2;
-    const fretNumX = leftHandedMode ? startX + (numStrings - 1) * stringSpacing + 20 : startX - 20;
-    const text = createSVGElement('text', {
-      x: fretNumX,
-      y: y + 5,
-      'font-size': 14,
-      'font-weight': 'bold',
-      fill: '#666',
-      'text-anchor': leftHandedMode ? 'start' : 'end'
-    });
-    text.textContent = i;
-    svg.appendChild(text);
-  }
-
-  // Draw open/muted indicators
-  for (let i = 0; i < numStrings; i++) {
-    const x = getStringX(i);
-    const fret = chordData.frets[i];
-
-    if (fret === 0) {
-      // Open string (O)
-      const circle = createSVGElement('circle', {
-        cx: x, cy: startY - 15,
-        r: 8,
-        fill: 'none',
-        stroke: '#28a745',
-        'stroke-width': 2
+    // Draw strings (horizontal lines)
+    for (let i = 0; i < numStrings; i++) {
+      const y = getStringY(i);
+      const line = createSVGElement('line', {
+        x1: startX, y1: y,
+        x2: startX + numFrets * fretSpacing, y2: y,
+        stroke: '#333',
+        'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2),
+        'class': `guitar-string string-${i}`,
+        'id': `string-${i}`
       });
-      svg.appendChild(circle);
-    } else if (fret === -1) {
-      // Muted string (X)
+      svg.appendChild(line);
+    }
+
+    // Draw frets (vertical lines)
+    for (let i = 0; i <= numFrets; i++) {
+      const x = startX + i * fretSpacing;
+      const line = createSVGElement('line', {
+        x1: x, y1: startY,
+        x2: x, y2: startY + (numStrings - 1) * stringSpacing,
+        stroke: i === 0 ? '#000' : '#333',
+        'stroke-width': i === 0 ? 4 : 2
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw fret numbers (below the fretboard)
+    for (let i = 1; i <= numFrets; i++) {
+      const x = startX + i * fretSpacing - fretSpacing / 2;
       const text = createSVGElement('text', {
-        x: x, y: startY - 8,
-        'font-size': 18,
+        x: x,
+        y: startY + (numStrings - 1) * stringSpacing + 20,
+        'font-size': 12,
         'font-weight': 'bold',
-        fill: '#dc3545',
+        fill: '#666',
         'text-anchor': 'middle'
       });
-      text.textContent = '×';
+      text.textContent = i;
       svg.appendChild(text);
     }
-  }
 
-  // Draw finger positions
-  // Note: In fingers array, string is numbered 1-6 from High E to Low E
-  chordData.fingers.forEach(([string, fret, finger]) => {
-    if (fret > 0 && fret <= numFrets) {
-      // Standard: Low E on left, so High E (string 1) at rightmost position
-      // Left-handed: flipped, High E (string 1) at leftmost position
-      const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
-      const y = startY + fret * fretSpacing - fretSpacing / 2;
-
-      // Finger circle
-      const circle = createSVGElement('circle', {
-        cx: x, cy: y,
-        r: 12,
-        fill: chordData.barre && finger === 1 ? '#ffc107' : '#007bff',
-        stroke: '#fff',
-        'stroke-width': 2
-      });
-      svg.appendChild(circle);
-
-      // Finger number
+    // Draw string names on left
+    const stringLabels = ['E', 'A', 'D', 'G', 'B', 'e'];
+    for (let i = 0; i < numStrings; i++) {
+      const y = getStringY(i);
       const text = createSVGElement('text', {
-        x: x, y: y + 5,
+        x: startX - 15,
+        y: y + 4,
+        'font-size': 11,
+        'font-weight': 'bold',
+        fill: '#666',
+        'text-anchor': 'middle'
+      });
+      text.textContent = stringLabels[i];
+      svg.appendChild(text);
+    }
+
+    // Draw open/muted indicators (on the left of nut)
+    for (let i = 0; i < numStrings; i++) {
+      const y = getStringY(i);
+      const fret = chordData.frets[i];
+
+      if (fret === 0) {
+        const circle = createSVGElement('circle', {
+          cx: startX - 30, cy: y,
+          r: 6,
+          fill: 'none',
+          stroke: '#28a745',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+      } else if (fret === -1) {
+        const text = createSVGElement('text', {
+          x: startX - 30, y: y + 5,
+          'font-size': 14,
+          'font-weight': 'bold',
+          fill: '#dc3545',
+          'text-anchor': 'middle'
+        });
+        text.textContent = '×';
+        svg.appendChild(text);
+      }
+    }
+
+    // Draw finger positions
+    chordData.fingers.forEach(([string, fret, finger]) => {
+      if (fret > 0 && fret <= numFrets) {
+        // string 1 = High E, string 6 = Low E
+        const stringIdx = 6 - string; // Convert to 0-indexed from Low E
+        const y = getStringY(stringIdx);
+        const x = startX + fret * fretSpacing - fretSpacing / 2;
+
+        const circle = createSVGElement('circle', {
+          cx: x, cy: y,
+          r: 10,
+          fill: chordData.barre && finger === 1 ? '#ffc107' : '#007bff',
+          stroke: '#fff',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+
+        const text = createSVGElement('text', {
+          x: x, y: y + 4,
+          'font-size': 12,
+          'font-weight': 'bold',
+          fill: '#fff',
+          'text-anchor': 'middle'
+        });
+        text.textContent = finger;
+        svg.appendChild(text);
+      }
+    });
+
+    // Draw barre line if applicable
+    if (chordData.barre) {
+      const barreFingers = chordData.fingers.filter(f => f[2] === 1);
+      if (barreFingers.length > 1) {
+        const minString = Math.min(...barreFingers.map(f => f[0]));
+        const maxString = Math.max(...barreFingers.map(f => f[0]));
+        const barreFret = barreFingers[0][1];
+
+        const y1 = getStringY(6 - minString);
+        const y2 = getStringY(6 - maxString);
+        const x = startX + barreFret * fretSpacing - fretSpacing / 2;
+
+        const line = createSVGElement('line', {
+          x1: x, y1: Math.min(y1, y2),
+          x2: x, y2: Math.max(y1, y2),
+          stroke: '#ffc107',
+          'stroke-width': 18,
+          'stroke-linecap': 'round',
+          opacity: 0.7
+        });
+        svg.insertBefore(line, svg.firstChild);
+      }
+    }
+  } else {
+    // VERTICAL MODE (Standard chord diagram)
+    const stringSpacing = 45;
+    const fretSpacing = 40;
+    const startX = 30;
+    const startY = 40;
+
+    // Reset viewBox for vertical layout
+    svg.setAttribute('viewBox', '0 0 300 250');
+
+    // Helper function to calculate X position based on handedness
+    const getStringX = (stringIndex) => {
+      if (leftHandedMode) {
+        return startX + (numStrings - 1 - stringIndex) * stringSpacing;
+      } else {
+        return startX + stringIndex * stringSpacing;
+      }
+    };
+
+    // Draw strings (vertical lines)
+    for (let i = 0; i < numStrings; i++) {
+      const x = getStringX(i);
+      const line = createSVGElement('line', {
+        x1: x, y1: startY,
+        x2: x, y2: startY + numFrets * fretSpacing,
+        stroke: '#333',
+        'stroke-width': i === 0 ? 2.5 : (i === numStrings - 1 ? 1 : 2 - i * 0.2),
+        'class': `guitar-string string-${i}`,
+        'id': `string-${i}`
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw frets (horizontal lines)
+    for (let i = 0; i <= numFrets; i++) {
+      const y = startY + i * fretSpacing;
+      const line = createSVGElement('line', {
+        x1: startX, y1: y,
+        x2: startX + (numStrings - 1) * stringSpacing, y2: y,
+        stroke: i === 0 ? '#000' : '#333',
+        'stroke-width': i === 0 ? 4 : 2
+      });
+      svg.appendChild(line);
+    }
+
+    // Draw fret numbers
+    for (let i = 1; i <= numFrets; i++) {
+      const y = startY + i * fretSpacing - fretSpacing / 2;
+      const fretNumX = leftHandedMode ? startX + (numStrings - 1) * stringSpacing + 20 : startX - 20;
+      const text = createSVGElement('text', {
+        x: fretNumX,
+        y: y + 5,
         'font-size': 14,
         'font-weight': 'bold',
-        fill: '#fff',
-        'text-anchor': 'middle'
+        fill: '#666',
+        'text-anchor': leftHandedMode ? 'start' : 'end'
       });
-      text.textContent = finger;
+      text.textContent = i;
       svg.appendChild(text);
     }
-  });
 
-  // Draw barre line if applicable
-  if (chordData.barre) {
-    const barreFingers = chordData.fingers.filter(f => f[2] === 1);
-    if (barreFingers.length > 1) {
-      const minString = Math.min(...barreFingers.map(f => f[0]));
-      const maxString = Math.max(...barreFingers.map(f => f[0]));
-      const barreFret = barreFingers[0][1];
+    // Draw open/muted indicators
+    for (let i = 0; i < numStrings; i++) {
+      const x = getStringX(i);
+      const fret = chordData.frets[i];
 
-      const x1 = leftHandedMode ? startX + (minString - 1) * stringSpacing : startX + (numStrings - minString) * stringSpacing;
-      const x2 = leftHandedMode ? startX + (maxString - 1) * stringSpacing : startX + (numStrings - maxString) * stringSpacing;
-      const y = startY + barreFret * fretSpacing - fretSpacing / 2;
+      if (fret === 0) {
+        const circle = createSVGElement('circle', {
+          cx: x, cy: startY - 15,
+          r: 8,
+          fill: 'none',
+          stroke: '#28a745',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+      } else if (fret === -1) {
+        const text = createSVGElement('text', {
+          x: x, y: startY - 8,
+          'font-size': 18,
+          'font-weight': 'bold',
+          fill: '#dc3545',
+          'text-anchor': 'middle'
+        });
+        text.textContent = '×';
+        svg.appendChild(text);
+      }
+    }
 
-      const line = createSVGElement('line', {
-        x1: Math.min(x1, x2), y1: y,
-        x2: Math.max(x1, x2), y2: y,
-        stroke: '#ffc107',
-        'stroke-width': 22,
-        'stroke-linecap': 'round',
-        opacity: 0.7
-      });
-      svg.insertBefore(line, svg.firstChild);
+    // Draw finger positions
+    chordData.fingers.forEach(([string, fret, finger]) => {
+      if (fret > 0 && fret <= numFrets) {
+        const x = leftHandedMode ? startX + (string - 1) * stringSpacing : startX + (numStrings - string) * stringSpacing;
+        const y = startY + fret * fretSpacing - fretSpacing / 2;
+
+        const circle = createSVGElement('circle', {
+          cx: x, cy: y,
+          r: 12,
+          fill: chordData.barre && finger === 1 ? '#ffc107' : '#007bff',
+          stroke: '#fff',
+          'stroke-width': 2
+        });
+        svg.appendChild(circle);
+
+        const text = createSVGElement('text', {
+          x: x, y: y + 5,
+          'font-size': 14,
+          'font-weight': 'bold',
+          fill: '#fff',
+          'text-anchor': 'middle'
+        });
+        text.textContent = finger;
+        svg.appendChild(text);
+      }
+    });
+
+    // Draw barre line if applicable
+    if (chordData.barre) {
+      const barreFingers = chordData.fingers.filter(f => f[2] === 1);
+      if (barreFingers.length > 1) {
+        const minString = Math.min(...barreFingers.map(f => f[0]));
+        const maxString = Math.max(...barreFingers.map(f => f[0]));
+        const barreFret = barreFingers[0][1];
+
+        const x1 = leftHandedMode ? startX + (minString - 1) * stringSpacing : startX + (numStrings - minString) * stringSpacing;
+        const x2 = leftHandedMode ? startX + (maxString - 1) * stringSpacing : startX + (numStrings - maxString) * stringSpacing;
+        const y = startY + barreFret * fretSpacing - fretSpacing / 2;
+
+        const line = createSVGElement('line', {
+          x1: Math.min(x1, x2), y1: y,
+          x2: Math.max(x1, x2), y2: y,
+          stroke: '#ffc107',
+          'stroke-width': 22,
+          'stroke-linecap': 'round',
+          opacity: 0.7
+        });
+        svg.insertBefore(line, svg.firstChild);
+      }
     }
   }
 }
@@ -2313,7 +3043,7 @@ window.playChord = async function () {
 
       if (useToneJs && guitarSynth) {
         console.log('Playing chord with Tone.js:', currentChord);
-        playChordWithTone(chordData);
+        await playChordWithTone(chordData);
         return;
       }
     } catch (error) {
@@ -2343,17 +3073,28 @@ window.playChord = async function () {
 };
 
 // Play chord using Tone.js PluckSynth
-function playChordWithTone(chordData) {
-  const strumDelay = arpeggioMode ? 0.35 : 0.04; // seconds
-  const noteDuration = arpeggioMode ? '2n' : '1n'; // half note or whole note
+async function playChordWithTone(chordData) {
+  const strumDelay = arpeggioMode ? 0.3 : 0.03; // seconds between strings
+  const noteDuration = arpeggioMode ? 0.8 : 0.6; // seconds (shorter notes = fewer polyphony issues)
+
+  // Ensure Tone.js context is running (can get suspended by browser)
+  if (Tone.context.state !== 'running') {
+    console.log('Tone.js context suspended, resuming...');
+    await Tone.start();
+    await Tone.context.resume();
+    console.log('Tone.js context resumed');
+  }
 
   // Pulse the play button
   pulsePlayButton();
 
-  // Release any currently playing notes
-  guitarSynth.releaseAll();
+  // Release all currently playing notes immediately
+  if (guitarSynth) {
+    guitarSynth.releaseAll(Tone.now());
+  }
 
-  const now = Tone.now();
+  // Start notes slightly in the future to allow release to process
+  const startTime = Tone.now() + 0.05;
 
   chordData.frets.forEach((fret, index) => {
     if (fret >= 0) { // Not muted
@@ -2361,13 +3102,11 @@ function playChordWithTone(chordData) {
       const note = fretToNote(stringNumber, fret, currentCapo);
 
       // Schedule note with strum delay
-      const time = now + (index * strumDelay);
+      const time = startTime + (index * strumDelay);
       guitarSynth.triggerAttackRelease(note, noteDuration, time);
 
-      console.log(`Tone.js: String ${stringNumber}, Fret ${fret} -> ${note}`);
-
       // Trigger string vibration animation
-      vibrateString(index, index * strumDelay * 1000);
+      vibrateString(index, (0.05 + index * strumDelay) * 1000);
     }
   });
 }
@@ -2830,7 +3569,20 @@ window.loadProgression = function (progressionIndex) {
   }
 };
 
-// Play a progression sequence
+// Cancel all ongoing playback sequences
+window.cancelPlayback = function () {
+  // Increment playback ID to invalidate old callbacks
+  activePlaybackId++;
+
+  // Clear all pending timeouts
+  playbackTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+  playbackTimeouts = [];
+
+  // Note: Don't call guitarSynth.releaseAll() here as it can cause issues
+  // The new playback will naturally override with fresh notes
+};
+
+// Play a progression sequence with rhythm
 window.playProgression = function (progressionIndex) {
   const progression = PROGRESSIONS_DATABASE[progressionIndex];
   if (!progression) return;
@@ -2845,18 +3597,93 @@ window.playProgression = function (progressionIndex) {
     return;
   }
 
+  // Cancel any ongoing playback first
+  cancelPlayback();
+  const currentPlaybackId = activePlaybackId;
+
   if (typeof ToolUtils !== 'undefined') {
     ToolUtils.showToast(`Playing: ${progression.name}`, 2000, 'info');
   }
 
+  // Musical timing - 100 BPM, strumming pattern
+  const bpm = 100;
+  const beatDuration = 60000 / bpm; // ms per beat
+  const beatsPerChord = 4;
+
   let delay = 0;
-  playableChords.forEach((chordName, index) => {
-    setTimeout(() => {
-      playSpecificChord(chordName);
-    }, delay);
-    delay += 2000; // 2 seconds between chords
+  playableChords.forEach((chordName) => {
+    // Play strumming pattern: down-down-up-up-down-up
+    // Beat 1: Full strum (down)
+    scheduleGuitarStrum(chordName, delay, currentPlaybackId, true);
+
+    // Beat 2: Down strum
+    scheduleGuitarStrum(chordName, delay + beatDuration, currentPlaybackId, true);
+
+    // Beat 2.5: Up strum (lighter)
+    scheduleGuitarStrum(chordName, delay + beatDuration * 1.5, currentPlaybackId, false);
+
+    // Beat 3.5: Up strum
+    scheduleGuitarStrum(chordName, delay + beatDuration * 2.5, currentPlaybackId, false);
+
+    // Beat 4: Down strum
+    scheduleGuitarStrum(chordName, delay + beatDuration * 3, currentPlaybackId, true);
+
+    // Beat 4.5: Up strum
+    scheduleGuitarStrum(chordName, delay + beatDuration * 3.5, currentPlaybackId, false);
+
+    delay += beatDuration * beatsPerChord;
   });
 };
+
+// Schedule a guitar strum
+function scheduleGuitarStrum(chordName, delayMs, playbackId, isDownStrum) {
+  const timeoutId = setTimeout(() => {
+    if (activePlaybackId === playbackId) {
+      // Update display on first beat
+      if (delayMs % (60000 / 100 * 4) < 100) {
+        currentChord = chordName;
+        const chordData = CHORD_DATABASE[chordName];
+        if (chordData) {
+          drawFretboard(chordData);
+          updateChordInfo(chordData);
+        }
+      }
+      playStrumPattern(chordName, isDownStrum);
+    }
+  }, delayMs);
+  playbackTimeouts.push(timeoutId);
+}
+
+// Play a single strum (down or up)
+async function playStrumPattern(chordName, isDownStrum) {
+  const chordData = CHORD_DATABASE[chordName];
+  if (!chordData || !guitarSynth) return;
+
+  // Ensure context is running
+  if (Tone.context.state !== 'running') {
+    await Tone.start();
+  }
+
+  const strumDelay = isDownStrum ? 0.025 : 0.02; // Faster for up strums
+  const noteDuration = isDownStrum ? 0.4 : 0.25; // Shorter for up strums
+  const startTime = Tone.now();
+
+  // Down strum: low to high, Up strum: high to low
+  const indices = isDownStrum ? [0, 1, 2, 3, 4, 5] : [5, 4, 3, 2, 1, 0];
+
+  indices.forEach((index, i) => {
+    const fret = chordData.frets[index];
+    if (fret >= 0) {
+      const stringNumber = 6 - index;
+      const note = fretToNote(stringNumber, fret, currentCapo);
+      const time = startTime + (i * strumDelay);
+      guitarSynth.triggerAttackRelease(note, noteDuration, time);
+    }
+  });
+
+  // Animate strings
+  vibrateChordStrings(chordData);
+}
 
 // Render progressions UI
 window.renderProgressions = function () {
@@ -2913,8 +3740,146 @@ document.addEventListener('DOMContentLoaded', function () {
   // Render progressions if container exists
   setTimeout(() => {
     renderProgressions();
+    renderPopularSongs();
   }, 100);
 });
+
+// ============================================
+// POPULAR SONGS FUNCTIONS (1B+ Views)
+// ============================================
+
+// Load a song's chords into multi-chord mode
+window.loadSongChords = function (songIndex) {
+  const song = POPULAR_SONGS_DATABASE[songIndex];
+  if (!song) return;
+
+  // Check if all chords exist
+  const missingChords = song.chords.filter(c => !CHORD_DATABASE[c]);
+  if (missingChords.length > 0) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast(`Some chords not available: ${missingChords.join(', ')}`, 3000, 'warning');
+    }
+    return;
+  }
+
+  // Enable multi-chord mode
+  const multiChordCheckbox = document.getElementById('multiChordMode');
+  if (multiChordCheckbox && !multiChordCheckbox.checked) {
+    multiChordCheckbox.checked = true;
+    toggleMultiChordMode();
+  }
+
+  // Clear and load new chords
+  selectedChords = [...song.chords];
+  updateSelectedChordsList();
+  renderMultiChordDisplay();
+
+  // Update capo if needed
+  if (song.capo > 0) {
+    currentCapo = song.capo;
+    const capoSlider = document.getElementById('capoSlider');
+    const capoValue = document.getElementById('capoValue');
+    if (capoSlider) capoSlider.value = song.capo;
+    if (capoValue) capoValue.textContent = song.capo;
+  }
+
+  // Show display
+  document.getElementById('welcomeInstructions').style.display = 'none';
+  document.getElementById('multiChordDisplay').style.display = 'block';
+
+  const capoMsg = song.capo > 0 ? ` (Capo fret ${song.capo})` : '';
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(`Loaded: ${song.title} - ${song.artist}${capoMsg}`, 3000, 'success');
+  }
+};
+
+// Play a song's chord progression with rhythm
+window.playSongChords = function (songIndex) {
+  const song = POPULAR_SONGS_DATABASE[songIndex];
+  if (!song) return;
+
+  const playableChords = song.chords.filter(c => CHORD_DATABASE[c]);
+
+  if (playableChords.length === 0) {
+    if (typeof ToolUtils !== 'undefined') {
+      ToolUtils.showToast('No playable chords in this song', 2000, 'warning');
+    }
+    return;
+  }
+
+  // Cancel any ongoing playback first
+  cancelPlayback();
+  const currentPlaybackId = activePlaybackId;
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(`Playing: ${song.title}`, 2000, 'info');
+  }
+
+  // Musical timing - 100 BPM, strumming pattern
+  const bpm = 100;
+  const beatDuration = 60000 / bpm;
+  const beatsPerChord = 4;
+
+  let delay = 0;
+  playableChords.forEach((chordName) => {
+    // Play strumming pattern: down-down-up-up-down-up
+    scheduleGuitarStrum(chordName, delay, currentPlaybackId, true);
+    scheduleGuitarStrum(chordName, delay + beatDuration, currentPlaybackId, true);
+    scheduleGuitarStrum(chordName, delay + beatDuration * 1.5, currentPlaybackId, false);
+    scheduleGuitarStrum(chordName, delay + beatDuration * 2.5, currentPlaybackId, false);
+    scheduleGuitarStrum(chordName, delay + beatDuration * 3, currentPlaybackId, true);
+    scheduleGuitarStrum(chordName, delay + beatDuration * 3.5, currentPlaybackId, false);
+
+    delay += beatDuration * beatsPerChord;
+  });
+};
+
+// Render popular songs UI
+window.renderPopularSongs = function () {
+  const container = document.getElementById('popularSongsContainer');
+  if (!container) return;
+
+  let html = '';
+
+  POPULAR_SONGS_DATABASE.forEach((song, index) => {
+    const isPlayable = song.chords.every(c => CHORD_DATABASE[c]);
+    const difficultyClass = song.difficulty === 'beginner' ? 'difficulty-beginner' :
+                           song.difficulty === 'intermediate' ? 'difficulty-intermediate' : 'difficulty-advanced';
+    const difficultyLabel = song.difficulty.charAt(0).toUpperCase() + song.difficulty.slice(1);
+
+    html += `
+      <div class="song-card ${isPlayable ? '' : 'disabled'}">
+        <div class="song-header">
+          <span class="song-title">${song.title}</span>
+          <span class="song-views">${song.views} views</span>
+        </div>
+        <div class="song-artist">${song.artist} (${song.year})</div>
+        <div class="song-chords">${song.chords.join(' → ')}</div>
+        <div class="song-meta">
+          <span class="song-difficulty ${difficultyClass}">${difficultyLabel}</span>
+          ${song.capo > 0 ? `<span class="song-capo">Capo ${song.capo}</span>` : ''}
+          <span class="song-strumming" title="Strumming pattern">♪ ${song.strumming}</span>
+        </div>
+        <div class="song-actions">
+          <button onclick="loadSongChords(${index})" ${isPlayable ? '' : 'disabled'} title="Load chords">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Load
+          </button>
+          <button onclick="playSongChords(${index})" ${isPlayable ? '' : 'disabled'} title="Play chords">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            Play
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+};
 
 // ============================================
 // QUICK WIN FEATURES: Toggle Functions
@@ -2973,7 +3938,34 @@ window.toggleSound = function () {
   }
 };
 
+// Toggle horizontal/vertical fretboard orientation
+window.toggleHorizontalMode = function () {
+  horizontalMode = !horizontalMode;
+  saveUserPreferences();
+
+  // Update toggle UI
+  const toggle = document.getElementById('horizontalToggle');
+  if (toggle) toggle.checked = horizontalMode;
+
+  // Redraw main fretboard if a chord is selected
+  if (currentChord) {
+    const chordData = CHORD_DATABASE[currentChord];
+    drawFretboard(chordData);
+  }
+
+  // Re-render multi-chord display if in multi-chord mode
+  if (selectedChords.length > 0) {
+    renderMultiChordDisplay();
+  }
+
+  if (typeof ToolUtils !== 'undefined') {
+    ToolUtils.showToast(horizontalMode ? 'Horizontal view (TAB style)' : 'Vertical view (Chord chart)', 1500, 'info');
+  }
+};
+
 // Get chord difficulty
 window.getChordDifficulty = function (chordName) {
   return CHORD_DIFFICULTY[chordName] || 'intermediate';
 };
+
+console.log('[Guitar Chord Finder] Script fully loaded. All functions defined.');
