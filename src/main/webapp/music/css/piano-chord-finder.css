@@ -1,0 +1,1298 @@
+/**
+ * Piano Chord Finder - Styles
+ * Modern, educational piano learning tool
+ */
+
+/* ========================================
+   THEME VARIABLES
+   ======================================== */
+:root {
+  --piano-primary: #6366f1;
+  --piano-primary-dark: #4f46e5;
+  --piano-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --piano-light: #eef2ff;
+  --piano-success: #22c55e;
+  --piano-warning: #f59e0b;
+  --piano-danger: #ef4444;
+  --key-white: #ffffff;
+  --key-black: #1a1a2e;
+  --key-active: #6366f1;
+  --key-root: #ef4444;
+  --key-third: #22c55e;
+  --key-fifth: #3b82f6;
+  --key-seventh: #f59e0b;
+}
+
+[data-theme="dark"] {
+  --piano-light: rgba(99, 102, 241, 0.15);
+  --key-white: #e2e8f0;
+  --key-black: #0f172a;
+}
+
+/* ========================================
+   LAYOUT - TWO COLUMN
+   ======================================== */
+.piano-tool-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  min-height: calc(100vh - 180px);
+}
+
+@media (max-width: 991px) {
+  .piano-tool-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* ========================================
+   CONTROL PANEL (Left)
+   ======================================== */
+.piano-control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+@media (max-width: 991px) {
+  .piano-control-panel {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+}
+
+/* ========================================
+   SEARCH CARD
+   ======================================== */
+.chord-search-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.chord-search-input {
+  display: flex;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.chord-search-input input {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--border, #e2e8f0);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary);
+}
+
+.chord-search-input input:focus {
+  outline: none;
+  border-color: var(--piano-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.chord-search-input button {
+  padding: 0.625rem 1rem;
+  background: var(--piano-gradient);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.chord-search-input button:hover {
+  transform: scale(1.05);
+}
+
+/* Autocomplete */
+.chord-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 50px;
+  background: var(--bg-primary, #fff);
+  border: 2px solid var(--piano-primary);
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+
+.chord-autocomplete.active {
+  display: block;
+}
+
+.chord-autocomplete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.chord-autocomplete-item:hover,
+.chord-autocomplete-item.selected {
+  background: var(--piano-light);
+}
+
+.chord-autocomplete-item .chord-name {
+  font-weight: 600;
+}
+
+.chord-autocomplete-item .chord-full-name {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.chord-autocomplete-empty,
+.chord-autocomplete-hint {
+  padding: 0.5rem 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.chord-autocomplete-item .chord-difficulty {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  text-transform: capitalize;
+}
+
+.chord-autocomplete-item .chord-difficulty.beginner {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.chord-autocomplete-item .chord-difficulty.intermediate {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.chord-autocomplete-item .chord-difficulty.advanced {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+/* Quick Access */
+.quick-access-section {
+  margin-top: 1rem;
+}
+
+.quick-access-section strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.quick-chords-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.quick-chord-btn {
+  padding: 0.375rem 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-chord-btn:hover {
+  border-color: var(--piano-primary);
+  background: var(--piano-light);
+  color: var(--piano-primary);
+}
+
+/* Chord Types */
+.chord-type-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.chord-type-btn {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chord-type-btn:hover {
+  border-color: var(--piano-primary);
+  color: var(--piano-primary);
+}
+
+/* Settings Panel */
+.settings-panel {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.settings-header strong {
+  font-size: 0.9rem;
+}
+
+.keyboard-hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.settings-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.setting-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.setting-toggle input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--piano-primary);
+}
+
+/* Inversion Card */
+.inversion-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.inversion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.inversion-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Hand Selector Card */
+.hand-selector-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.hand-selector-card strong {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.hand-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hand-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hand-btn:hover {
+  border-color: var(--piano-primary);
+}
+
+.hand-btn.active {
+  background: var(--piano-gradient);
+  color: white;
+  border-color: var(--piano-primary);
+}
+
+/* Favorites Section */
+.favorites-section {
+  margin-top: 0.5rem;
+}
+
+.favorites-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.favorites-btn:hover {
+  border-color: var(--piano-primary);
+  color: var(--piano-primary);
+}
+
+/* Note Colors Legend */
+.note-colors-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.note-color {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.note-color::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.note-color.root::before {
+  background: var(--key-root);
+}
+
+.note-color.third::before {
+  background: var(--key-third);
+}
+
+.note-color.fifth::before {
+  background: var(--key-fifth);
+}
+
+.note-color.seventh::before {
+  background: var(--key-seventh);
+}
+
+/* Chord Actions Section */
+.chord-actions-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Chord Notes Display */
+.chord-notes {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.chord-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Piano Section */
+.piano-section h6 {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ========================================
+   DISPLAY PANEL (Right)
+   ======================================== */
+.piano-display-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Welcome Section */
+.welcome-section {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.welcome-section h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: var(--text-secondary);
+}
+
+.welcome-tip {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--piano-light);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Chord Display Card */
+.chord-display-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+/* Chord Header */
+.chord-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.chord-info-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.chord-meta-info {
+  display: flex;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.difficulty-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+}
+
+.difficulty-beginner {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.difficulty-intermediate {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.difficulty-advanced {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+/* Play Button */
+.play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--piano-gradient);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
+}
+
+.play-btn.playing {
+  animation: pulse-glow 0.5s ease-out;
+}
+
+.play-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+/* ========================================
+   PIANO KEYBOARD
+   ======================================== */
+.piano-keyboard-container {
+  position: relative;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+#pianoKeyboard {
+  position: relative;
+  min-width: 700px;
+  height: 180px;
+}
+
+.piano-keys {
+  display: flex;
+  height: 100%;
+}
+
+.piano-key {
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.white-key {
+  width: 40px;
+  height: 160px;
+  background: var(--key-white);
+  border: 1px solid #ccc;
+  border-radius: 0 0 4px 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.white-key:hover {
+  background: #f0f0f0;
+}
+
+.white-key.active {
+  background: linear-gradient(180deg, var(--key-active) 0%, #818cf8 100%);
+  border-color: var(--key-active);
+}
+
+.white-key.root {
+  background: linear-gradient(180deg, var(--key-root) 0%, #f87171 100%);
+}
+
+.white-key.third {
+  background: linear-gradient(180deg, var(--key-third) 0%, #4ade80 100%);
+}
+
+.white-key.fifth {
+  background: linear-gradient(180deg, var(--key-fifth) 0%, #60a5fa 100%);
+}
+
+.white-key.seventh {
+  background: linear-gradient(180deg, var(--key-seventh) 0%, #fbbf24 100%);
+}
+
+.white-key.pressed {
+  transform: translateY(2px);
+  box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.key-label {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #666;
+  pointer-events: none;
+}
+
+.white-key.active .key-label,
+.white-key.root .key-label,
+.white-key.third .key-label,
+.white-key.fifth .key-label,
+.white-key.seventh .key-label {
+  color: white;
+  font-weight: 600;
+}
+
+.black-keys-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  pointer-events: none;
+}
+
+.black-key {
+  width: 28px;
+  height: 100px;
+  background: var(--key-black);
+  border-radius: 0 0 3px 3px;
+  position: absolute;
+  z-index: 2;
+  pointer-events: auto;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+}
+
+.black-key:hover {
+  background: #2d2d4a;
+}
+
+.black-key.active {
+  background: var(--key-active);
+}
+
+.black-key.root {
+  background: var(--key-root);
+}
+
+.black-key.third {
+  background: var(--key-third);
+}
+
+.black-key.fifth {
+  background: var(--key-fifth);
+}
+
+.black-key.seventh {
+  background: var(--key-seventh);
+}
+
+.black-key.pressed {
+  transform: translateY(2px);
+  height: 98px;
+}
+
+/* Black key positions are now set via inline styles in JS */
+
+/* ========================================
+   FINGERING SECTION
+   ======================================== */
+.fingering-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 0.5rem;
+}
+
+.fingering-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.hand-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hand-btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-primary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.hand-btn.active {
+  background: var(--piano-primary);
+  color: white;
+  border-color: var(--piano-primary);
+}
+
+.fingering-numbers {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.finger-note {
+  text-align: center;
+}
+
+.finger-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--piano-primary);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.finger-note-name {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.fingering-legend {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.fingering-hand {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--piano-primary);
+}
+
+/* ========================================
+   INVERSIONS
+   ======================================== */
+.inversions-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 0.5rem;
+}
+
+.inversions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.inversions-header strong {
+  font-size: 0.9rem;
+}
+
+#inversionLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.inversion-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inversion-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-primary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.inversion-btn:hover {
+  border-color: var(--piano-primary);
+}
+
+.inversion-btn.active {
+  background: var(--piano-primary);
+  color: white;
+  border-color: var(--piano-primary);
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+.chord-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.chord-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chord-action-btn:hover {
+  border-color: var(--piano-primary);
+  color: var(--piano-primary);
+}
+
+/* ========================================
+   PROGRESSIONS SECTION
+   ======================================== */
+.progressions-section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.progressions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.progressions-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progressions-title h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.progressions-title p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.key-selector select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-primary);
+  font-size: 0.9rem;
+}
+
+.progressions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.progression-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.progression-card:hover {
+  border-color: var(--piano-primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.progression-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progression-name {
+  font-weight: 600;
+}
+
+.progression-genre {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--piano-light);
+  color: var(--piano-primary);
+  border-radius: 0.25rem;
+}
+
+.progression-numerals {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.progression-chords {
+  font-weight: 600;
+  color: var(--piano-primary);
+  margin-bottom: 0.5rem;
+}
+
+.progression-description {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.progression-play-btn {
+  padding: 0.375rem 0.75rem;
+  background: var(--piano-gradient);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.progression-play-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Full-width Progressions Section (outside tool container) */
+.progressions-section-full {
+  background: var(--bg-primary, #fff);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0;
+  margin: 2rem 0;
+}
+
+.progressions-section-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.progressions-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.progressions-title {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.progressions-title svg {
+  flex-shrink: 0;
+  color: var(--piano-primary);
+}
+
+.progressions-title h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.progressions-title p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.key-selector-large {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.key-selector-large label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.key-selector-large select {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.key-selector-large select:focus {
+  outline: none;
+  border-color: var(--piano-primary);
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+[data-theme="dark"] .chord-search-card,
+[data-theme="dark"] .settings-panel,
+[data-theme="dark"] .chord-display-card,
+[data-theme="dark"] .progressions-section {
+  background: var(--bg-secondary);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .white-key {
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-color: #94a3b8;
+}
+
+[data-theme="dark"] .white-key:hover {
+  background: #d1d5db;
+}
+
+[data-theme="dark"] .key-label {
+  color: #475569;
+}
+
+[data-theme="dark"] .chord-autocomplete {
+  background: var(--bg-secondary);
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
+@media (max-width: 991px) {
+  .piano-two-column-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .piano-control-panel {
+    order: 2;
+  }
+
+  .piano-main-display {
+    order: 1;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+@media (max-width: 768px) {
+  .piano-tool-container {
+    padding: 0.5rem;
+  }
+
+  .chord-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  /* Piano keyboard - smaller keys for mobile */
+  .piano-keyboard-container {
+    margin: 1rem -0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+  }
+
+  .piano-keyboard {
+    min-width: 600px; /* Allow horizontal scroll */
+  }
+
+  .white-key {
+    width: 32px;
+    height: 120px;
+  }
+
+  .black-key {
+    width: 22px;
+    height: 75px;
+  }
+
+  .key-label {
+    font-size: 0.65rem;
+  }
+
+  /* Control panels */
+  .chord-search-card,
+  .settings-card,
+  .inversion-card,
+  .hand-selector-card {
+    padding: 0.75rem;
+  }
+
+  .chord-search-input input {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Settings toggles - touch friendly */
+  .settings-toggles {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-toggle {
+    padding: 0.75rem;
+    min-height: 44px; /* Touch target */
+  }
+
+  /* Inversion buttons */
+  .inversion-buttons {
+    flex-wrap: wrap;
+  }
+
+  .inversion-btn {
+    min-width: 60px;
+    min-height: 44px;
+    font-size: 0.85rem;
+  }
+
+  /* Hand selector */
+  .hand-buttons {
+    flex-direction: row;
+  }
+
+  .hand-btn {
+    min-height: 44px;
+    padding: 0.5rem;
+  }
+
+  /* Fingering display */
+  .fingering-numbers {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .finger-number {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  /* Chord actions */
+  .chord-actions,
+  .chord-actions-section {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .chord-action-btn,
+  .play-btn {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Progressions */
+  .progressions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progression-card {
+    padding: 1rem;
+  }
+
+  /* Favorites */
+  .favorites-section {
+    margin-top: 1rem;
+  }
+
+  .favorites-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - SMALL MOBILE
+   ======================================== */
+@media (max-width: 480px) {
+  .piano-tool-container {
+    padding: 0.25rem;
+  }
+
+  /* Even smaller piano keys */
+  .white-key {
+    width: 28px;
+    height: 100px;
+  }
+
+  .black-key {
+    width: 18px;
+    height: 60px;
+  }
+
+  .key-label {
+    font-size: 0.55rem;
+  }
+
+  /* Stack buttons vertically */
+  .chord-actions {
+    flex-direction: column;
+  }
+
+  .chord-action-btn {
+    width: 100%;
+  }
+
+  /* Quick chords grid */
+  .quick-chords-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  }
+
+  .quick-chord-btn {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+  }
+
+  /* Chord type buttons */
+  .chord-type-selector {
+    gap: 0.25rem;
+  }
+
+  .chord-type-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
