@@ -362,6 +362,25 @@
                         </div>
                     </a>
 
+                    <a href="<%=request.getContextPath()%>/music/ai-piano-duet.jsp" class="tool-card-link">
+                        <div class="tool-card featured-tool">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                🤖</div>
+                            <h2>AI Piano Duet <span
+                                    style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">NEW</span>
+                            </h2>
+                            <p>Play piano with artificial intelligence! A neural network listens to your melody and
+                                creates a beautiful duet in real-time using Google Magenta AI.</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">AI-Powered</span>
+                                <span class="tool-feature">Real-time Duet</span>
+                                <span class="tool-feature">Neural Network</span>
+                                <span class="tool-feature">MIDI Support</span>
+                                <span class="tool-feature">Google Magenta</span>
+                            </div>
+                        </div>
+                    </a>
+
                     <a href="<%=request.getContextPath()%>/music/ukulele-chord-finder.jsp" class="tool-card-link">
                         <div class="tool-card">
                             <div class="tool-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🪕
