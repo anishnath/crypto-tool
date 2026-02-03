@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2025-02-03T00:00:00.000Z",
-  "totalTools": 342,
+  "totalTools": 343,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -366,13 +366,6 @@
       "category": "Developer Tools",
       "keywords": "compare text diff developer tools",
       "description": "Compare Text Diff - Free online developer tools tool"
-    },
-    {
-      "name": "Free Chart Creator",
-      "url": "chart-maker.jsp",
-      "category": "Developer Tools",
-      "keywords": "online chart maker, free graph creator, bar chart generator, line graph maker, pie chart creator, csv to chart, data visualization tool",
-      "description": "Free Chart Creator - Create beautiful Bar, Line, Pie, and more charts from CSV data."
     },
     {
       "name": "Graph-Easy ASCII Diagram Generator",
@@ -2438,6 +2431,13 @@
       "category": "Music",
       "keywords": "transpose music, change key, transpose chords, music transposer, chord transposer, key changer, capo chart",
       "description": "Free Music Transpose Tool - Change song keys instantly. Transpose chords and notes to any key with capo suggestions."
+    },
+    {
+      "name": "AI Piano Duet",
+      "url": "music/ai-piano-duet.jsp",
+      "category": "Music",
+      "keywords": "ai piano, piano duet, artificial intelligence music, neural network piano, magenta ai, play piano with ai, interactive piano, music ai, machine learning piano",
+      "description": "Free AI Piano Duet - Play piano with artificial intelligence. Google Magenta neural network creates real-time duets with you."
     }
   ]
 }
