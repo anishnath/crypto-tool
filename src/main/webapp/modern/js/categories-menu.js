@@ -6,12 +6,55 @@
 let categoriesData = null;
 let toolsDatabase = null;
 
+// Get the correct path to tools-database.json (works from any subdirectory)
+function getToolsDatabasePath() {
+    // Try to find path from existing link/script tags that reference /modern/
+    const links = document.querySelectorAll('link[href*="/modern/"], script[src*="/modern/"]');
+    for (const el of links) {
+        const attr = el.getAttribute('href') || el.getAttribute('src');
+        if (attr) {
+            const modernIdx = attr.indexOf('/modern/');
+            if (modernIdx !== -1) {
+                return attr.substring(0, modernIdx) + '/modern/data/tools-database.json';
+            }
+        }
+    }
+
+    // Fallback: derive from pathname
+    const pathname = window.location.pathname;
+
+    // Check if pathname contains /modern/
+    const modernIdx = pathname.indexOf('/modern/');
+    if (modernIdx !== -1) {
+        return pathname.substring(0, modernIdx) + '/modern/data/tools-database.json';
+    }
+
+    // Look for known subdirectories to find context path
+    const knownDirs = ['/music/', '/tutorials/', '/exams/', '/blockchain/'];
+    for (const dir of knownDirs) {
+        const idx = pathname.indexOf(dir);
+        if (idx !== -1) {
+            return pathname.substring(0, idx) + '/modern/data/tools-database.json';
+        }
+    }
+
+    // Check if we're at root level (pathname ends with .jsp directly under context)
+    const lastSlash = pathname.lastIndexOf('/');
+    if (lastSlash > 0 && pathname.endsWith('.jsp')) {
+        return pathname.substring(0, lastSlash) + '/modern/data/tools-database.json';
+    }
+
+    // Final fallback
+    return '/modern/data/tools-database.json';
+}
+
 // Load categories data
 async function loadCategoriesData() {
     if (categoriesData) return categoriesData;
-    
+
     try {
-        const response = await fetch('modern/data/tools-database.json');
+        const toolsDbPath = getToolsDatabasePath();
+        const response = await fetch(toolsDbPath);
         if (response.ok) {
             const data = await response.json();
             toolsDatabase = data.tools || [];
