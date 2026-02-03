@@ -123,6 +123,79 @@
 
 
                 <style>
+                    /* Header spacing for fixed nav */
+                    .tool-page-header {
+                        background: var(--bg-primary, #ffffff);
+                        border-bottom: 1px solid var(--border, #e2e8f0);
+                        padding: 1.25rem 1.5rem;
+                        margin-top: 72px;
+                    }
+
+                    .tool-page-header-inner {
+                        max-width: 1600px;
+                        margin: 0 auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                    }
+
+                    .tool-page-header h1 {
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: var(--text-primary, #0f172a);
+                        margin: 0;
+                    }
+
+                    .tool-description {
+                        color: var(--text-secondary, #64748b);
+                        margin: 0.25rem 0 0 0;
+                        font-size: 0.95rem;
+                    }
+
+                    /* Breadcrumb spacing */
+                    .breadcrumb-nav {
+                        background: var(--bg-secondary, #f8fafc);
+                        padding: 0.75rem 1.5rem;
+                        border-bottom: 1px solid var(--border, #e2e8f0);
+                    }
+
+                    .breadcrumb-container {
+                        max-width: 1600px;
+                        margin: 0 auto;
+                    }
+
+                    .breadcrumb {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 0.5rem;
+                        font-size: 0.875rem;
+                    }
+
+                    .breadcrumb li {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .breadcrumb li:not(:last-child)::after {
+                        content: '/';
+                        margin-left: 0.5rem;
+                        color: var(--text-muted, #94a3b8);
+                    }
+
+                    .breadcrumb a {
+                        color: var(--primary, #6366f1);
+                        text-decoration: none;
+                    }
+
+                    .breadcrumb a:hover {
+                        text-decoration: underline;
+                    }
+
                     .ai-piano-container {
                         max-width: 100%;
                         margin: 0;
@@ -700,6 +773,37 @@
                         .temp-labels {
                             width: 150px;
                         }
+                    }
+
+                    /* Dark mode support */
+                    .dark-mode .tool-page-header {
+                        background: var(--bg-primary, #1e293b);
+                        border-bottom-color: var(--border, #334155);
+                    }
+
+                    .dark-mode .tool-page-header h1 {
+                        color: var(--text-primary, #f1f5f9);
+                    }
+
+                    .dark-mode .tool-description {
+                        color: var(--text-secondary, #94a3b8);
+                    }
+
+                    .dark-mode .breadcrumb-nav {
+                        background: var(--bg-secondary, #0f172a);
+                        border-bottom-color: var(--border, #334155);
+                    }
+
+                    .dark-mode .breadcrumb a {
+                        color: var(--primary, #818cf8);
+                    }
+
+                    .dark-mode .breadcrumb li:not(:last-child)::after {
+                        color: var(--text-muted, #64748b);
+                    }
+
+                    .dark-mode .breadcrumb li:last-child {
+                        color: var(--text-secondary, #94a3b8);
                     }
                 </style>
             </head>
