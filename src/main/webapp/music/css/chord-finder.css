@@ -1,0 +1,378 @@
+/* Chord Finder Common Styles - Ukulele, Guitar, etc. */
+
+.chord-finder-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+/* Chord Selector Section */
+.chord-selector-section {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.selector-group {
+    margin-bottom: 1.25rem;
+}
+
+.selector-group:last-child {
+    margin-bottom: 0;
+}
+
+.selector-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+/* Note Buttons */
+.note-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.note-btn {
+    min-width: 44px;
+    height: 44px;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.note-btn:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.note-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Chord Type Buttons */
+.chord-type-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chord-type-btn {
+    padding: 0.5rem 1rem;
+    height: 40px;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chord-type-btn:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.chord-type-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Current Chord Section */
+.current-chord-section {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.current-chord-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+/* Ukulele Diagram */
+.ukulele-diagram-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+#ukuleleCanvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Chord Info */
+.chord-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.chord-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Play Button */
+.play-chord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.play-chord-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.play-chord-btn:active {
+    transform: translateY(0);
+}
+
+/* Progressions Section */
+.progressions-section {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.progressions-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.progression-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.progression-btn {
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.progression-btn:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+}
+
+/* SEO Content */
+.tool-expertise-section {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid var(--border);
+}
+
+.tool-expertise-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.tool-expertise-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.tool-expertise-section p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.tool-expertise-section ul li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .chord-finder-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .chord-selector-section,
+    .current-chord-section,
+    .progressions-section,
+    .tool-expertise-section {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .current-chord-name {
+        font-size: 1.75rem;
+    }
+
+    .note-btn {
+        min-width: 40px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+
+    .chord-type-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .chord-info {
+        gap: 1.5rem;
+    }
+
+    .info-value {
+        font-size: 1rem;
+    }
+
+    .play-chord-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .chord-finder-container {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .chord-selector-section,
+    .current-chord-section,
+    .progressions-section,
+    .tool-expertise-section {
+        padding: 1rem;
+    }
+
+    .current-chord-name {
+        font-size: 1.5rem;
+    }
+
+    .note-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+    }
+
+    .note-buttons {
+        gap: 0.375rem;
+    }
+
+    .chord-type-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.75rem;
+        height: 36px;
+    }
+
+    .chord-type-buttons {
+        gap: 0.375rem;
+    }
+
+    .chord-info {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .chord-info-item {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .progression-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .progression-btn {
+        padding: 0.6rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .tool-expertise-section h2 {
+        font-size: 1.25rem;
+    }
+
+    .tool-expertise-section h3 {
+        font-size: 1rem;
+    }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .chord-selector-section,
+[data-theme="dark"] .current-chord-section,
+[data-theme="dark"] .progressions-section,
+[data-theme="dark"] .tool-expertise-section {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .note-btn,
+[data-theme="dark"] .chord-type-btn,
+[data-theme="dark"] .progression-btn {
+    background: var(--bg-tertiary);
+}

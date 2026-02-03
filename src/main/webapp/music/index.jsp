@@ -257,6 +257,15 @@
           "name": "Chromatic Tuner",
           "url": "https://8gwifi.org/music/tuner.jsp"
         }
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "item": {
+          "@type": "WebApplication",
+          "name": "Ukulele Chord Chart",
+          "url": "https://8gwifi.org/music/ukulele-chord-finder.jsp"
+        }
       }
     ]
   }
@@ -352,6 +361,118 @@
                             </div>
                         </div>
                     </a>
+
+                    <a href="<%=request.getContextPath()%>/music/ukulele-chord-finder.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🪕
+                            </div>
+                            <h2>Ukulele Chord Chart</h2>
+                            <p>Learn 100+ ukulele chords with interactive diagrams, audio playback, and fingering
+                                positions. Perfect for GCEA tuning!</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">100+ Chords</span>
+                                <span class="tool-feature">Audio Playback</span>
+                                <span class="tool-feature">GCEA Tuning</span>
+                                <span class="tool-feature">Progressions</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/bpm-finder.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">⏱️
+                            </div>
+                            <h2>BPM Finder</h2>
+                            <p>Find the tempo of any song by tapping along. Accurate tap tempo tool with beat counter
+                                and tempo guide.</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">Tap Tempo</span>
+                                <span class="tool-feature">Beat Counter</span>
+                                <span class="tool-feature">Tempo Guide</span>
+                                <span class="tool-feature">Instant</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/transpose.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">🎼
+                            </div>
+                            <h2>Transpose Tool</h2>
+                            <p>Change the key of any song instantly. Transpose chords and notes with capo suggestions
+                                for guitar.</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">Any Key</span>
+                                <span class="tool-feature">Chord Transpose</span>
+                                <span class="tool-feature">Capo Tips</span>
+                                <span class="tool-feature">Instant</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/virtual-piano.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">🎹
+                            </div>
+                            <h2>Virtual Piano</h2>
+                            <p>Play piano online with 88 keys, multiple instruments, recording, and keyboard controls.
+                                Perfect for practice and learning!</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">88 Keys</span>
+                                <span class="tool-feature">Recording</span>
+                                <span class="tool-feature">Multiple Instruments</span>
+                                <span class="tool-feature">Keyboard Controls</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/circle-of-fifths.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">🎼
+                            </div>
+                            <h2>Circle of Fifths</h2>
+                            <p>Interactive music theory tool. Explore key signatures, scales, chord progressions, and
+                                relationships between keys.</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">Key Signatures</span>
+                                <span class="tool-feature">Scales</span>
+                                <span class="tool-feature">Chord Progressions</span>
+                                <span class="tool-feature">Audio Playback</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/drum-machine.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🥁
+                            </div>
+                            <h2>Drum Machine</h2>
+                            <p>Create beats online with 16-step sequencer, multiple drum kits, tempo control, and preset
+                                patterns. Free beat maker!</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">16-Step Sequencer</span>
+                                <span class="tool-feature">Multiple Kits</span>
+                                <span class="tool-feature">Tempo Control</span>
+                                <span class="tool-feature">Presets</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="<%=request.getContextPath()%>/music/ear-training.jsp" class="tool-card-link">
+                        <div class="tool-card">
+                            <div class="tool-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">🎵
+                            </div>
+                            <h2>Ear Training</h2>
+                            <p>Practice interval recognition and develop your musical ear. Interactive exercises with
+                                scoring and progress tracking.</p>
+                            <div class="tool-features">
+                                <span class="tool-feature">Interval Recognition</span>
+                                <span class="tool-feature">Score Tracking</span>
+                                <span class="tool-feature">Practice Mode</span>
+                                <span class="tool-feature">Progress Stats</span>
+                            </div>
+                        </div>
+                    </a>
                 </section>
 
                 <!-- Coming Soon -->
@@ -359,16 +480,16 @@
                     <h2>Coming Soon</h2>
                     <div class="coming-soon-grid">
                         <div class="coming-soon-card">
-                            <h3>&#127931; Ukulele Chords</h3>
-                            <p>Chord diagrams for ukulele</p>
-                        </div>
-                        <div class="coming-soon-card">
-                            <h3>&#129345; Drum Machine</h3>
-                            <p>Create beats and rhythms</p>
-                        </div>
-                        <div class="coming-soon-card">
                             <h3>&#127932; Scale Finder</h3>
                             <p>Learn musical scales</p>
+                        </div>
+                        <div class="coming-soon-card">
+                            <h3>&#127929; Bass Chords</h3>
+                            <p>Bass guitar chord charts</p>
+                        </div>
+                        <div class="coming-soon-card">
+                            <h3>&#127925; Note Trainer</h3>
+                            <p>Learn to read music notes</p>
                         </div>
                     </div>
                 </section>
