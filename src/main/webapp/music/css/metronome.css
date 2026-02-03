@@ -1,0 +1,658 @@
+/* Metronome Tool Specific Styles */
+:root {
+    --metronome-primary: #6366f1;
+    /* Indigo */
+    --metronome-accent: #818cf8;
+    --metronome-bg: #eef2ff;
+    --metronome-text: #312e81;
+    --beat-active: #4f46e5;
+    --beat-inactive: #c7d2fe;
+}
+
+[data-theme="dark"] {
+    --metronome-primary: #818cf8;
+    --metronome-bg: #1e1b4b;
+    --metronome-text: #e0e7ff;
+    --beat-active: #818cf8;
+    --beat-inactive: #312e81;
+}
+
+.metronome-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.metronome-card {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Visual Beat Indicator */
+.beat-visualizer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 2.5rem;
+    height: 24px;
+}
+
+.beat-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--beat-inactive);
+    transition: background-color 0.1s, transform 0.1s;
+}
+
+.beat-dot.active {
+    background-color: var(--beat-active);
+    transform: scale(1.2);
+    box-shadow: 0 0 15px var(--beat-active);
+}
+
+.beat-dot.accent {
+    background-color: #ef4444;
+    /* Red for the '1' count */
+}
+
+.beat-dot.active.accent {
+    box-shadow: 0 0 15px #ef4444;
+}
+
+/* BPM Display */
+.bpm-display-container {
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.bpm-value {
+    font-size: 6rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+}
+
+.bpm-label {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+}
+
+/* Tempo Slider */
+.tempo-slider-container {
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.tempo-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border);
+    outline: none;
+    transition: opacity 0.2s;
+}
+
+.tempo-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--metronome-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border: 3px solid var(--bg-primary);
+    transition: transform 0.1s;
+}
+
+.tempo-range::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.tempo-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.tempo-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tempo-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--metronome-primary);
+    border-color: var(--metronome-primary);
+}
+
+/* Main Controls */
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.control-group {
+    text-align: left;
+}
+
+.control-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.control-select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25em;
+}
+
+/* Play Button */
+.play-btn-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--metronome-primary);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.play-btn-large:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+
+.play-btn-large:active {
+    transform: translateY(1px) scale(0.95);
+}
+
+.play-icon {
+    width: 32px;
+    height: 32px;
+    margin-left: 4px;
+    /* Optical centering */
+}
+
+.pause-icon {
+    width: 32px;
+    height: 32px;
+    display: none;
+}
+
+.is-playing .play-icon {
+    display: none;
+}
+
+.is-playing .pause-icon {
+    display: block;
+    margin-left: 0;
+}
+
+.is-playing .play-btn-large {
+    background: #ef4444;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+.is-playing .play-btn-large:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Tap Tempo */
+.tap-tempo-btn {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-top: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.1s;
+    width: 100%;
+    max-width: 200px;
+}
+
+.tap-tempo-btn:active {
+    background: var(--bg-secondary);
+    transform: scale(0.98);
+}
+
+.tap-tempo-btn.tapped {
+    background: var(--metronome-primary);
+    color: white;
+    border-color: var(--metronome-primary);
+}
+
+/* Tempo Markings List */
+.tempo-markings {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    text-align: left;
+}
+
+.tempo-marking-card {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tempo-marking-card:hover {
+    background: var(--bg-primary);
+    border-color: var(--metronome-primary);
+}
+
+.marking-name {
+    font-weight: 600;
+    display: block;
+    color: var(--text-primary);
+}
+
+.marking-range {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+
+/* ========================================== */
+/* MOBILE RESPONSIVENESS */
+/* ========================================== */
+
+/* Tablet and below (768px) */
+@media (max-width: 768px) {
+    .metronome-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .metronome-card {
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+
+    /* Main layout grid - stack on tablet/mobile */
+    .metronome-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Beat Counter - responsive size */
+    #beatCounter {
+        height: 250px !important;
+        font-size: 8rem !important;
+    }
+
+    /* 3D Canvas - Responsive Height */
+    #metronomeCanvasContainer {
+        height: 250px !important;
+    }
+
+    /* BPM Display */
+    .bpm-value {
+        font-size: 5rem;
+    }
+
+    .bpm-label {
+        font-size: 1rem;
+    }
+
+    /* Controls Grid - 2 columns on tablet */
+    .controls-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    /* Play Button */
+    .play-btn-large {
+        width: 70px;
+        height: 70px;
+    }
+
+    /* Tempo Markings */
+    .tempo-markings {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+
+    /* Accent Pattern Buttons */
+    .accent-beat-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.9rem;
+    }
+
+    /* Settings Grid - 2 columns */
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Advanced features buttons */
+    div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+        grid-template-columns: 1fr 1fr 1fr !important;
+    }
+}
+
+/* Mobile (600px and below) */
+@media (max-width: 600px) {
+    .metronome-card {
+        padding: 1rem;
+    }
+
+    /* Beat Counter - smaller on mobile */
+    #beatCounter {
+        height: 200px !important;
+        font-size: 6rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* 3D Canvas - Smaller on mobile */
+    #metronomeCanvasContainer {
+        height: 200px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* BPM Display */
+    .bpm-value {
+        font-size: 4rem;
+    }
+
+    .bpm-label {
+        font-size: 0.9rem;
+    }
+
+    /* BPM Display Container - center properly */
+    .bpm-display-container {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Tempo Slider */
+    .tempo-slider-container {
+        padding: 0 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Controls Grid - Stack on mobile */
+    .controls-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Settings Grid - 2 columns on mobile */
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        gap: 0.5rem !important;
+    }
+
+    /* Advanced features buttons - full width each */
+    div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Play Button - Slightly smaller */
+    .play-btn-large {
+        width: 64px;
+        height: 64px;
+    }
+
+    .play-icon,
+    .pause-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* Tempo Controls - Larger touch targets */
+    .tempo-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Tap Tempo - Full width on mobile */
+    .tap-tempo-btn {
+        max-width: 100%;
+        padding: 0.875rem;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Control labels and selects */
+    .control-label {
+        font-size: 0.75rem;
+    }
+
+    .control-select {
+        padding: 0.625rem;
+        font-size: 0.9rem;
+    }
+
+    /* Practice Mode - Compact layout */
+    div[style*="padding: 0.75rem"][style*="background: var(--surface)"] {
+        padding: 0.625rem !important;
+    }
+
+    #practiceStart,
+    #practiceEnd,
+    #practiceDuration {
+        width: 50px !important;
+        padding: 0.375rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* Accent Pattern - Smaller buttons */
+    .accent-beat-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.85rem;
+    }
+
+    #accentPatternSelector {
+        gap: 0.375rem !important;
+    }
+
+    /* Preset Modal - Full screen on mobile */
+    #presetModal>div {
+        width: 95% !important;
+        max-height: 90vh !important;
+        padding: 1.5rem !important;
+    }
+
+    /* Tempo Markings - 2 columns on mobile */
+    .tempo-markings {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tempo-marking-card {
+        padding: 0.75rem;
+    }
+
+    .marking-name {
+        font-size: 0.9rem;
+    }
+
+    .marking-range {
+        font-size: 0.75rem;
+    }
+}
+
+/* Small Mobile (400px and below) */
+@media (max-width: 400px) {
+    .metronome-card {
+        padding: 0.75rem;
+    }
+
+    /* Beat Counter - compact on small screens */
+    #beatCounter {
+        height: 150px !important;
+        font-size: 5rem !important;
+    }
+
+    /* 3D Canvas - Even smaller */
+    #metronomeCanvasContainer {
+        height: 150px !important;
+    }
+
+    /* BPM Display */
+    .bpm-value {
+        font-size: 3rem;
+    }
+
+    .bpm-label {
+        font-size: 0.75rem;
+    }
+
+    /* Play Button */
+    .play-btn-large {
+        width: 56px;
+        height: 56px;
+    }
+
+    .play-icon,
+    .pause-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Settings Grid - single column on very small screens */
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Control select - full width */
+    .control-select {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* Practice Mode - Compact inline */
+    #practiceStart,
+    #practiceEnd,
+    #practiceDuration {
+        width: 45px !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Accent Pattern - Even smaller */
+    .accent-beat-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.75rem;
+    }
+
+    /* Tempo slider thumb - larger for touch */
+    .tempo-range::-webkit-slider-thumb {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Landscape Mobile - Optimize for horizontal */
+@media (max-width: 900px) and (orientation: landscape) {
+    .metronome-layout {
+        display: grid !important;
+        flex-direction: unset !important;
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    #beatCounter {
+        height: 200px !important;
+        font-size: 6rem !important;
+    }
+
+    #metronomeCanvasContainer {
+        height: 180px !important;
+    }
+
+    .bpm-value {
+        font-size: 3.5rem;
+    }
+
+    .controls-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Larger touch targets */
+    .tempo-btn,
+    .control-select,
+    .tap-tempo-btn {
+        min-height: 44px;
+    }
+
+    /* Remove hover effects on touch */
+    .tempo-btn:hover,
+    .play-btn-large:hover,
+    .tempo-marking-card:hover {
+        transform: none;
+    }
+
+    /* Active states for touch feedback */
+    .tempo-btn:active {
+        transform: scale(0.95);
+        background: var(--bg-secondary);
+    }
+
+    .play-btn-large:active {
+        transform: scale(0.95);
+    }
+}

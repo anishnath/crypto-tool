@@ -63,88 +63,8 @@
                 <jsp:param name="toolImage" value="piano-chord-tool.png" />
                 <jsp:param name="toolFeatures"
                     value="100+ piano chord shapes with proper fingering,Major Minor 7th Maj7 m7 Dim Aug Sus Add9 chords,Interactive piano keyboard with 3 octaves,Audio playback with realistic piano sound,Chord inversions (root 1st 2nd 3rd position),Left and right hand fingering guides,Chord progressions database for popular songs,Sharp and flat chords included,Beginner to advanced difficulty ratings,Keyboard shortcuts for quick access" />
-                <jsp:param name="hasSteps" value="true" />
-                <jsp:param name="faq1q" value="What are the easiest piano chords for beginners?" />
-                <jsp:param name="faq1a"
-                    value="The easiest piano chords are C Major (C-E-G), G Major (G-B-D), F Major (F-A-C), A Minor (A-C-E), and D Minor (D-F-A). These use simple hand positions and are the foundation for thousands of songs." />
-                <jsp:param name="faq2q" value="What are piano chord inversions?" />
-                <jsp:param name="faq2a"
-                    value="Inversions are different ways to play the same chord by changing which note is on the bottom. Root position has the root note lowest, 1st inversion has the 3rd lowest, 2nd inversion has the 5th lowest. Inversions make chord transitions smoother." />
-                <jsp:param name="faq3q" value="How long does it take to learn piano chords?" />
-                <jsp:param name="faq3a"
-                    value="Most beginners can play basic triads (C, G, F, Am, Dm) within 1-2 weeks of daily practice. Learning all major and minor chords takes 1-2 months. Adding 7th chords and inversions may take 3-6 months." />
+                <jsp:param name="hasSteps" value="false" />
             </jsp:include>
-
-            <!-- Open Graph / Facebook -->
-            <meta property="og:type" content="website">
-            <meta property="og:url" content="https://8gwifi.org/music/piano-chord-finder.jsp">
-            <meta property="og:title" content="Interactive Piano Chord Finder (Free + MIDI Support)">
-            <meta property="og:description"
-                content="Master piano chords instantly. Connect your MIDI keyboard for real-time feedback. Includes inversions, audio playback, and fingering guides.">
-            <meta property="og:image" content="https://8gwifi.org/images/site/piano-chord-tool.png">
-            <meta property="og:site_name" content="8gwifi.org">
-            <meta property="og:locale" content="en_US">
-
-            <!-- Twitter -->
-            <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:url" content="https://8gwifi.org/music/piano-chord-finder.jsp">
-            <meta name="twitter:title" content="Interactive Piano Chord Finder (Free + MIDI)">
-            <meta name="twitter:description"
-                content="The ultimate free piano chord tool with MIDI support, audio playback, and finger guides.">
-            <meta name="twitter:image" content="https://8gwifi.org/images/site/piano-chord-tool.png">
-            <meta name="twitter:creator" content="@anish2good">
-            <meta name="twitter:site" content="@8gwifi">
-
-            <link rel="canonical" href="https://8gwifi.org/music/piano-chord-finder.jsp">
-
-            <!-- JSON-LD WebApplication Schema -->
-            <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Interactive Piano Chord Finder Online",
-  "alternateName": ["Piano Chord Finder", "MIDI Piano Tool", "Online Piano Chord Chart"],
-  "description": "Instantly find any piano chord with our free interactive tool. Connect your MIDI keyboard, hear realistic audio, and learn proper fingering and inversions.",
-  "url": "https://8gwifi.org/music/piano-chord-finder.jsp",
-  "image": "https://8gwifi.org/images/site/piano-chord-tool.png",
-  "screenshot": "https://8gwifi.org/images/site/piano-chord-tool.png",
-  "applicationCategory": ["MusicApplication", "EducationalApplication", "UtilitiesApplication"],
-  "applicationSubCategory": "Piano Learning Tool",
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript and Web Audio API. Works with Chrome, Firefox, Safari, Edge.",
-  "author": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "url": "https://x.com/anish2good"
-  },
-  "datePublished": "2025-02-02",
-  "dateModified": "2025-02-02",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "523",
-    "bestRating": "5"
-  },
-  "featureList": [
-    "100+ chord shapes: Major, Minor, 7th, Maj7, m7, Dim, Aug, Sus, Add9",
-    "Interactive 3-octave piano keyboard",
-    "Realistic piano audio using Tone.js synthesis",
-    "Chord inversions (Root, 1st, 2nd, 3rd position)",
-    "Left and right hand fingering guides",
-    "Chord progressions database for popular songs",
-    "Sharp and flat chords (C#, Bb, Eb, F#m, Abm)",
-    "Color-coded notes (root, third, fifth, seventh)",
-    "Difficulty ratings (beginner/intermediate/advanced)",
-    "Keyboard shortcuts for quick chord access"
-  ],
-  "keywords": "piano chords for beginners, easy piano chords, how to play piano chords, piano chord chart, learn piano chords, chord inversions, piano fingering"
-}
-    </script>
 
             <!-- Fonts -->
             <link rel="stylesheet"
@@ -601,7 +521,7 @@
                     <!-- Footer -->
                     <footer class="page-footer">
                         <div class="footer-content">
-                            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+                            <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
                             <div class="footer-links">
                                 <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
                                 <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
@@ -625,61 +545,7 @@
                             <script
                                 src="<%=request.getContextPath()%>/music/js/piano-chord-finder.js?v=<%=cacheVersion%>"></script>
 
-                            <!-- E-E-A-T JSON-LD Schemas -->
-                            <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Free Piano Chord Chart - Learn Easy Piano Chords for Beginners",
-  "url": "https://8gwifi.org/music/piano-chord-finder.jsp",
-  "description": "Learn piano chords fast with our free interactive chord chart. 100+ chord diagrams with fingering, inversions, audio playback, and chord progressions. Perfect for beginners!",
-  "datePublished": "2025-02-02",
-  "dateModified": "2025-02-02",
-  "inLanguage": "en-US",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org"
-  },
-  "about": {
-    "@type": "Thing",
-    "name": "Piano Chords",
-    "description": "Musical chords played on piano"
-  },
-  "audience": {
-    "@type": "Audience",
-    "audienceType": "Piano learners, keyboard players, musicians, beginners"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "url": "https://x.com/anish2good"
-  },
-  "reviewedBy": {
-    "@type": "Organization",
-    "name": "8gwifi.org Team"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org"
-  },
-  "keywords": "piano chords for beginners, easy piano chords, how to play piano chords, piano chord chart, learn piano chords online, chord inversions, piano fingering"
-}
-    </script>
-
-                            <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
-    {"@type": "ListItem", "position": 2, "name": "Music Tools", "item": "https://8gwifi.org/music/"},
-    {"@type": "ListItem", "position": 3, "name": "Piano Chord Chart", "item": "https://8gwifi.org/music/piano-chord-finder.jsp"}
-  ]
-}
-    </script>
-
+                            <!-- Custom HowTo Schema (more detailed than generic) -->
                             <script type="application/ld+json">
 {
   "@context": "https://schema.org",

@@ -35,85 +35,8 @@
         <jsp:param name="toolKeywords" value="guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, free guitar chord finder, learn guitar chords online, guitar power chords, slash chords guitar, guitar chord diagrams, guitar finger positions, chord progressions guitar, left handed guitar chords, barre chords, 7th chords guitar, sus chords, add9 chords, capo chord chart, F# chord, Bb chord guitar" />
         <jsp:param name="toolImage" value="guitar-chord-tool.png" />
         <jsp:param name="toolFeatures" value="160+ guitar chord shapes including power chords and slash chords,Major Minor 7th Sus Dim Aug Add9 and extended chords,Easy-to-read fretboard diagrams with finger numbers,Audio playback - hear how chords sound,Chord progressions database with popular songs,Left-handed mode for lefty guitarists,Capo transpose (frets 0-12),Sharp and flat chords (F# Bb Eb Ab),Beginner to advanced difficulty ratings,Keyboard shortcuts and multi-chord comparison" />
-        <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="What are the easiest guitar chords for beginners?" />
-        <jsp:param name="faq1a" value="The 5 easiest chords are C, G, D, Am, and Em. These open chords use simple finger positions and are the foundation for thousands of songs. Start with these before learning barre chords." />
-        <jsp:param name="faq2q" value="How do I read a guitar chord diagram?" />
-        <jsp:param name="faq2a" value="Numbers on dots show which finger to use: 1=Index, 2=Middle, 3=Ring, 4=Pinky. O above a string means play it open. X means don't play that string. Vertical lines are strings, horizontal lines are frets." />
-        <jsp:param name="faq3q" value="How long does it take to learn guitar chords?" />
-        <jsp:param name="faq3a" value="Most beginners can play basic open chords (C, G, D, Am, Em) within 2-4 weeks of daily practice. Smooth chord transitions take 1-2 months. Barre chords may take 3-6 months to master." />
+        <jsp:param name="hasSteps" value="false" />
     </jsp:include>
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://8gwifi.org/music/guitar-chord-finder.jsp">
-    <meta property="og:title" content="Learn Guitar Chords Free - 2000+ Chord Diagrams with Audio">
-    <meta property="og:description" content="Master guitar chords with our free chord chart. Interactive diagrams, audio playback, chord progressions, and left-handed support. Start playing songs today!">
-    <meta property="og:image" content="https://8gwifi.org/images/site/guitar-chord-tool.png">
-    <meta property="og:site_name" content="8gwifi.org">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://8gwifi.org/music/guitar-chord-finder.jsp">
-    <meta name="twitter:title" content="Free Guitar Chord Chart - Easy Chords for Beginners">
-    <meta name="twitter:description" content="Learn 2000+ guitar chords with interactive diagrams, audio playback, and chord progressions. Includes left-handed mode!">
-    <meta name="twitter:image" content="https://8gwifi.org/images/site/guitar-chord-tool.png">
-    <meta name="twitter:creator" content="@anish2good">
-    <meta name="twitter:site" content="@8gwifi">
-
-    <link rel="canonical" href="https://8gwifi.org/music/guitar-chord-finder.jsp">
-
-    <!-- JSON-LD WebApplication Schema -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Free Guitar Chord Chart - Learn Easy Chords for Beginners",
-  "alternateName": ["Guitar Chord Finder", "Guitar Chord Diagram Generator", "Online Chord Library"],
-  "description": "Learn guitar chords fast with our free interactive chord chart. Features 2000+ chord diagrams with finger positions, audio playback, chord progressions for popular songs, and left-handed mode. Perfect tool for beginners learning guitar.",
-  "url": "https://8gwifi.org/music/guitar-chord-finder.jsp",
-  "image": "https://8gwifi.org/images/site/guitar-chord-tool.png",
-  "screenshot": "https://8gwifi.org/images/site/guitar-chord-tool.png",
-  "applicationCategory": ["MusicApplication", "EducationalApplication", "UtilitiesApplication"],
-  "applicationSubCategory": "Guitar Learning Tool",
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript and Web Audio API. Works with Chrome, Firefox, Safari, Edge.",
-  "author": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "url": "https://x.com/anish2good"
-  },
-  "datePublished": "2024-01-15",
-  "dateModified": "2025-02-02",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "1247",
-    "bestRating": "5"
-  },
-  "featureList": [
-    "160+ chord shapes: Major, Minor, 7th, Power, Slash, Add9, Sus, Dim, Aug",
-    "Power chords for rock and punk (C5, G5, E5)",
-    "Slash chords with bass notes (C/G, D/F#, G/B)",
-    "Sharp and flat chords (F#, Bb, Eb, C#m, Abm)",
-    "Extended jazz chords (9th, 11th, 13th, m7b5, dim7)",
-    "Interactive fretboard diagrams with finger numbers",
-    "Audio chord playback with strum and arpeggio modes",
-    "Chord progressions database for popular songs",
-    "Left-handed mode for lefty guitarists",
-    "Capo transpose tool (frets 0-12)",
-    "Difficulty ratings (beginner/intermediate/advanced)",
-    "Keyboard shortcuts and multi-chord comparison"
-  ],
-  "keywords": "guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, learn guitar chords, chord progressions"
-}
-    </script>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -520,7 +443,7 @@
     <!-- Footer -->
     <footer class="page-footer">
         <div class="footer-content">
-            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+            <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
             <div class="footer-links">
                 <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
                 <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
@@ -539,61 +462,7 @@
     <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
     <script src="<%=request.getContextPath()%>/js/guitar-chord-finder.js?v=<%=cacheVersion%>"></script>
 
-    <!-- E-E-A-T JSON-LD Schemas -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Free Guitar Chord Chart - Learn Easy Chords for Beginners",
-  "url": "https://8gwifi.org/music/guitar-chord-finder.jsp",
-  "description": "Learn guitar chords fast with our free interactive chord chart. 2000+ chord diagrams with finger positions, audio playback, chord progressions for popular songs, and left-handed mode. Perfect for beginners!",
-  "datePublished": "2024-01-15",
-  "dateModified": "2025-02-02",
-  "inLanguage": "en-US",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org"
-  },
-  "about": {
-    "@type": "Thing",
-    "name": "Guitar Chords",
-    "description": "Musical chords played on guitar"
-  },
-  "audience": {
-    "@type": "Audience",
-    "audienceType": "Guitar learners, musicians, beginners"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "url": "https://x.com/anish2good"
-  },
-  "reviewedBy": {
-    "@type": "Organization",
-    "name": "8gwifi.org Team"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org"
-  },
-  "keywords": "guitar chords for beginners, easy guitar chords, how to play guitar chords, guitar chord chart, learn guitar chords online, chord progressions guitar, left handed guitar chords"
-}
-    </script>
-
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
-    {"@type": "ListItem", "position": 2, "name": "Music Tools", "item": "https://8gwifi.org/music/"},
-    {"@type": "ListItem", "position": 3, "name": "Guitar Chord Chart", "item": "https://8gwifi.org/music/guitar-chord-finder.jsp"}
-  ]
-}
-    </script>
-
+    <!-- Custom HowTo Schema (more detailed than generic) -->
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
