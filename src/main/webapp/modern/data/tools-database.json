@@ -1,7 +1,7 @@
 {
   "version": "1.3",
-  "lastUpdated": "2025-12-11T11:23:37.010Z",
-  "totalTools": 331,
+  "lastUpdated": "2025-02-03T00:00:00.000Z",
+  "totalTools": 335,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -17,6 +17,7 @@
     "Machine Learning",
     "Mathematics",
     "Media Tools",
+    "Music",
     "Network Tools",
     "Physics",
     "Productivity",
@@ -365,6 +366,13 @@
       "category": "Developer Tools",
       "keywords": "compare text diff developer tools",
       "description": "Compare Text Diff - Free online developer tools tool"
+    },
+    {
+      "name": "Free Chart Creator",
+      "url": "chart-maker.jsp",
+      "category": "Developer Tools",
+      "keywords": "online chart maker, free graph creator, bar chart generator, line graph maker, pie chart creator, csv to chart, data visualization tool",
+      "description": "Free Chart Creator - Create beautiful Bar, Line, Pie, and more charts from CSV data."
     },
     {
       "name": "Graph-Easy ASCII Diagram Generator",
@@ -2353,6 +2361,34 @@
       "category": "Security & PKI",
       "keywords": "verify private key csr x509 security & pki",
       "description": "Verify Private Key vs CSR/x509 - Free online security & pki tool"
+    },
+    {
+      "name": "Guitar Chord Chart",
+      "url": "music/guitar-chord-finder.jsp",
+      "category": "Music",
+      "keywords": "guitar chords, chord finder, chord chart, guitar chord diagram, learn guitar, chord progressions, left handed guitar, power chords, barre chords, capo chart",
+      "description": "Free Guitar Chord Chart - Learn 160+ chords with interactive diagrams, audio playback, progressions, and left-handed mode."
+    },
+    {
+      "name": "Piano Chord Chart",
+      "url": "music/piano-chord-finder.jsp",
+      "category": "Music",
+      "keywords": "piano chords, chord finder, piano chord chart, keyboard chords, learn piano, chord inversions, fingering guide, chord progressions, MIDI piano",
+      "description": "Free Piano Chord Chart - Learn 100+ chords with interactive keyboard, inversions, fingering guides, and audio playback."
+    },
+    {
+      "name": "Online Metronome",
+      "url": "music/metronome.jsp",
+      "category": "Music",
+      "keywords": "metronome, bpm counter, tempo, tap tempo, time signature, beat counter, practice tool, music timing, subdivisions",
+      "description": "Free Online Metronome - Accurate BPM counter with tap tempo, time signatures, subdivisions, and visual beat display."
+    },
+    {
+      "name": "Chromatic Tuner",
+      "url": "music/tuner.jsp",
+      "category": "Music",
+      "keywords": "tuner, guitar tuner, chromatic tuner, instrument tuner, pitch detection, violin tuner, ukulele tuner, bass tuner, online tuner",
+      "description": "Free Online Tuner - Chromatic tuner for guitar, violin, ukulele, and all instruments with real-time pitch detection."
     }
   ]
 }
