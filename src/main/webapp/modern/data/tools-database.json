@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2025-02-03T00:00:00.000Z",
-  "totalTools": 335,
+  "totalTools": 342,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -2389,6 +2389,55 @@
       "category": "Music",
       "keywords": "tuner, guitar tuner, chromatic tuner, instrument tuner, pitch detection, violin tuner, ukulele tuner, bass tuner, online tuner",
       "description": "Free Online Tuner - Chromatic tuner for guitar, violin, ukulele, and all instruments with real-time pitch detection."
+    },
+    {
+      "name": "Ukulele Chord Chart",
+      "url": "music/ukulele-chord-finder.jsp",
+      "category": "Music",
+      "keywords": "ukulele chords, ukulele chord chart, uke chords, ukulele chord finder, learn ukulele, GCEA tuning, ukulele fingering, beginner ukulele",
+      "description": "Free Ukulele Chord Chart - Learn 100+ chords with interactive diagrams, audio playback, and fingering positions for GCEA tuning."
+    },
+    {
+      "name": "Drum Machine",
+      "url": "music/drum-machine.jsp",
+      "category": "Music",
+      "keywords": "drum machine, beat maker, online drums, 16 step sequencer, drum patterns, 808 drums, trap beats, hip hop beats, drum programming",
+      "description": "Free Online Drum Machine - 16-step sequencer with 4 drum kits, preset patterns, tap tempo, and shareable beats."
+    },
+    {
+      "name": "Virtual Piano",
+      "url": "music/virtual-piano.jsp",
+      "category": "Music",
+      "keywords": "virtual piano, online piano, piano keyboard, play piano online, piano simulator, keyboard instrument, MIDI piano, learn piano",
+      "description": "Free Virtual Piano - Play piano online with multiple instruments, keyboard controls, recording, and sustain pedal."
+    },
+    {
+      "name": "Ear Training",
+      "url": "music/ear-training.jsp",
+      "category": "Music",
+      "keywords": "ear training, interval training, music ear training, learn intervals, perfect pitch, relative pitch, interval recognition, music theory",
+      "description": "Free Ear Training Tool - Practice interval recognition with 3 difficulty levels, progress tracking, and save your scores."
+    },
+    {
+      "name": "Circle of Fifths",
+      "url": "music/circle-of-fifths.jsp",
+      "category": "Music",
+      "keywords": "circle of fifths, music theory, key signatures, chord progressions, scales, major keys, minor keys, relative keys",
+      "description": "Interactive Circle of Fifths - Explore key signatures, chord progressions, scales, and relationships between keys."
+    },
+    {
+      "name": "BPM Finder",
+      "url": "music/bpm-finder.jsp",
+      "category": "Music",
+      "keywords": "bpm finder, tap tempo, beat counter, bpm calculator, tempo finder, beats per minute, tap bpm, song tempo",
+      "description": "Free BPM Finder - Tap along to any song to find its tempo. Accurate tap tempo tool for DJs and musicians."
+    },
+    {
+      "name": "Music Transpose Tool",
+      "url": "music/transpose.jsp",
+      "category": "Music",
+      "keywords": "transpose music, change key, transpose chords, music transposer, chord transposer, key changer, capo chart",
+      "description": "Free Music Transpose Tool - Change song keys instantly. Transpose chords and notes to any key with capo suggestions."
     }
   ]
 }
