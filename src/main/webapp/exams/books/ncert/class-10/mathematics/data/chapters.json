@@ -14288,8 +14288,9 @@
       "Distance ≈ 19 × 1.732 = 32.91 m"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Diagram showing a boy 1.5m tall walking towards a 30m building, with angles of elevation changing from 30° to 60° relative to eye level.",
+      "diagram_svg": "fig-9-1-q6-boy-building.svg"
     },
     "tags": [
       "trigonometry",
@@ -14342,8 +14343,9 @@
       "h ≈ 20(1.732 - 1) = 20 × 0.732 = 14.64 m"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Diagram showing a tower on top of a building with elevation angles 45° (to building top) and 60° (to tower top).",
+      "diagram_svg": "fig-9-1-q7-tower-building.svg"
     },
     "tags": [
       "trigonometry",
@@ -14521,8 +14523,9 @@
       "Distance from second pole = 80 - 20 = 60 m"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Two poles of equal height on either side of an 80m road. Point P on road with elevation angles 60° and 30°.",
+      "diagram_svg": "fig-9-1-q10-two-poles.svg"
     },
     "tags": [
       "trigonometry",
@@ -14822,8 +14825,9 @@
       "Time = Distance/Speed = (h√3/3)/(h√3/9) = (h√3/3) × (9/h√3) = 9/3 = 3 seconds"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Diagram showing a tower and a car at two positions with angles of depression 30° and 60°.",
+      "diagram_svg": "fig-9-1-q15-car-tower.svg"
     },
     "tags": [
       "trigonometry",
@@ -14843,6 +14847,54 @@
       "chapter": 9,
       "exercise": "9.1",
       "question_number": "Q15",
+      "page": 142
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Proof",
+    "chapter": "Class X - Chapter 9: Some Applications of Trigonometry",
+    "section": "9.1 Heights and Distances",
+    "exercise": "Exercise 9.1",
+    "question_number": "Q16",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "The angles of elevation of the top of a tower from two points at a distance of 4 m and 9 m from the base of the tower and in the same straight line with it are complementary. Prove that the height of the tower is 6 m.",
+    "question_latex": "The angles of elevation of the top of a tower from two points at a distance of 4 m and 9 m from the base of the tower and in the same straight line with it are complementary. Prove that the height of the tower is 6 m.",
+    "correct_answer_plain": "Proof: h² = 36 => h = 6 m",
+    "correct_answer_latex": "Proof: \\( h^2 = 36 \\implies h = 6 \\) m",
+    "hint": "Complementary angles sum to 90°. If one is θ, other is 90°-θ. Use tan(90°-θ) = cot θ",
+    "solution_steps": [
+      "Let height of tower = h",
+      "Let angles be θ and (90° - θ)",
+      "From point at 4m: tan θ = h/4 ... (1)",
+      "From point at 9m: tan(90° - θ) = h/9",
+      "cot θ = h/9 ... (2)",
+      "Multiply (1) and (2):",
+      "tan θ × cot θ = (h/4) × (h/9)",
+      "1 = h²/36",
+      "h² = 36",
+      "h = 6 m (height cannot be negative)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "diagram_description": "Diagram showing tower height h and two points at 4m and 9m with complementary angles.",
+      "diagram_svg": "fig-9-1-q16-complementary-angles.svg"
+    },
+    "tags": [
+      "trigonometry",
+      "applications",
+      "heights-distances",
+      "complementary-angles",
+      "proof"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 10,
+      "chapter": 9,
+      "exercise": "9.1",
+      "question_number": "Q16",
       "page": 142
     }
   }
