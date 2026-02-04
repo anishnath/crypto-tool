@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300">
+  <defs>
+    <linearGradient id="bldgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9ca3af;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#4b5563;stop-opacity:1"/>
+    </linearGradient>
+     <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d1fae5;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground -->
+  <rect x="0" y="250" width="340" height="50" fill="url(#groundGrad)"/>
+  <line x1="0" y1="250" x2="340" y2="250" stroke="#059669" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="170" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Transmission Tower on Building</text>
+
+  <!-- Coordinates: OBS(100, 250), BldgTop(220, 150), TowerTop(220, 80) -->
+  <!-- Shifted Right a bit to center -->
+  <!-- Run = 120. P=(100, 250). BldgBase=(220, 250). -->
+  <!-- BldgHeight = 100px (20m). Top=(220, 150). -->
+  <!-- TowerHeight = 73px (14.6m). Top=(220, 77). -->
+
+  <!-- Building -->
+  <rect x="220" y="150" width="40" height="100" fill="url(#bldgGrad)" stroke="#374151" stroke-width="1"/>
+  <text x="270" y="205" font-family="Arial, sans-serif" font-size="11" fill="#374151">Building</text>
+  <text x="270" y="220" font-family="Arial, sans-serif" font-size="11" fill="#374151" font-weight="bold">20 m</text>
+
+  <!-- Tower -->
+  <!-- Lattice structure -->
+  <path d="M 220 150 L 225 77 L 235 77 L 240 150 L 220 150" fill="none" stroke="#dc2626" stroke-width="2"/>
+  <path d="M 222 150 L 235 77" fill="none" stroke="#dc2626" stroke-width="1"/>
+  <path d="M 238 150 L 225 77" fill="none" stroke="#dc2626" stroke-width="1"/>
+  <path d="M 221 130 L 239 130" fill="none" stroke="#dc2626" stroke-width="1"/>
+  <path d="M 223 110 L 237 110" fill="none" stroke="#dc2626" stroke-width="1"/>
+  <path d="M 224 90 L 236 90" fill="none" stroke="#dc2626" stroke-width="1"/>
+  
+  <text x="250" y="120" font-family="Arial, sans-serif" font-size="11" fill="#dc2626">Tower (h)</text>
+
+  <!-- Observation Point -->
+  <circle cx="100" cy="250" r="4" fill="#2563eb"/>
+  <text x="100" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#2563eb" font-weight="bold">P</text>
+
+  <!-- Sight Lines -->
+  <!-- To top of building (45 deg) -->
+  <line x1="100" y1="250" x2="220" y2="150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+  
+  <!-- To top of tower (60 deg) -->
+  <line x1="100" y1="250" x2="230" y2="77" stroke="#dc2626" stroke-width="2"/> <!-- Aiming at center of top -->
+
+  <!-- Angles -->
+  <!-- 45 -->
+  <path d="M 140 250 A 40 40 0 0 0 135 217" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="145" y="235" font-family="Arial, sans-serif" font-size="10" fill="#f59e0b" font-weight="bold">45°</text>
+
+  <!-- 60 -->
+  <path d="M 160 250 A 60 60 0 0 0 148 185" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="160" y="195" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" font-weight="bold">60°</text>
+
+  <!-- Vertical Bracket for Height h? -->
+  <!-- Maybe not needed since label is there -->
+
+  <!-- Solution Hint -->
+  <rect x="10" y="50" width="130" height="90" fill="white" stroke="#3b82f6" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="75" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Hint:</text>
+  <text x="15" y="80" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan 45° = 20/dist</text>
+  <text x="15" y="92" font-family="Arial, sans-serif" font-size="9" fill="#374151">dist = 20 m</text>
+  <text x="15" y="104" font-family="Arial, sans-serif" font-size="9" fill="#374151">tan 60° = (20+h)/20</text>
+  <text x="15" y="116" font-family="Arial, sans-serif" font-size="9" fill="#374151">20√3 = 20 + h</text>
+  <text x="15" y="128" font-family="Arial, sans-serif" font-size="9" fill="#dc2626" font-weight="bold">h = 20(√3-1) m</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 320">
+  <defs>
+    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d1fae5;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2fe;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky background -->
+  <rect x="0" y="0" width="340" height="240" fill="url(#skyGrad)"/>
+
+  <!-- Ground -->
+  <rect x="0" y="240" width="340" height="80" fill="url(#groundGrad)"/>
+  <line x1="0" y1="240" x2="340" y2="240" stroke="#059669" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="170" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Car Approaching Tower</text>
+  <text x="170" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Angle of Depression changes 30° → 60° in 6 sec</text>
+
+  <!-- Horizontal line for Depression Angels -->
+  <line x1="280" y1="90" x2="10" y2="90" stroke="#9ca3af" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="150" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Horizontal Level</text>
+
+  <!-- Tower (AB) -->
+  <!-- A=(280, 90), B=(280, 240) -->
+  <line x1="280" y1="90" x2="280" y2="240" stroke="#b91c1c" stroke-width="3"/>
+  <rect x="275" y="240" width="10" height="3" fill="#7f1d1d"/>
+  <text x="290" y="160" font-family="Arial, sans-serif" font-size="10" fill="#b91c1c" font-weight="bold" transform="rotate(90, 290, 160)">Tower (h)</text>
+
+  <!-- Points -->
+  <!-- C (First pos) -> 30 deg -->
+  <!-- tan(30)=1/sqrt(3)=0.577. h=150. Base = 150/0.577 = 260. X = 280-260 = 20 -->
+  <circle cx="20" cy="240" r="4" fill="#2563eb"/>
+  <text x="20" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#2563eb" font-weight="bold">C</text>
+
+  <!-- D (Second pos) -> 60 deg -->
+  <!-- tan(60)=1.732. Base = 150/1.732 = 86.6. X = 280-86.6 = 193 -->
+  <circle cx="193" cy="240" r="4" fill="#2563eb"/>
+  <text x="193" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#2563eb" font-weight="bold">D</text>
+
+  <!-- B (Base) -->
+  <circle cx="280" cy="240" r="4" fill="#2563eb"/>
+  <text x="280" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#2563eb" font-weight="bold">B</text>
+
+  <!-- A (Top) -->
+  <circle cx="280" cy="90" r="4" fill="#2563eb"/>
+  <text x="290" y="90" font-family="Arial, sans-serif" font-size="11" fill="#2563eb" font-weight="bold">A</text>
+
+  <!-- Sight Lines -->
+  <!-- A to C -->
+  <line x1="280" y1="90" x2="20" y2="240" stroke="#4b5563" stroke-width="1"/>
+  <!-- A to D -->
+  <line x1="280" y1="90" x2="193" y2="240" stroke="#4b5563" stroke-width="1"/>
+
+  <!-- Angles of Depression -->
+  <path d="M 230 90 A 50 50 0 0 0 255 104" fill="none" stroke="#ef4444" stroke-width="1"/>
+  <text x="215" y="105" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">30°</text>
+
+  <path d="M 250 90 A 30 30 0 0 0 265 116" fill="none" stroke="#ef4444" stroke-width="1"/>
+  <text x="245" y="125" font-family="Arial, sans-serif" font-size="9" fill="#ef4444">60°</text>
+  
+  <!-- Angles of Elevation (Alternate Interior) -->
+  <path d="M 50 240 A 30 30 0 0 0 45 225" fill="none" stroke="#059669" stroke-width="1.5"/>
+  <text x="55" y="235" font-family="Arial, sans-serif" font-size="10" fill="#059669" font-weight="bold">30°</text>
+
+  <path d="M 213 240 A 20 20 0 0 0 209 210" fill="none" stroke="#059669" stroke-width="1.5"/>
+  <text x="215" y="225" font-family="Arial, sans-serif" font-size="10" fill="#059669" font-weight="bold">60°</text>
+
+  <!-- Car Symbol (Generic) -->
+  <g transform="translate(10, 225) scale(0.8)">
+    <path d="M0,10 L20,10 L25,0 L45,0 L50,10 L70,10 L70,20 L0,20 Z" fill="#f59e0b"/>
+    <circle cx="15" cy="20" r="5" fill="#333"/>
+    <circle cx="55" cy="20" r="5" fill="#333"/>
+  </g>
+  <g transform="translate(183, 225) scale(0.8)">
+    <path d="M0,10 L20,10 L25,0 L45,0 L50,10 L70,10 L70,20 L0,20 Z" fill="#f59e0b"/>
+    <circle cx="15" cy="20" r="5" fill="#333"/>
+    <circle cx="55" cy="20" r="5" fill="#333"/>
+  </g>
+
+  <!-- Distance Vectors -->
+  <line x1="20" y1="270" x2="193" y2="270" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  <text x="106" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d97706" font-weight="bold">Distance CD (Time = 6s)</text>
+
+  <line x1="193" y1="270" x2="280" y2="270" stroke="#db2777" stroke-width="1.5"/>
+  <text x="236" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#db2777" font-weight="bold">DB (Time = ?)</text>
+
+  <!-- Solution Text Box -->
+  <rect x="10" y="40" width="130" height="110" fill="white" stroke="#3b82f6" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="75" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Analysis:</text>
+  <text x="15" y="70" font-family="Arial, sans-serif" font-size="9" fill="#374151">In △ABC, tan 30° = h/BC</text>
+  <text x="15" y="82" font-family="Arial, sans-serif" font-size="9" fill="#374151">In △ABD, tan 60° = h/BD</text>
+  <text x="15" y="94" font-family="Arial, sans-serif" font-size="9" fill="#374151">BC = h√3, BD = h/√3</text>
+  <text x="15" y="106" font-family="Arial, sans-serif" font-size="9" fill="#374151">CD = BC - BD = 2h/√3</text>
+  <text x="15" y="118" font-family="Arial, sans-serif" font-size="9" fill="#374151">CD = 2 × BD</text>
+  <text x="15" y="130" font-family="Arial, sans-serif" font-size="9" fill="#374151">If CD takes 6s, BD = 3s</text>
+  
+  <!-- Watermark -->
+  <text x="50%" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org/exams/class-10</text>
+</svg>

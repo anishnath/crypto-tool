@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300">
+  <defs>
+    <linearGradient id="bldgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+    </linearGradient>
+     <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d1fae5;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground -->
+  <rect x="0" y="260" width="340" height="40" fill="url(#groundGrad)"/>
+  <line x1="0" y1="260" x2="340" y2="260" stroke="#059669" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="170" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Boy Walking Towards Building</text>
+  
+  <!-- Coordinates Calculation -->
+  <!-- Total Height 30m. Boy 1.5m. Effective 28.5m. -->
+  <!-- Scale: Let's say 28.5m = 171px. (1m = 6px). -->
+  <!-- Building Top y = 50. Building Base y = 260 => Height 210px (35m). Close enough scale. -->
+  <!-- Boy Height 1.5m * 6 = 9px. -->
+  <!-- Eye Level: y = 260 - 9 = 251. -->
+  <!-- Top of Building: y = 251 - 171 = 80. -->
+  <!-- Distances from Building (Right side x=280) -->
+  <!-- Pos 1 (30 deg): Base = 28.5 * sqrt(3) ~ 49.3m * 6 = 296px. Too wide. -->
+  <!-- Adjust Scale: 1m = 4px. -->
+  <!-- Eff Height 28.5m = 114px. -->
+  <!-- Top y = 251 - 114 = 137. -->
+  <!-- Pos 1 (30 deg): Dist = 28.5 * 1.732 ~ 49.36m * 4 = 197px. -->
+  <!-- Building X = 300. Pos 1 X = 300 - 197 = 103. -->
+  <!-- Pos 2 (60 deg): Dist = 28.5 / 1.732 ~ 16.45m * 4 = 66px. -->
+  <!-- Pos 2 X = 300 - 66 = 234. -->
+  
+  <!-- Building -->
+  <rect x="300" y="120" width="30" height="140" fill="url(#bldgGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="315" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#1e40af" font-weight="bold">Top</text>
+  
+  <!-- Total Height Indicator (Left of Building) -->
+  <line x1="335" y1="120" x2="335" y2="260" stroke="#1e40af" stroke-width="1"/>
+  <line x1="332" y1="120" x2="338" y2="120" stroke="#1e40af" stroke-width="1"/>
+  <line x1="332" y1="260" x2="338" y2="260" stroke="#1e40af" stroke-width="1"/>
+  <text x="340" y="190" font-family="Arial, sans-serif" font-size="10" fill="#1e40af" transform="rotate(90, 340, 190)">30 m</text>
+
+  <!-- Eye Level Line (Horizontal) -->
+  <line x1="50" y1="251" x2="300" y2="251" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="80" y="245" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">Eye Level</text>
+
+  <!-- Boy at Pos 1 (30 deg) -->
+  <line x1="103" y1="260" x2="103" y2="251" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="103" cy="251" r="3" fill="#ef4444"/>
+  <text x="103" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">Boy (Starts)</text>
+  
+  <!-- Boy at Pos 2 (60 deg) -->
+  <line x1="234" y1="260" x2="234" y2="251" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="234" cy="251" r="3" fill="#ef4444"/>
+  <text x="234" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ef4444" font-weight="bold">Boy (Ends)</text>
+
+  <!-- Sight Lines -->
+  <!-- Top Point Effective (300, 137) -->
+  <!-- Wait, total height 30m. Top of bldg is at y=120? 
+       Using scale 4px/m. 30m = 120px. Base y=260. Top y=140.
+       Boy Height 1.5m = 6px. Eye y=254.
+       Eff Height = 28.5m = 114px. Top y=140. Correct.
+       Let's re-calc X based on Top y=140.
+       Eff Height y diff = 254 - 140 = 114px. Correct.
+       Pos 1 X: 300 - 197 = 103.
+       Pos 2 X: 300 - 66 = 234.
+       The coordinates used above are mostly correct with y=140 top.
+  -->
+  
+  <!-- Update Top Y to 140 in this drawing context -->
+  <line x1="103" y1="254" x2="300" y2="140" stroke="#ef4444" stroke-width="1"/>
+  <line x1="234" y1="254" x2="300" y2="140" stroke="#ef4444" stroke-width="1"/>
+
+  <!-- Angles -->
+  <!-- 30 deg at Pos 1 -->
+  <path d="M 123 254 A 20 20 0 0 0 119 245" fill="none" stroke="#b91c1c" stroke-width="1.5"/> <!-- Approx arc -->
+  <text x="125" y="250" font-family="Arial, sans-serif" font-size="10" fill="#b91c1c" font-weight="bold">30°</text>
+
+  <!-- 60 deg at Pos 2 -->
+  <path d="M 244 254 A 20 20 0 0 0 240 242" fill="none" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="245" y="250" font-family="Arial, sans-serif" font-size="10" fill="#b91c1c" font-weight="bold">60°</text>
+
+  <!-- Boy Height Label -->
+  <line x1="90" y1="260" x2="90" y2="254" stroke="#374151" stroke-width="1"/>
+  <text x="85" y="260" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#374151">1.5m</text>
+
+  <!-- Solution Box -->
+  <rect x="10" y="50" width="140" height="90" fill="white" stroke="#3b82f6" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="80" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Key Insight:</text>
+  <text x="15" y="80" font-family="Arial, sans-serif" font-size="9" fill="#374151">Use Eye Level, not Ground!</text>
+  <text x="15" y="92" font-family="Arial, sans-serif" font-size="9" fill="#374151">Eff. Height = 30 - 1.5 = 28.5m</text>
+  <text x="15" y="104" font-family="Arial, sans-serif" font-size="9" fill="#374151">x₁ = 28.5 cot 30°</text>
+  <text x="15" y="116" font-family="Arial, sans-serif" font-size="9" fill="#374151">x₂ = 28.5 cot 60°</text>
+  <text x="15" y="128" font-family="Arial, sans-serif" font-size="9" fill="#ef4444" font-weight="bold">Dist = 19√3 m</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>

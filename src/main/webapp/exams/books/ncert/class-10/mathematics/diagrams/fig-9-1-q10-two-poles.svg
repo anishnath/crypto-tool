@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300">
+  <defs>
+    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d1fae5;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4b5563;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky background -->
+  <rect x="0" y="0" width="340" height="240" fill="#f0f9ff"/>
+
+  <!-- Ground -->
+  <rect x="0" y="240" width="340" height="60" fill="url(#groundGrad)"/>
+  <line x1="0" y1="240" x2="340" y2="240" stroke="#059669" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="170" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Two Poles on Road</text>
+  <text x="170" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Road Width = 80 m, Equal Heights</text>
+
+  <!-- Coords: RoadWidth=240px (represents 80m). 1m = 3px. Height=20sqrt(3)~34.6m -> ~104px -->
+  <!-- Left Pole Base: x=50. Right Pole Base: x=290 -->
+  <!-- Point P: x=20m from left = 60px. x_P = 50 + 60 = 110 -->
+  
+  <!-- Pole 1 (Left) -->
+  <rect x="45" y="136" width="10" height="104" fill="url(#poleGrad)"/>
+  <text x="35" y="190" font-family="Arial, sans-serif" font-size="10" fill="#1f2937" transform="rotate(-90, 35, 190)">Height (h)</text>
+
+  <!-- Pole 2 (Right) -->
+  <rect x="285" y="136" width="10" height="104" fill="url(#poleGrad)"/>
+  <text x="305" y="190" font-family="Arial, sans-serif" font-size="10" fill="#1f2937" transform="rotate(90, 305, 190)">Height (h)</text>
+
+  <!-- Point P -->
+  <circle cx="110" cy="240" r="4" fill="#ef4444"/>
+  <text x="110" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ef4444" font-weight="bold">P</text>
+
+  <!-- Sight Lines -->
+  <!-- Left Top (50, 136) to P (110, 240) -->
+  <line x1="50" y1="136" x2="110" y2="240" stroke="#f59e0b" stroke-width="2"/>
+  
+  <!-- Right Top (290, 136) to P (110, 240) -->
+  <line x1="290" y1="136" x2="110" y2="240" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Angles -->
+  <!-- Left Angle 60 -->
+  <path d="M 125 240 A 15 15 0 0 0 118 227" fill="none" stroke="#b45309" stroke-width="1.5"/>
+  <text x="120" y="235" font-family="Arial, sans-serif" font-size="10" fill="#b45309" font-weight="bold">60°</text>
+
+  <!-- Right Angle 30 -->
+  <!-- Correction: If closer to Left (20m), Angle is steeper (60). Wait. P closer to pole -> steeper angle. -->
+  <!-- My Calc: x=20m (Left). tan(60)=h/20. Correct. -->
+  <!-- Diagram: P at 110. Left Base at 50. Dist = 60px. Angle 60. Correct. -->
+  <!-- P at 110. Right Base at 290. Dist = 180px. Angle 30. Correct. -->
+  
+  <path d="M 95 240 A 15 15 0 0 1 102 227" fill="none" stroke="#b45309" stroke-width="1.5"/> <!-- This is wrong side. Angle is FROM HORIZONTAL -->
+  <!-- Re-do angles visualization properly -->
+  
+  <!-- Angle at P looking Left Top -->
+  <path d="M 100 240 L 110 240 L 50 136" fill="none" opacity="0"/> <!-- Reference -->
+  <!-- Arc 60 start from (95, 240) is wrong. Angle is between POLE BASE and SIGHT LINE? No, angle of elevation is from GROUND -->
+  <!-- Left Triangle: Base is horizontal line segment (50, 240) -> (110, 240). Hypotenuse (50, 136) -> (110, 240)? No P is the observer. -->
+  <!-- Observer at P looking at top of pole at 50. Line is P->TopLeft. Horizontal is P->LeftBase. Angle is between P->LeftBase and P->TopLeft. -->
+  <path d="M 95 240 A 15 15 0 0 1 103 228" fill="none" stroke="#b45309" stroke-width="1.5"/>
+  <text x="85" y="235" font-family="Arial, sans-serif" font-size="10" fill="#b45309" font-weight="bold">60°</text>
+
+  <!-- Angle at P looking Right Top -->
+  <path d="M 125 240 A 25 25 0 0 0 132 225" fill="none" stroke="#b45309" stroke-width="1.5"/>
+  <text x="135" y="235" font-family="Arial, sans-serif" font-size="10" fill="#b45309" font-weight="bold">30°</text>
+
+
+  <!-- Labels -->
+  <text x="50" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1f2937">A</text>
+  <text x="290" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1f2937">B</text>
+
+  <!-- Distances -->
+  <!-- x -->
+  <line x1="50" y1="260" x2="110" y2="260" stroke="#4b5563" stroke-width="1"/>
+  <text x="80" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#4b5563">x</text>
+  
+  <!-- 80-x -->
+  <line x1="110" y1="260" x2="290" y2="260" stroke="#4b5563" stroke-width="1"/>
+  <text x="200" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#4b5563">80 - x</text>
+  
+  <!-- Total 80 -->
+  <line x1="50" y1="285" x2="290" y2="285" stroke="#1f2937" stroke-width="1"/>
+  <line x1="50" y1="280" x2="50" y2="290" stroke="#1f2937" stroke-width="1"/>
+  <line x1="290" y1="280" x2="290" y2="290" stroke="#1f2937" stroke-width="1"/>
+  <text x="170" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1f2937" font-weight="bold">80 m</text>
+
+  <!-- Solution Box -->
+  <rect x="220" y="55" width="110" height="70" fill="white" stroke="#3b82f6" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="275" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#3b82f6" font-weight="bold">Calculations:</text>
+  <text x="225" y="85" font-family="Arial, sans-serif" font-size="9" fill="#374151">h = x√3</text>
+  <text x="225" y="98" font-family="Arial, sans-serif" font-size="9" fill="#374151">h = (80-x)/√3</text>
+  <text x="225" y="111" font-family="Arial, sans-serif" font-size="9" fill="#374151">x = 20 m</text>
+  <text x="225" y="121" font-family="Arial, sans-serif" font-size="9" fill="#16a34a" font-weight="bold">h = 20√3 m</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>
