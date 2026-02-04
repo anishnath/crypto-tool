@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Parallel Lines (Inconsistent)</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">x - y = 8 and 3x - 3y = 16</text>
+
+  <!-- Coordinate System -->
+  <!-- Range: X -2 to 10, Y -10 to 2 -->
+  <!-- Need to show intercept points (8, 0), (0, -8). -->
+  <!-- Origin at (100, 100). Scale: 20px per unit. -->
+  <!-- X: 0->100, 8->260. Y: 0->100, -8->260. -->
+  
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- Grid -->
+    <line x1="20" y1="100" x2="380" y2="100"/> <!-- X axis -->
+    <line x1="100" y1="20" x2="100" y2="280"/> <!-- Y axis -->
+    
+    <!-- Step 20px -->
+  </g>
+
+  <!-- Axes Labels -->
+  <text x="370" y="115" font-family="Arial, sans-serif" font-size="12" fill="#374151">X</text>
+  <text x="110" y="30" font-family="Arial, sans-serif" font-size="12" fill="#374151">Y</text>
+  <line x1="20" y1="100" x2="380" y2="100" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="100" y1="280" x2="100" y2="20" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Numbers -->
+  <text x="90" y="115" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="180" y="115" font-family="Arial, sans-serif" font-size="10" fill="#374151">4</text>
+  <text x="260" y="115" font-family="Arial, sans-serif" font-size="10" fill="#374151">8</text>
+  
+  <text x="85" y="180" font-family="Arial, sans-serif" font-size="10" fill="#374151">-4</text>
+  <text x="85" y="260" font-family="Arial, sans-serif" font-size="10" fill="#374151">-8</text>
+  
+  <!-- Line 1: x - y = 8 => y = x - 8 -->
+  <!-- Intercepts: (8, 0) -> (260, 100), (0, -8) -> (100, 260) -->
+  <line x1="20" y1="260" x2="300" y2="-20" stroke="#2563eb" stroke-width="2"/> <!-- approx slope 1 -->
+  <!-- Actual coords: (0, -8) -> (100, 260). (8, 0) -> (260, 100). -->
+  <!-- Extended: x=12 -> y=4. 12->340, 4->20 (100 - 80). -->
+  <line x1="100" y1="260" x2="340" y2="20" stroke="#2563eb" stroke-width="2"/>
+  
+  <text x="280" y="90" font-family="Arial, sans-serif" font-size="10" fill="#2563eb" transform="rotate(-45, 280, 90)">x - y = 8</text>
+  
+  <!-- Line 2: 3x - 3y = 16 => x - y = 5.33 -->
+  <!-- Intercepts: (5.33, 0), (0, -5.33) -->
+  <!-- 5.33 * 20 = 106.6 px. -->
+  <!-- X int: 100 + 106.6 = 206.6. Y int: 100 + 106.6 = 206.6. -->
+  <line x1="46.6" y1="260" x2="300" y2="6.6" stroke="#dc2626" stroke-width="2"/> <!-- Parallel offset -->
+  <!-- Calculation check: Slope same. Offset by (8 - 5.33) = 2.67 units = 53px horizontally. -->
+  <!-- Line 1 passes (100, 260). Line 2 passes (46.6, 260)? No. -->
+  <!-- Line 1: (0, -8). Line 2: (0, -5.33). Diff Y = 2.67 units = 53px. -->
+  <!-- Line 2 starts at (100, 206.6) vs (100, 260). Higher up. -->
+  <!-- End point x=12 -> y=6.66. (340, 100 - 133 = -33). -->
+  <line x1="100" y1="206.6" x2="340" y2="-33" stroke="#dc2626" stroke-width="2"/>
+  
+  <!-- Adjusted visual to fit box -->
+  <line x1="50" y1="256.6" x2="320" y2="-13.4" stroke="#dc2626" stroke-width="2"/>
+
+  <text x="210" y="80" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" transform="rotate(-45, 210, 80)">3x - 3y = 16</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>

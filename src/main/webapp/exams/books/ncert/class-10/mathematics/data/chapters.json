@@ -4952,7 +4952,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two lines: x + y = 10 and y = x + 4 intersecting at point (3, 7) on coordinate axes"
+      "diagram_description": "Graph showing two lines: x + y = 10 and y = x + 4 intersecting at point (3, 7) on coordinate axes",
+      "diagram_svg": "fig-3-1-q1-i-quiz-students.svg"
     },
     "tags": [
       "linear-equations",
@@ -4995,7 +4996,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two lines: 5x + 7y = 50 and 7x + 5y = 46 intersecting at point (3, 5)"
+      "diagram_description": "Graph showing two lines: 5x + 7y = 50 and 7x + 5y = 46 intersecting at point (3, 5)",
+      "diagram_svg": "fig-3-1-q1-ii-pencils-pens.svg"
     },
     "tags": [
       "linear-equations",
@@ -5394,7 +5396,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing a single line x + y = 5 (both equations represent the same line)"
+      "diagram_description": "Graph showing a single line x + y = 5 (both equations represent the same line)",
+      "diagram_svg": "fig-3-1-q4-i-coincident-lines.svg"
     },
     "tags": [
       "linear-equations",
@@ -5437,7 +5440,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two parallel lines: x - y = 8 and 3x - 3y = 16 that never intersect"
+      "diagram_description": "Graph showing two parallel lines: x - y = 8 and 3x - 3y = 16 that never intersect",
+      "diagram_svg": "fig-3-1-q4-ii-parallel-lines.svg"
     },
     "tags": [
       "linear-equations",
@@ -5480,7 +5484,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two lines: 2x + y - 6 = 0 and 4x - 2y - 4 = 0 intersecting at point (2, 2)"
+      "diagram_description": "Graph showing two lines: 2x + y - 6 = 0 and 4x - 2y - 4 = 0 intersecting at point (2, 2)",
+      "diagram_svg": "fig-3-1-q4-iii-consistent-pair.svg"
     },
     "tags": [
       "linear-equations",
@@ -5524,7 +5529,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two parallel lines: 2x - 2y - 2 = 0 and 4x - 4y - 5 = 0 that never intersect"
+      "diagram_description": "Graph showing two parallel lines: 2x - 2y - 2 = 0 and 4x - 4y - 5 = 0 that never intersect",
+      "diagram_svg": "fig-3-1-q4-iv-parallel-lines.svg"
     },
     "tags": [
       "linear-equations",
@@ -5745,7 +5751,8 @@
     ],
     "visual_content": {
       "has_diagram": true,
-      "diagram_description": "Graph showing two lines: x - y + 1 = 0 and 3x + 2y - 12 = 0, intersecting at (2, 3), forming a triangle with the x-axis. The three vertices are (-1, 0), (4, 0), and (2, 3). The triangular region is shaded."
+      "diagram_description": "Graph showing two lines: x - y + 1 = 0 and 3x + 2y - 12 = 0, intersecting at (2, 3), forming a triangle with the x-axis. The three vertices are (-1, 0), (4, 0), and (2, 3). The triangular region is shaded.",
+      "diagram_svg": "fig-3-1-q7-triangle-region.svg"
     },
     "tags": [
       "linear-equations",

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Class X Quiz Participants</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">x + y = 10, y = x + 4</text>
+
+  <!-- Coordinate System -->
+  <!-- Range: X from 0 to 10, Y from 0 to 12 -->
+  <!-- Origin at (40, 260). Scale: 320px / 12 units = ~25px per unit. -->
+  <!-- X: 0->40, 10->290. Y: 0->260, 10->10. -->
+  
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- Grid -->
+    <line x1="40" y1="260" x2="360" y2="260"/> <!-- X axis -->
+    <line x1="40" y1="10" x2="40" y2="260"/> <!-- Y axis -->
+    
+    <!-- Step 25px -->
+    <!-- X grid -->
+    <line x1="90" y1="10" x2="90" y2="260"/>
+    <line x1="140" y1="10" x2="140" y2="260"/>
+    <line x1="190" y1="10" x2="190" y2="260"/>
+    <line x1="240" y1="10" x2="240" y2="260"/>
+    <line x1="290" y1="10" x2="290" y2="260"/>
+    
+    <!-- Y grid -->
+    <line x1="40" y1="210" x2="360" y2="210"/>
+    <line x1="40" y1="160" x2="360" y2="160"/>
+    <line x1="40" y1="110" x2="360" y2="110"/>
+    <line x1="40" y1="60" x2="360" y2="60"/>
+  </g>
+
+  <!-- Axes Labels -->
+  <text x="350" y="275" font-family="Arial, sans-serif" font-size="12" fill="#374151">Boys (x)</text>
+  <text x="20" y="30" font-family="Arial, sans-serif" font-size="12" fill="#374151">Girls (y)</text>
+  <line x1="40" y1="260" x2="360" y2="260" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="40" y1="260" x2="40" y2="10" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Numbers -->
+  <text x="35" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="140" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">4</text>
+  <text x="240" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">8</text>
+  
+  <text x="25" y="215" font-family="Arial, sans-serif" font-size="10" fill="#374151">2</text>
+  <text x="25" y="115" font-family="Arial, sans-serif" font-size="10" fill="#374151">6</text>
+  <text x="25" y="65" font-family="Arial, sans-serif" font-size="10" fill="#374151">8</text>
+  
+  <!-- Line 1: x + y = 10 -->
+  <!-- (0, 10) -> (40, 10). (10, 0) -> (290, 260) -->
+  <line x1="40" y1="10" x2="290" y2="260" stroke="#2563eb" stroke-width="2"/>
+  <text x="200" y="200" font-family="Arial, sans-serif" font-size="10" fill="#2563eb" transform="rotate(-45, 200, 200)">x + y = 10</text>
+  
+  <!-- Line 2: y = x + 4 -->
+  <!-- (0, 4) -> (40, 160). (6, 10) -> (190, 10) -->
+  <line x1="40" y1="160" x2="190" y2="10" stroke="#dc2626" stroke-width="2"/>
+  <text x="80" y="100" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" transform="rotate(-45, 80, 100)">y = x + 4</text>
+
+  <!-- Intersection (3, 7) -->
+  <!-- x=3 -> 40 + 3*25 = 115 -->
+  <!-- y=7 -> 260 - 7*25 = 260 - 175 = 85 -->
+  <circle cx="115" cy="85" r="4" fill="#1e293b"/>
+  <text x="125" y="85" font-family="Arial, sans-serif" font-size="11" fill="#1e293b" font-weight="bold">(3, 7)</text>
+  
+  <!-- Dotted Lines to Axis -->
+  <line x1="115" y1="85" x2="115" y2="260" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="115" y="275" font-family="Arial, sans-serif" font-size="10" fill="#1e293b" font-weight="bold">3</text>
+  
+  <line x1="115" y1="85" x2="40" y2="85" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="25" y="90" font-family="Arial, sans-serif" font-size="10" fill="#1e293b" font-weight="bold">7</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>

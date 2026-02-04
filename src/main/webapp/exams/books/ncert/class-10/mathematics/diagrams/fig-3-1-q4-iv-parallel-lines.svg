@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Parallel Lines (Inconsistent)</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">2x - 2y - 2 = 0 and 4x - 4y - 5 = 0</text>
+
+  <!-- Coordinate System -->
+  <!-- Range: X -2 to 8, Y -2 to 8 -->
+  <!-- Origin at (100, 250). Scale: 30px per unit. -->
+  
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- Grid -->
+    <line x1="20" y1="250" x2="380" y2="250"/> <!-- X axis -->
+    <line x1="100" y1="20" x2="100" y2="280"/> <!-- Y axis -->
+  </g>
+
+  <!-- Axes Labels -->
+  <text x="370" y="265" font-family="Arial, sans-serif" font-size="12" fill="#374151">X</text>
+  <text x="110" y="30" font-family="Arial, sans-serif" font-size="12" fill="#374151">Y</text>
+  <line x1="20" y1="250" x2="380" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="100" y1="280" x2="100" y2="20" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Numbers -->
+  <text x="90" y="265" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="180" y="265" font-family="Arial, sans-serif" font-size="10" fill="#374151">3</text>
+  <text x="270" y="265" font-family="Arial, sans-serif" font-size="10" fill="#374151">6</text>
+  
+  <!-- Line 1: 2x - 2y = 2 => x - y = 1 => y = x - 1 -->
+  <!-- Intercepts: (1, 0) -> (130, 250), (0, -1) -> (100, 280) -->
+  <!-- x=7, y=6 -> (310, 70). -->
+  <line x1="100" y1="280" x2="330" y2="50" stroke="#2563eb" stroke-width="2"/>
+  <text x="250" y="140" font-family="Arial, sans-serif" font-size="10" fill="#2563eb" transform="rotate(-45, 250, 140)">2x - 2y = 2</text>
+  
+  <!-- Line 2: 4x - 4y = 5 => x - y = 1.25 => y = x - 1.25 -->
+  <!-- Intercepts: (1.25, 0), (0, -1.25) -->
+  <!-- Parallel, shifted down by 0.25 units (7.5px) compared to line 1 intercepts? -->
+  <!-- Wait. y = x - 1 vs y = x - 1.25. -->
+  <!-- Line 2 is LOWER than Line 1. (Larger negative intercept). -->
+  <!-- Shift = 0.25 units = 7.5px. -->
+  <line x1="107.5" y1="280" x2="337.5" y2="50" stroke="#dc2626" stroke-width="2"/>
+  <text x="270" y="160" font-family="Arial, sans-serif" font-size="10" fill="#dc2626" transform="rotate(-45, 270, 160)">4x - 4y = 5</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>

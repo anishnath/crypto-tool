@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Coincident Lines</text>
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">x + y = 5 and 2x + 2y = 10</text>
+
+  <!-- Coordinate System -->
+  <!-- Range: X, Y from 0 to 6 -->
+  <!-- Origin at (40, 260). Scale: 40px per unit. -->
+  
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- Grid -->
+    <line x1="40" y1="260" x2="360" y2="260"/> <!-- X axis -->
+    <line x1="40" y1="20" x2="40" y2="260"/> <!-- Y axis -->
+    
+    <!-- Step 40px -->
+    <!-- X grid -->
+    <line x1="80" y1="20" x2="80" y2="260"/>
+    <line x1="120" y1="20" x2="120" y2="260"/>
+    <line x1="160" y1="20" x2="160" y2="260"/>
+    <line x1="200" y1="20" x2="200" y2="260"/>
+    <line x1="240" y1="20" x2="240" y2="260"/>
+    <line x1="280" y1="20" x2="280" y2="260"/>
+    
+    <!-- Y grid -->
+    <line x1="40" y1="220" x2="360" y2="220"/>
+    <line x1="40" y1="180" x2="360" y2="180"/>
+    <line x1="40" y1="140" x2="360" y2="140"/>
+    <line x1="40" y1="100" x2="360" y2="100"/>
+    <line x1="40" y1="60" x2="360" y2="60"/>
+  </g>
+
+  <!-- Axes Labels -->
+  <text x="350" y="275" font-family="Arial, sans-serif" font-size="12" fill="#374151">X</text>
+  <text x="20" y="30" font-family="Arial, sans-serif" font-size="12" fill="#374151">Y</text>
+  <line x1="40" y1="260" x2="360" y2="260" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="40" y1="260" x2="40" y2="20" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Numbers -->
+  <text x="35" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">0</text>
+  <text x="120" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">2</text>
+  <text x="200" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">4</text>
+  <text x="280" y="275" font-family="Arial, sans-serif" font-size="10" fill="#374151">6</text>
+  
+  <text x="25" y="185" font-family="Arial, sans-serif" font-size="10" fill="#374151">2</text>
+  <text x="25" y="105" font-family="Arial, sans-serif" font-size="10" fill="#374151">4</text>
+  <text x="25" y="65" font-family="Arial, sans-serif" font-size="10" fill="#374151">5</text>
+  
+  <!-- Line: x + y = 5 -->
+  <!-- Intercepts: (0, 5) -> (40, 60), (5, 0) -> (240, 260) -->
+  
+  <!-- "Double" line effect to show coincidence -->
+  <!-- Line 1 (x+y=5) -->
+  <line x1="40" y1="60" x2="240" y2="260" stroke="#2563eb" stroke-width="4" opacity="0.5"/>
+  
+  <!-- Line 2 (2x+2y=10) -->
+  <line x1="40" y1="60" x2="240" y2="260" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/>
+  
+  <text x="130" y="150" font-family="Arial, sans-serif" font-size="10" fill="#374151" transform="rotate(-45, 130, 150)">x + y = 5</text>
+  <text x="150" y="160" font-family="Arial, sans-serif" font-size="10" fill="#374151" transform="rotate(-45, 150, 160)">2x + 2y = 10</text>
+
+  <!-- Watermark -->
+  <text x="50%" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+
+</svg>
