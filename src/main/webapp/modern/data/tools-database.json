@@ -1,7 +1,7 @@
 {
   "version": "1.3",
-  "lastUpdated": "2025-02-03T00:00:00.000Z",
-  "totalTools": 343,
+  "lastUpdated": "2026-02-05T00:00:00.000Z",
+  "totalTools": 374,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -53,11 +53,11 @@
       "description": "libp2p/devp2p Key Gen - Free online blockchain & crypto tool"
     },
     {
-      "name": "Degrees ↔ Radians",
+      "name": "Degrees \u2194 Radians",
       "url": "degree-radian.jsp",
       "category": "Mathematics",
       "keywords": "degrees radians mathematics",
-      "description": "Degrees ↔ Radians - Free online mathematics tool"
+      "description": "Degrees \u2194 Radians - Free online mathematics tool"
     },
     {
       "name": "Apache htpasswd Generator",
@@ -1180,13 +1180,6 @@
       "description": "Binomial Distribution Calculator - Free online mathematics tool"
     },
     {
-      "name": "Centripetal Force Calculator",
-      "url": "centripetal-force-calculator.jsp",
-      "category": "Physics",
-      "keywords": "centripetal force calculator physics",
-      "description": "Centripetal Force Calculator - Free online physics tool"
-    },
-    {
       "name": "Chi-Square Calculator",
       "url": "chi-square-calculator.jsp",
       "category": "Mathematics",
@@ -1236,13 +1229,6 @@
       "description": "Effect Size Calculator - Free online mathematics tool"
     },
     {
-      "name": "Energy Conservation Tracker",
-      "url": "energy-conservation-tracker.jsp",
-      "category": "Physics",
-      "keywords": "energy conservation tracker physics",
-      "description": "Energy Conservation Tracker - Free online physics tool"
-    },
-    {
       "name": "Equation Solver (Ax=b, AX=B, Polynomial)",
       "url": "linear-equations-solver.jsp",
       "category": "Mathematics",
@@ -1278,13 +1264,6 @@
       "description": "Fibonacci Spiral - Free online mathematics tool"
     },
     {
-      "name": "Friction Force Calculator",
-      "url": "friction-force-calculator.jsp",
-      "category": "Physics",
-      "keywords": "friction force calculator physics",
-      "description": "Friction Force Calculator - Free online physics tool"
-    },
-    {
       "name": "Graphing Calculator",
       "url": "graphing-calculator.jsp",
       "category": "Mathematics",
@@ -1292,11 +1271,11 @@
       "description": "Graphing Calculator - Free online mathematics tool"
     },
     {
-      "name": "Heron’s Formula Area",
+      "name": "Heron\u2019s Formula Area",
       "url": "heron-area.jsp",
       "category": "Mathematics",
       "keywords": "heron formula area mathematics",
-      "description": "Heron’s Formula Area - Free online mathematics tool"
+      "description": "Heron\u2019s Formula Area - Free online mathematics tool"
     },
     {
       "name": "Hypothesis Test Calculator",
@@ -1304,13 +1283,6 @@
       "category": "Mathematics",
       "keywords": "hypothesis test calculator mathematics",
       "description": "Hypothesis Test Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Inclined Plane Calculator",
-      "url": "inclined-plane-calculator.jsp",
-      "category": "Physics",
-      "keywords": "inclined plane calculator physics",
-      "description": "Inclined Plane Calculator - Free online physics tool"
     },
     {
       "name": "Inequality Solver (Linear, Quadratic, Polynomial)",
@@ -1353,27 +1325,6 @@
       "category": "Mathematics",
       "keywords": "lcm gcd finder mathematics",
       "description": "LCM/GCD Finder - Free online mathematics tool"
-    },
-    {
-      "name": "LED Resistor Calculator",
-      "url": "led-resistor-calculator.jsp",
-      "category": "Physics",
-      "keywords": "led resistor calculator physics",
-      "description": "LED Resistor Calculator - Free online physics tool"
-    },
-    {
-      "name": "Lens Equation & Mirror Formula Calculator",
-      "url": "lens-mirror-calculator.jsp",
-      "category": "Physics",
-      "keywords": "lens equation mirror formula calculator physics",
-      "description": "Lens Equation & Mirror Formula Calculator - Free online physics tool"
-    },
-    {
-      "name": "Lens/Mirror Ray Tracer",
-      "url": "lens-mirror-ray-tracer.jsp",
-      "category": "Physics",
-      "keywords": "lens mirror ray tracer physics",
-      "description": "Lens/Mirror Ray Tracer - Free online physics tool"
     },
     {
       "name": "Limit Calculator",
@@ -1481,13 +1432,6 @@
       "description": "Mind Reading Number Trick - Free online mathematics tool"
     },
     {
-      "name": "Momentum & Collision Calculator",
-      "url": "momentum-collision-calculator.jsp",
-      "category": "Physics",
-      "keywords": "momentum collision calculator physics",
-      "description": "Momentum & Collision Calculator - Free online physics tool"
-    },
-    {
       "name": "Monty Hall Simulator",
       "url": "monty-hall-simulator.jsp",
       "category": "Mathematics",
@@ -1500,13 +1444,6 @@
       "category": "Mathematics",
       "keywords": "normal distribution calculator mathematics",
       "description": "Normal Distribution Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Ohm's Law & Circuit Calculator",
-      "url": "ohms-law-calculator.jsp",
-      "category": "Physics",
-      "keywords": "ohm law circuit calculator physics",
-      "description": "Ohm's Law & Circuit Calculator - Free online physics tool"
     },
     {
       "name": "Outlier Detection Calculator",
@@ -1544,11 +1481,11 @@
       "description": "Percentile Calculator - Free online mathematics tool"
     },
     {
-      "name": "Polar ↔ Cartesian",
+      "name": "Polar \u2194 Cartesian",
       "url": "polar-cartesian.jsp",
       "category": "Mathematics",
       "keywords": "polar cartesian mathematics",
-      "description": "Polar ↔ Cartesian - Free online mathematics tool"
+      "description": "Polar \u2194 Cartesian - Free online mathematics tool"
     },
     {
       "name": "Prime Number Checker & Generator",
@@ -1563,13 +1500,6 @@
       "category": "Mathematics",
       "keywords": "prime spiral ulam mathematics",
       "description": "Prime Spiral (Ulam) - Free online mathematics tool"
-    },
-    {
-      "name": "Projectile Motion Simulator",
-      "url": "projectile-motion-simulator.jsp",
-      "category": "Physics",
-      "keywords": "projectile motion simulator physics",
-      "description": "Projectile Motion Simulator - Free online physics tool"
     },
     {
       "name": "Punycode Converter",
@@ -1593,32 +1523,25 @@
       "description": "Pythagorean Triples - Free online mathematics tool"
     },
     {
-      "name": "Quadratic Equation Solver (ax²+bx+c=0)",
+      "name": "Quadratic Equation Solver (ax\u00b2+bx+c=0)",
       "url": "quadratic-solver.jsp",
       "category": "Mathematics",
       "keywords": "quadratic equation solver mathematics",
-      "description": "Quadratic Equation Solver (ax²+bx+c=0) - Free online mathematics tool"
+      "description": "Quadratic Equation Solver (ax\u00b2+bx+c=0) - Free online mathematics tool"
     },
     {
-      "name": "Radical Simplifier (√, ∛, Rationalize)",
+      "name": "Radical Simplifier (\u221a, \u221b, Rationalize)",
       "url": "radical-simplifier.jsp",
       "category": "Mathematics",
       "keywords": "radical simplifier rationalize mathematics",
-      "description": "Radical Simplifier (√, ∛, Rationalize) - Free online mathematics tool"
+      "description": "Radical Simplifier (\u221a, \u221b, Rationalize) - Free online mathematics tool"
     },
     {
-      "name": "RC/RLC Filter Calculator",
-      "url": "rc-rlc-filter.jsp",
-      "category": "Physics",
-      "keywords": "rlc filter calculator physics",
-      "description": "RC/RLC Filter Calculator - Free online physics tool"
-    },
-    {
-      "name": "Recamán's Sequence",
+      "name": "Recam\u00e1n's Sequence",
       "url": "recaman-sequence.jsp",
       "category": "Mathematics",
       "keywords": "recam sequence mathematics",
-      "description": "Recamán's Sequence - Free online mathematics tool"
+      "description": "Recam\u00e1n's Sequence - Free online mathematics tool"
     },
     {
       "name": "Right-Triangle Trig (SOHCAHTOA)",
@@ -1647,20 +1570,6 @@
       "category": "Mathematics",
       "keywords": "scientific calculator mathematics",
       "description": "Scientific Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "SHM Oscillator (Spring/Pendulum)",
-      "url": "shm-oscillator.jsp",
-      "category": "Physics",
-      "keywords": "shm oscillator spring pendulum physics",
-      "description": "SHM Oscillator (Spring/Pendulum) - Free online physics tool"
-    },
-    {
-      "name": "Snell's Law & Prism Refraction",
-      "url": "snells-law-prism.jsp",
-      "category": "Physics",
-      "keywords": "snell law prism refraction physics",
-      "description": "Snell's Law & Prism Refraction - Free online physics tool"
     },
     {
       "name": "Spirograph Simulator",
@@ -1761,13 +1670,6 @@
       "description": "Variance Calculator - Free online mathematics tool"
     },
     {
-      "name": "Wave Speed & Frequency Tool",
-      "url": "wave-speed-frequency.jsp",
-      "category": "Physics",
-      "keywords": "wave speed frequency tool physics",
-      "description": "Wave Speed & Frequency Tool - Free online physics tool"
-    },
-    {
       "name": "Z-Score Calculator",
       "url": "z-score-calculator.jsp",
       "category": "Mathematics",
@@ -1789,11 +1691,11 @@
       "description": "EXIF Remover - Free online media tools tool"
     },
     {
-      "name": "GIF ↔ MP4 Converter",
+      "name": "GIF \u2194 MP4 Converter",
       "url": "gif-mp4-converter.jsp",
       "category": "Media Tools",
       "keywords": "gif mp4 converter media tools",
-      "description": "GIF ↔ MP4 Converter - Free online media tools tool"
+      "description": "GIF \u2194 MP4 Converter - Free online media tools tool"
     },
     {
       "name": "HEIC to JPG/PNG",
@@ -1810,11 +1712,11 @@
       "description": "Image Resizer - Free online media tools tool"
     },
     {
-      "name": "PNG ↔ JPG",
+      "name": "PNG \u2194 JPG",
       "url": "png-jpg-converter.jsp",
       "category": "Media Tools",
       "keywords": "png jpg media tools",
-      "description": "PNG ↔ JPG - Free online media tools tool"
+      "description": "PNG \u2194 JPG - Free online media tools tool"
     },
     {
       "name": "SVG to PNG/JPG",
@@ -2438,6 +2340,307 @@
       "category": "Music",
       "keywords": "ai piano, piano duet, artificial intelligence music, neural network piano, magenta ai, play piano with ai, interactive piano, music ai, machine learning piano",
       "description": "Free AI Piano Duet - Play piano with artificial intelligence. Google Magenta neural network creates real-time duets with you."
+    },
+    {
+      "name": "AC Circuits Calculator",
+      "url": "physics/ac-circuits.jsp",
+      "category": "Physics",
+      "keywords": "ac circuits, alternating current, rms voltage, impedance, resonance, rlc circuit, power factor, transformer",
+      "description": "AC Circuits Calculator - RMS values, impedance, resonance, power factor, and transformer calculations"
+    },
+    {
+      "name": "Acceleration Calculator",
+      "url": "physics/acceleration-calculator.jsp",
+      "category": "Physics",
+      "keywords": "acceleration calculator, kinematics, velocity change, motion, physics calculator",
+      "description": "Acceleration Calculator - Calculate acceleration from velocity and time with step-by-step solutions"
+    },
+    {
+      "name": "Bohr Model Calculator",
+      "url": "physics/bohr-model.jsp",
+      "category": "Physics",
+      "keywords": "bohr model, atomic radius, energy levels, hydrogen atom, spectral series, rydberg formula",
+      "description": "Bohr Model Calculator - Interactive atomic model with energy levels and spectral series"
+    },
+    {
+      "name": "Centripetal Force Calculator",
+      "url": "physics/centripetal-force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "centripetal force, circular motion, angular velocity, centrifugal, rotation",
+      "description": "Centripetal Force Calculator - Calculate force, velocity, and radius for circular motion"
+    },
+    {
+      "name": "Current Electricity Calculator",
+      "url": "physics/current-electricity.jsp",
+      "category": "Physics",
+      "keywords": "current electricity, ohms law, resistance, resistivity, circuits, potentiometer",
+      "description": "Current Electricity Calculator - Ohm's law, resistance, circuits, and potentiometer calculations"
+    },
+    {
+      "name": "Electrical Energy Calculator",
+      "url": "physics/electrical-energy.jsp",
+      "category": "Physics",
+      "keywords": "electrical energy, power, capacitor energy, inductor energy, joule heating",
+      "description": "Electrical Energy Calculator - Calculate electrical energy, power, and Joule heating"
+    },
+    {
+      "name": "Electromagnetic Induction Calculator",
+      "url": "physics/electromagnetic-induction.jsp",
+      "category": "Physics",
+      "keywords": "electromagnetic induction, faraday law, motional emf, inductance, lenz law",
+      "description": "Electromagnetic Induction Calculator - Faraday's law, motional EMF, and inductance calculations"
+    },
+    {
+      "name": "Electromagnetic Waves Calculator",
+      "url": "physics/electromagnetic-waves.jsp",
+      "category": "Physics",
+      "keywords": "electromagnetic waves, em spectrum, speed of light, intensity, radiation pressure",
+      "description": "Electromagnetic Waves Calculator - EM spectrum, intensity, and radiation pressure calculations"
+    },
+    {
+      "name": "Electrostatics Calculator",
+      "url": "physics/electrostatics.jsp",
+      "category": "Physics",
+      "keywords": "electrostatics, coulombs law, electric field, electric potential, capacitor, gauss law",
+      "description": "Electrostatics Calculator - Coulomb's law, electric field, potential, and capacitor formulas"
+    },
+    {
+      "name": "Energy Calculator",
+      "url": "physics/energy-calculator.jsp",
+      "category": "Physics",
+      "keywords": "energy calculator, kinetic energy, potential energy, conservation of energy",
+      "description": "Energy Calculator - Kinetic, potential, and elastic energy with conservation laws"
+    },
+    {
+      "name": "Energy Conversions Calculator",
+      "url": "physics/energy-conversions.jsp",
+      "category": "Physics",
+      "keywords": "energy conversion, battery, motor, generator, solar energy, efficiency",
+      "description": "Energy Conversions Calculator - Energy conversion formulas for common devices"
+    },
+    {
+      "name": "Fluid Dynamics Calculator",
+      "url": "physics/fluids-dynamics.jsp",
+      "category": "Physics",
+      "keywords": "fluid dynamics, bernoulli equation, continuity, viscosity, reynolds number",
+      "description": "Fluid Dynamics Calculator - Bernoulli's equation, continuity, and Reynolds number"
+    },
+    {
+      "name": "Fluid Statics Calculator",
+      "url": "physics/fluids-statics.jsp",
+      "category": "Physics",
+      "keywords": "fluid statics, pressure, buoyancy, archimedes principle, pascal law, hydrostatic",
+      "description": "Fluid Statics Calculator - Pressure, buoyancy, and Archimedes' principle"
+    },
+    {
+      "name": "Force Calculator (F=ma)",
+      "url": "physics/force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "force calculator, newtons second law, f=ma, weight, friction, free body diagram",
+      "description": "Force Calculator - Newton's Second Law with free body diagrams and friction"
+    },
+    {
+      "name": "Gravitational Force Calculator",
+      "url": "physics/gravitational-force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "gravitational force, universal gravitation, orbital velocity, escape velocity",
+      "description": "Gravitational Force Calculator - Universal gravitation, orbital and escape velocities"
+    },
+    {
+      "name": "Kinematics Solver",
+      "url": "physics/kinematics-solver.jsp",
+      "category": "Physics",
+      "keywords": "kinematics solver, suvat equations, motion equations, physics solver",
+      "description": "Kinematics Solver - Enter any 3 values and solve for the rest automatically"
+    },
+    {
+      "name": "Kinetic Theory of Gases",
+      "url": "physics/kinetic-theory.jsp",
+      "category": "Physics",
+      "keywords": "kinetic theory, gas molecules, rms velocity, mean free path, ideal gas",
+      "description": "Kinetic Theory of Gases - Molecular speeds, pressure, and mean free path calculations"
+    },
+    {
+      "name": "Lens Calculator",
+      "url": "physics/lens-calculator.jsp",
+      "category": "Physics",
+      "keywords": "lens calculator, thin lens formula, lens maker equation, magnification, focal length",
+      "description": "Lens Calculator - Thin lens formula, lens maker equation, and ray diagrams"
+    },
+    {
+      "name": "Magnetism Calculator",
+      "url": "physics/magnetism.jsp",
+      "category": "Physics",
+      "keywords": "magnetism, magnetic field, biot savart, lorentz force, cyclotron, magnetic flux",
+      "description": "Magnetism Calculator - Magnetic field, force on wire, torque, and cyclotron motion"
+    },
+    {
+      "name": "Matter Waves Calculator",
+      "url": "physics/matter-waves.jsp",
+      "category": "Physics",
+      "keywords": "matter waves, de broglie wavelength, wave particle duality, quantum mechanics",
+      "description": "Matter Waves Calculator - de Broglie wavelength and wave-particle duality"
+    },
+    {
+      "name": "Mirrors Calculator",
+      "url": "physics/mirrors.jsp",
+      "category": "Physics",
+      "keywords": "mirror formula, spherical mirror, focal length, magnification, concave convex",
+      "description": "Mirrors Calculator - Spherical mirror formula, focal length, and magnification"
+    },
+    {
+      "name": "Momentum & Collisions Calculator",
+      "url": "physics/momentum-calculator.jsp",
+      "category": "Physics",
+      "keywords": "momentum calculator, collision, impulse, elastic inelastic, conservation",
+      "description": "Momentum & Collisions Calculator - Momentum, impulse, and collision calculations"
+    },
+    {
+      "name": "Nuclear Physics Calculator",
+      "url": "physics/nuclear-physics.jsp",
+      "category": "Physics",
+      "keywords": "nuclear physics, binding energy, radioactive decay, half life, mass defect",
+      "description": "Nuclear Physics Calculator - Binding energy, radioactive decay, and half-life"
+    },
+    {
+      "name": "Optical Instruments Calculator",
+      "url": "physics/optical-instruments.jsp",
+      "category": "Physics",
+      "keywords": "optical instruments, microscope, telescope, magnification, resolving power",
+      "description": "Optical Instruments Calculator - Microscope, telescope, and resolving power"
+    },
+    {
+      "name": "Oscillations & SHM Calculator",
+      "url": "physics/oscillations.jsp",
+      "category": "Physics",
+      "keywords": "oscillations, simple harmonic motion, shm, pendulum, spring mass, frequency",
+      "description": "Oscillations & SHM Calculator - Simple harmonic motion, pendulum, and spring calculations"
+    },
+    {
+      "name": "Photoelectric Effect Calculator",
+      "url": "physics/photoelectric-effect.jsp",
+      "category": "Physics",
+      "keywords": "photoelectric effect, einstein equation, work function, stopping potential, threshold",
+      "description": "Photoelectric Effect Calculator - Einstein's equation, work function, and stopping potential"
+    },
+    {
+      "name": "Prism & Dispersion Calculator",
+      "url": "physics/prism-dispersion.jsp",
+      "category": "Physics",
+      "keywords": "prism, dispersion, deviation, minimum deviation, dispersive power, spectrum",
+      "description": "Prism & Dispersion Calculator - Deviation, dispersive power, and achromatic combinations"
+    },
+    {
+      "name": "Projectile Motion Calculator",
+      "url": "physics/projectile-motion.jsp",
+      "category": "Physics",
+      "keywords": "projectile motion, trajectory, range, maximum height, flight time, parabola",
+      "description": "Projectile Motion Calculator - Trajectory, range, and flight time with visualization"
+    },
+    {
+      "name": "Refraction Calculator",
+      "url": "physics/refraction.jsp",
+      "category": "Physics",
+      "keywords": "refraction, snells law, refractive index, critical angle, total internal reflection",
+      "description": "Refraction Calculator - Snell's law, critical angle, and total internal reflection"
+    },
+    {
+      "name": "Elasticity Calculator",
+      "url": "physics/solids-elasticity.jsp",
+      "category": "Physics",
+      "keywords": "elasticity, stress strain, youngs modulus, bulk modulus, shear modulus",
+      "description": "Elasticity Calculator - Stress, strain, Young's modulus, and elastic properties"
+    },
+    {
+      "name": "Special Relativity Calculator",
+      "url": "physics/special-relativity.jsp",
+      "category": "Physics",
+      "keywords": "special relativity, lorentz factor, time dilation, length contraction, e=mc2",
+      "description": "Special Relativity Calculator - Lorentz factor, time dilation, and relativistic energy"
+    },
+    {
+      "name": "Spring Force Calculator",
+      "url": "physics/spring-force-calculator.jsp",
+      "category": "Physics",
+      "keywords": "spring force, hookes law, spring constant, elastic potential energy",
+      "description": "Spring Force Calculator - Hooke's law and elastic potential energy"
+    },
+    {
+      "name": "Thermal Energy Calculator",
+      "url": "physics/thermal-energy.jsp",
+      "category": "Physics",
+      "keywords": "thermal energy, heat, specific heat, latent heat, calorimetry, heat engine",
+      "description": "Thermal Energy Calculator - Sensible heat, latent heat, and heat engine efficiency"
+    },
+    {
+      "name": "Thermodynamics Calculator",
+      "url": "physics/thermodynamics.jsp",
+      "category": "Physics",
+      "keywords": "thermodynamics, first law, entropy, specific heat, carnot cycle, ideal gas",
+      "description": "Thermodynamics Calculator - First law, entropy, and thermodynamic processes"
+    },
+    {
+      "name": "Torque Calculator",
+      "url": "physics/torque-calculator.jsp",
+      "category": "Physics",
+      "keywords": "torque calculator, moment of force, lever arm, rotational motion, angular acceleration",
+      "description": "Torque Calculator - Rotational force and moment calculations with visualization"
+    },
+    {
+      "name": "Uncertainty Principle Calculator",
+      "url": "physics/uncertainty-principle.jsp",
+      "category": "Physics",
+      "keywords": "uncertainty principle, heisenberg, position momentum, energy time, quantum",
+      "description": "Uncertainty Principle Calculator - Heisenberg's position-momentum and energy-time relations"
+    },
+    {
+      "name": "Units and Measurement",
+      "url": "physics/units-measurement.jsp",
+      "category": "Physics",
+      "keywords": "units measurement, si units, unit conversion, dimensional analysis, significant figures",
+      "description": "Units and Measurement - SI units, unit converter, and dimensional analysis"
+    },
+    {
+      "name": "Velocity Calculator",
+      "url": "physics/velocity-calculator.jsp",
+      "category": "Physics",
+      "keywords": "velocity calculator, speed, distance, time, motion, kinematics",
+      "description": "Velocity Calculator - Calculate speed and velocity with unit conversions"
+    },
+    {
+      "name": "Wave Formulas Calculator",
+      "url": "physics/wave-formulas.jsp",
+      "category": "Physics",
+      "keywords": "wave formulas, wave speed, frequency, wavelength, doppler effect, interference, beats",
+      "description": "Wave Formulas Calculator - Wave parameters, Doppler effect, and interference"
+    },
+    {
+      "name": "Wave Optics Calculator",
+      "url": "physics/wave-optics.jsp",
+      "category": "Physics",
+      "keywords": "wave optics, youngs double slit, diffraction, interference, fringe width",
+      "description": "Wave Optics Calculator - Young's double slit, diffraction grating, and interference"
+    },
+    {
+      "name": "Work & Power Calculator",
+      "url": "physics/work-power.jsp",
+      "category": "Physics",
+      "keywords": "work calculator, power, work energy theorem, mechanical work, watts",
+      "description": "Work & Power Calculator - Work, power, and work-energy theorem calculations"
+    },
+    {
+      "name": "X-Rays Calculator",
+      "url": "physics/xrays.jsp",
+      "category": "Physics",
+      "keywords": "xrays, x-ray, moseley law, cutoff wavelength, characteristic xrays, bremsstrahlung",
+      "description": "X-Rays Calculator - Moseley's law, cutoff wavelength, and characteristic X-rays"
+    },
+    {
+      "name": "Physics Calculators",
+      "url": "physics/index.jsp",
+      "category": "Physics",
+      "keywords": "physics calculators, physics tools, mechanics, optics, waves, thermodynamics, electromagnetism, modern physics",
+      "description": "Physics Calculators - 42 free physics calculators with step-by-step solutions"
     }
   ]
 }
