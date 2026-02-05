@@ -43,7 +43,7 @@
             <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/tutorials/" class="nav-link">
                     <span>📚</span>
-                    <span>Tutorials</span>
+                    <span>Learn to Code</span>
                 </a>
             </li>
             <li class="nav-item">
