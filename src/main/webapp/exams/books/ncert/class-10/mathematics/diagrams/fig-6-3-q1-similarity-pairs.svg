@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <style>
+      .label { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+      .dim { font-family: Arial, sans-serif; font-size: 10px; fill: #6b7280; }
+      .title { font-family: Arial, sans-serif; font-size: 14px; fill: #374151; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="20" class="title">Exercise 6.3 Q1: Similarity Check</text>
+
+  <!-- Pair (i): AAA -->
+  <g transform="translate(20, 40)">
+    <text x="130" y="0" class="label">(i)</text>
+    <!-- Triangle ABC -->
+    <polygon points="10,60 50,60 30,20" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="5" y="65" class="label">B</text>
+    <text x="55" y="65" class="label">C</text>
+    <text x="25" y="15" class="label">A</text>
+    <text x="30" y="32" class="dim">60°</text> <!-- A -->
+    <text x="15" y="55" class="dim">80°</text> <!-- B -->
+    <text x="40" y="55" class="dim">40°</text> <!-- C -->
+
+    <!-- Triangle PQR (Larger) -->
+    <g transform="translate(150, 0)">
+      <polygon points="10,60 70,60 40,0" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="5" y="65" class="label">Q</text>
+      <text x="75" y="65" class="label">R</text>
+      <text x="35" y="-5" class="label">P</text>
+      <text x="40" y="15" class="dim">60°</text>
+      <text x="20" y="55" class="dim">80°</text>
+      <text x="55" y="55" class="dim">40°</text>
+    </g>
+  </g>
+
+  <!-- Pair (ii): SSS -->
+  <g transform="translate(320, 60)">
+    <text x="130" y="-20" class="label">(ii)</text>
+    <!-- Triangle ABC -->
+    <polygon points="10,50 40,50 20,20" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="5" y="55" class="label">B</text>
+    <text x="45" y="55" class="label">C</text>
+    <text x="15" y="15" class="label">A</text>
+    <text x="5" y="35" class="dim">2</text>
+    <text x="30" y="35" class="dim">3</text>
+    <text x="25" y="55" class="dim">2.5</text>
+
+    <!-- Triangle PQR -->
+    <g transform="translate(100, -20)">
+      <polygon points="10,70 70,70 30,10" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="5" y="80" class="label">Q</text>
+      <text x="75" y="80" class="label">R</text>
+      <text x="25" y="5" class="label">P</text>
+      <text x="10" y="40" class="dim">6</text> <!-- PQ -->
+      <text x="55" y="40" class="dim">5</text> <!-- PR -->
+      <text x="40" y="80" class="dim">4</text> <!-- QR -->
+    </g>
+  </g>
+
+  <!-- Pair (iii): Not Similar -->
+  <g transform="translate(20, 160)">
+    <text x="130" y="0" class="label">(iii)</text>
+    <!-- Triangle LMP -->
+    <polygon points="10,50 50,50 30,20" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="5" y="55" class="label">M</text>
+    <text x="55" y="55" class="label">L</text>
+    <text x="25" y="15" class="label">P</text>
+    <text x="30" y="55" class="dim">2.7</text>
+    <text x="10" y="35" class="dim">2</text>
+    <text x="40" y="35" class="dim">3</text>
+
+    <!-- Triangle DEF -->
+    <g transform="translate(150, -10)">
+      <polygon points="10,60 70,60 30,10" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="5" y="70" class="label">E</text>
+      <text x="75" y="70" class="label">F</text>
+      <text x="25" y="5" class="label">D</text>
+      <text x="10" y="35" class="dim">4</text>
+      <text x="55" y="35" class="dim">6</text>
+      <text x="40" y="70" class="dim">5</text>
+    </g>
+  </g>
+
+  <!-- Pair (iv): SAS -->
+  <g transform="translate(320, 180)">
+    <text x="130" y="-20" class="label">(iv)</text>
+    <!-- Triangle MNL -->
+    <g transform="translate(0,0)">
+       <!-- Angle M=70 top vertex. Sides MN=2.5, ML=5 -->
+       <path d="M 30,10 L 10,50 L 50,50 Z" fill="none" stroke="#2563eb" stroke-width="1.5" />
+       <!-- Labels approximated as just triangle shape -->
+       <text x="25" y="5" class="label">M</text>
+       <text x="5" y="55" class="label">N</text>
+       <text x="55" y="55" class="label">L</text>
+       <text x="30" y="25" class="dim">70°</text>
+       <text x="10" y="30" class="dim">2.5</text>
+       <text x="45" y="30" class="dim">5</text>
+    </g>
+    
+    <!-- Triangle PQR -->
+    <g transform="translate(100, -20)">
+      <!-- Angle Q=70. PQ=5, QR=10. P on top, Q bottom left, R bottom right -->
+      <path d="M 40,10 L 10,70 L 90,70 Z" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="35" y="5" class="label">P</text>
+      <text x="0" y="75" class="label">Q</text>
+      <text x="95" y="75" class="label">R</text>
+      <text x="25" y="65" class="dim">70°</text>
+      <text x="15" y="40" class="dim">5</text>
+      <text x="50" y="75" class="dim">10</text>
+    </g>
+  </g>
+
+  <!-- Pair (v): Not SAS -->
+  <g transform="translate(20, 300)">
+    <text x="130" y="0" class="label">(v)</text>
+    <!-- Triangle ABC -->
+    <polygon points="10,60 50,60 30,20" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="5" y="65" class="label">B</text>
+    <text x="55" y="65" class="label">C</text>
+    <text x="25" y="15" class="label">A</text>
+    <text x="30" y="35" class="dim">80°</text>
+    <text x="10" y="40" class="dim">2.5</text>
+    <text x="30" y="65" class="dim">3</text>
+
+    <!-- Triangle DEF -->
+    <g transform="translate(150, -10)">
+      <polygon points="10,70 70,70 40,10" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="5" y="80" class="label">E</text>
+      <text x="75" y="80" class="label">F</text>
+      <text x="35" y="5" class="label">D</text>
+      <text x="60" y="65" class="dim">80°</text> <!-- Angle F, included? No side FD=5, FE=6. F is included. -->
+      <!-- Wait, problem says Angle A=80, sides AB=2.5, BC=3. Angle A is NOT included between AB and BC. -->
+      <!-- Problem says Angle F=80, sides FD=5, FE=6. Angle F IS included. -->
+      <text x="60" y="40" class="dim">5</text>
+      <text x="40" y="80" class="dim">6</text>
+    </g>
+  </g>
+
+  <!-- Pair (vi): AAA via Angle Sum -->
+  <g transform="translate(320, 320)">
+    <text x="130" y="-20" class="label">(vi)</text>
+    <!-- Triangle DEF -->
+    <polygon points="10,50 50,50 20,10" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="5" y="55" class="label">E</text>
+    <text x="55" y="55" class="label">F</text>
+    <text x="10" y="5" class="label">D</text>
+    <text x="25" y="25" class="dim">70°</text>
+    <text x="15" y="45" class="dim">80°</text>
+
+    <!-- Triangle PQR -->
+    <g transform="translate(100, -20)">
+      <polygon points="10,70 60,70 30,10" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="5" y="80" class="label">Q</text>
+      <text x="65" y="80" class="label">R</text>
+      <text x="25" y="5" class="label">P</text>
+      <text x="15" y="65" class="dim">80°</text>
+      <text x="50" y="65" class="dim">30°</text>
+    </g>
+  </g>
+  
+  <text x="50%" y="580" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

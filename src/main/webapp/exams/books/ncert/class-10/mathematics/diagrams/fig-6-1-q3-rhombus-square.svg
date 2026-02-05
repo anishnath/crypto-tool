@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 200">
+  <!-- Title -->
+  <text x="225" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#374151" font-weight="bold">Similarity Check: Rhombus vs Square</text>
+
+  <!-- Left Figure: Rhombus PQRS -->
+  <!-- Side 1.5. Let's start around x=50. Scale: 1 unit ~ 40px -->
+  <!-- 1.5 units = 60px. -->
+  <!-- Angles: 60/120 deg. -->
+  <!-- P bottom-left. Q bottom-right. R top-right. S top-left. -->
+  <g transform="translate(60, 140)">
+    <!-- P=(0,0) -->
+    <!-- Q=(60,0) -->
+    <!-- S=(60*cos60, -60*sin60) = (30, -52) -->
+    <!-- R=(60+30, -52) = (90, -52) -->
+    <polygon points="0,0 60,0 90,-52 30,-52" fill="none" stroke="#2563eb" stroke-width="2"/>
+    
+    <!-- Labels -->
+    <text x="-10" y="5" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">P</text>
+    <text x="65" y="5" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Q</text>
+    <text x="95" y="-55" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">R</text>
+    <text x="20" y="-55" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">S</text>
+    
+    <!-- Dimensions -->
+    <text x="30" y="15" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">1.5 cm</text>
+    <text x="80" y="-25" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">1.5 cm</text>
+    <text x="10" y="-25" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">1.5 cm</text>
+    <text x="60" y="-55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">1.5 cm</text>
+  </g>
+
+  <!-- Right Figure: Square ABCD -->
+  <!-- Side 3.0. Scale: 1 unit ~ 40px -->
+  <!-- 3.0 units = 120px. -->
+  <g transform="translate(250, 140)">
+    <rect x="0" y="-120" width="120" height="120" fill="none" stroke="#dc2626" stroke-width="2"/>
+    
+    <!-- Labels -->
+    <text x="-10" y="5" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">A</text>
+    <text x="125" y="5" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">B</text>
+    <text x="125" y="-125" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">C</text>
+    <text x="-10" y="-125" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">D</text>
+    
+    <!-- Dimensions -->
+    <text x="60" y="15" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">3 cm</text>
+    <text x="125" y="-60" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">3 cm</text>
+    <text x="-5" y="-60" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">3 cm</text>
+    <text x="60" y="-125" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">3 cm</text>
+    
+    <!-- Right Angle Marks -->
+    <polyline points="10,0 10,-10 0,-10" fill="none" stroke="#374151" stroke-width="1"/>
+    <polyline points="120,-10 110,-10 110,0" fill="none" stroke="#374151" stroke-width="1"/>
+    <polyline points="110,-120 110,-110 120,-110" fill="none" stroke="#374151" stroke-width="1"/>
+    <polyline points="0,-110 10,-110 10,-120" fill="none" stroke="#374151" stroke-width="1"/>
+  </g>
+
+  <!-- Watermark -->
+  <text x="50%" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>
