@@ -7,7 +7,7 @@
 <nav class="modern-nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
         <!-- Logo -->
-        <a href="index.jsp" class="nav-logo" aria-label="8gwifi.org Home">
+        <a href="<%=request.getContextPath()%>/" class="nav-logo" aria-label="8gwifi.org Home">
             <img src="<%=request.getContextPath()%>/images/site/logo.svg"
                  alt="8gwifi.org logo" 
                  width="32"
@@ -41,7 +41,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a href="tutorials/" class="nav-link">
+                <a href="<%=request.getContextPath()%>/tutorials/" class="nav-link">
                     <span>📚</span>
                     <span>Tutorials</span>
                 </a>
@@ -103,23 +103,23 @@
         <div class="drawer-section">
             <h3 class="drawer-section-title">⭐ Popular Tools</h3>
             <div id="popularToolsList">
-                <a href="Base64Functions.jsp" class="drawer-link">
+                <a href="<%=request.getContextPath()%>/Base64Functions.jsp" class="drawer-link">
                     <span class="drawer-link-icon">🔄</span>
                     <span>Base64 Encoder/Decoder</span>
                 </a>
-                <a href="jsonparser.jsp" class="drawer-link">
+                <a href="<%=request.getContextPath()%>/jsonparser.jsp" class="drawer-link">
                     <span class="drawer-link-icon">📝</span>
                     <span>JSON Beautifier</span>
                 </a>
-                <a href="CipherFunctions.jsp" class="drawer-link">
+                <a href="<%=request.getContextPath()%>/CipherFunctions.jsp" class="drawer-link">
                     <span class="drawer-link-icon">🔐</span>
                     <span>Cipher Encryption</span>
                 </a>
-                <a href="dns.jsp" class="drawer-link">
+                <a href="<%=request.getContextPath()%>/dns.jsp" class="drawer-link">
                     <span class="drawer-link-icon">🌐</span>
                     <span>DNS Lookup</span>
                 </a>
-                <a href="rsafunctions.jsp" class="drawer-link">
+                <a href="<%=request.getContextPath()%>/rsafunctions.jsp" class="drawer-link">
                     <span class="drawer-link-icon">🔒</span>
                     <span>RSA Encryption</span>
                 </a>
@@ -146,7 +146,7 @@
         <!-- Quick Links -->
         <div class="drawer-section">
             <h3 class="drawer-section-title">Quick Links</h3>
-            <a href="tutorials/" class="drawer-link">
+            <a href="<%=request.getContextPath()%>/tutorials/" class="drawer-link">
                 <span class="drawer-link-icon">📚</span>
                 <span>Tutorials</span>
             </a>
@@ -154,7 +154,7 @@
                 <span class="drawer-link-icon">💼</span>
                 <span>LinkedIn</span>
             </a>
-            <a href="jsonparser.jsp" class="drawer-link">
+            <a href="<%=request.getContextPath()%>/jsonparser.jsp" class="drawer-link">
                 <span class="drawer-link-icon">📝</span>
                 <span>JSON Beautifier</span>
             </a>
