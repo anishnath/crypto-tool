@@ -30,7 +30,7 @@ function getToolsDatabasePath() {
     }
 
     // Look for known subdirectories to find context path
-    const knownDirs = ['/music/', '/tutorials/', '/exams/', '/blockchain/'];
+    const knownDirs = ['/music/', '/tutorials/', '/exams/', '/blockchain/', '/physics/'];
     for (const dir of knownDirs) {
         const idx = pathname.indexOf(dir);
         if (idx !== -1) {
