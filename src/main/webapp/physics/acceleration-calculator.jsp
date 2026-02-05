@@ -40,7 +40,6 @@
                     rel="stylesheet">
 
                 <link rel="stylesheet"
-                <link rel="stylesheet"
                     href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
                 <link rel="stylesheet"
                     href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
@@ -109,9 +108,24 @@
 
                     @media (min-width: 1024px) {
                         .edu-grid {
-                            grid-template-columns: 420px 1fr;
+                            grid-template-columns: 380px 1fr;
                             gap: 2rem;
                         }
+                    }
+
+                    /* Back Link */
+                    .back-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: var(--physics-blue);
+                        font-weight: 600;
+                        text-decoration: none;
+                        margin-bottom: 1rem;
+                    }
+
+                    .back-link:hover {
+                        text-decoration: underline;
                     }
 
                     /* Control Panel */
@@ -668,19 +682,8 @@
             <body>
                 <%@ include file="../modern/components/nav-header.jsp" %>
 
-                    <!-- Breadcrumbs -->
-                    <nav class="breadcrumbs">
-                        <div class="breadcrumbs-container">
-                            <a href="<%=request.getContextPath()%>/">Home</a>
-                            <span class="breadcrumb-separator">›</span>
-                            <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
-                            <span class="breadcrumb-separator">›</span>
-                            <span class="breadcrumb-current">Acceleration Calculator</span>
-                        </div>
-                    </nav>
-
                     <!-- Tool Header -->
-                    <header class="tool-header" style="padding: 1rem 1.5rem;">
+                    <header class="tool-header" style="padding: 1rem 1.5rem; margin-top: 72px;">
                         <div class="tool-header-container">
                             <h1 class="tool-page-title" style="margin: 0; font-size: 1.75rem;">⚡ Acceleration Calculator
                             </h1>
@@ -688,451 +691,448 @@
                     </header>
 
                     <!-- Main Content -->
-                    <main class="tool-main">
-                        <div class="tool-container">
-                            <div class="edu-container">
+                    <main class="edu-container">
+                        <a href="<%=request.getContextPath()%>/physics/" class="back-link">← Physics Tools</a>
 
-                                <!-- Info Box -->
-                                <div class="info-box">
-                                    <div class="info-box-title">
-                                        <span>ℹ️</span>
-                                        <span>Acceleration Calculator (a ≠ 0)</span>
-                                    </div>
-                                    <p class="info-box-content">
-                                        This calculator is for <strong>constant acceleration</strong> motion using
-                                        kinematic equations.
-                                        Use it for objects speeding up or slowing down at a steady rate - like cars
-                                        accelerating,
-                                        braking vehicles, or free-falling objects. <strong>Uses formulas: v = u + at, s
-                                            = ut + ½at², v² = u² + 2as</strong>
-                                    </p>
+                        <!-- Info Box -->
+                        <div class="info-box">
+                            <div class="info-box-title">
+                                <span>ℹ️</span>
+                                <span>Acceleration Calculator (a ≠ 0)</span>
+                            </div>
+                            <p class="info-box-content">
+                                This calculator is for <strong>constant acceleration</strong> motion using
+                                kinematic equations.
+                                Use it for objects speeding up or slowing down at a steady rate - like cars
+                                accelerating,
+                                braking vehicles, or free-falling objects. <strong>Uses formulas: v = u + at, s
+                                    = ut + ½at², v² = u² + 2as</strong>
+                            </p>
+                        </div>
+
+                        <div class="edu-grid">
+
+                            <!-- Control Panel -->
+                            <div class="control-panel">
+                                <div class="panel-header">
+                                    <h2>Calculate</h2>
+                                    <p>Choose what you want to find</p>
                                 </div>
+                                <div class="panel-body">
+                                    <div class="mode-selector"
+                                        style="grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                                        <button class="mode-btn active" onclick="setMode('velocity')">
+                                            <span>v = u+at</span>
+                                        </button>
+                                        <button class="mode-btn" onclick="setMode('velocity-no-time')">
+                                            <span>v² = u²+2as</span>
+                                        </button>
+                                        <button class="mode-btn" onclick="setMode('distance')">
+                                            <span>s = ut+½at²</span>
+                                        </button>
+                                        <button class="mode-btn" onclick="setMode('distance-avg')">
+                                            <span>s = ½(u+v)t</span>
+                                        </button>
+                                        <button class="mode-btn" onclick="setMode('avg-velocity')">
+                                            <span>v_avg</span>
+                                        </button>
+                                    </div>
 
-                                <div class="edu-grid">
-
-                                    <!-- Control Panel -->
-                                    <div class="control-panel">
-                                        <div class="panel-header">
-                                            <h2>Calculate</h2>
-                                            <p>Choose what you want to find</p>
+                                    <!-- Final Velocity Mode (v = u + at) -->
+                                    <div id="velocity-inputs">
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🚀</span>
+                                                <span>Initial Velocity (u)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="initial-velocity" class="number-input"
+                                                    value="0" oninput="calculate()">
+                                                <select id="initial-velocity-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="panel-body">
-                                            <div class="mode-selector"
-                                                style="grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                                                <button class="mode-btn active" onclick="setMode('velocity')">
-                                                    <span>v = u+at</span>
-                                                </button>
-                                                <button class="mode-btn" onclick="setMode('velocity-no-time')">
-                                                    <span>v² = u²+2as</span>
-                                                </button>
-                                                <button class="mode-btn" onclick="setMode('distance')">
-                                                    <span>s = ut+½at²</span>
-                                                </button>
-                                                <button class="mode-btn" onclick="setMode('distance-avg')">
-                                                    <span>s = ½(u+v)t</span>
-                                                </button>
-                                                <button class="mode-btn" onclick="setMode('avg-velocity')">
-                                                    <span>v_avg</span>
-                                                </button>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⚡</span>
+                                                <span>Acceleration (a)</span>
                                             </div>
-
-                                            <!-- Final Velocity Mode (v = u + at) -->
-                                            <div id="velocity-inputs">
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🚀</span>
-                                                        <span>Initial Velocity (u)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="initial-velocity" class="number-input"
-                                                            value="0" oninput="calculate()">
-                                                        <select id="initial-velocity-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⚡</span>
-                                                        <span>Acceleration (a)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="acceleration" class="number-input"
-                                                            value="5" oninput="calculate()">
-                                                        <select id="acceleration-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s²" selected>m/s²</option>
-                                                            <option value="km/h²">km/h²</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⏱️</span>
-                                                        <span>Time (t)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="time" class="number-input" value="10"
-                                                            oninput="calculate()">
-                                                        <select id="time-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="s" selected>seconds</option>
-                                                            <option value="min">minutes</option>
-                                                            <option value="h">hours</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <div class="input-row">
+                                                <input type="number" id="acceleration" class="number-input"
+                                                    value="5" oninput="calculate()">
+                                                <select id="acceleration-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s²" selected>m/s²</option>
+                                                    <option value="km/h²">km/h²</option>
+                                                </select>
                                             </div>
+                                        </div>
 
-                                            <!-- Distance Mode (s = ut + ½at²) -->
-                                            <div id="distance-inputs" style="display: none;">
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🚀</span>
-                                                        <span>Initial Velocity (u)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="initial-velocity-d"
-                                                            class="number-input" value="0" oninput="calculate()">
-                                                        <select id="initial-velocity-d-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⚡</span>
-                                                        <span>Acceleration (a)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="acceleration-d" class="number-input"
-                                                            value="5" oninput="calculate()">
-                                                        <select id="acceleration-d-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s²" selected>m/s²</option>
-                                                            <option value="km/h²">km/h²</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⏱️</span>
-                                                        <span>Time (t)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="time-d" class="number-input" value="10"
-                                                            oninput="calculate()">
-                                                        <select id="time-d-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="s" selected>seconds</option>
-                                                            <option value="min">minutes</option>
-                                                            <option value="h">hours</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⏱️</span>
+                                                <span>Time (t)</span>
                                             </div>
-
-                                            <!-- Velocity No Time Mode (v² = u² + 2as) -->
-                                            <div id="velocity-no-time-inputs" style="display: none;">
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🚀</span>
-                                                        <span>Initial Velocity (u)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="initial-velocity-vnt"
-                                                            class="number-input" value="0" oninput="calculate()">
-                                                        <select id="initial-velocity-vnt-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⚡</span>
-                                                        <span>Acceleration (a)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="acceleration-vnt" class="number-input"
-                                                            value="5" oninput="calculate()">
-                                                        <select id="acceleration-vnt-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s²" selected>m/s²</option>
-                                                            <option value="km/h²">km/h²</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">📏</span>
-                                                        <span>Distance (s)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="distance-vnt" class="number-input"
-                                                            value="100" oninput="calculate()">
-                                                        <select id="distance-vnt-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m" selected>meters</option>
-                                                            <option value="km">kilometers</option>
-                                                            <option value="mi">miles</option>
-                                                            <option value="ft">feet</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Distance Average Mode (s = ½(u+v)t) -->
-                                            <div id="distance-avg-inputs" style="display: none;">
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🚀</span>
-                                                        <span>Initial Velocity (u)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="initial-velocity-da"
-                                                            class="number-input" value="0" oninput="calculate()">
-                                                        <select id="initial-velocity-da-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🏁</span>
-                                                        <span>Final Velocity (v)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="final-velocity-da" class="number-input"
-                                                            value="50" oninput="calculate()">
-                                                        <select id="final-velocity-da-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">⏱️</span>
-                                                        <span>Time (t)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="time-da" class="number-input"
-                                                            value="10" oninput="calculate()">
-                                                        <select id="time-da-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="s" selected>seconds</option>
-                                                            <option value="min">minutes</option>
-                                                            <option value="h">hours</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Average Velocity Mode (v_avg = (u+v)/2) -->
-                                            <div id="avg-velocity-inputs" style="display: none;">
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🚀</span>
-                                                        <span>Initial Velocity (u)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="initial-velocity-av"
-                                                            class="number-input" value="0" oninput="calculate()">
-                                                        <select id="initial-velocity-av-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="input-section">
-                                                    <div class="input-label">
-                                                        <span class="emoji">🏁</span>
-                                                        <span>Final Velocity (v)</span>
-                                                    </div>
-                                                    <div class="input-row">
-                                                        <input type="number" id="final-velocity-av" class="number-input"
-                                                            value="50" oninput="calculate()">
-                                                        <select id="final-velocity-av-unit" class="unit-select"
-                                                            onchange="calculate()">
-                                                            <option value="m/s">m/s</option>
-                                                            <option value="km/h">km/h</option>
-                                                            <option value="mph">mph</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Result -->
-                                            <div class="result-card">
-                                                <div class="result-label">Result</div>
-                                                <div class="result-main" id="result-value">50 m/s</div>
-                                                <div class="result-conversions" id="conversions"></div>
+                                            <div class="input-row">
+                                                <input type="number" id="time" class="number-input" value="10"
+                                                    oninput="calculate()">
+                                                <select id="time-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="s" selected>seconds</option>
+                                                    <option value="min">minutes</option>
+                                                    <option value="h">hours</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Visualization Panel -->
-                                    <div class="viz-panel">
-                                        <div class="viz-header">
-                                            <h3>📊 Live Visualization</h3>
-                                            <p>Watch acceleration in action</p>
-                                        </div>
-
-                                        <div class="animation-stage">
-                                            <div class="stage-info">
-                                                <div class="info-badge">
-                                                    <div class="label">Acceleration</div>
-                                                    <div class="value" id="accel-viz">5 m/s²</div>
-                                                </div>
-                                                <div class="info-badge">
-                                                    <div class="label">Time</div>
-                                                    <div class="value" id="time-viz">10 s</div>
-                                                </div>
+                                    <!-- Distance Mode (s = ut + ½at²) -->
+                                    <div id="distance-inputs" style="display: none;">
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🚀</span>
+                                                <span>Initial Velocity (u)</span>
                                             </div>
-                                            <div class="vehicle-container" id="vehicle-container">
-                                                <div class="vehicle" id="vehicle">🚗</div>
-                                            </div>
-                                            <div class="road">
-                                                <div class="road-line"></div>
-                                            </div>
-                                            <div class="distance-markers">
-                                                <span>Start</span>
-                                                <span>Finish</span>
+                                            <div class="input-row">
+                                                <input type="number" id="initial-velocity-d"
+                                                    class="number-input" value="0" oninput="calculate()">
+                                                <select id="initial-velocity-d-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
                                             </div>
                                         </div>
 
-                                        <!-- Interactive Graphs -->
-                                        <div class="graphs-container">
-                                            <!-- Velocity-Time Graph -->
-                                            <div class="graph-card">
-                                                <div class="graph-title">
-                                                    <span>📈</span>
-                                                    <span>Velocity vs Time</span>
-                                                </div>
-                                                <svg class="graph-svg" id="velocity-graph" viewBox="0 0 300 200">
-                                                    <!-- Grid -->
-                                                    <line class="graph-grid" x1="40" y1="20" x2="40" y2="160" />
-                                                    <line class="graph-grid" x1="40" y1="160" x2="280" y2="160" />
-
-                                                    <!-- Axes -->
-                                                    <line class="graph-axis" x1="40" y1="160" x2="280" y2="160" />
-                                                    <line class="graph-axis" x1="40" y1="20" x2="40" y2="160" />
-
-                                                    <!-- Labels -->
-                                                    <text class="graph-label" x="150" y="190">Time (s)</text>
-                                                    <text class="graph-label" x="5" y="90"
-                                                        transform="rotate(-90 5 90)">Velocity (m/s)</text>
-
-                                                    <!-- Graph line (will be updated by JS) -->
-                                                    <path id="v-t-line" class="graph-line" d="M 40 160 L 280 20" />
-                                                    <circle id="v-t-point" class="graph-point" cx="40" cy="160" />
-                                                </svg>
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⚡</span>
+                                                <span>Acceleration (a)</span>
                                             </div>
-
-                                            <!-- Position-Time Graph -->
-                                            <div class="graph-card">
-                                                <div class="graph-title">
-                                                    <span>📊</span>
-                                                    <span>Position vs Time</span>
-                                                </div>
-                                                <svg class="graph-svg" id="position-graph" viewBox="0 0 300 200">
-                                                    <!-- Grid -->
-                                                    <line class="graph-grid" x1="40" y1="20" x2="40" y2="160" />
-                                                    <line class="graph-grid" x1="40" y1="160" x2="280" y2="160" />
-
-                                                    <!-- Axes -->
-                                                    <line class="graph-axis" x1="40" y1="160" x2="280" y2="160" />
-                                                    <line class="graph-axis" x1="40" y1="20" x2="40" y2="160" />
-
-                                                    <!-- Labels -->
-                                                    <text class="graph-label" x="150" y="190">Time (s)</text>
-                                                    <text class="graph-label" x="5" y="90"
-                                                        transform="rotate(-90 5 90)">Position (m)</text>
-
-                                                    <!-- Graph line (will be updated by JS) -->
-                                                    <path id="s-t-line" class="graph-line"
-                                                        d="M 40 160 Q 160 90 280 20" />
-                                                    <circle id="s-t-point" class="graph-point" cx="40" cy="160" />
-                                                </svg>
+                                            <div class="input-row">
+                                                <input type="number" id="acceleration-d" class="number-input"
+                                                    value="5" oninput="calculate()">
+                                                <select id="acceleration-d-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s²" selected>m/s²</option>
+                                                    <option value="km/h²">km/h²</option>
+                                                </select>
                                             </div>
                                         </div>
 
-                                        <div class="formula-section">
-                                            <h4>📝 Step-by-Step Solution</h4>
-                                            <div id="formula-steps"></div>
-                                        </div>
-
-                                        <div class="examples-section">
-                                            <h4>💡 Quick Examples</h4>
-                                            <div class="examples-grid">
-                                                <div class="example-card" onclick="loadExample(1)">
-                                                    <div class="example-icon">🚗</div>
-                                                    <div class="example-title">Car Accelerating</div>
-                                                    <div class="example-desc">0 to 100 km/h</div>
-                                                </div>
-                                                <div class="example-card" onclick="loadExample(2)">
-                                                    <div class="example-icon">🪂</div>
-                                                    <div class="example-title">Free Fall</div>
-                                                    <div class="example-desc">Gravity: 9.8 m/s²</div>
-                                                </div>
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⏱️</span>
+                                                <span>Time (t)</span>
                                             </div>
-                                        </div>
-
-                                        <!-- Related Tools -->
-                                        <div class="examples-section">
-                                            <h4>🔗 Related Tools</h4>
-                                            <div class="examples-grid">
-                                                <a href="<%=request.getContextPath()%>/physics/velocity-calculator.jsp"
-                                                    style="text-decoration: none;">
-                                                    <div class="example-card">
-                                                        <div class="example-icon">⚡</div>
-                                                        <div class="example-title">Velocity Calculator</div>
-                                                        <div class="example-desc">For constant velocity (a = 0)</div>
-                                                    </div>
-                                                </a>
-                                                <a href="<%=request.getContextPath()%>/physics/"
-                                                    style="text-decoration: none;">
-                                                    <div class="example-card">
-                                                        <div class="example-icon">⚛️</div>
-                                                        <div class="example-title">All Physics Tools</div>
-                                                        <div class="example-desc">Browse all calculators</div>
-                                                    </div>
-                                                </a>
+                                            <div class="input-row">
+                                                <input type="number" id="time-d" class="number-input" value="10"
+                                                    oninput="calculate()">
+                                                <select id="time-d-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="s" selected>seconds</option>
+                                                    <option value="min">minutes</option>
+                                                    <option value="h">hours</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <!-- Velocity No Time Mode (v² = u² + 2as) -->
+                                    <div id="velocity-no-time-inputs" style="display: none;">
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🚀</span>
+                                                <span>Initial Velocity (u)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="initial-velocity-vnt"
+                                                    class="number-input" value="0" oninput="calculate()">
+                                                <select id="initial-velocity-vnt-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⚡</span>
+                                                <span>Acceleration (a)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="acceleration-vnt" class="number-input"
+                                                    value="5" oninput="calculate()">
+                                                <select id="acceleration-vnt-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s²" selected>m/s²</option>
+                                                    <option value="km/h²">km/h²</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">📏</span>
+                                                <span>Distance (s)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="distance-vnt" class="number-input"
+                                                    value="100" oninput="calculate()">
+                                                <select id="distance-vnt-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m" selected>meters</option>
+                                                    <option value="km">kilometers</option>
+                                                    <option value="mi">miles</option>
+                                                    <option value="ft">feet</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Distance Average Mode (s = ½(u+v)t) -->
+                                    <div id="distance-avg-inputs" style="display: none;">
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🚀</span>
+                                                <span>Initial Velocity (u)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="initial-velocity-da"
+                                                    class="number-input" value="0" oninput="calculate()">
+                                                <select id="initial-velocity-da-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🏁</span>
+                                                <span>Final Velocity (v)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="final-velocity-da" class="number-input"
+                                                    value="50" oninput="calculate()">
+                                                <select id="final-velocity-da-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">⏱️</span>
+                                                <span>Time (t)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="time-da" class="number-input"
+                                                    value="10" oninput="calculate()">
+                                                <select id="time-da-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="s" selected>seconds</option>
+                                                    <option value="min">minutes</option>
+                                                    <option value="h">hours</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Average Velocity Mode (v_avg = (u+v)/2) -->
+                                    <div id="avg-velocity-inputs" style="display: none;">
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🚀</span>
+                                                <span>Initial Velocity (u)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="initial-velocity-av"
+                                                    class="number-input" value="0" oninput="calculate()">
+                                                <select id="initial-velocity-av-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-section">
+                                            <div class="input-label">
+                                                <span class="emoji">🏁</span>
+                                                <span>Final Velocity (v)</span>
+                                            </div>
+                                            <div class="input-row">
+                                                <input type="number" id="final-velocity-av" class="number-input"
+                                                    value="50" oninput="calculate()">
+                                                <select id="final-velocity-av-unit" class="unit-select"
+                                                    onchange="calculate()">
+                                                    <option value="m/s">m/s</option>
+                                                    <option value="km/h">km/h</option>
+                                                    <option value="mph">mph</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div class="result-card">
+                                        <div class="result-label">Result</div>
+                                        <div class="result-main" id="result-value">50 m/s</div>
+                                        <div class="result-conversions" id="conversions"></div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Visualization Panel -->
+                            <div class="viz-panel">
+                                <div class="viz-header">
+                                    <h3>📊 Live Visualization</h3>
+                                    <p>Watch acceleration in action</p>
+                                </div>
+
+                                <div class="animation-stage">
+                                    <div class="stage-info">
+                                        <div class="info-badge">
+                                            <div class="label">Acceleration</div>
+                                            <div class="value" id="accel-viz">5 m/s²</div>
+                                        </div>
+                                        <div class="info-badge">
+                                            <div class="label">Time</div>
+                                            <div class="value" id="time-viz">10 s</div>
+                                        </div>
+                                    </div>
+                                    <div class="vehicle-container" id="vehicle-container">
+                                        <div class="vehicle" id="vehicle">🚗</div>
+                                    </div>
+                                    <div class="road">
+                                        <div class="road-line"></div>
+                                    </div>
+                                    <div class="distance-markers">
+                                        <span>Start</span>
+                                        <span>Finish</span>
+                                    </div>
+                                </div>
+
+                                <!-- Interactive Graphs -->
+                                <div class="graphs-container">
+                                    <!-- Velocity-Time Graph -->
+                                    <div class="graph-card">
+                                        <div class="graph-title">
+                                            <span>📈</span>
+                                            <span>Velocity vs Time</span>
+                                        </div>
+                                        <svg class="graph-svg" id="velocity-graph" viewBox="0 0 300 200">
+                                            <!-- Grid -->
+                                            <line class="graph-grid" x1="40" y1="20" x2="40" y2="160" />
+                                            <line class="graph-grid" x1="40" y1="160" x2="280" y2="160" />
+
+                                            <!-- Axes -->
+                                            <line class="graph-axis" x1="40" y1="160" x2="280" y2="160" />
+                                            <line class="graph-axis" x1="40" y1="20" x2="40" y2="160" />
+
+                                            <!-- Labels -->
+                                            <text class="graph-label" x="150" y="190">Time (s)</text>
+                                            <text class="graph-label" x="5" y="90"
+                                                transform="rotate(-90 5 90)">Velocity (m/s)</text>
+
+                                            <!-- Graph line (will be updated by JS) -->
+                                            <path id="v-t-line" class="graph-line" d="M 40 160 L 280 20" />
+                                            <circle id="v-t-point" class="graph-point" cx="40" cy="160" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Position-Time Graph -->
+                                    <div class="graph-card">
+                                        <div class="graph-title">
+                                            <span>📊</span>
+                                            <span>Position vs Time</span>
+                                        </div>
+                                        <svg class="graph-svg" id="position-graph" viewBox="0 0 300 200">
+                                            <!-- Grid -->
+                                            <line class="graph-grid" x1="40" y1="20" x2="40" y2="160" />
+                                            <line class="graph-grid" x1="40" y1="160" x2="280" y2="160" />
+
+                                            <!-- Axes -->
+                                            <line class="graph-axis" x1="40" y1="160" x2="280" y2="160" />
+                                            <line class="graph-axis" x1="40" y1="20" x2="40" y2="160" />
+
+                                            <!-- Labels -->
+                                            <text class="graph-label" x="150" y="190">Time (s)</text>
+                                            <text class="graph-label" x="5" y="90"
+                                                transform="rotate(-90 5 90)">Position (m)</text>
+
+                                            <!-- Graph line (will be updated by JS) -->
+                                            <path id="s-t-line" class="graph-line"
+                                                d="M 40 160 Q 160 90 280 20" />
+                                            <circle id="s-t-point" class="graph-point" cx="40" cy="160" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="formula-section">
+                                    <h4>📝 Step-by-Step Solution</h4>
+                                    <div id="formula-steps"></div>
+                                </div>
+
+                                <div class="examples-section">
+                                    <h4>💡 Quick Examples</h4>
+                                    <div class="examples-grid">
+                                        <div class="example-card" onclick="loadExample(1)">
+                                            <div class="example-icon">🚗</div>
+                                            <div class="example-title">Car Accelerating</div>
+                                            <div class="example-desc">0 to 100 km/h</div>
+                                        </div>
+                                        <div class="example-card" onclick="loadExample(2)">
+                                            <div class="example-icon">🪂</div>
+                                            <div class="example-title">Free Fall</div>
+                                            <div class="example-desc">Gravity: 9.8 m/s²</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Related Tools -->
+                                <div class="examples-section">
+                                    <h4>🔗 Related Tools</h4>
+                                    <div class="examples-grid">
+                                        <a href="<%=request.getContextPath()%>/physics/velocity-calculator.jsp"
+                                            style="text-decoration: none;">
+                                            <div class="example-card">
+                                                <div class="example-icon">⚡</div>
+                                                <div class="example-title">Velocity Calculator</div>
+                                                <div class="example-desc">For constant velocity (a = 0)</div>
+                                            </div>
+                                        </a>
+                                        <a href="<%=request.getContextPath()%>/physics/"
+                                            style="text-decoration: none;">
+                                            <div class="example-card">
+                                                <div class="example-icon">⚛️</div>
+                                                <div class="example-title">All Physics Tools</div>
+                                                <div class="example-desc">Browse all calculators</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </main>
 
-                    <footer class="tool-page-footer" style="background: var(--surface-1); border-top: 1px solid var(--border-light); padding: 2rem; text-align: center; margin-top: 2rem;">
+                    <footer style="background: var(--surface-1); border-top: 1px solid var(--border-light); padding: 2rem; text-align: center; margin-top: 2rem;">
                         <div class="tool-page-footer-inner">
                             <p style="color: var(--text-secondary); margin: 0;">&copy; 2025 8gwifi.org. All rights reserved.</p>
                         </div>
