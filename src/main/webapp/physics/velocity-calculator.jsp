@@ -38,9 +38,7 @@
                     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
                     rel="stylesheet">
 
-                <link rel="stylesheet"
-                <link rel="stylesheet"
-                    href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+                <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
                 <link rel="stylesheet"
                     href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
                 <link rel="stylesheet"
@@ -107,9 +105,23 @@
 
                     @media (min-width: 1024px) {
                         .edu-grid {
-                            grid-template-columns: 420px 1fr;
+                            grid-template-columns: 380px 1fr;
                             gap: 2rem;
                         }
+                    }
+
+                    /* Back Link */
+                    .back-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: var(--physics-blue);
+                        font-weight: 600;
+                        text-decoration: none;
+                        margin-bottom: 1rem;
+                    }
+                    .back-link:hover {
+                        text-decoration: underline;
                     }
 
                     /* Control Panel - Educational Style */
@@ -711,31 +723,18 @@
             <body>
                 <%@ include file="../modern/components/nav-header.jsp" %>
 
-                    <!-- Breadcrumbs -->
-                    <nav class="breadcrumbs">
-                        <div class="breadcrumbs-container">
-                            <a href="<%=request.getContextPath()%>/">Home</a>
-                            <span class="breadcrumb-separator">›</span>
-                            <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
-                            <span class="breadcrumb-separator">›</span>
-                            <span class="breadcrumb-current">Velocity Calculator</span>
-                        </div>
-                    </nav>
-
                     <!-- Tool Header -->
-                    <header class="tool-header" style="padding: 1rem 1.5rem;">
+                    <header class="tool-header" style="padding: 1rem 1.5rem; margin-top: 72px;">
                         <div class="tool-header-container">
-                            <h1 class="tool-page-title" style="margin: 0; font-size: 1.75rem;">⚡ Velocity Calculator
-                            </h1>
+                            <h1 class="tool-page-title" style="margin: 0; font-size: 1.75rem;">⚡ Velocity Calculator</h1>
                         </div>
                     </header>
 
                     <!-- Main Content -->
-                    <main class="tool-main">
-                        <div class="tool-container">
-                            <div class="edu-container">
+                    <main class="edu-container">
+                        <a href="<%=request.getContextPath()%>/physics/" class="back-link">← Physics Tools</a>
 
-                                <!-- Info Box -->
+                        <!-- Info Box -->
                                 <div class="info-box">
                                     <div class="info-box-title">
                                         <span>ℹ️</span>
@@ -1102,16 +1101,11 @@
                                         <li>Practice with real-world scenarios to make learning more meaningful</li>
                                     </ul>
                                 </div>
-
-                            </div>
-                        </div>
                     </main>
 
                     <!-- Footer -->
-                    <footer class="tool-page-footer">
-                        <div class="tool-page-footer-inner">
-                            <p>&copy; 2025 8gwifi.org. All rights reserved.</p>
-                        </div>
+                    <footer style="background: var(--surface-1); border-top: 1px solid var(--border-light); padding: 1.5rem; text-align: center; margin-top: 2rem;">
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">&copy; 2025 8gwifi.org - Free Online Physics Calculators</p>
                     </footer>
 
                     <%@ include file="../modern/components/analytics.jsp" %>

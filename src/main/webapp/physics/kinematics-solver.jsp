@@ -146,7 +146,7 @@
 
         @media (min-width: 1024px) {
             .edu-grid {
-                grid-template-columns: 450px 1fr;
+                grid-template-columns: 380px 1fr;
                 gap: 2rem;
             }
         }
@@ -179,6 +179,20 @@
 
         .info-box-content strong {
             color: var(--text-primary);
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--physics-blue);
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
 
         /* Control Panel */
@@ -811,35 +825,21 @@
         </div>
     </header>
 
-    <!-- Breadcrumbs -->
-    <nav class="breadcrumbs">
-        <div class="breadcrumbs-container">
-            <a href="<%=request.getContextPath()%>/">Home</a>
-            <span class="breadcrumb-separator">></span>
-            <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
-            <span class="breadcrumb-separator">></span>
-            <span class="breadcrumb-current">Kinematics Solver</span>
+    <main class="edu-container">
+        <a href="<%=request.getContextPath()%>/physics/" class="back-link">← Physics Tools</a>
+
+        <div class="info-box">
+            <div class="info-box-title">
+                <span>💡</span>
+                <span>How It Works</span>
+            </div>
+            <p class="info-box-content">
+                <strong>Click 3 variable buttons</strong> to mark as Known (green). Enter their values, then click "Solve".
+                The solver automatically picks the right kinematic formulas and calculates the 2 unknowns with step-by-step solutions!
+            </p>
         </div>
-    </nav>
 
-    <!-- Main Content -->
-    <main class="tool-main">
-        <div class="tool-container">
-            <div class="edu-container">
-
-                <!-- Info Box -->
-                <div class="info-box">
-                    <div class="info-box-title">
-                        <span>💡</span>
-                        <span>How It Works</span>
-                    </div>
-                    <p class="info-box-content">
-                        <strong>Click 3 variable buttons</strong> to mark as Known (green). Enter their values, then click "Solve".
-                        The solver automatically picks the right kinematic formulas and calculates the 2 unknowns with step-by-step solutions!
-                    </p>
-                </div>
-
-                <div class="edu-grid">
+        <div class="edu-grid">
 
                     <!-- Control Panel -->
                     <div class="control-panel">
@@ -924,8 +924,8 @@
 
                 </div>
 
-                <!-- Educational Content -->
-                <div class="edu-content">
+            <!-- Educational Content -->
+            <div class="edu-content">
                     <h2>Understanding Kinematic Equations (SUVAT)</h2>
                     <p>
                         Kinematics is the branch of physics that describes the motion of objects without considering the forces that cause the motion.
@@ -981,15 +981,11 @@
                         <li><strong>Engineering:</strong> Designing elevators, roller coasters, and transportation systems</li>
                         <li><strong>Aerospace:</strong> Planning rocket launches and spacecraft trajectories</li>
                     </ul>
-                </div>
-
             </div>
-        </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="tool-page-footer">
-        <p>&copy; 2024 8gwifi.org - Physics Education Tools</p>
+    <footer style="background: var(--surface-1); border-top: 1px solid var(--border-light); padding: 1.5rem; text-align: center; margin-top: 2rem;">
+        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">&copy; 2025 8gwifi.org - Free Online Physics Calculators</p>
     </footer>
 
     <%@ include file="../modern/components/analytics.jsp" %>
