@@ -1,0 +1,421 @@
+/* Physics Tools Common Styles - Mobile First */
+
+:root {
+    --physics-green: #10b981;
+    --physics-green-dark: #059669;
+    --physics-green-light: #34d399;
+}
+
+/* Variable Selector */
+.variable-selector {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.var-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--surface-2);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.var-btn:hover {
+    border-color: var(--physics-green-light);
+    transform: translateY(-2px);
+}
+
+.var-btn.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+    border-color: var(--physics-green);
+}
+
+.var-symbol {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    min-width: 2rem;
+}
+
+.var-name {
+    flex: 1;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.var-status {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    background: var(--surface-1);
+    color: var(--text-tertiary);
+}
+
+.var-btn.active .var-status {
+    background: var(--physics-green);
+    color: white;
+}
+
+/* Inputs Section */
+.inputs-section {
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.input-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.number-input {
+    flex: 1;
+    padding: 0.875rem;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    background: var(--surface-1);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.number-input:focus {
+    outline: none;
+    border-color: var(--physics-green);
+}
+
+.unit-select {
+    padding: 0.875rem;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-width: 90px;
+    cursor: pointer;
+}
+
+/* Calculate Button */
+.calculate-btn {
+    width: 100%;
+    padding: 1.125rem;
+    background: linear-gradient(135deg, var(--physics-green), var(--physics-green-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
+}
+
+/* Result Panel */
+.result-panel {
+    background: var(--surface-2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 300px;
+}
+
+.placeholder-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    min-height: 250px;
+}
+
+.placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.placeholder-state h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.placeholder-state p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+}
+
+/* Solution Display */
+.solution-header {
+    margin-bottom: 1.5rem;
+}
+
+.solution-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--physics-green);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.solution-card {
+    background: var(--surface-1);
+    border: 2px solid var(--physics-green);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.result-main {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.result-conversions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.conversion-badge {
+    background: var(--surface-2);
+    padding: 0.5rem 0.875rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.formula-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--physics-green);
+    margin-top: 1rem;
+}
+
+.formula-box strong {
+    color: var(--physics-green);
+}
+
+.formula-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1.0625rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.steps-container {
+    margin-top: 1rem;
+}
+
+.step {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.step:last-child {
+    border-bottom: none;
+}
+
+.step-label {
+    font-weight: 700;
+    color: var(--physics-green);
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.step-content {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+}
+
+/* Animation Stage */
+.animation-stage {
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.stage-info {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.info-badge {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-badge .label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.25rem;
+}
+
+.info-badge .value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.vehicle-container {
+    position: relative;
+    left: 0;
+    transition: left 2s ease-out;
+}
+
+.vehicle {
+    font-size: 3rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.road {
+    height: 4px;
+    background: #666;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.road-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(to right,
+            white 0px,
+            white 20px,
+            transparent 20px,
+            transparent 40px);
+    transform: translateY(-50%);
+}
+
+.distance-markers {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 600;
+}
+
+/* Graphs */
+.graphs-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.graph-card {
+    background: var(--surface-1);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.graph-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.graph-svg {
+    width: 100%;
+    height: 200px;
+    background: var(--surface-2);
+    border-radius: 8px;
+}
+
+.graph-axis {
+    stroke: var(--text-tertiary);
+    stroke-width: 2;
+}
+
+.graph-grid {
+    stroke: var(--border-light);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+}
+
+.graph-line {
+    fill: none;
+    stroke: var(--physics-green);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.graph-point {
+    fill: var(--physics-green-dark);
+}
+
+.graph-label {
+    fill: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .variable-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .graphs-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .variable-selector {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
