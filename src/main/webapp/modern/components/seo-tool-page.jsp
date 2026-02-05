@@ -52,7 +52,8 @@
         pageTitle = toolName + " | 8gwifi.org";
     } else if (pageTitle.length() > 60) {
         // Truncate if too long, keeping important keywords
-        int maxLength = 55;
+        // maxLength = 43 ensures total ≤ 60 chars (43 + "... | 8gwifi.org" = 60)
+        int maxLength = 43;
         if (pageTitle.length() > maxLength) {
             pageTitle = pageTitle.substring(0, maxLength).trim();
             if (!pageTitle.endsWith("|")) {
@@ -78,8 +79,21 @@
 <%
     // Optimize description length (150-160 chars for best CTR)
     String metaDescription = toolDescription;
+    // Category-specific append text for better relevance and CTR
+    String appendText;
+    if (toolCategory != null) {
+        String categoryLower = toolCategory.toLowerCase();
+        if (categoryLower.contains("physics") || categoryLower.contains("education") || categoryLower.contains("math")) {
+            appendText = " Free, instant results. Step-by-step solutions. No signup required.";
+        } else if (categoryLower.contains("developer") || categoryLower.contains("code")) {
+            appendText = " Free, secure, client-side processing. No registration required.";
+        } else {
+            appendText = " Free online tool. No registration required.";
+        }
+    } else {
+        appendText = " Free online tool. No registration required.";
+    }
     // Only append if description is short enough to keep total under 160 chars
-    String appendText = " Free, secure, client-side processing. No registration required.";
     if (metaDescription.length() + appendText.length() <= 160) {
         metaDescription = metaDescription + appendText;
     } else {
@@ -110,7 +124,23 @@
     }
 %>
 <meta name="description" content="<%= escapeJson(metaDescription) %>">
-<meta name="keywords" content="<%= escapeJson(toolKeywords + ", online tool, free, developer tool, client-side, secure") %>">
+<%
+    // Category-specific keyword append for better relevance
+    String keywordAppend;
+    if (toolCategory != null) {
+        String categoryLower = toolCategory.toLowerCase();
+        if (categoryLower.contains("physics") || categoryLower.contains("education") || categoryLower.contains("math")) {
+            keywordAppend = ", online calculator, free tool, homework help, step-by-step solutions";
+        } else if (categoryLower.contains("developer") || categoryLower.contains("code")) {
+            keywordAppend = ", online tool, free, developer tool, client-side, secure";
+        } else {
+            keywordAppend = ", online tool, free";
+        }
+    } else {
+        keywordAppend = ", online tool, free";
+    }
+%>
+<meta name="keywords" content="<%= escapeJson(toolKeywords + keywordAppend) %>">
 <link rel="canonical" href="<%= fullUrl %>">
 
 <!-- Open Graph -->
@@ -167,6 +197,9 @@
     "availability": "https://schema.org/InStock",
     "priceValidUntil": "2026-12-31"
   },
+  <%-- 
+  REMOVED: Hardcoded AggregateRating violates Google guidelines
+  Only include if you have actual user reviews stored in database
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
@@ -174,6 +207,7 @@
     "bestRating": "5",
     "worstRating": "1"
   },
+  --%>
   "featureList": [
 <% if (toolFeatures != null && !toolFeatures.trim().isEmpty()) {
     String[] features = toolFeatures.split(",");
@@ -306,7 +340,16 @@
     String faq2a = request.getParameter("faq2a");
     String faq3q = request.getParameter("faq3q");
     String faq3a = request.getParameter("faq3a");
+    String faq4q = request.getParameter("faq4q");
+    String faq4a = request.getParameter("faq4a");
+    String faq5q = request.getParameter("faq5q");
+    String faq5a = request.getParameter("faq5a");
+    String faq6q = request.getParameter("faq6q");
+    String faq6a = request.getParameter("faq6a");
     boolean hasFaq = (faq1q != null && faq1a != null);
+    boolean hasFaq4 = (faq4q != null && faq4a != null);
+    boolean hasFaq5 = (faq5q != null && faq5a != null);
+    boolean hasFaq6 = (faq6q != null && faq6a != null);
 %>
 <% if (hasFaq) { %>
 <script type="application/ld+json">
@@ -322,7 +365,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq1a) %>"
       }
-    }<% if (faq2q != null && faq2a != null) { %>,<% } %>
+    }<% if (faq2q != null || faq3q != null || hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
     <% } %>
     <% if (faq2q != null && faq2a != null) { %>
     {
@@ -332,7 +375,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq2a) %>"
       }
-    }<% if (faq3q != null && faq3a != null) { %>,<% } %>
+    }<% if (faq3q != null || hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
     <% } %>
     <% if (faq3q != null && faq3a != null) { %>
     {
@@ -341,6 +384,36 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "<%= escapeJson(faq3a) %>"
+      }
+    }<% if (hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
+    <% } %>
+    <% if (hasFaq4) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq4q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq4a) %>"
+      }
+    }<% if (hasFaq5 || hasFaq6) { %>,<% } %>
+    <% } %>
+    <% if (hasFaq5) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq5q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq5a) %>"
+      }
+    }<% if (hasFaq6) { %>,<% } %>
+    <% } %>
+    <% if (hasFaq6) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq6q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq6a) %>"
       }
     }
     <% } %>
