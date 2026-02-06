@@ -8038,8 +8038,6 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <url>
             <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/sets/ex-1-1-q1.jsp</loc>
             <changefreq>monthly</changefreq>
