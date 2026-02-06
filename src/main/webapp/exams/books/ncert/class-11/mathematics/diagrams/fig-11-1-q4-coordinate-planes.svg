@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .plane-label { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle; }
+      .axis-label { font-family: Arial, sans-serif; font-size: 9px; font-weight: bold; fill: #374151; }
+      .info { font-family: Arial, sans-serif; font-size: 8px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="a11" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L5,2.5 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">The Three Coordinate Planes</text>
+
+  <!-- XY-plane -->
+  <g transform="translate(55, 90)">
+    <polygon points="0,-20 40,-40 80,-20 40,0" fill="#2563eb" fill-opacity="0.15" stroke="#2563eb" stroke-width="1" />
+    <!-- X-axis -->
+    <line x1="40" y1="0" x2="85" y2="-22" class="axis" marker-end="url(#a11)" />
+    <text x="90" y="-22" class="axis-label" fill="#374151">X</text>
+    <!-- Y-axis -->
+    <line x1="40" y1="0" x2="40" y2="-50" class="axis" marker-end="url(#a11)" />
+    <text x="40" y="-54" class="axis-label" fill="#374151" text-anchor="middle">Z</text>
+    <!-- Z-axis (into screen) -->
+    <line x1="40" y1="0" x2="-5" y2="-22" class="axis" marker-end="url(#a11)" />
+    <text x="-12" y="-22" class="axis-label" fill="#374151">Y</text>
+    <circle cx="40" cy="0" r="2" fill="#374151" />
+    <text x="40" y="14" class="plane-label" fill="#2563eb">XY-plane</text>
+    <text x="40" y="24" class="info">(z = 0)</text>
+    <text x="40" y="34" class="info">Contains X and Y axes</text>
+  </g>
+
+  <!-- YZ-plane -->
+  <g transform="translate(155, 90)">
+    <polygon points="-20,-40 -20,0 20,0 20,-40" fill="#dc2626" fill-opacity="0.15" stroke="#dc2626" stroke-width="1" />
+    <!-- Axes -->
+    <line x1="0" y1="0" x2="35" y2="18" class="axis" marker-end="url(#a11)" />
+    <text x="40" y="22" class="axis-label" fill="#374151">X</text>
+    <line x1="0" y1="0" x2="0" y2="-50" class="axis" marker-end="url(#a11)" />
+    <text x="0" y="-54" class="axis-label" fill="#374151" text-anchor="middle">Z</text>
+    <line x1="0" y1="0" x2="-30" y2="0" class="axis" marker-end="url(#a11)" />
+    <text x="-36" y="3" class="axis-label" fill="#374151">Y</text>
+    <circle cx="0" cy="0" r="2" fill="#374151" />
+    <text x="0" y="14" class="plane-label" fill="#dc2626">YZ-plane</text>
+    <text x="0" y="24" class="info">(x = 0)</text>
+    <text x="0" y="34" class="info">Contains Y and Z axes</text>
+  </g>
+
+  <!-- XZ-plane -->
+  <g transform="translate(255, 90)">
+    <polygon points="0,-20 -30,-40 -30,0 0,20" fill="#16a34a" fill-opacity="0.15" stroke="#16a34a" stroke-width="1" />
+    <!-- Axes -->
+    <line x1="-15" y1="0" x2="25" y2="0" class="axis" marker-end="url(#a11)" />
+    <text x="30" y="3" class="axis-label" fill="#374151">X</text>
+    <line x1="-15" y1="0" x2="-15" y2="-50" class="axis" marker-end="url(#a11)" />
+    <text x="-15" y="-54" class="axis-label" fill="#374151" text-anchor="middle">Z</text>
+    <line x1="-15" y1="0" x2="-15" y2="20" stroke="#374151" stroke-width="1" stroke-dasharray="3 2" />
+    <text x="-15" y="28" class="axis-label" fill="#374151" text-anchor="middle">Y</text>
+    <circle cx="-15" cy="0" r="2" fill="#374151" />
+    <text x="-5" y="14" class="plane-label" fill="#16a34a">XZ-plane</text>
+    <text x="-5" y="24" class="info">(y = 0)</text>
+    <text x="-5" y="34" class="info">Contains X and Z axes</text>
+  </g>
+
+  <!-- Summary -->
+  <text x="150" y="155" class="note">XY-plane: z = 0 | YZ-plane: x = 0 | XZ-plane: y = 0</text>
+  <text x="150" y="167" class="note">A point on a plane has its perpendicular coordinate = 0</text>
+  <text x="150" y="179" class="note">A point on an axis has two coordinates = 0</text>
+
+  <text x="150" y="198" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

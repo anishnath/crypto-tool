@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .val { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; }
+      .mirror { stroke: #6b7280; stroke-width: 1; stroke-dasharray: 3 2; }
+      .formula { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="mc-arr" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L5,2.5 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Modulus and Conjugate of a Complex Number</text>
+
+  <g transform="translate(150, 90)">
+    <!-- Axes -->
+    <line x1="-100" y1="0" x2="100" y2="0" class="axis" marker-end="url(#mc-arr)" />
+    <line x1="0" y1="65" x2="0" y2="-65" class="axis" marker-end="url(#mc-arr)" />
+    <text x="96" y="14" class="label" fill="#374151" font-weight="bold">Re</text>
+    <text x="8" y="-58" class="label" fill="#374151" font-weight="bold">Im</text>
+
+    <!-- z = a + ib -->
+    <circle cx="60" cy="-45" r="5" fill="#2563eb" />
+    <text x="72" y="-48" class="val" fill="#2563eb">z = a+ib</text>
+
+    <!-- z̄ = a - ib (reflection) -->
+    <circle cx="60" cy="45" r="5" fill="#dc2626" />
+    <text x="72" y="52" class="val" fill="#dc2626">z&#x0304; = a&#x2212;ib</text>
+
+    <!-- Mirror line (real axis highlighted) -->
+    <line x1="-90" y1="0" x2="90" y2="0" stroke="#d97706" stroke-width="3" opacity="0.2" />
+    <text x="-75" y="-6" class="label" fill="#d97706" font-weight="bold">mirror line</text>
+
+    <!-- Reflection arrow -->
+    <line x1="60" y1="-40" x2="60" y2="40" class="mirror" />
+    <text x="52" y="0" class="label" fill="#6b7280" font-size="8">reflect</text>
+
+    <!-- Modulus from origin to z -->
+    <line x1="0" y1="0" x2="60" y2="-45" stroke="#16a34a" stroke-width="2" />
+    <text x="22" y="-28" class="val" fill="#16a34a" font-size="9">|z|</text>
+
+    <!-- Modulus from origin to z̄ (same length) -->
+    <line x1="0" y1="0" x2="60" y2="45" stroke="#16a34a" stroke-width="2" stroke-dasharray="4 2" />
+    <text x="22" y="32" class="val" fill="#16a34a" font-size="9">|z&#x0304;|</text>
+
+    <!-- a projection -->
+    <line x1="60" y1="-45" x2="60" y2="0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3 2" />
+    <text x="60" y="10" class="label" fill="#374151" text-anchor="middle">a</text>
+
+    <!-- b labels -->
+    <text x="66" y="-22" class="label" fill="#2563eb">b</text>
+    <text x="66" y="28" class="label" fill="#dc2626">&#x2212;b</text>
+
+    <!-- Origin -->
+    <circle cx="0" cy="0" r="2.5" fill="#374151" />
+    <text x="-8" y="12" class="label" font-weight="bold">O</text>
+  </g>
+
+  <!-- Formulas -->
+  <rect x="15" y="148" width="130" height="22" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1" />
+  <text x="80" y="162" class="formula" fill="#16a34a" font-weight="bold">|z| = &#x221A;(a&#xB2;+b&#xB2;)</text>
+
+  <rect x="155" y="148" width="130" height="22" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1" />
+  <text x="220" y="162" class="formula" fill="#dc2626" font-weight="bold">z&#x0304; = a &#x2212; ib (flip sign of Im)</text>
+
+  <text x="150" y="178" class="note">|z| = |z&#x0304;| (same distance from origin) | z &#xB7; z&#x0304; = |z|&#xB2;</text>
+
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

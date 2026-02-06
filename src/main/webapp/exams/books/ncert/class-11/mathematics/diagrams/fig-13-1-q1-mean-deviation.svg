@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 2; }
+      .tick { stroke: #374151; stroke-width: 1.5; }
+      .point { fill: #2563eb; }
+      .mean-line { stroke: #dc2626; stroke-width: 2; stroke-dasharray: 4 3; }
+      .dev-line { stroke: #f59e0b; stroke-width: 1.5; }
+      .dev-arrow { fill: #f59e0b; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .mean-label { font-family: Arial, sans-serif; font-size: 10px; fill: #dc2626; font-weight: bold; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .dev-label { font-family: Arial, sans-serif; font-size: 8px; fill: #d97706; text-anchor: middle; }
+    </style>
+    <marker id="arr-l" markerWidth="5" markerHeight="5" refX="0" refY="2.5" orient="auto">
+      <path d="M5,0 L5,5 L0,2.5 z" class="dev-arrow" />
+    </marker>
+    <marker id="arr-r" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L5,2.5 z" class="dev-arrow" />
+    </marker>
+    <marker id="ax-end" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Mean Deviation About the Mean</text>
+
+  <g transform="translate(25, 55)">
+    <!-- Number line -->
+    <line x1="0" y1="0" x2="255" y2="0" class="axis" marker-end="url(#ax-end)" />
+
+    <!-- Mean line (vertical dashed) -->
+    <line x1="130" y1="-30" x2="130" y2="12" class="mean-line" />
+    <text x="130" y="24" class="mean-label">x&#x0304; (mean)</text>
+
+    <!-- Data points -->
+    <circle cx="30" cy="0" r="5" class="point" />
+    <circle cx="65" cy="0" r="5" class="point" />
+    <circle cx="105" cy="0" r="5" class="point" />
+    <circle cx="155" cy="0" r="5" class="point" />
+    <circle cx="200" cy="0" r="5" class="point" />
+    <circle cx="240" cy="0" r="5" class="point" />
+
+    <!-- Point labels -->
+    <text x="30" y="-12" class="label">x&#x2081;</text>
+    <text x="65" y="-12" class="label">x&#x2082;</text>
+    <text x="105" y="-12" class="label">x&#x2083;</text>
+    <text x="155" y="-12" class="label">x&#x2084;</text>
+    <text x="200" y="-12" class="label">x&#x2085;</text>
+    <text x="240" y="-12" class="label">x&#x2086;</text>
+
+    <!-- Deviation arrows (below the line) -->
+    <line x1="35" y1="14" x2="125" y2="14" class="dev-line" marker-start="url(#arr-l)" marker-end="url(#arr-r)" />
+    <text x="80" y="24" class="dev-label">|x&#x2081; - x&#x0304;|</text>
+
+    <line x1="135" y1="14" x2="195" y2="14" class="dev-line" marker-start="url(#arr-l)" marker-end="url(#arr-r)" />
+    <text x="165" y="24" class="dev-label">|x&#x2085; - x&#x0304;|</text>
+  </g>
+
+  <!-- Formula -->
+  <text x="150" y="105" class="formula">M.D.(x&#x0304;) = (1/n) &#x2211; |x&#x1D62; - x&#x0304;|</text>
+  <text x="150" y="118" font-family="Arial, sans-serif" font-size="9" fill="#6b7280" text-anchor="middle">Average of absolute deviations from the mean</text>
+
+  <text x="150" y="130" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

@@ -1,0 +1,41 @@
+{
+  "ex-8-1-q1": {
+    "title": "a_n = n(n + 2) as f(x) = x\u00b2 + 2x",
+    "xDomain": [0, 10],
+    "yDomain": [-5, 120],
+    "data": [
+      { "fn": "x^2 + 2*x", "color": "#6366f1", "label": "f(x) = x\u00b2 + 2x" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "a\u2081 = 3" },
+      { "x": 5, "text": "a\u2085 = 35" },
+      { "x": 10, "text": "a\u2081\u2080 = 120" }
+    ]
+  },
+  "ex-8-2-q1": {
+    "title": "GP: 5/2, 5/4, 5/8, ... \u2192 f(x) = (5/2)\u00b7(1/2)^(x-1)",
+    "xDomain": [0, 10],
+    "yDomain": [-0.5, 3],
+    "data": [
+      { "fn": "2.5 * (0.5)^(x - 1)", "color": "#6366f1", "label": "f(x) = 2.5 \u00d7 0.5^(x-1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "a\u2081 = 5/2" },
+      { "x": 2, "text": "a\u2082 = 5/4" },
+      { "x": 3, "text": "a\u2083 = 5/8" }
+    ]
+  },
+  "ex-8-2-q30": {
+    "title": "Bacteria doubling: f(t) = 30 \u00d7 2^t",
+    "xDomain": [0, 8],
+    "yDomain": [-100, 8000],
+    "data": [
+      { "fn": "30 * 2^x", "color": "#ef4444", "label": "f(t) = 30 \u00d7 2\u1d57" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Initial: 30 bacteria" },
+      { "x": 5, "text": "t=5: 960" },
+      { "x": 8, "text": "t=8: 7680" }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130">
+  <defs>
+    <style>
+      .face { fill: #ffffff; stroke: #374151; stroke-width: 2; rx: 4; }
+      .face-1 { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; rx: 4; }
+      .face-2 { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 4; }
+      .face-3 { fill: #fef3c7; stroke: #d97706; stroke-width: 2; rx: 4; }
+      .num { font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; text-anchor: middle; }
+      .count { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .info { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Q3: Non-Standard Die — Face Distribution</text>
+
+  <!-- 6 die faces in a row -->
+  <g transform="translate(18, 28)">
+    <!-- Face 1 (first) -->
+    <rect x="0" y="0" width="40" height="40" class="face-1" />
+    <text x="20" y="29" class="num" fill="#2563eb">1</text>
+
+    <!-- Face 1 (second) -->
+    <rect x="46" y="0" width="40" height="40" class="face-1" />
+    <text x="66" y="29" class="num" fill="#2563eb">1</text>
+
+    <!-- Face 2 (first) -->
+    <rect x="92" y="0" width="40" height="40" class="face-2" />
+    <text x="112" y="29" class="num" fill="#16a34a">2</text>
+
+    <!-- Face 2 (second) -->
+    <rect x="138" y="0" width="40" height="40" class="face-2" />
+    <text x="158" y="29" class="num" fill="#16a34a">2</text>
+
+    <!-- Face 2 (third) -->
+    <rect x="184" y="0" width="40" height="40" class="face-2" />
+    <text x="204" y="29" class="num" fill="#16a34a">2</text>
+
+    <!-- Face 3 -->
+    <rect x="230" y="0" width="40" height="40" class="face-3" />
+    <text x="250" y="29" class="num" fill="#d97706">3</text>
+  </g>
+
+  <!-- Count labels -->
+  <text x="60" y="82" class="count">2 faces</text>
+  <text x="168" y="82" class="count">3 faces</text>
+  <text x="268" y="82" class="count">1 face</text>
+
+  <!-- Bracket lines -->
+  <line x1="28" y1="72" x2="96" y2="72" stroke="#6b7280" stroke-width="1" />
+  <line x1="120" y1="72" x2="222" y2="72" stroke="#6b7280" stroke-width="1" />
+
+  <!-- Probability setup -->
+  <text x="150" y="100" class="info">Total outcomes = 6 faces</text>
+  <text x="150" y="114" class="info">P(1) = 2/6, P(2) = 3/6, P(3) = 1/6</text>
+
+  <text x="150" y="128" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

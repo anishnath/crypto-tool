@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130">
+  <defs>
+    <style>
+      .interval { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; rx: 4; }
+      .mark-dot { fill: #dc2626; }
+      .arrow { stroke: #6b7280; stroke-width: 1; fill: none; }
+      .arrow-head { fill: #6b7280; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .bound { font-family: Arial, sans-serif; font-size: 9px; fill: #2563eb; text-anchor: middle; font-weight: bold; }
+      .mark { font-family: Arial, sans-serif; font-size: 10px; fill: #dc2626; text-anchor: middle; font-weight: bold; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="darrow" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto">
+      <path d="M0,0 L3,6 L6,0" fill="none" stroke="#6b7280" stroke-width="1" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Class Interval &#x2192; Class Mark (Mid-point)</text>
+
+  <!-- Three example intervals -->
+  <g transform="translate(0, 30)">
+    <!-- Interval 1 -->
+    <rect x="15" y="8" width="75" height="30" class="interval" />
+    <text x="15" y="5" class="bound">a</text>
+    <text x="90" y="5" class="bound">b</text>
+    <text x="52" y="28" class="label">Class Interval</text>
+    <line x1="52" y1="38" x2="52" y2="52" stroke="#6b7280" stroke-width="1" />
+    <polygon points="48,52 56,52 52,58" class="arrow-head" />
+    <circle cx="52" cy="64" r="4" class="mark-dot" />
+    <text x="52" y="78" class="mark">(a+b)/2</text>
+
+    <!-- Interval 2 -->
+    <rect x="112" y="8" width="75" height="30" class="interval" />
+    <text x="112" y="5" class="bound">0</text>
+    <text x="187" y="5" class="bound">100</text>
+    <text x="150" y="28" class="label">0 — 100</text>
+    <line x1="150" y1="38" x2="150" y2="52" stroke="#6b7280" stroke-width="1" />
+    <polygon points="146,52 154,52 150,58" class="arrow-head" />
+    <circle cx="150" cy="64" r="4" class="mark-dot" />
+    <text x="150" y="78" class="mark">50</text>
+
+    <!-- Interval 3 -->
+    <rect x="210" y="8" width="75" height="30" class="interval" />
+    <text x="210" y="5" class="bound">100</text>
+    <text x="285" y="5" class="bound">200</text>
+    <text x="247" y="28" class="label">100 — 200</text>
+    <line x1="247" y1="38" x2="247" y2="52" stroke="#6b7280" stroke-width="1" />
+    <polygon points="243,52 251,52 247,58" class="arrow-head" />
+    <circle cx="247" cy="64" r="4" class="mark-dot" />
+    <text x="247" y="78" class="mark">150</text>
+  </g>
+
+  <!-- Formula -->
+  <text x="150" y="108" class="formula">Class Mark (x&#x1D62;) = (Lower Limit + Upper Limit) / 2</text>
+  <text x="150" y="120" class="note">Used as representative value for all observations in that class</text>
+
+  <text x="150" y="130" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

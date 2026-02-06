@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .val { font-family: Arial, sans-serif; font-size: 9px; font-weight: bold; }
+      .line { stroke: #2563eb; stroke-width: 2; }
+      .rise-run { stroke-dasharray: 4 3; stroke-width: 1.5; }
+      .angle-arc { fill: none; stroke: #d97706; stroke-width: 1.5; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+    </style>
+    <marker id="sl-arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Slope of a Line</text>
+
+  <g transform="translate(40, 30)">
+    <!-- Axes -->
+    <line x1="0" y1="110" x2="210" y2="110" class="axis" marker-end="url(#sl-arr)" />
+    <line x1="0" y1="110" x2="0" y2="0" class="axis" marker-end="url(#sl-arr)" />
+    <text x="215" y="114" class="label" fill="#374151">X</text>
+    <text x="-6" y="-4" class="label" fill="#374151">Y</text>
+
+    <!-- The line -->
+    <line x1="20" y1="95" x2="180" y2="25" class="line" />
+
+    <!-- Points -->
+    <circle cx="50" cy="82" r="4" fill="#2563eb" />
+    <text x="42" y="78" class="val" fill="#2563eb">P&#x2081;</text>
+
+    <circle cx="150" cy="38" r="4" fill="#2563eb" />
+    <text x="158" y="34" class="val" fill="#2563eb">P&#x2082;</text>
+
+    <!-- Rise line (vertical) -->
+    <line x1="150" y1="82" x2="150" y2="38" stroke="#dc2626" class="rise-run" />
+    <text x="164" y="62" class="val" fill="#dc2626">rise</text>
+    <text x="164" y="72" class="label" fill="#dc2626">(y&#x2082;-y&#x2081;)</text>
+
+    <!-- Run line (horizontal) -->
+    <line x1="50" y1="82" x2="150" y2="82" stroke="#16a34a" class="rise-run" />
+    <text x="100" y="96" class="val" fill="#16a34a">run (x&#x2082;-x&#x2081;)</text>
+
+    <!-- Right angle marker -->
+    <rect x="142" y="74" width="8" height="8" fill="none" stroke="#6b7280" stroke-width="0.8" />
+
+    <!-- Angle θ -->
+    <path d="M65,110 A50,50 0 0,0 58,95" class="angle-arc" />
+    <text x="78" y="102" class="val" fill="#d97706">&#x3B8;</text>
+  </g>
+
+  <!-- Formulas -->
+  <text x="150" y="152" class="formula">Slope m = rise/run = (y&#x2082;-y&#x2081;)/(x&#x2082;-x&#x2081;) = tan &#x3B8;</text>
+  <text x="150" y="165" class="note">&#x3B8; = angle the line makes with the positive x-axis</text>
+  <text x="150" y="175" class="note">m &gt; 0: line rises | m &lt; 0: line falls | m = 0: horizontal | m = undefined: vertical</text>
+
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

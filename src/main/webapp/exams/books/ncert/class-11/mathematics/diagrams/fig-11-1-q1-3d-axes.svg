@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220">
+  <defs>
+    <style>
+      .axis-x { stroke: #2563eb; stroke-width: 2; }
+      .axis-y { stroke: #dc2626; stroke-width: 2; }
+      .axis-z { stroke: #16a34a; stroke-width: 2; }
+      .label { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .coord { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .dash { stroke-dasharray: 4 3; stroke-width: 1; }
+      .point { fill: #d97706; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="ax" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="currentColor" />
+    </marker>
+    <marker id="ax-b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2563eb" />
+    </marker>
+    <marker id="ax-r" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#dc2626" />
+    </marker>
+    <marker id="ax-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">3D Coordinate System</text>
+
+  <g transform="translate(150, 120)">
+    <!-- X-axis (going right-forward, isometric) -->
+    <line x1="0" y1="0" x2="110" y2="55" class="axis-x" marker-end="url(#ax-b)" />
+    <text x="120" y="62" class="label" fill="#2563eb">X</text>
+
+    <!-- Y-axis (going right) -->
+    <line x1="0" y1="0" x2="120" y2="0" class="axis-y" marker-end="url(#ax-r)" />
+    <text x="132" y="4" class="label" fill="#dc2626">Y</text>
+
+    <!-- Z-axis (going up) -->
+    <line x1="0" y1="0" x2="0" y2="-95" class="axis-z" marker-end="url(#ax-g)" />
+    <text x="0" y="-100" class="label" fill="#16a34a">Z</text>
+
+    <!-- Origin label -->
+    <text x="-12" y="14" class="coord" font-weight="bold">O</text>
+
+    <!-- Example point P(x,y,z) -->
+    <circle cx="75" cy="-38" r="5" class="point" />
+    <text x="75" y="-48" class="label" fill="#d97706" text-anchor="middle">P(x, y, z)</text>
+
+    <!-- Dashed projection lines -->
+    <!-- Down to XY plane -->
+    <line x1="75" y1="-38" x2="75" y2="18" stroke="#d97706" class="dash" />
+    <!-- Foot on XY plane -->
+    <circle cx="75" cy="18" r="2.5" fill="#d97706" opacity="0.4" />
+    <text x="86" y="30" class="coord" fill="#d97706">P'(x, y, 0)</text>
+
+    <!-- From foot to X-axis -->
+    <line x1="75" y1="18" x2="42" y2="38" stroke="#6b7280" class="dash" />
+    <!-- From foot to Y-axis -->
+    <line x1="75" y1="18" x2="58" y2="0" stroke="#6b7280" class="dash" />
+
+    <!-- Z-component bracket -->
+    <line x1="80" y1="-38" x2="80" y2="18" stroke="#16a34a" stroke-width="1" />
+    <text x="92" y="-8" class="coord" fill="#16a34a">z</text>
+  </g>
+
+  <text x="150" y="195" class="note">Every point in 3D space is uniquely located by three coordinates (x, y, z)</text>
+  <text x="150" y="207" class="note">x = distance along X, y = distance along Y, z = distance along Z</text>
+
+  <text x="150" y="220" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

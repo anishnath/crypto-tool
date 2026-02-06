@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .line { stroke: #059669; stroke-width: 1; stroke-dasharray: 4 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q4: Parabola x² = -16y</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 15px, Origin at 150, 100) -->
+  <!-- Focus (0, -4). a=4. -->
+  <g transform="translate(150, 100)">
+    <!-- Axes -->
+    <line x1="-130" y1="0" x2="130" y2="0" class="axis" marker-end="url(#arrow)" /> <!-- X -->
+    <line x1="0" y1="50" x2="0" y2="-180" class="axis" marker-end="url(#arrow)" /> <!-- Y --> <!-- wait, axis direction SVG Y is down positive. Math is Up positive. -->
+    <!-- Math Y: Up. SVG Y: Down. -->
+    <!-- Origin (150, 100). -->
+    <!-- Positive Math Y goes UP (negative SVG Y). -->
+    <!-- Focus at Math (0,-4) -> SVG (0, 4*15) = (0, 60). -->
+    <!-- Parabola opens Down (Math) -> SVG Up (Positive Y). -->
+    <!-- x^2 = -16y. y = -x^2/16. For math. -->
+    <!-- SVG coords: Y_svg = -Y_math. -->
+    <!-- -Y_svg = -x^2/16 => Y_svg = x^2/16. -->
+    <!-- So in SVG coords this opens Downwards (positive Y). -->
+    
+    <!-- Axes correction for display -->
+    <!-- X axis is fine. Y axis: Math +Y is Up (-SVG Y). -->
+    <line x1="0" y1="-80" x2="0" y2="180" class="axis" marker-end="url(#arrow)" />
+    
+    <text x="120" y="15" class="label">X</text>
+    <text x="5" y="-70" class="label">Y</text>
+    <text x="5" y="15" class="label">O</text>
+    
+    <!-- Parabola Math: y = -x^2/16. SVG: Y = X^2/16 -->
+    <!-- Scale 15. X values: -->
+    <!-- x=4 -> Y = 16/16 = 1 -> (60, 15) -->
+    <!-- x=8 -> Y = 64/16 = 4 -> (120, 60) -->
+    <path d="M -120,60 L -90,33.75 L -60,15 L -30,3.75 L 0,0 L 30,3.75 L 60,15 L 90,33.75 L 120,60" fill="none" class="curve" /> 
+    
+    <!-- Focus (0, -4) Math -> (0, 60) SVG -->
+    <circle cx="0" cy="60" r="3" class="point" />
+    <text x="5" y="75" class="label">F(0,-4)</text>
+    
+    <!-- Directrix y = 4 Math -> Y = -60 SVG -->
+    <line x1="-130" y1="-60" x2="130" y2="-60" class="line" />
+    <text x="80" y="-65" class="label" fill="#059669">Dir: y = 4</text>
+    
+    <!-- Latus Rectum: y=-4, x=8 and x=-8 -->
+    <!-- SVG: Y=60, X=120 and X=-120 -->
+    <line x1="-120" y1="60" x2="120" y2="60" stroke="#dc2626" stroke-width="1.5" />
+    <text x="125" y="65" class="label">(8,-4)</text>
+    <text x="-145" y="65" class="label">(-8,-4)</text>
+
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

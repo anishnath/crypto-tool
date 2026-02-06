@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 170">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .val { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; }
+      .line { stroke: #2563eb; stroke-width: 2; }
+      .perp { stroke: #dc2626; stroke-width: 2; stroke-dasharray: 5 3; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="pd-arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Distance from a Point to a Line</text>
+
+  <g transform="translate(40, 28)">
+    <!-- Axes -->
+    <line x1="0" y1="100" x2="210" y2="100" class="axis" marker-end="url(#pd-arr)" />
+    <line x1="0" y1="100" x2="0" y2="0" class="axis" marker-end="url(#pd-arr)" />
+    <text x="215" y="104" class="label" fill="#374151" font-weight="bold">X</text>
+    <text x="-6" y="-4" class="label" fill="#374151" font-weight="bold">Y</text>
+
+    <!-- The line Ax + By + C = 0 -->
+    <line x1="20" y1="15" x2="200" y2="90" class="line" />
+    <text x="200" y="84" class="val" fill="#2563eb" text-anchor="start">L: Ax+By+C=0</text>
+
+    <!-- The point P -->
+    <circle cx="60" cy="70" r="5" fill="#dc2626" />
+    <text x="50" y="66" class="val" fill="#dc2626">P(x&#x2081;,y&#x2081;)</text>
+
+    <!-- Perpendicular from P to line -->
+    <line x1="60" y1="70" x2="100" y2="42" class="perp" />
+
+    <!-- Foot of perpendicular -->
+    <circle cx="100" cy="42" r="3" fill="#d97706" />
+    <text x="112" y="40" class="label" fill="#d97706" font-weight="bold">M (foot)</text>
+
+    <!-- d label on perpendicular -->
+    <text x="72" y="50" class="val" fill="#dc2626">d</text>
+
+    <!-- Right angle marker -->
+    <rect x="94" y="42" width="6" height="6" fill="none" stroke="#6b7280" stroke-width="0.8" transform="rotate(27, 97, 45)" />
+  </g>
+
+  <!-- Formula -->
+  <rect x="30" y="132" width="240" height="22" rx="4" fill="#fee2e2" fill-opacity="0.3" stroke="#dc2626" stroke-width="1" />
+  <text x="150" y="147" class="formula" font-weight="bold">d = |Ax&#x2081; + By&#x2081; + C| / &#x221A;(A&#xB2; + B&#xB2;)</text>
+
+  <text x="150" y="165" class="note">Shortest distance is always along the perpendicular</text>
+
+  <text x="150" y="170" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

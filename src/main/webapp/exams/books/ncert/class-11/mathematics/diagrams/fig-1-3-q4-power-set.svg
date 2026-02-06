@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 170">
+  <defs>
+    <style>
+      .node { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; rx: 4; }
+      .node-top { fill: #bfdbfe; stroke: #2563eb; stroke-width: 2; rx: 4; }
+      .node-bottom { fill: #eff6ff; stroke: #93c5fd; stroke-width: 1.5; rx: 4; }
+      .link { stroke: #93c5fd; stroke-width: 1; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .size-label { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Q4(iii): All Subsets of {1, 2, 3} — Power Set (2&#xB3; = 8)</text>
+
+  <!-- Size labels on left -->
+  <text x="10" y="42" class="size-label">3 elem:</text>
+  <text x="10" y="72" class="size-label">2 elem:</text>
+  <text x="10" y="107" class="size-label">1 elem:</text>
+  <text x="10" y="140" class="size-label">0 elem:</text>
+
+  <!-- Level 0: Full set {1,2,3} -->
+  <rect x="112" y="28" width="76" height="20" class="node-top" />
+  <text x="150" y="42" class="label" font-weight="bold">{1, 2, 3}</text>
+
+  <!-- Lines from top to 2-element sets -->
+  <line x1="130" y1="48" x2="80" y2="60" class="link" />
+  <line x1="150" y1="48" x2="150" y2="60" class="link" />
+  <line x1="170" y1="48" x2="220" y2="60" class="link" />
+
+  <!-- Level 1: 2-element subsets -->
+  <rect x="48" y="60" width="62" height="20" class="node" />
+  <text x="79" y="74" class="label">{1, 2}</text>
+
+  <rect x="119" y="60" width="62" height="20" class="node" />
+  <text x="150" y="74" class="label">{1, 3}</text>
+
+  <rect x="190" y="60" width="62" height="20" class="node" />
+  <text x="221" y="74" class="label">{2, 3}</text>
+
+  <!-- Lines from 2-element to 1-element sets -->
+  <line x1="65" y1="80" x2="65" y2="93" class="link" />
+  <line x1="90" y1="80" x2="150" y2="93" class="link" />
+  <line x1="135" y1="80" x2="65" y2="93" class="link" />
+  <line x1="165" y1="80" x2="235" y2="93" class="link" />
+  <line x1="207" y1="80" x2="150" y2="93" class="link" />
+  <line x1="235" y1="80" x2="235" y2="93" class="link" />
+
+  <!-- Level 2: 1-element subsets -->
+  <rect x="40" y="93" width="50" height="20" class="node" />
+  <text x="65" y="107" class="label">{1}</text>
+
+  <rect x="125" y="93" width="50" height="20" class="node" />
+  <text x="150" y="107" class="label">{2}</text>
+
+  <rect x="210" y="93" width="50" height="20" class="node" />
+  <text x="235" y="107" class="label">{3}</text>
+
+  <!-- Lines to empty set -->
+  <line x1="65" y1="113" x2="150" y2="126" class="link" />
+  <line x1="150" y1="113" x2="150" y2="126" class="link" />
+  <line x1="235" y1="113" x2="150" y2="126" class="link" />
+
+  <!-- Level 3: Empty set -->
+  <rect x="128" y="126" width="44" height="20" class="node-bottom" />
+  <text x="150" y="140" class="label">&#x3D5;</text>
+
+  <text x="150" y="165" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

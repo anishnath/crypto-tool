@@ -1,0 +1,128 @@
+{
+  "ex-12-1-q1": {
+    "title": "f(x) = x + 3",
+    "xDomain": [-2, 8],
+    "yDomain": [-1, 12],
+    "data": [
+      { "fn": "x + 3", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "lim x→3 = 6" }
+    ]
+  },
+  "ex-12-1-q3": {
+    "title": "f(r) = πr²",
+    "xDomain": [-1, 4],
+    "yDomain": [-2, 40],
+    "data": [
+      { "fn": "3.14159 * x^2", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "lim r→1 = π" }
+    ]
+  },
+  "ex-12-1-q4": {
+    "title": "f(x) = (4x + 3)/(x - 2)",
+    "xDomain": [-5, 10],
+    "yDomain": [-30, 30],
+    "data": [
+      { "fn": "(4x + 3)/(x - 2)", "color": "#6366f1", "range": [-5, 1.99] },
+      { "fn": "(4x + 3)/(x - 2)", "color": "#6366f1", "range": [2.01, 10] }
+    ],
+    "annotations": [
+      { "x": 4, "text": "lim x→4 = 19/2" }
+    ]
+  },
+  "ex-12-1-q6": {
+    "title": "f(x) = [(x+1)⁵ - 1] / x",
+    "xDomain": [-3, 3],
+    "yDomain": [-5, 20],
+    "data": [
+      { "fn": "((x+1)^5 - 1) / x", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "lim x→0 = 5" }
+    ]
+  },
+  "ex-12-1-q7": {
+    "title": "f(x) = (3x² - x - 10)/(x² - 4)",
+    "xDomain": [-4, 6],
+    "yDomain": [-5, 10],
+    "data": [
+      { "fn": "(3*x^2 - x - 10)/(x^2 - 4)", "color": "#6366f1", "range": [-4, 1.99] },
+      { "fn": "(3*x^2 - x - 10)/(x^2 - 4)", "color": "#6366f1", "range": [2.01, 6] }
+    ],
+    "annotations": [
+      { "x": 2, "text": "lim x→2 = 11/4" }
+    ]
+  },
+  "ex-12-1-q13": {
+    "title": "f(x) = sin(ax)/bx → a/b as x→0",
+    "xDomain": [-6, 6],
+    "yDomain": [-1, 3],
+    "data": [
+      { "fn": "sin(2*x) / (3*x)", "color": "#6366f1", "label": "sin(2x)/(3x), a=2,b=3" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "lim x→0 = 2/3" }
+    ]
+  },
+  "ex-12-1-q14": {
+    "title": "f(x) = sin(ax)/sin(bx) → a/b as x→0",
+    "xDomain": [-6, 6],
+    "yDomain": [-3, 5],
+    "data": [
+      { "fn": "sin(2*x) / sin(3*x)", "color": "#6366f1", "label": "sin(2x)/sin(3x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "lim x→0 = 2/3" }
+    ]
+  },
+  "ex-12-2-q1": {
+    "title": "f(x) = x² - 2 and its derivative f'(x) = 2x",
+    "xDomain": [-5, 15],
+    "yDomain": [-10, 30],
+    "data": [
+      { "fn": "x^2 - 2", "color": "#6366f1", "label": "f(x) = x² - 2" },
+      { "fn": "2*x", "color": "#22c55e", "label": "f'(x) = 2x" }
+    ],
+    "annotations": [
+      { "x": 10, "text": "f'(10) = 20" }
+    ]
+  },
+  "ex-12-2-q10": {
+    "title": "cos(x) and its derivative -sin(x)",
+    "xDomain": [-6.28, 6.28],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "cos(x)", "color": "#6366f1", "label": "f(x) = cos(x)" },
+      { "fn": "-sin(x)", "color": "#22c55e", "label": "f'(x) = -sin(x)" }
+    ]
+  },
+  "misc-q14": {
+    "title": "sin(x + a) and its derivative cos(x + a)",
+    "xDomain": [-6.28, 6.28],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "sin(x + 1)", "color": "#6366f1", "label": "sin(x+1)" },
+      { "fn": "cos(x + 1)", "color": "#22c55e", "label": "cos(x+1) [derivative]" }
+    ]
+  },
+  "misc-q17": {
+    "title": "sin(x) + cos(x) and its derivative cos(x) - sin(x)",
+    "xDomain": [-6.28, 6.28],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "sin(x) + cos(x)", "color": "#6366f1", "label": "f(x) = sin(x) + cos(x)" },
+      { "fn": "cos(x) - sin(x)", "color": "#22c55e", "label": "f'(x) = cos(x) - sin(x)" }
+    ]
+  },
+  "misc-q15": {
+    "title": "csc(x)·cot(x) and its derivative",
+    "xDomain": [-6.28, 6.28],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "(1/sin(x)) * (cos(x)/sin(x))", "color": "#6366f1", "label": "csc(x)·cot(x)" }
+    ]
+  }
+}

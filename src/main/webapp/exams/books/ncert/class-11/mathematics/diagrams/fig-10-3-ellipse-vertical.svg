@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .line { stroke: #059669; stroke-width: 1; stroke-dasharray: 4 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Vertical Ellipse</text>
+  <text x="150" y="35" class="title" font-weight="normal" font-size="10">x²/4 + y²/25 = 1</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 20px, Center at 150, 150) -->
+  <g transform="translate(150, 150)">
+    <!-- Axes -->
+    <line x1="-100" y1="0" x2="100" y2="0" class="axis" marker-end="url(#arrow)" /> <!-- X -->
+    <line x1="0" y1="140" x2="0" y2="-140" class="axis" marker-end="url(#arrow)" /> <!-- Y -->
+    <text x="90" y="15" class="label">X</text>
+    <text x="5" y="-130" class="label">Y</text>
+    <text x="-15" y="15" class="label">O</text>
+    
+    <!-- Ellipse: a=5 (100px - vertical), b=2 (40px - horizontal) -->
+    <ellipse cx="0" cy="0" rx="40" ry="100" class="curve" />
+    
+    <!-- Foci: c = sqrt(25-4) = sqrt(21) approx 4.58 -->
+    <!-- 4.58 * 20 = 91.6 -->
+    <!-- Note: Y axis goes down is positive in SVG usually, but I want standard math coords. -->
+    <!-- SVG coords: y positive is DOWN. So Foci at (0, -c) and (0, +c) for visual up/down. -->
+    <!-- Visual Up (-y in svg): (0, -91.6). Visual Down (+y in svg): (0, 91.6). -->
+    <circle cx="0" cy="-91.6" r="3" class="point" />
+    <circle cx="0" cy="91.6" r="3" class="point" />
+    <text x="5" y="-91.6" class="label">F₁(0, c)</text>
+    <text x="5" y="91.6" class="label">F₂(0, -c)</text>
+
+    <!-- Vertices: a=5 -> 100px -->
+    <circle cx="0" cy="-100" r="3" class="point" />
+    <circle cx="0" cy="100" r="3" class="point" />
+    <text x="5" y="-105" class="label">A(0,5)</text>
+    <text x="5" y="110" class="label">A'(0,-5)</text>
+    
+    <!-- Minor Axis Endpoints: b=2 -> 40px -->
+    <circle cx="40" cy="0" r="3" class="point" />
+    <circle cx="-40" cy="0" r="3" class="point" />
+    <text x="40" y="15" class="label">B(2,0)</text>
+    <text x="-55" y="15" class="label">B'(-2,0)</text>
+
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

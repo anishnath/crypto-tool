@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 170">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 8px; fill: #4b5563; text-anchor: middle; }
+      .axis-label { font-family: Arial, sans-serif; font-size: 9px; fill: #374151; font-weight: bold; text-anchor: middle; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .dot { fill: #2563eb; }
+      .bar { fill: #dbeafe; stroke: #2563eb; stroke-width: 1; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .val { font-family: Arial, sans-serif; font-size: 7px; fill: #2563eb; text-anchor: middle; font-weight: bold; }
+    </style>
+    <marker id="eg-arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Exponential Growth (Doubling)</text>
+
+  <g transform="translate(45, 30)">
+    <!-- Axes -->
+    <line x1="0" y1="100" x2="220" y2="100" class="axis" marker-end="url(#eg-arr)" />
+    <line x1="0" y1="100" x2="0" y2="0" class="axis" marker-end="url(#eg-arr)" />
+
+    <text x="110" y="118" class="axis-label">Time (n)</text>
+    <text x="-8" y="50" class="axis-label" transform="rotate(-90, -8, 50)">Amount</text>
+
+    <!-- Bars showing doubling -->
+    <rect x="10" y="94" width="20" height="6" class="bar" />
+    <text x="20" y="108" class="label">0</text>
+    <text x="20" y="91" class="val">a</text>
+
+    <rect x="45" y="88" width="20" height="12" class="bar" />
+    <text x="55" y="108" class="label">1</text>
+    <text x="55" y="85" class="val">2a</text>
+
+    <rect x="80" y="76" width="20" height="24" class="bar" />
+    <text x="90" y="108" class="label">2</text>
+    <text x="90" y="73" class="val">4a</text>
+
+    <rect x="115" y="52" width="20" height="48" class="bar" />
+    <text x="125" y="108" class="label">3</text>
+    <text x="125" y="49" class="val">8a</text>
+
+    <rect x="150" y="4" width="20" height="96" class="bar" fill="#bfdbfe" />
+    <text x="160" y="108" class="label">4</text>
+    <text x="160" y="0" class="val">16a</text>
+
+    <!-- Exponential curve overlay -->
+    <path d="M20,94 Q55,90 90,76 Q125,52 160,4" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-dasharray="4 2" />
+  </g>
+
+  <text x="150" y="145" class="formula">After n periods: Amount = a &#xB7; 2&#x207F; (G.P. with r = 2)</text>
+  <text x="150" y="158" class="note">Exponential growth: small early, then rapid increase</text>
+
+  <text x="150" y="170" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

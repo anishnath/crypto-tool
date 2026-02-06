@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .grid { stroke: #e5e7eb; stroke-width: 0.5; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .val { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; }
+      .proj { stroke-dasharray: 4 3; stroke-width: 1; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="cp-arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">The Argand Plane (Complex Number Plane)</text>
+
+  <g transform="translate(130, 95)">
+    <!-- Grid -->
+    <line x1="-100" y1="-60" x2="130" y2="-60" class="grid" />
+    <line x1="-100" y1="-30" x2="130" y2="-30" class="grid" />
+    <line x1="-100" y1="30" x2="130" y2="30" class="grid" />
+    <line x1="-100" y1="60" x2="130" y2="60" class="grid" />
+    <line x1="-60" y1="-70" x2="-60" y2="70" class="grid" />
+    <line x1="-30" y1="-70" x2="-30" y2="70" class="grid" />
+    <line x1="30" y1="-70" x2="30" y2="70" class="grid" />
+    <line x1="60" y1="-70" x2="60" y2="70" class="grid" />
+    <line x1="90" y1="-70" x2="90" y2="70" class="grid" />
+    <line x1="120" y1="-70" x2="120" y2="70" class="grid" />
+
+    <!-- Axes -->
+    <line x1="-105" y1="0" x2="135" y2="0" class="axis" marker-end="url(#cp-arr)" />
+    <line x1="0" y1="75" x2="0" y2="-75" class="axis" marker-end="url(#cp-arr)" />
+
+    <!-- Axis labels -->
+    <text x="130" y="14" class="label" fill="#374151" font-weight="bold">Real (a)</text>
+    <text x="6" y="-68" class="label" fill="#374151" font-weight="bold">Imaginary (b)</text>
+
+    <!-- Tick marks -->
+    <text x="30" y="12" class="label" text-anchor="middle" font-size="7">1</text>
+    <text x="60" y="12" class="label" text-anchor="middle" font-size="7">2</text>
+    <text x="90" y="12" class="label" text-anchor="middle" font-size="7">3</text>
+    <text x="-30" y="12" class="label" text-anchor="middle" font-size="7">-1</text>
+    <text x="-60" y="12" class="label" text-anchor="middle" font-size="7">-2</text>
+    <text x="-10" y="-28" class="label" text-anchor="end" font-size="7">1i</text>
+    <text x="-10" y="-58" class="label" text-anchor="end" font-size="7">2i</text>
+    <text x="-10" y="34" class="label" text-anchor="end" font-size="7">-1i</text>
+
+    <!-- Point z = 3 + 2i -->
+    <circle cx="90" cy="-60" r="5" fill="#2563eb" />
+    <text x="100" y="-64" class="val" fill="#2563eb">z = 3+2i</text>
+
+    <!-- Projections -->
+    <line x1="90" y1="-60" x2="90" y2="0" class="proj" stroke="#dc2626" />
+    <line x1="90" y1="-60" x2="0" y2="-60" class="proj" stroke="#16a34a" />
+
+    <!-- a label -->
+    <text x="45" y="24" class="val" fill="#dc2626" text-anchor="middle" font-size="9">a = 3</text>
+
+    <!-- b label -->
+    <text x="-16" y="-28" class="val" fill="#16a34a" text-anchor="middle" font-size="9">b = 2</text>
+
+    <!-- Modulus line -->
+    <line x1="0" y1="0" x2="90" y2="-60" stroke="#d97706" stroke-width="1.5" />
+    <text x="38" y="-36" class="val" fill="#d97706" font-size="9">|z|</text>
+
+    <!-- Origin -->
+    <text x="-8" y="12" class="label" font-weight="bold">O</text>
+  </g>
+
+  <text x="150" y="165" class="formula">z = a + ib is plotted as point (a, b) on the Argand plane</text>
+  <text x="150" y="177" class="note">Real part on x-axis, Imaginary part on y-axis</text>
+
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

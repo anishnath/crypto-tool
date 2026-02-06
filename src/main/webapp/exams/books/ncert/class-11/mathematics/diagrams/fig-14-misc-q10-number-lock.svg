@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130">
+  <defs>
+    <style>
+      .wheel { fill: #f3f4f6; stroke: #374151; stroke-width: 2; rx: 6; }
+      .digit-display { fill: #1f2937; rx: 3; }
+      .digit { font-family: 'Courier New', monospace; font-size: 20px; fill: #10b981; font-weight: bold; text-anchor: middle; }
+      .wheel-label { font-family: Arial, sans-serif; font-size: 8px; fill: #9ca3af; text-anchor: middle; }
+      .digits-list { font-family: Arial, sans-serif; font-size: 7px; fill: #6b7280; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .info { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .body { fill: #e5e7eb; stroke: #9ca3af; stroke-width: 2; rx: 8; }
+      .arrow-up { font-family: Arial, sans-serif; font-size: 10px; fill: #9ca3af; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Q10: 4-Wheel Number Lock</text>
+
+  <!-- Lock body -->
+  <rect x="50" y="28" width="200" height="70" class="body" />
+
+  <!-- Wheel 1 -->
+  <g transform="translate(80, 42)">
+    <text x="0" y="-4" class="arrow-up">&#x25B2;</text>
+    <rect x="-16" y="2" width="32" height="36" class="wheel" />
+    <rect x="-12" y="12" width="24" height="18" class="digit-display" />
+    <text x="0" y="27" class="digit">?</text>
+    <text x="0" y="48" class="arrow-up">&#x25BC;</text>
+    <text x="0" y="58" class="digits-list">0-9</text>
+  </g>
+
+  <!-- Wheel 2 -->
+  <g transform="translate(125, 42)">
+    <text x="0" y="-4" class="arrow-up">&#x25B2;</text>
+    <rect x="-16" y="2" width="32" height="36" class="wheel" />
+    <rect x="-12" y="12" width="24" height="18" class="digit-display" />
+    <text x="0" y="27" class="digit">?</text>
+    <text x="0" y="48" class="arrow-up">&#x25BC;</text>
+    <text x="0" y="58" class="digits-list">0-9</text>
+  </g>
+
+  <!-- Wheel 3 -->
+  <g transform="translate(170, 42)">
+    <text x="0" y="-4" class="arrow-up">&#x25B2;</text>
+    <rect x="-16" y="2" width="32" height="36" class="wheel" />
+    <rect x="-12" y="12" width="24" height="18" class="digit-display" />
+    <text x="0" y="27" class="digit">?</text>
+    <text x="0" y="48" class="arrow-up">&#x25BC;</text>
+    <text x="0" y="58" class="digits-list">0-9</text>
+  </g>
+
+  <!-- Wheel 4 -->
+  <g transform="translate(215, 42)">
+    <text x="0" y="-4" class="arrow-up">&#x25B2;</text>
+    <rect x="-16" y="2" width="32" height="36" class="wheel" />
+    <rect x="-12" y="12" width="24" height="18" class="digit-display" />
+    <text x="0" y="27" class="digit">?</text>
+    <text x="0" y="48" class="arrow-up">&#x25BC;</text>
+    <text x="0" y="58" class="digits-list">0-9</text>
+  </g>
+
+  <text x="150" y="112" class="info">4 wheels, each 0-9, no repeats allowed</text>
+  <text x="150" y="126" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

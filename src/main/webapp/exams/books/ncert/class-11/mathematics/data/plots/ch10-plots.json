@@ -1,0 +1,314 @@
+{
+  "ex-10-1-q1": {
+    "title": "Circle: x² + (y - 2)² = 4",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "x^2 + (y - 2)^2 - 4", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Centre (0, 2)" }
+    ]
+  },
+  "ex-10-1-q2": {
+    "title": "Circle: (x + 2)² + (y - 3)² = 16",
+    "xDomain": [-9, 5],
+    "yDomain": [-4, 10],
+    "data": [
+      { "fn": "(x + 2)^2 + (y - 3)^2 - 16", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Centre (-2, 3)" }
+    ]
+  },
+  "ex-10-1-q4": {
+    "title": "Circle: (x - 1)² + (y - 1)² = 2",
+    "xDomain": [-3, 5],
+    "yDomain": [-3, 5],
+    "data": [
+      { "fn": "(x - 1)^2 + (y - 1)^2 - 2", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Centre (1, 1), r = sqrt(2)" }
+    ]
+  },
+  "ex-10-1-q6": {
+    "title": "Circle: (x + 5)² + (y - 3)² = 36",
+    "xDomain": [-14, 4],
+    "yDomain": [-6, 12],
+    "data": [
+      { "fn": "(x + 5)^2 + (y - 3)^2 - 36", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "Centre (-5, 3), r = 6" }
+    ]
+  },
+  "ex-10-1-q7": {
+    "title": "Circle: x² + y² - 4x - 8y - 45 = 0",
+    "xDomain": [-8, 12],
+    "yDomain": [-6, 14],
+    "data": [
+      { "fn": "x^2 + y^2 - 4*x - 8*y - 45", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Centre (2, 4), r = sqrt(65)" }
+    ]
+  },
+  "ex-10-1-q10": {
+    "title": "Circle through (4,1) and (6,5), centre on 4x + y = 16",
+    "xDomain": [-4, 10],
+    "yDomain": [-4, 12],
+    "data": [
+      { "fn": "(x - 3)^2 + (y - 4)^2 - 10", "fnType": "implicit", "color": "#6366f1" },
+      { "fn": "-4 * x + 16", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Centre (3, 4)" },
+      { "x": 4, "text": "(4, 1)" },
+      { "x": 6, "text": "(6, 5)" }
+    ]
+  },
+  "ex-10-1-q14": {
+    "title": "Circle: centre (2,2), through (4,5)",
+    "xDomain": [-4, 8],
+    "yDomain": [-4, 8],
+    "data": [
+      { "fn": "(x - 2)^2 + (y - 2)^2 - 13", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Centre (2, 2)" },
+      { "x": 4, "text": "(4, 5)" }
+    ]
+  },
+  "ex-10-1-q15": {
+    "title": "Point (-2.5, 3.5) vs Circle x² + y² = 25",
+    "xDomain": [-8, 8],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "x^2 + y^2 - 25", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Centre (0, 0), r = 5" },
+      { "x": -2.5, "text": "P(-2.5, 3.5) inside" }
+    ]
+  },
+  "ex-10-2-q1": {
+    "title": "Parabola: y² = 12x",
+    "xDomain": [-5, 15],
+    "yDomain": [-15, 15],
+    "data": [
+      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Focus (3, 0)" },
+      { "x": -3, "text": "Directrix x = -3" }
+    ]
+  },
+  "ex-10-2-q2": {
+    "title": "Parabola: x² = 6y",
+    "xDomain": [-10, 10],
+    "yDomain": [-3, 15],
+    "data": [
+      { "fn": "x^2 - 6 * y", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Focus (0, 3/2)" },
+      { "x": 4, "text": "Directrix y = -3/2" }
+    ]
+  },
+  "ex-10-2-q3": {
+    "title": "Parabola: y² = -8x",
+    "xDomain": [-15, 5],
+    "yDomain": [-15, 15],
+    "data": [
+      { "fn": "y^2 + 8 * x", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Focus (-2, 0)" },
+      { "x": 2, "text": "Directrix x = 2" }
+    ]
+  },
+  "ex-10-2-q4": {
+    "title": "Parabola: x² = -16y",
+    "xDomain": [-15, 15],
+    "yDomain": [-15, 5],
+    "data": [
+      { "fn": "x^2 + 16 * y", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Focus (0, -4)" },
+      { "x": 6, "text": "Directrix y = 4" }
+    ]
+  },
+  "ex-10-2-q7": {
+    "title": "Parabola: y² = 24x (focus (6,0), directrix x = -6)",
+    "xDomain": [-10, 20],
+    "yDomain": [-25, 25],
+    "data": [
+      { "fn": "y^2 - 24 * x", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 6, "text": "Focus (6, 0)" },
+      { "x": -6, "text": "Directrix x = -6" }
+    ]
+  },
+  "ex-10-2-q9": {
+    "title": "Parabola: y² = 12x (vertex (0,0), focus (3,0))",
+    "xDomain": [-5, 15],
+    "yDomain": [-15, 15],
+    "data": [
+      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Vertex (0, 0)" },
+      { "x": 3, "text": "Focus (3, 0)" }
+    ]
+  },
+  "ex-10-2-q11": {
+    "title": "Parabola: y² = (9/2)x, through (2,3)",
+    "xDomain": [-3, 12],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "y^2 - (9/2) * x", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Vertex (0, 0)" },
+      { "x": 2, "text": "(2, 3)" }
+    ]
+  },
+  "ex-10-3-q1": {
+    "title": "Ellipse: x²/36 + y²/16 = 1",
+    "xDomain": [-9, 9],
+    "yDomain": [-6, 6],
+    "data": [
+      { "fn": "x^2 / 36 + y^2 / 16 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 6, "text": "Vertex (6, 0)" },
+      { "x": -6, "text": "Vertex (-6, 0)" },
+      { "x": 4.47, "text": "Focus (2sqrt(5), 0)" }
+    ]
+  },
+  "ex-10-3-q2": {
+    "title": "Ellipse: x²/4 + y²/25 = 1",
+    "xDomain": [-5, 5],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "x^2 / 4 + y^2 / 25 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Vertices (0, +/-5)" },
+      { "x": 1, "text": "Foci (0, +/-sqrt(21))" }
+    ]
+  },
+  "ex-10-3-q10": {
+    "title": "Ellipse: x²/25 + y²/9 = 1 (vertices (+/-5,0), foci (+/-4,0))",
+    "xDomain": [-8, 8],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "Vertex (5, 0)" },
+      { "x": -5, "text": "Vertex (-5, 0)" },
+      { "x": 4, "text": "Focus (4, 0)" },
+      { "x": -4, "text": "Focus (-4, 0)" }
+    ]
+  },
+  "ex-10-3-q13": {
+    "title": "Ellipse: x²/9 + y²/4 = 1 (major (+/-3,0), minor (0,+/-2))",
+    "xDomain": [-5, 5],
+    "yDomain": [-4, 4],
+    "data": [
+      { "fn": "x^2 / 9 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Major axis end (3, 0)" },
+      { "x": -3, "text": "Major axis end (-3, 0)" }
+    ]
+  },
+  "ex-10-4-q1": {
+    "title": "Hyperbola: x²/16 - y²/9 = 1",
+    "xDomain": [-10, 10],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "x^2 / 16 - y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fn": "(3/4) * x", "color": "#a3a3a3", "skipTip": true },
+      { "fn": "-(3/4) * x", "color": "#a3a3a3", "skipTip": true }
+    ],
+    "annotations": [
+      { "x": 4, "text": "Vertex (4, 0)" },
+      { "x": -4, "text": "Vertex (-4, 0)" },
+      { "x": 5, "text": "Focus (5, 0)" }
+    ]
+  },
+  "ex-10-4-q7": {
+    "title": "Hyperbola: x²/4 - y²/5 = 1 (vertices (+/-2,0), foci (+/-3,0))",
+    "xDomain": [-8, 8],
+    "yDomain": [-6, 6],
+    "data": [
+      { "fn": "x^2 / 4 - y^2 / 5 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fn": "(sqrt(5)/2) * x", "color": "#a3a3a3", "skipTip": true },
+      { "fn": "-(sqrt(5)/2) * x", "color": "#a3a3a3", "skipTip": true }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Vertex (2, 0)" },
+      { "x": -2, "text": "Vertex (-2, 0)" },
+      { "x": 3, "text": "Focus (3, 0)" }
+    ]
+  },
+  "ex-10-4-q15": {
+    "title": "Hyperbola: y²/9 - x² = 1 (foci (0, +/-sqrt(10)), through (2,3))",
+    "xDomain": [-6, 6],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "y^2 / 9 - x^2 / 1 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fn": "3 * x", "color": "#a3a3a3", "skipTip": true },
+      { "fn": "-3 * x", "color": "#a3a3a3", "skipTip": true }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Vertices (0, +/-3)" },
+      { "x": 2, "text": "(2, 3) on curve" }
+    ]
+  },
+  "misc-q1": {
+    "title": "Parabolic Reflector: x² = 20y (20cm diam, 5cm deep)",
+    "xDomain": [-15, 15],
+    "yDomain": [-3, 12],
+    "data": [
+      { "fn": "x^2 - 20 * y", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Vertex (0, 0)" },
+      { "x": 1, "text": "Focus (0, 5)" },
+      { "x": 10, "text": "Rim (10, 5)" }
+    ]
+  },
+  "misc-q4": {
+    "title": "Semi-elliptical Arch: x²/16 + y²/4 = 1 (8m wide, 2m high)",
+    "xDomain": [-6, 6],
+    "yDomain": [-1, 4],
+    "data": [
+      { "fn": "x^2 / 16 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Top (0, 2)" },
+      { "x": 4, "text": "(4, 0)" },
+      { "x": -4, "text": "(-4, 0)" },
+      { "x": 2.5, "text": "h at 1.5m from end" }
+    ]
+  },
+  "misc-q7": {
+    "title": "Ellipse from Flag Posts: x²/25 + y²/9 = 1 (sum=10, dist=8)",
+    "xDomain": [-8, 8],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "Flag post F1 (4, 0)" },
+      { "x": -4, "text": "Flag post F2 (-4, 0)" },
+      { "x": 5, "text": "Vertex (5, 0)" }
+    ]
+  }
+}

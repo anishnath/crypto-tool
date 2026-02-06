@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 160">
+  <defs>
+    <style>
+      .universal { fill: #f9fafb; stroke: #374151; stroke-width: 2; rx: 8; }
+      .set-m { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; fill-opacity: 0.5; }
+      .set-b { fill: #fef3c7; stroke: #d97706; stroke-width: 2; fill-opacity: 0.5; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .set-label { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; }
+      .given { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .info { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Q18: Students — Mathematics and Biology (%)</text>
+
+  <!-- Universal Set -->
+  <rect x="20" y="25" width="260" height="100" class="universal" />
+  <text x="268" y="40" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">U</text>
+
+  <!-- Set M (Mathematics) -->
+  <circle cx="120" cy="75" r="45" class="set-m" />
+  <text x="88" y="58" class="set-label" fill="#2563eb">M</text>
+
+  <!-- Set B (Biology) -->
+  <circle cx="185" cy="75" r="45" class="set-b" />
+  <text x="217" y="58" class="set-label" fill="#d97706">B</text>
+
+  <!-- Given overlap -->
+  <text x="152" y="78" class="given">10%</text>
+  <text x="152" y="90" class="label" font-size="8">M&#x2229;B</text>
+
+  <!-- Given info -->
+  <text x="22" y="140" class="info">Given: P(M) = 40%, P(B) = 30%, P(M&#x2229;B) = 10%</text>
+  <text x="22" y="150" class="info">Find: P(M&#x222a;B) = ?</text>
+
+  <text x="150" y="156" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+  <defs>
+    <style>
+      .set-outer { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .set-inner { fill: none; stroke: #dc2626; stroke-width: 2; stroke-dasharray: 5 3; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .element { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .symbol { font-family: Arial, sans-serif; font-size: 14px; fill: #2563eb; font-weight: bold; text-anchor: middle; }
+      .cross { font-family: Arial, sans-serif; font-size: 14px; fill: #dc2626; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Q1: Subset vs Not-Subset</text>
+
+  <!-- Part (i): {2,3,4} ⊂ {1,2,3,4,5} -->
+  <g transform="translate(75, 85)">
+    <ellipse cx="0" cy="0" rx="60" ry="40" class="set-outer" />
+    <ellipse cx="5" cy="2" rx="32" ry="22" class="set-inner" stroke="#16a34a" />
+    <text x="0" y="-30" class="label" text-anchor="middle" fill="#2563eb">{1,2,3,4,5}</text>
+    <text x="-40" y="5" class="element">1</text>
+    <text x="-10" y="-5" class="element">2</text>
+    <text x="10" y="8" class="element">3</text>
+    <text x="25" y="-3" class="element">4</text>
+    <text x="40" y="5" class="element">5</text>
+    <text x="5" y="18" class="label" text-anchor="middle" fill="#16a34a">{2,3,4}</text>
+    <text x="0" y="55" class="symbol" fill="#16a34a">{2,3,4} &#x2282; {1,2,3,4,5}</text>
+  </g>
+
+  <!-- Part (ii): {a,b,c} ⊄ {b,c,d} -->
+  <g transform="translate(225, 85)">
+    <ellipse cx="-18" cy="0" rx="35" ry="28" class="set-inner" stroke="#dc2626" />
+    <ellipse cx="18" cy="0" rx="35" ry="28" class="set-outer" />
+    <text x="-35" y="-20" class="label" fill="#dc2626">{a,b,c}</text>
+    <text x="35" y="-20" class="label" fill="#2563eb">{b,c,d}</text>
+    <text x="-32" y="5" class="element">a</text>
+    <text x="-5" y="-5" class="element">b</text>
+    <text x="-5" y="10" class="element">c</text>
+    <text x="32" y="5" class="element">d</text>
+    <text x="0" y="55" class="cross">{a,b,c} &#x2284; {b,c,d}</text>
+  </g>
+
+  <text x="150" y="146" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

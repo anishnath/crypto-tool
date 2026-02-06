@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .box { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; rx: 4; }
+      .pos { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; fill: #2563eb; text-anchor: middle; }
+      .choices { font-family: Arial, sans-serif; font-size: 9px; fill: #dc2626; text-anchor: middle; font-weight: bold; }
+      .mult { font-family: Arial, sans-serif; font-size: 12px; fill: #d97706; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .val { font-family: Arial, sans-serif; font-size: 9px; fill: #16a34a; text-anchor: middle; font-weight: bold; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Factorial (n!)</text>
+
+  <text x="150" y="32" class="note">Arranging n distinct objects in a row</text>
+
+  <!-- 4 positions for 4! example -->
+  <g transform="translate(30, 40)">
+    <!-- Position 1 -->
+    <rect x="0" y="0" width="50" height="35" class="box" />
+    <text x="25" y="15" class="pos">Pos 1</text>
+    <text x="25" y="30" class="choices">4 choices</text>
+
+    <text x="58" y="20" class="mult">&#xD7;</text>
+
+    <!-- Position 2 -->
+    <rect x="65" y="0" width="50" height="35" class="box" />
+    <text x="90" y="15" class="pos">Pos 2</text>
+    <text x="90" y="30" class="choices">3 left</text>
+
+    <text x="123" y="20" class="mult">&#xD7;</text>
+
+    <!-- Position 3 -->
+    <rect x="130" y="0" width="50" height="35" class="box" />
+    <text x="155" y="15" class="pos">Pos 3</text>
+    <text x="155" y="30" class="choices">2 left</text>
+
+    <text x="188" y="20" class="mult">&#xD7;</text>
+
+    <!-- Position 4 -->
+    <rect x="195" y="0" width="50" height="35" class="box" />
+    <text x="220" y="15" class="pos">Pos 4</text>
+    <text x="220" y="30" class="choices">1 left</text>
+  </g>
+
+  <!-- Result -->
+  <text x="150" y="90" class="formula" font-weight="bold" fill="#d97706">4! = 4 &#xD7; 3 &#xD7; 2 &#xD7; 1 = 24</text>
+
+  <!-- General formula -->
+  <rect x="35" y="98" width="230" height="32" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1" />
+  <text x="150" y="113" class="formula" font-weight="bold">n! = n &#xD7; (n-1) &#xD7; (n-2) &#xD7; ... &#xD7; 2 &#xD7; 1</text>
+  <text x="150" y="125" class="val">By convention: 0! = 1</text>
+
+  <text x="150" y="143" class="note">Each position has one fewer choice because objects are used up</text>
+
+  <text x="150" y="150" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

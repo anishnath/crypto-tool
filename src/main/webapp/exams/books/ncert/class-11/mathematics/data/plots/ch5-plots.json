@@ -1,0 +1,62 @@
+{
+  "misc-q7": {
+    "title": "5x + 1 > -24 and 5x - 1 < 24",
+    "xDomain": [-8, 8],
+    "yDomain": [-30, 30],
+    "data": [
+      { "fn": "5*x + 1", "color": "#6366f1", "label": "y = 5x + 1" },
+      { "fn": "-24", "color": "#ef4444", "label": "y = -24" },
+      { "fn": "5*x - 1", "color": "#22c55e", "label": "y = 5x - 1" },
+      { "fn": "24", "color": "#f59e0b", "label": "y = 24" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "x > -5" },
+      { "x": 5, "text": "x < 5" }
+    ]
+  },
+  "misc-q8": {
+    "title": "2(x - 1) < x + 5 and 3(x + 2) > 2 - x",
+    "xDomain": [-5, 10],
+    "yDomain": [-10, 30],
+    "data": [
+      { "fn": "2*(x - 1)", "color": "#6366f1", "label": "y = 2(x - 1)" },
+      { "fn": "x + 5", "color": "#22c55e", "label": "y = x + 5" },
+      { "fn": "3*(x + 2)", "color": "#ef4444", "label": "y = 3(x + 2)" },
+      { "fn": "2 - x", "color": "#f59e0b", "label": "y = 2 - x" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "x > -1" },
+      { "x": 7, "text": "x < 7" }
+    ]
+  },
+  "misc-q9": {
+    "title": "3x - 7 > 2(x - 6) and 6 - x > 11 - 2x",
+    "xDomain": [-2, 10],
+    "yDomain": [-10, 20],
+    "data": [
+      { "fn": "3*x - 7", "color": "#6366f1", "label": "y = 3x - 7" },
+      { "fn": "2*(x - 6)", "color": "#22c55e", "label": "y = 2(x - 6)" },
+      { "fn": "6 - x", "color": "#ef4444", "label": "y = 6 - x" },
+      { "fn": "11 - 2*x", "color": "#f59e0b", "label": "y = 11 - 2x" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "x > -5" },
+      { "x": 5, "text": "x > 5" }
+    ]
+  },
+  "misc-q10": {
+    "title": "5(2x - 7) - 3(2x + 3) \u2264 0 and 2x + 19 \u2264 6x + 47",
+    "xDomain": [-10, 15],
+    "yDomain": [-30, 30],
+    "data": [
+      { "fn": "5*(2*x - 7) - 3*(2*x + 3)", "color": "#6366f1", "label": "y = 5(2x-7) - 3(2x+3)" },
+      { "fn": "0", "color": "#94a3b8", "label": "y = 0" },
+      { "fn": "2*x + 19", "color": "#22c55e", "label": "y = 2x + 19" },
+      { "fn": "6*x + 47", "color": "#ef4444", "label": "y = 6x + 47" }
+    ],
+    "annotations": [
+      { "x": 11, "text": "x \u2264 11" },
+      { "x": -7, "text": "x \u2265 -7" }
+    ]
+  }
+}

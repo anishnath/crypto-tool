@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1; }
+      .line { stroke-width: 2; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .form-title { font-family: Arial, sans-serif; font-size: 9px; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 8px; text-anchor: middle; }
+      .point { r: 3; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+    </style>
+    <marker id="lf-arr" markerWidth="4" markerHeight="4" refX="4" refY="2" orient="auto">
+      <path d="M0,0 L0,4 L4,2 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="14" class="title">Three Standard Forms of a Line Equation</text>
+
+  <!-- Form 1: Slope-Intercept -->
+  <g transform="translate(10, 28)">
+    <rect x="0" y="0" width="88" height="80" rx="4" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1" />
+    <text x="44" y="12" class="form-title" fill="#2563eb">Slope-Intercept</text>
+
+    <g transform="translate(10, 18)">
+      <line x1="0" y1="50" x2="70" y2="50" class="axis" marker-end="url(#lf-arr)" />
+      <line x1="35" y1="60" x2="35" y2="5" class="axis" marker-end="url(#lf-arr)" />
+
+      <!-- Line -->
+      <line x1="5" y1="50" x2="68" y2="15" class="line" stroke="#2563eb" />
+
+      <!-- c intercept -->
+      <circle cx="35" cy="32" class="point" fill="#2563eb" />
+      <text x="42" y="30" class="label" fill="#2563eb" font-weight="bold">c</text>
+
+      <!-- Slope angle -->
+      <text x="55" y="45" class="label" fill="#2563eb">m</text>
+    </g>
+
+    <text x="44" y="74" class="formula" fill="#2563eb" font-weight="bold">y = mx + c</text>
+  </g>
+
+  <!-- Form 2: Intercept Form -->
+  <g transform="translate(106, 28)">
+    <rect x="0" y="0" width="88" height="80" rx="4" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1" />
+    <text x="44" y="12" class="form-title" fill="#dc2626">Intercept Form</text>
+
+    <g transform="translate(10, 18)">
+      <line x1="0" y1="50" x2="70" y2="50" class="axis" marker-end="url(#lf-arr)" />
+      <line x1="15" y1="60" x2="15" y2="5" class="axis" marker-end="url(#lf-arr)" />
+
+      <!-- Line -->
+      <line x1="55" y1="50" x2="15" y2="18" class="line" stroke="#dc2626" />
+
+      <!-- a intercept on x-axis -->
+      <circle cx="55" cy="50" class="point" fill="#dc2626" />
+      <text x="55" y="46" class="label" fill="#dc2626" font-weight="bold" text-anchor="middle">a</text>
+
+      <!-- b intercept on y-axis -->
+      <circle cx="15" cy="18" class="point" fill="#dc2626" />
+      <text x="22" y="16" class="label" fill="#dc2626" font-weight="bold">b</text>
+    </g>
+
+    <text x="44" y="74" class="formula" fill="#dc2626" font-weight="bold">x/a + y/b = 1</text>
+  </g>
+
+  <!-- Form 3: Normal Form -->
+  <g transform="translate(202, 28)">
+    <rect x="0" y="0" width="88" height="80" rx="4" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1" />
+    <text x="44" y="12" class="form-title" fill="#16a34a">Normal Form</text>
+
+    <g transform="translate(10, 18)">
+      <line x1="0" y1="50" x2="70" y2="50" class="axis" marker-end="url(#lf-arr)" />
+      <line x1="15" y1="60" x2="15" y2="5" class="axis" marker-end="url(#lf-arr)" />
+
+      <!-- Line -->
+      <line x1="8" y1="22" x2="62" y2="50" class="line" stroke="#16a34a" />
+
+      <!-- Normal from origin -->
+      <line x1="15" y1="50" x2="38" y2="34" stroke="#d97706" stroke-width="1.5" stroke-dasharray="3 2" />
+      <circle cx="38" cy="34" class="point" fill="#d97706" />
+
+      <!-- p label -->
+      <text x="22" y="38" class="label" fill="#d97706" font-weight="bold">p</text>
+
+      <!-- omega angle -->
+      <text x="28" y="48" class="label" fill="#d97706">&#x3C9;</text>
+    </g>
+
+    <text x="44" y="68" class="formula" fill="#16a34a" font-weight="bold">x cos&#x3C9; + y sin&#x3C9; = p</text>
+    <text x="44" y="78" class="formula" fill="#6b7280">(p = &#x22A5; from origin)</text>
+  </g>
+
+  <!-- Conversion summary -->
+  <g transform="translate(10, 115)">
+    <rect x="0" y="0" width="280" height="55" rx="5" fill="#fefce8" stroke="#d97706" stroke-width="1" />
+    <text x="140" y="14" class="form-title" fill="#d97706">Converting Between Forms</text>
+
+    <text x="12" y="28" class="label" fill="#4b5563">Ax + By + C = 0 (general form)</text>
+    <text x="12" y="40" class="label" fill="#2563eb">&#x2192; Slope-intercept: y = (-A/B)x + (-C/B), so m = -A/B, c = -C/B</text>
+    <text x="12" y="50" class="label" fill="#dc2626">&#x2192; Intercept: x/(-C/A) + y/(-C/B) = 1, so a = -C/A, b = -C/B</text>
+  </g>
+
+  <text x="150" y="183" class="note">Each form highlights different properties of the same line</text>
+
+  <text x="150" y="198" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

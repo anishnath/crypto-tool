@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .seat { stroke-width: 1.5; rx: 4; }
+      .seat-m { fill: #dbeafe; stroke: #2563eb; }
+      .seat-w { fill: #fce7f3; stroke: #db2777; }
+      .pos { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 8px; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .step { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .num { font-family: Arial, sans-serif; font-size: 9px; fill: #d97706; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Constrained Arrangement</text>
+  <text x="150" y="28" class="note">Some positions have restrictions on who can occupy them</text>
+
+  <!-- Row of 9 seats -->
+  <g transform="translate(15, 38)">
+    <!-- Seat 1 (odd = men) -->
+    <rect x="0" y="0" width="26" height="30" class="seat seat-m" />
+    <text x="13" y="14" class="pos" fill="#2563eb">M</text>
+    <text x="13" y="26" class="label" fill="#2563eb">pos 1</text>
+
+    <!-- Seat 2 (even = women) -->
+    <rect x="30" y="0" width="26" height="30" class="seat seat-w" />
+    <text x="43" y="14" class="pos" fill="#db2777">W</text>
+    <text x="43" y="26" class="label" fill="#db2777">pos 2</text>
+
+    <!-- Seat 3 -->
+    <rect x="60" y="0" width="26" height="30" class="seat seat-m" />
+    <text x="73" y="14" class="pos" fill="#2563eb">M</text>
+    <text x="73" y="26" class="label" fill="#2563eb">pos 3</text>
+
+    <!-- Seat 4 -->
+    <rect x="90" y="0" width="26" height="30" class="seat seat-w" />
+    <text x="103" y="14" class="pos" fill="#db2777">W</text>
+    <text x="103" y="26" class="label" fill="#db2777">pos 4</text>
+
+    <!-- Seat 5 -->
+    <rect x="120" y="0" width="26" height="30" class="seat seat-m" />
+    <text x="133" y="14" class="pos" fill="#2563eb">M</text>
+    <text x="133" y="26" class="label" fill="#2563eb">pos 5</text>
+
+    <!-- Seat 6 -->
+    <rect x="150" y="0" width="26" height="30" class="seat seat-w" />
+    <text x="163" y="14" class="pos" fill="#db2777">W</text>
+    <text x="163" y="26" class="label" fill="#db2777">pos 6</text>
+
+    <!-- Seat 7 -->
+    <rect x="180" y="0" width="26" height="30" class="seat seat-m" />
+    <text x="193" y="14" class="pos" fill="#2563eb">M</text>
+    <text x="193" y="26" class="label" fill="#2563eb">pos 7</text>
+
+    <!-- Seat 8 -->
+    <rect x="210" y="0" width="26" height="30" class="seat seat-w" />
+    <text x="223" y="14" class="pos" fill="#db2777">W</text>
+    <text x="223" y="26" class="label" fill="#db2777">pos 8</text>
+
+    <!-- Seat 9 -->
+    <rect x="240" y="0" width="26" height="30" class="seat seat-m" />
+    <text x="253" y="14" class="pos" fill="#2563eb">M</text>
+    <text x="253" y="26" class="label" fill="#2563eb">pos 9</text>
+  </g>
+
+  <!-- Strategy steps -->
+  <g transform="translate(20, 84)">
+    <rect x="0" y="0" width="260" height="48" rx="5" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1" />
+
+    <text x="8" y="14" class="step" font-weight="bold" fill="#d97706">Strategy for constrained problems:</text>
+    <text x="8" y="26" class="step">Step 1: Fill the restricted positions first</text>
+    <text x="8" y="38" class="step">Step 2: Fill the remaining positions with leftover choices</text>
+    <text x="8" y="48" class="step">Step 3: Multiply the counts (counting principle)</text>
+  </g>
+
+  <text x="150" y="143" class="note">Always handle constraints before free choices</text>
+
+  <text x="150" y="150" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

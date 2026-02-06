@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 170">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .term-box { rx: 5; stroke-width: 1.5; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .part { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .mult { font-family: Arial, sans-serif; font-size: 14px; fill: #6b7280; text-anchor: middle; }
+      .highlight { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">General Term of Binomial Expansion</text>
+
+  <!-- The general term broken into parts -->
+  <text x="150" y="34" class="highlight" fill="#1f2937">T&#x1D63;&#x208A;&#x2081; in (a + b)&#x207F;</text>
+
+  <g transform="translate(15, 44)">
+    <!-- Part 1: Binomial coefficient -->
+    <rect x="0" y="0" width="80" height="45" class="term-box" fill="#dbeafe" stroke="#2563eb" />
+    <text x="40" y="20" class="part" fill="#2563eb">&#x207F;C&#x1D63;</text>
+    <text x="40" y="34" class="label" fill="#2563eb">coefficient</text>
+    <text x="40" y="54" class="label" fill="#2563eb">(from Pascal's</text>
+    <text x="40" y="63" class="label" fill="#2563eb">triangle)</text>
+
+    <text x="90" y="25" class="mult">&#xD7;</text>
+
+    <!-- Part 2: Power of a -->
+    <rect x="100" y="0" width="80" height="45" class="term-box" fill="#dcfce7" stroke="#16a34a" />
+    <text x="140" y="20" class="part" fill="#16a34a">a&#x207F;&#x207B;&#x02B3;</text>
+    <text x="140" y="34" class="label" fill="#16a34a">power of a</text>
+    <text x="140" y="54" class="label" fill="#16a34a">(decreases</text>
+    <text x="140" y="63" class="label" fill="#16a34a">n &#x2192; 0)</text>
+
+    <text x="190" y="25" class="mult">&#xD7;</text>
+
+    <!-- Part 3: Power of b -->
+    <rect x="200" y="0" width="80" height="45" class="term-box" fill="#fee2e2" stroke="#dc2626" />
+    <text x="240" y="20" class="part" fill="#dc2626">b&#x02B3;</text>
+    <text x="240" y="34" class="label" fill="#dc2626">power of b</text>
+    <text x="240" y="54" class="label" fill="#dc2626">(increases</text>
+    <text x="240" y="63" class="label" fill="#dc2626">0 &#x2192; n)</text>
+  </g>
+
+  <!-- Sum of powers note -->
+  <text x="150" y="116" class="note">Powers of a and b always add up to n: (n-r) + r = n</text>
+
+  <!-- Concrete example -->
+  <rect x="20" y="122" width="260" height="28" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="1" />
+  <text x="150" y="135" class="highlight" fill="#d97706">Example: 3rd term of (a+b)&#x2075;</text>
+  <text x="150" y="146" class="formula">T&#x2083; = &#x2075;C&#x2082; &#xB7; a&#xB3; &#xB7; b&#xB2; = 10a&#xB3;b&#xB2;  (r = 2)</text>
+
+  <text x="150" y="163" class="note">r goes from 0 to n, giving (n+1) terms total</text>
+
+  <text x="150" y="170" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

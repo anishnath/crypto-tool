@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .dash { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 2 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q11: Parabola Vertex(0,0) passing through (2,3)</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 40px, Origin at 50, 250) -->
+  <!-- Point (2,3) -> (80, -120) relative to origin -->
+  <g transform="translate(50, 250)">
+    <!-- Axes -->
+    <line x1="-30" y1="0" x2="200" y2="0" class="axis" marker-end="url(#arrow)" />
+    <line x1="0" y1="30" x2="0" y2="-220" class="axis" marker-end="url(#arrow)" />
+    <text x="190" y="15" class="label">X</text>
+    <text x="-15" y="-210" class="label">Y</text>
+    <text x="-15" y="15" class="label">O</text>
+    
+    <!-- Parabola passing through (2,3) with axis along x-axis. -->
+    <!-- y^2 = 4ax. 9 = 8a => 4a = 4.5 => y^2 = 4.5x -->
+    <!-- x = y^2 / 4.5 -->
+    <!-- Scale 40. -->
+    <!-- y=3 (120px) -> x=2 (80px). -->
+    <!-- y=4 (160px) -> x=16/4.5=3.55 (142px). -->
+    <path d="M 142,-160 L 80,-120 L 35,-80 L 9,-40 L 0,0 L 9,40 L 35,80 L 80,120 L 142,160" fill="none" class="curve" />
+    
+    <!-- Point P(2,3) -->
+    <circle cx="80" cy="-120" r="3" class="point" />
+    <text x="85" y="-125" class="label">P(2,3)</text>
+    
+    <!-- Guides -->
+    <line x1="80" y1="-120" x2="80" y2="0" class="dash" />
+    <line x1="80" y1="-120" x2="0" y2="-120" class="dash" />
+    <text x="80" y="15" class="label">2</text>
+    <text x="-15" y="-120" class="label">3</text>
+    
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

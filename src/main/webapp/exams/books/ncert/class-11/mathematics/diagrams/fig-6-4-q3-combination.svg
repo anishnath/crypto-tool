@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .heading { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; text-anchor: middle; }
+      .group { fill: #f3f4f6; stroke: #6b7280; stroke-width: 1; rx: 6; }
+      .item { stroke-width: 1.5; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .vs { font-family: Arial, sans-serif; font-size: 11px; fill: #d97706; font-weight: bold; text-anchor: middle; }
+      .eq { font-family: Arial, sans-serif; font-size: 9px; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Permutation vs Combination</text>
+
+  <!-- Permutation side -->
+  <g transform="translate(10, 28)">
+    <text x="65" y="0" class="heading" fill="#dc2626">Permutation (&#x207F;P&#x1D63;)</text>
+    <text x="65" y="12" class="label">Order MATTERS</text>
+
+    <!-- 3 different orderings of {A,B,C} -->
+    <rect x="5" y="18" width="120" height="70" class="group" />
+
+    <g transform="translate(15, 28)">
+      <circle cx="0" cy="0" r="9" class="item" fill="#dbeafe" stroke="#2563eb" />
+      <text x="0" y="4" class="eq" fill="#2563eb">A</text>
+      <circle cx="25" cy="0" r="9" class="item" fill="#fee2e2" stroke="#dc2626" />
+      <text x="25" y="4" class="eq" fill="#dc2626">B</text>
+      <circle cx="50" cy="0" r="9" class="item" fill="#dcfce7" stroke="#16a34a" />
+      <text x="50" y="4" class="eq" fill="#16a34a">C</text>
+      <text x="80" y="4" class="label">&#x2190; ABC</text>
+    </g>
+
+    <g transform="translate(15, 50)">
+      <circle cx="0" cy="0" r="9" class="item" fill="#fee2e2" stroke="#dc2626" />
+      <text x="0" y="4" class="eq" fill="#dc2626">B</text>
+      <circle cx="25" cy="0" r="9" class="item" fill="#dbeafe" stroke="#2563eb" />
+      <text x="25" y="4" class="eq" fill="#2563eb">A</text>
+      <circle cx="50" cy="0" r="9" class="item" fill="#dcfce7" stroke="#16a34a" />
+      <text x="50" y="4" class="eq" fill="#16a34a">C</text>
+      <text x="80" y="4" class="label">&#x2190; BAC</text>
+    </g>
+
+    <g transform="translate(15, 72)">
+      <circle cx="0" cy="0" r="9" class="item" fill="#dcfce7" stroke="#16a34a" />
+      <text x="0" y="4" class="eq" fill="#16a34a">C</text>
+      <circle cx="25" cy="0" r="9" class="item" fill="#dbeafe" stroke="#2563eb" />
+      <text x="25" y="4" class="eq" fill="#2563eb">A</text>
+      <circle cx="50" cy="0" r="9" class="item" fill="#fee2e2" stroke="#dc2626" />
+      <text x="50" y="4" class="eq" fill="#dc2626">B</text>
+      <text x="80" y="4" class="label">&#x2190; CAB</text>
+    </g>
+
+    <text x="65" y="100" class="label">... 6 arrangements total</text>
+    <text x="65" y="112" class="eq" fill="#dc2626">&#xB3;P&#x2083; = 3! = 6</text>
+  </g>
+
+  <!-- VS -->
+  <text x="150" y="75" class="vs">vs</text>
+
+  <!-- Combination side -->
+  <g transform="translate(160, 28)">
+    <text x="65" y="0" class="heading" fill="#2563eb">Combination (&#x207F;C&#x1D63;)</text>
+    <text x="65" y="12" class="label">Order DOESN'T matter</text>
+
+    <rect x="5" y="18" width="120" height="70" class="group" />
+
+    <g transform="translate(30, 55)">
+      <circle cx="0" cy="0" r="12" class="item" fill="#dbeafe" stroke="#2563eb" />
+      <text x="0" y="4" class="eq" fill="#2563eb">A</text>
+      <circle cx="30" cy="0" r="12" class="item" fill="#fee2e2" stroke="#dc2626" />
+      <text x="30" y="4" class="eq" fill="#dc2626">B</text>
+      <circle cx="60" cy="0" r="12" class="item" fill="#dcfce7" stroke="#16a34a" />
+      <text x="60" y="4" class="eq" fill="#16a34a">C</text>
+    </g>
+
+    <text x="65" y="38" class="label">{A,B,C} = {B,A,C} = {C,A,B}</text>
+    <text x="65" y="100" class="label">Only 1 group</text>
+    <text x="65" y="112" class="eq" fill="#2563eb">&#xB3;C&#x2083; = 1</text>
+  </g>
+
+  <!-- Formula -->
+  <rect x="25" y="140" width="250" height="22" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1" />
+  <text x="150" y="155" class="formula" font-weight="bold">&#x207F;C&#x1D63; = n! / [r! &#xD7; (n-r)!] = &#x207F;P&#x1D63; / r!</text>
+
+  <text x="150" y="174" class="note">Combination removes duplicate orderings by dividing by r!</text>
+
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

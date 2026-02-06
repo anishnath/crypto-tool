@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .line { stroke: #059669; stroke-width: 1; stroke-dasharray: 4 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q3: x²/16 + y²/9 = 1</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 20px, Center at 150, 100) -->
+  <g transform="translate(150, 100)">
+    <!-- Axes -->
+    <line x1="-140" y1="0" x2="140" y2="0" class="axis" marker-end="url(#arrow)" /> <!-- X -->
+    <line x1="0" y1="90" x2="0" y2="-90" class="axis" marker-end="url(#arrow)" /> <!-- Y -->
+    <text x="130" y="15" class="label">X</text>
+    <text x="5" y="-80" class="label">Y</text>
+    <text x="-15" y="15" class="label">O</text>
+    
+    <!-- Ellipse: a=4 (80px), b=3 (60px) -->
+    <ellipse cx="0" cy="0" rx="80" ry="60" class="curve" />
+    
+    <!-- Foci: c = sqrt(16-9) = sqrt(7) approx 2.65 -->
+    <!-- 2.65 * 20 = 53 -->
+    <circle cx="53" cy="0" r="3" class="point" />
+    <circle cx="-53" cy="0" r="3" class="point" />
+    <text x="53" y="-10" class="label" text-anchor="middle">F(√7,0)</text>
+    <text x="-53" y="-10" class="label" text-anchor="middle">F'(-√7,0)</text>
+
+    <!-- Vertices: a=4 -> 80px -->
+    <circle cx="80" cy="0" r="3" class="point" />
+    <circle cx="-80" cy="0" r="3" class="point" />
+    <text x="80" y="15" class="label" text-anchor="middle">A(4,0)</text>
+    <text x="-80" y="15" class="label" text-anchor="middle">A'(-4,0)</text>
+    
+    <!-- Minor Axis Endpoints: b=3 -> 60px -->
+    <circle cx="0" cy="-60" r="3" class="point" />
+    <circle cx="0" cy="60" r="3" class="point" />
+    <text x="5" y="-65" class="label">B(0,3)</text>
+    <text x="5" y="70" class="label">B'(0,-3)</text>
+
+  </g>
+  <text x="150" y="190" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

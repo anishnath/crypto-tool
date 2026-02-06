@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 210">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .circle { fill: none; stroke: #d1d5db; stroke-width: 1.5; }
+      .radius { stroke: #2563eb; stroke-width: 1.5; }
+      .dot { r: 4; }
+      .coord { font-family: Arial, sans-serif; font-size: 7px; fill: #4b5563; }
+      .angle { font-family: Arial, sans-serif; font-size: 8px; fill: #d97706; font-weight: bold; }
+      .proj { stroke-dasharray: 3 2; stroke-width: 1; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #374151; font-weight: bold; }
+    </style>
+    <marker id="uc-arr" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L5,2.5 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="14" class="title">Unit Circle: Key Angles and Values</text>
+
+  <g transform="translate(150, 108)">
+    <!-- Axes -->
+    <line x1="-90" y1="0" x2="90" y2="0" class="axis" marker-end="url(#uc-arr)" />
+    <line x1="0" y1="80" x2="0" y2="-80" class="axis" marker-end="url(#uc-arr)" />
+    <text x="92" y="-4" class="label" font-size="8">cos&#x3B8;</text>
+    <text x="8" y="-78" class="label" font-size="8">sin&#x3B8;</text>
+
+    <!-- Unit circle -->
+    <circle cx="0" cy="0" r="70" class="circle" />
+
+    <!-- 0° = (1,0) -->
+    <circle cx="70" cy="0" class="dot" fill="#2563eb" />
+    <text x="76" y="12" class="coord" font-weight="bold">(1, 0)</text>
+    <text x="76" y="-4" class="angle">0°</text>
+
+    <!-- 30° -->
+    <line x1="0" y1="0" x2="60.6" y2="-35" class="radius" opacity="0.3" />
+    <circle cx="60.6" cy="-35" class="dot" fill="#16a34a" />
+    <text x="72" y="-38" class="coord">(&#x221A;3/2, 1/2)</text>
+    <text x="46" y="-22" class="angle">30°</text>
+
+    <!-- 45° -->
+    <line x1="0" y1="0" x2="49.5" y2="-49.5" class="radius" opacity="0.3" />
+    <circle cx="49.5" cy="-49.5" class="dot" fill="#d97706" />
+    <text x="62" y="-54" class="coord">(1/&#x221A;2, 1/&#x221A;2)</text>
+    <text x="34" y="-38" class="angle">45°</text>
+
+    <!-- 60° -->
+    <line x1="0" y1="0" x2="35" y2="-60.6" class="radius" opacity="0.3" />
+    <circle cx="35" cy="-60.6" class="dot" fill="#dc2626" />
+    <text x="46" y="-66" class="coord">(1/2, &#x221A;3/2)</text>
+    <text x="20" y="-48" class="angle">60°</text>
+
+    <!-- 90° = (0,1) -->
+    <circle cx="0" cy="-70" class="dot" fill="#2563eb" />
+    <text x="14" y="-72" class="coord" font-weight="bold">(0, 1)</text>
+    <text x="-10" y="-62" class="angle">90°</text>
+
+    <!-- 180° = (-1,0) -->
+    <circle cx="-70" cy="0" class="dot" fill="#2563eb" />
+    <text x="-76" y="-6" class="coord" font-weight="bold" text-anchor="end">(-1, 0)</text>
+    <text x="-72" y="14" class="angle">180°</text>
+
+    <!-- 270° = (0,-1) -->
+    <circle cx="0" cy="70" class="dot" fill="#2563eb" />
+    <text x="14" y="72" class="coord" font-weight="bold">(0, -1)</text>
+    <text x="-12" y="66" class="angle">270°</text>
+
+    <!-- Projection lines for 45° example -->
+    <line x1="49.5" y1="-49.5" x2="49.5" y2="0" class="proj" stroke="#d97706" />
+    <line x1="49.5" y1="-49.5" x2="0" y2="-49.5" class="proj" stroke="#d97706" />
+  </g>
+
+  <!-- Key -->
+  <text x="150" y="196" class="formula">Point on unit circle at angle &#x3B8;: (cos&#x3B8;, sin&#x3B8;) | Radius = 1</text>
+  <text x="150" y="207" class="note">x-coordinate = cos&#x3B8;, y-coordinate = sin&#x3B8;</text>
+
+  <text x="150" y="210" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

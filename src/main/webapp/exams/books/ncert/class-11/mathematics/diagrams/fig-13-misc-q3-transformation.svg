@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .point-orig { fill: #2563eb; }
+      .point-scaled { fill: #dc2626; }
+      .arrow-big { stroke: #6b7280; stroke-width: 1.5; fill: none; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .set-label { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .brace-label { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .transform { font-family: Arial, sans-serif; font-size: 11px; fill: #16a34a; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Concept: Effect of Scaling on Variance</text>
+
+  <!-- Original data -->
+  <g transform="translate(25, 36)">
+    <text x="0" y="0" class="set-label" fill="#2563eb">Original: x&#x2081;, x&#x2082;, ..., x&#x2099;</text>
+    <line x1="0" y1="14" x2="250" y2="14" class="axis" />
+
+    <circle cx="60" cy="14" r="4" class="point-orig" />
+    <circle cx="90" cy="14" r="4" class="point-orig" />
+    <circle cx="115" cy="14" r="4" class="point-orig" />
+    <circle cx="140" cy="14" r="4" class="point-orig" />
+    <circle cx="170" cy="14" r="4" class="point-orig" />
+    <circle cx="195" cy="14" r="4" class="point-orig" />
+
+    <!-- Spread bracket -->
+    <line x1="60" y1="24" x2="195" y2="24" stroke="#2563eb" stroke-width="1.5" />
+    <text x="128" y="36" class="label" fill="#2563eb">spread = &#x3C3;</text>
+  </g>
+
+  <!-- Transformation arrow -->
+  <text x="150" y="80" class="transform">&#x00D7; c (multiply each value by c)</text>
+  <line x1="150" y1="68" x2="150" y2="73" stroke="#16a34a" stroke-width="1.5" />
+  <polygon points="146,73 154,73 150,79" fill="#16a34a" />
+
+  <!-- Scaled data -->
+  <g transform="translate(25, 88)">
+    <text x="0" y="0" class="set-label" fill="#dc2626">Scaled: cx&#x2081;, cx&#x2082;, ..., cx&#x2099;</text>
+    <line x1="0" y1="14" x2="250" y2="14" class="axis" />
+
+    <circle cx="30" cy="14" r="4" class="point-scaled" />
+    <circle cx="70" cy="14" r="4" class="point-scaled" />
+    <circle cx="105" cy="14" r="4" class="point-scaled" />
+    <circle cx="140" cy="14" r="4" class="point-scaled" />
+    <circle cx="180" cy="14" r="4" class="point-scaled" />
+    <circle cx="220" cy="14" r="4" class="point-scaled" />
+
+    <!-- Wider spread bracket -->
+    <line x1="30" y1="24" x2="220" y2="24" stroke="#dc2626" stroke-width="1.5" />
+    <text x="125" y="36" class="label" fill="#dc2626">spread = c&#x3C3; (new &#x3C3;&#xB2; = c&#xB2;&#x3C3;&#xB2;)</text>
+  </g>
+
+  <text x="150" y="140" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

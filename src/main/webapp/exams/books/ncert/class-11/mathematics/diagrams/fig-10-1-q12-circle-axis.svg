@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .circle { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="150" y="20" class="title">Q12: Circle with Centre on X-axis and radius 5</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 15px, Origin at 150, 150) -->
+  <g transform="translate(150, 150)">
+    <!-- Axes -->
+    <line x1="-140" y1="0" x2="140" y2="0" class="axis" marker-end="url(#arrow)" />
+    <line x1="0" y1="140" x2="0" y2="-140" class="axis" marker-end="url(#arrow)" />
+    
+    <!-- Labels -->
+    <text x="130" y="15" class="label">X</text>
+    <text x="5" y="-130" class="label">Y</text>
+    <text x="5" y="15" class="label">O</text>
+    
+    <!-- Point P(2,3) -->
+    <!-- 2 -> 30, 3 -> -45 -->
+    <circle cx="30" cy="-45" r="3" class="point" />
+    <text x="35" y="-45" class="label">P(2,3)</text>
+    
+    <!-- Centre C1(6,0) -->
+    <!-- 6 -> 90 -->
+    <circle cx="90" cy="0" r="3" class="point" />
+    <text x="90" y="15" class="label">C1(6,0)</text>
+    
+    <!-- Circle 1 (Radius 5 = 75px) -->
+    <circle cx="90" cy="0" r="75" class="circle" stroke-dasharray="2 2" />
+    
+    <!-- Centre C2(-2,0) -->
+    <!-- -2 -> -30 -->
+    <circle cx="-30" cy="0" r="3" class="point" />
+    <text x="-40" y="15" class="label">C2(-2,0)</text>
+    
+    <!-- Circle 2 (Radius 5 = 75px) -->
+    <circle cx="-30" cy="0" r="75" class="circle" />
+    
+    <!-- Radius lines for visual confirmation -->
+    <line x1="-30" y1="0" x2="30" y2="-45" stroke="#dc2626" stroke-width="1" />
+    <line x1="90" y1="0" x2="30" y2="-45" stroke="#dc2626" stroke-width="1" />
+    
+  </g>
+  
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

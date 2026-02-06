@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .line { stroke: #059669; stroke-width: 1; stroke-dasharray: 4 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q1: Parabola y² = 12x</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 15px, Origin at 100, 150) -->
+  <g transform="translate(100, 150)">
+    <!-- Axes -->
+    <line x1="-80" y1="0" x2="180" y2="0" class="axis" marker-end="url(#arrow)" /> <!-- X -->
+    <line x1="0" y1="130" x2="0" y2="-130" class="axis" marker-end="url(#arrow)" /> <!-- Y -->
+    <text x="170" y="15" class="label">X</text>
+    <text x="5" y="-120" class="label">Y</text>
+    <text x="-10" y="15" class="label">O</text>
+    
+    <!-- Parabola y^2 = 12x => x = y^2 / 12 -->
+    <!-- Plotting points: y = -12 to 12. x up to 12. -->
+    <path d="M 12,12 Q 0,0 12,-12" fill="none" class="curve" transform="scale(15,15)" /> 
+    <!-- Manual path might be safer with explicit pixels -->
+    <!-- x=12 -> 180px. y=sqrt(144)=12 -> 180px. Too big. -->
+    <!-- Let's plot y from -10 to 10. y=10 -> x=100/12=8.33 -->
+    <!-- 8.33 * 15 = 125px -->
+    <!-- Path: M 125,-150 Q 0,0 125,150 ... curve control point for parabola is specific. -->
+    <!-- Quadratic Bezier from (8.33, -10) to (8.33, 10) with control at (-8.33, 0)? No. -->
+    <!-- Simple way: M x1 y1 Q xc yc x2 y2. For parabola x=ky^2, control point is at (-x1, 0) for segment -y1 to y1? No. -->
+    <!-- Let's calculate a few points and use polyline or smooth curve. -->
+    <!-- (0,0), (0.33, 2), (1.33, 4), (3, 6), (5.33, 8), (8.33, 10) -->
+    <!-- Scale 15px/unit -->
+    <!-- (0,0), (5, 30), (20, 60), (45, 90), (80, 120), (125, 150) -->
+    <path d="M 125,-150 L 98,-132 L 73.5,-114 L 52,-96 L 33,-78 L 18,-60 L 7,-36 L 1,-12 L 0,0 L 1,12 L 7,36 L 18,60 L 33,78 L 52,96 L 73.5,114 L 98,132 L 125,150" fill="none" stroke="#2563eb" stroke-width="2" />
+    
+    <!-- Focus (3,0) -> (45, 0) -->
+    <circle cx="45" cy="0" r="3" class="point" />
+    <text x="45" y="15" class="label">F(3,0)</text>
+    
+    <!-- Directrix x = -3 -> x = -45 -->
+    <line x1="-45" y1="-130" x2="-45" y2="130" class="line" />
+    <text x="-75" y="-120" class="label" fill="#059669">Dir: x = -3</text>
+    
+    <!-- Latus Rectum: x=3, y=6 and y=-6 -->
+    <!-- y=6 -> 90px. Focus at 45. -->
+    <line x1="45" y1="-90" x2="45" y2="90" stroke="#dc2626" stroke-width="1.5" />
+    <text x="50" y="-80" class="label" fill="#dc2626">Latus Rectum</text>
+    <text x="50" y="-95" class="label">(3,6)</text>
+    <text x="50" y="105" class="label">(3,-6)</text>
+    
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

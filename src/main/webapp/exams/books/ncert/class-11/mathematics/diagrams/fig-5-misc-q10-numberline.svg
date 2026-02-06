@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 100">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 2; }
+      .tick { stroke: #374151; stroke-width: 2; }
+      .solution { stroke: #2563eb; stroke-width: 4; }
+      .label { font-family: Arial, sans-serif; font-size: 12px; fill: #4b5563; text-anchor: middle; }
+      .circle-open { fill: #ffffff; stroke: #2563eb; stroke-width: 2; }
+      .circle-closed { fill: #2563eb; stroke: #2563eb; stroke-width: 2; }
+      .title { font-family: Arial, sans-serif; font-size: 14px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow-start" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+    <marker id="arrow-end" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="225" y="20" class="title">Q10: -7 ≤ x ≤ 11</text>
+
+  <!-- Number Line System -->
+  <!-- Range -10 to 15. Total 25 units. Width 400px. 1 unit = 16px. -->
+  <g transform="translate(25, 60)">
+    <!-- Main Axis -->
+    <line x1="0" y1="0" x2="400" y2="0" class="axis" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)" />
+
+    <!-- Ticks -->
+    <!-- -10 --> <line x1="0" y1="-5" x2="0" y2="5" class="tick" /> <text x="0" y="20" class="label">-10</text>
+    <!-- -7 --> <line x1="48" y1="-5" x2="48" y2="5" class="tick" /> <text x="48" y="20" class="label">-7</text>
+    <!-- -5 --> <line x1="80" y1="-5" x2="80" y2="5" class="tick" /> 
+    <!-- 0 --> <line x1="160" y1="-5" x2="160" y2="5" class="tick" /> <text x="160" y="20" class="label">0</text>
+    <!-- 5 --> <line x1="240" y1="-5" x2="240" y2="5" class="tick" /> 
+    <!-- 10 --> <line x1="320" y1="-5" x2="320" y2="5" class="tick" /> 
+    <!-- 11 --> <line x1="336" y1="-5" x2="336" y2="5" class="tick" /> <text x="336" y="20" class="label">11</text>
+    <!-- 15 --> <line x1="400" y1="-5" x2="400" y2="5" class="tick" /> <text x="400" y="20" class="label">15</text>
+
+    <!-- Solution: -7 <= x <= 11 -->
+    <!-- Line from 48 to 336 -->
+    <line x1="48" y1="0" x2="336" y2="0" class="solution" />
+    
+    <!-- Closed Circle at -7 -->
+    <circle cx="48" cy="0" r="5" class="circle-closed" />
+    <!-- Closed Circle at 11 -->
+    <circle cx="336" cy="0" r="5" class="circle-closed" />
+
+  </g>
+  <text x="225" y="90" text-anchor="middle" font-size="10" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

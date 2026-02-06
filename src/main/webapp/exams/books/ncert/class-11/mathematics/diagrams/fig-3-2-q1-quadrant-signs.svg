@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .quadrant { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle; }
+      .sign { font-family: Arial, sans-serif; font-size: 8px; text-anchor: middle; }
+      .mnemonic { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #374151; font-weight: bold; }
+    </style>
+    <marker id="qs-arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">Signs of Trigonometric Functions by Quadrant</text>
+
+  <g transform="translate(150, 90)">
+    <!-- Axes -->
+    <line x1="-95" y1="0" x2="95" y2="0" class="axis" marker-end="url(#qs-arr)" />
+    <line x1="0" y1="70" x2="0" y2="-70" class="axis" marker-end="url(#qs-arr)" />
+    <text x="100" y="4" class="label">x</text>
+    <text x="4" y="-72" class="label">y</text>
+
+    <!-- Quadrant I -->
+    <rect x="4" y="-64" width="86" height="60" rx="6" fill="#dcfce7" fill-opacity="0.5" />
+    <text x="47" y="-44" class="quadrant" fill="#16a34a">I</text>
+    <text x="47" y="-32" class="mnemonic" fill="#16a34a">All +</text>
+    <text x="47" y="-20" class="sign" fill="#16a34a">sin+ cos+ tan+</text>
+
+    <!-- Quadrant II -->
+    <rect x="-90" y="-64" width="86" height="60" rx="6" fill="#dbeafe" fill-opacity="0.5" />
+    <text x="-47" y="-44" class="quadrant" fill="#2563eb">II</text>
+    <text x="-47" y="-32" class="mnemonic" fill="#2563eb">Sin +</text>
+    <text x="-47" y="-20" class="sign" fill="#2563eb">sin+ cos&#x2212; tan&#x2212;</text>
+
+    <!-- Quadrant III -->
+    <rect x="-90" y="4" width="86" height="60" rx="6" fill="#fef3c7" fill-opacity="0.5" />
+    <text x="-47" y="24" class="quadrant" fill="#d97706">III</text>
+    <text x="-47" y="36" class="mnemonic" fill="#d97706">Tan +</text>
+    <text x="-47" y="48" class="sign" fill="#d97706">sin&#x2212; cos&#x2212; tan+</text>
+
+    <!-- Quadrant IV -->
+    <rect x="4" y="4" width="86" height="60" rx="6" fill="#fee2e2" fill-opacity="0.5" />
+    <text x="47" y="24" class="quadrant" fill="#dc2626">IV</text>
+    <text x="47" y="36" class="mnemonic" fill="#dc2626">Cos +</text>
+    <text x="47" y="48" class="sign" fill="#dc2626">sin&#x2212; cos+ tan&#x2212;</text>
+
+    <!-- Angle markers -->
+    <text x="30" y="-2" class="label" fill="#6b7280" font-size="8">0°</text>
+    <text x="4" y="-56" class="label" fill="#6b7280" font-size="8">90°</text>
+    <text x="-30" y="-2" class="label" fill="#6b7280" font-size="8">180°</text>
+    <text x="4" y="64" class="label" fill="#6b7280" font-size="8">270°</text>
+  </g>
+
+  <!-- Mnemonic -->
+  <rect x="30" y="158" width="240" height="16" rx="3" fill="#f3f4f6" />
+  <text x="150" y="170" class="note" font-weight="bold">Mnemonic: "All Students Take Coffee" (A-S-T-C)</text>
+
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

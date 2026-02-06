@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 160">
+  <defs>
+    <style>
+      .universal { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; rx: 8; stroke-dasharray: 6 3; }
+      .set-a { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
+      .set-b { fill: #fef3c7; stroke: #d97706; stroke-width: 1.5; }
+      .set-c { fill: #fce7f3; stroke: #db2777; stroke-width: 1.5; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .set-label { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; }
+      .element { font-family: Arial, sans-serif; font-size: 9px; fill: #1f2937; }
+      .title { font-family: Arial, sans-serif; font-size: 11px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .check { font-family: Arial, sans-serif; font-size: 10px; fill: #16a34a; font-weight: bold; }
+      .cross { font-family: Arial, sans-serif; font-size: 10px; fill: #dc2626; }
+    </style>
+  </defs>
+
+  <text x="150" y="14" class="title">Q8: Which set can be Universal for A, B, C?</text>
+
+  <!-- Universal Set (iii) shown as dashed boundary -->
+  <rect x="15" y="22" width="200" height="95" class="universal" />
+  <text x="205" y="35" class="set-label" fill="#16a34a">(iii)</text>
+  <text x="205" y="46" class="label" fill="#16a34a">{0..10}</text>
+
+  <!-- Set A -->
+  <ellipse cx="55" cy="62" rx="32" ry="22" class="set-a" />
+  <text x="55" y="48" class="set-label" fill="#2563eb" text-anchor="middle">A</text>
+  <text x="42" y="63" class="element">1</text>
+  <text x="55" y="63" class="element">3</text>
+  <text x="67" y="63" class="element">5</text>
+
+  <!-- Set B -->
+  <ellipse cx="115" cy="62" rx="32" ry="22" class="set-b" />
+  <text x="115" y="48" class="set-label" fill="#d97706" text-anchor="middle">B</text>
+  <text x="102" y="63" class="element">2</text>
+  <text x="115" y="63" class="element">4</text>
+  <text x="128" y="63" class="element">6</text>
+
+  <!-- Set C -->
+  <ellipse cx="160" cy="85" rx="42" ry="20" class="set-c" />
+  <text x="160" y="81" class="set-label" fill="#db2777" text-anchor="middle">C</text>
+  <text x="128" y="93" class="element">0</text>
+  <text x="145" y="93" class="element">2</text>
+  <text x="160" y="93" class="element">4</text>
+  <text x="175" y="93" class="element">6</text>
+  <text x="190" y="93" class="element">8</text>
+
+  <!-- Verification panel -->
+  <text x="15" y="132" class="cross">(i) {0..6}: Missing 8 &#x2718;</text>
+  <text x="15" y="143" class="cross">(ii) &#x3D5;: Empty &#x2718;</text>
+  <text x="150" y="132" class="check">(iii) {0..10}: Has all &#x2714;</text>
+  <text x="150" y="143" class="cross">(iv) {1..8}: Missing 0 &#x2718;</text>
+
+  <text x="150" y="157" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

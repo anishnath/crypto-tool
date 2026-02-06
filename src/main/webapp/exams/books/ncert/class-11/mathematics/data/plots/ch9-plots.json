@@ -1,0 +1,254 @@
+{
+  "ex-9-1-q1": {
+    "title": "Quadrilateral with vertices A(-4,5), B(0,7), C(5,-5), D(-4,-2)",
+    "xDomain": [-7, 8],
+    "yDomain": [-8, 10],
+    "data": [
+      { "fn": "0.5*x + 7", "color": "#6366f1", "range": [-4, 0] },
+      { "fn": "-2.4*x + 7", "color": "#22c55e", "range": [0, 5] },
+      { "fn": "(-1/3)*x - 10/3", "color": "#ef4444", "range": [-4, 5] },
+      { "fn": "0", "color": "#f59e0b", "range": [-4, -4], "skipTip": true }
+    ],
+    "annotations": [
+      { "x": -4, "text": "A(-4, 5)" },
+      { "x": 0, "text": "B(0, 7)" },
+      { "x": 5, "text": "C(5, -5)" },
+      { "x": -4, "text": "D(-4, -2)" }
+    ]
+  },
+  "ex-9-1-q4": {
+    "title": "Point on x-axis equidistant from (7,6) and (3,4)",
+    "xDomain": [-2, 10],
+    "yDomain": [-3, 9],
+    "data": [
+      { "fn": "0", "color": "#94a3b8" }
+    ],
+    "annotations": [
+      { "x": 7, "text": "(7, 6)" },
+      { "x": 3, "text": "(3, 4)" },
+      { "x": 7.5, "text": "Equidistant point (7.5, 0)" }
+    ]
+  },
+  "ex-9-1-q5": {
+    "title": "Line through origin and midpoint of P(0,-4) and B(8,0)",
+    "xDomain": [-3, 10],
+    "yDomain": [-6, 3],
+    "data": [
+      { "fn": "-0.5*x", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "P(0, -4)" },
+      { "x": 8, "text": "B(8, 0)" },
+      { "x": 4, "text": "M(4, -2) midpoint" }
+    ]
+  },
+  "ex-9-1-q6": {
+    "title": "Right triangle with vertices A(4,4), B(3,5), C(-1,-1)",
+    "xDomain": [-4, 7],
+    "yDomain": [-4, 8],
+    "data": [
+      { "fn": "-x + 8", "color": "#6366f1", "range": [3, 4] },
+      { "fn": "1.5*x + 6.5", "color": "#22c55e", "range": [-1, 3] },
+      { "fn": "x", "color": "#ef4444", "range": [-1, 4] }
+    ],
+    "annotations": [
+      { "x": 4, "text": "A(4, 4) right angle" },
+      { "x": 3, "text": "B(3, 5)" },
+      { "x": -1, "text": "C(-1, -1)" }
+    ]
+  },
+  "ex-9-1-q9": {
+    "title": "Line joining (3,-1) and (4,-2) — angle 135 deg with x-axis",
+    "xDomain": [-2, 8],
+    "yDomain": [-6, 4],
+    "data": [
+      { "fn": "-x + 2", "color": "#6366f1" },
+      { "fn": "0", "color": "#94a3b8" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "(3, -1)" },
+      { "x": 4, "text": "(4, -2)" },
+      { "x": 1, "text": "slope = -1, angle = 135 deg" }
+    ]
+  },
+  "ex-9-2-q2": {
+    "title": "Line through (-4, 3) with slope 1/2",
+    "xDomain": [-8, 6],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "0.5*x + 5", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -4, "text": "(-4, 3)" },
+      { "x": -10, "text": "y-intercept (0, 5)" }
+    ]
+  },
+  "ex-9-2-q4": {
+    "title": "Line through (2, 2sqrt3) inclined at 75 deg",
+    "xDomain": [-2, 6],
+    "yDomain": [-6, 12],
+    "data": [
+      { "fn": "3.732*x - 4", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "(2, 2sqrt3)" },
+      { "x": 3, "text": "slope = tan(75) = 2 + sqrt3" }
+    ]
+  },
+  "ex-9-2-q7": {
+    "title": "Line through (-1, 1) and (2, -4)",
+    "xDomain": [-5, 6],
+    "yDomain": [-8, 5],
+    "data": [
+      { "fn": "(-5/3)*x - 2/3", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "(-1, 1)" },
+      { "x": 2, "text": "(2, -4)" }
+    ]
+  },
+  "ex-9-2-q8": {
+    "title": "Triangle PQR — median through R to midpoint of PQ",
+    "xDomain": [-4, 7],
+    "yDomain": [-1, 7],
+    "data": [
+      { "fn": "-0.5*x + 2", "color": "#94a3b8", "range": [-2, 2] },
+      { "fn": "(-2/3)*x + 17/3", "color": "#94a3b8", "range": [-2, 4] },
+      { "fn": "2*x - 3", "color": "#94a3b8", "range": [2, 4] },
+      { "fn": "0.75*x + 2", "color": "#ef4444" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "P(2, 1)" },
+      { "x": -2, "text": "Q(-2, 3)" },
+      { "x": 4, "text": "R(4, 5)" },
+      { "x": 0, "text": "M(0, 2) midpoint of PQ" }
+    ]
+  },
+  "ex-9-2-q11": {
+    "title": "Line with equal intercepts through (2, 3): x + y = 5",
+    "xDomain": [-2, 8],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "-x + 5", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "(2, 3)" },
+      { "x": 5, "text": "x-intercept (5, 0)" },
+      { "x": 0, "text": "y-intercept (0, 5)" }
+    ]
+  },
+  "ex-9-2-q13": {
+    "title": "Line through (0, 2) at angle 2pi/3 and its parallel",
+    "xDomain": [-4, 5],
+    "yDomain": [-6, 6],
+    "data": [
+      { "fn": "-1.732*x + 2", "color": "#6366f1" },
+      { "fn": "-1.732*x - 2", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "(0, 2) on first line" },
+      { "x": 0, "text": "(0, -2) on parallel line" },
+      { "x": 2, "text": "slope = -sqrt3, angle = 120 deg" }
+    ]
+  },
+  "ex-9-3-q3": {
+    "title": "Distance from (-1, 1) to line 12(x+6) = 5(y-2)",
+    "xDomain": [-10, 4],
+    "yDomain": [-8, 22],
+    "data": [
+      { "fn": "2.4*x + 16.4", "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "(-1, 1)" },
+      { "x": -6, "text": "Line: 12x - 5y + 82 = 0" }
+    ]
+  },
+  "ex-9-3-q5": {
+    "title": "Parallel lines 15x + 8y - 34 = 0 and 15x + 8y + 31 = 0",
+    "xDomain": [-6, 8],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "-1.875*x + 4.25", "color": "#6366f1" },
+      { "fn": "-1.875*x - 3.875", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "15x + 8y - 34 = 0" },
+      { "x": -1, "text": "15x + 8y + 31 = 0" },
+      { "x": 0, "text": "distance = 65/17" }
+    ]
+  },
+  "ex-9-3-q6": {
+    "title": "Line parallel to 3x - 4y + 2 = 0 through (-2, 3)",
+    "xDomain": [-6, 6],
+    "yDomain": [-3, 8],
+    "data": [
+      { "fn": "0.75*x + 0.5", "color": "#6366f1" },
+      { "fn": "0.75*x + 4.5", "color": "#ef4444" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "(-2, 3)" },
+      { "x": 2, "text": "3x - 4y + 2 = 0 (original)" },
+      { "x": -4, "text": "3x - 4y + 18 = 0 (parallel)" }
+    ]
+  },
+  "ex-9-3-q8": {
+    "title": "Angle between sqrt3 x + y = 1 and x + sqrt3 y = 1",
+    "xDomain": [-2, 3],
+    "yDomain": [-2, 3],
+    "data": [
+      { "fn": "-1.732*x + 1", "color": "#6366f1" },
+      { "fn": "-0.577*x + 0.577", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 0.37, "text": "angle = 30 deg" },
+      { "x": -1, "text": "sqrt3 x + y = 1" },
+      { "x": 1.5, "text": "x + sqrt3 y = 1" }
+    ]
+  },
+  "misc-q7": {
+    "title": "Triangle formed by y = x, y = -x, and x = 3",
+    "xDomain": [-5, 6],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x", "color": "#6366f1" },
+      { "fn": "-x", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Origin (0, 0)" },
+      { "x": 3, "text": "(3, 3)" },
+      { "x": 3, "text": "(3, -3)" },
+      { "x": 2, "text": "x = 3 (vertical side)" }
+    ]
+  },
+  "misc-q10": {
+    "title": "Lines through (3, 2) at 45 deg to x - 2y = 3",
+    "xDomain": [-3, 8],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "0.5*x - 1.5", "color": "#94a3b8" },
+      { "fn": "3*x - 7", "color": "#6366f1" },
+      { "fn": "(-1/3)*x + 3", "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "(3, 2)" },
+      { "x": 5, "text": "x - 2y = 3 (given)" },
+      { "x": 5, "text": "y = 3x - 7 (slope 3)" },
+      { "x": 6, "text": "y = -x/3 + 3 (slope -1/3)" }
+    ]
+  },
+  "misc-q20": {
+    "title": "Line equidistant from 9x+6y-7=0 and 3x+2y+6=0",
+    "xDomain": [-4, 6],
+    "yDomain": [-6, 4],
+    "data": [
+      { "fn": "-1.5*x + 7/6", "color": "#6366f1" },
+      { "fn": "-1.5*x - 3", "color": "#22c55e" },
+      { "fn": "-1.5*x - 11/12", "color": "#ef4444" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "9x + 6y - 7 = 0" },
+      { "x": -1, "text": "3x + 2y + 6 = 0" },
+      { "x": 0, "text": "equidistant: 18x + 12y + 11 = 0" }
+    ]
+  }
+}

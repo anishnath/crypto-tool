@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 230">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; fill: #374151; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .oct { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .sign { font-family: Arial, sans-serif; font-size: 8px; font-weight: bold; text-anchor: middle; }
+      .roman { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .plane { fill-opacity: 0.08; stroke-width: 0.5; }
+    </style>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="16" class="title">The Eight Octants in 3D Space</text>
+
+  <!-- 3D axes diagram -->
+  <g transform="translate(150, 100)">
+    <!-- Subtle planes -->
+    <polygon points="0,0 -70,35 0,70 70,35" class="plane" fill="#2563eb" stroke="#2563eb" />
+    <polygon points="0,0 70,35 70,-35 0,-70" class="plane" fill="#dc2626" stroke="#dc2626" />
+    <polygon points="0,0 -70,35 -70,-35 0,-70" class="plane" fill="#16a34a" stroke="#16a34a" />
+
+    <!-- X-axis -->
+    <line x1="-65" y1="32" x2="75" y2="-38" class="axis" marker-end="url(#arr)" />
+    <text x="82" y="-38" class="label" fill="#2563eb">X</text>
+    <text x="-72" y="38" class="label" fill="#2563eb" font-size="8">-X</text>
+
+    <!-- Y-axis -->
+    <line x1="-75" y1="-5" x2="80" y2="-5" class="axis" marker-end="url(#arr)" />
+    <text x="88" y="-2" class="label" fill="#dc2626">Y</text>
+    <text x="-82" y="-2" class="label" fill="#dc2626" font-size="8">-Y</text>
+
+    <!-- Z-axis -->
+    <line x1="0" y1="60" x2="0" y2="-75" class="axis" marker-end="url(#arr)" />
+    <text x="0" y="-80" class="label" fill="#16a34a">Z</text>
+    <text x="0" y="70" class="label" fill="#16a34a" font-size="8">-Z</text>
+
+    <!-- Octant labels -->
+    <text x="42" y="-42" class="roman" fill="#2563eb">I</text>
+    <text x="-20" y="-42" class="roman" fill="#6b7280">II</text>
+    <text x="-42" y="-18" class="roman" fill="#6b7280">III</text>
+    <text x="20" y="-18" class="roman" fill="#6b7280">IV</text>
+
+    <text x="42" y="20" class="roman" fill="#6b7280">V</text>
+    <text x="-20" y="20" class="roman" fill="#6b7280">VI</text>
+    <text x="-42" y="44" class="roman" fill="#6b7280">VII</text>
+    <text x="20" y="44" class="roman" fill="#6b7280">VIII</text>
+
+    <!-- Origin -->
+    <circle cx="0" cy="0" r="2.5" fill="#374151" />
+    <text x="-10" y="10" class="label" font-size="9">O</text>
+  </g>
+
+  <!-- Sign table -->
+  <g transform="translate(18, 152)">
+    <!-- Header -->
+    <text x="20" y="0" class="oct" font-weight="bold">Octant</text>
+    <text x="60" y="0" class="oct" font-weight="bold">x</text>
+    <text x="80" y="0" class="oct" font-weight="bold">y</text>
+    <text x="100" y="0" class="oct" font-weight="bold">z</text>
+
+    <text x="140" y="0" class="oct" font-weight="bold">Octant</text>
+    <text x="185" y="0" class="oct" font-weight="bold">x</text>
+    <text x="205" y="0" class="oct" font-weight="bold">y</text>
+    <text x="225" y="0" class="oct" font-weight="bold">z</text>
+
+    <line x1="5" y1="4" x2="112" y2="4" stroke="#d1d5db" stroke-width="0.5" />
+    <line x1="125" y1="4" x2="238" y2="4" stroke="#d1d5db" stroke-width="0.5" />
+
+    <!-- Row I -->
+    <text x="20" y="14" class="sign" fill="#2563eb">I</text>
+    <text x="60" y="14" class="sign" fill="#16a34a">+</text>
+    <text x="80" y="14" class="sign" fill="#16a34a">+</text>
+    <text x="100" y="14" class="sign" fill="#16a34a">+</text>
+    <!-- Row V -->
+    <text x="140" y="14" class="sign" fill="#6b7280">V</text>
+    <text x="185" y="14" class="sign" fill="#16a34a">+</text>
+    <text x="205" y="14" class="sign" fill="#16a34a">+</text>
+    <text x="225" y="14" class="sign" fill="#dc2626">−</text>
+
+    <!-- Row II -->
+    <text x="20" y="26" class="sign" fill="#6b7280">II</text>
+    <text x="60" y="26" class="sign" fill="#dc2626">−</text>
+    <text x="80" y="26" class="sign" fill="#16a34a">+</text>
+    <text x="100" y="26" class="sign" fill="#16a34a">+</text>
+    <!-- Row VI -->
+    <text x="140" y="26" class="sign" fill="#6b7280">VI</text>
+    <text x="185" y="26" class="sign" fill="#dc2626">−</text>
+    <text x="205" y="26" class="sign" fill="#16a34a">+</text>
+    <text x="225" y="26" class="sign" fill="#dc2626">−</text>
+
+    <!-- Row III -->
+    <text x="20" y="38" class="sign" fill="#6b7280">III</text>
+    <text x="60" y="38" class="sign" fill="#dc2626">−</text>
+    <text x="80" y="38" class="sign" fill="#dc2626">−</text>
+    <text x="100" y="38" class="sign" fill="#16a34a">+</text>
+    <!-- Row VII -->
+    <text x="140" y="38" class="sign" fill="#6b7280">VII</text>
+    <text x="185" y="38" class="sign" fill="#dc2626">−</text>
+    <text x="205" y="38" class="sign" fill="#dc2626">−</text>
+    <text x="225" y="38" class="sign" fill="#dc2626">−</text>
+
+    <!-- Row IV -->
+    <text x="20" y="50" class="sign" fill="#6b7280">IV</text>
+    <text x="60" y="50" class="sign" fill="#16a34a">+</text>
+    <text x="80" y="50" class="sign" fill="#dc2626">−</text>
+    <text x="100" y="50" class="sign" fill="#16a34a">+</text>
+    <!-- Row VIII -->
+    <text x="140" y="50" class="sign" fill="#6b7280">VIII</text>
+    <text x="185" y="50" class="sign" fill="#16a34a">+</text>
+    <text x="205" y="50" class="sign" fill="#dc2626">−</text>
+    <text x="225" y="50" class="sign" fill="#dc2626">−</text>
+  </g>
+
+  <text x="150" y="218" class="note">Sign of coordinates determines which octant a point lies in</text>
+
+  <text x="150" y="230" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

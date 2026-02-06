@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 160">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .slot { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; rx: 5; }
+      .slot-label { font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; fill: #2563eb; text-anchor: middle; }
+      .choice { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .mult { font-family: Arial, sans-serif; font-size: 14px; fill: #d97706; font-weight: bold; text-anchor: middle; }
+      .result { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .formula { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .brace { font-family: Arial, sans-serif; font-size: 9px; fill: #16a34a; text-anchor: middle; font-weight: bold; }
+    </style>
+  </defs>
+
+  <text x="150" y="16" class="title">Fundamental Principle of Counting</text>
+
+  <!-- Example: 3 slots with choices -->
+  <g transform="translate(25, 30)">
+    <!-- Slot 1 -->
+    <rect x="0" y="0" width="60" height="40" class="slot" />
+    <text x="30" y="25" class="slot-label">n&#x2081;</text>
+    <text x="30" y="-6" class="choice">choices</text>
+    <text x="30" y="55" class="choice">Event 1</text>
+
+    <!-- × -->
+    <text x="78" y="25" class="mult">&#xD7;</text>
+
+    <!-- Slot 2 -->
+    <rect x="95" y="0" width="60" height="40" class="slot" />
+    <text x="125" y="25" class="slot-label">n&#x2082;</text>
+    <text x="125" y="-6" class="choice">choices</text>
+    <text x="125" y="55" class="choice">Event 2</text>
+
+    <!-- × -->
+    <text x="173" y="25" class="mult">&#xD7;</text>
+
+    <!-- Slot 3 -->
+    <rect x="190" y="0" width="60" height="40" class="slot" />
+    <text x="220" y="25" class="slot-label">n&#x2083;</text>
+    <text x="220" y="-6" class="choice">choices</text>
+    <text x="220" y="55" class="choice">Event 3</text>
+  </g>
+
+  <!-- Equals total -->
+  <g transform="translate(25, 92)">
+    <line x1="0" y1="0" x2="250" y2="0" stroke="#d97706" stroke-width="1" />
+    <text x="125" y="16" class="result" font-weight="bold" fill="#d97706">Total ways = n&#x2081; &#xD7; n&#x2082; &#xD7; n&#x2083;</text>
+  </g>
+
+  <!-- Concrete example -->
+  <g transform="translate(25, 115)">
+    <rect x="0" y="0" width="250" height="28" rx="4" fill="#f0fdf4" stroke="#16a34a" stroke-width="1" />
+    <text x="125" y="12" class="brace">Example: 3-digit number from {1,2,3,4,5}</text>
+    <text x="125" y="24" class="choice" fill="#16a34a">5 &#xD7; 4 &#xD7; 3 = 60 (no repetition) | 5 &#xD7; 5 &#xD7; 5 = 125 (with repetition)</text>
+  </g>
+
+  <text x="150" y="155" class="note">If events are independent, multiply the number of choices at each step</text>
+
+  <text x="150" y="160" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

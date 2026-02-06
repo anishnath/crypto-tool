@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 190">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .circle { fill: none; stroke: #d1d5db; stroke-width: 1; }
+      .line-a { stroke: #2563eb; stroke-width: 2; }
+      .line-b { stroke: #dc2626; stroke-width: 2; }
+      .line-ab { stroke: #16a34a; stroke-width: 2; }
+      .arc { fill: none; stroke-width: 1.5; }
+      .label { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; }
+      .angle { font-family: Arial, sans-serif; font-size: 9px; font-weight: bold; }
+      .formula { font-family: Arial, sans-serif; font-size: 9px; fill: #4b5563; text-anchor: middle; }
+      .note { font-family: Arial, sans-serif; font-size: 9px; fill: #6b7280; text-anchor: middle; }
+      .box { rx: 4; stroke-width: 1; }
+    </style>
+    <marker id="ca-arr" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L5,2.5 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <text x="150" y="14" class="title">Compound Angle Formulas</text>
+
+  <!-- Unit circle with angles A and B -->
+  <g transform="translate(85, 85)">
+    <circle cx="0" cy="0" r="60" class="circle" />
+
+    <!-- Axes -->
+    <line x1="-68" y1="0" x2="68" y2="0" class="axis" marker-end="url(#ca-arr)" />
+    <line x1="0" y1="65" x2="0" y2="-65" class="axis" marker-end="url(#ca-arr)" />
+
+    <!-- Angle A line -->
+    <line x1="0" y1="0" x2="51.96" y2="-30" class="line-a" />
+    <circle cx="51.96" cy="-30" r="3" fill="#2563eb" />
+
+    <!-- Angle B line -->
+    <line x1="0" y1="0" x2="42.43" y2="-42.43" class="line-b" />
+    <circle cx="42.43" cy="-42.43" r="3" fill="#dc2626" />
+
+    <!-- Angle A+B line -->
+    <line x1="0" y1="0" x2="10.35" y2="-59.1" class="line-ab" />
+    <circle cx="10.35" cy="-59.1" r="3" fill="#16a34a" />
+
+    <!-- Arc for A -->
+    <path d="M35,0 A35,35 0 0,0 30.3,-17.5" class="arc" stroke="#2563eb" />
+    <text x="38" y="-6" class="angle" fill="#2563eb">A</text>
+
+    <!-- Arc for B (from A to A+B) -->
+    <path d="M30.3,-17.5 A35,35 0 0,0 6,-34.5" class="arc" stroke="#dc2626" />
+    <text x="24" y="-28" class="angle" fill="#dc2626">B</text>
+
+    <!-- Arc for A+B -->
+    <path d="M22,0 A22,22 0 0,0 3.8,-21.7" class="arc" stroke="#16a34a" stroke-dasharray="3 2" />
+    <text x="6" y="-14" class="angle" fill="#16a34a">A+B</text>
+  </g>
+
+  <!-- Formulas on the right -->
+  <g transform="translate(155, 28)">
+    <!-- sin(A+B) -->
+    <rect x="0" y="0" width="140" height="22" class="box" fill="#dbeafe" stroke="#2563eb" />
+    <text x="70" y="14" class="formula" fill="#2563eb" font-weight="bold">sin(A+B) = sinA cosB + cosA sinB</text>
+
+    <!-- sin(A-B) -->
+    <rect x="0" y="26" width="140" height="22" class="box" fill="#dbeafe" stroke="#2563eb" />
+    <text x="70" y="40" class="formula" fill="#2563eb" font-weight="bold">sin(A&#x2212;B) = sinA cosB &#x2212; cosA sinB</text>
+
+    <!-- cos(A+B) -->
+    <rect x="0" y="52" width="140" height="22" class="box" fill="#fee2e2" stroke="#dc2626" />
+    <text x="70" y="66" class="formula" fill="#dc2626" font-weight="bold">cos(A+B) = cosA cosB &#x2212; sinA sinB</text>
+
+    <!-- cos(A-B) -->
+    <rect x="0" y="78" width="140" height="22" class="box" fill="#fee2e2" stroke="#dc2626" />
+    <text x="70" y="92" class="formula" fill="#dc2626" font-weight="bold">cos(A&#x2212;B) = cosA cosB + sinA sinB</text>
+
+    <!-- tan(A+B) -->
+    <rect x="0" y="104" width="140" height="22" class="box" fill="#dcfce7" stroke="#16a34a" />
+    <text x="70" y="118" class="formula" fill="#16a34a" font-weight="bold">tan(A&#xB1;B) = (tanA &#xB1; tanB)/(1 &#x2213; tanA tanB)</text>
+  </g>
+
+  <text x="150" y="168" class="note">These formulas combine two angles into one expression</text>
+  <text x="150" y="180" class="note">Used to find exact values: e.g. sin75° = sin(45°+30°)</text>
+
+  <text x="150" y="190" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

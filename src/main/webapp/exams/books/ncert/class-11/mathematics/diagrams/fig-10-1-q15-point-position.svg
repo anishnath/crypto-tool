@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .circle { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="150" y="20" class="title">Q15: Point (-2.5, 3.5) vs Circle x² + y² = 25</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 20px, Origin at 150, 150) -->
+  <g transform="translate(150, 150)">
+    <!-- Axes -->
+    <line x1="-140" y1="0" x2="140" y2="0" class="axis" marker-end="url(#arrow)" />
+    <line x1="0" y1="140" x2="0" y2="-140" class="axis" marker-end="url(#arrow)" />
+    
+    <!-- Labels -->
+    <text x="130" y="15" class="label">X</text>
+    <text x="5" y="-130" class="label">Y</text>
+    <text x="5" y="15" class="label">O</text>
+    
+    <!-- Circle x^2+y^2=25 -> Radius 5 -> 100px -->
+    <circle cx="0" cy="0" r="100" class="circle" />
+    <text x="75" y="-75" class="label" fill="#2563eb">r=5</text>
+    
+    <!-- Point P(-2.5, 3.5) -->
+    <!-- -2.5 -> -50, 3.5 -> -70 -->
+    <circle cx="-50" cy="-70" r="3" class="point" />
+    <text x="-55" y="-75" class="label">P(-2.5, 3.5)</text>
+    
+    <!-- Distance Line -->
+    <line x1="0" y1="0" x2="-50" y2="-70" stroke="#dc2626" stroke-width="1" stroke-dasharray="2 2"/>
+    
+    <!-- Coordinates ticks -->
+    <text x="-50" y="12" class="label">-2.5</text>
+    <text x="5" y="-70" class="label">3.5</text>
+    <line x1="-50" y1="0" x2="-50" y2="-70" stroke="#e5e7eb" stroke-width="0.5"/>
+    <line x1="0" y1="-70" x2="-50" y2="-70" stroke="#e5e7eb" stroke-width="0.5"/>
+    
+  </g>
+  
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

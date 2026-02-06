@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 2; }
+      .tick { stroke: #374151; stroke-width: 2; }
+      .solution { stroke: #2563eb; stroke-width: 4; }
+      .label { font-family: Arial, sans-serif; font-size: 12px; fill: #4b5563; text-anchor: middle; }
+      .circle-open { fill: #ffffff; stroke: #2563eb; stroke-width: 2; }
+      .circle-closed { fill: #2563eb; stroke: #2563eb; stroke-width: 2; }
+      .title { font-family: Arial, sans-serif; font-size: 14px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow-start" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+    <marker id="arrow-end" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#374151" />
+    </marker>
+    <marker id="arrow-solution-end" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q20: x ≥ 68/77 (approx 0.88)</text>
+
+  <!-- Number Line System -->
+  <!-- Range -1 to 3. Total 4 units. Width 240px. 1 unit = 60px. -->
+  <g transform="translate(30, 60)">
+    <!-- Main Axis -->
+    <line x1="0" y1="0" x2="240" y2="0" class="axis" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)" />
+
+    <!-- Ticks -->
+    <!-- -1 --> <line x1="0" y1="-5" x2="0" y2="5" class="tick" /> <text x="0" y="20" class="label">-1</text>
+    <!-- 0 --> <line x1="60" y1="-5" x2="60" y2="5" class="tick" /> <text x="60" y="20" class="label">0</text>
+    <!-- 1 --> <line x1="120" y1="-5" x2="120" y2="5" class="tick" /> <text x="120" y="20" class="label">1</text>
+    <!-- 2 --> <line x1="180" y1="-5" x2="180" y2="5" class="tick" /> <text x="180" y="20" class="label">2</text>
+    <!-- 3 --> <line x1="240" y1="-5" x2="240" y2="5" class="tick" /> <text x="240" y="20" class="label">3</text>
+
+    <!-- Value: 68/77 approx 0.88 -->
+    <!-- 0 is at 60px. 1 is at 120px. -->
+    <!-- 0.88 unit * 60px = 52.8px from 0 => 60 + 52.8 = 112.8px -->
+    
+    <!-- Solution: x >= 0.88 -->
+    <!-- Line from 112.8 to right end (240) -->
+    <line x1="112.8" y1="0" x2="240" y2="0" class="solution" marker-end="url(#arrow-solution-end)" />
+    
+    <!-- Closed Circle at 0.88 -->
+    <circle cx="112.8" cy="0" r="5" class="circle-closed" />
+    <text x="112.8" y="-15" class="label" font-size="10">68/77</text>
+
+  </g>
+  <text x="150" y="90" text-anchor="middle" font-size="10" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

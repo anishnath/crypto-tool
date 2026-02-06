@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2; }
+      .point { fill: #dc2626; }
+      .dash { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 2 2; }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #4b5563; }
+      .title { font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <text x="150" y="20" class="title">Q12: Parabola symmetric to y-axis through (5,2)</text>
+
+  <!-- Coordinate System (Scale: 1 unit = 20px, Origin at 150, 200) -->
+  <g transform="translate(150, 200)">
+    <!-- Axes. SVG y down (Math y up). -->
+    <line x1="-130" y1="0" x2="130" y2="0" class="axis" marker-end="url(#arrow)" />
+    <line x1="0" y1="20" x2="0" y2="-180" class="axis" marker-end="url(#arrow)" />
+    <text x="120" y="15" class="label">X</text>
+    <text x="5" y="-170" class="label">Y</text>
+    <text x="5" y="15" class="label">O</text>
+    
+    <!-- Parabola x^2 = 12.5y. y = x^2 / 12.5 -->
+    <!-- Scale 20px. -->
+    <!-- Point P(5,2). x=5 (100px), y=2 (40px, up -> -40px). -->
+    <!-- x=2.5 -> 6.25/12.5 = 0.5. (50, -10). -->
+    <!-- x=6 -> 36/12.5 = 2.88. (120, -57.6). -->
+    <path d="M -120,-57.6 L -100,-40 L -50,-10 L 0,0 L 50,-10 L 100,-40 L 120,-57.6" fill="none" class="curve" />
+    
+    <!-- Point P(5,2) -->
+    <circle cx="100" cy="-40" r="3" class="point" />
+    <text x="105" y="-45" class="label">P(5,2)</text>
+    
+    <line x1="100" y1="-40" x2="100" y2="0" class="dash" />
+    <line x1="100" y1="-40" x2="0" y2="-40" class="dash" />
+    <text x="95" y="15" class="label">5</text>
+    <text x="-15" y="-35" class="label">2</text>
+    
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-size="9" fill="#9ca3af" opacity="0.6">8gwifi.org</text>
+</svg>

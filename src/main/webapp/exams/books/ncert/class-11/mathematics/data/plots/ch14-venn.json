@@ -1,0 +1,162 @@
+{
+  "ex-14-2-q21": {
+    "title": "Students: Mathematics vs Biology",
+    "sets": [
+      {"sets": ["Mathematics"], "size": 30},
+      {"sets": ["Biology"], "size": 32},
+      {"sets": ["Mathematics", "Biology"], "size": 24}
+    ],
+    "total": 60,
+    "regions": {
+      "A_only": {"value": "6", "label": "M only = 6"},
+      "B_only": {"value": "8", "label": "B only = 8"},
+      "A_and_B": {"value": "24", "label": "M ∩ B = 24"},
+      "neither": {"value": "22", "label": "Neither = 22"}
+    },
+    "colors": ["#6366f1", "#22c55e"]
+  },
+  "ex-14-2-q22": {
+    "title": "Candidates A and B: Exactly one selected",
+    "sets": [
+      {"sets": ["A"], "size": 70},
+      {"sets": ["B"], "size": 50},
+      {"sets": ["A", "B"], "size": 30}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "0.40", "label": "A only = 0.40"},
+      "B_only": {"value": "0.20", "label": "B only = 0.20"},
+      "A_and_B": {"value": "0.30", "label": "A ∩ B = 0.30"},
+      "neither": {"value": "0.10", "label": "Neither = 0.10"}
+    },
+    "colors": ["#6366f1", "#f59e0b"]
+  },
+  "ex-14-3-q13": {
+    "title": "Addition Rule: P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
+    "sets": [
+      {"sets": ["A"], "size": 33},
+      {"sets": ["B"], "size": 20},
+      {"sets": ["A", "B"], "size": 7}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "4/15", "label": "A only = 4/15"},
+      "B_only": {"value": "2/15", "label": "B only = 2/15"},
+      "A_and_B": {"value": "1/15", "label": "A ∩ B = 1/15"},
+      "neither": {"value": "8/15", "label": "Outside = 8/15"}
+    },
+    "colors": ["#6366f1", "#22c55e"]
+  },
+  "ex-14-3-q15": {
+    "title": "Events E and F: De Morgan's Law",
+    "sets": [
+      {"sets": ["E"], "size": 25},
+      {"sets": ["F"], "size": 50},
+      {"sets": ["E", "F"], "size": 12}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "1/8", "label": "E only = 1/8"},
+      "B_only": {"value": "3/8", "label": "F only = 3/8"},
+      "A_and_B": {"value": "1/8", "label": "E ∩ F = 1/8"},
+      "neither": {"value": "3/8", "label": "E' ∩ F' = 3/8"}
+    },
+    "colors": ["#6366f1", "#ef4444"]
+  },
+  "ex-14-3-q17": {
+    "title": "Events A and B: Complement and Union",
+    "sets": [
+      {"sets": ["A"], "size": 42},
+      {"sets": ["B"], "size": 48},
+      {"sets": ["A", "B"], "size": 16}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "0.26", "label": "A only = 0.26"},
+      "B_only": {"value": "0.32", "label": "B only = 0.32"},
+      "A_and_B": {"value": "0.16", "label": "A ∩ B = 0.16"},
+      "neither": {"value": "0.26", "label": "Neither = 0.26"}
+    },
+    "colors": ["#6366f1", "#22c55e"]
+  },
+  "ex-14-3-q18": {
+    "title": "Students: Mathematics 40% vs Biology 30%",
+    "sets": [
+      {"sets": ["Math"], "size": 40},
+      {"sets": ["Bio"], "size": 30},
+      {"sets": ["Math", "Bio"], "size": 10}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "30%", "label": "Math only = 30%"},
+      "B_only": {"value": "20%", "label": "Bio only = 20%"},
+      "A_and_B": {"value": "10%", "label": "Both = 10%"},
+      "neither": {"value": "40%", "label": "Neither = 40%"}
+    },
+    "colors": ["#6366f1", "#22c55e"]
+  },
+  "ex-14-3-q19": {
+    "title": "Entrance Test: First vs Second Exam",
+    "sets": [
+      {"sets": ["First"], "size": 80},
+      {"sets": ["Second"], "size": 70},
+      {"sets": ["First", "Second"], "size": 55}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "0.25", "label": "1st only = 0.25"},
+      "B_only": {"value": "0.15", "label": "2nd only = 0.15"},
+      "A_and_B": {"value": "0.55", "label": "Both = 0.55"},
+      "neither": {"value": "0.05", "label": "Neither = 0.05"}
+    },
+    "colors": ["#6366f1", "#f59e0b"]
+  },
+  "ex-14-3-q20": {
+    "title": "English vs Hindi: Pass Probability",
+    "sets": [
+      {"sets": ["English"], "size": 75},
+      {"sets": ["Hindi"], "size": 65},
+      {"sets": ["English", "Hindi"], "size": 50}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "0.25", "label": "E only = 0.25"},
+      "B_only": {"value": "0.15", "label": "H only = 0.15"},
+      "A_and_B": {"value": "0.50", "label": "Both = 0.50"},
+      "neither": {"value": "0.10", "label": "Neither = 0.10"}
+    },
+    "colors": ["#6366f1", "#22c55e"]
+  },
+  "misc-q7": {
+    "title": "P(A) = 0.54, P(B) = 0.69, P(A ∩ B) = 0.35",
+    "sets": [
+      {"sets": ["A"], "size": 54},
+      {"sets": ["B"], "size": 69},
+      {"sets": ["A", "B"], "size": 35}
+    ],
+    "total": 100,
+    "regions": {
+      "A_only": {"value": "0.19", "label": "A only = 0.19"},
+      "B_only": {"value": "0.34", "label": "B only = 0.34"},
+      "A_and_B": {"value": "0.35", "label": "A ∩ B = 0.35"},
+      "neither": {"value": "0.12", "label": "A' ∩ B' = 0.12"}
+    },
+    "colors": ["#6366f1", "#ef4444"]
+  },
+  "misc-q8": {
+    "title": "Male vs Over 35: Company Representatives",
+    "sets": [
+      {"sets": ["Male"], "size": 3},
+      {"sets": ["Over 35"], "size": 2},
+      {"sets": ["Male", "Over 35"], "size": 1}
+    ],
+    "total": 5,
+    "regions": {
+      "A_only": {"value": "2", "label": "Male ≤35 = 2"},
+      "B_only": {"value": "1", "label": "Female >35 = 1"},
+      "A_and_B": {"value": "1", "label": "Male >35 = 1"},
+      "neither": {"value": "1", "label": "Female ≤35 = 1"}
+    },
+    "colors": ["#6366f1", "#f59e0b"]
+  }
+}
