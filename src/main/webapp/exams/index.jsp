@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "Free Practice Exams | CBSE Maths + 150+ Mental Math Tricks";
-    String seoDescription = "Free CBSE Class 10 Maths mock tests with solutions + 150+ mental math tricks for competitive exams. Practice SSC, Bank, CAT quantitative aptitude.";
+    String seoTitle = "Free Practice Exams | NCERT Solutions + CBSE Maths + 150+ Mental Math Tricks";
+    String seoDescription = "1,128 NCERT textbook solutions with interactive graphs & Venn diagrams. Free CBSE mock tests + 150+ mental math tricks for SSC, Bank, CAT exams.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -25,7 +25,7 @@
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
 
     // Keywords
-    extraHead.append("<meta name=\"keywords\" content=\"CBSE practice exams, Class 10 maths mock test, mental math tricks, competitive exam preparation, SSC math, bank exam quantitative, CAT quant practice, free mock tests\">\n");
+    extraHead.append("<meta name=\"keywords\" content=\"NCERT solutions Class 11, NCERT solutions Class 10, NCERT solutions Class 9, CBSE practice exams, mental math tricks, competitive exam preparation, SSC math, bank exam quantitative, CAT quant practice, free mock tests, interactive graphs\">\n");
 
     request.setAttribute("extraHeadContent", extraHead.toString());
 %>
@@ -34,10 +34,10 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1 class="hero-title">Free Practice Exams & Mental Math Training</h1>
+                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions & Mental Math</h1>
                     <p class="hero-subtitle">
-                        CBSE board exam practice + 150+ mental math tricks for competitive exams.
-                        <strong>SSC, Bank, CAT, GRE</strong> quantitative aptitude preparation.
+                        1,128 NCERT textbook solutions with interactive graphs & Venn diagrams.
+                        CBSE board exam practice + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
                     </p>
                 </div>
             </section>
@@ -107,9 +107,9 @@
                                 <h3 class="board-card-title">NCERT Solutions</h3>
                                 <p class="board-card-subtitle">Textbook Exercise Solutions</p>
                                 <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">244 Questions</span>
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">1,128 Questions</span>
                                 </div>
-                                <p class="text-sm text-muted mt-4">Class 9 Mathematics</p>
+                                <p class="text-sm text-muted mt-4">Class 9, 10 & 11 Mathematics</p>
                             </a>
 
                             <!-- CBSE Board Card -->
@@ -243,25 +243,25 @@
                                 <div class="card text-center">
                                     <div
                                         style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
+                                        1,128</div>
+                                    <div class="text-muted text-sm">NCERT Solutions</div>
+                                </div>
+                                <div class="card text-center">
+                                    <div
+                                        style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
                                         150+</div>
                                     <div class="text-muted text-sm">Math Tricks</div>
                                 </div>
                                 <div class="card text-center">
                                     <div
                                         style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
-                                        5+</div>
-                                    <div class="text-muted text-sm">CBSE Practice Sets</div>
+                                        80+</div>
+                                    <div class="text-muted text-sm">Interactive Graphs</div>
                                 </div>
                                 <div class="card text-center">
                                     <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--success);">
                                         100%</div>
                                     <div class="text-muted text-sm">Free Forever</div>
-                                </div>
-                                <div class="card text-center">
-                                    <div
-                                        style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
-                                        24/7</div>
-                                    <div class="text-muted text-sm">Access</div>
                                 </div>
                             </div>
                         </div>
@@ -273,8 +273,8 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "@id": "https://8gwifi.org/exams/",
-    "name": "Free Practice Exams & Mental Math Training",
-    "description": "Free CBSE Class 10 Maths mock tests with solutions + 150+ mental math tricks for competitive exams.",
+    "name": "Free Practice Exams, NCERT Solutions & Mental Math",
+    "description": "1,128 NCERT textbook solutions with interactive graphs & Venn diagrams. Free CBSE mock tests + 150+ mental math tricks.",
     "url": "https://8gwifi.org/exams/",
     "inLanguage": "en",
     "isPartOf": {
@@ -292,11 +292,24 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 3,
+    "numberOfItems": 4,
     "itemListElement": [
         {
             "@type": "ListItem",
             "position": 1,
+            "item": {
+                "@type": "Course",
+                "name": "NCERT Textbook Solutions - Class 9, 10 & 11 Mathematics",
+                "description": "1,128 step-by-step NCERT solutions with interactive graphs, Venn diagrams, and SVG illustrations for Class 9, 10 & 11 Mathematics",
+                "url": "https://8gwifi.org/exams/books/ncert/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "isAccessibleForFree": true,
+                "educationalLevel": "Class 9-11"
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
             "item": {
                 "@type": "Course",
                 "name": "Quick Math - Mental Arithmetic Mastery",
@@ -309,7 +322,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 2,
+            "position": 3,
             "item": {
                 "@type": "WebApplication",
                 "name": "Math Memory Games - Brain Training",
@@ -322,7 +335,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 3,
+            "position": 4,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",

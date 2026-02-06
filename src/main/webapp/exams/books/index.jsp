@@ -139,7 +139,7 @@
     <!-- Hero Section -->
     <section class="books-hero">
         <h1>Textbook Solutions</h1>
-        <p>Step-by-step solutions for all exercises. Learn concepts with detailed explanations, hints, and practice problems.</p>
+        <p>Step-by-step solutions for all exercises. Learn concepts with detailed explanations, interactive graphs, Venn diagrams, and SVG illustrations.</p>
     </section>
 
     <!-- Ad: Header -->
@@ -154,10 +154,10 @@
             <a href="<%=request.getContextPath()%>/exams/books/ncert/" class="publisher-card">
                 <div class="publisher-logo">N</div>
                 <h2>NCERT</h2>
-                <p>National Council of Educational Research and Training textbooks. Official books for CBSE curriculum, Class 6-12.</p>
+                <p>National Council of Educational Research and Training textbooks. Official books for CBSE curriculum with interactive graphs, Venn diagrams, and SVG illustrations.</p>
                 <div class="publisher-stats">
                     <div class="stat">
-                        <div class="stat-value">2</div>
+                        <div class="stat-value">3</div>
                         <div class="stat-label">Classes</div>
                     </div>
                     <div class="stat">
@@ -165,7 +165,7 @@
                         <div class="stat-label">Subject</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">598</div>
+                        <div class="stat-value">1,128</div>
                         <div class="stat-label">Questions</div>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
                 "position": 1,
                 "name": "NCERT Solutions",
                 "url": "https://8gwifi.org/exams/books/ncert/",
-                "description": "Class 9 & 10 Mathematics with 598 solved questions"
+                "description": "Class 9, 10 & 11 Mathematics with 1,128 solved questions, interactive graphs, and Venn diagrams"
             }
         ]
     }
