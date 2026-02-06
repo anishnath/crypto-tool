@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "Free Practice Exams | NCERT Solutions + CBSE Maths + 150+ Mental Math Tricks";
-    String seoDescription = "1,128 NCERT textbook solutions with interactive graphs & Venn diagrams. Free CBSE mock tests + 150+ mental math tricks for SSC, Bank, CAT exams.";
+    String seoTitle = "Free Practice Exams | NCERT Solutions + Physics Tools + CBSE Maths + Mental Math";
+    String seoDescription = "1,128 NCERT solutions with interactive graphs, 43 physics solvers & calculators, CBSE mock tests + 150+ mental math tricks. 100% free.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -34,10 +34,10 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions & Mental Math</h1>
+                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions, Physics Tools & Mental Math</h1>
                     <p class="hero-subtitle">
-                        1,128 NCERT textbook solutions with interactive graphs & Venn diagrams.
-                        CBSE board exam practice + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
+                        1,128 NCERT solutions with interactive graphs, 43 physics solvers & calculators,
+                        CBSE mock tests + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
                     </p>
                 </div>
             </section>
@@ -110,6 +110,24 @@
                                     <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">1,128 Questions</span>
                                 </div>
                                 <p class="text-sm text-muted mt-4">Class 9, 10 & 11 Mathematics</p>
+                            </a>
+
+                            <!-- Physics Tools Card -->
+                            <a href="<%=request.getContextPath()%>/physics/"
+                                class="card card-clickable board-card" style="border-color: #f97316; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">Physics Tools</h3>
+                                <p class="board-card-subtitle">Interactive Solvers & Calculators</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">43 Tools</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Mechanics • Optics • Electromagnetism • Waves</p>
                             </a>
 
                             <!-- CBSE Board Card -->
@@ -254,9 +272,9 @@
                                 </div>
                                 <div class="card text-center">
                                     <div
-                                        style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
-                                        80+</div>
-                                    <div class="text-muted text-sm">Interactive Graphs</div>
+                                        style="font-size: var(--text-3xl); font-weight: 700; color: #f97316;">
+                                        43</div>
+                                    <div class="text-muted text-sm">Physics Tools</div>
                                 </div>
                                 <div class="card text-center">
                                     <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--success);">
@@ -292,7 +310,7 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 4,
+    "numberOfItems": 5,
     "itemListElement": [
         {
             "@type": "ListItem",
@@ -311,6 +329,19 @@
             "@type": "ListItem",
             "position": 2,
             "item": {
+                "@type": "WebApplication",
+                "name": "Physics Tools - Interactive Solvers & Calculators",
+                "applicationCategory": "EducationalApplication",
+                "description": "43 free interactive physics tools covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics",
+                "url": "https://8gwifi.org/physics/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
                 "@type": "Course",
                 "name": "Quick Math - Mental Arithmetic Mastery",
                 "description": "150+ mental math tricks covering Vedic math, speed calculation, and shortcuts for competitive exams",
@@ -322,7 +353,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 3,
+            "position": 4,
             "item": {
                 "@type": "WebApplication",
                 "name": "Math Memory Games - Brain Training",
@@ -335,7 +366,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 4,
+            "position": 5,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",
