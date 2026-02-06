@@ -56,9 +56,16 @@
 
 <!-- NCERT Books CSS -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/books/ncert/ncert-books.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- Page-specific minimal styles if needed -->
 <style>
+    /* Inter font for math education pages */
+    .container, .chapter-hero, .chapter-card, .chapter-content {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
     /* Any page-specific overrides go here */
     .chapter-hero {
         padding: var(--space-6) var(--space-4);
