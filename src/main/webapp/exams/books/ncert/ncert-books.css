@@ -3,6 +3,14 @@
  * Used across all NCERT textbook solution pages
  */
 
+/* Map NCERT tokens to Exam design system variables when needed */
+:root {
+    --accent: var(--accent-primary, #6366f1);
+    --accent-secondary: var(--accent-hover, #4f46e5);
+    --border-primary: var(--border, #e2e8f0);
+    --border-secondary: var(--border-light, #f1f5f9);
+}
+
 /* ============================================
    Hero Sections
    ============================================ */
@@ -461,6 +469,19 @@
     background: var(--bg-secondary);
 }
 
+.hint-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.hint-toggle:hover {
+    opacity: 0.85;
+}
+
 .toggle-btn {
     padding: var(--space-2) var(--space-4);
     border: 1px solid var(--border-primary);
@@ -489,6 +510,21 @@
     padding: var(--space-4);
     border-top: 1px solid var(--border-secondary);
     background: var(--bg-secondary);
+}
+
+.hint-content-text {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid #f59e0b;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+    display: none;
+}
+
+.hint-content-text.show {
+    display: block;
 }
 
 .hint-content.show,

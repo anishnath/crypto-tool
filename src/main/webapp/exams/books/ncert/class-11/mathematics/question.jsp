@@ -686,6 +686,43 @@
 
     .meta-pill.has-venn { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
 
+    /* Dark mode: make pills, hint toggle, and answer label more visible */
+    [data-theme="dark"] .meta-pill.chapter { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+    [data-theme="dark"] .meta-pill.exercise { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    [data-theme="dark"] .meta-pill.type { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+    [data-theme="dark"] .meta-pill.difficulty-easy { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    [data-theme="dark"] .meta-pill.difficulty-medium { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+    [data-theme="dark"] .meta-pill.difficulty-hard { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    [data-theme="dark"] .meta-pill.marks { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+    [data-theme="dark"] .meta-pill.has-plot { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+    [data-theme="dark"] .meta-pill.has-venn { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+
+    [data-theme="dark"] .hint-toggle {
+        color: #fbbf24;
+    }
+
+    [data-theme="dark"] .hint-content-text {
+        background: rgba(245, 158, 11, 0.12);
+        border-left-color: #fbbf24;
+        color: #cbd5e1;
+    }
+
+    [data-theme="dark"] .answer-label {
+        color: #4ade80;
+    }
+
+    [data-theme="dark"] .nav-btn {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+    }
+
+    [data-theme="dark"] .nav-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: #6366f1;
+        color: #c7d2fe;
+    }
+
     /* function-plot SVG theme overrides */
     .plot-target .function-plot {
         background: var(--bg-secondary) !important;
@@ -802,7 +839,7 @@
 <script>
 (function() {
     var CHAPTER_NUM = '<%= chapterNum %>';
-    var CHAPTER_NAME = '<%= chapterName %>';
+    var CHAPTER_NAME = '<%= chapterName.replace("'", "\\'") %>';
     var CHAPTER_SLUG = '<%= chapterSlug %>';
     var QUESTION_SLUG = '<%= questionSlug %>';
     var EXERCISE_NUM = '<%= exerciseNum %>';

@@ -104,6 +104,16 @@
     <link rel="stylesheet"
           href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
 
+    <!-- Theme initialization (before CSS to avoid flash) -->
+    <script>
+        (function () {
+            var theme = localStorage.getItem('exam-theme');
+            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
     <!-- Exam Platform CSS -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/exams.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/toast.css">
@@ -112,15 +122,8 @@
           href="<%=request.getContextPath()%>/exams/css/practice.css">
     <% } %>
 
-    <!-- Theme initialization and toggle -->
+    <!-- Theme toggle -->
     <script>
-        (function () {
-            var theme = localStorage.getItem('exam-theme');
-            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-
         // Global theme toggle (available before ExamCore loads)
         function toggleExamTheme() {
             var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -134,18 +137,31 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                macros: {
+                    cosec: ['\\operatorname{cosec}', 0]
+                }
             },
-            svg: {
-                fontCache: 'global'
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'svg', 'img'],
+                ignoreHtmlClass: 'no-mathjax|diagram-container|diagram-image|svg-diagram'
+            },
+            chtml: {
+                scale: 1,
+                minScale: 0.5
+            },
+            startup: {
+                pageReady: function() {
+                    return MathJax.startup.defaultPageReady();
+                }
             }
         };
     </script>
     <script id="MathJax-script" async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
     <!-- Analytics -->
-     <%@ include file="exam-analytics.jsp" %>
+<%--     <%@ include file="exam-analytics.jsp" %>--%>
 
     <!-- Ad Scripts -->
     <%@ include file="ads-head.jsp" %>
@@ -179,7 +195,7 @@
             <% if (isLoggedIn) { %>
             <a href="<%=request.getContextPath()%>/exams/dashboard.jsp">My Dashboard</a>
             <% } %>
-            <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
+            <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
             <a href="<%=request.getContextPath()%>/">Tools</a>
         </nav>
 
@@ -239,7 +255,7 @@
                 </svg>
             </button>
 
-            <button class="theme-toggle" onclick="toggleExamTheme()"
+        <button class="theme-toggle" type="button"
                     aria-label="Toggle theme">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" class="sun-icon">
