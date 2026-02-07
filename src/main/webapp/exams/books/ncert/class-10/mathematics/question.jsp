@@ -202,6 +202,7 @@
     .meta-pill.difficulty-hard { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
     .meta-pill.marks { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
     .meta-pill.type { background: var(--bg-secondary); color: var(--text-secondary); }
+    .meta-pill.has-plot { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
 
     /* Dark mode: make pills, hint toggle, and labels more visible */
     [data-theme="dark"] .meta-pill.chapter { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
@@ -211,6 +212,7 @@
     [data-theme="dark"] .meta-pill.difficulty-medium { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
     [data-theme="dark"] .meta-pill.difficulty-hard { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
     [data-theme="dark"] .meta-pill.marks { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+    [data-theme="dark"] .meta-pill.has-plot { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
 
     [data-theme="dark"] .hint-toggle {
         color: #fbbf24;
@@ -583,11 +585,107 @@
         to { transform: rotate(360deg); }
     }
 
+    /* Interactive Plot */
+    .plot-container {
+        margin: var(--space-4) 0;
+        padding: var(--space-4);
+        background: var(--bg-primary);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: var(--radius-lg);
+    }
+
+    .plot-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin-bottom: var(--space-3);
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--accent);
+    }
+
+    .plot-target {
+        width: 100%;
+        min-height: 300px;
+    }
+
+    .plot-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        padding: var(--space-3) var(--space-2) 0;
+        font-size: var(--text-xs);
+        color: var(--text-secondary);
+    }
+
+    .plot-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .plot-legend-swatch {
+        width: 18px;
+        height: 3px;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    /* function-plot SVG theme overrides */
+    .plot-target .function-plot {
+        background: var(--bg-secondary) !important;
+        border-radius: var(--radius-md);
+    }
+
+    .plot-target text {
+        fill: var(--text-secondary) !important;
+        font-family: inherit !important;
+    }
+
+    .plot-target .tick text {
+        fill: var(--text-muted) !important;
+        font-size: 11px !important;
+    }
+
+    .plot-target .axis path,
+    .plot-target .axis line {
+        stroke: var(--text-muted) !important;
+        stroke-opacity: 0.5 !important;
+    }
+
+    .plot-target .top-right-legend text {
+        fill: var(--text-primary) !important;
+        font-size: 12px !important;
+    }
+
+    .plot-target .annotation text {
+        fill: var(--text-primary) !important;
+        font-weight: 600 !important;
+        font-size: 12px !important;
+    }
+
+    .plot-target .annotation .line {
+        stroke: var(--text-muted) !important;
+        stroke-dasharray: 4 4 !important;
+    }
+
+    /* Grid lines */
+    .plot-target .graph-grid .tick line {
+        stroke: var(--border, #334155) !important;
+        stroke-opacity: 0.3 !important;
+    }
+
+    .plot-target .origin {
+        stroke: var(--text-muted) !important;
+        stroke-opacity: 0.6 !important;
+    }
+
     /* Mobile */
     @media (max-width: 640px) {
         .question-page-hero h1 { font-size: var(--text-lg); }
         .question-nav { flex-direction: column; }
         .nav-btn { width: 100%; justify-content: center; }
+        .plot-target { min-height: 250px; }
     }
 </style>
 
@@ -753,6 +851,7 @@
             html += '<span class="meta-pill type">' + currentQuestion.type + '</span>';
             html += '<span class="meta-pill difficulty-' + diffClass + '">' + diffLabel + '</span>';
             html += '<span class="meta-pill marks">' + currentQuestion.marks + ' Marks</span>';
+            if (currentQuestion.interactive_plot) html += '<span class="meta-pill has-plot">&#128200; Interactive Graph</span>';
             html += '</div>';
             html += '</section>';
 
@@ -837,6 +936,15 @@
             html += '<div class="answer-text">' + formatTextWithLineBreaks(currentQuestion.correct_answer_latex || currentQuestion.correct_answer_plain) + '</div>';
             html += '</div>';
 
+            // Interactive Plot
+            if (currentQuestion.interactive_plot) {
+                html += '<div class="plot-container">';
+                html += '<div class="plot-header">&#128200; Interactive Graph</div>';
+                html += '<div class="plot-target" id="questionPlot" data-plot-slug="' + currentQuestion.interactive_plot + '"></div>';
+                html += '<div class="plot-legend" id="questionPlot_legend"></div>';
+                html += '</div>';
+            }
+
             html += '</div>'; // solution-section
             html += '</div>'; // question-content-card
 
@@ -867,6 +975,63 @@
                 MathJax.typesetPromise([container]).catch(function(err) {
                     console.log('MathJax error:', err);
                 });
+            }
+
+            // Render interactive plot if present
+            if (currentQuestion.interactive_plot) {
+                var plotEl = document.getElementById('questionPlot');
+                if (plotEl) {
+                    var plotFile = '<%=request.getContextPath()%>/exams/books/ncert/class-10/mathematics/data/plots/ch' + CHAPTER_NUM + '-plots.json';
+                    fetch(plotFile)
+                        .then(function(r) { return r.json(); })
+                        .then(function(plotData) {
+                            var config = plotData[currentQuestion.interactive_plot];
+                            if (!config) return;
+
+                            var script = document.createElement('script');
+                            script.src = 'https://unpkg.com/function-plot/dist/function-plot.js';
+                            script.onload = function() {
+                                try {
+                                    functionPlot({
+                                        target: '#questionPlot',
+                                        width: plotEl.offsetWidth || 500,
+                                        height: 350,
+                                        grid: true,
+                                        xAxis: { domain: config.xDomain || [-10, 10] },
+                                        yAxis: { domain: config.yDomain || [-10, 10] },
+                                        data: config.data.map(function(d) {
+                                            var item = { fn: d.fn, color: d.color || '#6366f1' };
+                                            if (d.fnType) item.fnType = d.fnType;
+                                            if (d.range) item.range = d.range;
+                                            if (d.skipTip) item.skipTip = d.skipTip;
+                                            if (d.label) item.attr = { 'data-label': d.label };
+                                            return item;
+                                        }),
+                                        annotations: (config.annotations || []).map(function(a) {
+                                            return { x: a.x, text: a.text };
+                                        })
+                                    });
+                                    // Build legend
+                                    var legendEl = document.getElementById('questionPlot_legend');
+                                    if (legendEl) {
+                                        var legendHtml = '';
+                                        config.data.forEach(function(d) {
+                                            if (d.label && !d.skipTip) {
+                                                legendHtml += '<span class="plot-legend-item">'
+                                                    + '<span class="plot-legend-swatch" style="background:' + (d.color || '#6366f1') + '"></span>'
+                                                    + d.label + '</span>';
+                                            }
+                                        });
+                                        legendEl.innerHTML = legendHtml;
+                                    }
+                                } catch (e) {
+                                    console.log('Plot error:', e);
+                                }
+                            };
+                            document.head.appendChild(script);
+                        })
+                        .catch(function(err) { console.log('Plot data error:', err); });
+                }
             }
 
             // Inject QAPage Schema for SEO

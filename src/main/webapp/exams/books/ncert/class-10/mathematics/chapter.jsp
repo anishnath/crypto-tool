@@ -192,6 +192,7 @@
     .meta-badge.difficulty-easy { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
     .meta-badge.difficulty-medium { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
     .meta-badge.difficulty-hard { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .meta-badge.has-plot { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
 
     /* Solution Section */
     .solution-toggle {
@@ -268,6 +269,7 @@
     [data-theme="dark"] .meta-badge.difficulty-easy { background: rgba(34, 197, 94, 0.2); color: #86efac; }
     [data-theme="dark"] .meta-badge.difficulty-medium { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
     [data-theme="dark"] .meta-badge.difficulty-hard { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    [data-theme="dark"] .meta-badge.has-plot { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
 
     [data-theme="dark"] .solution-toggle {
         background: rgba(30, 41, 59, 0.8);
@@ -562,6 +564,101 @@
         }
     }
 
+    /* Interactive Plot */
+    .plot-container {
+        margin: var(--space-4) 0;
+        padding: var(--space-4);
+        background: var(--bg-primary);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: var(--radius-lg);
+    }
+
+    .plot-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin-bottom: var(--space-3);
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--accent);
+    }
+
+    .plot-target {
+        width: 100%;
+        min-height: 300px;
+    }
+
+    .plot-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        padding: var(--space-3) var(--space-2) 0;
+        font-size: var(--text-xs);
+        color: var(--text-secondary);
+    }
+
+    .plot-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .plot-legend-swatch {
+        width: 18px;
+        height: 3px;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    /* function-plot SVG theme overrides */
+    .plot-target .function-plot {
+        background: var(--bg-secondary) !important;
+        border-radius: var(--radius-md);
+    }
+
+    .plot-target text {
+        fill: var(--text-secondary) !important;
+        font-family: inherit !important;
+    }
+
+    .plot-target .tick text {
+        fill: var(--text-muted) !important;
+        font-size: 11px !important;
+    }
+
+    .plot-target .axis path,
+    .plot-target .axis line {
+        stroke: var(--text-muted) !important;
+        stroke-opacity: 0.5 !important;
+    }
+
+    .plot-target .top-right-legend text {
+        fill: var(--text-primary) !important;
+        font-size: 12px !important;
+    }
+
+    .plot-target .annotation text {
+        fill: var(--text-primary) !important;
+        font-weight: 600 !important;
+        font-size: 12px !important;
+    }
+
+    .plot-target .annotation .line {
+        stroke: var(--text-muted) !important;
+        stroke-dasharray: 4 4 !important;
+    }
+
+    /* Grid lines */
+    .plot-target .graph-grid .tick line {
+        stroke: var(--border, #334155) !important;
+        stroke-opacity: 0.3 !important;
+    }
+
+    .plot-target .origin {
+        stroke: var(--text-muted) !important;
+        stroke-opacity: 0.6 !important;
+    }
+
     /* Mobile */
     @media (max-width: 640px) {
         .chapter-hero h1 {
@@ -578,6 +675,10 @@
 
         .svg-diagram {
             max-height: 200px;
+        }
+
+        .plot-target {
+            min-height: 250px;
         }
     }
 </style>
@@ -881,6 +982,7 @@
                     html += '<span class="meta-badge type-' + typeClass + '">' + q.type + '</span>';
                     html += '<span class="meta-badge difficulty-' + diffClass + '">' + diffLabel + '</span>';
                     html += '<span class="meta-badge">' + q.marks + ' Marks</span>';
+                    if (q.interactive_plot) html += '<span class="meta-badge has-plot">&#128200; Interactive Graph</span>';
                     html += '</div>';
 
                     // Display diagram if question has one
@@ -956,6 +1058,17 @@
                     html += '</div>';
                     html += '<div class="answer-text">' + formatAnswerText(q.correct_answer_latex || q.correct_answer_plain) + '</div>';
                     html += '</div>';
+
+                    // Interactive Plot
+                    if (q.interactive_plot) {
+                        var plotId = 'plot_' + exIdx + '_' + qIdx;
+                        html += '<div class="plot-container">';
+                        html += '<div class="plot-header">&#128200; Interactive Graph</div>';
+                        html += '<div class="plot-target" id="' + plotId + '" data-plot-slug="' + q.interactive_plot + '"></div>';
+                        html += '<div class="plot-legend" id="' + plotId + '_legend"></div>';
+                        html += '</div>';
+                    }
+
                     html += '</div>';
 
                     html += '</div>';
@@ -1027,11 +1140,100 @@ function toggleSolution(qId) {
     btn.textContent = sol.classList.contains('show') ? 'Hide Solution' : 'Show Solution';
     btn.classList.toggle('active');
 
-    // Re-render MathJax for newly visible content
-    if (sol.classList.contains('show') && window.MathJax && window.MathJax.typesetPromise) {
-        MathJax.typesetPromise([sol]).catch(function(err) {
-            console.log('MathJax error:', err);
+    if (sol.classList.contains('show')) {
+        // Re-render MathJax for newly visible content
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            MathJax.typesetPromise([sol]).catch(function(err) {
+                console.log('MathJax error:', err);
+            });
+        }
+        // Render any plots inside this solution
+        var plotTargets = sol.querySelectorAll('.plot-target[data-plot-slug]');
+        if (plotTargets.length > 0) {
+            renderPlots(plotTargets);
+        }
+    }
+}
+
+// --- Interactive Plot Support ---
+var _plotDataCache = {};
+var _functionPlotLoaded = false;
+
+function loadFunctionPlot(callback) {
+    if (_functionPlotLoaded) { callback(); return; }
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/function-plot/dist/function-plot.js';
+    script.onload = function() { _functionPlotLoaded = true; callback(); };
+    document.head.appendChild(script);
+}
+
+function getPlotFile() {
+    return '<%=request.getContextPath()%>/exams/books/ncert/class-10/mathematics/data/plots/ch' + '<%= chapterNum %>' + '-plots.json';
+}
+
+function renderPlots(targets) {
+    var plotFile = getPlotFile();
+
+    function doRender(plotData) {
+        targets.forEach(function(el) {
+            if (el.dataset.rendered) return;
+            var slug = el.dataset.plotSlug;
+            var config = plotData[slug];
+            if (!config) return;
+
+            loadFunctionPlot(function() {
+                try {
+                    var plotConfig = {
+                        target: '#' + el.id,
+                        width: el.offsetWidth || 500,
+                        height: 300,
+                        grid: true,
+                        xAxis: { domain: config.xDomain || [-10, 10] },
+                        yAxis: { domain: config.yDomain || [-10, 10] },
+                        data: config.data.map(function(d) {
+                            var item = { fn: d.fn, color: d.color || '#6366f1' };
+                            if (d.fnType) item.fnType = d.fnType;
+                            if (d.range) item.range = d.range;
+                            if (d.skipTip) item.skipTip = d.skipTip;
+                            if (d.label) item.attr = { 'data-label': d.label };
+                            return item;
+                        }),
+                        annotations: (config.annotations || []).map(function(a) {
+                            return { x: a.x, text: a.text };
+                        })
+                    };
+                    functionPlot(plotConfig);
+                    el.dataset.rendered = 'true';
+                    // Build legend
+                    var legendEl = document.getElementById(el.id + '_legend');
+                    if (legendEl) {
+                        var legendHtml = '';
+                        config.data.forEach(function(d) {
+                            if (d.label && !d.skipTip) {
+                                legendHtml += '<span class="plot-legend-item">'
+                                    + '<span class="plot-legend-swatch" style="background:' + (d.color || '#6366f1') + '"></span>'
+                                    + d.label + '</span>';
+                            }
+                        });
+                        legendEl.innerHTML = legendHtml;
+                    }
+                } catch (e) {
+                    console.log('Plot error for ' + slug + ':', e);
+                }
+            });
         });
+    }
+
+    if (_plotDataCache[plotFile]) {
+        doRender(_plotDataCache[plotFile]);
+    } else {
+        fetch(plotFile)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                _plotDataCache[plotFile] = data;
+                doRender(data);
+            })
+            .catch(function(err) { console.log('Plot data load error:', err); });
     }
 }
 
