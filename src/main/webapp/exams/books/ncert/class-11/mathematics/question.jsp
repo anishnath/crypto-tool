@@ -1004,12 +1004,15 @@
                 html += '<div class="solution-steps-header">';
                 html += '<div class="solution-steps-icon">&#9998;</div>';
                 html += '<span class="solution-steps-title">Step-by-Step Solution</span>';
-                html += '<span class="solution-steps-count">' + displaySteps.length + ' steps</span>';
+                html += '<span class="solution-steps-count">' + displaySteps.filter(function(s){ return s && s.trim(); }).length + ' steps</span>';
                 html += '</div>';
                 html += '<ul class="solution-steps">';
-                displaySteps.forEach(function(step, idx) {
+                var stepNum = 0;
+                displaySteps.forEach(function(step) {
+                    if (!step || !step.trim()) return;
+                    stepNum++;
                     html += '<li class="solution-step">';
-                    html += '<span class="step-num">' + (idx + 1) + '</span>';
+                    html += '<span class="step-num">' + stepNum + '</span>';
                     html += '<span class="step-text">' + formatTextWithLineBreaks(step) + '</span>';
                     html += '</li>';
                 });
