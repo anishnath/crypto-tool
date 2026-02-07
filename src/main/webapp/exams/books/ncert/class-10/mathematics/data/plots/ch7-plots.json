@@ -1,0 +1,189 @@
+{
+  "ex-7-1-q1i": {
+    "title": "Distance: (2,3) to (4,1) = 2√2",
+    "xDomain": [0, 6],
+    "yDomain": [0, 5],
+    "data": [
+      { "fn": "-x + 5", "color": "#6366f1", "label": "Line AB" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "A(2, 3)" },
+      { "x": 4, "text": "B(4, 1)" }
+    ]
+  },
+  "ex-7-1-q1ii": {
+    "title": "Distance: (−5,7) to (−1,3) = 4√2",
+    "xDomain": [-7, 1],
+    "yDomain": [1, 9],
+    "data": [
+      { "fn": "-x + 2", "color": "#6366f1", "label": "Line AB" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "A(−5, 7)" },
+      { "x": -1, "text": "B(−1, 3)" }
+    ]
+  },
+  "ex-7-1-q3": {
+    "title": "Non-collinear: (1,5), (2,3), (−2,−11)",
+    "xDomain": [-4, 4],
+    "yDomain": [-14, 10],
+    "data": [
+      { "fn": "-2 * x + 7", "color": "#6366f1", "label": "Line AB: y = −2x + 7" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "A(1, 5)" },
+      { "x": 2, "text": "B(2, 3)" },
+      { "x": -2, "text": "C(−2, −11) — not on line AB" }
+    ]
+  },
+  "ex-7-1-q4": {
+    "title": "Isosceles triangle: (5,−2), (6,4), (7,−2)",
+    "xDomain": [3, 9],
+    "yDomain": [-5, 7],
+    "data": [
+      { "fn": "6 * x - 32", "color": "#6366f1", "label": "AB: y = 6x − 32" },
+      { "fn": "-6 * x + 40", "color": "#22c55e", "label": "BC: y = −6x + 40" },
+      { "fn": "-2", "color": "#ef4444", "label": "AC: y = −2" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "A(5, −2)" },
+      { "x": 6, "text": "B(6, 4)" },
+      { "x": 7, "text": "C(7, −2)" }
+    ]
+  },
+  "ex-7-1-q6i": {
+    "title": "Square: (−1,−2), (1,0), (−1,2), (−3,0)",
+    "xDomain": [-5, 3],
+    "yDomain": [-4, 4],
+    "data": [
+      { "fn": "x - 1", "color": "#6366f1", "label": "AB: y = x − 1" },
+      { "fn": "-x + 1", "color": "#22c55e", "label": "BC: y = −x + 1" },
+      { "fn": "x + 3", "color": "#ef4444", "label": "CD: y = x + 3" },
+      { "fn": "-x - 3", "color": "#f59e0b", "label": "DA: y = −x − 3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "A(−1, −2)" },
+      { "x": 1, "text": "B(1, 0)" },
+      { "x": -1, "text": "C(−1, 2)" },
+      { "x": -3, "text": "D(−3, 0)" }
+    ]
+  },
+  "ex-7-1-q6iii": {
+    "title": "Parallelogram: (4,5), (7,6), (4,3), (1,2)",
+    "xDomain": [-1, 9],
+    "yDomain": [0, 8],
+    "data": [
+      { "fn": "x / 3 + 11 / 3", "color": "#6366f1", "label": "AB: y = x/3 + 11/3" },
+      { "fn": "x - 1", "color": "#22c55e", "label": "BC: y = x − 1" },
+      { "fn": "x / 3 + 5 / 3", "color": "#ef4444", "label": "CD: y = x/3 + 5/3" },
+      { "fn": "x + 1", "color": "#f59e0b", "label": "DA: y = x + 1" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "A(4, 5)" },
+      { "x": 7, "text": "B(7, 6)" },
+      { "x": 4, "text": "C(4, 3)" },
+      { "x": 1, "text": "D(1, 2)" }
+    ]
+  },
+  "ex-7-1-q7": {
+    "title": "Equidistant point on x-axis from (2,−5) and (−2,9)",
+    "xDomain": [-10, 5],
+    "yDomain": [-8, 12],
+    "data": [
+      { "fn": "0", "color": "#6366f1", "label": "x-axis: y = 0" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "A(2, −5)" },
+      { "x": -2, "text": "B(−2, 9)" },
+      { "x": -7, "text": "P(−7, 0) equidistant" }
+    ]
+  },
+  "ex-7-1-q10": {
+    "title": "Locus: 3x + y = 5",
+    "xDomain": [-3, 5],
+    "yDomain": [-6, 10],
+    "data": [
+      { "fn": "-3 * x + 5", "color": "#6366f1", "label": "Locus: y = −3x + 5" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "A(3, 6)" },
+      { "x": -3, "text": "B(−3, 4)" },
+      { "x": 1, "text": "Locus: 3x + y = 5" }
+    ]
+  },
+  "ex-7-2-q1": {
+    "title": "Section formula: (−1,7) to (4,−3), ratio 2:3",
+    "xDomain": [-3, 6],
+    "yDomain": [-5, 10],
+    "data": [
+      { "fn": "-2 * x + 5", "color": "#6366f1", "label": "Line AB: y = −2x + 5" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "A(−1, 7)" },
+      { "x": 4, "text": "B(4, −3)" },
+      { "x": 1, "text": "P(1, 3) divides 2:3" }
+    ]
+  },
+  "ex-7-2-q2": {
+    "title": "Trisection: (4,−1) to (−2,−3)",
+    "xDomain": [-4, 6],
+    "yDomain": [-5, 2],
+    "data": [
+      { "fn": "x / 3 - 7 / 3", "color": "#6366f1", "label": "Line AB: y = x/3 − 7/3" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "A(4, −1)" },
+      { "x": 2, "text": "P₁(2, −5/3)" },
+      { "x": 0, "text": "P₂(0, −7/3)" },
+      { "x": -2, "text": "B(−2, −3)" }
+    ]
+  },
+  "ex-7-2-q4": {
+    "title": "Division ratio: (−3,10) to (6,−8) by (−1,6)",
+    "xDomain": [-5, 8],
+    "yDomain": [-10, 14],
+    "data": [
+      { "fn": "-2 * x + 4", "color": "#6366f1", "label": "Line AB: y = −2x + 4" }
+    ],
+    "annotations": [
+      { "x": -3, "text": "A(−3, 10)" },
+      { "x": -1, "text": "P(−1, 6) ratio 2:7" },
+      { "x": 6, "text": "B(6, −8)" }
+    ]
+  },
+  "ex-7-2-q9": {
+    "title": "Four equal parts: (−2,2) to (2,8)",
+    "xDomain": [-4, 4],
+    "yDomain": [0, 10],
+    "data": [
+      { "fn": "1.5 * x + 5", "color": "#6366f1", "label": "Line AB: y = 1.5x + 5" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "A(−2, 2)" },
+      { "x": -1, "text": "P₁(−1, 3.5)" },
+      { "x": 0, "text": "P₂(0, 5)" },
+      { "x": 1, "text": "P₃(1, 6.5)" },
+      { "x": 2, "text": "B(2, 8)" }
+    ]
+  },
+  "ex-7-2-q10": {
+    "title": "Rhombus: area = 24 sq units",
+    "xDomain": [-4, 6],
+    "yDomain": [-3, 7],
+    "data": [
+      { "fn": "5 * x - 15", "color": "#6366f1", "label": "AB: y = 5x − 15" },
+      { "fn": "x / 5 + 21 / 5", "color": "#22c55e", "label": "BC: y = x/5 + 21/5" },
+      { "fn": "5 * x + 9", "color": "#ef4444", "label": "CD: y = 5x + 9" },
+      { "fn": "x / 5 - 3 / 5", "color": "#f59e0b", "label": "DA: y = x/5 − 3/5" },
+      { "fn": "-x + 3", "color": "#6366f1", "label": "Diagonal AC: y = −x + 3" },
+      { "fn": "x + 1", "color": "#ef4444", "label": "Diagonal BD: y = x + 1" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "A(3, 0)" },
+      { "x": 4, "text": "B(4, 5)" },
+      { "x": -1, "text": "C(−1, 4)" },
+      { "x": -2, "text": "D(−2, −1)" },
+      { "x": 1, "text": "Area = 24" }
+    ]
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "ex-3-1-q1i": {
+    "title": "x + y = 10 and y = x + 4",
+    "xDomain": [-2, 12],
+    "yDomain": [-2, 14],
+    "data": [
+      { "fn": "-x + 10", "color": "#6366f1", "label": "x + y = 10" },
+      { "fn": "x + 4", "color": "#22c55e", "label": "y = x + 4" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Solution (3, 7)" }
+    ]
+  },
+  "ex-3-1-q1ii": {
+    "title": "5x + 7y = 50 and 7x + 5y = 46",
+    "xDomain": [-2, 12],
+    "yDomain": [-2, 12],
+    "data": [
+      { "fn": "(-5*x + 50)/7", "color": "#6366f1", "label": "5x + 7y = 50" },
+      { "fn": "(-7*x + 46)/5", "color": "#22c55e", "label": "7x + 5y = 46" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Solution (3, 5)" }
+    ]
+  },
+  "ex-3-1-q2i": {
+    "title": "Intersecting lines: 5x − 4y + 8 = 0, 7x + 6y − 9 = 0",
+    "xDomain": [-4, 4],
+    "yDomain": [-4, 6],
+    "data": [
+      { "fn": "(5*x + 8)/4", "color": "#6366f1", "label": "5x − 4y + 8 = 0" },
+      { "fn": "(-7*x + 9)/6", "color": "#22c55e", "label": "7x + 6y − 9 = 0" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Lines intersect" }
+    ]
+  },
+  "ex-3-1-q2ii": {
+    "title": "Coincident lines: 9x + 3y + 12 = 0",
+    "xDomain": [-4, 4],
+    "yDomain": [-10, 4],
+    "data": [
+      { "fn": "-3*x - 4", "color": "#6366f1", "label": "9x + 3y + 12 = 0" },
+      { "fn": "-3*x - 4", "color": "#22c55e", "label": "18x + 6y + 24 = 0" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Same line (coincident)" }
+    ]
+  },
+  "ex-3-1-q2iii": {
+    "title": "Parallel lines: 6x − 3y + 10 = 0, 2x − y + 9 = 0",
+    "xDomain": [-4, 4],
+    "yDomain": [-2, 14],
+    "data": [
+      { "fn": "2*x + 10/3", "color": "#6366f1", "label": "6x − 3y + 10 = 0" },
+      { "fn": "2*x + 9", "color": "#ef4444", "label": "2x − y + 9 = 0" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Parallel (no solution)" }
+    ]
+  },
+  "ex-3-1-q3i": {
+    "title": "Consistent: 3x + 2y = 5, 2x − 3y = 7",
+    "xDomain": [-2, 6],
+    "yDomain": [-4, 6],
+    "data": [
+      { "fn": "(-3*x + 5)/2", "color": "#6366f1", "label": "3x + 2y = 5" },
+      { "fn": "(2*x - 7)/3", "color": "#22c55e", "label": "2x − 3y = 7" }
+    ],
+    "annotations": [
+      { "x": 2.23, "text": "Solution (29/13, −11/13)" }
+    ]
+  },
+  "ex-3-1-q3ii": {
+    "title": "Inconsistent: 2x − 3y = 8, 4x − 6y = 9",
+    "xDomain": [-2, 8],
+    "yDomain": [-4, 4],
+    "data": [
+      { "fn": "(2*x - 8)/3", "color": "#6366f1", "label": "2x − 3y = 8" },
+      { "fn": "(4*x - 9)/6", "color": "#ef4444", "label": "4x − 6y = 9" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Parallel (no solution)" }
+    ]
+  },
+  "ex-3-1-q3iii": {
+    "title": "Consistent: 1.5x + 5y/3 = 7, 9x − 10y = 14",
+    "xDomain": [-2, 6],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "(7 - 1.5*x) * 3/5", "color": "#6366f1", "label": "(3/2)x + (5/3)y = 7" },
+      { "fn": "(9*x - 14)/10", "color": "#22c55e", "label": "9x − 10y = 14" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Unique solution (consistent)" }
+    ]
+  },
+  "ex-3-1-q3iv": {
+    "title": "Coincident: 5x − 3y = 11",
+    "xDomain": [-2, 6],
+    "yDomain": [-6, 6],
+    "data": [
+      { "fn": "(5*x - 11)/3", "color": "#6366f1", "label": "5x − 3y = 11" },
+      { "fn": "(5*x - 11)/3", "color": "#22c55e", "label": "−10x + 6y = −22" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Same line (∞ solutions)" }
+    ]
+  },
+  "ex-3-1-q3v": {
+    "title": "Coincident: (4/3)x + 2y = 8",
+    "xDomain": [-2, 8],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "4 - 2*x/3", "color": "#6366f1", "label": "(4/3)x + 2y = 8" },
+      { "fn": "4 - 2*x/3", "color": "#22c55e", "label": "2x + 3y = 12" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Same line (∞ solutions)" }
+    ]
+  },
+  "ex-3-1-q4i": {
+    "title": "Coincident: x + y = 5",
+    "xDomain": [-2, 8],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "-x + 5", "color": "#6366f1", "label": "x + y = 5" },
+      { "fn": "-x + 5", "color": "#22c55e", "label": "2x + 2y = 10" }
+    ],
+    "annotations": [
+      { "x": 2.5, "text": "Same line (∞ solutions)" }
+    ]
+  },
+  "ex-3-1-q4ii": {
+    "title": "Parallel: x − y = 8, 3x − 3y = 16",
+    "xDomain": [-2, 12],
+    "yDomain": [-10, 6],
+    "data": [
+      { "fn": "x - 8", "color": "#6366f1", "label": "x − y = 8" },
+      { "fn": "x - 16/3", "color": "#ef4444", "label": "3x − 3y = 16" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "Parallel (no solution)" }
+    ]
+  },
+  "ex-3-1-q4iii": {
+    "title": "Unique solution: 2x + y = 6, 4x − 2y = 4",
+    "xDomain": [-1, 5],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "-2*x + 6", "color": "#6366f1", "label": "2x + y − 6 = 0" },
+      { "fn": "2*x - 2", "color": "#22c55e", "label": "4x − 2y − 4 = 0" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Solution (2, 2)" }
+    ]
+  },
+  "ex-3-1-q4iv": {
+    "title": "Parallel: 2x − 2y = 2, 4x − 4y = 5",
+    "xDomain": [-2, 6],
+    "yDomain": [-4, 6],
+    "data": [
+      { "fn": "x - 1", "color": "#6366f1", "label": "2x − 2y − 2 = 0" },
+      { "fn": "x - 5/4", "color": "#ef4444", "label": "4x − 4y − 5 = 0" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Parallel (no solution)" }
+    ]
+  },
+  "ex-3-1-q5": {
+    "title": "Garden dimensions: x + y = 36, x − y = 4",
+    "xDomain": [0, 40],
+    "yDomain": [-5, 40],
+    "data": [
+      { "fn": "-x + 36", "color": "#6366f1", "label": "x + y = 36" },
+      { "fn": "x - 4", "color": "#22c55e", "label": "x − y = 4" }
+    ],
+    "annotations": [
+      { "x": 20, "text": "Solution (20, 16)" }
+    ]
+  },
+  "ex-3-1-q6i": {
+    "title": "Intersecting: 2x + 3y = 8, x + y = 4",
+    "xDomain": [-2, 6],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "(-2*x + 8)/3", "color": "#6366f1", "label": "2x + 3y − 8 = 0" },
+      { "fn": "-x + 4", "color": "#22c55e", "label": "x + y − 4 = 0" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "Intersecting" }
+    ]
+  },
+  "ex-3-1-q6ii": {
+    "title": "Parallel: 2x + 3y = 8, 4x + 6y = 20",
+    "xDomain": [-2, 8],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "(-2*x + 8)/3", "color": "#6366f1", "label": "2x + 3y − 8 = 0" },
+      { "fn": "(-4*x + 20)/6", "color": "#ef4444", "label": "4x + 6y − 20 = 0" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Parallel (no solution)" }
+    ]
+  },
+  "ex-3-1-q6iii": {
+    "title": "Coincident: 2x + 3y = 8",
+    "xDomain": [-2, 6],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "(-2*x + 8)/3", "color": "#6366f1", "label": "2x + 3y − 8 = 0" },
+      { "fn": "(-2*x + 8)/3", "color": "#22c55e", "label": "4x + 6y − 16 = 0" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Same line (∞ solutions)" }
+    ]
+  },
+  "ex-3-1-q7": {
+    "title": "Triangle: x − y + 1 = 0, 3x + 2y − 12 = 0, x-axis",
+    "xDomain": [-3, 6],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "x + 1", "color": "#6366f1", "label": "x − y + 1 = 0" },
+      { "fn": "(-3*x + 12)/2", "color": "#22c55e", "label": "3x + 2y − 12 = 0" },
+      { "fn": "0", "color": "#f59e0b", "label": "x-axis" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "(−1, 0)" },
+      { "x": 4, "text": "(4, 0)" },
+      { "x": 2, "text": "Intersection (2, 3)" }
+    ]
+  },
+  "ex-3-2-q1i": {
+    "title": "x + y = 14 and x − y = 4",
+    "xDomain": [-2, 16],
+    "yDomain": [-4, 16],
+    "data": [
+      { "fn": "-x + 14", "color": "#6366f1", "label": "x + y = 14" },
+      { "fn": "x - 4", "color": "#22c55e", "label": "x − y = 4" }
+    ],
+    "annotations": [
+      { "x": 9, "text": "Solution (9, 5)" }
+    ]
+  },
+  "ex-3-2-q2": {
+    "title": "2x + 3y = 11 and 2x − 4y = −24",
+    "xDomain": [-6, 8],
+    "yDomain": [-4, 10],
+    "data": [
+      { "fn": "(11 - 2*x)/3", "color": "#6366f1", "label": "2x + 3y = 11" },
+      { "fn": "(2*x + 24)/4", "color": "#22c55e", "label": "2x − 4y = −24" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Solution (−2, 5)" }
+    ]
+  },
+  "ex-3-3-q1i": {
+    "title": "x + y = 5 and 2x − 3y = 4",
+    "xDomain": [-2, 8],
+    "yDomain": [-2, 8],
+    "data": [
+      { "fn": "-x + 5", "color": "#6366f1", "label": "x + y = 5" },
+      { "fn": "(2*x - 4)/3", "color": "#22c55e", "label": "2x − 3y = 4" }
+    ],
+    "annotations": [
+      { "x": 3.8, "text": "Solution (3.8, 1.2)" }
+    ]
+  },
+  "ex-3-3-q1ii": {
+    "title": "3x + 4y = 10 and 2x − 2y = 2",
+    "xDomain": [-2, 6],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "(10 - 3*x)/4", "color": "#6366f1", "label": "3x + 4y = 10" },
+      { "fn": "x - 1", "color": "#22c55e", "label": "2x − 2y = 2" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Solution (2, 1)" }
+    ]
+  }
+}

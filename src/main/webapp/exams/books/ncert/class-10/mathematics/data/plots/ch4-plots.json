@@ -1,0 +1,173 @@
+{
+  "ex-4-2-q1i": {
+    "title": "(x+1)(x\u22122) = 0: roots at \u22121, 2",
+    "xDomain": [-3, 4],
+    "yDomain": [-4, 6],
+    "data": [
+      { "fn": "x^2 - x - 2", "color": "#6366f1", "label": "y = x\u00b2 \u2212 x \u2212 2" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Root x = \u22121" },
+      { "x": 2, "text": "Root x = 2" }
+    ]
+  },
+  "ex-4-2-q1ii": {
+    "title": "2x\u00b2 \u2212 x \u2212 3: roots at 3/2, \u22121",
+    "xDomain": [-3, 4],
+    "yDomain": [-4, 6],
+    "data": [
+      { "fn": "2*x^2 - x - 3", "color": "#6366f1", "label": "y = 2x\u00b2 \u2212 x \u2212 3" }
+    ],
+    "annotations": [
+      { "x": 1.5, "text": "Root x = 3/2" },
+      { "x": -1, "text": "Root x = \u22121" }
+    ]
+  },
+  "ex-4-2-q1iii": {
+    "title": "\u221a2x\u00b2 + 7x + 5\u221a2: two negative roots",
+    "xDomain": [-5, 2],
+    "yDomain": [-4, 8],
+    "data": [
+      { "fn": "sqrt(2)*x^2 + 7*x + 5*sqrt(2)", "color": "#6366f1", "label": "y = \u221a2x\u00b2 + 7x + 5\u221a2" }
+    ],
+    "annotations": [
+      { "x": -1.414, "text": "Root x = \u2212\u221a2 \u2248 \u22121.41" },
+      { "x": -3.536, "text": "Root x = \u22125\u221a2/2 \u2248 \u22123.54" }
+    ]
+  },
+  "ex-4-2-q1iv": {
+    "title": "2x\u00b2 \u2212 x + \u215b: repeated root at \u00bc",
+    "xDomain": [-1, 2],
+    "yDomain": [-1, 3],
+    "data": [
+      { "fn": "2*x^2 - x + 1/8", "color": "#6366f1", "label": "y = 2x\u00b2 \u2212 x + \u215b" }
+    ],
+    "annotations": [
+      { "x": 0.25, "text": "Repeated root x = \u00bc (touches x-axis)" }
+    ]
+  },
+  "ex-4-2-q1v": {
+    "title": "100x\u00b2 \u2212 20x + 1: repeated root at 0.1",
+    "xDomain": [-0.5, 0.7],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "100*x^2 - 20*x + 1", "color": "#6366f1", "label": "y = 100x\u00b2 \u2212 20x + 1" }
+    ],
+    "annotations": [
+      { "x": 0.1, "text": "Repeated root x = 1/10 (touches x-axis)" }
+    ]
+  },
+  "ex-4-3-q1i": {
+    "title": "2x\u00b2 \u2212 3x + 5: D < 0, no real roots",
+    "xDomain": [-2, 4],
+    "yDomain": [-1, 12],
+    "data": [
+      { "fn": "2*x^2 - 3*x + 5", "color": "#ef4444", "label": "y = 2x\u00b2 \u2212 3x + 5" }
+    ],
+    "annotations": [
+      { "x": 0.75, "text": "D = \u221231 < 0" },
+      { "x": 2.5, "text": "No x-intercept" }
+    ]
+  },
+  "ex-4-3-q1ii": {
+    "title": "3x\u00b2 \u2212 4\u221a3x + 4: D = 0, repeated root",
+    "xDomain": [-1, 3],
+    "yDomain": [-1, 6],
+    "data": [
+      { "fn": "3*x^2 - 4*sqrt(3)*x + 4", "color": "#f59e0b", "label": "y = 3x\u00b2 \u2212 4\u221a3x + 4" }
+    ],
+    "annotations": [
+      { "x": 1.155, "text": "D = 0, touches at x = 2\u221a3/3 \u2248 1.155" }
+    ]
+  },
+  "ex-4-3-q1iii": {
+    "title": "2x\u00b2 \u2212 6x + 3: D > 0, two distinct roots",
+    "xDomain": [-1, 4],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "2*x^2 - 6*x + 3", "color": "#22c55e", "label": "y = 2x\u00b2 \u2212 6x + 3" }
+    ],
+    "annotations": [
+      { "x": 0.634, "text": "Root x \u2248 0.634" },
+      { "x": 2.366, "text": "Root x \u2248 2.366" }
+    ]
+  },
+  "ex-4-1-q2i": {
+    "title": "2x\u00b2 + x \u2212 528 = 0 (rectangular plot)",
+    "xDomain": [-20, 20],
+    "yDomain": [-600, 200],
+    "data": [
+      { "fn": "2*x^2 + x - 528", "color": "#6366f1", "label": "y = 2x\u00b2 + x \u2212 528" }
+    ],
+    "annotations": [
+      { "x": 16, "text": "Positive root x \u2248 16 (breadth)" }
+    ]
+  },
+  "ex-4-1-q2ii": {
+    "title": "x\u00b2 + x \u2212 306 = 0 (consecutive integers)",
+    "xDomain": [-20, 20],
+    "yDomain": [-350, 100],
+    "data": [
+      { "fn": "x^2 + x - 306", "color": "#6366f1", "label": "y = x\u00b2 + x \u2212 306" }
+    ],
+    "annotations": [
+      { "x": 17, "text": "Positive root x = 17" }
+    ]
+  },
+  "ex-4-1-q2iv": {
+    "title": "x\u00b2 \u2212 8x \u2212 1280 = 0 (train speed)",
+    "xDomain": [-40, 50],
+    "yDomain": [-1400, 200],
+    "data": [
+      { "fn": "x^2 - 8*x - 1280", "color": "#6366f1", "label": "y = x\u00b2 \u2212 8x \u2212 1280" }
+    ],
+    "annotations": [
+      { "x": 40, "text": "Positive root x = 40 (speed in km/h)" }
+    ]
+  },
+  "ex-4-2-q4": {
+    "title": "x\u00b2 + x \u2212 182 = 0 (sum of squares = 365)",
+    "xDomain": [-16, 16],
+    "yDomain": [-200, 50],
+    "data": [
+      { "fn": "x^2 + x - 182", "color": "#6366f1", "label": "y = x\u00b2 + x \u2212 182" },
+      { "fn": "0", "color": "#ef4444", "label": "y = 0" }
+    ],
+    "annotations": [
+      { "x": 13, "text": "Root x = 13 (first integer)" }
+    ]
+  },
+  "ex-4-2-q5": {
+    "title": "x\u00b2 \u2212 7x \u2212 60 = 0 (right triangle sides)",
+    "xDomain": [-8, 16],
+    "yDomain": [-80, 30],
+    "data": [
+      { "fn": "x^2 - 7*x - 60", "color": "#6366f1", "label": "y = x\u00b2 \u2212 7x \u2212 60" }
+    ],
+    "annotations": [
+      { "x": 12, "text": "Positive root x = 12 (base)" }
+    ]
+  },
+  "ex-4-3-q2i-pos": {
+    "title": "2x\u00b2 + 2\u221a6x + 3: equal roots (k = 2\u221a6)",
+    "xDomain": [-3, 2],
+    "yDomain": [-1, 6],
+    "data": [
+      { "fn": "2*x^2 + 2*sqrt(6)*x + 3", "color": "#f59e0b", "label": "y = 2x\u00b2 + 2\u221a6x + 3" }
+    ],
+    "annotations": [
+      { "x": -1.225, "text": "Touches at x = \u2212\u221a6/2 \u2248 \u22121.22" }
+    ]
+  },
+  "ex-4-3-q2i-neg": {
+    "title": "2x\u00b2 \u2212 2\u221a6x + 3: equal roots (k = \u22122\u221a6)",
+    "xDomain": [-2, 3],
+    "yDomain": [-1, 6],
+    "data": [
+      { "fn": "2*x^2 - 2*sqrt(6)*x + 3", "color": "#f59e0b", "label": "y = 2x\u00b2 \u2212 2\u221a6x + 3" }
+    ],
+    "annotations": [
+      { "x": 1.225, "text": "Touches at x = \u221a6/2 \u2248 1.22" }
+    ]
+  }
+}
