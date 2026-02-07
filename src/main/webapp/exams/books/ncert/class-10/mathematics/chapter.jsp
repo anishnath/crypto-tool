@@ -1228,7 +1228,10 @@ function renderPlots(targets) {
         doRender(_plotDataCache[plotFile]);
     } else {
         fetch(plotFile)
-            .then(function(r) { return r.json(); })
+            .then(function(r) {
+                if (!r.ok) throw new Error('Plot file not found: ' + r.status);
+                return r.json();
+            })
             .then(function(data) {
                 _plotDataCache[plotFile] = data;
                 doRender(data);

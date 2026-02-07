@@ -983,7 +983,10 @@
                 if (plotEl) {
                     var plotFile = '<%=request.getContextPath()%>/exams/books/ncert/class-10/mathematics/data/plots/ch' + CHAPTER_NUM + '-plots.json';
                     fetch(plotFile)
-                        .then(function(r) { return r.json(); })
+                        .then(function(r) {
+                            if (!r.ok) throw new Error('Plot file not found: ' + r.status);
+                            return r.json();
+                        })
                         .then(function(plotData) {
                             var config = plotData[currentQuestion.interactive_plot];
                             if (!config) return;
