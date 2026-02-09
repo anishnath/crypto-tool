@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle;}
+      .title { font-family: sans-serif; font-size: 16px; fill: #111827; font-weight: bold; text-anchor: middle;}
+      .prob { font-family: sans-serif; font-size: 12px; fill: #ffffff; font-weight: bold; }
+      .box { fill: #f9fafb; stroke: #374151; stroke-width: 2; }
+      .circle-a { fill: rgba(16, 185, 129, 0.6); stroke: #047857; stroke-width: 2; } /* Green */
+      .circle-b { fill: rgba(59, 130, 246, 0.4); stroke: #2563eb; stroke-width: 2; } /* Blue */
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <!-- Panel 1: Subset Case -->
+  <g transform="translate(20, 20)">
+    <text x="150" y="20" class="title">Case (i): A ⊂ B</text>
+    <rect x="0" y="40" width="300" height="250" class="box" />
+    
+    <!-- B Circle (Larger) -->
+    <circle cx="150" cy="165" r="100" class="circle-b" />
+    <text x="150" y="80" class="label" fill="#1e3a8a">Set B</text>
+
+    <!-- A Circle (Inside B) -->
+    <circle cx="150" cy="185" r="50" class="circle-a" />
+    <text x="150" y="190" class="label" fill="#065f46" font-weight="bold">Set A</text>
+
+    <!-- Logic -->
+    <text x="150" y="270" class="label" font-size="12">A ∩ B = A</text>
+    <text x="150" y="290" class="label" font-size="12">P(B|A) = P(A)/P(A) = 1</text>
+  </g>
+
+  <!-- Panel 2: Disjoint Case -->
+  <g transform="translate(380, 20)">
+    <text x="150" y="20" class="title">Case (ii): A ∩ B = φ</text>
+    <rect x="0" y="40" width="300" height="250" class="box" />
+
+    <!-- A Circle -->
+    <circle cx="80" cy="165" r="50" class="circle-a" />
+    <text x="80" y="170" class="label" fill="#065f46" font-weight="bold">Set A</text>
+
+    <!-- B Circle -->
+    <circle cx="220" cy="165" r="60" class="circle-b" />
+    <text x="220" y="170" class="label" fill="#1e3a8a">Set B</text>
+
+    <!-- Logic -->
+    <text x="150" y="270" class="label" font-size="12">A ∩ B = φ (Empty)</text>
+    <text x="150" y="290" class="label" font-size="12">P(B|A) = 0/P(A) = 0</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="680" y="340" class="watermark">8gwifi.org</text>
+
+</svg>

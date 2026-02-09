@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle;}
+      .title { font-family: sans-serif; font-size: 16px; fill: #111827; font-weight: bold; text-anchor: middle;}
+      .prob { font-family: sans-serif; font-size: 12px; fill: #ffffff; font-weight: bold; }
+      .prob-dark { font-family: sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+      .box { fill: #f9fafb; stroke: #374151; stroke-width: 2; }
+      .circle-a { fill: rgba(236, 72, 153, 0.5); stroke: #db2777; stroke-width: 2; } /* Pink */
+      .circle-b { fill: rgba(34, 197, 94, 0.5); stroke: #16a34a; stroke-width: 2; } /* Green */
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <text x="300" y="30" class="title">Venn Diagram: Given Probabilities</text>
+
+  <!-- Sample Space -->
+  <rect x="50" y="50" width="500" height="250" class="box" />
+  
+  <!-- Circles -->
+  <circle cx="260" cy="180" r="90" class="circle-a" />
+  <circle cx="340" cy="180" r="90" class="circle-b" />
+
+  <!-- Labels -->
+  <text x="190" y="140" class="label" fill="#be185d">Set A</text>
+  <text x="190" y="160" class="label" font-size="10">P(A) = 6/11</text>
+  
+  <text x="410" y="140" class="label" fill="#15803d">Set B</text>
+  <text x="410" y="160" class="label" font-size="10">P(B) = 5/11</text>
+
+  <!-- Intersection Label -->
+  <text x="300" y="185" class="prob">A ∩ B</text>
+  <text x="300" y="205" class="prob">?</text>
+  
+  <!-- Union Info -->
+  <text x="300" y="80" class="prob-dark">P(A ∪ B) = 7/11</text>
+
+  <!-- Question Hint visual -->
+  <text x="300" y="330" class="prob-dark">Calculate Intersection first</text>
+
+  <!-- Watermark -->
+  <text x="540" y="330" class="watermark">8gwifi.org</text>
+</svg>

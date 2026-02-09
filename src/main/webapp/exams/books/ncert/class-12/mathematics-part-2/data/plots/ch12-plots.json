@@ -1,147 +1,714 @@
 {
   "ex-12-1-q1": {
-    "title": "Maximise Z = 3x + 4y subject to x + y \u2264 4, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 6],
-    "yDomain": [-1, 6],
+    "title": "Maximise Z = 3x + 4y subject to x + y ≤ 4, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      5
+    ],
+    "yDomain": [
+      -1,
+      5
+    ],
     "data": [
-      { "fn": "4 - x", "color": "#6366f1", "label": "x + y = 4" }
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(4 - 1 * x) / 1",
+        "color": "#6366f1",
+        "label": "x + y  ≤  4"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,0) Z=0" },
-      { "x": 4, "text": "(4,0) Z=12" },
-      { "x": 0, "text": "(0,4) Z=16 MAX" }
+      {
+        "x": 0,
+        "text": "(0,0) Z=0"
+      },
+      {
+        "x": 4,
+        "text": "(4,0) Z=12"
+      },
+      {
+        "x": 0,
+        "text": "(0,4) Z=16 MAX"
+      }
     ]
   },
   "ex-12-1-q2": {
-    "title": "Minimise Z = \u22123x + 4y subject to x + 2y \u2264 8, 3x + 2y \u2264 12, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 6],
-    "yDomain": [-1, 6],
+    "title": "Minimise Z = −3x + 4y subject to x + 2y ≤ 8, 3x + 2y ≤ 12, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      5
+    ],
+    "yDomain": [
+      -1,
+      5
+    ],
     "data": [
-      { "fn": "(8 - x) / 2", "color": "#6366f1", "label": "x + 2y = 8" },
-      { "fn": "(12 - 3x) / 2", "color": "#ef4444", "label": "3x + 2y = 12" }
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(8 - 1 * x) / 2",
+        "color": "#6366f1",
+        "label": "x + 2y  ≤  8"
+      },
+      {
+        "fn": "(12 - 3 * x) / 2",
+        "color": "#ef4444",
+        "label": "3x + 2y  ≤  12"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,0) Z=0" },
-      { "x": 4, "text": "(4,0) Z=\u221212 MIN" },
-      { "x": 2, "text": "(2,3) Z=6" },
-      { "x": 0, "text": "(0,4) Z=16" }
+      {
+        "x": 0,
+        "text": "(0,0) Z=0"
+      },
+      {
+        "x": 4,
+        "text": "(4,0) Z=-12 MIN"
+      },
+      {
+        "x": 2,
+        "text": "(2,3) Z=6"
+      },
+      {
+        "x": 0,
+        "text": "(0,4) Z=16"
+      }
     ]
   },
   "ex-12-1-q3": {
-    "title": "Maximise Z = 5x + 3y subject to 3x + 5y \u2264 15, 5x + 2y \u2264 10, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 6],
-    "yDomain": [-1, 5],
+    "title": "Maximise Z = 5x + 3y subject to 3x + 5y ≤ 15, 5x + 2y ≤ 10, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      3
+    ],
+    "yDomain": [
+      -1,
+      4
+    ],
     "data": [
-      { "fn": "(15 - 3x) / 5", "color": "#6366f1", "label": "3x + 5y = 15" },
-      { "fn": "(10 - 5x) / 2", "color": "#ef4444", "label": "5x + 2y = 10" }
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1.0526,
+            2.3684
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(15 - 3 * x) / 5",
+        "color": "#6366f1",
+        "label": "3x + 5y  ≤  15"
+      },
+      {
+        "fn": "(10 - 5 * x) / 2",
+        "color": "#ef4444",
+        "label": "5x + 2y  ≤  10"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,0) Z=0" },
-      { "x": 2, "text": "(2,0) Z=10" },
-      { "x": 1.05, "text": "(20/19, 45/19) Z=235/19 \u2248 12.37 MAX" },
-      { "x": 0, "text": "(0,3) Z=9" }
+      {
+        "x": 0,
+        "text": "(0,0) Z=0"
+      },
+      {
+        "x": 2,
+        "text": "(2,0) Z=10"
+      },
+      {
+        "x": 1.0526,
+        "text": "(20/19,45/19) Z=235/19 MAX"
+      },
+      {
+        "x": 0,
+        "text": "(0,3) Z=9"
+      }
     ]
   },
   "ex-12-1-q4": {
-    "title": "Minimise Z = 3x + 5y subject to x + 3y \u2265 3, x + y \u2265 2, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 6],
-    "yDomain": [-1, 5],
+    "title": "Minimise Z = 3x + 5y subject to x + 3y ≥ 3, x + y ≥ 2, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      6
+    ],
+    "yDomain": [
+      -1,
+      5
+    ],
     "data": [
-      { "fn": "(3 - x) / 3", "color": "#6366f1", "label": "x + 3y = 3" },
-      { "fn": "2 - x", "color": "#ef4444", "label": "x + y = 2" }
+      {
+        "points": [
+          [
+            0,
+            2
+          ],
+          [
+            1.5,
+            0.5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            2
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(3 - 1 * x) / 3",
+        "color": "#6366f1",
+        "label": "x + 3y  ≥  3"
+      },
+      {
+        "fn": "(2 - 1 * x) / 1",
+        "color": "#ef4444",
+        "label": "x + y  ≥  2"
+      }
     ],
     "annotations": [
-      { "x": 1.5, "text": "(3/2, 1/2) Z=7 MIN" },
-      { "x": 3, "text": "(3,0) Z=9" },
-      { "x": 0, "text": "(0,2) Z=10" }
+      {
+        "x": 0,
+        "text": "(0,2) Z=10"
+      },
+      {
+        "x": 1.5,
+        "text": "(1.5,1/2) Z=7 MIN"
+      },
+      {
+        "x": 3,
+        "text": "(3,0) Z=9"
+      }
     ]
   },
   "ex-12-1-q5": {
-    "title": "Maximise Z = 3x + 2y subject to x + 2y \u2264 10, 3x + y \u2264 15, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 8],
-    "yDomain": [-1, 8],
+    "title": "Maximise Z = 3x + 2y subject to x + 2y ≤ 10, 3x + y ≤ 15, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      6
+    ],
+    "yDomain": [
+      -1,
+      6
+    ],
     "data": [
-      { "fn": "(10 - x) / 2", "color": "#6366f1", "label": "x + 2y = 10" },
-      { "fn": "15 - 3x", "color": "#ef4444", "label": "3x + y = 15" }
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(10 - 1 * x) / 2",
+        "color": "#6366f1",
+        "label": "x + 2y  ≤  10"
+      },
+      {
+        "fn": "(15 - 3 * x) / 1",
+        "color": "#ef4444",
+        "label": "3x + y  ≤  15"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,0) Z=0" },
-      { "x": 5, "text": "(5,0) Z=15" },
-      { "x": 4, "text": "(4,3) Z=18 MAX" },
-      { "x": 0, "text": "(0,5) Z=10" }
+      {
+        "x": 0,
+        "text": "(0,0) Z=0"
+      },
+      {
+        "x": 5,
+        "text": "(5,0) Z=15"
+      },
+      {
+        "x": 4,
+        "text": "(4,3) Z=18 MAX"
+      },
+      {
+        "x": 0,
+        "text": "(0,5) Z=10"
+      }
     ]
   },
   "ex-12-1-q6": {
-    "title": "Minimise Z = x + 2y subject to 2x + y \u2265 3, x + 2y \u2265 6, x \u2265 0, y \u2265 0",
-    "xDomain": [-1, 8],
-    "yDomain": [-1, 6],
+    "title": "Minimise Z = x + 2y subject to 2x + y ≥ 3, x + 2y ≥ 6, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      8
+    ],
+    "yDomain": [
+      -1,
+      6
+    ],
     "data": [
-      { "fn": "3 - 2x", "color": "#6366f1", "label": "2x + y = 3" },
-      { "fn": "(6 - x) / 2", "color": "#ef4444", "label": "x + 2y = 6" }
+      {
+        "points": [
+          [
+            0,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(3 - 2 * x) / 1",
+        "color": "#6366f1",
+        "label": "2x + y  ≥  3"
+      },
+      {
+        "fn": "(6 - 1 * x) / 2",
+        "color": "#ef4444",
+        "label": "x + 2y  ≥  6"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,3) Z=6 MIN" },
-      { "x": 6, "text": "(6,0) Z=6" }
+      {
+        "x": 0,
+        "text": "(0,3) Z=6 MIN"
+      },
+      {
+        "x": 6,
+        "text": "(6,0) Z=6 MIN"
+      }
     ]
   },
   "ex-12-1-q7": {
-    "title": "Minimise and Maximise Z = 5x + 10y subject to x + 2y \u2264 120, x + y \u2265 60, x \u2212 2y \u2265 0, x \u2265 0, y \u2265 0",
-    "xDomain": [-5, 140],
-    "yDomain": [-5, 80],
+    "title": "Min and Max Z = 5x + 10y subject to x + 2y ≤ 120, x + y ≥ 60, x − 2y ≥ 0, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      140
+    ],
+    "yDomain": [
+      -1,
+      80
+    ],
     "data": [
-      { "fn": "(120 - x) / 2", "color": "#6366f1", "label": "x + 2y = 120" },
-      { "fn": "60 - x", "color": "#ef4444", "label": "x + y = 60" },
-      { "fn": "x / 2", "color": "#22c55e", "label": "x \u2212 2y = 0" }
+      {
+        "points": [
+          [
+            60,
+            0
+          ],
+          [
+            120,
+            0
+          ],
+          [
+            60,
+            30
+          ],
+          [
+            40,
+            20
+          ],
+          [
+            60,
+            0
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(120 - 1 * x) / 2",
+        "color": "#6366f1",
+        "label": "x + 2y  ≤  120"
+      },
+      {
+        "fn": "(60 - 1 * x) / 1",
+        "color": "#ef4444",
+        "label": "x + y  ≥  60"
+      },
+      {
+        "fn": "(0 - 1 * x) / -2",
+        "color": "#22c55e",
+        "label": "x - 2y  ≥  0"
+      }
     ],
     "annotations": [
-      { "x": 60, "text": "(60,0) Z=300 MIN" },
-      { "x": 120, "text": "(120,0) Z=600 MAX" },
-      { "x": 60, "text": "(60,30) Z=600 MAX" },
-      { "x": 40, "text": "(40,20) Z=400" }
+      {
+        "x": 60,
+        "text": "(60,0) Z=300 MIN"
+      },
+      {
+        "x": 120,
+        "text": "(120,0) Z=600 MAX"
+      },
+      {
+        "x": 60,
+        "text": "(60,30) Z=600 MAX"
+      },
+      {
+        "x": 40,
+        "text": "(40,20) Z=400"
+      }
     ]
   },
   "ex-12-1-q8": {
-    "title": "Minimise and Maximise Z = x + 2y subject to x + 2y \u2265 100, 2x \u2212 y \u2264 0, 2x + y \u2264 200, x \u2265 0, y \u2265 0",
-    "xDomain": [-5, 110],
-    "yDomain": [-5, 220],
+    "title": "Min and Max Z = x + 2y subject to x + 2y ≥ 100, 2x − y ≤ 0, 2x + y ≤ 200, x ≥ 0, y ≥ 0",
+    "xDomain": [
+      -1,
+      57.5
+    ],
+    "yDomain": [
+      -1,
+      230
+    ],
     "data": [
-      { "fn": "(100 - x) / 2", "color": "#6366f1", "label": "x + 2y = 100" },
-      { "fn": "2x", "color": "#ef4444", "label": "2x \u2212 y = 0" },
-      { "fn": "200 - 2x", "color": "#22c55e", "label": "2x + y = 200" }
+      {
+        "points": [
+          [
+            0,
+            50
+          ],
+          [
+            20,
+            40
+          ],
+          [
+            50,
+            100
+          ],
+          [
+            0,
+            200
+          ],
+          [
+            0,
+            50
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fn": "(100 - 1 * x) / 2",
+        "color": "#6366f1",
+        "label": "x + 2y  ≥  100"
+      },
+      {
+        "fn": "(0 - 2 * x) / -1",
+        "color": "#ef4444",
+        "label": "2x - y  ≤  0"
+      },
+      {
+        "fn": "(200 - 2 * x) / 1",
+        "color": "#22c55e",
+        "label": "2x + y  ≤  200"
+      }
     ],
     "annotations": [
-      { "x": 0, "text": "(0,50) Z=100 MIN" },
-      { "x": 20, "text": "(20,40) Z=100 MIN" },
-      { "x": 50, "text": "(50,100) Z=250" },
-      { "x": 0, "text": "(0,200) Z=400 MAX" }
+      {
+        "x": 0,
+        "text": "(0,50) Z=100 MIN"
+      },
+      {
+        "x": 20,
+        "text": "(20,40) Z=100 MIN"
+      },
+      {
+        "x": 50,
+        "text": "(50,100) Z=250"
+      },
+      {
+        "x": 0,
+        "text": "(0,200) Z=400 MAX"
+      }
     ]
   },
   "ex-12-1-q9": {
-    "title": "Maximise Z = \u2212x + 2y subject to x \u2265 3, x + y \u2265 5, x + 2y \u2265 6, y \u2265 0 (Unbounded)",
-    "xDomain": [-1, 10],
-    "yDomain": [-1, 10],
+    "title": "Maximise Z = −x + 2y subject to x ≥ 3, x + y ≥ 5, x + 2y ≥ 6, y ≥ 0 (Unbounded)",
+    "xDomain": [
+      -1,
+      10
+    ],
+    "yDomain": [
+      -1,
+      8
+    ],
     "data": [
-      { "fn": "5 - x", "color": "#6366f1", "label": "x + y = 5" },
-      { "fn": "(6 - x) / 2", "color": "#ef4444", "label": "x + 2y = 6" },
-      { "fn": "0 * x + 1000", "color": "#8b5cf6", "label": "x = 3 (vertical)" }
+      {
+        "points": [
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            3,
+            10
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "fnType": "points",
+        "graphType": "polyline",
+        "closed": true,
+        "color": "#93c5fd",
+        "attr": {
+          "fill": "#93c5fd",
+          "fill-opacity": 0.3
+        },
+        "label": "Feasible Region"
+      },
+      {
+        "fnType": "parametric",
+        "x": "3",
+        "y": "t",
+        "range": [
+          -1,
+          8
+        ],
+        "graphType": "polyline",
+        "color": "#6366f1",
+        "label": "x  ≥  3"
+      },
+      {
+        "fn": "(5 - 1 * x) / 1",
+        "color": "#ef4444",
+        "label": "x + y  ≥  5"
+      },
+      {
+        "fn": "(6 - 1 * x) / 2",
+        "color": "#22c55e",
+        "label": "x + 2y  ≥  6"
+      }
     ],
     "annotations": [
-      { "x": 4, "text": "(4,1) Z=\u22122" },
-      { "x": 3, "text": "(3,2) Z=1" },
-      { "x": 5, "text": "Z is unbounded (no maximum)" }
+      {
+        "x": 3,
+        "text": "(3,2) Z=1"
+      },
+      {
+        "x": 4,
+        "text": "(4,1) Z=-2"
+      },
+      {
+        "x": 6,
+        "text": "(6,0) Z=-6"
+      },
+      {
+        "x": 6.5,
+        "text": "Z is unbounded (no maximum)"
+      }
     ]
   },
   "ex-12-1-q10": {
-    "title": "Maximise Z = x + y subject to x \u2212 y \u2264 \u22121, \u2212x + y \u2264 0, x \u2265 0, y \u2265 0 (Infeasible)",
-    "xDomain": [-1, 6],
-    "yDomain": [-1, 6],
+    "title": "Maximise Z = x + y subject to x − y ≤ −1, −x + y ≤ 0, x ≥ 0, y ≥ 0 (Infeasible)",
+    "xDomain": [
+      -1,
+      5
+    ],
+    "yDomain": [
+      -1,
+      5
+    ],
     "data": [
-      { "fn": "x + 1", "color": "#6366f1", "label": "x \u2212 y = \u22121 (y \u2265 x+1)" },
-      { "fn": "x", "color": "#ef4444", "label": "\u2212x + y = 0 (y \u2264 x)" }
+      {
+        "fn": "(-1 - 1 * x) / -1",
+        "color": "#6366f1",
+        "label": "x - y  ≤  -1"
+      },
+      {
+        "fn": "(0 - -1 * x) / 1",
+        "color": "#ef4444",
+        "label": "-x + y  ≤  0"
+      }
     ],
     "annotations": [
-      { "x": 3, "text": "No feasible region exists" },
-      { "x": 2, "text": "y \u2265 x+1 and y \u2264 x cannot hold simultaneously" }
+      {
+        "x": 2.5,
+        "text": "No feasible region — constraints are contradictory"
+      }
     ]
   }
 }

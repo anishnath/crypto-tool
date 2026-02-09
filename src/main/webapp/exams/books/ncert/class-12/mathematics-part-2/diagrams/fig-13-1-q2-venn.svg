@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle;}
+      .title { font-family: sans-serif; font-size: 16px; fill: #111827; font-weight: bold; text-anchor: middle;}
+      .prob { font-family: sans-serif; font-size: 12px; fill: #ffffff; font-weight: bold; }
+      .prob-dark { font-family: sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+      .box { fill: #f9fafb; stroke: #374151; stroke-width: 2; }
+      .circle-a { fill: rgba(239, 68, 68, 0.4); stroke: #dc2626; stroke-width: 2; } /* Red */
+      .circle-b { fill: rgba(59, 130, 246, 0.6); stroke: #2563eb; stroke-width: 2; } /* Blue (Base for Conditional) */
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <text x="300" y="30" class="title">Venn Diagram: Given P(B) and Intersection</text>
+
+  <!-- Sample Space -->
+  <rect x="50" y="50" width="500" height="250" class="box" />
+  
+  <!-- Circles -->
+  <!-- B is the condition, make it prominent -->
+  <circle cx="350" cy="180" r="100" class="circle-b" />
+  
+  <!-- A intersects -->
+  <circle cx="250" cy="180" r="80" class="circle-a" />
+
+  <!-- Labels -->
+  <text x="200" y="140" class="label" fill="#991b1b">Set A</text>
+  <text x="400" y="140" class="label" fill="#1e3a8a">Set B (P = 0.5)</text>
+
+  <!-- Intersection Label -->
+  <text x="300" y="185" class="prob">P(A ∩ B)</text>
+  <text x="300" y="205" class="prob">= 0.32</text>
+
+  <!-- Question Hint visual -->
+  <text x="300" y="330" class="prob-dark">Find P(A|B) = ?</text>
+
+  <!-- Watermark -->
+  <text x="540" y="330" class="watermark">8gwifi.org</text>
+</svg>

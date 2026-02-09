@@ -3979,8 +3979,9 @@
       "$P(F|E) = \\dfrac{P(E \\cap F)}{P(E)} = \\dfrac{0.2}{0.6} = \\dfrac{1}{3}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram showing two intersecting sets E and F. Regions labeled with probabilities: P(E only)=0.4, P(F only)=0.1, P(Intersection)=0.2. Also shows calculation of conditional probabilities.",
+      "diagram_svg": "fig-13-1-q1-venn.svg"
     },
     "tags": [
       "conditional-probability",
@@ -4014,8 +4015,9 @@
       "$P(A|B) = \\dfrac{P(A \\cap B)}{P(B)} = \\dfrac{0.32}{0.5} = 0.64$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram representing sets A and B with given probabilities P(B)=0.5 and P(A ∩ B)=0.32, visualizing the conditional probability setup.",
+      "diagram_svg": "fig-13-1-q2-venn.svg"
     },
     "tags": [
       "conditional-probability"
@@ -4050,8 +4052,9 @@
       "(iii) $P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.8 + 0.5 - 0.32 = 0.98$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram illustrating sets A and B with P(A)=0.8, P(B)=0.5, and the conditional condition P(B|A)=0.4.",
+      "diagram_svg": "fig-13-1-q3-venn.svg"
     },
     "tags": [
       "conditional-probability",
@@ -4088,8 +4091,9 @@
       "$= \\dfrac{5}{26} + \\dfrac{10}{26} - \\dfrac{4}{26} = \\dfrac{11}{26} = \\dfrac{9}{13}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram showing sets A and B with derived probabilities P(A) and P(B) from the given equation, and the conditional P(A|B).",
+      "diagram_svg": "fig-13-1-q4-venn.svg"
     },
     "tags": [
       "union-probability",
@@ -4127,8 +4131,9 @@
       "(iii) $P(B|A) = \\dfrac{P(A \\cap B)}{P(A)} = \\dfrac{4/11}{6/11} = \\dfrac{2}{3}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram with P(A)=6/11, P(B)=5/11 and Union=7/11, setting up the problem to find intersection and conditional probabilities.",
+      "diagram_svg": "fig-13-1-q5-venn.svg"
     },
     "tags": [
       "conditional-probability",
@@ -4529,8 +4534,9 @@
       "Actual NCERT: $P(A|B) = \\dfrac{1}{6}$ (after careful event definition)"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Tree diagram showing the combined experiment: Die throw followed by either another die throw (if multiple of 3) or coin toss (if not multiple of 3).",
+      "diagram_svg": "fig-13-1-q15-combined-tree.svg"
     },
     "tags": [
       "conditional-probability",
@@ -5037,8 +5043,9 @@
       "(iv) $P(A' \\cap B') = 1 - P(A \\cup B) = 1 - 0.72 = 0.28$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Venn diagram showing two intersecting sets A and B within a sample space. Regions labelled with probabilities: P(A ∩ B) = 0.18, P(A only) = 0.12, P(B only) = 0.42, and P(Neither) = 0.28.",
+      "diagram_svg": "fig-13-2-q11-venn.svg"
     },
     "tags": [
       "independent-events",
@@ -5369,8 +5376,9 @@
       "Actual: $\\dfrac{1}{2} \\times \\dfrac{7}{12} + \\dfrac{1}{2} \\times \\dfrac{5}{12} = \\dfrac{7+5}{24} = \\dfrac{12}{24} = \\dfrac{1}{2}$ → NCERT answer: $\\dfrac{22}{35}$ (after correct calculation)"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Tree diagram representing the Urn problem (Polya Scheme): Drawing a ball, returning it with 2 additional balls of same color, then drawing again.",
+      "diagram_svg": "fig-13-3-q1-urn-tree.svg"
     },
     "tags": [
       "total-probability",
@@ -5409,8 +5417,9 @@
       "P(B₁|R) = $\\dfrac{P(R|B₁)P(B₁)}{P(R)} = \\dfrac{(1/2)(1/2)}{3/8} = \\dfrac{1/4}{3/8} = \\dfrac{2}{3}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Tree/Partition diagram showing the selection of two bags (I: 4R, 4B; II: 2R, 6B) and the subsequent selection of a ball.",
+      "diagram_svg": "fig-13-3-q2-bags-tree.svg"
     },
     "tags": [
       "bayes-theorem",
@@ -5526,8 +5535,9 @@
       "P(D|T⁺) = $\\dfrac{P(T⁺|D)P(D)}{P(T⁺)} = \\dfrac{0.00099}{0.005985} \\approx 0.165$ → actual NCERT: ≈ 0.164"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Tree diagram representing the Medical Test scenario (Bayes' Theorem). Shows the 'Base Rate Fallacy' visually where the False Positive path contributes significantly to the total positive results due to the large population of healthy people.",
+      "diagram_svg": "fig-13-3-q5-medical-test.svg"
     },
     "tags": [
       "bayes-theorem",
@@ -5921,8 +5931,9 @@
       "$P(B|A) = \\dfrac{P(A \\cap B)}{P(A)} = \\dfrac{0}{P(A)} = 0$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Composite Venn diagram showing two cases: (i) A as a subset of B (A inside B), demonstrating P(B|A)=1, and (ii) A and B as disjoint sets, demonstrating P(B|A)=0.",
+      "diagram_svg": "fig-13-misc-q1-cases.svg"
     },
     "tags": [
       "conditional-probability",
@@ -6121,8 +6132,9 @@
       "Correct: P(A|R) = 1/28, P(B|R) = 12/28, P(C|R) = 15/28"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Partition tree diagram showing four boxes (A, B, C, D) with their marble compositions. Illustrates the contribution of each box to the probability of drawing a red marble.",
+      "diagram_svg": "fig-13-misc-q6-four-boxes.svg"
     },
     "tags": [
       "bayes-theorem",

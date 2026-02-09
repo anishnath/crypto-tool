@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle;}
+      .prob { font-family: sans-serif; font-size: 12px; fill: #2563eb; font-weight: bold; }
+      .line { stroke: #374151; stroke-width: 2; }
+      .bag { fill: #e5e7eb; stroke: #4b5563; stroke-width: 2; rx: 10; ry: 10; }
+      .ball-red { fill: #ef4444; stroke: #991b1b; }
+      .ball-black { fill: #1f2937; stroke: #000; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="label" font-size="16" font-weight="bold">Bayes' Theorem: Two Bags Problem</text>
+
+  <!-- Start -->
+  <circle cx="50" cy="200" r="10" fill="#374151" />
+  <text x="50" y="225" class="label">Start</text>
+
+  <!-- Branches to Bags -->
+  <line x1="60" y1="200" x2="200" y2="100" class="line" />
+  <line x1="60" y1="200" x2="200" y2="300" class="line" />
+
+  <text x="110" y="140" class="prob">P(B₁) = 1/2</text>
+  <text x="110" y="270" class="prob">P(B₂) = 1/2</text>
+
+  <!-- Bag 1 -->
+  <g transform="translate(200, 70)">
+    <rect x="0" y="0" width="80" height="60" class="bag" />
+    <text x="40" y="35" class="label">Bag I</text>
+    <text x="40" y="55" class="label" font-size="10">4R, 4B</text>
+  </g>
+
+  <!-- Bag 2 -->
+  <g transform="translate(200, 270)">
+    <rect x="0" y="0" width="80" height="60" class="bag" />
+    <text x="40" y="35" class="label">Bag II</text>
+    <text x="40" y="55" class="label" font-size="10">2R, 6B</text>
+  </g>
+
+  <!-- Branches to Red/Black from Bag 1 -->
+  <line x1="280" y1="100" x2="450" y2="50" class="line" />
+  <line x1="280" y1="100" x2="450" y2="150" class="line" />
+
+  <text x="360" y="70" class="prob" fill="#dc2626">P(R|B₁) = 4/8</text>
+  <text x="360" y="130" class="prob">P(B|B₁) = 4/8</text>
+
+  <g transform="translate(450, 50)">
+    <circle cx="0" cy="0" r="15" class="ball-red" />
+    <text x="25" y="5" class="label" text-anchor="start" fill="#dc2626">Red</text>
+  </g>
+  <g transform="translate(450, 150)">
+    <circle cx="0" cy="0" r="15" class="ball-black" />
+    <text x="25" y="5" class="label" text-anchor="start">Black</text>
+  </g>
+
+  <!-- Branches to Red/Black from Bag 2 -->
+  <line x1="280" y1="300" x2="450" y2="250" class="line" />
+  <line x1="280" y1="300" x2="450" y2="350" class="line" />
+
+  <text x="360" y="270" class="prob" fill="#dc2626">P(R|B₂) = 2/8</text>
+  <text x="360" y="330" class="prob">P(B|B₂) = 6/8</text>
+
+  <g transform="translate(450, 250)">
+    <circle cx="0" cy="0" r="15" class="ball-red" />
+    <text x="25" y="5" class="label" text-anchor="start" fill="#dc2626">Red</text>
+  </g>
+  <g transform="translate(450, 350)">
+    <circle cx="0" cy="0" r="15" class="ball-black" />
+    <text x="25" y="5" class="label" text-anchor="start">Black</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="590" y="390" class="watermark">8gwifi.org</text>
+
+</svg>

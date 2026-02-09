@@ -1139,7 +1139,19 @@ function getPlotFile() {
 function buildPlotItem(d) {
     var item = { color: d.color || '#6366f1' };
 
-    if (d.fnType === 'parametric') {
+    if (d.fnType === 'points') {
+        item.fnType = 'points';
+        item.points = d.points;
+        item.graphType = d.graphType || 'polyline';
+        item.sampler = 'builtIn';
+        if (d.closed) item.closed = true;
+        if (d.attr) item.attr = d.attr;
+        if (d.skipTip !== undefined) item.skipTip = d.skipTip;
+        if (d.label) {
+            item.attr = Object.assign({}, d.attr || {}, { 'data-label': d.label });
+        }
+        return item;
+    } else if (d.fnType === 'parametric') {
         item.fnType = 'parametric';
         item.x = d.x;
         item.y = d.y;
@@ -1165,7 +1177,8 @@ function buildPlotItem(d) {
     if (d.skipTip) item.skipTip = d.skipTip;
     if (d.secondaryAxis) item.secondaryAxis = true;
     if (d.nSamples) item.nSamples = d.nSamples;
-    if (d.label) item.attr = { 'data-label': d.label };
+    if (d.attr) item.attr = Object.assign({}, d.attr, item.attr || {});
+    if (d.label) item.attr = Object.assign({}, item.attr || {}, { 'data-label': d.label });
 
     return item;
 }

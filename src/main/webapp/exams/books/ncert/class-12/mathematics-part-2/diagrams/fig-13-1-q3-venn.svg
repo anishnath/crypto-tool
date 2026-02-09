@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle;}
+      .title { font-family: sans-serif; font-size: 16px; fill: #111827; font-weight: bold; text-anchor: middle;}
+      .prob { font-family: sans-serif; font-size: 12px; fill: #ffffff; font-weight: bold; }
+      .prob-dark { font-family: sans-serif; font-size: 12px; fill: #1f2937; font-weight: bold; }
+      .box { fill: #f9fafb; stroke: #374151; stroke-width: 2; }
+      .circle-a { fill: rgba(16, 185, 129, 0.6); stroke: #047857; stroke-width: 2; } /* Green (Base for Conditional) */
+      .circle-b { fill: rgba(139, 92, 246, 0.4); stroke: #7c3aed; stroke-width: 2; } /* Violet */
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <text x="300" y="30" class="title">Venn Diagram: Given P(A), P(B), P(B|A)</text>
+
+  <!-- Sample Space -->
+  <rect x="50" y="50" width="500" height="250" class="box" />
+  
+  <!-- Circles -->
+  <!-- A is the condition given -->
+  <circle cx="250" cy="180" r="100" class="circle-a" />
+  <circle cx="380" cy="180" r="80" class="circle-b" />
+
+  <!-- Labels -->
+  <text x="200" y="130" class="label" fill="#065f46">Set A (P = 0.8)</text>
+  <text x="430" y="140" class="label" fill="#5b21b6">Set B (P = 0.5)</text>
+
+  <!-- Intersection Label (Unknown visually to student initially) -->
+  <text x="315" y="185" class="prob">A ∩ B</text>
+  
+  <!-- Given Info Box -->
+  <rect x="55" y="55" width="120" height="60" fill="white" stroke="#ccc" rx="5"/>
+  <text x="115" y="75" class="prob-dark">Given:</text>
+  <text x="115" y="95" class="prob-dark">P(B|A) = 0.4</text>
+
+  <!-- Question Hint visual -->
+  <text x="300" y="330" class="prob-dark">Calculate Intersection, Conditional, Union</text>
+
+  <!-- Watermark -->
+  <text x="540" y="330" class="watermark">8gwifi.org</text>
+</svg>
