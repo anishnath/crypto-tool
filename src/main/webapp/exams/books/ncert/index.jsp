@@ -274,7 +274,7 @@
         </div>
     </section>
 
-    <!-- Class 12 Section (Coming Soon) -->
+    <!-- Class 12 Section -->
     <section class="class-section">
         <div class="class-header">
             <span class="class-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Class 12</span>
@@ -282,13 +282,21 @@
         </div>
 
         <div class="subjects-grid">
-            <div class="subject-card coming-soon">
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-12/mathematics-part-1/" class="subject-card">
                 <div class="subject-icon math">&#128202;</div>
                 <div class="subject-info">
-                    <h3>Mathematics <span class="coming-badge">Soon</span></h3>
-                    <p>Coming soon</p>
+                    <h3>Mathematics Part 1</h3>
+                    <p>6 Chapters &bull; 413 Questions</p>
                 </div>
-            </div>
+            </a>
+
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-12/mathematics-part-2/" class="subject-card">
+                <div class="subject-icon math">&#128202;</div>
+                <div class="subject-info">
+                    <h3>Mathematics Part 2</h3>
+                    <p>7 Chapters &bull; 506 Questions</p>
+                </div>
+            </a>
 
             <div class="subject-card coming-soon">
                 <div class="subject-icon physics">&#9889;</div>
@@ -365,6 +373,18 @@
                 "position": 3,
                 "name": "Class 11 Mathematics",
                 "url": "https://8gwifi.org/exams/books/ncert/class-11/mathematics/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Class 12 Mathematics Part 1",
+                "url": "https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Class 12 Mathematics Part 2",
+                "url": "https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-2/"
             }
         ]
     }
