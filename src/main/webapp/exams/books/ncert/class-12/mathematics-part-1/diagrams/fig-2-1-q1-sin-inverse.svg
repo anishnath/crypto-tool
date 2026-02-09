@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <defs>
+    <style>
+      .axis { stroke: #374151; stroke-width: 1.5; }
+      .grid { stroke: #e5e7eb; stroke-width: 0.5; }
+      .curve { fill: none; stroke: #2563eb; stroke-width: 2.5; }
+      .aux-lines { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4; }
+      .point { fill: #dc2626; stroke: #fff; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 12px; fill: #4b5563; }
+      .title { font-family: sans-serif; font-size: 14px; font-weight: bold; fill: #1f2937; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151" />
+    </marker>
+  </defs>
+
+  <!-- Background Grid -->
+  <line x1="50" y1="200" x2="250" y2="200" class="axis" marker-end="url(#arrow)" />
+  <line x1="150" y1="350" x2="150" y2="50" class="axis" marker-end="url(#arrow)" />
+
+  <!-- Labels -->
+  <text x="260" y="205" class="label">x</text>
+  <text x="140" y="40" class="label">y</text>
+  <text x="80" y="30" class="title">y = sin⁻¹(x)</text>
+
+  <!-- Y-axis ticks (intervals of PI/6 approx 30px) -->
+  <!-- PI/2 is at y=110 (200 - 90) assuming scale 90px = PI/2 -->
+  <line x1="145" y1="110" x2="155" y2="110" class="axis" />
+  <text x="115" y="115" class="label">π/2</text>
+  
+  <line x1="145" y1="290" x2="155" y2="290" class="axis" />
+  <text x="110" y="295" class="label">-π/2</text>
+
+  <!-- X-axis ticks -->
+  <line x1="240" y1="195" x2="240" y2="205" class="axis" /> <!-- x=1, scale 90px -->
+  <text x="235" y="225" class="label">1</text>
+  
+  <line x1="60" y1="195" x2="60" y2="205" class="axis" /> <!-- x=-1 -->
+  <text x="55" y="225" class="label">-1</text>
+  
+  <!-- Curve sin^-1(x) -->
+  <!-- passing through (-1, -PI/2), (0,0), (1, PI/2) -->
+  <!-- Control points to approximate sine curve shape inverted -->
+  <path d="M 60 290 Q 110 280 150 200 T 240 110" class="curve" />
+
+  <!-- Point (-1/2, -PI/6) -->
+  <!-- x = -0.5 -> 150 - 45 = 105 -->
+  <!-- y = -PI/6 -> -1/3 of PI/2 -> 200 + 30 = 230 -->
+  <line x1="150" y1="230" x2="105" y2="230" class="aux-lines" />
+  <line x1="105" y1="200" x2="105" y2="230" class="aux-lines" />
+  <circle cx="105" cy="230" r="4" class="point" />
+  
+  <text x="70" y="250" class="label" fill="#dc2626">(-1/2, -π/6)</text>
+
+</svg>

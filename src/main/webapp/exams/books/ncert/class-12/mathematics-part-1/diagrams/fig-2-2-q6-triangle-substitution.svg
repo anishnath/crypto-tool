@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 250">
+  <defs>
+    <style>
+      .shape { fill: #f3f4f6; stroke: #374151; stroke-width: 2; stroke-linejoin: round; }
+      .angle-arc { fill: none; stroke: #2563eb; stroke-width: 1.5; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; }
+      .label-math { font-family: serif; font-style: italic; font-size: 16px; fill: #1f2937; }
+    </style>
+  </defs>
+
+  <!-- Right Triangle -->
+  <!-- Vertices: A(50, 200), B(250, 200), C(250, 50) -->
+  <!-- Base AB, Height BC, Hypotenuse AC -->
+  <path d="M 50 200 L 250 200 L 250 50 Z" class="shape" />
+  
+  <!-- Right Angle Mark -->
+  <path d="M 230 200 L 230 180 L 250 180" fill="none" stroke="#374151" stroke-width="1.5" />
+
+  <!-- Angle Theta at A -->
+  <path d="M 90 200 A 40 40 0 0 0 85 174" class="angle-arc" />
+  <text x="100" y="190" class="label-math">θ</text>
+  
+  <!-- Labels for Sides -->
+  <!-- Hypotenuse -->
+  <text x="130" y="110" class="label-math">a</text>
+  
+  <!-- Opposite (Vertical) -->
+  <text x="260" y="130" class="label-math">x</text>
+  
+  <!-- Adjacent (Base) -->
+  <text x="140" y="225" class="label-math">√(a² - x²)</text>
+  
+  <!-- Context Label -->
+  <text x="150" y="30" class="label" text-anchor="middle">Substitution: x = a sin(θ)</text>
+</svg>

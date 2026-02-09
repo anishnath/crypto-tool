@@ -1,0 +1,187 @@
+{
+  "ex-10-1-q1": {
+    "title": "Displacement vector: 40 km, 30 degrees east of north",
+    "xDomain": [-5, 45],
+    "yDomain": [-5, 45],
+    "data": [
+      { "fnType": "vector", "vector": [20, 34.64], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "d = 40 km (30 deg E of N)" },
+      { "fnType": "vector", "vector": [0, 40], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "North direction (reference)" },
+      { "fnType": "vector", "vector": [20, 0], "offset": [0, 34.64], "graphType": "polyline", "color": "#f59e0b", "label": "East component = 40 sin 30 = 20" },
+      { "fnType": "vector", "vector": [0, 34.64], "offset": [0, 0], "graphType": "polyline", "color": "#8b5cf6", "label": "North component = 40 cos 30 = 34.64" }
+    ],
+    "annotations": [
+      { "x": 20, "text": "40 km at 30 deg east of north" },
+      { "x": 10, "text": "East = 20, North = 34.64" }
+    ]
+  },
+  "ex-10-2-q1": {
+    "title": "Magnitude of vectors (2D projection, x-y plane)",
+    "xDomain": [-3, 4],
+    "yDomain": [-8, 3],
+    "data": [
+      { "fnType": "vector", "vector": [1, 1], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "a = i + j + k, |a| = sqrt(3)" },
+      { "fnType": "vector", "vector": [2, -7], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "b = 2i - 7j - 3k, |b| = sqrt(62)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "|a| = sqrt(3) ~ 1.73" },
+      { "x": 2, "text": "|b| = sqrt(62) ~ 7.87" }
+    ]
+  },
+  "ex-10-2-q5": {
+    "title": "Vector from point (2,1) to point (-5,7)",
+    "xDomain": [-8, 5],
+    "yDomain": [-1, 10],
+    "data": [
+      { "fnType": "vector", "vector": [-7, 6], "offset": [2, 1], "graphType": "polyline", "color": "#6366f1", "label": "AB = -7i + 6j" },
+      { "fnType": "vector", "vector": [2, 1], "offset": [0, 0], "graphType": "polyline", "color": "#f59e0b", "label": "Position A = (2, 1)" },
+      { "fnType": "vector", "vector": [-5, 7], "offset": [0, 0], "graphType": "polyline", "color": "#8b5cf6", "label": "Position B = (-5, 7)" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Initial point A(2, 1)" },
+      { "x": -5, "text": "Terminal point B(-5, 7)" },
+      { "x": -1.5, "text": "|AB| = sqrt(49+36) = sqrt(85)" }
+    ]
+  },
+  "ex-10-2-q6": {
+    "title": "Sum of three vectors (2D projection, x-y plane)",
+    "xDomain": [-4, 4],
+    "yDomain": [-7, 5],
+    "data": [
+      { "fnType": "vector", "vector": [1, -2], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "a = i - 2j + k" },
+      { "fnType": "vector", "vector": [-2, 4], "offset": [1, -2], "graphType": "polyline", "color": "#ef4444", "label": "b = -2i + 4j + 5k" },
+      { "fnType": "vector", "vector": [1, -6], "offset": [-1, 2], "graphType": "polyline", "color": "#f59e0b", "label": "c = i - 6j - 7k" },
+      { "fnType": "vector", "vector": [0, -4], "offset": [0, 0], "graphType": "polyline", "color": "#22c55e", "label": "a+b+c = 0i - 4j - k" }
+    ],
+    "annotations": [
+      { "x": 0.5, "text": "Tail-to-head addition" },
+      { "x": 0, "text": "Resultant: -4j - k" }
+    ]
+  },
+  "ex-10-2-q7": {
+    "title": "Unit vector in direction of a = i + j + 2k (2D projection, x-y plane)",
+    "xDomain": [-1, 3],
+    "yDomain": [-1, 3],
+    "data": [
+      { "fnType": "vector", "vector": [1, 1], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "a = i + j + 2k, |a| = sqrt(6)" },
+      { "fnType": "vector", "vector": [0.4082, 0.4082], "offset": [0, 0], "graphType": "polyline", "color": "#22c55e", "label": "a-hat = (1/sqrt6)i + (1/sqrt6)j + (2/sqrt6)k" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "|a| = sqrt(6) ~ 2.449" },
+      { "x": 0.4, "text": "Unit vector (scaled to length 1)" }
+    ]
+  },
+  "ex-10-3-q1": {
+    "title": "Angle between vectors: |a|=sqrt(3), |b|=2, a.b=sqrt(6)",
+    "xDomain": [-1, 4],
+    "yDomain": [-1, 3],
+    "data": [
+      { "fnType": "vector", "vector": [1.732, 0], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "|a| = sqrt(3), along x-axis" },
+      { "fnType": "vector", "vector": [1.414, 1.414], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "|b| = 2, at 45 deg to a" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "0.6*cos(t)", "y": "0.6*sin(t)", "range": [0, 0.7854], "color": "#f59e0b", "label": "theta = pi/4 = 45 deg" }
+    ],
+    "annotations": [
+      { "x": 1.732, "text": "|a| = sqrt(3)" },
+      { "x": 1.414, "text": "|b| = 2" },
+      { "x": 0.5, "text": "cos theta = sqrt(6)/(sqrt(3)*2) = 1/sqrt(2), theta = 45 deg" }
+    ]
+  },
+  "ex-10-3-q3": {
+    "title": "Projection of (i - j) on (i + j)",
+    "xDomain": [-2, 3],
+    "yDomain": [-2, 3],
+    "data": [
+      { "fnType": "vector", "vector": [1, -1], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "a = i - j" },
+      { "fnType": "vector", "vector": [1, 1], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "b = i + j" },
+      { "fnType": "vector", "vector": [0, 0], "offset": [0, 0], "graphType": "polyline", "color": "#22c55e", "label": "Projection = 0 (perpendicular)" },
+      { "fn": "x", "range": [0, 1.5], "color": "#ef4444", "label": "Direction of b: y = x" },
+      { "fn": "-x", "range": [0, 1.5], "color": "#6366f1", "label": "Direction of a: y = -x" }
+    ],
+    "annotations": [
+      { "x": 1.2, "text": "a . b = 1 - 1 = 0" },
+      { "x": 0.3, "text": "Projection = 0 (orthogonal)" }
+    ]
+  },
+  "ex-10-3-q15": {
+    "title": "Triangle ABC: A(1,2,3), B(-1,0,0), C(0,1,2) - 2D projection (x-y plane)",
+    "xDomain": [-3, 3],
+    "yDomain": [-1, 4],
+    "data": [
+      { "fnType": "vector", "vector": [-2, -2], "offset": [1, 2], "graphType": "polyline", "color": "#6366f1", "label": "AB: A(1,2) to B(-1,0)" },
+      { "fnType": "vector", "vector": [1, 1], "offset": [-1, 0], "graphType": "polyline", "color": "#ef4444", "label": "BC: B(-1,0) to C(0,1)" },
+      { "fnType": "vector", "vector": [1, 1], "offset": [0, 1], "graphType": "polyline", "color": "#f59e0b", "label": "CA: C(0,1) to A(1,2)" },
+      { "fnType": "vector", "vector": [-1, -1], "offset": [1, 2], "graphType": "polyline", "color": "#22c55e", "label": "AC: A(1,2) to C(0,1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "A(1, 2, 3)" },
+      { "x": -1, "text": "B(-1, 0, 0)" },
+      { "x": 0, "text": "C(0, 1, 2)" }
+    ]
+  },
+  "ex-10-4-q9": {
+    "title": "Triangle area: A(1,1,2), B(2,3,5), C(1,5,5) - 2D projection (x-y plane)",
+    "xDomain": [-1, 4],
+    "yDomain": [-1, 7],
+    "data": [
+      { "fnType": "vector", "vector": [1, 2], "offset": [1, 1], "graphType": "polyline", "color": "#6366f1", "label": "AB = i + 2j + 3k" },
+      { "fnType": "vector", "vector": [0, 4], "offset": [1, 1], "graphType": "polyline", "color": "#ef4444", "label": "AC = 0i + 4j + 3k" },
+      { "fnType": "vector", "vector": [-1, 2], "offset": [2, 3], "graphType": "polyline", "color": "#f59e0b", "label": "BC: B(2,3) to C(1,5)" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "1 + (2-1)*t + (1-2)*t*(1-t)*0", "y": "1 + (3-1)*t", "range": [0, 1], "color": "#22c55e", "label": "Side AB" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "A(1, 1, 2)" },
+      { "x": 2, "text": "B(2, 3, 5)" },
+      { "x": 1.2, "text": "C(1, 5, 5)" },
+      { "x": 0, "text": "Area = (1/2)|AB x AC| = sqrt(61)/2" }
+    ]
+  },
+  "ex-10-4-q10": {
+    "title": "Parallelogram with adjacent sides a = 2i - 4j + 5k and b = i - 2j - 3k",
+    "xDomain": [-2, 6],
+    "yDomain": [-8, 4],
+    "data": [
+      { "fnType": "vector", "vector": [2, -4], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "a = 2i - 4j + 5k" },
+      { "fnType": "vector", "vector": [1, -2], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "b = i - 2j - 3k" },
+      { "fnType": "vector", "vector": [1, -2], "offset": [2, -4], "graphType": "polyline", "color": "#ef4444", "label": "b (translated)" },
+      { "fnType": "vector", "vector": [2, -4], "offset": [1, -2], "graphType": "polyline", "color": "#6366f1", "label": "a (translated)" },
+      { "fnType": "vector", "vector": [3, -6], "offset": [0, 0], "graphType": "polyline", "color": "#22c55e", "label": "Diagonal a + b = 3i - 6j + 2k" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "a = 2i - 4j + 5k" },
+      { "x": 1, "text": "b = i - 2j - 3k" },
+      { "x": 3, "text": "Area = |a x b| = sqrt((-2)^2 + (11)^2 + (0)^2) = 11.18" }
+    ]
+  },
+  "misc-q1": {
+    "title": "Unit vector in XY-plane at 30 degrees with positive x-axis",
+    "xDomain": [-0.5, 1.5],
+    "yDomain": [-0.5, 1.2],
+    "data": [
+      { "fnType": "vector", "vector": [0.866, 0.5], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "u = cos30 i + sin30 j = (sqrt3/2)i + (1/2)j" },
+      { "fnType": "vector", "vector": [1, 0], "offset": [0, 0], "graphType": "polyline", "color": "#ef4444", "label": "x-axis (i)" },
+      { "fnType": "vector", "vector": [0, 1], "offset": [0, 0], "graphType": "polyline", "color": "#f59e0b", "label": "y-axis (j)" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t)", "y": "sin(t)", "range": [0, 6.2832], "color": "#8b5cf6", "label": "Unit circle" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "0.3*cos(t)", "y": "0.3*sin(t)", "range": [0, 0.5236], "color": "#22c55e", "label": "theta = 30 deg = pi/6" }
+    ],
+    "annotations": [
+      { "x": 0.866, "text": "cos 30 = sqrt(3)/2 ~ 0.866" },
+      { "x": 0.15, "text": "30 deg" },
+      { "x": 0.5, "text": "|u| = 1 (unit vector)" }
+    ]
+  },
+  "misc-q3": {
+    "title": "Girl walks 4 km west, then 3 km at 30 degrees east of north",
+    "xDomain": [-6, 3],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fnType": "vector", "vector": [-4, 0], "offset": [0, 0], "graphType": "polyline", "color": "#6366f1", "label": "Step 1: 4 km West" },
+      { "fnType": "vector", "vector": [1.5, 2.598], "offset": [-4, 0], "graphType": "polyline", "color": "#ef4444", "label": "Step 2: 3 km, 30 deg E of N" },
+      { "fnType": "vector", "vector": [-2.5, 2.598], "offset": [0, 0], "graphType": "polyline", "color": "#22c55e", "label": "Resultant displacement" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Start" },
+      { "x": -4, "text": "After 4 km West" },
+      { "x": -2.5, "text": "Final: (-2.5, 2.598)" },
+      { "x": -1.25, "text": "|d| = sqrt(6.25 + 6.75) = sqrt(13) ~ 3.61 km" }
+    ]
+  }
+}

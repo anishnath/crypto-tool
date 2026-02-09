@@ -1,0 +1,275 @@
+{
+  "ex-9-2-q1": {
+    "title": "Verify y = e^x + 1 satisfies y'' - y' = 0",
+    "xDomain": [-3, 3],
+    "yDomain": [-1, 12],
+    "data": [
+      { "fn": "exp(x) + 1", "derivative": { "fn": "exp(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = e^x + 1" },
+      { "fn": "exp(x)", "color": "#22c55e", "label": "y' = e^x" },
+      { "fn": "exp(x)", "color": "#ef4444", "label": "y'' = e^x (same as y')" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y(0) = 2, y'(0) = 1" },
+      { "x": 1, "text": "y' = y'' => y'' - y' = 0 verified" }
+    ]
+  },
+  "ex-9-2-q2": {
+    "title": "Family y = x^2 + 2x + C satisfying y' - 2x - 2 = 0",
+    "xDomain": [-5, 5],
+    "yDomain": [-6, 20],
+    "data": [
+      { "fn": "x^2 + 2*x - 2", "color": "#6366f1", "label": "C = -2" },
+      { "fn": "x^2 + 2*x", "color": "#22c55e", "label": "C = 0" },
+      { "fn": "x^2 + 2*x + 2", "color": "#ef4444", "label": "C = 2" },
+      { "fn": "x^2 + 2*x + 4", "color": "#f59e0b", "label": "C = 4" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Vertex at x = -1 for all curves" },
+      { "x": 2, "text": "y' = 2x + 2 for all C" }
+    ]
+  },
+  "ex-9-2-q3": {
+    "title": "Family y = cos(x) + C satisfying y' + sin(x) = 0",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-4, 4],
+    "data": [
+      { "fn": "cos(x) - 1", "color": "#6366f1", "label": "C = -1" },
+      { "fn": "cos(x)", "derivative": { "fn": "-sin(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "C = 0" },
+      { "fn": "cos(x) + 1", "color": "#ef4444", "label": "C = 1" },
+      { "fn": "cos(x) + 2", "color": "#f59e0b", "label": "C = 2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "All curves peak at x = 0" },
+      { "x": 3.14, "text": "All curves trough at x = pi" }
+    ]
+  },
+  "ex-9-2-q4": {
+    "title": "y = sqrt(1 + x^2) and its derivative",
+    "xDomain": [-4, 4],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "sqrt(1 + x^2)", "derivative": { "fn": "x / sqrt(1 + x^2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = sqrt(1 + x^2)" },
+      { "fn": "x / sqrt(1 + x^2)", "color": "#22c55e", "label": "y' = x / sqrt(1 + x^2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y(0) = 1, y'(0) = 0 (minimum)" },
+      { "x": 2, "text": "Approaches y = |x| for large |x|" }
+    ]
+  },
+  "ex-9-3-q1": {
+    "title": "dy/dx = tan^2(x/2): Solution y = 2*tan(x/2) - x + C",
+    "xDomain": [-5, 5],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "2*tan(x/2) - x - 2", "range": [-3.14, 3.14], "color": "#6366f1", "label": "C = -2" },
+      { "fn": "2*tan(x/2) - x", "range": [-3.14, 3.14], "color": "#22c55e", "label": "C = 0" },
+      { "fn": "2*tan(x/2) - x + 2", "range": [-3.14, 3.14], "color": "#ef4444", "label": "C = 2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Curves pass through (0, C)" },
+      { "x": 2.5, "text": "Vertical asymptote near x = pi" }
+    ]
+  },
+  "ex-9-3-q2": {
+    "title": "dy/dx = sqrt(4 - y^2): Solution y = 2*sin(x + C)",
+    "xDomain": [-7, 7],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fn": "2*sin(x - 1)", "color": "#6366f1", "label": "C = -1" },
+      { "fn": "2*sin(x)", "derivative": { "fn": "2*cos(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "C = 0" },
+      { "fn": "2*sin(x + 1)", "color": "#ef4444", "label": "C = 1" },
+      { "fn": "2*sin(x + 2)", "color": "#f59e0b", "label": "C = 2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Amplitude = 2 for all curves" },
+      { "x": 3.14, "text": "Phase-shifted sine waves" }
+    ]
+  },
+  "ex-9-3-q9": {
+    "title": "dy/dx = sin^{-1}(x): Solution y = x*asin(x) + sqrt(1 - x^2) + C",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-2, 4],
+    "data": [
+      { "fn": "x * asin(x) + sqrt(1 - x^2) - 1", "range": [-1, 1], "color": "#6366f1", "label": "C = -1" },
+      { "fn": "x * asin(x) + sqrt(1 - x^2)", "range": [-1, 1], "derivative": { "fn": "asin(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "C = 0" },
+      { "fn": "x * asin(x) + sqrt(1 - x^2) + 1", "range": [-1, 1], "color": "#ef4444", "label": "C = 1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y'(0) = asin(0) = 0" },
+      { "x": 1, "text": "Domain: -1 <= x <= 1" }
+    ]
+  },
+  "ex-9-3-q12": {
+    "title": "(x+1)dy/dx = 2e^{-y} - 1: Solution curves",
+    "xDomain": [-4, 6],
+    "yDomain": [-3, 4],
+    "data": [
+      { "fn": "log(((x + 1)^2 + 1) / 2)", "range": [-0.99, 6], "color": "#6366f1", "label": "2e^y = (x+1)^2 + 1 (C = 1)" },
+      { "fn": "log(((x + 1)^2 + 2) / 2)", "range": [-0.99, 6], "color": "#22c55e", "label": "C = 2" },
+      { "fn": "log(((x + 1)^2 + 0.5) / 2)", "range": [-0.99, 6], "color": "#ef4444", "label": "C = 0.5" },
+      { "fn": "log(((x + 1)^2 + 3) / 2)", "range": [-0.99, 6], "color": "#f59e0b", "label": "C = 3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Singularity at x = -1" },
+      { "x": 2, "text": "Solution: 2e^y = (x+1)^2 + C" }
+    ]
+  },
+  "ex-9-4-q2": {
+    "title": "y' = (x + y)/x: Solution y = x*ln|x| + Cx",
+    "xDomain": [-5, 5],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "x * log(abs(x)) - 2*x", "range": [0.01, 5], "color": "#6366f1", "label": "C = -2 (x > 0)" },
+      { "fn": "x * log(abs(x))", "range": [0.01, 5], "color": "#22c55e", "label": "C = 0 (x > 0)" },
+      { "fn": "x * log(abs(x)) + 2*x", "range": [0.01, 5], "color": "#ef4444", "label": "C = 2 (x > 0)" },
+      { "fn": "x * log(abs(x)) - 2*x", "range": [-5, -0.01], "color": "#6366f1", "label": "C = -2 (x < 0)" },
+      { "fn": "x * log(abs(x))", "range": [-5, -0.01], "color": "#22c55e", "label": "C = 0 (x < 0)" },
+      { "fn": "x * log(abs(x)) + 2*x", "range": [-5, -0.01], "color": "#ef4444", "label": "C = 2 (x < 0)" }
+    ],
+    "annotations": [
+      { "x": 0.5, "text": "Homogeneous DE: substitute y = vx" },
+      { "x": 3, "text": "y = x ln|x| + Cx" }
+    ]
+  },
+  "ex-9-4-q11": {
+    "title": "(x + y)dy + (x - y)dx = 0: Implicit solution curves",
+    "xDomain": [-5, 5],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fnType": "parametric", "x": "1.5 * cos(t) * exp(-t)", "y": "1.5 * sin(t) * exp(-t)", "graphType": "polyline", "range": [-6.28, 6.28], "color": "#6366f1", "label": "Spiral solution (C = 1.5)" },
+      { "fnType": "parametric", "x": "3 * cos(t) * exp(-t)", "y": "3 * sin(t) * exp(-t)", "graphType": "polyline", "range": [-6.28, 6.28], "color": "#22c55e", "label": "Spiral solution (C = 3)" },
+      { "fnType": "parametric", "x": "5 * cos(t) * exp(-t)", "y": "5 * sin(t) * exp(-t)", "graphType": "polyline", "range": [-6.28, 6.28], "color": "#ef4444", "label": "Spiral solution (C = 5)" },
+      { "fnType": "parametric", "x": "8 * cos(t) * exp(-t)", "y": "8 * sin(t) * exp(-t)", "graphType": "polyline", "range": [-6.28, 6.28], "color": "#f59e0b", "label": "Spiral solution (C = 8)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Logarithmic spirals: tan^{-1}(y/x) = ln(sqrt(x^2+y^2)) + C" },
+      { "x": 3, "text": "Homogeneous equation" }
+    ]
+  },
+  "ex-9-5-q1": {
+    "title": "dy/dx + 2y = sin(x): General solution",
+    "xDomain": [-4, 8],
+    "yDomain": [-2, 3],
+    "data": [
+      { "fn": "(2*sin(x) - cos(x)) / 5 + 3 * exp(-2*x)", "color": "#6366f1", "label": "C = 3" },
+      { "fn": "(2*sin(x) - cos(x)) / 5 + 1 * exp(-2*x)", "color": "#22c55e", "label": "C = 1" },
+      { "fn": "(2*sin(x) - cos(x)) / 5", "derivative": { "fn": "2*(2*cos(x) + sin(x)) / 5", "updateOnMouseMove": true }, "color": "#ef4444", "label": "C = 0 (particular)" },
+      { "fn": "(2*sin(x) - cos(x)) / 5 - 2 * exp(-2*x)", "color": "#f59e0b", "label": "C = -2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "IF = e^{2x}" },
+      { "x": 5, "text": "All solutions -> particular as x -> inf" }
+    ]
+  },
+  "ex-9-5-q2": {
+    "title": "dy/dx + 3y = e^{-2x}: Solution y = e^{-2x} + Ce^{-3x}",
+    "xDomain": [-1, 4],
+    "yDomain": [-3, 5],
+    "data": [
+      { "fn": "exp(-2*x) - 2 * exp(-3*x)", "color": "#6366f1", "label": "C = -2" },
+      { "fn": "exp(-2*x)", "derivative": { "fn": "-2*exp(-2*x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "C = 0 (particular)" },
+      { "fn": "exp(-2*x) + 2 * exp(-3*x)", "color": "#ef4444", "label": "C = 2" },
+      { "fn": "exp(-2*x) + 4 * exp(-3*x)", "color": "#f59e0b", "label": "C = 4" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "At x = 0: y = 1 + C" },
+      { "x": 2, "text": "All curves -> 0 as x -> inf" }
+    ]
+  },
+  "ex-9-5-q3": {
+    "title": "dy/dx + y/x = x^2: Solution y = x^3/4 + C/x",
+    "xDomain": [-5, 5],
+    "yDomain": [-10, 15],
+    "data": [
+      { "fn": "x^3 / 4 - 1/x", "range": [0.1, 5], "color": "#6366f1", "label": "C = -1 (x > 0)" },
+      { "fn": "x^3 / 4", "range": [0.1, 5], "derivative": { "fn": "3*x^2 / 4", "updateOnMouseMove": true }, "color": "#22c55e", "label": "C = 0 (x > 0)" },
+      { "fn": "x^3 / 4 + 1/x", "range": [0.1, 5], "color": "#ef4444", "label": "C = 1 (x > 0)" },
+      { "fn": "x^3 / 4 - 1/x", "range": [-5, -0.1], "color": "#6366f1", "label": "C = -1 (x < 0)" },
+      { "fn": "x^3 / 4", "range": [-5, -0.1], "color": "#22c55e", "label": "C = 0 (x < 0)" },
+      { "fn": "x^3 / 4 + 1/x", "range": [-5, -0.1], "color": "#ef4444", "label": "C = 1 (x < 0)" }
+    ],
+    "annotations": [
+      { "x": 0.5, "text": "Singular at x = 0 (for C != 0)" },
+      { "x": 3, "text": "IF = x; y = x^3/4 + C/x" }
+    ]
+  },
+  "misc-q4": {
+    "title": "sin^{-1}(y) + sin^{-1}(x) = C: Implicit curves",
+    "xDomain": [-1.2, 1.2],
+    "yDomain": [-1.2, 1.2],
+    "data": [
+      { "fnType": "parametric", "x": "sin(t)", "y": "sin(-t)", "graphType": "polyline", "range": [-1.57, 1.57], "color": "#6366f1", "label": "C = 0: y = -x" },
+      { "fnType": "parametric", "x": "sin(t)", "y": "sin(0.7854 - t)", "graphType": "polyline", "range": [-1.57, 1.57], "color": "#22c55e", "label": "C = pi/4" },
+      { "fnType": "parametric", "x": "sin(t)", "y": "sin(1.5708 - t)", "graphType": "polyline", "range": [-1.57, 1.57], "color": "#ef4444", "label": "C = pi/2" },
+      { "fnType": "parametric", "x": "sin(t)", "y": "sin(-0.7854 - t)", "graphType": "polyline", "range": [-1.57, 1.57], "color": "#f59e0b", "label": "C = -pi/4" },
+      { "fnType": "parametric", "x": "sin(t)", "y": "sin(-1.5708 - t)", "graphType": "polyline", "range": [-1.57, 1.57], "color": "#8b5cf6", "label": "C = -pi/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Domain: -1 <= x,y <= 1" },
+      { "x": 0.7, "text": "sin^{-1}y + sin^{-1}x = C" }
+    ]
+  },
+  "ex-9-2-family-overview": {
+    "title": "Overview: General vs Particular Solutions of DEs",
+    "xDomain": [-4, 4],
+    "yDomain": [-5, 10],
+    "data": [
+      { "fn": "exp(x) - 3", "color": "#6366f1", "label": "y = e^x - 3 (C = -3)" },
+      { "fn": "exp(x) - 1", "color": "#22c55e", "label": "y = e^x - 1 (C = -1)" },
+      { "fn": "exp(x) + 1", "color": "#ef4444", "label": "y = e^x + 1 (C = 1, Ex 9.2 Q1)" },
+      { "fn": "exp(x) + 3", "color": "#f59e0b", "label": "y = e^x + 3 (C = 3)" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "General solution: y = e^x + C" },
+      { "x": 1, "text": "All satisfy y' - y = -C (related DEs)" }
+    ]
+  },
+  "ex-9-3-slope-field": {
+    "title": "Slope field concept: dy/dx = sqrt(4 - y^2)",
+    "xDomain": [-4, 4],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fn": "2*sin(x - 1.5708)", "color": "#6366f1", "label": "y = 2sin(x - pi/2) = -2cos(x)" },
+      { "fn": "2*sin(x)", "color": "#22c55e", "label": "y = 2sin(x)" },
+      { "fn": "2*sin(x + 1.5708)", "color": "#ef4444", "label": "y = 2sin(x + pi/2) = 2cos(x)" },
+      { "fn": "2", "color": "#8b5cf6", "label": "y = 2 (equilibrium: dy/dx = 0)" },
+      { "fn": "-2", "color": "#8b5cf6", "label": "y = -2 (equilibrium: dy/dx = 0)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Solutions oscillate between y = -2 and y = 2" },
+      { "x": 3, "text": "Equilibria at y = +/- 2" }
+    ]
+  },
+  "ex-9-5-integrating-factor": {
+    "title": "Integrating Factor Method: dy/dx + 2y = sin(x) step-by-step",
+    "xDomain": [-2, 8],
+    "yDomain": [-1.5, 3],
+    "data": [
+      { "fn": "(2*sin(x) - cos(x)) / 5", "color": "#22c55e", "label": "Particular solution y_p = (2sinx - cosx)/5" },
+      { "fn": "exp(-2*x)", "color": "#f59e0b", "label": "Homogeneous solution e^{-2x}" },
+      { "fn": "(2*sin(x) - cos(x)) / 5 + 2*exp(-2*x)", "derivative": { "fn": "(2*cos(x) + sin(x))*2/5 - 4*exp(-2*x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "General: y_p + 2e^{-2x}" },
+      { "fn": "(2*sin(x) - cos(x)) / 5 - exp(-2*x)", "color": "#ef4444", "label": "General: y_p - e^{-2x}" },
+      { "fn": "sin(x)", "color": "#8b5cf6", "label": "Forcing function: sin(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "IF = e^{2x}" },
+      { "x": 4, "text": "Transient Ce^{-2x} dies out" },
+      { "x": 6, "text": "Steady state: (2sinx - cosx)/5" }
+    ]
+  },
+  "ex-9-4-homogeneous-concept": {
+    "title": "Homogeneous DE concept: y' = (x+y)/x = 1 + y/x",
+    "xDomain": [-0.5, 6],
+    "yDomain": [-6, 10],
+    "data": [
+      { "fn": "x * log(x) - 2*x", "range": [0.05, 6], "color": "#6366f1", "label": "y = x ln(x) - 2x" },
+      { "fn": "x * log(x)", "range": [0.05, 6], "derivative": { "fn": "log(x) + 1", "updateOnMouseMove": true }, "color": "#22c55e", "label": "y = x ln(x)" },
+      { "fn": "x * log(x) + x", "range": [0.05, 6], "color": "#ef4444", "label": "y = x ln(x) + x" },
+      { "fn": "x * log(x) + 3*x", "range": [0.05, 6], "color": "#f59e0b", "label": "y = x ln(x) + 3x" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "At x = 1: y = C (since ln(1) = 0)" },
+      { "x": 4, "text": "Substitution: v = y/x" }
+    ]
+  }
+}

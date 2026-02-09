@@ -1,0 +1,675 @@
+{
+  "ex-6-1-q11": {
+    "title": "Curve 6y = x^3 + 2: Rate of change of coordinates",
+    "xDomain": [-5, 5],
+    "yDomain": [-20, 22],
+    "data": [
+      { "fn": "(x^3 + 2) / 6", "derivative": { "fn": "x^2 / 2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = (x^3 + 2)/6" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "dy/dx = 8 at x=4" },
+      { "x": -4, "text": "dy/dx = 8 at x=-4" }
+    ]
+  },
+  "ex-6-1-q15": {
+    "title": "Marginal cost function C(x) = 0.007x^3 - 0.003x^2 + 15x + 4000",
+    "xDomain": [0, 30],
+    "yDomain": [4000, 4700],
+    "data": [
+      { "fn": "0.007*x^3 - 0.003*x^2 + 15*x + 4000", "derivative": { "fn": "0.021*x^2 - 0.006*x + 15", "updateOnMouseMove": true }, "color": "#6366f1", "label": "C(x)" },
+      { "fn": "0.021*x^2 - 0.006*x + 15", "color": "#ef4444", "label": "C'(x) marginal cost", "secondaryAxis": true }
+    ],
+    "annotations": [
+      { "x": 17, "text": "x=17, MC evaluated" }
+    ]
+  },
+  "ex-6-2-q3": {
+    "title": "f(x) = sin(x): Increasing and decreasing intervals on [0, pi]",
+    "xDomain": [-0.5, 4],
+    "yDomain": [-0.5, 1.5],
+    "data": [
+      { "fn": "sin(x)", "range": [0, 1.5708], "color": "#22c55e", "label": "Increasing [0, pi/2]" },
+      { "fn": "sin(x)", "range": [1.5708, 3.1416], "color": "#ef4444", "label": "Decreasing [pi/2, pi]" },
+      { "fn": "cos(x)", "range": [0, 3.1416], "color": "#f59e0b", "label": "f'(x) = cos(x)" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "Max at pi/2" }
+    ]
+  },
+  "ex-6-2-q4": {
+    "title": "f(x) = 2x^2 - 3x: Increasing/decreasing intervals",
+    "xDomain": [-2, 3],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "2*x^2 - 3*x", "range": [-2, 0.75], "color": "#ef4444", "label": "Decreasing x < 3/4" },
+      { "fn": "2*x^2 - 3*x", "range": [0.75, 3], "color": "#22c55e", "label": "Increasing x > 3/4" },
+      { "fn": "4*x - 3", "color": "#f59e0b", "label": "f'(x) = 4x - 3" }
+    ],
+    "annotations": [
+      { "x": 0.75, "text": "Min at x=3/4" }
+    ]
+  },
+  "ex-6-2-q5": {
+    "title": "f(x) = 2x^3 - 3x^2 - 36x + 7: Critical points and monotonicity",
+    "xDomain": [-4, 5],
+    "yDomain": [-80, 60],
+    "data": [
+      { "fn": "2*x^3 - 3*x^2 - 36*x + 7", "range": [-4, -2], "color": "#22c55e", "label": "Increasing (-inf,-2)" },
+      { "fn": "2*x^3 - 3*x^2 - 36*x + 7", "range": [-2, 3], "color": "#ef4444", "label": "Decreasing (-2,3)" },
+      { "fn": "2*x^3 - 3*x^2 - 36*x + 7", "range": [3, 5], "color": "#22c55e", "label": "Increasing (3,inf)" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Local max x=-2" },
+      { "x": 3, "text": "Local min x=3" }
+    ]
+  },
+  "ex-6-2-q6a": {
+    "title": "f(x) = x^2 + 2x - 5: Increasing/decreasing",
+    "xDomain": [-4, 3],
+    "yDomain": [-7, 8],
+    "data": [
+      { "fn": "x^2 + 2*x - 5", "range": [-4, -1], "color": "#ef4444", "label": "Decreasing x < -1" },
+      { "fn": "x^2 + 2*x - 5", "range": [-1, 3], "color": "#22c55e", "label": "Increasing x > -1" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Min at x=-1" }
+    ]
+  },
+  "ex-6-2-q6b": {
+    "title": "f(x) = 10 - 6x - 2x^2: Downward parabola",
+    "xDomain": [-5, 3],
+    "yDomain": [-15, 15],
+    "data": [
+      { "fn": "10 - 6*x - 2*x^2", "range": [-5, -1.5], "color": "#22c55e", "label": "Increasing x < -3/2" },
+      { "fn": "10 - 6*x - 2*x^2", "range": [-1.5, 3], "color": "#ef4444", "label": "Decreasing x > -3/2" }
+    ],
+    "annotations": [
+      { "x": -1.5, "text": "Max at x=-3/2" }
+    ]
+  },
+  "ex-6-2-q6c": {
+    "title": "f(x) = -2x^3 - 9x^2 - 12x + 1",
+    "xDomain": [-4, 2],
+    "yDomain": [-15, 10],
+    "data": [
+      { "fn": "-2*x^3 - 9*x^2 - 12*x + 1", "range": [-4, -2], "color": "#ef4444", "label": "Decreasing x<-2" },
+      { "fn": "-2*x^3 - 9*x^2 - 12*x + 1", "range": [-2, -1], "color": "#22c55e", "label": "Increasing (-2,-1)" },
+      { "fn": "-2*x^3 - 9*x^2 - 12*x + 1", "range": [-1, 2], "color": "#ef4444", "label": "Decreasing x>-1" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Local min x=-2" },
+      { "x": -1, "text": "Local max x=-1" }
+    ]
+  },
+  "ex-6-2-q6d": {
+    "title": "f(x) = 6 - 9x - x^2",
+    "xDomain": [-8, 4],
+    "yDomain": [-20, 30],
+    "data": [
+      { "fn": "6 - 9*x - x^2", "range": [-8, -4.5], "color": "#22c55e", "label": "Increasing x < -9/2" },
+      { "fn": "6 - 9*x - x^2", "range": [-4.5, 4], "color": "#ef4444", "label": "Decreasing x > -9/2" }
+    ],
+    "annotations": [
+      { "x": -4.5, "text": "Max at x=-9/2" }
+    ]
+  },
+  "ex-6-2-q6e": {
+    "title": "f(x) = (x+1)^3 * (x-3)^3: Monotonicity with three critical points",
+    "xDomain": [-3, 5],
+    "yDomain": [-600, 600],
+    "data": [
+      { "fn": "(x+1)^3 * (x-3)^3", "derivative": { "fn": "6*(x+1)^2*(x-3)^2*(x-1)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = (x+1)^3(x-3)^3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Inflection x=-1" },
+      { "x": 1, "text": "Local max x=1" },
+      { "x": 3, "text": "Inflection x=3" }
+    ]
+  },
+  "ex-6-2-q7": {
+    "title": "y = log(1+x) - 2x/(2+x): Increasing for x > -1",
+    "xDomain": [-0.8, 6],
+    "yDomain": [-0.5, 1],
+    "data": [
+      { "fn": "log(1+x) - 2*x/(2+x)", "derivative": { "fn": "x^2/((1+x)*(2+x)^2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = log(1+x) - 2x/(2+x)" },
+      { "fn": "x^2 / ((1+x)*(2+x)^2)", "color": "#22c55e", "label": "y' = x^2/((1+x)(2+x)^2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y'=0 at x=0" }
+    ]
+  },
+  "ex-6-2-q8": {
+    "title": "y = [x(x-2)]^2 = x^2(x-2)^2: Increasing intervals",
+    "xDomain": [-1, 3],
+    "yDomain": [-0.5, 5],
+    "data": [
+      { "fn": "x^2 * (x-2)^2", "derivative": { "fn": "4*x*(x-1)*(x-2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = x^2(x-2)^2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Min x=0" },
+      { "x": 1, "text": "Local max x=1" },
+      { "x": 2, "text": "Min x=2" }
+    ]
+  },
+  "ex-6-2-q9": {
+    "title": "y = 4sin(theta) - theta on [0, pi/2]",
+    "xDomain": [-0.2, 2],
+    "yDomain": [-0.5, 3],
+    "data": [
+      { "fn": "4*sin(x) - x", "derivative": { "fn": "4*cos(x) - 1", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = 4sin(x) - x" },
+      { "fn": "4*cos(x) - 1", "color": "#f59e0b", "label": "y' = 4cos(x) - 1" }
+    ],
+    "annotations": [
+      { "x": 1.318, "text": "y'=0 at cos^-1(1/4)" }
+    ]
+  },
+  "ex-6-2-q11": {
+    "title": "f(x) = x^2 - x + 1 on (-1,1): Neither increasing nor decreasing",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-0.5, 4],
+    "data": [
+      { "fn": "x^2 - x + 1", "range": [-1, 0.5], "color": "#ef4444", "label": "Decreasing x < 1/2" },
+      { "fn": "x^2 - x + 1", "range": [0.5, 1], "color": "#22c55e", "label": "Increasing x > 1/2" }
+    ],
+    "annotations": [
+      { "x": 0.5, "text": "Min at x=1/2" }
+    ]
+  },
+  "ex-6-2-q13": {
+    "title": "f(x) = x^100 + sin(x) - 1 near origin",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "x^100 + sin(x) - 1", "color": "#6366f1", "label": "f(x) = x^100 + sin(x) - 1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = -1" },
+      { "x": 1, "text": "f(1) = sin(1)" }
+    ]
+  },
+  "ex-6-2-q19": {
+    "title": "y = x^2 * e^x: Increasing intervals",
+    "xDomain": [-4, 2],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "x^2 * exp(x)", "derivative": { "fn": "exp(x)*(x^2 + 2*x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = x^2 * e^x" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "y'=0 at x=-2" },
+      { "x": 0, "text": "y'=0 at x=0" }
+    ]
+  },
+  "ex-6-3-q1i": {
+    "title": "f(x) = (2x-1)^2 + 3: Minimum value",
+    "xDomain": [-2, 3],
+    "yDomain": [0, 15],
+    "data": [
+      { "fn": "(2*x - 1)^2 + 3", "derivative": { "fn": "8*x - 4", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = (2x-1)^2 + 3" }
+    ],
+    "annotations": [
+      { "x": 0.5, "text": "Min = 3 at x=1/2" }
+    ]
+  },
+  "ex-6-3-q1ii": {
+    "title": "f(x) = 9x^2 + 12x + 2: Minimum value",
+    "xDomain": [-3, 2],
+    "yDomain": [-4, 20],
+    "data": [
+      { "fn": "9*x^2 + 12*x + 2", "derivative": { "fn": "18*x + 12", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = 9x^2 + 12x + 2" }
+    ],
+    "annotations": [
+      { "x": -0.667, "text": "Min = -2 at x=-2/3" }
+    ]
+  },
+  "ex-6-3-q1iii": {
+    "title": "f(x) = -(x-1)^2 + 10: Maximum value",
+    "xDomain": [-2, 4],
+    "yDomain": [-2, 12],
+    "data": [
+      { "fn": "-(x - 1)^2 + 10", "derivative": { "fn": "-2*(x - 1)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = -(x-1)^2 + 10" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Max = 10 at x=1" }
+    ]
+  },
+  "ex-6-3-q2i": {
+    "title": "f(x) = |x+2| - 1: Minimum at vertex",
+    "xDomain": [-6, 3],
+    "yDomain": [-2, 5],
+    "data": [
+      { "fn": "abs(x + 2) - 1", "color": "#6366f1", "label": "f(x) = |x+2| - 1" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Min = -1 at x=-2" }
+    ]
+  },
+  "ex-6-3-q2ii": {
+    "title": "g(x) = -|x+1| + 3: Maximum at vertex",
+    "xDomain": [-5, 4],
+    "yDomain": [-2, 4],
+    "data": [
+      { "fn": "-abs(x + 1) + 3", "color": "#6366f1", "label": "g(x) = -|x+1| + 3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Max = 3 at x=-1" }
+    ]
+  },
+  "ex-6-3-q2iii": {
+    "title": "h(x) = sin(2x) + 5: Bounded oscillation",
+    "xDomain": [-1, 7],
+    "yDomain": [3.5, 6.5],
+    "data": [
+      { "fn": "sin(2*x) + 5", "derivative": { "fn": "2*cos(2*x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "h(x) = sin(2x) + 5" }
+    ],
+    "annotations": [
+      { "x": 0.785, "text": "Max = 6" },
+      { "x": 2.356, "text": "Min = 4" }
+    ]
+  },
+  "ex-6-3-q3i": {
+    "title": "f(x) = x^2: Local minimum at origin",
+    "xDomain": [-3, 3],
+    "yDomain": [-1, 9],
+    "data": [
+      { "fn": "x^2", "derivative": { "fn": "2*x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x^2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Min = 0 at x=0" }
+    ]
+  },
+  "ex-6-3-q3ii": {
+    "title": "g(x) = x^3 - 3x: Local max and min",
+    "xDomain": [-3, 3],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x^3 - 3*x", "derivative": { "fn": "3*x^2 - 3", "updateOnMouseMove": true }, "color": "#6366f1", "label": "g(x) = x^3 - 3x" },
+      { "fn": "3*x^2 - 3", "color": "#f59e0b", "label": "g'(x) = 3x^2 - 3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Max = 2 at x=-1" },
+      { "x": 1, "text": "Min = -2 at x=1" }
+    ]
+  },
+  "ex-6-3-q3iii": {
+    "title": "h(x) = sin(x) + cos(x) on (0, pi/2)",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.5, 2],
+    "data": [
+      { "fn": "sin(x) + cos(x)", "derivative": { "fn": "cos(x) - sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "h(x) = sin(x) + cos(x)" },
+      { "fn": "cos(x) - sin(x)", "color": "#f59e0b", "label": "h'(x) = cos(x) - sin(x)" }
+    ],
+    "annotations": [
+      { "x": 0.785, "text": "Max = sqrt(2) at pi/4" }
+    ]
+  },
+  "ex-6-3-q3iv": {
+    "title": "f(x) = sin(x) - cos(x) on (0, 2pi)",
+    "xDomain": [-0.5, 7],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "sin(x) - cos(x)", "derivative": { "fn": "cos(x) + sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = sin(x) - cos(x)" },
+      { "fn": "cos(x) + sin(x)", "color": "#f59e0b", "label": "f'(x) = cos(x) + sin(x)" }
+    ],
+    "annotations": [
+      { "x": 2.356, "text": "Max = sqrt(2) at 3pi/4" },
+      { "x": 5.498, "text": "Min = -sqrt(2) at 7pi/4" }
+    ]
+  },
+  "ex-6-3-q3v": {
+    "title": "f(x) = x^3 - 6x^2 + 9x + 15: Local max and min",
+    "xDomain": [-1, 5],
+    "yDomain": [10, 22],
+    "data": [
+      { "fn": "x^3 - 6*x^2 + 9*x + 15", "derivative": { "fn": "3*x^2 - 12*x + 9", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x^3 - 6x^2 + 9x + 15" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Local max = 19" },
+      { "x": 3, "text": "Local min = 15" }
+    ]
+  },
+  "ex-6-3-q3vi": {
+    "title": "g(x) = x^2 + 2/x for x > 0: Local minimum",
+    "xDomain": [0.2, 5],
+    "yDomain": [0, 15],
+    "data": [
+      { "fn": "x^2 + 2/x", "derivative": { "fn": "2*x - 2/x^2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "g(x) = x^2 + 2/x" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Min = 3 at x=1" }
+    ]
+  },
+  "ex-6-3-q3vii": {
+    "title": "g(x) = 1/(x^2 + 2): Maximum at origin",
+    "xDomain": [-4, 4],
+    "yDomain": [-0.1, 0.6],
+    "data": [
+      { "fn": "1/(x^2 + 2)", "derivative": { "fn": "-2*x/(x^2 + 2)^2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "g(x) = 1/(x^2 + 2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Max = 1/2 at x=0" }
+    ]
+  },
+  "ex-6-3-q3viii": {
+    "title": "f(x) = x*sqrt(1-x) on [0,1]: Local maximum",
+    "xDomain": [-0.1, 1.1],
+    "yDomain": [-0.1, 0.5],
+    "data": [
+      { "fn": "x * sqrt(1 - x)", "derivative": { "fn": "(2 - 3*x)/(2*sqrt(1 - x))", "updateOnMouseMove": true }, "range": [0, 1], "color": "#6366f1", "label": "f(x) = x*sqrt(1-x)" }
+    ],
+    "annotations": [
+      { "x": 0.667, "text": "Max at x=2/3" }
+    ]
+  },
+  "ex-6-3-q5i": {
+    "title": "f(x) = x^3 on [-2, 2]: Absolute max/min",
+    "xDomain": [-2.5, 2.5],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "x^3", "derivative": { "fn": "3*x^2", "updateOnMouseMove": true }, "range": [-2, 2], "color": "#6366f1", "label": "f(x) = x^3" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Max = 8" },
+      { "x": -2, "text": "Min = -8" }
+    ]
+  },
+  "ex-6-3-q5ii": {
+    "title": "f(x) = sin(x) + cos(x) on [0, pi]: Absolute max/min",
+    "xDomain": [-0.5, 3.7],
+    "yDomain": [-1.5, 2],
+    "data": [
+      { "fn": "sin(x) + cos(x)", "derivative": { "fn": "cos(x) - sin(x)", "updateOnMouseMove": true }, "range": [0, 3.1416], "color": "#6366f1", "label": "f(x) = sin(x) + cos(x)" }
+    ],
+    "annotations": [
+      { "x": 0.785, "text": "Max = sqrt(2) at pi/4" },
+      { "x": 3.1416, "text": "Min = -1 at pi" }
+    ]
+  },
+  "ex-6-3-q5iii": {
+    "title": "f(x) = 4x - 0.5x^2 on [-2, 4.5]: Absolute max/min",
+    "xDomain": [-3, 5.5],
+    "yDomain": [-12, 10],
+    "data": [
+      { "fn": "4*x - 0.5*x^2", "derivative": { "fn": "4 - x", "updateOnMouseMove": true }, "range": [-2, 4.5], "color": "#6366f1", "label": "f(x) = 4x - x^2/2" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "Max = 8 at x=4" },
+      { "x": -2, "text": "Min = -10 at x=-2" }
+    ]
+  },
+  "ex-6-3-q5iv": {
+    "title": "f(x) = (x-1)^2 + 3 on [-3, 1]: Absolute max/min",
+    "xDomain": [-4, 2],
+    "yDomain": [0, 22],
+    "data": [
+      { "fn": "(x - 1)^2 + 3", "derivative": { "fn": "2*(x - 1)", "updateOnMouseMove": true }, "range": [-3, 1], "color": "#6366f1", "label": "f(x) = (x-1)^2 + 3" }
+    ],
+    "annotations": [
+      { "x": -3, "text": "Max = 19 at x=-3" },
+      { "x": 1, "text": "Min = 3 at x=1" }
+    ]
+  },
+  "ex-6-3-q6": {
+    "title": "p(x) = 41 - 72x - 18x^2: Maximum profit",
+    "xDomain": [-5, 3],
+    "yDomain": [-200, 120],
+    "data": [
+      { "fn": "41 - 72*x - 18*x^2", "derivative": { "fn": "-72 - 36*x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "p(x) = 41 - 72x - 18x^2" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "Max profit at vertex" }
+    ]
+  },
+  "ex-6-3-q7": {
+    "title": "f(x) = 3x^4 - 8x^3 + 12x^2 - 48x + 25 on [0,3]",
+    "xDomain": [-0.5, 3.5],
+    "yDomain": [-45, 30],
+    "data": [
+      { "fn": "3*x^4 - 8*x^3 + 12*x^2 - 48*x + 25", "derivative": { "fn": "12*x^3 - 24*x^2 + 24*x - 48", "updateOnMouseMove": true }, "range": [0, 3], "color": "#6366f1", "label": "f(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0)=25 Max" },
+      { "x": 2, "text": "f(2)=-39 Min" },
+      { "x": 3, "text": "f(3)=16" }
+    ]
+  },
+  "ex-6-3-q8": {
+    "title": "f(x) = sin(2x) on [0, 2pi]: Maximum points",
+    "xDomain": [-0.5, 7],
+    "yDomain": [-1.5, 1.5],
+    "data": [
+      { "fn": "sin(2*x)", "derivative": { "fn": "2*cos(2*x)", "updateOnMouseMove": true }, "range": [0, 6.2832], "color": "#6366f1", "label": "f(x) = sin(2x)" }
+    ],
+    "annotations": [
+      { "x": 0.785, "text": "Max=1 at pi/4" },
+      { "x": 3.927, "text": "Max=1 at 5pi/4" },
+      { "x": 2.356, "text": "Min=-1 at 3pi/4" },
+      { "x": 5.498, "text": "Min=-1 at 7pi/4" }
+    ]
+  },
+  "ex-6-3-q9": {
+    "title": "f(x) = sin(x) + cos(x): Maximum value sqrt(2)",
+    "xDomain": [-1, 7],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "sin(x) + cos(x)", "derivative": { "fn": "cos(x) - sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = sin(x) + cos(x)" },
+      { "fn": "1.4142", "color": "#ef4444", "label": "y = sqrt(2)" }
+    ],
+    "annotations": [
+      { "x": 0.785, "text": "Max = sqrt(2) at pi/4" }
+    ]
+  },
+  "ex-6-3-q10": {
+    "title": "f(x) = 2x^3 - 24x + 107 on [1,3] and [-3,-1]",
+    "xDomain": [-4, 4],
+    "yDomain": [60, 150],
+    "data": [
+      { "fn": "2*x^3 - 24*x + 107", "range": [1, 3], "color": "#6366f1", "label": "f on [1,3]" },
+      { "fn": "2*x^3 - 24*x + 107", "range": [-3, -1], "color": "#22c55e", "label": "f on [-3,-1]" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Critical pt x=2" },
+      { "x": -2, "text": "Max=139 at x=-2" }
+    ]
+  },
+  "ex-6-3-q12": {
+    "title": "f(x) = x + sin(2x) on [0, 2pi]",
+    "xDomain": [-0.5, 7],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "x + sin(2*x)", "derivative": { "fn": "1 + 2*cos(2*x)", "updateOnMouseMove": true }, "range": [0, 6.2832], "color": "#6366f1", "label": "f(x) = x + sin(2x)" },
+      { "fn": "1 + 2*cos(2*x)", "range": [0, 6.2832], "color": "#f59e0b", "label": "f'(x) = 1 + 2cos(2x)" }
+    ],
+    "annotations": [
+      { "x": 6.2832, "text": "Max = 2pi at x=2pi" },
+      { "x": 0, "text": "Min = 0 at x=0" }
+    ]
+  },
+  "ex-6-3-q27": {
+    "title": "Parabola x^2 = 2y: Nearest point to (0,5)",
+    "xDomain": [-5, 5],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "x^2 / 2", "derivative": { "fn": "x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = x^2/2 (parabola)" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3*cos(t)", "y": "5 + 3*sin(t)", "range": [0, 6.2832], "color": "#ef4444", "label": "Min distance circle (r=3)" }
+    ],
+    "annotations": [
+      { "x": 2.828, "text": "Nearest (2sqrt2, 4)" },
+      { "x": 0, "text": "(0,5) target point" }
+    ]
+  },
+  "ex-6-3-q28": {
+    "title": "f(x) = (1-x+x^2)/(1+x+x^2): Minimum value 1/3",
+    "xDomain": [-5, 5],
+    "yDomain": [0, 2],
+    "data": [
+      { "fn": "(1 - x + x^2)/(1 + x + x^2)", "color": "#6366f1", "label": "f(x) = (1-x+x^2)/(1+x+x^2)" },
+      { "fn": "1/3", "color": "#ef4444", "label": "y = 1/3 (minimum)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Min = 1/3 at x=1" }
+    ]
+  },
+  "ex-6-3-q29": {
+    "title": "f(x) = (x(x-1)+1)^(1/3) on [0,1]: Maximum = 1",
+    "xDomain": [-0.2, 1.3],
+    "yDomain": [0.5, 1.2],
+    "data": [
+      { "fn": "(x^2 - x + 1)^(1/3)", "derivative": { "fn": "(2*x - 1)/(3*(x^2 - x + 1)^(2/3))", "updateOnMouseMove": true }, "range": [0, 1], "color": "#6366f1", "label": "f(x) = (x^2-x+1)^(1/3)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 1" },
+      { "x": 0.5, "text": "Min at x=1/2" },
+      { "x": 1, "text": "f(1) = 1 Max" }
+    ]
+  },
+  "misc-q1": {
+    "title": "f(x) = log(x)/x: Maximum at x = e",
+    "xDomain": [0.2, 10],
+    "yDomain": [-1, 0.5],
+    "data": [
+      { "fn": "log(x)/x", "derivative": { "fn": "(1 - log(x))/x^2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = ln(x)/x" },
+      { "fn": "(1 - log(x))/x^2", "color": "#f59e0b", "label": "f'(x) = (1-ln(x))/x^2" }
+    ],
+    "annotations": [
+      { "x": 2.718, "text": "Max = 1/e at x=e" }
+    ]
+  },
+  "misc-q3": {
+    "title": "f(x) = (4sin(x)-2x-x*cos(x))/(2+cos(x)): Monotonicity",
+    "xDomain": [-0.5, 7],
+    "yDomain": [-6, 2],
+    "data": [
+      { "fn": "(4*sin(x) - 2*x - x*cos(x))/(2 + cos(x))", "range": [0, 1.5708], "color": "#22c55e", "label": "Increasing (0,pi/2)" },
+      { "fn": "(4*sin(x) - 2*x - x*cos(x))/(2 + cos(x))", "range": [1.5708, 4.7124], "color": "#ef4444", "label": "Decreasing (pi/2,3pi/2)" },
+      { "fn": "(4*sin(x) - 2*x - x*cos(x))/(2 + cos(x))", "range": [4.7124, 6.2832], "color": "#22c55e", "label": "Increasing (3pi/2,2pi)" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "pi/2" },
+      { "x": 4.7124, "text": "3pi/2" }
+    ]
+  },
+  "misc-q4": {
+    "title": "f(x) = x^3 + 1/x^3: Increasing and decreasing intervals",
+    "xDomain": [-3, 3],
+    "yDomain": [-30, 30],
+    "data": [
+      { "fn": "x^3 + 1/x^3", "range": [-3, -1], "color": "#22c55e", "label": "Increasing x<-1" },
+      { "fn": "x^3 + 1/x^3", "range": [-1, -0.1], "color": "#ef4444", "label": "Decreasing (-1,0)" },
+      { "fn": "x^3 + 1/x^3", "range": [0.1, 1], "color": "#ef4444", "label": "Decreasing (0,1)" },
+      { "fn": "x^3 + 1/x^3", "range": [1, 3], "color": "#22c55e", "label": "Increasing x>1" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Local max at x=-1" },
+      { "x": 1, "text": "Local min at x=1" }
+    ]
+  },
+  "misc-q10": {
+    "title": "f(x) = (x-2)^4 * (x+1)^3: Local max, min, inflection",
+    "xDomain": [-2.5, 3.5],
+    "yDomain": [-50, 50],
+    "data": [
+      { "fn": "(x - 2)^4 * (x + 1)^3", "derivative": { "fn": "(x - 2)^3*(x + 1)^2*(7*x - 2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = (x-2)^4(x+1)^3" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Inflection x=-1" },
+      { "x": 0.286, "text": "Local max x=2/7" },
+      { "x": 2, "text": "Local min x=2" }
+    ]
+  },
+  "misc-q11": {
+    "title": "f(x) = cos^2(x) + sin(x) on [0, pi]",
+    "xDomain": [-0.5, 3.7],
+    "yDomain": [-0.2, 1.5],
+    "data": [
+      { "fn": "cos(x)^2 + sin(x)", "derivative": { "fn": "cos(x)*(1 - 2*sin(x))", "updateOnMouseMove": true }, "range": [0, 3.1416], "color": "#6366f1", "label": "f(x) = cos^2(x) + sin(x)" }
+    ],
+    "annotations": [
+      { "x": 0.524, "text": "Max=5/4 at pi/6" },
+      { "x": 2.618, "text": "Max=5/4 at 5pi/6" },
+      { "x": 1.5708, "text": "f=1 at pi/2" }
+    ]
+  },
+  "ex-6-3-q4-exp": {
+    "title": "f(x) = e^x: Strictly increasing, no extrema",
+    "xDomain": [-3, 3],
+    "yDomain": [-1, 10],
+    "data": [
+      { "fn": "exp(x)", "derivative": { "fn": "exp(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = e^x" },
+      { "fn": "exp(x)", "color": "#22c55e", "label": "f'(x) = e^x > 0 always" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0)=1, always increasing" }
+    ]
+  },
+  "ex-6-3-q4-log": {
+    "title": "g(x) = log(x): Strictly increasing, no extrema",
+    "xDomain": [0.1, 8],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fn": "log(x)", "derivative": { "fn": "1/x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "g(x) = ln(x)" },
+      { "fn": "1/x", "color": "#22c55e", "label": "g'(x) = 1/x > 0" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "g(1) = 0" }
+    ]
+  },
+  "ex-6-3-q4-cubic": {
+    "title": "h(x) = x^3 + x^2 + x + 1: Always increasing",
+    "xDomain": [-3, 2],
+    "yDomain": [-20, 15],
+    "data": [
+      { "fn": "x^3 + x^2 + x + 1", "derivative": { "fn": "3*x^2 + 2*x + 1", "updateOnMouseMove": true }, "color": "#6366f1", "label": "h(x) = x^3+x^2+x+1" },
+      { "fn": "3*x^2 + 2*x + 1", "color": "#22c55e", "label": "h'(x) = 3x^2+2x+1 > 0" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "h(0)=1, D<0 so h'>0" }
+    ]
+  },
+  "ex-6-3-q13": {
+    "title": "Product P = x(24-x) maximized: Sum = 24",
+    "xDomain": [-2, 26],
+    "yDomain": [-50, 160],
+    "data": [
+      { "fn": "x*(24 - x)", "derivative": { "fn": "24 - 2*x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "P = x(24-x)" }
+    ],
+    "annotations": [
+      { "x": 12, "text": "Max P=144 at x=12" }
+    ]
+  },
+  "ex-6-3-q17": {
+    "title": "Box volume V(x) = x(18-2x)^2: Open box from square tin",
+    "xDomain": [0, 9],
+    "yDomain": [0, 500],
+    "data": [
+      { "fn": "x*(18 - 2*x)^2", "derivative": { "fn": "(18 - 2*x)*(18 - 6*x)", "updateOnMouseMove": true }, "range": [0, 9], "color": "#6366f1", "label": "V(x) = x(18-2x)^2" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Max volume at x=3" },
+      { "x": 9, "text": "V=0 (all cut)" }
+    ]
+  },
+  "ex-6-2-q16": {
+    "title": "f(x) = log(sin(x)): Increasing/decreasing",
+    "xDomain": [0.1, 3],
+    "yDomain": [-5, 0.5],
+    "data": [
+      { "fn": "log(sin(x))", "range": [0.1, 1.5708], "color": "#22c55e", "label": "Increasing (0,pi/2)" },
+      { "fn": "log(sin(x))", "range": [1.5708, 3], "color": "#ef4444", "label": "Decreasing (pi/2,pi)" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "Max = 0 at pi/2" }
+    ]
+  },
+  "ex-6-2-q18": {
+    "title": "f(x) = x^3 - 3x^2 + 3x - 100: Always increasing",
+    "xDomain": [-3, 5],
+    "yDomain": [-140, -60],
+    "data": [
+      { "fn": "x^3 - 3*x^2 + 3*x - 100", "derivative": { "fn": "3*x^2 - 6*x + 3", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = (x-1)^3 - 100" },
+      { "fn": "3*(x - 1)^2", "color": "#22c55e", "label": "f'(x) = 3(x-1)^2 >= 0" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "f'=0 only at x=1" }
+    ]
+  }
+}

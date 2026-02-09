@@ -1,0 +1,177 @@
+{
+  "ex-1-2-q1": {
+    "title": "f(x) = 1/x: One-one and onto on R* (self-inverse)",
+    "xDomain": [-6, 6],
+    "yDomain": [-6, 6],
+    "data": [
+      { "fn": "1/x", "range": [-6, -0.05], "color": "#6366f1", "label": "f(x) = 1/x (x < 0)" },
+      { "fn": "1/x", "range": [0.05, 6], "color": "#6366f1", "label": "f(x) = 1/x (x > 0)" },
+      { "fn": "x", "color": "#22c55e", "label": "y = x (reflection line)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "f(1) = 1" },
+      { "x": -1, "text": "f(-1) = -1" },
+      { "x": 2, "text": "f(2) = 0.5" }
+    ]
+  },
+
+  "ex-1-2-q2": {
+    "title": "f(x) = x^2 vs f(x) = x^3: Injectivity comparison",
+    "xDomain": [-3, 3],
+    "yDomain": [-5, 9],
+    "data": [
+      { "fn": "x^2", "derivative": { "fn": "2 * x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x^2 (not one-one)" },
+      { "fn": "x^3", "color": "#22c55e", "label": "f(x) = x^3 (one-one)" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "f(-1) = f(1) = 1 for x^2" },
+      { "x": 1, "text": "Both equal 1 at x = 1" },
+      { "x": -2, "text": "x^3 is strictly increasing" }
+    ]
+  },
+
+  "ex-1-2-q3": {
+    "title": "Greatest Integer Function [x]: Step function, neither one-one nor onto",
+    "xDomain": [-4, 4],
+    "yDomain": [-5, 4],
+    "data": [
+      { "fn": "-4", "range": [-4, -3], "color": "#6366f1", "label": "[x] = floor(x)" },
+      { "fn": "-3", "range": [-3, -2], "color": "#6366f1" },
+      { "fn": "-2", "range": [-2, -1], "color": "#6366f1" },
+      { "fn": "-1", "range": [-1, 0], "color": "#6366f1" },
+      { "fn": "0", "range": [0, 1], "color": "#6366f1" },
+      { "fn": "1", "range": [1, 2], "color": "#6366f1" },
+      { "fn": "2", "range": [2, 3], "color": "#6366f1" },
+      { "fn": "3", "range": [3, 4], "color": "#6366f1" },
+      { "fn": "x", "color": "#22c55e", "label": "y = x (comparison)" }
+    ],
+    "annotations": [
+      { "x": 1.5, "text": "[1.2] = [1.9] = 1 (not one-one)" },
+      { "x": 0, "text": "Range is Z, not R (not onto)" }
+    ]
+  },
+
+  "ex-1-2-q4": {
+    "title": "Modulus Function f(x) = |x|: Neither one-one nor onto on R",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 6],
+    "data": [
+      { "fn": "abs(x)", "color": "#6366f1", "label": "f(x) = |x|" },
+      { "fn": "x", "color": "#22c55e", "label": "y = x (comparison)" },
+      { "fn": "-x", "range": [-5, 0], "color": "#ef4444", "label": "y = -x (x < 0 piece)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Corner at origin" },
+      { "x": 2, "text": "f(2) = f(-2) = 2" },
+      { "x": -3, "text": "No negative outputs (not onto)" }
+    ]
+  },
+
+  "ex-1-2-q5": {
+    "title": "Signum Function: Maps R to {-1, 0, 1}, neither one-one nor onto",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "-1", "range": [-5, -0.01], "color": "#6366f1", "label": "sgn(x) = -1 (x < 0)" },
+      { "fn": "1", "range": [0.01, 5], "color": "#ef4444", "label": "sgn(x) = 1 (x > 0)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "sgn(0) = 0" },
+      { "x": 2, "text": "sgn(1) = sgn(2) = 1" },
+      { "x": -2, "text": "sgn(-3) = sgn(-1) = -1" }
+    ]
+  },
+
+  "ex-1-2-q7": {
+    "title": "f(x) = 3-4x (bijective) vs f(x) = 1+x^2 (neither)",
+    "xDomain": [-3, 4],
+    "yDomain": [-10, 12],
+    "data": [
+      { "fn": "3 - 4*x", "color": "#6366f1", "label": "f(x) = 3 - 4x (bijective)" },
+      { "fn": "1 + x^2", "color": "#ef4444", "label": "f(x) = 1 + x^2 (not one-one)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "3-4x: f(0) = 3" },
+      { "x": 1, "text": "1+x^2: f(1) = f(-1) = 2" },
+      { "x": 0.75, "text": "3-4x crosses zero" }
+    ]
+  },
+
+  "ex-1-2-q10": {
+    "title": "f(x) = (x-2)/(x-3): Bijective from R-{3} to R-{1}",
+    "xDomain": [-5, 10],
+    "yDomain": [-8, 10],
+    "data": [
+      { "fn": "(x - 2)/(x - 3)", "range": [-5, 2.95], "color": "#6366f1", "label": "f(x) = (x-2)/(x-3), x < 3" },
+      { "fn": "(x - 2)/(x - 3)", "range": [3.05, 10], "color": "#6366f1", "label": "f(x) = (x-2)/(x-3), x > 3" },
+      { "fn": "1", "color": "#f59e0b", "label": "y = 1 (horizontal asymptote)" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "Vertical asymptote x = 3" },
+      { "x": 2, "text": "f(2) = 0 (x-intercept)" },
+      { "x": 0, "text": "f(0) = 2/3" }
+    ]
+  },
+
+  "ex-1-2-q11": {
+    "title": "f(x) = x^4: Neither one-one nor onto on R",
+    "xDomain": [-2.5, 2.5],
+    "yDomain": [-2, 12],
+    "data": [
+      { "fn": "x^4", "derivative": { "fn": "4 * x^3", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x^4" },
+      { "fn": "x^2", "color": "#22c55e", "label": "f(x) = x^2 (comparison)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "f(1) = f(-1) = 1 (not one-one)" },
+      { "x": 0, "text": "Minimum at origin" },
+      { "x": -2, "text": "No negative outputs (not onto)" }
+    ]
+  },
+
+  "misc-q1": {
+    "title": "f(x) = x/(1+|x|): Bijective mapping R to (-1, 1)",
+    "xDomain": [-10, 10],
+    "yDomain": [-1.5, 1.5],
+    "data": [
+      { "fn": "x/(1 + abs(x))", "color": "#6366f1", "label": "f(x) = x/(1+|x|)" },
+      { "fn": "1", "color": "#f59e0b", "label": "y = 1 (upper bound)" },
+      { "fn": "-1", "color": "#f59e0b", "label": "y = -1 (lower bound)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0" },
+      { "x": 1, "text": "f(1) = 0.5" },
+      { "x": -1, "text": "f(-1) = -0.5" }
+    ]
+  },
+
+  "misc-q2": {
+    "title": "f(x) = x^3: Injective (one-one) on R",
+    "xDomain": [-3, 3],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "x^3", "derivative": { "fn": "3 * x^2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x^3 (injective)" },
+      { "fn": "x", "color": "#22c55e", "label": "y = x (comparison)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Inflection at origin" },
+      { "x": 1, "text": "f(1) = 1" },
+      { "x": -1, "text": "f(-1) = -1 (strictly increasing)" }
+    ]
+  },
+
+  "misc-q5": {
+    "title": "f(x) = x^2 - x and g(x) = 2|x - 1/2| - 1: Equal functions on A = {-1,0,1,2}",
+    "xDomain": [-2, 3],
+    "yDomain": [-1, 4],
+    "data": [
+      { "fn": "x^2 - x", "color": "#6366f1", "label": "f(x) = x^2 - x" },
+      { "fn": "2*abs(x - 0.5) - 1", "color": "#22c55e", "label": "g(x) = 2|x - 1/2| - 1" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "f(-1) = g(-1) = 2" },
+      { "x": 0, "text": "f(0) = g(0) = 0" },
+      { "x": 1, "text": "f(1) = g(1) = 0" },
+      { "x": 2, "text": "f(2) = g(2) = 2" }
+    ]
+  }
+}

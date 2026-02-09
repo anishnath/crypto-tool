@@ -1,0 +1,369 @@
+{
+  "ex-7-1-q1": {
+    "title": "Integral of sin(2x): antiderivative F(x) = -cos(2x)/2",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-1.5, 1.5],
+    "data": [
+      { "fn": "sin(2*x)", "color": "#6366f1", "label": "f(x) = sin(2x)" },
+      { "fn": "-cos(2*x)/2", "derivative": { "fn": "sin(2*x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = -cos(2x)/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "F(0) = -1/2" },
+      { "x": 1.5708, "text": "f = 0, F = max at \u03c0/2" },
+      { "x": 0.7854, "text": "f = max, F = 0 at \u03c0/4" }
+    ]
+  },
+  "ex-7-1-q5": {
+    "title": "Integral of (sin 2x - 4e^(3x)): antiderivative F(x)",
+    "xDomain": [-2, 2],
+    "yDomain": [-30, 5],
+    "data": [
+      { "fn": "sin(2*x) - 4*exp(3*x)", "color": "#6366f1", "label": "f(x) = sin(2x) - 4e^(3x)" },
+      { "fn": "-cos(2*x)/2 - (4/3)*exp(3*x)", "derivative": { "fn": "sin(2*x) - 4*exp(3*x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = -cos(2x)/2 - (4/3)e^(3x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = -4, F(0) = -11/6" },
+      { "x": 1, "text": "Exponential dominates" }
+    ]
+  },
+  "ex-7-2-q1": {
+    "title": "Integral of 2x/(1+x\u00b2): antiderivative F(x) = log(1+x\u00b2)",
+    "xDomain": [-5, 5],
+    "yDomain": [-1, 4],
+    "data": [
+      { "fn": "2*x/(1+x^2)", "color": "#6366f1", "label": "f(x) = 2x/(1+x\u00b2)" },
+      { "fn": "log(1+x^2)", "derivative": { "fn": "2*x/(1+x^2)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = log(1+x\u00b2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0, F(0) = 0" },
+      { "x": 1, "text": "f(1) = 1, F(1) = ln 2" },
+      { "x": -1, "text": "f(-1) = -1" }
+    ]
+  },
+  "ex-7-2-q5": {
+    "title": "Integral of sin(x)cos(x): antiderivative F(x) = sin\u00b2(x)/2",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-0.8, 0.8],
+    "data": [
+      { "fn": "sin(x)*cos(x)", "color": "#6366f1", "label": "f(x) = sin(x)cos(x) [a=1, b=0]" },
+      { "fn": "sin(x)^2/2", "derivative": { "fn": "sin(x)*cos(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = sin\u00b2(x)/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0, F(0) = 0" },
+      { "x": 0.7854, "text": "f max at \u03c0/4" },
+      { "x": 1.5708, "text": "F max = 1/2 at \u03c0/2" }
+    ]
+  },
+  "ex-7-3-q1": {
+    "title": "Integrand sin\u00b2(2x+5): periodic squared sine function",
+    "xDomain": [-4, 4],
+    "yDomain": [-0.3, 1.3],
+    "data": [
+      { "fn": "sin(2*x+5)^2", "color": "#6366f1", "label": "f(x) = sin\u00b2(2x+5)" },
+      { "fn": "x/2 - sin(4*x+10)/8", "derivative": { "fn": "sin(2*x+5)^2", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = x/2 - sin(4x+10)/8" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = sin\u00b2(5) \u2248 0.92" },
+      { "x": -2.5, "text": "Period = \u03c0" }
+    ]
+  },
+  "ex-7-3-q5": {
+    "title": "Integrand sin\u00b3(x)cos\u00b3(x): product of cubed trig functions",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-0.2, 0.2],
+    "data": [
+      { "fn": "sin(x)^3 * cos(x)^3", "color": "#6366f1", "label": "f(x) = sin\u00b3(x)cos\u00b3(x)" },
+      { "fn": "sin(x)^4/4 - sin(x)^6/6", "derivative": { "fn": "sin(x)^3 * cos(x)^3", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = sin\u2074(x)/4 - sin\u2076(x)/6" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0" },
+      { "x": 0.7854, "text": "f(\u03c0/4) = 1/8" },
+      { "x": 1.5708, "text": "f(\u03c0/2) = 0" }
+    ]
+  },
+  "ex-7-5-q1": {
+    "title": "Integrand x/((x+1)(x+2)): partial fraction decomposition",
+    "xDomain": [-5, 5],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x/((x+1)*(x+2))", "color": "#6366f1", "label": "f(x) = x/((x+1)(x+2))" },
+      { "fn": "-1/(x+1)", "color": "#ef4444", "label": "-1/(x+1) [partial fraction A]" },
+      { "fn": "2/(x+2)", "color": "#f59e0b", "label": "2/(x+2) [partial fraction B]" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Asymptote x = -1" },
+      { "x": -2, "text": "Asymptote x = -2" },
+      { "x": 0, "text": "f(0) = 0" }
+    ]
+  },
+  "ex-7-6-q1": {
+    "title": "Integral of x sin(x) by parts: F(x) = -x cos(x) + sin(x)",
+    "xDomain": [-10, 10],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "x*sin(x)", "color": "#6366f1", "label": "f(x) = x sin(x)" },
+      { "fn": "-x*cos(x) + sin(x)", "derivative": { "fn": "x*sin(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = -x cos(x) + sin(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0, F(0) = 0" },
+      { "x": 3.1416, "text": "F(\u03c0) = \u03c0" },
+      { "x": -3.1416, "text": "F(-\u03c0) = -\u03c0" }
+    ]
+  },
+  "ex-7-6-q3": {
+    "title": "Integral of x\u00b2e^x by parts: F(x) = e^x(x\u00b2 - 2x + 2)",
+    "xDomain": [-4, 3],
+    "yDomain": [-2, 20],
+    "data": [
+      { "fn": "x^2 * exp(x)", "color": "#6366f1", "label": "f(x) = x\u00b2e^x" },
+      { "fn": "exp(x)*(x^2 - 2*x + 2)", "derivative": { "fn": "x^2 * exp(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "F(x) = e^x(x\u00b2 - 2x + 2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0, F(0) = 2" },
+      { "x": 1, "text": "F(1) = e \u2248 2.72" },
+      { "x": -1, "text": "f(-1) = 1/e" }
+    ]
+  },
+  "ex-7-7-q1": {
+    "title": "Integrand sqrt(4 - x\u00b2): upper semicircle of radius 2",
+    "xDomain": [-3.5, 3.5],
+    "yDomain": [-1, 3],
+    "data": [
+      { "fn": "sqrt(4 - x^2)", "range": [-2, 2], "color": "#6366f1", "label": "y = \u221a(4 - x\u00b2), semicircle r = 2" },
+      { "fn": "sqrt(4 - x^2)", "range": [-2, 2], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Total area under curve = 2\u03c0" }
+    ],
+    "annotations": [
+      { "x": -2, "text": "(-2, 0)" },
+      { "x": 2, "text": "(2, 0)" },
+      { "x": 0, "text": "Max y = 2 at x = 0" }
+    ]
+  },
+  "ex-7-8-q1": {
+    "title": "Definite integral: \u222b[-1,1] (x+1) dx = 2",
+    "xDomain": [-3, 3],
+    "yDomain": [-1.5, 3.5],
+    "data": [
+      { "fn": "x + 1", "color": "#6366f1", "label": "y = x + 1" },
+      { "fn": "x + 1", "range": [-1, 1], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area = 2" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "x = -1, y = 0" },
+      { "x": 1, "text": "x = 1, y = 2" },
+      { "x": 0, "text": "\u222b = [x\u00b2/2 + x] = 2" }
+    ]
+  },
+  "ex-7-8-q4": {
+    "title": "Definite integral: \u222b[0,\u03c0/4] sin(2x) dx = 1/2",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.3, 1.3],
+    "data": [
+      { "fn": "sin(2*x)", "color": "#6366f1", "label": "y = sin(2x)" },
+      { "fn": "sin(2*x)", "range": [0, 0.7854], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, \u03c0/4] = 1/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0" },
+      { "x": 0.7854, "text": "x = \u03c0/4, y = 1" },
+      { "x": 0.4, "text": "\u222b = [-cos(2x)/2] = 1/2" }
+    ]
+  },
+  "ex-7-8-q5": {
+    "title": "Definite integral: \u222b[0,\u03c0/2] cos(2x) dx = 0",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-1.3, 1.3],
+    "data": [
+      { "fn": "cos(2*x)", "color": "#6366f1", "label": "y = cos(2x)" },
+      { "fn": "cos(2*x)", "range": [0, 0.7854], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Positive region [0, \u03c0/4]" },
+      { "fn": "cos(2*x)", "range": [0.7854, 1.5708], "closed": true, "color": "rgba(239, 68, 68, 0.2)", "label": "Negative region [\u03c0/4, \u03c0/2]" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 1" },
+      { "x": 0.7854, "text": "Zero crossing at \u03c0/4" },
+      { "x": 1.5708, "text": "x = \u03c0/2, y = -1" },
+      { "x": 0.5, "text": "Net area = 0 (cancels)" }
+    ]
+  },
+  "ex-7-8-q7": {
+    "title": "Definite integral: \u222b[0,\u03c0/4] tan(x) dx = (1/2)ln 2",
+    "xDomain": [-0.3, 1.2],
+    "yDomain": [-0.3, 1.5],
+    "data": [
+      { "fn": "tan(x)", "range": [0, 1.2], "color": "#6366f1", "label": "y = tan(x)" },
+      { "fn": "tan(x)", "range": [0, 0.7854], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, \u03c0/4] = (1/2)ln 2 \u2248 0.347" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 0" },
+      { "x": 0.7854, "text": "x = \u03c0/4, y = 1" },
+      { "x": 0.4, "text": "\u222b = [-ln|cos x|]" }
+    ]
+  },
+  "ex-7-8-q9": {
+    "title": "Definite integral: \u222b[0,1] 1/\u221a(1-x\u00b2) dx = \u03c0/2",
+    "xDomain": [-0.5, 1.5],
+    "yDomain": [-0.5, 6],
+    "data": [
+      { "fn": "1/sqrt(1 - x^2)", "range": [0, 0.98], "color": "#6366f1", "label": "y = 1/\u221a(1-x\u00b2)" },
+      { "fn": "1/sqrt(1 - x^2)", "range": [0, 0.98], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, 1] = \u03c0/2 \u2248 1.571" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 1" },
+      { "x": 0.98, "text": "y \u2192 \u221e as x \u2192 1" },
+      { "x": 0.5, "text": "\u222b = [arcsin(x)] = \u03c0/2" }
+    ]
+  },
+  "ex-7-8-q12": {
+    "title": "Definite integral: \u222b[0,\u03c0/2] cos\u00b2(x) dx = \u03c0/4",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.3, 1.3],
+    "data": [
+      { "fn": "cos(x)^2", "color": "#6366f1", "label": "y = cos\u00b2(x)" },
+      { "fn": "cos(x)^2", "range": [0, 1.5708], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, \u03c0/2] = \u03c0/4 \u2248 0.785" },
+      { "fn": "0.5", "range": [0, 1.5708], "color": "#f59e0b", "label": "Average value = 1/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 1" },
+      { "x": 1.5708, "text": "x = \u03c0/2, y = 0" },
+      { "x": 0.8, "text": "cos\u00b2x = (1+cos2x)/2" }
+    ]
+  },
+  "ex-7-8-q15": {
+    "title": "Definite integral: \u222b[0,1] x\u00b7e^(x\u00b2) dx = (e-1)/2",
+    "xDomain": [-0.5, 1.5],
+    "yDomain": [-0.3, 3],
+    "data": [
+      { "fn": "x * exp(x^2)", "color": "#6366f1", "label": "y = x\u00b7e^(x\u00b2)" },
+      { "fn": "x * exp(x^2)", "range": [0, 1], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, 1] = (e-1)/2 \u2248 0.859" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 0" },
+      { "x": 1, "text": "x = 1, y = e \u2248 2.718" },
+      { "x": 0.5, "text": "Substitution: t = x\u00b2" }
+    ]
+  },
+  "ex-7-9-q1": {
+    "title": "Definite integral: \u222b[0,1] x/(x\u00b2+1) dx = (1/2)ln 2",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.2, 0.8],
+    "data": [
+      { "fn": "x/(x^2 + 1)", "color": "#6366f1", "label": "y = x/(x\u00b2+1)" },
+      { "fn": "x/(x^2 + 1)", "range": [0, 1], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, 1] = (1/2)ln 2 \u2248 0.347" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 0" },
+      { "x": 1, "text": "x = 1, y = 1/2" },
+      { "x": 0.5, "text": "Substitution: t = x\u00b2+1" }
+    ]
+  },
+  "ex-7-10-q1": {
+    "title": "Property of definite integrals: \u222b[0,\u03c0/2] cos\u00b2(x) dx = \u03c0/4",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.3, 1.3],
+    "data": [
+      { "fn": "cos(x)^2", "color": "#6366f1", "label": "y = cos\u00b2(x)" },
+      { "fn": "sin(x)^2", "color": "#ef4444", "label": "y = sin\u00b2(x) [using property]" },
+      { "fn": "cos(x)^2", "range": [0, 1.5708], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area cos\u00b2x = \u03c0/4" },
+      { "fn": "1", "range": [0, 1.5708], "color": "#f59e0b", "label": "cos\u00b2x + sin\u00b2x = 1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "cos\u00b2(0) = 1, sin\u00b2(0) = 0" },
+      { "x": 0.7854, "text": "Equal at \u03c0/4: both = 1/2" },
+      { "x": 1.5708, "text": "cos\u00b2(\u03c0/2) = 0, sin\u00b2(\u03c0/2) = 1" }
+    ]
+  },
+  "ex-7-10-q5": {
+    "title": "Definite integral: \u222b[-5,5] |x+2| dx = 29",
+    "xDomain": [-7, 7],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "-(x + 2)", "range": [-7, -2], "color": "#6366f1", "label": "y = -(x+2) for x < -2" },
+      { "fn": "x + 2", "range": [-2, 7], "color": "#6366f1", "label": "y = x+2 for x \u2265 -2" },
+      { "fn": "-(x + 2)", "range": [-5, -2], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [-5, -2] = 9/2" },
+      { "fn": "x + 2", "range": [-2, 5], "closed": true, "color": "rgba(34, 197, 94, 0.3)", "label": "Area [-2, 5] = 49/2" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "x = -5, y = 3" },
+      { "x": -2, "text": "Vertex (-2, 0)" },
+      { "x": 5, "text": "x = 5, y = 7" },
+      { "x": 1, "text": "Total = 9/2 + 49/2 = 29" }
+    ]
+  },
+  "ex-7-10-q6": {
+    "title": "Definite integral: \u222b[2,8] |x-5| dx = 9",
+    "xDomain": [0, 10],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "-(x - 5)", "range": [0, 5], "color": "#6366f1", "label": "y = -(x-5) = 5-x for x < 5" },
+      { "fn": "x - 5", "range": [5, 10], "color": "#6366f1", "label": "y = x-5 for x \u2265 5" },
+      { "fn": "-(x - 5)", "range": [2, 5], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [2, 5] = 9/2" },
+      { "fn": "x - 5", "range": [5, 8], "closed": true, "color": "rgba(34, 197, 94, 0.3)", "label": "Area [5, 8] = 9/2" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "x = 2, y = 3" },
+      { "x": 5, "text": "Vertex (5, 0)" },
+      { "x": 8, "text": "x = 8, y = 3" },
+      { "x": 4, "text": "Total = 9/2 + 9/2 = 9" }
+    ]
+  },
+  "ex-7-10-q18": {
+    "title": "Definite integral: \u222b[0,4] |x-1| dx = 5",
+    "xDomain": [-1, 5],
+    "yDomain": [-0.5, 4],
+    "data": [
+      { "fn": "-(x - 1)", "range": [-1, 1], "color": "#6366f1", "label": "y = 1-x for x < 1" },
+      { "fn": "x - 1", "range": [1, 5], "color": "#6366f1", "label": "y = x-1 for x \u2265 1" },
+      { "fn": "-(x - 1)", "range": [0, 1], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, 1] = 1/2" },
+      { "fn": "x - 1", "range": [1, 4], "closed": true, "color": "rgba(34, 197, 94, 0.3)", "label": "Area [1, 4] = 9/2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, y = 1" },
+      { "x": 1, "text": "Vertex (1, 0)" },
+      { "x": 4, "text": "x = 4, y = 3" },
+      { "x": 2, "text": "Total = 1/2 + 9/2 = 5" }
+    ]
+  },
+  "misc-q24": {
+    "title": "Definite integral: \u222b[\u03c0/2,\u03c0] e^x(1-sinx)/(1-cosx) dx",
+    "xDomain": [1, 3.5],
+    "yDomain": [-50, 10],
+    "data": [
+      { "fn": "exp(x)*(1-sin(x))/(1-cos(x))", "range": [1.6, 3.1], "color": "#6366f1", "label": "f(x) = e^x(1-sinx)/(1-cosx)" },
+      { "fn": "exp(x)*(1-sin(x))/(1-cos(x))", "range": [1.5708, 3.1416], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Shaded area [\u03c0/2, \u03c0]" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "x = \u03c0/2: (1-1)/(1-0) = 0" },
+      { "x": 3.1416, "text": "x = \u03c0: (1-0)/(1-(-1)) = e^\u03c0/2" },
+      { "x": 2.3, "text": "Uses e^x[f(x)+f'(x)] form" }
+    ]
+  },
+  "misc-q25": {
+    "title": "Definite integral: \u222b[0,\u03c0/4] sinx cosx/(cos\u2074x + sin\u2074x) dx",
+    "xDomain": [-0.3, 1.2],
+    "yDomain": [-0.3, 1.5],
+    "data": [
+      { "fn": "sin(x)*cos(x)/(cos(x)^4 + sin(x)^4)", "range": [0, 0.78], "color": "#6366f1", "label": "f(x) = sinx cosx/(cos\u2074x + sin\u2074x)" },
+      { "fn": "sin(x)*cos(x)/(cos(x)^4 + sin(x)^4)", "range": [0, 0.7854], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Area [0, \u03c0/4] = \u03c0/8" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0" },
+      { "x": 0.7854, "text": "f(\u03c0/4) = 1 [both = 1/4]" },
+      { "x": 0.4, "text": "Substitution: t = tan\u00b2x" }
+    ]
+  },
+  "misc-q31": {
+    "title": "Definite integral: \u222b[1,4] [|x-1| + |x-2| + |x-3|] dx = 19/2",
+    "xDomain": [0, 5],
+    "yDomain": [-0.5, 6],
+    "data": [
+      { "fn": "abs(x-1) + abs(x-2) + abs(x-3)", "color": "#6366f1", "label": "y = |x-1| + |x-2| + |x-3|" },
+      { "fn": "abs(x-1)", "color": "#ef4444", "label": "|x-1|" },
+      { "fn": "abs(x-2)", "color": "#f59e0b", "label": "|x-2|" },
+      { "fn": "abs(x-3)", "color": "#22c55e", "label": "|x-3|" },
+      { "fn": "abs(x-1) + abs(x-2) + abs(x-3)", "range": [1, 4], "closed": true, "color": "rgba(99, 102, 241, 0.3)", "label": "Total area [1, 4] = 19/2" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "x = 1: sum = 0+1+2 = 3" },
+      { "x": 2, "text": "x = 2: sum = 1+0+1 = 2 (min)" },
+      { "x": 3, "text": "x = 3: sum = 2+1+0 = 3" },
+      { "x": 4, "text": "x = 4: sum = 3+2+1 = 6" }
+    ]
+  }
+}

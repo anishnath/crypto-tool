@@ -1,0 +1,332 @@
+{
+  "ex-2-1-q1": {
+    "title": "y = sin^-1(x): Principal value branch, point (-1/2, -pi/6)",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "asin(x)", "derivative": { "fn": "1/sqrt(1 - x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = sin^-1(x)" }
+    ],
+    "annotations": [
+      { "x": -0.5, "text": "(-1/2, -pi/6)" },
+      { "x": -1, "text": "(-1, -pi/2)" },
+      { "x": 1, "text": "(1, pi/2)" }
+    ]
+  },
+
+  "ex-2-1-q2": {
+    "title": "y = cos^-1(x): Principal value branch, point (sqrt(3)/2, pi/6)",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos(x)", "derivative": { "fn": "-1/sqrt(1 - x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = cos^-1(x)" }
+    ],
+    "annotations": [
+      { "x": 0.866, "text": "(sqrt(3)/2, pi/6)" },
+      { "x": -1, "text": "(-1, pi)" },
+      { "x": 1, "text": "(1, 0)" }
+    ]
+  },
+
+  "ex-2-1-q4": {
+    "title": "y = tan^-1(x): Principal value branch, point (-sqrt(3), -pi/3)",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "atan(x)", "derivative": { "fn": "1/(1 + x^2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = tan^-1(x)" }
+    ],
+    "annotations": [
+      { "x": -1.732, "text": "(-sqrt(3), -pi/3)" },
+      { "x": 0, "text": "Origin (0, 0)" },
+      { "x": 1.732, "text": "(sqrt(3), pi/3)" }
+    ]
+  },
+
+  "ex-2-1-q5": {
+    "title": "y = cos^-1(x): Principal value at x = -1/2 is 2pi/3",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos(x)", "derivative": { "fn": "-1/sqrt(1 - x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = cos^-1(x)" }
+    ],
+    "annotations": [
+      { "x": -0.5, "text": "(-1/2, 2pi/3)" },
+      { "x": 0, "text": "(0, pi/2)" },
+      { "x": 1, "text": "(1, 0)" }
+    ]
+  },
+
+  "ex-2-1-q6": {
+    "title": "y = tan^-1(x): Principal value at x = -1 is -pi/4",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "atan(x)", "derivative": { "fn": "1/(1 + x^2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = tan^-1(x)" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "(-1, -pi/4)" },
+      { "x": 1, "text": "(1, pi/4)" }
+    ]
+  },
+
+  "ex-2-1-q9": {
+    "title": "y = cos^-1(x): Principal value at x = -1/sqrt(2) is 3pi/4",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos(x)", "derivative": { "fn": "-1/sqrt(1 - x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = cos^-1(x)" }
+    ],
+    "annotations": [
+      { "x": -0.707, "text": "(-1/sqrt(2), 3pi/4)" },
+      { "x": 0.707, "text": "(1/sqrt(2), pi/4)" }
+    ]
+  },
+
+  "ex-2-1-q13": {
+    "title": "Range of sin^-1(x): [-pi/2, pi/2] (Answer: B)",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-2.5, 2.5],
+    "data": [
+      { "fn": "asin(x)", "derivative": { "fn": "1/sqrt(1 - x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = sin^-1(x)" },
+      { "fn": "1.5708", "color": "#ef4444", "label": "y = pi/2 (upper bound)" },
+      { "fn": "-1.5708", "color": "#ef4444", "label": "y = -pi/2 (lower bound)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "sin^-1(1) = pi/2" },
+      { "x": -1, "text": "sin^-1(-1) = -pi/2" }
+    ]
+  },
+
+  "ex-2-2-q1": {
+    "title": "3sin^-1(x) = sin^-1(3x - 4x^3): Triple angle identity",
+    "xDomain": [-0.7, 0.7],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "3*asin(x)", "range": [-0.5, 0.5], "color": "#6366f1", "label": "y = 3 sin^-1(x)" },
+      { "fn": "asin(3*x - 4*x^3)", "range": [-0.5, 0.5], "color": "#22c55e", "label": "y = sin^-1(3x - 4x^3)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Both pass through origin" },
+      { "x": 0.5, "text": "x = 1/2: both = pi/2" }
+    ]
+  },
+
+  "ex-2-2-q2": {
+    "title": "3cos^-1(x) = cos^-1(4x^3 - 3x): Triple angle identity",
+    "xDomain": [0.3, 1.1],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "3*acos(x)", "range": [0.5, 1], "color": "#6366f1", "label": "y = 3 cos^-1(x)" },
+      { "fn": "acos(4*x^3 - 3*x)", "range": [0.5, 1], "color": "#22c55e", "label": "y = cos^-1(4x^3 - 3x)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "x = 1: both = 0" },
+      { "x": 0.5, "text": "x = 1/2: both = pi" }
+    ]
+  },
+
+  "ex-2-2-q3": {
+    "title": "tan^-1((sqrt(1+x^2)-1)/x) simplifies to (1/2)tan^-1(x)",
+    "xDomain": [-5, 5],
+    "yDomain": [-1, 1],
+    "data": [
+      { "fn": "atan((sqrt(1 + x^2) - 1)/x)", "range": [-5, -0.01], "color": "#6366f1", "label": "tan^-1((sqrt(1+x^2)-1)/x)" },
+      { "fn": "atan((sqrt(1 + x^2) - 1)/x)", "range": [0.01, 5], "color": "#6366f1" },
+      { "fn": "(1/2)*atan(x)", "color": "#22c55e", "label": "(1/2) tan^-1(x)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "x = 1: both = pi/8" },
+      { "x": -1, "text": "x = -1: both = -pi/8" }
+    ]
+  },
+
+  "ex-2-2-q5": {
+    "title": "tan^-1((cos x - sin x)/(cos x + sin x)) = pi/4 - x",
+    "xDomain": [-1, 2.5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "atan((cos(x) - sin(x))/(cos(x) + sin(x)))", "range": [-0.78, 2.35], "color": "#6366f1", "label": "tan^-1((cos x - sin x)/(cos x + sin x))" },
+      { "fn": "0.7854 - x", "range": [-0.78, 2.35], "color": "#22c55e", "label": "y = pi/4 - x" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0: y = pi/4" },
+      { "x": 0.7854, "text": "x = pi/4: y = 0" }
+    ]
+  },
+
+  "ex-2-2-q9": {
+    "title": "sin^-1(2x/(1+x^2)) and cos^-1((1-y^2)/(1+y^2)) are 2tan^-1",
+    "xDomain": [-3, 3],
+    "yDomain": [-3.5, 3.5],
+    "data": [
+      { "fn": "asin(2*x/(1 + x^2))", "range": [-0.99, 0.99], "color": "#6366f1", "label": "sin^-1(2x/(1+x^2))" },
+      { "fn": "2*atan(x)", "color": "#22c55e", "label": "2 tan^-1(x)" },
+      { "fn": "acos((1 - x^2)/(1 + x^2))", "range": [0.01, 3], "color": "#f59e0b", "label": "cos^-1((1-x^2)/(1+x^2))" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "All pass through origin" },
+      { "x": 1, "text": "x = 1: y = pi/2" }
+    ]
+  },
+
+  "ex-2-2-q10": {
+    "title": "sin^-1(sin(x)): Wraps 2pi/3 back to pi/3",
+    "xDomain": [-4, 4],
+    "yDomain": [-2.5, 2.5],
+    "data": [
+      { "fn": "asin(sin(x))", "color": "#6366f1", "label": "y = sin^-1(sin(x))" },
+      { "fn": "x", "range": [-1.5708, 1.5708], "color": "#22c55e", "label": "y = x (principal branch)" }
+    ],
+    "annotations": [
+      { "x": 2.094, "text": "sin^-1(sin(2pi/3)) = pi/3" },
+      { "x": 0, "text": "Identity on [-pi/2, pi/2]" }
+    ]
+  },
+
+  "ex-2-2-q11": {
+    "title": "tan^-1(tan(x)): Wraps 3pi/4 back to -pi/4",
+    "xDomain": [-5, 5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "atan(tan(x))", "range": [-1.5, 1.5], "color": "#6366f1", "label": "y = tan^-1(tan(x))" },
+      { "fn": "atan(tan(x))", "range": [1.65, 4.6], "color": "#6366f1" },
+      { "fn": "atan(tan(x))", "range": [-4.6, -1.65], "color": "#6366f1" },
+      { "fn": "x", "range": [-1.5, 1.5], "color": "#22c55e", "label": "y = x (principal branch)" }
+    ],
+    "annotations": [
+      { "x": 2.356, "text": "tan^-1(tan(3pi/4)) = -pi/4" },
+      { "x": 0, "text": "Identity on (-pi/2, pi/2)" }
+    ]
+  },
+
+  "ex-2-2-q13": {
+    "title": "cos^-1(cos(x)): Wraps 7pi/6 back to 5pi/6",
+    "xDomain": [-1, 8],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos(cos(x))", "color": "#6366f1", "label": "y = cos^-1(cos(x))" },
+      { "fn": "x", "range": [0, 3.1416], "color": "#22c55e", "label": "y = x (principal branch)" }
+    ],
+    "annotations": [
+      { "x": 3.665, "text": "cos^-1(cos(7pi/6)) = 5pi/6" },
+      { "x": 0, "text": "cos^-1(cos(0)) = 0" },
+      { "x": 3.1416, "text": "cos^-1(cos(pi)) = pi" }
+    ]
+  },
+
+  "misc-q1": {
+    "title": "cos^-1(cos(13pi/6)) = pi/6 (period wrapping)",
+    "xDomain": [-1, 8],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos(cos(x))", "color": "#6366f1", "label": "y = cos^-1(cos(x))" },
+      { "fn": "x", "range": [0, 3.1416], "color": "#22c55e", "label": "y = x (principal branch)" }
+    ],
+    "annotations": [
+      { "x": 6.807, "text": "cos^-1(cos(13pi/6)) = pi/6" },
+      { "x": 3.1416, "text": "Reflection at pi" },
+      { "x": 6.2832, "text": "Period restart at 2pi" }
+    ]
+  },
+
+  "misc-q2": {
+    "title": "tan^-1(tan(7pi/6)) = pi/6 (period wrapping)",
+    "xDomain": [-1, 5],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "atan(tan(x))", "range": [-1, 1.5], "color": "#6366f1", "label": "y = tan^-1(tan(x))" },
+      { "fn": "atan(tan(x))", "range": [1.65, 4.6], "color": "#6366f1" },
+      { "fn": "x", "range": [-1, 1.5], "color": "#22c55e", "label": "y = x (principal branch)" }
+    ],
+    "annotations": [
+      { "x": 3.665, "text": "tan^-1(tan(7pi/6)) = pi/6" },
+      { "x": 0, "text": "Identity on (-pi/2, pi/2)" }
+    ]
+  },
+
+  "misc-q8": {
+    "title": "tan^-1(sqrt(x)) = (1/2)cos^-1((1-x)/(1+x)) for x in [0,1]",
+    "xDomain": [-0.2, 1.5],
+    "yDomain": [-0.2, 1.2],
+    "data": [
+      { "fn": "atan(sqrt(x))", "range": [0, 1.5], "color": "#6366f1", "label": "tan^-1(sqrt(x))" },
+      { "fn": "(1/2)*acos((1 - x)/(1 + x))", "range": [0, 1.5], "color": "#22c55e", "label": "(1/2) cos^-1((1-x)/(1+x))" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0: both = 0" },
+      { "x": 1, "text": "x = 1: both = pi/4" }
+    ]
+  },
+
+  "misc-q10": {
+    "title": "tan^-1((sqrt(1+x)-sqrt(1-x))/(sqrt(1+x)+sqrt(1-x))) = pi/4 - (1/2)cos^-1(x)",
+    "xDomain": [-0.8, 1.1],
+    "yDomain": [-0.5, 1.2],
+    "data": [
+      { "fn": "atan((sqrt(1 + x) - sqrt(1 - x))/(sqrt(1 + x) + sqrt(1 - x)))", "range": [-0.707, 0.99], "color": "#6366f1", "label": "LHS: tan^-1(...)" },
+      { "fn": "0.7854 - (1/2)*acos(x)", "range": [-0.707, 0.99], "color": "#22c55e", "label": "RHS: pi/4 - (1/2)cos^-1(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0: both = 0" },
+      { "x": 1, "text": "x = 1: both = pi/4" }
+    ]
+  },
+
+  "misc-q13": {
+    "title": "sin(tan^-1(x)) = x/sqrt(1+x^2) (Answer: D)",
+    "xDomain": [-4, 4],
+    "yDomain": [-1.5, 1.5],
+    "data": [
+      { "fn": "sin(atan(x))", "derivative": { "fn": "1/(1 + x^2)^(3/2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "sin(tan^-1(x))" },
+      { "fn": "x/sqrt(1 + x^2)", "color": "#22c55e", "label": "x / sqrt(1 + x^2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0" },
+      { "x": 1, "text": "f(1) = 1/sqrt(2)" },
+      { "x": -1, "text": "f(-1) = -1/sqrt(2)" }
+    ]
+  },
+
+  "ex-2-1-q11": {
+    "title": "All three principal branches: sin^-1, cos^-1, tan^-1",
+    "xDomain": [-3, 3],
+    "yDomain": [-2, 3.5],
+    "data": [
+      { "fn": "asin(x)", "range": [-1, 1], "color": "#6366f1", "label": "y = sin^-1(x), range [-pi/2, pi/2]" },
+      { "fn": "acos(x)", "range": [-1, 1], "color": "#22c55e", "label": "y = cos^-1(x), range [0, pi]" },
+      { "fn": "atan(x)", "color": "#ef4444", "label": "y = tan^-1(x), range (-pi/2, pi/2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "sin^-1(0)=0, cos^-1(0)=pi/2" },
+      { "x": 1, "text": "sin^-1=pi/2, cos^-1=0, tan^-1=pi/4" }
+    ]
+  },
+
+  "ex-2-2-q4": {
+    "title": "tan^-1(sqrt((1-cos x)/(1+cos x))) = x/2 for 0 < x < pi",
+    "xDomain": [-0.3, 3.5],
+    "yDomain": [-0.3, 2],
+    "data": [
+      { "fn": "atan(sqrt((1 - cos(x))/(1 + cos(x))))", "range": [0.01, 3.1], "color": "#6366f1", "label": "tan^-1(sqrt((1-cos x)/(1+cos x)))" },
+      { "fn": "x/2", "range": [0, 3.14], "color": "#22c55e", "label": "y = x/2" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "x = pi/2: both = pi/4" },
+      { "x": 3.1416, "text": "x = pi: both = pi/2" }
+    ]
+  },
+
+  "ex-2-1-q14": {
+    "title": "tan^-1(sqrt(3)) - sec^-1(-2) = -pi/3 (Answer: B)",
+    "xDomain": [-3, 3],
+    "yDomain": [-2, 3.5],
+    "data": [
+      { "fn": "atan(x)", "color": "#6366f1", "label": "y = tan^-1(x)" },
+      { "fn": "acos(1/x)", "range": [-3, -1.01], "color": "#22c55e", "label": "y = sec^-1(x), x < -1" },
+      { "fn": "acos(1/x)", "range": [1.01, 3], "color": "#22c55e", "label": "y = sec^-1(x), x > 1" }
+    ],
+    "annotations": [
+      { "x": 1.732, "text": "tan^-1(sqrt(3)) = pi/3" },
+      { "x": -2, "text": "sec^-1(-2) = 2pi/3" }
+    ]
+  }
+}

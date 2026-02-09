@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .grid { stroke: #e5e7eb; stroke-width: 0.5; }
+      .line-main { stroke: #2563eb; stroke-width: 2; }
+      .line-related { stroke: #60a5fa; stroke-width: 2; stroke-dasharray: 4; }
+      .text { font-family: sans-serif; font-size: 12px; fill: #374151; }
+      .label { font-family: sans-serif; font-size: 10px; fill: #6b7280; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+
+  <!-- Grid -->
+  <line x1="0" y1="150" x2="300" y2="150" class="axis" marker-end="url(#arrow)" />
+  <line x1="150" y1="300" x2="150" y2="0" class="axis" marker-end="url(#arrow)" />
+
+  <!-- Lines with slope 2 (y = 2x + c) -->
+  <!-- y = 2x + 4 (Main line from question) -->
+  <!-- Corresponds to points like (-2, 0), (0, 4) -->
+  <!-- Scaled: Center (150, 150). Scale 20px per unit. -->
+  <!-- Eq: y_svg = 150 - (2 * (x_svg - 150)/20 + 4) * 20 -->
+  <!-- y_svg = 150 - (2 * (x_svg - 150) + 80) = 150 - 2x_svg + 300 - 80 = 370 - 2x derived logic check: x=0 -> y=4 -> svg_y=150-80=70. svg_x=150. Correct. -->
+  <line x1="100" y1="170" x2="200" y2="-30" class="line-main" />
+  <text x="180" y="30" class="text">y = 2x + 4</text>
+
+  <!-- y = 2x (Origin) -->
+  <line x1="100" y1="250" x2="225" y2="0" class="line-related" />
+  <text x="210" y="80" class="label">y = 2x</text>
+
+  <!-- y = 2x - 4 -->
+  <line x1="120" y1="300" x2="245" y2="50" class="line-related" />
+  <text x="230" y="130" class="label">y = 2x - 4</text>
+
+  <text x="280" y="165" class="text">X</text>
+  <text x="160" y="20" class="text">Y</text>
+</svg>

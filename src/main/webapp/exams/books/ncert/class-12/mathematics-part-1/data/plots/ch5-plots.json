@@ -1,0 +1,793 @@
+{
+  "ex-5-1-q1": {
+    "title": "f(x) = 5x - 3: Continuous polynomial (linear)",
+    "xDomain": [-4, 6],
+    "yDomain": [-25, 25],
+    "data": [
+      { "fn": "5*x - 3", "color": "#6366f1", "label": "y = 5x - 3" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "x = 0, f(0) = -3" },
+      { "x": -3, "text": "x = -3, f(-3) = -18" },
+      { "x": 5, "text": "x = 5, f(5) = 22" }
+    ]
+  },
+
+  "ex-5-1-q2": {
+    "title": "f(x) = 2x^2 - 1: Continuous parabola at x = 3",
+    "xDomain": [-2, 5],
+    "yDomain": [-3, 20],
+    "data": [
+      { "fn": "2*x^2 - 1", "color": "#6366f1", "label": "y = 2x^2 - 1" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "x = 3, f(3) = 17" }
+    ]
+  },
+
+  "ex-5-1-q3a": {
+    "title": "f(x) = x - 5: Continuous linear function",
+    "xDomain": [-2, 10],
+    "yDomain": [-8, 6],
+    "data": [
+      { "fn": "x - 5", "color": "#6366f1", "label": "y = x - 5" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "Zero at x = 5" }
+    ]
+  },
+
+  "ex-5-1-q3b": {
+    "title": "f(x) = 1/(x - 5): Discontinuity at x = 5",
+    "xDomain": [-2, 12],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fn": "1/(x - 5)", "range": [-2, 4.95], "color": "#6366f1", "label": "y = 1/(x-5), x < 5" },
+      { "fn": "1/(x - 5)", "range": [5.05, 12], "color": "#6366f1", "label": "y = 1/(x-5), x > 5" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "Vertical asymptote x = 5" }
+    ]
+  },
+
+  "ex-5-1-q3c": {
+    "title": "f(x) = (x^2 - 25)/(x + 5): Removable discontinuity at x = -5",
+    "xDomain": [-10, 5],
+    "yDomain": [-18, 2],
+    "data": [
+      { "fn": "(x^2 - 25)/(x + 5)", "range": [-10, -5.05], "color": "#6366f1", "label": "f(x) = (x^2-25)/(x+5)" },
+      { "fn": "(x^2 - 25)/(x + 5)", "range": [-4.95, 5], "color": "#6366f1" },
+      { "fn": "x - 5", "color": "#22c55e", "nSamples": 100, "label": "Simplified: y = x - 5" }
+    ],
+    "annotations": [
+      { "x": -5, "text": "Hole at (-5, -10)" }
+    ]
+  },
+
+  "ex-5-1-q3d": {
+    "title": "f(x) = |x - 5|: Corner at x = 5, continuous everywhere",
+    "xDomain": [-1, 11],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "abs(x - 5)", "color": "#6366f1", "label": "y = |x - 5|" }
+    ],
+    "annotations": [
+      { "x": 5, "text": "Corner at x = 5" }
+    ]
+  },
+
+  "ex-5-1-q5": {
+    "title": "Piecewise: x if x <= 1, 5 if x > 1 (Jump at x = 1)",
+    "xDomain": [-2, 5],
+    "yDomain": [-3, 7],
+    "data": [
+      { "fn": "x", "range": [-2, 1], "color": "#6366f1", "label": "y = x (x <= 1)" },
+      { "fn": "5", "range": [1, 5], "color": "#ef4444", "label": "y = 5 (x > 1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Jump: 1 to 5" }
+    ]
+  },
+
+  "ex-5-1-q6": {
+    "title": "Piecewise: 2x+3 if x <= 2, 2x-3 if x > 2 (Jump at x = 2)",
+    "xDomain": [-1, 5],
+    "yDomain": [-2, 10],
+    "data": [
+      { "fn": "2*x + 3", "range": [-1, 2], "color": "#6366f1", "label": "y = 2x+3 (x <= 2)" },
+      { "fn": "2*x - 3", "range": [2, 5], "color": "#ef4444", "label": "y = 2x-3 (x > 2)" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Jump: 7 down to 1" }
+    ]
+  },
+
+  "ex-5-1-q7": {
+    "title": "Three-piece: |x|+3, -2x, 6x+2 (Jump at x = 3)",
+    "xDomain": [-6, 5],
+    "yDomain": [-8, 25],
+    "data": [
+      { "fn": "abs(x) + 3", "range": [-6, -3], "color": "#6366f1", "label": "|x|+3 (x <= -3)" },
+      { "fn": "-2*x", "range": [-3, 3], "color": "#22c55e", "label": "-2x (-3 < x < 3)" },
+      { "fn": "6*x + 2", "range": [3, 5], "color": "#ef4444", "label": "6x+2 (x >= 3)" }
+    ],
+    "annotations": [
+      { "x": -3, "text": "Continuous: both = 6" },
+      { "x": 3, "text": "Jump: -6 to 20" }
+    ]
+  },
+
+  "ex-5-1-q8": {
+    "title": "Signum-like: f(x) = |x|/x (Discontinuity at x = 0)",
+    "xDomain": [-4, 4],
+    "yDomain": [-2, 2],
+    "data": [
+      { "fn": "-1", "range": [-4, -0.01], "color": "#6366f1", "label": "f(x) = -1 (x < 0)" },
+      { "fn": "1", "range": [0.01, 4], "color": "#ef4444", "label": "f(x) = 1 (x > 0)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Not defined at x = 0" }
+    ]
+  },
+
+  "ex-5-1-q10": {
+    "title": "Piecewise: x+1 if x >= 1, x^2+1 if x < 1 (Continuous at x = 1)",
+    "xDomain": [-2, 4],
+    "yDomain": [-1, 6],
+    "data": [
+      { "fn": "x^2 + 1", "range": [-2, 1], "color": "#6366f1", "label": "x^2+1 (x < 1)" },
+      { "fn": "x + 1", "range": [1, 4], "color": "#22c55e", "label": "x+1 (x >= 1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Both = 2: continuous" }
+    ]
+  },
+
+  "ex-5-1-q11": {
+    "title": "Piecewise: x^3-3 if x <= 2, x^2+1 if x > 2 (Check at x = 2)",
+    "xDomain": [-1, 4],
+    "yDomain": [-5, 12],
+    "data": [
+      { "fn": "x^3 - 3", "range": [-1, 2], "color": "#6366f1", "label": "x^3-3 (x <= 2)" },
+      { "fn": "x^2 + 1", "range": [2, 4], "color": "#22c55e", "label": "x^2+1 (x > 2)" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Both = 5: continuous" }
+    ]
+  },
+
+  "ex-5-1-q12": {
+    "title": "Piecewise: x^10-1 if x <= 1, x^2 if x > 1 (Jump at x = 1)",
+    "xDomain": [-0.5, 2.5],
+    "yDomain": [-2, 5],
+    "data": [
+      { "fn": "x^10 - 1", "range": [-0.5, 1], "color": "#6366f1", "label": "x^10-1 (x <= 1)" },
+      { "fn": "x^2", "range": [1, 2.5], "color": "#ef4444", "label": "x^2 (x > 1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Jump: 0 to 1" }
+    ]
+  },
+
+  "ex-5-1-q14": {
+    "title": "Step function: 3 on [0,1], 4 on (1,3), 5 on [3,10]",
+    "xDomain": [-1, 11],
+    "yDomain": [1, 7],
+    "data": [
+      { "fn": "3", "range": [0, 1], "color": "#6366f1", "label": "f = 3 (0 <= x <= 1)" },
+      { "fn": "4", "range": [1, 3], "color": "#22c55e", "label": "f = 4 (1 < x < 3)" },
+      { "fn": "5", "range": [3, 10], "color": "#ef4444", "label": "f = 5 (3 <= x <= 10)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Jump: 3 to 4" },
+      { "x": 3, "text": "Jump: 4 to 5" }
+    ]
+  },
+
+  "ex-5-1-q15": {
+    "title": "Piecewise: 2x if x < 0, 0 if 0 <= x <= 1, 4x if x > 1",
+    "xDomain": [-3, 4],
+    "yDomain": [-6, 14],
+    "data": [
+      { "fn": "2*x", "range": [-3, 0], "color": "#6366f1", "label": "2x (x < 0)" },
+      { "fn": "0", "range": [0, 1], "color": "#22c55e", "label": "0 (0 <= x <= 1)" },
+      { "fn": "4*x", "range": [1, 4], "color": "#ef4444", "label": "4x (x > 1)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Continuous: both = 0" },
+      { "x": 1, "text": "Jump: 0 to 4" }
+    ]
+  },
+
+  "ex-5-1-q16": {
+    "title": "Piecewise: -2 if x <= -1, 2x if -1 < x <= 1, 2 if x > 1 (Continuous)",
+    "xDomain": [-4, 4],
+    "yDomain": [-4, 4],
+    "data": [
+      { "fn": "-2", "range": [-4, -1], "color": "#6366f1", "label": "-2 (x <= -1)" },
+      { "fn": "2*x", "range": [-1, 1], "color": "#22c55e", "label": "2x (-1 < x <= 1)" },
+      { "fn": "2", "range": [1, 4], "color": "#ef4444", "label": "2 (x > 1)" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Match: both = -2" },
+      { "x": 1, "text": "Match: both = 2" }
+    ]
+  },
+
+  "ex-5-1-q19": {
+    "title": "g(x) = x - floor(x): Fractional part (sawtooth), jumps at integers",
+    "xDomain": [-3, 4],
+    "yDomain": [-0.5, 1.5],
+    "data": [
+      { "fn": "x - (-3)", "range": [-3, -2], "color": "#6366f1", "label": "{x} = x - [x]" },
+      { "fn": "x - (-2)", "range": [-2, -1], "color": "#6366f1" },
+      { "fn": "x - (-1)", "range": [-1, 0], "color": "#6366f1" },
+      { "fn": "x - 0", "range": [0, 1], "color": "#6366f1" },
+      { "fn": "x - 1", "range": [1, 2], "color": "#6366f1" },
+      { "fn": "x - 2", "range": [2, 3], "color": "#6366f1" },
+      { "fn": "x - 3", "range": [3, 4], "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Jump 1 to 0" },
+      { "x": 1, "text": "Jump 1 to 0" },
+      { "x": 2, "text": "Jump 1 to 0" }
+    ]
+  },
+
+  "ex-5-1-q24": {
+    "title": "f(x) = x^2 sin(1/x): Squeezed to 0, continuous everywhere",
+    "xDomain": [-1, 1],
+    "yDomain": [-0.5, 0.5],
+    "data": [
+      { "fn": "x^2 * sin(1/x)", "range": [-1, -0.01], "color": "#6366f1", "label": "x^2 sin(1/x)" },
+      { "fn": "x^2 * sin(1/x)", "range": [0.01, 1], "color": "#6366f1" },
+      { "fn": "x^2", "color": "#22c55e", "label": "Envelope: x^2" },
+      { "fn": "-x^2", "color": "#22c55e", "label": "Envelope: -x^2" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 0, squeeze" }
+    ]
+  },
+
+  "ex-5-1-q32": {
+    "title": "f(x) = |cos(x)|: Continuous with corners at odd multiples of pi/2",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-0.3, 1.3],
+    "data": [
+      { "fn": "abs(cos(x))", "color": "#6366f1", "label": "y = |cos x|" }
+    ],
+    "annotations": [
+      { "x": 1.5708, "text": "Corner at pi/2" },
+      { "x": -1.5708, "text": "Corner at -pi/2" },
+      { "x": 4.7124, "text": "Corner at 3pi/2" }
+    ]
+  },
+
+  "ex-5-1-q34": {
+    "title": "f(x) = |x| - |x+1|: Piecewise linear, continuous everywhere",
+    "xDomain": [-4, 4],
+    "yDomain": [-2, 2.5],
+    "data": [
+      { "fn": "1", "range": [-4, -1], "color": "#6366f1", "label": "1 (x < -1)" },
+      { "fn": "-2*x - 1", "range": [-1, 0], "color": "#22c55e", "label": "-2x-1 (-1 <= x < 0)" },
+      { "fn": "-1", "range": [0, 4], "color": "#ef4444", "label": "-1 (x >= 0)" }
+    ],
+    "annotations": [
+      { "x": -1, "text": "Corner, value = 1" },
+      { "x": 0, "text": "Corner, value = -1" }
+    ]
+  },
+
+  "ex-5-1-q13": {
+    "title": "Piecewise: x+5 if x <= 1, x-5 if x > 1 (Jump at x = 1)",
+    "xDomain": [-3, 5],
+    "yDomain": [-6, 8],
+    "data": [
+      { "fn": "x + 5", "range": [-3, 1], "color": "#6366f1", "label": "x+5 (x <= 1)" },
+      { "fn": "x - 5", "range": [1, 5], "color": "#ef4444", "label": "x-5 (x > 1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Jump: 6 to -4" }
+    ]
+  },
+
+  "ex-5-1-q23": {
+    "title": "Piecewise: sin(x)/x if x < 0, x if x >= 0 (Discontinuous at 0)",
+    "xDomain": [-8, 5],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "sin(x)/x", "range": [-8, -0.01], "color": "#6366f1", "label": "sin(x)/x (x < 0)" },
+      { "fn": "x", "range": [0, 5], "color": "#22c55e", "label": "x (x >= 0)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Left lim = 1, f(0) = 0" }
+    ]
+  },
+
+  "ex-5-1-q30": {
+    "title": "Continuous piecewise: 5, ax+b, 21 with a=2, b=1",
+    "xDomain": [-1, 12],
+    "yDomain": [0, 25],
+    "data": [
+      { "fn": "5", "range": [-1, 2], "color": "#6366f1", "label": "5 (x <= 2)" },
+      { "fn": "2*x + 1", "range": [2, 10], "color": "#22c55e", "label": "2x+1 (2 < x < 10)" },
+      { "fn": "21", "range": [10, 12], "color": "#ef4444", "label": "21 (x >= 10)" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Match: 5 = 2(2)+1" },
+      { "x": 10, "text": "Match: 21 = 2(10)+1" }
+    ]
+  },
+
+  "ex-5-3-q9": {
+    "title": "y = sin^-1(2x/(1+x^2)) = 2 arctan(x)",
+    "xDomain": [-3, 3],
+    "yDomain": [-3.5, 3.5],
+    "data": [
+      { "fn": "asin(2*x/(1 + x^2))", "range": [-0.99, 0.99], "color": "#6366f1", "label": "sin^-1(2x/(1+x^2))" },
+      { "fn": "2*atan(x)", "color": "#22c55e", "label": "2 arctan(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y = 0" },
+      { "x": 1, "text": "y = pi/2" }
+    ]
+  },
+
+  "ex-5-3-q10": {
+    "title": "y = tan^-1((3x - x^3)/(1 - 3x^2)) = 3 arctan(x)",
+    "xDomain": [-1, 1],
+    "yDomain": [-2.5, 2.5],
+    "data": [
+      { "fn": "atan((3*x - x^3)/(1 - 3*x^2))", "range": [-0.55, 0.55], "color": "#6366f1", "label": "tan^-1((3x-x^3)/(1-3x^2))" },
+      { "fn": "3*atan(x)", "color": "#22c55e", "label": "3 arctan(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y = 0" }
+    ]
+  },
+
+  "ex-5-3-q11": {
+    "title": "y = cos^-1((1-x^2)/(1+x^2)) = 2 arctan(x), 0 < x < 1",
+    "xDomain": [-0.5, 2],
+    "yDomain": [-0.5, 3.5],
+    "data": [
+      { "fn": "acos((1 - x^2)/(1 + x^2))", "range": [0.01, 2], "color": "#6366f1", "label": "cos^-1((1-x^2)/(1+x^2))" },
+      { "fn": "2*atan(x)", "range": [0.01, 2], "color": "#22c55e", "label": "2 arctan(x)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "y = pi/2" }
+    ]
+  },
+
+  "ex-5-4-q1": {
+    "title": "e^x / sin(x) and its derivative",
+    "xDomain": [0.1, 6],
+    "yDomain": [-20, 20],
+    "data": [
+      { "fn": "exp(x)/sin(x)", "range": [0.1, 3.1], "color": "#6366f1", "label": "e^x / sin x" },
+      { "fn": "exp(x)/sin(x)", "range": [3.2, 6], "color": "#6366f1" }
+    ],
+    "annotations": [
+      { "x": 3.14159, "text": "Asymptote at x = pi" }
+    ]
+  },
+
+  "ex-5-4-q3": {
+    "title": "e^(x^3): Rapid exponential growth",
+    "xDomain": [-2, 2],
+    "yDomain": [-1, 10],
+    "data": [
+      { "fn": "exp(x^3)", "derivative": { "fn": "3*x^2 * exp(x^3)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = e^(x^3)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 1" },
+      { "x": 1, "text": "f(1) = e ~ 2.72" }
+    ]
+  },
+
+  "ex-5-4-q7": {
+    "title": "sqrt(e^x) = e^(x/2)",
+    "xDomain": [-4, 4],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "exp(x/2)", "derivative": { "fn": "(1/2)*exp(x/2)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "sqrt(e^x) = e^(x/2)" },
+      { "fn": "exp(x)", "color": "#22c55e", "label": "e^x (comparison)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Both = 1 at x = 0" }
+    ]
+  },
+
+  "ex-5-4-q8": {
+    "title": "log(log(x)) for x > 1",
+    "xDomain": [1.01, 20],
+    "yDomain": [-5, 2],
+    "data": [
+      { "fn": "log(log(x))", "derivative": { "fn": "1/(x*log(x))", "updateOnMouseMove": true }, "range": [1.01, 20], "color": "#6366f1", "label": "y = ln(ln x)" },
+      { "fn": "log(x)", "range": [1.01, 20], "color": "#22c55e", "label": "y = ln x (comparison)" }
+    ],
+    "annotations": [
+      { "x": 2.71828, "text": "ln(ln(e)) = 0" }
+    ]
+  },
+
+  "ex-5-5-q1": {
+    "title": "cos(x) * cos(2x) * cos(3x): Triple product",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-1.2, 1.2],
+    "data": [
+      { "fn": "cos(x) * cos(2*x) * cos(3*x)", "color": "#6366f1", "label": "cos(x)cos(2x)cos(3x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 1" },
+      { "x": 3.14159, "text": "f(pi) = -1" }
+    ]
+  },
+
+  "ex-5-6-q3": {
+    "title": "Parametric: x = sin(t), y = cos(2t) (Lissajous figure)",
+    "xDomain": [-1.5, 1.5],
+    "yDomain": [-1.5, 1.5],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "sin(t)", "y": "cos(2*t)", "range": [0, 6.2832], "color": "#6366f1", "label": "x=sin(t), y=cos(2t)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "t=0: (0,1)" }
+    ]
+  },
+
+  "ex-5-6-q4": {
+    "title": "Parametric: x = 4t, y = 4/t (Rectangular hyperbola xy = 16)",
+    "xDomain": [-20, 20],
+    "yDomain": [-20, 20],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "4*t", "y": "4/t", "range": [0.2, 5], "color": "#6366f1", "label": "x=4t, y=4/t (t > 0)" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "4*t", "y": "4/t", "range": [-5, -0.2], "color": "#ef4444", "label": "x=4t, y=4/t (t < 0)" }
+    ],
+    "annotations": [
+      { "x": 4, "text": "t=1: (4,4)" }
+    ]
+  },
+
+  "ex-5-6-q6": {
+    "title": "Cycloid: x = theta - sin(theta), y = 1 + cos(theta)",
+    "xDomain": [-1, 14],
+    "yDomain": [-0.5, 2.5],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "t - sin(t)", "y": "1 + cos(t)", "range": [0, 12.5664], "color": "#6366f1", "label": "Cycloid (a = 1)" }
+    ],
+    "annotations": [
+      { "x": 3.14159, "text": "Cusp at theta = pi" },
+      { "x": 9.42478, "text": "Cusp at theta = 3pi" }
+    ]
+  },
+
+  "ex-5-6-q1": {
+    "title": "Parametric: x = 2t^2, y = t^4 (Parabola-like)",
+    "xDomain": [-1, 10],
+    "yDomain": [-1, 15],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "2*t^2", "y": "t^4", "range": [-2, 2], "color": "#6366f1", "label": "x=2t^2, y=t^4 (a=1)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "t=0: origin" },
+      { "x": 2, "text": "t=1: (2,1)" }
+    ]
+  },
+
+  "ex-5-6-q2": {
+    "title": "Parametric: x = 3 cos θ, y = 2 cos θ (Degenerate line segment)",
+    "xDomain": [-4, 4],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "3*cos(t)", "y": "2*cos(t)", "range": [0, 6.2832], "color": "#6366f1", "label": "x=3cos(θ), y=2cos(θ)" },
+      { "fn": "(2/3)*x", "color": "#22c55e", "label": "y = (2/3)x" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "θ=0: (3,2)" },
+      { "x": -3, "text": "θ=π: (-3,-2)" },
+      { "x": 0, "text": "dy/dx = 2/3 (constant)" }
+    ]
+  },
+
+  "ex-5-6-q7": {
+    "title": "Parametric: x = sin³(t)/√cos(t), y = cos³(t)/√cos(2t)",
+    "xDomain": [-0.1, 1.5],
+    "yDomain": [-0.1, 1.5],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "sin(t)^3 / sqrt(cos(t))", "y": "cos(t)^3 / sqrt(cos(2*t))", "range": [0.01, 0.78], "color": "#6366f1", "label": "x=sin³t/√(cos t), y=cos³t/√(cos 2t)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "t→0: (0, 1)" }
+    ]
+  },
+
+  "ex-5-6-q8": {
+    "title": "Parametric: x = a(cos t + log tan(t/2)), y = a sin t (Tractrix)",
+    "xDomain": [-5, 2],
+    "yDomain": [-1.2, 1.2],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t) + log(tan(t/2))", "y": "sin(t)", "range": [0.1, 3.04], "color": "#6366f1", "label": "Tractrix: x=cos t + ln(tan(t/2)), y=sin t" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Asymptotic approach" },
+      { "x": -3, "text": "dy/dx = sec(t)" }
+    ]
+  },
+
+  "ex-5-6-q10": {
+    "title": "Parametric: x = a(cos t + t sin t), y = a(sin t − t cos t) (Involute of circle)",
+    "xDomain": [-10, 10],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t) + t*sin(t)", "y": "sin(t) - t*cos(t)", "range": [0, 18.85], "color": "#6366f1", "label": "Involute of circle (a=1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "t=0: start at (1,0)" },
+      { "x": 0, "text": "dy/dx = tan(t)" }
+    ]
+  },
+
+  "ex-5-6-q11": {
+    "title": "Parametric: x = √(2^(sin⁻¹t)), y = √(2^(cos⁻¹t)), dy/dx = −y/x",
+    "xDomain": [0.5, 2.5],
+    "yDomain": [0.5, 2.5],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "2^(asin(t)/2)", "y": "2^(acos(t)/2)", "range": [-0.99, 0.99], "color": "#6366f1", "label": "x=√(2^(sin⁻¹t)), y=√(2^(cos⁻¹t))" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "t=0: (1, 2^(π/4))" },
+      { "x": 1.4, "text": "xy = constant (hyperbola-like)" }
+    ]
+  },
+
+  "ex-5-7-q3": {
+    "title": "y = x cos(x), y'' = -x cos(x) - 2 sin(x)",
+    "xDomain": [-8, 8],
+    "yDomain": [-8, 8],
+    "data": [
+      { "fn": "x * cos(x)", "derivative": { "fn": "cos(x) - x*sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "y = x cos x" },
+      { "fn": "-x * cos(x) - 2*sin(x)", "color": "#ef4444", "label": "y'' = -x cos x - 2 sin x" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y(0)=0, y''(0)=0" }
+    ]
+  },
+
+  "ex-5-7-q6": {
+    "title": "y = e^x sin(5x) and its second derivative",
+    "xDomain": [-1, 3],
+    "yDomain": [-50, 50],
+    "data": [
+      { "fn": "exp(x) * sin(5*x)", "color": "#6366f1", "label": "y = e^x sin(5x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y(0) = 0" },
+      { "x": 0.6283, "text": "Period ~ pi/5" }
+    ]
+  },
+
+  "ex-5-7-q11": {
+    "title": "y = 5 cos(x) - 3 sin(x): y'' + y = 0",
+    "xDomain": [-8, 8],
+    "yDomain": [-7, 7],
+    "data": [
+      { "fn": "5*cos(x) - 3*sin(x)", "color": "#6366f1", "label": "y = 5cos(x) - 3sin(x)" },
+      { "fn": "-5*cos(x) + 3*sin(x)", "color": "#ef4444", "label": "y'' = -5cos(x) + 3sin(x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y(0)=5, y''(0)=-5" },
+      { "x": 3.14159, "text": "y and y'' are negatives" }
+    ]
+  },
+
+  "misc-q18": {
+    "title": "f(x) = |x|^3: Smooth (twice differentiable), f''(x) = 6|x|",
+    "xDomain": [-3, 3],
+    "yDomain": [-2, 28],
+    "data": [
+      { "fn": "abs(x)^3", "color": "#6366f1", "label": "f(x) = |x|^3" },
+      { "fn": "6*abs(x)", "color": "#ef4444", "label": "f''(x) = 6|x|" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Smooth at origin" }
+    ]
+  },
+
+  "misc-q20": {
+    "title": "f(x) = |x| + |x - 2|: Continuous, not differentiable at x=0,2",
+    "xDomain": [-3, 5],
+    "yDomain": [-1, 8],
+    "data": [
+      { "fn": "2 - 2*x", "range": [-3, 0], "color": "#6366f1", "label": "2-2x (x < 0)" },
+      { "fn": "2", "range": [0, 2], "color": "#22c55e", "label": "2 (0 <= x <= 2)" },
+      { "fn": "2*x - 2", "range": [2, 5], "color": "#ef4444", "label": "2x-2 (x > 2)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Corner: not diff." },
+      { "x": 2, "text": "Corner: not diff." }
+    ]
+  },
+
+  "misc-q12": {
+    "title": "Parametric: x = 10(t - sin t), y = 12(1 - cos t) (Cycloid variant)",
+    "xDomain": [-2, 35],
+    "yDomain": [-1, 26],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "10*(t - sin(t))", "y": "12*(1 - cos(t))", "range": [0, 6.2832], "color": "#6366f1", "label": "x=10(t-sin t), y=12(1-cos t)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "Start: (0,0)" }
+    ]
+  },
+
+  "ex-5-5-q4": {
+    "title": "x^x and 2^sin(x): Logarithmic differentiation",
+    "xDomain": [0.1, 3],
+    "yDomain": [-1, 10],
+    "data": [
+      { "fn": "x^x", "range": [0.1, 3], "color": "#6366f1", "label": "y = x^x" },
+      { "fn": "2^sin(x)", "range": [0.1, 3], "color": "#22c55e", "label": "y = 2^sin(x)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "x^x = 1" },
+      { "x": 1.5708, "text": "2^sin(pi/2) = 2" }
+    ]
+  },
+
+  "ex-5-4-q5": {
+    "title": "log(cos(e^x)): Nested composition",
+    "xDomain": [-2, 1.1],
+    "yDomain": [-6, 1],
+    "data": [
+      { "fn": "log(cos(exp(x)))", "range": [-2, 1.1], "color": "#6366f1", "label": "y = ln(cos(e^x))" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y = ln(cos 1) ~ -0.31" }
+    ]
+  },
+
+  "ex-5-6-q5": {
+    "title": "Parametric: x = cos(t) - cos(2t), y = sin(t) - sin(2t)",
+    "xDomain": [-3, 3],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t) - cos(2*t)", "y": "sin(t) - sin(2*t)", "range": [0, 6.2832], "color": "#6366f1", "label": "Epicycloid-like curve" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "t = 0: (0, 0)" }
+    ]
+  },
+
+  "ex-5-1-q27": {
+    "title": "Piecewise: kx^2 if x <= 2, 3 if x > 2 (k = 3/4 for continuity)",
+    "xDomain": [-2, 5],
+    "yDomain": [-1, 5],
+    "data": [
+      { "fn": "(3/4)*x^2", "range": [-2, 2], "color": "#6366f1", "label": "(3/4)x^2 (x <= 2)" },
+      { "fn": "3", "range": [2, 5], "color": "#22c55e", "label": "3 (x > 2)" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Match: (3/4)(4) = 3" }
+    ]
+  },
+
+  "ex-5-1-q17": {
+    "title": "Piecewise: ax+1 / bx+3 at x=3 (a = b + 2/3 for continuity)",
+    "xDomain": [0, 6],
+    "yDomain": [0, 10],
+    "data": [
+      { "fn": "1*x + 1", "range": [0, 3], "color": "#6366f1", "label": "ax+1 (a=1, x <= 3)" },
+      { "fn": "(1/3)*x + 3", "range": [3, 6], "color": "#22c55e", "label": "bx+3 (b=1/3, x > 3)" }
+    ],
+    "annotations": [
+      { "x": 3, "text": "3a+1 = 3b+3 for continuity" }
+    ]
+  },
+
+  "ex-5-4-q2": {
+    "title": "e^(arcsin(x)): Exponential of inverse sine",
+    "xDomain": [-1, 1],
+    "yDomain": [0, 5],
+    "data": [
+      { "fn": "exp(asin(x))", "derivative": { "fn": "exp(asin(x))/sqrt(1-x^2)", "updateOnMouseMove": true }, "range": [-1, 1], "color": "#6366f1", "label": "y = e^(arcsin x)" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 1" },
+      { "x": 1, "text": "f(1) = e^(pi/2) ~ 4.81" }
+    ]
+  },
+
+  "ex-5-7-q4": {
+    "title": "y = log(x): First and second derivatives",
+    "xDomain": [0.1, 8],
+    "yDomain": [-3, 3],
+    "data": [
+      { "fn": "log(x)", "derivative": { "fn": "1/x", "updateOnMouseMove": true }, "range": [0.1, 8], "color": "#6366f1", "label": "y = ln x" },
+      { "fn": "1/x", "range": [0.1, 8], "color": "#22c55e", "label": "y' = 1/x" },
+      { "fn": "-1/x^2", "range": [0.1, 8], "color": "#ef4444", "label": "y'' = -1/x^2" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "ln(1)=0, y'=1" },
+      { "x": 2.71828, "text": "ln(e)=1" }
+    ]
+  },
+
+  "ex-5-7-q5": {
+    "title": "y = x^3 log(x) and its second derivative",
+    "xDomain": [0.1, 4],
+    "yDomain": [-5, 30],
+    "data": [
+      { "fn": "x^3 * log(x)", "derivative": { "fn": "3*x^2*log(x) + x^2", "updateOnMouseMove": true }, "range": [0.1, 4], "color": "#6366f1", "label": "y = x^3 ln x" },
+      { "fn": "6*x*log(x) + 5*x", "range": [0.1, 4], "color": "#ef4444", "label": "y'' = 6x ln x + 5x" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "y(1)=0, y''(1)=5" }
+    ]
+  },
+
+  "ex-5-5-q10": {
+    "title": "x^cos(x) and (x^2+1)/(x^2-1)",
+    "xDomain": [0.1, 5],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fn": "x^cos(x)", "range": [0.1, 5], "color": "#6366f1", "label": "x^cos(x)" },
+      { "fn": "(x^2 + 1)/(x^2 - 1)", "range": [0.1, 0.98], "color": "#22c55e", "label": "(x^2+1)/(x^2-1)" },
+      { "fn": "(x^2 + 1)/(x^2 - 1)", "range": [1.02, 5], "color": "#22c55e" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "Asymptote at x = 1" }
+    ]
+  },
+
+  "misc-q2": {
+    "title": "sin^3(x) + cos^6(x)",
+    "xDomain": [-6.5, 6.5],
+    "yDomain": [-1.2, 1.8],
+    "data": [
+      { "fn": "sin(x)^3 + cos(x)^6", "color": "#6366f1", "label": "sin^3 x + cos^6 x" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "f(0) = 1" },
+      { "x": 1.5708, "text": "f(pi/2) = 1" }
+    ]
+  },
+
+  "misc-q17": {
+    "title": "Involute: x = cos(t)+t*sin(t), y = sin(t)-t*cos(t)",
+    "xDomain": [-10, 10],
+    "yDomain": [-10, 10],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t) + t*sin(t)", "y": "sin(t) - t*cos(t)", "range": [0, 18.85], "color": "#6366f1", "label": "Involute of circle (a=1)" }
+    ],
+    "annotations": [
+      { "x": 1, "text": "t=0: start at (1,0)" }
+    ]
+  },
+
+  "ex-5-3-q5": {
+    "title": "Implicit curve: x^2 + xy + y^2 = 100 (Rotated ellipse)",
+    "xDomain": [-12, 12],
+    "yDomain": [-12, 12],
+    "data": [
+      { "fn": "(-x + sqrt(400 - 3*x^2)) / 2", "range": [-11.5, 11.5], "color": "#6366f1", "label": "Upper branch" },
+      { "fn": "(-x - sqrt(400 - 3*x^2)) / 2", "range": [-11.5, 11.5], "color": "#6366f1", "label": "Lower branch" }
+    ],
+    "annotations": [
+      { "x": 0, "text": "y = +/-10 at x=0" }
+    ]
+  },
+
+  "ex-5-6-q9": {
+    "title": "Parametric: x = a sec(t), y = b tan(t) (Hyperbola, a=2, b=1)",
+    "xDomain": [-8, 8],
+    "yDomain": [-5, 5],
+    "data": [
+      { "fnType": "parametric", "graphType": "polyline", "x": "2/cos(t)", "y": "tan(t)", "range": [-1.4, 1.4], "color": "#6366f1", "label": "Right branch (a=2, b=1)" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2/cos(t)", "y": "tan(t)", "range": [1.75, 4.54], "color": "#ef4444", "label": "Left branch" }
+    ],
+    "annotations": [
+      { "x": 2, "text": "Vertex at (2, 0)" }
+    ]
+  }
+}
