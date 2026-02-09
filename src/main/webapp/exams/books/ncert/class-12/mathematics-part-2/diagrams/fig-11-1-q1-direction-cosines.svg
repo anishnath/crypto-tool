@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1.5; }
+      .vector { stroke-width: 3; stroke-linecap: round; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .angle-text { font-family: sans-serif; font-size: 12px; fill: #4b5563; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563" />
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Direction Cosines: Line in YZ Plane</text>
+
+  <!-- Center -->
+  <circle cx="250" cy="250" r="2" fill="#000" />
+  <text x="240" y="265" class="label">O</text>
+
+  <!-- Axes -->
+  <!-- Z axis (Up) -->
+  <line x1="250" y1="250" x2="250" y2="50" class="axis" marker-end="url(#arrow)" />
+  <text x="265" y="60" class="label">Z</text>
+
+  <!-- Y axis (Right) -->
+  <line x1="250" y1="250" x2="450" y2="250" class="axis" marker-end="url(#arrow)" />
+  <text x="440" y="270" class="label">Y</text>
+
+  <!-- X axis (Coming out/Left perspective) -->
+  <line x1="250" y1="250" x2="100" y2="400" class="axis" marker-end="url(#arrow)" />
+  <text x="110" y="390" class="label">X</text>
+
+  <!-- The Line: 90 to X, 135 to Y, 45 to Z -->
+  <!-- 90 to X means it is in the YZ plane (vertical plane here) -->
+  <!-- 45 to Z means it splits +Z and something -->
+  <!-- 135 to Y means it is in the 2nd quadrant of YZ plane (Top-Left in 2D YZ terms) -->
+  <!-- Actually Y is right, Z is up. 135 from Y means pointing towards -Y. -->
+  <!-- So it points Up and Left in the YZ plane diagrammatically -->
+  
+  <line x1="250" y1="250" x2="110" y2="110" class="vector" stroke="#2563eb" marker-end="url(#arrow-blue)" />
+  <text x="100" y="100" class="label" fill="#2563eb">L</text>
+
+  <!-- Angles -->
+  <!-- Gamma (to Z) = 45 -->
+  <path d="M250,200 A50,50 0 0,0 215,215" fill="none" stroke="#ef4444" stroke-width="1.5" />
+  <text x="225" y="190" class="angle-text" fill="#ef4444">γ = 45°</text>
+
+  <!-- Beta (to Y) = 135 -->
+  <!-- Arc from +Y axis to the line -->
+  <path d="M300,250 A50,50 0 0,0 215,215" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,2" /> 
+  <!-- Note: SVG arc flags are tricky, simple visual approximation: large arc -->
+  <text x="320" y="200" class="angle-text" fill="#10b981">β = 135°</text>
+
+  <!-- Alpha (to X) = 90 -->
+  <!-- Harder to show 3D angle to X, but we can state it -->
+  <text x="130" y="320" class="angle-text" fill="#6b7280">α = 90° (⊥ to X)</text>
+  <path d="M240,260 L230,270" fill="none" stroke="#6b7280" stroke-width="1" /> <!-- Hinting perp -->
+
+  <!-- Coordinates Hint -->
+  <text x="250" y="450" class="label" font-weight="normal">Direction Cosines: (0, -1/√2, 1/√2)</text>
+
+  <!-- Watermark -->
+  <text x="480" y="480" class="watermark">8gwifi.org</text>
+</svg>

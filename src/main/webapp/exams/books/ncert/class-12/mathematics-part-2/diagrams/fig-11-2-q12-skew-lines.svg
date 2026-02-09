@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .eqn { font-family: monospace; font-size: 12px; fill: #4b5563; }
+      .axis { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f2937" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="label" font-size="16">Shortest Distance Between Skew Lines</text>
+
+  <!-- Visualizing 3D feel with pseudo-axes -->
+  <line x1="50" y1="350" x2="550" y2="350" class="axis" /> <!-- x-like -->
+  <line x1="50" y1="350" x2="50" y2="50" class="axis" />   <!-- y-like -->
+  <line x1="50" y1="350" x2="200" y2="200" class="axis" />  <!-- z-like perspective -->
+
+  <!-- Line 1: r = a1 + lambda b1 -->
+  <!-- Represents: (1,2,1) direction (1,-1,1) -->
+  <!-- Visually: A line floating 'higher' and going 'into' the page -->
+  <line x1="150" y1="150" x2="450" y2="100" stroke="#2563eb" stroke-width="3" />
+  <circle cx="250" cy="133" r="4" fill="#2563eb" /> <!-- Point A1 -->
+  <text x="250" y="125" class="label" fill="#2563eb">Line 1 (L₁)</text>
+  <text x="460" y="105" class="eqn" fill="#2563eb">r = a₁ + λb₁</text>
+
+  <!-- Line 2: r = a2 + mu b2 -->
+  <!-- Represents: (2,-1,-1) direction (2,1,2) -->
+  <!-- Visually: A line floating 'lower' and going 'across' differently -->
+  <line x1="150" y1="300" x2="500" y2="250" stroke="#dc2626" stroke-width="3" />
+  <circle cx="350" cy="271" r="4" fill="#dc2626" /> <!-- Point A2 -->
+  <text x="350" y="300" class="label" fill="#dc2626">Line 2 (L₂)</text>
+  <text x="510" y="255" class="eqn" fill="#dc2626">r = a₂ + μb₂</text>
+
+  <!-- Shortest Distance Segment -->
+  <!-- Perpendicular to both lines -->
+  <line x1="300" y1="125" x2="300" y2="278" stroke="#059669" stroke-width="2" stroke-dasharray="5,5" />
+  <text x="310" y="200" class="label" fill="#059669" text-anchor="start">SD (d)</text>
+  
+  <!-- Right Angle indicators -->
+  <!-- Top angle -->
+  <path d="M290,135 L300,135 L300,125" fill="none" stroke="#059669" stroke-width="1.5" />
+  <!-- Bottom angle -->
+  <path d="M300,278 L300,268 L310,268" fill="none" stroke="#059669" stroke-width="1.5" transform="rotate(-15, 300, 278)" />
+
+  <!-- Formula Hint -->
+  <rect x="380" y="320" width="200" height="60" rx="5" fill="#f3f4f6" stroke="#d1d5db" />
+  <text x="480" y="340" class="label" font-size="12">Shortest Distance Formula:</text>
+  <text x="480" y="365" class="eqn" text-anchor="middle">| (b₁ × b₂) · (a₂ - a₁) | / |b₁ × b₂|</text>
+
+  <!-- Watermark -->
+  <text x="580" y="390" class="watermark">8gwifi.org</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .line { stroke-width: 2.5; stroke-linecap: round; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .angle-text { font-family: sans-serif; font-size: 12px; fill: #4b5563; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Angle Between Two Intersecting Lines</text>
+
+  <!-- Intersection Point Origin -->
+  <circle cx="250" cy="200" r="3" fill="#000" />
+  <text x="250" y="225" class="label">P</text>
+
+  <!-- Line 1: Direction d1 -->
+  <!-- Goes from bottom-left to top-right steep -->
+  <line x1="200" y1="350" x2="300" y2="50" class="line" stroke="#2563eb" />
+  <text x="310" y="60" class="label" fill="#2563eb">L₁</text>
+  <text x="320" y="80" class="angle-text" fill="#2563eb">d₁</text>
+
+  <!-- Line 2: Direction d2 -->
+  <!-- Goes from top-left to bottom-right shallow -->
+  <line x1="50" y1="150" x2="450" y2="250" class="line" stroke="#dc2626" />
+  <text x="440" y="240" class="label" fill="#dc2626">L₂</text>
+  <text x="430" y="260" class="angle-text" fill="#dc2626">d₂</text>
+
+  <!-- Angle Theta -->
+  <!-- Arc between the two lines at intersection -->
+  <!-- Line 1 vector is roughly (1, -3), angle -71 deg -->
+  <!-- Line 2 vector is roughly (4, 1), angle 14 deg -->
+  <!-- Angle between is about 85 deg -->
+  <path d="M280,208 A40,40 0 0,1 262,162" fill="none" stroke="#059669" stroke-width="2" />
+  <text x="290" y="180" class="angle-text" fill="#059669" font-size="16" font-weight="bold">θ</text>
+
+  <!-- Formula Hint -->
+  <rect x="50" y="320" width="180" height="50" rx="5" fill="#f3f4f6" stroke="#d1d5db" />
+  <text x="140" y="350" class="angle-text" text-anchor="middle">cos θ = |d₁ · d₂| / (|d₁||d₂|)</text>
+
+  <!-- Perpendicular Case visual hint -->
+  <text x="400" y="350" class="angle-text" text-anchor="middle">If d₁ · d₂ = 0</text>
+  <text x="400" y="370" class="angle-text" text-anchor="middle">Then θ = 90° (⊥)</text>
+
+  <!-- Watermark -->
+  <text x="480" y="390" class="watermark">8gwifi.org</text>
+</svg>

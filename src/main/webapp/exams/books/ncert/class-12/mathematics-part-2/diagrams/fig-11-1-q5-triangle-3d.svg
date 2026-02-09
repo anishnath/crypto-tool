@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .axis { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4; }
+      .triangle { stroke-width: 2; fill: rgba(37, 99, 235, 0.1); stroke-linejoin: round; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .coord { font-family: monospace; font-size: 11px; fill: #4b5563; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Triangle in 3D Space</text>
+
+  <!-- 3D Axes for context -->
+  <line x1="250" y1="250" x2="250" y2="50" class="axis" /> <!-- Z -->
+  <text x="265" y="60" class="label" font-size="12" fill="#9ca3af">Z</text>
+  <line x1="250" y1="250" x2="450" y2="350" class="axis" /> <!-- Y (approx) -->
+  <text x="440" y="360" class="label" font-size="12" fill="#9ca3af">Y</text>
+  <line x1="250" y1="250" x2="50" y2="350" class="axis" />  <!-- X (approx) -->
+  <text x="60" y="360" class="label" font-size="12" fill="#9ca3af">X</text>
+  
+  <circle cx="250" cy="250" r="2" fill="#9ca3af" /> <!-- Origin -->
+
+  <!-- Vertices (Projected roughly) -->
+  <!-- A(3, 5, -4): X+, Y+, Z- -->
+  <!-- B(-1, 1, 2): X-, Y+, Z+ -->
+  <!-- C(-5, -5, -2): X-, Y-, Z- -->
+
+  <!-- Let's map roughly: x->left/down, y->right/down, z->up -->
+  <!-- A: right, right, down -> Bottom Right area -->
+  <!-- B: left, right, up -> Top Right area -->
+  <!-- C: left, left, down -> Bottom Left area -->
+
+  <!-- Point A -->
+  <circle cx="380" cy="400" r="4" fill="#dc2626" />
+  <text x="400" y="400" class="label" fill="#dc2626">A</text>
+  <text x="400" y="420" class="coord">3, 5, -4</text>
+
+  <!-- Point B -->
+  <circle cx="300" cy="150" r="4" fill="#16a34a" />
+  <text x="300" y="130" class="label" fill="#16a34a">B</text>
+  <text x="300" y="145" class="coord">-1, 1, 2</text>
+
+  <!-- Point C -->
+  <circle cx="100" cy="350" r="4" fill="#9333ea" />
+  <text x="80" y="350" class="label" fill="#9333ea">C</text>
+  <text x="80" y="370" class="coord">-5, -5, -2</text>
+
+  <!-- Triangle Edges -->
+  <path d="M380,400 L300,150 L100,350 Z" class="triangle" stroke="#2563eb" />
+
+  <!-- Direction Vectors hint -->
+  <text x="350" y="275" class="coord" fill="#2563eb">AB</text>
+  <text x="200" y="250" class="coord" fill="#2563eb">BC</text>
+  <text x="240" y="390" class="coord" fill="#2563eb">CA</text>
+
+  <!-- Watermark -->
+  <text x="480" y="480" class="watermark">8gwifi.org</text>
+</svg>

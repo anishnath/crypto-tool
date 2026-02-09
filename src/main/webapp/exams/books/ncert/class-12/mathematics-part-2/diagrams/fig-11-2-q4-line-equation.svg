@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .vector-label { font-family: serif; font-size: 14px; font-style: italic; font-weight: bold; }
+      .eqn { font-family: monospace; font-size: 12px; fill: #4b5563; }
+      .axis { stroke: #e5e7eb; stroke-width: 1.5; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f2937" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="label" font-size="16">Vector Equation of a Line</text>
+
+  <!-- Origin -->
+  <circle cx="100" cy="350" r="3" fill="#000" />
+  <text x="90" y="365" class="label">O</text>
+
+  <!-- Axes (Background) -->
+  <line x1="100" y1="350" x2="550" y2="350" class="axis" />
+  <line x1="100" y1="350" x2="100" y2="50" class="axis" />
+  <line x1="100" y1="350" x2="20" y2="390" class="axis" />
+
+  <!-- Fixed Point A(1, 2, 3) -->
+  <circle cx="200" cy="200" r="4" fill="#dc2626" />
+  <text x="180" y="195" class="label" fill="#dc2626">A(position a)</text>
+  
+  <!-- Vector a (O to A) -->
+  <line x1="100" y1="350" x2="195" y2="205" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="140" y="270" class="vector-label" fill="#dc2626">a</text>
+
+  <!-- Vector b (Parallel Direction) floating separately -->
+  <line x1="400" y1="300" x2="550" y2="225" stroke="#059669" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="480" y="280" class="vector-label" fill="#059669">b</text>
+  <text x="480" y="300" class="eqn" fill="#059669">i + j - 2k</text>
+
+  <!-- The Line L (Through A, Parallel to b) -->
+  <line x1="120" y1="240" x2="420" y2="90" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="10,5" />
+  <text x="400" y="110" class="label" fill="#2563eb">Line L</text>
+
+  <!-- Arbitrary Point P (r) on Line -->
+  <circle cx="300" cy="150" r="4" fill="#1f2937" />
+  <text x="310" y="140" class="label">P(r)</text>
+
+  <!-- Vector r (O to P) -->
+  <line x1="100" y1="350" x2="295" y2="155" stroke="#1f2937" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="200" y="240" class="vector-label" fill="#1f2937">r</text>
+
+  <!-- Vector AP -->
+  <line x1="200" y1="200" x2="295" y2="153" stroke="#9333ea" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="250" y="170" class="vector-label" fill="#9333ea">λb</text>
+
+  <!-- Equation Box -->
+  <rect x="350" y="320" width="200" height="50" rx="5" fill="#f9fafb" stroke="#e5e7eb" />
+  <text x="450" y="350" class="eqn" text-anchor="middle" font-size="14" font-weight="bold">r = a + λb</text>
+
+  <!-- Watermark -->
+  <text x="580" y="390" class="watermark">8gwifi.org</text>
+</svg>

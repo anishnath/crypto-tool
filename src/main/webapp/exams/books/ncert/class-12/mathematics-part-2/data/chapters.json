@@ -2532,8 +2532,9 @@
       "Check: $0^2 + \\left(-\\dfrac{1}{\\sqrt{2}}\\right)^2 + \\left(\\dfrac{1}{\\sqrt{2}}\\right)^2 = 0 + \\frac{1}{2} + \\frac{1}{2} = 1$ → correct"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "3D coordinate system illustrating a line in the YZ plane making 90° with X-axis, 135° with Y-axis, and 45° with Z-axis.",
+      "diagram_svg": "fig-11-1-q1-direction-cosines.svg"
     },
     "tags": [
       "direction-cosines",
@@ -2688,8 +2689,9 @@
       "Similarly for BC and CA (after calculation)"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "3D plot of a triangle with vertices A(3,5,-4), B(-1,1,2), and C(-5,-5,-2) relative to the axes. Shows the sides as direction vectors for finding direction cosines.",
+      "diagram_svg": "fig-11-1-q5-triangle-3d.svg"
     },
     "tags": [
       "direction-cosines",
@@ -2853,8 +2855,9 @@
       "Cartesian form: $\\dfrac{x-1}{1} = \\dfrac{y-2}{1} = \\dfrac{z-3}{-2}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Visual representation of the vector equation of a line passing through point A(vector a) and parallel to vector b. Shows the triangle law: r = a + λb.",
+      "diagram_svg": "fig-11-2-q4-line-equation.svg"
     },
     "tags": [
       "equation-of-line",
@@ -3098,8 +3101,9 @@
       "$-9p - 2p + 10 = 0 \\implies -11p = -10 \\implies p = 10/11$ → actual NCERT: $p = \\pm 1$ (after full correct calculation)"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "Illustration of two intersecting lines L1 and L2 with directions d1 and d2, intersecting at an angle θ. Highlights the condition for perpendicularity (dot product = 0).",
+      "diagram_svg": "fig-11-2-q10-lines-angle.svg"
     },
     "tags": [
       "perpendicular-lines",
@@ -3179,8 +3183,9 @@
       "Shortest distance = $\\dfrac{9}{3\\sqrt{2}} = \\dfrac{3}{\\sqrt{2}} = \\dfrac{3\\sqrt{2}}{2}$ → actual NCERT: $\\sqrt{3}$"
     ],
     "visual_content": {
-      "has_diagram": false,
-      "diagram_description": ""
+      "has_diagram": true,
+      "diagram_description": "3D visualization of two skew lines L1 and L2 which are neither parallel nor intersecting. A dashed line segment connecting them represents the unique shortest distance, which is perpendicular to both lines.",
+      "diagram_svg": "fig-11-2-q12-skew-lines.svg"
     },
     "tags": [
       "shortest-distance",
