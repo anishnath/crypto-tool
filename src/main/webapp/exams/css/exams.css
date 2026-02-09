@@ -250,6 +250,14 @@ img {
     font-size: var(--text-sm);
 }
 
+.logo-img {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: white;
+    padding: 2px;
+}
+
 .logo-text {
     display: none;
 }

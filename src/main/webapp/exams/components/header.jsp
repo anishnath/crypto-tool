@@ -185,18 +185,21 @@
                 </svg>
             </button>
             <a href="<%=request.getContextPath()%>/exams/" class="logo">
-                <span class="logo-icon">EP</span>
-                <span class="logo-text">ExamPrep</span>
+                <img src="<%=request.getContextPath()%>/images/site/logo.png" alt="8gwifi.org" class="logo-img" width="44" height="44">
+                <span class="logo-text">8gwifi.org</span>
             </a>
         </div>
 
         <nav class="header-nav">
-            <a href="<%=request.getContextPath()%>/exams/">Home</a>
-            <% if (isLoggedIn) { %>
-            <a href="<%=request.getContextPath()%>/exams/dashboard.jsp">My Dashboard</a>
-            <% } %>
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
+            <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
+            <a href="<%=request.getContextPath()%>/physics/">Physics</a>
+            <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory Games</a>
             <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
             <a href="<%=request.getContextPath()%>/">Tools</a>
+            <% if (isLoggedIn) { %>
+            <a href="<%=request.getContextPath()%>/exams/dashboard.jsp">Dashboard</a>
+            <% } %>
         </nav>
 
         <div class="header-right">
@@ -301,8 +304,8 @@
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
                                     <span class="logo">
-                                        <span class="logo-icon">EP</span>
-                                        <span>ExamPrep</span>
+                                        <img src="<%=request.getContextPath()%>/images/site/logo.png" alt="8gwifi.org" class="logo-img" width="44" height="44">
+                                        <span>8gwifi.org</span>
                                     </span>
         <button class="menu-btn" onclick="closeMobileMenu()" aria-label="Close menu">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -314,6 +317,13 @@
     </div>
     <nav class="mobile-menu-nav">
         <a href="<%=request.getContextPath()%>/exams/">Home</a>
+        <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
+        <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
+        <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+        <a href="<%=request.getContextPath()%>/exams/math-memory/">Mental Memory</a>
+        <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
+        <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
+        <a href="<%=request.getContextPath()%>/">Tools</a>
         <% if (isLoggedIn) { %>
         <a href="<%=request.getContextPath()%>/exams/dashboard.jsp"
            style="display: flex; align-items: center; gap: var(--space-2);">
@@ -324,12 +334,9 @@
                 <rect x="14" y="14" width="7" height="7"></rect>
                 <rect x="3" y="14" width="7" height="7"></rect>
             </svg>
-            My Dashboard
+            Dashboard
         </a>
         <% } %>
-        <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
-        <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
-        <a href="<%=request.getContextPath()%>/">Tools</a>
         <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: var(--space-2);">
             <span style="font-weight: 600;">&#120143;</span>
             Follow @anish2good
