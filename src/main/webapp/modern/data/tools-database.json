@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-05T00:00:00.000Z",
-  "totalTools": 374,
+  "totalTools": 382,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -10,6 +10,7 @@
     "DevOps & Infrastructure",
     "Developer Tools",
     "Document Tools",
+    "Education",
     "File Sharing",
     "Finance",
     "Health",
@@ -2641,6 +2642,62 @@
       "category": "Physics",
       "keywords": "physics calculators, physics tools, mechanics, optics, waves, thermodynamics, electromagnetism, modern physics",
       "description": "Physics Calculators - 42 free physics calculators with step-by-step solutions"
+    },
+    {
+      "name": "NCERT Solutions - Class 9 Mathematics",
+      "url": "exams/books/ncert/class-9/mathematics/",
+      "category": "Education",
+      "keywords": "ncert solutions class 9 mathematics, cbse class 9, textbook solutions, step by step",
+      "description": "NCERT Class 9 Maths Solutions - 15 chapters, 244 questions with step-by-step explanations"
+    },
+    {
+      "name": "NCERT Solutions - Class 10 Mathematics",
+      "url": "exams/books/ncert/class-10/mathematics/",
+      "category": "Education",
+      "keywords": "ncert solutions class 10 mathematics, cbse class 10, board exam, textbook solutions",
+      "description": "NCERT Class 10 Maths Solutions - 14 chapters, 354 questions with step-by-step explanations"
+    },
+    {
+      "name": "NCERT Solutions - Class 11 Mathematics",
+      "url": "exams/books/ncert/class-11/mathematics/",
+      "category": "Education",
+      "keywords": "ncert solutions class 11 mathematics, cbse class 11, textbook solutions, sets, trigonometry, statistics",
+      "description": "NCERT Class 11 Maths Solutions - 14 chapters, 529 questions with step-by-step explanations"
+    },
+    {
+      "name": "NCERT Solutions - Class 12 Mathematics Part 1",
+      "url": "exams/books/ncert/class-12/mathematics-part-1/",
+      "category": "Education",
+      "keywords": "ncert solutions class 12 maths part 1, relations functions, matrices, determinants, derivatives, continuity",
+      "description": "NCERT Class 12 Maths Part 1 Solutions - 6 chapters, 413 questions with interactive graphs"
+    },
+    {
+      "name": "NCERT Solutions - Class 12 Mathematics Part 2",
+      "url": "exams/books/ncert/class-12/mathematics-part-2/",
+      "category": "Education",
+      "keywords": "ncert solutions class 12 maths part 2, integrals, differential equations, vectors, 3d geometry, linear programming, probability",
+      "description": "NCERT Class 12 Maths Part 2 Solutions - 7 chapters, 506 questions with interactive plots"
+    },
+    {
+      "name": "Quick Math - Mental Arithmetic",
+      "url": "exams/quick-math/",
+      "category": "Education",
+      "keywords": "quick math, vedic math, mental arithmetic, speed calculation, tricks, ssc, bank, cat, gre",
+      "description": "Quick Math - 150+ mental math tricks and Vedic math shortcuts for competitive exams"
+    },
+    {
+      "name": "Math Memory Games",
+      "url": "exams/math-memory/",
+      "category": "Education",
+      "keywords": "math memory games, brain training, mental calculation, working memory, cognitive skills",
+      "description": "Math Memory Games - 16 free brain training games to improve memory and mental calculation"
+    },
+    {
+      "name": "CBSE Board Practice",
+      "url": "exams/cbse-board/",
+      "category": "Education",
+      "keywords": "cbse board exam, class 10 mathematics, practice sets, mock tests, board preparation",
+      "description": "CBSE Class 10 Mathematics - Practice sets and mock tests with detailed solutions"
     }
   ]
 }
