@@ -6,7 +6,8 @@
     "data": [
       { "fn": "-abs(x)", "color": "#6366f1", "label": "f(x) = -|x|" },
       { "fn": "sqrt(9 - x^2)", "color": "#22c55e", "label": "upper semicircle" },
-      { "fn": "-sqrt(9 - x^2)", "color": "#22c55e", "label": "lower semicircle" }
+      { "fn": "-sqrt(9 - x^2)", "color": "#22c55e", "label": "lower semicircle" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3 * cos(t)", "y": "3 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "x^2 + y^2 = 9 (parametric)" }
     ],
     "annotations": [
       { "x": 0, "text": "Origin" }
@@ -28,7 +29,7 @@
     "xDomain": [-3, 5],
     "yDomain": [-15, 30],
     "data": [
-      { "fn": "x^2 + 2", "color": "#6366f1", "label": "f(x) = x\u00b2 + 2" },
+      { "fn": "x^2 + 2", "derivative": { "fn": "2 * x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x\u00b2 + 2" },
       { "fn": "2 - 3*x", "color": "#ef4444", "label": "f(x) = 2 - 3x", "range": [0, 5] }
     ],
     "annotations": [
@@ -40,7 +41,7 @@
     "xDomain": [-1, 12],
     "yDomain": [-2, 35],
     "data": [
-      { "fn": "x^2", "color": "#6366f1", "label": "f(x) = x\u00b2", "range": [0, 3] },
+      { "fn": "x^2", "derivative": { "fn": "2 * x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x\u00b2", "range": [0, 3] },
       { "fn": "3*x", "color": "#22c55e", "label": "f(x) = 3x", "range": [3, 10] }
     ],
     "annotations": [
@@ -52,7 +53,7 @@
     "xDomain": [-1, 10],
     "yDomain": [-1, 4],
     "data": [
-      { "fn": "sqrt(x - 1)", "color": "#6366f1", "label": "f(x) = \u221a(x - 1)" }
+      { "fn": "sqrt(x - 1)", "derivative": { "fn": "1 / (2 * sqrt(x - 1))", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = \u221a(x - 1)" }
     ],
     "annotations": [
       { "x": 1, "text": "Domain starts at x = 1" }
@@ -74,7 +75,7 @@
     "xDomain": [-5, 5],
     "yDomain": [-0.5, 1.5],
     "data": [
-      { "fn": "x^2 / (1 + x^2)", "color": "#6366f1", "label": "f(x) = x\u00b2/(1 + x\u00b2)" }
+      { "fn": "x^2 / (1 + x^2)", "derivative": { "fn": "(2 * x) / (1 + x^2)^2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x\u00b2/(1 + x\u00b2)" }
     ],
     "annotations": [
       { "x": 0, "text": "f(0) = 0, approaches 1 as x \u2192 \u00b1\u221e" }

@@ -4,7 +4,7 @@
     "xDomain": [-1, 2],
     "yDomain": [-50, 50],
     "data": [
-      { "fn": "(1 - 2*x)^5", "color": "#6366f1", "label": "(1 - 2x)\u2075" },
+      { "fn": "(1 - 2*x)^5", "derivative": { "fn": "-10 * (1 - 2*x)^4", "updateOnMouseMove": true }, "color": "#6366f1", "label": "(1 - 2x)\u2075" },
       { "fn": "1 - 10*x + 40*x^2 - 80*x^3 + 80*x^4 - 32*x^5", "color": "#22c55e", "label": "expanded form" }
     ],
     "annotations": [
@@ -17,7 +17,7 @@
     "xDomain": [-1, 4],
     "yDomain": [-100, 1000],
     "data": [
-      { "fn": "(2*x - 3)^6", "color": "#6366f1", "label": "(2x - 3)\u2076" }
+      { "fn": "(2*x - 3)^6", "derivative": { "fn": "12 * (2*x - 3)^5", "updateOnMouseMove": true }, "color": "#6366f1", "label": "(2x - 3)\u2076" }
     ],
     "annotations": [
       { "x": 1.5, "text": "Minimum at x = 3/2" },

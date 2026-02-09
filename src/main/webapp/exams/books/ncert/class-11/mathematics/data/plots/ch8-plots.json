@@ -4,7 +4,7 @@
     "xDomain": [0, 10],
     "yDomain": [-5, 120],
     "data": [
-      { "fn": "x^2 + 2*x", "color": "#6366f1", "label": "f(x) = x\u00b2 + 2x" }
+      { "fn": "x^2 + 2*x", "derivative": { "fn": "2*x + 2", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x\u00b2 + 2x" }
     ],
     "annotations": [
       { "x": 1, "text": "a\u2081 = 3" },
@@ -17,7 +17,7 @@
     "xDomain": [0, 10],
     "yDomain": [-0.5, 3],
     "data": [
-      { "fn": "2.5 * (0.5)^(x - 1)", "color": "#6366f1", "label": "f(x) = 2.5 \u00d7 0.5^(x-1)" }
+      { "fn": "2.5 * (0.5)^(x - 1)", "derivative": { "fn": "2.5 * (0.5)^(x - 1) * log(0.5)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = 2.5 \u00d7 0.5^(x-1)" }
     ],
     "annotations": [
       { "x": 1, "text": "a\u2081 = 5/2" },
@@ -30,7 +30,7 @@
     "xDomain": [0, 8],
     "yDomain": [-100, 8000],
     "data": [
-      { "fn": "30 * 2^x", "color": "#ef4444", "label": "f(t) = 30 \u00d7 2\u1d57" }
+      { "fn": "30 * 2^x", "derivative": { "fn": "30 * 2^x * log(2)", "updateOnMouseMove": true }, "color": "#ef4444", "label": "f(t) = 30 \u00d7 2\u1d57" }
     ],
     "annotations": [
       { "x": 0, "text": "Initial: 30 bacteria" },

@@ -4,7 +4,8 @@
     "xDomain": [-5, 5],
     "yDomain": [-2, 6],
     "data": [
-      { "fn": "x^2 + (y - 2)^2 - 4", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 + (y - 2)^2 - 4", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2 * cos(t)", "y": "2 + 2 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Centre (0, 2)" }
@@ -15,7 +16,8 @@
     "xDomain": [-9, 5],
     "yDomain": [-4, 10],
     "data": [
-      { "fn": "(x + 2)^2 + (y - 3)^2 - 16", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "(x + 2)^2 + (y - 3)^2 - 16", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-2 + 4 * cos(t)", "y": "3 + 4 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": -2, "text": "Centre (-2, 3)" }
@@ -26,7 +28,8 @@
     "xDomain": [-3, 5],
     "yDomain": [-3, 5],
     "data": [
-      { "fn": "(x - 1)^2 + (y - 1)^2 - 2", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "(x - 1)^2 + (y - 1)^2 - 2", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "1 + sqrt(2) * cos(t)", "y": "1 + sqrt(2) * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 1, "text": "Centre (1, 1), r = sqrt(2)" }
@@ -37,7 +40,8 @@
     "xDomain": [-14, 4],
     "yDomain": [-6, 12],
     "data": [
-      { "fn": "(x + 5)^2 + (y - 3)^2 - 36", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "(x + 5)^2 + (y - 3)^2 - 36", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-5 + 6 * cos(t)", "y": "3 + 6 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": -5, "text": "Centre (-5, 3), r = 6" }
@@ -48,7 +52,8 @@
     "xDomain": [-8, 12],
     "yDomain": [-6, 14],
     "data": [
-      { "fn": "x^2 + y^2 - 4*x - 8*y - 45", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 + y^2 - 4*x - 8*y - 45", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2 + sqrt(65) * cos(t)", "y": "4 + sqrt(65) * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 2, "text": "Centre (2, 4), r = sqrt(65)" }
@@ -60,7 +65,8 @@
     "yDomain": [-4, 12],
     "data": [
       { "fn": "(x - 3)^2 + (y - 4)^2 - 10", "fnType": "implicit", "color": "#6366f1" },
-      { "fn": "-4 * x + 16", "color": "#22c55e" }
+      { "fn": "-4 * x + 16", "color": "#22c55e" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3 + sqrt(10) * cos(t)", "y": "4 + sqrt(10) * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 3, "text": "Centre (3, 4)" },
@@ -73,7 +79,8 @@
     "xDomain": [-4, 8],
     "yDomain": [-4, 8],
     "data": [
-      { "fn": "(x - 2)^2 + (y - 2)^2 - 13", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "(x - 2)^2 + (y - 2)^2 - 13", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2 + sqrt(13) * cos(t)", "y": "2 + sqrt(13) * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 2, "text": "Centre (2, 2)" },
@@ -85,7 +92,8 @@
     "xDomain": [-8, 8],
     "yDomain": [-8, 8],
     "data": [
-      { "fn": "x^2 + y^2 - 25", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 + y^2 - 25", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "5 * cos(t)", "y": "5 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Centre (0, 0), r = 5" },
@@ -97,7 +105,8 @@
     "xDomain": [-5, 15],
     "yDomain": [-15, 15],
     "data": [
-      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3 * t^2", "y": "6 * t", "range": [-3, 3], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 3, "text": "Focus (3, 0)" },
@@ -109,7 +118,8 @@
     "xDomain": [-10, 10],
     "yDomain": [-3, 15],
     "data": [
-      { "fn": "x^2 - 6 * y", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 - 6 * y", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "t", "y": "t^2 / 6", "range": [-8, 8], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Focus (0, 3/2)" },
@@ -121,7 +131,8 @@
     "xDomain": [-15, 5],
     "yDomain": [-15, 15],
     "data": [
-      { "fn": "y^2 + 8 * x", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "y^2 + 8 * x", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-2 * t^2", "y": "4 * t", "range": [-3, 3], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": -2, "text": "Focus (-2, 0)" },
@@ -133,7 +144,8 @@
     "xDomain": [-15, 15],
     "yDomain": [-15, 5],
     "data": [
-      { "fn": "x^2 + 16 * y", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 + 16 * y", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "t", "y": "-t^2 / 16", "range": [-12, 12], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Focus (0, -4)" },
@@ -145,7 +157,8 @@
     "xDomain": [-10, 20],
     "yDomain": [-25, 25],
     "data": [
-      { "fn": "y^2 - 24 * x", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "y^2 - 24 * x", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "6 * t^2", "y": "12 * t", "range": [-2, 2], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 6, "text": "Focus (6, 0)" },
@@ -157,7 +170,8 @@
     "xDomain": [-5, 15],
     "yDomain": [-15, 15],
     "data": [
-      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "y^2 - 12 * x", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3 * t^2", "y": "6 * t", "range": [-3, 3], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Vertex (0, 0)" },
@@ -169,7 +183,8 @@
     "xDomain": [-3, 12],
     "yDomain": [-10, 10],
     "data": [
-      { "fn": "y^2 - (9/2) * x", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "y^2 - (9/2) * x", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "(9/8) * t^2", "y": "(9/4) * t", "range": [-3, 3], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Vertex (0, 0)" },
@@ -181,7 +196,8 @@
     "xDomain": [-9, 9],
     "yDomain": [-6, 6],
     "data": [
-      { "fn": "x^2 / 36 + y^2 / 16 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 36 + y^2 / 16 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "6 * cos(t)", "y": "4 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 6, "text": "Vertex (6, 0)" },
@@ -194,7 +210,8 @@
     "xDomain": [-5, 5],
     "yDomain": [-8, 8],
     "data": [
-      { "fn": "x^2 / 4 + y^2 / 25 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 4 + y^2 / 25 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2 * cos(t)", "y": "5 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Vertices (0, +/-5)" },
@@ -206,7 +223,8 @@
     "xDomain": [-8, 8],
     "yDomain": [-5, 5],
     "data": [
-      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "5 * cos(t)", "y": "3 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 5, "text": "Vertex (5, 0)" },
@@ -220,7 +238,8 @@
     "xDomain": [-5, 5],
     "yDomain": [-4, 4],
     "data": [
-      { "fn": "x^2 / 9 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 9 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "3 * cos(t)", "y": "2 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 3, "text": "Major axis end (3, 0)" },
@@ -234,7 +253,9 @@
     "data": [
       { "fn": "x^2 / 16 - y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" },
       { "fn": "(3/4) * x", "color": "#a3a3a3", "skipTip": true },
-      { "fn": "-(3/4) * x", "color": "#a3a3a3", "skipTip": true }
+      { "fn": "-(3/4) * x", "color": "#a3a3a3", "skipTip": true },
+      { "fnType": "parametric", "graphType": "polyline", "x": "4 / cos(t)", "y": "3 * tan(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-4 / cos(t)", "y": "-3 * tan(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 4, "text": "Vertex (4, 0)" },
@@ -249,7 +270,9 @@
     "data": [
       { "fn": "x^2 / 4 - y^2 / 5 - 1", "fnType": "implicit", "color": "#6366f1" },
       { "fn": "(sqrt(5)/2) * x", "color": "#a3a3a3", "skipTip": true },
-      { "fn": "-(sqrt(5)/2) * x", "color": "#a3a3a3", "skipTip": true }
+      { "fn": "-(sqrt(5)/2) * x", "color": "#a3a3a3", "skipTip": true },
+      { "fnType": "parametric", "graphType": "polyline", "x": "2 / cos(t)", "y": "sqrt(5) * tan(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-2 / cos(t)", "y": "-sqrt(5) * tan(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 2, "text": "Vertex (2, 0)" },
@@ -264,7 +287,9 @@
     "data": [
       { "fn": "y^2 / 9 - x^2 / 1 - 1", "fnType": "implicit", "color": "#6366f1" },
       { "fn": "3 * x", "color": "#a3a3a3", "skipTip": true },
-      { "fn": "-3 * x", "color": "#a3a3a3", "skipTip": true }
+      { "fn": "-3 * x", "color": "#a3a3a3", "skipTip": true },
+      { "fnType": "parametric", "graphType": "polyline", "x": "tan(t)", "y": "3 / cos(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "-tan(t)", "y": "-3 / cos(t)", "range": [-1.47, 1.47], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Vertices (0, +/-3)" },
@@ -276,7 +301,8 @@
     "xDomain": [-15, 15],
     "yDomain": [-3, 12],
     "data": [
-      { "fn": "x^2 - 20 * y", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 - 20 * y", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "t", "y": "t^2 / 20", "range": [-12, 12], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Vertex (0, 0)" },
@@ -289,7 +315,8 @@
     "xDomain": [-6, 6],
     "yDomain": [-1, 4],
     "data": [
-      { "fn": "x^2 / 16 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 16 + y^2 / 4 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "4 * cos(t)", "y": "2 * sin(t)", "range": [0, 3.14159], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 0, "text": "Top (0, 2)" },
@@ -303,7 +330,8 @@
     "xDomain": [-8, 8],
     "yDomain": [-5, 5],
     "data": [
-      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" }
+      { "fn": "x^2 / 25 + y^2 / 9 - 1", "fnType": "implicit", "color": "#6366f1" },
+      { "fnType": "parametric", "graphType": "polyline", "x": "5 * cos(t)", "y": "3 * sin(t)", "range": [0, 6.2832], "color": "#22c55e", "label": "Parametric trace" }
     ],
     "annotations": [
       { "x": 4, "text": "Flag post F1 (4, 0)" },

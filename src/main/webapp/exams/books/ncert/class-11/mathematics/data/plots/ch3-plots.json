@@ -4,8 +4,8 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "cos(x)", "color": "#6366f1", "label": "cos(x)" },
-      { "fn": "sin(x)", "color": "#22c55e", "label": "sin(x)" }
+      { "fn": "cos(x)", "derivative": { "fn": "-sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "cos(x)" },
+      { "fn": "sin(x)", "derivative": { "fn": "cos(x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "sin(x)" }
     ]
   },
   "ex-3-2-q6": {
@@ -13,7 +13,7 @@
     "xDomain": [-12.56, 12.56],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "sin(x)", "color": "#6366f1", "label": "sin(x)" }
+      { "fn": "sin(x)", "derivative": { "fn": "cos(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "sin(x)" }
     ],
     "annotations": [
       { "x": 13.35, "text": "sin(765°) = sin(45°)" }
@@ -24,8 +24,9 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "sin(x)", "color": "#6366f1", "label": "sin(x)" },
-      { "fn": "tan(x)", "color": "#ef4444", "label": "tan(x)", "range": [-1.5, 1.5] }
+      { "fn": "sin(x)", "derivative": { "fn": "cos(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "sin(x)" },
+      { "fn": "tan(x)", "derivative": { "fn": "1 / cos(x)^2", "updateOnMouseMove": true }, "color": "#ef4444", "label": "tan(x)", "range": [-1.5, 1.5] },
+      { "fnType": "parametric", "graphType": "polyline", "x": "cos(t)", "y": "sin(t)", "range": [0, 6.2832], "color": "#f59e0b", "label": "Unit circle", "skipTip": true }
     ]
   },
   "ex-3-3-q12": {
@@ -69,8 +70,8 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "cos(4*x)", "color": "#6366f1", "label": "cos(4x)" },
-      { "fn": "1 - 8*sin(x)^2*cos(x)^2", "color": "#22c55e", "label": "1 - 8sin²xcos²x" }
+      { "fn": "cos(4*x)", "derivative": { "fn": "-4 * sin(4*x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "cos(4x)" },
+      { "fn": "1 - 8*sin(x)^2*cos(x)^2", "derivative": { "fn": "-4 * sin(4*x)", "updateOnMouseMove": true }, "color": "#22c55e", "label": "1 - 8sin²xcos²x" }
     ]
   },
   "ex-3-3-q25": {
@@ -78,7 +79,7 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "cos(6*x)", "color": "#6366f1", "label": "cos(6x)" },
+      { "fn": "cos(6*x)", "derivative": { "fn": "-6 * sin(6*x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "cos(6x)" },
       { "fn": "32*cos(x)^6 - 48*cos(x)^4 + 18*cos(x)^2 - 1", "color": "#22c55e", "label": "expanded form" }
     ]
   }

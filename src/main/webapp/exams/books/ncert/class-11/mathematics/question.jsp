@@ -1102,10 +1102,20 @@
                                         xAxis: { domain: config.xDomain || [-10, 10] },
                                         yAxis: { domain: config.yDomain || [-10, 10] },
                                         data: config.data.map(function(d) {
-                                            var item = { fn: d.fn, color: d.color || '#6366f1' };
-                                            if (d.fnType) item.fnType = d.fnType;
+                                            var item = { color: d.color || '#6366f1' };
+                                            if (d.fnType === 'parametric') {
+                                                item.fnType = 'parametric';
+                                                item.x = d.x;
+                                                item.y = d.y;
+                                                if (d.graphType) item.graphType = d.graphType;
+                                            } else {
+                                                item.fn = d.fn;
+                                                if (d.fnType) item.fnType = d.fnType;
+                                            }
                                             if (d.range) item.range = d.range;
+                                            if (d.derivative) item.derivative = d.derivative;
                                             if (d.skipTip) item.skipTip = d.skipTip;
+                                            if (d.nSamples) item.nSamples = d.nSamples;
                                             if (d.label) item.attr = { 'data-label': d.label };
                                             return item;
                                         }),

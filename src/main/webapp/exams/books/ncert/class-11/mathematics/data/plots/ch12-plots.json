@@ -15,7 +15,7 @@
     "xDomain": [-1, 4],
     "yDomain": [-2, 40],
     "data": [
-      { "fn": "3.14159 * x^2", "color": "#6366f1" }
+      { "fn": "3.14159 * x^2", "derivative": { "fn": "2 * 3.14159 * x", "updateOnMouseMove": true }, "color": "#6366f1" }
     ],
     "annotations": [
       { "x": 1, "text": "lim r→1 = π" }
@@ -83,7 +83,7 @@
     "xDomain": [-5, 15],
     "yDomain": [-10, 30],
     "data": [
-      { "fn": "x^2 - 2", "color": "#6366f1", "label": "f(x) = x² - 2" },
+      { "fn": "x^2 - 2", "derivative": { "fn": "2 * x", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = x² - 2" },
       { "fn": "2*x", "color": "#22c55e", "label": "f'(x) = 2x" }
     ],
     "annotations": [
@@ -95,7 +95,7 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "cos(x)", "color": "#6366f1", "label": "f(x) = cos(x)" },
+      { "fn": "cos(x)", "derivative": { "fn": "-sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = cos(x)" },
       { "fn": "-sin(x)", "color": "#22c55e", "label": "f'(x) = -sin(x)" }
     ]
   },
@@ -104,7 +104,7 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "sin(x + 1)", "color": "#6366f1", "label": "sin(x+1)" },
+      { "fn": "sin(x + 1)", "derivative": { "fn": "cos(x + 1)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "sin(x+1)" },
       { "fn": "cos(x + 1)", "color": "#22c55e", "label": "cos(x+1) [derivative]" }
     ]
   },
@@ -113,7 +113,7 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-2, 2],
     "data": [
-      { "fn": "sin(x) + cos(x)", "color": "#6366f1", "label": "f(x) = sin(x) + cos(x)" },
+      { "fn": "sin(x) + cos(x)", "derivative": { "fn": "cos(x) - sin(x)", "updateOnMouseMove": true }, "color": "#6366f1", "label": "f(x) = sin(x) + cos(x)" },
       { "fn": "cos(x) - sin(x)", "color": "#22c55e", "label": "f'(x) = cos(x) - sin(x)" }
     ]
   },
@@ -122,7 +122,7 @@
     "xDomain": [-6.28, 6.28],
     "yDomain": [-10, 10],
     "data": [
-      { "fn": "(1/sin(x)) * (cos(x)/sin(x))", "color": "#6366f1", "label": "csc(x)·cot(x)" }
+      { "fn": "(1/sin(x)) * (cos(x)/sin(x))", "derivative": { "fn": "-(cos(x)^2 + 1) / sin(x)^3", "updateOnMouseMove": true }, "color": "#6366f1", "label": "csc(x)·cot(x)" }
     ]
   }
 }
