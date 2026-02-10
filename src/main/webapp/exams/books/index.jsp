@@ -161,11 +161,11 @@
                         <div class="stat-label">Classes</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">1</div>
-                        <div class="stat-label">Subject</div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Subjects</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">2,046</div>
+                        <div class="stat-value">2,069</div>
                         <div class="stat-label">Questions</div>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
                 "position": 1,
                 "name": "NCERT Solutions",
                 "url": "https://8gwifi.org/exams/books/ncert/",
-                "description": "Class 9, 10, 11 & 12 Mathematics with 2,046 solved questions, interactive graphs, and Venn diagrams"
+                "description": "Class 9-12 Mathematics & Physics with 2,069 solved questions, interactive graphs, and step-by-step solutions"
             }
         ]
     }

@@ -298,10 +298,18 @@
                 </div>
             </a>
 
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-12/physics-part-1/" class="subject-card">
+                <div class="subject-icon physics">&#9889;</div>
+                <div class="subject-info">
+                    <h3>Physics Part 1</h3>
+                    <p>8 Chapters &bull; 23 Questions</p>
+                </div>
+            </a>
+
             <div class="subject-card coming-soon">
                 <div class="subject-icon physics">&#9889;</div>
                 <div class="subject-info">
-                    <h3>Physics <span class="coming-badge">Soon</span></h3>
+                    <h3>Physics Part 2 <span class="coming-badge">Soon</span></h3>
                     <p>Coming soon</p>
                 </div>
             </div>
@@ -385,6 +393,12 @@
                 "position": 5,
                 "name": "Class 12 Mathematics Part 2",
                 "url": "https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-2/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 6,
+                "name": "Class 12 Physics Part 1",
+                "url": "https://8gwifi.org/exams/books/ncert/class-12/physics-part-1/"
             }
         ]
     }
