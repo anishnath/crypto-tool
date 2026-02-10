@@ -1,0 +1,77 @@
+{
+  "q8-1-displacement-current": {
+    "type": "displacement-current",
+    "params": {
+      "I_label": "I = 0.15 A",
+      "E_label": "I_d = ε₀ dΦ_E/dt = 0.15 A",
+      "title": "Displacement Current in Charging Capacitor"
+    }
+  },
+  "q8-2-capacitor-b-field": {
+    "type": "displacement-current",
+    "params": {
+      "I_label": "I_rms = 6.9 μA",
+      "E_label": "B₀ = 1.63 × 10⁻¹¹ T at edge",
+      "title": "Magnetic Field from Displacement Current"
+    }
+  },
+  "q8-3-em-speed": {
+    "type": "em-wave-propagation",
+    "params": {
+      "lambda_label": "c = 3 × 10⁸ m/s (all EM waves)",
+      "title": "EM Waves Travel at Speed of Light"
+    }
+  },
+  "q8-4-em-transverse": {
+    "type": "em-wave-propagation",
+    "params": {
+      "lambda_label": "λ = 10 m",
+      "title": "EM Wave — E ⊥ B ⊥ Direction of Propagation"
+    }
+  },
+  "q8-5-radio-wavelength": {
+    "type": "em-spectrum",
+    "params": {
+      "highlight": "radio",
+      "highlight_label": "7.5–12 MHz → λ = 25–40 m",
+      "title": "Radio Wave Band — Wavelength Range"
+    }
+  },
+  "q8-6-oscillation-frequency": {
+    "type": "em-wave-propagation",
+    "params": {
+      "lambda_label": "f = 10⁹ Hz = oscillation frequency",
+      "title": "EM Wave Frequency = Source Frequency"
+    }
+  },
+  "q8-7-e-from-b": {
+    "type": "em-wave-propagation",
+    "params": {
+      "lambda_label": "B₀ = 510 nT → E₀ = 153 V/m",
+      "title": "Electric and Magnetic Fields in EM Wave"
+    }
+  },
+  "q8-8-em-wave-complete": {
+    "type": "em-wave-propagation",
+    "params": {
+      "lambda_label": "E₀ = 120 V/m, B₀ = 4×10⁻⁷ T, λ = 6 m",
+      "title": "EM Wave — Complete Description"
+    }
+  },
+  "q8-9-photon-energy": {
+    "type": "em-spectrum",
+    "params": {
+      "highlight": "",
+      "highlight_label": "E = hν: Radio ~10⁻⁹ eV to Gamma ~10⁶ eV",
+      "title": "EM Spectrum — Photon Energies"
+    }
+  },
+  "q8-10-microwave": {
+    "type": "em-spectrum",
+    "params": {
+      "highlight": "microwave",
+      "highlight_label": "f = 20 GHz, λ = 1.5 cm, E₀ = 48 V/m",
+      "title": "Microwave — Properties"
+    }
+  }
+}

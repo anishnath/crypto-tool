@@ -1,0 +1,200 @@
+{
+  "q4-1-coil-field": {
+    "title": "Magnetic Field at Centre of Circular Coil",
+    "formula_display": "B = μ₀NI / (2R)",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "N", "label": "Number of turns N", "unit": "", "default": 100, "min": 1, "max": 10000, "step": 1 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 0.40, "min": 0.01, "max": 100, "step": 0.01 },
+      { "id": "R", "label": "Radius R", "unit": "m", "default": 0.08, "min": 0.001, "max": 5, "step": 0.001 }
+    ],
+    "compute": "mu0 * N * I / (2 * R)",
+    "output": { "label": "Magnetic field B", "unit": "T", "precision": 4 },
+    "plot": {
+      "vary": "R",
+      "range": [0.01, 0.5],
+      "points": 60,
+      "xLabel": "Radius R (m)",
+      "yLabel": "B (T)"
+    }
+  },
+
+  "q4-2-wire-field": {
+    "title": "Magnetic Field from Long Straight Wire",
+    "formula_display": "B = μ₀I / (2πd)",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "I", "label": "Current I", "unit": "A", "default": 35, "min": 0.1, "max": 1000, "step": 0.1 },
+      { "id": "d", "label": "Distance d", "unit": "m", "default": 0.20, "min": 0.001, "max": 100, "step": 0.01 }
+    ],
+    "compute": "mu0 * I / (2 * 3.14159 * d)",
+    "output": { "label": "Magnetic field B", "unit": "T", "precision": 4 },
+    "plot": {
+      "vary": "d",
+      "range": [0.01, 5],
+      "points": 60,
+      "xLabel": "Distance d (m)",
+      "yLabel": "B (T)"
+    }
+  },
+
+  "q4-5-force-per-length": {
+    "title": "Force per Unit Length on Current-Carrying Wire",
+    "formula_display": "F/l = B I sin θ",
+    "inputs": [
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.15, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 8, "min": 0.01, "max": 1000, "step": 0.1 },
+      { "id": "theta", "label": "Angle θ", "unit": "°", "default": 30, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "B * I * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Force per length F/l", "unit": "N/m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 60,
+      "xLabel": "Angle θ (°)",
+      "yLabel": "F/l (N/m)"
+    }
+  },
+
+  "q4-6-wire-in-solenoid": {
+    "title": "Force on Wire in Magnetic Field",
+    "formula_display": "F = B I l sin θ",
+    "inputs": [
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.27, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 10, "min": 0.01, "max": 1000, "step": 0.1 },
+      { "id": "l", "label": "Wire length l", "unit": "m", "default": 0.03, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "theta", "label": "Angle θ", "unit": "°", "default": 90, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "B * I * l * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Force F", "unit": "N", "precision": 4 },
+    "plot": {
+      "vary": "l",
+      "range": [0.005, 0.2],
+      "points": 50,
+      "xLabel": "Wire length (m)",
+      "yLabel": "Force (N)"
+    }
+  },
+
+  "q4-7-parallel-wires": {
+    "title": "Force Between Parallel Current-Carrying Wires",
+    "formula_display": "F = μ₀ I₁ I₂ l / (2πd)",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "I1", "label": "Current I₁", "unit": "A", "default": 8.0, "min": 0.1, "max": 1000, "step": 0.1 },
+      { "id": "I2", "label": "Current I₂", "unit": "A", "default": 5.0, "min": 0.1, "max": 1000, "step": 0.1 },
+      { "id": "l", "label": "Section length l", "unit": "m", "default": 0.10, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "d", "label": "Separation d", "unit": "m", "default": 0.04, "min": 0.001, "max": 10, "step": 0.001 }
+    ],
+    "compute": "mu0 * I1 * I2 * l / (2 * 3.14159 * d)",
+    "output": { "label": "Force F", "unit": "N", "precision": 4 },
+    "direction_rule": "'Same direction → attractive; opposite → repulsive'",
+    "plot": {
+      "vary": "d",
+      "range": [0.005, 0.5],
+      "points": 60,
+      "xLabel": "Separation d (m)",
+      "yLabel": "Force (N)"
+    }
+  },
+
+  "q4-8-solenoid-field": {
+    "title": "Magnetic Field Inside Solenoid",
+    "formula_display": "B = μ₀ n I = μ₀ (N/L) I",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "N", "label": "Total turns N", "unit": "", "default": 2000, "min": 1, "max": 100000, "step": 1 },
+      { "id": "L", "label": "Solenoid length L", "unit": "m", "default": 0.80, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 8.0, "min": 0.01, "max": 100, "step": 0.1 }
+    ],
+    "compute": "mu0 * (N / L) * I",
+    "output": { "label": "Magnetic field B", "unit": "T", "precision": 4 },
+    "plot": {
+      "vary": "I",
+      "range": [0.5, 20],
+      "points": 60,
+      "xLabel": "Current I (A)",
+      "yLabel": "B (T)"
+    }
+  },
+
+  "q4-9-torque-coil": {
+    "title": "Torque on Current Loop in Magnetic Field",
+    "formula_display": "τ = N I A B sin θ",
+    "inputs": [
+      { "id": "N", "label": "Number of turns N", "unit": "", "default": 20, "min": 1, "max": 10000, "step": 1 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 12, "min": 0.01, "max": 100, "step": 0.1 },
+      { "id": "A", "label": "Area A", "unit": "m²", "default": 0.01, "min": 1e-6, "max": 1, "step": 1e-4 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.80, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "theta", "label": "Angle θ", "unit": "°", "default": 30, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "N * I * A * B * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Torque τ", "unit": "N·m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 60,
+      "xLabel": "Angle θ (°)",
+      "yLabel": "Torque (N·m)"
+    }
+  },
+
+  "q4-11-circular-orbit": {
+    "title": "Radius of Circular Orbit in Magnetic Field",
+    "formula_display": "r = mv / (qB)",
+    "constants": { "m_e": 9.109e-31, "e": 1.6e-19 },
+    "inputs": [
+      { "id": "v", "label": "Speed v", "unit": "m/s", "default": 4.8e6, "min": 1e3, "max": 3e8, "step": 1e5, "exponent": true },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 6.5e-4, "min": 1e-6, "max": 10, "step": 1e-5, "exponent": true }
+    ],
+    "compute": "m_e * v / (e * B)",
+    "output": { "label": "Orbit radius r", "unit": "m", "precision": 4 },
+    "plot": {
+      "vary": "v",
+      "range": [1e5, 1e7],
+      "points": 60,
+      "xLabel": "Speed v (m/s)",
+      "yLabel": "Radius r (m)"
+    }
+  },
+
+  "q4-12-cyclotron-freq": {
+    "title": "Cyclotron Frequency",
+    "formula_display": "f = qB / (2πm)",
+    "constants": { "m_e": 9.109e-31, "e": 1.6e-19 },
+    "inputs": [
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 6.5e-4, "min": 1e-6, "max": 10, "step": 1e-5, "exponent": true }
+    ],
+    "compute": "e * B / (2 * 3.14159 * m_e)",
+    "output": { "label": "Frequency f", "unit": "Hz", "precision": 4 },
+    "plot": {
+      "vary": "B",
+      "range": [1e-4, 1e-2],
+      "points": 60,
+      "xLabel": "Magnetic field B (T)",
+      "yLabel": "Frequency f (Hz)"
+    }
+  },
+
+  "q4-13-torque-circular": {
+    "title": "Torque on Circular Coil in Magnetic Field",
+    "formula_display": "τ = N I A B sin θ  (A = πr²)",
+    "inputs": [
+      { "id": "N", "label": "Number of turns N", "unit": "", "default": 30, "min": 1, "max": 10000, "step": 1 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 6.0, "min": 0.01, "max": 100, "step": 0.1 },
+      { "id": "r", "label": "Coil radius r", "unit": "m", "default": 0.08, "min": 0.001, "max": 5, "step": 0.001 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 1.0, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "theta", "label": "Angle θ", "unit": "°", "default": 60, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "N * I * 3.14159 * r * r * B * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Torque τ", "unit": "N·m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 60,
+      "xLabel": "Angle θ (°)",
+      "yLabel": "Torque (N·m)"
+    }
+  }
+}

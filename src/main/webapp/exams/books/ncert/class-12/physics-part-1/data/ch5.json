@@ -1,0 +1,616 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Torque on Bar Magnet",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.1",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A short bar magnet placed with its axis at 30° with a uniform external magnetic field of 0.25 T experiences a torque of magnitude equal to 4.5 × 10⁻² J. What is the magnitude of magnetic moment of the magnet?",
+    "question_latex": "A short bar magnet placed with its axis at $30^\\circ$ with a uniform external magnetic field of $0.25$ T experiences a torque of magnitude equal to $4.5 \\times 10^{-2}$ J. What is the magnitude of magnetic moment of the magnet?",
+    "sub_parts": null,
+    "correct_answer_plain": "m = 0.36 J T⁻¹",
+    "correct_answer_latex": "$m = 0.36$ J T$^{-1}$",
+    "hint": "Use torque formula: τ = mB sin θ, solve for m = τ/(B sin θ)",
+    "solution_steps_latex": [
+      "Given: Angle between magnet axis and field: $\\theta = 30^\\circ$",
+      "Magnetic field: $B = 0.25$ T",
+      "Torque: $\\tau = 4.5 \\times 10^{-2}$ J (Note: Unit should be N$\\cdot$m or J, assuming J means N$\\cdot$m here)",
+      "To find: Magnetic moment $m$",
+      "**Formula**: Torque on a bar magnet in uniform magnetic field:",
+      "$\\vec{\\tau} = \\vec{m} \\times \\vec{B}$",
+      "Magnitude: $\\tau = mB\\sin\\theta$",
+      "**Solving for m**:",
+      "$m = \\frac{\\tau}{B\\sin\\theta}$",
+      "**Substituting values**:",
+      "$m = \\frac{4.5 \\times 10^{-2}}{0.25 \\times \\sin(30^\\circ)}$",
+      "$m = \\frac{4.5 \\times 10^{-2}}{0.25 \\times 0.5}$",
+      "$m = \\frac{4.5 \\times 10^{-2}}{0.125}$",
+      "$m = \\frac{0.045}{0.125}$",
+      "$m = 0.36$ J T$^{-1}$",
+      "**Note**: The unit J T$^{-1}$ is equivalent to A m$^2$ (magnetic moment)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Bar magnet at 30° angle in uniform magnetic field of 0.25 T, experiencing torque τ = mB sinθ",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Angle θ: 30°",
+        "Magnetic field B: 0.25 T",
+        "Torque τ: 4.5 × 10⁻² N·m"
+      ],
+      "to_find": [
+        "Magnetic moment m"
+      ],
+      "formulas_used": [
+        "$\\vec{\\tau} = \\vec{m} \\times \\vec{B}$",
+        "$\\tau = mB\\sin\\theta$",
+        "$m = \\frac{\\tau}{B\\sin\\theta}$"
+      ]
+    },
+    "tags": [
+      "bar-magnet",
+      "magnetic-moment",
+      "torque",
+      "cross-product",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.1",
+      "page": 152
+    },
+    "calculator": "q5-1-magnetic-moment",
+    "p5_sketch": "q5-1-torque-magnet",
+    "calculator_slug": "q5-1-magnetic-moment",
+    "p5_sketch_slug": "q5-1-torque-magnet"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Equilibrium and Potential Energy of Bar Magnet",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.2",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A short bar magnet of magnetic moment m = 0.32 J T⁻¹ is placed in a uniform magnetic field of 0.15 T. If the bar is free to rotate in the plane of the field, which orientation would correspond to its (a) stable, and (b) unstable equilibrium? What is the potential energy of the magnet in each case?",
+    "question_latex": "A short bar magnet of magnetic moment $m = 0.32$ J T$^{-1}$ is placed in a uniform magnetic field of $0.15$ T. If the bar is free to rotate in the plane of the field, which orientation would correspond to its (a) stable, and (b) unstable equilibrium? What is the potential energy of the magnet in each case?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) m parallel to B; U = −mB = −4.8 × 10⁻² J: stable. (b) m anti-parallel to B; U = +mB = +4.8 × 10⁻² J: unstable.",
+    "correct_answer_latex": "(a) $\\vec{m}$ parallel to $\\vec{B}$; $U = -mB = -4.8 \\times 10^{-2}$ J: stable. (b) $\\vec{m}$ anti-parallel to $\\vec{B}$; $U = +mB = +4.8 \\times 10^{-2}$ J: unstable.",
+    "hint": "Stable equilibrium: minimum potential energy (θ = 0°). Unstable equilibrium: maximum potential energy (θ = 180°). Use U = -mB cos θ",
+    "solution_steps_latex": [
+      "Given: Magnetic moment $m = 0.32$ J T$^{-1}$",
+      "Magnetic field $B = 0.15$ T",
+      "Bar can rotate in plane of field",
+      "**Potential energy formula**: $U = -\\vec{m} \\cdot \\vec{B} = -mB\\cos\\theta$",
+      "where $\\theta$ is angle between $\\vec{m}$ and $\\vec{B}$",
+      "**Part (a): Stable Equilibrium**",
+      "Stable equilibrium occurs at **minimum potential energy**",
+      "Since $U = -mB\\cos\\theta$, minimum occurs when $\\cos\\theta$ is maximum",
+      "$\\cos\\theta_{max} = 1$ when $\\theta = 0^\\circ$",
+      "**Orientation**: Magnetic moment aligned **parallel** to field direction",
+      "**Potential energy**:",
+      "$U_{stable} = -mB\\cos(0^\\circ) = -mB \\times 1 = -mB$",
+      "$U_{stable} = -0.32 \\times 0.15 = -0.048$ J",
+      "**Part (b): Unstable Equilibrium**",
+      "Unstable equilibrium occurs at **maximum potential energy**",
+      "Maximum occurs when $\\cos\\theta$ is minimum",
+      "$\\cos\\theta_{min} = -1$ when $\\theta = 180^\\circ$",
+      "**Orientation**: Magnetic moment aligned **anti-parallel** (opposite) to field direction",
+      "**Potential energy**:",
+      "$U_{unstable} = -mB\\cos(180^\\circ) = -mB \\times (-1) = +mB$",
+      "$U_{unstable} = +0.32 \\times 0.15 = +0.048$ J",
+      "**Summary**:",
+      "- Stable: $\\theta = 0^\\circ$, $U = -0.048$ J (N pole toward field direction)",
+      "- Unstable: $\\theta = 180^\\circ$, $U = +0.048$ J (S pole toward field direction)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Bar magnet in uniform field showing stable equilibrium (m parallel to B, θ=0°) and unstable equilibrium (m anti-parallel, θ=180°)",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic moment m: 0.32 J T⁻¹",
+        "Magnetic field B: 0.15 T",
+        "Bar free to rotate in field plane"
+      ],
+      "to_find": [
+        "(a) Stable equilibrium orientation and potential energy",
+        "(b) Unstable equilibrium orientation and potential energy"
+      ],
+      "formulas_used": [
+        "$U = -\\vec{m} \\cdot \\vec{B}$",
+        "$U = -mB\\cos\\theta$",
+        "Stable: minimum U at $\\theta = 0^\\circ$",
+        "Unstable: maximum U at $\\theta = 180^\\circ$"
+      ]
+    },
+    "tags": [
+      "bar-magnet",
+      "equilibrium",
+      "potential-energy",
+      "stable-unstable",
+      "dot-product",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.2",
+      "page": 152
+    },
+    "calculator": "q5-2-potential-energy",
+    "p5_sketch": "q5-2-equilibrium",
+    "calculator_slug": "q5-2-potential-energy",
+    "p5_sketch_slug": "q5-2-equilibrium"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Solenoid as Bar Magnet",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A closely wound solenoid of 800 turns and area of cross section 2.5 × 10⁻⁴ m² carries a current of 3.0 A. Explain the sense in which the solenoid acts like a bar magnet. What is its associated magnetic moment?",
+    "question_latex": "A closely wound solenoid of $800$ turns and area of cross section $2.5 \\times 10^{-4}$ m$^2$ carries a current of $3.0$ A. Explain the sense in which the solenoid acts like a bar magnet. What is its associated magnetic moment?",
+    "sub_parts": null,
+    "correct_answer_plain": "m = 0.60 J T⁻¹ along the axis of the solenoid determined by the sense of flow of the current.",
+    "correct_answer_latex": "$m = 0.60$ J T$^{-1}$ along the axis of the solenoid determined by the sense of flow of the current.",
+    "hint": "Solenoid produces uniform field inside, acts like bar magnet with poles at ends. m = nIA where n is number of turns",
+    "solution_steps_latex": [
+      "Given: Number of turns $n = 800$",
+      "Area of cross section $A = 2.5 \\times 10^{-4}$ m$^2$",
+      "Current $I = 3.0$ A",
+      "**Explanation: Solenoid as Bar Magnet**",
+      "A current-carrying solenoid behaves like a bar magnet in the following sense:",
+      "1. **Magnetic field pattern**: The field lines outside the solenoid are similar to those of a bar magnet",
+      "2. **Poles**: One end acts as **North pole**, other as **South pole**",
+      "3. **Pole determination**: Using right-hand thumb rule:",
+      "   - Curl fingers in direction of current",
+      "   - Thumb points toward North pole",
+      "4. **Uniform field inside**: Like a bar magnet, solenoid has uniform field inside",
+      "5. **Magnetic moment**: Has definite magnetic moment along its axis",
+      "**Calculating Magnetic Moment**",
+      "For a solenoid: $m = nIA$",
+      "where:",
+      "- $n$ = number of turns",
+      "- $I$ = current",
+      "- $A$ = area of cross section",
+      "**Substituting values**:",
+      "$m = 800 \\times 3.0 \\times 2.5 \\times 10^{-4}$",
+      "$m = 2400 \\times 2.5 \\times 10^{-4}$",
+      "$m = 6000 \\times 10^{-4}$",
+      "$m = 0.6$ A m$^2$ or $0.6$ J T$^{-1}$",
+      "**Note**: The magnetic moment is directed along the axis from S to N pole"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Solenoid with 800 turns acting as bar magnet, magnetic moment m = NIA along axis determined by current direction",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Number of turns n: 800",
+        "Area of cross section A: 2.5 × 10⁻⁴ m²",
+        "Current I: 3.0 A"
+      ],
+      "to_find": [
+        "Explanation of solenoid as bar magnet",
+        "Magnetic moment m"
+      ],
+      "formulas_used": [
+        "$m = nIA$ (magnetic moment of solenoid)",
+        "Right-hand thumb rule for pole determination"
+      ]
+    },
+    "tags": [
+      "solenoid",
+      "bar-magnet-analogy",
+      "magnetic-moment",
+      "current-loop",
+      "conceptual-understanding",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.3",
+      "page": 152
+    },
+    "calculator": "q5-3-solenoid-moment",
+    "p5_sketch": "q5-3-solenoid-magnet",
+    "calculator_slug": "q5-3-solenoid-moment",
+    "p5_sketch_slug": "q5-3-solenoid-magnet"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Torque on Solenoid",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "If the solenoid in Exercise 5.3 is free to turn about the vertical direction and a uniform horizontal magnetic field of 0.25 T is applied, what is the magnitude of torque on the solenoid when its axis makes an angle of 30° with the direction of applied field?",
+    "question_latex": "If the solenoid in Exercise 5.3 is free to turn about the vertical direction and a uniform horizontal magnetic field of $0.25$ T is applied, what is the magnitude of torque on the solenoid when its axis makes an angle of $30^\\circ$ with the direction of applied field?",
+    "sub_parts": null,
+    "correct_answer_plain": "τ = 0.075 N·m = 7.5 × 10⁻² N·m",
+    "correct_answer_latex": "$\\tau = 0.075$ N$\\cdot$m $= 7.5 \\times 10^{-2}$ N$\\cdot$m",
+    "hint": "From Exercise 5.3: m = 0.6 J T⁻¹. Use τ = mB sin θ",
+    "solution_steps_latex": [
+      "From Exercise 5.3:",
+      "Magnetic moment of solenoid: $m = 0.6$ A m$^2$ (or J T$^{-1}$)",
+      "Given: Magnetic field $B = 0.25$ T (horizontal)",
+      "Angle between solenoid axis and field: $\\theta = 30^\\circ$",
+      "Solenoid free to rotate about vertical axis",
+      "To find: Torque $\\tau$ on the solenoid",
+      "**Formula**: Torque on magnetic dipole in uniform field:",
+      "$\\vec{\\tau} = \\vec{m} \\times \\vec{B}$",
+      "Magnitude: $\\tau = mB\\sin\\theta$",
+      "**Substituting values**:",
+      "$\\tau = 0.6 \\times 0.25 \\times \\sin(30^\\circ)$",
+      "$\\tau = 0.6 \\times 0.25 \\times 0.5$",
+      "$\\tau = 0.15 \\times 0.5$",
+      "$\\tau = 0.075$ N$\\cdot$m",
+      "$\\tau = 7.5 \\times 10^{-2}$ N$\\cdot$m",
+      "**Direction**: Torque tends to align the solenoid axis with the field direction"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Solenoid rotatable about vertical axis in horizontal magnetic field of 0.25 T, axis at 30° to field",
+      "figure_reference": "References Exercise 5.3"
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic moment m: 0.6 J T⁻¹ (from Ex 5.3)",
+        "Magnetic field B: 0.25 T (horizontal)",
+        "Angle θ: 30°",
+        "Solenoid can rotate about vertical"
+      ],
+      "to_find": [
+        "Torque τ on solenoid"
+      ],
+      "formulas_used": [
+        "$\\vec{\\tau} = \\vec{m} \\times \\vec{B}$",
+        "$\\tau = mB\\sin\\theta$"
+      ]
+    },
+    "tags": [
+      "solenoid",
+      "torque",
+      "magnetic-moment",
+      "cross-product",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.4",
+      "page": 152
+    },
+    "calculator": "q5-4-solenoid-torque",
+    "p5_sketch": "q5-4-solenoid-torque",
+    "calculator_slug": "q5-4-solenoid-torque",
+    "p5_sketch_slug": "q5-4-solenoid-torque"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Work Done in Rotating Bar Magnet",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.5",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "A bar magnet of magnetic moment 1.5 J T⁻¹ lies aligned with the direction of a uniform magnetic field of 0.22 T.\n(a) What is the amount of work required by an external torque to turn the magnet so as to align its magnetic moment: (i) normal to the field direction, (ii) opposite to the field direction?\n(b) What is the torque on the magnet in cases (i) and (ii)?",
+    "question_latex": "A bar magnet of magnetic moment $1.5$ J T$^{-1}$ lies aligned with the direction of a uniform magnetic field of $0.22$ T.\n\n(a) What is the amount of work required by an external torque to turn the magnet so as to align its magnetic moment: (i) normal to the field direction, (ii) opposite to the field direction?\n\n(b) What is the torque on the magnet in cases (i) and (ii)?",
+    "sub_parts": [
+      "(a)(i)",
+      "(a)(ii)",
+      "(b)(i)",
+      "(b)(ii)"
+    ],
+    "correct_answer_plain": "(a)(i) W = 0.33 J, (a)(ii) W = 0.66 J; (b)(i) τ = 0.33 N·m, (b)(ii) τ = 0",
+    "correct_answer_latex": "(a)(i) $W = 0.33$ J, (a)(ii) $W = 0.66$ J; (b)(i) $\\tau = 0.33$ N$\\cdot$m, (b)(ii) $\\tau = 0$",
+    "hint": "Work = ΔU = U_final - U_initial, where U = -mB cos θ. Torque: τ = mB sin θ",
+    "solution_steps_latex": [
+      "Given: Magnetic moment $m = 1.5$ J T$^{-1}$",
+      "Magnetic field $B = 0.22$ T",
+      "Initial position: Aligned with field $\\implies \\theta_i = 0^\\circ$",
+      "**Part (a): Work Required**",
+      "Potential energy: $U = -mB\\cos\\theta$",
+      "Work done by external torque: $W = U_{final} - U_{initial} = \\Delta U$",
+      "Initial potential energy: $U_i = -mB\\cos(0^\\circ) = -mB$",
+      "$U_i = -1.5 \\times 0.22 = -0.33$ J",
+      "**Case (i): Normal to field** ($\\theta_f = 90^\\circ$)",
+      "$U_f = -mB\\cos(90^\\circ) = -mB \\times 0 = 0$ J",
+      "Work required: $W = U_f - U_i = 0 - (-0.33) = 0.33$ J",
+      "**Case (ii): Opposite to field** ($\\theta_f = 180^\\circ$)",
+      "$U_f = -mB\\cos(180^\\circ) = -mB \\times (-1) = +mB$",
+      "$U_f = +1.5 \\times 0.22 = +0.33$ J",
+      "Work required: $W = U_f - U_i = 0.33 - (-0.33) = 0.66$ J",
+      "**Part (b): Torque on Magnet**",
+      "Torque: $\\tau = mB\\sin\\theta$",
+      "**Case (i): At $\\theta = 90^\\circ$ (normal to field)**",
+      "$\\tau = mB\\sin(90^\\circ) = mB \\times 1 = mB$",
+      "$\\tau = 1.5 \\times 0.22 = 0.33$ N$\\cdot$m",
+      "**Case (ii): At $\\theta = 180^\\circ$ (opposite to field)**",
+      "$\\tau = mB\\sin(180^\\circ) = mB \\times 0 = 0$",
+      "**Summary**:",
+      "- (a)(i) Work to rotate to 90°: $W = 0.33$ J",
+      "- (a)(ii) Work to rotate to 180°: $W = 0.66$ J",
+      "- (b)(i) Torque at 90°: $\\tau = 0.33$ N$\\cdot$m (maximum)",
+      "- (b)(ii) Torque at 180°: $\\tau = 0$ (unstable equilibrium)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Bar magnet rotating from aligned position (0°) to normal (90°) and opposite (180°) orientations in uniform field",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic moment m: 1.5 J T⁻¹",
+        "Magnetic field B: 0.22 T",
+        "Initial orientation: aligned (θ = 0°)"
+      ],
+      "to_find": [
+        "(a) Work to rotate to: (i) 90°, (ii) 180°",
+        "(b) Torque at: (i) 90°, (ii) 180°"
+      ],
+      "formulas_used": [
+        "$U = -mB\\cos\\theta$ (potential energy)",
+        "$W = \\Delta U = U_f - U_i$ (work done)",
+        "$\\tau = mB\\sin\\theta$ (torque)"
+      ]
+    },
+    "tags": [
+      "bar-magnet",
+      "work-energy",
+      "torque",
+      "potential-energy",
+      "rotation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.5",
+      "page": 152
+    },
+    "calculator": "q5-5-work-rotation",
+    "p5_sketch": "q5-5-work-rotation",
+    "calculator_slug": "q5-5-work-rotation",
+    "p5_sketch_slug": "q5-5-work-rotation"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Solenoid - Magnetic Moment and Torque",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.6",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A closely wound solenoid of 2000 turns and area of cross-section 1.6 × 10⁻⁴ m², carrying a current of 4.0 A, is suspended through its centre allowing it to turn in a horizontal plane.\n(a) What is the magnetic moment associated with the solenoid?\n(b) What is the force and torque on the solenoid if a uniform horizontal magnetic field of 7.5 × 10⁻² T is set up at an angle of 30° with the axis of the solenoid?",
+    "question_latex": "A closely wound solenoid of $2000$ turns and area of cross-section $1.6 \\times 10^{-4}$ m$^2$, carrying a current of $4.0$ A, is suspended through its centre allowing it to turn in a horizontal plane.\n\n(a) What is the magnetic moment associated with the solenoid?\n\n(b) What is the force and torque on the solenoid if a uniform horizontal magnetic field of $7.5 \\times 10^{-2}$ T is set up at an angle of $30^\\circ$ with the axis of the solenoid?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) m = 1.28 J T⁻¹, (b) Force = 0, Torque = 0.048 N·m",
+    "correct_answer_latex": "(a) $m = 1.28$ J T$^{-1}$, (b) Force $= 0$, Torque $\\tau = 0.048$ N$\\cdot$m",
+    "hint": "(a) m = nIA. (b) Force on magnetic dipole in uniform field is zero. Torque: τ = mB sin θ",
+    "solution_steps_latex": [
+      "Given: Number of turns $n = 2000$",
+      "Area of cross-section $A = 1.6 \\times 10^{-4}$ m$^2$",
+      "Current $I = 4.0$ A",
+      "Solenoid suspended at centre, can rotate in horizontal plane",
+      "**Part (a): Magnetic Moment**",
+      "Magnetic moment of solenoid: $m = nIA$",
+      "**Substituting values**:",
+      "$m = 2000 \\times 4.0 \\times 1.6 \\times 10^{-4}$",
+      "$m = 8000 \\times 1.6 \\times 10^{-4}$",
+      "$m = 12800 \\times 10^{-4}$",
+      "$m = 1.28$ A m$^2$ or $1.28$ J T$^{-1}$",
+      "**Part (b): Force and Torque**",
+      "Given: Magnetic field $B = 7.5 \\times 10^{-2}$ T (horizontal)",
+      "Angle between solenoid axis and field: $\\theta = 30^\\circ$",
+      "**Force**:",
+      "In a **uniform** magnetic field, the net force on a magnetic dipole is **zero**",
+      "This is because forces on N and S poles are equal and opposite",
+      "$F_{net} = 0$",
+      "**Torque**:",
+      "$\\tau = mB\\sin\\theta$",
+      "$\\tau = 1.28 \\times 7.5 \\times 10^{-2} \\times \\sin(30^\\circ)$",
+      "$\\tau = 1.28 \\times 0.075 \\times 0.5$",
+      "$\\tau = 0.096 \\times 0.5$",
+      "$\\tau = 0.048$ N$\\cdot$m",
+      "$\\tau = 4.8 \\times 10^{-2}$ N$\\cdot$m",
+      "**Direction**: Torque acts to align solenoid axis with field direction"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Solenoid (2000 turns) suspended at centre in horizontal magnetic field of 7.5×10⁻² T, axis at 30° to field",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Number of turns n: 2000",
+        "Area A: 1.6 × 10⁻⁴ m²",
+        "Current I: 4.0 A",
+        "Magnetic field B: 7.5 × 10⁻² T",
+        "Angle θ: 30°"
+      ],
+      "to_find": [
+        "(a) Magnetic moment m",
+        "(b) Force and torque on solenoid"
+      ],
+      "formulas_used": [
+        "$m = nIA$ (magnetic moment)",
+        "$F_{net} = 0$ (in uniform field)",
+        "$\\tau = mB\\sin\\theta$ (torque)"
+      ]
+    },
+    "tags": [
+      "solenoid",
+      "magnetic-moment",
+      "force-in-uniform-field",
+      "torque",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.6",
+      "page": 152
+    },
+    "calculator": "q5-6-solenoid-combined",
+    "p5_sketch": "q5-6-solenoid-combined",
+    "calculator_slug": "q5-6-solenoid-combined",
+    "p5_sketch_slug": "q5-6-solenoid-combined"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 5: Magnetism and Matter",
+    "section": "Magnetic Field Due to Bar Magnet",
+    "exercise": "Exercise 5",
+    "question_number": "Q5.7",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A short bar magnet has a magnetic moment of 0.48 J T⁻¹. Give the direction and magnitude of the magnetic field produced by the magnet at a distance of 10 cm from the centre of the magnet on (a) the axis, (b) the equatorial lines (normal bisector) of the magnet.",
+    "question_latex": "A short bar magnet has a magnetic moment of $0.48$ J T$^{-1}$. Give the direction and magnitude of the magnetic field produced by the magnet at a distance of $10$ cm from the centre of the magnet on (a) the axis, (b) the equatorial lines (normal bisector) of the magnet.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 0.96 G along S-N direction. (b) 0.48 G along N-S direction.",
+    "correct_answer_latex": "(a) $B_{\\text{axial}} = 0.96$ G along S$\\to$N direction. (b) $B_{\\text{equatorial}} = 0.48$ G along N$\\to$S direction.",
+    "hint": "Axial: B = (μ₀/4π) × (2m/r³). Equatorial: B = (μ₀/4π) × (m/r³). Direction: axial is along m, equatorial is opposite to m",
+    "solution_steps_latex": [
+      "Given: Magnetic moment $m = 0.48$ J T$^{-1}$ or A m$^2$",
+      "Distance from center: $r = 10$ cm $= 0.10$ m",
+      "Permeability: $\\mu_0 = 4\\pi \\times 10^{-7}$ T m A$^{-1}$",
+      "**Part (a): Magnetic Field on Axis**",
+      "For a short bar magnet (magnetic dipole), field on **axial line**:",
+      "$B_{axial} = \\frac{\\mu_0}{4\\pi} \\times \\frac{2m}{r^3}$",
+      "**Substituting values**:",
+      "$B_{axial} = \\frac{4\\pi \\times 10^{-7}}{4\\pi} \\times \\frac{2 \\times 0.48}{(0.10)^3}$",
+      "$B_{axial} = 10^{-7} \\times \\frac{0.96}{0.001}$",
+      "$B_{axial} = 10^{-7} \\times 960$",
+      "$B_{axial} = 960 \\times 10^{-7}$ T",
+      "$B_{axial} = 9.6 \\times 10^{-5}$ T",
+      "$B_{axial} = 0.96 \\times 10^{-4}$ T",
+      "**Direction**: Along the axis from **S pole to N pole** (direction of magnetic moment $\\vec{m}$)",
+      "**Part (b): Magnetic Field on Equatorial Line**",
+      "For a short bar magnet, field on **equatorial line** (normal bisector):",
+      "$B_{equatorial} = \\frac{\\mu_0}{4\\pi} \\times \\frac{m}{r^3}$",
+      "**Note**: Equatorial field is exactly **half** the axial field",
+      "$B_{equatorial} = \\frac{1}{2} B_{axial}$",
+      "**Substituting values**:",
+      "$B_{equatorial} = \\frac{\\mu_0}{4\\pi} \\times \\frac{0.48}{(0.10)^3}$",
+      "$B_{equatorial} = 10^{-7} \\times \\frac{0.48}{0.001}$",
+      "$B_{equatorial} = 10^{-7} \\times 480$",
+      "$B_{equatorial} = 480 \\times 10^{-7}$ T",
+      "$B_{equatorial} = 4.8 \\times 10^{-5}$ T",
+      "$B_{equatorial} = 0.48 \\times 10^{-4}$ T",
+      "**Direction**: Perpendicular to axis, **opposite** to direction of magnetic moment (from N to S externally)",
+      "**Verification**: $B_{equatorial} = \\frac{1}{2} B_{axial}$ ✓"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Bar magnet with axial point (along NS axis) and equatorial point (on perpendicular bisector) both at 10 cm from center",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic moment m: 0.48 J T⁻¹",
+        "Distance r: 10 cm = 0.10 m",
+        "Permeability μ₀: 4π × 10⁻⁷ T m A⁻¹"
+      ],
+      "to_find": [
+        "(a) Magnetic field on axis (magnitude and direction)",
+        "(b) Magnetic field on equatorial line (magnitude and direction)"
+      ],
+      "formulas_used": [
+        "$B_{axial} = \\frac{\\mu_0}{4\\pi} \\times \\frac{2m}{r^3}$",
+        "$B_{equatorial} = \\frac{\\mu_0}{4\\pi} \\times \\frac{m}{r^3}$",
+        "$B_{equatorial} = \\frac{1}{2} B_{axial}$"
+      ]
+    },
+    "tags": [
+      "bar-magnet",
+      "magnetic-field",
+      "axial-field",
+      "equatorial-field",
+      "magnetic-dipole",
+      "inverse-cube-law",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 5,
+      "exercise": "5",
+      "question_number": "Q5.7",
+      "page": 153
+    },
+    "calculator": "q5-7-dipole-field",
+    "p5_sketch": "q5-7-dipole-field",
+    "calculator_slug": "q5-7-dipole-field",
+    "p5_sketch_slug": "q5-7-dipole-field"
+  }
+]

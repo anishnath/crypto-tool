@@ -1,0 +1,86 @@
+{
+  "q3-1-short-circuit": {
+    "type": "simple-circuit",
+    "params": {
+      "emf": 12,
+      "internal_resistance": 0.4,
+      "external_resistance": 0,
+      "current": 30,
+      "label_emf": "12 V",
+      "label_r": "0.4 Ω",
+      "label_I": "30 A (max)"
+    }
+  },
+  "q3-2-battery-resistor": {
+    "type": "simple-circuit",
+    "params": {
+      "emf": 10,
+      "internal_resistance": 3,
+      "external_resistance": 17,
+      "current": 0.5,
+      "label_emf": "10 V",
+      "label_r": "3 Ω",
+      "label_R": "17 Ω",
+      "label_I": "0.5 A"
+    }
+  },
+  "q3-3-resistance-temp": {
+    "type": "resistance-temperature",
+    "params": {
+      "R0": 100,
+      "T0": 27,
+      "alpha": 1.7e-4,
+      "R_final": 117,
+      "T_final": 1027,
+      "title": "Heating Element: R vs T"
+    }
+  },
+  "q3-5-silver-temp-coeff": {
+    "type": "resistance-temperature",
+    "params": {
+      "R0": 2.1,
+      "T0": 27.5,
+      "alpha": 0.0039,
+      "R_final": 2.7,
+      "T_final": 100,
+      "title": "Silver Wire: R vs T"
+    }
+  },
+  "q3-6-nichrome-heating": {
+    "type": "resistance-temperature",
+    "params": {
+      "R0": 71.875,
+      "T0": 27,
+      "alpha": 1.7e-4,
+      "R_final": 82.14,
+      "T_final": 867,
+      "title": "Nichrome Element: R vs T"
+    }
+  },
+  "q3-7-kirchhoff": {
+    "type": "kirchhoff-network",
+    "params": {
+      "resistors": { "AB": 10, "BC": 5, "AD": 5, "DC": 10, "BD": 5 },
+      "emf": 10
+    }
+  },
+  "q3-8-charging": {
+    "type": "charging-circuit",
+    "params": {
+      "supply_voltage": 120,
+      "battery_emf": 8,
+      "series_resistance": 15.5,
+      "internal_resistance": 0.5
+    }
+  },
+  "q3-9-drift": {
+    "type": "drift-velocity",
+    "params": {
+      "wire_length": 3.0,
+      "current": 3.0,
+      "num_electrons": 30,
+      "label_vd": "1.1 × 10⁻⁴ m/s",
+      "label_time": "≈ 2.7 × 10⁴ s (7.6 hrs)"
+    }
+  }
+}

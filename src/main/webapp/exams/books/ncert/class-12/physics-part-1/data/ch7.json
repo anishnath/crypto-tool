@@ -1,0 +1,692 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "AC Circuits - Power and Current",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.1",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "A 100 Ω resistor is connected to a 220 V, 50 Hz ac supply.\n(a) What is the rms value of current in the circuit?\n(b) What is the net power consumed over a full cycle?",
+    "question_latex": "A $100$ $\\Omega$ resistor is connected to a $220$ V, $50$ Hz ac supply.\n\n(a) What is the rms value of current in the circuit?\n\n(b) What is the net power consumed over a full cycle?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) I_rms = 2.2 A, (b) P = 484 W",
+    "correct_answer_latex": "(a) $I_{rms} = 2.2$ A, (b) $P = 484$ W",
+    "hint": "For resistor: V and I are in phase. Use Ohm's law: I_rms = V_rms/R. Power: P = V_rms × I_rms = I_rms²R",
+    "solution_steps_latex": [
+      "Given: Resistance $R = 100$ $\\Omega$",
+      "RMS voltage: $V_{rms} = 220$ V",
+      "Frequency: $f = 50$ Hz (not needed for this problem)",
+      "**Part (a): RMS Current**",
+      "For a purely resistive AC circuit:",
+      "Voltage and current are **in phase**",
+      "Ohm's law applies: $V_{rms} = I_{rms} \\times R$",
+      "Therefore: $I_{rms} = \\frac{V_{rms}}{R}$",
+      "**Substituting values**:",
+      "$I_{rms} = \\frac{220}{100}$",
+      "$I_{rms} = 2.2$ A",
+      "**Part (b): Net Power Consumed**",
+      "Average power in AC circuit: $P = V_{rms} I_{rms} \\cos\\phi$",
+      "For pure resistor: Phase difference $\\phi = 0^\\circ$",
+      "Therefore: $\\cos\\phi = \\cos(0^\\circ) = 1$ (power factor = 1)",
+      "$P = V_{rms} I_{rms}$",
+      "**Method 1**: Using $V_{rms}$ and $I_{rms}$",
+      "$P = 220 \\times 2.2 = 484$ W",
+      "**Method 2**: Using $I_{rms}^2 R$",
+      "$P = I_{rms}^2 R = (2.2)^2 \\times 100 = 4.84 \\times 100 = 484$ W",
+      "**Method 3**: Using $V_{rms}^2/R$",
+      "$P = \\frac{V_{rms}^2}{R} = \\frac{(220)^2}{100} = \\frac{48400}{100} = 484$ W",
+      "**Note**: Power consumed over full cycle = Average power = 484 W"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "AC circuit with pure resistor R = 100 Ω; voltage and current waveforms in phase",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Resistance R: 100 Ω",
+        "RMS voltage V_rms: 220 V",
+        "Frequency f: 50 Hz"
+      ],
+      "to_find": [
+        "(a) RMS current I_rms",
+        "(b) Net power consumed"
+      ],
+      "formulas_used": [
+        "$I_{rms} = \\frac{V_{rms}}{R}$ (Ohm's law for AC)",
+        "$P = V_{rms} I_{rms} \\cos\\phi$ (average power)",
+        "For resistor: $\\phi = 0^\\circ$, $\\cos\\phi = 1$",
+        "$P = I_{rms}^2 R = \\frac{V_{rms}^2}{R}$"
+      ]
+    },
+    "tags": [
+      "ac-circuit",
+      "resistor",
+      "rms-current",
+      "power-consumption",
+      "ohms-law",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.1",
+      "page": 200
+    },
+    "calculator_slug": "q7-1-resistive-ac",
+    "p5_sketch_slug": "q7-1-resistive-ac",
+    "p5_sketch": "q7-1-resistive-ac",
+    "calculator": "q7-1-resistive-ac"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "Peak vs RMS Values",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.2",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "(a) The peak voltage of an ac supply is 300 V. What is the rms voltage?\n(b) The rms value of current in an ac circuit is 10 A. What is the peak current?",
+    "question_latex": "(a) The peak voltage of an ac supply is $300$ V. What is the rms voltage?\n\n(b) The rms value of current in an ac circuit is $10$ A. What is the peak current?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) V_rms = 212.1 V, (b) I_0 = 14.14 A",
+    "correct_answer_latex": "(a) $V_{rms} = 212.1$ V, (b) $I_0 = 14.14$ A",
+    "hint": "Relationship: V_rms = V_0/√2 and I_rms = I_0/√2",
+    "solution_steps_latex": [
+      "**Part (a): Peak to RMS Voltage**",
+      "Given: Peak voltage $V_0 = 300$ V",
+      "To find: RMS voltage $V_{rms}$",
+      "**Relationship between peak and RMS values**:",
+      "For sinusoidal AC: $V_{rms} = \\frac{V_0}{\\sqrt{2}}$",
+      "**Substituting**:",
+      "$V_{rms} = \\frac{300}{\\sqrt{2}} = \\frac{300}{1.414}$",
+      "$V_{rms} = 212.1$ V",
+      "**Part (b): RMS to Peak Current**",
+      "Given: RMS current $I_{rms} = 10$ A",
+      "To find: Peak current $I_0$",
+      "**Relationship**:",
+      "$I_{rms} = \\frac{I_0}{\\sqrt{2}}$",
+      "Therefore: $I_0 = I_{rms} \\times \\sqrt{2}$",
+      "$I_0 = 10 \\times \\sqrt{2} = 10 \\times 1.414$",
+      "$I_0 = 14.14$ A",
+      "**Summary**:",
+      "- Peak value is $\\sqrt{2} \\approx 1.414$ times RMS value",
+      "- RMS value is $\\frac{1}{\\sqrt{2}} \\approx 0.707$ times peak value"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Sinusoidal waveform showing peak voltage V₀ = 300 V and RMS voltage V_rms = 212.1 V",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "(a) Peak voltage V₀: 300 V",
+        "(b) RMS current I_rms: 10 A"
+      ],
+      "to_find": [
+        "(a) RMS voltage V_rms",
+        "(b) Peak current I₀"
+      ],
+      "formulas_used": [
+        "$V_{rms} = \\frac{V_0}{\\sqrt{2}}$",
+        "$I_{rms} = \\frac{I_0}{\\sqrt{2}}$",
+        "$I_0 = \\sqrt{2} \\times I_{rms}$"
+      ]
+    },
+    "tags": [
+      "ac-circuit",
+      "peak-value",
+      "rms-value",
+      "conversion",
+      "sinusoidal-waveform",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.2",
+      "page": 200
+    },
+    "calculator_slug": "q7-2-peak-rms",
+    "p5_sketch_slug": "q7-2-peak-rms",
+    "p5_sketch": "q7-2-peak-rms",
+    "calculator": "q7-2-peak-rms"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "Inductive Reactance",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A 44 mH inductor is connected to 220 V, 50 Hz ac supply. Determine the rms value of the current in the circuit.",
+    "question_latex": "A $44$ mH inductor is connected to $220$ V, $50$ Hz ac supply. Determine the rms value of the current in the circuit.",
+    "sub_parts": null,
+    "correct_answer_plain": "I_rms = 15.92 A ≈ 16 A",
+    "correct_answer_latex": "$I_{rms} = 15.92$ A $\\approx 16$ A",
+    "hint": "Inductive reactance: X_L = ωL = 2πfL. Then I_rms = V_rms/X_L",
+    "solution_steps_latex": [
+      "Given: Inductance $L = 44$ mH $= 44 \\times 10^{-3}$ H $= 0.044$ H",
+      "RMS voltage: $V_{rms} = 220$ V",
+      "Frequency: $f = 50$ Hz",
+      "To find: RMS current $I_{rms}$",
+      "**Step 1**: Calculate angular frequency",
+      "$\\omega = 2\\pi f = 2 \\times 3.14 \\times 50$",
+      "$\\omega = 314$ rad/s",
+      "**Step 2**: Calculate inductive reactance",
+      "Inductive reactance: $X_L = \\omega L = 2\\pi f L$",
+      "$X_L = 314 \\times 0.044$",
+      "$X_L = 13.816$ $\\Omega$",
+      "**Step 3**: Calculate RMS current",
+      "For purely inductive circuit:",
+      "$I_{rms} = \\frac{V_{rms}}{X_L}$",
+      "$I_{rms} = \\frac{220}{13.816}$",
+      "$I_{rms} = 15.92$ A",
+      "$I_{rms} \\approx 16$ A",
+      "**Note**: In pure inductor:",
+      "- Current **lags** voltage by $90^\\circ$ ($\\phi = 90^\\circ$)",
+      "- No power is consumed (reactive circuit)",
+      "- Energy is alternately stored and released"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "AC circuit with pure inductor L = 44 mH; current lags voltage by 90°",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Inductance L: 44 mH = 0.044 H",
+        "RMS voltage V_rms: 220 V",
+        "Frequency f: 50 Hz"
+      ],
+      "to_find": [
+        "RMS current I_rms"
+      ],
+      "formulas_used": [
+        "$\\omega = 2\\pi f$ (angular frequency)",
+        "$X_L = \\omega L = 2\\pi f L$ (inductive reactance)",
+        "$I_{rms} = \\frac{V_{rms}}{X_L}$"
+      ]
+    },
+    "tags": [
+      "ac-circuit",
+      "inductor",
+      "inductive-reactance",
+      "rms-current",
+      "phase-difference",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.3",
+      "page": 200
+    },
+    "calculator_slug": "q7-3-inductive-reactance",
+    "p5_sketch_slug": "q7-3-inductive-ac",
+    "p5_sketch": "q7-3-inductive-ac",
+    "calculator": "q7-3-inductive-reactance"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "Capacitive Reactance",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A 60 μF capacitor is connected to a 110 V, 60 Hz ac supply. Determine the rms value of the current in the circuit.",
+    "question_latex": "A $60$ $\\mu$F capacitor is connected to a $110$ V, $60$ Hz ac supply. Determine the rms value of the current in the circuit.",
+    "sub_parts": null,
+    "correct_answer_plain": "I_rms = 2.49 A ≈ 2.5 A",
+    "correct_answer_latex": "$I_{rms} = 2.49$ A $\\approx 2.5$ A",
+    "hint": "Capacitive reactance: X_C = 1/(ωC) = 1/(2πfC). Then I_rms = V_rms/X_C",
+    "solution_steps_latex": [
+      "Given: Capacitance $C = 60$ $\\mu$F $= 60 \\times 10^{-6}$ F",
+      "RMS voltage: $V_{rms} = 110$ V",
+      "Frequency: $f = 60$ Hz",
+      "To find: RMS current $I_{rms}$",
+      "**Step 1**: Calculate angular frequency",
+      "$\\omega = 2\\pi f = 2 \\times 3.14 \\times 60$",
+      "$\\omega = 376.8$ rad/s",
+      "**Step 2**: Calculate capacitive reactance",
+      "Capacitive reactance: $X_C = \\frac{1}{\\omega C} = \\frac{1}{2\\pi f C}$",
+      "$X_C = \\frac{1}{376.8 \\times 60 \\times 10^{-6}}$",
+      "$X_C = \\frac{1}{0.022608}$",
+      "$X_C = 44.23$ $\\Omega$",
+      "**Step 3**: Calculate RMS current",
+      "For purely capacitive circuit:",
+      "$I_{rms} = \\frac{V_{rms}}{X_C}$",
+      "$I_{rms} = \\frac{110}{44.23}$",
+      "$I_{rms} = 2.487$ A",
+      "$I_{rms} \\approx 2.49$ A or $2.5$ A",
+      "**Note**: In pure capacitor:",
+      "- Current **leads** voltage by $90^\\circ$ ($\\phi = -90^\\circ$)",
+      "- No power is consumed (reactive circuit)",
+      "- Energy is alternately stored and released"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "AC circuit with pure capacitor C = 60 μF; current leads voltage by 90°",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Capacitance C: 60 μF = 60 × 10⁻⁶ F",
+        "RMS voltage V_rms: 110 V",
+        "Frequency f: 60 Hz"
+      ],
+      "to_find": [
+        "RMS current I_rms"
+      ],
+      "formulas_used": [
+        "$\\omega = 2\\pi f$ (angular frequency)",
+        "$X_C = \\frac{1}{\\omega C} = \\frac{1}{2\\pi f C}$ (capacitive reactance)",
+        "$I_{rms} = \\frac{V_{rms}}{X_C}$"
+      ]
+    },
+    "tags": [
+      "ac-circuit",
+      "capacitor",
+      "capacitive-reactance",
+      "rms-current",
+      "phase-difference",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.4",
+      "page": 200
+    },
+    "calculator_slug": "q7-4-capacitive-reactance",
+    "p5_sketch_slug": "q7-4-capacitive-ac",
+    "p5_sketch": "q7-4-capacitive-ac",
+    "calculator": "q7-4-capacitive-reactance"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "AC Circuits - Power",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.5",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "In Exercises 7.3 and 7.4, what is the net power absorbed by each circuit over a complete cycle. Explain your answer.",
+    "question_latex": "In Exercises 7.3 and 7.4, what is the net power absorbed by each circuit over a complete cycle. Explain your answer.",
+    "sub_parts": null,
+    "correct_answer_plain": "Net power absorbed is zero in both purely inductive (7.3) and purely capacitive (7.4) circuits over a complete cycle. Energy is alternately stored and returned to the source.",
+    "correct_answer_latex": "Net power absorbed is zero in both purely inductive (7.3) and purely capacitive (7.4) circuits over a complete cycle. Energy is alternately stored and returned to the source.",
+    "hint": "Pure inductors and capacitors are reactive elements - they store and release energy but do not dissipate it.",
+    "solution_steps_latex": [
+      "**For Exercise 7.3 (Pure Inductor)**:",
+      "In a purely inductive circuit, current lags voltage by $90^\\circ$",
+      "Phase difference: $\\phi = 90^\\circ$",
+      "Average power: $P_{avg} = V_{rms} I_{rms} \\cos\\phi = V_{rms} I_{rms} \\cos(90^\\circ) = 0$",
+      "During first quarter cycle: inductor stores energy as magnetic field",
+      "During next quarter cycle: inductor returns energy to source",
+      "Net energy absorbed over complete cycle = 0",
+      "**For Exercise 7.4 (Pure Capacitor)**:",
+      "In a purely capacitive circuit, current leads voltage by $90^\\circ$",
+      "Phase difference: $\\phi = -90^\\circ$",
+      "Average power: $P_{avg} = V_{rms} I_{rms} \\cos\\phi = V_{rms} I_{rms} \\cos(90^\\circ) = 0$",
+      "During first quarter cycle: capacitor stores energy as electric field",
+      "During next quarter cycle: capacitor returns energy to source",
+      "Net energy absorbed over complete cycle = 0",
+      "**Conclusion**: Only resistive elements dissipate power. Reactive elements (L and C) only temporarily store and release energy."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Reactive circuit waveforms showing V, I with 90° phase difference; zero average power",
+      "figure_reference": "References Exercises 7.3 and 7.4"
+    },
+    "physical_quantities": {
+      "given": [
+        "Pure inductor circuit (Ex 7.3)",
+        "Pure capacitor circuit (Ex 7.4)",
+        "AC supply over complete cycle"
+      ],
+      "to_find": [
+        "Net power absorbed in each circuit",
+        "Explanation"
+      ],
+      "formulas_used": [
+        "$P_{avg} = V_{rms} I_{rms} \\cos\\phi$",
+        "For pure L: $\\phi = 90^\\circ$",
+        "For pure C: $\\phi = -90^\\circ$",
+        "$\\cos(90^\\circ) = 0$"
+      ]
+    },
+    "tags": [
+      "ac-power",
+      "reactive-elements",
+      "power-factor",
+      "pure-inductor",
+      "pure-capacitor",
+      "energy-storage",
+      "conceptual-understanding",
+      "phase-difference"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.5",
+      "page": 200
+    },
+    "calculator_slug": "",
+    "p5_sketch_slug": "q7-5-zero-power",
+    "p5_sketch": "q7-5-zero-power"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "LC Oscillations",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.6",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A charged 30 μF capacitor is connected to a 27 mH inductor. What is the angular frequency of free oscillations of the circuit?",
+    "question_latex": "A charged $30$ $\\mu$F capacitor is connected to a $27$ mH inductor. What is the angular frequency of free oscillations of the circuit?",
+    "sub_parts": null,
+    "correct_answer_plain": "ω = 1111 rad/s ≈ 1.11 × 10³ rad/s",
+    "correct_answer_latex": "$\\omega = 1111$ rad/s $\\approx 1.11 \\times 10^{3}$ rad/s",
+    "hint": "Use the formula for LC oscillation: ω = 1/√(LC)",
+    "solution_steps_latex": [
+      "Given: $C = 30$ $\\mu$F $= 30 \\times 10^{-6}$ F",
+      "$L = 27$ mH $= 27 \\times 10^{-3}$ H",
+      "To find: Angular frequency $\\omega$ of free oscillations",
+      "For an LC circuit undergoing free oscillations:",
+      "$\\omega = \\frac{1}{\\sqrt{LC}}$",
+      "Substituting values:",
+      "$\\omega = \\frac{1}{\\sqrt{27 \\times 10^{-3} \\times 30 \\times 10^{-6}}}$",
+      "$\\omega = \\frac{1}{\\sqrt{810 \\times 10^{-9}}}$",
+      "$\\omega = \\frac{1}{\\sqrt{8.1 \\times 10^{-7}}}$",
+      "$\\omega = \\frac{1}{9.0 \\times 10^{-4}}$",
+      "$\\omega = 1111.11$ rad/s",
+      "$\\omega \\approx 1.11 \\times 10^{3}$ rad/s",
+      "**Note**: Frequency $f = \\frac{\\omega}{2\\pi} = \\frac{1111}{2\\pi} \\approx 177$ Hz"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "LC oscillation circuit with L = 27 mH, C = 30 μF; energy oscillates between electric and magnetic",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Capacitance C: 30 μF = 30 × 10⁻⁶ F",
+        "Inductance L: 27 mH = 27 × 10⁻³ H"
+      ],
+      "to_find": [
+        "Angular frequency ω of free oscillations"
+      ],
+      "formulas_used": [
+        "$\\omega = \\frac{1}{\\sqrt{LC}}$",
+        "Frequency: $f = \\frac{\\omega}{2\\pi}$"
+      ]
+    },
+    "tags": [
+      "lc-oscillations",
+      "angular-frequency",
+      "resonance",
+      "free-oscillations",
+      "electromagnetic-oscillations",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.6",
+      "page": 200
+    },
+    "calculator_slug": "q7-6-lc-frequency",
+    "p5_sketch_slug": "q7-6-lc-oscillation",
+    "p5_sketch": "q7-6-lc-oscillation",
+    "calculator": "q7-6-lc-frequency"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "LCR Circuit and Resonance",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.7",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "A series LCR circuit with R = 20 Ω, L = 1.5 H and C = 35 μF is connected to a variable-frequency 200 V ac supply. When the frequency of the supply equals the natural frequency of the circuit, what is the average power transferred to the circuit in one complete cycle?",
+    "question_latex": "A series LCR circuit with $R = 20$ $\\Omega$, $L = 1.5$ H and $C = 35$ $\\mu$F is connected to a variable-frequency $200$ V ac supply. When the frequency of the supply equals the natural frequency of the circuit, what is the average power transferred to the circuit in one complete cycle?",
+    "sub_parts": null,
+    "correct_answer_plain": "P_avg = 2000 W = 2 kW",
+    "correct_answer_latex": "$P_{avg} = 2000$ W $= 2$ kW",
+    "hint": "At resonance, impedance Z = R and power factor cos φ = 1. Use P = V²/R.",
+    "solution_steps_latex": [
+      "Given: $R = 20$ $\\Omega$, $L = 1.5$ H, $C = 35$ $\\mu$F $= 35 \\times 10^{-6}$ F",
+      "Supply voltage: $V = 200$ V (rms assumed)",
+      "Condition: Supply frequency = Natural frequency (resonance)",
+      "**At resonance**:",
+      "Inductive reactance: $X_L = \\omega L$",
+      "Capacitive reactance: $X_C = \\frac{1}{\\omega C}$",
+      "At resonance: $X_L = X_C$",
+      "Therefore, impedance: $Z = \\sqrt{R^2 + (X_L - X_C)^2} = \\sqrt{R^2 + 0} = R$",
+      "$Z = 20$ $\\Omega$",
+      "Phase difference: $\\phi = 0$ (voltage and current in phase)",
+      "Power factor: $\\cos\\phi = \\cos(0) = 1$",
+      "Current in circuit: $I_{rms} = \\frac{V_{rms}}{Z} = \\frac{200}{20} = 10$ A",
+      "**Average power**:",
+      "Method 1: $P_{avg} = V_{rms} I_{rms} \\cos\\phi = 200 \\times 10 \\times 1 = 2000$ W",
+      "Method 2: $P_{avg} = I_{rms}^2 R = (10)^2 \\times 20 = 2000$ W",
+      "Method 3: $P_{avg} = \\frac{V_{rms}^2}{R} = \\frac{(200)^2}{20} = \\frac{40000}{20} = 2000$ W",
+      "$P_{avg} = 2000$ W $= 2$ kW",
+      "**Note**: Maximum power is transferred at resonance."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Series LCR resonance curve showing power maximum at f₀ = 21.9 Hz, P = 2000 W",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Resistance R: 20 Ω",
+        "Inductance L: 1.5 H",
+        "Capacitance C: 35 μF = 35 × 10⁻⁶ F",
+        "Supply voltage V: 200 V (rms)",
+        "Frequency: equals natural frequency (resonance)"
+      ],
+      "to_find": [
+        "Average power transferred in one complete cycle"
+      ],
+      "formulas_used": [
+        "At resonance: $X_L = X_C$",
+        "$Z = R$ (at resonance)",
+        "$I_{rms} = \\frac{V_{rms}}{Z}$",
+        "$P_{avg} = V_{rms} I_{rms} \\cos\\phi$",
+        "$P_{avg} = I_{rms}^2 R$",
+        "$P_{avg} = \\frac{V_{rms}^2}{R}$ (at resonance)"
+      ]
+    },
+    "tags": [
+      "lcr-circuit",
+      "resonance",
+      "power-at-resonance",
+      "series-circuit",
+      "impedance",
+      "power-factor",
+      "maximum-power-transfer",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.7",
+      "page": 200
+    },
+    "calculator_slug": "q7-7-resonance-power",
+    "p5_sketch_slug": "q7-7-lcr-resonance",
+    "p5_sketch": "q7-7-lcr-resonance",
+    "calculator": "q7-7-resonance-power"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 7: Alternating Current",
+    "section": "LCR Circuit - Comprehensive Analysis",
+    "exercise": "Exercise 7",
+    "question_number": "Q7.8",
+    "marks": 6,
+    "difficulty": 0.8,
+    "question_plain": "Figure 7.17 shows a series LCR circuit connected to a variable frequency 230 V source. L = 5.0 H, C = 80μF, R = 40 Ω.\n(a) Determine the source frequency which drives the circuit in resonance.\n(b) Obtain the impedance of the circuit and the amplitude of current at the resonating frequency.\n(c) Determine the rms potential drops across the three elements of the circuit. Show that the potential drop across the LC combination is zero at the resonating frequency.",
+    "question_latex": "Figure 7.17 shows a series LCR circuit connected to a variable frequency $230$ V source. $L = 5.0$ H, $C = 80$ $\\mu$F, $R = 40$ $\\Omega$.\n\n(a) Determine the source frequency which drives the circuit in resonance.\n\n(b) Obtain the impedance of the circuit and the amplitude of current at the resonating frequency.\n\n(c) Determine the rms potential drops across the three elements of the circuit. Show that the potential drop across the LC combination is zero at the resonating frequency.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) f = 7.96 Hz, (b) Z = 40 Ω, I_0 = 8.13 A, (c) V_R = 230 V, V_L = 1437.5 V, V_C = 1437.5 V, V_LC = 0",
+    "correct_answer_latex": "(a) $f = 7.96$ Hz, (b) $Z = 40$ $\\Omega$, $I_0 = 8.13$ A, (c) $V_R = 230$ V, $V_L = 1437.5$ V, $V_C = 1437.5$ V, $V_{LC} = 0$",
+    "hint": "(a) ω₀ = 1/√(LC), f = ω/(2π). (b) At resonance Z = R. (c) V_L = V_C at resonance, they cancel",
+    "solution_steps_latex": [
+      "Given: $L = 5.0$ H, $C = 80$ $\\mu$F $= 80 \\times 10^{-6}$ F, $R = 40$ $\\Omega$",
+      "Supply: $V_{rms} = 230$ V, variable frequency",
+      "**Part (a): Resonance Frequency**",
+      "At resonance: $X_L = X_C$",
+      "$\\omega_0 L = \\frac{1}{\\omega_0 C}$",
+      "$\\omega_0^2 = \\frac{1}{LC}$",
+      "$\\omega_0 = \\frac{1}{\\sqrt{LC}}$",
+      "$\\omega_0 = \\frac{1}{\\sqrt{5.0 \\times 80 \\times 10^{-6}}}$",
+      "$\\omega_0 = \\frac{1}{\\sqrt{4 \\times 10^{-4}}} = \\frac{1}{0.02} = 50$ rad/s",
+      "Frequency: $f_0 = \\frac{\\omega_0}{2\\pi} = \\frac{50}{2 \\times 3.14} = \\frac{50}{6.28}$",
+      "$f_0 = 7.96$ Hz $\\approx 8$ Hz",
+      "**Part (b): Impedance and Current Amplitude**",
+      "At resonance: $Z = R = 40$ $\\Omega$",
+      "RMS current: $I_{rms} = \\frac{V_{rms}}{Z} = \\frac{230}{40} = 5.75$ A",
+      "Peak (amplitude) current: $I_0 = \\sqrt{2} \\times I_{rms}$",
+      "$I_0 = 1.414 \\times 5.75 = 8.13$ A",
+      "**Part (c): Potential Drops**",
+      "**Across R**:",
+      "$V_R = I_{rms} R = 5.75 \\times 40 = 230$ V",
+      "**Across L**:",
+      "$X_L = \\omega_0 L = 50 \\times 5.0 = 250$ $\\Omega$",
+      "$V_L = I_{rms} X_L = 5.75 \\times 250 = 1437.5$ V",
+      "**Across C**:",
+      "$X_C = \\frac{1}{\\omega_0 C} = \\frac{1}{50 \\times 80 \\times 10^{-6}} = \\frac{1}{0.004} = 250$ $\\Omega$",
+      "$V_C = I_{rms} X_C = 5.75 \\times 250 = 1437.5$ V",
+      "**Across LC combination**:",
+      "Since $V_L$ and $V_C$ are $180^\\circ$ out of phase:",
+      "$V_{LC} = |V_L - V_C| = |1437.5 - 1437.5| = 0$ V",
+      "**Verification**:",
+      "Applied voltage: $V = \\sqrt{V_R^2 + (V_L - V_C)^2}$",
+      "$V = \\sqrt{(230)^2 + 0^2} = 230$ V ✓",
+      "**Key Point**: At resonance, $V_L = V_C$, they exactly cancel each other!",
+      "The entire supply voltage appears across the resistor."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Series LCR circuit at resonance: Z = R = 40 Ω, voltage magnification V_L = V_C = 1437.5 V",
+      "figure_reference": "Figure 7.17"
+    },
+    "physical_quantities": {
+      "given": [
+        "Inductance L: 5.0 H",
+        "Capacitance C: 80 μF = 80 × 10⁻⁶ F",
+        "Resistance R: 40 Ω",
+        "Supply voltage V_rms: 230 V",
+        "Variable frequency source"
+      ],
+      "to_find": [
+        "(a) Resonance frequency",
+        "(b) Impedance and current amplitude at resonance",
+        "(c) RMS potential drops across R, L, C and LC combination"
+      ],
+      "formulas_used": [
+        "$\\omega_0 = \\frac{1}{\\sqrt{LC}}$ (resonance angular frequency)",
+        "$f_0 = \\frac{\\omega_0}{2\\pi}$ (resonance frequency)",
+        "$Z = \\sqrt{R^2 + (X_L - X_C)^2}$ (impedance)",
+        "At resonance: $Z = R$",
+        "$I = \\frac{V}{Z}$",
+        "$I_0 = \\sqrt{2} I_{rms}$",
+        "$V_R = IR$, $V_L = IX_L$, $V_C = IX_C$"
+      ]
+    },
+    "tags": [
+      "lcr-circuit",
+      "series-circuit",
+      "resonance-frequency",
+      "impedance-at-resonance",
+      "voltage-distribution",
+      "reactive-voltage-cancellation",
+      "figure-based-question",
+      "comprehensive-analysis"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 7,
+      "exercise": "7",
+      "question_number": "Q7.8",
+      "page": 200
+    },
+    "calculator_slug": "q7-8-lcr-impedance",
+    "p5_sketch_slug": "q7-8-lcr-comprehensive",
+    "p5_sketch": "q7-8-lcr-comprehensive",
+    "calculator": "q7-8-lcr-impedance"
+  }
+]

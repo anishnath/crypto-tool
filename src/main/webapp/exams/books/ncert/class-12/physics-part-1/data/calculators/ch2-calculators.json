@@ -1,0 +1,197 @@
+{
+  "q2-1-potential-zero": {
+    "title": "Electric Potential — Zero Point Finder",
+    "formula_display": "V = kq₁/r₁ + kq₂/r₂ = 0",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q1", "label": "Charge q₁", "unit": "C", "default": 5e-8, "min": 1e-9, "max": 1e-4, "step": 1e-9, "exponent": true },
+      { "id": "q2", "label": "Charge q₂ (negative)", "unit": "C", "default": -3e-8, "min": -1e-4, "max": -1e-9, "step": 1e-9, "exponent": false },
+      { "id": "d", "label": "Separation d", "unit": "m", "default": 0.16, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "abs(q1) * d / (abs(q1) + abs(q2))",
+    "output": { "label": "Zero-potential point (from q₁, between)", "unit": "m", "precision": 4 },
+    "plot": {
+      "vary": "d",
+      "range": [0.02, 1.0],
+      "points": 50,
+      "xLabel": "Separation (m)",
+      "yLabel": "Zero-point distance (m)"
+    }
+  },
+
+  "q2-2-hexagon-potential": {
+    "title": "Potential at Centre of Regular Polygon",
+    "formula_display": "V = n × kq / a",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "n", "label": "Number of vertices", "unit": "", "default": 6, "min": 3, "max": 12, "step": 1 },
+      { "id": "q", "label": "Charge at each vertex", "unit": "C", "default": 5e-6, "min": 1e-9, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "a", "label": "Side length a", "unit": "m", "default": 0.1, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "n * k * q / a",
+    "output": { "label": "Potential V", "unit": "V", "precision": 4 },
+    "plot": {
+      "vary": "a",
+      "range": [0.02, 1.0],
+      "points": 50,
+      "xLabel": "Side length (m)",
+      "yLabel": "Potential (V)"
+    }
+  },
+
+  "q2-4-sphere-efield": {
+    "title": "E-field of Charged Conducting Sphere",
+    "formula_display": "E = kq / r²  (r ≥ R)",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q", "label": "Charge q", "unit": "C", "default": 1.6e-7, "min": 1e-9, "max": 1e-3, "step": 1e-8, "exponent": true },
+      { "id": "R", "label": "Sphere radius R", "unit": "m", "default": 0.12, "min": 0.01, "max": 2.0, "step": 0.01 },
+      { "id": "r", "label": "Distance from centre r", "unit": "m", "default": 0.18, "min": 0.01, "max": 5.0, "step": 0.01 }
+    ],
+    "compute": "r < R ? 0 : k * q / (r * r)",
+    "output": { "label": "Electric field E", "unit": "N/C", "precision": 4 },
+    "direction_rule": "r < R ? 'E = 0 inside conductor' : 'Radially outward'",
+    "plot": {
+      "vary": "r",
+      "range": [0.01, 1.0],
+      "points": 80,
+      "xLabel": "Distance r (m)",
+      "yLabel": "E (N/C)"
+    }
+  },
+
+  "q2-5-capacitor-dielectric": {
+    "title": "Capacitor with Dielectric",
+    "formula_display": "C' = κ × ε₀A / d'",
+    "inputs": [
+      { "id": "C0", "label": "Original capacitance C₀", "unit": "pF", "default": 8, "min": 1, "max": 10000, "step": 1 },
+      { "id": "kappa", "label": "Dielectric constant κ", "unit": "", "default": 6, "min": 1, "max": 100, "step": 0.5 },
+      { "id": "d_factor", "label": "Distance factor (d'/d)", "unit": "×", "default": 0.5, "min": 0.1, "max": 5.0, "step": 0.1 }
+    ],
+    "compute": "C0 * kappa / d_factor",
+    "output": { "label": "New capacitance C'", "unit": "pF", "precision": 4 },
+    "plot": {
+      "vary": "kappa",
+      "range": [1, 20],
+      "points": 50,
+      "xLabel": "Dielectric constant κ",
+      "yLabel": "Capacitance (pF)"
+    }
+  },
+
+  "q2-6-series-capacitor": {
+    "title": "Capacitors in Series",
+    "formula_display": "1/C = 1/C₁ + 1/C₂ + 1/C₃",
+    "inputs": [
+      { "id": "C1", "label": "Capacitor C₁", "unit": "pF", "default": 9, "min": 1, "max": 10000, "step": 1 },
+      { "id": "C2", "label": "Capacitor C₂", "unit": "pF", "default": 9, "min": 1, "max": 10000, "step": 1 },
+      { "id": "C3", "label": "Capacitor C₃", "unit": "pF", "default": 9, "min": 1, "max": 10000, "step": 1 },
+      { "id": "V", "label": "Supply voltage", "unit": "V", "default": 120, "min": 1, "max": 1000, "step": 1 }
+    ],
+    "compute": "1 / (1/C1 + 1/C2 + 1/C3)",
+    "output": { "label": "Total capacitance", "unit": "pF", "precision": 4 },
+    "plot": {
+      "vary": "C1",
+      "range": [1, 100],
+      "points": 50,
+      "xLabel": "C₁ (pF)",
+      "yLabel": "C_total (pF)"
+    }
+  },
+
+  "q2-7-parallel-capacitor": {
+    "title": "Capacitors in Parallel",
+    "formula_display": "C = C₁ + C₂ + C₃",
+    "inputs": [
+      { "id": "C1", "label": "Capacitor C₁", "unit": "pF", "default": 2, "min": 1, "max": 10000, "step": 1 },
+      { "id": "C2", "label": "Capacitor C₂", "unit": "pF", "default": 3, "min": 1, "max": 10000, "step": 1 },
+      { "id": "C3", "label": "Capacitor C₃", "unit": "pF", "default": 4, "min": 1, "max": 10000, "step": 1 },
+      { "id": "V", "label": "Supply voltage", "unit": "V", "default": 100, "min": 1, "max": 1000, "step": 1 }
+    ],
+    "compute": "C1 + C2 + C3",
+    "output": { "label": "Total capacitance", "unit": "pF", "precision": 4 },
+    "plot": {
+      "vary": "C1",
+      "range": [1, 100],
+      "points": 50,
+      "xLabel": "C₁ (pF)",
+      "yLabel": "C_total (pF)"
+    }
+  },
+
+  "q2-8-plate-capacitor": {
+    "title": "Parallel Plate Capacitor — C and Q",
+    "formula_display": "C = ε₀A/d,  Q = CV",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "A", "label": "Plate area A", "unit": "m²", "default": 6e-3, "min": 1e-4, "max": 1, "step": 1e-4, "exponent": true },
+      { "id": "d", "label": "Plate separation d", "unit": "m", "default": 3e-3, "min": 1e-4, "max": 0.1, "step": 1e-4, "exponent": true },
+      { "id": "V", "label": "Voltage V", "unit": "V", "default": 100, "min": 1, "max": 10000, "step": 1 }
+    ],
+    "compute": "epsilon0 * A / d",
+    "output": { "label": "Capacitance C", "unit": "F", "precision": 4 },
+    "plot": {
+      "vary": "d",
+      "range": [0.0005, 0.05],
+      "points": 50,
+      "xLabel": "Separation d (m)",
+      "yLabel": "Capacitance (F)"
+    }
+  },
+
+  "q2-9-dielectric-insert": {
+    "title": "Dielectric Insertion — Battery On vs Off",
+    "formula_display": "C' = κC₀",
+    "inputs": [
+      { "id": "C0", "label": "Original capacitance C₀", "unit": "pF", "default": 17.71, "min": 1, "max": 10000, "step": 0.01 },
+      { "id": "V0", "label": "Original voltage V₀", "unit": "V", "default": 100, "min": 1, "max": 10000, "step": 1 },
+      { "id": "kappa", "label": "Dielectric constant κ", "unit": "", "default": 6, "min": 1, "max": 100, "step": 0.5 }
+    ],
+    "compute": "kappa * C0",
+    "output": { "label": "New capacitance C'", "unit": "pF", "precision": 4 },
+    "plot": {
+      "vary": "kappa",
+      "range": [1, 20],
+      "points": 50,
+      "xLabel": "Dielectric constant κ",
+      "yLabel": "Capacitance (pF)"
+    }
+  },
+
+  "q2-10-energy-stored": {
+    "title": "Energy Stored in Capacitor",
+    "formula_display": "U = ½CV²",
+    "inputs": [
+      { "id": "C", "label": "Capacitance C", "unit": "pF", "default": 12, "min": 1, "max": 100000, "step": 1 },
+      { "id": "V", "label": "Voltage V", "unit": "V", "default": 50, "min": 1, "max": 10000, "step": 1 }
+    ],
+    "compute": "0.5 * C * 1e-12 * V * V",
+    "output": { "label": "Energy U", "unit": "J", "precision": 4 },
+    "plot": {
+      "vary": "V",
+      "range": [1, 500],
+      "points": 60,
+      "xLabel": "Voltage (V)",
+      "yLabel": "Energy (J)"
+    }
+  },
+
+  "q2-11-energy-loss": {
+    "title": "Charge Sharing — Energy Loss",
+    "formula_display": "ΔU = ½ × C₁C₂/(C₁+C₂) × (V₁−V₂)²",
+    "inputs": [
+      { "id": "C1", "label": "Capacitor C₁", "unit": "pF", "default": 600, "min": 1, "max": 100000, "step": 1 },
+      { "id": "V1", "label": "Initial voltage V₁", "unit": "V", "default": 200, "min": 1, "max": 10000, "step": 1 },
+      { "id": "C2", "label": "Capacitor C₂ (uncharged)", "unit": "pF", "default": 600, "min": 1, "max": 100000, "step": 1 }
+    ],
+    "compute": "0.5 * (C1 * 1e-12) * (C2 * 1e-12) / ((C1 + C2) * 1e-12) * V1 * V1",
+    "output": { "label": "Energy lost ΔU", "unit": "J", "precision": 4 },
+    "plot": {
+      "vary": "C2",
+      "range": [100, 5000],
+      "points": 50,
+      "xLabel": "C₂ (pF)",
+      "yLabel": "Energy lost (J)"
+    }
+  }
+}

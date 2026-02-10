@@ -1,0 +1,115 @@
+{
+  "q6-3-solenoid-emf": {
+    "title": "Induced EMF in Loop Inside Solenoid",
+    "formula_display": "\u03b5 = \u03bc\u2080 \u00b7 n \u00b7 A \u00b7 (dI/dt)",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "n", "label": "Turns per metre n", "unit": "m\u207b\u00b9", "default": 1500, "min": 100, "max": 100000, "step": 100 },
+      { "id": "A", "label": "Loop area A", "unit": "m\u00b2", "default": 2.0e-4, "min": 1e-6, "max": 1, "step": 1e-5, "exponent": true },
+      { "id": "dIdt", "label": "Rate of current change dI/dt", "unit": "A/s", "default": 20, "min": 0.1, "max": 10000, "step": 0.1 }
+    ],
+    "compute": "mu0 * n * A * dIdt",
+    "output": { "label": "Induced EMF \u03b5", "unit": "V", "precision": 6 },
+    "plot": {
+      "vary": "dIdt",
+      "range": [1, 100],
+      "points": 60,
+      "xLabel": "dI/dt (A/s)",
+      "yLabel": "\u03b5 (V)"
+    }
+  },
+
+  "q6-4-motional-emf": {
+    "title": "Motional EMF \u2014 Loop Exiting Field",
+    "formula_display": "\u03b5 = Blv",
+    "inputs": [
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.3, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "l", "label": "Edge length l", "unit": "m", "default": 0.08, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "v", "label": "Velocity v", "unit": "m/s", "default": 0.01, "min": 0.001, "max": 100, "step": 0.001 }
+    ],
+    "compute": "B * l * v",
+    "output": { "label": "Induced EMF \u03b5", "unit": "V", "precision": 6 },
+    "plot": {
+      "vary": "v",
+      "range": [0.001, 0.1],
+      "points": 60,
+      "xLabel": "Velocity v (m/s)",
+      "yLabel": "\u03b5 (V)"
+    }
+  },
+
+  "q6-5-rotating-rod": {
+    "title": "EMF of Rotating Rod",
+    "formula_display": "\u03b5 = \u00bdB\u03c9l\u00b2",
+    "inputs": [
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.5, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "omega", "label": "Angular frequency \u03c9", "unit": "rad/s", "default": 400, "min": 1, "max": 10000, "step": 1 },
+      { "id": "l", "label": "Rod length l", "unit": "m", "default": 1.0, "min": 0.01, "max": 10, "step": 0.01 }
+    ],
+    "compute": "0.5 * B * omega * l * l",
+    "output": { "label": "Induced EMF \u03b5", "unit": "V", "precision": 4 },
+    "plot": {
+      "vary": "omega",
+      "range": [10, 1000],
+      "points": 60,
+      "xLabel": "Angular frequency \u03c9 (rad/s)",
+      "yLabel": "\u03b5 (V)"
+    }
+  },
+
+  "q6-6-falling-wire": {
+    "title": "EMF of Wire Falling in Earth\u2019s Field",
+    "formula_display": "\u03b5 = B\u2095lv",
+    "inputs": [
+      { "id": "BH", "label": "Horizontal field B\u2095", "unit": "T", "default": 3.0e-5, "min": 1e-6, "max": 1e-3, "step": 1e-6, "exponent": true },
+      { "id": "l", "label": "Wire length l", "unit": "m", "default": 10, "min": 0.1, "max": 100, "step": 0.1 },
+      { "id": "v", "label": "Falling speed v", "unit": "m/s", "default": 5.0, "min": 0.1, "max": 100, "step": 0.1 }
+    ],
+    "compute": "BH * l * v",
+    "output": { "label": "Induced EMF \u03b5", "unit": "V", "precision": 6 },
+    "plot": {
+      "vary": "v",
+      "range": [0.5, 20],
+      "points": 60,
+      "xLabel": "Falling speed v (m/s)",
+      "yLabel": "\u03b5 (V)"
+    }
+  },
+
+  "q6-7-self-inductance": {
+    "title": "Self-Inductance from Back-EMF",
+    "formula_display": "L = \u03b5 / (dI/dt) = \u03b5 \u00b7 \u0394t / \u0394I",
+    "inputs": [
+      { "id": "emf", "label": "Average induced EMF \u03b5", "unit": "V", "default": 200, "min": 0.01, "max": 10000, "step": 1 },
+      { "id": "dI", "label": "Current change \u0394I", "unit": "A", "default": 5.0, "min": 0.01, "max": 1000, "step": 0.1 },
+      { "id": "dt", "label": "Time interval \u0394t", "unit": "s", "default": 0.1, "min": 0.001, "max": 100, "step": 0.01 }
+    ],
+    "compute": "emf * dt / dI",
+    "output": { "label": "Self-inductance L", "unit": "H", "precision": 4 },
+    "plot": {
+      "vary": "dI",
+      "range": [0.5, 20],
+      "points": 60,
+      "xLabel": "Current change \u0394I (A)",
+      "yLabel": "L (H)"
+    }
+  },
+
+  "q6-8-mutual-flux": {
+    "title": "Flux Linkage from Mutual Inductance",
+    "formula_display": "\u0394\u03a6 = M \u00b7 \u0394I",
+    "inputs": [
+      { "id": "M", "label": "Mutual inductance M", "unit": "H", "default": 1.5, "min": 0.01, "max": 100, "step": 0.01 },
+      { "id": "dI", "label": "Current change \u0394I", "unit": "A", "default": 20, "min": 0.1, "max": 1000, "step": 0.1 }
+    ],
+    "compute": "M * dI",
+    "output": { "label": "Flux linkage change \u0394\u03a6", "unit": "Wb", "precision": 4 },
+    "plot": {
+      "vary": "dI",
+      "range": [1, 50],
+      "points": 60,
+      "xLabel": "Current change \u0394I (A)",
+      "yLabel": "\u0394\u03a6 (Wb)"
+    }
+  }
+}

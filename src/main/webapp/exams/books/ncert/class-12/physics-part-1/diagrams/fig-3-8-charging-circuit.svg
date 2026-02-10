@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 280">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .wire { stroke: #374151; stroke-width: 2.5; fill: none; }
+      .batt-long { stroke: #dc2626; stroke-width: 3; }
+      .batt-short { stroke: #dc2626; stroke-width: 5; }
+      .supply-long { stroke: #7c3aed; stroke-width: 3; }
+      .supply-short { stroke: #7c3aed; stroke-width: 5; }
+      .resistor { stroke: #3b82f6; stroke-width: 2.5; fill: none; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#059669" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="24" class="label" font-size="16">Battery Charging Circuit</text>
+
+  <!-- DC Supply (left) -->
+  <polyline points="70,55 70,100" class="wire" />
+  <line x1="52" y1="100" x2="88" y2="100" class="supply-long" />
+  <line x1="58" y1="118" x2="82" y2="118" class="supply-short" />
+  <polyline points="70,118 70,210" class="wire" />
+  <text x="38" y="94" class="label" fill="#7c3aed" font-size="11" text-anchor="end">+</text>
+  <text x="38" y="128" class="label" fill="#7c3aed" font-size="11" text-anchor="end">−</text>
+  <text x="38" y="112" class="label" fill="#7c3aed" font-size="12" text-anchor="end">120 V</text>
+
+  <!-- Series Resistor (top) -->
+  <polyline points="70,55 170,55" class="wire" />
+  <polyline points="170,55 173,45 179,65 185,45 191,65 197,45 203,65 206,55" class="resistor" />
+  <polyline points="206,55 340,55" class="wire" />
+  <text x="188" y="38" class="label" fill="#3b82f6" font-size="12">R = 15.5 Ω</text>
+
+  <!-- Battery being charged (right) -->
+  <polyline points="340,55 340,100" class="wire" />
+  <line x1="322" y1="118" x2="358" y2="118" class="batt-long" />
+  <line x1="328" y1="100" x2="352" y2="100" class="batt-short" />
+  <polyline points="340,118 340,210" class="wire" />
+  <text x="375" y="94" class="label" fill="#dc2626" font-size="11" text-anchor="start">−</text>
+  <text x="375" y="128" class="label" fill="#dc2626" font-size="11" text-anchor="start">+</text>
+  <text x="380" y="112" class="label" fill="#dc2626" font-size="12" text-anchor="start">E=8 V</text>
+
+  <!-- Internal resistance of battery -->
+  <polyline points="340,118 340,145" class="wire" />
+  <polyline points="340,145 350,148 330,154 350,160 330,166 340,169" stroke="#6b7280" stroke-width="2" fill="none" />
+  <polyline points="340,169 340,210" class="wire" />
+  <text x="380" y="162" class="label" fill="#6b7280" font-size="11" text-anchor="start">r=0.5 Ω</text>
+
+  <!-- Bottom wire -->
+  <polyline points="70,210 340,210" class="wire" />
+
+  <!-- Current arrow -->
+  <line x1="240" y1="55" x2="290" y2="55" stroke="#059669" stroke-width="2.5" marker-end="url(#arr)" />
+  <text x="265" y="74" class="label" fill="#059669" font-size="12">I = 7 A</text>
+
+  <!-- Terminal voltage annotation -->
+  <rect x="138" y="226" width="235" height="38" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" />
+  <text x="255" y="245" class="label" fill="#059669" font-size="12">V_terminal = E + Ir = 8 + 3.5 = 11.5 V</text>
+  <text x="255" y="260" class="label" fill="#6b7280" font-size="10" font-weight="normal">Series R limits current to safe value</text>
+
+  <!-- Watermark -->
+  <text x="480" y="272" class="watermark">8gwifi.org</text>
+</svg>

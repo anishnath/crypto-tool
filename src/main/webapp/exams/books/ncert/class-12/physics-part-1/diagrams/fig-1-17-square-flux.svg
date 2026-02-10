@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .cube { fill: rgba(229, 231, 235, 0.4); stroke: #9ca3af; stroke-width: 1.5; stroke-dasharray: 4; }
+      .square-face { fill: rgba(59, 130, 246, 0.2); stroke: #2563eb; stroke-width: 2; }
+      .charge { fill: #ef4444; stroke: #b91c1c; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .dim-line { stroke: #6b7280; stroke-width: 1; marker-start: url(#tick); marker-end: url(#tick); }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="tick" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#6b7280" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Flux Through Square Surface</text>
+
+  <!-- The Real Square (Bottom Face) -->
+  <!-- Perspective: parallelogram -->
+  <polygon points="150,300 350,300 400,250 200,250" class="square-face" />
+  <text x="280" y="280" class="label" fill="#2563eb">Square Face (10cm x 10cm)</text>
+
+  <!-- Imaginary Cube Construction (Dashed) -->
+  <!-- Top Face -->
+  <polygon points="150,100 350,100 400,50 200,50" class="cube" />
+  <!-- Vertical Edges -->
+  <line x1="150" y1="300" x2="150" y2="100" class="cube" />
+  <line x1="350" y1="300" x2="350" y2="100" class="cube" />
+  <line x1="400" y1="250" x2="400" y2="50" class="cube" />
+  <line x1="200" y1="250" x2="200" y2="50" class="cube" />
+
+  <!-- Charge location -->
+  <!-- 5 cm directly above center of square -->
+  <!-- Center of square: (275, 275) approx -->
+  <!-- Height of cube is 200px (visual). 5cm is half of 10cm side. -->
+  <!-- So charge is exactly in the center of the cube! -->
+  <circle cx="275" cy="175" r="8" class="charge" />
+  <text x="300" y="170" class="label" fill="#dc2626">q (+10µC)</text>
+  <text x="310" y="190" class="label" font-size="12" fill="#4b5563">(Center of Cube)</text>
+
+  <!-- Height Indicator -->
+  <line x1="275" y1="275" x2="275" y2="185" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="2" />
+  <text x="290" y="230" class="label" font-size="12" fill="#6b7280">5 cm</text>
+
+  <!-- Flux arrows outgoing from center -->
+  <line x1="275" y1="175" x2="275" y2="350" stroke="#ef4444" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="275" y1="175" x2="450" y2="175" stroke="#ef4444" stroke-width="1.5" marker-end="url(#arrow)" />
+  <!-- (Arrows represent spherical symmetry) -->
+
+  <!-- Formula Hint -->
+  <rect x="50" y="350" width="220" height="40" rx="5" fill="#f3f4f6" stroke="#d1d5db" />
+  <text x="160" y="375" class="label">Flux = q / 6ε₀ (One Face)</text>
+
+  <!-- Watermark -->
+  <text x="480" y="390" class="watermark">8gwifi.org</text>
+</svg>

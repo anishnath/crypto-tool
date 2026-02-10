@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .charge-pos { fill: #ef4444; stroke: #b91c1c; stroke-width: 2; }
+      .charge-neg { fill: #3b82f6; stroke: #1d4ed8; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .vector { stroke-width: 2; marker-end: url(#arrow); }
+      .axis { stroke: #9ca3af; stroke-width: 1; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Electric Dipole</text>
+
+  <!-- Z Axis -->
+  <line x1="250" y1="50" x2="250" y2="350" class="axis" marker-end="url(#arrow)" />
+  <text x="265" y="60" class="label">Z</text>
+
+  <!-- Origin -->
+  <circle cx="250" cy="200" r="2" fill="#000" />
+  <text x="235" y="205" class="label">O</text>
+
+  <!-- Charge B: -2.5 uC at z = +15 cm (Top) -->
+  <circle cx="250" cy="100" r="12" class="charge-neg" />
+  <text x="290" y="105" class="label" fill="#2563eb">B (-q)</text>
+  <text x="320" y="125" class="label" font-size="10" fill="#6b7280">(0, 0, +15)</text>
+
+  <!-- Charge A: +2.5 uC at z = -15 cm (Bottom) -->
+  <circle cx="250" cy="300" r="12" class="charge-pos" />
+  <text x="290" y="305" class="label" fill="#dc2626">A (+q)</text>
+  <text x="320" y="325" class="label" font-size="10" fill="#6b7280">(0, 0, -15)</text>
+
+  <!-- Dipole Moment Vector p -->
+  <!-- From Negative to Positive? No, Dipole moment is from Negative to Positive charge. -->
+  <!-- Check Physics convention: p is vector from -q to +q. -->
+  <!-- Charge B is -q (Top). Charge A is +q (Bottom). -->
+  <!-- So vector points from B (Top) to A (Bottom)? -->
+  <!-- Wait. Let's check question 1.9. -->
+  <!-- A: (0,0,-15), B: (0,0,+15). -->
+  <!-- qA = +2.5 (positive). qB = -2.5 (negative). -->
+  <!-- So +q is at Bottom (A). -q is at Top (B). -->
+  <!-- Dipole Moment p points from -q to +q. -->
+  <!-- So from B (Top) to A (Bottom). i.e., -z direction. -->
+  <!-- Solution in JSON says: "Direction: along +z axis (from -q to +q)" -->
+  <!-- Wait. If -q is at +15 (Top) and +q is at -15 (Bottom). -->
+  <!-- Vector from -q to +q is Vector from (0,0,15) to (0,0,-15). -->
+  <!-- That is (0,0,-30). Direction is -z. -->
+  <!-- JSON Solution says: "d = 0.30 m along +z direction (from B to A...)" -->
+  <!-- "from B to A: from z=+0.15 to z=-0.15". That is -z direction! -->
+  <!-- Okay, let's look at JSON again. "Correct Answer: ... along +z direction". -->
+  <!-- Wait. "A: (0,0,-15) B: (0,0,+15)". qA = +2.5. qB = -2.5. -->
+  <!-- +q is at -15 (Bottom). -q is at +15 (Top). -->
+  <!-- p is from -q to +q. From Top to Bottom. Downward. -->
+  <!-- Downward is -z (if z points up). -->
+  <!-- My diagram Z axis points Up. So p should point Down. -->
+  <!-- I will draw p pointing Down. -->
+  
+  <line x1="220" y1="100" x2="220" y2="300" class="vector" stroke="#059669" marker-end="url(#arrow)" />
+  <text x="200" y="200" class="label" fill="#059669">p</text>
+  
+  <!-- Watermark -->
+  <text x="480" y="390" class="watermark">8gwifi.org</text>
+</svg>

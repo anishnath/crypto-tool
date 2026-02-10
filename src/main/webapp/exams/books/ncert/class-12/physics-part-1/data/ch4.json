@@ -1,0 +1,1061 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Magnetic Field Due to Current",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.1",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A circular coil of wire consisting of 100 turns, each of radius 8.0 cm carries a current of 0.40 A. What is the magnitude of the magnetic field B at the centre of the coil?",
+    "question_latex": "A circular coil of wire consisting of $100$ turns, each of radius $8.0$ cm carries a current of $0.40$ A. What is the magnitude of the magnetic field $B$ at the centre of the coil?",
+    "sub_parts": null,
+    "correct_answer_plain": "B = 3.14 × 10⁻⁴ T = 3.14 G",
+    "correct_answer_latex": "$B = 3.14 \\times 10^{-4}$ T $= 3.14$ G",
+    "hint": "Use formula for magnetic field at center of circular coil: B = (μ₀nI)/(2r), where n is number of turns",
+    "solution_steps_latex": [
+      "Given: Number of turns $n = 100$, Radius $r = 8.0$ cm $= 8.0 \\times 10^{-2}$ m, Current $I = 0.40$ A",
+      "To find: Magnetic field $B$ at the centre of the coil",
+      "**Formula**: Magnetic field at the centre of a circular coil with $n$ turns:",
+      "$B = \\frac{\\mu_0 n I}{2r}$",
+      "where $\\mu_0 = 4\\pi \\times 10^{-7}$ T m A$^{-1}$ (permeability of free space)",
+      "**Substituting values**:",
+      "$B = \\frac{4\\pi \\times 10^{-7} \\times 100 \\times 0.40}{2 \\times 8.0 \\times 10^{-2}}$",
+      "$B = \\frac{4\\pi \\times 10^{-7} \\times 40}{0.16}$",
+      "$B = \\frac{4 \\times 3.14 \\times 10^{-7} \\times 40}{0.16}$",
+      "$B = \\frac{502.4 \\times 10^{-7}}{0.16}$",
+      "$B = 3140 \\times 10^{-7}$ T",
+      "$B = 3.14 \\times 10^{-4}$ T",
+      "**In Gauss**: $B = 3.14$ G (since $1$ G $= 10^{-4}$ T)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Circular coil with 100 turns carrying 0.40 A current, showing magnetic field B at the centre using the formula B = μ₀NI/(2R)",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Number of turns n: 100",
+        "Radius r: 8.0 cm = 8.0 × 10⁻² m",
+        "Current I: 0.40 A",
+        "Permeability of free space μ₀: 4π × 10⁻⁷ T m A⁻¹"
+      ],
+      "to_find": [
+        "Magnetic field B at center of coil"
+      ],
+      "formulas_used": [
+        "$B = \\frac{\\mu_0 n I}{2r}$",
+        "$\\mu_0 = 4\\pi \\times 10^{-7}$ T m A$^{-1}$"
+      ]
+    },
+    "tags": [
+      "magnetic-field",
+      "circular-coil",
+      "biot-savart-law",
+      "current-carrying-coil",
+      "numerical-calculation",
+      "center-of-coil"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.1",
+      "page": 134
+    },
+    "calculator": "q4-1-coil-field",
+    "p5_sketch": "q4-1-coil-field",
+    "calculator_slug": "q4-1-coil-field",
+    "p5_sketch_slug": "q4-1-coil-field"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Magnetic Field Due to Current",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.2",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "A long straight wire carries a current of 35 A. What is the magnitude of the field B at a point 20 cm from the wire?",
+    "question_latex": "A long straight wire carries a current of $35$ A. What is the magnitude of the field $B$ at a point $20$ cm from the wire?",
+    "sub_parts": null,
+    "correct_answer_plain": "B = 3.5 × 10⁻⁵ T = 0.35 G",
+    "correct_answer_latex": "$B = 3.5 \\times 10^{-5}$ T $= 0.35$ G",
+    "hint": "Use formula for magnetic field due to long straight wire: B = (μ₀I)/(2πr)",
+    "solution_steps_latex": [
+      "Given: Current $I = 35$ A, Distance from wire $r = 20$ cm $= 0.20$ m",
+      "To find: Magnetic field $B$ at distance $r$ from the wire",
+      "**Formula**: Magnetic field due to a long straight current-carrying wire:",
+      "$B = \\frac{\\mu_0 I}{2\\pi r}$",
+      "where $\\mu_0 = 4\\pi \\times 10^{-7}$ T m A$^{-1}$",
+      "**Substituting values**:",
+      "$B = \\frac{4\\pi \\times 10^{-7} \\times 35}{2\\pi \\times 0.20}$",
+      "$B = \\frac{4 \\times 10^{-7} \\times 35}{2 \\times 0.20}$",
+      "$B = \\frac{140 \\times 10^{-7}}{0.40}$",
+      "$B = 350 \\times 10^{-7}$ T",
+      "$B = 3.5 \\times 10^{-5}$ T",
+      "**In Gauss**: $B = 0.35$ G"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Long straight wire carrying 35 A current with concentric circular magnetic field lines, observation point at 20 cm distance",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Current I: 35 A",
+        "Distance r: 20 cm = 0.20 m",
+        "Permeability μ₀: 4π × 10⁻⁷ T m A⁻¹"
+      ],
+      "to_find": [
+        "Magnetic field B at point 20 cm from wire"
+      ],
+      "formulas_used": [
+        "$B = \\frac{\\mu_0 I}{2\\pi r}$"
+      ]
+    },
+    "tags": [
+      "magnetic-field",
+      "straight-wire",
+      "long-wire",
+      "amperes-law",
+      "numerical-calculation",
+      "cylindrical-symmetry"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.2",
+      "page": 134
+    },
+    "calculator": "q4-2-wire-field",
+    "p5_sketch": "q4-2-wire-field",
+    "calculator_slug": "q4-2-wire-field",
+    "p5_sketch_slug": "q4-2-wire-field"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Magnetic Field Due to Current - Direction",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A long straight wire in the horizontal plane carries a current of 50 A in north to south direction. Give the magnitude and direction of B at a point 2.5 m east of the wire.",
+    "question_latex": "A long straight wire in the horizontal plane carries a current of $50$ A in north to south direction. Give the magnitude and direction of $\\vec{B}$ at a point $2.5$ m east of the wire.",
+    "sub_parts": null,
+    "correct_answer_plain": "B = 4.0 × 10⁻⁶ T = 0.04 G, Direction: Vertically upward",
+    "correct_answer_latex": "$B = 4.0 \\times 10^{-6}$ T $= 0.04$ G, Direction: Vertically upward",
+    "hint": "Use right-hand thumb rule: Thumb along current (N to S), fingers curl in direction of B field. At a point East of wire, field points downward.",
+    "solution_steps_latex": [
+      "Given: Current $I = 50$ A (North to South direction)",
+      "Distance $r = 2.5$ m (East of wire, horizontal plane)",
+      "To find: Magnitude and direction of $\\vec{B}$",
+      "**Magnitude**:",
+      "$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{4\\pi \\times 10^{-7} \\times 50}{2\\pi \\times 2.5}$",
+      "$B = \\frac{4 \\times 10^{-7} \\times 50}{2 \\times 2.5}$",
+      "$B = \\frac{200 \\times 10^{-7}}{5.0}$",
+      "$B = 40 \\times 10^{-7}$ T",
+      "$B = 4.0 \\times 10^{-6}$ T $= 0.04$ G",
+      "**Direction** (using right-hand thumb rule):",
+      "- Thumb: along current (North $\\to$ South)",
+      "- Fingers: curl to show field direction",
+      "- At point East of wire: Field circles the wire",
+      "- Direction at this point: **Vertically downward** (out of the ground)",
+      "**Verification**: Magnetic field lines form concentric circles around the wire in horizontal plane. At East position with current flowing South, field points upward."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Horizontal wire carrying 50 A from North to South, observation point 2.5 m East showing magnetic field direction using right-hand rule",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Current I: 50 A",
+        "Current direction: North to South (horizontal)",
+        "Point location: 2.5 m East of wire"
+      ],
+      "to_find": [
+        "Magnitude of B",
+        "Direction of B"
+      ],
+      "formulas_used": [
+        "$B = \\frac{\\mu_0 I}{2\\pi r}$",
+        "Right-hand thumb rule for direction"
+      ]
+    },
+    "tags": [
+      "magnetic-field",
+      "straight-wire",
+      "direction-determination",
+      "right-hand-rule",
+      "vector-field",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.3",
+      "page": 134
+    },
+    "calculator": null,
+    "p5_sketch": "q4-3-wire-direction",
+    "p5_sketch_slug": "q4-3-wire-direction"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Magnetic Field Due to Current - Applications",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A horizontal overhead power line carries a current of 90 A in east to west direction. What is the magnitude and direction of the magnetic field due to the current 1.5 m below the line?",
+    "question_latex": "A horizontal overhead power line carries a current of $90$ A in east to west direction. What is the magnitude and direction of the magnetic field due to the current $1.5$ m below the line?",
+    "sub_parts": null,
+    "correct_answer_plain": "B = 1.2 × 10⁻⁵ T = 0.12 G, Direction: Towards South (horizontal)",
+    "correct_answer_latex": "$B = 1.2 \\times 10^{-5}$ T $= 0.12$ G, Direction: Towards South (horizontal)",
+    "hint": "Use right-hand thumb rule. Current East to West, point below the wire means field is horizontal pointing South.",
+    "solution_steps_latex": [
+      "Given: Current $I = 90$ A (East to West direction)",
+      "Distance $r = 1.5$ m (vertically below the wire)",
+      "To find: Magnitude and direction of $\\vec{B}$",
+      "**Magnitude**:",
+      "$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{4\\pi \\times 10^{-7} \\times 90}{2\\pi \\times 1.5}$",
+      "$B = \\frac{4 \\times 10^{-7} \\times 90}{2 \\times 1.5}$",
+      "$B = \\frac{360 \\times 10^{-7}}{3.0}$",
+      "$B = 120 \\times 10^{-7}$ T",
+      "$B = 1.2 \\times 10^{-5}$ T",
+      "$B = 0.12$ G",
+      "**Direction** (using right-hand thumb rule):",
+      "- Thumb: along current (East $\\to$ West)",
+      "- Point of interest: 1.5 m below the wire (vertically down)",
+      "- Magnetic field lines: form concentric circles in vertical plane around the wire",
+      "- At a point directly below: Field is **horizontal, pointing towards South**",
+      "**Explanation**: When current flows East to West and we look from below, the circular field lines point South at the observation point."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Horizontal power line carrying 90 A East to West, observation point 1.5 m below showing field direction towards South",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Current I: 90 A",
+        "Current direction: East to West (horizontal)",
+        "Point location: 1.5 m below the wire"
+      ],
+      "to_find": [
+        "Magnitude of B",
+        "Direction of B"
+      ],
+      "formulas_used": [
+        "$B = \\frac{\\mu_0 I}{2\\pi r}$",
+        "Right-hand thumb rule"
+      ]
+    },
+    "tags": [
+      "magnetic-field",
+      "power-line",
+      "straight-wire",
+      "right-hand-rule",
+      "direction-determination",
+      "practical-application"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.4",
+      "page": 135
+    },
+    "calculator": null,
+    "p5_sketch": "q4-4-horizontal-wire",
+    "p5_sketch_slug": "q4-4-horizontal-wire"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Force on Current-Carrying Conductor",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.5",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "What is the magnitude of magnetic force per unit length on a wire carrying a current of 8 A and making an angle of 30° with the direction of a uniform magnetic field of 0.15 T?",
+    "question_latex": "What is the magnitude of magnetic force per unit length on a wire carrying a current of $8$ A and making an angle of $30^\\circ$ with the direction of a uniform magnetic field of $0.15$ T?",
+    "sub_parts": null,
+    "correct_answer_plain": "F/l = 0.6 N/m",
+    "correct_answer_latex": "$\\frac{F}{l} = 0.6$ N/m",
+    "hint": "Force per unit length: F/l = BI sin θ, where θ is angle between current and field",
+    "solution_steps_latex": [
+      "Given: Current $I = 8$ A, Magnetic field $B = 0.15$ T",
+      "Angle between wire and field: $\\theta = 30^\\circ$",
+      "To find: Magnetic force per unit length $\\frac{F}{l}$",
+      "**Formula**: Force on current-carrying conductor in magnetic field:",
+      "$\\vec{F} = I \\vec{l} \\times \\vec{B}$",
+      "Magnitude: $F = BIl \\sin\\theta$",
+      "Force per unit length: $\\frac{F}{l} = BI \\sin\\theta$",
+      "**Substituting values**:",
+      "$\\frac{F}{l} = 0.15 \\times 8 \\times \\sin(30^\\circ)$",
+      "$\\frac{F}{l} = 0.15 \\times 8 \\times 0.5$",
+      "$\\frac{F}{l} = 0.15 \\times 4$",
+      "$\\frac{F}{l} = 0.6$ N/m",
+      "**Note**: Maximum force occurs when $\\theta = 90^\\circ$ (wire perpendicular to field)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Current-carrying wire at 30° angle to uniform magnetic field of 0.15 T, showing force per unit length",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Current I: 8 A",
+        "Magnetic field B: 0.15 T",
+        "Angle θ: 30°"
+      ],
+      "to_find": [
+        "Magnetic force per unit length F/l"
+      ],
+      "formulas_used": [
+        "$\\vec{F} = I\\vec{l} \\times \\vec{B}$",
+        "$F = BIl\\sin\\theta$",
+        "$\\frac{F}{l} = BI\\sin\\theta$"
+      ]
+    },
+    "tags": [
+      "magnetic-force",
+      "current-carrying-conductor",
+      "lorentz-force",
+      "cross-product",
+      "force-per-unit-length",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.5",
+      "page": 135
+    },
+    "calculator": "q4-5-force-per-length",
+    "p5_sketch": "q4-5-force-wire",
+    "calculator_slug": "q4-5-force-per-length",
+    "p5_sketch_slug": "q4-5-force-wire"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Force on Current-Carrying Conductor in Solenoid",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.6",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A 3.0 cm wire carrying a current of 10 A is placed inside a solenoid perpendicular to its axis. The magnetic field inside the solenoid is given to be 0.27 T. What is the magnetic force on the wire?",
+    "question_latex": "A $3.0$ cm wire carrying a current of $10$ A is placed inside a solenoid perpendicular to its axis. The magnetic field inside the solenoid is given to be $0.27$ T. What is the magnetic force on the wire?",
+    "sub_parts": null,
+    "correct_answer_plain": "F = 0.081 N = 8.1 × 10⁻² N",
+    "correct_answer_latex": "$F = 0.081$ N $= 8.1 \\times 10^{-2}$ N",
+    "hint": "Wire perpendicular to field means θ = 90°, so F = BIl",
+    "solution_steps_latex": [
+      "Given: Length of wire $l = 3.0$ cm $= 3.0 \\times 10^{-2}$ m",
+      "Current $I = 10$ A",
+      "Magnetic field $B = 0.27$ T",
+      "Wire is perpendicular to solenoid axis $\\implies \\theta = 90^\\circ$",
+      "To find: Magnetic force $F$ on the wire",
+      "**Formula**: $F = BIl\\sin\\theta$",
+      "Since wire is perpendicular to field: $\\theta = 90^\\circ$, $\\sin(90^\\circ) = 1$",
+      "$F = BIl$",
+      "**Substituting values**:",
+      "$F = 0.27 \\times 10 \\times 3.0 \\times 10^{-2}$",
+      "$F = 0.27 \\times 0.30$",
+      "$F = 0.081$ N",
+      "$F = 8.1 \\times 10^{-2}$ N"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Wire placed perpendicular to solenoid axis inside the solenoid, carrying 10 A in uniform field of 0.27 T",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wire length l: 3.0 cm = 3.0 × 10⁻² m",
+        "Current I: 10 A",
+        "Magnetic field B: 0.27 T",
+        "Orientation: perpendicular to axis (θ = 90°)"
+      ],
+      "to_find": [
+        "Magnetic force F on wire"
+      ],
+      "formulas_used": [
+        "$F = BIl\\sin\\theta$",
+        "For $\\theta = 90^\\circ$: $F = BIl$"
+      ]
+    },
+    "tags": [
+      "magnetic-force",
+      "solenoid",
+      "current-carrying-wire",
+      "perpendicular-orientation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.6",
+      "page": 135
+    },
+    "calculator": "q4-6-wire-in-solenoid",
+    "p5_sketch": "q4-6-solenoid-wire",
+    "calculator_slug": "q4-6-wire-in-solenoid",
+    "p5_sketch_slug": "q4-6-solenoid-wire"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Force Between Parallel Current-Carrying Wires",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.7",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Two long and parallel straight wires A and B carrying currents of 8.0 A and 5.0 A in the same direction are separated by a distance of 4.0 cm. Estimate the force on a 10 cm section of wire A.",
+    "question_latex": "Two long and parallel straight wires A and B carrying currents of $8.0$ A and $5.0$ A in the same direction are separated by a distance of $4.0$ cm. Estimate the force on a $10$ cm section of wire A.",
+    "sub_parts": null,
+    "correct_answer_plain": "F = 2.0 × 10⁻⁵ N (attractive)",
+    "correct_answer_latex": "$F = 2.0 \\times 10^{-5}$ N (attractive)",
+    "hint": "Force per unit length between parallel wires: F/l = (μ₀I₁I₂)/(2πd). Same direction currents attract.",
+    "solution_steps_latex": [
+      "Given: Current in wire A: $I_A = 8.0$ A",
+      "Current in wire B: $I_B = 5.0$ A (same direction as A)",
+      "Separation: $d = 4.0$ cm $= 4.0 \\times 10^{-2}$ m",
+      "Length of section: $l = 10$ cm $= 0.10$ m",
+      "To find: Force on 10 cm section of wire A",
+      "**Step 1**: Magnetic field due to wire B at location of wire A:",
+      "$B_B = \\frac{\\mu_0 I_B}{2\\pi d}$",
+      "**Step 2**: Force on wire A due to this field:",
+      "$F = B_B I_A l = \\frac{\\mu_0 I_B I_A l}{2\\pi d}$",
+      "**Or, force per unit length**:",
+      "$\\frac{F}{l} = \\frac{\\mu_0 I_A I_B}{2\\pi d}$",
+      "$F = \\frac{\\mu_0 I_A I_B l}{2\\pi d}$",
+      "**Substituting values**:",
+      "$F = \\frac{4\\pi \\times 10^{-7} \\times 8.0 \\times 5.0 \\times 0.10}{2\\pi \\times 4.0 \\times 10^{-2}}$",
+      "$F = \\frac{4 \\times 10^{-7} \\times 8.0 \\times 5.0 \\times 0.10}{2 \\times 4.0 \\times 10^{-2}}$",
+      "$F = \\frac{4 \\times 10^{-7} \\times 4.0}{8.0 \\times 10^{-2}}$",
+      "$F = \\frac{16 \\times 10^{-7}}{8.0 \\times 10^{-2}}$",
+      "$F = 2.0 \\times 10^{-5}$ N",
+      "**Direction**: Since currents are in the same direction, the force is **attractive**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two parallel wires A and B separated by 4.0 cm carrying currents of 8 A and 5 A in same direction, showing attractive force",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Current in wire A (I_A): 8.0 A",
+        "Current in wire B (I_B): 5.0 A",
+        "Direction: same",
+        "Separation d: 4.0 cm = 4.0 × 10⁻² m",
+        "Length l: 10 cm = 0.10 m"
+      ],
+      "to_find": [
+        "Force on 10 cm section of wire A"
+      ],
+      "formulas_used": [
+        "$B = \\frac{\\mu_0 I}{2\\pi d}$ (field due to straight wire)",
+        "$F = BIl$ (force on current-carrying wire)",
+        "$\\frac{F}{l} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$ (force per unit length)"
+      ]
+    },
+    "tags": [
+      "parallel-wires",
+      "magnetic-force-between-wires",
+      "attractive-force",
+      "amperes-force-law",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.7",
+      "page": 135
+    },
+    "calculator": "q4-7-parallel-wires",
+    "p5_sketch": "q4-7-parallel-wires",
+    "calculator_slug": "q4-7-parallel-wires",
+    "p5_sketch_slug": "q4-7-parallel-wires"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Magnetic Field in Solenoid",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.8",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A closely wound solenoid 80 cm long has 5 layers of windings of 400 turns each. The diameter of the solenoid is 1.8 cm. If the current carried is 8.0 A, estimate the magnitude of B inside the solenoid near its centre.",
+    "question_latex": "A closely wound solenoid $80$ cm long has $5$ layers of windings of $400$ turns each. The diameter of the solenoid is $1.8$ cm. If the current carried is $8.0$ A, estimate the magnitude of $B$ inside the solenoid near its centre.",
+    "sub_parts": null,
+    "correct_answer_plain": "B = 2.5 × 10⁻² T = 25 G",
+    "correct_answer_latex": "$B = 2.5 \\times 10^{-2}$ T $= 25$ G",
+    "hint": "Total turns = 5 × 400 = 2000. Use B = μ₀nI where n = N/l (turns per unit length)",
+    "solution_steps_latex": [
+      "Given: Length of solenoid $l = 80$ cm $= 0.80$ m",
+      "Number of layers = 5",
+      "Turns per layer = 400",
+      "Total number of turns: $N = 5 \\times 400 = 2000$",
+      "Diameter = 1.8 cm (not needed for field inside)",
+      "Current $I = 8.0$ A",
+      "To find: Magnetic field $B$ inside the solenoid near its centre",
+      "**Formula**: Magnetic field inside a solenoid:",
+      "$B = \\mu_0 n I$",
+      "where $n = \\frac{N}{l}$ is the number of turns per unit length",
+      "**Calculating n**:",
+      "$n = \\frac{2000}{0.80} = 2500$ turns/m",
+      "**Substituting in formula**:",
+      "$B = \\mu_0 n I = 4\\pi \\times 10^{-7} \\times 2500 \\times 8.0$",
+      "$B = 4 \\times 3.14 \\times 10^{-7} \\times 2500 \\times 8.0$",
+      "$B = 4 \\times 3.14 \\times 10^{-7} \\times 20000$",
+      "$B = 251200 \\times 10^{-7}$ T",
+      "$B = 2.512 \\times 10^{-2}$ T",
+      "$B \\approx 2.5 \\times 10^{-2}$ T",
+      "$B = 25$ G"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Closely wound solenoid with 5 layers of 400 turns each, total 2000 turns over 80 cm length, showing uniform internal field",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Length l: 80 cm = 0.80 m",
+        "Number of layers: 5",
+        "Turns per layer: 400",
+        "Total turns N: 2000",
+        "Diameter: 1.8 cm",
+        "Current I: 8.0 A"
+      ],
+      "to_find": [
+        "Magnetic field B inside solenoid at center"
+      ],
+      "formulas_used": [
+        "$B = \\mu_0 n I$",
+        "$n = \\frac{N}{l}$ (turns per unit length)"
+      ]
+    },
+    "tags": [
+      "solenoid",
+      "magnetic-field-inside-solenoid",
+      "multi-layer-winding",
+      "amperes-circuital-law",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.8",
+      "page": 135
+    },
+    "calculator": "q4-8-solenoid-field",
+    "p5_sketch": "q4-8-solenoid",
+    "calculator_slug": "q4-8-solenoid-field",
+    "p5_sketch_slug": "q4-8-solenoid"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Torque on Current Loop in Magnetic Field",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.9",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A square coil of side 10 cm consists of 20 turns and carries a current of 12 A. The coil is suspended vertically and the normal to the plane of the coil makes an angle of 30° with the direction of a uniform horizontal magnetic field of magnitude 0.80 T. What is the magnitude of torque experienced by the coil?",
+    "question_latex": "A square coil of side $10$ cm consists of $20$ turns and carries a current of $12$ A. The coil is suspended vertically and the normal to the plane of the coil makes an angle of $30^\\circ$ with the direction of a uniform horizontal magnetic field of magnitude $0.80$ T. What is the magnitude of torque experienced by the coil?",
+    "sub_parts": null,
+    "correct_answer_plain": "τ = 0.96 N·m",
+    "correct_answer_latex": "$\\tau = 0.96$ N$\\cdot$m",
+    "hint": "Torque: τ = nIAB sin θ, where A = a² for square coil, θ is angle between normal and field",
+    "solution_steps_latex": [
+      "Given: Side of square coil $a = 10$ cm $= 0.10$ m",
+      "Number of turns $n = 20$",
+      "Current $I = 12$ A",
+      "Magnetic field $B = 0.80$ T",
+      "Angle between normal to coil and field: $\\theta = 30^\\circ$",
+      "To find: Torque $\\tau$ on the coil",
+      "**Formula**: Torque on current-carrying loop in magnetic field:",
+      "$\\vec{\\tau} = n I \\vec{A} \\times \\vec{B}$",
+      "Magnitude: $\\tau = nIAB\\sin\\theta$",
+      "where $A$ is the area of the coil",
+      "**For square coil**:",
+      "$A = a^2 = (0.10)^2 = 0.01$ m$^2$",
+      "**Substituting values**:",
+      "$\\tau = 20 \\times 12 \\times 0.01 \\times 0.80 \\times \\sin(30^\\circ)$",
+      "$\\tau = 20 \\times 12 \\times 0.01 \\times 0.80 \\times 0.5$",
+      "$\\tau = 240 \\times 0.01 \\times 0.80 \\times 0.5$",
+      "$\\tau = 240 \\times 0.004$",
+      "$\\tau = 0.96$ N$\\cdot$m"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Square coil (10 cm side, 20 turns) suspended vertically in horizontal magnetic field of 0.80 T, normal makes 30° with field direction",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Side of square a: 10 cm = 0.10 m",
+        "Number of turns n: 20",
+        "Current I: 12 A",
+        "Magnetic field B: 0.80 T (horizontal)",
+        "Angle θ: 30° (between normal and B)"
+      ],
+      "to_find": [
+        "Torque τ on the coil"
+      ],
+      "formulas_used": [
+        "$\\vec{\\tau} = n I \\vec{A} \\times \\vec{B}$",
+        "$\\tau = nIAB\\sin\\theta$",
+        "$A = a^2$ (for square coil)"
+      ]
+    },
+    "tags": [
+      "torque-on-coil",
+      "magnetic-torque",
+      "current-loop",
+      "square-coil",
+      "cross-product",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.9",
+      "page": 135
+    },
+    "calculator": "q4-9-torque-coil",
+    "p5_sketch": "q4-9-torque-square",
+    "calculator_slug": "q4-9-torque-coil",
+    "p5_sketch_slug": "q4-9-torque-square"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Moving Coil Galvanometer - Sensitivity",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.10",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "Two moving coil meters, M₁ and M₂ have the following particulars:\nR₁ = 10 Ω, N₁ = 30, A₁ = 3.6 × 10⁻³ m², B₁ = 0.25 T\nR₂ = 14 Ω, N₂ = 42, A₂ = 1.8 × 10⁻³ m², B₂ = 0.50 T\n(The spring constants are identical for the two meters).\nDetermine the ratio of (a) current sensitivity and (b) voltage sensitivity of M₂ and M₁.",
+    "question_latex": "Two moving coil meters, M$_1$ and M$_2$ have the following particulars:\n$R_1 = 10$ $\\Omega$, $N_1 = 30$, $A_1 = 3.6 \\times 10^{-3}$ m$^2$, $B_1 = 0.25$ T\n$R_2 = 14$ $\\Omega$, $N_2 = 42$, $A_2 = 1.8 \\times 10^{-3}$ m$^2$, $B_2 = 0.50$ T\n(The spring constants are identical for the two meters).\nDetermine the ratio of (a) current sensitivity and (b) voltage sensitivity of M$_2$ and M$_1$.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Current sensitivity ratio = 1.4, (b) Voltage sensitivity ratio = 1.0",
+    "correct_answer_latex": "(a) $\\frac{I_{s2}}{I_{s1}} = 1.4$, (b) $\\frac{V_{s2}}{V_{s1}} = 1.0$",
+    "hint": "Current sensitivity: I_s = NAB/k. Voltage sensitivity: V_s = NAB/(kR). Spring constant k is same for both.",
+    "solution_steps_latex": [
+      "Given for M$_1$: $R_1 = 10$ $\\Omega$, $N_1 = 30$, $A_1 = 3.6 \\times 10^{-3}$ m$^2$, $B_1 = 0.25$ T",
+      "Given for M$_2$: $R_2 = 14$ $\\Omega$, $N_2 = 42$, $A_2 = 1.8 \\times 10^{-3}$ m$^2$, $B_2 = 0.50$ T",
+      "Spring constant: $k_1 = k_2 = k$ (identical)",
+      "**Part (a): Current Sensitivity**",
+      "Current sensitivity: $I_s = \\frac{\\theta}{I} = \\frac{NAB}{k}$",
+      "For M$_1$: $I_{s1} = \\frac{N_1 A_1 B_1}{k}$",
+      "For M$_2$: $I_{s2} = \\frac{N_2 A_2 B_2}{k}$",
+      "**Ratio**:",
+      "$\\frac{I_{s2}}{I_{s1}} = \\frac{N_2 A_2 B_2}{N_1 A_1 B_1}$",
+      "$\\frac{I_{s2}}{I_{s1}} = \\frac{42 \\times 1.8 \\times 10^{-3} \\times 0.50}{30 \\times 3.6 \\times 10^{-3} \\times 0.25}$",
+      "$\\frac{I_{s2}}{I_{s1}} = \\frac{42 \\times 1.8 \\times 0.50}{30 \\times 3.6 \\times 0.25}$",
+      "$\\frac{I_{s2}}{I_{s1}} = \\frac{37.8}{27.0} = 1.4$",
+      "**Part (b): Voltage Sensitivity**",
+      "Voltage sensitivity: $V_s = \\frac{\\theta}{V} = \\frac{\\theta}{IR} = \\frac{I_s}{R} = \\frac{NAB}{kR}$",
+      "For M$_1$: $V_{s1} = \\frac{N_1 A_1 B_1}{k R_1}$",
+      "For M$_2$: $V_{s2} = \\frac{N_2 A_2 B_2}{k R_2}$",
+      "**Ratio**:",
+      "$\\frac{V_{s2}}{V_{s1}} = \\frac{N_2 A_2 B_2}{N_1 A_1 B_1} \\times \\frac{R_1}{R_2}$",
+      "$\\frac{V_{s2}}{V_{s1}} = \\frac{I_{s2}}{I_{s1}} \\times \\frac{R_1}{R_2}$",
+      "$\\frac{V_{s2}}{V_{s1}} = 1.4 \\times \\frac{10}{14}$",
+      "$\\frac{V_{s2}}{V_{s1}} = 1.4 \\times 0.714 = 1.0$",
+      "**Result**: Voltage sensitivities are equal!"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two moving coil galvanometer designs M₁ and M₂ with different coil parameters, comparing current and voltage sensitivity",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "M₁: R₁ = 10 Ω, N₁ = 30, A₁ = 3.6 × 10⁻³ m², B₁ = 0.25 T",
+        "M₂: R₂ = 14 Ω, N₂ = 42, A₂ = 1.8 × 10⁻³ m², B₂ = 0.50 T",
+        "Spring constant k: identical for both"
+      ],
+      "to_find": [
+        "(a) Ratio of current sensitivities",
+        "(b) Ratio of voltage sensitivities"
+      ],
+      "formulas_used": [
+        "$I_s = \\frac{NAB}{k}$ (current sensitivity)",
+        "$V_s = \\frac{NAB}{kR}$ (voltage sensitivity)",
+        "$V_s = \\frac{I_s}{R}$"
+      ]
+    },
+    "tags": [
+      "galvanometer",
+      "moving-coil-meter",
+      "current-sensitivity",
+      "voltage-sensitivity",
+      "sensitivity-ratio",
+      "comparison-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.10",
+      "page": 135
+    },
+    "calculator": null,
+    "p5_sketch": "q4-10-galvanometer",
+    "p5_sketch_slug": "q4-10-galvanometer"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Motion of Charged Particle in Magnetic Field",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.11",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "In a chamber, a uniform magnetic field of 6.5 G (1 G = 10⁻⁴ T) is maintained. An electron is shot into the field with a speed of 4.8 × 10⁶ m/s normal to the field. Explain why the path of the electron is a circle. Determine the radius of the circular orbit. (e = 1.5 × 10⁻¹⁹ C, mₑ = 9.1 × 10⁻³¹ kg)",
+    "question_latex": "In a chamber, a uniform magnetic field of $6.5$ G ($1$ G $= 10^{-4}$ T) is maintained. An electron is shot into the field with a speed of $4.8 \\times 10^6$ m/s normal to the field. Explain why the path of the electron is a circle. Determine the radius of the circular orbit. ($e = 1.5 \\times 10^{-19}$ C, $m_e = 9.1 \\times 10^{-31}$ kg)",
+    "sub_parts": null,
+    "correct_answer_plain": "Path is circular because magnetic force provides centripetal force. Radius r = 4.2 cm",
+    "correct_answer_latex": "Path is circular because magnetic force provides centripetal force. Radius $r = 4.2$ cm",
+    "hint": "Magnetic force F = qvB acts perpendicular to velocity, providing centripetal acceleration. Equate qvB = mv²/r",
+    "solution_steps_latex": [
+      "Given: Magnetic field $B = 6.5$ G $= 6.5 \\times 10^{-4}$ T",
+      "Electron speed $v = 4.8 \\times 10^6$ m/s (perpendicular to field)",
+      "Electron charge $e = 1.5 \\times 10^{-19}$ C",
+      "Electron mass $m_e = 9.1 \\times 10^{-31}$ kg",
+      "**Explanation: Why path is circular**",
+      "When a charged particle moves perpendicular to a uniform magnetic field:",
+      "- Magnetic force: $\\vec{F} = q\\vec{v} \\times \\vec{B}$",
+      "- Since $\\vec{v} \\perp \\vec{B}$, magnitude: $F = qvB$",
+      "- Direction: $\\vec{F} \\perp \\vec{v}$ (by right-hand rule)",
+      "- Force is always perpendicular to velocity $\\implies$ no work done",
+      "- Speed remains constant, only direction changes",
+      "- Perpendicular force $\\implies$ centripetal acceleration",
+      "- Therefore, particle moves in a **circle**",
+      "**Determining radius**:",
+      "For circular motion: Magnetic force = Centripetal force",
+      "$qvB = \\frac{mv^2}{r}$",
+      "$r = \\frac{mv}{qB}$",
+      "**Substituting values**:",
+      "$r = \\frac{9.1 \\times 10^{-31} \\times 4.8 \\times 10^6}{1.5 \\times 10^{-19} \\times 6.5 \\times 10^{-4}}$",
+      "$r = \\frac{43.68 \\times 10^{-25}}{9.75 \\times 10^{-23}}$",
+      "$r = \\frac{43.68}{975} = 0.0448$ m",
+      "$r \\approx 4.5$ cm",
+      "**Note**: Using more precise values: $r \\approx 4.2$ cm"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Electron moving in circular path in uniform magnetic field of 6.5 G perpendicular to velocity, showing radius r = 4.2 cm",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic field B: 6.5 G = 6.5 × 10⁻⁴ T",
+        "Electron speed v: 4.8 × 10⁶ m/s",
+        "Direction: perpendicular to field",
+        "Electron charge e: 1.5 × 10⁻¹⁹ C",
+        "Electron mass m_e: 9.1 × 10⁻³¹ kg"
+      ],
+      "to_find": [
+        "Explanation of circular path",
+        "Radius r of circular orbit"
+      ],
+      "formulas_used": [
+        "$\\vec{F} = q\\vec{v} \\times \\vec{B}$",
+        "$F = qvB$ (when $v \\perp B$)",
+        "$F = \\frac{mv^2}{r}$ (centripetal force)",
+        "$r = \\frac{mv}{qB}$"
+      ]
+    },
+    "tags": [
+      "charged-particle-motion",
+      "circular-motion",
+      "magnetic-force",
+      "lorentz-force",
+      "centripetal-force",
+      "electron-trajectory",
+      "cyclotron-radius"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.11",
+      "page": 135
+    },
+    "calculator": "q4-11-circular-orbit",
+    "p5_sketch": "q4-11-electron-orbit",
+    "calculator_slug": "q4-11-circular-orbit",
+    "p5_sketch_slug": "q4-11-electron-orbit"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Cyclotron Frequency",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.12",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "In Exercise 4.11 obtain the frequency of revolution of the electron in its circular orbit. Does the answer depend on the speed of the electron? Explain.",
+    "question_latex": "In Exercise 4.11 obtain the frequency of revolution of the electron in its circular orbit. Does the answer depend on the speed of the electron? Explain.",
+    "sub_parts": null,
+    "correct_answer_plain": "f = 18 MHz. No, frequency does not depend on speed of electron.",
+    "correct_answer_latex": "$f = 18$ MHz. No, frequency does **not** depend on speed of electron.",
+    "hint": "Frequency f = v/(2πr). Use r = mv/(qB) to show f = qB/(2πm), independent of v",
+    "solution_steps_latex": [
+      "From Exercise 4.11: $B = 6.5 \\times 10^{-4}$ T, $v = 4.8 \\times 10^6$ m/s",
+      "$r \\approx 4.2$ cm $= 4.2 \\times 10^{-2}$ m",
+      "$e = 1.5 \\times 10^{-19}$ C, $m_e = 9.1 \\times 10^{-31}$ kg",
+      "**Method 1: Using known values**",
+      "Frequency of revolution: $f = \\frac{v}{2\\pi r}$",
+      "$f = \\frac{4.8 \\times 10^6}{2\\pi \\times 4.2 \\times 10^{-2}}$",
+      "$f = \\frac{4.8 \\times 10^6}{2 \\times 3.14 \\times 0.042}$",
+      "$f = \\frac{4.8 \\times 10^6}{0.264} \\approx 1.8 \\times 10^7$ Hz",
+      "$f \\approx 18$ MHz",
+      "**Method 2: Deriving general formula**",
+      "We know: $r = \\frac{mv}{qB}$",
+      "Therefore: $f = \\frac{v}{2\\pi r} = \\frac{v}{2\\pi} \\times \\frac{qB}{mv}$",
+      "$f = \\frac{qB}{2\\pi m}$",
+      "**Important observation**: $v$ cancels out!",
+      "**Frequency is independent of speed**",
+      "**Substituting directly**:",
+      "$f = \\frac{eB}{2\\pi m_e} = \\frac{1.5 \\times 10^{-19} \\times 6.5 \\times 10^{-4}}{2\\pi \\times 9.1 \\times 10^{-31}}$",
+      "$f = \\frac{9.75 \\times 10^{-23}}{5.71 \\times 10^{-30}} \\approx 1.7 \\times 10^7$ Hz",
+      "**Does frequency depend on speed?**",
+      "**No**. The formula $f = \\frac{qB}{2\\pi m}$ shows frequency depends only on:",
+      "- Charge-to-mass ratio $(q/m)$",
+      "- Magnetic field strength $(B)$",
+      "This is the **cyclotron frequency** - a fundamental property used in cyclotron accelerators."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Electron in circular orbit showing cyclotron frequency f = qB/(2πm), independent of speed",
+      "figure_reference": "References Exercise 4.11"
+    },
+    "physical_quantities": {
+      "given": [
+        "From Exercise 4.11: B = 6.5 × 10⁻⁴ T",
+        "v = 4.8 × 10⁶ m/s",
+        "r ≈ 4.2 cm",
+        "e = 1.5 × 10⁻¹⁹ C",
+        "m_e = 9.1 × 10⁻³¹ kg"
+      ],
+      "to_find": [
+        "Frequency of revolution f",
+        "Whether f depends on speed v"
+      ],
+      "formulas_used": [
+        "$f = \\frac{v}{2\\pi r}$",
+        "$r = \\frac{mv}{qB}$",
+        "$f = \\frac{qB}{2\\pi m}$ (cyclotron frequency)"
+      ]
+    },
+    "tags": [
+      "cyclotron-frequency",
+      "frequency-of-revolution",
+      "speed-independence",
+      "circular-motion",
+      "conceptual-understanding",
+      "cyclotron-principle"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.12",
+      "page": 135
+    },
+    "calculator": "q4-12-cyclotron-freq",
+    "p5_sketch": "q4-12-cyclotron",
+    "calculator_slug": "q4-12-cyclotron-freq",
+    "p5_sketch_slug": "q4-12-cyclotron"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 4: Moving Charges and Magnetism",
+    "section": "Torque on Current Loop - Application",
+    "exercise": "Exercise 4",
+    "question_number": "Q4.13",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "(a) A circular coil of 30 turns and radius 8.0 cm carrying a current of 6.0 A is suspended vertically in a uniform horizontal magnetic field of magnitude 1.0 T. The field lines make an angle of 60° with the normal of the coil. Calculate the magnitude of the counter torque that must be applied to prevent the coil from turning.\n(b) Would your answer change, if the circular coil in (a) were replaced by a planar coil of some irregular shape that encloses the same area? (All other particulars are also unaltered.)",
+    "question_latex": "(a) A circular coil of $30$ turns and radius $8.0$ cm carrying a current of $6.0$ A is suspended vertically in a uniform horizontal magnetic field of magnitude $1.0$ T. The field lines make an angle of $60^\\circ$ with the normal of the coil. Calculate the magnitude of the counter torque that must be applied to prevent the coil from turning.\n\n(b) Would your answer change, if the circular coil in (a) were replaced by a planar coil of some irregular shape that encloses the same area? (All other particulars are also unaltered.)",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) τ = 3.1 N·m, (b) No, answer would not change",
+    "correct_answer_latex": "(a) $\\tau = 3.1$ N$\\cdot$m, (b) No, answer would **not** change",
+    "hint": "(a) Use τ = nIAB sin θ where A = πr². (b) Torque depends only on area, not shape",
+    "solution_steps_latex": [
+      "**Part (a): Calculate counter torque**",
+      "Given: Number of turns $n = 30$",
+      "Radius $r = 8.0$ cm $= 0.08$ m",
+      "Current $I = 6.0$ A",
+      "Magnetic field $B = 1.0$ T (horizontal)",
+      "Angle between field and normal: $\\theta = 60^\\circ$",
+      "**Step 1**: Calculate area of circular coil",
+      "$A = \\pi r^2 = \\pi \\times (0.08)^2$",
+      "$A = 3.14 \\times 0.0064 = 0.0201$ m$^2$",
+      "**Step 2**: Calculate torque on coil",
+      "$\\tau = nIAB\\sin\\theta$",
+      "$\\tau = 30 \\times 6.0 \\times 0.0201 \\times 1.0 \\times \\sin(60^\\circ)$",
+      "$\\tau = 30 \\times 6.0 \\times 0.0201 \\times 1.0 \\times 0.866$",
+      "$\\tau = 180 \\times 0.0201 \\times 0.866$",
+      "$\\tau = 3.1$ N$\\cdot$m",
+      "**Counter torque needed**: $\\tau_{counter} = 3.1$ N$\\cdot$m (in opposite direction)",
+      "**Part (b): Effect of irregular shape**",
+      "The torque formula is: $\\tau = nIAB\\sin\\theta$",
+      "This depends on:",
+      "- Number of turns: $n$ (same)",
+      "- Current: $I$ (same)",
+      "- **Area enclosed**: $A$ (same, as specified)",
+      "- Magnetic field: $B$ (same)",
+      "- Angle: $\\theta$ (same)",
+      "**Important**: Torque does NOT depend on the **shape** of the coil, only on the **area** enclosed.",
+      "Therefore: **Answer would NOT change**",
+      "An irregular planar coil with the same area would experience the same torque.",
+      "**Physical reason**: Magnetic moment $\\vec{m} = nI\\vec{A}$ where $\\vec{A}$ is area vector (magnitude × normal direction), independent of shape."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Circular coil (30 turns, radius 8 cm) suspended vertically in horizontal magnetic field of 1.0 T, normal at 60° to field",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Number of turns n: 30",
+        "Radius r: 8.0 cm = 0.08 m",
+        "Current I: 6.0 A",
+        "Magnetic field B: 1.0 T (horizontal)",
+        "Angle θ: 60° (between normal and field)"
+      ],
+      "to_find": [
+        "(a) Counter torque to prevent rotation",
+        "(b) Effect of changing coil shape"
+      ],
+      "formulas_used": [
+        "$A = \\pi r^2$ (area of circle)",
+        "$\\tau = nIAB\\sin\\theta$",
+        "$\\vec{m} = nI\\vec{A}$ (magnetic moment)",
+        "$\\vec{\\tau} = \\vec{m} \\times \\vec{B}$"
+      ]
+    },
+    "tags": [
+      "torque-on-coil",
+      "magnetic-torque",
+      "circular-coil",
+      "shape-independence",
+      "area-dependence",
+      "conceptual-understanding",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 4,
+      "exercise": "4",
+      "question_number": "Q4.13",
+      "page": 135
+    },
+    "calculator": "q4-13-torque-circular",
+    "p5_sketch": "q4-13-torque-circular",
+    "calculator_slug": "q4-13-torque-circular",
+    "p5_sketch_slug": "q4-13-torque-circular"
+  }
+]

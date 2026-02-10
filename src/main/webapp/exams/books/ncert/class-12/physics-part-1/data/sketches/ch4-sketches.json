@@ -1,0 +1,116 @@
+{
+  "q4-1-coil-field": {
+    "type": "magnetic-field-wire",
+    "params": {
+      "current": 0.40,
+      "current_direction": "outof",
+      "label_B": "B = 3.14 \u00d7 10\u207b\u2074 T",
+      "label_d": "R = 8 cm",
+      "show_point": false
+    }
+  },
+  "q4-2-wire-field": {
+    "type": "magnetic-field-wire",
+    "params": {
+      "current": 35,
+      "current_direction": "outof",
+      "label_B": "B = 3.5 \u00d7 10\u207b\u2075 T",
+      "label_d": "d = 20 cm",
+      "show_point": true
+    }
+  },
+  "q4-3-wire-direction": {
+    "type": "magnetic-field-wire",
+    "params": {
+      "current": 50,
+      "current_direction": "into",
+      "label_B": "B = 4.0 \u00d7 10\u207b\u2076 T (vertical up)",
+      "label_d": "d = 2.5 m (East)",
+      "show_point": true
+    }
+  },
+  "q4-4-horizontal-wire": {
+    "type": "magnetic-field-wire",
+    "params": {
+      "current": 90,
+      "current_direction": "into",
+      "label_B": "B = 1.2 \u00d7 10\u207b\u2075 T (South)",
+      "label_d": "d = 1.5 m (below)",
+      "show_point": true
+    }
+  },
+  "q4-5-force-wire": {
+    "type": "magnetic-field-wire",
+    "params": {
+      "current": 8,
+      "current_direction": "outof",
+      "label_B": "B = 0.15 T, \u03b8 = 30\u00b0",
+      "label_d": "F/l = 0.6 N/m",
+      "show_point": false
+    }
+  },
+  "q4-6-solenoid-wire": {
+    "type": "solenoid-field",
+    "params": {
+      "visible_turns": 10,
+      "label_B": "B = 0.27 T (uniform inside)"
+    }
+  },
+  "q4-7-parallel-wires": {
+    "type": "parallel-wires",
+    "params": {
+      "I1": 8,
+      "I2": 5,
+      "same_direction": true,
+      "label_d": "d = 4 cm",
+      "label_F": "F = 2 \u00d7 10\u207b\u2075 N (attractive)"
+    }
+  },
+  "q4-8-solenoid": {
+    "type": "solenoid-field",
+    "params": {
+      "visible_turns": 14,
+      "label_B": "B = 2.5 \u00d7 10\u207b\u00b2 T = 25 G"
+    }
+  },
+  "q4-9-torque-square": {
+    "type": "torque-coil",
+    "params": {
+      "angle": 30,
+      "coil_shape": "square",
+      "label_tau": "\u03c4 = 0.96 N\u00b7m"
+    }
+  },
+  "q4-10-galvanometer": {
+    "type": "torque-coil",
+    "params": {
+      "angle": 45,
+      "coil_shape": "square",
+      "label_tau": "Galvanometer: coil in B field"
+    }
+  },
+  "q4-11-electron-orbit": {
+    "type": "circular-orbit",
+    "params": {
+      "radius_label": "r = 4.2 cm",
+      "particle": "electron",
+      "field_direction": "into"
+    }
+  },
+  "q4-12-cyclotron": {
+    "type": "circular-orbit",
+    "params": {
+      "radius_label": "f = 18 MHz",
+      "particle": "electron",
+      "field_direction": "into"
+    }
+  },
+  "q4-13-torque-circular": {
+    "type": "torque-coil",
+    "params": {
+      "angle": 60,
+      "coil_shape": "circular",
+      "label_tau": "\u03c4 = 3.1 N\u00b7m"
+    }
+  }
+}

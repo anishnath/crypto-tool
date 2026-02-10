@@ -1,0 +1,54 @@
+{
+  "q2-1-zero-potential": {
+    "type": "coulomb-force",
+    "params": {
+      "charges": [
+        { "x": 0.25, "y": 0, "q": 1, "label": "q₁ = +5×10⁻⁸ C" },
+        { "x": 0.75, "y": 0, "q": -1, "label": "q₂ = −3×10⁻⁸ C" }
+      ],
+      "distance_label": "16 cm",
+      "show_force": false
+    }
+  },
+  "q2-2-hexagon-charges": {
+    "type": "charge-config",
+    "params": {
+      "charges": [
+        { "x": 0.5,   "y": 0.2,  "q": 1, "label": "5 µC" },
+        { "x": 0.76,  "y": 0.35, "q": 1, "label": "5 µC" },
+        { "x": 0.76,  "y": 0.65, "q": 1, "label": "5 µC" },
+        { "x": 0.5,   "y": 0.8,  "q": 1, "label": "5 µC" },
+        { "x": 0.24,  "y": 0.65, "q": 1, "label": "5 µC" },
+        { "x": 0.24,  "y": 0.35, "q": 1, "label": "5 µC" }
+      ],
+      "result_label": "V = 6 × kq/a = 2.7 × 10⁶ V"
+    }
+  },
+  "q2-3-equipotential-dipole": {
+    "type": "dipole",
+    "params": {
+      "positive": { "x": 0.3, "y": 0.5 },
+      "negative": { "x": 0.7, "y": 0.5 },
+      "show_moment": true,
+      "positive_label": "+2 µC",
+      "negative_label": "−2 µC"
+    }
+  },
+  "q2-4-sphere-field": {
+    "type": "conducting-sphere",
+    "params": {
+      "charge_sign": "positive",
+      "sphere_radius": 50,
+      "show_radius": true,
+      "observation_point": { "r": 75, "angle": 0, "label": "P (18 cm)" }
+    }
+  },
+  "q2-5-capacitor-dielectric": {
+    "type": "parallel-plates",
+    "params": {}
+  },
+  "q2-8-parallel-plate": {
+    "type": "parallel-plates",
+    "params": {}
+  }
+}

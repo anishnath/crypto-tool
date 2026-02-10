@@ -1,0 +1,62 @@
+{
+  "q5-1-torque-magnet": {
+    "type": "bar-magnet-torque",
+    "params": {
+      "angle": 30,
+      "label_tau": "4.5 \u00d7 10\u207b\u00b2 N\u00b7m",
+      "label_m": "m = 0.36 J T\u207b\u00b9"
+    }
+  },
+  "q5-2-equilibrium": {
+    "type": "bar-magnet-torque",
+    "params": {
+      "angle": 5,
+      "label_tau": "U = \u2212mB cos \u03b8",
+      "label_m": "Stable: \u03b8=0\u00b0, Unstable: \u03b8=180\u00b0",
+      "title": "Equilibrium of Bar Magnet in Field"
+    }
+  },
+  "q5-3-solenoid-magnet": {
+    "type": "solenoid-field",
+    "params": {
+      "visible_turns": 10,
+      "label_B": "m = NIA = 0.60 A m\u00b2",
+      "title": "Solenoid as Bar Magnet"
+    }
+  },
+  "q5-4-solenoid-torque": {
+    "type": "bar-magnet-torque",
+    "params": {
+      "angle": 30,
+      "label_tau": "7.5 \u00d7 10\u207b\u00b2 N\u00b7m",
+      "label_m": "m = 0.6 A m\u00b2, B = 0.25 T",
+      "title": "Solenoid Torque in Magnetic Field"
+    }
+  },
+  "q5-5-work-rotation": {
+    "type": "bar-magnet-torque",
+    "params": {
+      "angle": 45,
+      "label_tau": "W = mB(cos\u03b8\u2081 \u2212 cos\u03b8\u2082)",
+      "label_m": "m = 1.5 J T\u207b\u00b9, B = 0.22 T",
+      "title": "Work Done Rotating Bar Magnet"
+    }
+  },
+  "q5-6-solenoid-combined": {
+    "type": "bar-magnet-torque",
+    "params": {
+      "angle": 30,
+      "label_tau": "\u03c4 = 0.048 N\u00b7m",
+      "label_m": "m = NIA = 1.28 A m\u00b2",
+      "title": "Solenoid in Uniform Field"
+    }
+  },
+  "q5-7-dipole-field": {
+    "type": "dipole-field",
+    "params": {
+      "label_axial": "0.96 G (S\u2192N)",
+      "label_eq": "0.48 G (N\u2192S)",
+      "title": "Bar Magnet: Axial & Equatorial Field"
+    }
+  }
+}

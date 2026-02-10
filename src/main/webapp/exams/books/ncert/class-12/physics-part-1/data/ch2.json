@@ -1,0 +1,732 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.1",
+    "question_number": "2.1",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Two charges 5 × 10^{-8} C and -3 × 10^{-8} C are located 16 cm apart. At what point(s) on the line joining the two charges is the electric potential zero? Take the potential at infinity to be zero.",
+    "question_latex": "Two charges $5 \\times 10^{-8}$ C and $-3 \\times 10^{-8}$ C are located 16 cm apart. At what point(s) on the line joining the two charges is the electric potential zero? Take the potential at infinity to be zero.",
+    "sub_parts": null,
+    "correct_answer_plain": "Two points: (i) 10 cm from the positive charge (between the charges), (ii) 40 cm from the positive charge (outside, beyond the negative charge)",
+    "correct_answer_latex": "Two points: (i) 10 cm from $q_1$ (between the charges), (ii) 40 cm from $q_1$ (outside, beyond $q_2$)",
+    "hint": "Set V = 0 at point P. Use V = kq/r for each charge and solve for position where potentials cancel.",
+    "solution_steps_latex": [
+      "Let positive charge $q_1 = 5 \\times 10^{-8}$ C at point A, negative $q_2 = -3 \\times 10^{-8}$ C at B. Distance AB = 16 cm = 0.16 m.",
+      "**Point 1 — Between the charges:** Let P be at distance $x$ from A (so distance from B = $0.16 - x$).",
+      "$V = \\frac{kq_1}{x} + \\frac{kq_2}{0.16-x} = 0 \\implies \\frac{5}{x} = \\frac{3}{0.16 - x}$",
+      "$5(0.16 - x) = 3x \\implies 0.80 = 8x \\implies x = 0.10$ m = **10 cm from $q_1$**",
+      "**Point 2 — Outside, beyond $q_2$:** Let P be at distance $x$ from B (so from A = $0.16 + x$).",
+      "$\\frac{5}{0.16+x} = \\frac{3}{x} \\implies 5x = 3(0.16+x) \\implies 2x = 0.48 \\implies x = 0.24$ m",
+      "So this point is 24 cm from $q_2$, i.e. **40 cm from $q_1$** (outside the segment).",
+      "Both points satisfy $V = 0$. There is no zero-potential point on the other side (beyond $q_1$) since both contributions would be positive there."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two point charges on a horizontal line: positive charge q₁ = +5×10⁻⁸ C on the left and negative charge q₂ = −3×10⁻⁸ C on the right, separated by 16 cm. Two zero-potential points are marked — one between the charges (10 cm from q₁) and one outside the segment beyond q₂ (40 cm from q₁).",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "q₁ = $5 \\times 10^{-8}$ C",
+        "q₂ = $-3 \\times 10^{-8}$ C",
+        "Separation = 16 cm = 0.16 m"
+      ],
+      "to_find": [
+        "Position where electric potential V = 0"
+      ],
+      "formulas_used": [
+        "$V = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r}$"
+      ]
+    },
+    "tags": [
+      "electric-potential",
+      "superposition",
+      "zero-potential-point",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.1",
+      "question_number": "2.1",
+      "page": 2
+    },
+    "calculator": "q2-1-potential-zero",
+    "p5_sketch": "q2-1-zero-potential",
+    "calculator_slug": "q2-1-potential-zero",
+    "p5_sketch_slug": "q2-1-zero-potential"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.2",
+    "question_number": "2.2",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A regular hexagon of side 10 cm has a charge 5 µC at each of its vertices. Calculate the potential at the centre of the hexagon.",
+    "question_latex": "A regular hexagon of side 10 cm has a charge $5 \\ \\mu$C at each of its vertices. Calculate the potential at the centre of the hexagon.",
+    "sub_parts": null,
+    "correct_answer_plain": "2.7 × 10^6 V",
+    "correct_answer_latex": "$2.7 \\times 10^{6}$ V",
+    "hint": "In a regular hexagon, distance from centre to each vertex is equal to side length. Total potential is scalar sum.",
+    "solution_steps_latex": [
+      "Side length $a$ = 10 cm = 0.1 m",
+      "In a regular hexagon, the distance from the centre to each vertex equals the side length, so $r = a = 0.1$ m.",
+      "Charge at each vertex $q = 5 \\ \\mu$C = $5 \\times 10^{-6}$ C. Number of vertices $n = 6$.",
+      "Potential is a scalar, so total potential at centre is the algebraic sum:",
+      "$V = 6 \\times \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r} = 6 \\times \\frac{kq}{a}$",
+      "$V = 6 \\times 9 \\times 10^9 \\times \\frac{5 \\times 10^{-6}}{0.1}$",
+      "$V = 6 \\times 9 \\times 10^9 \\times 5 \\times 10^{-5} = 6 \\times 4.5 \\times 10^{5}$",
+      "$V = 27.0 \\times 10^{5} = 2.7 \\times 10^{6}$ V"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Regular hexagon with side 10 cm, equal charge 5 μC at each of the six vertices. Centre point marked where potential is to be calculated.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Side length = 10 cm = 0.1 m",
+        "Charge at each vertex = $5 \\ \\mu$C = $5 \\times 10^{-6}$ C"
+      ],
+      "to_find": [
+        "Electric potential at centre"
+      ],
+      "formulas_used": [
+        "$V = \\sum \\frac{k q_i}{r_i}$"
+      ]
+    },
+    "tags": [
+      "electric-potential",
+      "symmetry",
+      "regular-hexagon",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.2",
+      "question_number": "2.2",
+      "page": 2
+    },
+    "calculator": "q2-2-hexagon-potential",
+    "p5_sketch": "q2-2-hexagon-charges",
+    "calculator_slug": "q2-2-hexagon-potential",
+    "p5_sketch_slug": "q2-2-hexagon-charges"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.3",
+    "question_number": "2.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Two charges 2 µC and -2 µC are placed at points A and B 6 cm apart. (a) Identify an equipotential surface of the system. (b) What is the direction of the electric field at every point on this surface?",
+    "question_latex": "Two charges $2 \\ \\mu$C and $-2 \\ \\mu$C are placed at points A and B 6 cm apart. (a) Identify an equipotential surface of the system. (b) What is the direction of the electric field at every point on this surface?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) The plane perpendicular to AB and passing through the midpoint (perpendicular bisector plane). (b) The electric field is perpendicular to the equipotential surface (along AB direction).",
+    "correct_answer_latex": "(a) Plane perpendicular to line AB passing through midpoint. (b) Electric field is normal to the surface (parallel to AB).",
+    "hint": "For equal and opposite charges, midpoint has V = 0. Equipotential surfaces are perpendicular to field lines.",
+    "solution_steps_latex": [
+      "**(a) Equipotential surface**",
+      "Charges are equal in magnitude, opposite in sign → system resembles dipole.",
+      "At midpoint of AB, potential due to both charges cancel → V = 0.",
+      "All points equidistant from +q and -q have same potential (V = 0).",
+      "This locus is the plane perpendicular to AB passing through midpoint → equipotential surface is the perpendicular bisector plane.",
+      "**(b) Direction of E**",
+      "Electric field lines are always perpendicular to equipotential surfaces.",
+      "On this plane, E is normal to the plane → direction along AB (from + to - charge)."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two charges +2 μC at A and -2 μC at B, 6 cm apart. Plane perpendicular to AB at midpoint is the V = 0 equipotential surface.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Charges $2 \\ \\mu$C and $-2 \\ \\mu$C",
+        "Separation = 6 cm"
+      ],
+      "to_find": [
+        "(a) Equipotential surface",
+        "(b) Direction of E on that surface"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "equipotential-surface",
+      "electric-field-direction",
+      "dipole-system",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.3",
+      "question_number": "2.3",
+      "page": 2
+    },
+    "p5_sketch": "q2-3-equipotential-dipole",
+    "p5_sketch_slug": "q2-3-equipotential-dipole"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.4",
+    "question_number": "2.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A spherical conductor of radius 12 cm has a charge of 1.6 × 10^{-7} C distributed uniformly on its surface. What is the electric field (a) inside the sphere (b) just outside the sphere (c) at a point 18 cm from the centre of the sphere?",
+    "question_latex": "A spherical conductor of radius 12 cm has a charge of $1.6 \\times 10^{-7}$ C distributed uniformly on its surface. What is the electric field (a) inside the sphere (b) just outside the sphere (c) at a point 18 cm from the centre of the sphere?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) 0 N/C, (b) 1.0 × 10^5 N/C outward, (c) 4.4 × 10^4 N/C outward",
+    "correct_answer_latex": "(a) $0$ N/C, (b) $1.0 \\times 10^{5}$ N/C (outward), (c) $4.4 \\times 10^{4}$ N/C (outward)",
+    "hint": "Inside conductor E = 0. Outside behaves like point charge at centre.",
+    "solution_steps_latex": [
+      "Charge $q = 1.6 \\times 10^{-7}$ C, radius $R = 12$ cm = 0.12 m",
+      "**(a) Inside the sphere** (r < R): For a conductor, $E = 0$ everywhere inside.",
+      "**(b) Just outside** (r = R = 0.12 m):",
+      "$E = \\frac{kq}{R^2} = \\frac{9 \\times 10^9 \\times 1.6 \\times 10^{-7}}{(0.12)^2} = \\frac{1.44 \\times 10^{3}}{1.44 \\times 10^{-2}} = 1.0 \\times 10^{5}$ N/C, radially outward",
+      "**(c) At r = 18 cm = 0.18 m:**",
+      "$E = \\frac{kq}{r^2} = \\frac{9 \\times 10^9 \\times 1.6 \\times 10^{-7}}{(0.18)^2} = \\frac{1.44 \\times 10^{3}}{3.24 \\times 10^{-2}} \\approx 4.4 \\times 10^{4}$ N/C, radially outward"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "A conducting sphere of radius R = 12 cm carrying charge q = 1.6×10⁻⁷ C uniformly distributed on its surface. Three observation regions are shown: (a) a point inside the sphere where E = 0, (b) a point just outside the surface at r = R, and (c) an external point P at r = 18 cm from the centre. Electric field lines radiate outward from the surface.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Charge $q = 1.6 \\times 10^{-7}$ C",
+        "Radius $R = 12$ cm = 0.12 m"
+      ],
+      "to_find": [
+        "Electric field (a) inside, (b) just outside, (c) at 18 cm"
+      ],
+      "formulas_used": [
+        "$E = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2}$ (for r ≥ R)",
+        "$E = 0$ (for r < R)"
+      ]
+    },
+    "tags": [
+      "conducting-sphere",
+      "electric-field",
+      "gauss-law",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.4",
+      "question_number": "2.4",
+      "page": 2
+    },
+    "calculator": "q2-4-sphere-efield",
+    "p5_sketch": "q2-4-sphere-field",
+    "calculator_slug": "q2-4-sphere-efield",
+    "p5_sketch_slug": "q2-4-sphere-field"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.5",
+    "question_number": "2.5",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A parallel plate capacitor with air between the plates has a capacitance of 8 pF (1 pF = 10^{-12} F). What will be the capacitance if the distance between the plates is reduced by half, and the space between them is filled with a substance of dielectric constant 6?",
+    "question_latex": "A parallel plate capacitor with air between the plates has a capacitance of 8 pF ($1$ pF = $10^{-12}$ F). What will be the capacitance if the distance between the plates is reduced by half, and the space between them is filled with a substance of dielectric constant 6?",
+    "sub_parts": null,
+    "correct_answer_plain": "96 pF",
+    "correct_answer_latex": "$96$ pF",
+    "hint": "C ∝ 1/d and C ∝ K. New C = K × (d / (d/2)) × original C",
+    "solution_steps_latex": [
+      "Initial capacitance $C_0 = 8$ pF (air, K = 1)",
+      "Formula: $C = \\frac{K \\epsilon_0 A}{d}$",
+      "New distance $d' = d/2$",
+      "New dielectric constant K = 6",
+      "New capacitance $C' = \\frac{6 \\epsilon_0 A}{d/2} = 6 \\times 2 \\times \\frac{\\epsilon_0 A}{d} = 12 C_0$",
+      "$C' = 12 \\times 8 = 96$ pF"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "A parallel plate capacitor shown in two states: (left) original configuration with air between the plates at separation d, C = 8 pF; (right) modified with plate separation halved to d/2 and the gap filled with a dielectric slab of constant κ = 6. Positive charges on top plate, negative on bottom, with electric field lines between them.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Original C = 8 pF",
+        "New distance = half",
+        "Dielectric constant K = 6"
+      ],
+      "to_find": [
+        "New capacitance"
+      ],
+      "formulas_used": [
+        "$C = \\frac{K \\epsilon_0 A}{d}$"
+      ]
+    },
+    "tags": [
+      "parallel-plate-capacitor",
+      "dielectric-effect",
+      "capacitance-change",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.5",
+      "question_number": "2.5",
+      "page": 2
+    },
+    "calculator": "q2-5-capacitor-dielectric",
+    "p5_sketch": "q2-5-capacitor-dielectric",
+    "calculator_slug": "q2-5-capacitor-dielectric",
+    "p5_sketch_slug": "q2-5-capacitor-dielectric"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.6",
+    "question_number": "2.6",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Three capacitors each of capacitance 9 pF are connected in series. (a) What is the total capacitance of the combination? (b) What is the potential difference across each capacitor if the combination is connected to a 120 V supply?",
+    "question_latex": "Three capacitors each of capacitance 9 pF are connected in series. (a) What is the total capacitance of the combination? (b) What is the potential difference across each capacitor if the combination is connected to a 120 V supply?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 3 pF, (b) 40 V across each",
+    "correct_answer_latex": "(a) $3$ pF, (b) $40$ V across each",
+    "hint": "In series: 1/C_eq = 1/C1 + 1/C2 + 1/C3. Same charge, voltage divides equally.",
+    "solution_steps_latex": [
+      "**(a) Equivalent capacitance**",
+      "Three identical capacitors: C = 9 pF each",
+      "In series: $\\frac{1}{C_{\\text{eq}}} = \\frac{1}{9} + \\frac{1}{9} + \\frac{1}{9} = \\frac{3}{9} = \\frac{1}{3}$",
+      "$C_{\\text{eq}} = 3$ pF",
+      "**(b) Potential difference**",
+      "Total V = 120 V",
+      "In series, charge Q is same on each → V across each = V_total / 3",
+      "$V_{\\text{each}} = 120 / 3 = 40$ V"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Three 9 pF capacitors connected in series across 120 V supply.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Each C = 9 pF",
+        "Connected in series",
+        "Supply = 120 V"
+      ],
+      "to_find": [
+        "(a) Equivalent C",
+        "(b) V across each"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{C_{\\text{eq}}} = \\sum \\frac{1}{C_i}$",
+        "$V_i = \\frac{Q}{C_i}$ (same Q)"
+      ]
+    },
+    "tags": [
+      "capacitors-in-series",
+      "equivalent-capacitance",
+      "voltage-division",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.6",
+      "question_number": "2.6",
+      "page": 2
+    },
+    "calculator": "q2-6-series-capacitor",
+    "calculator_slug": "q2-6-series-capacitor"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.7",
+    "question_number": "2.7",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Three capacitors of capacitances 2 pF, 3 pF and 4 pF are connected in parallel. (a) What is the total capacitance of the combination? (b) Determine the charge on each capacitor if the combination is connected to a 100 V supply.",
+    "question_latex": "Three capacitors of capacitances 2 pF, 3 pF and 4 pF are connected in parallel. (a) What is the total capacitance of the combination? (b) Determine the charge on each capacitor if the combination is connected to a 100 V supply.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 9 pF, (b) 200 pC, 300 pC, 400 pC on 2 pF, 3 pF, 4 pF respectively",
+    "correct_answer_latex": "(a) $9$ pF, (b) $Q_1 = 200$ pC, $Q_2 = 300$ pC, $Q_3 = 400$ pC",
+    "hint": "In parallel: C_eq = sum of capacitances. Same voltage across each, Q = C V.",
+    "solution_steps_latex": [
+      "**(a) Equivalent capacitance**",
+      "$C_{\\text{eq}} = C_1 + C_2 + C_3 = 2 + 3 + 4 = 9$ pF",
+      "**(b) Charge on each**",
+      "Voltage across each = 100 V (parallel connection)",
+      "$Q_1 = C_1 V = 2 \\times 10^{-12} \\times 100 = 200 \\times 10^{-12}$ C = 200 pC",
+      "$Q_2 = 3 \\times 100 = 300$ pC",
+      "$Q_3 = 4 \\times 100 = 400$ pC"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Three capacitors (2 pF, 3 pF, 4 pF) connected in parallel across 100 V supply.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "C₁ = 2 pF, C₂ = 3 pF, C₃ = 4 pF",
+        "Connected in parallel",
+        "Supply = 100 V"
+      ],
+      "to_find": [
+        "(a) Equivalent C",
+        "(b) Charge on each capacitor"
+      ],
+      "formulas_used": [
+        "$C_{\\text{eq}} = C_1 + C_2 + C_3$",
+        "$Q = C V$"
+      ]
+    },
+    "tags": [
+      "capacitors-in-parallel",
+      "equivalent-capacitance",
+      "charge-on-capacitor",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.7",
+      "question_number": "2.7",
+      "page": 2
+    },
+    "calculator": "q2-7-parallel-capacitor",
+    "calculator_slug": "q2-7-parallel-capacitor"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.8",
+    "question_number": "2.8",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "In a parallel plate capacitor with air between the plates, each plate has an area of 6 × 10^{-3} m² and the distance between the plates is 3 mm. Calculate the capacitance of the capacitor. If this capacitor is connected to a 100 V supply, what is the charge on each plate of the capacitor?",
+    "question_latex": "In a parallel plate capacitor with air between the plates, each plate has an area of $6 \\times 10^{-3}$ m² and the distance between the plates is 3 mm. Calculate the capacitance of the capacitor. If this capacitor is connected to a 100 V supply, what is the charge on each plate of the capacitor?",
+    "sub_parts": null,
+    "correct_answer_plain": "Capacitance ≈ 18 pF, Charge ≈ 1.8 nC",
+    "correct_answer_latex": "C $\\approx 18$ pF, Q $\\approx 1.8 \\times 10^{-9}$ C",
+    "hint": "Use C = ε₀ A / d. Then Q = C V.",
+    "solution_steps_latex": [
+      "A = $6 \\times 10^{-3}$ m², d = 3 mm = $3 \\times 10^{-3}$ m, for air $K = 1$.",
+      "$C = \\frac{\\epsilon_0 A}{d} = \\frac{8.85 \\times 10^{-12} \\times 6 \\times 10^{-3}}{3 \\times 10^{-3}} = \\frac{53.1 \\times 10^{-15}}{3 \\times 10^{-3}} = 17.7 \\times 10^{-12}$ F $\\approx 18$ pF",
+      "Connected to V = 100 V:",
+      "$Q = CV = 18 \\times 10^{-12} \\times 100 = 1.8 \\times 10^{-9}$ C $\\approx 1.8$ nC"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "A parallel plate capacitor with air between the plates. Each plate has area A = 6×10⁻³ m² and the plates are separated by d = 3 mm. The capacitor is connected to a 100 V battery. Uniform electric field lines run from the positive plate (+) to the negative plate (−). Dimensions and voltage are labelled.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Area A = $6 \\times 10^{-3}$ m²",
+        "Separation d = 3 mm = $3 \\times 10^{-3}$ m",
+        "Air dielectric",
+        "Supply = 100 V"
+      ],
+      "to_find": [
+        "Capacitance C",
+        "Charge Q on each plate"
+      ],
+      "formulas_used": [
+        "$C = \\frac{\\epsilon_0 A}{d}$",
+        "$Q = C V$"
+      ]
+    },
+    "tags": [
+      "parallel-plate-capacitor",
+      "capacitance-calculation",
+      "charge-on-plates",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.8",
+      "question_number": "2.8",
+      "page": 2
+    },
+    "calculator": "q2-8-plate-capacitor",
+    "p5_sketch": "q2-8-parallel-plate",
+    "calculator_slug": "q2-8-plate-capacitor",
+    "p5_sketch_slug": "q2-8-parallel-plate"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual|Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.9",
+    "question_number": "2.9",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Explain what would happen if in the capacitor given in Exercise 2.8, a 3 mm thick mica sheet (of dielectric constant = 6) were inserted between the plates (a) while the voltage supply remained connected. (b) after the supply was disconnected.",
+    "question_latex": "Explain what would happen if in the capacitor given in Exercise 2.8, a 3 mm thick mica sheet (of dielectric constant = 6) were inserted between the plates (a) while the voltage supply remained connected. (b) after the supply was disconnected.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) C' = 108 pF, Q' = 1.08 × 10^{-8} C, V = 100 V (unchanged), energy increases 6×. (b) C' = 108 pF, Q = 1.8 nC (unchanged), V' ≈ 16.6 V, energy decreases to 1/6.",
+    "correct_answer_latex": "(a) $C' = 6C = 108$ pF, $Q' = C'V = 1.08 \\times 10^{-8}$ C, $V = 100$ V (same), $U' = 6U$. (b) $C' = 108$ pF, $Q = 1.8$ nC (same), $V' = V/6 \\approx 16.6$ V, $U' = U/6$.",
+    "hint": "When dielectric is inserted: (connected) V constant → Q and U increase by K. (disconnected) Q constant → V and U decrease by K.",
+    "solution_steps_latex": [
+      "From Ex. 2.8: $C_0 \\approx 18$ pF, $V = 100$ V, $Q_0 = C_0 V = 1.8 \\times 10^{-9}$ C, $U_0 = \\frac{1}{2}C_0 V^2 = 90$ pJ",
+      "Mica dielectric: $K = 6$, thickness = 3 mm = plate separation → completely fills the gap.",
+      "**(a) Battery stays connected** → $V = 100$ V held constant.",
+      "$C' = KC_0 = 6 \\times 18 = 108$ pF",
+      "$Q' = C'V = 108 \\times 10^{-12} \\times 100 = 1.08 \\times 10^{-8}$ C (increases 6×)",
+      "$U' = \\frac{1}{2}C'V^2 = 6U_0$ (energy increases 6×; extra energy supplied by battery)",
+      "**(b) Battery disconnected first** → charge $Q_0 = 1.8$ nC is conserved.",
+      "$C' = KC_0 = 108$ pF (same as above)",
+      "$V' = \\frac{Q_0}{C'} = \\frac{V}{K} = \\frac{100}{6} \\approx 16.6$ V (voltage drops)",
+      "$U' = \\frac{Q_0^2}{2C'} = \\frac{U_0}{K} = \\frac{U_0}{6}$ (energy decreases to 1/6)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "The parallel plate capacitor from Ex 2.8 (A = 6×10⁻³ m², d = 3 mm) with a 3 mm thick mica sheet (κ = 6) inserted between the plates, completely filling the gap. Two scenarios illustrated: (a) battery remains connected — voltage stays at 100 V, charge increases; (b) battery disconnected before insertion — charge stays the same, voltage drops.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Original C = 17.7 pF (from Ex 2.8)",
+        "V = 100 V",
+        "Dielectric constant K = 6",
+        "Mica sheet thickness = 3 mm (fills entire gap)"
+      ],
+      "to_find": [
+        "(a) Effect when connected to supply",
+        "(b) Effect when disconnected"
+      ],
+      "formulas_used": [
+        "$C' = K C$",
+        "$Q = C V$, $U = \\frac{1}{2} C V^2 = \\frac{1}{2} \\frac{Q^2}{C}$"
+      ]
+    },
+    "tags": [
+      "dielectric-insertion",
+      "capacitor-with-battery",
+      "isolated-capacitor",
+      "energy-change",
+      "conceptual-numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.9",
+      "question_number": "2.9",
+      "page": 1
+    },
+    "calculator": "q2-9-dielectric-insert",
+    "calculator_slug": "q2-9-dielectric-insert"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.10",
+    "question_number": "2.10",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A 12 pF capacitor is connected to a 50 V battery. How much electrostatic energy is stored in the capacitor?",
+    "question_latex": "A 12 pF capacitor is connected to a 50 V battery. How much electrostatic energy is stored in the capacitor?",
+    "sub_parts": null,
+    "correct_answer_plain": "1.5 × 10^{-8} J or 15 nJ",
+    "correct_answer_latex": "$1.5 \\times 10^{-8}$ J",
+    "hint": "Use energy formula U = (1/2) C V²",
+    "solution_steps_latex": [
+      "Given: $C = 12$ pF = $12 \\times 10^{-12}$ F, $V = 50$ V",
+      "Electrostatic energy stored $U = \\frac{1}{2} C V^2$",
+      "$U = \\frac{1}{2} \\times 12 \\times 10^{-12} \\times (50)^2$",
+      "$U = 6 \\times 10^{-12} \\times 2500$",
+      "$U = 1.5 \\times 10^{-8}$ J"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "A 12 pF capacitor connected across a 50 V battery. Energy U = ½CV² is stored in the electric field between the capacitor plates. Simple circuit diagram showing battery and capacitor in a loop.",
+      "figure_reference": "fig-2-10-energy-stored",
+      "diagram_svg": "fig-2-10-energy-stored"
+    },
+    "physical_quantities": {
+      "given": [
+        "C = 12 pF = $12 \\times 10^{-12}$ F",
+        "V = 50 V"
+      ],
+      "to_find": [
+        "Stored electrostatic energy U"
+      ],
+      "formulas_used": [
+        "$U = \\frac{1}{2} C V^2$"
+      ]
+    },
+    "tags": [
+      "energy-stored-in-capacitor",
+      "numerical",
+      "basic-capacitance"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.10",
+      "question_number": "2.10",
+      "page": 1
+    },
+    "calculator": "q2-10-energy-stored",
+    "calculator_slug": "q2-10-energy-stored"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 2: Electrostatic Potential and Capacitance",
+    "section": "Exercises",
+    "exercise": "Exercise 2.11",
+    "question_number": "2.11",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A 600 pF capacitor is charged by a 200 V supply. It is then disconnected from the supply and is connected to another uncharged 600 pF capacitor. How much electrostatic energy is lost in the process?",
+    "question_latex": "A 600 pF capacitor is charged by a 200 V supply. It is then disconnected from the supply and is connected to another uncharged 600 pF capacitor. How much electrostatic energy is lost in the process?",
+    "sub_parts": null,
+    "correct_answer_plain": "6 × 10^{-6} J or 6 µJ",
+    "correct_answer_latex": "$6 \\times 10^{-6}$ J",
+    "hint": "Initial energy = ½ C V². After connection (parallel), total C becomes 2C, charge conserved → new V = V/2 → final energy = ¼ initial.",
+    "solution_steps_latex": [
+      "Initial capacitor: $C = 600$ pF = $6 \\times 10^{-10}$ F, $V = 200$ V",
+      "Initial energy $U_i = \\frac{1}{2} C V^2 = \\frac{1}{2} \\times 6 \\times 10^{-10} \\times (200)^2$",
+      "$U_i = 3 \\times 10^{-10} \\times 40000 = 1.2 \\times 10^{-5}$ J",
+      "Charge on first capacitor $Q = C V = 6 \\times 10^{-10} \\times 200 = 1.2 \\times 10^{-7}$ C",
+      "Disconnected and connected to identical uncharged capacitor → parallel combination",
+      "Total capacitance = $C + C = 1200$ pF = $1.2 \\times 10^{-9}$ F",
+      "Charge conserved → new voltage $V' = \\frac{Q}{2C} = \\frac{200}{2} = 100$ V",
+      "Final energy $U_f = \\frac{1}{2} (2C) (V')^2 = \\frac{1}{2} \\times 1.2 \\times 10^{-9} \\times (100)^2$",
+      "$U_f = 6 \\times 10^{-10} \\times 10000 = 6 \\times 10^{-6}$ J",
+      "Energy lost = $U_i - U_f = 1.2 \\times 10^{-5} - 6 \\times 10^{-6} = 6 \\times 10^{-6}$ J"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Two-stage circuit: Stage 1 — a 600 pF capacitor C₁ is charged to 200 V by a battery, then the battery is disconnected. Stage 2 — the charged C₁ is connected in parallel to an identical uncharged 600 pF capacitor C₂. Charge redistributes equally, each capacitor settles at 100 V, and half the original energy is lost as heat.",
+      "figure_reference": "fig-2-11-energy-loss"
+    },
+    "physical_quantities": {
+      "given": [
+        "C = 600 pF = $6 \\times 10^{-10}$ F",
+        "Charging voltage = 200 V",
+        "Second capacitor = 600 pF (uncharged)"
+      ],
+      "to_find": [
+        "Electrostatic energy lost"
+      ],
+      "formulas_used": [
+        "$U = \\frac{1}{2} C V^2$",
+        "Charge conservation in parallel: $Q = C_1 V_1 = (C_1 + C_2) V'$"
+      ]
+    },
+    "tags": [
+      "energy-loss-in-capacitor",
+      "charge-redistribution",
+      "parallel-combination",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 2,
+      "exercise": "2.11",
+      "question_number": "2.11",
+      "page": 1
+    },
+    "calculator": "q2-11-energy-loss",
+    "calculator_slug": "q2-11-energy-loss"
+  }
+]

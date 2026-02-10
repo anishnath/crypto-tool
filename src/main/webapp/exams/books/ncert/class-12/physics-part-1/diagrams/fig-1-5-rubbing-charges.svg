@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <defs>
+    <style>
+      .rod { fill: #d1fae5; stroke: #059669; stroke-width: 2; }
+      .silk { fill: #f3e8ff; stroke: #9333ea; stroke-width: 2; }
+      .electron { fill: #2563eb; }
+      .plus { fill: #dc2626; font-weight: bold; font-family: sans-serif; font-size: 16px; text-anchor: middle; }
+      .minus { fill: #2563eb; font-weight: bold; font-family: sans-serif; font-size: 20px; text-anchor: middle; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .arrow-box { fill: none; stroke: #4b5563; stroke-width: 2; marker-end: url(#arrow); }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="label" font-size="16">Charging by Friction: Triboelectric Effect</text>
+
+  <!-- BEFORE STATE -->
+  <g transform="translate(50, 60)">
+    <text x="100" y="-10" class="label">Before Rubbing</text>
+    
+    <!-- Glass Rod (Neutral) -->
+    <rect x="20" y="20" width="40" height="150" rx="5" class="rod" />
+    <text x="40" y="100" class="label" fill="#059669" transform="rotate(-90, 40, 100)">Glass (0)</text>
+
+    <!-- Silk Cloth (Neutral) -->
+    <path d="M80,20 Q120,10 160,20 Q170,100 160,170 Q120,180 80,170 Q70,90 80,20 Z" class="silk" />
+    <text x="120" y="100" class="label" fill="#9333ea">Silk (0)</text>
+  </g>
+
+  <!-- ARROW -->
+  <path d="M230,130 L270,130" class="arrow-box" />
+  <text x="250" y="120" class="label" font-size="12">Rubbing</text>
+
+  <!-- AFTER STATE -->
+  <g transform="translate(300, 60)">
+    <text x="100" y="-10" class="label">After Rubbing</text>
+
+    <!-- Glass Rod (Positive) -->
+    <rect x="20" y="20" width="40" height="150" rx="5" class="rod" />
+    <text x="40" y="50" class="plus">+</text>
+    <text x="40" y="80" class="plus">+</text>
+    <text x="40" y="110" class="plus">+</text>
+    <text x="40" y="140" class="plus">+</text>
+
+    <!-- Silk Cloth (Negative) -->
+    <path d="M80,20 Q120,10 160,20 Q170,100 160,170 Q120,180 80,170 Q70,90 80,20 Z" class="silk" />
+    <text x="120" y="50" class="minus">-</text>
+    <text x="120" y="80" class="minus">-</text>
+    <text x="120" y="110" class="minus">-</text>
+    <text x="120" y="140" class="minus">-</text>
+  </g>
+  
+  <!-- Transfer Description -->
+  <text x="300" y="260" class="label" fill="#2563eb">Electrons transferred from Glass to Silk</text>
+  <text x="300" y="280" class="label" font-size="12" font-weight="normal">Total Charge Conserved: (+q) + (-q) = 0</text>
+
+  <!-- Watermark -->
+  <text x="580" y="290" class="watermark">8gwifi.org</text>
+</svg>

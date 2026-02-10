@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .square { fill: rgba(59, 130, 246, 0.2); stroke: #2563eb; stroke-width: 2; }
+      .normal-vec { stroke: #dc2626; stroke-width: 3; marker-end: url(#arrow-red); }
+      .field-lines { stroke: #10b981; stroke-width: 2; marker-end: url(#arrow-green); }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .angle-arc { fill: none; stroke: #fbbf24; stroke-width: 2; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Electric Flux Calculation</text>
+
+  <!-- Part A: Plane || YZ -->
+  <g transform="translate(50, 80)">
+    <text x="100" y="-10" class="label">Case (a): θ = 0°</text>
+    <!-- Square in YZ plane (seen edge-on or slightly approx) -->
+    <rect x="80" y="20" width="10" height="100" class="square" fill="#bfdbfe" />
+    <text x="85" y="140" class="label" font-size="12">Plane || YZ</text>
+
+    <!-- Normal Vector (Along X) -->
+    <line x1="90" y1="70" x2="160" y2="70" class="normal-vec" />
+    <text x="170" y="70" class="label" fill="#dc2626">n</text>
+
+    <!-- Electric Field E (Along X) -->
+    <line x1="20" y1="40" x2="160" y2="40" class="field-lines" />
+    <line x1="20" y1="100" x2="160" y2="100" class="field-lines" />
+    <text x="170" y="40" class="label" fill="#10b981">E</text>
+    
+    <text x="100" y="160" class="label">Flux = EA</text>
+  </g>
+
+  <!-- Part B: Normal at 60 deg -->
+  <g transform="translate(300, 80)">
+    <text x="100" y="-10" class="label">Case (b): θ = 60°</text>
+    <!-- Tilted Square (represented by tilted line) -->
+    <line x1="80" y1="20" x2="80" y2="120" stroke="#2563eb" stroke-width="4" transform="rotate(60, 80, 70)" />
+    
+    <!-- Normal Vector (Tilted 60 deg from X) -->
+    <!-- Center (80, 70). X+ is straight right. 60 deg Up -->
+    <line x1="80" y1="70" x2="130" y2="41" class="normal-vec" /> <!-- approx 60 deg -->
+    <text x="140" y="35" class="label" fill="#dc2626">n</text>
+
+    <!-- Electric Field E (Still along X) -->
+    <line x1="20" y1="70" x2="160" y2="70" class="field-lines" />
+    <text x="170" y="70" class="label" fill="#10b981">E</text>
+
+    <!-- Angle Arc -->
+    <!-- Between E (0 deg) and n (-60 deg visual, +60 math) -->
+    <path d="M110,70 A30,30 0 0,0 100,55" class="angle-arc" />
+    <text x="120" y="60" class="label" font-size="10" fill="#fbbf24">60°</text>
+    
+    <text x="100" y="160" class="label">Flux = EA cos 60°</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="480" y="390" class="watermark">8gwifi.org</text>
+</svg>

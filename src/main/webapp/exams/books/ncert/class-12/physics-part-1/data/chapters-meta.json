@@ -1,0 +1,54 @@
+{
+  "subject": "Physics",
+  "partLabel": "Part 1",
+  "chapters": [
+    {
+      "slug": "electric-charges-and-fields",
+      "num": "1",
+      "name": "Electric Charges and Fields",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 1 Electric Charges and Fields solutions. Exercises."
+    },
+    {
+      "slug": "electrostatic-potential-and-capacitance",
+      "num": "2",
+      "name": "Electrostatic Potential and Capacitance",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 2 Electrostatic Potential and Capacitance solutions. Exercises."
+    },
+    {
+      "slug": "current-electricity",
+      "num": "3",
+      "name": "Current Electricity",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 3 Current Electricity solutions. Exercises."
+    },
+    {
+      "slug": "moving-charges-and-magnetism",
+      "num": "4",
+      "name": "Moving Charges and Magnetism",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 4 Moving Charges and Magnetism solutions. Magnetic Field Due to Current, Magnetic Field Due to Current - Direction, Magnetic Field Due to Current - Applications, Force on Current-Carrying Conductor, Force on Current-Carrying Conductor in Solenoid, Force Between Parallel Current-Carrying Wires."
+    },
+    {
+      "slug": "magnetism-and-matter",
+      "num": "5",
+      "name": "Magnetism and Matter",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 5 Magnetism and Matter solutions. Torque on Bar Magnet, Equilibrium and Potential Energy of Bar Magnet, Solenoid as Bar Magnet, Torque on Solenoid, Work Done in Rotating Bar Magnet, Solenoid - Magnetic Moment and Torque."
+    },
+    {
+      "slug": "electromagnetic-induction",
+      "num": "6",
+      "name": "Electromagnetic Induction",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 6 Electromagnetic Induction solutions. Faraday's Law and Lenz's Law, Lenz's Law and Direction of Induced Current, Faraday's Law - Induced EMF, Motional EMF, Motional EMF - Rotating Rod, Motional EMF in Earth's Field."
+    },
+    {
+      "slug": "alternating-current",
+      "num": "7",
+      "name": "Alternating Current",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 7 Alternating Current solutions. AC Circuits - Power and Current, Peak vs RMS Values, Inductive Reactance, Capacitive Reactance, AC Circuits - Power, LC Oscillations."
+    },
+    {
+      "slug": "electromagnetic-waves",
+      "num": "8",
+      "name": "Electromagnetic Waves",
+      "desc": "NCERT Class 12 Physics Part 1 Chapter 8 Electromagnetic Waves solutions. Displacement Current and Capacitor, Displacement Current in AC Circuit, Properties of EM Waves, Direction of E and B in EM Wave, EM Spectrum - Radio Waves, Generation of EM Waves."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "q6-1-flux-change": {
+    "type": "flux-change-loop",
+    "params": {
+      "flux_direction": "increasing",
+      "current_label": "Induced current opposes flux change",
+      "title": "Faraday\u2019s Law \u2014 Predict Induced Current"
+    }
+  },
+  "q6-2-lenz-law": {
+    "type": "flux-change-loop",
+    "params": {
+      "flux_direction": "increasing",
+      "current_label": "Along adcd (opposes increasing flux)",
+      "title": "Lenz\u2019s Law \u2014 Shape Change"
+    }
+  },
+  "q6-3-solenoid-loop": {
+    "type": "flux-change-loop",
+    "params": {
+      "flux_direction": "increasing",
+      "current_label": "\u03b5 = 7.5 \u00d7 10\u207b\u2076 V",
+      "title": "Loop Inside Solenoid \u2014 Changing Current"
+    }
+  },
+  "q6-4-loop-exiting": {
+    "type": "motional-emf",
+    "params": {
+      "emf_label": "Blv",
+      "title": "Rectangular Loop Exiting Magnetic Field"
+    }
+  },
+  "q6-5-rotating-rod": {
+    "type": "rotating-rod",
+    "params": {
+      "emf_label": "\u00bdB\u03c9l\u00b2 = 100 V",
+      "title": "Rotating Rod \u2014 Faraday Disc"
+    }
+  },
+  "q6-6-falling-wire": {
+    "type": "motional-emf",
+    "params": {
+      "emf_label": "1.5 \u00d7 10\u207b\u00b3 V",
+      "title": "Wire Falling in Earth\u2019s Field"
+    }
+  },
+  "q6-7-self-inductance": {
+    "type": "inductance-coil",
+    "params": {
+      "L_label": "4 H",
+      "emf_label": "\u03b5 = L(dI/dt) = 200 V",
+      "change": "decreasing",
+      "title": "Self-Inductance"
+    }
+  },
+  "q6-8-mutual-inductance": {
+    "type": "inductance-coil",
+    "params": {
+      "L_label": "M = 1.5 H",
+      "emf_label": "\u0394\u03a6 = M\u0394I = 30 Wb",
+      "change": "increasing",
+      "title": "Mutual Inductance \u2014 Flux Linkage"
+    }
+  }
+}

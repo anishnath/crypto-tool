@@ -1,0 +1,137 @@
+{
+  "q5-1-magnetic-moment": {
+    "title": "Magnetic Moment from Torque",
+    "formula_display": "m = \u03c4 / (B sin \u03b8)",
+    "inputs": [
+      { "id": "tau", "label": "Torque \u03c4", "unit": "N\u00b7m", "default": 0.045, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.25, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "theta", "label": "Angle \u03b8", "unit": "\u00b0", "default": 30, "min": 1, "max": 90, "step": 1 }
+    ],
+    "compute": "tau / (B * Math.sin(theta * 3.14159 / 180))",
+    "output": { "label": "Magnetic moment m", "unit": "J T\u207b\u00b9", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [1, 90],
+      "points": 60,
+      "xLabel": "Angle \u03b8 (\u00b0)",
+      "yLabel": "m (J T\u207b\u00b9)"
+    }
+  },
+
+  "q5-2-potential-energy": {
+    "title": "Potential Energy of Magnetic Dipole",
+    "formula_display": "U = \u2212mB cos \u03b8",
+    "inputs": [
+      { "id": "m", "label": "Magnetic moment m", "unit": "J T\u207b\u00b9", "default": 0.32, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.15, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "theta", "label": "Angle \u03b8", "unit": "\u00b0", "default": 0, "min": 0, "max": 180, "step": 1 }
+    ],
+    "compute": "-m * B * Math.cos(theta * 3.14159 / 180)",
+    "output": { "label": "Potential energy U", "unit": "J", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 180],
+      "points": 60,
+      "xLabel": "Angle \u03b8 (\u00b0)",
+      "yLabel": "U (J)"
+    }
+  },
+
+  "q5-3-solenoid-moment": {
+    "title": "Magnetic Moment of Solenoid",
+    "formula_display": "m = NIA",
+    "inputs": [
+      { "id": "N", "label": "Number of turns N", "unit": "", "default": 800, "min": 1, "max": 100000, "step": 1 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 3.0, "min": 0.01, "max": 100, "step": 0.1 },
+      { "id": "A", "label": "Cross-section area A", "unit": "m\u00b2", "default": 2.5e-4, "min": 1e-6, "max": 1, "step": 1e-5, "exponent": true }
+    ],
+    "compute": "N * I * A",
+    "output": { "label": "Magnetic moment m", "unit": "A m\u00b2", "precision": 4 },
+    "plot": {
+      "vary": "I",
+      "range": [0.5, 10],
+      "points": 60,
+      "xLabel": "Current I (A)",
+      "yLabel": "m (A m\u00b2)"
+    }
+  },
+
+  "q5-4-solenoid-torque": {
+    "title": "Torque on Solenoid in Magnetic Field",
+    "formula_display": "\u03c4 = mB sin \u03b8",
+    "inputs": [
+      { "id": "m", "label": "Magnetic moment m", "unit": "A m\u00b2", "default": 0.6, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.25, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "theta", "label": "Angle \u03b8", "unit": "\u00b0", "default": 30, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "m * B * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Torque \u03c4", "unit": "N\u00b7m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 60,
+      "xLabel": "Angle \u03b8 (\u00b0)",
+      "yLabel": "\u03c4 (N\u00b7m)"
+    }
+  },
+
+  "q5-5-work-rotation": {
+    "title": "Work Done Rotating Magnetic Dipole",
+    "formula_display": "W = mB(cos \u03b8\u2081 \u2212 cos \u03b8\u2082)",
+    "inputs": [
+      { "id": "m", "label": "Magnetic moment m", "unit": "J T\u207b\u00b9", "default": 1.5, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 0.22, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "theta1", "label": "Initial angle \u03b8\u2081", "unit": "\u00b0", "default": 0, "min": 0, "max": 180, "step": 1 },
+      { "id": "theta2", "label": "Final angle \u03b8\u2082", "unit": "\u00b0", "default": 90, "min": 0, "max": 180, "step": 1 }
+    ],
+    "compute": "m * B * (Math.cos(theta1 * 3.14159 / 180) - Math.cos(theta2 * 3.14159 / 180))",
+    "output": { "label": "Work done W", "unit": "J", "precision": 4 },
+    "plot": {
+      "vary": "theta2",
+      "range": [0, 180],
+      "points": 60,
+      "xLabel": "Final angle \u03b8\u2082 (\u00b0)",
+      "yLabel": "W (J)"
+    }
+  },
+
+  "q5-6-solenoid-combined": {
+    "title": "Solenoid: Moment and Torque",
+    "formula_display": "\u03c4 = NIA \u00b7 B sin \u03b8",
+    "inputs": [
+      { "id": "N", "label": "Number of turns N", "unit": "", "default": 2000, "min": 1, "max": 100000, "step": 1 },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 4.0, "min": 0.01, "max": 100, "step": 0.1 },
+      { "id": "A", "label": "Cross-section area A", "unit": "m\u00b2", "default": 1.6e-4, "min": 1e-6, "max": 1, "step": 1e-5, "exponent": true },
+      { "id": "B", "label": "Magnetic field B", "unit": "T", "default": 7.5e-2, "min": 0.001, "max": 10, "step": 0.001 },
+      { "id": "theta", "label": "Angle \u03b8", "unit": "\u00b0", "default": 30, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "N * I * A * B * Math.sin(theta * 3.14159 / 180)",
+    "output": { "label": "Torque \u03c4", "unit": "N\u00b7m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 60,
+      "xLabel": "Angle \u03b8 (\u00b0)",
+      "yLabel": "\u03c4 (N\u00b7m)"
+    }
+  },
+
+  "q5-7-dipole-field": {
+    "title": "Magnetic Field of Bar Magnet (Dipole)",
+    "formula_display": "B_axial = \u03bc\u2080\u00b72m/(4\u03c0r\u00b3), B_eq = \u03bc\u2080\u00b7m/(4\u03c0r\u00b3)",
+    "constants": { "mu0": 1.2566e-6 },
+    "inputs": [
+      { "id": "m", "label": "Magnetic moment m", "unit": "A m\u00b2", "default": 0.48, "min": 0.01, "max": 10, "step": 0.01 },
+      { "id": "r", "label": "Distance r", "unit": "m", "default": 0.10, "min": 0.01, "max": 5, "step": 0.01 }
+    ],
+    "compute": "mu0 * 2 * m / (4 * 3.14159 * r * r * r)",
+    "output": { "label": "Axial field B_axial", "unit": "T", "precision": 6 },
+    "plot": {
+      "vary": "r",
+      "range": [0.05, 0.5],
+      "points": 60,
+      "xLabel": "Distance r (m)",
+      "yLabel": "B_axial (T)"
+    }
+  }
+}

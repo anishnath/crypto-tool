@@ -1,0 +1,114 @@
+{
+  "q8-1-displacement-current": {
+    "title": "Displacement Current in Capacitor",
+    "formula_display": "C = ε₀πr²/d, dV/dt = I/C",
+    "constants": { "eps0": 8.854e-12, "pi": 3.14159 },
+    "inputs": [
+      { "id": "r", "label": "Plate radius r", "unit": "m", "default": 0.12, "min": 0.01, "max": 1, "step": 0.01 },
+      { "id": "d", "label": "Plate separation d", "unit": "m", "default": 0.05, "min": 0.001, "max": 1, "step": 0.001 },
+      { "id": "I", "label": "Charging current I", "unit": "A", "default": 0.15, "min": 0.001, "max": 10, "step": 0.001 }
+    ],
+    "compute": "I / (eps0 * pi * r * r / d)",
+    "output": { "label": "Rate of voltage change dV/dt", "unit": "V/s", "precision": 4 },
+    "plot": {
+      "vary": "I",
+      "range": [0.01, 1],
+      "points": 60,
+      "xLabel": "Current I (A)",
+      "yLabel": "dV/dt (V/s)"
+    }
+  },
+
+  "q8-2-b-field-capacitor": {
+    "title": "Magnetic Field at Edge of Capacitor",
+    "formula_display": "B = μ₀I_d/(2πR)",
+    "constants": { "mu0": 1.2566e-6, "pi": 3.14159 },
+    "inputs": [
+      { "id": "Id", "label": "Displacement current I_d", "unit": "μA", "default": 6.9, "min": 0.1, "max": 1000, "step": 0.1 },
+      { "id": "R", "label": "Plate radius R", "unit": "m", "default": 0.06, "min": 0.01, "max": 1, "step": 0.01 }
+    ],
+    "compute": "mu0 * Id * 1e-6 / (2 * pi * R)",
+    "output": { "label": "Magnetic field B", "unit": "T", "precision": 6 },
+    "plot": {
+      "vary": "Id",
+      "range": [1, 50],
+      "points": 60,
+      "xLabel": "Displacement current I_d (μA)",
+      "yLabel": "B (T)"
+    }
+  },
+
+  "q8-5-wavelength-frequency": {
+    "title": "Wavelength from Frequency",
+    "formula_display": "λ = c/f",
+    "constants": { "c": 3e8 },
+    "inputs": [
+      { "id": "f", "label": "Frequency f", "unit": "MHz", "default": 7.5, "min": 0.1, "max": 1000, "step": 0.1 }
+    ],
+    "compute": "c / (f * 1e6)",
+    "output": { "label": "Wavelength λ", "unit": "m", "precision": 4 },
+    "plot": {
+      "vary": "f",
+      "range": [1, 100],
+      "points": 60,
+      "xLabel": "Frequency f (MHz)",
+      "yLabel": "λ (m)"
+    }
+  },
+
+  "q8-7-e-from-b": {
+    "title": "Electric Field from Magnetic Field",
+    "formula_display": "E₀ = cB₀",
+    "constants": { "c": 3e8 },
+    "inputs": [
+      { "id": "B0", "label": "Magnetic field B₀", "unit": "nT", "default": 510, "min": 1, "max": 10000, "step": 1 }
+    ],
+    "compute": "c * B0 * 1e-9",
+    "output": { "label": "Electric field E₀", "unit": "V/m", "precision": 4 },
+    "plot": {
+      "vary": "B0",
+      "range": [10, 2000],
+      "points": 60,
+      "xLabel": "B₀ (nT)",
+      "yLabel": "E₀ (V/m)"
+    }
+  },
+
+  "q8-8-em-wave-properties": {
+    "title": "EM Wave Properties",
+    "formula_display": "B₀ = E₀/c, k = 2π/λ, ω = ck",
+    "constants": { "c": 3e8, "pi": 3.14159 },
+    "inputs": [
+      { "id": "E0", "label": "Electric field E₀", "unit": "V/m", "default": 120, "min": 1, "max": 10000, "step": 1 },
+      { "id": "lam", "label": "Wavelength λ", "unit": "m", "default": 6, "min": 0.01, "max": 1000, "step": 0.01 }
+    ],
+    "compute": "E0 / c",
+    "output": { "label": "Magnetic field B₀", "unit": "T", "precision": 8 },
+    "plot": {
+      "vary": "E0",
+      "range": [10, 500],
+      "points": 60,
+      "xLabel": "E₀ (V/m)",
+      "yLabel": "B₀ (T)"
+    }
+  },
+
+  "q8-10-em-complete": {
+    "title": "EM Wave — Wavelength & B₀",
+    "formula_display": "λ = c/f, B₀ = E₀/c",
+    "constants": { "c": 3e8 },
+    "inputs": [
+      { "id": "f", "label": "Frequency f", "unit": "GHz", "default": 20, "min": 0.1, "max": 1000, "step": 0.1 },
+      { "id": "E0", "label": "Electric field E₀", "unit": "V/m", "default": 48, "min": 1, "max": 10000, "step": 1 }
+    ],
+    "compute": "c / (f * 1e9)",
+    "output": { "label": "Wavelength λ", "unit": "m", "precision": 6 },
+    "plot": {
+      "vary": "f",
+      "range": [1, 100],
+      "points": 60,
+      "xLabel": "Frequency f (GHz)",
+      "yLabel": "λ (m)"
+    }
+  }
+}

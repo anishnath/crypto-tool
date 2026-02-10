@@ -1,0 +1,330 @@
+{
+  "q1-1-coulomb-calc": {
+    "title": "Coulomb's Law Calculator",
+    "formula_display": "F = k × |q₁ × q₂| / r²",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q1", "label": "Charge q₁", "unit": "C", "default": 2e-7, "min": 1e-9, "max": 1e-4, "step": 1e-8, "exponent": true },
+      { "id": "q2", "label": "Charge q₂", "unit": "C", "default": 3e-7, "min": 1e-9, "max": 1e-4, "step": 1e-8, "exponent": true },
+      { "id": "r", "label": "Distance r", "unit": "m", "default": 0.3, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "k * abs(q1 * q2) / (r * r)",
+    "output": { "label": "Force F", "unit": "N", "precision": 4 },
+    "direction_rule": "q1 * q2 > 0 ? 'Repulsive ↔' : 'Attractive →←'",
+    "plot": {
+      "vary": "r",
+      "range": [0.05, 1.5],
+      "points": 60,
+      "xLabel": "Distance (m)",
+      "yLabel": "Force (N)"
+    }
+  },
+
+  "q1-2-coulomb-distance": {
+    "title": "Coulomb's Law — Find Distance",
+    "formula_display": "r = √(k × |q₁ × q₂| / F)",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q1", "label": "Charge q₁", "unit": "C", "default": 4e-7, "min": 1e-9, "max": 1e-4, "step": 1e-8, "exponent": true },
+      { "id": "q2", "label": "Charge q₂", "unit": "C", "default": 8e-7, "min": 1e-9, "max": 1e-4, "step": 1e-8, "exponent": true },
+      { "id": "F", "label": "Force F", "unit": "N", "default": 0.2, "min": 0.001, "max": 10, "step": 0.001, "exponent": true }
+    ],
+    "compute": "sqrt(k * abs(q1 * q2) / F)",
+    "output": { "label": "Distance r", "unit": "m", "precision": 4 },
+    "plot": {
+      "vary": "F",
+      "range": [0.01, 5.0],
+      "points": 60,
+      "xLabel": "Force (N)",
+      "yLabel": "Distance (m)"
+    }
+  },
+
+  "q1-8-field-midpoint": {
+    "title": "Electric Field at Midpoint",
+    "formula_display": "E = 2 × k × |q| / (d/2)²",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q", "label": "Charge magnitude |q|", "unit": "C", "default": 3e-6, "min": 1e-9, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "d", "label": "Separation d", "unit": "m", "default": 0.2, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "2 * k * abs(q) / pow(d / 2, 2)",
+    "output": { "label": "Electric field E", "unit": "N/C", "precision": 4 },
+    "plot": {
+      "vary": "d",
+      "range": [0.02, 1.0],
+      "points": 50,
+      "xLabel": "Separation (m)",
+      "yLabel": "E (N/C)"
+    }
+  },
+
+  "q1-10-dipole-torque": {
+    "title": "Torque on Electric Dipole",
+    "formula_display": "τ = p × E × sin θ",
+    "inputs": [
+      { "id": "p", "label": "Dipole moment p", "unit": "C·m", "default": 4e-9, "min": 1e-12, "max": 1e-6, "step": 1e-10, "exponent": true },
+      { "id": "E", "label": "Electric field E", "unit": "N/C", "default": 5e4, "min": 1, "max": 1e7, "step": 100, "exponent": true },
+      { "id": "theta", "label": "Angle θ", "unit": "°", "default": 30, "min": 0, "max": 180, "step": 1 }
+    ],
+    "compute": "p * E * sin(theta * PI / 180)",
+    "output": { "label": "Torque τ", "unit": "N·m", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 180],
+      "points": 90,
+      "xLabel": "Angle θ (°)",
+      "yLabel": "Torque (N·m)"
+    }
+  },
+
+  "q1-11-electron-count": {
+    "title": "Electron Transfer Calculator",
+    "formula_display": "n = |Q| / e",
+    "constants": { "e_charge": 1.6e-19 },
+    "inputs": [
+      { "id": "Q", "label": "Total charge |Q|", "unit": "C", "default": 3e-7, "min": 1e-12, "max": 1e-3, "step": 1e-8, "exponent": true }
+    ],
+    "compute": "abs(Q) / e_charge",
+    "output": { "label": "Electrons n", "unit": "", "precision": 4 },
+    "plot": {
+      "vary": "Q",
+      "range": [1e-10, 1e-5],
+      "points": 50,
+      "xLabel": "Charge (C)",
+      "yLabel": "Number of electrons"
+    }
+  },
+
+  "q1-14-flux-calc": {
+    "title": "Electric Flux Calculator",
+    "formula_display": "Φ = E × A × cos θ",
+    "inputs": [
+      { "id": "E_field", "label": "Electric field E", "unit": "N/C", "default": 3e3, "min": 1, "max": 1e6, "step": 100, "exponent": true },
+      { "id": "side", "label": "Square side", "unit": "m", "default": 0.1, "min": 0.01, "max": 2.0, "step": 0.01 },
+      { "id": "theta", "label": "Angle θ (normal to E)", "unit": "°", "default": 0, "min": 0, "max": 90, "step": 1 }
+    ],
+    "compute": "E_field * side * side * cos(theta * PI / 180)",
+    "output": { "label": "Flux Φ", "unit": "N·m²/C", "precision": 4 },
+    "plot": {
+      "vary": "theta",
+      "range": [0, 90],
+      "points": 90,
+      "xLabel": "Angle θ (°)",
+      "yLabel": "Flux (N·m²/C)"
+    }
+  },
+
+  "q1-18-gauss-flux": {
+    "title": "Gauss's Law — Total Flux",
+    "formula_display": "Φ = q / ε₀",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "q", "label": "Enclosed charge q", "unit": "C", "default": 2e-6, "min": 1e-12, "max": 1e-3, "step": 1e-7, "exponent": true }
+    ],
+    "compute": "q / epsilon0",
+    "output": { "label": "Flux Φ", "unit": "N·m²/C", "precision": 4 },
+    "plot": {
+      "vary": "q",
+      "range": [1e-9, 1e-4],
+      "points": 50,
+      "xLabel": "Charge (C)",
+      "yLabel": "Flux (N·m²/C)"
+    }
+  },
+
+  "q1-20-sphere-charge": {
+    "title": "Conducting Sphere — Find Charge",
+    "formula_display": "q = E × r² / k",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "E_field", "label": "Electric field E", "unit": "N/C", "default": 1.5e3, "min": 1, "max": 1e6, "step": 100, "exponent": true },
+      { "id": "r", "label": "Distance from centre r", "unit": "m", "default": 0.2, "min": 0.01, "max": 5.0, "step": 0.01 }
+    ],
+    "compute": "E_field * r * r / k",
+    "output": { "label": "Charge |q|", "unit": "C", "precision": 4 },
+    "plot": {
+      "vary": "r",
+      "range": [0.05, 2.0],
+      "points": 50,
+      "xLabel": "Distance (m)",
+      "yLabel": "Charge (C)"
+    }
+  },
+
+  "q1-22-line-charge": {
+    "title": "Infinite Line Charge — Find λ",
+    "formula_display": "λ = E × 2πε₀r",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "E_field", "label": "Electric field E", "unit": "N/C", "default": 9e4, "min": 1, "max": 1e7, "step": 100, "exponent": true },
+      { "id": "r", "label": "Distance r", "unit": "m", "default": 0.02, "min": 0.001, "max": 1.0, "step": 0.001 }
+    ],
+    "compute": "E_field * 2 * PI * epsilon0 * r",
+    "output": { "label": "Linear charge density λ", "unit": "C/m", "precision": 4 },
+    "plot": {
+      "vary": "r",
+      "range": [0.005, 0.5],
+      "points": 50,
+      "xLabel": "Distance (m)",
+      "yLabel": "λ (C/m)"
+    }
+  },
+
+  "q1-23-plates-field": {
+    "title": "Parallel Plates — E Between",
+    "formula_display": "E = σ / ε₀",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "sigma", "label": "Surface charge density σ", "unit": "C/m²", "default": 17e-22, "min": 1e-25, "max": 1e-3, "step": 1e-23, "exponent": true }
+    ],
+    "compute": "sigma / epsilon0",
+    "output": { "label": "Electric field E", "unit": "N/C", "precision": 4 },
+    "plot": {
+      "vary": "sigma",
+      "range": [1e-23, 1e-19],
+      "points": 50,
+      "xLabel": "σ (C/m²)",
+      "yLabel": "E (N/C)"
+    }
+  },
+
+  "q1-3-force-ratio": {
+    "title": "Electrostatic vs Gravitational Force Ratio",
+    "formula_display": "Ratio = k × e² / (G × m₁ × m₂)",
+    "constants": { "k": 8.9875e9, "G": 6.674e-11, "e_charge": 1.6e-19 },
+    "inputs": [
+      { "id": "m1", "label": "Mass m₁ (particle 1)", "unit": "kg", "default": 9.109e-31, "min": 1e-31, "max": 1e-24, "step": 1e-32, "exponent": true },
+      { "id": "m2", "label": "Mass m₂ (particle 2)", "unit": "kg", "default": 9.109e-31, "min": 1e-31, "max": 1e-24, "step": 1e-32, "exponent": true }
+    ],
+    "compute": "k * e_charge * e_charge / (G * m1 * m2)",
+    "output": { "label": "Ratio (dimensionless)", "unit": "", "precision": 4 },
+    "plot": {
+      "vary": "m1",
+      "range": [1e-31, 1e-25],
+      "points": 60,
+      "xLabel": "Mass m₁ (kg)",
+      "yLabel": "Force ratio"
+    }
+  },
+
+  "q1-6-net-force-square": {
+    "title": "Net Force at Centre of Square",
+    "formula_display": "F = k × |q × Q| / r²  (r = a/√2)",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "qA", "label": "Charge A (corner)", "unit": "C", "default": 2e-6, "min": -1e-3, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "qC", "label": "Charge C (opposite)", "unit": "C", "default": 2e-6, "min": -1e-3, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "qB", "label": "Charge B (corner)", "unit": "C", "default": -5e-6, "min": -1e-3, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "qD", "label": "Charge D (opposite)", "unit": "C", "default": -5e-6, "min": -1e-3, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "Q", "label": "Test charge Q", "unit": "C", "default": 1e-6, "min": 1e-9, "max": 1e-3, "step": 1e-7, "exponent": true },
+      { "id": "a", "label": "Side length a", "unit": "m", "default": 0.1, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "sqrt(pow(k*Q/(a*a/2)*(qA - qC), 2) + pow(k*Q/(a*a/2)*(qB - qD), 2))",
+    "output": { "label": "Net force |F|", "unit": "N", "precision": 4 },
+    "plot": {
+      "vary": "a",
+      "range": [0.02, 1.0],
+      "points": 50,
+      "xLabel": "Side length (m)",
+      "yLabel": "Net Force (N)"
+    }
+  },
+
+  "q1-9-dipole-moment": {
+    "title": "Electric Dipole Moment Calculator",
+    "formula_display": "p = q × d",
+    "inputs": [
+      { "id": "q", "label": "Charge magnitude |q|", "unit": "C", "default": 2.5e-7, "min": 1e-12, "max": 1e-3, "step": 1e-8, "exponent": true },
+      { "id": "d", "label": "Separation d", "unit": "m", "default": 0.30, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "q * d",
+    "output": { "label": "Dipole moment p", "unit": "C·m", "precision": 4 },
+    "plot": {
+      "vary": "d",
+      "range": [0.01, 1.0],
+      "points": 50,
+      "xLabel": "Separation (m)",
+      "yLabel": "Dipole moment (C·m)"
+    }
+  },
+
+  "q1-12-coulomb-spheres": {
+    "title": "Coulomb Force — Two Spheres",
+    "formula_display": "F = k × q² / r²",
+    "constants": { "k": 8.9875e9 },
+    "inputs": [
+      { "id": "q", "label": "Charge on each q", "unit": "C", "default": 6.5e-7, "min": 1e-9, "max": 1e-3, "step": 1e-8, "exponent": true },
+      { "id": "r", "label": "Separation r", "unit": "m", "default": 0.5, "min": 0.01, "max": 5.0, "step": 0.01 },
+      { "id": "q_mult", "label": "Charge multiplier", "unit": "×", "default": 1, "min": 0.5, "max": 5.0, "step": 0.5 },
+      { "id": "r_div", "label": "Distance divisor", "unit": "×", "default": 1, "min": 0.5, "max": 5.0, "step": 0.5 }
+    ],
+    "compute": "k * pow(q * q_mult, 2) / pow(r / r_div, 2)",
+    "output": { "label": "Force F", "unit": "N", "precision": 4 },
+    "direction_rule": "'Repulsive ↔ (like charges)'",
+    "plot": {
+      "vary": "r",
+      "range": [0.05, 2.0],
+      "points": 60,
+      "xLabel": "Separation (m)",
+      "yLabel": "Force (N)"
+    }
+  },
+
+  "q1-16-flux-to-charge": {
+    "title": "Gauss's Law — Flux to Charge",
+    "formula_display": "q = Φ × ε₀",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "flux", "label": "Net outward flux Φ", "unit": "N·m²/C", "default": 8e3, "min": 1, "max": 1e8, "step": 100, "exponent": true }
+    ],
+    "compute": "flux * epsilon0",
+    "output": { "label": "Enclosed charge q", "unit": "C", "precision": 4 },
+    "plot": {
+      "vary": "flux",
+      "range": [100, 1e6],
+      "points": 50,
+      "xLabel": "Flux (N·m²/C)",
+      "yLabel": "Charge (C)"
+    }
+  },
+
+  "q1-19-flux-charge": {
+    "title": "Gauss's Law — Point Charge from Flux",
+    "formula_display": "q = Φ × ε₀",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "flux", "label": "Electric flux Φ", "unit": "N·m²/C", "default": -1e3, "min": -1e6, "max": 1e6, "step": 100, "exponent": false },
+      { "id": "R", "label": "Gaussian sphere radius", "unit": "m", "default": 0.1, "min": 0.01, "max": 2.0, "step": 0.01 }
+    ],
+    "compute": "flux * epsilon0",
+    "output": { "label": "Point charge q", "unit": "C", "precision": 4 },
+    "direction_rule": "flux < 0 ? 'Negative charge (flux inward)' : 'Positive charge (flux outward)'",
+    "plot": {
+      "vary": "flux",
+      "range": [-1e4, 1e4],
+      "points": 60,
+      "xLabel": "Flux (N·m²/C)",
+      "yLabel": "Charge (C)"
+    }
+  },
+
+  "q1-21-sphere-density": {
+    "title": "Conducting Sphere — Charge & Flux from σ",
+    "formula_display": "q = σ × 4πR²,  Φ = q / ε₀",
+    "constants": { "epsilon0": 8.854e-12 },
+    "inputs": [
+      { "id": "R", "label": "Sphere radius R", "unit": "m", "default": 1.2, "min": 0.01, "max": 5.0, "step": 0.01 },
+      { "id": "sigma", "label": "Surface charge density σ", "unit": "C/m²", "default": 80e-6, "min": 1e-9, "max": 1e-2, "step": 1e-7, "exponent": true }
+    ],
+    "compute": "sigma * 4 * PI * R * R",
+    "output": { "label": "Total charge q", "unit": "C", "precision": 4 },
+    "plot": {
+      "vary": "R",
+      "range": [0.1, 3.0],
+      "points": 50,
+      "xLabel": "Radius (m)",
+      "yLabel": "Charge (C)"
+    }
+  }
+}

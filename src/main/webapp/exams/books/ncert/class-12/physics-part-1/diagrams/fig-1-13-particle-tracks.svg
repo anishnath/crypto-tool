@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .plate { stroke-width: 4; stroke: #4b5563; }
+      .field-line { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4; marker-end: url(#arrow); }
+      .track { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .sign { font-family: sans-serif; font-size: 16px; font-weight: bold; }
+      .track-1 { stroke: #dc2626; } /* Positive (Red) */
+      .track-2 { stroke: #2563eb; } /* Negative (Blue) */
+      .track-3 { stroke: #2563eb; } /* Negative */
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Particle Tracks in Electric Field</text>
+  
+  <!-- Plates -->
+  <!-- Top Plate (Negative for Upward Field?) or Positive? -->
+  <!-- Trying to match Description: "Particle 1 (positive) curves upward" -->
+  <!-- Positive charge F = qE. If it moves Up, F is Up. So E is Up. -->
+  <!-- E points from + to -. So Bottom is +, Top is -. -->
+  
+  <!-- Let's check: Field lines Up. Bottom Plate +, Top Plate - -->
+  <line x1="50" y1="350" x2="450" y2="350" class="plate" stroke="#ef4444" /> <!-- Bottom Plate (+) -->
+  <text x="470" y="355" class="sign" fill="#ef4444">+</text>
+  <text x="470" y="335" class="sign" fill="#ef4444">+</text>
+
+  <line x1="50" y1="50" x2="450" y2="50" class="plate" stroke="#1f2937" /> <!-- Top Plate (-) -->
+  <text x="470" y="55" class="sign" fill="#1f2937">-</text>
+  <text x="470" y="75" class="sign" fill="#1f2937">-</text>
+
+  <!-- Field Lines (Upward) -->
+  <line x1="100" y1="350" x2="100" y2="60" class="field-line" />
+  <line x1="200" y1="350" x2="200" y2="60" class="field-line" />
+  <line x1="300" y1="350" x2="300" y2="60" class="field-line" />
+  <line x1="400" y1="350" x2="400" y2="60" class="field-line" />
+
+  <!-- Particle 1: Positive, curves Up (with field) -->
+  <!-- Starts left, moves right, deflects Up -->
+  <path d="M50,200 Q250,200 400,100" class="track track-1" marker-end="url(#arrow)" />
+  <text x="410" y="100" class="label" fill="#dc2626">1 (+)</text>
+
+  <!-- Particle 2: Negative, curves Down (against field) -->
+  <!-- Tight curvature -->
+  <path d="M50,220 Q200,220 350,330" class="track track-2" marker-end="url(#arrow)" />
+  <text x="360" y="330" class="label" fill="#2563eb">2 (-)</text>
+  <text x="380" y="310" class="label" font-size="10" fill="#2563eb">High q/m</text>
+
+  <!-- Particle 3: Negative, curves Down (against field) -->
+  <!-- Loose curvature -->
+  <path d="M50,180 Q300,180 430,280" class="track track-3" marker-end="url(#arrow)" />
+  <text x="440" y="280" class="label" fill="#2563eb">3 (-)</text>
+
+  <!-- Watermark -->
+  <text x="480" y="390" class="watermark">8gwifi.org</text>
+</svg>

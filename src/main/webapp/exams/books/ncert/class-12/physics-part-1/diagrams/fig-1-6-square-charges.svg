@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .charge-pos { fill: #ef4444; stroke: #b91c1c; stroke-width: 2; }
+      .charge-neg { fill: #3b82f6; stroke: #1d4ed8; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .vector { stroke-width: 2; marker-end: url(#arrow); }
+      .vector-cancellation { stroke-dasharray: 4; opacity: 0.6; }
+      .axis { stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Forces on Center Charge</text>
+
+  <!-- Square Frame -->
+  <rect x="100" y="100" width="300" height="300" fill="none" stroke="#e5e7eb" stroke-width="2" />
+  
+  <!-- Diagonals -->
+  <line x1="100" y1="100" x2="400" y2="400" class="axis" />
+  <line x1="400" y1="100" x2="100" y2="400" class="axis" />
+
+  <!-- Charges at Corners -->
+  <!-- A: Top-Left (+2 uC) -->
+  <circle cx="100" cy="100" r="12" class="charge-pos" />
+  <text x="100" y="80" class="label" fill="#dc2626">A (+2µC)</text>
+
+  <!-- B: Top-Right (-5 uC) -->
+  <circle cx="400" cy="100" r="12" class="charge-neg" />
+  <text x="400" y="80" class="label" fill="#2563eb">B (-5µC)</text>
+
+  <!-- C: Bottom-Right (+2 uC) -->
+  <circle cx="400" cy="400" r="12" class="charge-pos" />
+  <text x="400" y="430" class="label" fill="#dc2626">C (+2µC)</text>
+
+  <!-- D: Bottom-Left (-5 uC) -->
+  <circle cx="100" cy="400" r="12" class="charge-neg" />
+  <text x="100" y="430" class="label" fill="#2563eb">D (-5µC)</text>
+
+  <!-- Center Charge (+1 uC) -->
+  <circle cx="250" cy="250" r="8" fill="#10b981" stroke="#047857" stroke-width="2" />
+  <text x="250" y="280" class="label" fill="#047857">O (+1µC)</text>
+
+  <!-- Forces acting on Center O -->
+  
+  <!-- Force from A (+2) on O (+1) is Repulsive -> Towards C (Down-Right) -->
+  <line x1="250" y1="250" x2="330" y2="330" class="vector" stroke="#dc2626" />
+  <text x="340" y="340" class="label" fill="#dc2626" font-size="12">F_A</text>
+
+  <!-- Force from C (+2) on O (+1) is Repulsive -> Towards A (Top-Left) -->
+  <line x1="250" y1="250" x2="170" y2="170" class="vector" stroke="#dc2626" />
+  <text x="160" y="160" class="label" fill="#dc2626" font-size="12">F_C</text>
+
+  <!-- F_A and F_C are equal and opposite -->
+  <line x1="165" y1="175" x2="175" y2="165" stroke="#dc2626" stroke-width="2" /> <!-- tick mark -->
+  <line x1="325" y1="335" x2="335" y2="325" stroke="#dc2626" stroke-width="2" /> <!-- tick mark -->
+
+
+  <!-- Force from B (-5) on O (+1) is Attractive -> Towards B (Top-Right) -->
+  <line x1="250" y1="250" x2="350" y2="150" class="vector" stroke="#2563eb" />
+  <text x="360" y="140" class="label" fill="#2563eb" font-size="12">F_B</text>
+
+  <!-- Force from D (-5) on O (+1) is Attractive -> Towards D (Bottom-Left) -->
+  <line x1="250" y1="250" x2="150" y2="350" class="vector" stroke="#2563eb" />
+  <text x="140" y="370" class="label" fill="#2563eb" font-size="12">F_D</text>
+
+  <!-- F_B and F_D are equal and opposite -->
+  <line x1="345" y1="155" x2="355" y2="145" stroke="#2563eb" stroke-width="2" /> <!-- double tick -->
+  <line x1="340" y1="160" x2="350" y2="150" stroke="#2563eb" stroke-width="2" />
+  
+  <line x1="145" y1="355" x2="155" y2="345" stroke="#2563eb" stroke-width="2" /> <!-- double tick -->
+  <line x1="140" y1="360" x2="150" y2="350" stroke="#2563eb" stroke-width="2" />
+
+  <!-- Conclusion text -->
+  <rect x="150" y="450" width="200" height="40" rx="5" fill="#f3f4f6" stroke="#d1d5db" />
+  <text x="250" y="475" class="label">Net Force = 0</text>
+
+  <!-- Watermark -->
+  <text x="480" y="490" class="watermark">8gwifi.org</text>
+</svg>

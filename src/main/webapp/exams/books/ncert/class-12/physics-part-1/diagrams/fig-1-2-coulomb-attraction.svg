@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <style>
+      .sphere-pos { fill: #ef4444; stroke: #b91c1c; stroke-width: 2; }
+      .sphere-neg { fill: #3b82f6; stroke: #1d4ed8; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .dim-line { stroke: #6b7280; stroke-width: 1; }
+      .force-arrow { stroke: #10b981; stroke-width: 3; marker-end: url(#arrow-green); }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="30" class="label" font-size="16">Electrostatic Attraction</text>
+
+  <!-- Sphere 1 (Positive) -->
+  <circle cx="150" cy="100" r="15" class="sphere-pos" />
+  <text x="150" y="75" class="label" fill="#dc2626">q₁ (+)</text>
+  <text x="150" y="140" class="label" font-size="12" font-weight="normal">0.4 µC</text>
+
+  <!-- Sphere 2 (Negative) -->
+  <circle cx="350" cy="100" r="15" class="sphere-neg" />
+  <text x="350" y="75" class="label" fill="#2563eb">q₂ (-)</text>
+  <text x="350" y="140" class="label" font-size="12" font-weight="normal">-0.8 µC</text>
+
+  <!-- Distance -->
+  <line x1="150" y1="160" x2="350" y2="160" class="dim-line" />
+  <line x1="150" y1="155" x2="150" y2="165" class="dim-line" />
+  <line x1="350" y1="155" x2="350" y2="165" class="dim-line" />
+  <text x="250" y="175" class="label" fill="#4b5563">r = ? (Found 12 cm)</text>
+
+  <!-- Attractive Forces (Inward) -->
+  <!-- Force on q1 (to right) -->
+  <line x1="165" y1="100" x2="220" y2="100" class="force-arrow" />
+  <text x="200" y="90" class="label" fill="#10b981">F₁₂</text>
+
+  <!-- Force on q2 (to left) -->
+  <line x1="335" y1="100" x2="280" y2="100" class="force-arrow" />
+  <text x="300" y="90" class="label" fill="#10b981">F₂₁</text>
+
+  <!-- Watermark -->
+  <text x="480" y="190" class="watermark">8gwifi.org</text>
+</svg>

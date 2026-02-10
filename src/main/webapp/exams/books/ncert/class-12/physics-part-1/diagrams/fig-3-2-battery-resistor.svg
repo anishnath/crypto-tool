@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 280">
+  <defs>
+    <style>
+      .label { font-family: sans-serif; font-size: 14px; fill: #1f2937; text-anchor: middle; font-weight: bold; }
+      .wire { stroke: #374151; stroke-width: 2.5; fill: none; }
+      .batt-long { stroke: #dc2626; stroke-width: 3; }
+      .batt-short { stroke: #dc2626; stroke-width: 5; }
+      .resistor { stroke: #3b82f6; stroke-width: 2.5; fill: none; }
+      .watermark { font-family: sans-serif; font-size: 20px; fill: rgba(0,0,0,0.1); font-weight: bold; text-anchor: end; }
+    </style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#059669" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="24" class="label" font-size="16">Battery with External Resistor</text>
+
+  <!-- Left wire (top to battery) -->
+  <polyline points="100,55 100,95" class="wire" />
+
+  <!-- Battery -->
+  <line x1="82" y1="95" x2="118" y2="95" class="batt-long" />
+  <line x1="88" y1="113" x2="112" y2="113" class="batt-short" />
+  <text x="65" y="80" class="label" fill="#dc2626" font-size="11" text-anchor="end">+</text>
+  <text x="65" y="125" class="label" fill="#dc2626" font-size="11" text-anchor="end">−</text>
+  <text x="55" y="107" class="label" fill="#dc2626" font-size="12" text-anchor="end">E=10 V</text>
+
+  <!-- Internal resistance -->
+  <polyline points="100,113 100,140" class="wire" />
+  <polyline points="100,140 110,143 90,149 110,155 90,161 100,164" stroke="#6b7280" stroke-width="2" fill="none" />
+  <polyline points="100,164 100,210" class="wire" />
+  <text x="72" y="157" class="label" fill="#6b7280" font-size="11" text-anchor="end">r=3 Ω</text>
+
+  <!-- Bottom wire -->
+  <polyline points="100,210 400,210" class="wire" />
+
+  <!-- Right wire (bottom to resistor) -->
+  <polyline points="400,210 400,170" class="wire" />
+
+  <!-- External Resistor R (right side) -->
+  <polyline points="400,170 410,167 390,161 410,155 390,149 410,143 390,137 400,134" class="resistor" />
+  <polyline points="400,134 400,55" class="wire" />
+  <text x="430" y="155" class="label" fill="#3b82f6" font-size="12" text-anchor="start">R=17 Ω</text>
+
+  <!-- Top wire -->
+  <polyline points="100,55 400,55" class="wire" />
+
+  <!-- Current arrow on top -->
+  <line x1="200" y1="55" x2="300" y2="55" stroke="#059669" stroke-width="2.5" marker-end="url(#arr)" />
+  <text x="250" y="47" class="label" fill="#059669" font-size="12">I = 0.5 A</text>
+
+  <!-- Terminal voltage annotation -->
+  <line x1="400" y1="55" x2="430" y2="55" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4" />
+  <line x1="400" y1="210" x2="430" y2="210" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4" />
+  <line x1="430" y1="60" x2="430" y2="205" stroke="#f59e0b" stroke-width="1.5" />
+  <line x1="425" y1="60" x2="435" y2="60" stroke="#f59e0b" stroke-width="1.5" />
+  <line x1="425" y1="205" x2="435" y2="205" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="460" y="135" class="label" fill="#d97706" font-size="11" text-anchor="start">V_term</text>
+  <text x="460" y="150" class="label" fill="#d97706" font-size="11" text-anchor="start">= 8.5 V</text>
+
+  <!-- Watermark -->
+  <text x="480" y="270" class="watermark">8gwifi.org</text>
+</svg>

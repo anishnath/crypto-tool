@@ -1,0 +1,159 @@
+{
+  "q3-1-max-current": {
+    "title": "Maximum Current from Battery (Short Circuit)",
+    "formula_display": "I_max = E / r",
+    "inputs": [
+      { "id": "E", "label": "EMF (E)", "unit": "V", "default": 12, "min": 0.1, "max": 500, "step": 0.1 },
+      { "id": "r", "label": "Internal resistance (r)", "unit": "Ω", "default": 0.4, "min": 0.01, "max": 100, "step": 0.01 }
+    ],
+    "compute": "E / r",
+    "output": { "label": "Maximum current I_max", "unit": "A", "precision": 4 },
+    "plot": {
+      "vary": "r",
+      "range": [0.05, 10],
+      "points": 60,
+      "xLabel": "Internal resistance r (Ω)",
+      "yLabel": "Max current (A)"
+    }
+  },
+
+  "q3-2-battery-resistor": {
+    "title": "Battery with External Resistor",
+    "formula_display": "R = E/I − r,  V = E − Ir",
+    "inputs": [
+      { "id": "E", "label": "EMF (E)", "unit": "V", "default": 10, "min": 0.1, "max": 500, "step": 0.1 },
+      { "id": "r", "label": "Internal resistance (r)", "unit": "Ω", "default": 3, "min": 0.01, "max": 100, "step": 0.01 },
+      { "id": "I", "label": "Current (I)", "unit": "A", "default": 0.5, "min": 0.01, "max": 100, "step": 0.01 }
+    ],
+    "compute": "E / I - r",
+    "output": { "label": "External resistance R", "unit": "Ω", "precision": 4 },
+    "plot": {
+      "vary": "I",
+      "range": [0.05, 5],
+      "points": 60,
+      "xLabel": "Current I (A)",
+      "yLabel": "External resistance R (Ω)"
+    }
+  },
+
+  "q3-3-temp-from-resistance": {
+    "title": "Temperature from Resistance Change",
+    "formula_display": "T = T₀ + (R/R₀ − 1) / α",
+    "inputs": [
+      { "id": "R0", "label": "Initial resistance R₀", "unit": "Ω", "default": 100, "min": 0.1, "max": 100000, "step": 0.1 },
+      { "id": "R", "label": "Final resistance R", "unit": "Ω", "default": 117, "min": 0.1, "max": 100000, "step": 0.1 },
+      { "id": "T0", "label": "Initial temperature T₀", "unit": "°C", "default": 27, "min": -273, "max": 5000, "step": 1 },
+      { "id": "alpha", "label": "Temp coefficient α", "unit": "°C⁻¹", "default": 1.7e-4, "min": 1e-6, "max": 0.01, "step": 1e-5, "exponent": true }
+    ],
+    "compute": "T0 + (R / R0 - 1) / alpha",
+    "output": { "label": "Temperature T", "unit": "°C", "precision": 1 },
+    "plot": {
+      "vary": "R",
+      "range": [100, 200],
+      "points": 60,
+      "xLabel": "Resistance R (Ω)",
+      "yLabel": "Temperature (°C)"
+    }
+  },
+
+  "q3-4-resistivity": {
+    "title": "Resistivity of a Wire",
+    "formula_display": "ρ = R × A / L",
+    "inputs": [
+      { "id": "R", "label": "Resistance R", "unit": "Ω", "default": 5.0, "min": 0.001, "max": 100000, "step": 0.1 },
+      { "id": "A", "label": "Cross-section area A", "unit": "m²", "default": 6e-7, "min": 1e-10, "max": 0.01, "step": 1e-8, "exponent": true },
+      { "id": "L", "label": "Length L", "unit": "m", "default": 15, "min": 0.01, "max": 1000, "step": 0.1 }
+    ],
+    "compute": "R * A / L",
+    "output": { "label": "Resistivity ρ", "unit": "Ω·m", "precision": 4 },
+    "plot": {
+      "vary": "L",
+      "range": [1, 50],
+      "points": 50,
+      "xLabel": "Wire length L (m)",
+      "yLabel": "Resistivity ρ (Ω·m)"
+    }
+  },
+
+  "q3-5-temp-coefficient": {
+    "title": "Temperature Coefficient of Resistivity",
+    "formula_display": "α = (R₂/R₁ − 1) / (T₂ − T₁)",
+    "inputs": [
+      { "id": "R1", "label": "Resistance R₁", "unit": "Ω", "default": 2.1, "min": 0.001, "max": 100000, "step": 0.01 },
+      { "id": "T1", "label": "Temperature T₁", "unit": "°C", "default": 27.5, "min": -273, "max": 5000, "step": 0.5 },
+      { "id": "R2", "label": "Resistance R₂", "unit": "Ω", "default": 2.7, "min": 0.001, "max": 100000, "step": 0.01 },
+      { "id": "T2", "label": "Temperature T₂", "unit": "°C", "default": 100, "min": -273, "max": 5000, "step": 0.5 }
+    ],
+    "compute": "(R2 / R1 - 1) / (T2 - T1)",
+    "output": { "label": "Temp coefficient α", "unit": "°C⁻¹", "precision": 6 },
+    "plot": {
+      "vary": "T2",
+      "range": [50, 500],
+      "points": 50,
+      "xLabel": "Temperature T₂ (°C)",
+      "yLabel": "α (°C⁻¹)"
+    }
+  },
+
+  "q3-6-steady-temperature": {
+    "title": "Steady Temperature of Heating Element",
+    "formula_display": "T = T₀ + (I₀/I − 1)² ×  … → T = T₀ + (R/R₀ − 1)/α",
+    "inputs": [
+      { "id": "V", "label": "Supply voltage", "unit": "V", "default": 230, "min": 1, "max": 1000, "step": 1 },
+      { "id": "I0", "label": "Initial (cold) current I₀", "unit": "A", "default": 3.2, "min": 0.01, "max": 100, "step": 0.01 },
+      { "id": "I", "label": "Steady (hot) current I", "unit": "A", "default": 2.8, "min": 0.01, "max": 100, "step": 0.01 },
+      { "id": "T0", "label": "Room temperature T₀", "unit": "°C", "default": 27, "min": -50, "max": 100, "step": 1 },
+      { "id": "alpha", "label": "Temp coefficient α", "unit": "°C⁻¹", "default": 1.7e-4, "min": 1e-6, "max": 0.01, "step": 1e-5, "exponent": true }
+    ],
+    "compute": "T0 + ((V / I) / (V / I0) - 1) / alpha",
+    "output": { "label": "Steady temperature T", "unit": "°C", "precision": 1 },
+    "plot": {
+      "vary": "I",
+      "range": [1.0, 3.2],
+      "points": 50,
+      "xLabel": "Steady current I (A)",
+      "yLabel": "Temperature (°C)"
+    }
+  },
+
+  "q3-8-charging-circuit": {
+    "title": "Battery Charging Circuit",
+    "formula_display": "I = (V − E)/(R + r),  V_term = E + Ir",
+    "inputs": [
+      { "id": "V", "label": "Supply voltage V", "unit": "V", "default": 120, "min": 1, "max": 1000, "step": 1 },
+      { "id": "E", "label": "Battery EMF (E)", "unit": "V", "default": 8, "min": 0.1, "max": 500, "step": 0.1 },
+      { "id": "R", "label": "Series resistor R", "unit": "Ω", "default": 15.5, "min": 0.1, "max": 10000, "step": 0.1 },
+      { "id": "r", "label": "Internal resistance r", "unit": "Ω", "default": 0.5, "min": 0.01, "max": 100, "step": 0.01 }
+    ],
+    "compute": "(V - E) / (R + r)",
+    "output": { "label": "Charging current I", "unit": "A", "precision": 4 },
+    "plot": {
+      "vary": "R",
+      "range": [1, 100],
+      "points": 60,
+      "xLabel": "Series resistance R (Ω)",
+      "yLabel": "Charging current (A)"
+    }
+  },
+
+  "q3-9-drift-time": {
+    "title": "Electron Drift Time",
+    "formula_display": "t = L·n·e·A / I",
+    "constants": { "e": 1.6e-19 },
+    "inputs": [
+      { "id": "L", "label": "Wire length L", "unit": "m", "default": 3.0, "min": 0.01, "max": 100, "step": 0.1 },
+      { "id": "n", "label": "Number density n", "unit": "m⁻³", "default": 8.5e28, "min": 1e25, "max": 1e30, "step": 1e27, "exponent": true },
+      { "id": "A", "label": "Cross-section area A", "unit": "m²", "default": 2e-6, "min": 1e-9, "max": 0.01, "step": 1e-7, "exponent": true },
+      { "id": "I", "label": "Current I", "unit": "A", "default": 3.0, "min": 0.01, "max": 100, "step": 0.01 }
+    ],
+    "compute": "L * n * e * A / I",
+    "output": { "label": "Drift time t", "unit": "s", "precision": 2 },
+    "plot": {
+      "vary": "I",
+      "range": [0.1, 10],
+      "points": 60,
+      "xLabel": "Current I (A)",
+      "yLabel": "Drift time (s)"
+    }
+  }
+}

@@ -1,0 +1,920 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Displacement Current and Capacitor",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.1",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "Figure 8.5 shows a capacitor made of two circular plates each of radius 12 cm, and separated by 5.0 cm. The capacitor is being charged by an external source (not shown in the figure). The charging current is constant and equal to 0.15 A.\n(a) Calculate the capacitance and the rate of change of potential difference between the plates.\n(b) Obtain the displacement current across the plates.\n(c) Is Kirchhoff's first rule (junction rule) valid at each plate of the capacitor? Explain.",
+    "question_latex": "Figure 8.5 shows a capacitor made of two circular plates each of radius $12$ cm, and separated by $5.0$ cm. The capacitor is being charged by an external source (not shown in the figure). The charging current is constant and equal to $0.15$ A.\n\n(a) Calculate the capacitance and the rate of change of potential difference between the plates.\n\n(b) Obtain the displacement current across the plates.\n\n(c) Is Kirchhoff's first rule (junction rule) valid at each plate of the capacitor? Explain.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) C = 8.0 × 10⁻¹² F, dV/dt = 1.88 × 10¹⁰ V/s; (b) I_d = 0.15 A; (c) Yes, if we include displacement current",
+    "correct_answer_latex": "(a) $C = 8.0 \\times 10^{-12}$ F, $\\frac{dV}{dt} = 1.88 \\times 10^{10}$ V/s; (b) $I_d = 0.15$ A; (c) Yes, if we include displacement current",
+    "hint": "(a) C = ε₀A/d. Use I = C(dV/dt). (b) Displacement current = conduction current. (c) Kirchhoff's rule valid if I_d included",
+    "solution_steps_latex": [
+      "Given: Radius of plates $r = 12$ cm $= 0.12$ m",
+      "Separation $d = 5.0$ cm $= 0.05$ m",
+      "Charging current $I = 0.15$ A (constant)",
+      "**Part (a): Capacitance and Rate of Change of Voltage**",
+      "**Capacitance**: For parallel plate capacitor",
+      "$C = \\frac{\\varepsilon_0 A}{d}$",
+      "where $\\varepsilon_0 = 8.85 \\times 10^{-12}$ F/m (permittivity of free space)",
+      "Area: $A = \\pi r^2 = \\pi \\times (0.12)^2 = 3.14 \\times 0.0144$",
+      "$A = 0.0452$ m$^2$",
+      "$C = \\frac{8.85 \\times 10^{-12} \\times 0.0452}{0.05}$",
+      "$C = \\frac{4.0 \\times 10^{-13}}{0.05} = 8.0 \\times 10^{-12}$ F $= 8.0$ pF",
+      "**Rate of change of voltage**:",
+      "Charge on capacitor: $Q = CV$",
+      "Charging current: $I = \\frac{dQ}{dt} = C\\frac{dV}{dt}$",
+      "Therefore: $\\frac{dV}{dt} = \\frac{I}{C}$",
+      "$\\frac{dV}{dt} = \\frac{0.15}{8.0 \\times 10^{-12}}$",
+      "$\\frac{dV}{dt} = 1.875 \\times 10^{10}$ V/s",
+      "$\\frac{dV}{dt} \\approx 1.88 \\times 10^{10}$ V/s",
+      "**Part (b): Displacement Current**",
+      "Maxwell's concept: Displacement current in the gap between capacitor plates",
+      "$I_d = \\varepsilon_0 \\frac{d\\Phi_E}{dt}$",
+      "For a capacitor being charged, **displacement current equals conduction current**:",
+      "$I_d = I = 0.15$ A",
+      "**Explanation**: While conduction current flows in wires, displacement current 'flows' through the dielectric (gap) between plates",
+      "**Part (c): Kirchhoff's Junction Rule**",
+      "**Kirchhoff's first rule**: Sum of currents entering = Sum of currents leaving",
+      "**At plate surface**:",
+      "- Current $I$ enters through wire (conduction current)",
+      "- No conduction current leaves (gap is insulator)",
+      "**Classical view**: Appears to violate junction rule",
+      "**Maxwell's modification**: Include displacement current!",
+      "- Conduction current $I$ enters plate",
+      "- Displacement current $I_d = I$ 'leaves' through gap",
+      "- Total: $I_{in} = I$, $I_{out} = I_d = I$",
+      "**Conclusion**: Kirchhoff's junction rule **is valid** at each plate when we include displacement current",
+      "This was Maxwell's great insight: displacement current maintains continuity of current"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Parallel plate capacitor charging with displacement current I_d = ε₀ dΦ_E/dt equal to conduction current",
+      "figure_reference": "Figure 8.5"
+    },
+    "physical_quantities": {
+      "given": [
+        "Plate radius r: 12 cm = 0.12 m",
+        "Plate separation d: 5.0 cm = 0.05 m",
+        "Charging current I: 0.15 A (constant)"
+      ],
+      "to_find": [
+        "(a) Capacitance C and dV/dt",
+        "(b) Displacement current I_d",
+        "(c) Validity of Kirchhoff's rule"
+      ],
+      "formulas_used": [
+        "$C = \\frac{\\varepsilon_0 A}{d}$ (capacitance)",
+        "$I = C\\frac{dV}{dt}$ (charging current)",
+        "$I_d = \\varepsilon_0 \\frac{d\\Phi_E}{dt}$ (displacement current)",
+        "For capacitor: $I_d = I$"
+      ]
+    },
+    "tags": [
+      "displacement-current",
+      "capacitor-charging",
+      "maxwells-equations",
+      "kirchhoffs-law",
+      "capacitance",
+      "conceptual-understanding",
+      "figure-based"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.1",
+      "page": 213
+    },
+    "calculator_slug": "q8-1-displacement-current",
+    "p5_sketch_slug": "q8-1-displacement-current",
+    "p5_sketch": "q8-1-displacement-current",
+    "calculator": "q8-1-displacement-current"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Displacement Current in AC Circuit",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.2",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "A parallel plate capacitor (Fig. 8.6) made of circular plates each of radius R = 6.0 cm has a capacitance C = 100 pF. The capacitor is connected to a 230 V ac supply with a (angular) frequency of 300 rad/s.\n(a) What is the rms value of the conduction current?\n(b) Is the conduction current equal to the displacement current?\n(c) Determine the amplitude of B at a point 3.0 cm from the axis between the plates.",
+    "question_latex": "A parallel plate capacitor (Fig. 8.6) made of circular plates each of radius $R = 6.0$ cm has a capacitance $C = 100$ pF. The capacitor is connected to a $230$ V ac supply with a (angular) frequency of $300$ rad/s.\n\n(a) What is the rms value of the conduction current?\n\n(b) Is the conduction current equal to the displacement current?\n\n(c) Determine the amplitude of B at a point $3.0$ cm from the axis between the plates.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) I_rms = 6.9 × 10⁻⁶ A = 6.9 μA; (b) Yes; (c) B₀ = 1.63 × 10⁻¹¹ T",
+    "correct_answer_latex": "(a) $I_{rms} = 6.9 \\times 10^{-6}$ A $= 6.9$ $\\mu$A; (b) Yes; (c) $B_0 = 1.63 \\times 10^{-11}$ T",
+    "hint": "(a) I_rms = V_rms × ωC. (b) Yes, for capacitor. (c) Use Ampere-Maxwell law: ∮B·dl = μ₀ε₀(dΦ_E/dt)",
+    "solution_steps_latex": [
+      "Given: Plate radius $R = 6.0$ cm $= 0.06$ m",
+      "Capacitance $C = 100$ pF $= 100 \\times 10^{-12}$ F $= 10^{-10}$ F",
+      "RMS voltage $V_{rms} = 230$ V",
+      "Angular frequency $\\omega = 300$ rad/s",
+      "**Part (a): RMS Conduction Current**",
+      "For AC circuit with capacitor:",
+      "Capacitive reactance: $X_C = \\frac{1}{\\omega C}$",
+      "RMS current: $I_{rms} = \\frac{V_{rms}}{X_C} = V_{rms} \\omega C$",
+      "$I_{rms} = 230 \\times 300 \\times 10^{-10}$",
+      "$I_{rms} = 6.9 \\times 10^{-6}$ A $= 6.9$ $\\mu$A",
+      "**Part (b): Conduction vs Displacement Current**",
+      "**Yes**, conduction current equals displacement current",
+      "For a capacitor:",
+      "- Conduction current flows in connecting wires",
+      "- Displacement current 'flows' through the dielectric gap",
+      "- They are **always equal**: $I_d = I_c$",
+      "This ensures current continuity in the circuit",
+      "**Part (c): Magnetic Field Between Plates**",
+      "Point location: $r = 3.0$ cm $= 0.03$ m from axis",
+      "**Using Ampere-Maxwell Law**:",
+      "$\\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 \\varepsilon_0 \\frac{d\\Phi_E}{dt}$",
+      "For circular path of radius $r$ between plates:",
+      "$B \\times 2\\pi r = \\mu_0 \\varepsilon_0 \\frac{d\\Phi_E}{dt}$",
+      "Electric flux through circle of radius $r$:",
+      "$\\Phi_E = E \\times \\pi r^2$",
+      "$\\frac{d\\Phi_E}{dt} = \\pi r^2 \\frac{dE}{dt}$",
+      "**Relating to current**:",
+      "Displacement current through area $\\pi r^2$:",
+      "$I_d(r) = \\varepsilon_0 \\frac{d\\Phi_E}{dt} = I \\times \\frac{\\pi r^2}{\\pi R^2} = I \\frac{r^2}{R^2}$",
+      "Therefore:",
+      "$B \\times 2\\pi r = \\mu_0 I \\frac{r^2}{R^2}$",
+      "$B = \\frac{\\mu_0 I r}{2\\pi R^2}$",
+      "For AC: $I = I_0 \\sin(\\omega t)$, so $B = B_0 \\sin(\\omega t)$",
+      "Peak current: $I_0 = \\sqrt{2} I_{rms} = 1.414 \\times 6.9 \\times 10^{-6}$",
+      "$I_0 = 9.76 \\times 10^{-6}$ A",
+      "**Amplitude of B**:",
+      "$B_0 = \\frac{\\mu_0 I_0 r}{2\\pi R^2}$",
+      "$B_0 = \\frac{4\\pi \\times 10^{-7} \\times 9.76 \\times 10^{-6} \\times 0.03}{2\\pi \\times (0.06)^2}$",
+      "$B_0 = \\frac{4 \\times 10^{-7} \\times 9.76 \\times 10^{-6} \\times 0.03}{2 \\times 0.0036}$",
+      "$B_0 = \\frac{1.17 \\times 10^{-13}}{7.2 \\times 10^{-3}}$",
+      "$B_0 = 1.63 \\times 10^{-11}$ T"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": true,
+      "has_ray_diagram": false,
+      "diagram_description": "Capacitor with displacement current; magnetic field B at edge of plates from Ampere-Maxwell law",
+      "figure_reference": "Figure 8.6"
+    },
+    "physical_quantities": {
+      "given": [
+        "Plate radius R: 6.0 cm = 0.06 m",
+        "Capacitance C: 100 pF = 10⁻¹⁰ F",
+        "RMS voltage V_rms: 230 V",
+        "Angular frequency ω: 300 rad/s",
+        "Point location: r = 3.0 cm from axis"
+      ],
+      "to_find": [
+        "(a) RMS conduction current",
+        "(b) Equality of conduction and displacement currents",
+        "(c) Amplitude of magnetic field B at r = 3 cm"
+      ],
+      "formulas_used": [
+        "$I_{rms} = V_{rms} \\omega C$ (AC in capacitor)",
+        "$I_d = I_c$ (for capacitor)",
+        "$\\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 \\varepsilon_0 \\frac{d\\Phi_E}{dt}$ (Ampere-Maxwell)",
+        "$B = \\frac{\\mu_0 I r}{2\\pi R^2}$ (B field between plates)"
+      ]
+    },
+    "tags": [
+      "displacement-current",
+      "ac-circuit",
+      "capacitor",
+      "ampere-maxwell-law",
+      "magnetic-field",
+      "figure-based",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.2",
+      "page": 213
+    },
+    "calculator_slug": "q8-2-b-field-capacitor",
+    "p5_sketch_slug": "q8-2-capacitor-b-field",
+    "p5_sketch": "q8-2-capacitor-b-field",
+    "calculator": "q8-2-b-field-capacitor"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Properties of EM Waves",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.3",
+    "marks": 1,
+    "difficulty": 0.3,
+    "question_plain": "What physical quantity is the same for X-rays of wavelength 10⁻¹⁰ m, red light of wavelength 6800 Å and radiowaves of wavelength 500 m?",
+    "question_latex": "What physical quantity is the same for X-rays of wavelength $10^{-10}$ m, red light of wavelength $6800$ Å and radiowaves of wavelength $500$ m?",
+    "sub_parts": null,
+    "correct_answer_plain": "Speed in vacuum (c = 3 × 10⁸ m/s)",
+    "correct_answer_latex": "Speed in vacuum ($c = 3 \\times 10^8$ m/s)",
+    "hint": "All electromagnetic waves travel at same speed in vacuum regardless of wavelength or frequency",
+    "solution_steps_latex": [
+      "Given: Three types of electromagnetic radiation:",
+      "1. X-rays: $\\lambda_1 = 10^{-10}$ m",
+      "2. Red light: $\\lambda_2 = 6800$ Å $= 6800 \\times 10^{-10}$ m $= 6.8 \\times 10^{-7}$ m",
+      "3. Radio waves: $\\lambda_3 = 500$ m",
+      "To find: Common physical quantity",
+      "**Analysis**:",
+      "These waves have very different wavelengths:",
+      "- X-rays: $\\sim 10^{-10}$ m (shortest)",
+      "- Visible light: $\\sim 10^{-7}$ m (medium)",
+      "- Radio waves: $\\sim 10^2$ m (longest)",
+      "Their frequencies are also different:",
+      "$f = \\frac{c}{\\lambda}$",
+      "- X-rays: $f_1 = 3 \\times 10^{18}$ Hz",
+      "- Red light: $f_2 = 4.4 \\times 10^{14}$ Hz",
+      "- Radio waves: $f_3 = 6 \\times 10^5$ Hz",
+      "**What's the same?**",
+      "**Speed in vacuum**: $c = 3 \\times 10^8$ m/s",
+      "**Fundamental property**: All electromagnetic waves, regardless of wavelength or frequency, travel at the **same speed in vacuum**:",
+      "$c = f\\lambda = 3 \\times 10^8$ m/s",
+      "This is a universal constant (speed of light)",
+      "**Note**: Speed changes in different media, but in vacuum all EM waves have same speed"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "All EM waves propagate at c = 3 × 10⁸ m/s in vacuum regardless of wavelength",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "X-ray wavelength: 10⁻¹⁰ m",
+        "Red light wavelength: 6800 Å = 6.8 × 10⁻⁷ m",
+        "Radio wave wavelength: 500 m"
+      ],
+      "to_find": [
+        "Common physical quantity for all three"
+      ],
+      "formulas_used": [
+        "$c = f\\lambda$ (wave equation)",
+        "$c = 3 \\times 10^8$ m/s (speed of light in vacuum)"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "speed-of-light",
+      "em-spectrum",
+      "universal-constant",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.3",
+      "page": 214
+    },
+    "calculator_slug": "",
+    "p5_sketch_slug": "q8-3-em-speed",
+    "p5_sketch": "q8-3-em-speed"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Direction of E and B in EM Wave",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.4",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A plane electromagnetic wave travels in vacuum along z-direction. What can you say about the directions of its electric and magnetic field vectors? If the frequency of the wave is 30 MHz, what is its wavelength?",
+    "question_latex": "A plane electromagnetic wave travels in vacuum along z-direction. What can you say about the directions of its electric and magnetic field vectors? If the frequency of the wave is $30$ MHz, what is its wavelength?",
+    "sub_parts": null,
+    "correct_answer_plain": "E and B are perpendicular to each other and to direction of propagation (z-axis). They lie in xy-plane. λ = 10 m",
+    "correct_answer_latex": "$\\vec{E}$ and $\\vec{B}$ are perpendicular to each other and to direction of propagation (z-axis). They lie in xy-plane. $\\lambda = 10$ m",
+    "hint": "EM waves are transverse: E ⊥ B ⊥ direction of propagation. Use c = fλ",
+    "solution_steps_latex": [
+      "Given: EM wave travels along **z-direction**",
+      "Frequency: $f = 30$ MHz $= 30 \\times 10^6$ Hz $= 3 \\times 10^7$ Hz",
+      "Medium: vacuum",
+      "**Part 1: Directions of E and B**",
+      "**Property of EM waves**: They are **transverse waves**",
+      "This means:",
+      "1. $\\vec{E} \\perp \\vec{B}$ (E and B perpendicular to each other)",
+      "2. Both $\\vec{E}$ and $\\vec{B}$ are perpendicular to direction of propagation",
+      "**For wave along z-direction**:",
+      "- Direction of propagation: **z-axis**",
+      "- $\\vec{E}$ and $\\vec{B}$ both lie in **xy-plane**",
+      "- $\\vec{E}$ and $\\vec{B}$ are perpendicular to each other",
+      "**Possible configurations**:",
+      "- Example 1: $\\vec{E}$ along x-axis, $\\vec{B}$ along y-axis",
+      "- Example 2: $\\vec{E}$ along y-axis, $\\vec{B}$ along x-axis",
+      "- Or any other perpendicular directions in xy-plane",
+      "**Relationship**: $\\vec{E} \\times \\vec{B}$ points in direction of wave propagation (z-direction)",
+      "**Part 2: Wavelength**",
+      "Wave equation: $c = f\\lambda$",
+      "where $c = 3 \\times 10^8$ m/s (speed of light in vacuum)",
+      "$\\lambda = \\frac{c}{f}$",
+      "$\\lambda = \\frac{3 \\times 10^8}{3 \\times 10^7}$",
+      "$\\lambda = 10$ m",
+      "**Note**: This is in the radio wave range (short wave radio)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "EM wave along z-axis: E and B perpendicular to each other and to propagation direction; λ = 10 m",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Direction of propagation: z-direction",
+        "Frequency f: 30 MHz = 3 × 10⁷ Hz",
+        "Medium: vacuum"
+      ],
+      "to_find": [
+        "Directions of E and B field vectors",
+        "Wavelength λ"
+      ],
+      "formulas_used": [
+        "$\\vec{E} \\perp \\vec{B}$ (transverse wave)",
+        "$\\vec{E}, \\vec{B} \\perp $ direction of propagation",
+        "$c = f\\lambda$",
+        "$\\lambda = \\frac{c}{f}$"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "transverse-waves",
+      "electric-field",
+      "magnetic-field",
+      "wavelength-calculation",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.4",
+      "page": 214
+    },
+    "calculator_slug": "",
+    "p5_sketch_slug": "q8-4-em-transverse",
+    "p5_sketch": "q8-4-em-transverse"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "EM Spectrum - Radio Waves",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.5",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "A radio can tune in to any station in the 7.5 MHz to 12 MHz band. What is the corresponding wavelength band?",
+    "question_latex": "A radio can tune in to any station in the $7.5$ MHz to $12$ MHz band. What is the corresponding wavelength band?",
+    "sub_parts": null,
+    "correct_answer_plain": "λ: 25 m to 40 m",
+    "correct_answer_latex": "$\\lambda$: $25$ m to $40$ m",
+    "hint": "Use λ = c/f. Higher frequency → shorter wavelength",
+    "solution_steps_latex": [
+      "Given: Frequency range: $f_1 = 7.5$ MHz to $f_2 = 12$ MHz",
+      "$f_1 = 7.5 \\times 10^6$ Hz",
+      "$f_2 = 12 \\times 10^6$ Hz",
+      "To find: Corresponding wavelength range",
+      "**Formula**: $\\lambda = \\frac{c}{f}$",
+      "where $c = 3 \\times 10^8$ m/s",
+      "**For f₁ = 7.5 MHz (lower frequency)**:",
+      "$\\lambda_1 = \\frac{3 \\times 10^8}{7.5 \\times 10^6}$",
+      "$\\lambda_1 = \\frac{3 \\times 10^8}{7.5 \\times 10^6} = \\frac{300}{7.5}$",
+      "$\\lambda_1 = 40$ m",
+      "**For f₂ = 12 MHz (higher frequency)**:",
+      "$\\lambda_2 = \\frac{3 \\times 10^8}{12 \\times 10^6}$",
+      "$\\lambda_2 = \\frac{300}{12} = 25$ m",
+      "**Wavelength range**: $25$ m to $40$ m",
+      "**Note**: ",
+      "- Lower frequency (7.5 MHz) → Longer wavelength (40 m)",
+      "- Higher frequency (12 MHz) → Shorter wavelength (25 m)",
+      "- This is **inverse relationship**: $\\lambda \\propto \\frac{1}{f}$",
+      "**Band classification**: Short wave radio band"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Radio band of EM spectrum; 7.5–12 MHz corresponds to wavelengths 25–40 m",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Frequency range: 7.5 MHz to 12 MHz",
+        "f₁ = 7.5 × 10⁶ Hz",
+        "f₂ = 12 × 10⁶ Hz"
+      ],
+      "to_find": [
+        "Wavelength range"
+      ],
+      "formulas_used": [
+        "$\\lambda = \\frac{c}{f}$",
+        "$c = 3 \\times 10^8$ m/s"
+      ]
+    },
+    "tags": [
+      "electromagnetic-spectrum",
+      "radio-waves",
+      "wavelength-frequency-relation",
+      "inverse-relationship",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.5",
+      "page": 214
+    },
+    "calculator_slug": "q8-5-wavelength-frequency",
+    "p5_sketch_slug": "q8-5-radio-wavelength",
+    "p5_sketch": "q8-5-radio-wavelength",
+    "calculator": "q8-5-wavelength-frequency"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Generation of EM Waves",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.6",
+    "marks": 1,
+    "difficulty": 0.3,
+    "question_plain": "A charged particle oscillates about its mean equilibrium position with a frequency of 10⁹ Hz. What is the frequency of the electromagnetic waves produced by the oscillator?",
+    "question_latex": "A charged particle oscillates about its mean equilibrium position with a frequency of $10^9$ Hz. What is the frequency of the electromagnetic waves produced by the oscillator?",
+    "sub_parts": null,
+    "correct_answer_plain": "f = 10⁹ Hz (same as oscillation frequency)",
+    "correct_answer_latex": "$f = 10^9$ Hz (same as oscillation frequency)",
+    "hint": "Accelerating charges radiate EM waves with same frequency as their oscillation",
+    "solution_steps_latex": [
+      "Given: Oscillation frequency of charged particle: $f = 10^9$ Hz",
+      "To find: Frequency of electromagnetic waves produced",
+      "**Principle**: **Accelerating charges radiate electromagnetic waves**",
+      "When a charged particle oscillates:",
+      "1. It undergoes periodic acceleration",
+      "2. This produces time-varying electric and magnetic fields",
+      "3. These fields propagate as electromagnetic waves",
+      "**Key Property**: The frequency of radiated EM waves equals the frequency of oscillation",
+      "$f_{EM} = f_{oscillation}$",
+      "**Answer**: $f_{EM} = 10^9$ Hz $= 1$ GHz",
+      "**Physical explanation**:",
+      "- Charge oscillates with period $T = 1/f$",
+      "- Electric field at distance changes with same period",
+      "- Magnetic field also changes with same period",
+      "- Therefore, EM wave has same frequency",
+      "**Classification**: $10^9$ Hz is in the **microwave** region of EM spectrum",
+      "**Application**: This principle is used in radio transmitters, antennas, and oscillators"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "EM wave with f = 10⁹ Hz matches the oscillation frequency of the source charge",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Oscillation frequency of charged particle: 10⁹ Hz"
+      ],
+      "to_find": [
+        "Frequency of EM waves produced"
+      ],
+      "formulas_used": [
+        "$f_{EM} = f_{oscillation}$ (for oscillating charge)"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "generation-of-em-waves",
+      "oscillating-charge",
+      "accelerated-charge",
+      "radiation",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.6",
+      "page": 214
+    },
+    "calculator_slug": "",
+    "p5_sketch_slug": "q8-6-oscillation-frequency",
+    "p5_sketch": "q8-6-oscillation-frequency"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Relationship Between E and B",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The amplitude of the magnetic field part of a harmonic electromagnetic wave in vacuum is B₀ = 510 nT. What is the amplitude of the electric field part of the wave?",
+    "question_latex": "The amplitude of the magnetic field part of a harmonic electromagnetic wave in vacuum is $B_0 = 510$ nT. What is the amplitude of the electric field part of the wave?",
+    "sub_parts": null,
+    "correct_answer_plain": "E₀ = 153 N/C or V/m",
+    "correct_answer_latex": "$E_0 = 153$ N/C or V/m",
+    "hint": "For EM waves in vacuum: E₀/B₀ = c",
+    "solution_steps_latex": [
+      "Given: Amplitude of magnetic field: $B_0 = 510$ nT",
+      "$B_0 = 510 \\times 10^{-9}$ T $= 5.1 \\times 10^{-7}$ T",
+      "Medium: vacuum",
+      "To find: Amplitude of electric field $E_0$",
+      "**Relationship between E and B in EM wave**:",
+      "For electromagnetic waves in vacuum:",
+      "$\\frac{E}{B} = c$",
+      "where $c = 3 \\times 10^8$ m/s (speed of light)",
+      "This applies to both instantaneous values and amplitudes:",
+      "$\\frac{E_0}{B_0} = c$",
+      "Therefore: $E_0 = c \\times B_0$",
+      "**Substituting values**:",
+      "$E_0 = 3 \\times 10^8 \\times 5.1 \\times 10^{-7}$",
+      "$E_0 = 15.3 \\times 10^1$",
+      "$E_0 = 153$ N/C",
+      "or $E_0 = 153$ V/m (equivalent units)",
+      "**Note**: ",
+      "- E and B oscillate in phase",
+      "- Ratio E/B = c is constant throughout the wave",
+      "- E is much larger numerically than B, but both are equally important"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "EM wave showing E₀ = 153 V/m computed from B₀ = 510 nT using E₀ = cB₀",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnetic field amplitude B₀: 510 nT = 5.1 × 10⁻⁷ T",
+        "Medium: vacuum"
+      ],
+      "to_find": [
+        "Electric field amplitude E₀"
+      ],
+      "formulas_used": [
+        "$\\frac{E_0}{B_0} = c$ (EM wave in vacuum)",
+        "$E_0 = c B_0$",
+        "$c = 3 \\times 10^8$ m/s"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "electric-field",
+      "magnetic-field",
+      "amplitude-relation",
+      "speed-of-light",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.7",
+      "page": 214
+    },
+    "calculator_slug": "q8-7-e-from-b",
+    "p5_sketch_slug": "q8-7-e-from-b",
+    "p5_sketch": "q8-7-e-from-b",
+    "calculator": "q8-7-e-from-b"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "EM Wave Parameters and Equations",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.8",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Suppose that the electric field amplitude of an electromagnetic wave is E₀ = 120 N/C and that its frequency is ν = 50.0 MHz. (a) Determine, B₀, ω, k, and λ. (b) Find expressions for E and B.",
+    "question_latex": "Suppose that the electric field amplitude of an electromagnetic wave is $E_0 = 120$ N/C and that its frequency is $\\nu = 50.0$ MHz. (a) Determine, $B_0$, $\\omega$, $k$, and $\\lambda$. (b) Find expressions for $\\vec{E}$ and $\\vec{B}$.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) B₀ = 4 × 10⁻⁷ T, ω = 3.14 × 10⁸ rad/s, k = 1.05 rad/m, λ = 6 m; (b) E = 120 sin(kz - ωt), B = 4×10⁻⁷ sin(kz - ωt)",
+    "correct_answer_latex": "(a) $B_0 = 4 \\times 10^{-7}$ T, $\\omega = 3.14 \\times 10^8$ rad/s, $k = 1.05$ rad/m, $\\lambda = 6$ m; (b) $E = 120 \\sin(kz - \\omega t)$, $B = 4 \\times 10^{-7} \\sin(kz - \\omega t)$",
+    "hint": "(a) B₀ = E₀/c, ω = 2πν, λ = c/ν, k = 2π/λ. (b) E = E₀ sin(kz - ωt), B = B₀ sin(kz - ωt)",
+    "solution_steps_latex": [
+      "Given: Electric field amplitude $E_0 = 120$ N/C",
+      "Frequency $\\nu = 50.0$ MHz $= 50 \\times 10^6$ Hz $= 5 \\times 10^7$ Hz",
+      "**Part (a): Determine B₀, ω, k, and λ**",
+      "**1. Magnetic field amplitude** $B_0$:",
+      "$B_0 = \\frac{E_0}{c} = \\frac{120}{3 \\times 10^8}$",
+      "$B_0 = 4 \\times 10^{-7}$ T $= 400$ nT",
+      "**2. Angular frequency** $\\omega$:",
+      "$\\omega = 2\\pi \\nu = 2 \\times 3.14 \\times 5 \\times 10^7$",
+      "$\\omega = 3.14 \\times 10^8$ rad/s",
+      "**3. Wavelength** $\\lambda$:",
+      "$\\lambda = \\frac{c}{\\nu} = \\frac{3 \\times 10^8}{5 \\times 10^7}$",
+      "$\\lambda = 6$ m",
+      "**4. Wave number (propagation constant)** $k$:",
+      "$k = \\frac{2\\pi}{\\lambda} = \\frac{2 \\times 3.14}{6}$",
+      "$k = 1.047$ rad/m $\\approx 1.05$ rad/m",
+      "**Alternatively**: $k = \\frac{\\omega}{c} = \\frac{3.14 \\times 10^8}{3 \\times 10^8} = 1.047$ rad/m ✓",
+      "**Part (b): Expressions for E and B**",
+      "Assuming wave travels in **+z direction**:",
+      "**Electric field** (say, along x-axis):",
+      "$\\vec{E} = E_0 \\sin(kz - \\omega t) \\, \\hat{i}$",
+      "$\\vec{E} = 120 \\sin(1.05z - 3.14 \\times 10^8 t) \\, \\hat{i}$ N/C",
+      "**Magnetic field** (along y-axis, perpendicular to E):",
+      "$\\vec{B} = B_0 \\sin(kz - \\omega t) \\, \\hat{j}$",
+      "$\\vec{B} = 4 \\times 10^{-7} \\sin(1.05z - 3.14 \\times 10^8 t) \\, \\hat{j}$ T",
+      "**Note**: ",
+      "- $\\vec{E} \\times \\vec{B}$ points in +z direction (direction of propagation)",
+      "- Both E and B oscillate in phase",
+      "- Units: z in meters, t in seconds"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Complete EM wave: E₀ = 120 V/m, B₀ = 4×10⁻⁷ T, λ = 6 m, k = 1.05 rad/m, ω = 3.14×10⁸ rad/s",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Electric field amplitude E₀: 120 N/C",
+        "Frequency ν: 50.0 MHz = 5 × 10⁷ Hz"
+      ],
+      "to_find": [
+        "(a) B₀, ω, k, λ",
+        "(b) Expressions for E and B"
+      ],
+      "formulas_used": [
+        "$B_0 = \\frac{E_0}{c}$",
+        "$\\omega = 2\\pi \\nu$",
+        "$\\lambda = \\frac{c}{\\nu}$",
+        "$k = \\frac{2\\pi}{\\lambda} = \\frac{\\omega}{c}$",
+        "$\\vec{E} = E_0 \\sin(kz - \\omega t) \\hat{i}$",
+        "$\\vec{B} = B_0 \\sin(kz - \\omega t) \\hat{j}$"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "wave-parameters",
+      "wave-equation",
+      "angular-frequency",
+      "wave-number",
+      "wavelength",
+      "comprehensive-analysis"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.8",
+      "page": 214
+    },
+    "calculator_slug": "q8-8-em-wave-properties",
+    "p5_sketch_slug": "q8-8-em-wave-complete",
+    "p5_sketch": "q8-8-em-wave-complete",
+    "calculator": "q8-8-em-wave-properties"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Photon Energy in EM Spectrum",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.9",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "The terminology of different parts of the electromagnetic spectrum is given in the text. Use the formula E = hν (for energy of a quantum of radiation: photon) and obtain the photon energy in units of eV for different parts of the electromagnetic spectrum. In what way are the different scales of photon energies that you obtain related to the sources of electromagnetic radiation?",
+    "question_latex": "The terminology of different parts of the electromagnetic spectrum is given in the text. Use the formula $E = h\\nu$ (for energy of a quantum of radiation: photon) and obtain the photon energy in units of eV for different parts of the electromagnetic spectrum. In what way are the different scales of photon energies that you obtain related to the sources of electromagnetic radiation?",
+    "sub_parts": null,
+    "correct_answer_plain": "Photon energies range from ~10⁻⁹ eV (radio) to ~10⁶ eV (gamma rays). Higher energy transitions produce higher energy photons.",
+    "correct_answer_latex": "Photon energies range from $\\sim 10^{-9}$ eV (radio) to $\\sim 10^6$ eV (gamma rays). Higher energy transitions produce higher energy photons.",
+    "hint": "E = hν = hc/λ. Use h = 6.63 × 10⁻³⁴ J·s, convert to eV using 1 eV = 1.6 × 10⁻¹⁹ J",
+    "solution_steps_latex": [
+      "**Formula**: Photon energy $E = h\\nu = \\frac{hc}{\\lambda}$",
+      "Constants:",
+      "$h = 6.63 \\times 10^{-34}$ J$\\cdot$s (Planck's constant)",
+      "$c = 3 \\times 10^8$ m/s",
+      "$hc = 6.63 \\times 10^{-34} \\times 3 \\times 10^8 = 1.99 \\times 10^{-25}$ J$\\cdot$m",
+      "Conversion: $1$ eV $= 1.6 \\times 10^{-19}$ J",
+      "$hc = \\frac{1.99 \\times 10^{-25}}{1.6 \\times 10^{-19}}$ eV$\\cdot$m $\\approx 1.24 \\times 10^{-6}$ eV$\\cdot$m",
+      "**Calculating photon energies for different regions**:",
+      "**1. Radio waves** ($\\lambda \\sim 1$ m to $10^3$ m):",
+      "$E = \\frac{1.24 \\times 10^{-6}}{1}$ eV $\\sim 10^{-6}$ eV $= 1$ $\\mu$eV",
+      "For $\\lambda = 10^3$ m: $E \\sim 10^{-9}$ eV",
+      "**2. Microwaves** ($\\lambda \\sim 10^{-3}$ m to $10^{-1}$ m):",
+      "$E = \\frac{1.24 \\times 10^{-6}}{10^{-3}}$ eV $\\sim 10^{-3}$ eV $= 1$ meV",
+      "**3. Infrared** ($\\lambda \\sim 10^{-6}$ m to $10^{-3}$ m):",
+      "$E = \\frac{1.24 \\times 10^{-6}}{10^{-6}}$ eV $\\sim 1$ eV",
+      "**4. Visible light** ($\\lambda \\sim 400$ nm to $700$ nm):",
+      "For $\\lambda = 500$ nm $= 5 \\times 10^{-7}$ m:",
+      "$E = \\frac{1.24 \\times 10^{-6}}{5 \\times 10^{-7}}$ eV $\\approx 2.5$ eV",
+      "Range: $1.8$ eV (red) to $3.1$ eV (violet)",
+      "**5. Ultraviolet** ($\\lambda \\sim 10$ nm to $400$ nm):",
+      "$E \\sim 3$ eV to $100$ eV",
+      "**6. X-rays** ($\\lambda \\sim 0.01$ nm to $10$ nm):",
+      "For $\\lambda = 1$ nm $= 10^{-9}$ m:",
+      "$E = \\frac{1.24 \\times 10^{-6}}{10^{-9}}$ eV $\\sim 10^3$ eV $= 1$ keV",
+      "Range: $100$ eV to $100$ keV",
+      "**7. Gamma rays** ($\\lambda < 0.01$ nm):",
+      "$E > 100$ keV, up to MeV range",
+      "**Relation to sources**:",
+      "**Low energy** (radio, microwave): Oscillating charges in circuits, antennas",
+      "**Medium energy** (infrared, visible): Molecular vibrations, electronic transitions in atoms",
+      "**High energy** (UV, X-rays): Inner electron transitions in heavy atoms",
+      "**Very high energy** (gamma rays): Nuclear transitions, particle decays",
+      "**Key insight**: Photon energy reflects the energy scale of the source",
+      "Higher binding energies → Higher photon energies"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Full EM spectrum showing photon energy range from ~10⁻⁹ eV (radio) to ~10⁶ eV (gamma rays)",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Formula: E = hν",
+        "Planck's constant h: 6.63 × 10⁻³⁴ J·s",
+        "Speed of light c: 3 × 10⁸ m/s",
+        "Conversion: 1 eV = 1.6 × 10⁻¹⁹ J"
+      ],
+      "to_find": [
+        "Photon energies for different EM spectrum regions",
+        "Relation to sources"
+      ],
+      "formulas_used": [
+        "$E = h\\nu = \\frac{hc}{\\lambda}$",
+        "$hc \\approx 1.24 \\times 10^{-6}$ eV$\\cdot$m"
+      ]
+    },
+    "tags": [
+      "electromagnetic-spectrum",
+      "photon-energy",
+      "plancks-constant",
+      "quantum-nature",
+      "energy-scales",
+      "sources-of-radiation",
+      "comprehensive-analysis"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.9",
+      "page": 214
+    },
+    "calculator_slug": "",
+    "p5_sketch_slug": "q8-9-photon-energy",
+    "p5_sketch": "q8-9-photon-energy"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 8: Electromagnetic Waves",
+    "section": "Energy Density in EM Waves",
+    "exercise": "Exercise 8",
+    "question_number": "Q8.10",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "In a plane electromagnetic wave, the electric field oscillates sinusoidally at a frequency of 2.0 × 10¹⁰ Hz and amplitude 48 V/m.\n(a) What is the wavelength of the wave?\n(b) What is the amplitude of the oscillating magnetic field?\n(c) Show that the average energy density of the E field equals the average energy density of the B field. [c = 3 × 10⁸ m/s.]",
+    "question_latex": "In a plane electromagnetic wave, the electric field oscillates sinusoidally at a frequency of $2.0 \\times 10^{10}$ Hz and amplitude $48$ V/m.\n\n(a) What is the wavelength of the wave?\n\n(b) What is the amplitude of the oscillating magnetic field?\n\n(c) Show that the average energy density of the E field equals the average energy density of the B field. [$c = 3 \\times 10^8$ m/s.]",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) λ = 1.5 × 10⁻² m = 1.5 cm; (b) B₀ = 1.6 × 10⁻⁷ T; (c) ⟨u_E⟩ = ⟨u_B⟩ = (1/4)ε₀E₀²",
+    "correct_answer_latex": "(a) $\\lambda = 1.5 \\times 10^{-2}$ m $= 1.5$ cm; (b) $B_0 = 1.6 \\times 10^{-7}$ T; (c) $\\langle u_E \\rangle = \\langle u_B \\rangle = \\frac{1}{4}\\varepsilon_0 E_0^2$",
+    "hint": "(a) λ = c/f. (b) B₀ = E₀/c. (c) u_E = (1/2)ε₀E², u_B = B²/(2μ₀), average both and use E₀ = cB₀",
+    "solution_steps_latex": [
+      "Given: Frequency $f = 2.0 \\times 10^{10}$ Hz",
+      "Electric field amplitude $E_0 = 48$ V/m",
+      "Speed of light $c = 3 \\times 10^8$ m/s",
+      "**Part (a): Wavelength**",
+      "$\\lambda = \\frac{c}{f} = \\frac{3 \\times 10^8}{2.0 \\times 10^{10}}$",
+      "$\\lambda = 1.5 \\times 10^{-2}$ m $= 1.5$ cm $= 15$ mm",
+      "**Note**: This is in the **microwave** region",
+      "**Part (b): Amplitude of Magnetic Field**",
+      "For EM wave in vacuum: $\\frac{E_0}{B_0} = c$",
+      "$B_0 = \\frac{E_0}{c} = \\frac{48}{3 \\times 10^8}$",
+      "$B_0 = 1.6 \\times 10^{-7}$ T $= 160$ nT",
+      "**Part (c): Average Energy Densities**",
+      "**Energy density in electric field**:",
+      "$u_E = \\frac{1}{2}\\varepsilon_0 E^2$",
+      "For sinusoidal wave: $E = E_0 \\sin(kx - \\omega t)$",
+      "Average over one cycle:",
+      "$\\langle u_E \\rangle = \\frac{1}{2}\\varepsilon_0 \\langle E^2 \\rangle = \\frac{1}{2}\\varepsilon_0 E_0^2 \\langle \\sin^2(kx - \\omega t) \\rangle$",
+      "Since $\\langle \\sin^2 \\theta \\rangle = \\frac{1}{2}$:",
+      "$\\langle u_E \\rangle = \\frac{1}{2}\\varepsilon_0 E_0^2 \\times \\frac{1}{2} = \\frac{1}{4}\\varepsilon_0 E_0^2$",
+      "**Energy density in magnetic field**:",
+      "$u_B = \\frac{B^2}{2\\mu_0}$",
+      "Average:",
+      "$\\langle u_B \\rangle = \\frac{1}{2\\mu_0} \\langle B^2 \\rangle = \\frac{1}{2\\mu_0} B_0^2 \\times \\frac{1}{2} = \\frac{B_0^2}{4\\mu_0}$",
+      "**Showing equality**:",
+      "We know: $E_0 = cB_0$ and $c = \\frac{1}{\\sqrt{\\mu_0\\varepsilon_0}}$",
+      "Therefore: $c^2 = \\frac{1}{\\mu_0\\varepsilon_0}$",
+      "Substituting $B_0 = \\frac{E_0}{c}$ in $\\langle u_B \\rangle$:",
+      "$\\langle u_B \\rangle = \\frac{1}{4\\mu_0} \\left(\\frac{E_0}{c}\\right)^2 = \\frac{E_0^2}{4\\mu_0 c^2}$",
+      "$\\langle u_B \\rangle = \\frac{E_0^2}{4\\mu_0} \\times \\mu_0\\varepsilon_0 = \\frac{\\varepsilon_0 E_0^2}{4}$",
+      "$\\langle u_B \\rangle = \\frac{1}{4}\\varepsilon_0 E_0^2$",
+      "**Conclusion**: $\\langle u_E \\rangle = \\langle u_B \\rangle = \\frac{1}{4}\\varepsilon_0 E_0^2$",
+      "Electric and magnetic fields carry **equal energy** in EM wave ✓"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Microwave EM wave: f = 20 GHz, λ = 1.5 cm, B₀ = 1.6×10⁻⁷ T; equal electric and magnetic energy densities",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Frequency f: 2.0 × 10¹⁰ Hz",
+        "Electric field amplitude E₀: 48 V/m",
+        "Speed of light c: 3 × 10⁸ m/s"
+      ],
+      "to_find": [
+        "(a) Wavelength λ",
+        "(b) Magnetic field amplitude B₀",
+        "(c) Proof that ⟨u_E⟩ = ⟨u_B⟩"
+      ],
+      "formulas_used": [
+        "$\\lambda = \\frac{c}{f}$",
+        "$B_0 = \\frac{E_0}{c}$",
+        "$u_E = \\frac{1}{2}\\varepsilon_0 E^2$",
+        "$u_B = \\frac{B^2}{2\\mu_0}$",
+        "$\\langle \\sin^2 \\theta \\rangle = \\frac{1}{2}$",
+        "$c^2 = \\frac{1}{\\mu_0\\varepsilon_0}$"
+      ]
+    },
+    "tags": [
+      "electromagnetic-waves",
+      "wavelength",
+      "magnetic-field-amplitude",
+      "energy-density",
+      "energy-equipartition",
+      "proof-based",
+      "comprehensive-analysis"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 8,
+      "exercise": "8",
+      "question_number": "Q8.10",
+      "page": 214
+    },
+    "calculator_slug": "q8-10-em-complete",
+    "p5_sketch_slug": "q8-10-microwave",
+    "p5_sketch": "q8-10-microwave",
+    "calculator": "q8-10-em-complete"
+  }
+]

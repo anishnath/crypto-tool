@@ -1,0 +1,656 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Faraday's Law and Lenz's Law",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.1",
+    "marks": 4,
+    "difficulty": 0.5,
+    "question_plain": "Predict the direction of induced current in the situations described by the following Figs. 6.15(a) to (f).",
+    "question_latex": "Predict the direction of induced current in the situations described by the following Figs. 6.15(a) to (f).",
+    "given": "Six different situations involving changing magnetic flux through loops",
+    "to_find": "Direction of induced current in each case",
+    "correct_answer_plain": "(a) Along qrpq (b) Along prq, along yzx (c) Along yzx (d) Along zyx (e) Along xry (f) No induced current since field lines lie in the plane of the loop.",
+    "correct_answer_latex": "(a) Along $qrpq$ (b) Along $prq$, along $yzx$ (c) Along $yzx$ (d) Along $zyx$ (e) Along $xry$ (f) No induced current since field lines lie in the plane of the loop.",
+    "solution_steps_latex": [
+      "Apply **Lenz's law**: The induced current opposes the change in magnetic flux that causes it.",
+      "**(a)** Coil $P$ near wire with increasing current $\\to$ flux through $P$ increases $\\to$ induced current opposes increase $\\to$ current flows along $qrpq$",
+      "**(b)** Coil $P$ near wire with decreasing current $\\to$ flux decreases $\\to$ current along $prq$; Coil $Q$ moved toward wire $\\to$ flux increases $\\to$ current along $yzx$",
+      "**(c)** Current in wire $XY$ increasing $\\to$ flux through nearby loop increases $\\to$ current along $yzx$",
+      "**(d)** Current in wire $XY$ decreasing $\\to$ flux through nearby loop decreases $\\to$ current along $zyx$",
+      "**(e)** Coil rotates, changing flux $\\to$ current along $xry$",
+      "**(f)** Magnetic field lies **in** the plane of the loop $\\to$ $\\Phi = 0$ and $d\\Phi/dt = 0$ $\\to$ **no induced current**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Six situations (a)-(f) showing coils near current-carrying wires, moving coils, and loops in magnetic fields for predicting induced current direction",
+      "figure_reference": "Figure 6.15"
+    },
+    "physical_quantities": [
+      "magnetic flux",
+      "induced current",
+      "Lenz's law"
+    ],
+    "tags": [
+      "electromagnetic-induction",
+      "lenz-law",
+      "faraday-law",
+      "conceptual"
+    ],
+    "calculator": null,
+    "p5_sketch": "q6-1-flux-change",
+    "p5_sketch_slug": "q6-1-flux-change"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Lenz's Law and Direction of Induced Current",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.2",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Use Lenz's law to determine the direction of induced current in the situations described by Fig. 6.16:\n(a) A wire of irregular shape turning into a circular shape;\n(b) A circular loop being deformed into a narrow straight wire.",
+    "question_latex": "Use Lenz's law to determine the direction of induced current in the situations described by Fig. 6.16:\n\n(a) A wire of irregular shape turning into a circular shape;\n\n(b) A circular loop being deformed into a narrow straight wire.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Along adcd (flux increases during shape change, induced current produces opposing flux). (b) Along a′d′c′b′ (flux decreases during the process).",
+    "correct_answer_latex": "(a) Along $adcd$ (flux increases during shape change, induced current produces opposing flux). (b) Along $a'd'c'b'$ (flux decreases during the process).",
+    "hint": "Lenz's law: Induced current opposes the change causing it. When area increases, flux increases - induced current opposes this. When area decreases, flux decreases - induced current opposes this.",
+    "solution_steps_latex": [
+      "**Lenz's Law**: The direction of induced current is such that it opposes the change in magnetic flux that produces it.",
+      "**Part (a): Irregular wire → Circular shape**",
+      "**Change**: Wire shape changes from irregular to circular",
+      "**Effect**: Area enclosed by wire **increases** (circle has maximum area for given perimeter)",
+      "**Flux change**: If external magnetic field $\\vec{B}$ is present (say, into the page),",
+      "Magnetic flux: $\\Phi = BA$",
+      "Since area $A$ increases, flux $\\Phi$ **increases**",
+      "**Lenz's law application**:",
+      "Induced current must create magnetic field to **oppose** the increase in flux",
+      "Therefore, induced current creates field **opposite** to external field",
+      "**Direction**: If external field is into page, induced current flows **counterclockwise** (by right-hand rule)",
+      "This creates field **out of page**, opposing the flux increase",
+      "**Part (b): Circular loop → Narrow straight wire**",
+      "**Change**: Circular loop deforms into narrow straight wire",
+      "**Effect**: Area enclosed by loop **decreases** (straight wire has nearly zero enclosed area)",
+      "**Flux change**: If external magnetic field $\\vec{B}$ is present,",
+      "Since area $A$ decreases, flux $\\Phi = BA$ **decreases**",
+      "**Lenz's law application**:",
+      "Induced current must create magnetic field to **oppose** the decrease in flux",
+      "Therefore, induced current creates field in **same direction** as external field",
+      "**Direction**: If external field is into page, induced current flows **clockwise** (by right-hand rule)",
+      "This creates field **into page**, opposing the flux decrease",
+      "**Summary**:",
+      "- Increasing area → Induced field opposes external field → Current counterclockwise",
+      "- Decreasing area → Induced field aids external field → Current clockwise"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Wire changing shape: (a) irregular to circular (flux increases), (b) circular to narrow (flux decreases), in external magnetic field",
+      "figure_reference": "Figure 6.16"
+    },
+    "physical_quantities": {
+      "given": [
+        "Two scenarios with changing loop shapes",
+        "External magnetic field present",
+        "(a) Irregular → Circular (area increases)",
+        "(b) Circular → Straight (area decreases)"
+      ],
+      "to_find": [
+        "Direction of induced current in each case"
+      ],
+      "formulas_used": [
+        "Lenz's law: Induced effect opposes the cause",
+        "$\\Phi = BA$ (magnetic flux)",
+        "$\\varepsilon = -\\frac{d\\Phi}{dt}$ (Faraday's law with Lenz's law)",
+        "Right-hand rule for current direction"
+      ]
+    },
+    "tags": [
+      "lenzs-law",
+      "induced-current",
+      "direction-determination",
+      "flux-change",
+      "area-change",
+      "conceptual-understanding",
+      "figure-based"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.2",
+      "page": 175
+    },
+    "calculator": null,
+    "p5_sketch": "q6-2-lenz-law",
+    "p5_sketch_slug": "q6-2-lenz-law"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Faraday's Law - Induced EMF",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A long solenoid with 15 turns per cm has a small loop of area 2.0 cm² placed inside the solenoid normal to its axis. If the current carried by the solenoid changes steadily from 2.0 A to 4.0 A in 0.1 s, what is the induced emf in the loop while the current is changing?",
+    "question_latex": "A long solenoid with $15$ turns per cm has a small loop of area $2.0$ cm$^2$ placed inside the solenoid normal to its axis. If the current carried by the solenoid changes steadily from $2.0$ A to $4.0$ A in $0.1$ s, what is the induced emf in the loop while the current is changing?",
+    "sub_parts": null,
+    "correct_answer_plain": "ε = 7.5 × 10⁻⁶ V = 7.5 μV",
+    "correct_answer_latex": "$\\varepsilon = 7.5 \\times 10^{-6}$ V $= 7.5$ $\\mu$V",
+    "hint": "Magnetic field in solenoid: B = μ₀nI. Flux through loop: Φ = BA. Use Faraday's law: ε = -dΦ/dt",
+    "solution_steps_latex": [
+      "Given: Turns per unit length: $n = 15$ turns/cm $= 1500$ turns/m",
+      "Area of small loop: $A = 2.0$ cm$^2$ $= 2.0 \\times 10^{-4}$ m$^2$",
+      "Initial current: $I_1 = 2.0$ A",
+      "Final current: $I_2 = 4.0$ A",
+      "Time interval: $\\Delta t = 0.1$ s",
+      "Loop placed normal to solenoid axis",
+      "To find: Induced emf $\\varepsilon$ in the loop",
+      "**Step 1**: Magnetic field inside solenoid",
+      "$B = \\mu_0 n I$",
+      "where $\\mu_0 = 4\\pi \\times 10^{-7}$ T m A$^{-1}$",
+      "**Step 2**: Magnetic flux through small loop",
+      "$\\Phi = BA = \\mu_0 n I A$",
+      "Since loop is inside solenoid and normal to axis, it links the full field",
+      "**Step 3**: Change in flux",
+      "$\\Delta \\Phi = \\Phi_2 - \\Phi_1 = \\mu_0 n A (I_2 - I_1)$",
+      "$\\Delta \\Phi = \\mu_0 n A \\Delta I$",
+      "where $\\Delta I = 4.0 - 2.0 = 2.0$ A",
+      "**Step 4**: Induced emf (Faraday's law)",
+      "$\\varepsilon = -\\frac{d\\Phi}{dt} = -\\frac{\\Delta \\Phi}{\\Delta t}$",
+      "Magnitude: $|\\varepsilon| = \\frac{\\mu_0 n A \\Delta I}{\\Delta t}$",
+      "**Step 5**: Substituting values",
+      "$\\varepsilon = \\frac{4\\pi \\times 10^{-7} \\times 1500 \\times 2.0 \\times 10^{-4} \\times 2.0}{0.1}$",
+      "$\\varepsilon = \\frac{4 \\times 3.14 \\times 10^{-7} \\times 1500 \\times 2.0 \\times 10^{-4} \\times 2.0}{0.1}$",
+      "$\\varepsilon = \\frac{4 \\times 3.14 \\times 1500 \\times 2.0 \\times 2.0 \\times 10^{-11}}{0.1}$",
+      "$\\varepsilon = \\frac{75360 \\times 10^{-11}}{0.1}$",
+      "$\\varepsilon = 753600 \\times 10^{-11}$ V",
+      "$\\varepsilon = 7.536 \\times 10^{-6}$ V",
+      "$\\varepsilon \\approx 7.5 \\times 10^{-6}$ V $= 7.5$ $\\mu$V"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Small loop of area 2.0 cm² inside long solenoid (15 turns/cm), current changing from 2 A to 4 A",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Turns per unit length n: 15 turns/cm = 1500 turns/m",
+        "Loop area A: 2.0 cm² = 2.0 × 10⁻⁴ m²",
+        "Initial current I₁: 2.0 A",
+        "Final current I₂: 4.0 A",
+        "Time interval Δt: 0.1 s",
+        "Loop orientation: normal to axis"
+      ],
+      "to_find": [
+        "Induced emf ε in the loop"
+      ],
+      "formulas_used": [
+        "$B = \\mu_0 n I$ (field in solenoid)",
+        "$\\Phi = BA$ (magnetic flux)",
+        "$\\varepsilon = -\\frac{d\\Phi}{dt}$ (Faraday's law)",
+        "$\\varepsilon = \\frac{\\mu_0 n A \\Delta I}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "faradays-law",
+      "induced-emf",
+      "solenoid",
+      "changing-current",
+      "flux-linkage",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.3",
+      "page": 176
+    },
+    "calculator": "q6-3-solenoid-emf",
+    "p5_sketch": "q6-3-solenoid-loop",
+    "calculator_slug": "q6-3-solenoid-emf",
+    "p5_sketch_slug": "q6-3-solenoid-loop"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Motional EMF",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.4",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A rectangular wire loop of sides 8 cm and 2 cm with a small cut is moving out of a region of uniform magnetic field of magnitude 0.3 T directed normal to the loop. What is the emf developed across the cut if the velocity of the loop is 1 cm/s in a direction normal to the (a) longer side, (b) shorter side of the loop? For how long does the induced voltage last in each case?",
+    "question_latex": "A rectangular wire loop of sides $8$ cm and $2$ cm with a small cut is moving out of a region of uniform magnetic field of magnitude $0.3$ T directed normal to the loop. What is the emf developed across the cut if the velocity of the loop is $1$ cm/s in a direction normal to the (a) longer side, (b) shorter side of the loop? For how long does the induced voltage last in each case?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(1) ε = 2.4 × 10⁻⁴ V, lasting 2 s; (2) ε = 0.6 × 10⁻⁴ V, lasting 8 s",
+    "correct_answer_latex": "(1) $\\varepsilon = 2.4 \\times 10^{-4}$ V, lasting $2$ s; (2) $\\varepsilon = 0.6 \\times 10^{-4}$ V, lasting $8$ s",
+    "hint": "ε = Blv where l is the side perpendicular to velocity. Duration = distance/velocity = (side parallel to velocity)/velocity",
+    "solution_steps_latex": [
+      "Given: Loop dimensions: $l_1 = 8$ cm $= 0.08$ m (longer side), $l_2 = 2$ cm $= 0.02$ m (shorter side)",
+      "Magnetic field: $B = 0.3$ T (normal to loop), Velocity: $v = 1$ cm/s $= 0.01$ m/s",
+      "Loop is moving **out** of the field region",
+      "**Key principle**: When a rectangular loop exits a uniform field, EMF is generated by the edge at the field boundary.",
+      "The edge crossing the boundary is the one **perpendicular** to the velocity direction.",
+      "**Case (1): Velocity normal to longer side (8 cm)**",
+      "Velocity is perpendicular to 8 cm side $\\implies$ velocity is along the 2 cm direction",
+      "The edge at the boundary (crossing field line region) is the **longer side** (8 cm)",
+      "$\\varepsilon = Blv = 0.3 \\times 0.08 \\times 0.01 = 2.4 \\times 10^{-4}$ V",
+      "**Duration**: Loop must travel distance equal to the shorter side (2 cm) to fully exit:",
+      "$t = \\frac{0.02}{0.01} = 2$ s",
+      "**Case (2): Velocity normal to shorter side (2 cm)**",
+      "Velocity is perpendicular to 2 cm side $\\implies$ velocity is along the 8 cm direction",
+      "The edge at the boundary is the **shorter side** (2 cm)",
+      "$\\varepsilon = Blv = 0.3 \\times 0.02 \\times 0.01 = 0.6 \\times 10^{-4}$ V",
+      "**Duration**: Loop must travel distance equal to the longer side (8 cm) to fully exit:",
+      "$t = \\frac{0.08}{0.01} = 8$ s"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Rectangular loop (8 cm × 2 cm) with small cut, moving out of uniform magnetic field region at 1 cm/s",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Loop dimensions: 8 cm × 2 cm",
+        "Magnetic field B: 0.3 T (normal to loop)",
+        "Velocity v: 1 cm/s = 0.01 m/s",
+        "Direction: (a) normal to longer side, (b) normal to shorter side",
+        "Loop moving out of field"
+      ],
+      "to_find": [
+        "EMF developed across cut",
+        "Duration of induced voltage"
+      ],
+      "formulas_used": [
+        "$\\varepsilon = Blv$ (motional emf)",
+        "$t = \\frac{d}{v}$ (time duration)",
+        "$l$ = side perpendicular to velocity (cutting field lines)"
+      ]
+    },
+    "tags": [
+      "motional-emf",
+      "moving-loop",
+      "induced-voltage",
+      "flux-change",
+      "duration-calculation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.4",
+      "page": 176
+    },
+    "calculator": "q6-4-motional-emf",
+    "p5_sketch": "q6-4-loop-exiting",
+    "calculator_slug": "q6-4-motional-emf",
+    "p5_sketch_slug": "q6-4-loop-exiting"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Motional EMF - Rotating Rod",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.5",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A 1.0 m long metallic rod is rotated with an angular frequency of 400 rad/s about an axis normal to the rod passing through its one end. The other end of the rod is in contact with a circular metallic ring. A constant and uniform magnetic field of 0.5 T parallel to the axis exists everywhere. Calculate the emf developed between the centre and the ring.",
+    "question_latex": "A $1.0$ m long metallic rod is rotated with an angular frequency of $400$ rad/s about an axis normal to the rod passing through its one end. The other end of the rod is in contact with a circular metallic ring. A constant and uniform magnetic field of $0.5$ T parallel to the axis exists everywhere. Calculate the emf developed between the centre and the ring.",
+    "sub_parts": null,
+    "correct_answer_plain": "ε = 100 V",
+    "correct_answer_latex": "$\\varepsilon = 100$ V",
+    "hint": "Rod sweeps area. Use ε = ½Bωl² where ω is angular velocity",
+    "solution_steps_latex": [
+      "Given: Length of rod: $l = 1.0$ m",
+      "Angular frequency: $\\omega = 400$ rad/s",
+      "Magnetic field: $B = 0.5$ T (parallel to axis of rotation)",
+      "Rod rotates about one end, other end touches ring",
+      "To find: EMF between centre and ring",
+      "**Method 1: Using flux change**",
+      "As rod rotates, it sweeps area",
+      "In time $dt$, rod rotates through angle $d\\theta = \\omega dt$",
+      "Area swept: $dA = \\frac{1}{2}l^2 d\\theta$",
+      "Flux change: $d\\Phi = B \\cdot dA = \\frac{1}{2}Bl^2 d\\theta$",
+      "Induced emf: $\\varepsilon = \\frac{d\\Phi}{dt} = \\frac{1}{2}Bl^2 \\frac{d\\theta}{dt} = \\frac{1}{2}Bl^2\\omega$",
+      "**Method 2: Using motional emf**",
+      "Consider element at distance $r$ from axis, width $dr$",
+      "Linear velocity: $v = r\\omega$",
+      "EMF in element: $d\\varepsilon = Bv\\,dr = Br\\omega\\,dr$",
+      "Total emf: $\\varepsilon = \\int_0^l Br\\omega\\,dr = B\\omega \\int_0^l r\\,dr$",
+      "$\\varepsilon = B\\omega \\left[\\frac{r^2}{2}\\right]_0^l = \\frac{1}{2}B\\omega l^2$",
+      "**Calculating**:",
+      "$\\varepsilon = \\frac{1}{2} \\times 0.5 \\times 400 \\times (1.0)^2$",
+      "$\\varepsilon = \\frac{1}{2} \\times 0.5 \\times 400$",
+      "$\\varepsilon = \\frac{1}{2} \\times 200$",
+      "$\\varepsilon = 100$ V",
+      "**Direction**: Centre is at lower potential, ring at higher potential"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Metallic rod (1 m) rotating at 400 rad/s about one end in contact with circular ring, B = 0.5 T parallel to axis",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Rod length l: 1.0 m",
+        "Angular frequency ω: 400 rad/s",
+        "Magnetic field B: 0.5 T (parallel to axis)",
+        "Rotation: about one end"
+      ],
+      "to_find": [
+        "EMF between centre and ring"
+      ],
+      "formulas_used": [
+        "$\\varepsilon = \\frac{d\\Phi}{dt}$ (Faraday's law)",
+        "$\\varepsilon = \\frac{1}{2}B\\omega l^2$ (rotating rod)",
+        "$v = r\\omega$ (linear velocity)",
+        "$d\\varepsilon = Bv\\,dr$ (motional emf element)"
+      ]
+    },
+    "tags": [
+      "motional-emf",
+      "rotating-rod",
+      "angular-motion",
+      "flux-change",
+      "integration",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.5",
+      "page": 176
+    },
+    "calculator": "q6-5-rotating-rod",
+    "p5_sketch": "q6-5-rotating-rod",
+    "calculator_slug": "q6-5-rotating-rod",
+    "p5_sketch_slug": "q6-5-rotating-rod"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Motional EMF in Earth's Field",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.6",
+    "marks": 4,
+    "difficulty": 0.5,
+    "question_plain": "A horizontal straight wire 10 m long extending from east to west is falling with a speed of 5.0 m/s, at right angles to the horizontal component of the earth's magnetic field, 0.30 × 10⁻⁴ Wb/m².\n(a) What is the instantaneous value of the emf induced in the wire?\n(b) What is the direction of the emf?\n(c) Which end of the wire is at the higher electrical potential?",
+    "question_latex": "A horizontal straight wire $10$ m long extending from east to west is falling with a speed of $5.0$ m/s, at right angles to the horizontal component of the earth's magnetic field, $0.30 \\times 10^{-4}$ Wb/m$^2$.\n\n(a) What is the instantaneous value of the emf induced in the wire?\n\n(b) What is the direction of the emf?\n\n(c) Which end of the wire is at the higher electrical potential?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) ε = 1.5 × 10⁻³ V, (b) West to East, (c) Eastern end.",
+    "correct_answer_latex": "(a) $\\varepsilon = 1.5 \\times 10^{-3}$ V, (b) West to East, (c) Eastern end.",
+    "hint": "ε = Blv. Direction: Use Fleming's right-hand rule or v × B direction",
+    "solution_steps_latex": [
+      "Given: Length of wire: $l = 10$ m (east to west)",
+      "Velocity: $v = 5.0$ m/s (falling vertically downward)",
+      "Horizontal component of Earth's field: $B_H = 0.30 \\times 10^{-4}$ T (pointing North)",
+      "**Part (a): Instantaneous EMF**",
+      "Motional emf: $\\varepsilon = B_H l v$",
+      "$\\varepsilon = 0.30 \\times 10^{-4} \\times 10 \\times 5.0$",
+      "$\\varepsilon = 15 \\times 10^{-4}$ V $= 1.5 \\times 10^{-3}$ V",
+      "**Part (b): Direction of EMF**",
+      "Using $\\vec{F} = q(\\vec{v} \\times \\vec{B})$ on positive charges in wire:",
+      "$\\vec{v}$ is downward ($-\\hat{z}$), $\\vec{B}$ is North ($+\\hat{y}$)",
+      "$\\vec{v} \\times \\vec{B} = (-\\hat{z}) \\times (+\\hat{y}) = +\\hat{x}$ (East)",
+      "Force on positive charges is toward **East**",
+      "Therefore EMF direction (inside wire): **West to East**",
+      "**Part (c): Higher potential end**",
+      "Positive charges accumulate at the **Eastern end**",
+      "**Eastern end** is at higher electrical potential"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Horizontal wire (10 m, E-W) falling at 5 m/s in Earth’s horizontal magnetic field pointing North",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wire length l: 10 m (east to west)",
+        "Velocity v: 5.0 m/s (falling, downward)",
+        "Earth's horizontal field B_H: 0.30 × 10⁻⁴ T (northward)",
+        "Configuration: v, B, l mutually perpendicular"
+      ],
+      "to_find": [
+        "(a) Instantaneous EMF",
+        "(b) Direction of EMF",
+        "(c) Which end has higher potential"
+      ],
+      "formulas_used": [
+        "$\\varepsilon = Blv$ (motional emf)",
+        "$\\vec{F} = q(\\vec{v} \\times \\vec{B})$ (Lorentz force)",
+        "Fleming's right-hand rule"
+      ]
+    },
+    "tags": [
+      "motional-emf",
+      "earths-magnetic-field",
+      "falling-conductor",
+      "flemings-right-hand-rule",
+      "potential-difference",
+      "direction-determination"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.6",
+      "page": 176
+    },
+    "calculator": "q6-6-falling-wire",
+    "p5_sketch": "q6-6-falling-wire",
+    "calculator_slug": "q6-6-falling-wire",
+    "p5_sketch_slug": "q6-6-falling-wire"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Self-Inductance",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Current in a circuit falls from 5.0 A to 0.0 A in 0.1 s. If an average emf of 200 V induced, give an estimate of the self-inductance of the circuit.",
+    "question_latex": "Current in a circuit falls from $5.0$ A to $0.0$ A in $0.1$ s. If an average emf of $200$ V induced, give an estimate of the self-inductance of the circuit.",
+    "sub_parts": null,
+    "correct_answer_plain": "L = 4 H",
+    "correct_answer_latex": "$L = 4$ H",
+    "hint": "Self-induced emf: ε = L(dI/dt). Solve for L = ε/(ΔI/Δt)",
+    "solution_steps_latex": [
+      "Given: Initial current: $I_1 = 5.0$ A",
+      "Final current: $I_2 = 0.0$ A",
+      "Time interval: $\\Delta t = 0.1$ s",
+      "Average induced emf: $\\varepsilon = 200$ V",
+      "To find: Self-inductance $L$",
+      "**Formula**: Self-induced emf:",
+      "$\\varepsilon = -L\\frac{dI}{dt}$",
+      "For average values:",
+      "$\\varepsilon_{avg} = L\\left|\\frac{\\Delta I}{\\Delta t}\\right|$",
+      "(Taking magnitude, negative sign indicates opposition)",
+      "**Calculating change in current**:",
+      "$\\Delta I = I_2 - I_1 = 0.0 - 5.0 = -5.0$ A",
+      "$|\\Delta I| = 5.0$ A",
+      "**Solving for L**:",
+      "$L = \\frac{\\varepsilon_{avg}}{|\\Delta I / \\Delta t|}$",
+      "$L = \\frac{\\varepsilon_{avg} \\times \\Delta t}{|\\Delta I|}$",
+      "**Substituting values**:",
+      "$L = \\frac{200 \\times 0.1}{5.0}$",
+      "$L = \\frac{20}{5.0}$",
+      "$L = 4$ H (henry)",
+      "**Physical meaning**: Self-inductance of 4 H means when current changes at rate of 1 A/s, induced emf is 4 V"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Circuit with self-inductance, current falling from 5 A to 0 A in 0.1 s, average back-EMF of 200 V",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial current I₁: 5.0 A",
+        "Final current I₂: 0.0 A",
+        "Time interval Δt: 0.1 s",
+        "Average induced emf ε: 200 V"
+      ],
+      "to_find": [
+        "Self-inductance L"
+      ],
+      "formulas_used": [
+        "$\\varepsilon = -L\\frac{dI}{dt}$ (self-induced emf)",
+        "$L = \\frac{\\varepsilon}{|dI/dt|}$"
+      ]
+    },
+    "tags": [
+      "self-inductance",
+      "induced-emf",
+      "rate-of-change-of-current",
+      "inductance-calculation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.7",
+      "page": 176
+    },
+    "calculator": "q6-7-self-inductance",
+    "p5_sketch": "q6-7-self-inductance",
+    "calculator_slug": "q6-7-self-inductance",
+    "p5_sketch_slug": "q6-7-self-inductance"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 6: Electromagnetic Induction",
+    "section": "Mutual Inductance",
+    "exercise": "Exercise 6",
+    "question_number": "Q6.8",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A pair of adjacent coils has a mutual inductance of 1.5 H. If the current in one coil changes from 0 to 20 A in 0.5 s, what is the change of flux linkage with the other coil?",
+    "question_latex": "A pair of adjacent coils has a mutual inductance of $1.5$ H. If the current in one coil changes from $0$ to $20$ A in $0.5$ s, what is the change of flux linkage with the other coil?",
+    "sub_parts": null,
+    "correct_answer_plain": "ΔΦ = 30 Wb-turns",
+    "correct_answer_latex": "$\\Delta \\Phi = 30$ Wb-turns",
+    "hint": "Mutual inductance: M = Φ/I. Change in flux linkage: ΔΦ = M × ΔI",
+    "solution_steps_latex": [
+      "Given: Mutual inductance: $M = 1.5$ H",
+      "Initial current in coil 1: $I_1 = 0$ A",
+      "Final current in coil 1: $I_2 = 20$ A",
+      "Time: $\\Delta t = 0.5$ s (not needed for this calculation)",
+      "To find: Change in flux linkage with coil 2",
+      "**Definition of mutual inductance**:",
+      "Flux linkage in coil 2 due to current in coil 1:",
+      "$\\Phi_2 = M I_1$",
+      "where $\\Phi_2$ is the total flux linkage (flux $\\times$ number of turns in coil 2)",
+      "**Change in flux linkage**:",
+      "$\\Delta \\Phi_2 = M (I_2 - I_1) = M \\Delta I$",
+      "**Calculating change in current**:",
+      "$\\Delta I = I_2 - I_1 = 20 - 0 = 20$ A",
+      "**Substituting values**:",
+      "$\\Delta \\Phi_2 = 1.5 \\times 20$",
+      "$\\Delta \\Phi_2 = 30$ Wb (weber)",
+      "More precisely: $30$ Wb-turns (flux linkage)",
+      "**Note**: If induced emf were asked:",
+      "$\\varepsilon = -M\\frac{dI}{dt} = -1.5 \\times \\frac{20}{0.5} = -60$ V",
+      "But question asks only for change in flux linkage: $\\Delta \\Phi = 30$ Wb-turns"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two adjacent coils with mutual inductance M = 1.5 H, current in one coil changing from 0 to 20 A",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mutual inductance M: 1.5 H",
+        "Initial current I₁: 0 A",
+        "Final current I₂: 20 A",
+        "Time interval Δt: 0.5 s"
+      ],
+      "to_find": [
+        "Change in flux linkage ΔΦ with other coil"
+      ],
+      "formulas_used": [
+        "$M = \\frac{\\Phi}{I}$ (mutual inductance definition)",
+        "$\\Phi = MI$ (flux linkage)",
+        "$\\Delta \\Phi = M \\Delta I$"
+      ]
+    },
+    "tags": [
+      "mutual-inductance",
+      "flux-linkage",
+      "coupled-coils",
+      "induced-emf",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 6,
+      "exercise": "6",
+      "question_number": "Q6.8",
+      "page": 176
+    },
+    "calculator": "q6-8-mutual-flux",
+    "p5_sketch": "q6-8-mutual-inductance",
+    "calculator_slug": "q6-8-mutual-flux",
+    "p5_sketch_slug": "q6-8-mutual-inductance"
+  }
+]

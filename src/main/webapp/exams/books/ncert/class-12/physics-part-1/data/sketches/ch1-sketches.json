@@ -1,0 +1,148 @@
+{
+  "q1-1-coulomb-repulsion": {
+    "type": "coulomb-force",
+    "params": {
+      "charges": [
+        { "x": 0.3, "y": 0, "q": 1, "label": "q₁ = 2×10⁻⁷ C" },
+        { "x": 0.7, "y": 0, "q": 1, "label": "q₂ = 3×10⁻⁷ C" }
+      ]
+    }
+  },
+  "q1-2-coulomb-attraction": {
+    "type": "coulomb-force",
+    "params": {
+      "charges": [
+        { "x": 0.3, "y": 0, "q": 1, "label": "q₁ = 0.4 µC" },
+        { "x": 0.7, "y": 0, "q": -1, "label": "q₂ = −0.8 µC" }
+      ]
+    }
+  },
+  "q1-5-rubbing-charges": {
+    "type": "rubbing-charges",
+    "params": {}
+  },
+  "q1-6-square-charges": {
+    "type": "charge-config",
+    "params": {
+      "charges": [
+        { "x": 0.25, "y": 0.25, "q": 1, "label": "A (+2 µC)", "corner": "A" },
+        { "x": 0.75, "y": 0.25, "q": -1, "label": "B (−5 µC)", "corner": "B" },
+        { "x": 0.75, "y": 0.75, "q": 1, "label": "C (+2 µC)", "corner": "C" },
+        { "x": 0.25, "y": 0.75, "q": -1, "label": "D (−5 µC)", "corner": "D" }
+      ],
+      "test_charge": { "x": 0.5, "y": 0.5, "q": 1, "label": "+1 µC" }
+    }
+  },
+  "q1-8-field-midpoint": {
+    "type": "electric-field",
+    "params": {
+      "charges": [
+        { "x": 0.25, "y": 0.5, "q": 1, "label": "+3 µC" },
+        { "x": 0.75, "y": 0.5, "q": -1, "label": "−3 µC" }
+      ],
+      "num_lines": 10
+    }
+  },
+  "q1-9-dipole": {
+    "type": "dipole",
+    "params": {
+      "positive": { "x": 0.35, "y": 0.5 },
+      "negative": { "x": 0.65, "y": 0.5 },
+      "show_moment": true
+    }
+  },
+  "q1-10-dipole-torque": {
+    "type": "dipole",
+    "params": {
+      "positive": { "x": 0.4, "y": 0.4 },
+      "negative": { "x": 0.6, "y": 0.6 },
+      "show_moment": true,
+      "uniform_field": true,
+      "field_angle": 0
+    }
+  },
+  "q1-13-particle-tracks": {
+    "type": "particle-tracks",
+    "params": {
+      "particles": [
+        { "label": "1", "q_sign": 1, "curvature": 0.3 },
+        { "label": "2", "q_sign": -1, "curvature": 0.8 },
+        { "label": "3", "q_sign": -1, "curvature": 0.15 }
+      ]
+    }
+  },
+  "q1-14-flux-square": {
+    "type": "flux-surface",
+    "params": {
+      "surface_type": "square",
+      "field_direction": "right",
+      "normal_angle": 0
+    }
+  },
+  "q1-15-flux-cube": {
+    "type": "flux-surface",
+    "params": {
+      "surface_type": "cube",
+      "field_direction": "right"
+    }
+  },
+  "q1-17-flux-face": {
+    "type": "flux-surface",
+    "params": {
+      "surface_type": "cube",
+      "field_direction": "right"
+    }
+  },
+  "q1-18-flux-gaussian": {
+    "type": "flux-surface",
+    "params": {
+      "surface_type": "cube",
+      "field_direction": "right"
+    }
+  },
+  "q1-20-conducting-sphere": {
+    "type": "conducting-sphere",
+    "params": {
+      "charge_sign": "negative",
+      "sphere_radius": 55
+    }
+  },
+  "q1-23-parallel-plates": {
+    "type": "parallel-plates",
+    "params": {}
+  },
+  "q1-12-two-spheres": {
+    "type": "coulomb-force",
+    "params": {
+      "charges": [
+        { "x": 0.25, "y": 0, "q": 1, "label": "A = 6.5×10⁻⁷ C" },
+        { "x": 0.75, "y": 0, "q": 1, "label": "B = 6.5×10⁻⁷ C" }
+      ],
+      "distance_label": "50 cm"
+    }
+  },
+  "q1-16-black-box": {
+    "type": "flux-surface",
+    "params": {
+      "surface_type": "cube",
+      "field_direction": "right",
+      "result_label": "Φ_net = 8.0 × 10³ N·m²/C → q_encl = Φε₀"
+    }
+  },
+  "q1-19-gaussian-sphere": {
+    "type": "conducting-sphere",
+    "params": {
+      "charge_sign": "negative",
+      "sphere_radius": 50,
+      "show_radius": true
+    }
+  },
+  "q1-21-charged-sphere": {
+    "type": "conducting-sphere",
+    "params": {
+      "charge_sign": "positive",
+      "sphere_radius": 60,
+      "show_radius": true
+    }
+  }
+}

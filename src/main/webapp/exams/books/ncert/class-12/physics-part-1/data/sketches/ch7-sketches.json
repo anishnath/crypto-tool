@@ -1,0 +1,75 @@
+{
+  "q7-1-resistive-ac": {
+    "type": "ac-waveform",
+    "params": {
+      "phase": 0,
+      "label_v": "V = 220 sin(ωt)",
+      "label_i": "I = 2.2 sin(ωt)",
+      "title": "Pure Resistive AC Circuit — V and I in Phase"
+    }
+  },
+  "q7-2-peak-rms": {
+    "type": "ac-waveform",
+    "params": {
+      "phase": 0,
+      "show_rms": true,
+      "label_v": "V₀ = 300 V, V_rms = 212.1 V",
+      "label_i": "I₀ = 10√2 A, I_rms = 10 A",
+      "title": "Peak vs RMS Values"
+    }
+  },
+  "q7-3-inductive-ac": {
+    "type": "ac-waveform",
+    "params": {
+      "phase": 90,
+      "label_v": "V = 220 sin(ωt)",
+      "label_i": "I lags V by 90°",
+      "title": "Pure Inductive Circuit — Current Lags Voltage"
+    }
+  },
+  "q7-4-capacitive-ac": {
+    "type": "ac-waveform",
+    "params": {
+      "phase": -90,
+      "label_v": "V = 110 sin(ωt)",
+      "label_i": "I leads V by 90°",
+      "title": "Pure Capacitive Circuit — Current Leads Voltage"
+    }
+  },
+  "q7-5-zero-power": {
+    "type": "ac-waveform",
+    "params": {
+      "phase": 90,
+      "label_v": "P_avg = 0",
+      "label_i": "φ = 90° → cos φ = 0",
+      "title": "Zero Average Power in Reactive Circuits"
+    }
+  },
+  "q7-6-lc-oscillation": {
+    "type": "lc-oscillation",
+    "params": {
+      "L_label": "L = 27 mH",
+      "C_label": "C = 30 μF",
+      "omega_label": "ω ≈ 1111 rad/s",
+      "title": "LC Oscillation — Energy Exchange"
+    }
+  },
+  "q7-7-lcr-resonance": {
+    "type": "lcr-resonance",
+    "params": {
+      "R": 20,
+      "resonance_label": "f₀ = 21.9 Hz",
+      "power_label": "P = V²/R = 2000 W",
+      "title": "Series LCR at Resonance — Maximum Power"
+    }
+  },
+  "q7-8-lcr-comprehensive": {
+    "type": "lcr-resonance",
+    "params": {
+      "R": 40,
+      "resonance_label": "f₀ = 7.96 Hz",
+      "power_label": "V_L = V_C = 1437.5 V, V_LC = 0",
+      "title": "Series LCR — Voltage Magnification at Resonance"
+    }
+  }
+}
