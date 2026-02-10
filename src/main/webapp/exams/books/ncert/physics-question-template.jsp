@@ -1246,6 +1246,7 @@ function toggleHint() {
 
 function injectQASchema(q) {
     var BOOK_PART = '<%= bookPart %>';
+    var NCERT_LABEL = '<%= ncertLabel.replace("'", "\\'") %>';
     var questionText = (q.question_plain || '')
         .replace(/\\[\(\)\[\]]/g, '')
         .replace(/\\\w+/g, '');
