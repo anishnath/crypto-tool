@@ -1,0 +1,83 @@
+{
+  "q9-1-concave-mirror": {
+    "type": "concave-mirror",
+    "params": {
+      "u": 27, "f": 18, "h_obj": 2.5,
+      "title": "Concave Mirror — Object between F and C"
+    }
+  },
+  "q9-2-convex-mirror": {
+    "type": "convex-mirror",
+    "params": {
+      "u": 12, "f": 15, "h_obj": 4.5,
+      "title": "Convex Mirror — Virtual Image"
+    }
+  },
+  "q9-4-refraction-glass": {
+    "type": "refraction",
+    "params": {
+      "n1": 1.0, "n2": 1.51, "angle_i": 60,
+      "medium1": "Air", "medium2": "Glass",
+      "title": "Refraction — Air to Glass"
+    }
+  },
+  "q9-5-tir-diamond": {
+    "type": "total-internal-reflection",
+    "params": {
+      "n1": 2.42, "n2": 1.0,
+      "medium1": "Diamond", "medium2": "Air",
+      "title": "Total Internal Reflection in Diamond"
+    }
+  },
+  "q9-6-prism": {
+    "type": "prism-refraction",
+    "params": {
+      "prism_angle": 60, "n": 1.5, "angle_i": 45,
+      "title": "Refraction Through a Glass Prism"
+    }
+  },
+  "q9-8-convex-lens": {
+    "type": "lens-ray-diagram",
+    "params": {
+      "u": 30, "f": 20, "h_obj": 5, "lens_type": "convex",
+      "title": "Convex Lens — Real Image"
+    }
+  },
+  "q9-10-concave-lens": {
+    "type": "lens-ray-diagram",
+    "params": {
+      "u": 20, "f": 15, "h_obj": 3, "lens_type": "concave",
+      "title": "Concave Lens — Virtual Image"
+    }
+  },
+  "q9-16-refraction-water": {
+    "type": "refraction",
+    "params": {
+      "n1": 1.0, "n2": 1.33, "angle_i": 45,
+      "medium1": "Air", "medium2": "Water",
+      "title": "Refraction — Air to Water"
+    }
+  },
+  "q9-17-tir-glass": {
+    "type": "total-internal-reflection",
+    "params": {
+      "n1": 1.5, "n2": 1.0,
+      "medium1": "Glass", "medium2": "Air",
+      "title": "Total Internal Reflection in Glass"
+    }
+  },
+  "q9-19-convex-lens-2": {
+    "type": "lens-ray-diagram",
+    "params": {
+      "u": 25, "f": 10, "h_obj": 5, "lens_type": "convex",
+      "title": "Convex Lens (f=10cm, u=25cm)"
+    }
+  },
+  "q9-21-prism-tir": {
+    "type": "prism-refraction",
+    "params": {
+      "prism_angle": 60, "n": 1.524, "angle_i": 40,
+      "title": "Prism — Deviation"
+    }
+  }
+}

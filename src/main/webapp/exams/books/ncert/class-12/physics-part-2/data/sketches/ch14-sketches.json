@@ -1,0 +1,23 @@
+{
+  "q14-4-pn-junction-forward": {
+    "type": "pn-junction",
+    "params": {
+      "bias": "forward",
+      "title": "p-n Junction — Forward Bias"
+    }
+  },
+  "q14-5-pn-junction-reverse": {
+    "type": "pn-junction",
+    "params": {
+      "bias": "reverse",
+      "title": "p-n Junction — Reverse Bias"
+    }
+  },
+  "q14-6-pn-junction-none": {
+    "type": "pn-junction",
+    "params": {
+      "bias": "none",
+      "title": "p-n Junction — No Bias (Equilibrium)"
+    }
+  }
+}

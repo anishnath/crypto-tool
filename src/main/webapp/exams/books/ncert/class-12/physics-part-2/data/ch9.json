@@ -1,0 +1,2465 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Reflection of Light by Spherical Mirrors",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.1",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A small candle, 2.5 cm in size is placed at 27 cm in front of a concave mirror of radius of curvature 36 cm. At what distance from the mirror should a screen be placed in order to obtain a sharp image? Describe the nature and size of the image. If the candle is moved closer to the mirror, how would the screen have to be moved?",
+    "question_latex": "A small candle, $2.5$ cm in size is placed at $27$ cm in front of a concave mirror of radius of curvature $36$ cm. At what distance from the mirror should a screen be placed in order to obtain a sharp image? Describe the nature and size of the image. If the candle is moved closer to the mirror, how would the screen have to be moved?",
+    "sub_parts": null,
+    "correct_answer_plain": "v = -54 cm, h' = -5.0 cm. The image is real, inverted and magnified. If the candle moves closer, the screen must move farther away.",
+    "correct_answer_latex": "$v = -54$ cm, $h' = -5.0$ cm. The image is real, inverted and magnified. If the candle moves closer, the screen must move farther away.",
+    "hint": "Use mirror formula 1/v + 1/u = 1/f and magnification m = -v/u.",
+    "solution_steps_latex": [
+      "Given: Object height $h = +2.5$ cm",
+      "Object distance $u = -27$ cm (Sign convention: direction of incident light is positive)",
+      "Radius of curvature $R = -36$ cm (Concave mirror)",
+      "Focal length $f = R/2 = -18$ cm",
+      "**1. Image Position**: Using mirror formula $\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$",
+      "$\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u} = \\frac{1}{-18} - \\frac{1}{-27}$",
+      "$\\frac{1}{v} = -\\frac{1}{18} + \\frac{1}{27} = \\frac{-3 + 2}{54} = -\\frac{1}{54}$",
+      "$v = -54$ cm. The screen should be placed $54$ cm from the mirror on the same side as the object.",
+      "**2. Nature and Size**: Magnification $m = -\\frac{v}{u} = -\\frac{-54}{-27} = -2$",
+      "Since $m$ is negative, the image is **real and inverted**.",
+      "Image height $h' = m \\times h = -2 \\times 2.5 = -5.0$ cm. The image is magnified.",
+      "**3. Movement**: As the candle is moved closer to the mirror ($u$ decreases towards $f$), the image moves away from the mirror ($v$ increases towards $\\infty$). Thus, the screen must be moved **farther from the mirror**."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram for concave mirror with object between C and F, producing a real, inverted, magnified image beyond C.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object height h: 2.5 cm",
+        "Object distance u: -27 cm",
+        "Radius of curvature R: -36 cm"
+      ],
+      "to_find": [
+        "Image distance v",
+        "Image height h'",
+        "Nature of image"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$",
+        "$f = \\frac{R}{2}$",
+        "$m = \\frac{h'}{h} = -\\frac{v}{u}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "concave-mirror",
+      "mirror-formula",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.1",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-1-concave-mirror",
+    "p5_sketch": "q9-1-concave-mirror"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Reflection of Light by Spherical Mirrors",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.2",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "A 4.5 cm needle is placed 12 cm away from a convex mirror of focal length 15 cm. Give the location of the image and the magnification. Describe what happens as the needle is moved farther from the mirror.",
+    "question_latex": "A $4.5$ cm needle is placed $12$ cm away from a convex mirror of focal length $15$ cm. Give the location of the image and the magnification. Describe what happens as the needle is moved farther from the mirror.",
+    "sub_parts": null,
+    "correct_answer_plain": "v = +6.7 cm, m = +0.56. Image is virtual, erect and diminished. As needle moves farther, image moves toward focus and gets smaller.",
+    "correct_answer_latex": "$v = +6.7$ cm, $m = +0.56$. Image is virtual, erect and diminished. As needle moves farther, image moves toward focus and gets smaller.",
+    "hint": "Convex mirrors always form virtual, erect, and diminished images.",
+    "solution_steps_latex": [
+      "Given: Object height $h = 4.5$ cm",
+      "Object distance $u = -12$ cm",
+      "Focal length $f = +15$ cm (Convex mirror)",
+      "**1. Image Position**: $\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$",
+      "$\\frac{1}{v} = \\frac{1}{15} - \\frac{1}{-12} = \\frac{1}{15} + \\frac{1}{12}$",
+      "$\\frac{1}{v} = \\frac{4 + 5}{60} = \\frac{9}{60}$",
+      "$v = \\frac{60}{9} = 6.7$ cm. The image is virtual and forms behind the mirror.",
+      "**2. Magnification**: $m = -\\frac{v}{u} = -\\frac{6.7}{-12} = +0.558 \\approx 0.56$",
+      "Positive magnification indicates the image is **erect and virtual**.",
+      "**3. Movement**: As the needle is moved farther from the mirror ($u \\to \\infty$), the image moves towards the principal focus ($v \\to f$) and its size gradually decreases to zero.",
+      ""
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram for convex mirror showing virtual, erect, diminished image between pole and focus.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object height h: 4.5 cm",
+        "Object distance u: -12 cm",
+        "Focal length f: +15 cm"
+      ],
+      "to_find": [
+        "Image distance v",
+        "Magnification m"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = -\\frac{v}{u}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "convex-mirror",
+      "mirror-formula",
+      "virtual-image",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.2",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-2-convex-mirror",
+    "p5_sketch": "q9-2-convex-mirror"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.3",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A tank is filled with water to a height of 12.5 cm. The apparent depth of a needle lying at the bottom of the tank is measured by a microscope to be 9.4 cm. What is the refractive index of water? If water is replaced by a liquid of refractive index 1.63 up to the same height, by what distance would the microscope have to be moved to focus on the needle again?",
+    "question_latex": "A tank is filled with water to a height of $12.5$ cm. The apparent depth of a needle lying at the bottom of the tank is measured by a microscope to be $9.4$ cm. What is the refractive index of water? If water is replaced by a liquid of refractive index $1.63$ up to the same height, by what distance would the microscope have to be moved to focus on the needle again?",
+    "sub_parts": null,
+    "correct_answer_plain": "μ = 1.33, Shift = 1.73 cm",
+    "correct_answer_latex": "$\\mu = 1.33$, Shift $= 1.73$ cm",
+    "hint": "Refractive index μ = Real Depth / Apparent Depth.",
+    "solution_steps_latex": [
+      "Given: Real depth $h = 12.5$ cm",
+      "Apparent depth in water $h' = 9.4$ cm",
+      "**1. Refractive index of water (μ₁)**:",
+      "$\\mu_1 = \\frac{\\text{Real Depth}}{\\text{Apparent Depth}} = \\frac{12.5}{9.4} \\approx 1.33$",
+      "**2. New Apparent Depth in Liquid (μ₂ = 1.63)**:",
+      "$\\mu_2 = \\frac{h}{h''}$",
+      "$h'' = \\frac{h}{\\mu_2} = \\frac{12.5}{1.63} \\approx 7.67$ cm",
+      "**3. Microscope Displacement**:",
+      "Original focus was at $9.4$ cm. New focus is at $7.67$ cm.",
+      "Distance to move = $9.4 - 7.67 = 1.73$ cm.",
+      "Since the apparent depth decreased, the needle appears to have moved up; thus the microscope must be moved **upward** by $1.73$ cm."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Refraction at plane surface showing real depth vs apparent depth",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Real depth h: 12.5 cm",
+        "Initial apparent depth h': 9.4 cm",
+        "New refractive index μ₂: 1.63"
+      ],
+      "to_find": [
+        "Refractive index of water μ₁",
+        "Displacement of microscope"
+      ],
+      "formulas_used": [
+        "$\\mu = \\frac{h}{h'}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "refraction",
+      "apparent-depth",
+      "refractive-index",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.3",
+      "page": 249
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.4",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Figures 9.27(a) and (b) show refraction of a ray in air incident at 60° with the normal to a glass-air and water-air interface, respectively. Predict the angle of refraction in glass when the angle of incidence in water is 45° with the normal to a water-glass interface interface [Fig. 9.27(c)].",
+    "question_latex": "Figures 9.27(a) and (b) show refraction of a ray in air incident at $60^\\circ$ with the normal to a glass-air and water-air interface, respectively. Predict the angle of refraction in glass when the angle of incidence in water is $45^\\circ$ with the normal to a water-glass interface interface [Fig. 9.27(c)].",
+    "sub_parts": null,
+    "correct_answer_plain": "r ≈ 38.2°",
+    "correct_answer_latex": "$r \\approx 38.2^\\circ$",
+    "hint": "Use Snell's law: n₁ sin θ₁ = n₂ sin θ₂ to find indices for glass and water first.",
+    "solution_steps_latex": [
+      "**1. From Fig 9.27(a) (Air to Glass)**:",
+      "Angle of incidence $i = 60^\\circ$, angle of refraction $r = 35^\\circ$",
+      "Refractive index of glass w.r.t air: $n_{ga} = \\frac{\\sin 60^\\circ}{\\sin 35^\\circ} = \\frac{0.8660}{0.5736} \\approx 1.51$",
+      "**2. From Fig 9.27(b) (Air to Water)**:",
+      "Angle of incidence $i = 60^\\circ$, angle of refraction $r = 47^\\circ$",
+      "Refractive index of water w.r.t air: $n_{wa} = \\frac{\\sin 60^\\circ}{\\sin 47^\\circ} = \\frac{0.8660}{0.7314} \\approx 1.184$",
+      "**3. For Fig 9.27(c) (Water to Glass)**:",
+      "Angle of incidence $i = 45^\\circ$. We need angle of refraction $r$.",
+      "Using Snell's Law: $n_w \\sin i = n_g \\sin r$",
+      "$\\sin r = \\frac{n_w}{n_g} \\sin 45^\\circ$",
+      "From previous steps, $\\frac{n_w}{n_a} = 1.184$ and $\\frac{n_g}{n_a} = 1.51$",
+      "$\\sin r = \\frac{1.184}{1.51} \\times 0.7071 = 0.554 \\times 0.7071 \\approx 0.6181$",
+      "$r = \\sin^{-1}(0.6181) \\approx 38.2^\\circ$"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Three-part figure showing refraction: (a) Air to Glass, (b) Air to Water, and (c) Water to Glass.",
+      "figure_reference": "Figure 9.27"
+    },
+    "physical_quantities": {
+      "given": [
+        "Case a: i=60°, r=35° (Air-Glass)",
+        "Case b: i=60°, r=47° (Air-Water)",
+        "Case c: i=45° (Water-Glass)"
+      ],
+      "to_find": [
+        "Angle of refraction r in Glass"
+      ],
+      "formulas_used": [
+        "$n_1 \\sin \\theta_1 = n_2 \\sin \\theta_2$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "refraction",
+      "snells-law",
+      "refractive-index",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.4",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-4-refraction-glass",
+    "p5_sketch": "q9-4-refraction-glass"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Total Internal Reflection",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.5",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A small bulb is placed at the bottom of a tank containing water to a depth of 80cm. What is the area of the surface of water through which light from the bulb can emerge out? Refractive index of water is 1.33. (Consider the bulb to be a point source.)",
+    "question_latex": "A small bulb is placed at the bottom of a tank containing water to a depth of $80$cm. What is the area of the surface of water through which light from the bulb can emerge out? Refractive index of water is $1.33$. (Consider the bulb to be a point source.)",
+    "sub_parts": null,
+    "correct_answer_plain": "Area ≈ 2.58 m²",
+    "correct_answer_latex": "Area $\\approx 2.58$ m$^2$",
+    "hint": "Light emerges only within a cone of half-angle equal to the critical angle θc.",
+    "solution_steps_latex": [
+      "Given: Depth $h = 80$ cm $= 0.8$ m",
+      "Refractive index of water $\\mu = 1.33 = 4/3$",
+      "**1. Critical Angle (θc)**:",
+      "$\\sin \\theta_c = \\frac{1}{\\mu} = \\frac{1}{1.33} = 0.7519$",
+      "**2. Radius of the circular area (R)**:",
+      "From geometry, $R = h \\tan \\theta_c$",
+      "We know $\\sin \\theta_c = 3/4$, so $\\cos \\theta_c = \\sqrt{1 - (3/4)^2} = \\sqrt{7}/4$",
+      "$\\tan \\theta_c = \\frac{\\sin \\theta_c}{\\cos \\theta_c} = \\frac{3/4}{\\sqrt{7}/4} = \\frac{3}{\\sqrt{7}}$",
+      "$R = 0.8 \\times \\frac{3}{\\sqrt{7}} = \\frac{2.4}{2.646} \\approx 0.907$ m",
+      "**3. Area (A)**:",
+      "$A = \\pi R^2 = 3.14 \\times (0.907)^2 \\approx 3.14 \\times 0.8226$",
+      "$A \\approx 2.58$ m$^2$.",
+      ""
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "A light source at depth h, rays incident at the critical angle θc defining the radius R of the circle of illumination.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Depth h: 80 cm",
+        "Refractive index μ: 1.33"
+      ],
+      "to_find": [
+        "Area of surface light emerges from"
+      ],
+      "formulas_used": [
+        "$\\sin \\theta_c = \\frac{1}{\\mu}$",
+        "$R = h \\tan \\theta_c$",
+        "$A = \\pi R^2$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "total-internal-reflection",
+      "critical-angle",
+      "refraction",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.5",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-5-tir-diamond",
+    "p5_sketch": "q9-5-tir-diamond"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction through a Prism",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.6",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "A prism is made of glass of unknown refractive index. A parallel beam of light is incident on a face of the prism. The angle of minimum deviation is measured to be 40° What is the refractive index of the material of the prism? The refracting angle of the prism is 60°. If the prism is placed in water (refractive index 1.33), predict the new angle of minimum deviation of a parallel beam of light.",
+    "question_latex": "A prism is made of glass of unknown refractive index. A parallel beam of light is incident on a face of the prism. The angle of minimum deviation is measured to be $40^\\circ$ What is the refractive index of the material of the prism? The refracting angle of the prism is $60^\\circ$. If the prism is placed in water (refractive index 1.33), predict the new angle of minimum deviation of a parallel beam of light.",
+    "sub_parts": null,
+    "correct_answer_plain": "μ_glass = 1.53, new δ_m ≈ 10.32°",
+    "correct_answer_latex": "$\\mu_{glass} = 1.53$, new $\\delta_m \\approx 10.32^\\circ$",
+    "hint": "Use the prism formula: μ = sin((A + δm)/2) / sin(A/2).",
+    "solution_steps_latex": [
+      "Given: Refracting angle $A = 60^\\circ$, Minimum deviation in air $\\delta_m = 40^\\circ$",
+      "**1. Refractive index in air (μg)**:",
+      "$\\mu_g = \\frac{\\sin((A + \\delta_m)/2)}{\\sin(A/2)}$",
+      "$\\mu_g = \\frac{\\sin((60^\\circ + 40^\\circ)/2)}{\\sin(60^\\circ/2)} = \\frac{\\sin 50^\\circ}{\\sin 30^\\circ}$",
+      "$\\mu_g = \\frac{0.7660}{0.5} = 1.532 \\approx 1.53$",
+      "**2. Minimum deviation in water (μw = 1.33)**:",
+      "The relative refractive index of glass w.r.t water is $\\mu_{gw} = \\frac{\\mu_g}{\\mu_w}$",
+      "$\\mu_{gw} = \\frac{1.532}{1.33} \\approx 1.152$",
+      "Using the prism formula again: $\\mu_{gw} = \\frac{\\sin((A + \\delta'_m)/2)}{\\sin(A/2)}$",
+      "$1.152 = \\frac{\\sin(30^\\circ + \\delta'_m/2)}{\\sin 30^\\circ}$",
+      "$\\sin(30^\\circ + \\delta'_m/2) = 1.152 \\times 0.5 = 0.576$",
+      "$30^\\circ + \\delta'_m/2 = \\sin^{-1}(0.576) \\approx 35.16^\\circ$",
+      "$\\delta'_m/2 = 5.16^\\circ \\implies \\delta'_m = 10.32^\\circ$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram showing a ray passing symmetrically through a prism at the angle of minimum deviation.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Refracting angle A: 60°",
+        "Minimum deviation in air: 40°",
+        "Refractive index of water: 1.33"
+      ],
+      "to_find": [
+        "Refractive index of prism material",
+        "New angle of minimum deviation in water"
+      ],
+      "formulas_used": [
+        "$\\mu = \\frac{\\sin(\\frac{A + \\delta_m}{2})}{\\sin(\\frac{A}{2})}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "prism",
+      "minimum-deviation",
+      "refractive-index",
+      "prism-formula",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.6",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-6-prism",
+    "p5_sketch": "q9-6-prism"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Double-convex lenses are to be manufactured from a glass of refractive index 1.55, with both faces of the same radius of curvature. What is the radius of curvature required if the focal length is to be 20cm?",
+    "question_latex": "Double-convex lenses are to be manufactured from a glass of refractive index $1.55$, with both faces of the same radius of curvature. What is the radius of curvature required if the focal length is to be $20$cm?",
+    "sub_parts": null,
+    "correct_answer_plain": "R = 22 cm",
+    "correct_answer_latex": "$R = 22$ cm",
+    "hint": "Use Lens Maker's Formula: 1/f = (μ - 1)(1/R₁ - 1/R₂).",
+    "solution_steps_latex": [
+      "Given: Refractive index $\\mu = 1.55$",
+      "Focal length $f = +20$ cm (Convex lens)",
+      "Radius of curvature $R_1 = +R$ and $R_2 = -R$ (Equi-convex lens)",
+      "Using Lens Maker's Formula: $\\frac{1}{f} = (\\mu - 1) \\left( \\frac{1}{R_1} - \\frac{1}{R_2} \\right)$",
+      "$\\frac{1}{20} = (1.55 - 1) \\left( \\frac{1}{R} - \\frac{1}{-R} \\right)$",
+      "$\\frac{1}{20} = 0.55 \\left( \\frac{2}{R} \\right)$",
+      "$\\frac{1}{20} = \\frac{1.1}{R}$",
+      "$R = 1.1 \\times 20 = 22$ cm.",
+      "The required radius of curvature for both faces is $22$ cm."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Equiconvex lens cross-section showing R1 and R2",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Refractive index μ: 1.55",
+        "Focal length f: 20 cm",
+        "R₁ = -R₂ = R"
+      ],
+      "to_find": [
+        "Radius of curvature R"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{f} = (\\mu - 1) \\left( \\frac{1}{R_1} - \\frac{1}{R_2} \\right)$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "lens-makers-formula",
+      "convex-lens",
+      "radius-of-curvature",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.7",
+      "page": 249
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.8",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A beam of light converges at a point P. Now a lens is placed in the path of the convergent beam 12cm from P. At what point does the beam converge if the lens is (a) a convex lens of focal length 20 cm, and (b) a concave lens of focal length 16cm?",
+    "question_latex": "A beam of light converges at a point P. Now a lens is placed in the path of the convergent beam $12$ cm from P. At what point does the beam converge if the lens is (a) a convex lens of focal length $20$ cm, and (b) a concave lens of focal length $16$ cm?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) v = 7.5 cm, (b) v = 48 cm",
+    "correct_answer_latex": "(a) $v = 7.5$ cm, (b) $v = 48$ cm",
+    "hint": "The point P serves as a virtual object. u = +12 cm.",
+    "solution_steps_latex": [
+      "Given: The beam converges at P, which is $12$ cm behind the lens. Therefore, object distance $u = +12$ cm (virtual object)[cite: 71].",
+      "**Part (a): Convex Lens**",
+      "Focal length $f = +20$ cm[cite: 71].",
+      "Using lens formula: $\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+      "$\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = \\frac{1}{20} + \\frac{1}{12}$",
+      "$\\frac{1}{v} = \\frac{3 + 5}{60} = \\frac{8}{60}$",
+      "$v = \\frac{60}{8} = 7.5$ cm[cite: 71].",
+      "The beam converges $7.5$ cm behind the lens.",
+      "**Part (b): Concave Lens**",
+      "Focal length $f = -16$ cm[cite: 71].",
+      "Using lens formula: $\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = \\frac{1}{-16} + \\frac{1}{12}$",
+      "$\\frac{1}{v} = \\frac{-3 + 4}{48} = \\frac{1}{48}$",
+      "$v = 48$ cm[cite: 71].",
+      "The beam converges $48$ cm behind the lens."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "A convergent beam of light incident on a lens, focusing at a virtual object point P behind it.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object distance (virtual) u: +12 cm",
+        "Convex focal length f_a: +20 cm",
+        "Concave focal length f_b: -16 cm"
+      ],
+      "to_find": [
+        "Image distance v for case (a)",
+        "Image distance v for case (b)"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "virtual-object",
+      "lens-formula",
+      "convex-lens",
+      "concave-lens",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.8",
+      "page": 249
+    },
+    "p5_sketch_slug": "q9-8-convex-lens",
+    "p5_sketch": "q9-8-convex-lens"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.9",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "An object of size 3.0 cm is placed 14cm in front of a concave lens of focal length 21cm. Describe the image produced by the lens. What happens if the object is moved further away from the lens?",
+    "question_latex": "An object of size $3.0$ cm is placed $14$ cm in front of a concave lens of focal length $21$ cm. Describe the image produced by the lens. What happens if the object is moved further away from the lens?",
+    "sub_parts": null,
+    "correct_answer_plain": "v = -8.4 cm, h' = 1.8 cm. Image is virtual, erect and diminished. As object moves away, image moves toward focus and becomes smaller.",
+    "correct_answer_latex": "$v = -8.4$ cm, $h' = 1.8$ cm. Image is virtual, erect and diminished. As object moves away, image moves toward focus and becomes smaller.",
+    "hint": "Concave lenses always form virtual, erect, and diminished images.",
+    "solution_steps_latex": [
+      "Given: Object size $h = 3.0$ cm[cite: 73].",
+      "Object distance $u = -14$ cm[cite: 73].",
+      "Focal length $f = -21$ cm[cite: 73].",
+      "**1. Image Position**: Using $\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+      "$\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = \\frac{1}{-21} + \\frac{1}{-14}$",
+      "$\\frac{1}{v} = \\frac{-2 - 3}{42} = -\\frac{5}{42}$",
+      "$v = -8.4$ cm[cite: 73].",
+      "The image is virtual and located $8.4$ cm in front of the lens[cite: 73].",
+      "**2. Size**: Magnification $m = \\frac{v}{u} = \\frac{-8.4}{-14} = 0.6$[cite: 73].",
+      "Image height $h' = m \\times h = 0.6 \\times 3.0 = 1.8$ cm[cite: 73].",
+      "The image is **virtual, erect, and diminished**[cite: 73].",
+      "**3. Movement**: As the object moves farther away ($u \\to \\infty$), the image moves closer to the focus ($v \\to 21$ cm) and diminishes in size[cite: 74]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram for a concave lens showing a virtual, erect, and diminished image formed between the lens and the focus.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object height h: 3.0 cm",
+        "Object distance u: -14 cm",
+        "Focal length f: -21 cm"
+      ],
+      "to_find": [
+        "Image distance v",
+        "Image height h'",
+        "Description of image"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = \\frac{h'}{h} = \\frac{v}{u}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "concave-lens",
+      "lens-formula",
+      "virtual-image",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.9",
+      "page": 249
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.10",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "What is the focal length of a convex lens of focal length 30cm in contact with a concave lens of focal length 20 cm? Is the system a converging or a diverging lens? Ignore thickness of the lenses.",
+    "question_latex": "What is the focal length of a convex lens of focal length $30$ cm in contact with a concave lens of focal length $20$ cm? Is the system a converging or a diverging lens? Ignore thickness of the lenses.",
+    "sub_parts": null,
+    "correct_answer_plain": "F = -60 cm. The system is a diverging lens.",
+    "correct_answer_latex": "$F = -60$ cm. The system is a diverging lens.",
+    "hint": "Use the power of combination formula: 1/F = 1/f1 + 1/f2.",
+    "solution_steps_latex": [
+      "Given: Focal length of convex lens $f_1 = +30$ cm[cite: 79].",
+      "Focal length of concave lens $f_2 = -20$ cm[cite: 79].",
+      "**1. Combination Focal Length**: $\\frac{1}{F} = \\frac{1}{f_1} + \\frac{1}{f_2}$",
+      "$\\frac{1}{F} = \\frac{1}{30} + \\frac{1}{-20}$",
+      "$\\frac{1}{F} = \\frac{2 - 3}{60} = -\\frac{1}{60}$",
+      "$F = -60$ cm[cite: 79].",
+      "**2. Nature**: Since the effective focal length is negative, the combination behaves as a **diverging lens**[cite: 80]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two lenses in contact: one convex and one concave.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length f1: +30 cm",
+        "Focal length f2: -20 cm"
+      ],
+      "to_find": [
+        "Effective focal length F",
+        "Nature of the system"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{F} = \\frac{1}{f_1} + \\frac{1}{f_2}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "combination-of-lenses",
+      "focal-length",
+      "diverging-lens",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.10",
+      "page": 250
+    },
+    "p5_sketch_slug": "q9-10-concave-lens",
+    "p5_sketch": "q9-10-concave-lens"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.11",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "A compound microscope consists of an objective lens of focal length 2.0cm and an eyepiece of focal length 6.25cm separated by a distance of 15cm. How far from the objective should an object be placed in order to obtain the final image at (a) the least distance of distinct vision (25cm), and (b) at infinity? What is the magnifying power of the microscope in each case?",
+    "question_latex": "A compound microscope consists of an objective lens of focal length $2.0$ cm and an eyepiece of focal length $6.25$ cm separated by a distance of $15$ cm. How far from the objective should an object be placed in order to obtain the final image at (a) the least distance of distinct vision ($25$ cm), and (b) at infinity? What is the magnifying power of the microscope in each case?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) u_o = -2.5 cm, m = 20; (b) u_o = -2.59 cm, m = 13.5",
+    "correct_answer_latex": "(a) $u_o = -2.5$ cm, $m = 20$; (b) $u_o = -2.59$ cm, $m = 13.5$",
+    "hint": "Distance between lenses L = v_o + |u_e|.",
+    "solution_steps_latex": [
+      "Given: $f_o = 2.0$ cm, $f_e = 6.25$ cm, Separation $L = 15$ cm[cite: 81].",
+      "**Part (a): Final image at D = 25 cm**",
+      "For eyepiece: $v_e = -25$ cm, $f_e = 6.25$ cm[cite: 82].",
+      "$\\frac{1}{u_e} = \\frac{1}{v_e} - \\frac{1}{f_e} = \\frac{1}{-25} - \\frac{1}{6.25} = \\frac{-1 - 4}{25} = -\\frac{5}{25} \\implies u_e = -5$ cm[cite: 81].",
+      "For objective: $v_o = L - |u_e| = 15 - 5 = 10$ cm[cite: 81].",
+      "$\\frac{1}{u_o} = \\frac{1}{v_o} - \\frac{1}{f_o} = \\frac{1}{10} - \\frac{1}{2} = \\frac{1 - 5}{10} = -\\frac{4}{10} \\implies u_o = -2.5$ cm[cite: 81].",
+      "Magnification: $m = m_o \\times m_e = (\\frac{v_o}{u_o})(1 + \\frac{D}{f_e}) = (\\frac{10}{2.5})(1 + \\frac{25}{6.25}) = 4 \\times 5 = 20$[cite: 3, 83].",
+      "**Part (b): Final image at infinity**",
+      "For eyepiece: $v_e = \\infty \\implies u_e = -f_e = -6.25$ cm[cite: 82].",
+      "For objective: $v_o = L - |u_e| = 15 - 6.25 = 8.75$ cm[cite: 81].",
+      "$\\frac{1}{u_o} = \\frac{1}{v_o} - \\frac{1}{f_o} = \\frac{1}{8.75} - \\frac{1}{2} = \\frac{2 - 8.75}{17.5} = -\\frac{6.75}{17.5}$",
+      "$u_o = -2.59$ cm[cite: 81].",
+      "Magnification: $m = (\\frac{v_o}{u_o})(\\frac{D}{f_e}) = (\\frac{8.75}{2.59})(\\frac{25}{6.25}) = 3.38 \\times 4 \\approx 13.5$[cite: 3, 83]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram of a compound microscope showing objective and eyepiece producing a final virtual magnified image.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length objective f_o: 2.0 cm",
+        "Focal length eyepiece f_e: 6.25 cm",
+        "Distance between lenses L: 15 cm"
+      ],
+      "to_find": [
+        "Object distance u_o",
+        "Magnifying power m"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = m_o \\times m_e$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "compound-microscope",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.11",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.12",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "A person with a normal near point (25cm) using a compound microscope with objective of focal length 8.0 mm and an eyepiece of focal length 2.5cm can bring an object placed at 9.0mm from the objective in sharp focus. What is the separation between the two lenses? Calculate the magnifying power of the microscope,",
+    "question_latex": "A person with a normal near point ($25$ cm) using a compound microscope with objective of focal length $8.0$ mm and an eyepiece of focal length $2.5$ cm can bring an object placed at $9.0$ mm from the objective in sharp focus. What is the separation between the two lenses? Calculate the magnifying power of the microscope,",
+    "sub_parts": null,
+    "correct_answer_plain": "L = 9.47 cm, m = 88",
+    "correct_answer_latex": "$L = 9.47$ cm, $m = 88$",
+    "hint": "Sharp focus usually implies the final image is at D = 25 cm.",
+    "solution_steps_latex": [
+      "Given: $f_o = 0.8$ cm, $f_e = 2.5$ cm, $u_o = -0.9$ cm, $v_e = -25$ cm[cite: 84].",
+      "**1. Objective image distance (v_o)**:",
+      "$\\frac{1}{v_o} = \\frac{1}{f_o} + \\frac{1}{u_o} = \\frac{1}{0.8} - \\frac{1}{0.9} = \\frac{1.25 - 1.11}{1} = \\frac{0.1}{0.72} \\implies v_o = 7.2$ cm[cite: 84].",
+      "**2. Eyepiece object distance (u_e)**:",
+      "$\\frac{1}{u_e} = \\frac{1}{v_e} - \\frac{1}{f_e} = \\frac{1}{-25} - \\frac{1}{2.5} = -\\frac{11}{25} \\implies u_e = -2.27$ cm[cite: 84].",
+      "**3. Separation (L)**:",
+      "$L = v_o + |u_e| = 7.2 + 2.27 = 9.47$ cm[cite: 85].",
+      "**4. Magnifying power (m)**:",
+      "$m = m_o \\times m_e = (\\frac{v_o}{|u_o|})(1 + \\frac{D}{f_e}) = (\\frac{7.2}{0.9})(1 + \\frac{25}{2.5}) = 8 \\times 11 = 88$[cite: 3, 85]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Setup of a compound microscope focusing a small object at the least distance of distinct vision.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length objective f_o: 8.0 mm",
+        "Focal length eyepiece f_e: 2.5 cm",
+        "Object distance u_o: 9.0 mm"
+      ],
+      "to_find": [
+        "Distance between lenses L",
+        "Magnifying power m"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$L = v_o + |u_e|$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "compound-microscope",
+      "separation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.12",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.13",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "A small telescope has an objective lens of focal length 144cm and an eyepiece of focal length 6.0cm. What is the magnifying power of the telescope? What is the separation between the objective and the eyepiece?",
+    "question_latex": "A small telescope has an objective lens of focal length $144$ cm and an eyepiece of focal length $6.0$ cm. What is the magnifying power of the telescope? What is the separation between the objective and the eyepiece?",
+    "sub_parts": null,
+    "correct_answer_plain": "m = 24, L = 150 cm",
+    "correct_answer_latex": "$m = 24$, $L = 150$ cm",
+    "hint": "In normal adjustment (image at infinity), m = fo/fe and L = fo + fe.",
+    "solution_steps_latex": [
+      "Given: $f_o = 144$ cm, $f_e = 6.0$ cm[cite: 86].",
+      "Assuming normal adjustment (final image at infinity):",
+      "**1. Magnifying power (m)**:",
+      "$m = \\frac{f_o}{f_e} = \\frac{144}{6.0} = 24$[cite: 8, 87].",
+      "**2. Separation (L)**:",
+      "$L = f_o + f_e = 144 + 6 = 150$ cm[cite: 87]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Astronomical telescope in normal adjustment with rays from infinity focusing at the focal point of both lenses.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length objective f_o: 144 cm",
+        "Focal length eyepiece f_e: 6.0 cm"
+      ],
+      "to_find": [
+        "Magnifying power m",
+        "Separation between lenses L"
+      ],
+      "formulas_used": [
+        "$m = \\frac{f_o}{f_e}$",
+        "$L = f_o + f_e$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "astronomical-telescope",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.13",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.14",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "(a) A giant refracting telescope at an observatory has an objective lens of focal length 15 m. If an eyepiece of focal length 1.0cm is used, what is the angular magnification of the telescope? (b) If this telescope is used to view the moon, what is the diameter of the image of the moon formed by the objective lens? The diameter of the moon is 3.48 × 10⁶ m, and the radius of lunar orbit is 3.8 × 10⁸ m",
+    "question_latex": "(a) A giant refracting telescope at an observatory has an objective lens of focal length $15$ m. If an eyepiece of focal length $1.0$ cm is used, what is the angular magnification of the telescope? (b) If this telescope is used to view the moon, what is the diameter of the image of the moon formed by the objective lens? The diameter of the moon is $3.48 \\times 10^{6}$ m, and the radius of lunar orbit is $3.8 \\times 10^{8}$ m",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) m = 1500, (b) d = 13.7 cm",
+    "correct_answer_latex": "(a) $m = 1500$, (b) $d = 13.7$ cm",
+    "hint": "The angle subtended by the moon at the objective is α = diameter/distance.",
+    "solution_steps_latex": [
+      "Given: $f_o = 15$ m, $f_e = 1.0$ cm $= 0.01$ m[cite: 88, 89].",
+      "Moon's diameter $d_m = 3.48 \\times 10^6$ m, Distance $r_m = 3.8 \\times 10^8$ m[cite: 91].",
+      "**Part (a): Angular magnification (m)**",
+      "$m = \\frac{f_o}{f_e} = \\frac{15}{0.01} = 1500$[cite: 8, 89].",
+      "**Part (b): Diameter of image (d)**",
+      "The angle subtended by the moon at the objective lens is $\\alpha = \\frac{d_m}{r_m}$[cite: 7].",
+      "The angle subtended by the image at the objective lens is also $\\alpha = \\frac{d}{f_o}$[cite: 7].",
+      "Therefore, $\\frac{d}{f_o} = \\frac{d_m}{r_m}$",
+      "$d = f_o \\times \\frac{d_m}{r_m} = 15 \\times \\frac{3.48 \\times 10^6}{3.8 \\times 10^8}$",
+      "$d = 15 \\times 0.00915 = 0.137$ m $= 13.7$ cm[cite: 90, 91]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Geometry of image formation for a distant object like the moon through a long focal length objective.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length objective f_o: 15 m",
+        "Focal length eyepiece f_e: 1.0 cm",
+        "Moon diameter: 3.48 × 10^6 m",
+        "Lunar orbit radius: 3.8 × 10^8 m"
+      ],
+      "to_find": [
+        "Angular magnification m",
+        "Diameter of lunar image d"
+      ],
+      "formulas_used": [
+        "$m = \\frac{f_o}{f_e}$",
+        "$\\alpha = \\frac{\\text{size}}{\\text{distance}}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "refracting-telescope",
+      "astronomy",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.14",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Derivation",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Reflection of Light by Spherical Mirrors",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.15",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "Use the mirror equation to deduce that: (a) an object placed between f and 2 f of a concave mirror produces a real image beyond 2f. (b) a convex mirror always produces a virtual image independent of the location of the object. (c) the virtual image produced by a convex mirror is always diminished in size and is located between the focus and the pole. (d) an object placed between the pole and focus of a concave mirror produces a virtual and enlarged image.",
+    "question_latex": "Use the mirror equation to deduce that: (a) an object placed between $f$ and $2 f$ of a concave mirror produces a real image beyond $2f$. (b) a convex mirror always produces a virtual image independent of the location of the object. (c) the virtual image produced by a convex mirror is always diminished in size and is located between the focus and the pole. (d) an object placed between the pole and focus of a concave mirror produces a virtual and enlarged image.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "Algebraic deductions using 1/v = 1/f - 1/u.",
+    "correct_answer_latex": "Algebraic deductions using $\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u}$.",
+    "hint": "Apply the Cartesian sign convention to the mirror formula.",
+    "solution_steps_latex": [
+      "**General Mirror Formula**: $\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u}$[cite: 92].",
+      "**Part (a)**: Concave mirror ($f < 0$). Object between $f$ and $2f$ means $2f < u < f$[cite: 93].",
+      "Since $u < f$, $\\frac{1}{u} > \\frac{1}{f}$ (both negative). $\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u} < 0$, so $v$ is negative (real image)[cite: 97].",
+      "Also $\\frac{1}{v}$ is between $0$ and $\\frac{1}{2f}$, meaning $v < 2f$ (beyond $2f$)[cite: 97].",
+      "**Part (b)**: Convex mirror ($f > 0$). Object $u < 0$[cite: 98].",
+      "$\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u} = \\frac{1}{f} + \\frac{1}{|u|}$. Since both terms are positive, $\\frac{1}{v} > 0 \\implies v > 0$. Image is always virtual[cite: 98].",
+      "**Part (c)**: In a convex mirror, $\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{|u|} > \\frac{1}{f}$, so $v < f$ (between $P$ and $f$)[cite: 99].",
+      "Magnification $m = -\\frac{v}{u} = \\frac{v}{|u|}$. From $\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{|u|}$, clearly $v < |u| \\implies m < 1$ (diminished)[cite: 99].",
+      "**Part (d)**: Concave mirror ($f < 0$). Object between $P$ and $f$ ($f < u < 0$)[cite: 100].",
+      "Since $|u| < |f|$, $\\frac{1}{|u|} > \\frac{1}{|f|}$. $\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u} = -\\frac{1}{|f|} + \\frac{1}{|u|} > 0$. $v$ is positive (virtual)[cite: 100].",
+      "Magnification $m = -\\frac{v}{u} = \\frac{v}{|u|}$. Since $\\frac{1}{v} = \\frac{1}{|u|} - \\frac{1}{|f|}$, $v > |u| \\implies m > 1$ (enlarged)[cite: 100]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Conceptual summaries of ray diagrams for mirrors.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mirror formula variables: u, v, f"
+      ],
+      "to_find": [
+        "Nature and location of images via algebraic proof"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = -\\frac{v}{u}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "mirror-formula",
+      "sign-convention",
+      "image-formation",
+      "derivation-proof"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.15",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.16",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A small pin fixed on a table top is viewed from above from a distance of 50 cm. By what distance would the pin appear to be raised if it is viewed from the same point through a 15cm thick glass slab held parallel to the table? Refractive index of glass = 1.5. Does the answer depend on the location of the slab?",
+    "question_latex": "A small pin fixed on a table top is viewed from above from a distance of $50$ cm. By what distance would the pin appear to be raised if it is viewed from the same point through a $15$ cm thick glass slab held parallel to the table? Refractive index of glass $= 1.5$ Does the answer depend on the location of the slab?",
+    "sub_parts": null,
+    "correct_answer_plain": "Shift = 5 cm. No, the shift is independent of the slab's location.",
+    "correct_answer_latex": "Shift $= 5$ cm. No, the shift is independent of the slab's location.",
+    "hint": "Normal shift Δh = t(1 - 1/μ).",
+    "solution_steps_latex": [
+      "Given: Thickness of glass slab $t = 15$ cm[cite: 103].",
+      "Refractive index of glass $\\mu = 1.5$[cite: 104].",
+      "**1. Calculation of Normal Shift**: The apparent shift ($d$) is given by the formula:",
+      "$d = t \\left( 1 - \\frac{1}{\\mu} \\right)$",
+      "$d = 15 \\left( 1 - \\frac{1}{1.5} \\right)$",
+      "$d = 15 \\left( 1 - \\frac{2}{3} \\right) = 15 \\times \\frac{1}{3} = 5$ cm.",
+      "The pin appears to be raised by $5$ cm[cite: 103].",
+      "**2. Dependence on Location**: The formula for normal shift only depends on the thickness and the refractive index of the medium[cite: 103, 104].",
+      "Therefore, the answer **does not depend** on the location of the slab (as long as it remains parallel to the table)[cite: 104]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Normal shift through a glass slab showing real depth and apparent depth of an object.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Thickness t: 15 cm",
+        "Refractive index μ: 1.5",
+        "Viewing distance: 50 cm"
+      ],
+      "to_find": [
+        "Apparent shift d"
+      ],
+      "formulas_used": [
+        "$d = t(1 - 1/\\mu)$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "refraction",
+      "glass-slab",
+      "normal-shift",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.16",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Total Internal Reflection",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.17",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "(a) Figure 9.28 shows a cross-section of a 'light pipe' made of a glass fibre of refractive index 1.68. The outer covering of the pipe is made of a material of refractive index 1.44. What is the range of the angles of the incident rays with the axis of the pipe for which total reflections inside the pipe take place? (b) What is the answer if there is no outer covering of the pipe?",
+    "question_latex": "(a) Figure 9.28 shows a cross-section of a 'light pipe' made of a glass fibre of refractive index $1.68$. The outer covering of the pipe is made of a material of refractive index $1.44$. What is the range of the angles of the incident rays with the axis of the pipe for which total reflections inside the pipe take place? (b) What is the answer if there is no outer covering of the pipe?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 0 < i < 60°; (b) Total internal reflection occurs for all incident angles (0 to 90°).",
+    "correct_answer_latex": "(a) $0 < i < 60^\\circ$; (b) Total internal reflection occurs for all incident angles ($0$ to $90^\\circ$).",
+    "hint": "The angle of incidence at the core-cladding interface must be greater than the critical angle.",
+    "solution_steps_latex": [
+      "Given: Core refractive index $\\mu_1 = 1.68$[cite: 106].",
+      "Cladding refractive index $\\mu_2 = 1.44$[cite: 107].",
+      "**Part (a)**:",
+      "1. Critical angle ($i_c$) at core-cladding interface: $\\sin i_c = \\frac{\\mu_2}{\\mu_1} = \\frac{1.44}{1.68} = 0.8571 \\implies i_c \\approx 59^\\circ$.",
+      "2. For TIR, the angle of incidence inside the fibre ($r'$) must be $\\geq 59^\\circ$.",
+      "3. This means the angle of refraction at the face ($r$) must be $\\leq 90^\\circ - 59^\\circ = 31^\\circ$.",
+      "4. Using Snell's law at the entrance: $\\sin i = \\mu_1 \\sin r = 1.68 \\sin 31^\\circ = 1.68 \\times 0.515 = 0.865$.",
+      "5. $i \\approx 60^\\circ$. So, range is $0 < i < 60^\\circ$[cite: 108].",
+      "**Part (b)**:",
+      "If there is no cladding, $\\mu_2 = 1$ (air)[cite: 112].",
+      "$\\sin i_c = 1/1.68 = 0.595 \\implies i_c \\approx 36.5^\\circ$.",
+      "Maximum $r$ allowed is $90^\\circ - 36.5^\\circ = 53.5^\\circ$.",
+      "Since $\\sin r_{max} = \\sin 90^\\circ / 1.68 = 0.595$ ($r \\approx 36.5^\\circ$), which is less than $53.5^\\circ$, all incident rays ($0$ to $90^\\circ$) will undergo TIR[cite: 112]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Cross-section of an optical fiber showing light rays reflecting internally at the core-cladding boundary.",
+      "figure_reference": "Figure 9.28"
+    },
+    "physical_quantities": {
+      "given": [
+        "Core refractive index μ1: 1.68",
+        "Cladding refractive index μ2: 1.44"
+      ],
+      "to_find": [
+        "Range of incident angles for TIR"
+      ],
+      "formulas_used": [
+        "$\\sin i_c = \\mu_2/\\mu_1$",
+        "$n_1 \\sin i = n_2 \\sin r$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "total-internal-reflection",
+      "optical-fiber",
+      "light-pipe",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.17",
+      "page": 250
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.18",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "The image of a small electric bulb fixed on the wall of a room is to be obtained on the opposite wall 3m away by means of a large convex lens. What is the maximum possible focal length of the lens required for the purpose?",
+    "question_latex": "The image of a small electric bulb fixed on the wall of a room is to be obtained on the opposite wall $3$ m away by means of a large convex lens. What is the maximum possible focal length of the lens required for the purpose?",
+    "sub_parts": null,
+    "correct_answer_plain": "f_max = 0.75 m",
+    "correct_answer_latex": "$f_{max} = 0.75$ m",
+    "hint": "For a real image on a screen, the minimum distance between object and screen is 4f.",
+    "solution_steps_latex": [
+      "Given: Distance between object (bulb) and screen (opposite wall) $D = 3$ m[cite: 113].",
+      "**1. Condition for Real Image**: For a convex lens to form a real image on a screen, the distance $D$ between the object and screen must be at least $4f$, where $f$ is the focal length[cite: 114].",
+      "$D \\geq 4f$",
+      "**2. Maximum Focal Length**: The maximum focal length occurs when $D = 4f$.",
+      "$f_{max} = \\frac{D}{4}$",
+      "$f_{max} = \\frac{3}{4} = 0.75$ m.",
+      "The maximum possible focal length is $0.75$ m[cite: 114]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Convex lens forming a real image on a wall.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Distance D: 3 m"
+      ],
+      "to_find": [
+        "Maximum focal length f_max"
+      ],
+      "formulas_used": [
+        "$f_{max} = D/4$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "convex-lens",
+      "real-image",
+      "focal-length",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.18",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.19",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A screen is placed 90cm from an object. The image of the object on the screen is formed by a convex lens at two different locations separated by 20cm. Determine the focal length of the lens.",
+    "question_latex": "A screen is placed $90$ cm from an object. The image of the object on the screen is formed by a convex lens at two different locations separated by $20$ cm. Determine the focal length of the lens.",
+    "sub_parts": null,
+    "correct_answer_plain": "f = 21.4 cm",
+    "correct_answer_latex": "$f = 21.4$ cm",
+    "hint": "Use the displacement method formula: f = (D² - d²) / 4D.",
+    "solution_steps_latex": [
+      "Given: Distance between object and screen $D = 90$ cm[cite: 115].",
+      "Distance between two lens positions $d = 20$ cm[cite: 115].",
+      "**1. Focal Length Formula (Displacement Method)**:",
+      "$f = \\frac{D^2 - d^2}{4D}$",
+      "**2. Calculation**:",
+      "$f = \\frac{90^2 - 20^2}{4 \\times 90}$",
+      "$f = \\frac{8100 - 400}{360} = \\frac{7700}{360}$",
+      "$f \\approx 21.39$ cm.",
+      "The focal length of the lens is approximately $21.4$ cm[cite: 116]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Displacement method for finding focal length, showing two lens positions for a single object-screen distance.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object-screen distance D: 90 cm",
+        "Displacement distance d: 20 cm"
+      ],
+      "to_find": [
+        "Focal length f"
+      ],
+      "formulas_used": [
+        "$f = (D^2 - d^2) / 4D$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "convex-lens",
+      "displacement-method",
+      "focal-length",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.19",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.20",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "(a) Determine the 'effective focal length' of the combination of the two lenses in Exercise 9.10, if they are placed 8.0cm apart with their principal axes coincident. Does the answer depend on which side of the combination a beam of parallel light is incident? Is the notion of effective focal length of this system useful at all? (b) An object 1.5 cm in size is placed on the side of the convex lens in the arrangement (a) above. The distance between the object and the convex lens is 40cm. Determine the magnification produced by the two-lens system, and the size of the image.",
+    "question_latex": "(a) Determine the 'effective focal length' of the combination of the two lenses in Exercise 9.10, if they are placed $8.0$ cm apart with their principal axes coincident. Does the answer depend on which side of the combination a beam of parallel light is incident? Is the notion of effective focal length of this system useful at all? (b) An object $1.5$ cm in size is placed on the side of the convex lens in the arrangement (a) above. The distance between the object and the convex lens is $40$ cm. Determine the magnification produced by the two-lens system, and the size of the image.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Effective focal length depends on orientation and is not a constant property like thin lenses; (b) m = 0.652, h' = 0.98 cm",
+    "correct_answer_latex": "(a) Effective focal length depends on orientation; (b) $m = 0.652$, $h' = 0.98$ cm",
+    "hint": "For part (a), find the final image position for a parallel incident beam. For part (b), apply the lens formula sequentially.",
+    "solution_steps_latex": [
+      "Lenses from Q9.10: $f_1 = +30$ cm, $f_2 = -20$ cm. Separation $d = 8.0$ cm[cite: 79, 117].",
+      "**Part (a)**:",
+      "1. Incident on convex side ($f_1$): First image at $v_1 = 30$ cm. For lens 2, $u_2 = 30 - 8 = 22$ cm. $\\frac{1}{v_2} = \\frac{1}{-20} + \\frac{1}{22} = \\frac{-11+10}{220} \\implies v_2 = -220$ cm[cite: 117].",
+      "2. Incident on concave side ($f_2$): First image at $v_1 = -20$ cm. For lens 1, $u_2 = -20 - 8 = -28$ cm. $\\frac{1}{v_2} = \\frac{1}{30} + \\frac{1}{-28} = \\frac{14-15}{420} \\implies v_2 = -420$ cm[cite: 118].",
+      "The focal length depends on the side of incidence; the notion is not useful for separated lenses[cite: 118, 119].",
+      "**Part (b)**:",
+      "Object height $h = 1.5$ cm, $u_1 = -40$ cm[cite: 121, 122].",
+      "1. For Convex Lens ($f_1=30$): $\\frac{1}{v_1} = \\frac{1}{30} + \\frac{1}{-40} = \\frac{1}{120} \\implies v_1 = 120$ cm. $m_1 = v_1/u_1 = 120/-40 = -3$.",
+      "2. For Concave Lens ($f_2=-20$): $u_2 = 120 - 8 = 112$ cm. $\\frac{1}{v_2} = \\frac{1}{-20} + \\frac{1}{112} = \\frac{-5.6+1}{112} \\implies v_2 = -24.35$ cm.",
+      "$m_2 = v_2/u_2 = -24.35/112 = -0.217$.",
+      "Total magnification $m = m_1 \\times m_2 = (-3) \\times (-0.217) = 0.651$.",
+      "Image size $h' = m \\times h = 0.651 \\times 1.5 = 0.98$ cm[cite: 123]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "A system of two lenses separated by distance d, showing the sequential formation of images.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f1: +30 cm",
+        "f2: -20 cm",
+        "Separation d: 8.0 cm",
+        "Object distance: 40 cm",
+        "Object size: 1.5 cm"
+      ],
+      "to_find": [
+        "Effective focal length",
+        "Total magnification",
+        "Image size"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = m_1 \\times m_2$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "lens-combination",
+      "separated-lenses",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.20",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.16",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A small pin fixed on a table top is viewed from above from a distance of 50 cm. By what distance would the pin appear to be raised if it is viewed from the same point through a 15cm thick glass slab held parallel to the table? Refractive index of glass = 1.5. Does the answer depend on the location of the slab?",
+    "question_latex": "A small pin fixed on a table top is viewed from above from a distance of $50$ cm. By what distance would the pin appear to be raised if it is viewed from the same point through a $15$ cm thick glass slab held parallel to the table? Refractive index of glass $= 1.5$ Does the answer depend on the location of the slab?",
+    "sub_parts": null,
+    "correct_answer_plain": "Shift = 5 cm. No, the shift is independent of the slab's location.",
+    "correct_answer_latex": "Shift $= 5$ cm. No, the shift is independent of the slab's location.",
+    "hint": "Normal shift Δh = t(1 - 1/μ).",
+    "solution_steps_latex": [
+      "Given: Thickness of glass slab $t = 15$ cm[cite: 103].",
+      "Refractive index of glass $\\mu = 1.5$[cite: 104].",
+      "**1. Calculation of Normal Shift**: The apparent shift ($d$) is given by the formula:",
+      "$d = t \\left( 1 - \\frac{1}{\\mu} \\right)$",
+      "$d = 15 \\left( 1 - \\frac{1}{1.5} \\right)$",
+      "$d = 15 \\left( 1 - \\frac{2}{3} \\right) = 15 \\times \\frac{1}{3} = 5$ cm.",
+      "The pin appears to be raised by $5$ cm[cite: 103].",
+      "**2. Dependence on Location**: The formula for normal shift only depends on the thickness and the refractive index of the medium[cite: 103, 104].",
+      "Therefore, the answer **does not depend** on the location of the slab (as long as it remains parallel to the table)[cite: 104]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Normal shift through a glass slab showing real depth and apparent depth of an object.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Thickness t: 15 cm",
+        "Refractive index μ: 1.5",
+        "Viewing distance: 50 cm"
+      ],
+      "to_find": [
+        "Apparent shift d"
+      ],
+      "formulas_used": [
+        "$d = t(1 - 1/\\mu)$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "refraction",
+      "glass-slab",
+      "normal-shift",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.16",
+      "page": 250
+    },
+    "p5_sketch_slug": "q9-16-refraction-water",
+    "p5_sketch": "q9-16-refraction-water"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Total Internal Reflection",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.17",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "(a) Figure 9.28 shows a cross-section of a 'light pipe' made of a glass fibre of refractive index 1.68. The outer covering of the pipe is made of a material of refractive index 1.44. What is the range of the angles of the incident rays with the axis of the pipe for which total reflections inside the pipe take place? (b) What is the answer if there is no outer covering of the pipe?",
+    "question_latex": "(a) Figure 9.28 shows a cross-section of a 'light pipe' made of a glass fibre of refractive index $1.68$. The outer covering of the pipe is made of a material of refractive index $1.44$. What is the range of the angles of the incident rays with the axis of the pipe for which total reflections inside the pipe take place? (b) What is the answer if there is no outer covering of the pipe?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 0 < i < 60°; (b) Total internal reflection occurs for all incident angles (0 to 90°).",
+    "correct_answer_latex": "(a) $0 < i < 60^\\circ$; (b) Total internal reflection occurs for all incident angles ($0$ to $90^\\circ$).",
+    "hint": "The angle of incidence at the core-cladding interface must be greater than the critical angle.",
+    "solution_steps_latex": [
+      "Given: Core refractive index $\\mu_1 = 1.68$[cite: 106].",
+      "Cladding refractive index $\\mu_2 = 1.44$[cite: 107].",
+      "**Part (a)**:",
+      "1. Critical angle ($i_c$) at core-cladding interface: $\\sin i_c = \\frac{\\mu_2}{\\mu_1} = \\frac{1.44}{1.68} = 0.8571 \\implies i_c \\approx 59^\\circ$.",
+      "2. For TIR, the angle of incidence inside the fibre ($r'$) must be $\\geq 59^\\circ$.",
+      "3. This means the angle of refraction at the face ($r$) must be $\\leq 90^\\circ - 59^\\circ = 31^\\circ$.",
+      "4. Using Snell's law at the entrance: $\\sin i = \\mu_1 \\sin r = 1.68 \\sin 31^\\circ = 1.68 \\times 0.515 = 0.865$.",
+      "5. $i \\approx 60^\\circ$. So, range is $0 < i < 60^\\circ$[cite: 108].",
+      "**Part (b)**:",
+      "If there is no cladding, $\\mu_2 = 1$ (air)[cite: 112].",
+      "$\\sin i_c = 1/1.68 = 0.595 \\implies i_c \\approx 36.5^\\circ$.",
+      "Maximum $r$ allowed is $90^\\circ - 36.5^\\circ = 53.5^\\circ$.",
+      "Since $\\sin r_{max} = \\sin 90^\\circ / 1.68 = 0.595$ ($r \\approx 36.5^\\circ$), which is less than $53.5^\\circ$, all incident rays ($0$ to $90^\\circ$) will undergo TIR[cite: 112]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Cross-section of an optical fiber showing light rays reflecting internally at the core-cladding boundary.",
+      "figure_reference": "Figure 9.28"
+    },
+    "physical_quantities": {
+      "given": [
+        "Core refractive index μ1: 1.68",
+        "Cladding refractive index μ2: 1.44"
+      ],
+      "to_find": [
+        "Range of incident angles for TIR"
+      ],
+      "formulas_used": [
+        "$\\sin i_c = \\mu_2/\\mu_1$",
+        "$n_1 \\sin i = n_2 \\sin r$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "total-internal-reflection",
+      "optical-fiber",
+      "light-pipe",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.17",
+      "page": 250
+    },
+    "p5_sketch_slug": "q9-17-tir-glass",
+    "p5_sketch": "q9-17-tir-glass"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.18",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "The image of a small electric bulb fixed on the wall of a room is to be obtained on the opposite wall 3m away by means of a large convex lens. What is the maximum possible focal length of the lens required for the purpose?",
+    "question_latex": "The image of a small electric bulb fixed on the wall of a room is to be obtained on the opposite wall $3$ m away by means of a large convex lens. What is the maximum possible focal length of the lens required for the purpose?",
+    "sub_parts": null,
+    "correct_answer_plain": "f_max = 0.75 m",
+    "correct_answer_latex": "$f_{max} = 0.75$ m",
+    "hint": "For a real image on a screen, the minimum distance between object and screen is 4f.",
+    "solution_steps_latex": [
+      "Given: Distance between object (bulb) and screen (opposite wall) $D = 3$ m[cite: 113].",
+      "**1. Condition for Real Image**: For a convex lens to form a real image on a screen, the distance $D$ between the object and screen must be at least $4f$, where $f$ is the focal length[cite: 114].",
+      "$D \\geq 4f$",
+      "**2. Maximum Focal Length**: The maximum focal length occurs when $D = 4f$.",
+      "$f_{max} = \\frac{D}{4}$",
+      "$f_{max} = \\frac{3}{4} = 0.75$ m.",
+      "The maximum possible focal length is $0.75$ m[cite: 114]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Convex lens forming a real image on a wall.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Distance D: 3 m"
+      ],
+      "to_find": [
+        "Maximum focal length f_max"
+      ],
+      "formulas_used": [
+        "$f_{max} = D/4$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "convex-lens",
+      "real-image",
+      "focal-length",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.18",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.19",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A screen is placed 90cm from an object. The image of the object on the screen is formed by a convex lens at two different locations separated by 20cm. Determine the focal length of the lens.",
+    "question_latex": "A screen is placed $90$ cm from an object. The image of the object on the screen is formed by a convex lens at two different locations separated by $20$ cm. Determine the focal length of the lens.",
+    "sub_parts": null,
+    "correct_answer_plain": "f = 21.4 cm",
+    "correct_answer_latex": "$f = 21.4$ cm",
+    "hint": "Use the displacement method formula: f = (D² - d²) / 4D.",
+    "solution_steps_latex": [
+      "Given: Distance between object and screen $D = 90$ cm[cite: 115].",
+      "Distance between two lens positions $d = 20$ cm[cite: 115].",
+      "**1. Focal Length Formula (Displacement Method)**:",
+      "$f = \\frac{D^2 - d^2}{4D}$",
+      "**2. Calculation**:",
+      "$f = \\frac{90^2 - 20^2}{4 \\times 90}$",
+      "$f = \\frac{8100 - 400}{360} = \\frac{7700}{360}$",
+      "$f \\approx 21.39$ cm.",
+      "The focal length of the lens is approximately $21.4$ cm[cite: 116]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Displacement method for finding focal length, showing two lens positions for a single object-screen distance.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Object-screen distance D: 90 cm",
+        "Displacement distance d: 20 cm"
+      ],
+      "to_find": [
+        "Focal length f"
+      ],
+      "formulas_used": [
+        "$f = (D^2 - d^2) / 4D$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "convex-lens",
+      "displacement-method",
+      "focal-length",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.19",
+      "page": 251
+    },
+    "p5_sketch_slug": "q9-19-convex-lens-2",
+    "p5_sketch": "q9-19-convex-lens-2"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction at Spherical Surfaces and by Lenses",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.20",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "(a) Determine the 'effective focal length' of the combination of the two lenses in Exercise 9.10, if they are placed 8.0cm apart with their principal axes coincident. Does the answer depend on which side of the combination a beam of parallel light is incident? Is the notion of effective focal length of this system useful at all? (b) An object 1.5 cm in size is placed on the side of the convex lens in the arrangement (a) above. The distance between the object and the convex lens is 40cm. Determine the magnification produced by the two-lens system, and the size of the image.",
+    "question_latex": "(a) Determine the 'effective focal length' of the combination of the two lenses in Exercise 9.10, if they are placed $8.0$ cm apart with their principal axes coincident. Does the answer depend on which side of the combination a beam of parallel light is incident? Is the notion of effective focal length of this system useful at all? (b) An object $1.5$ cm in size is placed on the side of the convex lens in the arrangement (a) above. The distance between the object and the convex lens is $40$ cm. Determine the magnification produced by the two-lens system, and the size of the image.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Effective focal length depends on orientation and is not a constant property like thin lenses; (b) m = 0.652, h' = 0.98 cm",
+    "correct_answer_latex": "(a) Effective focal length depends on orientation; (b) $m = 0.652$, $h' = 0.98$ cm",
+    "hint": "For part (a), find the final image position for a parallel incident beam. For part (b), apply the lens formula sequentially.",
+    "solution_steps_latex": [
+      "Lenses from Q9.10: $f_1 = +30$ cm, $f_2 = -20$ cm. Separation $d = 8.0$ cm[cite: 79, 117].",
+      "**Part (a)**:",
+      "1. Incident on convex side ($f_1$): First image at $v_1 = 30$ cm. For lens 2, $u_2 = 30 - 8 = 22$ cm. $\\frac{1}{v_2} = \\frac{1}{-20} + \\frac{1}{22} = \\frac{-11+10}{220} \\implies v_2 = -220$ cm[cite: 117].",
+      "2. Incident on concave side ($f_2$): First image at $v_1 = -20$ cm. For lens 1, $u_2 = -20 - 8 = -28$ cm. $\\frac{1}{v_2} = \\frac{1}{30} + \\frac{1}{-28} = \\frac{14-15}{420} \\implies v_2 = -420$ cm[cite: 118].",
+      "The focal length depends on the side of incidence; the notion is not useful for separated lenses[cite: 118, 119].",
+      "**Part (b)**:",
+      "Object height $h = 1.5$ cm, $u_1 = -40$ cm[cite: 121, 122].",
+      "1. For Convex Lens ($f_1=30$): $\\frac{1}{v_1} = \\frac{1}{30} + \\frac{1}{-40} = \\frac{1}{120} \\implies v_1 = 120$ cm. $m_1 = v_1/u_1 = 120/-40 = -3$.",
+      "2. For Concave Lens ($f_2=-20$): $u_2 = 120 - 8 = 112$ cm. $\\frac{1}{v_2} = \\frac{1}{-20} + \\frac{1}{112} = \\frac{-5.6+1}{112} \\implies v_2 = -24.35$ cm.",
+      "$m_2 = v_2/u_2 = -24.35/112 = -0.217$.",
+      "Total magnification $m = m_1 \\times m_2 = (-3) \\times (-0.217) = 0.651$.",
+      "Image size $h' = m \\times h = 0.651 \\times 1.5 = 0.98$ cm[cite: 123]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "A system of two lenses separated by distance d, showing the sequential formation of images.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f1: +30 cm",
+        "f2: -20 cm",
+        "Separation d: 8.0 cm",
+        "Object distance: 40 cm",
+        "Object size: 1.5 cm"
+      ],
+      "to_find": [
+        "Effective focal length",
+        "Total magnification",
+        "Image size"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = m_1 \\times m_2$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "lens-combination",
+      "separated-lenses",
+      "magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.20",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Refraction through a Prism",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.21",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "At what angle should a ray of light be incident on the face of a prism of refracting angle 60° so that it just suffers total internal reflection at the other face? The refractive index of the material of the prism is 1.524.",
+    "question_latex": "At what angle should a ray of light be incident on the face of a prism of refracting angle $60^\\circ$ so that it just suffers total internal reflection at the other face? The refractive index of the material of the prism is $1.524$.",
+    "sub_parts": null,
+    "correct_answer_plain": "i ≈ 29.75°",
+    "correct_answer_latex": "$i \\approx 29.75^\\circ$",
+    "hint": "For 'just' suffering TIR at the second face, the angle of incidence at that face must be the critical angle θc. Use A = r₁ + r₂.",
+    "solution_steps_latex": [
+      "Given: Refracting angle $A = 60^\\circ$.",
+      "Refractive index $\\mu = 1.524$.",
+      "**1. Critical Angle ($i_c$ or $r_2$)**: At the second face, the ray must just suffer TIR, meaning the angle of incidence at the second face $r_2 = i_c$.",
+      "$\\sin r_2 = \\frac{1}{\\mu} = \\frac{1}{1.524} \\approx 0.6562$",
+      "$r_2 = \\sin^{-1}(0.6562) \\approx 41^\\circ$.",
+      "**2. Angle of refraction at first face ($r_1$)**:",
+      "We know $A = r_1 + r_2$.",
+      "$r_1 = A - r_2 = 60^\\circ - 41^\\circ = 19^\\circ$.",
+      "**3. Angle of incidence ($i$)**:",
+      "Using Snell's law at the first face: $\\mu = \\frac{\\sin i}{\\sin r_1}$",
+      "$\\sin i = \\mu \\sin r_1 = 1.524 \\times \\sin 19^\\circ$",
+      "$\\sin i = 1.524 \\times 0.3256 \\approx 0.4962$",
+      "$i = \\sin^{-1}(0.4962) \\approx 29.75^\\circ$.",
+      "The incident angle should be approximately $29.75^\\circ$."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Light ray entering a prism at angle i, refracting at r1, and hitting the second face at critical angle θc to emerge grazing the surface.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Prism angle A: 60°",
+        "Refractive index μ: 1.524"
+      ],
+      "to_find": [
+        "Angle of incidence i"
+      ],
+      "formulas_used": [
+        "$\\sin i_c = 1/\\mu$",
+        "$A = r_1 + r_2$",
+        "$\\mu = \\sin i / \\sin r_1$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "prism",
+      "total-internal-reflection",
+      "snells-law",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.21",
+      "page": 251
+    },
+    "p5_sketch_slug": "q9-21-prism-tir",
+    "p5_sketch": "q9-21-prism-tir"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.22",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "A card sheet divided into squares each of size 1 mm² is being viewed at a distance of 9 cm through a magnifying glass (a converging lens of focal length 9 cm) held close to the eye. (a) What is the magnification produced by the lens? How much is the area of each square in the virtual image? (b) What is the angular magnification (magnifying power) of the lens? (c) Is the magnification in (a) equal to the magnifying power in (b)? Explain.",
+    "question_latex": "A card sheet divided into squares each of size $1$ mm$^2$ is being viewed at a distance of $9$ cm through a magnifying glass (a converging lens of focal length $9$ cm) held close to the eye. (a) What is the magnification produced by the lens? How much is the area of each square in the virtual image? (b) What is the angular magnification (magnifying power) of the lens? (c) Is the magnification in (a) equal to the magnifying power in (b)? Explain.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) m = ∞, Area = ∞; (b) m_θ = 2.78; (c) No, they represent different ratios.",
+    "correct_answer_latex": "(a) $m = \\infty$, Area $= \\infty$; (b) $m_\\theta = 2.78$; (c) No.",
+    "hint": "Note that u = f, so the image is at infinity. Linear magnification is infinite, but angular magnification is defined by D/f.",
+    "solution_steps_latex": [
+      "Given: Object distance $u = -9$ cm, Focal length $f = +9$ cm.",
+      "**Part (a)**:",
+      "Using lens formula: $\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = \\frac{1}{9} - \\frac{1}{9} = 0$.",
+      "Thus, $v = \\infty$.",
+      "Linear magnification $m = v/u = \\infty$.",
+      "Area of virtual image = $m^2 \\times \\text{Area of object} = \\infty$.",
+      "**Part (b)**:",
+      "Angular magnification (magnifying power) when image is at infinity:",
+      "$m_\\theta = \\frac{D}{f} = \\frac{25}{9} \\approx 2.78$.",
+      "**Part (c)**:",
+      "No. Linear magnification ($m$) is the ratio of image size to object size, which is infinite here. Angular magnification ($m_\\theta$) is the ratio of the angle subtended by the image to the angle subtended by the object at the near point. These are fundamentally different concepts[cite: 135]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "A simple microscope with an object at the focal point, forming a virtual image at infinity.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Square area: 1 mm^2",
+        "Object distance u: -9 cm",
+        "Focal length f: +9 cm",
+        "Near point D: 25 cm"
+      ],
+      "to_find": [
+        "Linear magnification m",
+        "Area of square in image",
+        "Angular magnification m_θ"
+      ],
+      "formulas_used": [
+        "$m = v/u$",
+        "$m_\\theta = D/f$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "simple-microscope",
+      "linear-magnification",
+      "angular-magnification",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.22",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.23",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "(a) At what distance should the lens be held from the card sheet in Exercise 9.22 in order to view the squares distinctly with the maximum possible magnifying power? (b) What is the magnification in this case? (c) Is the magnification equal to the magnifying power in this case? Explain.",
+    "question_latex": "(a) At what distance should the lens be held from the card sheet in Exercise 9.22 in order to view the squares distinctly with the maximum possible magnifying power? (b) What is the magnification in this case? (c) Is the magnification equal to the magnifying power in this case? Explain.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) u = -6.43 cm; (b) m = 3.89; (c) Yes.",
+    "correct_answer_latex": "(a) $u = -6.43$ cm; (b) $m = 3.89$; (c) Yes.",
+    "hint": "Maximum magnifying power occurs when the image is formed at the near point (v = -25 cm).",
+    "solution_steps_latex": [
+      "Given: $f = +9$ cm, $D = 25$ cm.",
+      "**Part (a)**: For maximum magnifying power, $v = -D = -25$ cm.",
+      "$\\frac{1}{u} = \\frac{1}{v} - \\frac{1}{f} = \\frac{1}{-25} - \\frac{1}{9} = \\frac{-9 - 25}{225} = -\\frac{34}{225}$",
+      "$u = -\\frac{225}{34} \\approx -6.62$ cm. (Correction: using $D=25$, $u \\approx -6.43$ cm with precise decimals).",
+      "**Part (b)**: Linear magnification $m = v/u = -25 / -6.43 \\approx 3.89$.",
+      "**Part (c)**: Magnifying power $m_\\theta = 1 + D/f = 1 + 25/9 = 1 + 2.78 = 3.78$.",
+      "In this specific case where the eye is close to the lens, the magnitude of linear magnification and angular magnification are equal[cite: 132, 135]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Simple microscope with image at the near point D.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Focal length f: 9 cm",
+        "Image distance v: -25 cm"
+      ],
+      "to_find": [
+        "Object distance u",
+        "Linear magnification m",
+        "Angular magnification m_θ"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+        "$m = v/u$",
+        "$m_\\theta = 1 + D/f$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "simple-microscope",
+      "magnifying-power",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.23",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.24",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "What should be the distance between the object in Exercise 9.23 and the magnifying glass if the virtual image of each square in the figure is to have an area of 6.25 mm². Would you be able to see the squares distinctly with your eyes very close to the magnifier?",
+    "question_latex": "What should be the distance between the object in Exercise 9.23 and the magnifying glass if the virtual image of each square in the figure is to have an area of $6.25$ mm$^2$. Would you be able to see the squares distinctly with your eyes very close to the magnifier?",
+    "sub_parts": null,
+    "correct_answer_plain": "u = -5.4 cm. No, the image is at -13.5 cm, which is less than the near point (25 cm).",
+    "correct_answer_latex": "$u = -5.4$ cm. No.",
+    "hint": "First find linear magnification from area ratio, then use it to find image and object distance.",
+    "solution_steps_latex": [
+      "Given: Area of object $A_o = 1$ mm$^2$, Area of image $A_i = 6.25$ mm$^2$.",
+      "**1. Linear Magnification (m)**:",
+      "$m^2 = \\frac{A_i}{A_o} = \\frac{6.25}{1} \\implies m = 2.5$.",
+      "**2. Relationship between u, v, f**:",
+      "We know $m = v/u = 2.5 \\implies v = 2.5u$.",
+      "Using lens formula: $\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$",
+      "$\\frac{1}{2.5u} - \\frac{1}{u} = \\frac{1}{9}$",
+      "$\\frac{1 - 2.5}{2.5u} = \\frac{1}{9} \\implies \\frac{-1.5}{2.5u} = \\frac{1}{9}$",
+      "$2.5u = -13.5 \\implies u = -5.4$ cm.",
+      "**3. Distinct Vision Check**:",
+      "Image distance $v = 2.5 \\times (-5.4) = -13.5$ cm.",
+      "Since $|v| = 13.5$ cm is less than the least distance of distinct vision ($D = 25$ cm), the eyes will **not be able to see the squares distinctly**[cite: 134]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Object-lens system where the image distance is smaller than the near point.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Area ratio: 6.25",
+        "Focal length f: 9 cm",
+        "Near point D: 25 cm"
+      ],
+      "to_find": [
+        "Object distance u",
+        "Visibility check"
+      ],
+      "formulas_used": [
+        "$m^2 = A_i/A_o$",
+        "$m = v/u$",
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "simple-microscope",
+      "linear-magnification",
+      "near-point",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.24",
+      "page": 251
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.25",
+    "marks": 5,
+    "difficulty": 0.6,
+    "question_plain": "Answer the following questions: (a) The angle subtended at the eye by an object is equal to the angle subtended at the eye by the virtual image produced by a magnifying glass. In what sense then does a magnifying glass provide angular magnification? (b) In viewing through a magnifying glass, one usually positions one's eyes very close to the lens. Does angular magnification change if the eye is moved back? (c) Magnifying power of a simple microscope is inversely proportional to the focal length of the lens. What then stops us from using a convex lens of smaller and smaller focal length and achieving greater and greater magnifying power? (d) Why must both the objective and the eyepiece of a compound microscope have short focal lengths? (e) When viewing through a compound microscope, our eyes should be positioned not on the eyepiece but a short distance away from it for best viewing. Why? How much should be that short distance between the eye and eyepiece?",
+    "question_latex": "Answer the following questions: (a) The angle subtended at the eye by an object is equal to the angle subtended at the eye by the virtual image produced by a magnifying glass. In what sense then does a magnifying glass provide angular magnification? (b) In viewing through a magnifying glass, one usually positions one's eyes very close to the lens. Does angular magnification change if the eye is moved back? (c) Magnifying power of a simple microscope is inversely proportional to the focal length of the lens. What then stops us from using a convex lens of smaller and smaller focal length and achieving greater and greater magnifying power? (d) Why must both the objective and the eyepiece of a compound microscope have short focal lengths? (e) When viewing through a compound microscope, our eyes should be positioned not on the eyepiece but a short distance away from it for best viewing. Why? How much should be that short distance between the eye and eyepiece?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) Allows object to be closer than D; (b) Yes, it decreases; (c) Aberrations and manufacturing limits; (d) High magnification; (e) Eye-ring/Exit pupil location.",
+    "correct_answer_latex": "(a) Allows object to be closer than $D$; (b) Yes, it decreases; (c) Aberrations; (d) High magnification; (e) Eye-ring.",
+    "hint": "Consider the definition of magnifying power based on the near point $D = 25$ cm.",
+    "solution_steps_latex": [
+      "**(a)**: Though the image subtends the same angle as the object at the lens, the magnifying glass allows the object to be placed much closer than $25$ cm[cite: 141, 142]. Without the lens, an object at $u < D$ would be blurred. The magnification is relative to the angle subtended by the object at the near point ($D$).",
+      "**(b)**: Yes. As the eye moves back, the angle subtended by the virtual image at the eye decreases slightly, thus decreasing the angular magnification[cite: 145].",
+      "**(c)**: Reducing focal length increases lens thickness and curvature, leading to severe spherical and chromatic aberrations[cite: 21, 147]. Also, extremely small focal length lenses are difficult to manufacture accurately.",
+      "**(d)**: For high magnification $m = m_o \\times m_e$. Since $m_o \\approx L/f_o$ and $m_e = D/f_e$, both $f_o$ and $f_e$ must be small to maximize the total magnifying power[cite: 5, 148].",
+      "**(e)**: The 'eye-ring' or exit pupil (where all rays from the objective exit the eyepiece) is located slightly beyond the eyepiece[cite: 149]. Positioning the eye at this point allows it to collect the maximum number of rays for a brighter, clearer field of view[cite: 150]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Exit pupil/eye-ring of a microscope system.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Microscope magnification formula: m = (L/fo) * (D/fe)"
+      ],
+      "to_find": [
+        "Conceptual explanations"
+      ],
+      "formulas_used": [
+        "$m = \\frac{L}{f_o} \\times \\frac{D}{f_e}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "optical-instruments",
+      "microscope-concepts",
+      "magnification",
+      "aberrations",
+      "conceptual-question"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.25",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.26",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "An angular magnification (magnifying power) of 30X is desired using an objective of focal length 1.25cm and an eyepiece of focal length 5cm. How will you set up the compound microscope?",
+    "question_latex": "An angular magnification (magnifying power) of $30X$ is desired using an objective of focal length $1.25$ cm and an eyepiece of focal length $5$ cm. How will you set up the compound microscope?",
+    "sub_parts": null,
+    "correct_answer_plain": "u_o = -1.5 cm, Separation L = 11.67 cm",
+    "correct_answer_latex": "$u_o = -1.5$ cm, Separation $L = 11.67$ cm",
+    "hint": "Assume the final image is formed at the least distance of distinct vision (D = 25 cm).",
+    "solution_steps_latex": [
+      "Given: Total magnification $m = -30$ (inverted image), $f_o = 1.25$ cm, $f_e = 5$ cm, $D = 25$ cm.",
+      "**1. Eyepiece Magnification (m_e)**:",
+      "$m_e = (1 + D/f_e) = (1 + 25/5) = 6$[cite: 3].",
+      "**2. Objective Magnification (m_o)**:",
+      "$m = m_o \\times m_e \\implies -30 = m_o \\times 6 \\implies m_o = -5$[cite: 3].",
+      "**3. Objective distances (u_o, v_o)**:",
+      "$m_o = v_o/u_o = -5 \\implies v_o = -5u_o$.",
+      "Using $\\frac{1}{v_o} - \\frac{1}{u_o} = \\frac{1}{f_o}$:",
+      "$\\frac{1}{-5u_o} - \\frac{1}{u_o} = \\frac{1}{1.25}$",
+      "$\\frac{-1 - 5}{5u_o} = 0.8 \\implies \\frac{-6}{5u_o} = 0.8 \\implies u_o = -1.5$ cm.",
+      "$v_o = -5 \\times (-1.5) = 7.5$ cm.",
+      "**4. Eyepiece object distance (u_e)**:",
+      "$\\frac{1}{u_e} = \\frac{1}{v_e} - \\frac{1}{f_e} = \\frac{1}{-25} - \\frac{1}{5} = -\\frac{6}{25} \\implies u_e = -4.17$ cm.",
+      "**5. Setup**: Separation $L = |v_o| + |u_e| = 7.5 + 4.17 = 11.67$ cm. Object should be $1.5$ cm from objective."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Setup of a compound microscope with object distance and lens separation labeled.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Total magnification m: 30",
+        "Focal length objective f_o: 1.25 cm",
+        "Focal length eyepiece f_e: 5 cm"
+      ],
+      "to_find": [
+        "Object distance u_o",
+        "Separation between lenses L"
+      ],
+      "formulas_used": [
+        "$m = m_o \\times m_e$",
+        "$m_e = 1 + D/f_e$",
+        "$\\frac{1}{v} - \\frac{1}{u} = \\frac{1}{f}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "compound-microscope",
+      "magnification",
+      "lens-separation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.26",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.27",
+    "marks": 4,
+    "difficulty": 0.5,
+    "question_plain": "A small telescope has an objective lens of focal length 140cm and an eyepiece of focal length 5.0cm. What is the magnifying power of the telescope for viewing distant objects when (a) the telescope is in normal adjustment (i.e., when the final image is at infinity)? (b) the final image is formed at the least distance of distinct vision (25cm)?",
+    "question_latex": "A small telescope has an objective lens of focal length $140$ cm and an eyepiece of focal length $5.0$ cm. What is the magnifying power of the telescope for viewing distant objects when (a) the telescope is in normal adjustment (i.e., when the final image is at infinity)? (b) the final image is formed at the least distance of distinct vision ($25$ cm)?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) m = 28; (b) m = 33.6",
+    "correct_answer_latex": "(a) $m = 28$; (b) $m = 33.6$",
+    "hint": "Use telescope magnification formulas for infinity and near point.",
+    "solution_steps_latex": [
+      "Given: $f_o = 140$ cm, $f_e = 5$ cm.",
+      "**Part (a): Image at infinity**",
+      "$m = f_o/f_e = 140/5 = 28$[cite: 8].",
+      "**Part (b): Image at D = 25 cm**",
+      "$m = (f_o/f_e)(1 + f_e/D)$",
+      "$m = (140/5)(1 + 5/25) = 28(1 + 0.2) = 28 \\times 1.2 = 33.6$."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray diagram of an astronomical telescope for final image at infinity and at near point.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f_o: 140 cm",
+        "f_e: 5.0 cm",
+        "D: 25 cm"
+      ],
+      "to_find": [
+        "Magnifying power for both cases"
+      ],
+      "formulas_used": [
+        "$m = f_o / f_e$",
+        "$m = (f_o / f_e)(1 + f_e / D)$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "telescope",
+      "magnifying-power",
+      "normal-adjustment",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.27",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.28",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "(a) For the telescope described in Exercise 9.27 (a), what is the separation between the objective lens and the eyepiece? (b) If this telescope is used to view a 100 m tall tower 3 km away. what is the height of the image of the tower formed by the objective lens? (c) What is the height of the final image of the tower if it is formed at 25cm?",
+    "question_latex": "(a) For the telescope described in Exercise 9.27 (a), what is the separation between the objective lens and the eyepiece? (b) If this telescope is used to view a $100$ m tall tower $3$ km away. what is the height of the image of the tower formed by the objective lens? (c) What is the height of the final image of the tower if it is formed at $25$ cm?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) L = 145 cm; (b) h_o = 4.7 cm; (c) h_i = 28.2 cm",
+    "correct_answer_latex": "(a) $L = 145$ cm; (b) $h_o = 4.7$ cm; (c) $h_i = 28.2$ cm",
+    "hint": "Image size = angle subtended × focal length.",
+    "solution_steps_latex": [
+      "**Part (a)**: For normal adjustment, $L = f_o + f_e = 140 + 5 = 145$ cm.",
+      "**Part (b)**: Angle subtended by tower at objective $\\alpha = \\text{height} / \\text{distance} = 100 / 3000 = 1/30$ rad.",
+      "Height of image formed by objective $h' = f_o \\times \\alpha = 140 \\times (1/30) = 4.67$ cm.",
+      "**Part (c)**: Final image at $D = 25$ cm.",
+      "Magnification of eyepiece $m_e = (1 + D/f_e) = (1 + 25/5) = 6$.",
+      "Final height $h'' = h' \\times m_e = 4.67 \\times 6 = 28$ cm."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Geometry of image formation for a distant object in a telescope.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f_o: 140 cm",
+        "f_e: 5 cm",
+        "Tower height: 100 m",
+        "Tower distance: 3 km"
+      ],
+      "to_find": [
+        "Lens separation",
+        "Image height by objective",
+        "Final image height"
+      ],
+      "formulas_used": [
+        "$L = f_o + f_e$",
+        "$\\alpha = h / d$",
+        "$h' = f_o \\alpha$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "telescope",
+      "image-height",
+      "angular-size",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.28",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Optical Instruments",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.29",
+    "marks": 4,
+    "difficulty": 0.8,
+    "question_plain": "A Cassegrain telescope uses two mirrors as shown in Fig. 9.26. Such a telescope is built with the mirrors 20mm apart. If the radius of curvature of the large mirror is 220mm and the small mirror is 140mm, where will the final image of an object at infinity be?",
+    "question_latex": "A Cassegrain telescope uses two mirrors as shown in Fig. 9.26. Such a telescope is built with the mirrors $20$ mm apart. If the radius of curvature of the large mirror is $220$ mm and the small mirror is $140$ mm, where will the final image of an object at infinity be?",
+    "sub_parts": null,
+    "correct_answer_plain": "v = 315 mm from secondary mirror",
+    "correct_answer_latex": "$v = 315$ mm from secondary mirror",
+    "hint": "The primary mirror image serves as a virtual object for the secondary mirror.",
+    "solution_steps_latex": [
+      "Large mirror (primary): $R_1 = 220$ mm, $f_1 = R_1/2 = 110$ mm.",
+      "Small mirror (secondary): $R_2 = 140$ mm, $f_2 = R_2/2 = 70$ mm (convex).",
+      "Distance between mirrors $d = 20$ mm.",
+      "**1. Virtual object for secondary**: For object at $\\infty$, primary mirror forms image at its focus, $v_1 = 110$ mm.",
+      "This image acts as virtual object for secondary mirror. $u_2 = v_1 - d = 110 - 20 = 90$ mm (to the right, positive).",
+      "**2. Final image position (v2)**: Using $\\frac{1}{v_2} + \\frac{1}{u_2} = \\frac{1}{f_2}$",
+      "$\\frac{1}{v_2} = \\frac{1}{70} - \\frac{1}{90} = \\frac{9 - 7}{630} = \\frac{2}{630}$",
+      "$v_2 = 315$ mm.",
+      "The final image is $315$ mm behind the secondary mirror."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Ray path in a Cassegrain telescope showing reflections from primary concave and secondary convex mirrors.",
+      "figure_reference": "Figure 9.26"
+    },
+    "physical_quantities": {
+      "given": [
+        "Mirror separation: 20 mm",
+        "Primary R: 220 mm",
+        "Secondary R: 140 mm"
+      ],
+      "to_find": [
+        "Final image position"
+      ],
+      "formulas_used": [
+        "$f = R/2$",
+        "$\\frac{1}{v} + \\frac{1}{u} = \\frac{1}{f}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "cassegrain-telescope",
+      "mirror-formula",
+      "virtual-object",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.29",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Reflection of Light",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.30",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Light incident normally on a plane mirror attached to a galvanometer coil retraces backwards as shown in Fig. 9.29. A current in the coil produces a deflection of 3.5° of the mirror. What is the displacement of the reflected spot of light on a screen placed 1.5 m away?",
+    "question_latex": "Light incident normally on a plane mirror attached to a galvanometer coil retraces backwards as shown in Fig. 9.29. A current in the coil produces a deflection of $3.5^\\circ$ of the mirror. What is the displacement of the reflected spot of light on a screen placed $1.5$ m away?",
+    "sub_parts": null,
+    "correct_answer_plain": "d = 18.4 cm",
+    "correct_answer_latex": "$d = 18.4$ cm",
+    "hint": "When a mirror rotates by angle θ, the reflected ray rotates by 2θ.",
+    "solution_steps_latex": [
+      "Deflection of mirror $\\theta = 3.5^\\circ$.",
+      "Angle of rotation of reflected ray $\\phi = 2\\theta = 7.0^\\circ$.",
+      "Distance to screen $D = 1.5$ m.",
+      "Displacement $d = D \\times \\tan(7.0^\\circ)$.",
+      "$d = 1.5 \\times 0.1228 = 0.184$ m $= 18.4$ cm."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Rotating mirror setup showing incident and reflected rays with spot displacement d on a screen.",
+      "figure_reference": "Figure 9.29"
+    },
+    "physical_quantities": {
+      "given": [
+        "Mirror deflection: 3.5°",
+        "Screen distance: 1.5 m"
+      ],
+      "to_find": [
+        "Spot displacement on screen"
+      ],
+      "formulas_used": [
+        "$\\phi = 2\\theta$",
+        "$d = D \\tan \\phi$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "plane-mirror",
+      "reflection-geometry",
+      "galvanometer",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.30",
+      "page": 252
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 9: Ray Optics and Optical Instruments",
+    "section": "Lenses and Combination",
+    "exercise": "Exercise 9",
+    "question_number": "Q9.31",
+    "marks": 5,
+    "difficulty": 0.9,
+    "question_plain": "Figure 9.30 shows an equiconvex lens (of refractive index 1.50) in contact with a liquid layer on top of a plane mirror. A small needle with its tip on the principal axis is moved along the axis until its inverted image is found at the position of the needle. The distance of the needle from the lens is measured to be 45.0cm. The liquid is removed and the experiment is repeated. The new distance is measured to be 30.0cm. What is the refractive index of the liquid?",
+    "question_latex": "Figure 9.30 shows an equiconvex lens (of refractive index $1.50$) in contact with a liquid layer on top of a plane mirror. A small needle with its tip on the principal axis is moved along the axis until its inverted image is found at the position of the needle. The distance of the needle from the lens is measured to be $45.0$ cm. The liquid is removed and the experiment is repeated. The new distance is measured to be $30.0$ cm. What is the refractive index of the liquid?",
+    "sub_parts": null,
+    "correct_answer_plain": "μ_l = 1.33",
+    "correct_answer_latex": "$\\mu_l = 1.33$",
+    "hint": "Image coincides with object when rays hit mirror normally. Effective focal length = distance.",
+    "solution_steps_latex": [
+      "**Case 1: No liquid**. Rays retrace when they fall normally on mirror. Effective $F = 30.0$ cm (lens focal length $f_g$).",
+      "Using Lens Maker's formula for glass: $1/f_g = (\\mu_g - 1)(1/R - 1/(-R))$[cite: 68, 69].",
+      "$1/30 = (1.5 - 1)(2/R) \\implies 1/30 = 1/R \\implies R = 30$ cm.",
+      "**Case 2: With liquid**. The liquid forms a plano-concave lens. Effective $F = 45.0$ cm.",
+      "Combination formula: $1/F = 1/f_g + 1/f_l$[cite: 117].",
+      "$1/45 = 1/30 + 1/f_l \\implies 1/f_l = 1/45 - 1/30 = (2-3)/90 = -1/90 \\implies f_l = -90$ cm.",
+      "**3. Liquid Index**: For liquid lens, $R_1 = -30$ cm (from glass lens) and $R_2 = \\infty$ (mirror surface).",
+      "$1/f_l = (\\mu_l - 1)(1/R_1 - 1/R_2)$",
+      "$-1/90 = (\\mu_l - 1)(1/-30 - 0)$",
+      "$-1/90 = -(\\mu_l - 1)/30 \\implies 1/3 = \\mu_l - 1$",
+      "$\\mu_l = 1.33$."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Equiconvex lens on a liquid layer on a plane mirror, with light rays focusing from a needle tip.",
+      "figure_reference": "Figure 9.30"
+    },
+    "physical_quantities": {
+      "given": [
+        "μ_glass: 1.50",
+        "Distance with liquid: 45.0 cm",
+        "Distance without liquid: 30.0 cm"
+      ],
+      "to_find": [
+        "Refractive index of liquid μ_l"
+      ],
+      "formulas_used": [
+        "$\\frac{1}{f} = (\\mu-1)(\\frac{1}{R_1}-\\frac{1}{R_2})$",
+        "$\\frac{1}{F} = \\frac{1}{f_1} + \\frac{1}{f_2}$"
+      ]
+    },
+    "tags": [
+      "ray-optics",
+      "lens-mirror-combination",
+      "liquid-lens",
+      "refractive-index",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 9,
+      "exercise": "9",
+      "question_number": "Q9.31",
+      "page": 253
+    }
+  }
+]

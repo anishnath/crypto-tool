@@ -1,0 +1,23 @@
+{
+  "q12-5-bohr-transition-3to1": {
+    "type": "bohr-model",
+    "params": {
+      "n_initial": 3, "n_final": 1,
+      "title": "Bohr Model — Transition n=3→1"
+    }
+  },
+  "q12-7-bohr-ionization": {
+    "type": "bohr-model",
+    "params": {
+      "n_initial": 4, "n_final": 2, "show_transition": true,
+      "title": "Bohr Model — Balmer Series (n=4→2)"
+    }
+  },
+  "q12-8-bohr-radius": {
+    "type": "bohr-model",
+    "params": {
+      "n_initial": 2, "n_final": 1, "show_transition": true,
+      "title": "Bohr Model — Lyman Series (n=2→1)"
+    }
+  }
+}

@@ -1,0 +1,340 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 11: Dual Nature of Radiation and Matter",
+    "section": "Photoelectric Effect",
+    "exercise": "Exercise 11",
+    "question_number": "Q11.1",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "Find the (a) maximum frequency, and (b) minimum wavelength of X-rays produced by 30 kV electrons.",
+    "question_latex": "Find the (a) maximum frequency, and (b) minimum wavelength of X-rays produced by $30$ kV electrons.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 7.24 × 10¹⁸ Hz; (b) 0.041 nm",
+    "correct_answer_latex": "(a) $7.24 \\times 10^{18}$ Hz; (b) $0.041$ nm",
+    "hint": "Use E = eV = hν_max and λ_min = c/ν_max.",
+    "solution_steps_latex": [
+      "Given: Accelerating potential $V = 30$ kV $= 3 \\times 10^4$ V. [cite: 233]",
+      "**Part (a): Maximum Frequency (ν_max)**",
+      "Maximum energy of photon $E_{max} = eV$. [cite: 212]",
+      "Also, $E_{max} = h\\nu_{max}$. [cite: 212]",
+      "$\\nu_{max} = \\frac{eV}{h} = \\frac{1.6 \\times 10^{-19} \\times 3 \\times 10^4}{6.63 \\times 10^{-34}}$",
+      "$\\nu_{max} = \\frac{4.8 \\times 10^{-15}}{6.63 \\times 10^{-34}} \\approx 7.24 \\times 10^{18}$ Hz.",
+      "**Part (b): Minimum Wavelength (λ_min)**",
+      "$\\lambda_{min} = \\frac{c}{\\nu_{max}}$",
+      "$\\lambda_{min} = \\frac{3 \\times 10^8}{7.24 \\times 10^{18}} \\approx 4.14 \\times 10^{-11}$ m $= 0.0414$ nm."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Potential V: 30 kV"
+      ],
+      "to_find": [
+        "Maximum frequency ν_max",
+        "Minimum wavelength λ_min"
+      ],
+      "formulas_used": [
+        "$E = h\\nu$",
+        "$E = eV$",
+        "$\\lambda = c/\\nu$"
+      ]
+    },
+    "tags": [
+      "dual-nature",
+      "x-rays",
+      "photon-energy",
+      "plancks-constant",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 11,
+      "exercise": "11",
+      "question_number": "Q11.1",
+      "page": 288
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 11: Dual Nature of Radiation and Matter",
+    "section": "Photoelectric Effect",
+    "exercise": "Exercise 11",
+    "question_number": "Q11.2",
+    "marks": 5,
+    "difficulty": 0.6,
+    "question_plain": "The work function of caesium metal is 2.14 eV. When light of frequency 6 × 10¹⁴ Hz is incident on the metal surface, photoemission of electrons occurs. What is the (a) maximum kinetic energy of the emitted electrons, (b) Stopping potential, and (c) maximum speed of the emitted photoelectrons?",
+    "question_latex": "The work function of caesium metal is $2.14$ eV. [cite: 236] When light of frequency $6 \\times 10^{14}$ Hz is incident on the metal surface, photoemission of electrons occurs. [cite: 237] What is the (a) maximum kinetic energy of the emitted electrons, [cite: 238] (b) Stopping potential, [cite: 239] and (c) maximum speed of the emitted photoelectrons? [cite: 240]",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) 0.34 eV = 0.54 × 10⁻¹⁹J; (b) 0.34V; (c) 344 km/s",
+    "correct_answer_latex": "(a) $0.34$ eV $= 0.54 \\times 10^{-19}$J; (b) $0.34$V; (c) $344$ km/s",
+    "hint": "Use Einstein's photoelectric equation: K_max = hν - ϕ₀.",
+    "solution_steps_latex": [
+      "Given: Work function $\\phi_0 = 2.14$ eV [cite: 236]",
+      "Frequency $\\nu = 6 \\times 10^{14}$ Hz [cite: 237]",
+      "**Part (a): Maximum Kinetic Energy (K_max)**",
+      "Energy of incident photon $E = h\\nu = (6.63 \\times 10^{-34} \\times 6 \\times 10^{14}) / (1.6 \\times 10^{-19})$ eV",
+      "$E \\approx 2.485$ eV",
+      "$K_{max} = E - \\phi_0 = 2.485 - 2.14 = 0.345$ eV [cite: 212]",
+      "**Part (b): Stopping Potential (V_0)**",
+      "$K_{max} = eV_0 \\implies V_0 = K_{max}/e$ [cite: 212]",
+      "$V_0 = 0.345$ V.",
+      "**Part (c): Maximum Speed (v_max)**",
+      "$K_{max} = 0.345 \\text{ eV} = 0.345 \\times 1.6 \\times 10^{-19} = 5.52 \\times 10^{-20}$ J",
+      "$\\frac{1}{2}mv_{max}^2 = K_{max} \\implies v_{max} = \\sqrt{\\frac{2 K_{max}}{m}}$",
+      "$v_{max} = \\sqrt{\\frac{2 \\times 5.52 \\times 10^{-20}}{9.1 \\times 10^{-31}}} \\approx 3.48 \\times 10^5$ m/s."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Work function ϕ₀: 2.14 eV",
+        "Frequency ν: 6 × 10¹⁴ Hz"
+      ],
+      "to_find": [
+        "Maximum kinetic energy K_max",
+        "Stopping potential V_0",
+        "Maximum speed v_max"
+      ],
+      "formulas_used": [
+        "$K_{max} = h\\nu - \\phi_0$",
+        "$K_{max} = eV_0$",
+        "$K_{max} = \\frac{1}{2}mv^2$"
+      ]
+    },
+    "tags": [
+      "photoelectric-effect",
+      "einstein-equation",
+      "work-function",
+      "stopping-potential",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 11,
+      "exercise": "11",
+      "question_number": "Q11.2",
+      "page": 289
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 11: Dual Nature of Radiation and Matter",
+    "section": "Photoelectric Effect",
+    "exercise": "Exercise 11",
+    "question_number": "Q11.3",
+    "marks": 1,
+    "difficulty": 0.2,
+    "question_plain": "The photoelectric cut-off voltage in a certain experiment is 1.5 V. What is the maximum kinetic energy of photoelectrons emitted?",
+    "question_latex": "The photoelectric cut-off voltage in a certain experiment is $1.5$ V. [cite: 241] What is the maximum kinetic energy of photoelectrons emitted? [cite: 241]",
+    "sub_parts": null,
+    "correct_answer_plain": "K_max = 1.5 eV = 2.4 × 10⁻¹⁹ J",
+    "correct_answer_latex": "$K_{max} = 1.5$ eV $= 2.4 \\times 10^{-19}$ J",
+    "hint": "Relationship between stopping potential and max kinetic energy: K_max = eV_0.",
+    "solution_steps_latex": [
+      "Given: Stopping potential $V_0 = 1.5$ V. [cite: 241]",
+      "We know $K_{max} = eV_0$. [cite: 212]",
+      "$K_{max} = 1.5$ eV.",
+      "In Joules: $K_{max} = 1.5 \\times 1.6 \\times 10^{-19}$ J",
+      "$K_{max} = 2.4 \\times 10^{-19}$ J."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Cut-off voltage V_0: 1.5 V"
+      ],
+      "to_find": [
+        "Maximum kinetic energy K_max"
+      ],
+      "formulas_used": [
+        "$K_{max} = eV_0$"
+      ]
+    },
+    "tags": [
+      "photoelectric-effect",
+      "stopping-potential",
+      "kinetic-energy",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 11,
+      "exercise": "11",
+      "question_number": "Q11.3",
+      "page": 289
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 11: Dual Nature of Radiation and Matter",
+    "section": "Photon Nature of Light",
+    "exercise": "Exercise 11",
+    "question_number": "Q11.4",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "Monochromatic light of wavelength 632.8 nm is produced by a helium-neon laser. The power emitted is 9.42 mW. (a) Find the energy and momentum of each photon in the light beam, (b) How many photons per second, on the average, arrive at a target irradiated by this beam? (Assume the beam to have uniform cross-section which is less than the target area), and (c) How fast does a hydrogen atom have to travel in order to have the same momentum as that of the photon?",
+    "question_latex": "Monochromatic light of wavelength $632.8$ nm is produced by a helium-neon laser. [cite: 242] The power emitted is $9.42$ mW. [cite: 242] (a) Find the energy and momentum of each photon in the light beam, [cite: 243] (b) How many photons per second, on the average, arrive at a target irradiated by this beam? [cite: 243] (Assume the beam to have uniform cross-section which is less than the target area), [cite: 244] and (c) How fast does a hydrogen atom have to travel in order to have the same momentum as that of the photon? [cite: 246]",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) E = 3.14 × 10⁻¹⁹ J, p = 1.05 × 10⁻²⁷ kg m/s; (b) N = 3 × 10¹⁶ photons/s; (c) v = 0.63 m/s",
+    "correct_answer_latex": "(a) $E = 3.14 \\times 10^{-19}$ J, $p = 1.05 \\times 10^{-27}$ kg m/s; (b) $N = 3 \\times 10^{16}$ photons/s; (c) $v = 0.63$ m/s",
+    "hint": "Use E = hc/λ and p = h/λ.",
+    "solution_steps_latex": [
+      "Given: Wavelength $\\lambda = 632.8$ nm $= 6.328 \\times 10^{-7}$ m. [cite: 242]",
+      "Power $P = 9.42$ mW $= 9.42 \\times 10^{-3}$ W. [cite: 242]",
+      "**Part (a): Energy and Momentum**",
+      "Energy $E = \\frac{hc}{\\lambda} = \\frac{6.63 \\times 10^{-34} \\times 3 \\times 10^8}{6.328 \\times 10^{-7}} \\approx 3.14 \\times 10^{-19}$ J.",
+      "Momentum $p = \\frac{h}{\\lambda} = \\frac{6.63 \\times 10^{-34}}{6.328 \\times 10^{-7}} \\approx 1.05 \\times 10^{-27}$ kg m/s. [cite: 212]",
+      "**Part (b): Photons per second (N)**",
+      "$P = N \\times E \\implies N = P/E$",
+      "$N = \\frac{9.42 \\times 10^{-3}}{3.14 \\times 10^{-19}} = 3 \\times 10^{16}$ photons/s.",
+      "**Part (c): Speed of Hydrogen atom (v)**",
+      "$p_{photon} = p_{atom} = m_H v$",
+      "Mass of hydrogen atom $m_H \\approx 1.67 \\times 10^{-27}$ kg.",
+      "$v = \\frac{p}{m_H} = \\frac{1.05 \\times 10^{-27}}{1.67 \\times 10^{-27}} \\approx 0.63$ m/s."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wavelength λ: 632.8 nm",
+        "Power P: 9.42 mW"
+      ],
+      "to_find": [
+        "Photon energy E",
+        "Photon momentum p",
+        "Photon count rate N",
+        "Hydrogen atom speed v"
+      ],
+      "formulas_used": [
+        "$E = hc/\\lambda$",
+        "$p = h/\\lambda$",
+        "$P = NE$",
+        "$p = mv$"
+      ]
+    },
+    "tags": [
+      "photon-nature",
+      "energy-calculation",
+      "momentum",
+      "photon-flux",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 11,
+      "exercise": "11",
+      "question_number": "Q11.4",
+      "page": 289
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 11: Dual Nature of Radiation and Matter",
+    "section": "Photoelectric Effect",
+    "exercise": "Exercise 11",
+    "question_number": "Q11.5",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "In an experiment on photoelectric effect, the slope of the cut-off voltage versus frequency of incident light is found to be 4.12 × 10⁻¹⁵ V s. Calculate the value of Planck's constant.",
+    "question_latex": "In an experiment on photoelectric effect, the slope of the cut-off voltage versus frequency of incident light is found to be $4.12 \\times 10^{-15}$ V s. [cite: 247] Calculate the value of Planck's constant. [cite: 248]",
+    "sub_parts": null,
+    "correct_answer_plain": "h = 6.592 × 10⁻³⁴ J s",
+    "correct_answer_latex": "$h = 6.592 \\times 10^{-34}$ J s",
+    "hint": "The slope of the V_0 vs ν graph is h/e.",
+    "solution_steps_latex": [
+      "Einstein's equation: $eV_0 = h\\nu - \\phi_0$",
+      "$V_0 = (h/e)\\nu - (\\phi_0/e)$",
+      "This is in form $y = mx + c$, where slope $m = h/e$.",
+      "Given: Slope $= 4.12 \\times 10^{-15}$ V s. [cite: 247]",
+      "$h = \\text{slope} \\times e$",
+      "$h = 4.12 \\times 10^{-15} \\times 1.6 \\times 10^{-19}$",
+      "$h = 6.592 \\times 10^{-34}$ J s."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Graph showing the linear relationship between stopping potential and frequency of incident light.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Slope of V0 vs ν graph: 4.12 × 10⁻¹⁵ V s"
+      ],
+      "to_find": [
+        "Planck's constant h"
+      ],
+      "formulas_used": [
+        "$\\text{Slope} = h/e$"
+      ]
+    },
+    "tags": [
+      "photoelectric-effect",
+      "stopping-potential",
+      "plancks-constant",
+      "graphical-analysis",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 11,
+      "exercise": "11",
+      "question_number": "Q11.5",
+      "page": 289
+    },
+    "p5_sketch_slug": "q11-5-photoelectric",
+    "p5_sketch": "q11-5-photoelectric"
+  }
+]

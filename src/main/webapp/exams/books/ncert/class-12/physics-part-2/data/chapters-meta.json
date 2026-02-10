@@ -1,0 +1,42 @@
+{
+  "subject": "Physics",
+  "partLabel": "Part 2",
+  "chapters": [
+    {
+      "slug": "ray-optics-and-optical-instruments",
+      "num": "9",
+      "name": "Ray Optics and Optical Instruments",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 9 Ray Optics and Optical Instruments solutions. Reflection of Light by Spherical Mirrors, Refraction, Total Internal Reflection, Refraction through a Prism, Refraction at Spherical Surfaces and by Lenses, Optical Instruments."
+    },
+    {
+      "slug": "wave-optics",
+      "num": "10",
+      "name": "Wave Optics",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 10 Wave Optics solutions. Refraction and Reflection of Plane Waves using Huygens Principle, Huygens Principle, Refraction of Plane Waves, Interference of Light Waves and Young's Experiment."
+    },
+    {
+      "slug": "dual-nature-of-radiation-and-matter",
+      "num": "11",
+      "name": "Dual Nature of Radiation and Matter",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 11 Dual Nature of Radiation and Matter solutions. Photoelectric Effect, Photon Nature of Light."
+    },
+    {
+      "slug": "atoms",
+      "num": "12",
+      "name": "Atoms",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 12 Atoms solutions. Alpha-particle Scattering and Rutherford's Nuclear Model of Atom, Bohr Model of the Hydrogen Atom, Hydrogen Spectrum, Bohr's Explanation of de Broglie's Hypothesis."
+    },
+    {
+      "slug": "nuclei",
+      "num": "13",
+      "name": "Nuclei",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 13 Nuclei solutions. Mass-Energy and Nuclear Binding Energy, Nuclear Fission, Nuclear Fusion, Size of the Nucleus, Nuclear Reactions."
+    },
+    {
+      "slug": "semiconductor-electronics",
+      "num": "14",
+      "name": "Semiconductor Electronics: Materials, Devices and Simple Circuits",
+      "desc": "NCERT Class 12 Physics Part 2 Chapter 14 Semiconductor Electronics: Materials, Devices and Simple Circuits solutions. n-type Semiconductor, p-type Semiconductor, Energy Bands, p-n Junction, p-n Junction Diode, Rectifiers."
+    }
+  ]
+}

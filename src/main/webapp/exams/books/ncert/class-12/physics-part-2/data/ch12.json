@@ -1,0 +1,562 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Alpha-particle Scattering and Rutherford's Nuclear Model of Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.1",
+    "marks": 5,
+    "difficulty": 0.4,
+    "question_plain": "Choose the correct alternative from the clues given at the end of the each statement: (a) The size of the atom in Thomson's model is .......... the atomic size in Rutherford's model. (much greater than/no different from/much less than.) (b) In the ground state of .......... electrons are in stable equilibrium, while in .......... electrons always experience a net force. (Thomson's model/ Rutherford's model.) (c) A classical atom based on .......... is doomed to collapse. (Thomson's model/ Rutherford's model.) (d) An atom has a nearly continuous mass distribution in a .......... but has a highly non-uniform mass distribution in .......... (Thomson's model/ Rutherford's model.) (e) The positively charged part of the atom possesses most of the mass in .......... (Rutherford's model/both the models.)",
+    "question_latex": "Choose the correct alternative from the clues given at the end of the each statement: (a) The size of the atom in Thomson's model is .......... the atomic size in Rutherford's model. (much greater than/no different from/much less than.) (b) In the ground state of .......... electrons are in stable equilibrium, while in .......... electrons always experience a net force. (Thomson's model/ Rutherford's model.) (c) A classical atom based on .......... is doomed to collapse. (Thomson's model/ Rutherford's model.) (d) An atom has a nearly continuous mass distribution in a .......... but has a highly non-uniform mass distribution in .......... (Thomson's model/ Rutherford's model.) (e) The positively charged part of the atom possesses most of the mass in .......... (Rutherford's model/both the models.)",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) no different from; (b) Thomson's model, Rutherford's model; (c) Rutherford's model; (d) Thomson's model, Rutherford's model; (e) both the models.",
+    "correct_answer_latex": "(a) no different from; (b) Thomson's model, Rutherford's model; (c) Rutherford's model; (d) Thomson's model, Rutherford's model; (e) both the models.",
+    "hint": "Recall the fundamental differences between the plum-pudding model and the nuclear model.",
+    "solution_steps_latex": [
+      "**(a)**: **no different from**. Both models describe the overall size of the atom to be of the order of $10^{-10}$ m[cite: 272, 274].",
+      "**(b)**: **Thomson's model; Rutherford's model**. In Thomson's model, electrons are embedded in a positive 'pudding' and can be in equilibrium, whereas in Rutherford's model, electrons revolve and thus experience a centripetal force[cite: 275, 277].",
+      "**(c)**: **Rutherford's model**. According to classical electromagnetism, an accelerating (revolving) electron must radiate energy and eventually spiral into the nucleus[cite: 278, 280].",
+      "**(d)**: **Thomson's model; Rutherford's model**. Thomson's model assumes mass is distributed throughout the atom, while Rutherford's model concentrates most mass in a tiny nucleus[cite: 281, 282].",
+      "**(e)**: **both the models**. In both Thomson's and Rutherford's descriptions, the positive charge carries the bulk of the atomic mass[cite: 283, 284]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Comparison of Thomson's plum pudding model and Rutherford's nuclear model of the atom.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Conceptual alternatives"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "atoms",
+      "thomsons-model",
+      "rutherfords-model",
+      "atomic-structure",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.1",
+      "page": 305
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Alpha-particle Scattering and Rutherford's Nuclear Model of Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.2",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Suppose you are given a chance to repeat the alpha-particle scattering experiment using a thin sheet of solid hydrogen in place of the gold foil. (Hydrogen is a solid at temperatures below 14 K.) What results do you expect?",
+    "question_latex": "Suppose you are given a chance to repeat the alpha-particle scattering experiment using a thin sheet of solid hydrogen in place of the gold foil. (Hydrogen is a solid at temperatures below $14$ K.) What results do you expect?",
+    "sub_parts": null,
+    "correct_answer_plain": "No large-angle scattering would be observed.",
+    "correct_answer_latex": "No large-angle scattering would be observed.",
+    "hint": "Consider the mass of an alpha particle compared to a hydrogen nucleus (proton).",
+    "solution_steps_latex": [
+      "In the alpha-particle scattering experiment, large-angle scattering occurs because the target nucleus (gold) is much heavier than the incident alpha particle[cite: 285].",
+      "The mass of an alpha particle is approximately $4$ u, whereas the mass of a hydrogen nucleus (proton) is approximately $1$ u[cite: 286].",
+      "When a heavier particle (alpha) hits a lighter target (hydrogen), the incident particle will not be deflected at large angles or bounced back[cite: 286].",
+      "Therefore, the alpha particles would pass through the solid hydrogen with almost no deflection, and no large-angle scattering would be observed[cite: 286]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Temperature for solid hydrogen: < 14 K"
+      ],
+      "to_find": [
+        "Expected experimental results"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "atoms",
+      "alpha-particle-scattering",
+      "rutherfords-experiment",
+      "conservation-of-momentum",
+      "reasoning"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.2",
+      "page": 305
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr Model of the Hydrogen Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.3",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "A difference of 2.3 eV separates two energy levels in an atom. What is the frequency of radiation emitted when the atom make a transition from the upper level to the lower level?",
+    "question_latex": "A difference of $2.3$ eV separates two energy levels in an atom. What is the frequency of radiation emitted when the atom make a transition from the upper level to the lower level?",
+    "sub_parts": null,
+    "correct_answer_plain": "5.6 × 10¹⁴ Hz",
+    "correct_answer_latex": "$5.6 \\times 10^{14}$ Hz",
+    "hint": "Use Bohr's frequency condition: hν = E₂ - E₁.",
+    "solution_steps_latex": [
+      "Given: Energy difference $\\Delta E = 2.3$ eV[cite: 287].",
+      "Convert energy to Joules: $\\Delta E = 2.3 \\times 1.6 \\times 10^{-19}$ J $= 3.68 \\times 10^{-19}$ J[cite: 288].",
+      "Using the formula $h\\nu = \\Delta E$[cite: 288].",
+      "Frequency $\\nu = \\frac{\\Delta E}{h} = \\frac{3.68 \\times 10^{-19}}{6.63 \\times 10^{-34}}$[cite: 288].",
+      "$\\nu \\approx 5.55 \\times 10^{14}$ Hz[cite: 288]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Energy difference ΔE: 2.3 eV",
+        "Planck's constant h: 6.63 × 10⁻³⁴ J·s"
+      ],
+      "to_find": [
+        "Frequency ν"
+      ],
+      "formulas_used": [
+        "$h\\nu = E_2 - E_1$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "energy-levels",
+      "photon-emission",
+      "bohr-postulates",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.3",
+      "page": 305
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr Model of the Hydrogen Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.4",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The ground state energy of hydrogen atom is -13.6 eV. What are the kinetic and potential energies of the electron in this state?",
+    "question_latex": "The ground state energy of hydrogen atom is $-13.6$ eV. What are the kinetic and potential energies of the electron in this state?",
+    "sub_parts": null,
+    "correct_answer_plain": "KE = 13.6 eV, PE = -27.2 eV",
+    "correct_answer_latex": "KE $= 13.6$ eV, PE $= -27.2$ eV",
+    "hint": "For an electron in orbit, Total Energy (E) = -Kinetic Energy (K) and Potential Energy (U) = 2 × Total Energy (E).",
+    "solution_steps_latex": [
+      "Given: Total energy in ground state $E = -13.6$ eV[cite: 289].",
+      "Kinetic energy $K$ is given by $K = -E$[cite: 290].",
+      "$K = -(-13.6) = 13.6$ eV[cite: 290].",
+      "Potential energy $U$ is given by $U = 2E$[cite: 290].",
+      "$U = 2 \\times (-13.6) = -27.2$ eV[cite: 290]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Ground state energy E: -13.6 eV"
+      ],
+      "to_find": [
+        "Kinetic energy KE",
+        "Potential energy PE"
+      ],
+      "formulas_used": [
+        "$K = -E$",
+        "$U = 2E$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "bohr-model",
+      "energy-of-electron",
+      "kinetic-energy",
+      "potential-energy",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.4",
+      "page": 305
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr Model of the Hydrogen Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.5",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A hydrogen atom initially in the ground level absorbs a photon which excites it to the n = 4 level. Determine the wavelength and frequency of photon.",
+    "question_latex": "A hydrogen atom initially in the ground level absorbs a photon which excites it to the $n=4$ level. Determine the wavelength and frequency of photon.",
+    "sub_parts": null,
+    "correct_answer_plain": "9.7 × 10⁻⁸m; 3.1 × 10¹⁵Hz",
+    "correct_answer_latex": "$9.7 \\times 10^{-8}$m; $3.1 \\times 10^{15}$Hz",
+    "hint": "Energy of level n: En = -13.6/n² eV. Photon energy ΔE = E₄ - E₁.",
+    "solution_steps_latex": [
+      "Energy of ground state ($n=1$): $E_1 = -13.6$ eV[cite: 291].",
+      "Energy of $n=4$ level: $E_4 = -\\frac{13.6}{4^2} = -\\frac{13.6}{16} = -0.85$ eV[cite: 292].",
+      "Energy of absorbed photon $\\Delta E = E_4 - E_1 = -0.85 - (-13.6) = 12.75$ eV[cite: 292].",
+      "In Joules: $\\Delta E = 12.75 \\times 1.6 \\times 10^{-19}$ J $= 2.04 \\times 10^{-18}$ J[cite: 292].",
+      "**Frequency (ν)**: $\\nu = \\frac{\\Delta E}{h} = \\frac{2.04 \\times 10^{-18}}{6.63 \\times 10^{-34}} \\approx 3.08 \\times 10^{15}$ Hz[cite: 292].",
+      "**Wavelength (λ)**: $\\lambda = \\frac{c}{\\nu} = \\frac{3 \\times 10^8}{3.08 \\times 10^{15}} \\approx 9.72 \\times 10^{-8}$ m $= 97.2$ nm[cite: 292]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Energy level diagram for hydrogen showing transition from n=1 to n=4.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial state: n=1",
+        "Final state: n=4",
+        "Ground state energy: -13.6 eV"
+      ],
+      "to_find": [
+        "Frequency ν",
+        "Wavelength λ"
+      ],
+      "formulas_used": [
+        "$E_n = -13.6/n^2$ eV",
+        "$h\\nu = \\Delta E$",
+        "$\\lambda = c/\\nu$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "hydrogen-spectrum",
+      "energy-transition",
+      "absorption-spectrum",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.5",
+      "page": 305
+    },
+    "p5_sketch_slug": "q12-5-bohr-transition-3to1",
+    "p5_sketch": "q12-5-bohr-transition-3to1"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr Model of the Hydrogen Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.6",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "(a) Using the Bohr's model calculate the speed of the electron in a hydrogen atom in the n = 1, 2, and 3 levels. (b) Calculate the orbital period in each of these levels.",
+    "question_latex": "(a) Using the Bohr's model calculate the speed of the electron in a hydrogen atom in the $n = 1, 2,$ and $3$ levels. (b) Calculate the orbital period in each of these levels.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 2.18 × 10⁶ m/s; 1.09 × 10⁶ m/s; 7.27 × 10⁵ m/s (b) 1.52 × 10⁻¹⁶ s; 1.22 × 10⁻¹⁵ s; 4.11 × 10⁻¹⁵ s",
+    "correct_answer_latex": "(a) $2.18 \\times 10^{6}$ m/s; $1.09 \\times 10^{6}$ m/s; $7.27 \\times 10^{5}$ m/s (b) $1.52 \\times 10^{-16}$ s; $1.22 \\times 10^{-15}$ s; $4.11 \\times 10^{-15}$ s",
+    "hint": "v_n = v_1/n where v_1 ≈ c/137. T_n = 2πr_n/v_n.",
+    "solution_steps_latex": [
+      "**Part (a): Speed of electron**",
+      "Speed in $n^{th}$ orbit is $v_n = \\frac{1}{n} \\frac{e^2}{2 \\varepsilon_0 h}$.",
+      "For $n=1$, $v_1 = \\frac{(1.6 \\times 10^{-19})^2}{2 \\times 8.85 \\times 10^{-12} \\times 6.63 \\times 10^{-34}} \\approx 2.18 \\times 10^6$ m/s.",
+      "For $n=2$, $v_2 = v_1/2 = 1.09 \\times 10^6$ m/s.",
+      "For $n=3$, $v_3 = v_1/3 = 0.727 \\times 10^6$ m/s.",
+      "**Part (b): Orbital period (T)**",
+      "Orbital period $T_n = \\frac{2\\pi r_n}{v_n}$. Since $r_n \\propto n^2$ and $v_n \\propto 1/n$, $T_n \\propto n^3$.",
+      "For $n=1$, $r_1 = 5.3 \\times 10^{-11}$ m. $T_1 = \\frac{2 \\times 3.14 \\times 5.3 \\times 10^{-11}}{2.18 \\times 10^6} \\approx 1.52 \\times 10^{-16}$ s.",
+      "For $n=2$, $T_2 = T_1 \\times 2^3 = 1.52 \\times 10^{-16} \\times 8 \\approx 1.22 \\times 10^{-15}$ s.",
+      "For $n=3$, $T_3 = T_1 \\times 3^3 = 1.52 \\times 10^{-16} \\times 27 \\approx 4.11 \\times 10^{-15}$ s."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Quantum numbers n: 1, 2, 3"
+      ],
+      "to_find": [
+        "Velocity v_n",
+        "Orbital period T_n"
+      ],
+      "formulas_used": [
+        "$v_n = v_1 / n$",
+        "$T_n = 2\\pi r_n / v_n$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "bohr-model",
+      "electron-velocity",
+      "orbital-period",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.6",
+      "page": 305
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr Model of the Hydrogen Atom",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The radius of the innermost electron orbit of a hydrogen atom is 5.3 × 10⁻¹¹ m. What are the radii of the n = 2 and n = 3 orbits?",
+    "question_latex": "The radius of the innermost electron orbit of a hydrogen atom is $5.3 \\times 10^{-11}$ m. What are the radii of the $n=2$ and $n=3$ orbits?",
+    "sub_parts": null,
+    "correct_answer_plain": "r2 = 2.12 × 10⁻¹⁰ m, r3 = 4.77 × 10⁻¹⁰ m",
+    "correct_answer_latex": "$r_2 = 2.12 \\times 10^{-10}$ m, $r_3 = 4.77 \\times 10^{-10}$ m",
+    "hint": "In Bohr's model, r_n = n² × r_1.",
+    "solution_steps_latex": [
+      "Given: Innermost orbit ($n=1$) radius $r_1 = 5.3 \\times 10^{-11}$ m.",
+      "The formula for the radius of the $n^{th}$ orbit is $r_n = n^2 r_1$.",
+      "**For n = 2**:",
+      "$r_2 = 2^2 \\times 5.3 \\times 10^{-11} = 4 \\times 5.3 \\times 10^{-11} = 2.12 \\times 10^{-10}$ m.",
+      "**For n = 3**:",
+      "$r_3 = 3^2 \\times 5.3 \\times 10^{-11} = 9 \\times 5.3 \\times 10^{-11} = 4.77 \\times 10^{-10}$ m."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Representation of Bohr orbits for n=1, 2, and 3 showing increasing radii.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Bohr radius r1: 5.3 × 10⁻¹¹ m"
+      ],
+      "to_find": [
+        "Radius r2",
+        "Radius r3"
+      ],
+      "formulas_used": [
+        "$r_n = n^2 r_1$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "bohr-model",
+      "bohr-radius",
+      "orbital-radius",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.7",
+      "page": 305
+    },
+    "p5_sketch_slug": "q12-7-bohr-ionization",
+    "p5_sketch": "q12-7-bohr-ionization"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Hydrogen Spectrum",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.8",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A 12.5 eV electron beam is used to bombard gaseous hydrogen at room temperature. What series of wavelengths will be emitted?",
+    "question_latex": "A $12.5$ eV electron beam is used to bombard gaseous hydrogen at room temperature. What series of wavelengths will be emitted?",
+    "sub_parts": null,
+    "correct_answer_plain": "Lyman series: 103 nm and 122 nm; Balmer series: 656 nm",
+    "correct_answer_latex": "Lyman series: $103$ nm and $122$ nm; Balmer series: $656$ nm",
+    "hint": "Find the highest energy level n the atom can be excited to using 12.5 eV. ΔE = -13.6/n² - (-13.6).",
+    "solution_steps_latex": [
+      "Energy supplied to ground state ($n=1$) hydrogen atom = $12.5$ eV.",
+      "Energy of ground state $E_1 = -13.6$ eV.",
+      "Energy of excited state $E_n = E_1 + \\text{Energy supplied} = -13.6 + 12.5 = -1.1$ eV.",
+      "Using $E_n = -\\frac{13.6}{n^2}$, we get $n^2 = \\frac{-13.6}{-1.1} \\approx 12.36$.",
+      "The maximum integer value is $n = 3$.",
+      "Possible transitions from $n=3$ are: $3 \\to 2$, $3 \\to 1$, and $2 \\to 1$.",
+      "Transitions to $n=1$ ($3 \\to 1, 2 \\to 1$) belong to the **Lyman series**.",
+      "Transition to $n=2$ ($3 \\to 2$) belongs to the **Balmer series**."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Energy level diagram showing possible de-excitation paths from n=3 to n=1.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Excitation energy: 12.5 eV"
+      ],
+      "to_find": [
+        "Spectral series emitted"
+      ],
+      "formulas_used": [
+        "$E_n = -13.6/n^2$ eV"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "hydrogen-spectrum",
+      "electron-bombardment",
+      "spectral-series",
+      "lyman-series",
+      "balmer-series",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.8",
+      "page": 305
+    },
+    "p5_sketch_slug": "q12-8-bohr-radius",
+    "p5_sketch": "q12-8-bohr-radius"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 12: Atoms",
+    "section": "Bohr's Explanation of de Broglie's Hypothesis",
+    "exercise": "Exercise 12",
+    "question_number": "Q12.9",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "In accordance with the Bohr's model, find the quantum number that characterises the earth's revolution around the sun in an orbit of radius 1.5 × 10¹¹ m with orbital speed 3 × 10⁴ m/s (Mass of earth = 6.0 × 10²⁴ kg.)",
+    "question_latex": "In accordance with the Bohr's model, find the quantum number that characterises the earth's revolution around the sun in an orbit of radius $1.5 \\times 10^{11}$ m with orbital speed $3 \\times 10^{4}$ m/s (Mass of earth $= 6.0 \\times 10^{24}$ kg.)",
+    "sub_parts": null,
+    "correct_answer_plain": "2.6 × 10⁷⁴",
+    "correct_answer_latex": "$2.6 \\times 10^{74}$",
+    "hint": "Bohr's quantization rule: L = mvr = nh/2π.",
+    "solution_steps_latex": [
+      "Given: Mass of Earth $m = 6.0 \\times 10^{24}$ kg.",
+      "Orbital radius $r = 1.5 \\times 10^{11}$ m.",
+      "Orbital speed $v = 3 \\times 10^4$ m/s.",
+      "Bohr's quantization condition for angular momentum: $mvr = \\frac{nh}{2\\pi}$.",
+      "Rearranging for quantum number $n$: $n = \\frac{2\\pi mvr}{h}$.",
+      "$n = \\frac{2 \\times 3.14 \\times (6.0 \\times 10^{24}) \\times (3 \\times 10^4) \\times (1.5 \\times 10^{11})}{6.63 \\times 10^{-34}}$.",
+      "$n = \\frac{169.56 \\times 10^{39}}{6.63 \\times 10^{-34}} \\approx 2.57 \\times 10^{74}$.",
+      "Note: This extremely large value shows that quantization is not observable for macroscopic bodies."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass of Earth m: 6.0 × 10²⁴ kg",
+        "Orbital radius r: 1.5 × 10¹¹ m",
+        "Orbital speed v: 3 × 10⁴ m/s"
+      ],
+      "to_find": [
+        "Quantum number n"
+      ],
+      "formulas_used": [
+        "$mvr = nh/2\\pi$"
+      ]
+    },
+    "tags": [
+      "atoms",
+      "bohr-model",
+      "quantization-of-angular-momentum",
+      "correspondence-principle",
+      "macroscopic-quantization",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 12,
+      "exercise": "12",
+      "question_number": "Q12.9",
+      "page": 305
+    }
+  }
+]

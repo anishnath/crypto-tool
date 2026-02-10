@@ -1,0 +1,9 @@
+{
+  "q11-5-photoelectric": {
+    "type": "photoelectric-effect",
+    "params": {
+      "work_function_eV": 2.14, "photon_energy_eV": 3.0,
+      "title": "Photoelectric Effect — Sodium"
+    }
+  }
+}

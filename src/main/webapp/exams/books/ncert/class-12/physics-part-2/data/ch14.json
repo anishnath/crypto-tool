@@ -1,0 +1,335 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "n-type Semiconductor",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.1",
+    "marks": 1,
+    "difficulty": 0.3,
+    "question_plain": "In an n-type silicon, which of the following statement is true: (a) Electrons are majority carriers and trivalent atoms are the dopants. (b) Electrons are minority carriers and pentavalent atoms are the dopants. (c) Holes are minority carriers and pentavalent atoms are the dopants. (d) Holes are majority carriers and trivalent atoms are the dopants.",
+    "question_latex": "In an n-type silicon, which of the following statement is true:\n\n(a) Electrons are majority carriers and trivalent atoms are the dopants.\n\n(b) Electrons are minority carriers and pentavalent atoms are the dopants.\n\n(c) Holes are minority carriers and pentavalent atoms are the dopants.\n\n(d) Holes are majority carriers and trivalent atoms are the dopants.",
+    "sub_parts": null,
+    "correct_answer_plain": "(c) Holes are minority carriers and pentavalent atoms are the dopants.",
+    "correct_answer_latex": "(c) Holes are minority carriers and pentavalent atoms are the dopants.",
+    "hint": "In n-type semiconductors, 'n' stands for negative. This is achieved by adding atoms with 5 valence electrons (pentavalent).",
+    "solution_steps_latex": [
+      "n-type semiconductors are formed by doping intrinsic semiconductors (like Si or Ge) with **pentavalent** impurities[cite: 368, 375].",
+      "Pentavalent atoms have 5 valence electrons. Four form bonds with Si, while the fifth becomes a free **electron**, making electrons the **majority carriers**[cite: 372, 375].",
+      "Since electrons are the majority, **holes** become the **minority carriers**[cite: 375].",
+      "Evaluating the options: (c) correctly identifies holes as minority carriers and pentavalent atoms as the dopants[cite: 375]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Atomic structure of n-type silicon showing a pentavalent dopant atom with a free electron.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Correct statement for n-type silicon"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "semiconductors",
+      "n-type",
+      "doping",
+      "charge-carriers",
+      "pentavalent-impurity"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.1",
+      "page": 341
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "p-type Semiconductor",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.2",
+    "marks": 1,
+    "difficulty": 0.3,
+    "question_plain": "Which of the statements given in Exercise 14.1 is true for p-type semiconductors.",
+    "question_latex": "Which of the statements given in Exercise $14.1$ is true for p-type semiconductors.",
+    "sub_parts": null,
+    "correct_answer_plain": "Holes are majority carriers and trivalent atoms are the dopants.",
+    "correct_answer_latex": "Holes are majority carriers and trivalent atoms are the dopants.",
+    "hint": "p-type stands for positive. It is formed by using impurities that create a 'deficiency' of electrons (trivalent atoms).",
+    "solution_steps_latex": [
+      "p-type semiconductors are created by adding **trivalent** impurities (dopants with 3 valence electrons) to the intrinsic semiconductor[cite: 368, 376].",
+      "A trivalent atom creates a vacancy or a **hole** in the lattice structure[cite: 376].",
+      "In p-type materials, **holes** are the **majority carriers** and electrons are the minority carriers[cite: 376].",
+      "Therefore, the statement corresponding to p-type would be that holes are majority carriers and trivalent atoms are the dopants[cite: 376]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Atomic structure of p-type silicon showing a trivalent dopant atom and a resulting hole.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Correct statement for p-type semiconductor"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "semiconductors",
+      "p-type",
+      "doping",
+      "charge-carriers",
+      "trivalent-impurity"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.2",
+      "page": 341
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "Energy Bands",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.3",
+    "marks": 1,
+    "difficulty": 0.4,
+    "question_plain": "Carbon, silicon and germanium have four valence electrons each. These are characterised by valence and conduction bands separated by energy band gap respectively equal to (Eg)C, (Eg)Si and (Eg)Ge. Which of the following statements is true? (a) (Eg)Si < (Eg)Ge < (Eg)C (b) (Eg)C < (Eg)Ge > (Eg)Si (c) (Eg)C > (Eg)Si > (Eg)Ge (d) (Eg)C = (Eg)Si = (Eg)Ge",
+    "question_latex": "Carbon, silicon and germanium have four valence electrons each. These are characterised by valence and conduction bands separated by energy band gap respectively equal to $(E_{g})_{C},$ $(E_{g})_{Si}$ and $(E_{g})_{Ge}$. Which of the following statements is true?\n\n(a) $(E_{g})_{Si} < (E_{g})_{Ge} < (E_{g})_{C}$\n\n(b) $(E_{g})_{C} < (E_{g})_{Ge} > (E_{g})_{Si}$\n\n(c) $(E_{g})_{C} > (E_{g})_{Si} > (E_{g})_{Ge}$\n\n(d) $(E_{g})_{C} = (E_{g})_{Si} = (E_{g})_{Ge}$",
+    "sub_parts": null,
+    "correct_answer_plain": "(c) (Eg)C > (Eg)Si > (Eg)Ge",
+    "correct_answer_latex": "(c) $(E_{g})_{C} > (E_{g})_{Si} > (E_{g})_{Ge}$",
+    "hint": "Energy band gap depends on the strength of the atomic bonds. As we go down the group in the periodic table, the distance of valence electrons from the nucleus increases and the band gap decreases.",
+    "solution_steps_latex": [
+      "Carbon (C), Silicon (Si), and Germanium (Ge) all belong to the same group in the periodic table and have 4 valence electrons[cite: 379].",
+      "The energy band gap ($E_g$) represents the energy required to excite an electron from the valence band to the conduction band[cite: 356, 383].",
+      "Carbon (in diamond form) is an insulator with a very large band gap ($E_g > 3$ eV)[cite: 357, 386].",
+      "Silicon and Germanium are semiconductors. As the atomic size increases from C to Si to Ge, the valence electrons are less tightly bound to the nucleus, leading to a smaller band gap[cite: 357, 386].",
+      "Thus, $(E_g)_C > (E_g)_{Si} > (E_g)_{Ge}$[cite: 386]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Energy band gap diagrams comparing an insulator (Carbon), and semiconductors (Silicon and Germanium).",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Relative order of energy band gaps"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "energy-bands",
+      "band-gap",
+      "insulators",
+      "semiconductors",
+      "periodic-trends"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.3",
+      "page": 341
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "p-n Junction",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.4",
+    "marks": 1,
+    "difficulty": 0.4,
+    "question_plain": "In an unbiased p-n junction, holes diffuse from the p-region to n-region because (a) free electrons in the n-region attract them. (b) they move across the junction by the potential difference. (c) hole concentration in p-region is more as compared to n-region. (d) All the above.",
+    "question_latex": "In an unbiased p-n junction, holes diffuse from the p-region to n-region because\n\n(a) free electrons in the n-region attract them.\n\n(b) they move across the junction by the potential difference.\n\n(c) hole concentration in p-region is more as compared to n-region.\n\n(d) All the above.",
+    "sub_parts": null,
+    "correct_answer_plain": "(c) hole concentration in p-region is more as compared to n-region.",
+    "correct_answer_latex": "(c) hole concentration in p-region is more as compared to n-region.",
+    "hint": "Diffusion is a process where particles move from a region of higher concentration to a region of lower concentration.",
+    "solution_steps_latex": [
+      "In an unbiased p-n junction, there is no external voltage applied[cite: 388].",
+      "The p-region has a high concentration of holes, while the n-region has a low concentration of holes[cite: 392].",
+      "Due to this **concentration gradient**, holes **diffuse** from the p-region to the n-region[cite: 388, 392].",
+      "This process does not require attraction or potential difference; it is a result of random thermal motion naturally evening out concentrations[cite: 392]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Cross-section of an unbiased p-n junction showing the diffusion of holes and electrons across the boundary.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Reason for hole diffusion in unbiased p-n junction"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "p-n-junction",
+      "diffusion",
+      "concentration-gradient",
+      "holes"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.4",
+      "page": 342
+    },
+    "p5_sketch_slug": "q14-4-pn-junction-forward",
+    "p5_sketch": "q14-4-pn-junction-forward"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "p-n Junction Diode",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.5",
+    "marks": 1,
+    "difficulty": 0.4,
+    "question_plain": "When a forward bias is applied to a p-n junction, it (a) raises the potential barrier. (b) reduces the majority carrier current to zero. (c) lowers the potential barrier. (d) None of the above.",
+    "question_latex": "When a forward bias is applied to a p-n junction, it\n\n(a) raises the potential barrier.\n\n(b) reduces the majority carrier current to zero.\n\n(c) lowers the potential barrier.\n\n(d) None of the above.",
+    "sub_parts": null,
+    "correct_answer_plain": "(c) lowers the potential barrier.",
+    "correct_answer_latex": "(c) lowers the potential barrier.",
+    "hint": "Forward bias means the positive terminal is connected to the p-side and the negative terminal to the n-side.",
+    "solution_steps_latex": [
+      "Forward bias involves connecting the p-side to the positive terminal and the n-side to the negative terminal of a battery[cite: 362].",
+      "This external voltage opposes the built-in junction potential barrier[cite: 360, 362].",
+      "As a result, forward bias **lowers the potential barrier** and decreases the width of the depletion layer[cite: 362, 397].",
+      "This facilitates a significantly higher flow of majority carriers, resulting in a larger current (mA)[cite: 363]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Energy level diagram showing the reduction of the potential barrier under forward bias conditions.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Effect of forward bias on p-n junction"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "p-n-junction",
+      "forward-bias",
+      "potential-barrier",
+      "depletion-layer"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.5",
+      "page": 342
+    },
+    "p5_sketch_slug": "q14-5-pn-junction-reverse",
+    "p5_sketch": "q14-5-pn-junction-reverse"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "section": "Rectifiers",
+    "exercise": "Exercise 14",
+    "question_number": "Q14.6",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "In half-wave rectification, what is the output frequency if the input frequency is 50 Hz. What is the output frequency of a full-wave rectifier for the same input frequency.",
+    "question_latex": "In half-wave rectification, what is the output frequency if the input frequency is $50$ Hz. What is the output frequency of a full-wave rectifier for the same input frequency.",
+    "sub_parts": [
+      "Half-wave rectifier output frequency",
+      "Full-wave rectifier output frequency"
+    ],
+    "correct_answer_plain": "Half-wave: 50 Hz, Full-wave: 100 Hz",
+    "correct_answer_latex": "Half-wave: $50$ Hz, Full-wave: $100$ Hz",
+    "hint": "In half-wave rectification, only one half of the AC cycle is used. In full-wave, both halves are converted to positive output cycles.",
+    "solution_steps_latex": [
+      "Rectification is the process of converting AC voltage to a unidirectional DC-like voltage[cite: 364].",
+      "**Half-wave Rectifier**: The output pulse occurs only during one-half of the input cycle. Therefore, the frequency of the output remains the same as the input[cite: 400].",
+      "Output frequency (Half-wave) = $50$ Hz[cite: 400].",
+      "**Full-wave Rectifier**: Both the positive and negative halves of the AC input cycle produce a positive output pulse. This effectively doubles the number of pulses per second[cite: 401].",
+      "Output frequency (Full-wave) = $2 \\times 50$ Hz = $100$ Hz[cite: 401]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Input and output voltage graphs for half-wave and full-wave rectifiers illustrating the change in pulse frequency.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Input frequency: 50 Hz"
+      ],
+      "to_find": [
+        "Output frequency for half-wave rectifier",
+        "Output frequency for full-wave rectifier"
+      ],
+      "formulas_used": [
+        "$f_{out(HW)} = f_{in}$",
+        "$f_{out(FW)} = 2 \\times f_{in}$"
+      ]
+    },
+    "tags": [
+      "rectifiers",
+      "half-wave",
+      "full-wave",
+      "frequency",
+      "ac-to-dc"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 14,
+      "exercise": "14",
+      "question_number": "Q14.6",
+      "page": 342
+    },
+    "p5_sketch_slug": "q14-6-pn-junction-none",
+    "p5_sketch": "q14-6-pn-junction-none"
+  }
+]

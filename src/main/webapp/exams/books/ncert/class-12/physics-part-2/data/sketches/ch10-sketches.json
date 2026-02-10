@@ -1,0 +1,23 @@
+{
+  "q10-4-youngs-double-slit": {
+    "type": "wave-interference",
+    "params": {
+      "wavelength_nm": 600, "slit_sep_mm": 0.5, "screen_dist_m": 1,
+      "title": "Young's Double Slit — Fringe Pattern"
+    }
+  },
+  "q10-5-interference-wavelength": {
+    "type": "wave-interference",
+    "params": {
+      "wavelength_nm": 500, "slit_sep_mm": 0.3, "screen_dist_m": 1.5,
+      "title": "Interference — Different Wavelength"
+    }
+  },
+  "q10-6-interference-bandwidth": {
+    "type": "wave-interference",
+    "params": {
+      "wavelength_nm": 589, "slit_sep_mm": 0.1, "screen_dist_m": 1,
+      "title": "Interference — Fringe Width Calculation"
+    }
+  }
+}

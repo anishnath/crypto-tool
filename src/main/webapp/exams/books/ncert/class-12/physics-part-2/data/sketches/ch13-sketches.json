@@ -1,0 +1,24 @@
+{
+  "q13-1-binding-energy-curve": {
+    "type": "nuclear-binding-energy",
+    "params": {
+      "highlight_nuclei": [
+        { "A": 2, "name": "²H", "bea": 1.1 },
+        { "A": 4, "name": "⁴He", "bea": 7.07 },
+        { "A": 56, "name": "⁵⁶Fe", "bea": 8.79 },
+        { "A": 238, "name": "²³⁸U", "bea": 7.57 }
+      ],
+      "title": "Nuclear Binding Energy per Nucleon"
+    }
+  },
+  "q13-2-binding-energy-specific": {
+    "type": "nuclear-binding-energy",
+    "params": {
+      "highlight_nuclei": [
+        { "A": 56, "name": "⁵⁶Fe", "bea": 8.79 },
+        { "A": 209, "name": "²⁰⁹Bi", "bea": 7.85 }
+      ],
+      "title": "BE/A — Iron vs Bismuth"
+    }
+  }
+}

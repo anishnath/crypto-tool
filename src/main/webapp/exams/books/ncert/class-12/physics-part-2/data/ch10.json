@@ -1,0 +1,411 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Refraction and Reflection of Plane Waves using Huygens Principle",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.1",
+    "marks": 5,
+    "difficulty": 0.5,
+    "question_plain": "Monochromatic light of wavelength 589 nm is incident from air on a water surface. What are the wavelength, frequency and speed of (a) reflected, and (b) refracted light? Refractive index of water is 1.33.",
+    "question_latex": "Monochromatic light of wavelength $589$ nm is incident from air on a water surface. What are the wavelength, frequency and speed of (a) reflected, and (b) refracted light? Refractive index of water is $1.33$.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) λ = 589 nm, ν = 5.09 × 10¹⁴ Hz, c = 3.00 × 10⁸ m s⁻¹; (b) ν = 5.09 × 10¹⁴ Hz, v = 2.26 × 10⁸ ms⁻¹, λ = 444 nm",
+    "correct_answer_latex": "(a) $\\lambda = 589$ nm, $\\nu = 5.09 \\times 10^{14}$ Hz, $c = 3.00 \\times 10^{8}$ m s$^{-1}$; (b) $\\nu = 5.09 \\times 10^{14}$ Hz, $v = 2.26 \\times 10^{8}$ ms$^{-1}$, $\\lambda = 444$ nm",
+    "hint": "Frequency remains unchanged during reflection and refraction. Speed and wavelength change in a medium based on refractive index.",
+    "solution_steps_latex": [
+      "Given: Wavelength in air $\\lambda = 589$ nm $= 589 \\times 10^{-9}$ m[cite: 192].",
+      "Refractive index of water $\\mu = 1.33$[cite: 193].",
+      "Speed of light in vacuum/air $c = 3 \\times 10^8$ m/s.",
+      "**Frequency (ν)**: $\\nu = \\frac{c}{\\lambda} = \\frac{3 \\times 10^8}{589 \\times 10^{-9}} \\approx 5.09 \\times 10^{14}$ Hz.",
+      "**Part (a): Reflected Light**",
+      "Reflection occurs in the same medium (air).",
+      "1. Wavelength $\\lambda_r = 589$ nm.",
+      "2. Frequency $\\nu_r = 5.09 \\times 10^{14}$ Hz (Frequency is property of source).",
+      "3. Speed $v_r = 3 \\times 10^8$ m/s.",
+      "**Part (b): Refracted Light**",
+      "Refraction occurs in water.",
+      "1. Frequency $\\nu_{water} = 5.09 \\times 10^{14}$ Hz (Unchanged).",
+      "2. Speed $v = \\frac{c}{\\mu} = \\frac{3 \\times 10^8}{1.33} \\approx 2.26 \\times 10^8$ m/s.",
+      "3. Wavelength $\\lambda' = \\frac{\\lambda}{\\mu} = \\frac{589}{1.33} \\approx 443$ nm."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": true,
+      "diagram_description": "Light ray incident from air to water showing both reflected and refracted rays with wavelength change in water.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wavelength λ: 589 nm",
+        "Refractive index μ: 1.33"
+      ],
+      "to_find": [
+        "Reflected wavelength, frequency, speed",
+        "Refracted wavelength, frequency, speed"
+      ],
+      "formulas_used": [
+        "$\\nu = c/\\lambda$",
+        "$v = c/\\mu$",
+        "$\\lambda' = \\lambda/\\mu$"
+      ]
+    },
+    "tags": [
+      "wave-optics",
+      "reflection",
+      "refraction",
+      "wavelength-frequency-relation",
+      "refractive-index",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.1",
+      "page": 273
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Huygens Principle",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.2",
+    "marks": 3,
+    "difficulty": 0.3,
+    "question_plain": "What is the shape of the wavefront in each of the following cases: (a) Light diverging from a point source. (b) Light emerging out of a convex lens when a point source is placed at its focus. (c) The portion of the wavefront of light from a distant star intercepted by the Earth.",
+    "question_latex": "What is the shape of the wavefront in each of the following cases: (a) Light diverging from a point source. (b) Light emerging out of a convex lens when a point source is placed at its focus. (c) The portion of the wavefront of light from a distant star intercepted by the Earth.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) Spherical; (b) Plane; (c) Plane",
+    "correct_answer_latex": "(a) Spherical; (b) Plane; (c) Plane",
+    "hint": "Wavefront is a surface of constant phase. It is perpendicular to the rays.",
+    "solution_steps_latex": [
+      "**(a)**: Light diverging from a point source spreads out in all directions equally. The locus of points at a constant distance (constant phase) from the point source is a **spherical wavefront**[cite: 194].",
+      "**(b)**: When a point source is at the focus of a convex lens, the rays emerging from the lens become parallel to the principal axis. The wavefront perpendicular to parallel rays is a **plane wavefront**[cite: 195].",
+      "**(c)**: Light from a distant star (at infinity) reaches Earth as parallel rays. Although the original wavefront is spherical, a small portion intercepted by Earth over a vast distance appears as a **plane wavefront**[cite: 196]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Illustrations showing (a) spherical wavefront from point source, (b) plane wavefront from convex lens, and (c) plane wavefront from distant star.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [],
+      "to_find": [
+        "Shape of wavefront"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "wave-optics",
+      "huygens-principle",
+      "wavefronts",
+      "spherical-wavefront",
+      "plane-wavefront",
+      "conceptual-understanding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.2",
+      "page": 273
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Refraction of Plane Waves",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.3",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "(a) The refractive index of glass is 1.5. What is the speed of light in glass? (Speed of light in vacuum is 3.0 × 10⁸ m/s). (b) Is the speed of light in glass independent of the colour of light? If not, which of the two colours red and violet travels slower in a glass prism?",
+    "question_latex": "(a) The refractive index of glass is $1.5$. What is the speed of light in glass? (Speed of light in vacuum is $3.0 \\times 10^{8}$ m/s). (b) Is the speed of light in glass independent of the colour of light? If not, which of the two colours red and violet travels slower in a glass prism?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 2.0 × 10⁸ m/s; (b) No, violet travels slower.",
+    "correct_answer_latex": "(a) $2.0 \\times 10^{8}$ m/s; (b) No, violet travels slower.",
+    "hint": "Speed in medium v = c/μ. Refractive index depends on wavelength (Cauchy's formula).",
+    "solution_steps_latex": [
+      "**Part (a)**:",
+      "Given: Refractive index of glass $\\mu = 1.5$[cite: 197].",
+      "Speed of light in vacuum $c = 3.0 \\times 10^8$ m/s[cite: 198].",
+      "Speed of light in glass $v = \\frac{c}{\\mu} = \\frac{3.0 \\times 10^8}{1.5} = 2.0 \\times 10^8$ m/s[cite: 197].",
+      "**Part (b)**:",
+      "The speed of light in glass is **not independent** of colour[cite: 199].",
+      "Refractive index $\\mu$ is higher for shorter wavelengths (violet) than for longer wavelengths (red).",
+      "Since $v = c/\\mu$, a higher $\\mu$ means lower speed.",
+      "Therefore, **violet travels slower** in a glass prism than red light[cite: 200]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "μ of glass: 1.5",
+        "c: 3.0 × 10⁸ m/s"
+      ],
+      "to_find": [
+        "Speed in glass",
+        "Slower colour (red vs violet)"
+      ],
+      "formulas_used": [
+        "$v = c/\\mu$"
+      ]
+    },
+    "tags": [
+      "wave-optics",
+      "refraction",
+      "refractive-index",
+      "dispersion",
+      "speed-of-light",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.3",
+      "page": 273
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Interference of Light Waves and Young's Experiment",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.4",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "In a Young's double-slit experiment, the slits are separated by 0.28 mm and the screen is placed 1.4 m away. The distance between the central bright fringe and the fourth bright fringe is measured to be 1.2 cm. Determine the wavelength of light used in the experiment.",
+    "question_latex": "In a Young's double-slit experiment, the slits are separated by $0.28$ mm and the screen is placed $1.4$ m away. The distance between the central bright fringe and the fourth bright fringe is measured to be $1.2$ cm. Determine the wavelength of light used in the experiment.",
+    "sub_parts": null,
+    "correct_answer_plain": "λ = 600 nm",
+    "correct_answer_latex": "$\\lambda = 600$ nm",
+    "hint": "Distance of nth bright fringe y_n = nλD/d.",
+    "solution_steps_latex": [
+      "Given: Slit separation $d = 0.28$ mm $= 0.28 \\times 10^{-3}$ m[cite: 201].",
+      "Screen distance $D = 1.4$ m[cite: 201].",
+      "Distance of 4th bright fringe ($n=4$) $y_4 = 1.2$ cm $= 1.2 \\times 10^{-2}$ m[cite: 202].",
+      "Formula for $n^{th}$ bright fringe: $y_n = \\frac{n\\lambda D}{d}$[cite: 201, 203].",
+      "Rearranging for wavelength: $\\lambda = \\frac{y_4 d}{n D}$[cite: 203].",
+      "$\\lambda = \\frac{(1.2 \\times 10^{-2}) \\times (0.28 \\times 10^{-3})}{4 \\times 1.4}$[cite: 203].",
+      "$\\lambda = \\frac{0.336 \\times 10^{-5}}{5.6}$[cite: 203].",
+      "$\\lambda = 0.06 \\times 10^{-5} = 6 \\times 10^{-7}$ m $= 600$ nm[cite: 203]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Young's Double Slit Experiment setup showing slit separation d, screen distance D, and fringe position y.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Slit separation d: 0.28 mm",
+        "Screen distance D: 1.4 m",
+        "Fringe position y4: 1.2 cm",
+        "n: 4"
+      ],
+      "to_find": [
+        "Wavelength λ"
+      ],
+      "formulas_used": [
+        "$y_n = n\\lambda D/d$"
+      ]
+    },
+    "tags": [
+      "wave-optics",
+      "interference",
+      "youngs-double-slit-experiment",
+      "fringe-width",
+      "wavelength-calculation",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.4",
+      "page": 273
+    },
+    "p5_sketch_slug": "q10-4-youngs-double-slit",
+    "p5_sketch": "q10-4-youngs-double-slit"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Interference of Light Waves and Young's Experiment",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.5",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "In Young's double-slit experiment using monochromatic light of wavelength λ, the intensity of light at a point on the screen where path difference is λ, is K units. What is the intensity of light at a point where path difference is λ/3?",
+    "question_latex": "In Young's double-slit experiment using monochromatic light of wavelength $\\lambda$, the intensity of light at a point on the screen where path difference is $\\lambda$, is $K$ units. What is the intensity of light at a point where path difference is $\\lambda/3$?",
+    "sub_parts": null,
+    "correct_answer_plain": "I = K/4",
+    "correct_answer_latex": "$I = K/4$",
+    "hint": "Phase difference φ = (2π/λ) × path difference. Intensity I = I_max cos²(φ/2).",
+    "solution_steps_latex": [
+      "Intensity formula: $I = 4 I_0 \\cos^2(\\phi/2)$, where $I_{max} = 4 I_0$[cite: 204].",
+      "Phase difference $\\phi = \\frac{2\\pi}{\\lambda} \\times \\Delta x$.",
+      "**Case 1**: Path difference $\\Delta x = \\lambda$[cite: 204].",
+      "$\\phi_1 = \\frac{2\\pi}{\\lambda} \\times \\lambda = 2\\pi$.",
+      "Intensity $I_1 = 4 I_0 \\cos^2(2\\pi/2) = 4 I_0 \\cos^2(\\pi) = 4 I_0$.",
+      "Given $I_1 = K$, so $K = 4 I_0$[cite: 204].",
+      "**Case 2**: Path difference $\\Delta x = \\lambda/3$[cite: 205].",
+      "$\\phi_2 = \\frac{2\\pi}{\\lambda} \\times \\frac{\\lambda}{3} = \\frac{2\\pi}{3}$.",
+      "Intensity $I_2 = 4 I_0 \\cos^2\\left(\\frac{2\\pi/3}{2}\\right) = K \\cos^2(\\pi/3)$[cite: 205].",
+      "Since $\\cos(\\pi/3) = 1/2$:",
+      "$I_2 = K \\times (1/2)^2 = K/4$[cite: 205]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Intensity distribution graph for YDSE showing intensity varying with phase difference.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial intensity I1: K at Δx = λ",
+        "Target Δx: λ/3"
+      ],
+      "to_find": [
+        "Intensity at Δx = λ/3"
+      ],
+      "formulas_used": [
+        "$\\phi = (2\\pi/\\lambda) \\Delta x$",
+        "$I = I_{max} \\cos^2(\\phi/2)$"
+      ]
+    },
+    "tags": [
+      "wave-optics",
+      "interference",
+      "intensity-distribution",
+      "phase-difference",
+      "path-difference",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.5",
+      "page": 273
+    },
+    "p5_sketch_slug": "q10-5-interference-wavelength",
+    "p5_sketch": "q10-5-interference-wavelength"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XII - Chapter 10: Wave Optics",
+    "section": "Interference of Light Waves and Young's Experiment",
+    "exercise": "Exercise 10",
+    "question_number": "Q10.6",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "A beam of light consisting of two wavelengths, 650 nm and 520 nm, is used to obtain interference fringes in a Young's double-slit experiment. (a) Find the distance of the third bright fringe on the screen from the central maximum for wavelength 650 nm. (b) What is the least distance from the central maximum where the bright fringes due to both the wavelengths coincide?",
+    "question_latex": "A beam of light consisting of two wavelengths, $650$ nm and $520$ nm, is used to obtain interference fringes in a Young's double-slit experiment. (a) Find the distance of the third bright fringe on the screen from the central maximum for wavelength $650$ nm. (b) What is the least distance from the central maximum where the bright fringes due to both the wavelengths coincide?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 1.17 mm (b) 1.56 mm",
+    "correct_answer_latex": "(a) $1.17$ mm (b) $1.56$ mm",
+    "hint": "For coincidence, n1λ1 = n2λ2.",
+    "solution_steps_latex": [
+      "Given: $\\lambda_1 = 650$ nm, $\\lambda_2 = 520$ nm[cite: 206].",
+      "**Part (a)**:",
+      "Distance of $3^{rd}$ bright fringe for $\\lambda_1$: $y_3 = \\frac{3\\lambda_1 D}{d}$[cite: 207].",
+      "$y_3 = \\frac{3 \\times 650 \\times 10^{-9} D}{d} = \\frac{1950 \\times 10^{-9} D}{d}$ m[cite: 207].",
+      "**Part (b)**:",
+      "Let $n_1^{th}$ bright fringe of $\\lambda_1$ coincide with $n_2^{th}$ bright fringe of $\\lambda_2$[cite: 208].",
+      "$y = \\frac{n_1\\lambda_1 D}{d} = \\frac{n_2\\lambda_2 D}{d}$[cite: 208].",
+      "$n_1\\lambda_1 = n_2\\lambda_2$[cite: 208].",
+      "$\\frac{n_1}{n_2} = \\frac{\\lambda_2}{\\lambda_1} = \\frac{520}{650} = \\frac{4}{5}$[cite: 208].",
+      "Least integral values are $n_1 = 4$ and $n_2 = 5$.",
+      "Least distance $y_{min} = \\frac{4\\lambda_1 D}{d} = \\frac{4 \\times 650 \\times 10^{-9} D}{d} = \\frac{2600 \\times 10^{-9} D}{d}$ m[cite: 208]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "λ1: 650 nm",
+        "λ2: 520 nm"
+      ],
+      "to_find": [
+        "y3 for λ1",
+        "Coincidence distance y"
+      ],
+      "formulas_used": [
+        "$y = n\\lambda D/d$",
+        "$n_1\\lambda_1 = n_2\\lambda_2$"
+      ]
+    },
+    "tags": [
+      "wave-optics",
+      "interference",
+      "youngs-double-slit-experiment",
+      "coincidence-of-fringes",
+      "wavelength-comparison",
+      "numerical-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 12,
+      "chapter": 10,
+      "exercise": "10",
+      "question_number": "Q10.6",
+      "page": 273
+    },
+    "p5_sketch_slug": "q10-6-interference-bandwidth",
+    "p5_sketch": "q10-6-interference-bandwidth"
+  }
+]
