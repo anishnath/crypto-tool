@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-05T00:00:00.000Z",
-  "totalTools": 382,
+  "totalTools": 383,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -2677,6 +2677,13 @@
       "category": "Education",
       "keywords": "ncert solutions class 12 maths part 2, integrals, differential equations, vectors, 3d geometry, linear programming, probability",
       "description": "NCERT Class 12 Maths Part 2 Solutions - 7 chapters, 506 questions with interactive plots"
+    },
+    {
+      "name": "Visual Math Lab",
+      "url": "exams/visual-math/",
+      "category": "Education",
+      "keywords": "visual math, interactive math, unit circle, matrix calculator, function plotter, derivative visualizer, trigonometry, algebra, calculus, statistics, linear algebra",
+      "description": "Visual Math Lab - 35 interactive math visualizations covering algebra, trigonometry, calculus, linear algebra, statistics and geometry"
     },
     {
       "name": "Quick Math - Mental Arithmetic",
