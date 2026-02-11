@@ -94,12 +94,19 @@
         if (pageData == null) return "";
 
         StringBuilder html = new StringBuilder();
+        String defaultOgImage = "https://8gwifi.org/exams/images/math-memory-og.png";
+        String defaultSiteName = "8gwifi.org";
+        String defaultAuthor = "8gwifi.org";
 
         // Keywords
         String keywords = pageData.optString("keywords", "");
         if (!keywords.isEmpty()) {
             html.append("<meta name=\"keywords\" content=\"").append(escapeHtml(keywords)).append("\">\n");
         }
+
+        // Author / Publisher
+        html.append("<meta name=\"author\" content=\"").append(escapeHtml(defaultAuthor)).append("\">\n");
+        html.append("<meta name=\"publisher\" content=\"").append(escapeHtml(defaultSiteName)).append("\">\n");
 
         // Open Graph tags
         if (pageData.has("openGraph")) {
@@ -109,6 +116,15 @@
                 if (!value.isEmpty()) {
                     html.append("<meta property=\"").append(escapeHtml(key)).append("\" content=\"").append(escapeHtml(value)).append("\">\n");
                 }
+            }
+            if (!og.has("og:image")) {
+                html.append("<meta property=\"og:image\" content=\"").append(escapeHtml(defaultOgImage)).append("\">\n");
+            }
+            if (!og.has("og:site_name")) {
+                html.append("<meta property=\"og:site_name\" content=\"").append(escapeHtml(defaultSiteName)).append("\">\n");
+            }
+            if (!og.has("og:type")) {
+                html.append("<meta property=\"og:type\" content=\"website\">\n");
             }
         }
 
@@ -120,6 +136,12 @@
                 if (!value.isEmpty()) {
                     html.append("<meta name=\"").append(escapeHtml(key)).append("\" content=\"").append(escapeHtml(value)).append("\">\n");
                 }
+            }
+            if (!tc.has("twitter:card")) {
+                html.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
+            }
+            if (!tc.has("twitter:image")) {
+                html.append("<meta name=\"twitter:image\" content=\"").append(escapeHtml(defaultOgImage)).append("\">\n");
             }
         }
 
@@ -180,7 +202,15 @@
      */
     public String generateJsonLd(String pageKey, ServletContext context) {
         org.json.JSONObject pageData = getPageSEO(pageKey, context);
-        if (pageData == null || "index".equals(pageKey)) return "";
+        if (pageData == null) return "";
+
+        if ("index".equals(pageKey)) {
+            StringBuilder indexJson = new StringBuilder();
+            appendOrganizationJsonLd(indexJson);
+            appendWebSiteJsonLd(indexJson);
+            appendBreadcrumbJsonLd(indexJson, "Math Memory Games", "https://8gwifi.org/exams/math-memory/");
+            return indexJson.toString();
+        }
 
         String title = pageData.optString("title", "Math Memory Game");
         String description = pageData.optString("description", "Train your brain with math memory games.");
@@ -188,6 +218,9 @@
         String gameName = getGameDisplayName(pageKey);
 
         StringBuilder json = new StringBuilder();
+
+        appendOrganizationJsonLd(json);
+        appendWebSiteJsonLd(json);
 
         // WebApplication/VideoGame Schema
         json.append("<script type=\"application/ld+json\">\n");
@@ -224,32 +257,7 @@
         json.append("</script>\n");
 
         // BreadcrumbList Schema
-        json.append("<script type=\"application/ld+json\">\n");
-        json.append("{\n");
-        json.append("  \"@context\": \"https://schema.org\",\n");
-        json.append("  \"@type\": \"BreadcrumbList\",\n");
-        json.append("  \"itemListElement\": [\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"ListItem\",\n");
-        json.append("      \"position\": 1,\n");
-        json.append("      \"name\": \"Home\",\n");
-        json.append("      \"item\": \"https://8gwifi.org\"\n");
-        json.append("    },\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"ListItem\",\n");
-        json.append("      \"position\": 2,\n");
-        json.append("      \"name\": \"Math Memory Games\",\n");
-        json.append("      \"item\": \"https://8gwifi.org/exams/math-memory/\"\n");
-        json.append("    },\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"ListItem\",\n");
-        json.append("      \"position\": 3,\n");
-        json.append("      \"name\": \"").append(escapeJson(gameName)).append("\",\n");
-        json.append("      \"item\": \"").append(escapeJson(canonical)).append("\"\n");
-        json.append("    }\n");
-        json.append("  ]\n");
-        json.append("}\n");
-        json.append("</script>\n");
+        appendBreadcrumbJsonLd(json, gameName, canonical);
 
         // FAQPage Schema for common questions
         json.append("<script type=\"application/ld+json\">\n");
@@ -286,5 +294,61 @@
         json.append("</script>");
 
         return json.toString();
+    }
+
+    private void appendOrganizationJsonLd(StringBuilder json) {
+        json.append("<script type=\"application/ld+json\">\n");
+        json.append("{\n");
+        json.append("  \"@context\": \"https://schema.org\",\n");
+        json.append("  \"@type\": \"Organization\",\n");
+        json.append("  \"name\": \"8gwifi.org\",\n");
+        json.append("  \"url\": \"https://8gwifi.org\"\n");
+        json.append("}\n");
+        json.append("</script>\n");
+    }
+
+    private void appendWebSiteJsonLd(StringBuilder json) {
+        json.append("<script type=\"application/ld+json\">\n");
+        json.append("{\n");
+        json.append("  \"@context\": \"https://schema.org\",\n");
+        json.append("  \"@type\": \"WebSite\",\n");
+        json.append("  \"name\": \"Math Memory Games\",\n");
+        json.append("  \"url\": \"https://8gwifi.org/exams/math-memory/\",\n");
+        json.append("  \"publisher\": {\n");
+        json.append("    \"@type\": \"Organization\",\n");
+        json.append("    \"name\": \"8gwifi.org\",\n");
+        json.append("    \"url\": \"https://8gwifi.org\"\n");
+        json.append("  }\n");
+        json.append("}\n");
+        json.append("</script>\n");
+    }
+
+    private void appendBreadcrumbJsonLd(StringBuilder json, String leafName, String leafUrl) {
+        json.append("<script type=\"application/ld+json\">\n");
+        json.append("{\n");
+        json.append("  \"@context\": \"https://schema.org\",\n");
+        json.append("  \"@type\": \"BreadcrumbList\",\n");
+        json.append("  \"itemListElement\": [\n");
+        json.append("    {\n");
+        json.append("      \"@type\": \"ListItem\",\n");
+        json.append("      \"position\": 1,\n");
+        json.append("      \"name\": \"Home\",\n");
+        json.append("      \"item\": \"https://8gwifi.org\"\n");
+        json.append("    },\n");
+        json.append("    {\n");
+        json.append("      \"@type\": \"ListItem\",\n");
+        json.append("      \"position\": 2,\n");
+        json.append("      \"name\": \"Math Memory Games\",\n");
+        json.append("      \"item\": \"https://8gwifi.org/exams/math-memory/\"\n");
+        json.append("    },\n");
+        json.append("    {\n");
+        json.append("      \"@type\": \"ListItem\",\n");
+        json.append("      \"position\": 3,\n");
+        json.append("      \"name\": \"").append(escapeJson(leafName)).append("\",\n");
+        json.append("      \"item\": \"").append(escapeJson(leafUrl)).append("\"\n");
+        json.append("    }\n");
+        json.append("  ]\n");
+        json.append("}\n");
+        json.append("</script>\n");
     }
 %>
