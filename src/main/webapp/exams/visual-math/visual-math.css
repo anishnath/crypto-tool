@@ -1,0 +1,750 @@
+/* ===========================================
+   Visual Math Lab - Shared Styles
+   =========================================== */
+
+/* ---- Hero ---- */
+.vm-hero {
+    text-align: center;
+    padding: var(--space-8) var(--space-4);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-6);
+}
+
+.vm-hero h1 {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.vm-hero p {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ---- Filter Chips ---- */
+.vm-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    justify-content: center;
+}
+
+.vm-chip {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.vm-chip:hover {
+    border-color: var(--accent-primary, #6366f1);
+    color: var(--accent-primary, #6366f1);
+}
+
+.vm-chip.active {
+    background: var(--accent-primary, #6366f1);
+    color: white;
+    border-color: var(--accent-primary, #6366f1);
+}
+
+/* ---- Card Grid ---- */
+.vm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
+}
+
+.vm-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: block;
+}
+
+.vm-card:hover {
+    border-color: var(--accent-primary, #6366f1);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+    transform: translateY(-4px);
+}
+
+.vm-card-preview {
+    width: 100%;
+    height: 180px;
+    background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.vm-card-preview canvas {
+    display: block;
+}
+
+.vm-card-body {
+    padding: var(--space-4) var(--space-5);
+}
+
+.vm-card-body h3 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.vm-card-tag {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+}
+
+.vm-card-tag.trig {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+.vm-card-tag.calc {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.vm-card-tag.linalg {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+}
+
+.vm-card-tag.algebra {
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+}
+
+.vm-card-tag.prob {
+    background: rgba(249, 115, 22, 0.12);
+    color: #f97316;
+}
+
+.vm-card-tag.geometry {
+    background: rgba(236, 72, 153, 0.12);
+    color: #ec4899;
+}
+
+.vm-card-tag.stat {
+    background: rgba(147, 51, 234, 0.12);
+    color: #9333ea;
+}
+
+.vm-card-tag[class*="3d-geom"] {
+    background: rgba(6, 182, 212, 0.12);
+    color: #06b6d4;
+}
+
+.vm-card-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Coming soon overlay */
+.vm-card.coming-soon {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.vm-card.coming-soon .vm-card-preview::after {
+    content: 'Coming Soon';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+/* ---- Visualization Page Layout ---- */
+.viz-header {
+    margin-bottom: var(--space-6);
+}
+
+.viz-header h1 {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.viz-subtitle {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+}
+
+.viz-interactive {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
+}
+
+.viz-canvas-wrap {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    min-height: 400px;
+    position: relative;
+}
+
+.viz-canvas-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* ---- Controls Panel ---- */
+.viz-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.viz-controls {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+}
+
+.viz-controls h3,
+.viz-values h3 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+}
+
+.control-group {
+    margin-bottom: var(--space-3);
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-group>label {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+}
+
+/* Slider */
+.viz-slider-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.viz-slider-row input[type="range"] {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    outline: none;
+}
+
+.viz-slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-primary, #6366f1);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.viz-slider-val {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Checkboxes */
+.viz-check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.viz-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.viz-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-primary, #6366f1);
+}
+
+.viz-check .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-sin {
+    background: #ef4444;
+}
+
+.dot-cos {
+    background: #3b82f6;
+}
+
+.dot-tan {
+    background: #f97316;
+}
+
+/* Buttons */
+.viz-btn-row {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+}
+
+.viz-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border-primary);
+    transition: all 0.2s ease;
+}
+
+.viz-btn-primary {
+    background: var(--accent-primary, #6366f1);
+    color: white;
+    border-color: var(--accent-primary, #6366f1);
+}
+
+.viz-btn-primary:hover {
+    opacity: 0.9;
+}
+
+.viz-btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.viz-btn-secondary:hover {
+    background: var(--bg-tertiary);
+}
+
+/* ---- Values Panel ---- */
+.viz-values {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+}
+
+.viz-values table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.viz-values td {
+    padding: 6px 0;
+    font-size: var(--text-sm);
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.viz-values tr:last-child td {
+    border-bottom: none;
+}
+
+.viz-values td:first-child {
+    font-weight: 600;
+    color: var(--text-secondary);
+    width: 60px;
+}
+
+.viz-values td:last-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+    text-align: right;
+}
+
+.val-sin {
+    color: #ef4444 !important;
+}
+
+.val-cos {
+    color: #3b82f6 !important;
+}
+
+.val-tan {
+    color: #f97316 !important;
+}
+
+/* ---- Math Explanation Section ---- */
+.viz-math {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+
+.viz-math h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+.viz-math-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+}
+
+.viz-math-col h3 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.viz-math-col p,
+.viz-math-col li {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.viz-math-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.viz-math-col li {
+    padding: var(--space-1) 0;
+    padding-left: var(--space-4);
+    position: relative;
+}
+
+.viz-math-col li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-primary, #6366f1);
+    transform: translateY(-50%);
+}
+
+.formula-highlight {
+    display: inline-block;
+    background: var(--bg-secondary);
+    padding: 2px 10px;
+    border-radius: var(--radius-sm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+}
+
+/* ---- Special Angles Table ---- */
+.angles-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+}
+
+.angles-table th,
+.angles-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.angles-table th {
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+}
+
+.angles-table td {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary);
+}
+
+.angles-table .clickable-angle {
+    cursor: pointer;
+    color: var(--accent-primary, #6366f1);
+    font-weight: 600;
+}
+
+.angles-table .clickable-angle:hover {
+    text-decoration: underline;
+}
+
+/* ---- Related Visualizations ---- */
+.viz-related {
+    margin-bottom: var(--space-8);
+}
+
+.viz-related h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+.viz-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3);
+}
+
+.viz-related-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.viz-related-card:hover {
+    border-color: var(--accent-primary, #6366f1);
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.1);
+}
+
+.viz-related-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.viz-related-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.viz-related-card span {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .vm-hero h1 {
+        font-size: var(--text-2xl);
+    }
+
+    .vm-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .viz-interactive {
+        grid-template-columns: 1fr;
+    }
+
+    .viz-canvas-wrap {
+        min-height: 300px;
+    }
+
+    .viz-panel {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .viz-controls,
+    .viz-values {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .viz-math-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .viz-header h1 {
+        font-size: var(--text-2xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .viz-panel {
+        flex-direction: column;
+    }
+
+    .viz-controls,
+    .viz-values {
+        min-width: 100%;
+    }
+
+    .viz-header h1 {
+        font-size: var(--text-xl);
+    }
+
+    .viz-subtitle {
+        font-size: var(--text-sm);
+    }
+
+    .viz-canvas-wrap {
+        min-height: 260px;
+    }
+
+    /* Larger touch targets on mobile */
+    .vm-chip {
+        padding: 10px 16px;
+        font-size: var(--text-sm);
+    }
+
+    .viz-btn {
+        padding: 12px 16px;
+    }
+
+    .control-group > label {
+        font-size: var(--text-sm);
+    }
+
+    /* Better spacing for touch */
+    .viz-slider-row {
+        gap: var(--space-3);
+    }
+
+    .viz-check-group {
+        gap: var(--space-3);
+    }
+
+    .viz-check input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .viz-slider-row input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Math section readability */
+    .viz-math {
+        padding: var(--space-4);
+    }
+
+    .viz-math h2 {
+        font-size: var(--text-lg);
+    }
+
+    .formula-highlight {
+        font-size: var(--text-xs);
+        padding: 2px 6px;
+    }
+
+    /* Related cards stack */
+    .viz-related-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Values table readability */
+    .viz-values td {
+        font-size: var(--text-sm);
+        padding: 8px 0;
+    }
+
+    .viz-values td:last-child {
+        word-break: break-all;
+        font-size: var(--text-xs);
+    }
+}
+
+/* ---- Floating Sidebar Ads (desktop, in margins) ---- */
+.viz-sidebar-ad,
+.viz-sidebar-ad-left {
+    display: none;
+}
+
+/* Left sidebar: 160px skyscraper — needs 1200 + 160*2 + 40*2 = 1600px */
+@media (min-width: 1600px) {
+    .viz-sidebar-ad-left {
+        display: block;
+        position: fixed;
+        top: 80px;
+        left: calc((100vw - 1200px) / 2 - 180px);
+        width: 160px;
+        z-index: 10;
+    }
+}
+
+/* Right sidebar: 300x250 ad — needs 1200 + 160 + 300 + 60 = 1720px */
+@media (min-width: 1720px) {
+    .viz-sidebar-ad {
+        display: block;
+        position: fixed;
+        top: 80px;
+        right: calc((100vw - 1200px) / 2 - 320px);
+        width: 300px;
+        z-index: 10;
+    }
+}
+
+/* Extra-wide: upgrade right sidebar to 336px */
+@media (min-width: 1920px) {
+    .viz-sidebar-ad {
+        right: calc((100vw - 1200px) / 2 - 356px);
+        width: 336px;
+    }
+}
