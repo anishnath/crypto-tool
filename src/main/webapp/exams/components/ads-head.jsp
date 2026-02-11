@@ -51,5 +51,5 @@
     })();
 </script>
 
-<!-- InView for lazy loading (using jsdelivr) -->
-<script src="https://cdn.jsdelivr.net/npm/in-view@0.6.1/dist/in-view.min.js"></script>
+<!-- InView for lazy loading (using jsdelivr) - defer to avoid blocking LCP -->
+<script defer src="https://cdn.jsdelivr.net/npm/in-view@0.6.1/dist/in-view.min.js"></script>
