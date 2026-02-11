@@ -28,7 +28,7 @@
     String title = request.getParameter("pageTitle") != null ? request.getParameter("pageTitle") : "8gwifi.org - Free Online Tools for Developers";
     String description = request.getParameter("pageDescription") != null ? request.getParameter("pageDescription") : "Free online tools for developers: Cryptography, Network diagnostics, DevOps, Encoders, PKI, Blockchain, and 200+ more tools.";
     String canonicalUrl = request.getParameter("canonicalUrl") != null ? request.getParameter("canonicalUrl") : "https://8gwifi.org";
-    String ogImage = request.getParameter("ogImage") != null ? request.getParameter("ogImage") : "https://8gwifi.org/images/site/4book.png";
+    String ogImage = request.getParameter("ogImage") != null ? request.getParameter("ogImage") : "https://8gwifi.org/images/site/logo.png";
     String schemaType = request.getParameter("schemaType") != null ? request.getParameter("schemaType") : "WebSite";
     String baseUrl = "https://8gwifi.org";
     String currentPath = request.getRequestURI();
@@ -85,7 +85,7 @@
   "name": "<%= escapeJson(title) %>",
   "description": "<%= escapeJson(description) %>",
   "url": "<%= canonicalUrl %>",
-  "logo": "<%= baseUrl %>/images/site/4book.png",
+  "logo": "<%= baseUrl %>/images/site/logo.png",
   "image": "<%= ogImage %>",
   "sameAs": [
     "https://twitter.com/anish2good"
@@ -105,7 +105,7 @@
     "name": "8gwifi.org",
     "logo": {
       "@type": "ImageObject",
-      "url": "<%= baseUrl %>/images/site/4book.png"
+      "url": "<%= baseUrl %>/images/site/logo.png"
     }
   }
 }
@@ -169,7 +169,7 @@
   "@type": "Organization",
   "name": "8gwifi.org",
   "url": "<%= baseUrl %>",
-  "logo": "<%= baseUrl %>/images/site/4book.png",
+  "logo": "<%= baseUrl %>/images/site/logo.png",
   "sameAs": [
     "https://twitter.com/anish2good"
   ],
