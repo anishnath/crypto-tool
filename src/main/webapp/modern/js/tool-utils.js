@@ -667,6 +667,216 @@
         },
 
         /**
+         * Download a DOM element or canvas as a PNG image with 8gwifi.org watermark
+         *
+         * Supports:
+         * - Canvas elements: used directly
+         * - Any DOM element: captured via html2canvas (lazy-loaded from CDN)
+         *
+         * @param {Element|string} source - DOM element, canvas, or CSS selector
+         * @param {string} filename - Filename (default: 'download.png')
+         * @param {Object} options - Options object
+         * @param {number} options.scale - Capture scale factor (default: 2 for retina)
+         * @param {string} options.backgroundColor - Background color (default: '#ffffff')
+         * @param {string} options.watermarkText - Watermark text (default: '8gwifi.org')
+         * @param {string} options.watermarkPosition - Position: 'bottom-right', 'bottom-left', 'top-right', 'top-left' (default: 'bottom-right')
+         * @param {number} options.watermarkOpacity - Watermark opacity 0-1 (default: 0.6)
+         * @param {number} options.watermarkFontSize - Font size in px (default: auto-calculated)
+         * @param {number} options.padding - Extra padding around captured content in px (default: 20)
+         * @param {boolean} options.showToast - Show toast notification (default: true)
+         * @param {string} options.toastMessage - Custom toast message
+         * @param {boolean} options.showSupportPopup - Show support popup (default: true)
+         * @param {string} options.toolName - Tool name for popup
+         * @returns {Promise<boolean>} Success status
+         */
+        downloadCanvasAsImage: async function (source, filename = 'download.png', options = {}) {
+            const {
+                scale = 2,
+                backgroundColor = '#ffffff',
+                watermarkText = '8gwifi.org',
+                watermarkPosition = 'bottom-right',
+                watermarkOpacity = 0.6,
+                watermarkFontSize = null,
+                padding = 20,
+                showToast = true,
+                toastMessage = null,
+                showSupportPopup = true,
+                toolName = null
+            } = options;
+
+            try {
+                // Resolve source element
+                const el = typeof source === 'string'
+                    ? document.querySelector(source)
+                    : source;
+
+                if (!el) {
+                    this.showToast('Element not found for image capture', 2000, 'error');
+                    return false;
+                }
+
+                // Show loading toast
+                if (showToast) {
+                    this.showToast('Generating image...', 1500, 'info');
+                }
+
+                let sourceCanvas;
+
+                if (el instanceof HTMLCanvasElement) {
+                    // Already a canvas — use directly
+                    sourceCanvas = el;
+                } else {
+                    // Load html2canvas if not available
+                    if (typeof html2canvas === 'undefined') {
+                        await this._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+                        // Verify it loaded
+                        if (typeof html2canvas === 'undefined') {
+                            throw new Error('Failed to load html2canvas library');
+                        }
+                    }
+
+                    // Capture DOM element to canvas
+                    sourceCanvas = await html2canvas(el, {
+                        scale: scale,
+                        backgroundColor: backgroundColor,
+                        useCORS: true,
+                        logging: false,
+                        allowTaint: true
+                    });
+                }
+
+                // Create final canvas with padding and watermark
+                var pad = padding * scale;
+                var finalWidth = sourceCanvas.width + pad * 2;
+                var finalHeight = sourceCanvas.height + pad * 2;
+
+                var finalCanvas = document.createElement('canvas');
+                finalCanvas.width = finalWidth;
+                finalCanvas.height = finalHeight;
+
+                var ctx = finalCanvas.getContext('2d');
+
+                // Fill background
+                ctx.fillStyle = backgroundColor;
+                ctx.fillRect(0, 0, finalWidth, finalHeight);
+
+                // Draw source content centered
+                ctx.drawImage(sourceCanvas, pad, pad);
+
+                // Draw watermark
+                var fontSize = watermarkFontSize
+                    ? watermarkFontSize * scale
+                    : Math.max(14, Math.min(24, Math.floor(finalWidth / 30))) * scale;
+                ctx.font = 'bold ' + fontSize + 'px Inter, -apple-system, sans-serif';
+                ctx.globalAlpha = watermarkOpacity;
+
+                // Measure text
+                var metrics = ctx.measureText(watermarkText);
+                var textWidth = metrics.width;
+                var textHeight = fontSize;
+                var margin = 12 * scale;
+
+                // Calculate position
+                var x, y;
+                switch (watermarkPosition) {
+                    case 'bottom-left':
+                        x = margin;
+                        y = finalHeight - margin;
+                        break;
+                    case 'top-right':
+                        x = finalWidth - textWidth - margin;
+                        y = textHeight + margin;
+                        break;
+                    case 'top-left':
+                        x = margin;
+                        y = textHeight + margin;
+                        break;
+                    case 'bottom-right':
+                    default:
+                        x = finalWidth - textWidth - margin;
+                        y = finalHeight - margin;
+                        break;
+                }
+
+                // Draw watermark shadow for readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.fillText(watermarkText, x + 1 * scale, y + 1 * scale);
+
+                // Draw watermark text
+                ctx.fillStyle = '#1DA1F2';
+                ctx.fillText(watermarkText, x, y);
+
+                // Reset alpha
+                ctx.globalAlpha = 1.0;
+
+                // Convert to blob and download
+                var self = this;
+                return new Promise(function (resolve) {
+                    finalCanvas.toBlob(function (blob) {
+                        if (!blob) {
+                            self.showToast('Failed to generate image', 3000, 'error');
+                            resolve(false);
+                            return;
+                        }
+
+                        var url = URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = filename;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        setTimeout(function () { URL.revokeObjectURL(url); }, 100);
+
+                        if (showToast) {
+                            var msg = toastMessage || 'Downloaded ' + filename;
+                            self.showToast(msg, 2000, 'success');
+                        }
+
+                        if (showSupportPopup) {
+                            setTimeout(function () {
+                                self.showSupportPopup(toolName, 'Downloaded: ' + filename);
+                            }, 500);
+                        }
+
+                        resolve(true);
+                    }, 'image/png');
+                });
+
+            } catch (err) {
+                console.error('Image download failed:', err);
+                if (showToast) {
+                    this.showToast('Image download failed: ' + err.message, 3000, 'error');
+                }
+                return false;
+            }
+        },
+
+        /**
+         * Lazy-load an external script
+         * @private
+         * @param {string} src - Script URL
+         * @returns {Promise<void>}
+         */
+        _loadScript: function (src) {
+            return new Promise(function (resolve, reject) {
+                // Check if already loaded
+                var existing = document.querySelector('script[src="' + src + '"]');
+                if (existing) {
+                    resolve();
+                    return;
+                }
+
+                var script = document.createElement('script');
+                script.src = src;
+                script.onload = function () { resolve(); };
+                script.onerror = function () { reject(new Error('Failed to load script: ' + src)); };
+                document.head.appendChild(script);
+            });
+        },
+
+        /**
          * Get MIME type from filename extension
          * @private
          */
