@@ -171,7 +171,7 @@
     <% } %>
 
     <!-- Analytics -->
-<%@ include file="exam-analytics.jsp" %>
+    <%@ include file="exam-analytics.jsp" %>
 
     <!-- Ad Scripts -->
     <%@ include file="ads-head.jsp" %>
@@ -195,18 +195,33 @@
                 </svg>
             </button>
             <a href="<%=request.getContextPath()%>/exams/" class="logo">
-                <img src="<%=request.getContextPath()%>/images/site/logo.png" alt="8gwifi.org" class="logo-img" width="44" height="44">
+                <img src="<%=request.getContextPath()%>/images/site/logo.png" alt="8gwifi.org"  width="44" height="44">
                 <span class="logo-text">8gwifi.org</span>
             </a>
         </div>
 
         <nav class="header-nav">
-            <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
-            <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math</a>
-            <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
-            <a href="<%=request.getContextPath()%>/physics/">Physics</a>
-            <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory Games</a>
-            <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Labs
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4L5 6.5L7.5 4"/></svg>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math Lab</a>
+                    <a href="<%=request.getContextPath()%>/exams/visual-physics/">Visual Physics Lab</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Practice
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4L5 6.5L7.5 4"/></svg>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
+                    <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory</a>
+                    <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+                </div>
+            </div>
+            <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
             <a href="<%=request.getContextPath()%>/">Tools</a>
             <% if (isLoggedIn) { %>
             <a href="<%=request.getContextPath()%>/exams/dashboard.jsp">Dashboard</a>
@@ -308,6 +323,89 @@
     color: var(--text-primary);
     border-color: var(--accent-primary);
 }
+
+/* Nav dropdowns */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition-fast);
+}
+
+.nav-dropdown-trigger:hover,
+.nav-dropdown:hover .nav-dropdown-trigger {
+    color: var(--text-primary);
+}
+
+.nav-dropdown-trigger svg {
+    transition: transform 0.2s ease;
+}
+
+.nav-dropdown:hover .nav-dropdown-trigger svg {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    min-width: 160px;
+    padding: 4px;
+    z-index: 200;
+}
+
+/* invisible bridge so menu doesn't close between trigger and panel */
+.nav-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+    display: flex;
+}
+
+.nav-dropdown-menu a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.nav-dropdown-menu a:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .nav-dropdown-menu {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
 </style>
 
 <!-- Mobile Menu -->
@@ -330,6 +428,7 @@
         <a href="<%=request.getContextPath()%>/exams/">Home</a>
         <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
         <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math</a>
+        <a href="<%=request.getContextPath()%>/exams/visual-physics/">Visual Physics</a>
         <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
         <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
         <a href="<%=request.getContextPath()%>/exams/math-memory/">Mental Memory</a>
