@@ -83,7 +83,7 @@
           "url": "https://8gwifi.org",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://8gwifi.org/images/site/4book.png"
+            "url": "https://8gwifi.org/images/site/logo.png"
           },
           "description": "Free online security and cryptography tools trusted by 500,000+ professionals monthly. Providing enterprise-grade encryption, certificate management, and security utilities since 2010.",
           "foundingDate": "2010",
