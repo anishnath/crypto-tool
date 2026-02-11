@@ -152,71 +152,283 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Free Online Tools",
-  "description": "Browse 200+ free online tools for professionals, students, and developers organized by category",
+  "description": "Browse free online tools for professionals, students, and developers organized by category",
   "url": "<%= baseUrl %>",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 331,
+    "name": "Top Tools and Pages",
+    "description": "Top performing pages on 8gwifi.org",
+    "numberOfItems": 45,
     "itemListElement": [
       {
-        "@type": "SoftwareApplication",
-        "name": "Base64 Encoder/Decoder",
-        "url": "<%= baseUrl %>/Base64Functions.jsp",
-        "applicationCategory": "Encoder",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "ListItem",
+        "position": 1,
+        "name": "PGP Encrypt/Decrypt",
+        "url": "<%= baseUrl %>/pgpencdec.jsp"
       },
       {
-        "@type": "SoftwareApplication",
-        "name": "RSA Encryption/Decryption",
-        "url": "<%= baseUrl %>/rsafunctions.jsp",
-        "applicationCategory": "Cryptography",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SSH Functions",
+        "url": "<%= baseUrl %>/sshfunctions.jsp"
       },
       {
-        "@type": "SoftwareApplication",
-        "name": "Cipher Encryption/Decryption",
-        "url": "<%= baseUrl %>/CipherFunctions.jsp",
-        "applicationCategory": "Cryptography",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "ListItem",
+        "position": 3,
+        "name": "TikZ Viewer",
+        "url": "<%= baseUrl %>/tikz-viewer.jsp"
       },
       {
-        "@type": "SoftwareApplication",
-        "name": "PGP Encryption/Decryption",
-        "url": "<%= baseUrl %>/pgpencdec.jsp",
-        "applicationCategory": "Security",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "ListItem",
+        "position": 4,
+        "name": "PEM Parser Functions",
+        "url": "<%= baseUrl %>/PemParserFunctions.jsp"
       },
       {
-        "@type": "SoftwareApplication",
-        "name": "SSL/TLS Scanner",
-        "url": "<%= baseUrl %>/sslscan.jsp",
-        "applicationCategory": "Security",
-        "operatingSystem": "Web Browser",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "ListItem",
+        "position": 5,
+        "name": "RSA Sign Verify Functions",
+        "url": "<%= baseUrl %>/rsasignverifyfunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "JWK Convert Functions",
+        "url": "<%= baseUrl %>/jwkconvertfunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 7,
+        "name": "Fernet",
+        "url": "<%= baseUrl %>/fernet.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 8,
+        "name": "RSA Functions",
+        "url": "<%= baseUrl %>/rsafunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 9,
+        "name": "Cipher Functions",
+        "url": "<%= baseUrl %>/CipherFunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 10,
+        "name": "JWS Generator",
+        "url": "<%= baseUrl %>/jwsgen.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 11,
+        "name": "PGP File Verify",
+        "url": "<%= baseUrl %>/pgpfileverify.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 12,
+        "name": "PGP File Decrypt",
+        "url": "<%= baseUrl %>/pgp-file-decrypt.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 13,
+        "name": "Lewis Structure Generator",
+        "url": "<%= baseUrl %>/lewis-structure-generator.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 14,
+        "name": "EC Sign Verify",
+        "url": "<%= baseUrl %>/ecsignverify.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 15,
+        "name": "PBKDF",
+        "url": "<%= baseUrl %>/pbkdf.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 16,
+        "name": "JKS Functions",
+        "url": "<%= baseUrl %>/jks.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 17,
+        "name": "JWS Parser",
+        "url": "<%= baseUrl %>/jwsparse.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 18,
+        "name": "Base64 Hex",
+        "url": "<%= baseUrl %>/base64Hex.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 19,
+        "name": "EC Functions",
+        "url": "<%= baseUrl %>/ecfunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 20,
+        "name": "PGP Key Functions",
+        "url": "<%= baseUrl %>/pgpkeyfunction.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 21,
+        "name": "PEM Convert",
+        "url": "<%= baseUrl %>/pemconvert.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 22,
+        "name": "PGP Suite",
+        "url": "<%= baseUrl %>/pgp-suite.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 23,
+        "name": "Homepage",
+        "url": "<%= baseUrl %>/index.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 24,
+        "name": "Certificates Tools",
+        "url": "<%= baseUrl %>/certs.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 25,
+        "name": "PEM Public Key",
+        "url": "<%= baseUrl %>/pempublic.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 26,
+        "name": "Steganography Tool",
+        "url": "<%= baseUrl %>/steganography-tool.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 27,
+        "name": "Neural Network Playground",
+        "url": "<%= baseUrl %>/neural_network_playground.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 28,
+        "name": "JWS Verify",
+        "url": "<%= baseUrl %>/jwsverify.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 29,
+        "name": "PBE",
+        "url": "<%= baseUrl %>/pbe.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 30,
+        "name": "Projectile Motion Simulator",
+        "url": "<%= baseUrl %>/projectile-motion-simulator.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 31,
+        "name": "htpasswd Generator",
+        "url": "<%= baseUrl %>/htpasswd.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 32,
+        "name": "Hexdump",
+        "url": "<%= baseUrl %>/hexdump.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 33,
+        "name": "LaTeX Equation Editor",
+        "url": "<%= baseUrl %>/latex-equation-editor.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 34,
+        "name": "PGP Dump",
+        "url": "<%= baseUrl %>/pgpdump.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 35,
+        "name": "Python Intro Tutorial",
+        "url": "<%= baseUrl %>/tutorials/python/intro.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 36,
+        "name": "Argon2",
+        "url": "<%= baseUrl %>/argon2.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 37,
+        "name": "cURL Functions",
+        "url": "<%= baseUrl %>/curlfunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 38,
+        "name": "JWK Functions",
+        "url": "<%= baseUrl %>/jwkfunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 39,
+        "name": "Password Generator",
+        "url": "<%= baseUrl %>/passwdgen.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 40,
+        "name": "BIP39 Mnemonic",
+        "url": "<%= baseUrl %>/bip39-mnemonic.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 41,
+        "name": "Self Signed Certificate Functions",
+        "url": "<%= baseUrl %>/SelfSignCertificateFunctions.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 42,
+        "name": "Gradient Descent Visualizer",
+        "url": "<%= baseUrl %>/gradient_descent_visualizer.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 43,
+        "name": "ISBN Validator",
+        "url": "<%= baseUrl %>/isbn-validator.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 44,
+        "name": "Programming Tutorials",
+        "url": "<%= baseUrl %>/tutorials/index.jsp"
+      },
+      {
+        "@type": "ListItem",
+        "position": 45,
+        "name": "Exams and Practice",
+        "url": "<%= baseUrl %>/exams/index.jsp"
       }
     ]
   },
@@ -353,4 +565,3 @@
   }
 }
 </script>
-

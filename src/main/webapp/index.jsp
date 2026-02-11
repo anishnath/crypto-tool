@@ -20,7 +20,7 @@
     <meta property="og:url" content="https://8gwifi.org">
     <meta property="og:title" content="8gwifi.org - Free Online Tools | 200+ Professional Tools">
     <meta property="og:description" content="Free online tools for professionals, students, and developers: Cryptography, Network diagnostics, DevOps, Data Converters, Mathematics, Finance, Chemistry, and 200+ more. All free, secure, client-side. No registration.">
-    <meta property="og:image" content="https://8gwifi.org/images/site/4book.png">
+    <meta property="og:image" content="https://8gwifi.org/images/site/logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="8gwifi.org">
