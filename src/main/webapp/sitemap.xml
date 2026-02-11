@@ -16063,4 +16063,45 @@
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
+    <!-- Visual Math Lab -->
+    <url>
+        <loc>https://8gwifi.org/exams/visual-math/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url><loc>https://8gwifi.org/exams/visual-math/unit-circle.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/riemann-sum.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/matrix-transform.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/taylor-series.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/function-plotter.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/central-limit-theorem.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/normal-distribution.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/derivative.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/quadratic.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/pythagorean-theorem.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/circle-theorems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/trig-graphs.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/triangle-solver.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/statistics-dashboard.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/3d-shapes.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/linear-equation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/systems-of-equations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/polynomial-roots.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/exp-log.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/conic-sections.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/transformations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/vectors-2d.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/sequences-series.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/complex-plane.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/polar-coordinates.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/parametric-curves.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/probability-distributions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/limits-continuity.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/slope-fields.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/regression-scatter.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/fractal-explorer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/venn-diagram.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/matrix-calculator.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/integration-explorer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/permutations-combinations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
