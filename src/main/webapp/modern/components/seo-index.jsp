@@ -20,11 +20,11 @@
   "description": "Comprehensive suite of 200+ free online tools for professionals, students, and developers: Cryptography, Network diagnostics, DevOps, Mathematics, Finance, Chemistry, Data Converters, PKI, Blockchain, and more. All tools are client-side, secure, and require no registration.",
   "logo": {
     "@type": "ImageObject",
-    "url": "<%= baseUrl %>/images/site/4book.png",
+    "url": "<%= baseUrl %>/images/site/logo.png",
     "width": 512,
     "height": 512
   },
-  "image": "<%= baseUrl %>/images/site/4book.png",
+  "image": "<%= baseUrl %>/images/site/logo.png",
   "sameAs": [
     "https://twitter.com/anish2good"
   ],
@@ -41,7 +41,7 @@
     "name": "8gwifi.org",
     "logo": {
       "@type": "ImageObject",
-      "url": "<%= baseUrl %>/images/site/4book.png"
+      "url": "<%= baseUrl %>/images/site/logo.png"
     }
   }
 }
@@ -243,7 +243,7 @@
   "url": "<%= baseUrl %>",
   "logo": {
     "@type": "ImageObject",
-    "url": "<%= baseUrl %>/images/site/4book.png",
+    "url": "<%= baseUrl %>/images/site/logo.png",
     "width": 512,
     "height": 512
   },
