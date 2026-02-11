@@ -439,7 +439,7 @@
                                 data-parent="#sidebarAccordion">
                                 <div class="card-body p-2">
                                     <ul class="list-unstyled mb-0 small">
-                                        <li><a href="/onecompiler.jsp"><strong>Online Compiler (60+
+                                        <li><a href="/online-compiler"><strong>Online Compiler (60+
                                                     Languages)</strong></a></li>
                                         <li><a href="/html-code-editor.jsp"><strong>HTML/CSS/JS Playground</strong> <span
                                                     class="badge badge-success">New</span></a></li>
