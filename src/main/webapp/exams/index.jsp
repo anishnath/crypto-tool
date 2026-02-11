@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "Free Practice Exams | NCERT Solutions + Physics Tools + CBSE Maths + Mental Math";
-    String seoDescription = "2,046 NCERT solutions with interactive graphs, 43 physics solvers & calculators, CBSE mock tests + 150+ mental math tricks. 100% free.";
+    String seoTitle = "Free Practice Exams | NCERT Solutions + Visual Math Lab + Physics Tools + Mental Math";
+    String seoDescription = "2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks. 100% free.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -25,7 +25,7 @@
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
 
     // Keywords
-    extraHead.append("<meta name=\"keywords\" content=\"NCERT solutions Class 11, NCERT solutions Class 10, NCERT solutions Class 9, CBSE practice exams, mental math tricks, competitive exam preparation, SSC math, bank exam quantitative, CAT quant practice, free mock tests, interactive graphs\">\n");
+    extraHead.append("<meta name=\"keywords\" content=\"NCERT solutions Class 11, NCERT solutions Class 10, NCERT solutions Class 9, CBSE practice exams, mental math tricks, visual math tools, interactive math visualizations, unit circle calculator, matrix calculator, function plotter, competitive exam preparation, SSC math, bank exam quantitative, CAT quant practice, free mock tests, interactive graphs\">\n");
 
     request.setAttribute("extraHeadContent", extraHead.toString());
 %>
@@ -34,9 +34,9 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions, Physics Tools & Mental Math</h1>
+                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions, Visual Math Lab, Physics Tools & Mental Math</h1>
                     <p class="hero-subtitle">
-                        2,046 NCERT solutions with interactive graphs, 43 physics solvers & calculators,
+                        2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers & calculators,
                         CBSE mock tests + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
                     </p>
                 </div>
@@ -128,6 +128,23 @@
                                     <span class="board-card-badge" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">43 Tools</span>
                                 </div>
                                 <p class="text-sm text-muted mt-4">Mechanics • Optics • Electromagnetism • Waves</p>
+                            </a>
+
+                            <!-- Visual Math Lab Card -->
+                            <a href="<%=request.getContextPath()%>/exams/visual-math/"
+                                class="card card-clickable board-card" style="border-color: #8b5cf6; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">Visual Math Lab</h3>
+                                <p class="board-card-subtitle">Interactive Math Visualizations</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white;">35 Tools</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Algebra • Trig • Calculus • Statistics</p>
                             </a>
 
                             <!-- CBSE Board Card -->
@@ -272,6 +289,12 @@
                                 </div>
                                 <div class="card text-center">
                                     <div
+                                        style="font-size: var(--text-3xl); font-weight: 700; color: #8b5cf6;">
+                                        35</div>
+                                    <div class="text-muted text-sm">Visual Math Tools</div>
+                                </div>
+                                <div class="card text-center">
+                                    <div
                                         style="font-size: var(--text-3xl); font-weight: 700; color: #f97316;">
                                         43</div>
                                     <div class="text-muted text-sm">Physics Tools</div>
@@ -291,8 +314,8 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "@id": "https://8gwifi.org/exams/",
-    "name": "Free Practice Exams, NCERT Solutions & Mental Math",
-    "description": "2,046 NCERT textbook solutions with interactive graphs & Venn diagrams. Free CBSE mock tests + 150+ mental math tricks.",
+    "name": "Free Practice Exams, NCERT Solutions, Visual Math Lab & Mental Math",
+    "description": "2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks.",
     "url": "https://8gwifi.org/exams/",
     "inLanguage": "en",
     "isPartOf": {
@@ -310,7 +333,7 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 5,
+    "numberOfItems": 6,
     "itemListElement": [
         {
             "@type": "ListItem",
@@ -367,6 +390,19 @@
         {
             "@type": "ListItem",
             "position": 5,
+            "item": {
+                "@type": "WebApplication",
+                "name": "Visual Math Lab - Interactive Math Visualizations",
+                "applicationCategory": "EducationalApplication",
+                "description": "35 interactive math visualizations covering algebra, trigonometry, calculus, linear algebra, statistics, and geometry",
+                "url": "https://8gwifi.org/exams/visual-math/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 6,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",
