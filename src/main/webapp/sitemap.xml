@@ -16104,4 +16104,29 @@
     <url><loc>https://8gwifi.org/exams/visual-math/matrix-calculator.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/integration-explorer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/permutations-combinations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <!-- Visual Physics Lab -->
+    <url>
+        <loc>https://8gwifi.org/exams/visual-physics/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/projectile-motion.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/pendulum-shm.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/lens-ray-diagram.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/electric-field.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/circuit-builder.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/wave-interference.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/snells-law.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/standing-waves.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/inclined-plane.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/collisions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/doppler-effect.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/magnetic-field.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/orbital-mechanics.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/torque-rotation.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/ideal-gas.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/em-induction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/diffraction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/photoelectric-effect.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-physics/pulley-systems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
