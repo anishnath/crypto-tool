@@ -299,6 +299,23 @@
     window.closeMobileSearch = closeMobileSearch;
 </script>
 
+<!-- Shared tools-database.json loader (single fetch, reused by categories-menu, search, related-tools) -->
+<script>
+(function() {
+    var dbPath = '<%=request.getContextPath()%>/modern/data/tools-database.json';
+    window.__toolsDatabasePath = dbPath;
+    window.__toolsDatabasePromise = null;
+    window.__getToolsDatabase = function() {
+        if (!window.__toolsDatabasePromise) {
+            window.__toolsDatabasePromise = fetch(dbPath)
+                .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+                .catch(function(err) { console.warn('Failed to load tools-database.json:', err); return null; });
+        }
+        return window.__toolsDatabasePromise;
+    };
+})();
+</script>
+
 <!-- Categories Menu Script -->
 <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js" defer onerror="console.warn('categories-menu.js failed to load')"></script>
 

@@ -34,85 +34,39 @@ console.log('🔍 Search.js v2.1 loaded');
         window._searchToolsDatabase = data;
     };
 
-    // Load tools database from JSON file
+    // Load tools database (uses shared promise from nav-header.jsp — single fetch)
     async function loadToolsDatabase() {
         try {
-            // Find the script tag that loaded this file to get the correct base path
-            let basePath = '';
-            const scripts = document.querySelectorAll('script[src*="search.js"]');
-            if (scripts.length > 0) {
-                const scriptSrc = scripts[scripts.length - 1].getAttribute('src');
-                if (scriptSrc) {
-                    // Extract base: /mywebapp2_war_exploded/modern/js/search.js?v=2.0 -> /mywebapp2_war_exploded/modern/data/tools-database.json
-                    basePath = scriptSrc.split('?')[0]; // Remove query params
-                    basePath = basePath.replace('/js/search.js', '/data/tools-database.json');
+            // Use shared database loader if available (avoids duplicate fetches)
+            if (typeof window.__getToolsDatabase === 'function') {
+                var data = await window.__getToolsDatabase();
+                if (data && data.tools) {
+                    var db = data.tools;
+                    setToolsDatabase(db);
+                    console.log('✅ Search: Loaded ' + db.length + ' tools (shared)');
+                    return db;
                 }
             }
-            
-            // Extract base path from current location as fallback
-            const pathname = window.location.pathname;
-            const origin = window.location.origin;
-            
-            // Build absolute path from current page location
-            let absolutePath = '';
-            if (pathname.includes('/modern/')) {
-                // If page is in modern directory or subdirectory
-                const modernIndex = pathname.indexOf('/modern/');
-                absolutePath = pathname.substring(0, modernIndex) + '/modern/data/tools-database.json';
-            } else {
-                // Extract context path (everything before the JSP filename)
-                const lastSlash = pathname.lastIndexOf('/');
-                if (lastSlash > 0) {
-                    absolutePath = pathname.substring(0, lastSlash + 1) + 'modern/data/tools-database.json';
-                } else {
-                    absolutePath = '/modern/data/tools-database.json';
-                }
+
+            // Fallback: fetch directly using server-resolved path
+            var dbPath = window.__toolsDatabasePath || '/modern/data/tools-database.json';
+            console.log('🔍 Search: Loading database from', dbPath);
+            var response = await fetch(dbPath);
+            if (response.ok) {
+                var data2 = await response.json();
+                var db2 = data2.tools || [];
+                setToolsDatabase(db2);
+                console.log('✅ Search: Loaded ' + db2.length + ' tools');
+                return db2;
             }
-            
-            // Try multiple path strategies (most likely first)
-            const pathsToTry = [
-                basePath,  // Derived from script src (most reliable)
-                absolutePath,  // Derived from current page path
-                origin + absolutePath,  // Full URL with current path
-                '../data/tools-database.json',  // Relative to js/ directory (if script is in /modern/js/)
-                origin + '/modern/data/tools-database.json',  // Absolute from origin
-                '/modern/data/tools-database.json'  // Absolute from root
-            ].filter(p => p); // Remove empty strings
-            
-            console.log('🔍 Search: Trying to load database from:', pathsToTry[0] || 'various paths');
-            
-            for (const jsonPath of pathsToTry) {
-                try {
-                    const response = await fetch(jsonPath);
-                    if (response.ok) {
-                        const data = await response.json();
-                        const db = data.tools || [];
-                        setToolsDatabase(db);
-                        console.log(`✅ Search: Loaded ${db.length} tools from ${jsonPath}`);
-                        return db;
-                    } else {
-                        // Only log first attempt to avoid spam
-                        if (jsonPath === pathsToTry[0]) {
-                            console.log(`❌ Search: ${jsonPath} returned ${response.status}, trying alternatives...`);
-                        }
-                    }
-                } catch (fetchError) {
-                    // Silently continue to next path
-                }
-            }
-            
-            console.warn(`⚠️ Search: Failed to load tools database (tried ${pathsToTry.length} paths)`);
+            console.warn('⚠️ Search: Failed to load tools database');
         } catch (error) {
             console.warn('⚠️ Search: Failed to load tools database:', error);
-            // Fallback - use existing data if available
-            const existing = getToolsDatabase();
+            var existing = getToolsDatabase();
             if (existing && existing.length > 0) {
-                console.log('✅ Search: Using cached database');
                 return existing;
-            } else {
-                setToolsDatabase([]);
-                return [];
             }
+            setToolsDatabase([]);
         }
         return getToolsDatabase();
     }

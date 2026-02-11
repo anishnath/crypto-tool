@@ -6,96 +6,48 @@
 let categoriesData = null;
 let toolsDatabase = null;
 
-// Get the correct path to tools-database.json (works from any subdirectory)
-function getToolsDatabasePath() {
-    // Try to find path from existing link/script tags that reference /modern/
-    const links = document.querySelectorAll('link[href*="/modern/"], script[src*="/modern/"]');
-    for (const el of links) {
-        const attr = el.getAttribute('href') || el.getAttribute('src');
-        if (attr) {
-            const modernIdx = attr.indexOf('/modern/');
-            if (modernIdx !== -1) {
-                return attr.substring(0, modernIdx) + '/modern/data/tools-database.json';
-            }
-        }
-    }
-
-    // Fallback: derive from pathname
-    const pathname = window.location.pathname;
-
-    // Check if pathname contains /modern/
-    const modernIdx = pathname.indexOf('/modern/');
-    if (modernIdx !== -1) {
-        return pathname.substring(0, modernIdx) + '/modern/data/tools-database.json';
-    }
-
-    // Look for known subdirectories to find context path
-    const knownDirs = ['/music/', '/tutorials/', '/exams/', '/blockchain/', '/physics/'];
-    for (const dir of knownDirs) {
-        const idx = pathname.indexOf(dir);
-        if (idx !== -1) {
-            return pathname.substring(0, idx) + '/modern/data/tools-database.json';
-        }
-    }
-
-    // Check if we're at root level (pathname ends with .jsp directly under context)
-    const lastSlash = pathname.lastIndexOf('/');
-    if (lastSlash > 0 && pathname.endsWith('.jsp')) {
-        return pathname.substring(0, lastSlash) + '/modern/data/tools-database.json';
-    }
-
-    // Final fallback
-    return '/modern/data/tools-database.json';
-}
-
-// Load categories data
+// Load categories data (uses shared promise from nav-header.jsp)
 async function loadCategoriesData() {
     if (categoriesData) return categoriesData;
 
     try {
-        const toolsDbPath = getToolsDatabasePath();
-        const response = await fetch(toolsDbPath);
-        if (response.ok) {
-            const data = await response.json();
-            toolsDatabase = data.tools || [];
-            
-            // Group tools by category
-            const grouped = {};
-            toolsDatabase.forEach(tool => {
-                if (!tool || !tool.category || !tool.url) {
-                    console.warn('Skipping invalid tool:', tool);
-                    return;
-                }
-                if (!grouped[tool.category]) {
-                    grouped[tool.category] = [];
-                }
-                // Avoid duplicates by checking URL
-                const exists = grouped[tool.category].some(t => t.url === tool.url);
-                if (!exists) {
-                    grouped[tool.category].push(tool);
-                } else {
-                    console.warn(`Duplicate tool found: ${tool.name} (${tool.url}) in category ${tool.category}`);
-                }
-            });
-            
-            // Verify counts
-            console.log('=== Tool Counts by Category ===');
-            Object.keys(grouped).sort().forEach(cat => {
-                console.log(`${cat}: ${grouped[cat].length} tools`);
-            });
-            
-            categoriesData = {
-                categories: data.categories || [],
-                toolsByCategory: grouped,
-                totalTools: data.totalTools || 0
-            };
-            
-            return categoriesData;
+        // Use shared database loader (single fetch across all scripts)
+        const data = typeof window.__getToolsDatabase === 'function'
+            ? await window.__getToolsDatabase()
+            : null;
+
+        if (!data) {
+            console.warn('Categories: tools-database.json not available');
+            return null;
         }
+
+        toolsDatabase = data.tools || [];
+
+        // Group tools by category
+        const grouped = {};
+        toolsDatabase.forEach(tool => {
+            if (!tool || !tool.category || !tool.url) return;
+            if (!grouped[tool.category]) {
+                grouped[tool.category] = [];
+            }
+            // Avoid duplicates by checking URL
+            const exists = grouped[tool.category].some(t => t.url === tool.url);
+            if (!exists) {
+                grouped[tool.category].push(tool);
+            }
+        });
+
+        categoriesData = {
+            categories: data.categories || [],
+            toolsByCategory: grouped,
+            totalTools: data.totalTools || 0
+        };
+
+        return categoriesData;
     } catch (error) {
         console.warn('Failed to load categories data:', error);
     }
-    
+
     return null;
 }
 
@@ -227,7 +179,7 @@ function getTopToolsForCategory(category, limit = 12) {
         'sshfunctions.jsp',
         'PemParserFunctions.jsp',
         'rsafunctions.jsp',
-        'onecompiler.jsp'
+        '/online-compiler'
     ];
     
     // Sort: popular first, then alphabetically

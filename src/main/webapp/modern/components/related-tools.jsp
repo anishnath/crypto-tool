@@ -515,25 +515,26 @@
         return toolIcons.tool;
     }
     
-    // Load tools database
+    // Load tools database (uses shared promise from nav-header.jsp — single fetch)
     async function loadRelatedTools() {
         try {
-            if (!config.toolsDatabasePath) {
-                console.warn('Related Tools: Tools database path not configured');
-                showError();
-                return;
+            // Use shared database loader if available (avoids duplicate fetches)
+            let data = null;
+            if (typeof window.__getToolsDatabase === 'function') {
+                data = await window.__getToolsDatabase();
+            } else {
+                // Fallback: fetch directly
+                const response = await fetch(config.toolsDatabasePath);
+                if (!response.ok) {
+                    throw new Error('Failed to load tools database: ' + response.status);
+                }
+                data = await response.json();
             }
-            
-            const response = await fetch(config.toolsDatabasePath + '?v=' + Date.now());
-            if (!response.ok) {
-                throw new Error('Failed to load tools database: ' + response.status);
-            }
-            
-            const data = await response.json();
+
             if (!data || !data.tools) {
                 throw new Error('Invalid tools database format');
             }
-            
+
             let tools = data.tools || [];
             
             // Get current tool's keywords for relevance scoring
