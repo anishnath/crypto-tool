@@ -100,6 +100,14 @@
     <link rel="icon" type="image/svg+xml"
           href="<%=request.getContextPath()%>/tutorials/assets/images/favicon.svg">
 
+    <!-- Preconnect to CDN origins for faster resource loading -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <!-- Preload critical font (Inter Regular - most used weight) -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="<%=request.getContextPath()%>/tutorials/assets/fonts/Inter-Regular.woff2">
+
     <!-- Fonts (shared with tutorials) -->
     <link rel="stylesheet"
           href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
@@ -132,7 +140,8 @@
         }
     </script>
 
-    <!-- MathJax for LaTeX rendering -->
+    <!-- MathJax for LaTeX rendering (skip on pages that don't need it for faster LCP) -->
+    <% if (!"true".equals(request.getAttribute("skipMathJax"))) { %>
     <script>
         window.MathJax = {
             tex: {
@@ -159,9 +168,10 @@
     </script>
     <script id="MathJax-script" async
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <% } %>
 
     <!-- Analytics -->
-     <%@ include file="exam-analytics.jsp" %>
+<%@ include file="exam-analytics.jsp" %>
 
     <!-- Ad Scripts -->
     <%@ include file="ads-head.jsp" %>
@@ -192,6 +202,7 @@
 
         <nav class="header-nav">
             <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
+            <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math</a>
             <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
             <a href="<%=request.getContextPath()%>/physics/">Physics</a>
             <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory Games</a>
@@ -318,6 +329,7 @@
     <nav class="mobile-menu-nav">
         <a href="<%=request.getContextPath()%>/exams/">Home</a>
         <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
+        <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math</a>
         <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
         <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
         <a href="<%=request.getContextPath()%>/exams/math-memory/">Mental Memory</a>
