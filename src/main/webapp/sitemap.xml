@@ -10,8 +10,8 @@
 </url>
 <url>
     <loc>https://8gwifi.org/online-compiler/</loc>
-    <priority>1.0</priority>
-    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
     </url>
 <url><loc>https://8gwifi.org/embed-online-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 <url><loc>https://8gwifi.org/online-python-compiler/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
