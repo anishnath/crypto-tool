@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-05T00:00:00.000Z",
-  "totalTools": 383,
+  "totalTools": 384,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -2705,6 +2705,13 @@
       "category": "Education",
       "keywords": "cbse board exam, class 10 mathematics, practice sets, mock tests, board preparation",
       "description": "CBSE Class 10 Mathematics - Practice sets and mock tests with detailed solutions"
+    },
+    {
+      "name": "Visual Physics Lab",
+      "url": "exams/visual-physics/",
+      "category": "Education",
+      "keywords": "visual physics, interactive physics, projectile motion simulator, lens ray diagram, electric field simulator, circuit simulator, wave interference, pendulum SHM, collisions, inclined plane, snells law, magnetic field, standing waves, doppler effect, orbital mechanics, torque rotation, pulley systems, ideal gas, electromagnetic induction, diffraction, photoelectric effect, physics visualization",
+      "description": "Visual Physics Lab - 19 interactive physics simulations covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics"
     }
   ]
 }
