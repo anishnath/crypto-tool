@@ -130,6 +130,24 @@
                                 <p class="text-sm text-muted mt-4">Mechanics • Optics • Electromagnetism • Waves</p>
                             </a>
 
+                            <!-- Visual Physics Lab Card -->
+                            <a href="<%=request.getContextPath()%>/exams/visual-physics/"
+                                class="card card-clickable board-card" style="border-color: #10b981; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #10b981, #059669);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">Visual Physics Lab</h3>
+                                <p class="board-card-subtitle">Interactive Physics Simulations</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">19 Tools</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Mechanics &bull; Optics &bull; E&amp;M &bull; Waves &bull; Thermo &bull; Modern</p>
+                            </a>
+
                             <!-- Visual Math Lab Card -->
                             <a href="<%=request.getContextPath()%>/exams/visual-math/"
                                 class="card card-clickable board-card" style="border-color: #8b5cf6; border-width: 2px;">
@@ -295,6 +313,12 @@
                                 </div>
                                 <div class="card text-center">
                                     <div
+                                        style="font-size: var(--text-3xl); font-weight: 700; color: #10b981;">
+                                        19</div>
+                                    <div class="text-muted text-sm">Physics Sims</div>
+                                </div>
+                                <div class="card text-center">
+                                    <div
                                         style="font-size: var(--text-3xl); font-weight: 700; color: #f97316;">
                                         43</div>
                                     <div class="text-muted text-sm">Physics Tools</div>
@@ -333,7 +357,7 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 6,
+    "numberOfItems": 7,
     "itemListElement": [
         {
             "@type": "ListItem",
@@ -392,6 +416,19 @@
             "position": 5,
             "item": {
                 "@type": "WebApplication",
+                "name": "Visual Physics Lab - Interactive Physics Simulations",
+                "applicationCategory": "EducationalApplication",
+                "description": "19 interactive physics simulations covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics",
+                "url": "https://8gwifi.org/exams/visual-physics/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 6,
+            "item": {
+                "@type": "WebApplication",
                 "name": "Visual Math Lab - Interactive Math Visualizations",
                 "applicationCategory": "EducationalApplication",
                 "description": "35 interactive math visualizations covering algebra, trigonometry, calculus, linear algebra, statistics, and geometry",
@@ -402,7 +439,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 6,
+            "position": 7,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",
