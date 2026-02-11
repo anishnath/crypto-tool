@@ -391,7 +391,7 @@
     },
     {
       "name": "Online Compiler (60+ Languages)",
-      "url": "onecompiler.jsp",
+      "url": "/online-compiler",
       "category": "Developer Tools",
       "keywords": "online compiler languages developer tools",
       "description": "Online Compiler (60+ Languages) - Free online developer tools tool"
