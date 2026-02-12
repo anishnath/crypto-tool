@@ -128,6 +128,7 @@ async function callOpenAI(prompt, env, options = {}) {
   const model = options.model || 'gpt-4o-mini';
   const temperature = options.temperature ?? 0.1;
   const maxTokens = options.maxTokens || 1000;
+  const systemMessage = options.systemMessage || 'You are a precise exam evaluator. Always respond with valid JSON only.';
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -140,7 +141,7 @@ async function callOpenAI(prompt, env, options = {}) {
       messages: [
         {
           role: 'system',
-          content: 'You are a precise exam evaluator. Always respond with valid JSON only.'
+          content: systemMessage
         },
         {
           role: 'user',
@@ -552,6 +553,197 @@ async function handleMarkExam(request, env) {
     saved_to_db: savedToDb,
     attempt_id: attempt_id || null
   });
+}
+
+/**
+ * Build prompt for math step-by-step solutions (generic — works for integrals, derivatives, etc.)
+ * Designed for minimal token usage: concise prompt, concise response.
+ */
+function buildMathStepsPrompt(operation, expression, variable, answer, bounds) {
+  let problemDesc;
+  if (operation === 'integrate' && bounds) {
+    problemDesc = `Definite integral: ∫[${bounds.lower},${bounds.upper}] ${expression} d${variable} = ${answer}`;
+  } else if (operation === 'integrate') {
+    problemDesc = `Indefinite integral: ∫ ${expression} d${variable} = ${answer}`;
+  } else if (operation === 'differentiate') {
+    problemDesc = `Derivative: d/d${variable}(${expression}) = ${answer}`;
+  } else {
+    problemDesc = `${operation}: ${expression} = ${answer}`;
+  }
+
+  return `Show solution steps for: ${problemDesc}
+
+Rules:
+- 3-5 steps max, fewest possible
+- Each step: short title + LaTeX formula
+- LaTeX must use \\frac{}{}, \\int, \\sin, \\cos etc.
+- Final step must show the answer
+- JSON only, no explanation text
+
+Response format:
+{"steps":[{"t":"step title","l":"LaTeX formula"}],"method":"method name"}`;
+}
+
+/**
+ * Build a deterministic cache key for math-steps lookups
+ */
+function buildCacheKey(operation, expression, variable, bounds) {
+  // Normalize: lowercase operation, trim expression, sort for consistency
+  const op = (operation || 'integrate').toLowerCase().trim();
+  const expr = (expression || '').trim();
+  const v = (variable || 'x').trim();
+  const lo = bounds?.lower?.trim() || '';
+  const hi = bounds?.upper?.trim() || '';
+  return `${op}|${expr}|${v}|${lo}|${hi}`;
+}
+
+/**
+ * Hash an IP address for privacy-safe request tracking
+ */
+async function hashIP(ip) {
+  if (!ip) return null;
+  const data = new TextEncoder().encode(ip);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+}
+
+/**
+ * Log a math-steps request for analytics
+ */
+async function logMathStepsRequest(env, expression, operation, variable, bounds, cacheHit, responseTimeMs) {
+  if (!env.DB) return;
+  try {
+    const ipHash = await hashIP(null); // IP not available here, set from caller if needed
+    await env.DB.prepare(
+      `INSERT INTO math_steps_requests (expression, operation, variable, bounds_lower, bounds_upper, cache_hit, response_time_ms, ip_hash)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      expression,
+      operation || 'integrate',
+      variable || 'x',
+      bounds?.lower || null,
+      bounds?.upper || null,
+      cacheHit ? 1 : 0,
+      responseTimeMs,
+      ipHash
+    ).run();
+  } catch (e) {
+    console.error('Failed to log math-steps request:', e);
+  }
+}
+
+/**
+ * Handle math step-by-step solution requests
+ * POST /api/math-steps
+ * Body: { operation, expression, variable, answer, bounds?: {lower, upper} }
+ *
+ * Flow: Check DB cache → if hit, return cached steps. If miss, call AI → cache result → return.
+ */
+async function handleMathSteps(request, env) {
+  const startTime = Date.now();
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const { operation, expression, variable, answer, bounds } = payload;
+
+  if (!expression || !answer) {
+    return jsonResponse({ error: 'Missing required fields: expression, answer' }, { status: 400 });
+  }
+
+  const op = operation || 'integrate';
+  const v = variable || 'x';
+  const cacheKey = buildCacheKey(op, expression, v, bounds);
+
+  // 1. Check DB cache
+  if (env.DB) {
+    try {
+      const cached = await env.DB.prepare(
+        'SELECT steps_json, method, hit_count FROM math_steps_cache WHERE cache_key = ?'
+      ).bind(cacheKey).first();
+
+      if (cached) {
+        // Cache hit — update stats and return
+        await env.DB.prepare(
+          `UPDATE math_steps_cache SET hit_count = hit_count + 1, last_accessed_at = datetime('now') WHERE cache_key = ?`
+        ).bind(cacheKey).run();
+
+        const elapsed = Date.now() - startTime;
+        logMathStepsRequest(env, expression, op, v, bounds, true, elapsed);
+
+        const steps = JSON.parse(cached.steps_json);
+        console.log(`Math-steps cache HIT: "${expression}" (hits: ${cached.hit_count + 1})`);
+
+        return jsonResponse({
+          success: true,
+          steps: steps,
+          method: cached.method || '',
+          cached: true
+        });
+      }
+    } catch (e) {
+      console.error('Cache lookup error (falling through to AI):', e);
+    }
+  }
+
+  // 2. Cache miss — call AI
+  try {
+    const prompt = buildMathStepsPrompt(op, expression, v, answer, bounds);
+
+    const result = await callOpenAI(prompt, env, {
+      model: 'gpt-4o-mini',
+      temperature: 0.1,
+      maxTokens: 500,
+      systemMessage: 'You are a math tutor. Respond with valid JSON only.'
+    });
+
+    // Normalize response
+    const steps = (result.steps || []).map(s => ({
+      title: s.t || s.title || '',
+      latex: s.l || s.latex || ''
+    }));
+    const method = result.method || '';
+
+    // 3. Store in cache
+    if (env.DB && steps.length > 0) {
+      try {
+        await env.DB.prepare(
+          `INSERT OR IGNORE INTO math_steps_cache (cache_key, operation, expression, variable, answer, bounds_lower, bounds_upper, steps_json, method)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          cacheKey,
+          op,
+          expression,
+          v,
+          answer,
+          bounds?.lower || null,
+          bounds?.upper || null,
+          JSON.stringify(steps),
+          method
+        ).run();
+        console.log(`Math-steps cache STORE: "${expression}"`);
+      } catch (e) {
+        console.error('Cache store error:', e);
+      }
+    }
+
+    const elapsed = Date.now() - startTime;
+    logMathStepsRequest(env, expression, op, v, bounds, false, elapsed);
+
+    return jsonResponse({
+      success: true,
+      steps: steps,
+      method: method,
+      cached: false
+    });
+  } catch (err) {
+    console.error('Math steps error:', err);
+    return jsonResponse({ error: 'Failed to generate steps', details: err.message }, { status: 500 });
+  }
 }
 
 /**
@@ -1585,6 +1777,16 @@ export default {
           return withCors(authError, reqOrigin);
         }
         const r = await handleMarkBatch(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // Math step-by-step solutions (generic)
+      if (pathname === '/api/math-steps' && request.method === 'POST') {
+        const authError = requireApiKey(request, env);
+        if (authError) {
+          return withCors(authError, reqOrigin);
+        }
+        const r = await handleMathSteps(request, env);
         return withCors(r, reqOrigin);
       }
 

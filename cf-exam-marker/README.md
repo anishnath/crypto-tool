@@ -437,6 +437,54 @@ Response:
 
 ---
 
+#### Math Step-by-Step Solutions (Generic)
+```
+POST /api/math-steps
+Content-Type: application/json
+X-API-Key: your_api_key
+
+{
+  "operation": "integrate",
+  "expression": "e^x*x^2",
+  "variable": "x",
+  "answer": "e^x*(x^2-2*x+2)",
+  "bounds": { "lower": "0", "upper": "1" }
+}
+```
+
+**Parameters:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `expression` | string | Yes | Math expression (max 200 chars, math characters only) |
+| `answer` | string | Yes | Correct answer from CAS engine (anchors the AI response) |
+| `operation` | string | No | One of: `integrate`, `differentiate`, `simplify`, `solve` (default: `integrate`) |
+| `variable` | string | No | One of: `x`, `y`, `t`, `u`, `z`, `r`, `s`, `n` (default: `x`) |
+| `bounds` | object | No | `{lower, upper}` for definite integrals (max 30 chars each) |
+
+**Validation (servlet-side, acts as anti-spam):**
+- `expression` and `answer` must match `[a-zA-Z0-9 +\-*/^().,|\!]` regex
+- `operation` and `variable` must be from whitelists
+- Length limits enforced on all fields
+- Invalid requests are rejected before reaching OpenAI (no cost)
+
+Response:
+```json
+{
+  "success": true,
+  "steps": [
+    { "title": "Integration by Parts", "latex": "\\int e^x x^2 \\, dx = e^x x^2 - \\int e^x (2x) \\, dx" },
+    { "title": "Second Integration by Parts", "latex": "\\int e^x (2x) \\, dx = 2x e^x - 2e^x" },
+    { "title": "Combine Results", "latex": "e^x(x^2 - 2x + 2) + C" },
+    { "title": "Evaluate Bounds", "latex": "\\int_0^1 e^x x^2 \\, dx = e(1-2+2) - (0-0+2) = e - 2" }
+  ],
+  "method": "Integration by Parts"
+}
+```
+
+**Cost:** Uses `gpt-4o-mini` with max 500 tokens. Prompt requests 3-5 steps with abbreviated keys to minimize token usage.
+
+---
+
 #### Mark Full Exam
 ```
 POST /api/mark-exam
@@ -534,6 +582,7 @@ curl http://localhost:8787/api/chapters?exam_type=CBSE | jq .
 - Can specify `"model": "gpt-4o"` for higher accuracy (more expensive)
 - Batching reduces API calls
 - Typical exam (25 subjective questions): ~5 API calls
+- Math steps: ~500 tokens per request (3-5 steps), answer-anchored prompt keeps output concise
 
 ---
 
