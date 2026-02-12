@@ -1273,9 +1273,152 @@
     });
     document.getElementById('iq-download-pdf-btn').addEventListener('click', function() {
         if (!lastSolveContext) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('No result to download', 2000, 'warning'); return; }
-        var text = 'Inequality Solver - 8gwifi.org\n\nInequality: ' + lastSolveContext.raw + '\nSolution: ' + lastResultText + '\nLaTeX: ' + lastResultLatex;
-        if (typeof ToolUtils !== 'undefined') ToolUtils.downloadAsFile(text, 'inequality-solution.txt', { toast: 'Solution downloaded!' });
+        downloadResultPdf();
     });
+
+    function downloadResultPdf() {
+        var ctx = lastSolveContext;
+
+        // Build off-screen container for capture
+        var container = document.createElement('div');
+        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:700px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+        document.body.appendChild(container);
+
+        // Title
+        var title = document.createElement('div');
+        title.style.cssText = 'font-size:22px;font-weight:700;margin-bottom:8px;color:#059669;';
+        title.textContent = 'Inequality Solver \u2014 8gwifi.org';
+        container.appendChild(title);
+
+        var divider = document.createElement('div');
+        divider.style.cssText = 'height:2px;background:linear-gradient(90deg,#059669,#10b981,transparent);margin-bottom:24px;';
+        container.appendChild(divider);
+
+        // Inequality
+        var qLabel = document.createElement('div');
+        qLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;';
+        qLabel.textContent = 'Inequality';
+        container.appendChild(qLabel);
+
+        var qMath = document.createElement('div');
+        qMath.style.cssText = 'font-size:20px;margin-bottom:24px;';
+        container.appendChild(qMath);
+        try { katex.render(inequalityToLatex(ctx.raw), qMath, { displayMode: true, throwOnError: false }); } catch(e) { qMath.textContent = ctx.raw; }
+
+        // Solution
+        var aLabel = document.createElement('div');
+        aLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;';
+        aLabel.textContent = 'Solution (Interval Notation)';
+        container.appendChild(aLabel);
+
+        var aMath = document.createElement('div');
+        aMath.style.cssText = 'font-size:22px;margin-bottom:16px;padding:16px;background:#ecfdf5;border-radius:8px;';
+        container.appendChild(aMath);
+        try { katex.render(lastResultLatex, aMath, { displayMode: true, throwOnError: false }); } catch(e) { aMath.textContent = lastResultText; }
+
+        // Plain text version
+        var textDiv = document.createElement('div');
+        textDiv.style.cssText = 'font-size:14px;color:#334155;margin-bottom:20px;font-family:monospace;';
+        textDiv.textContent = lastResultText;
+        container.appendChild(textDiv);
+
+        // Include steps if rendered
+        var stepsArea = document.getElementById('iq-steps-area');
+        if (stepsArea && stepsArea.children.length > 0) {
+            var stepsLabel = document.createElement('div');
+            stepsLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:12px;border-top:1px solid #e2e8f0;padding-top:16px;';
+            stepsLabel.textContent = 'Step-by-Step Solution';
+            container.appendChild(stepsLabel);
+
+            var stepEls = stepsArea.querySelectorAll('.iq-step');
+            for (var i = 0; i < stepEls.length; i++) {
+                var stepRow = document.createElement('div');
+                stepRow.style.cssText = 'display:flex;gap:12px;margin-bottom:12px;';
+
+                var stepNum = document.createElement('div');
+                stepNum.style.cssText = 'width:24px;height:24px;background:#059669;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
+                stepNum.textContent = (i + 1);
+                stepRow.appendChild(stepNum);
+
+                var stepBody = document.createElement('div');
+                stepBody.style.cssText = 'flex:1;';
+
+                var titleEl = stepEls[i].querySelector('.iq-step-title');
+                if (titleEl) {
+                    var sTitle = document.createElement('div');
+                    sTitle.style.cssText = 'font-size:13px;font-weight:600;color:#334155;margin-bottom:4px;';
+                    sTitle.textContent = titleEl.textContent;
+                    stepBody.appendChild(sTitle);
+                }
+
+                var mathEl = stepEls[i].querySelector('.iq-step-math');
+                if (mathEl) {
+                    var sMath = document.createElement('div');
+                    sMath.style.cssText = 'font-size:16px;';
+                    var katexAnnotation = mathEl.querySelector('annotation');
+                    if (katexAnnotation) {
+                        katex.render(katexAnnotation.textContent, sMath, { displayMode: true, throwOnError: false });
+                    } else {
+                        sMath.innerHTML = mathEl.innerHTML;
+                    }
+                    stepBody.appendChild(sMath);
+                }
+
+                stepRow.appendChild(stepBody);
+                container.appendChild(stepRow);
+            }
+        }
+
+        // Footer
+        var footer = document.createElement('div');
+        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
+        footer.innerHTML = '<span>Generated by 8gwifi.org Inequality Solver</span><span>' + new Date().toLocaleDateString() + '</span>';
+        container.appendChild(footer);
+
+        // Capture and generate PDF
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Generating PDF...', 1500, 'info');
+
+        var loadHtml2Canvas = (typeof html2canvas !== 'undefined')
+            ? Promise.resolve()
+            : ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+
+        loadHtml2Canvas.then(function() {
+            return ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+        }).then(function() {
+            return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+        }).then(function(canvas) {
+            document.body.removeChild(container);
+
+            var imgData = canvas.toDataURL('image/png');
+            var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+            var pageWidth = pdf.internal.pageSize.getWidth();
+            var pageHeight = pdf.internal.pageSize.getHeight();
+            var margin = 10;
+            var usableWidth = pageWidth - margin * 2;
+
+            var imgWidth = usableWidth;
+            var imgHeight = (canvas.height * usableWidth) / canvas.width;
+
+            var usableHeight = pageHeight - margin * 2;
+            if (imgHeight > usableHeight) {
+                imgHeight = usableHeight;
+                imgWidth = (canvas.width * usableHeight) / canvas.height;
+            }
+
+            var x = (pageWidth - imgWidth) / 2;
+            pdf.addImage(imgData, 'PNG', x, margin, imgWidth, imgHeight);
+
+            var filename = 'inequality-' + ctx.raw.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.pdf';
+            pdf.save(filename);
+
+            if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('PDF downloaded!', 2000, 'success');
+        }).catch(function(err) {
+            console.error('PDF generation failed:', err);
+            if (container.parentNode) document.body.removeChild(container);
+            if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('PDF generation failed', 3000, 'error');
+        });
+    }
 
     // ========== Load from URL ==========
     (function loadFromUrl() {
