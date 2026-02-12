@@ -570,6 +570,181 @@
             border-color: var(--border, #334155);
         }
 
+        /* ========== Encrypt/Decrypt Flow Animation ========== */
+        .fernet-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1rem;
+            gap: 1.25rem;
+        }
+
+        .fernet-flow-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .fernet-flow-box {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            animation: flowFadeIn 0.6s ease both;
+        }
+
+        .flow-plaintext {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1.5px solid #93c5fd;
+            min-width: 72px;
+            animation-delay: 0s;
+        }
+
+        .flow-token {
+            background: #fce7f3;
+            color: #9d174d;
+            border: 1.5px solid #f9a8d4;
+            min-width: 72px;
+            animation-delay: 0.8s;
+        }
+
+        .flow-engine {
+            background: var(--tool-gradient);
+            color: #fff;
+            border: none;
+            padding: 0.625rem 0.875rem;
+            border-radius: 0.625rem;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);
+            animation-delay: 0.3s;
+            position: relative;
+        }
+
+        .flow-engine-label {
+            font-size: 0.625rem;
+            opacity: 0.85;
+            margin-top: 0.125rem;
+            font-weight: 500;
+        }
+
+        [data-theme="dark"] .flow-plaintext {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        [data-theme="dark"] .flow-token {
+            background: rgba(236, 72, 153, 0.15);
+            color: #f9a8d4;
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+
+        /* Animated arrow connector */
+        .flow-arrow {
+            flex: 1;
+            min-width: 28px;
+            height: 2px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .flow-arrow-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+        }
+
+        .flow-arrow-dot {
+            position: absolute;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--tool-primary);
+            animation: flowDot 2s ease-in-out infinite;
+        }
+
+        .flow-arrow-head {
+            position: absolute;
+            top: -4px;
+            right: -2px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid var(--border);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        @keyframes flowDot {
+            0% { left: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: calc(100% - 8px); opacity: 0; }
+        }
+
+        @keyframes flowFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flow mode label */
+        .fernet-flow-mode {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--tool-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            animation: flowFadeIn 0.3s ease both;
+        }
+
+        .fernet-flow-caption {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            text-align: center;
+            animation: flowFadeIn 0.6s ease 1s both;
+        }
+
+        /* Key icon floating */
+        .flow-key-icon {
+            position: absolute;
+            top: -18px;
+            right: -6px;
+            font-size: 0.75rem;
+            animation: flowKeyBob 2.5s ease-in-out infinite;
+        }
+
+        @keyframes flowKeyBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Decrypt reverse arrows */
+        .flow-arrow.reverse .flow-arrow-dot {
+            animation: flowDotReverse 2s ease-in-out infinite;
+        }
+
+        .flow-arrow.reverse .flow-arrow-head {
+            left: -2px;
+            right: auto;
+            border-left: none;
+            border-right: 6px solid var(--border);
+        }
+
+        @keyframes flowDotReverse {
+            0% { left: calc(100% - 8px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 0; opacity: 0; }
+        }
+
         /* Output column tabs */
         .fernet-output-tabs {
             display: flex;
@@ -744,13 +919,30 @@
                     </div>
                     <div class="tool-result-content" id="displaySection">
                         <div class="tool-empty-state" id="emptyState">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                <circle cx="12" cy="16" r="1"/>
-                            </svg>
-                            <h3>Fernet Encryption</h3>
-                            <p>Enter a message and key, then click Encrypt or Decrypt.</p>
+                            <div class="fernet-flow" id="fernetFlow">
+                                <!-- Encrypt flow -->
+                                <div class="fernet-flow-mode" id="flowModeLabel">Encryption</div>
+                                <div class="fernet-flow-row" id="flowRow">
+                                    <div class="fernet-flow-box flow-plaintext" id="flowBoxLeft">Plaintext</div>
+                                    <div class="flow-arrow" id="flowArrow1">
+                                        <div class="flow-arrow-line"></div>
+                                        <div class="flow-arrow-dot"></div>
+                                        <div class="flow-arrow-head"></div>
+                                    </div>
+                                    <div class="fernet-flow-box flow-engine">
+                                        <span class="flow-key-icon">&#128273;</span>
+                                        AES-128-CBC
+                                        <div class="flow-engine-label">HMAC-SHA256</div>
+                                    </div>
+                                    <div class="flow-arrow" id="flowArrow2">
+                                        <div class="flow-arrow-line"></div>
+                                        <div class="flow-arrow-dot" style="animation-delay:1s;"></div>
+                                        <div class="flow-arrow-head"></div>
+                                    </div>
+                                    <div class="fernet-flow-box flow-token" id="flowBoxRight">Fernet Token</div>
+                                </div>
+                                <p class="fernet-flow-caption">Enter a message and key, then click Encrypt or Decrypt.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="tool-result-actions" id="resultActions">
@@ -1058,6 +1250,35 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
     var displaySection = document.getElementById('displaySection');
     var resultActions = document.getElementById('resultActions');
 
+    // ========== Flow Animation ==========
+
+    function updateFlowAnimation(mode) {
+        var flowLabel = document.getElementById('flowModeLabel');
+        var flowBoxLeft = document.getElementById('flowBoxLeft');
+        var flowBoxRight = document.getElementById('flowBoxRight');
+        var flowArrow1 = document.getElementById('flowArrow1');
+        var flowArrow2 = document.getElementById('flowArrow2');
+        if (!flowLabel) return;
+
+        if (mode === 'decrypt') {
+            flowLabel.textContent = 'Decryption';
+            flowBoxLeft.textContent = 'Fernet Token';
+            flowBoxLeft.className = 'fernet-flow-box flow-token';
+            flowBoxRight.textContent = 'Plaintext';
+            flowBoxRight.className = 'fernet-flow-box flow-plaintext';
+            flowArrow1.classList.add('reverse');
+            flowArrow2.classList.add('reverse');
+        } else {
+            flowLabel.textContent = 'Encryption';
+            flowBoxLeft.textContent = 'Plaintext';
+            flowBoxLeft.className = 'fernet-flow-box flow-plaintext';
+            flowBoxRight.textContent = 'Fernet Token';
+            flowBoxRight.className = 'fernet-flow-box flow-token';
+            flowArrow1.classList.remove('reverse');
+            flowArrow2.classList.remove('reverse');
+        }
+    }
+
     // ========== Mode Toggle ==========
 
     modeBtns.forEach(function(btn) {
@@ -1086,6 +1307,9 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
                 messageHint.textContent = 'Text will be encrypted with AES-128-CBC';
                 submitBtn.textContent = 'Encrypt Message';
             }
+
+            // Update flow animation direction
+            updateFlowAnimation(mode);
         });
     });
 
