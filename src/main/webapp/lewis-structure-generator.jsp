@@ -1264,6 +1264,22 @@
         return atoms;
     }
 
+    // Preserve user-entered connectivity style for display (e.g., CH3OCH3 vs C2H6O).
+    function normalizeFormulaForDisplay(formula) {
+        var f = formula || '';
+        f = f.replace(/[\u2080-\u2089]/g, function(ch) {
+            return String(ch.charCodeAt(0) - 0x2080);
+        });
+        f = f.replace(/[\u2070\u00B9\u00B2\u00B3\u2074-\u2079]/g, function(ch) {
+            var map = {'\u2070':'0','\u00B9':'1','\u00B2':'2','\u00B3':'3',
+                '\u2074':'4','\u2075':'5','\u2076':'6','\u2077':'7',
+                '\u2078':'8','\u2079':'9'};
+            return map[ch] || ch;
+        });
+        f = f.replace(/[\u207A\u207B\u2212+\-]+$/, '');
+        return f.replace(/\s+/g, '');
+    }
+
     // ========== p5.js SKETCH LIFECYCLE ==========
     function destroyCurrentSketch() {
         if (currentP5) {
@@ -1287,6 +1303,23 @@
     // Determines bond orders and lone pairs for accurate Lewis structures
 
     function analyzeBonding(atoms, centralAtom, totalValence) {
+        // Special-case NO2 radical: one N=O and one N-O with an unpaired electron on N.
+        if (centralAtom === 'N' &&
+            (atoms['N'] || 0) === 1 &&
+            (atoms['O'] || 0) === 2 &&
+            Object.keys(atoms).length === 2 &&
+            totalValence === 17) {
+            return {
+                peripherals: ['O', 'O'],
+                bondOrders: [2, 1],
+                peripheralLonePairs: [2, 3],
+                centralLonePairs: 0,
+                hasResonance: true,
+                isRadical: true,
+                unpairedElectrons: 1
+            };
+        }
+
         var peripherals = [];
         for (var el in atoms) {
             if (el === centralAtom && atoms[el] === 1) continue;
@@ -1508,6 +1541,13 @@
         for (var i = 0; i < termsPerAtom.length; i++) termBonds += termsPerAtom[i].length;
         var remaining = totalValence - (bbBonds + termBonds) * 2;
 
+        var termBondOrders = [];
+        for (var i = 0; i < termsPerAtom.length; i++) {
+            var arr = [];
+            for (var t = 0; t < termsPerAtom[i].length; t++) arr.push(1);
+            termBondOrders.push(arr);
+        }
+
         // Terminal atom lone pairs (non-H get up to 3 pairs for octet)
         var termLonePairs = [];
         for (var i = 0; i < termsPerAtom.length; i++) {
@@ -1558,7 +1598,7 @@
                 var myBondE = 0;
                 if (i > 0) myBondE += bbBondOrders[i - 1] * 2;
                 if (i < backbone.length - 1) myBondE += bbBondOrders[i] * 2;
-                myBondE += termsPerAtom[i].length * 2;
+                for (var ti = 0; ti < termBondOrders[i].length; ti++) myBondE += termBondOrders[i][ti] * 2;
                 var atomE = myBondE + bbLonePairs[i] * 2;
                 var target = (backbone[i] === 'H') ? 2 : 8;
 
@@ -1578,7 +1618,49 @@
                         atomE += 2;
                         increased = true;
                     }
+                    // Try upgrading a terminal bond attached to this atom (e.g., C=O).
+                    if (!increased) {
+                        for (var ti = 0; ti < termsPerAtom[i].length; ti++) {
+                            var maxTermBond = getMaxBonds(termsPerAtom[i][ti]);
+                            if (termsPerAtom[i][ti] !== 'H' &&
+                                termLonePairs[i][ti] > 0 &&
+                                termBondOrders[i][ti] < maxTermBond) {
+                                termLonePairs[i][ti]--;
+                                termBondOrders[i][ti]++;
+                                atomE += 2;
+                                increased = true;
+                                break;
+                            }
+                        }
+                    }
                     if (!increased) break;
+                }
+            }
+        }
+
+        // If adjacent backbone atoms are both electron-deficient, promote their bond order.
+        function atomTarget(idx) {
+            return (backbone[idx] === 'H') ? 2 : 8;
+        }
+        function atomElectronCount(idx) {
+            var e = bbLonePairs[idx] * 2;
+            if (idx > 0) e += bbBondOrders[idx - 1] * 2;
+            if (idx < backbone.length - 1) e += bbBondOrders[idx] * 2;
+            for (var ti = 0; ti < termBondOrders[idx].length; ti++) e += termBondOrders[idx][ti] * 2;
+            return e;
+        }
+        var changed = true;
+        var guard = 0;
+        while (changed && guard < 8) {
+            changed = false;
+            guard++;
+            for (var bi = 0; bi < bbBondOrders.length; bi++) {
+                if (bbBondOrders[bi] >= 3) continue;
+                var leftE = atomElectronCount(bi);
+                var rightE = atomElectronCount(bi + 1);
+                if (leftE < atomTarget(bi) && rightE < atomTarget(bi + 1)) {
+                    bbBondOrders[bi]++;
+                    changed = true;
                 }
             }
         }
@@ -1586,7 +1668,8 @@
         return {
             bbBondOrders: bbBondOrders,
             bbLonePairs: bbLonePairs,
-            termLonePairs: termLonePairs
+            termLonePairs: termLonePairs,
+            termBondOrders: termBondOrders
         };
     }
 
@@ -1629,7 +1712,7 @@
     }
 
     // ========== p5.js: Lewis Structure Sketch ==========
-    function createLewisSketch(atoms, centralAtom, totalValence, charge, bonding) {
+    function createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaLabel) {
         destroyCurrentSketch();
 
         var container = document.getElementById('lewisCanvasContainer');
@@ -1641,6 +1724,7 @@
             var bondOrders = bonding.bondOrders;
             var pLonePairs = bonding.peripheralLonePairs;
             var centralLonePairs = bonding.centralLonePairs;
+            var unpairedElectrons = bonding.unpairedElectrons || 0;
 
             p.setup = function() {
                 var canvas = p.createCanvas(w, h);
@@ -1774,6 +1858,20 @@
                     }
                 }
 
+                // Draw unpaired electron(s) on central atom for radicals.
+                if (unpairedElectrons > 0) {
+                    var maxDots = Math.min(unpairedElectrons, 3);
+                    var baseAngle = -Math.PI / 2;
+                    for (var ue = 0; ue < maxDots; ue++) {
+                        var ueAngle = baseAngle + (ue - (maxDots - 1) / 2) * (Math.PI / 7);
+                        var ux = cx + Math.cos(ueAngle) * (bondLen * 0.32);
+                        var uy = cy + Math.sin(ueAngle) * (bondLen * 0.32);
+                        p.fill(lonePairCol);
+                        p.noStroke();
+                        p.ellipse(ux, uy, 7, 7);
+                    }
+                }
+
                 // Central atom circle
                 var centerColor = elementColors[centralAtom] || elementColors['default'];
                 p.stroke(dark ? 100 : 60);
@@ -1795,8 +1893,8 @@
                 p.textSize(11);
                 p.textStyle(p.NORMAL);
                 p.textAlign(p.CENTER, p.TOP);
-                var formulaStr = Object.entries(atoms).map(function(e){ return e[0] + (e[1] > 1 ? e[1] : ''); }).join('');
-                p.text('Lewis Structure: ' + formatFormulaText(formulaStr) + (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : ''), w/2, 10);
+                var shownFormula = formulaLabel || Object.entries(atoms).map(function(e){ return e[0] + (e[1] > 1 ? e[1] : ''); }).join('');
+                p.text('Lewis Structure: ' + formatFormulaText(shownFormula) + (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : ''), w/2, 10);
             };
         }, container);
     }
@@ -2412,7 +2510,8 @@
                             x: bbPos[i].x + Math.cos(angles[t]) * bondLen,
                             y: bbPos[i].y + Math.sin(angles[t]) * bondLen,
                             el: terms[t],
-                            parent: i
+                            parent: i,
+                            termIndex: t
                         });
                     }
                 }
@@ -2425,15 +2524,21 @@
                         order, bondCol, 4);
                 }
 
-                // Draw terminal bonds (single)
+                // Draw terminal bonds (single/double/triple from analysis)
+                var termOrders = chainBonding ? chainBonding.termBondOrders : null;
                 for (var t = 0; t < termPos.length; t++) {
+                    var tOrder = 1;
+                    if (termOrders &&
+                        termOrders[termPos[t].parent] &&
+                        termOrders[termPos[t].parent][termPos[t].termIndex] !== undefined) {
+                        tOrder = termOrders[termPos[t].parent][termPos[t].termIndex];
+                    }
                     drawMultiBond(p, bbPos[termPos[t].parent].x, bbPos[termPos[t].parent].y,
-                        termPos[t].x, termPos[t].y, 1, bondCol, 2.5);
+                        termPos[t].x, termPos[t].y, tOrder, bondCol, 2.5);
                 }
 
                 // Draw lone pairs on terminal atoms (from analysis or fallback)
                 var tLonePairs = chainBonding ? chainBonding.termLonePairs : null;
-                var tIdx = 0;
                 for (var i = 0; i < n; i++) {
                     var terms = termsPerAtom[i];
                     if (!terms) continue;
@@ -2445,37 +2550,28 @@
                             var elV = valenceElectrons[terms[t]] || 0;
                             lpCount = (elV > 1) ? Math.floor((elV - 1) / 2) : 0;
                         }
-                        // Find this terminal in termPos
                         var tp = null;
                         for (var k = 0; k < termPos.length; k++) {
-                            if (termPos[k].parent === i && termPos[k].el === terms[t]) {
+                            if (termPos[k].parent === i && termPos[k].termIndex === t) {
                                 tp = termPos[k];
-                                termPos[k] = {x: tp.x, y: tp.y, el: '_used_', parent: tp.parent};
                                 break;
                             }
                         }
                         if (!tp) continue;
                         if (lpCount > 0) {
                             var lpAngle = Math.atan2(tp.y - bbPos[i].y, tp.x - bbPos[i].x);
-                            drawLonePairDots(p, tp.x, tp.y, lpAngle, 22, lonePairCol);
+                            for (var lp = 0; lp < Math.min(lpCount, 3); lp++) {
+                                var spreadAngle;
+                                if (lpCount === 1) {
+                                    spreadAngle = lpAngle;
+                                } else if (lpCount === 2) {
+                                    spreadAngle = lpAngle + (lp === 0 ? -Math.PI / 5 : Math.PI / 5);
+                                } else {
+                                    spreadAngle = lpAngle + (lp - 1) * Math.PI / 4;
+                                }
+                                drawLonePairDots(p, tp.x, tp.y, spreadAngle, 22, lonePairCol);
+                            }
                         }
-                    }
-                }
-                // Restore termPos (fix _used_ markers)
-                termPos = [];
-                for (var i = 0; i < n; i++) {
-                    var terms = termsPerAtom[i];
-                    if (!terms || terms.length === 0) continue;
-                    var isFirst  = (i === 0);
-                    var isLast   = (i === n - 1);
-                    var isMiddle = (!isFirst && !isLast);
-                    var angles = getTerminalAngles(terms.length, isFirst, isMiddle, isLast);
-                    for (var t = 0; t < terms.length; t++) {
-                        termPos.push({
-                            x: bbPos[i].x + Math.cos(angles[t]) * bondLen,
-                            y: bbPos[i].y + Math.sin(angles[t]) * bondLen,
-                            el: terms[t], parent: i
-                        });
                     }
                 }
 
@@ -2568,25 +2664,196 @@
 
     // ========== PATTERN DETECTION FUNCTIONS ==========
 
+    function canonicalFormulaKey(atoms, charge) {
+        // Hill-system ordering: C, H, then alphabetical others.
+        var keys = Object.keys(atoms);
+        keys.sort(function(a, b) {
+            if (a === 'C') return -1;
+            if (b === 'C') return 1;
+            if (a === 'H' && keys.indexOf('C') !== -1 && b !== 'C') return -1;
+            if (b === 'H' && keys.indexOf('C') !== -1 && a !== 'C') return 1;
+            return a.localeCompare(b);
+        });
+        var f = '';
+        for (var i = 0; i < keys.length; i++) {
+            var el = keys[i];
+            f += el + (atoms[el] > 1 ? atoms[el] : '');
+        }
+        return f + '|' + charge;
+    }
+
+    var predefinedLewisTemplates = null;
+
+    function getPredefinedLewisTemplate(atoms, charge) {
+        var key = canonicalFormulaKey(atoms, charge);
+
+        function buildOxoanionTemplate(centralAtom, oxygenBondOrders, label) {
+            var lonePairs = oxygenBondOrders.map(function(order) {
+                if (order >= 3) return 1;
+                if (order === 2) return 2;
+                return 3;
+            });
+            return {
+                centralAtom: centralAtom,
+                bonding: {
+                    peripherals: oxygenBondOrders.map(function() { return 'O'; }),
+                    bondOrders: oxygenBondOrders.slice(),
+                    peripheralLonePairs: lonePairs,
+                    centralLonePairs: 0,
+                    hasResonance: true,
+                    isRadical: false,
+                    unpairedElectrons: 0
+                },
+                note: 'Predefined ' + label + ' resonance template applied.'
+            };
+        }
+
+        function buildGenericTemplate(centralAtom, peripheralAtom, count, label) {
+            var bondOrders = [];
+            var pLonePairs = [];
+            for (var i = 0; i < count; i++) {
+                bondOrders.push(1);
+                if (peripheralAtom === 'R' || peripheralAtom === 'H') pLonePairs.push(0);
+                else if (peripheralAtom === 'N') pLonePairs.push(2);
+                else pLonePairs.push(3);
+            }
+            return {
+                centralAtom: centralAtom,
+                bonding: {
+                    peripherals: bondOrders.map(function() { return peripheralAtom; }),
+                    bondOrders: bondOrders,
+                    peripheralLonePairs: pLonePairs,
+                    centralLonePairs: 0,
+                    hasResonance: false,
+                    isRadical: false,
+                    unpairedElectrons: 0
+                },
+                note: 'Predefined generic template (' + label + ') applied.'
+            };
+        }
+
+        if (!predefinedLewisTemplates) {
+            var templates = {
+                // Common resonance-heavy ions: use predefined textbook contributors.
+                'NO3|-1': buildOxoanionTemplate('N', [2, 1, 1], 'nitrate'),
+                'NO2|-1': buildOxoanionTemplate('N', [2, 1], 'nitrite'),
+                'CO3|-2': buildOxoanionTemplate('C', [2, 1, 1], 'carbonate'),
+                'O3S|-2': buildOxoanionTemplate('S', [2, 1, 1], 'sulfite'),
+                'O4S|-2': buildOxoanionTemplate('S', [2, 2, 1, 1], 'sulfate'),
+                'O3P|-3': buildOxoanionTemplate('P', [2, 1, 1], 'phosphite'),
+                'O4P|-3': buildOxoanionTemplate('P', [2, 1, 1, 1], 'phosphate'),
+                'ClO2|-1': buildOxoanionTemplate('Cl', [2, 1], 'chlorite'),
+                'ClO3|-1': buildOxoanionTemplate('Cl', [2, 1, 1], 'chlorate'),
+                'ClO4|-1': buildOxoanionTemplate('Cl', [2, 1, 1, 1], 'perchlorate'),
+                'BrO3|-1': buildOxoanionTemplate('Br', [2, 1, 1], 'bromate'),
+                'IO3|-1': buildOxoanionTemplate('I', [2, 1, 1], 'iodate'),
+                'CrO4|-2': buildOxoanionTemplate('Cr', [2, 2, 1, 1], 'chromate'),
+                'MnO4|-1': buildOxoanionTemplate('Mn', [2, 2, 2, 1], 'permanganate')
+            };
+
+            function addGeneratedTemplate(central, peripheral, count, charge, label, allowOddValence) {
+                if (count < 1) return;
+                var fAtoms = {};
+                fAtoms[central] = 1;
+                fAtoms[peripheral] = count;
+                var fKey = canonicalFormulaKey(fAtoms, charge || 0);
+                if (!templates[fKey]) {
+                    var t = buildGenericTemplate(central, peripheral, count, label);
+                    if (allowOddValence) t.allowOddValence = true;
+                    templates[fKey] = t;
+                }
+            }
+
+            // Generic-symbol templates for deterministic educational rendering.
+            var genericCentrals = ['A', 'M', 'E', 'G'];
+            var genericPeripherals = ['X', 'L', 'R'];
+            for (var gc = 0; gc < genericCentrals.length; gc++) {
+                for (var gp = 0; gp < genericPeripherals.length; gp++) {
+                    for (var n = 1; n <= 8; n++) {
+                        addGeneratedTemplate(
+                            genericCentrals[gc],
+                            genericPeripherals[gp],
+                            n,
+                            0,
+                            genericCentrals[gc] + genericPeripherals[gp] + n,
+                            true
+                        );
+                    }
+                }
+            }
+
+            // Real-element single-center families (halides/oxides/nitrides) to expand deterministic coverage.
+            var centerMaxBonds = {
+                'B': 3, 'C': 4, 'N': 3, 'Si': 4, 'P': 5, 'S': 6, 'Cl': 7, 'Br': 7, 'I': 7, 'Xe': 8
+            };
+            var familyPeripherals = ['F', 'Cl', 'Br', 'I', 'O', 'N'];
+            for (var center in centerMaxBonds) {
+                var maxCount = centerMaxBonds[center];
+                for (var fp = 0; fp < familyPeripherals.length; fp++) {
+                    var p = familyPeripherals[fp];
+                    if (center === p) continue;
+                    for (var n = 1; n <= maxCount; n++) {
+                        addGeneratedTemplate(center, p, n, 0, center + p + n, false);
+                    }
+                }
+            }
+
+            predefinedLewisTemplates = templates;
+        }
+
+        var tpl = predefinedLewisTemplates[key] || null;
+        if (!tpl) return null;
+
+        // Guardrail: odd-electron species should use logic (radical handling)
+        // unless explicitly added as an odd-electron predefined template.
+        var totalValence = 0;
+        for (var el in atoms) {
+            totalValence += (valenceElectrons[el] || 0) * atoms[el];
+        }
+        totalValence -= charge;
+        if ((totalValence % 2 !== 0) && !tpl.allowOddValence) {
+            return null;
+        }
+
+        return tpl;
+    }
+
     // Detect oxyacid pattern: H + O + central atom (e.g., H2SO4, H3PO4, HNO3)
     function detectOxyacid(atoms, centralAtom) {
-        return atoms['H'] && atoms['O'] &&
+        var oxyacidCenters = ['N', 'P', 'S', 'Cl', 'Br', 'I', 'Se', 'Te', 'As'];
+        var numH = atoms['H'] || 0;
+        var numO = atoms['O'] || 0;
+        var nonHOFCenters = Object.keys(atoms).filter(function(el) {
+            return el !== 'H' && el !== 'O' && el !== 'F' && (atoms[el] || 0) > 0;
+        });
+        return numH >= 1 && numO >= 2 &&
             centralAtom !== 'H' && centralAtom !== 'O' && centralAtom !== 'F' &&
-            (atoms[centralAtom] || 0) === 1; // Single central atom
+            (atoms[centralAtom] || 0) === 1 &&
+            nonHOFCenters.length === 1 &&
+            oxyacidCenters.indexOf(centralAtom) !== -1 &&
+            numH <= numO; // H attached through O in typical oxyacids
     }
 
     // Detect alcohol pattern: C + O + H where C>1 and O=1 (e.g., CH3OH, C2H5OH)
     function detectAlcohol(atoms) {
-        return atoms['C'] && atoms['O'] && atoms['H'] &&
+        var c = atoms['C'] || 0;
+        var h = atoms['H'] || 0;
+        var o = atoms['O'] || 0;
+        return c >= 1 && o === 1 && h >= 1 &&
             (atoms['C'] || 0) >= 1 && (atoms['O'] || 0) === 1 &&
-            Object.keys(atoms).length === 3; // Only C, O, H
+            Object.keys(atoms).length === 3 &&
+            h === (2 * c + 2); // CnH(2n+2)O (alcohol/ether formula family)
     }
 
-    // Detect simple ether pattern: C + O where C>1 and O=1, no H or few H (e.g., CH3OCH3)
-    function detectEther(atoms) {
-        return atoms['C'] && atoms['O'] &&
-            (atoms['C'] || 0) >= 2 && (atoms['O'] || 0) === 1 &&
-            Object.keys(atoms).length <= 3; // C, O, maybe H
+    // Detect explicit ether connectivity in raw formula text (e.g., CH3OCH3, C2H5OC2H5).
+    function detectEther(formulaRaw) {
+        if (!formulaRaw) return false;
+        var normalized = formulaRaw.replace(/\s+/g, '');
+        normalized = normalized.replace(/[\u2080-\u2089]/g, function(ch) {
+            return String(ch.charCodeAt(0) - 0x2080);
+        });
+        normalized = normalized.replace(/[\u207A\u207B\u2212+\-]+$/, '');
+        return /C[0-9H]*O[0-9H]*C/.test(normalized);
     }
 
     // Detect ring structure: Formula suggests cyclic (e.g., C6H6, C5H10, C6H12)
@@ -2640,19 +2907,25 @@
             var bondingElectrons = numBonds * 2;
             var remainingElectrons = totalValence - bondingElectrons;
 
-            var formulaStr = Object.entries(atoms).map(function(e) { return e[0] + (e[1] > 1 ? e[1] : ''); }).join('');
+            var formulaStr = normalizeFormulaForDisplay(formula);
 
             // ========== PATTERN DETECTION AND ROUTING ==========
             var centralCount = atoms[centralAtom] || 0;
+            var predefinedTemplate = getPredefinedLewisTemplate(atoms, charge);
             var isOxyacid = detectOxyacid(atoms, centralAtom);
-            var isAlcohol = detectAlcohol(atoms);
-            var isEther = detectEther(atoms);
+            var isEther = detectEther(formula);
+            var isAlcohol = !isEther && detectAlcohol(atoms);
             var isRing = detectRing(atoms);
             var isChain = !isOxyacid && !isAlcohol && !isEther && !isRing && centralCount >= 2;
 
             var backbone, termsPerAtom, bonding, chainBonding;
 
-            if (isOxyacid) {
+            if (predefinedTemplate) {
+                centralAtom = predefinedTemplate.centralAtom;
+                bonding = predefinedTemplate.bonding;
+                createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
+
+            } else if (isOxyacid) {
                 // Handle oxyacids: H bonds to O, O bonds to central (e.g., H2SO4)
                 bonding = analyzeOxyacidBonding(atoms, centralAtom, totalValence);
                 createOxyacidLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
@@ -2750,12 +3023,30 @@
                 termsPerAtom = [];
                 for (var k = 0; k < backbone.length; k++) termsPerAtom.push([]);
                 var remaining = allTerminals.slice();
-                for (var k = 0; k < backbone.length && remaining.length > 0; k++) {
+                var capacities = [];
+                for (var k = 0; k < backbone.length; k++) {
                     var bbBonds = (k > 0 ? 1 : 0) + (k < backbone.length - 1 ? 1 : 0);
-                    var maxT = Math.max(0, getMaxBonds(backbone[k]) - bbBonds);
-                    termsPerAtom[k] = remaining.splice(0, maxT);
+                    capacities[k] = Math.max(0, getMaxBonds(backbone[k]) - bbBonds);
                 }
-                // Overflow goes to last atom (expanded octet)
+
+                // Round-robin terminal placement avoids overloading the first backbone atom.
+                var idx = 0;
+                while (remaining.length > 0) {
+                    var assigned = false;
+                    for (var tries = 0; tries < backbone.length; tries++) {
+                        var target = (idx + tries) % backbone.length;
+                        if (capacities[target] > 0) {
+                            termsPerAtom[target].push(remaining.shift());
+                            capacities[target]--;
+                            idx = (target + 1) % backbone.length;
+                            assigned = true;
+                            break;
+                        }
+                    }
+                    if (!assigned) break;
+                }
+
+                // Overflow goes to last atom (expanded octet or fallback).
                 if (remaining.length > 0) {
                     termsPerAtom[backbone.length - 1] = termsPerAtom[backbone.length - 1].concat(remaining);
                 }
@@ -2766,7 +3057,7 @@
             } else {
                 // Star structure: single central atom with peripherals
                 bonding = analyzeBonding(atoms, centralAtom, totalValence);
-                createLewisSketch(atoms, centralAtom, totalValence, charge, bonding);
+                createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
             }
 
             // Helper: describe bond orders as text
@@ -2784,6 +3075,39 @@
                 return parts.join(', ');
             }
 
+            function bondOrderLabel(order) {
+                return order === 3 ? 'triple' : order === 2 ? 'double' : 'single';
+            }
+
+            // Keep info cards consistent with the actually generated structure (chain/ring/star/predefined/oxyacid).
+            var displayBondingElectrons = bondingElectrons;
+            if (predefinedTemplate) {
+                displayBondingElectrons = bonding.bondOrders.reduce(function(sum, o) { return sum + o * 2; }, 0);
+            } else if (isOxyacid) {
+                var centralOBondE = bonding.bondOrders.reduce(function(sum, o) { return sum + o * 2; }, 0);
+                var ohBondE = (atoms['H'] || 0) * 2; // O-H bonds in oxyacids
+                displayBondingElectrons = centralOBondE + ohBondE;
+            } else if ((isRing || isAlcohol || isEther || isChain) && chainBonding && backbone && termsPerAtom) {
+                var bbOrdersForCalc = chainBonding.bbBondOrders || [];
+                var bbBondE = bbOrdersForCalc.reduce(function(sum, o) { return sum + o * 2; }, 0);
+                var termBondE = 0;
+                for (var bi = 0; bi < termsPerAtom.length; bi++) {
+                    for (var ti = 0; ti < termsPerAtom[bi].length; ti++) {
+                        var tbo = 1;
+                        if (chainBonding.termBondOrders &&
+                            chainBonding.termBondOrders[bi] &&
+                            chainBonding.termBondOrders[bi][ti] !== undefined) {
+                            tbo = chainBonding.termBondOrders[bi][ti];
+                        }
+                        termBondE += tbo * 2;
+                    }
+                }
+                displayBondingElectrons = bbBondE + termBondE;
+            } else if (bonding && bonding.bondOrders) {
+                displayBondingElectrons = bonding.bondOrders.reduce(function(sum, o) { return sum + o * 2; }, 0);
+            }
+            var displayRemainingElectrons = totalValence - displayBondingElectrons;
+
             // Build result HTML
             var html = '';
             html += buildMoleculeHeader(formulaStr, charge);
@@ -2794,11 +3118,16 @@
 
             // Radical warning
             if (totalValence % 2 !== 0) {
-                html += '<div class="lewis-alert lewis-alert-warning" style="margin-bottom:0.75rem;">\u26a0\ufe0f <strong>Radical species:</strong> ' + totalValence + ' valence electrons (odd count). One electron remains unpaired on the central atom.</div>';
+                html += '<div class="lewis-alert lewis-alert-warning" style="margin-bottom:0.75rem;">\u26a0\ufe0f <strong>Radical species:</strong> ' + totalValence + ' valence electrons (odd count). One or more electrons remain unpaired.</div>';
             }
 
             // Pattern-specific notes
-            if (isOxyacid) {
+            if (predefinedTemplate) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#6366f1;">' +
+                    '\u2139\ufe0f <strong>Resonance structure:</strong> Showing one valid Lewis form. ' +
+                    'Actual electrons are delocalized across equivalent bonds.' +
+                    '</div>';
+            } else if (isOxyacid) {
                 html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Oxyacid structure detected:</strong> H atoms are bonded to O atoms (forming O\u2013H groups), which then bond to ' + centralAtom + '. Some O atoms may form double bonds with the central atom.</div>';
             } else if (isAlcohol) {
                 html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Alcohol structure detected:</strong> Structure shows \u2013OH hydroxyl group bonded to carbon chain.</div>';
@@ -2810,8 +3139,8 @@
 
             html += '<div class="lewis-info-grid">';
             html += '<div class="lewis-info-card"><strong>Total Valence e\u207b</strong><span>' + totalValence + '</span></div>';
-            html += '<div class="lewis-info-card"><strong>Bonding e\u207b</strong><span>' + bondingElectrons + '</span></div>';
-            html += '<div class="lewis-info-card"><strong>Remaining e\u207b</strong><span>' + remainingElectrons + '</span></div>';
+            html += '<div class="lewis-info-card"><strong>Bonding e\u207b</strong><span>' + displayBondingElectrons + '</span></div>';
+            html += '<div class="lewis-info-card"><strong>Remaining e\u207b</strong><span>' + displayRemainingElectrons + '</span></div>';
             html += '</div>';
 
             if (isOxyacid) {
@@ -2842,9 +3171,9 @@
                         html += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
                     } else {
                         // Close the ring
-                        var bo = bbOrders[0] || 1;
-                        html += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
-                    }
+                    var bo = bbOrders[backbone.length - 1] || 1;
+                    html += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
+                }
                 }
                 html += backbone[0]; // Close ring
                 html += '</span> (' + backbone.length + '-membered ring)</div>';
@@ -2883,7 +3212,15 @@
                 html += '<div class="lewis-result-label">Bond Types</div>';
                 var allChainOrders = bbOrders.slice();
                 for (var bi = 0; bi < termsPerAtom.length; bi++) {
-                    for (var ti = 0; ti < termsPerAtom[bi].length; ti++) allChainOrders.push(1);
+                    for (var ti = 0; ti < termsPerAtom[bi].length; ti++) {
+                        var tbo = 1;
+                        if (chainBonding.termBondOrders &&
+                            chainBonding.termBondOrders[bi] &&
+                            chainBonding.termBondOrders[bi][ti] !== undefined) {
+                            tbo = chainBonding.termBondOrders[bi][ti];
+                        }
+                        allChainOrders.push(tbo);
+                    }
                 }
                 html += '<div class="lewis-result-value">' + describeBondOrders(allChainOrders) + ' bond' + (allChainOrders.length !== 1 ? 's' : '') + '</div>';
 
@@ -2904,6 +3241,11 @@
                 html += '<div class="lewis-result-label">Central Atom</div>';
                 html += '<div class="lewis-result-value"><span class="lewis-chem">' + centralAtom + '</span>' +
                     (bonding.centralLonePairs > 0 ? ' (' + bonding.centralLonePairs + ' lone pair' + (bonding.centralLonePairs !== 1 ? 's' : '') + ')' : ' (no lone pairs)') + '</div>';
+
+                if (bonding.unpairedElectrons && bonding.unpairedElectrons > 0) {
+                    html += '<div class="lewis-result-label">Unpaired Electrons</div>';
+                    html += '<div class="lewis-result-value">' + bonding.unpairedElectrons + '</div>';
+                }
 
                 html += '<div class="lewis-result-label">Bond Types</div>';
                 html += '<div class="lewis-result-value">' + describeBondOrders(bonding.bondOrders) + ' bond' + (bonding.peripherals.length !== 1 ? 's' : '') + ' to ' + totalAtoms + ' atom' + (totalAtoms !== 1 ? 's' : '') + '</div>';
@@ -2942,37 +3284,60 @@
             document.getElementById('resultActions').classList.add('visible');
 
             // Build text result for copying
-            if (isOxyacid) {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+            var formulaWithChargeText = formatFormulaText(formulaStr) +
+                (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : '');
+            if (predefinedTemplate) {
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Resonance molecule' +
+                    '\nCentral Atom: ' + centralAtom +
+                    '\nOne valid resonance form: ' + describeBondOrders(bonding.bondOrders) +
+                    '\nNote: Actual electrons are delocalized across equivalent bonds.';
+            } else if (isOxyacid) {
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Oxyacid' +
                     '\nCentral Atom: ' + centralAtom +
                     '\nOH groups: ' + bonding.ohGroups +
                     '\nDouble-bonded O: ' + bonding.doubleO;
             } else if (isRing) {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Cyclic (' + backbone.length + '-membered ring)' +
                     '\nBackbone: ' + backbone.join('-') + '-' + backbone[0];
             } else if (isAlcohol) {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Alcohol (contains -OH group)' +
                     '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
             } else if (isEther) {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Ether (C-O-C linkage)' +
                     '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
             } else if (isChain || (chainBonding && backbone)) {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                var terminalBondLabels = [];
+                for (var bi = 0; bi < termsPerAtom.length; bi++) {
+                    for (var ti = 0; ti < termsPerAtom[bi].length; ti++) {
+                        var to = 1;
+                        if (chainBonding.termBondOrders &&
+                            chainBonding.termBondOrders[bi] &&
+                            chainBonding.termBondOrders[bi][ti] !== undefined) {
+                            to = chainBonding.termBondOrders[bi][ti];
+                        }
+                        terminalBondLabels.push(bondOrderLabel(to));
+                    }
+                }
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nCondensed: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom)) +
-                    '\nBackbone bonds: ' + chainBonding.bbBondOrders.map(function(o) { return o === 3 ? 'triple' : o === 2 ? 'double' : 'single'; }).join(', ');
+                    '\nBackbone bonds: ' + chainBonding.bbBondOrders.map(function(o) { return bondOrderLabel(o); }).join(', ') +
+                    '\nTerminal bonds: ' + (terminalBondLabels.length > 0 ? terminalBondLabels.join(', ') : 'none');
             } else {
-                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nCentral Atom: ' + centralAtom + ' (' + bonding.centralLonePairs + ' lone pairs)' +
+                    (bonding.unpairedElectrons > 0 ? '\nUnpaired electrons: ' + bonding.unpairedElectrons : '') +
                     '\nBonds: ' + describeBondOrders(bonding.bondOrders);
             }
 
@@ -3355,4 +3720,4 @@
     }
 </script>
 </body>
-</html
+</html>
