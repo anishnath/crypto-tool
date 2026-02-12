@@ -20,7 +20,7 @@
 set -e  # Exit on error
 
 # Parse command line arguments
-SKIP_BACKUP=false
+SKIP_BACKUP=true
 SKIP_BUILD=false
 HEALTH_CHECK_URL=""
 VERBOSE=false
