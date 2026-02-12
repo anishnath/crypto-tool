@@ -647,471 +647,471 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <%@ include file="modern/components/nav-header.jsp" %>
+<!-- Navigation -->
+<%@ include file="modern/components/nav-header.jsp" %>
 
-    <!-- Page Header -->
-    <header class="tool-page-header">
-        <div class="tool-page-header-inner">
-            <div>
-                <h1 class="tool-page-title">Lewis Structure Generator & VSEPR Calculator</h1>
-                <nav class="tool-breadcrumbs">
-                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp">Chemistry</a> /
-                    Lewis Structure Generator
-                </nav>
-            </div>
-            <div class="tool-page-badges">
-                <span class="tool-badge">Lewis Dot Diagrams</span>
-                <span class="tool-badge">VSEPR Theory</span>
-                <span class="tool-badge">Molecular Visualization</span>
-            </div>
+<!-- Page Header -->
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Lewis Structure Generator & VSEPR Calculator</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp">Chemistry</a> /
+                Lewis Structure Generator
+            </nav>
         </div>
-    </header>
-
-    <!-- Tool Description -->
-    <section class="tool-description-section">
-        <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Generate Lewis dot structures, predict molecular geometry using VSEPR theory, calculate bond angles, and analyze molecular polarity. Visualize molecular structures with interactive diagrams.</p>
-            </div>
+        <div class="tool-page-badges">
+            <span class="tool-badge">Lewis Dot Diagrams</span>
+            <span class="tool-badge">VSEPR Theory</span>
+            <span class="tool-badge">Molecular Visualization</span>
         </div>
-    </section>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <main class="tool-page-container">
-        <!-- ========== INPUT COLUMN ========== -->
-        <div class="tool-input-column">
-            <div class="tool-card">
-                <!-- Tab Selection -->
-                <div class="tool-tabs" role="tablist">
-                    <button type="button" class="tool-tab active" data-tab="lewis" role="tab">
-                        <span>&#9883;</span> Lewis Structure
-                    </button>
-                    <button type="button" class="tool-tab" data-tab="vsepr" role="tab">
-                        <span>&#11042;</span> VSEPR Predictor
-                    </button>
-                    <button type="button" class="tool-tab" data-tab="formal" role="tab">
-                        <span>&#9874;</span> Formal Charge
-                    </button>
-                </div>
-
-                <!-- ========== Tab 1: Lewis Structure ========== -->
-                <div id="lewisSection" class="tool-form-section active">
-                    <div class="tool-form-group">
-                        <label class="tool-label">Molecular Formula</label>
-                        <input type="text" class="tool-input" id="molecularFormula" placeholder="e.g., H2O, CO2, NH3, or ML2 (generic)">
-                        <p class="tool-hint" style="margin-top:0.25rem;">Enter formula like H2O, CO2, NH3, or generic notation (ML2, AX3, MX4)</p>
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Quick Examples</label>
-                        <div style="margin-top:0.25rem;">
-                            <span class="lewis-example-pill" data-formula="H2O">H&#8322;O</span>
-                            <span class="lewis-example-pill" data-formula="CO2">CO&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="NH3">NH&#8323;</span>
-                            <span class="lewis-example-pill" data-formula="CH4">CH&#8324;</span>
-                            <span class="lewis-example-pill" data-formula="O2">O&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="N2">N&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="SO2">SO&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="HCN">HCN</span>
-                            <span class="lewis-example-pill" data-formula="CCl4">CCl&#8324;</span>
-                            <span class="lewis-example-pill" data-formula="F2">F&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="O3">O&#8323;</span>
-                            <span class="lewis-example-pill" data-formula="N2O">N&#8322;O</span>
-                            <span class="lewis-example-pill" data-formula="NO2">NO&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="PCl3">PCl&#8323;</span>
-                            <span class="lewis-example-pill" data-formula="PCl5">PCl&#8325;</span>
-                            <span class="lewis-example-pill" data-formula="SF6">SF&#8326;</span>
-                            <span class="lewis-example-pill" data-formula="XeF2">XeF&#8322;</span>
-                            <span class="lewis-example-pill" data-formula="C2H6">C&#8322;H&#8326;</span>
-                            <span class="lewis-example-pill" data-formula="C2H3F3">C&#8322;H&#8323;F&#8323;</span>
-                            <span class="lewis-example-pill" data-formula="C3H8">C&#8323;H&#8328;</span>
-                            <span class="lewis-example-pill" data-formula="H2SO4">H&#8322;SO&#8324;</span>
-                            <span class="lewis-example-pill generic" data-formula="ML2">ML&#8322;</span>
-                            <span class="lewis-example-pill generic" data-formula="AX3">AX&#8323;</span>
-                            <span class="lewis-example-pill generic" data-formula="MX4">MX&#8324;</span>
-                        </div>
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Charge (optional)</label>
-                        <input type="number" class="tool-input" id="molecularCharge" value="0" placeholder="0" style="max-width:120px;">
-                        <p class="tool-hint" style="margin-top:0.25rem;">For ions: +1 for NH&#8324;&#8314;, -1 for CN&#8315;, -2 for CO&#8323;&#178;&#8315;, -3 for PO&#8324;&#179;&#8315;</p>
-                    </div>
-
-                    <div class="tool-form-actions">
-                        <button type="button" class="tool-action-btn" id="generateLewisBtn">
-                            &#9883; Generate Lewis Structure
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ========== Tab 2: VSEPR Predictor ========== -->
-                <div id="vseprSection" class="tool-form-section">
-                    <div class="tool-form-group">
-                        <label class="tool-label">Central Atom</label>
-                        <input type="text" class="tool-input" id="centralAtom" placeholder="e.g., C, N, O, S" style="max-width:120px;">
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Bonding Electron Pairs (Bonds)</label>
-                        <input type="number" class="tool-input" id="bondingPairs" min="1" max="7" value="4" style="max-width:120px;">
-                        <p class="tool-hint" style="margin-top:0.25rem;">Count single, double, and triple bonds as 1 bonding region each</p>
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Lone Electron Pairs</label>
-                        <input type="number" class="tool-input" id="lonePairs" min="0" max="4" value="0" style="max-width:120px;">
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Quick VSEPR Examples</label>
-                        <div style="margin-top:0.25rem;">
-                            <span class="lewis-example-pill" data-vsepr="2,0">2B-0LP (Linear)</span>
-                            <span class="lewis-example-pill" data-vsepr="3,0">3B-0LP (Trig. Planar)</span>
-                            <span class="lewis-example-pill" data-vsepr="2,1">2B-1LP (Bent ~120&deg;)</span>
-                            <span class="lewis-example-pill" data-vsepr="4,0">4B-0LP (Tetrahedral)</span>
-                            <span class="lewis-example-pill" data-vsepr="3,1">3B-1LP (Trig. Pyramidal)</span>
-                            <span class="lewis-example-pill" data-vsepr="2,2">2B-2LP (Bent ~104&deg;)</span>
-                            <span class="lewis-example-pill" data-vsepr="5,0">5B-0LP (Trig. Bipyramidal)</span>
-                            <span class="lewis-example-pill" data-vsepr="4,1">4B-1LP (Seesaw)</span>
-                            <span class="lewis-example-pill" data-vsepr="3,2">3B-2LP (T-shaped)</span>
-                            <span class="lewis-example-pill" data-vsepr="2,3">2B-3LP (Linear, XeF&#8322;)</span>
-                            <span class="lewis-example-pill" data-vsepr="6,0">6B-0LP (Octahedral)</span>
-                            <span class="lewis-example-pill" data-vsepr="5,1">5B-1LP (Square Pyramidal)</span>
-                            <span class="lewis-example-pill" data-vsepr="4,2">4B-2LP (Square Planar)</span>
-                            <span class="lewis-example-pill" data-vsepr="7,0">7B-0LP (Pent. Bipyramidal)</span>
-                        </div>
-                    </div>
-
-                    <div class="tool-form-actions">
-                        <button type="button" class="tool-action-btn" id="predictVSEPRBtn">
-                            &#11042; Predict Geometry
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ========== Tab 3: Formal Charge ========== -->
-                <div id="formalSection" class="tool-form-section">
-                    <div class="lewis-alert" style="margin-bottom:1rem;">
-                        <strong>Formula:</strong> Formal Charge = (Valence e&#8315;) - (Non-bonding e&#8315;) - (Bonding e&#8315; / 2)
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Atom</label>
-                        <input type="text" class="tool-input" id="formalAtom" placeholder="e.g., C, N, O" style="max-width:120px;">
-                        <p class="tool-hint" style="margin-top:0.25rem;">Type an element symbol &mdash; valence electrons auto-fill below</p>
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Valence Electrons</label>
-                        <input type="number" class="tool-input" id="formalValence" min="1" max="8" placeholder="auto-filled" style="max-width:120px;">
-                        <p class="tool-hint" style="margin-top:0.25rem;">C=4, N=5, O=6, H=1 (auto-filled from atom above)</p>
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Non-bonding Electrons (Lone Pairs x 2)</label>
-                        <input type="number" class="tool-input" id="formalNonBonding" min="0" placeholder="Number of non-bonding electrons" style="max-width:120px;">
-                    </div>
-
-                    <div class="tool-form-group">
-                        <label class="tool-label">Bonding Electrons</label>
-                        <input type="number" class="tool-input" id="formalBonding" min="0" placeholder="Single=2, Double=4, Triple=6" style="max-width:120px;">
-                        <p class="tool-hint" style="margin-top:0.25rem;">Single bond = 2, Double = 4, Triple = 6</p>
-                    </div>
-
-                    <div class="tool-form-actions">
-                        <button type="button" class="tool-action-btn" id="calcFormalBtn">
-                            &#9874; Calculate Formal Charge
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Learn content is in the below-the-fold educational sections -->
-            </div>
+<!-- Tool Description -->
+<section class="tool-description-section">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Generate Lewis dot structures, predict molecular geometry using VSEPR theory, calculate bond angles, and analyze molecular polarity. Visualize molecular structures with interactive diagrams.</p>
         </div>
+    </div>
+</section>
 
-        <!-- ========== OUTPUT COLUMN ========== -->
-        <div class="tool-output-column">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <span>&#128203;</span>
-                    <h4>Result</h4>
+<!-- Main Content -->
+<main class="tool-page-container">
+    <!-- ========== INPUT COLUMN ========== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <!-- Tab Selection -->
+            <div class="tool-tabs" role="tablist">
+                <button type="button" class="tool-tab active" data-tab="lewis" role="tab">
+                    <span>&#9883;</span> Lewis Structure
+                </button>
+                <button type="button" class="tool-tab" data-tab="vsepr" role="tab">
+                    <span>&#11042;</span> VSEPR Predictor
+                </button>
+                <button type="button" class="tool-tab" data-tab="formal" role="tab">
+                    <span>&#9874;</span> Formal Charge
+                </button>
+            </div>
+
+            <!-- ========== Tab 1: Lewis Structure ========== -->
+            <div id="lewisSection" class="tool-form-section active">
+                <div class="tool-form-group">
+                    <label class="tool-label">Molecular Formula</label>
+                    <input type="text" class="tool-input" id="molecularFormula" placeholder="e.g., H2O, CO2, NH3, or ML2 (generic)">
+                    <p class="tool-hint" style="margin-top:0.25rem;">Enter formula like H2O, CO2, NH3, or generic notation (ML2, AX3, MX4)</p>
                 </div>
-                <div class="tool-result-content" id="resultOutput">
-                    <!-- Molecular diagram canvas -->
-                    <div class="lewis-canvas-wrapper" id="lewisCanvasContainer">
-                        <div class="tool-empty-state" id="emptyState">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
-                                <circle cx="12" cy="12" r="3"/>
-                                <circle cx="4" cy="12" r="1.5"/>
-                                <circle cx="20" cy="12" r="1.5"/>
-                                <circle cx="12" cy="4" r="1.5"/>
-                                <line x1="9" y1="12" x2="5.5" y2="12"/>
-                                <line x1="14.5" y1="12" x2="18.5" y2="12"/>
-                                <line x1="12" y1="9" x2="12" y2="5.5"/>
-                            </svg>
-                            <h3>Molecular Diagram</h3>
-                            <p>Enter a molecular formula or set VSEPR parameters to visualize the structure.</p>
-                        </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Quick Examples</label>
+                    <div style="margin-top:0.25rem;">
+                        <span class="lewis-example-pill" data-formula="H2O">H&#8322;O</span>
+                        <span class="lewis-example-pill" data-formula="CO2">CO&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="NH3">NH&#8323;</span>
+                        <span class="lewis-example-pill" data-formula="CH4">CH&#8324;</span>
+                        <span class="lewis-example-pill" data-formula="O2">O&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="N2">N&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="SO2">SO&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="HCN">HCN</span>
+                        <span class="lewis-example-pill" data-formula="CCl4">CCl&#8324;</span>
+                        <span class="lewis-example-pill" data-formula="F2">F&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="O3">O&#8323;</span>
+                        <span class="lewis-example-pill" data-formula="N2O">N&#8322;O</span>
+                        <span class="lewis-example-pill" data-formula="NO2">NO&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="PCl3">PCl&#8323;</span>
+                        <span class="lewis-example-pill" data-formula="PCl5">PCl&#8325;</span>
+                        <span class="lewis-example-pill" data-formula="SF6">SF&#8326;</span>
+                        <span class="lewis-example-pill" data-formula="XeF2">XeF&#8322;</span>
+                        <span class="lewis-example-pill" data-formula="C2H6">C&#8322;H&#8326;</span>
+                        <span class="lewis-example-pill" data-formula="C2H3F3">C&#8322;H&#8323;F&#8323;</span>
+                        <span class="lewis-example-pill" data-formula="C3H8">C&#8323;H&#8328;</span>
+                        <span class="lewis-example-pill" data-formula="H2SO4">H&#8322;SO&#8324;</span>
+                        <span class="lewis-example-pill generic" data-formula="ML2">ML&#8322;</span>
+                        <span class="lewis-example-pill generic" data-formula="AX3">AX&#8323;</span>
+                        <span class="lewis-example-pill generic" data-formula="MX4">MX&#8324;</span>
                     </div>
-
-                    <!-- Text result area -->
-                    <div id="resultDisplay"></div>
                 </div>
-                <div class="tool-result-actions" id="resultActions">
-                    <button type="button" class="tool-action-btn" id="copyResultBtn">
-                        <span>&#128203;</span> Copy
-                    </button>
-                    <button type="button" class="tool-action-btn" id="downloadPngBtn">
-                        <span>&#8681;</span> Download PNG
-                    </button>
-                    <button type="button" class="tool-action-btn" id="shareUrlBtn">
-                        <span>&#128279;</span> Share URL
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Charge (optional)</label>
+                    <input type="number" class="tool-input" id="molecularCharge" value="0" placeholder="0" style="max-width:120px;">
+                    <p class="tool-hint" style="margin-top:0.25rem;">For ions: +1 for NH&#8324;&#8314;, -1 for CN&#8315;, -2 for CO&#8323;&#178;&#8315;, -3 for PO&#8324;&#179;&#8315;</p>
+                </div>
+
+                <div class="tool-form-actions">
+                    <button type="button" class="tool-action-btn" id="generateLewisBtn">
+                        &#9883; Generate Lewis Structure
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- ========== ADS COLUMN ========== -->
-        <div class="tool-ads-column">
-            <%@ include file="modern/ads/ad-three-column.jsp" %>
-        </div>
-    </main>
+            <!-- ========== Tab 2: VSEPR Predictor ========== -->
+            <div id="vseprSection" class="tool-form-section">
+                <div class="tool-form-group">
+                    <label class="tool-label">Central Atom</label>
+                    <input type="text" class="tool-input" id="centralAtom" placeholder="e.g., C, N, O, S" style="max-width:120px;">
+                </div>
 
-    <!-- Mobile Ad Fallback -->
-    <div class="tool-mobile-ad-container">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+                <div class="tool-form-group">
+                    <label class="tool-label">Bonding Electron Pairs (Bonds)</label>
+                    <input type="number" class="tool-input" id="bondingPairs" min="1" max="7" value="4" style="max-width:120px;">
+                    <p class="tool-hint" style="margin-top:0.25rem;">Count single, double, and triple bonds as 1 bonding region each</p>
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Lone Electron Pairs</label>
+                    <input type="number" class="tool-input" id="lonePairs" min="0" max="4" value="0" style="max-width:120px;">
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Quick VSEPR Examples</label>
+                    <div style="margin-top:0.25rem;">
+                        <span class="lewis-example-pill" data-vsepr="2,0">2B-0LP (Linear)</span>
+                        <span class="lewis-example-pill" data-vsepr="3,0">3B-0LP (Trig. Planar)</span>
+                        <span class="lewis-example-pill" data-vsepr="2,1">2B-1LP (Bent ~120&deg;)</span>
+                        <span class="lewis-example-pill" data-vsepr="4,0">4B-0LP (Tetrahedral)</span>
+                        <span class="lewis-example-pill" data-vsepr="3,1">3B-1LP (Trig. Pyramidal)</span>
+                        <span class="lewis-example-pill" data-vsepr="2,2">2B-2LP (Bent ~104&deg;)</span>
+                        <span class="lewis-example-pill" data-vsepr="5,0">5B-0LP (Trig. Bipyramidal)</span>
+                        <span class="lewis-example-pill" data-vsepr="4,1">4B-1LP (Seesaw)</span>
+                        <span class="lewis-example-pill" data-vsepr="3,2">3B-2LP (T-shaped)</span>
+                        <span class="lewis-example-pill" data-vsepr="2,3">2B-3LP (Linear, XeF&#8322;)</span>
+                        <span class="lewis-example-pill" data-vsepr="6,0">6B-0LP (Octahedral)</span>
+                        <span class="lewis-example-pill" data-vsepr="5,1">5B-1LP (Square Pyramidal)</span>
+                        <span class="lewis-example-pill" data-vsepr="4,2">4B-2LP (Square Planar)</span>
+                        <span class="lewis-example-pill" data-vsepr="7,0">7B-0LP (Pent. Bipyramidal)</span>
+                    </div>
+                </div>
+
+                <div class="tool-form-actions">
+                    <button type="button" class="tool-action-btn" id="predictVSEPRBtn">
+                        &#11042; Predict Geometry
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========== Tab 3: Formal Charge ========== -->
+            <div id="formalSection" class="tool-form-section">
+                <div class="lewis-alert" style="margin-bottom:1rem;">
+                    <strong>Formula:</strong> Formal Charge = (Valence e&#8315;) - (Non-bonding e&#8315;) - (Bonding e&#8315; / 2)
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Atom</label>
+                    <input type="text" class="tool-input" id="formalAtom" placeholder="e.g., C, N, O" style="max-width:120px;">
+                    <p class="tool-hint" style="margin-top:0.25rem;">Type an element symbol &mdash; valence electrons auto-fill below</p>
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Valence Electrons</label>
+                    <input type="number" class="tool-input" id="formalValence" min="1" max="8" placeholder="auto-filled" style="max-width:120px;">
+                    <p class="tool-hint" style="margin-top:0.25rem;">C=4, N=5, O=6, H=1 (auto-filled from atom above)</p>
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Non-bonding Electrons (Lone Pairs x 2)</label>
+                    <input type="number" class="tool-input" id="formalNonBonding" min="0" placeholder="Number of non-bonding electrons" style="max-width:120px;">
+                </div>
+
+                <div class="tool-form-group">
+                    <label class="tool-label">Bonding Electrons</label>
+                    <input type="number" class="tool-input" id="formalBonding" min="0" placeholder="Single=2, Double=4, Triple=6" style="max-width:120px;">
+                    <p class="tool-hint" style="margin-top:0.25rem;">Single bond = 2, Double = 4, Triple = 6</p>
+                </div>
+
+                <div class="tool-form-actions">
+                    <button type="button" class="tool-action-btn" id="calcFormalBtn">
+                        &#9874; Calculate Formal Charge
+                    </button>
+                </div>
+            </div>
+
+            <!-- Learn content is in the below-the-fold educational sections -->
+        </div>
     </div>
 
-    <!-- ========== EDUCATIONAL CONTENT (below-the-fold, SEO-visible) ========== -->
-    <section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <!-- ========== OUTPUT COLUMN ========== -->
+    <div class="tool-output-column">
+        <div class="tool-card tool-result-card">
+            <div class="tool-result-header">
+                <span>&#128203;</span>
+                <h4>Result</h4>
+            </div>
+            <div class="tool-result-content" id="resultOutput">
+                <!-- Molecular diagram canvas -->
+                <div class="lewis-canvas-wrapper" id="lewisCanvasContainer">
+                    <div class="tool-empty-state" id="emptyState">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
+                            <circle cx="12" cy="12" r="3"/>
+                            <circle cx="4" cy="12" r="1.5"/>
+                            <circle cx="20" cy="12" r="1.5"/>
+                            <circle cx="12" cy="4" r="1.5"/>
+                            <line x1="9" y1="12" x2="5.5" y2="12"/>
+                            <line x1="14.5" y1="12" x2="18.5" y2="12"/>
+                            <line x1="12" y1="9" x2="12" y2="5.5"/>
+                        </svg>
+                        <h3>Molecular Diagram</h3>
+                        <p>Enter a molecular formula or set VSEPR parameters to visualize the structure.</p>
+                    </div>
+                </div>
 
-        <!-- Lewis Structures Guide -->
-        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">What Is a Lewis Structure?</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">A <strong>Lewis structure</strong> (also called a <strong>Lewis dot diagram</strong> or <strong>electron dot structure</strong>) is a 2D representation of a molecule that shows how valence electrons are arranged among the atoms. Invented by Gilbert N. Lewis in 1916, these diagrams are fundamental to understanding chemical bonding.</p>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">In a Lewis structure:</p>
-            <ul style="margin-left: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                <li style="margin-bottom: 0.4rem;"><strong>Lines</strong> represent <strong>covalent bonds</strong> (shared electron pairs) &mdash; a single line is a single bond (2 e&#8315;), a double line is a double bond (4 e&#8315;), and a triple line is a triple bond (6 e&#8315;)</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Dots</strong> represent <strong>lone pairs</strong> (non-bonding electrons) that belong to a single atom</li>
-                <li style="margin-bottom: 0.4rem;">The <strong>octet rule</strong> states most atoms are stable with 8 electrons in their valence shell (hydrogen needs only 2)</li>
-            </ul>
+                <!-- Text result area -->
+                <div id="resultDisplay"></div>
+            </div>
+            <div class="tool-result-actions" id="resultActions">
+                <button type="button" class="tool-action-btn" id="copyResultBtn">
+                    <span>&#128203;</span> Copy
+                </button>
+                <button type="button" class="tool-action-btn" id="downloadPngBtn">
+                    <span>&#8681;</span> Download PNG
+                </button>
+                <button type="button" class="tool-action-btn" id="shareUrlBtn">
+                    <span>&#128279;</span> Share URL
+                </button>
+            </div>
+        </div>
+    </div>
 
-            <h3 style="font-size: 1.05rem; margin: 1.5rem 0 0.75rem;">How to Draw a Lewis Structure (Step-by-Step)</h3>
-            <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
-                <li style="margin-bottom: 0.6rem;"><strong>Count total valence electrons.</strong> Add up the valence electrons for every atom. For ions, add electrons for negative charges or subtract for positive charges. Example: H&#8322;O has 2(1) + 6 = 8 valence electrons.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Identify the central atom.</strong> The least electronegative atom goes in the center. Hydrogen and fluorine are always terminal (outer) atoms. Carbon is almost always central.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Draw single bonds</strong> from the central atom to each surrounding atom. Each bond uses 2 electrons.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Distribute remaining electrons as lone pairs.</strong> Give outer atoms full octets first (start with the most electronegative), then place leftover electrons on the central atom.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Form multiple bonds if needed.</strong> If the central atom has fewer than 8 electrons, convert lone pairs from adjacent atoms into double or triple bonds until the octet is satisfied.</li>
-                <li style="margin-bottom: 0.6rem;"><strong>Check formal charges.</strong> The best Lewis structure minimizes formal charges, places negative charges on more electronegative atoms, and avoids same-sign charges on adjacent atoms.</li>
-            </ol>
+    <!-- ========== ADS COLUMN ========== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-three-column.jsp" %>
+    </div>
+</main>
+
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+</div>
+
+<!-- ========== EDUCATIONAL CONTENT (below-the-fold, SEO-visible) ========== -->
+<section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+
+    <!-- Lewis Structures Guide -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">What Is a Lewis Structure?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">A <strong>Lewis structure</strong> (also called a <strong>Lewis dot diagram</strong> or <strong>electron dot structure</strong>) is a 2D representation of a molecule that shows how valence electrons are arranged among the atoms. Invented by Gilbert N. Lewis in 1916, these diagrams are fundamental to understanding chemical bonding.</p>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">In a Lewis structure:</p>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            <li style="margin-bottom: 0.4rem;"><strong>Lines</strong> represent <strong>covalent bonds</strong> (shared electron pairs) &mdash; a single line is a single bond (2 e&#8315;), a double line is a double bond (4 e&#8315;), and a triple line is a triple bond (6 e&#8315;)</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Dots</strong> represent <strong>lone pairs</strong> (non-bonding electrons) that belong to a single atom</li>
+            <li style="margin-bottom: 0.4rem;">The <strong>octet rule</strong> states most atoms are stable with 8 electrons in their valence shell (hydrogen needs only 2)</li>
+        </ul>
+
+        <h3 style="font-size: 1.05rem; margin: 1.5rem 0 0.75rem;">How to Draw a Lewis Structure (Step-by-Step)</h3>
+        <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
+            <li style="margin-bottom: 0.6rem;"><strong>Count total valence electrons.</strong> Add up the valence electrons for every atom. For ions, add electrons for negative charges or subtract for positive charges. Example: H&#8322;O has 2(1) + 6 = 8 valence electrons.</li>
+            <li style="margin-bottom: 0.6rem;"><strong>Identify the central atom.</strong> The least electronegative atom goes in the center. Hydrogen and fluorine are always terminal (outer) atoms. Carbon is almost always central.</li>
+            <li style="margin-bottom: 0.6rem;"><strong>Draw single bonds</strong> from the central atom to each surrounding atom. Each bond uses 2 electrons.</li>
+            <li style="margin-bottom: 0.6rem;"><strong>Distribute remaining electrons as lone pairs.</strong> Give outer atoms full octets first (start with the most electronegative), then place leftover electrons on the central atom.</li>
+            <li style="margin-bottom: 0.6rem;"><strong>Form multiple bonds if needed.</strong> If the central atom has fewer than 8 electrons, convert lone pairs from adjacent atoms into double or triple bonds until the octet is satisfied.</li>
+            <li style="margin-bottom: 0.6rem;"><strong>Check formal charges.</strong> The best Lewis structure minimizes formal charges, places negative charges on more electronegative atoms, and avoids same-sign charges on adjacent atoms.</li>
+        </ol>
+    </div>
+
+    <!-- Formal Charge Guide -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Understanding Formal Charge</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Formal charge (FC)</strong> is a bookkeeping tool that assigns an imaginary charge to each atom in a Lewis structure, assuming all bonding electrons are shared equally. It helps you determine which Lewis structure is the most stable representation of a molecule.</p>
+
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; text-align: center;">
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">
+                FC = (Valence e&#8315;) &minus; (Lone pair e&#8315;) &minus; (Bonding e&#8315; &divide; 2)
+            </p>
         </div>
 
-        <!-- Formal Charge Guide -->
-        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Understanding Formal Charge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Formal charge (FC)</strong> is a bookkeeping tool that assigns an imaginary charge to each atom in a Lewis structure, assuming all bonding electrons are shared equally. It helps you determine which Lewis structure is the most stable representation of a molecule.</p>
-
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; text-align: center;">
-                <p style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">
-                    FC = (Valence e&#8315;) &minus; (Lone pair e&#8315;) &minus; (Bonding e&#8315; &divide; 2)
-                </p>
+        <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Worked Examples</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Oxygen in H&#8322;O</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 6, Lone pair e&#8315; = 4, Bonding e&#8315; = 4</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 6 &minus; 4 &minus; (4&divide;2) = <strong>0</strong> (neutral, ideal)</p>
             </div>
-
-            <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Worked Examples</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Oxygen in H&#8322;O</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 6, Lone pair e&#8315; = 4, Bonding e&#8315; = 4</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 6 &minus; 4 &minus; (4&divide;2) = <strong>0</strong> (neutral, ideal)</p>
-                </div>
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Nitrogen in NH&#8324;&#8314;</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 5, Lone pair e&#8315; = 0, Bonding e&#8315; = 8</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 5 &minus; 0 &minus; (8&divide;2) = <strong>+1</strong> (matches ion charge)</p>
-                </div>
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Carbon in CO (carbon monoxide)</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 4, Lone pair e&#8315; = 2, Bonding e&#8315; = 6</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 4 &minus; 2 &minus; (6&divide;2) = <strong>&minus;1</strong></p>
-                </div>
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Nitrogen in NH&#8324;&#8314;</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 5, Lone pair e&#8315; = 0, Bonding e&#8315; = 8</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 5 &minus; 0 &minus; (8&divide;2) = <strong>+1</strong> (matches ion charge)</p>
             </div>
-
-            <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Rules for Choosing the Best Lewis Structure</h3>
-            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
-                <li style="margin-bottom: 0.4rem;">The structure with formal charges <strong>closest to zero</strong> on all atoms is preferred</li>
-                <li style="margin-bottom: 0.4rem;">Negative formal charges should reside on the <strong>more electronegative</strong> atoms (O, F, N)</li>
-                <li style="margin-bottom: 0.4rem;">Avoid placing <strong>same-sign charges</strong> on adjacent atoms (like +1 next to +1)</li>
-                <li style="margin-bottom: 0.4rem;">Minimize the <strong>total number</strong> of atoms with non-zero formal charges</li>
-                <li style="margin-bottom: 0.4rem;">The sum of all formal charges must equal the overall <strong>molecular charge</strong></li>
-            </ul>
-        </div>
-
-        <!-- VSEPR Theory Guide -->
-        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">VSEPR Theory &mdash; Predicting Molecular Shape</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>VSEPR</strong> (Valence Shell Electron Pair Repulsion) theory predicts the three-dimensional shape of molecules based on one simple principle: <em>electron groups around a central atom arrange themselves as far apart as possible to minimize repulsion</em>.</p>
-
-            <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Key Concepts</h3>
-            <ul style="margin-left: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                <li style="margin-bottom: 0.4rem;"><strong>Electron domains</strong> (or steric number) = bonding pairs + lone pairs around the central atom. A double or triple bond counts as <em>one</em> electron domain.</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Electron geometry</strong> describes the arrangement of <em>all</em> electron domains (bonds + lone pairs)</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Molecular geometry</strong> describes the arrangement of <em>only the atoms</em> (ignoring lone pairs)</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Lone pairs</strong> occupy more space than bonding pairs, compressing bond angles below ideal values</li>
-            </ul>
-
-            <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Complete VSEPR Geometry Table</h3>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; color: var(--text-secondary);">
-                    <thead>
-                        <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Steric #</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Bonds</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Lone Pairs</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Electron Geometry</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Molecular Geometry</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Bond Angle</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Example</th>
-                            <th style="padding: 0.6rem 0.5rem; text-align: left;">Polarity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">2</td><td>2</td><td>0</td><td>Linear</td><td>Linear</td><td>180&#176;</td><td>CO&#8322;, BeCl&#8322;</td><td>Nonpolar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">3</td><td>3</td><td>0</td><td>Trigonal Planar</td><td>Trigonal Planar</td><td>120&#176;</td><td>BF&#8323;, SO&#8323;</td><td>Nonpolar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">3</td><td>2</td><td>1</td><td>Trigonal Planar</td><td>Bent</td><td>&lt;120&#176;</td><td>SO&#8322;, O&#8323;</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">4</td><td>4</td><td>0</td><td>Tetrahedral</td><td>Tetrahedral</td><td>109.5&#176;</td><td>CH&#8324;, CCl&#8324;</td><td>Nonpolar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">4</td><td>3</td><td>1</td><td>Tetrahedral</td><td>Trigonal Pyramidal</td><td>~107&#176;</td><td>NH&#8323;, PCl&#8323;</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">4</td><td>2</td><td>2</td><td>Tetrahedral</td><td>Bent</td><td>~104.5&#176;</td><td>H&#8322;O, H&#8322;S</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">5</td><td>5</td><td>0</td><td>Trigonal Bipyramidal</td><td>Trigonal Bipyramidal</td><td>90&#176;, 120&#176;</td><td>PCl&#8325;</td><td>Nonpolar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">5</td><td>4</td><td>1</td><td>Trigonal Bipyramidal</td><td>Seesaw</td><td>&lt;90&#176;, &lt;120&#176;</td><td>SF&#8324;</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">5</td><td>3</td><td>2</td><td>Trigonal Bipyramidal</td><td>T-shaped</td><td>&lt;90&#176;</td><td>ClF&#8323;, BrF&#8323;</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">5</td><td>2</td><td>3</td><td>Trigonal Bipyramidal</td><td>Linear</td><td>180&#176;</td><td>XeF&#8322;, I&#8323;&#8315;</td><td>Nonpolar*</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">6</td><td>6</td><td>0</td><td>Octahedral</td><td>Octahedral</td><td>90&#176;</td><td>SF&#8326;</td><td>Nonpolar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">6</td><td>5</td><td>1</td><td>Octahedral</td><td>Square Pyramidal</td><td>&lt;90&#176;</td><td>BrF&#8325;, IF&#8325;</td><td>Polar</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">6</td><td>4</td><td>2</td><td>Octahedral</td><td>Square Planar</td><td>90&#176;</td><td>XeF&#8324;</td><td>Nonpolar*</td></tr>
-                        <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">7</td><td>7</td><td>0</td><td>Pentagonal Bipyramidal</td><td>Pentagonal Bipyramidal</td><td>72&#176;, 90&#176;</td><td>IF&#8327;</td><td>Nonpolar</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p style="color: var(--text-secondary); font-size: 0.82rem; margin-top: 0.5rem;">* Despite having lone pairs, XeF&#8322; (linear) and XeF&#8324; (square planar) are <strong>nonpolar</strong> because their molecular geometries are symmetric &mdash; dipole moments cancel out.</p>
-
-            <h3 style="font-size: 1.05rem; margin: 1.5rem 0 0.75rem;">Polarity and Molecular Shape</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">A molecule is <strong>nonpolar</strong> when its molecular geometry is <em>symmetric</em> (with identical ligands) &mdash; the individual bond dipoles cancel. It is <strong>polar</strong> when the geometry is asymmetric, leaving a net dipole moment.</p>
-            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
-                <li style="margin-bottom: 0.4rem;"><strong>Always nonpolar</strong> (identical ligands): Linear (2 bonds), Trigonal Planar, Tetrahedral, Square Planar, Octahedral</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Always polar:</strong> Bent, Trigonal Pyramidal, Seesaw, T-shaped, Square Pyramidal</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Common misconception:</strong> &ldquo;Lone pairs always make a molecule polar&rdquo; &mdash; this is <em>wrong</em>. XeF&#8322; has 3 lone pairs but is nonpolar because the two Xe&ndash;F bonds point in opposite directions</li>
-            </ul>
-        </div>
-
-        <!-- Exceptions to Octet Rule -->
-        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Exceptions to the Octet Rule</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">While the octet rule works for most molecules, there are three important exceptions:</p>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Incomplete Octets</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Some atoms are stable with <em>fewer</em> than 8 electrons. Hydrogen needs only 2 (duet rule). Beryllium and boron commonly have 4 and 6 electrons respectively. Example: BF&#8323; has only 6 electrons around B.</p>
-                </div>
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Expanded Octets</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Elements in Period 3 and beyond can hold <em>more</em> than 8 electrons by using d-orbitals. Examples: PCl&#8325; (10 e&#8315;), SF&#8326; (12 e&#8315;), XeF&#8322; (10 e&#8315;), XeF&#8324; (12 e&#8315;). Common elements: P, S, Cl, Br, I, Xe.</p>
-                </div>
-                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
-                    <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Odd-Electron (Free Radicals)</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Molecules with an <em>odd</em> number of valence electrons cannot satisfy the octet rule on every atom. Examples: NO (11 e&#8315;), NO&#8322; (17 e&#8315;). The unpaired electron makes these species highly reactive.</p>
-                </div>
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Carbon in CO (carbon monoxide)</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Valence e&#8315; = 4, Lone pair e&#8315; = 2, Bonding e&#8315; = 6</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">FC = 4 &minus; 2 &minus; (6&divide;2) = <strong>&minus;1</strong></p>
             </div>
         </div>
 
-        <!-- Resonance Structures -->
-        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Resonance Structures</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">When a molecule can be drawn with multiple valid Lewis structures that differ only in the <em>placement of electrons</em> (not atoms), these are called <strong>resonance structures</strong>. The true molecule is a weighted average (resonance hybrid) of all contributing structures.</p>
-            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
-                <li style="margin-bottom: 0.4rem;"><strong>O&#8323; (ozone):</strong> One O=O double bond and one O&ndash;O single bond. Two equivalent resonance structures exist where the double bond switches sides. The real bond order is 1.5.</li>
-                <li style="margin-bottom: 0.4rem;"><strong>NO&#8323;&#8315; (nitrate):</strong> Three equivalent resonance structures, each with one N=O double bond and two N&ndash;O single bonds. The real bond order is 1.33 for each N&ndash;O bond.</li>
-                <li style="margin-bottom: 0.4rem;"><strong>CO&#8323;&#178;&#8315; (carbonate):</strong> Three equivalent resonance structures with a real bond order of 1.33 for each C&ndash;O bond.</li>
-                <li style="margin-bottom: 0.4rem;"><strong>Tip:</strong> This tool alerts you when resonance is likely &mdash; look for the &ldquo;Resonance&rdquo; badge in the results when identical atoms have different bond orders.</li>
-            </ul>
+        <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Rules for Choosing the Best Lewis Structure</h3>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+            <li style="margin-bottom: 0.4rem;">The structure with formal charges <strong>closest to zero</strong> on all atoms is preferred</li>
+            <li style="margin-bottom: 0.4rem;">Negative formal charges should reside on the <strong>more electronegative</strong> atoms (O, F, N)</li>
+            <li style="margin-bottom: 0.4rem;">Avoid placing <strong>same-sign charges</strong> on adjacent atoms (like +1 next to +1)</li>
+            <li style="margin-bottom: 0.4rem;">Minimize the <strong>total number</strong> of atoms with non-zero formal charges</li>
+            <li style="margin-bottom: 0.4rem;">The sum of all formal charges must equal the overall <strong>molecular charge</strong></li>
+        </ul>
+    </div>
+
+    <!-- VSEPR Theory Guide -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">VSEPR Theory &mdash; Predicting Molecular Shape</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>VSEPR</strong> (Valence Shell Electron Pair Repulsion) theory predicts the three-dimensional shape of molecules based on one simple principle: <em>electron groups around a central atom arrange themselves as far apart as possible to minimize repulsion</em>.</p>
+
+        <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Key Concepts</h3>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            <li style="margin-bottom: 0.4rem;"><strong>Electron domains</strong> (or steric number) = bonding pairs + lone pairs around the central atom. A double or triple bond counts as <em>one</em> electron domain.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Electron geometry</strong> describes the arrangement of <em>all</em> electron domains (bonds + lone pairs)</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Molecular geometry</strong> describes the arrangement of <em>only the atoms</em> (ignoring lone pairs)</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Lone pairs</strong> occupy more space than bonding pairs, compressing bond angles below ideal values</li>
+        </ul>
+
+        <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem;">Complete VSEPR Geometry Table</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; color: var(--text-secondary);">
+                <thead>
+                <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Steric #</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Bonds</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Lone Pairs</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Electron Geometry</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Molecular Geometry</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Bond Angle</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Example</th>
+                    <th style="padding: 0.6rem 0.5rem; text-align: left;">Polarity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">2</td><td>2</td><td>0</td><td>Linear</td><td>Linear</td><td>180&#176;</td><td>CO&#8322;, BeCl&#8322;</td><td>Nonpolar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">3</td><td>3</td><td>0</td><td>Trigonal Planar</td><td>Trigonal Planar</td><td>120&#176;</td><td>BF&#8323;, SO&#8323;</td><td>Nonpolar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">3</td><td>2</td><td>1</td><td>Trigonal Planar</td><td>Bent</td><td>&lt;120&#176;</td><td>SO&#8322;, O&#8323;</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">4</td><td>4</td><td>0</td><td>Tetrahedral</td><td>Tetrahedral</td><td>109.5&#176;</td><td>CH&#8324;, CCl&#8324;</td><td>Nonpolar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">4</td><td>3</td><td>1</td><td>Tetrahedral</td><td>Trigonal Pyramidal</td><td>~107&#176;</td><td>NH&#8323;, PCl&#8323;</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">4</td><td>2</td><td>2</td><td>Tetrahedral</td><td>Bent</td><td>~104.5&#176;</td><td>H&#8322;O, H&#8322;S</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">5</td><td>5</td><td>0</td><td>Trigonal Bipyramidal</td><td>Trigonal Bipyramidal</td><td>90&#176;, 120&#176;</td><td>PCl&#8325;</td><td>Nonpolar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">5</td><td>4</td><td>1</td><td>Trigonal Bipyramidal</td><td>Seesaw</td><td>&lt;90&#176;, &lt;120&#176;</td><td>SF&#8324;</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">5</td><td>3</td><td>2</td><td>Trigonal Bipyramidal</td><td>T-shaped</td><td>&lt;90&#176;</td><td>ClF&#8323;, BrF&#8323;</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">5</td><td>2</td><td>3</td><td>Trigonal Bipyramidal</td><td>Linear</td><td>180&#176;</td><td>XeF&#8322;, I&#8323;&#8315;</td><td>Nonpolar*</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">6</td><td>6</td><td>0</td><td>Octahedral</td><td>Octahedral</td><td>90&#176;</td><td>SF&#8326;</td><td>Nonpolar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">6</td><td>5</td><td>1</td><td>Octahedral</td><td>Square Pyramidal</td><td>&lt;90&#176;</td><td>BrF&#8325;, IF&#8325;</td><td>Polar</td></tr>
+                <tr style="border-bottom: 1px solid var(--border);"><td style="padding:0.5rem;">6</td><td>4</td><td>2</td><td>Octahedral</td><td>Square Planar</td><td>90&#176;</td><td>XeF&#8324;</td><td>Nonpolar*</td></tr>
+                <tr style="border-bottom: 1px solid var(--border); background: var(--bg-secondary);"><td style="padding:0.5rem;">7</td><td>7</td><td>0</td><td>Pentagonal Bipyramidal</td><td>Pentagonal Bipyramidal</td><td>72&#176;, 90&#176;</td><td>IF&#8327;</td><td>Nonpolar</td></tr>
+                </tbody>
+            </table>
         </div>
+        <p style="color: var(--text-secondary); font-size: 0.82rem; margin-top: 0.5rem;">* Despite having lone pairs, XeF&#8322; (linear) and XeF&#8324; (square planar) are <strong>nonpolar</strong> because their molecular geometries are symmetric &mdash; dipole moments cancel out.</p>
 
-    </section>
+        <h3 style="font-size: 1.05rem; margin: 1.5rem 0 0.75rem;">Polarity and Molecular Shape</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">A molecule is <strong>nonpolar</strong> when its molecular geometry is <em>symmetric</em> (with identical ligands) &mdash; the individual bond dipoles cancel. It is <strong>polar</strong> when the geometry is asymmetric, leaving a net dipole moment.</p>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+            <li style="margin-bottom: 0.4rem;"><strong>Always nonpolar</strong> (identical ligands): Linear (2 bonds), Trigonal Planar, Tetrahedral, Square Planar, Octahedral</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Always polar:</strong> Bent, Trigonal Pyramidal, Seesaw, T-shaped, Square Pyramidal</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Common misconception:</strong> &ldquo;Lone pairs always make a molecule polar&rdquo; &mdash; this is <em>wrong</em>. XeF&#8322; has 3 lone pairs but is nonpolar because the two Xe&ndash;F bonds point in opposite directions</li>
+        </ul>
+    </div>
 
-    <!-- Related Chemistry Tools -->
-    <jsp:include page="modern/components/related-tools.jsp">
-        <jsp:param name="currentToolUrl" value="lewis-structure-generator.jsp"/>
-        <jsp:param name="keyword" value="chemistry"/>
-        <jsp:param name="limit" value="6"/>
-    </jsp:include>
+    <!-- Exceptions to Octet Rule -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Exceptions to the Octet Rule</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">While the octet rule works for most molecules, there are three important exceptions:</p>
 
-    <!-- E-E-A-T: Experience, Expertise, Authoritativeness, Trustworthiness -->
-    <section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
-        <div class="tool-card" style="padding: 2rem;">
-            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">About This Lewis Structure Tool & Methodology</h2>
-            <p style="margin-bottom: 1rem; color: var(--text-secondary);">This Lewis Structure Generator uses valence electron calculations and VSEPR (Valence Shell Electron Pair Repulsion) theory to predict molecular geometry, bond angles, and polarity. All calculations and visualizations run entirely in your browser for instant, interactive molecular diagrams.</p>
-
-            <h3 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">How Lewis Structure Generation Works:</h3>
-            <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
-                <li style="margin-bottom: 0.5rem;"><strong>Count Valence Electrons:</strong> Sum all valence electrons from each atom, adjusting for molecular charge</li>
-                <li style="margin-bottom: 0.5rem;"><strong>Arrange Atoms:</strong> Place the least electronegative atom in the center (hydrogen is always terminal)</li>
-                <li style="margin-bottom: 0.5rem;"><strong>Draw Bonds:</strong> Connect atoms with single bonds, then distribute remaining electrons as lone pairs</li>
-                <li style="margin-bottom: 0.5rem;"><strong>Form Multiple Bonds:</strong> If the central atom lacks an octet, convert lone pairs to double or triple bonds</li>
-                <li><strong>Check Formal Charges:</strong> Calculate formal charges - the best structure minimizes charges</li>
-            </ol>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                <div>
-                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Authorship & Expertise</h3>
-                    <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-                        <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--tool-primary);">Anish Nath</a></li>
-                        <li><strong>Background:</strong> Science and engineering education tools</li>
-                        <li><strong>Covers:</strong> 80+ elements, generic notation, VSEPR steric numbers 1-7</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Tool Details</h3>
-                    <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-                        <li><strong>Visualization:</strong> Interactive 2D molecular diagrams with element coloring (CPK standard)</li>
-                        <li><strong>Privacy:</strong> All calculations run entirely in your browser &mdash; nothing is sent to a server</li>
-                        <li><strong>Chemistry Standards:</strong> VSEPR theory, formal charge rules, octet rule, expanded octet support</li>
-                        <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--tool-primary);">@anish2good</a></li>
-                    </ul>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Incomplete Octets</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Some atoms are stable with <em>fewer</em> than 8 electrons. Hydrogen needs only 2 (duet rule). Beryllium and boron commonly have 4 and 6 electrons respectively. Example: BF&#8323; has only 6 electrons around B.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Expanded Octets</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Elements in Period 3 and beyond can hold <em>more</em> than 8 electrons by using d-orbitals. Examples: PCl&#8325; (10 e&#8315;), SF&#8326; (12 e&#8315;), XeF&#8322; (10 e&#8315;), XeF&#8324; (12 e&#8315;). Common elements: P, S, Cl, Br, I, Xe.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem;">
+                <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--tool-primary);">Odd-Electron (Free Radicals)</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Molecules with an <em>odd</em> number of valence electrons cannot satisfy the octet rule on every atom. Examples: NO (11 e&#8315;), NO&#8322; (17 e&#8315;). The unpaired electron makes these species highly reactive.</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Support Section -->
-    <%@ include file="modern/components/support-section.jsp" %>
+    <!-- Resonance Structures -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Resonance Structures</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">When a molecule can be drawn with multiple valid Lewis structures that differ only in the <em>placement of electrons</em> (not atoms), these are called <strong>resonance structures</strong>. The true molecule is a weighted average (resonance hybrid) of all contributing structures.</p>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+            <li style="margin-bottom: 0.4rem;"><strong>O&#8323; (ozone):</strong> One O=O double bond and one O&ndash;O single bond. Two equivalent resonance structures exist where the double bond switches sides. The real bond order is 1.5.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>NO&#8323;&#8315; (nitrate):</strong> Three equivalent resonance structures, each with one N=O double bond and two N&ndash;O single bonds. The real bond order is 1.33 for each N&ndash;O bond.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>CO&#8323;&#178;&#8315; (carbonate):</strong> Three equivalent resonance structures with a real bond order of 1.33 for each C&ndash;O bond.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Tip:</strong> This tool alerts you when resonance is likely &mdash; look for the &ldquo;Resonance&rdquo; badge in the results when identical atoms have different bond orders.</li>
+        </ul>
+    </div>
 
-    <!-- Footer -->
-    <footer class="page-footer">
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-            <div class="footer-links">
-                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+</section>
+
+<!-- Related Chemistry Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="lewis-structure-generator.jsp"/>
+    <jsp:param name="keyword" value="chemistry"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
+
+<!-- E-E-A-T: Experience, Expertise, Authoritativeness, Trustworthiness -->
+<section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="tool-card" style="padding: 2rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">About This Lewis Structure Tool & Methodology</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">This Lewis Structure Generator uses valence electron calculations and VSEPR (Valence Shell Electron Pair Repulsion) theory to predict molecular geometry, bond angles, and polarity. All calculations and visualizations run entirely in your browser for instant, interactive molecular diagrams.</p>
+
+        <h3 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">How Lewis Structure Generation Works:</h3>
+        <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
+            <li style="margin-bottom: 0.5rem;"><strong>Count Valence Electrons:</strong> Sum all valence electrons from each atom, adjusting for molecular charge</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Arrange Atoms:</strong> Place the least electronegative atom in the center (hydrogen is always terminal)</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Draw Bonds:</strong> Connect atoms with single bonds, then distribute remaining electrons as lone pairs</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Form Multiple Bonds:</strong> If the central atom lacks an octet, convert lone pairs to double or triple bonds</li>
+            <li><strong>Check Formal Charges:</strong> Calculate formal charges - the best structure minimizes charges</li>
+        </ol>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+            <div>
+                <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Authorship & Expertise</h3>
+                <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--tool-primary);">Anish Nath</a></li>
+                    <li><strong>Background:</strong> Science and engineering education tools</li>
+                    <li><strong>Covers:</strong> 80+ elements, generic notation, VSEPR steric numbers 1-7</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Tool Details</h3>
+                <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    <li><strong>Visualization:</strong> Interactive 2D molecular diagrams with element coloring (CPK standard)</li>
+                    <li><strong>Privacy:</strong> All calculations run entirely in your browser &mdash; nothing is sent to a server</li>
+                    <li><strong>Chemistry Standards:</strong> VSEPR theory, formal charge rules, octet rule, expanded octet support</li>
+                    <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--tool-primary);">@anish2good</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-    <%@ include file="modern/components/analytics.jsp" %>
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
 
-    <!-- p5.js CDN (instance mode, deferred) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" defer></script>
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<%@ include file="modern/components/analytics.jsp" %>
 
-    <script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+<!-- p5.js CDN (instance mode, deferred) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" defer></script>
+
+<script>
     // ========== DATA: Valence electrons (80+ elements + generic) ==========
     const valenceElectrons = {
         // Period 1
@@ -1207,7 +1207,7 @@
     // ========== CHEMICAL FORMULA FORMATTING ==========
     // Unicode subscript digits for plain-text contexts (copy, canvas, clipboard)
     var unicodeSubs = {'0':'\u2080','1':'\u2081','2':'\u2082','3':'\u2083','4':'\u2084',
-                       '5':'\u2085','6':'\u2086','7':'\u2087','8':'\u2088','9':'\u2089'};
+        '5':'\u2085','6':'\u2086','7':'\u2087','8':'\u2088','9':'\u2089'};
 
     // "H2O" → "H<sub>2</sub>O"  (for innerHTML)
     function formatFormulaHtml(formula) {
@@ -1246,8 +1246,8 @@
         // Normalize Unicode superscripts (⁰¹²³⁴⁵⁶⁷⁸⁹) to ASCII digits
         formula = formula.replace(/[\u2070\u00B9\u00B2\u00B3\u2074-\u2079]/g, function(ch) {
             var map = {'\u2070':'0','\u00B9':'1','\u00B2':'2','\u00B3':'3',
-                       '\u2074':'4','\u2075':'5','\u2076':'6','\u2077':'7',
-                       '\u2078':'8','\u2079':'9'};
+                '\u2074':'4','\u2075':'5','\u2076':'6','\u2077':'7',
+                '\u2078':'8','\u2079':'9'};
             return map[ch] || ch;
         });
         // Strip trailing charge symbols (⁺ ⁻ + - −) so they don't break parsing
@@ -1377,6 +1377,128 @@
             hasResonance: hasResonance,
             isRadical: (totalValence % 2 !== 0),
             unpairedElectrons: remaining
+        };
+    }
+
+    // ========== OXYACID BONDING ANALYSIS ==========
+    function analyzeOxyacidBonding(atoms, centralAtom, totalValence) {
+        var numH = atoms['H'] || 0;
+        var numO = atoms['O'] || 0;
+
+        // In oxyacids, H bonds to O (forming OH groups)
+        // Remaining O forms double bonds with central atom
+        var ohGroups = Math.min(numH, numO); // Number of O-H groups
+        var doubleO = numO - ohGroups;        // Remaining O atoms (double bonded)
+
+        // Build peripheral atoms: OH groups + double-bonded O
+        var peripherals = [];
+        var bondOrders = [];
+        var peripheralLonePairs = [];
+
+        // Add OH groups (single bond to central)
+        for (var i = 0; i < ohGroups; i++) {
+            peripherals.push('O');
+            bondOrders.push(1);
+            peripheralLonePairs.push(2); // O in OH has 2 lone pairs
+        }
+
+        // Add double-bonded O
+        for (var i = 0; i < doubleO; i++) {
+            peripherals.push('O');
+            bondOrders.push(2);
+            peripheralLonePairs.push(2); // O in =O has 2 lone pairs
+        }
+
+        // Calculate central atom lone pairs
+        var centralE = 0;
+        for (var i = 0; i < bondOrders.length; i++) {
+            centralE += bondOrders[i] * 2;
+        }
+
+        var centralTarget = 8; // Most central atoms want octet
+        var remaining = totalValence - centralE - (ohGroups * 2) - (numO * 4); // Account for O lone pairs and O-H bonds
+        var centralLonePairs = Math.max(0, Math.floor((centralTarget - centralE) / 2));
+
+        return {
+            peripherals: peripherals,
+            bondOrders: bondOrders,
+            peripheralLonePairs: peripheralLonePairs,
+            centralLonePairs: centralLonePairs,
+            hasResonance: doubleO > 1, // Multiple double bonds = resonance
+            isRadical: false,
+            unpairedElectrons: 0,
+            ohGroups: ohGroups,
+            doubleO: doubleO
+        };
+    }
+
+    // ========== RING BONDING ANALYSIS ==========
+    function analyzeRingBonding(backbone, termsPerAtom, totalValence) {
+        // For rings, all backbone bonds are single bonds initially
+        var bbBonds = backbone.length; // Ring has same number of bonds as atoms
+        var termBonds = 0;
+        for (var i = 0; i < termsPerAtom.length; i++) {
+            termBonds += termsPerAtom[i].length;
+        }
+
+        var remaining = totalValence - (bbBonds + termBonds) * 2;
+
+        // Terminal atom lone pairs
+        var termLonePairs = [];
+        for (var i = 0; i < termsPerAtom.length; i++) {
+            termLonePairs[i] = [];
+            for (var j = 0; j < termsPerAtom[i].length; j++) {
+                var term = termsPerAtom[i][j];
+                if (term === 'H') {
+                    termLonePairs[i].push(0);
+                } else {
+                    var need = 3; // Non-H terminal needs 3 pairs for octet
+                    var canGive = Math.min(need, Math.floor(remaining / 2));
+                    termLonePairs[i].push(canGive);
+                    remaining -= canGive * 2;
+                }
+            }
+        }
+
+        // Backbone lone pairs
+        var bbLonePairs = [];
+        for (var i = 0; i < backbone.length; i++) {
+            var bbBondCount = 2 + termsPerAtom[i].length; // 2 ring bonds + terminals
+            var atomE = bbBondCount * 2;
+            var target = 8;
+            var need = Math.max(0, (target - atomE) / 2);
+            var canGive = Math.min(need, Math.floor(remaining / 2));
+            bbLonePairs[i] = canGive;
+            remaining -= canGive * 2;
+        }
+
+        // Bond orders (all single for simple rings, or alternate for benzene)
+        var bbBondOrders = [];
+        var isBenzene = backbone.length === 6;
+
+        // Check if it's benzene-like (6 carbons with few H)
+        var totalH = 0;
+        for (var i = 0; i < termsPerAtom.length; i++) {
+            for (var j = 0; j < termsPerAtom[i].length; j++) {
+                if (termsPerAtom[i][j] === 'H') totalH++;
+            }
+        }
+        isBenzene = isBenzene && totalH === 6;
+
+        for (var i = 0; i < backbone.length; i++) {
+            if (isBenzene) {
+                // Alternate single/double for benzene
+                bbBondOrders.push(i % 2 === 0 ? 1 : 2);
+            } else {
+                bbBondOrders.push(1);
+            }
+        }
+
+        return {
+            bbBondOrders: bbBondOrders,
+            bbLonePairs: bbLonePairs,
+            termLonePairs: termLonePairs,
+            isRing: true
         };
     }
 
@@ -1675,6 +1797,274 @@
                 p.textAlign(p.CENTER, p.TOP);
                 var formulaStr = Object.entries(atoms).map(function(e){ return e[0] + (e[1] > 1 ? e[1] : ''); }).join('');
                 p.text('Lewis Structure: ' + formatFormulaText(formulaStr) + (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : ''), w/2, 10);
+            };
+        }, container);
+    }
+
+    // ========== p5.js: Oxyacid Lewis Structure Sketch ==========
+    function createOxyacidLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr) {
+        destroyCurrentSketch();
+
+        var container = document.getElementById('lewisCanvasContainer');
+        var w = container.clientWidth || 400;
+        var h = Math.max(320, container.clientHeight || 320);
+
+        currentP5 = new p5(function(p) {
+            var peripherals = bonding.peripherals;
+            var bondOrders = bonding.bondOrders;
+            var pLonePairs = bonding.peripheralLonePairs;
+            var centralLonePairs = bonding.centralLonePairs;
+            var ohGroups = bonding.ohGroups;
+            var doubleO = bonding.doubleO;
+
+            p.setup = function() {
+                var canvas = p.createCanvas(w, h);
+                canvas.parent('lewisCanvasContainer');
+                p.textFont('Inter, sans-serif');
+                p.noLoop();
+            };
+
+            p.draw = function() {
+                var dark = isDarkMode();
+                var bg = dark ? p.color(30, 41, 59) : p.color(255);
+                var textCol = dark ? p.color(226, 232, 240) : p.color(15, 23, 42);
+                var bondCol = dark ? p.color(148, 163, 184) : p.color(100, 116, 139);
+                var lonePairCol = dark ? p.color(129, 230, 217) : p.color(16, 185, 129);
+
+                p.background(bg);
+
+                var cx = w / 2;
+                var cy = h / 2;
+                var bondLen = Math.min(w, h) * 0.3;
+
+                // Compute peripheral O positions
+                var pPositions = [];
+                for (var i = 0; i < peripherals.length; i++) {
+                    var angle;
+                    if (peripherals.length === 1) {
+                        angle = 0;
+                    } else if (peripherals.length === 2) {
+                        angle = (i === 0) ? Math.PI : 0;
+                    } else if (peripherals.length === 3) {
+                        angle = (i === 0) ? -Math.PI/2 : (i === 1) ? Math.PI/6 : -Math.PI/6 + Math.PI;
+                    } else if (peripherals.length === 4) {
+                        // Tetrahedral-like arrangement
+                        angle = (2 * Math.PI * i) / 4 - Math.PI / 4;
+                    } else {
+                        angle = (2 * Math.PI * i) / peripherals.length - Math.PI / 2;
+                    }
+                    pPositions.push({
+                        x: cx + Math.cos(angle) * bondLen,
+                        y: cy + Math.sin(angle) * bondLen,
+                        angle: angle
+                    });
+                }
+
+                // Draw bonds from central to O atoms
+                for (var i = 0; i < peripherals.length; i++) {
+                    drawMultiBond(p, cx, cy, pPositions[i].x, pPositions[i].y,
+                        bondOrders[i], bondCol, 3);
+                }
+
+                // Draw H atoms bonded to OH group oxygens
+                var numH = atoms['H'] || 0;
+                for (var i = 0; i < ohGroups && i < pPositions.length; i++) {
+                    var oPos = pPositions[i];
+                    var hAngle = oPos.angle; // H extends further out
+                    var hx = oPos.x + Math.cos(hAngle) * 35;
+                    var hy = oPos.y + Math.sin(hAngle) * 35;
+
+                    // Draw O-H bond
+                    p.stroke(bondCol);
+                    p.strokeWeight(2.5);
+                    p.line(oPos.x, oPos.y, hx, hy);
+
+                    // Draw H atom
+                    var hColor = elementColors['H'] || elementColors['default'];
+                    p.stroke(dark ? 100 : 60);
+                    p.strokeWeight(1.5);
+                    p.fill(hColor[0], hColor[1], hColor[2], dark ? 200 : 230);
+                    p.ellipse(hx, hy, 30, 30);
+
+                    p.fill(dark ? 20 : 30);
+                    p.noStroke();
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.textSize(12);
+                    p.textStyle(p.BOLD);
+                    p.text('H', hx, hy);
+                }
+
+                // Draw lone pairs on O atoms
+                for (var i = 0; i < peripherals.length; i++) {
+                    if (pLonePairs[i] > 0) {
+                        var farAngle = pPositions[i].angle;
+                        // For OH groups, lone pairs go to sides
+                        // For =O, lone pairs go to sides
+                        var lpDist = 22;
+                        var angleOffset = (i < ohGroups) ? Math.PI / 3 : Math.PI / 2.5;
+
+                        for (var lp = 0; lp < Math.min(pLonePairs[i], 2); lp++) {
+                            var spreadAngle = farAngle + (lp === 0 ? angleOffset : -angleOffset);
+                            drawLonePairDots(p, pPositions[i].x, pPositions[i].y,
+                                spreadAngle, lpDist, lonePairCol);
+                        }
+                    }
+                }
+
+                // Draw O atom circles
+                for (var i = 0; i < peripherals.length; i++) {
+                    var elColor = elementColors['O'] || elementColors['default'];
+                    p.stroke(dark ? 100 : 60);
+                    p.strokeWeight(1.5);
+                    p.fill(elColor[0], elColor[1], elColor[2], dark ? 200 : 230);
+                    p.ellipse(pPositions[i].x, pPositions[i].y, 36, 36);
+
+                    p.fill(255);
+                    p.noStroke();
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.textSize(14);
+                    p.textStyle(p.BOLD);
+                    p.text('O', pPositions[i].x, pPositions[i].y);
+                }
+
+                // Draw central atom circle
+                var centerColor = elementColors[centralAtom] || elementColors['default'];
+                p.stroke(dark ? 100 : 60);
+                p.strokeWeight(2);
+                p.fill(centerColor[0], centerColor[1], centerColor[2], dark ? 220 : 240);
+                p.ellipse(cx, cy, 44, 44);
+
+                var isCenterLight = elementTextDark(centerColor);
+                p.fill(isCenterLight ? (dark ? 20 : 30) : (dark ? 240 : 255));
+                p.noStroke();
+                p.textAlign(p.CENTER, p.CENTER);
+                p.textSize(16);
+                p.textStyle(p.BOLD);
+                p.text(centralAtom, cx, cy);
+
+                // Title
+                p.fill(dark ? p.color(148, 163, 184) : p.color(100, 116, 139));
+                p.textSize(11);
+                p.textStyle(p.NORMAL);
+                p.textAlign(p.CENTER, p.TOP);
+                p.text('Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : ''), w/2, 10);
+            };
+        }, container);
+    }
+
+    // ========== p5.js: Ring Lewis Structure Sketch ==========
+    function createRingLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding) {
+        destroyCurrentSketch();
+
+        var container = document.getElementById('lewisCanvasContainer');
+        var w = container.clientWidth || 400;
+        var h = Math.max(320, container.clientHeight || 320);
+
+        currentP5 = new p5(function(p) {
+            var n = backbone.length;
+            var radius = Math.min(w, h) * 0.28;
+            var cx = w / 2;
+            var cy = h / 2;
+            var termBondLen = 50;
+
+            p.setup = function() {
+                var canvas = p.createCanvas(w, h);
+                canvas.parent('lewisCanvasContainer');
+                p.textFont('Inter, sans-serif');
+                p.noLoop();
+            };
+
+            p.draw = function() {
+                var dark = isDarkMode();
+                var bg = dark ? p.color(30, 41, 59) : p.color(255);
+                var textCol = dark ? p.color(226, 232, 240) : p.color(15, 23, 42);
+                var bondCol = dark ? p.color(148, 163, 184) : p.color(100, 116, 139);
+                var lonePairCol = dark ? p.color(129, 230, 217) : p.color(16, 185, 129);
+
+                p.background(bg);
+
+                // Calculate positions for ring atoms
+                var ringPositions = [];
+                for (var i = 0; i < n; i++) {
+                    var angle = (2 * Math.PI * i) / n - Math.PI / 2;
+                    ringPositions.push({
+                        x: cx + Math.cos(angle) * radius,
+                        y: cy + Math.sin(angle) * radius,
+                        angle: angle
+                    });
+                }
+
+                // Draw ring bonds
+                var bbOrders = chainBonding.bbBondOrders;
+                for (var i = 0; i < n; i++) {
+                    var next = (i + 1) % n;
+                    var order = bbOrders[i] || 1;
+                    drawMultiBond(p, ringPositions[i].x, ringPositions[i].y,
+                        ringPositions[next].x, ringPositions[next].y,
+                        order, bondCol, 2.5);
+                }
+
+                // Draw terminal atoms and bonds
+                for (var i = 0; i < n; i++) {
+                    var terms = termsPerAtom[i] || [];
+                    for (var t = 0; t < terms.length; t++) {
+                        var termEl = terms[t];
+                        var baseAngle = ringPositions[i].angle;
+                        var spreadAngle = baseAngle;
+                        if (terms.length > 1) {
+                            spreadAngle = baseAngle + (t - (terms.length - 1) / 2) * 0.3;
+                        }
+
+                        var tx = ringPositions[i].x + Math.cos(spreadAngle) * termBondLen;
+                        var ty = ringPositions[i].y + Math.sin(spreadAngle) * termBondLen;
+
+                        // Draw bond
+                        p.stroke(bondCol);
+                        p.strokeWeight(2);
+                        p.line(ringPositions[i].x, ringPositions[i].y, tx, ty);
+
+                        // Draw terminal atom
+                        var termColor = elementColors[termEl] || elementColors['default'];
+                        p.stroke(dark ? 100 : 60);
+                        p.strokeWeight(1.5);
+                        p.fill(termColor[0], termColor[1], termColor[2], dark ? 200 : 230);
+                        p.ellipse(tx, ty, 32, 32);
+
+                        var isLight = elementTextDark(termColor);
+                        p.fill(isLight ? (dark ? 20 : 30) : (dark ? 240 : 255));
+                        p.noStroke();
+                        p.textAlign(p.CENTER, p.CENTER);
+                        p.textSize(12);
+                        p.textStyle(p.BOLD);
+                        p.text(termEl, tx, ty);
+                    }
+                }
+
+                // Draw ring atom circles
+                for (var i = 0; i < n; i++) {
+                    var atomColor = elementColors[backbone[i]] || elementColors['default'];
+                    p.stroke(dark ? 100 : 60);
+                    p.strokeWeight(1.5);
+                    p.fill(atomColor[0], atomColor[1], atomColor[2], dark ? 210 : 235);
+                    p.ellipse(ringPositions[i].x, ringPositions[i].y, 38, 38);
+
+                    var isLight = elementTextDark(atomColor);
+                    p.fill(isLight ? (dark ? 20 : 30) : (dark ? 240 : 255));
+                    p.noStroke();
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.textSize(14);
+                    p.textStyle(p.BOLD);
+                    p.text(backbone[i], ringPositions[i].x, ringPositions[i].y);
+                }
+
+                // Title
+                p.fill(dark ? p.color(148, 163, 184) : p.color(100, 116, 139));
+                p.textSize(11);
+                p.textStyle(p.NORMAL);
+                p.textAlign(p.CENTER, p.TOP);
+                p.text('Lewis Structure (Ring): ' + formatFormulaText(formulaStr) +
+                    (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : ''), w/2, 10);
             };
         }, container);
     }
@@ -2176,6 +2566,44 @@
     });
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
+    // ========== PATTERN DETECTION FUNCTIONS ==========
+
+    // Detect oxyacid pattern: H + O + central atom (e.g., H2SO4, H3PO4, HNO3)
+    function detectOxyacid(atoms, centralAtom) {
+        return atoms['H'] && atoms['O'] &&
+            centralAtom !== 'H' && centralAtom !== 'O' && centralAtom !== 'F' &&
+            (atoms[centralAtom] || 0) === 1; // Single central atom
+    }
+
+    // Detect alcohol pattern: C + O + H where C>1 and O=1 (e.g., CH3OH, C2H5OH)
+    function detectAlcohol(atoms) {
+        return atoms['C'] && atoms['O'] && atoms['H'] &&
+            (atoms['C'] || 0) >= 1 && (atoms['O'] || 0) === 1 &&
+            Object.keys(atoms).length === 3; // Only C, O, H
+    }
+
+    // Detect simple ether pattern: C + O where C>1 and O=1, no H or few H (e.g., CH3OCH3)
+    function detectEther(atoms) {
+        return atoms['C'] && atoms['O'] &&
+            (atoms['C'] || 0) >= 2 && (atoms['O'] || 0) === 1 &&
+            Object.keys(atoms).length <= 3; // C, O, maybe H
+    }
+
+    // Detect ring structure: Formula suggests cyclic (e.g., C6H6, C5H10, C6H12)
+    function detectRing(atoms) {
+        if (!atoms['C']) return false;
+        var numC = atoms['C'] || 0;
+        var numH = atoms['H'] || 0;
+
+        // Common ring patterns:
+        // Benzene: C6H6 (2n)
+        // Cycloalkane: CnH2n
+        // Cycloalkene: CnH(2n-2)
+        return (numC >= 3 && numH === 2 * numC) || // Cycloalkane
+            (numC >= 6 && numH === numC) ||      // Benzene-like
+            (numC >= 3 && numH === 2 * numC - 2); // Cycloalkene
+    }
+
     // ========== GENERATE LEWIS STRUCTURE ==========
     function generateLewis() {
         var formula = document.getElementById('molecularFormula').value.trim();
@@ -2214,13 +2642,100 @@
 
             var formulaStr = Object.entries(atoms).map(function(e) { return e[0] + (e[1] > 1 ? e[1] : ''); }).join('');
 
-            // Detect multi-center (chain) molecules: 2+ of the central atom
+            // ========== PATTERN DETECTION AND ROUTING ==========
             var centralCount = atoms[centralAtom] || 0;
-            var isChain = centralCount >= 2;
-            var backbone, termsPerAtom;
+            var isOxyacid = detectOxyacid(atoms, centralAtom);
+            var isAlcohol = detectAlcohol(atoms);
+            var isEther = detectEther(atoms);
+            var isRing = detectRing(atoms);
+            var isChain = !isOxyacid && !isAlcohol && !isEther && !isRing && centralCount >= 2;
 
-            if (isChain) {
-                // Build backbone from central atoms
+            var backbone, termsPerAtom, bonding, chainBonding;
+
+            if (isOxyacid) {
+                // Handle oxyacids: H bonds to O, O bonds to central (e.g., H2SO4)
+                bonding = analyzeOxyacidBonding(atoms, centralAtom, totalValence);
+                createOxyacidLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
+
+            } else if (isAlcohol) {
+                // Handle alcohols: C-C-...-C-OH (e.g., CH3OH, C2H5OH)
+                backbone = [];
+                var numC = atoms['C'] || 0;
+                for (var k = 0; k < numC; k++) backbone.push('C');
+                backbone.push('O'); // O at the end
+
+                // H atoms distribute: some to O (1 H), rest to C atoms
+                termsPerAtom = [];
+                for (var k = 0; k < backbone.length; k++) termsPerAtom.push([]);
+
+                var numH = atoms['H'] || 0;
+                // Last position (O) gets 1 H
+                termsPerAtom[backbone.length - 1].push('H');
+                numH--;
+
+                // Distribute remaining H to carbons
+                for (var k = 0; k < numC && numH > 0; k++) {
+                    var bbBonds = (k > 0 ? 1 : 0) + (k < backbone.length - 1 ? 1 : 0);
+                    var maxH = 4 - bbBonds;
+                    var give = Math.min(maxH, numH);
+                    for (var h = 0; h < give; h++) termsPerAtom[k].push('H');
+                    numH -= give;
+                }
+
+                chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+
+            } else if (isEther) {
+                // Handle ethers: C-O-C (e.g., CH3OCH3)
+                var numC = atoms['C'] || 0;
+                var halfC = Math.floor(numC / 2);
+
+                backbone = [];
+                for (var k = 0; k < halfC; k++) backbone.push('C');
+                backbone.push('O');
+                for (var k = 0; k < numC - halfC; k++) backbone.push('C');
+
+                // Distribute H atoms to C atoms
+                termsPerAtom = [];
+                for (var k = 0; k < backbone.length; k++) termsPerAtom.push([]);
+
+                var numH = atoms['H'] || 0;
+                for (var k = 0; k < backbone.length && numH > 0; k++) {
+                    if (backbone[k] === 'O') continue; // O gets no H in simple ether
+                    var bbBonds = (k > 0 ? 1 : 0) + (k < backbone.length - 1 ? 1 : 0);
+                    var maxH = 4 - bbBonds;
+                    var give = Math.min(maxH, numH);
+                    for (var h = 0; h < give; h++) termsPerAtom[k].push('H');
+                    numH -= give;
+                }
+
+                chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+
+            } else if (isRing) {
+                // Handle rings: Connect carbons in a circle
+                var numC = atoms['C'] || 0;
+                backbone = [];
+                for (var k = 0; k < numC; k++) backbone.push('C');
+
+                // Distribute H atoms
+                termsPerAtom = [];
+                for (var k = 0; k < numC; k++) termsPerAtom.push([]);
+
+                var numH = atoms['H'] || 0;
+                var hPerC = Math.floor(numH / numC);
+                var extraH = numH % numC;
+
+                for (var k = 0; k < numC; k++) {
+                    var give = hPerC + (k < extraH ? 1 : 0);
+                    for (var h = 0; h < give; h++) termsPerAtom[k].push('H');
+                }
+
+                chainBonding = analyzeRingBonding(backbone, termsPerAtom, totalValence);
+                createRingLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+
+            } else if (isChain) {
+                // Original chain handling for homogeneous backbones
                 backbone = [];
                 for (var k = 0; k < centralCount; k++) backbone.push(centralAtom);
 
@@ -2245,10 +2760,12 @@
                     termsPerAtom[backbone.length - 1] = termsPerAtom[backbone.length - 1].concat(remaining);
                 }
 
-                var chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
+                chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
                 createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+
             } else {
-                var bonding = analyzeBonding(atoms, centralAtom, totalValence);
+                // Star structure: single central atom with peripherals
+                bonding = analyzeBonding(atoms, centralAtom, totalValence);
                 createLewisSketch(atoms, centralAtom, totalValence, charge, bonding);
             }
 
@@ -2280,9 +2797,15 @@
                 html += '<div class="lewis-alert lewis-alert-warning" style="margin-bottom:0.75rem;">\u26a0\ufe0f <strong>Radical species:</strong> ' + totalValence + ' valence electrons (odd count). One electron remains unpaired on the central atom.</div>';
             }
 
-            // Oxyacid warning: when H and O are both peripherals to a non-H/O/F central atom
-            if (!isChain && atoms['H'] && atoms['O'] && centralAtom !== 'H' && centralAtom !== 'O' && centralAtom !== 'F') {
-                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#f59e0b;">\ud83d\udca1 <strong>Note:</strong> In oxyacids like <span class="lewis-chem">' + formatFormulaHtml(formulaStr) + '</span>, H atoms usually bond to O (forming O\u2013H groups), not directly to ' + centralAtom + '. The actual connectivity is more complex than a simple star layout.</div>';
+            // Pattern-specific notes
+            if (isOxyacid) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Oxyacid structure detected:</strong> H atoms are bonded to O atoms (forming O\u2013H groups), which then bond to ' + centralAtom + '. Some O atoms may form double bonds with the central atom.</div>';
+            } else if (isAlcohol) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Alcohol structure detected:</strong> Structure shows \u2013OH hydroxyl group bonded to carbon chain.</div>';
+            } else if (isEther) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Ether structure detected:</strong> Oxygen bridges two carbon chains (C\u2013O\u2013C).</div>';
+            } else if (isRing) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Cyclic structure detected:</strong> Carbon atoms form a ring structure.</div>';
             }
 
             html += '<div class="lewis-info-grid">';
@@ -2291,7 +2814,54 @@
             html += '<div class="lewis-info-card"><strong>Remaining e\u207b</strong><span>' + remainingElectrons + '</span></div>';
             html += '</div>';
 
-            if (isChain) {
+            if (isOxyacid) {
+                // Oxyacid-specific results
+                html += '<div class="lewis-result-label">Central Atom</div>';
+                html += '<div class="lewis-result-value"><span class="lewis-chem">' + centralAtom + '</span></div>';
+
+                html += '<div class="lewis-result-label">Oxygen Atoms</div>';
+                html += '<div class="lewis-result-value">' +
+                    bonding.ohGroups + ' O in \u2013OH groups, ' +
+                    bonding.doubleO + ' O in =' + centralAtom + '=O double bonds</div>';
+
+                html += '<div class="lewis-result-label">Structure Type</div>';
+                html += '<div class="lewis-result-value">Oxyacid with ' + (atoms['H'] || 0) + ' acidic hydrogen' +
+                    ((atoms['H'] || 0) !== 1 ? 's' : '') + '</div>';
+
+            } else if (isRing) {
+                // Ring-specific results
+                var chainNotation = generateChainNotation(backbone, termsPerAtom);
+                var bbOrders = chainBonding.bbBondOrders;
+
+                html += '<div class="lewis-result-label">Ring Structure</div>';
+                html += '<div class="lewis-result-value"><span class="lewis-chem">';
+                for (var bi = 0; bi < backbone.length; bi++) {
+                    html += backbone[bi];
+                    if (bi < backbone.length - 1) {
+                        var bo = bbOrders[bi] || 1;
+                        html += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
+                    } else {
+                        // Close the ring
+                        var bo = bbOrders[0] || 1;
+                        html += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
+                    }
+                }
+                html += backbone[0]; // Close ring
+                html += '</span> (' + backbone.length + '-membered ring)</div>';
+
+                var isBenzene = backbone.length === 6;
+                var totalH = 0;
+                for (var i = 0; i < termsPerAtom.length; i++) {
+                    for (var j = 0; j < termsPerAtom[i].length; j++) {
+                        if (termsPerAtom[i][j] === 'H') totalH++;
+                    }
+                }
+                if (isBenzene && totalH === 6) {
+                    html += '<div class="lewis-result-label">Aromatic Character</div>';
+                    html += '<div class="lewis-result-value">Benzene ring with alternating single/double bonds (resonance)</div>';
+                }
+
+            } else if (isAlcohol || isEther || isChain) {
                 // Chain-specific results
                 var chainNotation = generateChainNotation(backbone, termsPerAtom);
                 var bbOrders = chainBonding.bbBondOrders;
@@ -2370,13 +2940,41 @@
 
             document.getElementById('resultDisplay').innerHTML = html;
             document.getElementById('resultActions').classList.add('visible');
-            currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
-                '\nTotal Valence Electrons: ' + totalValence +
-                (isChain
-                    ? '\nCondensed: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom)) +
-                      '\nBackbone bonds: ' + chainBonding.bbBondOrders.map(function(o) { return o === 3 ? 'triple' : o === 2 ? 'double' : 'single'; }).join(', ')
-                    : '\nCentral Atom: ' + centralAtom + ' (' + bonding.centralLonePairs + ' lone pairs)' +
-                      '\nBonds: ' + describeBondOrders(bonding.bondOrders));
+
+            // Build text result for copying
+            if (isOxyacid) {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Oxyacid' +
+                    '\nCentral Atom: ' + centralAtom +
+                    '\nOH groups: ' + bonding.ohGroups +
+                    '\nDouble-bonded O: ' + bonding.doubleO;
+            } else if (isRing) {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Cyclic (' + backbone.length + '-membered ring)' +
+                    '\nBackbone: ' + backbone.join('-') + '-' + backbone[0];
+            } else if (isAlcohol) {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Alcohol (contains -OH group)' +
+                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
+            } else if (isEther) {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Ether (C-O-C linkage)' +
+                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
+            } else if (isChain || (chainBonding && backbone)) {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nCondensed: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom)) +
+                    '\nBackbone bonds: ' + chainBonding.bbBondOrders.map(function(o) { return o === 3 ? 'triple' : o === 2 ? 'double' : 'single'; }).join(', ');
+            } else {
+                currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nCentral Atom: ' + centralAtom + ' (' + bonding.centralLonePairs + ' lone pairs)' +
+                    '\nBonds: ' + describeBondOrders(bonding.bondOrders);
+            }
 
         } catch (error) {
             ToolUtils.showToast('Error: ' + error.message, 3000, 'error');
@@ -2672,89 +3270,89 @@
             }, 100);
         }
     });
-    </script>
+</script>
 
-    <!-- E-E-A-T JSON-LD Schemas -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Lewis Structure Generator & VSEPR Calculator | 8gwifi.org",
-  "url": "https://8gwifi.org/lewis-structure-generator.jsp",
-  "description": "Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions.",
-  "author": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "url": "https://x.com/anish2good"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org"
-  }
-}
-    </script>
-
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
-    {"@type": "ListItem", "position": 2, "name": "Chemistry Tools", "item": "https://8gwifi.org/chemical-equation-balancer.jsp"},
-    {"@type": "ListItem", "position": 3, "name": "Lewis Structure Generator", "item": "https://8gwifi.org/lewis-structure-generator.jsp"}
-  ]
-}
-    </script>
-
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Draw a Lewis Structure",
-  "description": "Step-by-step guide to drawing Lewis dot structures for molecules",
-  "step": [
-    {"@type": "HowToStep", "position": 1, "name": "Count valence electrons", "text": "Add up all valence electrons from each atom. For ions, add electrons for negative charge or subtract for positive charge."},
-    {"@type": "HowToStep", "position": 2, "name": "Arrange atoms", "text": "Place the least electronegative atom in the center (usually the unique atom). Hydrogen is always terminal."},
-    {"@type": "HowToStep", "position": 3, "name": "Draw single bonds", "text": "Connect atoms with single bonds. Each bond uses 2 electrons."},
-    {"@type": "HowToStep", "position": 4, "name": "Complete octets", "text": "Distribute remaining electrons as lone pairs to satisfy the octet rule (8 electrons for most atoms, 2 for hydrogen)."},
-    {"@type": "HowToStep", "position": 5, "name": "Form multiple bonds", "text": "If central atom doesn't have an octet, form double or triple bonds by converting lone pairs from outer atoms."},
-    {"@type": "HowToStep", "position": 6, "name": "Check formal charges", "text": "Calculate formal charges. The best structure has formal charges closest to zero."}
-  ]
-}
-    </script>
-
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
+<!-- E-E-A-T JSON-LD Schemas -->
+<script type="application/ld+json">
     {
-      "@type": "Question",
-      "name": "What is a Lewis structure?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is VSEPR theory?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do you calculate formal charge?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms."
-      }
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Lewis Structure Generator & VSEPR Calculator | 8gwifi.org",
+        "url": "https://8gwifi.org/lewis-structure-generator.jsp",
+        "description": "Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions.",
+        "author": {
+            "@type": "Person",
+            "name": "Anish Nath",
+            "url": "https://x.com/anish2good"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "8gwifi.org",
+            "url": "https://8gwifi.org"
+        }
     }
-  ]
-}
-    </script>
+</script>
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
+            {"@type": "ListItem", "position": 2, "name": "Chemistry Tools", "item": "https://8gwifi.org/chemical-equation-balancer.jsp"},
+            {"@type": "ListItem", "position": 3, "name": "Lewis Structure Generator", "item": "https://8gwifi.org/lewis-structure-generator.jsp"}
+        ]
+    }
+</script>
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Draw a Lewis Structure",
+        "description": "Step-by-step guide to drawing Lewis dot structures for molecules",
+        "step": [
+            {"@type": "HowToStep", "position": 1, "name": "Count valence electrons", "text": "Add up all valence electrons from each atom. For ions, add electrons for negative charge or subtract for positive charge."},
+            {"@type": "HowToStep", "position": 2, "name": "Arrange atoms", "text": "Place the least electronegative atom in the center (usually the unique atom). Hydrogen is always terminal."},
+            {"@type": "HowToStep", "position": 3, "name": "Draw single bonds", "text": "Connect atoms with single bonds. Each bond uses 2 electrons."},
+            {"@type": "HowToStep", "position": 4, "name": "Complete octets", "text": "Distribute remaining electrons as lone pairs to satisfy the octet rule (8 electrons for most atoms, 2 for hydrogen)."},
+            {"@type": "HowToStep", "position": 5, "name": "Form multiple bonds", "text": "If central atom doesn't have an octet, form double or triple bonds by converting lone pairs from outer atoms."},
+            {"@type": "HowToStep", "position": 6, "name": "Check formal charges", "text": "Calculate formal charges. The best structure has formal charges closest to zero."}
+        ]
+    }
+</script>
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is a Lewis structure?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is VSEPR theory?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do you calculate formal charge?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms."
+                }
+            }
+        ]
+    }
+</script>
 </body>
-</html>
+</html
