@@ -134,12 +134,12 @@
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="IP Subnet Calculator - Instant CIDR, Visual Map" />
-        <jsp:param name="toolDescription" value="Free instant IP subnet calculator with visual subnet map and live CIDR results. Get subnet mask, network/broadcast address, wildcard mask, host range, and IP-in-subnet checker. Runs entirely in your browser." />
+        <jsp:param name="toolDescription" value="Free instant IP subnet calculator with visual subnet map and live CIDR results. Get subnet mask, network/broadcast address, wildcard mask, host range, and IP-in-subnet checker. Includes interactive subnetting practice worksheets for CCNA and Network+ exam prep. Runs entirely in your browser." />
         <jsp:param name="toolCategory" value="Network Tools" />
         <jsp:param name="toolUrl" value="SubnetFunctions.jsp" />
-        <jsp:param name="toolKeywords" value="subnet calculator, CIDR calculator, IP subnet calculator, network calculator, subnet mask calculator, IPv4 subnetting, wildcard mask, visual subnet map, IP in subnet checker, subnet planner, network address calculator, broadcast address, host range calculator, CIDR to subnet mask, online subnet tool" />
+        <jsp:param name="toolKeywords" value="subnet calculator, CIDR calculator, IP subnet calculator, network calculator, subnet mask calculator, IPv4 subnetting, wildcard mask, visual subnet map, IP in subnet checker, subnet planner, network address calculator, broadcast address, host range calculator, CIDR to subnet mask, online subnet tool, subnetting practice, CCNA subnet quiz, subnet practice worksheet, network+ subnetting practice" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Instant live CIDR calculation as you type,Visual subnet address space map,IP-in-subnet membership checker,Network and broadcast address calculation,Subnet mask and wildcard mask,Usable host range with binary view,Private network and class detection,Calculation history with one-click reload,IP address list generation,Works fully offline in browser" />
+        <jsp:param name="toolFeatures" value="Instant live CIDR calculation as you type,Visual subnet address space map,IP-in-subnet membership checker,Network and broadcast address calculation,Subnet mask and wildcard mask,Usable host range with binary view,Private network and class detection,Calculation history with one-click reload,IP address list generation,Works fully offline in browser,Interactive subnetting practice worksheets with difficulty levels,Downloadable practice sheets for CCNA exam prep" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is CIDR notation and how does this calculator use it?" />
         <jsp:param name="faq1a" value="CIDR (Classless Inter-Domain Routing) notation combines an IP address with a prefix length, like 192.168.1.0/24, where /24 means the first 24 bits define the network. This calculator instantly computes subnet mask, network address, broadcast address, usable host range, and wildcard mask from any CIDR input. Results update live as you type or drag the CIDR slider." />
@@ -150,9 +150,9 @@
         <jsp:param name="faq4q" value="How do I check if an IP address belongs to a subnet?" />
         <jsp:param name="faq4a" value="Use the IP-in-Subnet Checker below the results. Type any IP address and it instantly tells you whether that IP falls within the calculated subnet. If the IP is outside the subnet, it shows which subnet the IP would belong to using the same prefix length. The check uses bitwise AND: (IP AND mask) must equal the network address." />
         <jsp:param name="faq5q" value="How many usable hosts are in a subnet?" />
-        <jsp:param name="faq5a" value="Usable hosts = 2^(32 - prefix) - 2. The two subtracted addresses are the network address (all host bits 0) and broadcast address (all host bits 1). Examples: /24 = 254 hosts, /28 = 14 hosts, /30 = 2 hosts (point-to-point links). Special cases: /31 has 2 usable addresses (RFC 3021), and /32 is a single host route." />
-        <jsp:param name="faq6q" value="Does this subnet calculator work offline?" />
-        <jsp:param name="faq6a" value="Yes. All subnet calculations run entirely in your browser using client-side JavaScript. No data is sent to any server. The tool works fully offline after the page loads, making it ideal for network engineers working in air-gapped environments. Your calculation history is saved in localStorage and persists across sessions." />
+        <jsp:param name="faq5a" value="Usable hosts = 2^(32 - prefix) - 2. The two subtracted addresses are the network address (all host bits 0) and broadcast address (all host bits 1). Examples: /24 = 254 hosts, /28 = 14 hosts, /30 = 2 hosts (point-to-point links). Special cases: /31 has 2 usable addresses (RFC 3021), and /32 is a single host route. This tool works fully offline after the page loads and your calculation history persists in localStorage across sessions." />
+        <jsp:param name="faq6q" value="Can I practice subnetting problems with this tool?" />
+        <jsp:param name="faq6a" value="Yes. Switch to the Practice Questions tab to generate randomized subnetting problems at Easy, Medium, or Hard difficulty. Easy covers /8, /16, /24 masks. Medium covers /20-/28. Hard includes unusual prefixes and extra fields like wildcard mask. Check your answers instantly, reveal solutions, or download the worksheet as a printable PNG for offline study." />
     </jsp:include>
 
     <!-- Enhanced HowTo Schema (Subnet-Specific for High CTR) -->
@@ -181,6 +181,12 @@
                 "name": "Check IP Membership and Export",
                 "text": "Use the IP-in-Subnet Checker to verify if any IP belongs to the subnet. Copy results as text, share via URL, or download as JSON. Your calculation is saved to history for quick reload.",
                 "position": 3
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Practice Subnetting Skills",
+                "text": "Switch to the Practice Questions tab, select difficulty, and generate randomized problems. Check answers instantly or download the worksheet as a PNG.",
+                "position": 4
             }
         ]
     }
@@ -1022,6 +1028,17 @@
         [data-theme="dark"] .ip-checker-result.in-range { color: #6ee7b7; }
         [data-theme="dark"] .ip-checker-result.out-range { color: #fca5a5; }
 
+        /* === Tab Navigation === */
+        .subnet-tabs { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:0; }
+        .subnet-tab { flex:1; padding:0.75rem 1rem; font-size:0.875rem; font-weight:600;
+            background:none; border:none; border-bottom:3px solid transparent;
+            color:var(--text-secondary); cursor:pointer; transition:all 0.15s; font-family:var(--font-sans); }
+        .subnet-tab:hover { color:var(--text-primary); background:var(--bg-secondary); }
+        .subnet-tab.active { color:var(--tool-primary); border-bottom-color:var(--tool-primary); }
+        [data-theme="dark"] .subnet-tab:hover { background:rgba(255,255,255,0.05); }
+        .subnet-tab-panel { display:none; }
+        .subnet-tab-panel.active { display:block; }
+
         /* === Calculation History === */
         .calc-history {
             margin-top: 0.75rem;
@@ -1261,40 +1278,54 @@
 
         <!-- ========== OUTPUT COLUMN ========== -->
         <div class="tool-output-column">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="16" x2="12" y2="12"/>
-                        <line x1="12" y1="8" x2="12.01" y2="8"/>
-                    </svg>
-                    <h4>Subnet Information</h4>
-                </div>
-                <div class="tool-result-content" id="displaySection">
-                    <div class="tool-empty-state" id="emptyState">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
-                            <rect x="2" y="3" width="20" height="14" rx="2"/>
-                            <line x1="8" y1="21" x2="16" y2="21"/>
-                            <line x1="12" y1="17" x2="12" y2="21"/>
-                            <circle cx="7" cy="10" r="1"/>
-                            <circle cx="12" cy="10" r="1"/>
-                            <circle cx="17" cy="10" r="1"/>
+            <!-- Tab Navigation -->
+            <div class="subnet-tabs">
+                <button class="subnet-tab active" data-tab="calculator">Calculator</button>
+                <button class="subnet-tab" data-tab="practice">Practice Questions</button>
+            </div>
+
+            <!-- Tab Panel: Calculator (active by default) -->
+            <div class="subnet-tab-panel active" id="tab-calculator">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
                         </svg>
-                        <h3>IP Subnet Calculator</h3>
-                        <p>Enter a CIDR address to see subnet information. Results update live as you type.</p>
+                        <h4>Subnet Information</h4>
+                    </div>
+                    <div class="tool-result-content" id="displaySection">
+                        <div class="tool-empty-state" id="emptyState">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
+                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                                <circle cx="7" cy="10" r="1"/>
+                                <circle cx="12" cy="10" r="1"/>
+                                <circle cx="17" cy="10" r="1"/>
+                            </svg>
+                            <h3>IP Subnet Calculator</h3>
+                            <p>Enter a CIDR address to see subnet information. Results update live as you type.</p>
+                        </div>
+                    </div>
+                    <div class="tool-result-actions" id="resultActions">
+                        <button type="button" class="tool-action-btn" id="copyBtn">
+                            <span>&#128203;</span> Copy Text
+                        </button>
+                        <button type="button" class="tool-action-btn" id="shareBtn">
+                            <span>&#128279;</span> Share URL
+                        </button>
+                        <button type="button" class="tool-action-btn" id="downloadBtn">
+                            <span>&#128229;</span> Download JSON
+                        </button>
                     </div>
                 </div>
-                <div class="tool-result-actions" id="resultActions">
-                    <button type="button" class="tool-action-btn" id="copyBtn">
-                        <span>&#128203;</span> Copy Text
-                    </button>
-                    <button type="button" class="tool-action-btn" id="shareBtn">
-                        <span>&#128279;</span> Share URL
-                    </button>
-                    <button type="button" class="tool-action-btn" id="downloadBtn">
-                        <span>&#128229;</span> Download JSON
-                    </button>
-                </div>
+            </div>
+
+            <!-- Tab Panel: Practice -->
+            <div class="subnet-tab-panel" id="tab-practice">
+                <div id="practiceSection"></div>
             </div>
         </div>
 
@@ -1440,15 +1471,15 @@
                     How many usable hosts are in a subnet?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Usable hosts = 2^(32 - prefix) - 2. The two subtracted addresses are the network address (all host bits 0) and broadcast address (all host bits 1). Examples: /24 = 254 hosts, /28 = 14 hosts, /30 = 2 hosts (point-to-point links). Special cases: /31 has 2 usable addresses (RFC 3021), and /32 is a single host route.</div>
+                <div class="faq-answer">Usable hosts = 2^(32 - prefix) - 2. The two subtracted addresses are the network address (all host bits 0) and broadcast address (all host bits 1). Examples: /24 = 254 hosts, /28 = 14 hosts, /30 = 2 hosts (point-to-point links). Special cases: /31 has 2 usable addresses (RFC 3021), and /32 is a single host route. This tool works fully offline after the page loads and your calculation history persists in localStorage across sessions.</div>
             </div>
 
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">
-                    Does this subnet calculator work offline?
+                    Can I practice subnetting problems with this tool?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes. All subnet calculations run entirely in your browser using client-side JavaScript. No data is sent to any server. The tool works fully offline after the page loads, making it ideal for network engineers working in air-gapped environments. Your calculation history is saved in localStorage and persists across sessions.</div>
+                <div class="faq-answer">Yes. Switch to the Practice Questions tab to generate randomized subnetting problems at Easy, Medium, or Hard difficulty. Easy covers /8, /16, /24 masks. Medium covers /20-/28. Hard includes unusual prefixes and extra fields like wildcard mask. Check your answers instantly, reveal solutions, or download the worksheet as a printable PNG for offline study.</div>
             </div>
         </div>
 
@@ -1480,6 +1511,7 @@
     <%@ include file="modern/components/analytics.jsp" %>
 
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
@@ -2055,6 +2087,17 @@
         var calculateBtnEl = document.getElementById('calculateBtn');
         var includeEl = document.getElementById('includeAddresses');
 
+        // Tab switching
+        var tabs = document.querySelectorAll('.subnet-tab');
+        for (var t = 0; t < tabs.length; t++) {
+            tabs[t].addEventListener('click', function() {
+                document.querySelectorAll('.subnet-tab').forEach(function(b){b.classList.remove('active');});
+                document.querySelectorAll('.subnet-tab-panel').forEach(function(p){p.classList.remove('active');});
+                this.classList.add('active');
+                document.getElementById('tab-' + this.getAttribute('data-tab')).classList.add('active');
+            });
+        }
+
         // Live input calculation (debounced)
         subnetEl.addEventListener('input', debouncedCalculate);
 
@@ -2127,6 +2170,76 @@
             navigator.clipboard.writeText(cmd);
         }
     };
+
+    // ========== Practice Sheet (uses shared module) ==========
+
+    var PRACTICE_OCTETS = [10, 172, 192, 8, 44, 100, 198, 203];
+    var EASY_PREFIXES   = [8, 16, 24];
+    var MEDIUM_PREFIXES = [20, 21, 22, 25, 26, 27, 28];
+    var HARD_PREFIXES   = [9, 11, 13, 15, 17, 19, 23, 27, 29, 30];
+
+    function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function pickRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomIp() {
+        return pickRandom(PRACTICE_OCTETS) + '.' + randInt(0, 255) + '.' + randInt(0, 255) + '.' + randInt(0, 254);
+    }
+
+    function generateSubnetProblems(difficulty, count) {
+        var problems = [];
+        var prefixes;
+        if (difficulty === 'easy')        prefixes = EASY_PREFIXES;
+        else if (difficulty === 'medium') prefixes = MEDIUM_PREFIXES;
+        else                              prefixes = HARD_PREFIXES;
+
+        for (var i = 0; i < count; i++) {
+            var ip = randomIp();
+            var prefix = pickRandom(prefixes);
+            var info = calculateSubnetInfo(ip, prefix);
+            if (!info) continue;
+
+            var fields = [
+                { id: 'net',   label: 'Network Address',   answer: info.networkAddress,   placeholder: 'e.g. 192.168.1.0' },
+                { id: 'bcast', label: 'Broadcast Address',  answer: info.broadcastAddress, placeholder: 'e.g. 192.168.1.255' },
+                { id: 'mask',  label: 'Subnet Mask',        answer: info.subnetMask,       placeholder: 'e.g. 255.255.255.0' },
+                { id: 'hosts', label: 'Usable Hosts',       answer: String(info.usableHosts), placeholder: 'number' }
+            ];
+
+            if (difficulty === 'hard') {
+                fields.push({ id: 'wild', label: 'Wildcard Mask', answer: info.wildcardMask, placeholder: 'e.g. 0.0.0.255' });
+                fields.push({ id: 'first', label: 'First Usable IP', answer: info.lowAddress, placeholder: '' });
+            }
+
+            problems.push({
+                prompt: 'Given: <strong>' + escapeHtml(ip + '/' + prefix) + '</strong>',
+                hint: difficulty === 'easy' ? 'Hint: /' + prefix + ' means ' + (32 - prefix) + ' host bits' : '',
+                fields: fields
+            });
+        }
+        return problems;
+    }
+
+    // Init practice sheet after DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+            ToolUtils.PracticeSheet.init({
+                containerId: 'practiceSection',
+                title: 'Subnetting Practice',
+                toolColor: '#0891b2',
+                difficulties: [
+                    { id: 'easy',   label: 'Easy',   description: '/8, /16, /24' },
+                    { id: 'medium', label: 'Medium', description: '/20 - /28' },
+                    { id: 'hard',   label: 'Hard',   description: 'Random prefixes, more fields' }
+                ],
+                generateProblems: generateSubnetProblems
+            });
+        }
+    });
 
     })();
     </script>
