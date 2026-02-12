@@ -1271,7 +1271,7 @@ function injectQASchema(q) {
             "name": "NCERT Class 11 Maths " + q.exercise + " " + q.question_number + ": " + questionText.substring(0, 200),
             "text": questionText,
             "answerCount": 1,
-            "dateCreated": "2025-01-01",
+            "dateCreated": "2025-01-01T00:00:00+00:00",
             "author": {
                 "@type": "Organization",
                 "name": "NCERT"
@@ -1279,10 +1279,11 @@ function injectQASchema(q) {
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": answerParts.join(' '),
-                "dateCreated": "2025-01-01",
+                "dateCreated": "2025-01-01T00:00:00+00:00",
                 "author": {
                     "@type": "Organization",
-                    "name": "8gwifi.org"
+                    "name": "8gwifi.org",
+                    "url": "https://8gwifi.org"
                 },
                 "upvoteCount": 10
             }

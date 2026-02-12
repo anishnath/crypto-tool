@@ -1,4 +1,12 @@
 {
+  "q10-1-refraction-air-water": {
+    "type": "refraction",
+    "params": {
+      "n1": 1.0, "n2": 1.33, "angle_i": 35,
+      "medium1": "Air", "medium2": "Water",
+      "title": "Refraction — Air to Water (589 nm)"
+    }
+  },
   "q10-4-youngs-double-slit": {
     "type": "wave-interference",
     "params": {

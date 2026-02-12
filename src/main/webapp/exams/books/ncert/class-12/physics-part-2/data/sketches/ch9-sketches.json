@@ -43,6 +43,13 @@
       "title": "Convex Lens — Real Image"
     }
   },
+  "q9-9-concave-lens": {
+    "type": "lens-ray-diagram",
+    "params": {
+      "u": 14, "f": 21, "h_obj": 3, "lens_type": "concave",
+      "title": "Concave Lens — Object at 14cm (f=21cm)"
+    }
+  },
   "q9-10-concave-lens": {
     "type": "lens-ray-diagram",
     "params": {
