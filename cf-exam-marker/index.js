@@ -556,6 +556,23 @@ async function handleMarkExam(request, env) {
 }
 
 /**
+ * Fix LaTeX strings corrupted by JSON.parse.
+ * GPT often returns \frac, \text, \big etc. with single backslashes in JSON.
+ * JSON.parse interprets \f as form-feed (0x0C), \t as tab (0x09), \b as backspace (0x08),
+ * \n as newline (0x0A), \r as carriage return (0x0D) — destroying the LaTeX.
+ * This restores the original backslash sequences.
+ */
+function fixLatex(str) {
+  if (!str) return str;
+  return str
+    .replace(/\x08/g, '\\b')   // backspace  → \b  (\big, \binom, \begin)
+    .replace(/\x09/g, '\\t')   // tab        → \t  (\text, \tan, \theta, \times)
+    .replace(/\x0C/g, '\\f')   // form feed  → \f  (\frac, \flat)
+    .replace(/\x0D/g, '\\r')   // cr         → \r  (\right, \rangle)
+    .replace(/\x0A/g, '\\n');   // newline    → \n  (\neq, \not, \nu)
+}
+
+/**
  * Build prompt for math step-by-step solutions (generic — works for integrals, derivatives, etc.)
  * Designed for minimal token usage: concise prompt, concise response.
  */
@@ -571,14 +588,19 @@ function buildMathStepsPrompt(operation, expression, variable, answer, bounds) {
     problemDesc = `${operation}: ${expression} = ${answer}`;
   }
 
-  return `Show solution steps for: ${problemDesc}
+  return `Show detailed solution steps for: ${problemDesc}
 
 Rules:
-- 3-5 steps max, fewest possible
-- Each step: short title + LaTeX formula
-- LaTeX must use \\frac{}{}, \\int, \\sin, \\cos etc.
-- Final step must show the answer
-- JSON only, no explanation text
+- Give 5-8 clear steps. Do NOT skip intermediate algebra.
+- Step 1: Always rewrite the original problem in standard notation
+- Step 2: Identify the integration technique or rule to apply
+- Middle steps: Show each algebraic manipulation, substitution, or simplification one at a time. Show before and after for each transformation.
+- For definite integrals: show the antiderivative, then substitute upper bound, then substitute lower bound, then compute the difference
+- Second-to-last step: Simplify to get the final expression
+- Final step: Write the complete answer with + C (indefinite) or numeric value (definite)
+- Each step: short descriptive title + full LaTeX formula showing the work
+- LaTeX must use \\frac{}{}, \\int, \\sin, \\cos, \\left(, \\right) etc.
+- JSON only, no explanation text outside the JSON
 
 Response format:
 {"steps":[{"t":"step title","l":"LaTeX formula"}],"method":"method name"}`;
@@ -697,16 +719,16 @@ async function handleMathSteps(request, env) {
     const result = await callOpenAI(prompt, env, {
       model: 'gpt-4o-mini',
       temperature: 0.1,
-      maxTokens: 500,
-      systemMessage: 'You are a math tutor. Respond with valid JSON only.'
+      maxTokens: 800,
+      systemMessage: 'You are a patient math tutor who shows every intermediate step. Never skip algebra. Respond with valid JSON only.'
     });
 
-    // Normalize response
+    // Normalize response and fix LaTeX backslash corruption from JSON.parse
     const steps = (result.steps || []).map(s => ({
-      title: s.t || s.title || '',
-      latex: s.l || s.latex || ''
+      title: fixLatex(s.t || s.title || ''),
+      latex: fixLatex(s.l || s.latex || '')
     }));
-    const method = result.method || '';
+    const method = fixLatex(result.method || '');
 
     // 3. Store in cache
     if (env.DB && steps.length > 0) {
