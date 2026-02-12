@@ -1,6 +1,10 @@
 package z.y.x.exam;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +18,13 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * CF Exam Marker Servlet - Proxy/Wrapper for CF Exam Marker API
@@ -70,7 +78,8 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                path.contains("/api/attempts/") && path.contains("/submit") ||
                path.contains("/api/mark") ||
                path.contains("/api/mark-batch") ||
-               path.contains("/api/mark-exam");
+               path.contains("/api/mark-exam") ||
+               path.contains("/api/math-steps");
     }
     
     @Override
@@ -172,6 +181,9 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                     break;
                 case "mark_exam":
                     handleMarkExam(request, response);
+                    break;
+                case "math_steps":
+                    handleMathSteps(request, response);
                     break;
                 case "upsert_user":
                     handleUpsertUser(request, response);
@@ -454,6 +466,134 @@ public class CFExamMarkerFunctionality extends HttpServlet {
             throws IOException {
         String requestBody = readRequestBody(request);
         makeApiRequest(getApiBaseUrl() + "/api/mark-exam", "POST", requestBody, response, true);
+    }
+
+    // ---- Math steps validation constants ----
+    private static final Set<String> ALLOWED_OPERATIONS = new HashSet<>(
+            Arrays.asList("integrate", "differentiate", "simplify", "solve"));
+    private static final Set<String> ALLOWED_VARIABLES = new HashSet<>(
+            Arrays.asList("x", "y", "t", "u", "z", "r", "s", "n"));
+    // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, _, etc.
+    private static final Pattern MATH_EXPR_PATTERN = Pattern.compile(
+            "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.,|\\\\!=_]+$");
+    // Bounds: simple number or math const like pi, e, -3, 2.5, pi/2, sqrt(2)
+    private static final Pattern BOUND_PATTERN = Pattern.compile(
+            "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.]+$");
+    private static final int MAX_EXPR_LENGTH = 200;
+    private static final int MAX_ANSWER_LENGTH = 500;
+    private static final int MAX_BOUND_LENGTH = 30;
+
+    /**
+     * Math step-by-step solutions (generic - integrals, derivatives, etc.)
+     * Validates all input before proxying to CF Worker to prevent spam/abuse.
+     */
+    private void handleMathSteps(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String requestBody = readRequestBody(request);
+
+        // Parse and validate JSON
+        JsonObject payload;
+        try {
+            JsonElement parsed = new JsonParser().parse(requestBody);
+            payload = parsed.getAsJsonObject();
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_json", "Request body must be valid JSON");
+            return;
+        }
+
+        // 1. expression (required, must look like math)
+        String expression = getJsonString(payload, "expression");
+        if (expression == null || expression.isEmpty()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "expression is required");
+            return;
+        }
+        if (expression.length() > MAX_EXPR_LENGTH) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "expression too long (max " + MAX_EXPR_LENGTH + " chars)");
+            return;
+        }
+        if (!MATH_EXPR_PATTERN.matcher(expression).matches()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "expression contains invalid characters");
+            return;
+        }
+
+        // 2. answer (required, must look like math)
+        String answer = getJsonString(payload, "answer");
+        if (answer == null || answer.isEmpty()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "answer is required");
+            return;
+        }
+        if (answer.length() > MAX_ANSWER_LENGTH) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer too long (max " + MAX_ANSWER_LENGTH + " chars)");
+            return;
+        }
+        if (!MATH_EXPR_PATTERN.matcher(answer).matches()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer contains invalid characters");
+            return;
+        }
+
+        // 3. operation (optional, must be from whitelist)
+        String operation = getJsonString(payload, "operation");
+        if (operation != null && !operation.isEmpty() && !ALLOWED_OPERATIONS.contains(operation)) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "operation must be one of: " + ALLOWED_OPERATIONS);
+            return;
+        }
+
+        // 4. variable (optional, single letter from whitelist)
+        String variable = getJsonString(payload, "variable");
+        if (variable != null && !variable.isEmpty() && !ALLOWED_VARIABLES.contains(variable)) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "variable must be one of: " + ALLOWED_VARIABLES);
+            return;
+        }
+
+        // 5. bounds (optional object with lower/upper)
+        if (payload.has("bounds") && !payload.get("bounds").isJsonNull()) {
+            try {
+                JsonObject bounds = payload.getAsJsonObject("bounds");
+                String lower = getJsonString(bounds, "lower");
+                String upper = getJsonString(bounds, "upper");
+
+                if (lower != null && (lower.length() > MAX_BOUND_LENGTH || !BOUND_PATTERN.matcher(lower).matches())) {
+                    sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "bounds.lower is invalid");
+                    return;
+                }
+                if (upper != null && (upper.length() > MAX_BOUND_LENGTH || !BOUND_PATTERN.matcher(upper).matches())) {
+                    sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "bounds.upper is invalid");
+                    return;
+                }
+            } catch (Exception e) {
+                sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "bounds must be an object with lower and upper");
+                return;
+            }
+        }
+
+        // All checks passed — forward to CF Worker
+        makeApiRequest(getApiBaseUrl() + "/api/math-steps", "POST", requestBody, response, true);
+    }
+
+    /**
+     * Helper: get a string value from JsonObject (returns null if missing or not a string)
+     */
+    private String getJsonString(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return null;
+        try {
+            return obj.get(key).getAsString().trim();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Helper: send a JSON error response
+     */
+    private void sendError(HttpServletResponse response, int status, String error, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("error", error);
+        errorMap.put("message", message);
+        out.println(gson.toJson(errorMap));
     }
 
     /**
