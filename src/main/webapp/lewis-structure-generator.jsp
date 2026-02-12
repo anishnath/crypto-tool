@@ -1711,6 +1711,72 @@
         p.ellipse(dotX + perpX, dotY + perpY, 5, 5);
     }
 
+    // Choose 2D bond angles for Lewis star-style sketches using VSEPR cues.
+    function getLewisPeripheralAngles(peripheralCount, centralLonePairs, unpairedElectrons) {
+        var n = peripheralCount || 0;
+        if (n <= 0) return [];
+        if (n === 1) return [0];
+
+        var cLp = centralLonePairs || 0;
+        var u = unpairedElectrons || 0;
+        var effectiveLone = cLp + (u > 0 ? 1 : 0);
+        var steric = n + effectiveLone;
+        var key = steric + '-' + effectiveLone;
+        var molecular = (vseprData[key] && vseprData[key].molecular) ? vseprData[key].molecular : '';
+
+        if (n === 2) {
+            var isLinearAX2 = molecular === 'Linear' || ((cLp >= 3) && u === 0);
+            if (isLinearAX2) return [Math.PI, 0];
+
+            var bondAngleDeg;
+            if (cLp >= 2) bondAngleDeg = 104.5;
+            else if (cLp === 1) bondAngleDeg = 118;
+            else bondAngleDeg = 134; // odd-electron AX2 radicals such as NO2
+
+            var half = (bondAngleDeg * Math.PI / 180) / 2;
+            var bisector = Math.PI / 2; // Open downward; keep LP/radical dot above.
+            return [bisector - half, bisector + half];
+        }
+
+        if (n === 3 && molecular === 'T-shaped') {
+            return [Math.PI, 0, Math.PI / 2];
+        }
+        if (n === 3 && molecular === 'Trigonal Pyramidal') {
+            return [-Math.PI / 2, Math.PI / 5, 4 * Math.PI / 5];
+        }
+        if (n === 3 && molecular === 'Trigonal Planar') {
+            return [-Math.PI / 2, Math.PI / 6, 5 * Math.PI / 6];
+        }
+
+        if (n === 4 && molecular === 'Seesaw') {
+            return [-Math.PI / 2, Math.PI / 2, -Math.PI / 6, 5 * Math.PI / 6];
+        }
+        if (n === 4 && molecular === 'Square Planar') {
+            return [-Math.PI / 2, 0, Math.PI / 2, Math.PI];
+        }
+        if (n === 4 && molecular === 'Tetrahedral') {
+            // Slightly skewed 2D projection so tetrahedral is not shown as perfect square-planar.
+            return [-Math.PI / 2, -Math.PI / 8, 5 * Math.PI / 8, 9 * Math.PI / 8];
+        }
+
+        if (n === 5 && molecular === 'Trigonal Bipyramidal') {
+            return [-Math.PI / 2, Math.PI / 2, 0, 2 * Math.PI / 3, -2 * Math.PI / 3];
+        }
+        if (n === 5 && molecular === 'Square Pyramidal') {
+            return [-Math.PI / 2, 0, Math.PI / 2, Math.PI, -Math.PI / 4];
+        }
+
+        if (n === 6 && molecular === 'Octahedral') {
+            return [-Math.PI / 2, Math.PI / 2, 0, Math.PI, -Math.PI / 4, 3 * Math.PI / 4];
+        }
+
+        var angles = [];
+        for (var i = 0; i < n; i++) {
+            angles.push((2 * Math.PI * i) / n - Math.PI / 2);
+        }
+        return angles;
+    }
+
     // ========== p5.js: Lewis Structure Sketch ==========
     function createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaLabel) {
         destroyCurrentSketch();
@@ -1747,16 +1813,12 @@
                 var bondLen = Math.min(w, h) * 0.3;
 
                 // Compute peripheral positions
+                var pAngles = getLewisPeripheralAngles(peripheralAtoms.length, centralLonePairs, unpairedElectrons);
                 var pPositions = [];
                 for (var i = 0; i < peripheralAtoms.length; i++) {
-                    var angle;
-                    if (peripheralAtoms.length === 1) {
-                        angle = 0;
-                    } else if (peripheralAtoms.length === 2) {
-                        angle = (i === 0) ? Math.PI : 0;
-                    } else {
-                        angle = (2 * Math.PI * i) / peripheralAtoms.length - Math.PI / 2;
-                    }
+                    var angle = (pAngles[i] !== undefined)
+                        ? pAngles[i]
+                        : ((2 * Math.PI * i) / peripheralAtoms.length - Math.PI / 2);
                     pPositions.push({
                         x: cx + Math.cos(angle) * bondLen,
                         y: cy + Math.sin(angle) * bondLen,
@@ -1831,6 +1893,22 @@
                         } else {
                             for (var lp = 0; lp < centralLonePairs; lp++) {
                                 lpAngles.push(baseAngle + (lp - (centralLonePairs-1)/2) * Math.PI/4);
+                            }
+                        }
+                    } else if (peripheralAtoms.length === 2) {
+                        // Keep lone pairs on the opposite side of bent AX2 bonds (top side in this layout).
+                        if (centralLonePairs === 1) {
+                            lpAngles.push(-Math.PI / 2);
+                        } else if (centralLonePairs === 2) {
+                            lpAngles.push(-Math.PI / 2 - Math.PI / 6);
+                            lpAngles.push(-Math.PI / 2 + Math.PI / 6);
+                        } else if (centralLonePairs === 3) {
+                            lpAngles.push(Math.PI);
+                            lpAngles.push(-Math.PI / 2 - Math.PI / 5);
+                            lpAngles.push(-Math.PI / 2 + Math.PI / 5);
+                        } else if (centralLonePairs > 3) {
+                            for (var lp = 0; lp < centralLonePairs; lp++) {
+                                lpAngles.push(-Math.PI / 2 + (lp - (centralLonePairs - 1) / 2) * (Math.PI / 8));
                             }
                         }
                     } else {
@@ -1936,21 +2014,12 @@
                 var bondLen = Math.min(w, h) * 0.3;
 
                 // Compute peripheral O positions
+                var pAngles = getLewisPeripheralAngles(peripherals.length, centralLonePairs, 0);
                 var pPositions = [];
                 for (var i = 0; i < peripherals.length; i++) {
-                    var angle;
-                    if (peripherals.length === 1) {
-                        angle = 0;
-                    } else if (peripherals.length === 2) {
-                        angle = (i === 0) ? Math.PI : 0;
-                    } else if (peripherals.length === 3) {
-                        angle = (i === 0) ? -Math.PI/2 : (i === 1) ? Math.PI/6 : -Math.PI/6 + Math.PI;
-                    } else if (peripherals.length === 4) {
-                        // Tetrahedral-like arrangement
-                        angle = (2 * Math.PI * i) / 4 - Math.PI / 4;
-                    } else {
-                        angle = (2 * Math.PI * i) / peripherals.length - Math.PI / 2;
-                    }
+                    var angle = (pAngles[i] !== undefined)
+                        ? pAngles[i]
+                        : ((2 * Math.PI * i) / peripherals.length - Math.PI / 2);
                     pPositions.push({
                         x: cx + Math.cos(angle) * bondLen,
                         y: cy + Math.sin(angle) * bondLen,
@@ -2415,6 +2484,11 @@
     // ========== CHAIN MOLECULE SUPPORT ==========
     // Max bonds an element typically forms (for distributing terminals)
     function getMaxBonds(el) {
+        var expanded = {
+            'P': 5, 'S': 6, 'Cl': 7, 'Br': 7, 'I': 7,
+            'Xe': 8, 'Se': 6, 'Te': 6, 'As': 5
+        };
+        if (expanded[el] !== undefined) return expanded[el];
         var v = valenceElectrons[el];
         if (!v) return 4;
         if (v <= 4) return v;   // Groups 1-14
@@ -2458,7 +2532,7 @@
     }
 
     // p5.js sketch for chain / multi-center molecules
-    function createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding) {
+    function createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding, termAttachedHydrogens) {
         destroyCurrentSketch();
 
         var container = document.getElementById('lewisCanvasContainer');
@@ -2471,6 +2545,8 @@
             var startX = (w - spacing * (n - 1)) / 2;
             var cy = h / 2;
             var bondLen = Math.min(spacing * 0.55, 75);
+            var termAttachedH = termAttachedHydrogens ||
+                (chainBonding && chainBonding.termAttachedHydrogens) || [];
 
             p.setup = function() {
                 var canvas = p.createCanvas(w, h);
@@ -2511,7 +2587,8 @@
                             y: bbPos[i].y + Math.sin(angles[t]) * bondLen,
                             el: terms[t],
                             parent: i,
-                            termIndex: t
+                            termIndex: t,
+                            hAttached: (termAttachedH[i] && termAttachedH[i][t]) ? termAttachedH[i][t] : 0
                         });
                     }
                 }
@@ -2535,6 +2612,24 @@
                     }
                     drawMultiBond(p, bbPos[termPos[t].parent].x, bbPos[termPos[t].parent].y,
                         termPos[t].x, termPos[t].y, tOrder, bondCol, 2.5);
+                }
+
+                // Draw hydrogens attached to terminal atoms (e.g., O-H in carboxylic acids).
+                var attachedHPos = [];
+                for (var t = 0; t < termPos.length; t++) {
+                    var hCount = termPos[t].hAttached || 0;
+                    if (hCount <= 0) continue;
+                    var baseAngle = Math.atan2(
+                        termPos[t].y - bbPos[termPos[t].parent].y,
+                        termPos[t].x - bbPos[termPos[t].parent].x
+                    );
+                    for (var h = 0; h < hCount; h++) {
+                        var hAngle = baseAngle + (hCount === 1 ? 0 : (h - (hCount - 1) / 2) * Math.PI / 8);
+                        var hx = termPos[t].x + Math.cos(hAngle) * 42;
+                        var hy = termPos[t].y + Math.sin(hAngle) * 42;
+                        drawMultiBond(p, termPos[t].x, termPos[t].y, hx, hy, 1, bondCol, 2);
+                        attachedHPos.push({x: hx, y: hy});
+                    }
                 }
 
                 // Draw lone pairs on terminal atoms (from analysis or fallback)
@@ -2612,6 +2707,21 @@
                     p.text(termPos[t].el, termPos[t].x, termPos[t].y);
                 }
 
+                // Draw attached hydrogen atom circles/labels (for O-H groups).
+                for (var h = 0; h < attachedHPos.length; h++) {
+                    var hColor = elementColors['H'] || elementColors['default'];
+                    p.stroke(dark ? 100 : 60);
+                    p.strokeWeight(1.5);
+                    p.fill(hColor[0], hColor[1], hColor[2], dark ? 200 : 230);
+                    p.ellipse(attachedHPos[h].x, attachedHPos[h].y, 30, 30);
+                    p.fill(dark ? 30 : 40);
+                    p.noStroke();
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.textSize(12);
+                    p.textStyle(p.BOLD);
+                    p.text('H', attachedHPos[h].x, attachedHPos[h].y);
+                }
+
                 // Draw backbone atoms (on top, larger)
                 for (var i = 0; i < n; i++) {
                     var elColor = elementColors[backbone[i]] || elementColors['default'];
@@ -2641,13 +2751,25 @@
     }
 
     // Generate condensed notation for chain molecules: "H₃C — CF₃"
-    function generateChainNotation(backbone, termsPerAtom) {
+    function generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens) {
         var parts = [];
         for (var i = 0; i < backbone.length; i++) {
             var grouped = {};
-            (termsPerAtom[i] || []).forEach(function(el) { grouped[el] = (grouped[el] || 0) + 1; });
+            (termsPerAtom[i] || []).forEach(function(el, tIdx) {
+                var token = el;
+                var hAttached = (termAttachedHydrogens &&
+                    termAttachedHydrogens[i] &&
+                    termAttachedHydrogens[i][tIdx]) ? termAttachedHydrogens[i][tIdx] : 0;
+                if (el === 'O' && hAttached > 0) token = 'OH';
+                grouped[token] = (grouped[token] || 0) + 1;
+            });
             var termStr = '';
-            for (var el in grouped) { termStr += el + (grouped[el] > 1 ? grouped[el] : ''); }
+            if (grouped['OH'] === 1 && grouped['O'] === 1 && Object.keys(grouped).length === 2) {
+                // Carboxyl group notation around carbon.
+                termStr = (i === 0) ? 'HOO' : 'OOH';
+            } else {
+                for (var el in grouped) { termStr += el + (grouped[el] > 1 ? grouped[el] : ''); }
+            }
             // Convention: first atom gets terminals before symbol, rest after
             parts.push(i === 0 ? termStr + backbone[i] : backbone[i] + termStr);
         }
@@ -2687,23 +2809,37 @@
     function getPredefinedLewisTemplate(atoms, charge) {
         var key = canonicalFormulaKey(atoms, charge);
 
-        function buildOxoanionTemplate(centralAtom, oxygenBondOrders, label) {
+        function buildOxoanionTemplate(centralAtom, oxygenBondOrders, ionCharge, label) {
             var lonePairs = oxygenBondOrders.map(function(order) {
                 if (order >= 3) return 1;
                 if (order === 2) return 2;
                 return 3;
             });
+            var totalValence = (valenceElectrons[centralAtom] || 0) +
+                oxygenBondOrders.length * (valenceElectrons['O'] || 6) -
+                (ionCharge || 0);
+            var bondElectrons = oxygenBondOrders.reduce(function(sum, order) {
+                return sum + order * 2;
+            }, 0);
+            var peripheralLonePairElectrons = lonePairs.reduce(function(sum, lp) {
+                return sum + lp * 2;
+            }, 0);
+            var remaining = totalValence - bondElectrons - peripheralLonePairElectrons;
+            if (remaining < 0) remaining = 0;
+            var centralLonePairs = Math.floor(remaining / 2);
+            var unpairedElectrons = remaining % 2;
             return {
                 centralAtom: centralAtom,
                 bonding: {
                     peripherals: oxygenBondOrders.map(function() { return 'O'; }),
                     bondOrders: oxygenBondOrders.slice(),
                     peripheralLonePairs: lonePairs,
-                    centralLonePairs: 0,
+                    centralLonePairs: centralLonePairs,
                     hasResonance: true,
-                    isRadical: false,
-                    unpairedElectrons: 0
+                    isRadical: unpairedElectrons > 0,
+                    unpairedElectrons: unpairedElectrons
                 },
+                isResonanceTemplate: true,
                 note: 'Predefined ' + label + ' resonance template applied.'
             };
         }
@@ -2728,27 +2864,79 @@
                     isRadical: false,
                     unpairedElectrons: 0
                 },
+                isResonanceTemplate: false,
                 note: 'Predefined generic template (' + label + ') applied.'
+            };
+        }
+
+        function buildChainTemplate(backbone, termsPerAtom, chainBonding, label, termAttachedHydrogens) {
+            return {
+                kind: 'chain',
+                backbone: backbone,
+                termsPerAtom: termsPerAtom,
+                chainBonding: chainBonding,
+                termAttachedHydrogens: termAttachedHydrogens || null,
+                note: 'Predefined ' + label + ' template applied.'
             };
         }
 
         if (!predefinedLewisTemplates) {
             var templates = {
                 // Common resonance-heavy ions: use predefined textbook contributors.
-                'NO3|-1': buildOxoanionTemplate('N', [2, 1, 1], 'nitrate'),
-                'NO2|-1': buildOxoanionTemplate('N', [2, 1], 'nitrite'),
-                'CO3|-2': buildOxoanionTemplate('C', [2, 1, 1], 'carbonate'),
-                'O3S|-2': buildOxoanionTemplate('S', [2, 1, 1], 'sulfite'),
-                'O4S|-2': buildOxoanionTemplate('S', [2, 2, 1, 1], 'sulfate'),
-                'O3P|-3': buildOxoanionTemplate('P', [2, 1, 1], 'phosphite'),
-                'O4P|-3': buildOxoanionTemplate('P', [2, 1, 1, 1], 'phosphate'),
-                'ClO2|-1': buildOxoanionTemplate('Cl', [2, 1], 'chlorite'),
-                'ClO3|-1': buildOxoanionTemplate('Cl', [2, 1, 1], 'chlorate'),
-                'ClO4|-1': buildOxoanionTemplate('Cl', [2, 1, 1, 1], 'perchlorate'),
-                'BrO3|-1': buildOxoanionTemplate('Br', [2, 1, 1], 'bromate'),
-                'IO3|-1': buildOxoanionTemplate('I', [2, 1, 1], 'iodate'),
-                'CrO4|-2': buildOxoanionTemplate('Cr', [2, 2, 1, 1], 'chromate'),
-                'MnO4|-1': buildOxoanionTemplate('Mn', [2, 2, 2, 1], 'permanganate')
+                'NO3|-1': buildOxoanionTemplate('N', [2, 1, 1], -1, 'nitrate'),
+                'NO2|-1': buildOxoanionTemplate('N', [2, 1], -1, 'nitrite'),
+                'CO3|-2': buildOxoanionTemplate('C', [2, 1, 1], -2, 'carbonate'),
+                'O3S|-2': buildOxoanionTemplate('S', [2, 1, 1], -2, 'sulfite'),
+                'O4S|-2': buildOxoanionTemplate('S', [2, 2, 1, 1], -2, 'sulfate'),
+                'O3P|-3': buildOxoanionTemplate('P', [2, 1, 1], -3, 'phosphite'),
+                'O4P|-3': buildOxoanionTemplate('P', [2, 1, 1, 1], -3, 'phosphate'),
+                'ClO2|-1': buildOxoanionTemplate('Cl', [2, 1], -1, 'chlorite'),
+                'ClO3|-1': buildOxoanionTemplate('Cl', [2, 1, 1], -1, 'chlorate'),
+                'ClO4|-1': buildOxoanionTemplate('Cl', [2, 1, 1, 1], -1, 'perchlorate'),
+                'BrO3|-1': buildOxoanionTemplate('Br', [2, 1, 1], -1, 'bromate'),
+                'IO3|-1': buildOxoanionTemplate('I', [2, 1, 1], -1, 'iodate'),
+                'CrO4|-2': buildOxoanionTemplate('Cr', [2, 2, 1, 1], -2, 'chromate'),
+                'MnO4|-1': buildOxoanionTemplate('Mn', [2, 2, 2, 1], -1, 'permanganate'),
+                'Cl3OP|0': {
+                    centralAtom: 'P',
+                    bonding: {
+                        peripherals: ['O', 'Cl', 'Cl', 'Cl'],
+                        bondOrders: [2, 1, 1, 1],
+                        peripheralLonePairs: [2, 3, 3, 3],
+                        centralLonePairs: 0,
+                        hasResonance: false,
+                        isRadical: false,
+                        unpairedElectrons: 0
+                    },
+                    isResonanceTemplate: false,
+                    note: 'Predefined phosphoryl chloride structure applied.'
+                },
+                'C2H4O2|0': buildChainTemplate(
+                    ['C', 'C'],
+                    [['H', 'H', 'H'], ['O', 'O']],
+                    {
+                        bbBondOrders: [1],
+                        bbLonePairs: [0, 0],
+                        termLonePairs: [[0, 0, 0], [2, 2]],
+                        termBondOrders: [[1, 1, 1], [1, 2]],
+                        termAttachedHydrogens: [[0, 0, 0], [1, 0]]
+                    },
+                    'acetic-acid-style',
+                    [[0, 0, 0], [1, 0]]
+                ),
+                'C2H2O4|0': buildChainTemplate(
+                    ['C', 'C'],
+                    [['O', 'O'], ['O', 'O']],
+                    {
+                        bbBondOrders: [1],
+                        bbLonePairs: [0, 0],
+                        termLonePairs: [[2, 2], [2, 2]],
+                        termBondOrders: [[1, 2], [1, 2]],
+                        termAttachedHydrogens: [[1, 0], [1, 0]]
+                    },
+                    'oxalic-acid-style',
+                    [[1, 0], [1, 0]]
+                )
             };
 
             function addGeneratedTemplate(central, peripheral, count, charge, label, allowOddValence) {
@@ -2765,10 +2953,13 @@
             }
 
             // Generic-symbol templates for deterministic educational rendering.
-            var genericCentrals = ['A', 'M', 'E', 'G'];
-            var genericPeripherals = ['X', 'L', 'R'];
+            // Keep auto-generated coverage on generic symbols only so real chemistry
+            // still flows through bonding analysis.
+            var genericCentrals = genericSymbols.slice();
+            var genericPeripherals = genericSymbols.slice();
             for (var gc = 0; gc < genericCentrals.length; gc++) {
                 for (var gp = 0; gp < genericPeripherals.length; gp++) {
+                    if (genericCentrals[gc] === genericPeripherals[gp]) continue;
                     for (var n = 1; n <= 8; n++) {
                         addGeneratedTemplate(
                             genericCentrals[gc],
@@ -2778,22 +2969,6 @@
                             genericCentrals[gc] + genericPeripherals[gp] + n,
                             true
                         );
-                    }
-                }
-            }
-
-            // Real-element single-center families (halides/oxides/nitrides) to expand deterministic coverage.
-            var centerMaxBonds = {
-                'B': 3, 'C': 4, 'N': 3, 'Si': 4, 'P': 5, 'S': 6, 'Cl': 7, 'Br': 7, 'I': 7, 'Xe': 8
-            };
-            var familyPeripherals = ['F', 'Cl', 'Br', 'I', 'O', 'N'];
-            for (var center in centerMaxBonds) {
-                var maxCount = centerMaxBonds[center];
-                for (var fp = 0; fp < familyPeripherals.length; fp++) {
-                    var p = familyPeripherals[fp];
-                    if (center === p) continue;
-                    for (var n = 1; n <= maxCount; n++) {
-                        addGeneratedTemplate(center, p, n, 0, center + p + n, false);
                     }
                 }
             }
@@ -2820,7 +2995,7 @@
 
     // Detect oxyacid pattern: H + O + central atom (e.g., H2SO4, H3PO4, HNO3)
     function detectOxyacid(atoms, centralAtom) {
-        var oxyacidCenters = ['N', 'P', 'S', 'Cl', 'Br', 'I', 'Se', 'Te', 'As'];
+        var oxyacidCenters = ['N', 'P', 'S', 'Cl', 'Br', 'I', 'Se', 'Te', 'As', 'C'];
         var numH = atoms['H'] || 0;
         var numO = atoms['O'] || 0;
         var nonHOFCenters = Object.keys(atoms).filter(function(el) {
@@ -2919,8 +3094,18 @@
             var isChain = !isOxyacid && !isAlcohol && !isEther && !isRing && centralCount >= 2;
 
             var backbone, termsPerAtom, bonding, chainBonding;
+            var termAttachedHydrogens = null;
+            var predefinedChain = false;
 
-            if (predefinedTemplate) {
+            if (predefinedTemplate && predefinedTemplate.kind === 'chain') {
+                predefinedChain = true;
+                backbone = predefinedTemplate.backbone.slice();
+                termsPerAtom = predefinedTemplate.termsPerAtom.map(function(arr) { return arr.slice(); });
+                chainBonding = predefinedTemplate.chainBonding;
+                termAttachedHydrogens = predefinedTemplate.termAttachedHydrogens || chainBonding.termAttachedHydrogens || null;
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding, termAttachedHydrogens);
+
+            } else if (predefinedTemplate) {
                 centralAtom = predefinedTemplate.centralAtom;
                 bonding = predefinedTemplate.bonding;
                 createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
@@ -2956,7 +3141,7 @@
                 }
 
                 chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
-                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding, termAttachedHydrogens);
 
             } else if (isEther) {
                 // Handle ethers: C-O-C (e.g., CH3OCH3)
@@ -2983,7 +3168,7 @@
                 }
 
                 chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
-                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding, termAttachedHydrogens);
 
             } else if (isRing) {
                 // Handle rings: Connect carbons in a circle
@@ -3052,11 +3237,31 @@
                 }
 
                 chainBonding = analyzeChainBonding(backbone, termsPerAtom, totalValence);
-                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding);
+                createChainLewisSketch(backbone, termsPerAtom, totalValence, charge, formulaStr, chainBonding, termAttachedHydrogens);
 
             } else {
                 // Star structure: single central atom with peripherals
                 bonding = analyzeBonding(atoms, centralAtom, totalValence);
+
+                var centralBondOrderSum = bonding.bondOrders.reduce(function(sum, o) { return sum + o; }, 0);
+                var centralMaxBonds = getMaxBonds(centralAtom);
+                var invalidStar = centralBondOrderSum > centralMaxBonds;
+                if (!invalidStar) {
+                    for (var pi = 0; pi < bonding.peripherals.length; pi++) {
+                        if (bonding.bondOrders[pi] > getMaxBonds(bonding.peripherals[pi])) {
+                            invalidStar = true;
+                            break;
+                        }
+                    }
+                }
+                if (invalidStar) {
+                    ToolUtils.showToast(
+                        'Formula is ambiguous in molecular form. Try a structural formula (e.g., CH3OH or CH3COOH) or specify charge.',
+                        4500,
+                        'warning'
+                    );
+                    return;
+                }
                 createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
             }
 
@@ -3081,7 +3286,7 @@
 
             // Keep info cards consistent with the actually generated structure (chain/ring/star/predefined/oxyacid).
             var displayBondingElectrons = bondingElectrons;
-            if (predefinedTemplate) {
+            if (predefinedTemplate && !predefinedChain) {
                 displayBondingElectrons = bonding.bondOrders.reduce(function(sum, o) { return sum + o * 2; }, 0);
             } else if (isOxyacid) {
                 var centralOBondE = bonding.bondOrders.reduce(function(sum, o) { return sum + o * 2; }, 0);
@@ -3100,6 +3305,13 @@
                             tbo = chainBonding.termBondOrders[bi][ti];
                         }
                         termBondE += tbo * 2;
+                    }
+                }
+                if (termAttachedHydrogens) {
+                    for (var bi = 0; bi < termAttachedHydrogens.length; bi++) {
+                        for (var ti = 0; ti < (termAttachedHydrogens[bi] || []).length; ti++) {
+                            termBondE += ((termAttachedHydrogens[bi][ti] || 0) * 2);
+                        }
                     }
                 }
                 displayBondingElectrons = bbBondE + termBondE;
@@ -3122,10 +3334,18 @@
             }
 
             // Pattern-specific notes
-            if (predefinedTemplate) {
+            if (predefinedTemplate && !predefinedChain && predefinedTemplate.isResonanceTemplate) {
                 html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#6366f1;">' +
                     '\u2139\ufe0f <strong>Resonance structure:</strong> Showing one valid Lewis form. ' +
                     'Actual electrons are delocalized across equivalent bonds.' +
+                    '</div>';
+            } else if (predefinedTemplate && !predefinedChain) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">' +
+                    '\u2705 <strong>Valid structure selected:</strong> Showing a common Lewis structure that satisfies valence and octet rules.' +
+                    '</div>';
+            } else if (predefinedChain) {
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">' +
+                    '\u2705 <strong>Valid connectivity selected:</strong> Showing one common structure that satisfies valence and octet rules.' +
                     '</div>';
             } else if (isOxyacid) {
                 html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#10b981;">\u2705 <strong>Oxyacid structure detected:</strong> H atoms are bonded to O atoms (forming O\u2013H groups), which then bond to ' + centralAtom + '. Some O atoms may form double bonds with the central atom.</div>';
@@ -3159,7 +3379,7 @@
 
             } else if (isRing) {
                 // Ring-specific results
-                var chainNotation = generateChainNotation(backbone, termsPerAtom);
+                var chainNotation = generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens);
                 var bbOrders = chainBonding.bbBondOrders;
 
                 html += '<div class="lewis-result-label">Ring Structure</div>';
@@ -3192,7 +3412,7 @@
 
             } else if (isAlcohol || isEther || isChain) {
                 // Chain-specific results
-                var chainNotation = generateChainNotation(backbone, termsPerAtom);
+                var chainNotation = generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens);
                 var bbOrders = chainBonding.bbBondOrders;
 
                 html += '<div class="lewis-result-label">Backbone Chain</div>';
@@ -3220,6 +3440,13 @@
                             tbo = chainBonding.termBondOrders[bi][ti];
                         }
                         allChainOrders.push(tbo);
+                    }
+                }
+                if (termAttachedHydrogens) {
+                    for (var bi = 0; bi < termAttachedHydrogens.length; bi++) {
+                        for (var ti = 0; ti < (termAttachedHydrogens[bi] || []).length; ti++) {
+                            for (var h = 0; h < (termAttachedHydrogens[bi][ti] || 0); h++) allChainOrders.push(1);
+                        }
                     }
                 }
                 html += '<div class="lewis-result-value">' + describeBondOrders(allChainOrders) + ' bond' + (allChainOrders.length !== 1 ? 's' : '') + '</div>';
@@ -3286,13 +3513,19 @@
             // Build text result for copying
             var formulaWithChargeText = formatFormulaText(formulaStr) +
                 (charge !== 0 ? ' (' + (charge > 0 ? '+' : '') + charge + ')' : '');
-            if (predefinedTemplate) {
+            if (predefinedTemplate && !predefinedChain && predefinedTemplate.isResonanceTemplate) {
                 currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Resonance molecule' +
                     '\nCentral Atom: ' + centralAtom +
                     '\nOne valid resonance form: ' + describeBondOrders(bonding.bondOrders) +
                     '\nNote: Actual electrons are delocalized across equivalent bonds.';
+            } else if (predefinedTemplate && !predefinedChain) {
+                currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
+                    '\nTotal Valence Electrons: ' + totalValence +
+                    '\nType: Selected valid structure' +
+                    '\nCentral Atom: ' + centralAtom +
+                    '\nBonds: ' + describeBondOrders(bonding.bondOrders);
             } else if (isOxyacid) {
                 currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
@@ -3309,12 +3542,12 @@
                 currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Alcohol (contains -OH group)' +
-                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
+                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens));
             } else if (isEther) {
                 currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
                     '\nType: Ether (C-O-C linkage)' +
-                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom));
+                    '\nBackbone: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens));
             } else if (isChain || (chainBonding && backbone)) {
                 var terminalBondLabels = [];
                 for (var bi = 0; bi < termsPerAtom.length; bi++) {
@@ -3328,9 +3561,16 @@
                         terminalBondLabels.push(bondOrderLabel(to));
                     }
                 }
+                if (termAttachedHydrogens) {
+                    for (var bi = 0; bi < termAttachedHydrogens.length; bi++) {
+                        for (var ti = 0; ti < (termAttachedHydrogens[bi] || []).length; ti++) {
+                            for (var h = 0; h < (termAttachedHydrogens[bi][ti] || 0); h++) terminalBondLabels.push('single');
+                        }
+                    }
+                }
                 currentResultText = 'Lewis Structure: ' + formulaWithChargeText +
                     '\nTotal Valence Electrons: ' + totalValence +
-                    '\nCondensed: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom)) +
+                    '\nCondensed: ' + formatFormulaText(generateChainNotation(backbone, termsPerAtom, termAttachedHydrogens)) +
                     '\nBackbone bonds: ' + chainBonding.bbBondOrders.map(function(o) { return bondOrderLabel(o); }).join(', ') +
                     '\nTerminal bonds: ' + (terminalBondLabels.length > 0 ? terminalBondLabels.join(', ') : 'none');
             } else {
