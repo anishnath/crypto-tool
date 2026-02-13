@@ -470,7 +470,7 @@ public class CFExamMarkerFunctionality extends HttpServlet {
 
     // ---- Math steps validation constants ----
     private static final Set<String> ALLOWED_OPERATIONS = new HashSet<>(
-            Arrays.asList("integrate", "differentiate", "simplify", "solve"));
+            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve"));
     private static final Set<String> ALLOWED_VARIABLES = new HashSet<>(
             Arrays.asList("x", "y", "t", "u", "z", "r", "s", "n"));
     // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, _, etc.
