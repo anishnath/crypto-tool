@@ -250,6 +250,32 @@
         .isbn-format-table th{font-weight:600;color:var(--text-primary);background:var(--bg-secondary);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em}
         .isbn-format-table td{color:var(--text-secondary)}
         [data-theme="dark"] .isbn-format-table th{background:var(--bg-tertiary)}
+        .isbn-book-card{display:flex;gap:1rem;padding:0.875rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:0.75rem}
+        .isbn-book-cover{width:60px;height:90px;border-radius:4px;object-fit:cover;background:var(--bg-tertiary);flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+        .isbn-book-cover-placeholder{width:60px;height:90px;border-radius:4px;background:var(--tool-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--tool-primary);font-size:0.625rem;font-weight:600;text-align:center;padding:0.25rem}
+        .isbn-book-meta{flex:1;min-width:0}
+        .isbn-book-title{font-size:0.875rem;font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;line-height:1.3}
+        .isbn-book-author{font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.375rem}
+        .isbn-book-details{display:flex;flex-wrap:wrap;gap:0.375rem}
+        .isbn-book-tag{font-size:0.625rem;font-weight:600;padding:0.15rem 0.5rem;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
+        [data-theme="dark"] .isbn-book-card{background:var(--bg-tertiary);border-color:var(--border)}
+        .isbn-book-loading{font-size:0.75rem;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem}
+        @keyframes isbn-dot-pulse{0%,80%,100%{opacity:0.3}40%{opacity:1}}
+        .isbn-book-loading span{animation:isbn-dot-pulse 1.4s ease-in-out infinite}
+        .isbn-book-loading span:nth-child(2){animation-delay:0.2s}
+        .isbn-book-loading span:nth-child(3){animation-delay:0.4s}
+        .isbn-steps{margin-bottom:0.75rem;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+        .isbn-steps-header{display:flex;align-items:center;justify-content:space-between;padding:0.625rem 0.75rem;background:var(--bg-secondary);cursor:pointer;font-size:0.8125rem;font-weight:600;color:var(--text-primary);border:none;width:100%;font-family:var(--font-sans)}
+        .isbn-steps-header:hover{background:var(--bg-tertiary)}
+        .isbn-steps-body{display:none;padding:0.75rem;font-size:0.75rem;font-family:var(--font-mono);line-height:1.8;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-primary)}
+        .isbn-steps.open .isbn-steps-body{display:block}
+        .isbn-steps-chevron{transition:transform 0.2s;font-size:0.625rem}
+        .isbn-steps.open .isbn-steps-chevron{transform:rotate(180deg)}
+        .isbn-step-row{display:flex;justify-content:space-between;padding:0.125rem 0;border-bottom:1px dashed var(--border-light)}
+        .isbn-step-row:last-child{border-bottom:none}
+        .isbn-step-highlight{font-weight:700;color:var(--tool-primary)}
+        [data-theme="dark"] .isbn-steps-header{background:var(--bg-tertiary)}
+        [data-theme="dark"] .isbn-steps-body{background:var(--bg-secondary)}
     </style>
 </head>
 <body>
@@ -314,10 +340,12 @@
                     <div class="tool-form-group">
                         <label class="tool-form-label">Sample ISBNs</label>
                         <div class="isbn-examples">
+                            <button type="button" class="isbn-chip" data-isbn="9780061120084">The Alchemist</button>
+                            <button type="button" class="isbn-chip" data-isbn="0451524934">1984 (ISBN-10)</button>
+                            <button type="button" class="isbn-chip" data-isbn="9791034908219">979 Prefix</button>
+                            <button type="button" class="isbn-chip" data-isbn="007462542X">X Check Digit</button>
                             <button type="button" class="isbn-chip" data-isbn="9780306406157">ISBN-13</button>
-                            <button type="button" class="isbn-chip" data-isbn="0306406152">ISBN-10</button>
                             <button type="button" class="isbn-chip" data-isbn="978-0-14-300723-4">With Dashes</button>
-                            <button type="button" class="isbn-chip" data-isbn="007462542X">With X Check</button>
                         </div>
                     </div>
                 </div>
@@ -483,295 +511,9 @@
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-    <script>
-    // ========== ISBN LOGIC ==========
-    function normalizeISBN(isbn) {
-        return isbn.replace(/[-\s]/g, '').toUpperCase();
-    }
-
-    function calculateISBN13CheckDigit(isbn) {
-        var digits = isbn.substring(0, 12).split('').map(Number);
-        var sum = 0;
-        for (var i = 0; i < 12; i++) {
-            sum += digits[i] * (i % 2 === 0 ? 1 : 3);
-        }
-        var remainder = sum % 10;
-        return remainder === 0 ? 0 : 10 - remainder;
-    }
-
-    function calculateISBN10CheckDigit(isbn) {
-        var isbnDigits = normalizeISBN(isbn);
-        if (isbnDigits.length < 9) return null;
-        var digits = isbnDigits.substring(0, 9).split('').map(Number);
-        var sum = 0;
-        for (var i = 0; i < 9; i++) {
-            sum += digits[i] * (i + 1);
-        }
-        var remainder = sum % 11;
-        if (remainder === 0) return '0';
-        if (remainder === 1) return 'X';
-        return String(11 - remainder);
-    }
-
-    function validateISBN13(isbn) {
-        var normalized = normalizeISBN(isbn);
-        if (normalized.length !== 13 || !/^\d{13}$/.test(normalized)) {
-            return { valid: false, error: 'ISBN-13 must be exactly 13 digits' };
-        }
-        if (!normalized.startsWith('978') && !normalized.startsWith('979')) {
-            return { valid: false, error: 'ISBN-13 must start with 978 or 979' };
-        }
-        var checkDigit = calculateISBN13CheckDigit(normalized);
-        var providedCheck = parseInt(normalized[12]);
-        if (checkDigit !== providedCheck) {
-            return { valid: false, error: 'Invalid check digit. Expected ' + checkDigit + ', got ' + providedCheck };
-        }
-        return { valid: true, isbn: normalized, type: 'ISBN-13', checkDigit: checkDigit };
-    }
-
-    function validateISBN10(isbn) {
-        var normalized = normalizeISBN(isbn);
-        if (normalized.length !== 10 || !/^[\dX]{10}$/.test(normalized)) {
-            return { valid: false, error: 'ISBN-10 must be exactly 10 characters (digits or X)' };
-        }
-        var checkDigit = calculateISBN10CheckDigit(normalized);
-        if (checkDigit === null) {
-            return { valid: false, error: 'Error calculating check digit' };
-        }
-        var providedCheck = normalized[9].toUpperCase();
-        if (checkDigit !== providedCheck) {
-            return { valid: false, error: 'Invalid check digit. Expected ' + checkDigit + ', got ' + providedCheck };
-        }
-        return { valid: true, isbn: normalized, type: 'ISBN-10', checkDigit: checkDigit };
-    }
-
-    function convertISBN10To13(isbn10) {
-        var normalized = normalizeISBN(isbn10);
-        if (normalized.length !== 10) return { error: 'Invalid ISBN-10 format' };
-        var isbn13 = '978' + normalized.substring(0, 9);
-        var checkDigit = calculateISBN13CheckDigit(isbn13);
-        return { isbn13: isbn13 + checkDigit, isbn10: normalized };
-    }
-
-    function convertISBN13To10(isbn13) {
-        var normalized = normalizeISBN(isbn13);
-        if (normalized.length !== 13 || !normalized.startsWith('978')) {
-            return { error: 'Only ISBN-13 starting with 978 can be converted to ISBN-10' };
-        }
-        var isbn10 = normalized.substring(3, 12);
-        var checkDigit = calculateISBN10CheckDigit(isbn10);
-        if (checkDigit === null) return { error: 'Error calculating ISBN-10 check digit' };
-        return { isbn13: normalized, isbn10: isbn10 + checkDigit };
-    }
-
-    function formatISBN(isbn, type) {
-        var n = normalizeISBN(isbn);
-        if (type === 'ISBN-13') {
-            return n.substring(0,3)+'-'+n.substring(3,4)+'-'+n.substring(4,7)+'-'+n.substring(7,12)+'-'+n.substring(12);
-        } else {
-            return n.substring(0,1)+'-'+n.substring(1,4)+'-'+n.substring(4,9)+'-'+n.substring(9);
-        }
-    }
-
-    // ========== STATE & DOM ==========
-    var isbnInput = document.getElementById('isbn-input');
-    var actionSelect = document.getElementById('isbn-action');
-    var processBtn = document.getElementById('isbn-process-btn');
-    var convertBtn = document.getElementById('isbn-convert-btn');
-    var clearBtn = document.getElementById('isbn-clear-btn');
-    var resultContent = document.getElementById('isbn-result-content');
-    var resultActions = document.getElementById('isbn-result-actions');
-    var lastResultText = '';
-
-    // ========== PROCESS ==========
-    function processISBN() {
-        var input = isbnInput.value.trim();
-        if (!input) {
-            resultContent.innerHTML = '<div class="isbn-warn">Enter an ISBN number to validate</div>';
-            return;
-        }
-
-        var normalized = normalizeISBN(input);
-        var result;
-
-        if (normalized.length === 13) {
-            result = validateISBN13(input);
-        } else if (normalized.length === 10) {
-            result = validateISBN10(input);
-        } else {
-            resultContent.innerHTML = '<div class="isbn-invalid">Invalid ISBN Length</div><p style="padding:0.5rem;color:var(--text-secondary);font-size:0.8125rem;">ISBN must be 10 or 13 characters (excluding dashes). Got ' + normalized.length + ' characters.</p>';
-            resultActions.classList.remove('visible');
-            return;
-        }
-
-        if (result.valid) {
-            var formatted = formatISBN(result.isbn, result.type);
-            var html = '';
-
-            html += '<div class="isbn-valid">Valid ' + result.type + '</div>';
-            html += '<div class="isbn-display">' + escapeHtml(formatted) + '</div>';
-            html += '<div class="isbn-info-grid">';
-            html += '<div class="isbn-info-row"><span class="isbn-info-label">Type</span><span class="isbn-info-value">' + result.type + '</span></div>';
-            html += '<div class="isbn-info-row"><span class="isbn-info-label">Check Digit</span><span class="isbn-info-value">' + result.checkDigit + '</span></div>';
-            html += '<div class="isbn-info-row"><span class="isbn-info-label">Raw</span><span class="isbn-info-value">' + result.isbn + '</span></div>';
-            html += '</div>';
-
-            // Conversion
-            if (result.type === 'ISBN-10') {
-                var conv = convertISBN10To13(result.isbn);
-                if (!conv.error) {
-                    html += '<div class="isbn-convert-box"><strong>Converted to ISBN-13:</strong><code>' + formatISBN(conv.isbn13, 'ISBN-13') + '</code></div>';
-                }
-            } else if (result.type === 'ISBN-13' && result.isbn.startsWith('978')) {
-                var conv = convertISBN13To10(result.isbn);
-                if (!conv.error) {
-                    html += '<div class="isbn-convert-box"><strong>Converted to ISBN-10:</strong><code>' + formatISBN(conv.isbn10, 'ISBN-10') + '</code></div>';
-                }
-            }
-
-            // Barcode
-            var isbnForBarcode = null;
-            if (result.type === 'ISBN-13') {
-                isbnForBarcode = result.isbn;
-            } else {
-                var bc = convertISBN10To13(result.isbn);
-                if (!bc.error) isbnForBarcode = bc.isbn13;
-            }
-
-            if (isbnForBarcode) {
-                html += '<div class="isbn-barcode-section"><h5>EAN-13 Barcode</h5><div class="isbn-barcode-area" id="isbn-barcode-area"></div>';
-                html += '<div class="isbn-barcode-btns"><button onclick="downloadBarcode(\'png\')">Download PNG</button><button onclick="downloadBarcode(\'svg\')">Download SVG</button></div></div>';
-            }
-
-            resultContent.innerHTML = html;
-            lastResultText = result.type + ': ' + formatted + ' (Valid, Check Digit: ' + result.checkDigit + ')';
-            resultActions.classList.add('visible');
-
-            // Generate barcode after DOM update
-            if (isbnForBarcode) {
-                setTimeout(function() { generateBarcode(isbnForBarcode); }, 50);
-            }
-        } else {
-            resultContent.innerHTML = '<div class="isbn-invalid">Invalid ' + (normalized.length === 13 ? 'ISBN-13' : 'ISBN-10') + '</div><p style="padding:0.5rem;color:var(--text-secondary);font-size:0.8125rem;">' + escapeHtml(result.error) + '</p>';
-            resultActions.classList.remove('visible');
-            lastResultText = '';
-        }
-    }
-
-    function generateBarcode(isbn13) {
-        var area = document.getElementById('isbn-barcode-area');
-        if (!area) return;
-        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.id = 'isbn-barcode-svg';
-        try {
-            JsBarcode(svg, isbn13, { format: 'EAN13', width: 2, height: 80, displayValue: true, fontSize: 14, margin: 10 });
-            area.innerHTML = '';
-            area.appendChild(svg);
-        } catch (e) {
-            area.innerHTML = '<p style="color:var(--error);font-size:0.8125rem;">Barcode error: ' + escapeHtml(e.message) + '</p>';
-        }
-    }
-
-    function downloadBarcode(format) {
-        var svg = document.getElementById('isbn-barcode-svg');
-        if (!svg) return;
-        if (format === 'svg') {
-            var svgStr = new XMLSerializer().serializeToString(svg);
-            var blob = new Blob([svgStr], { type: 'image/svg+xml' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url; a.download = 'isbn-barcode.svg';
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        } else {
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var img = new Image();
-            var svgStr = new XMLSerializer().serializeToString(svg);
-            var svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
-            var url = URL.createObjectURL(svgBlob);
-            img.onload = function() {
-                canvas.width = img.width; canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                canvas.toBlob(function(blob) {
-                    var dUrl = URL.createObjectURL(blob);
-                    var a = document.createElement('a');
-                    a.href = dUrl; a.download = 'isbn-barcode.png';
-                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                    URL.revokeObjectURL(dUrl); URL.revokeObjectURL(url);
-                });
-            };
-            img.src = url;
-        }
-        if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) ToolUtils.showToast('Barcode downloaded!');
-    }
-
-    function clearAll() {
-        isbnInput.value = '';
-        resultContent.innerHTML = document.getElementById('isbn-empty-tpl') ? document.getElementById('isbn-empty-tpl').innerHTML : '<div class="tool-empty-state"><h3>Enter an ISBN to validate</h3><p>Check ISBN format, convert between ISBN-10 and ISBN-13, and generate EAN-13 barcodes.</p></div>';
-        resultActions.classList.remove('visible');
-        lastResultText = '';
-        isbnInput.focus();
-    }
-
-    function copyResult() {
-        if (!lastResultText) return;
-        if (typeof ToolUtils !== 'undefined' && ToolUtils.copyToClipboard) {
-            ToolUtils.copyToClipboard(lastResultText);
-            ToolUtils.showToast('Copied to clipboard!');
-        } else {
-            navigator.clipboard.writeText(lastResultText);
-        }
-    }
-
-    // ========== UTILS ==========
-    function escapeHtml(str) {
-        if (!str) return '';
-        var div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
-
-    function toggleFaq(btn) {
-        var item = btn.closest('.faq-item');
-        if (item) item.classList.toggle('open');
-    }
-
-    // ========== AUTO-DETECT ==========
-    isbnInput.addEventListener('input', function() {
-        var n = normalizeISBN(this.value);
-        if (n.length === 13) actionSelect.value = 'validate';
-        else if (n.length === 10) actionSelect.value = 'convert';
-    });
-
-    // ========== EVENT LISTENERS ==========
-    processBtn.addEventListener('click', processISBN);
-    convertBtn.addEventListener('click', processISBN);
-    clearBtn.addEventListener('click', clearAll);
-    document.getElementById('isbn-copy-btn').addEventListener('click', copyResult);
-
-    isbnInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); processISBN(); }
-    });
-
-    // Sample chips
-    var chips = document.querySelectorAll('.isbn-chip');
-    for (var c = 0; c < chips.length; c++) {
-        chips[c].addEventListener('click', function() {
-            isbnInput.value = this.getAttribute('data-isbn');
-            processISBN();
-        });
-    }
-
-    // URL param support
-    (function() {
-        var params = new URLSearchParams(window.location.search);
-        var isbn = params.get('isbn') || params.get('q');
-        if (isbn) { isbnInput.value = isbn; processISBN(); }
-    })();
-    </script>
+    <script src="<%=request.getContextPath()%>/js/isbn-validator.js?v=<%=cacheVersion%>" defer></script>
 </body>
 </html>
