@@ -115,26 +115,26 @@
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
     </style>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Derivative Calculator with Steps - Differentiate Functions Free" />
-        <jsp:param name="toolDescription" value="Free online derivative calculator with detailed step-by-step solutions. Compute 1st through 5th derivatives instantly with rule identification (power, product, quotient, chain rule). Live KaTeX preview, interactive Plotly graph with critical points, point evaluation, LaTeX export, PDF download, and Python SymPy compiler. No signup required." />
+        <jsp:param name="toolName" value="Derivative Calculator with Steps | Free Derivative Solver" />
+        <jsp:param name="toolDescription" value="Free derivative calculator with step-by-step solutions. Find derivatives using power, product, quotient, and chain rules. Interactive graph, LaTeX export." />
         <jsp:param name="toolCategory" value="Mathematics" />
         <jsp:param name="toolUrl" value="derivative-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="derivative calculator with steps, differentiation calculator, derivative solver, power rule, product rule, quotient rule, chain rule, nth derivative calculator, tangent line calculator, critical points, free derivative calculator" />
+        <jsp:param name="toolKeywords" value="derivative calculator, derivative calculator with steps, derivative calculator online free, differentiation calculator, derivative solver, how to find derivative, second derivative calculator, implicit differentiation calculator, partial derivative calculator, power rule calculator, product rule calculator, quotient rule calculator, chain rule calculator, nth derivative calculator, find derivative of a function, tangent line calculator, critical points calculator" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Step-by-step with rule identification,1st through 5th derivatives,Live KaTeX preview,Interactive Plotly graph,Critical points detection,Point evaluation f prime(a),Download PDF,Copy LaTeX,Share URL,Python SymPy compiler,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="What types of functions can this differentiate?" />
-        <jsp:param name="faq1a" value="This calculator differentiates polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x, log x), hyperbolic functions (sinh, cosh, tanh), inverse trig functions (arcsin, arccos, arctan), rational functions, square roots, and compositions of all these function types." />
-        <jsp:param name="faq2q" value="Does it show step-by-step solutions?" />
-        <jsp:param name="faq2a" value="Yes. After computing a derivative, click Show Steps to see a deterministic step-by-step solution. The calculator identifies which differentiation rule applies (Power Rule, Product Rule, Quotient Rule, Chain Rule, etc.) and shows the rule application with full LaTeX math rendering at each step." />
-        <jsp:param name="faq3q" value="Can I calculate higher-order derivatives?" />
-        <jsp:param name="faq3a" value="Yes. Select derivative order from 1st through 5th using the order buttons. For higher-order derivatives, the calculator shows all intermediate derivatives. For example, requesting the 3rd derivative of x^5 shows f prime(x) = 5x^4, f double-prime(x) = 20x^3, and f triple-prime(x) = 60x^2." />
-        <jsp:param name="faq4q" value="What is the chain rule?" />
-        <jsp:param name="faq4a" value="The chain rule states that d/dx[f(g(x))] = f prime(g(x)) * g prime(x). It is used when differentiating composite functions. For example, d/dx[sin(x^2)] = cos(x^2) * 2x. This calculator automatically detects when the chain rule applies." />
-        <jsp:param name="faq5q" value="How do I enter my function?" />
-        <jsp:param name="faq5a" value="Use standard math notation: x^2 for x squared, sin(x) for sine, e^x for exponential, log(x) for natural log, sqrt(x) for square root. Use * for multiplication (2*x). A live KaTeX preview shows your expression in rendered math notation as you type." />
-        <jsp:param name="faq6q" value="Is this free?" />
-        <jsp:param name="faq6a" value="Yes, this derivative calculator is completely free with no signup, no account, and no usage limits. All computation runs client-side in your browser. Features include step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a Python SymPy compiler." />
+        <jsp:param name="faq1q" value="What is a derivative in calculus?" />
+        <jsp:param name="faq1a" value="A derivative measures the instantaneous rate of change of a function. Geometrically, f'(a) equals the slope of the tangent line to y = f(x) at the point (a, f(a)). The derivative is defined as f'(x) = lim(h to 0) [f(x+h) - f(x)] / h. Derivatives are fundamental to calculus, physics, engineering, and optimization." />
+        <jsp:param name="faq2q" value="How do you find the derivative of a function step by step?" />
+        <jsp:param name="faq2a" value="To find a derivative step by step: (1) Identify the function type - polynomial, trigonometric, exponential, or composite. (2) Apply the matching rule - power rule for x^n, product rule for f*g, quotient rule for f/g, or chain rule for f(g(x)). (3) Simplify the result. (4) Verify by checking at specific points." />
+        <jsp:param name="faq3q" value="What is the chain rule and when do you use it?" />
+        <jsp:param name="faq3a" value="The chain rule states d/dx[f(g(x))] = f'(g(x)) * g'(x). Use it when differentiating composite functions - a function inside another function. For example, d/dx[sin(x^2)] = cos(x^2) * 2x. The outer function is sin and the inner function is x^2. The chain rule is the most frequently used differentiation rule in calculus." />
+        <jsp:param name="faq4q" value="What is the difference between first and second derivative?" />
+        <jsp:param name="faq4a" value="The first derivative f'(x) gives the rate of change and slope of the tangent line. The second derivative f''(x) measures how the rate of change itself is changing - it determines concavity. If f''(x) > 0, the graph is concave up. If f''(x) < 0, it is concave down. In physics, if f is position, f' is velocity and f'' is acceleration." />
+        <jsp:param name="faq5q" value="How do you find critical points using derivatives?" />
+        <jsp:param name="faq5a" value="To find critical points: (1) Compute f'(x). (2) Set f'(x) = 0 and solve for x. (3) Also check where f'(x) is undefined. These x-values are critical points. Use the second derivative test: if f''(c) > 0 the critical point is a local minimum, if f''(c) < 0 it is a local maximum, if f''(c) = 0 the test is inconclusive." />
+        <jsp:param name="faq6q" value="What are the basic rules of differentiation?" />
+        <jsp:param name="faq6a" value="The five basic differentiation rules are: Power Rule d/dx[x^n] = nx^(n-1), Product Rule d/dx[fg] = f'g + fg', Quotient Rule d/dx[f/g] = (f'g - fg')/g^2, Chain Rule d/dx[f(g(x))] = f'(g(x))g'(x), and Sum Rule d/dx[f+g] = f'+g'. Most derivatives can be computed by combining these rules." />
     </jsp:include>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
@@ -240,7 +240,7 @@
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">Derivative Calculator with Steps</h1>
+                <h1 class="tool-page-title">Derivative Calculator - Find Derivatives with Steps</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#math-tools">Math Tools</a> /
@@ -258,7 +258,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>Compute derivatives with <strong>detailed step-by-step solutions</strong> showing rule identification. Supports 1st through 5th order derivatives of polynomials, trig, exponential, logarithmic, and rational functions. Includes <strong>interactive graph</strong> with critical points, point evaluation, <strong>PDF download</strong>, LaTeX export, and a built-in Python SymPy compiler. Free, instant, no signup.</p>
+                <p>Free online <strong>derivative calculator</strong> that shows <strong>step-by-step solutions</strong> with rule identification. Find first through fifth order derivatives of polynomials, trig, exponential, logarithmic, and composite functions using the power rule, product rule, quotient rule, and chain rule. Includes <strong>interactive graph</strong> with critical points, PDF download, LaTeX export, and Python compiler.</p>
             </div>
         </div>
     </section>
@@ -396,7 +396,7 @@
     </jsp:include>
     <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What is a Derivative?</h2>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What is a Derivative in Calculus?</h2>
             <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">The <strong>derivative</strong> of a function f(x) measures the instantaneous rate of change of f with respect to x. Geometrically, f'(a) is the slope of the tangent line to the curve y = f(x) at the point (a, f(a)). The derivative is defined as the limit: f'(x) = lim(h&rarr;0) [f(x+h) - f(x)] / h.</p>
             <p style="color:var(--text-secondary);margin-bottom:0;line-height:1.7;">In physics, velocity is the derivative of position, and acceleration is the derivative of velocity. In economics, marginal cost is the derivative of total cost. Derivatives are fundamental to optimization, linear approximation, and modeling change.</p>
             <svg class="dc-diagram" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;">
@@ -416,7 +416,18 @@
             </svg>
         </div>
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Differentiation Rules</h2>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">How to Find the Derivative Step by Step</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">Follow these steps to find the derivative of any function:</p>
+            <ol style="color:var(--text-secondary);line-height:2;padding-left:1.25rem;margin:0;">
+                <li><strong>Identify the function type</strong> &mdash; Is it a polynomial, trigonometric, exponential, logarithmic, or composite function?</li>
+                <li><strong>Choose the correct differentiation rule</strong> &mdash; Power rule for x<sup>n</sup>, product rule for f&middot;g, quotient rule for f/g, chain rule for f(g(x)).</li>
+                <li><strong>Apply the rule</strong> &mdash; Write out each step of the differentiation, showing the rule being used.</li>
+                <li><strong>Simplify the result</strong> &mdash; Combine like terms, factor where possible, and reduce fractions.</li>
+                <li><strong>Verify your answer</strong> &mdash; Check by evaluating the derivative at a specific point or using numerical approximation.</li>
+            </ol>
+        </div>
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">How to Differentiate - Rules of Differentiation</h2>
             <table class="dc-rules-table">
                 <thead><tr><th style="width:35%;">Rule</th><th style="width:35%;">Formula</th><th>Example</th></tr></thead>
                 <tbody>
@@ -430,7 +441,7 @@
             </table>
         </div>
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Common Derivatives</h2>
+            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Common Derivatives Every Calculus Student Should Know</h2>
             <table class="dc-rules-table">
                 <thead><tr><th style="width:40%;">Function</th><th>Derivative</th></tr></thead>
                 <tbody>
@@ -447,7 +458,7 @@
             </table>
         </div>
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Applications of Derivatives</h2>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Applications of Derivatives in Real Life</h2>
             <div class="dc-edu-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
                 <div class="dc-edu-card" style="text-align:center;border-left:3px solid #d97706;">
                     <h4>Velocity &amp; Acceleration</h4>
@@ -469,12 +480,12 @@
         </div>
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
             <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What types of functions can this differentiate?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">This calculator differentiates polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x, log x), hyperbolic functions (sinh, cosh, tanh), inverse trig functions (arcsin, arccos, arctan), rational functions, square roots, and compositions of all these function types.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Does it show step-by-step solutions?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Yes. After computing a derivative, click Show Steps to see a deterministic step-by-step solution. The calculator identifies which differentiation rule applies (Power Rule, Product Rule, Quotient Rule, Chain Rule) and shows the application with full LaTeX math rendering at each step.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can I calculate higher-order derivatives?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Yes. Select the derivative order from 1st through 5th. For higher-order derivatives, the calculator shows all intermediate results. For example, requesting the 3rd derivative of x^5 shows f'(x) = 5x^4, f''(x) = 20x^3, and f'''(x) = 60x^2.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is the chain rule?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The chain rule states that d/dx[f(g(x))] = f'(g(x)) &middot; g'(x). It is used for composite functions. For example, d/dx[sin(x^2)] = cos(x^2) &middot; 2x. This calculator automatically detects composite functions and applies the chain rule.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do I enter my function?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Use standard math notation: x^2 for x squared, sin(x) for sine, e^x for exponential, log(x) for natural log, sqrt(x) for square root. Use * for multiplication (2*x). A live KaTeX preview shows your expression in rendered math notation as you type.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Is this free?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Yes, completely free with no signup, no account, no limits. All computation runs client-side in your browser using the Nerdamer CAS library. Includes step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a Python SymPy compiler.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is a derivative in calculus?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">A derivative measures the instantaneous rate of change of a function. Geometrically, f'(a) equals the slope of the tangent line to y = f(x) at the point (a, f(a)). The derivative is defined as f'(x) = lim(h&rarr;0) [f(x+h) - f(x)] / h. Derivatives are fundamental to calculus, physics, engineering, and optimization.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you find the derivative of a function step by step?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To find a derivative step by step: (1) Identify the function type &mdash; polynomial, trigonometric, exponential, or composite. (2) Apply the matching rule &mdash; power rule for x^n, product rule for f&middot;g, quotient rule for f/g, or chain rule for f(g(x)). (3) Simplify the result. (4) Verify by checking at specific points.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is the chain rule and when do you use it?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The chain rule states d/dx[f(g(x))] = f'(g(x)) &middot; g'(x). Use it when differentiating composite functions &mdash; a function inside another function. For example, d/dx[sin(x&sup2;)] = cos(x&sup2;) &middot; 2x. The outer function is sin and the inner function is x&sup2;. The chain rule is the most frequently used differentiation rule in calculus.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is the difference between first and second derivative?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The first derivative f'(x) gives the rate of change and slope of the tangent line. The second derivative f''(x) measures how the rate of change itself is changing &mdash; it determines concavity. If f''(x) &gt; 0, the graph is concave up. If f''(x) &lt; 0, it is concave down. In physics, if f is position, f' is velocity and f'' is acceleration.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you find critical points using derivatives?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To find critical points: (1) Compute f'(x). (2) Set f'(x) = 0 and solve for x. (3) Also check where f'(x) is undefined. These x-values are critical points. Use the second derivative test: if f''(c) &gt; 0 the critical point is a local minimum, if f''(c) &lt; 0 it is a local maximum, if f''(c) = 0 the test is inconclusive.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What are the basic rules of differentiation?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The five basic differentiation rules are: Power Rule d/dx[x^n] = nx^(n-1), Product Rule d/dx[fg] = f'g + fg', Quotient Rule d/dx[f/g] = (f'g - fg')/g&sup2;, Chain Rule d/dx[f(g(x))] = f'(g(x))g'(x), and Sum Rule d/dx[f+g] = f'+g'. Most derivatives can be computed by combining these rules.</div></div>
         </div>
     </section>
     <section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
