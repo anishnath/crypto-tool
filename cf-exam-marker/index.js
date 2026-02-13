@@ -584,6 +584,8 @@ function buildMathStepsPrompt(operation, expression, variable, answer, bounds) {
     problemDesc = `Indefinite integral: ∫ ${expression} d${variable} = ${answer}`;
   } else if (operation === 'differentiate') {
     problemDesc = `Derivative: d/d${variable}(${expression}) = ${answer}`;
+  } else if (operation === 'limit') {
+    problemDesc = `Limit: lim(${variable}→${bounds ? bounds.lower : '?'}) ${expression} = ${answer}`;
   } else {
     problemDesc = `${operation}: ${expression} = ${answer}`;
   }
