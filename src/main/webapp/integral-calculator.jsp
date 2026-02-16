@@ -1651,6 +1651,18 @@
         });
     };
 
+    /** Wrap plain text in \\text{} so KaTeX preserves spaces. In math mode, spaces are collapsed. */
+    function prepareLatexForKatex(latex) {
+        if (!latex || typeof latex !== 'string') return latex;
+        var firstBackslash = latex.indexOf('\\');
+        if (firstBackslash === -1) {
+            return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
+        }
+        if (firstBackslash === 0) return latex;
+        var leading = latex.substring(0, firstBackslash).replace(/\\/g, '\\\\').replace(/}/g, '\\}');
+        return '\\text{' + leading + '}' + latex.substring(firstBackslash);
+    }
+
     function renderSteps(steps, method, isAI) {
         var container = document.getElementById('ic-steps-area');
         if (!container) return;
@@ -1675,12 +1687,13 @@
         html += '</div>';
         container.innerHTML = html;
 
-        // Render KaTeX for each step
+        // Render KaTeX for each step (plain text wrapped in \text{} to preserve spacing)
         for (var j = 0; j < steps.length; j++) {
             var el = document.getElementById('ic-step-math-' + j);
             if (el && steps[j].latex) {
                 try {
-                    katex.render(steps[j].latex, el, { displayMode: true, throwOnError: false });
+                    var prepared = prepareLatexForKatex(steps[j].latex);
+                    katex.render(prepared, el, { displayMode: true, throwOnError: false });
                 } catch (e) {
                     el.textContent = steps[j].latex;
                 }
