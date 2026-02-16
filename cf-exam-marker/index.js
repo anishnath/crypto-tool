@@ -663,7 +663,7 @@ async function logMathStepsRequest(env, expression, operation, variable, bounds,
  *
  * Flow: Check DB cache → if hit, return cached steps. If miss, call AI → cache result → return.
  */
-async function handleMathSteps(request, env) {
+async function handleMathSteps(request, env, ctx) {
   const startTime = Date.now();
 
   let payload;
@@ -697,7 +697,11 @@ async function handleMathSteps(request, env) {
         ).bind(cacheKey).run();
 
         const elapsed = Date.now() - startTime;
-        logMathStepsRequest(env, expression, op, v, bounds, true, elapsed);
+        if (ctx?.waitUntil) {
+          ctx.waitUntil(logMathStepsRequest(env, expression, op, v, bounds, true, elapsed));
+        } else {
+          await logMathStepsRequest(env, expression, op, v, bounds, true, elapsed);
+        }
 
         const steps = JSON.parse(cached.steps_json);
         console.log(`Math-steps cache HIT: "${expression}" (hits: ${cached.hit_count + 1})`);
@@ -756,7 +760,11 @@ async function handleMathSteps(request, env) {
     }
 
     const elapsed = Date.now() - startTime;
-    logMathStepsRequest(env, expression, op, v, bounds, false, elapsed);
+    if (ctx?.waitUntil) {
+      ctx.waitUntil(logMathStepsRequest(env, expression, op, v, bounds, false, elapsed));
+    } else {
+      await logMathStepsRequest(env, expression, op, v, bounds, false, elapsed);
+    }
 
     return jsonResponse({
       success: true,
@@ -1810,7 +1818,7 @@ export default {
         if (authError) {
           return withCors(authError, reqOrigin);
         }
-        const r = await handleMathSteps(request, env);
+        const r = await handleMathSteps(request, env, ctx);
         return withCors(r, reqOrigin);
       }
 
