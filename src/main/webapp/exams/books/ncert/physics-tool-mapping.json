@@ -1,0 +1,101 @@
+{
+  "units-and-measurements": [
+    {"url": "units-measurement.jsp", "label": "Units and Measurement"}
+  ],
+  "motion-in-a-straight-line": [
+    {"url": "velocity-calculator.jsp", "label": "Velocity Calculator"},
+    {"url": "acceleration-calculator.jsp", "label": "Acceleration Calculator"},
+    {"url": "kinematics-solver.jsp", "label": "Kinematics Solver"}
+  ],
+  "motion-in-a-plane": [
+    {"url": "projectile-motion.jsp", "label": "Projectile Motion"}
+  ],
+  "laws-of-motion": [
+    {"url": "force-calculator.jsp", "label": "Force Calculator (F = ma)"},
+    {"url": "momentum-calculator.jsp", "label": "Momentum & Collisions"}
+  ],
+  "work-energy-and-power": [
+    {"url": "energy-calculator.jsp", "label": "Energy Calculator"},
+    {"url": "work-power.jsp", "label": "Work & Power"},
+    {"url": "spring-force-calculator.jsp", "label": "Spring Force (Hooke's Law)"}
+  ],
+  "system-of-particles-and-rotational-motion": [
+    {"url": "torque-calculator.jsp", "label": "Torque Calculator"},
+    {"url": "centripetal-force-calculator.jsp", "label": "Circular Motion"},
+    {"url": "momentum-calculator.jsp", "label": "Momentum & Collisions"}
+  ],
+  "gravitation": [
+    {"url": "gravitational-force-calculator.jsp", "label": "Gravitational Force"}
+  ],
+  "mechanical-properties-of-solids": [
+    {"url": "solids-elasticity.jsp", "label": "Solids & Elasticity"}
+  ],
+  "mechanical-properties-of-fluids": [
+    {"url": "fluids-statics.jsp", "label": "Fluids Statics"},
+    {"url": "fluids-dynamics.jsp", "label": "Fluids Dynamics"}
+  ],
+  "thermal-properties-of-matter": [
+    {"url": "thermal-energy.jsp", "label": "Thermal Energy"}
+  ],
+  "thermodynamics": [
+    {"url": "thermodynamics.jsp", "label": "Thermodynamics"}
+  ],
+  "kinetic-theory": [
+    {"url": "kinetic-theory.jsp", "label": "Kinetic Theory of Gases"}
+  ],
+  "oscillations": [
+    {"url": "oscillations.jsp", "label": "Oscillations & SHM"}
+  ],
+  "waves": [
+    {"url": "wave-formulas.jsp", "label": "Wave Formulas"}
+  ],
+  "electric-charges-and-fields": [
+    {"url": "electrostatics.jsp", "label": "Electrostatics"}
+  ],
+  "electrostatic-potential-and-capacitance": [
+    {"url": "electrostatics.jsp", "label": "Electrostatics"},
+    {"url": "electrical-energy.jsp", "label": "Electrical Energy"}
+  ],
+  "current-electricity": [
+    {"url": "current-electricity.jsp", "label": "Current Electricity"}
+  ],
+  "moving-charges-and-magnetism": [
+    {"url": "magnetism.jsp", "label": "Magnetism"}
+  ],
+  "magnetism-and-matter": [
+    {"url": "magnetism.jsp", "label": "Magnetism"}
+  ],
+  "electromagnetic-induction": [
+    {"url": "electromagnetic-induction.jsp", "label": "EM Induction & AC"}
+  ],
+  "alternating-current": [
+    {"url": "ac-circuits.jsp", "label": "AC Circuits"}
+  ],
+  "electromagnetic-waves": [
+    {"url": "electromagnetic-waves.jsp", "label": "Electromagnetic Waves"}
+  ],
+  "ray-optics-and-optical-instruments": [
+    {"url": "refraction.jsp", "label": "Refraction"},
+    {"url": "mirrors.jsp", "label": "Mirrors"},
+    {"url": "lens-calculator.jsp", "label": "Lens Calculator"},
+    {"url": "prism-dispersion.jsp", "label": "Prism & Dispersion"},
+    {"url": "optical-instruments.jsp", "label": "Optical Instruments"}
+  ],
+  "wave-optics": [
+    {"url": "wave-optics.jsp", "label": "Wave Optics"}
+  ],
+  "dual-nature-of-radiation-and-matter": [
+    {"url": "photoelectric-effect.jsp", "label": "Photoelectric Effect"},
+    {"url": "matter-waves.jsp", "label": "Matter Waves (de Broglie)"}
+  ],
+  "atoms": [
+    {"url": "bohr-model.jsp", "label": "Bohr Model"}
+  ],
+  "nuclei": [
+    {"url": "nuclear-physics.jsp", "label": "Nuclear Physics"}
+  ],
+  "semiconductor-electronics": [
+    {"url": "current-electricity.jsp", "label": "Current Electricity"},
+    {"url": "electrical-energy.jsp", "label": "Electrical Energy"}
+  ]
+}

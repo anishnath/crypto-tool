@@ -310,6 +310,62 @@
                         color: white;
                     }
 
+                    /* Chapter Tools Section */
+                    .chapter-tools-section {
+                        margin-bottom: var(--space-6);
+                        padding: var(--space-5);
+                        background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(6, 182, 212, 0.06) 100%);
+                        border: 1px solid rgba(16, 185, 129, 0.2);
+                        border-radius: var(--radius-lg);
+                    }
+
+                    .chapter-tools-title {
+                        font-size: var(--text-base);
+                        font-weight: 700;
+                        color: var(--text-primary);
+                        margin: 0 0 var(--space-1);
+                    }
+
+                    .chapter-tools-desc {
+                        font-size: var(--text-sm);
+                        color: var(--text-secondary);
+                        margin: 0 0 var(--space-4);
+                    }
+
+                    .chapter-tools-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                        gap: var(--space-3);
+                    }
+
+                    .chapter-tool-link {
+                        display: flex;
+                        align-items: center;
+                        gap: var(--space-2);
+                        padding: var(--space-3);
+                        background: var(--bg-primary);
+                        border: 1px solid var(--border-primary);
+                        border-radius: var(--radius-md);
+                        text-decoration: none;
+                        font-size: var(--text-sm);
+                        font-weight: 600;
+                        color: var(--accent);
+                        transition: all 0.2s ease;
+                    }
+
+                    .chapter-tool-link:hover {
+                        border-color: #10b981;
+                        background: rgba(16, 185, 129, 0.08);
+                        color: #059669;
+                    }
+
+                    .chapter-tool-link::after {
+                        content: '\2192';
+                        margin-left: auto;
+                        font-size: 0.9em;
+                        opacity: 0.7;
+                    }
+
                     .hint-content,
                     .solution-content {
                         display: none;
@@ -984,6 +1040,15 @@
                             </div>
                         </section>
 
+                        <!-- Tools for this Chapter (Physics only) -->
+                        <% if (bookPart != null && bookPart.contains("physics")) { %>
+                        <section class="chapter-tools-section" id="chapterToolsSection" style="display:none;">
+                            <h3 class="chapter-tools-title">&#128296; Tools for this Chapter</h3>
+                            <p class="chapter-tools-desc">Explore related physics calculators with step-by-step solutions.</p>
+                            <div class="chapter-tools-grid" id="chapterToolsGrid"></div>
+                        </section>
+                        <% } %>
+
                         <!-- Ad: Header (Mobile/Tablet) -->
                         <div class="mobile-ad-container">
                             <%@ include file="../../components/ad-leaderboard.jsp" %>
@@ -1075,8 +1140,29 @@
                         var NCERT_LABEL = '<%= ncertLabel.replace("'", "\\'") %>';
                         var CHAPTER_NUM = '<%= chapterNum %>';
                         var CHAPTER_NAME = '<%= chapterName.replace("'", "\\'") %>';
+                        var CHAPTER_SLUG = '<%= chapterSlug %>';
+                        var CTX = '<%=request.getContextPath()%>';
                         var container = document.getElementById('questionsContainer');
                         var statsContainer = document.getElementById('chapterStats');
+
+                        // Load "Tools for this chapter" (physics only)
+                        var toolsSection = document.getElementById('chapterToolsSection');
+                        var toolsGrid = document.getElementById('chapterToolsGrid');
+                        if (toolsSection && toolsGrid && BOOK_PART.indexOf('physics') >= 0) {
+                            fetch(CTX + '/exams/books/ncert/physics-tool-mapping.json')
+                                .then(function (r) { return r.ok ? r.json() : {}; })
+                                .then(function (mapping) {
+                                    var tools = mapping[CHAPTER_SLUG];
+                                    if (tools && tools.length > 0) {
+                                        toolsSection.style.display = 'block';
+                                        toolsGrid.innerHTML = tools.map(function (t) {
+                                            var href = CTX + '/physics/' + t.url;
+                                            return '<a href="' + href + '" class="chapter-tool-link" target="_blank" rel="noopener">' + t.label + '</a>';
+                                        }).join('');
+                                    }
+                                })
+                                .catch(function () {});
+                        }
 
                         // Helper: Convert pipe-delimited table text to HTML table
                         function convertPipeTableToHtml(text) {

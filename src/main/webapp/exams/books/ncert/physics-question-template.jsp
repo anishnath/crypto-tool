@@ -634,9 +634,41 @@
                             height: auto !important;
                         }
 
-                        /* Calculator widget */
-                        .calc-container {
-                            margin-top: var(--space-4);
+                    /* Explore more: related physics calculators */
+                    .explore-more-tools {
+                        margin-top: var(--space-4);
+                        display: none;
+                    }
+
+                    .explore-more-box {
+                        padding: var(--space-3) var(--space-4);
+                        background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(6, 182, 212, 0.06) 100%);
+                        border: 1px solid rgba(16, 185, 129, 0.2);
+                        border-radius: var(--radius-md);
+                        font-size: var(--text-sm);
+                        color: var(--text-secondary);
+                    }
+
+                    .explore-more-label {
+                        font-weight: 600;
+                        color: var(--text-primary);
+                        margin-right: var(--space-2);
+                    }
+
+                    .explore-more-link {
+                        color: var(--accent);
+                        text-decoration: none;
+                        font-weight: 500;
+                    }
+
+                    .explore-more-link:hover {
+                        color: #059669;
+                        text-decoration: underline;
+                    }
+
+                    /* Calculator widget */
+                    .calc-container {
+                        margin-top: var(--space-4);
                             background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(139, 92, 246, 0.06) 100%);
                             border: 1px solid rgba(99, 102, 241, 0.2);
                             border-radius: var(--radius-lg);
@@ -1303,6 +1335,11 @@
                                         });
                                     }
 
+                                    // Explore more: related physics calculators (physics only)
+                                    if (BOOK_PART.indexOf('physics') >= 0) {
+                                        html += '<div class="explore-more-tools" id="exploreMoreTools"></div>';
+                                    }
+
                                     html += '</div>'; // solution-section
                                     html += '</div>'; // question-content-card
 
@@ -1458,6 +1495,25 @@
 
                                     // Inject QAPage Schema for SEO
                                     injectQASchema(currentQuestion);
+
+                                    // Load "Explore more" tools (physics only)
+                                    var exploreEl = document.getElementById('exploreMoreTools');
+                                    if (exploreEl && BOOK_PART.indexOf('physics') >= 0 && CHAPTER_SLUG) {
+                                        fetch('<%=request.getContextPath()%>/exams/books/ncert/physics-tool-mapping.json')
+                                            .then(function (r) { return r.ok ? r.json() : {}; })
+                                            .then(function (mapping) {
+                                                var tools = mapping[CHAPTER_SLUG];
+                                                if (tools && tools.length > 0) {
+                                                    var ctx = '<%=request.getContextPath()%>';
+                                                    var links = tools.slice(0, 3).map(function (t) {
+                                                        return '<a href="' + ctx + '/physics/' + t.url + '" class="explore-more-link" target="_blank" rel="noopener">' + t.label + '</a>';
+                                                    }).join(' &bull; ');
+                                                    exploreEl.innerHTML = '<div class="explore-more-box"><span class="explore-more-label">Explore more:</span> ' + links + '</div>';
+                                                    exploreEl.style.display = 'block';
+                                                }
+                                            })
+                                            .catch(function () {});
+                                    }
                                 })
                                 .catch(function (error) {
                                     console.error('Error loading question:', error);
