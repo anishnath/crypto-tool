@@ -1,0 +1,135 @@
+{
+    "q2-2-position-time-comparison": {
+        "type": "position-time-comparison",
+        "title": "Position-Time Graph: Two Children Returning Home",
+        "params": {
+            "childA": {
+                "distance": 400,
+                "startTime": 0,
+                "speed": 2,
+                "name": "Child A"
+            },
+            "childB": {
+                "distance": 600,
+                "startTime": 50,
+                "speed": 4,
+                "name": "Child B"
+            },
+            "showOvertaking": true,
+            "showVelocityComparison": true,
+            "animate": true,
+            "width": 600,
+            "height": 450
+        }
+    },
+    "q2-4-velocity-time-analysis": {
+        "type": "velocity-time-analysis",
+        "title": "Velocity-Time Graph: Area Under Curve",
+        "params": {
+            "initialVelocity": 0,
+            "acceleration": 2,
+            "duration": 10,
+            "showArea": true,
+            "showDisplacement": true,
+            "showParticle": true,
+            "animate": true,
+            "width": 600,
+            "height": 450
+        }
+    },
+    "q2-3-daily-commute": {
+        "type": "daily-commute-graph",
+        "title": "Daily Commute: Position-Time Graph",
+        "params": {
+            "distance": 2.5,
+            "walkSpeed": 5,
+            "autoSpeed": 25,
+            "stayDuration": 7.5,
+            "showSegments": true,
+            "animate": true,
+            "width": 600,
+            "height": 450
+        }
+    },
+    "q2-5-braking-car": {
+        "type": "braking-car-demo",
+        "title": "Braking Car: Stopping Distance",
+        "params": {
+            "initialSpeed": 35,
+            "distance": 200,
+            "showVTGraph": true,
+            "showCalculations": true,
+            "animate": true,
+            "width": 600,
+            "height": 450
+        }
+    },
+    "q2-6-vertical-projectile": {
+        "type": "vertical-projectile",
+        "title": "Vertical Projectile: Ball Thrown Upward",
+        "params": {
+            "initial_velocity": 29.4,
+            "gravity": 9.8,
+            "show_graphs": true,
+            "show_vectors": true,
+            "width": 600,
+            "height": 500
+        }
+    },
+    "q2-7-free-fall": {
+        "type": "free-fall-demo",
+        "title": "Free Fall: Stone Thrown Upward",
+        "params": {
+            "initialVelocity": 20,
+            "gravity": 9.8,
+            "groundLevel": 0,
+            "showVelocityVector": true,
+            "showVTGraph": true,
+            "showMaxHeight": true,
+            "showSymmetry": true,
+            "animate": true,
+            "width": 600,
+            "height": 500
+        }
+    },
+    "q2-10-position-velocity-acceleration": {
+        "type": "position-velocity-acceleration",
+        "title": "Derivatives: Position → Velocity → Acceleration",
+        "params": {
+            "positionFunction": "3*t - 4*t*t + t*t*t",
+            "duration": 4,
+            "showDerivatives": true,
+            "showAllGraphs": true,
+            "animate": true,
+            "width": 600,
+            "height": 500
+        }
+    },
+    "q2-6-braking-car": {
+        "type": "braking-car-demo",
+        "title": "Braking Car: Deceleration and Stopping Distance",
+        "params": {
+            "initialVelocity": 20,
+            "deceleration": 5,
+            "showStoppingDistance": true,
+            "showVTGraph": true,
+            "animate": true,
+            "width": 600,
+            "height": 400
+        }
+    },
+    "q2-11-equations-of-motion": {
+        "type": "equations-of-motion-demo",
+        "title": "Equations of Motion: Uniformly Accelerated Motion",
+        "params": {
+            "initialVelocity": 5,
+            "acceleration": 2,
+            "duration": 10,
+            "showAllEquations": true,
+            "showGraphs": true,
+            "interactive": true,
+            "width": 600,
+            "height": 500
+        }
+    }
+}

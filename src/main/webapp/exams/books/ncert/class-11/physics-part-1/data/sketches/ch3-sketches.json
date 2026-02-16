@@ -1,0 +1,349 @@
+{
+    "q3-6-vector-addition": {
+        "type": "vector-addition",
+        "title": "Vector Addition Interactive",
+        "description": "Visualize vector addition using triangle and parallelogram methods",
+        "params": {
+            "vectors": [
+                {
+                    "id": "a",
+                    "magnitude": 5,
+                    "angle": 0,
+                    "color": "#FF6B6B",
+                    "label": "→a"
+                },
+                {
+                    "id": "b",
+                    "magnitude": 3,
+                    "angle": 60,
+                    "color": "#4ECDC4",
+                    "label": "→b"
+                }
+            ],
+            "show_resultant": true,
+            "show_components": true,
+            "method": "triangle"
+        },
+        "controls": {
+            "adjustable": [
+                "magnitude",
+                "angle"
+            ],
+            "add_remove_vectors": true,
+            "toggle_method": [
+                "triangle",
+                "parallelogram",
+                "component"
+            ],
+            "show_inequality": true
+        },
+        "educational_notes": [
+            "Triangle inequality: |→a + →b| ≤ |→a| + |→b|",
+            "Equality when vectors are parallel",
+            "Parallelogram diagonal = resultant",
+            "Component method: add x and y separately"
+        ],
+        "formulas": [
+            "|→a + →b| = √(a² + b² + 2ab cos θ)",
+            "tan α = (b sin θ)/(a + b cos θ)"
+        ]
+    },
+    "q3-7-null-vector": {
+        "type": "vector-addition",
+        "title": "Four Vectors Forming Closed Polygon",
+        "description": "When four vectors sum to zero, they form a closed quadrilateral",
+        "params": {
+            "vectors": [
+                {
+                    "id": "a",
+                    "magnitude": 3,
+                    "angle": 0,
+                    "color": "#FF6B6B",
+                    "label": "→a"
+                },
+                {
+                    "id": "b",
+                    "magnitude": 4,
+                    "angle": 90,
+                    "color": "#4ECDC4",
+                    "label": "→b"
+                },
+                {
+                    "id": "c",
+                    "magnitude": 3,
+                    "angle": 180,
+                    "color": "#95E1D3",
+                    "label": "→c"
+                },
+                {
+                    "id": "d",
+                    "magnitude": 4,
+                    "angle": 270,
+                    "color": "#AA96DA",
+                    "label": "→d"
+                }
+            ],
+            "show_resultant": true,
+            "show_closed_polygon": true
+        },
+        "controls": {
+            "adjustable": [
+                "magnitude",
+                "angle"
+            ],
+            "auto_close": true,
+            "verify_sum_zero": true
+        },
+        "educational_notes": [
+            "→a + →b + →c + →d = 0 means closed polygon",
+            "Individual vectors need not be zero",
+            "|→a + →c| = |→b + →d| (opposite sides)",
+            "→b + →c lies in plane of →a and →d"
+        ]
+    },
+    "q3-8-displacement-path": {
+        "type": "displacement-comparison",
+        "title": "Three Girls Skating - Different Paths",
+        "description": "Same displacement, different path lengths",
+        "params": {
+            "radius": 200,
+            "start_point": "P",
+            "end_point": "Q",
+            "paths": [
+                {
+                    "id": "A",
+                    "type": "arc",
+                    "arc_angle": 180,
+                    "color": "#FF6B6B",
+                    "label": "Girl A (arc)"
+                },
+                {
+                    "id": "B",
+                    "type": "straight",
+                    "color": "#4ECDC4",
+                    "label": "Girl B (diameter)"
+                },
+                {
+                    "id": "C",
+                    "type": "curved",
+                    "control_points": [
+                        [
+                            100,
+                            -50
+                        ],
+                        [
+                            300,
+                            50
+                        ]
+                    ],
+                    "color": "#95E1D3",
+                    "label": "Girl C (curved)"
+                }
+            ],
+            "show_displacement": true,
+            "show_path_lengths": true
+        },
+        "controls": {
+            "animate_motion": true,
+            "show_comparison_table": true
+        },
+        "educational_notes": [
+            "Displacement = straight line P to Q = 400 m (all same)",
+            "Path length varies by route taken",
+            "Only Girl B: path length = displacement",
+            "Displacement independent of path"
+        ],
+        "calculations": {
+            "displacement": 400,
+            "path_A": 628.3,
+            "path_B": 400,
+            "path_C": 450
+        }
+    },
+    "q3-9-circular-park": {
+        "type": "sequential-path",
+        "title": "Cyclist in Circular Park",
+        "description": "Round trip: O→P→arc→Q→O",
+        "params": {
+            "radius": 1000,
+            "segments": [
+                {
+                    "type": "radial",
+                    "from": "O",
+                    "to": "P",
+                    "color": "#FF6B6B",
+                    "label": "O to P"
+                },
+                {
+                    "type": "arc",
+                    "from": "P",
+                    "to": "Q",
+                    "angle": 90,
+                    "color": "#4ECDC4",
+                    "label": "Arc P to Q"
+                },
+                {
+                    "type": "radial",
+                    "from": "Q",
+                    "to": "O",
+                    "color": "#95E1D3",
+                    "label": "Q to O"
+                }
+            ],
+            "total_time": 10
+        },
+        "controls": {
+            "animate_motion": true,
+            "show_displacement": true,
+            "show_path_length": true,
+            "calculate_speeds": true
+        },
+        "educational_notes": [
+            "Net displacement = 0 (returns to start)",
+            "Average velocity = 0",
+            "Average speed = total path / time ≠ 0",
+            "Path length = 1 + π/2 + 1 = 3.57 km"
+        ],
+        "calculations": {
+            "displacement": 0,
+            "path_length": 3.571,
+            "avg_velocity": 0,
+            "avg_speed": 21.4
+        }
+    },
+    "q3-10-hexagon-path": {
+        "type": "polygon-path",
+        "title": "Motorist Turning at 60° Intervals",
+        "description": "Regular hexagon formed by 60° turns every 500m",
+        "params": {
+            "segment_length": 500,
+            "turn_angle": 60,
+            "num_segments": 8
+        },
+        "controls": {
+            "adjustable": [
+                "segment_length",
+                "turn_angle",
+                "num_segments"
+            ],
+            "animate_motion": true,
+            "show_displacement_at_each_turn": true,
+            "show_path_length": true
+        },
+        "educational_notes": [
+            "60° turns create regular hexagon",
+            "After 6 segments: displacement = 0 (closed)",
+            "At 3rd turn: displacement = 1 km at 60°",
+            "At 8th turn: displacement = 866 m at 30°"
+        ],
+        "key_points": {
+            "turn_3": {
+                "displacement_magnitude": 1000,
+                "displacement_angle": 60,
+                "path_length": 1500
+            },
+            "turn_6": {
+                "displacement_magnitude": 0,
+                "displacement_angle": null,
+                "path_length": 3000
+            },
+            "turn_8": {
+                "displacement_magnitude": 866,
+                "displacement_angle": 30,
+                "path_length": 4000
+            }
+        }
+    },
+    "projectile-motion-2d": {
+        "type": "projectile-motion",
+        "title": "2D Projectile Motion Simulator",
+        "description": "Launch projectile at any angle and velocity",
+        "params": {
+            "initial_velocity": 20,
+            "launch_angle": 45,
+            "gravity": 9.8,
+            "initial_height": 0
+        },
+        "controls": {
+            "adjustable": [
+                "initial_velocity",
+                "launch_angle",
+                "initial_height"
+            ],
+            "animation": true,
+            "show_trajectory": true,
+            "show_velocity_components": true,
+            "show_graphs": [
+                "x-t",
+                "y-t",
+                "vx-t",
+                "vy-t"
+            ],
+            "multiple_projectiles": true
+        },
+        "educational_notes": [
+            "Horizontal velocity = constant (no air resistance)",
+            "Vertical velocity changes due to gravity",
+            "Maximum range at 45° (on level ground)",
+            "Time of flight = 2v₀ sin θ / g",
+            "Range = v₀² sin 2θ / g"
+        ],
+        "formulas": [
+            "x(t) = v₀ cos θ × t",
+            "y(t) = v₀ sin θ × t - ½gt²",
+            "vₓ(t) = v₀ cos θ",
+            "vᵧ(t) = v₀ sin θ - gt",
+            "Range = v₀² sin 2θ / g",
+            "Max height = (v₀ sin θ)² / 2g",
+            "Time of flight = 2v₀ sin θ / g"
+        ],
+        "presets": [
+            {
+                "name": "45° Launch",
+                "velocity": 20,
+                "angle": 45
+            },
+            {
+                "name": "30° Launch",
+                "velocity": 20,
+                "angle": 30
+            },
+            {
+                "name": "60° Launch",
+                "velocity": 20,
+                "angle": 60
+            },
+            {
+                "name": "Horizontal Launch",
+                "velocity": 20,
+                "angle": 0,
+                "height": 10
+            }
+        ]
+    },
+    "q3-12-ceiling-projectile": {
+        "type": "projectile-motion",
+        "title": "Projectile with Ceiling Constraint",
+        "description": "Find max range without hitting 25m ceiling",
+        "params": {
+            "initial_velocity": 40,
+            "launch_angle": 30,
+            "gravity": 9.8,
+            "ceiling_height": 25,
+            "initial_height": 0
+        },
+        "controls": {
+            "adjustable": [
+                "launch_angle"
+            ],
+            "animation": true,
+            "show_trajectory": true
+        },
+        "educational_notes": [
+            "Ceiling at 25m limits the maximum height",
+            "H_max = (v₀ sin θ)² / 2g",
+            "If H_max > 25m, projectile hits ceiling",
+            "Task: Adjust angle to maximize range without hitting"
+        ]
+    }
+}

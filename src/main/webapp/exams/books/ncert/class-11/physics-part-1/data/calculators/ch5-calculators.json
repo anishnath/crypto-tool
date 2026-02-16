@@ -1,0 +1,149 @@
+{
+    "q5-ke-ratio": {
+        "title": "Kinetic Energy & Speed Ratio",
+        "formula_display": "v₂/v₁ = √[(KE₂/m₂)/(KE₁/m₁)]",
+        "inputs": [
+            {
+                "id": "ke1",
+                "label": "KE of Particle 1",
+                "unit": "eV",
+                "default": 10000,
+                "min": 1,
+                "max": 1000000,
+                "step": 100
+            },
+            {
+                "id": "m1",
+                "label": "Mass of Particle 1",
+                "unit": "kg",
+                "default": 9.11e-31,
+                "min": 1e-31,
+                "max": 1e-25,
+                "step": 1e-31
+            },
+            {
+                "id": "ke2",
+                "label": "KE of Particle 2",
+                "unit": "eV",
+                "default": 100000,
+                "min": 1,
+                "max": 1000000,
+                "step": 100
+            },
+            {
+                "id": "m2",
+                "label": "Mass of Particle 2",
+                "unit": "kg",
+                "default": 1.67e-27,
+                "min": 1e-31,
+                "max": 1e-25,
+                "step": 1e-31
+            }
+        ],
+        "compute": "Math.sqrt((ke2 * 1.6e-19 / m2) / (ke1 * 1.6e-19 / m1))",
+        "output": {
+            "label": "Speed Ratio (v₂/v₁)",
+            "unit": "",
+            "precision": 2
+        },
+        "note": "Enter KE in eV. 1 keV = 1000 eV."
+    },
+    "q5-pump-power": {
+        "title": "Pump Power & Efficiency",
+        "formula_display": "P_in = P_out / η = (mgh/t) / η",
+        "inputs": [
+            {
+                "id": "volume",
+                "label": "Volume of Water",
+                "unit": "m³",
+                "default": 30,
+                "min": 1,
+                "max": 100,
+                "step": 1
+            },
+            {
+                "id": "height",
+                "label": "Height h",
+                "unit": "m",
+                "default": 40,
+                "min": 1,
+                "max": 100,
+                "step": 1
+            },
+            {
+                "id": "time_min",
+                "label": "Time",
+                "unit": "min",
+                "default": 15,
+                "min": 1,
+                "max": 60,
+                "step": 1
+            },
+            {
+                "id": "efficiency",
+                "label": "Efficiency η",
+                "unit": "%",
+                "default": 30,
+                "min": 1,
+                "max": 100,
+                "step": 1
+            }
+        ],
+        "compute": "((volume * 1000 * 9.8 * height) / (time_min * 60)) / (efficiency / 100)",
+        "output": {
+            "label": "Power Input",
+            "unit": "W",
+            "precision": 0
+        },
+        "plot": {
+            "vary": "efficiency",
+            "range": [
+                10,
+                90
+            ],
+            "points": 80,
+            "xLabel": "Efficiency (%)",
+            "yLabel": "Power Required (W)"
+        }
+    },
+    "q5-work-energy": {
+        "title": "Work-Energy Theorem",
+        "formula_display": "W = ΔKE = ½m(v_f² - v_i²)",
+        "inputs": [
+            {
+                "id": "mass",
+                "label": "Mass m",
+                "unit": "kg",
+                "default": 0.5,
+                "min": 0.1,
+                "max": 100,
+                "step": 0.1
+            },
+            {
+                "id": "vi",
+                "label": "Initial Velocity v_i",
+                "unit": "m/s",
+                "default": 0,
+                "min": 0,
+                "max": 100,
+                "step": 1
+            },
+            {
+                "id": "vf",
+                "label": "Final Velocity v_f",
+                "unit": "m/s",
+                "default": 14.14,
+                "min": 0,
+                "max": 100,
+                "step": 0.1
+            }
+        ],
+        "compute": "0.5 * mass * (Math.pow(vf, 2) - Math.pow(vi, 2))",
+        "output": {
+            "label": "Work Done",
+            "unit": "J",
+            "precision": 2
+        },
+        "direction_rule": "vf > vi ? 'Positive Work (Speed up)' : 'Negative Work (Slow down)'"
+    }
+}

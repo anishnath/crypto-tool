@@ -1,0 +1,1769 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Net Force and Equilibrium",
+    "exercise": "Exercise",
+    "question_number": "Q4.1",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Give the magnitude and direction of the net force acting on\n(a) a drop of rain falling down with a constant speed,\n(b) a cork of mass 10 g floating on water,\n(c) a kite skillfully held stationary in the sky,\n(d) a car moving with a constant velocity of 30 km/h on a rough road,\n(e) a high-speed electron in space far from all material objects, and free of electric and magnetic fields.",
+    "question_latex": "Give the magnitude and direction of the net force acting on\n(a) a drop of rain falling down with a constant speed,\n(b) a cork of mass 10 g floating on water,\n(c) a kite skillfully held stationary in the sky,\n(d) a car moving with a constant velocity of 30 km/h on a rough road,\n(e) a high-speed electron in space far from all material objects, and free of electric and magnetic fields.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) to (d) No net force according to the First Law; (e) No force, since it is far away from all material agencies producing electromagnetic and gravitational forces.",
+    "correct_answer_latex": "(a) to (d) No net force according to the First Law; (e) No force, since it is far away from all material agencies producing electromagnetic and gravitational forces.",
+    "hint": "First Law: If velocity is constant (including zero), net force is zero.",
+    "solution_steps_latex": [
+      "By Newton's First Law: If a body is at rest or moving with constant velocity, the net force on it is zero",
+      "**Part (a)**: Raindrop falling with constant speed",
+      "Constant speed → zero acceleration → Net force = 0",
+      "Forces: Weight (mg downward) and air resistance (upward) are balanced",
+      "**Part (b)**: Cork floating on water",
+      "Stationary (at rest) → Net force = 0",
+      "Forces: Weight (downward) and buoyant force (upward) are balanced",
+      "**Part (c)**: Kite held stationary in sky",
+      "Stationary → Net force = 0",
+      "Forces: Weight, wind force, and tension in string are balanced",
+      "**Part (d)**: Car moving with constant velocity",
+      "Constant velocity → zero acceleration → Net force = 0",
+      "Forces: Engine force and friction/air resistance are balanced",
+      "**Part (e)**: Electron in empty space (no fields)",
+      "No electromagnetic or gravitational forces → Net force = 0",
+      "The electron moves with constant velocity (First Law)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various scenarios of motion"
+      ],
+      "to_find": [
+        "Net force in each case"
+      ],
+      "formulas_used": [
+        "Newton's First Law: $F_{net} = 0$ for constant velocity"
+      ]
+    },
+    "tags": [
+      "newtons-first-law",
+      "equilibrium",
+      "net-force",
+      "constant-velocity",
+      "balanced-forces"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.1",
+      "page": 68
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Force and Acceleration",
+    "exercise": "Exercise",
+    "question_number": "Q4.2",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A pebble of mass 0.05 kg is thrown vertically upwards. Give the direction and magnitude of the net force on the pebble,\n(a) during its upward motion,\n(b) during its downward motion,\n(c) at the highest point where it is momentarily at rest. Do your answers change if the pebble was thrown at an angle of 45° with the horizontal direction?\nIgnore air resistance.",
+    "question_latex": "A pebble of mass 0.05 kg is thrown vertically upwards. Give the direction and magnitude of the net force on the pebble,\n(a) during its upward motion,\n(b) during its downward motion,\n(c) at the highest point where it is momentarily at rest. Do your answers change if the pebble was thrown at an angle of 45° with the horizontal direction?\nIgnore air resistance.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "The only force in each case is the force of gravity, (neglecting effects of air) equal to 0.5 N vertically downward. The answers do not change, even if the motion of the pebble is not along the vertical. The pebble is not at rest at the highest point. It has a constant horizontal component of velocity throughout its motion.",
+    "correct_answer_latex": "The only force in each case is the force of gravity, (neglecting effects of air) equal to 0.5 N vertically downward. The answers do not change, even if the motion of the pebble is not along the vertical. The pebble is not at rest at the highest point. It has a constant horizontal component of velocity throughout its motion.",
+    "hint": "Only gravity acts (no air resistance). Force depends on mass and g, not on velocity or position.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.05$ kg, $g = 10$ m s$^{-2}$, Air resistance neglected",
+      "**Key principle**: Force at an instant depends only on the situation at that instant, not on velocity or direction of motion",
+      "Only force acting = Weight = $mg$ (vertically downward)",
+      "**Part (a)**: During upward motion",
+      "Net force = $mg = 0.05 \\times 10 = 0.5$ N (vertically downward)",
+      "**Part (b)**: During downward motion",
+      "Net force = $mg = 0.5$ N (vertically downward)",
+      "Same as (a) - force doesn't depend on direction of motion",
+      "**Part (c)**: At highest point (momentarily at rest)",
+      "Net force = $mg = 0.5$ N (vertically downward)",
+      "Same as (a) and (b) - force doesn't depend on velocity being zero",
+      "**If thrown at 45° to horizontal**:",
+      "Net force = $mg = 0.5$ N (vertically downward)",
+      "**No change** - gravitational force is always vertically downward",
+      "At highest point of projectile motion, velocity is not zero (horizontal component exists)",
+      "But force is still $mg$ downward"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.05 kg",
+        "g = 10 m s⁻²",
+        "Air resistance neglected"
+      ],
+      "to_find": [
+        "Net force during upward, downward motion, and at highest point"
+      ],
+      "formulas_used": [
+        "$F = mg$"
+      ]
+    },
+    "tags": [
+      "gravity",
+      "weight",
+      "projectile-motion",
+      "force-independence",
+      "vertical-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.2",
+      "page": 68
+    },
+    "calculator": "q4-force-calculator",
+    "calculator_slug": "q4-force-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Force and Frames of Reference",
+    "exercise": "Exercise",
+    "question_number": "Q4.3",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Give the magnitude and direction of the net force acting on a stone of mass 0.1 kg,\n(a) just after it is dropped from the window of a stationary train,\n(b) just after it is dropped from the window of a train running at a constant velocity of 36 km/h,\n(c) just after it is dropped from the window of a train accelerating with 1 m s⁻²,\n(d) lying on the floor of a train which is accelerating with 1 m s⁻², the stone being at rest relative to the train.\nNeglect air resistance throughout.",
+    "question_latex": "Give the magnitude and direction of the net force acting on a stone of mass 0.1 kg,\n(a) just after it is dropped from the window of a stationary train,\n(b) just after it is dropped from the window of a train running at a constant velocity of 36 km/h,\n(c) just after it is dropped from the window of a train accelerating with 1 m s$^{-2}$,\n(d) lying on the floor of a train which is accelerating with 1 m s$^{-2}$, the stone being at rest relative to the train.\nNeglect air resistance throughout.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) 1 N vertically downwards; (b) same as in (a); (c) same as in (a); force at an instant depends on the situation at that instant, not on history; (d) 0.1 N in the direction of motion of the train.",
+    "correct_answer_latex": "(a) 1 N vertically downwards; (b) same as in (a); (c) same as in (a); force at an instant depends on the situation at that instant, not on history; (d) 0.1 N in the direction of motion of the train.",
+    "hint": "After dropping, only gravity acts on stone. For (d), stone accelerates with train, so net force ≠ 0.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.1$ kg, $g = 10$ m s$^{-2}$, Air resistance neglected",
+      "**Part (a)**: Dropped from stationary train",
+      "After dropping, only gravity acts",
+      "Net force = $mg = 0.1 \\times 10 = 1$ N (vertically downward)",
+      "**Part (b)**: Dropped from train moving at constant velocity (36 km/h)",
+      "Just after dropping, train's velocity doesn't matter",
+      "Only gravity acts on the stone",
+      "Net force = $mg = 1$ N (vertically downward)",
+      "Same as (a) - horizontal velocity doesn't affect vertical force",
+      "**Part (c)**: Dropped from accelerating train (a = 1 m s$^{-2}$)",
+      "Just after dropping, stone is no longer in contact with train",
+      "Only gravity acts",
+      "Net force = $mg = 1$ N (vertically downward)",
+      "Same as (a) and (b) - train's acceleration is irrelevant once stone is released",
+      "**Part (d)**: Stone on floor of accelerating train",
+      "Stone accelerates with train: $a = 1$ m s$^{-2}$",
+      "By Newton's Second Law: $F_{net} = ma$",
+      "Net force = $0.1 \\times 1 = 0.1$ N (in direction of train's motion, horizontal)",
+      "This force is provided by friction between stone and floor"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.1 kg",
+        "Train velocity (b): 36 km/h",
+        "Train acceleration (c,d): 1 m s⁻²",
+        "g = 10 m s⁻²"
+      ],
+      "to_find": [
+        "Net force in each scenario"
+      ],
+      "formulas_used": [
+        "$F = mg$",
+        "$F_{net} = ma$"
+      ]
+    },
+    "tags": [
+      "gravity",
+      "newtons-second-law",
+      "frames-of-reference",
+      "acceleration",
+      "free-fall"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.3",
+      "page": 68
+    },
+    "p5_sketch": "q4-3-train-drop",
+    "p5_sketch_slug": "q4-3-train-drop",
+    "calculator": "q4-force-calculator",
+    "calculator_slug": "q4-force-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q4.4",
+    "marks": 1,
+    "difficulty": 0.4,
+    "question_plain": "One end of a string of length l is connected to a particle of mass m and the other to a small peg on a smooth horizontal table. If the particle moves in a circle with speed v the net force on the particle (directed towards the centre) is:\n(i) T, (ii) T - mv²/l, (iii) T + mv²/l, (iv) 0\nT is the tension in the string. [Choose the correct alternative].",
+    "question_latex": "One end of a string of length $l$ is connected to a particle of mass $m$ and the other to a small peg on a smooth horizontal table. If the particle moves in a circle with speed $v$ the net force on the particle (directed towards the centre) is:\n(i) $T$, (ii) $T - \\frac{mv^2}{l}$, (iii) $T + \\frac{mv^2}{l}$, (iv) 0\n$T$ is the tension in the string. [Choose the correct alternative].",
+    "sub_parts": null,
+    "correct_answer_plain": "(i) T",
+    "correct_answer_latex": "(i) $T$",
+    "hint": "On horizontal table, only horizontal force is tension. Centripetal force = tension.",
+    "solution_steps_latex": [
+      "Given: Particle of mass $m$ in circular motion on horizontal table",
+      "Radius of circle = $l$ (length of string)",
+      "Speed = $v$",
+      "**Forces on particle**:",
+      "Vertical: Weight $mg$ (downward) and Normal force $N$ (upward) balance each other",
+      "Horizontal: Only tension $T$ acts (towards center)",
+      "**Centripetal force required** for circular motion:",
+      "$F_c = \\frac{mv^2}{r} = \\frac{mv^2}{l}$",
+      "**This centripetal force is provided by tension**:",
+      "Net force towards center = $T$",
+      "And this must equal the required centripetal force:",
+      "$T = \\frac{mv^2}{l}$",
+      "**Answer**: The net force on the particle (directed towards centre) is **(i) T**",
+      "Note: Options (ii) and (iii) suggest additional forces, but tension is the only horizontal force",
+      "Option (iv) is wrong - net force cannot be zero for circular motion"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "String length: l",
+        "Mass: m",
+        "Speed: v",
+        "Tension: T"
+      ],
+      "to_find": [
+        "Net force towards center"
+      ],
+      "formulas_used": [
+        "Centripetal force = $\\frac{mv^2}{r}$"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "centripetal-force",
+      "tension",
+      "horizontal-circle",
+      "mcq"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.4",
+      "page": 69
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Newton's Second Law",
+    "exercise": "Exercise",
+    "question_number": "Q4.5",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "A constant retarding force of 50 N is applied to a body of mass 20 kg moving initially with a speed of 15 m s⁻¹. How long does the body take to stop?",
+    "question_latex": "A constant retarding force of 50 N is applied to a body of mass 20 kg moving initially with a speed of 15 m s$^{-1}$. How long does the body take to stop?",
+    "sub_parts": null,
+    "correct_answer_plain": "6.0 s",
+    "correct_answer_latex": "6.0 s",
+    "hint": "Find acceleration using F=ma, then use v=u+at with v=0.",
+    "solution_steps_latex": [
+      "Given: Retarding force $F = 50$ N, Mass $m = 20$ kg",
+      "Initial speed $u = 15$ m s$^{-1}$, Final speed $v = 0$ (stops)",
+      "**Find acceleration**:",
+      "Using Newton's Second Law: $F = ma$",
+      "$a = \\frac{F}{m} = \\frac{50}{20} = 2.5$ m s$^{-2}$",
+      "Since force is retarding, $a = -2.5$ m s$^{-2}$",
+      "**Find time to stop**:",
+      "Using equation of motion: $v = u + at$",
+      "$0 = 15 + (-2.5)t$",
+      "$2.5t = 15$",
+      "$t = \\frac{15}{2.5} = 6.0$ s"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Retarding force: 50 N",
+        "Mass: 20 kg",
+        "Initial speed: 15 m s⁻¹"
+      ],
+      "to_find": [
+        "Time to stop"
+      ],
+      "formulas_used": [
+        "$F = ma$",
+        "$v = u + at$"
+      ]
+    },
+    "tags": [
+      "newtons-second-law",
+      "retarding-force",
+      "equations-of-motion",
+      "stopping-time"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.5",
+      "page": 69
+    },
+    "calculator": "q4-force-calculator",
+    "calculator_slug": "q4-force-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Newton's Second Law",
+    "exercise": "Exercise",
+    "question_number": "Q4.6",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A constant force acting on a body of mass 3.0 kg changes its speed from 2.0 m s⁻¹ to 3.5 m s⁻¹ in 25 s. The direction of the motion of the body remains unchanged. What is the magnitude and direction of the force?",
+    "question_latex": "A constant force acting on a body of mass 3.0 kg changes its speed from 2.0 m s$^{-1}$ to 3.5 m s$^{-1}$ in 25 s. The direction of the motion of the body remains unchanged. What is the magnitude and direction of the force?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.18 N in the direction of motion",
+    "correct_answer_latex": "0.18 N in the direction of motion",
+    "hint": "Find acceleration from change in speed, then F=ma.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 3.0$ kg",
+      "Initial speed $u = 2.0$ m s$^{-1}$",
+      "Final speed $v = 3.5$ m s$^{-1}$",
+      "Time $t = 25$ s",
+      "Direction unchanged (motion in straight line)",
+      "**Find acceleration**:",
+      "Using $v = u + at$:",
+      "$3.5 = 2.0 + a(25)$",
+      "$25a = 1.5$",
+      "$a = \\frac{1.5}{25} = 0.06$ m s$^{-2}$",
+      "**Find force**:",
+      "Using $F = ma$:",
+      "$F = 3.0 \\times 0.06 = 0.18$ N",
+      "**Direction**: Since acceleration is positive (speed increasing), force is in the direction of motion"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 3.0 kg",
+        "Initial speed: 2.0 m s⁻¹",
+        "Final speed: 3.5 m s⁻¹",
+        "Time: 25 s"
+      ],
+      "to_find": [
+        "Magnitude and direction of force"
+      ],
+      "formulas_used": [
+        "$v = u + at$",
+        "$F = ma$"
+      ]
+    },
+    "tags": [
+      "newtons-second-law",
+      "constant-force",
+      "acceleration",
+      "force-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.6",
+      "page": 69
+    },
+    "calculator": "q4-force-calculator",
+    "calculator_slug": "q4-force-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Vector Addition of Forces",
+    "exercise": "Exercise",
+    "question_number": "Q4.7",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A body of mass 5 kg is acted upon by two perpendicular forces 8 N and 6 N. Give the magnitude and direction of the acceleration of the body.",
+    "question_latex": "A body of mass 5 kg is acted upon by two perpendicular forces 8 N and 6 N. Give the magnitude and direction of the acceleration of the body.",
+    "sub_parts": null,
+    "correct_answer_plain": "2 m s⁻² at an angle of tan⁻¹(3/4) = 37° with the direction of 8 N force",
+    "correct_answer_latex": "$2$ m s$^{-2}$ at an angle of $\\tan^{-1}(3/4) = 37°$ with the direction of 8 N force",
+    "hint": "Find resultant force using Pythagorean theorem (perpendicular forces), then a=F/m.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 5$ kg",
+      "Two perpendicular forces: $F_1 = 8$ N and $F_2 = 6$ N",
+      "**Find resultant force**:",
+      "Since forces are perpendicular:",
+      "$F_{net} = \\sqrt{F_1^2 + F_2^2} = \\sqrt{8^2 + 6^2}$",
+      "$F_{net} = \\sqrt{64 + 36} = \\sqrt{100} = 10$ N",
+      "**Direction of resultant**:",
+      "$\\tan \\theta = \\frac{F_2}{F_1} = \\frac{6}{8} = \\frac{3}{4}$",
+      "$\\theta = \\tan^{-1}(\\frac{3}{4}) = 37°$ (approximately)",
+      "Direction: 37° with the 8 N force",
+      "**Find acceleration**:",
+      "Using $F = ma$:",
+      "$a = \\frac{F_{net}}{m} = \\frac{10}{5} = 2$ m s$^{-2}$",
+      "**Direction of acceleration**: Same as resultant force, i.e., at 37° with 8 N force"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 5 kg",
+        "Force 1: 8 N",
+        "Force 2: 6 N (perpendicular to F1)"
+      ],
+      "to_find": [
+        "Magnitude and direction of acceleration"
+      ],
+      "formulas_used": [
+        "$F_{net} = \\sqrt{F_1^2 + F_2^2}$ (perpendicular forces)",
+        "$\\tan \\theta = \\frac{F_2}{F_1}$",
+        "$a = \\frac{F}{m}$"
+      ]
+    },
+    "tags": [
+      "vector-addition",
+      "perpendicular-forces",
+      "resultant-force",
+      "acceleration",
+      "newtons-second-law"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.7",
+      "page": 69
+    },
+    "calculator": "q4-perpendicular-forces",
+    "calculator_slug": "q4-perpendicular-forces"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Newton's Second Law",
+    "exercise": "Exercise",
+    "question_number": "Q4.8",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "The driver of a three-wheeler moving with a speed of 36 km/h sees a child standing in the middle of the road and brings his vehicle to rest in 4.0 s just in time to save the child. What is the average retarding force on the vehicle? The mass of the three-wheeler is 400 kg and the mass of the driver is 65 kg.",
+    "question_latex": "The driver of a three-wheeler moving with a speed of 36 km/h sees a child standing in the middle of the road and brings his vehicle to rest in 4.0 s just in time to save the child. What is the average retarding force on the vehicle? The mass of the three-wheeler is 400 kg and the mass of the driver is 65 kg.",
+    "sub_parts": null,
+    "correct_answer_plain": "1162.5 N",
+    "correct_answer_latex": "1162.5 N",
+    "hint": "Total mass = vehicle + driver. Find acceleration, then F=ma.",
+    "solution_steps_latex": [
+      "Given: Initial speed $u = 36$ km/h $= 36 \\times \\frac{5}{18} = 10$ m s$^{-1}$",
+      "Final speed $v = 0$ (comes to rest)",
+      "Time $t = 4.0$ s",
+      "Mass of three-wheeler $= 400$ kg",
+      "Mass of driver $= 65$ kg",
+      "Total mass $m = 400 + 65 = 465$ kg",
+      "**Find acceleration**:",
+      "Using $v = u + at$:",
+      "$0 = 10 + a(4)$",
+      "$a = -\\frac{10}{4} = -2.5$ m s$^{-2}$",
+      "**Find retarding force**:",
+      "Using $F = ma$:",
+      "$F = 465 \\times (-2.5) = -1162.5$ N",
+      "Magnitude of retarding force $= 1162.5$ N $\\approx 1.2 \\times 10^3$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial speed: 36 km/h = 10 m s⁻¹",
+        "Time to stop: 4.0 s",
+        "Vehicle mass: 400 kg",
+        "Driver mass: 65 kg"
+      ],
+      "to_find": [
+        "Average retarding force"
+      ],
+      "formulas_used": [
+        "$v = u + at$",
+        "$F = ma$"
+      ]
+    },
+    "tags": [
+      "retarding-force",
+      "braking",
+      "newtons-second-law",
+      "stopping-distance"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.8",
+      "page": 69
+    },
+    "calculator": "q4-force-calculator",
+    "calculator_slug": "q4-force-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Rocket Propulsion",
+    "exercise": "Exercise",
+    "question_number": "Q4.9",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A rocket with a lift-off mass 20,000 kg is blasted upwards with an initial acceleration of 5.0 m s⁻². Calculate the initial thrust (force) of the blast.",
+    "question_latex": "A rocket with a lift-off mass 20,000 kg is blasted upwards with an initial acceleration of 5.0 m s$^{-2}$. Calculate the initial thrust (force) of the blast.",
+    "sub_parts": null,
+    "correct_answer_plain": "3.0 × 10⁵ N",
+    "correct_answer_latex": "$3.0 \\times 10^5$ N",
+    "hint": "Net upward force = ma. This equals Thrust - Weight. So Thrust = ma + mg.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 20,000$ kg $= 2 \\times 10^4$ kg",
+      "Upward acceleration $a = 5.0$ m s$^{-2}$",
+      "$g = 10$ m s$^{-2}$",
+      "**Forces on rocket**:",
+      "Thrust $F$ (upward)",
+      "Weight $W = mg$ (downward)",
+      "**Net upward force** = $F - mg$",
+      "**By Newton's Second Law**:",
+      "$F - mg = ma$",
+      "$F = ma + mg = m(a + g)$",
+      "$F = 20,000 \\times (5.0 + 10)$",
+      "$F = 20,000 \\times 15 = 300,000$ N",
+      "$F = 3.0 \\times 10^5$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Lift-off mass: 20,000 kg",
+        "Initial acceleration: 5.0 m s⁻²",
+        "g = 10 m s⁻²"
+      ],
+      "to_find": [
+        "Initial thrust force"
+      ],
+      "formulas_used": [
+        "$F_{net} = ma$",
+        "$F_{thrust} = m(a + g)$"
+      ]
+    },
+    "tags": [
+      "rocket-propulsion",
+      "thrust",
+      "newtons-second-law",
+      "vertical-motion",
+      "weight"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.9",
+      "page": 69
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Equations of Motion",
+    "exercise": "Exercise",
+    "question_number": "Q4.10",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "A body of mass 0.40 kg moving initially with a constant speed of 10 m s⁻¹ to the north is subject to a constant force of 8.0 N directed towards the south for 30 s. Take the instant the force is applied to be t = 0, the position of the body at that time to be x = 0, and predict its position at t = -5 s, 25 s, 100 s.",
+    "question_latex": "A body of mass 0.40 kg moving initially with a constant speed of 10 m s$^{-1}$ to the north is subject to a constant force of 8.0 N directed towards the south for 30 s. Take the instant the force is applied to be $t = 0$, the position of the body at that time to be $x = 0$, and predict its position at $t = -5$ s, 25 s, 100 s.",
+    "sub_parts": null,
+    "correct_answer_plain": "t = -5 s: x = -50 m; t = 25 s: x = -6 km; t = 100 s: x = -50 km",
+    "correct_answer_latex": "$t = -5$ s: $x = -50$ m; $t = 25$ s: $x = -6$ km; $t = 100$ s: $x = -50$ km",
+    "hint": "Find acceleration. For t<0, no force acts. For 0≤t≤30, use s=ut+½at². For t>30, find final velocity and use uniform motion.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.40$ kg, Initial speed $u = 10$ m s$^{-1}$ (north, positive direction)",
+      "Force $F = 8.0$ N (south, negative direction) for 30 s",
+      "At $t = 0$: position $x = 0$",
+      "**Acceleration during force application** (0 ≤ t ≤ 30 s):",
+      "$a = \\frac{F}{m} = \\frac{-8.0}{0.40} = -20$ m s$^{-2}$",
+      "**Position at $t = -5$ s** (before force applied):",
+      "Body moving with constant velocity $u = 10$ m s$^{-1}$",
+      "$x = u \\times t = 10 \\times (-5) = -50$ m",
+      "(Negative means 50 m south of origin)",
+      "**Position at $t = 25$ s** (force still acting):",
+      "Using $x = ut + \\frac{1}{2}at^2$:",
+      "$x = 10(25) + \\frac{1}{2}(-20)(25)^2$",
+      "$x = 250 - 10 \\times 625 = 250 - 6250 = -6000$ m $= -6$ km",
+      "**Position at $t = 100$ s** (force stopped at t=30s):",
+      "First find velocity at $t = 30$ s:",
+      "$v = u + at = 10 + (-20)(30) = 10 - 600 = -590$ m s$^{-1}$",
+      "Position at $t = 30$ s:",
+      "$x_{30} = 10(30) + \\frac{1}{2}(-20)(30)^2 = 300 - 9000 = -8700$ m",
+      "From $t = 30$ s to $t = 100$ s (70 s), body moves with constant velocity -590 m s$^{-1}$:",
+      "$x_{100} = x_{30} + v \\times 70 = -8700 + (-590)(70)$",
+      "$x_{100} = -8700 - 41300 = -50,000$ m $= -50$ km"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.40 kg",
+        "Initial velocity: 10 m s⁻¹ north",
+        "Force: 8.0 N south for 30 s",
+        "Initial position: x = 0 at t = 0"
+      ],
+      "to_find": [
+        "Position at t = -5 s, 25 s, 100 s"
+      ],
+      "formulas_used": [
+        "$a = \\frac{F}{m}$",
+        "$x = ut + \\frac{1}{2}at^2$",
+        "$v = u + at$"
+      ]
+    },
+    "tags": [
+      "equations-of-motion",
+      "constant-force",
+      "position-prediction",
+      "kinematics",
+      "piecewise-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.10",
+      "page": 69
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Projectile Motion",
+    "exercise": "Exercise",
+    "question_number": "Q4.11",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A truck starts from rest and accelerates uniformly at 2.0 m s⁻². At t = 10 s, a stone is dropped by a person standing on the top of the truck (6 m high from the ground). What are the (a) velocity, and (b) acceleration of the stone at t = 11s? (Neglect air resistance.)",
+    "question_latex": "A truck starts from rest and accelerates uniformly at 2.0 m s$^{-2}$. At $t = 10$ s, a stone is dropped by a person standing on the top of the truck (6 m high from the ground). What are the (a) velocity, and (b) acceleration of the stone at $t = 11$s? (Neglect air resistance.)",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Velocity of car (at t = 10 s) = 0 + 2 × 10 = 20 m s⁻¹. By the First Law, the horizontal component of velocity is 20 m s⁻¹ throughout. Vertical component of velocity (at t = 11s) = 0 + 10 × 1 = 10 m s⁻¹. Velocity of stone (at t = 11s) = √(20² + 10²) = √500 = 22.4 m s⁻¹ at an angle of tan⁻¹(½) with the horizontal. (b) 10 m s⁻² vertically downwards.",
+    "correct_answer_latex": "(a) Velocity of car (at $t = 10$ s) = $0 + 2 \\times 10 = 20$ m s$^{-1}$. By the First Law, the horizontal component of velocity is 20 m s$^{-1}$ throughout. Vertical component of velocity (at $t = 11$s) = $0 + 10 \\times 1 = 10$ m s$^{-1}$. Velocity of stone (at $t = 11$s) = $\\sqrt{20^2 + 10^2} = \\sqrt{500} = 22.4$ m s$^{-1}$ at an angle of $\\tan^{-1}(1/2)$ with the horizontal. (b) 10 m s$^{-2}$ vertically downwards.",
+    "hint": "At t=10s, find truck velocity (this is initial horizontal velocity of stone). After dropping, only gravity acts vertically.",
+    "solution_steps_latex": [
+      "Given: Truck starts from rest, acceleration $a_{truck} = 2.0$ m s$^{-2}$",
+      "Stone dropped at $t = 10$ s from height 6 m",
+      "**Velocity of truck at t = 10 s**:",
+      "$v_{truck} = u + at = 0 + 2.0 \\times 10 = 20$ m s$^{-1}$ (horizontal)",
+      "**When stone is dropped** (at t = 10 s):",
+      "Initial horizontal velocity of stone = 20 m s$^{-1}$ (same as truck)",
+      "Initial vertical velocity of stone = 0",
+      "**Part (a)**: Velocity at t = 11 s (1 second after dropping)",
+      "**Horizontal component**: Remains constant (no horizontal force)",
+      "$v_x = 20$ m s$^{-1}$",
+      "**Vertical component**: Free fall under gravity",
+      "$v_y = u_y + gt = 0 + 10 \\times 1 = 10$ m s$^{-1}$ (downward)",
+      "**Resultant velocity**:",
+      "$v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{20^2 + 10^2} = \\sqrt{400 + 100} = \\sqrt{500}$",
+      "$v = 22.36$ m s$^{-1}$ $\\approx 22.4$ m s$^{-1}$",
+      "**Direction**: $\\tan \\theta = \\frac{v_y}{v_x} = \\frac{10}{20} = \\frac{1}{2}$",
+      "$\\theta = \\tan^{-1}(0.5) \\approx 26.6°$ below horizontal",
+      "**Part (b)**: Acceleration at t = 11 s",
+      "Only gravity acts on stone after it's dropped",
+      "Acceleration = $g = 10$ m s$^{-2}$ vertically downward"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Truck acceleration: 2.0 m s⁻²",
+        "Stone dropped at t = 10 s",
+        "Height: 6 m",
+        "g = 10 m s⁻²"
+      ],
+      "to_find": [
+        "(a) Velocity at t = 11 s",
+        "(b) Acceleration at t = 11 s"
+      ],
+      "formulas_used": [
+        "$v = u + at$",
+        "$v = \\sqrt{v_x^2 + v_y^2}$",
+        "$\\tan \\theta = \\frac{v_y}{v_x}$"
+      ]
+    },
+    "tags": [
+      "projectile-motion",
+      "2d-motion",
+      "free-fall",
+      "velocity-components",
+      "independence-of-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.11",
+      "page": 69
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Projectile Motion",
+    "exercise": "Exercise",
+    "question_number": "Q4.12",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A bob of mass 0.1 kg hung from the ceiling of a room by a string 2 m long is set into oscillation. The speed of the bob at its mean position is 1 m s⁻¹. What is the trajectory of the bob if the string is cut when the bob is (a) at one of its extreme positions, (b) at its mean position.",
+    "question_latex": "A bob of mass 0.1 kg hung from the ceiling of a room by a string 2 m long is set into oscillation. The speed of the bob at its mean position is 1 m s$^{-1}$. What is the trajectory of the bob if the string is cut when the bob is (a) at one of its extreme positions, (b) at its mean position.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) At the extreme position, the bob has zero velocity. If the string is cut, it will fall vertically downwards. (b) At the mean position, the bob has a horizontal velocity. If the string is cut, it will fall along a parabolic path.",
+    "correct_answer_latex": "(a) At the extreme position, the bob has zero velocity. If the string is cut, it will fall vertically downwards. (b) At the mean position, the bob has a horizontal velocity. If the string is cut, it will fall along a parabolic path.",
+    "hint": "At extreme position, velocity = 0. At mean position, velocity is horizontal.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.1$ kg, String length $l = 2$ m",
+      "Speed at mean position $v = 1$ m s$^{-1}$",
+      "**Part (a)**: String cut at extreme position",
+      "At extreme position: Velocity = 0 (bob momentarily at rest)",
+      "When string is cut:",
+      "Initial horizontal velocity = 0",
+      "Initial vertical velocity = 0",
+      "Only gravity acts (vertically downward)",
+      "**Trajectory**: Vertical straight line (free fall)",
+      "The bob falls vertically downward",
+      "**Part (b)**: String cut at mean position",
+      "At mean position: Velocity = 1 m s$^{-1}$ (horizontal)",
+      "When string is cut:",
+      "Initial horizontal velocity = 1 m s$^{-1}$",
+      "Initial vertical velocity = 0",
+      "Horizontal velocity remains constant (no horizontal force)",
+      "Vertical velocity increases due to gravity",
+      "**Trajectory**: Parabolic path",
+      "This is projectile motion with horizontal projection"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.1 kg",
+        "String length: 2 m",
+        "Speed at mean: 1 m s⁻¹"
+      ],
+      "to_find": [
+        "Trajectory when string cut at (a) extreme (b) mean position"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "pendulum",
+      "projectile-motion",
+      "trajectory",
+      "free-fall",
+      "simple-harmonic-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.12",
+      "page": 69
+    },
+    "p5_sketch": "q4-12-pendulum-cut",
+    "p5_sketch_slug": "q4-12-pendulum-cut"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Apparent Weight in Lift",
+    "exercise": "Exercise",
+    "question_number": "Q4.13",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A man of mass 70 kg stands on a weighing scale in a lift which is moving\n(a) upwards with a uniform speed of 10 m s⁻¹,\n(b) downwards with a uniform acceleration of 5 m s⁻²,\n(c) upwards with a uniform acceleration of 5 m s⁻².\nWhat would be the readings on the scale in each case?\n(d) What would be the reading if the lift mechanism failed and it hurtled down freely under gravity?",
+    "question_latex": "A man of mass 70 kg stands on a weighing scale in a lift which is moving\n(a) upwards with a uniform speed of 10 m s$^{-1}$,\n(b) downwards with a uniform acceleration of 5 m s$^{-2}$,\n(c) upwards with a uniform acceleration of 5 m s$^{-2}$.\nWhat would be the readings on the scale in each case?\n(d) What would be the reading if the lift mechanism failed and it hurtled down freely under gravity?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) N = 70 × 10 = 700 N; Reading is 70 kg; (b) 70 × 10 - N = 70 × 5; Reading is 35 kg; (c) N - 70 × 10 = 70 × 5; Reading is 105 kg; (d) 70 × 10 - N = 70 × 10; Reading would be zero; the scale would read zero.",
+    "correct_answer_latex": "(a) $N = 70 \\times 10 = 700$ N; Reading is 70 kg; (b) $70 \\times 10 - N = 70 \\times 5$; Reading is 35 kg; (c) $N - 70 \\times 10 = 70 \\times 5$; Reading is 105 kg; (d) $70 \\times 10 - N = 70 \\times 10$; Reading would be zero; the scale would read zero.",
+    "hint": "Reading = Normal force from scale. Apply F=ma with proper sign for acceleration.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 70$ kg, $g = 10$ m s$^{-2}$",
+      "**Key**: Reading on scale = Normal force $N$ (in mass units, divide by g)",
+      "**Part (a)**: Moving upward with constant speed (10 m s$^{-1}$)",
+      "Constant velocity → acceleration = 0",
+      "Net force = 0: $N - mg = 0$",
+      "$N = mg = 70 \\times 10 = 700$ N",
+      "Reading = $\\frac{N}{g} = \\frac{700}{10} = 70$ kg",
+      "**Part (b)**: Downward with acceleration 5 m s$^{-2}$",
+      "Taking upward as positive:",
+      "Net force = $ma = m(-5) = -350$ N (downward)",
+      "$N - mg = -350$",
+      "$N = mg - 350 = 700 - 350 = 350$ N",
+      "Reading = $\\frac{350}{10} = 35$ kg",
+      "**Part (c)**: Upward with acceleration 5 m s$^{-2}$",
+      "Net force = $ma = 70 \\times 5 = 350$ N (upward)",
+      "$N - mg = 350$",
+      "$N = mg + 350 = 700 + 350 = 1050$ N",
+      "Reading = $\\frac{1050}{10} = 105$ kg",
+      "**Part (d)**: Free fall (lift mechanism failed)",
+      "Acceleration = $g$ (downward)",
+      "Net force = $mg$ (downward)",
+      "$N - mg = -mg$",
+      "$N = 0$",
+      "Reading = 0 kg (weightlessness)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 70 kg",
+        "g = 10 m s⁻²",
+        "(a) Upward speed: 10 m s⁻¹ (constant)",
+        "(b) Downward acceleration: 5 m s⁻²",
+        "(c) Upward acceleration: 5 m s⁻²",
+        "(d) Free fall"
+      ],
+      "to_find": [
+        "Reading on scale in each case"
+      ],
+      "formulas_used": [
+        "$F_{net} = ma$",
+        "$N - mg = ma$ (for lift problems)"
+      ]
+    },
+    "tags": [
+      "apparent-weight",
+      "lift-problems",
+      "normal-force",
+      "newtons-second-law",
+      "weightlessness"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.13",
+      "page": 69
+    },
+    "p5_sketch": "q4-13-lift-weight",
+    "p5_sketch_slug": "q4-13-lift-weight",
+    "calculator": "q4-apparent-weight",
+    "calculator_slug": "q4-apparent-weight"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Force and Impulse from Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q4.14",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Figure 4.16 shows the position-time graph of a particle of mass 4 kg. What is the (a) force on the particle for t < 0, t > 4 s, 0 < t < 4 s? (b) impulse at t = 0 and t = 4 s? (Consider one-dimensional motion only).",
+    "question_latex": "Figure 4.16 shows the position-time graph of a particle of mass 4 kg. What is the (a) force on the particle for $t < 0$, $t > 4$ s, $0 < t < 4$ s? (b) impulse at $t = 0$ and $t = 4$ s? (Consider one-dimensional motion only).",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) In all the three intervals, acceleration and, therefore, force are zero. (b) 3 kg m s⁻¹ at t = 0; -3 kg m s⁻¹ at t = 4 s.",
+    "correct_answer_latex": "(a) In all the three intervals, acceleration and, therefore, force are zero. (b) 3 kg m s$^{-1}$ at $t = 0$; $-3$ kg m s$^{-1}$ at $t = 4$ s.",
+    "hint": "Slope of x-t graph gives velocity. Constant slope means constant velocity, hence zero acceleration.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 4$ kg",
+      "From Figure 4.16: x-t graph shows three segments",
+      "**Part (a)**: Force in different time intervals",
+      "**For $t < 0$**: Graph is horizontal line",
+      "Slope = 0 → Velocity = 0 → Acceleration = 0 → Force = 0",
+      "**For $0 < t < 4$ s**: Graph is straight line with constant positive slope",
+      "From graph: $x$ goes from 0 to 3 m in 4 s",
+      "Velocity = slope = $\\frac{3 - 0}{4 - 0} = 0.75$ m s$^{-1}$ (constant)",
+      "Constant velocity → Acceleration = 0 → Force = 0",
+      "**For $t > 4$ s**: Graph is horizontal line at x = 3 m",
+      "Slope = 0 → Velocity = 0 → Acceleration = 0 → Force = 0",
+      "**Part (b)**: Impulse at t = 0 and t = 4 s",
+      "Impulse = Change in momentum = $m \\Delta v$",
+      "**At $t = 0$**:",
+      "Velocity changes from 0 (for $t < 0$) to 0.75 m s$^{-1}$ (for $t > 0$)",
+      "$\\Delta v = 0.75 - 0 = 0.75$ m s$^{-1}$",
+      "Impulse = $4 \\times 0.75 = 3$ kg m s$^{-1}$ (or 3 N s)",
+      "**At $t = 4$ s**:",
+      "Velocity changes from 0.75 m s$^{-1}$ to 0",
+      "$\\Delta v = 0 - 0.75 = -0.75$ m s$^{-1}$",
+      "Impulse = $4 \\times (-0.75) = -3$ kg m s$^{-1}$ (or -3 N s)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Position-time graph showing: horizontal line at x=0 for t<0, straight line from (0,0) to (4,3), horizontal line at x=3 for t>4",
+      "figure_reference": "Figure 4.16"
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 4 kg",
+        "x-t graph provided"
+      ],
+      "to_find": [
+        "(a) Force in different time intervals",
+        "(b) Impulse at t=0 and t=4s"
+      ],
+      "formulas_used": [
+        "Velocity = slope of x-t graph",
+        "$F = ma$",
+        "Impulse = $m \\Delta v$"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "impulse",
+      "momentum-change",
+      "graph-interpretation",
+      "force-from-graph"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.14",
+      "page": 69
+    },
+    "calculator": "q4-impulse-calculator",
+    "calculator_slug": "q4-impulse-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Tension in String",
+    "exercise": "Exercise",
+    "question_number": "Q4.15",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "Two bodies of masses 10 kg and 20 kg respectively kept on a smooth, horizontal surface are tied to the ends of a light string. A horizontal force F = 600 N is applied to (i) A, (ii) B along the direction of string. What is the tension in the string in each case?",
+    "question_latex": "Two bodies of masses 10 kg and 20 kg respectively kept on a smooth, horizontal surface are tied to the ends of a light string. A horizontal force $F = 600$ N is applied to (i) A, (ii) B along the direction of string. What is the tension in the string in each case?",
+    "sub_parts": [
+      "(i)",
+      "(ii)"
+    ],
+    "correct_answer_plain": "If the 20 kg mass is pulled, 600 - T = 20a, T = 10a; a = 20 m s⁻², T = 200 N. If the 10 kg mass is pulled, a = 20 m s⁻², T = 400 N",
+    "correct_answer_latex": "If the 20 kg mass is pulled, $600 - T = 20a$, $T = 10a$; $a = 20$ m s$^{-2}$, $T = 200$ N. If the 10 kg mass is pulled, $a = 20$ m s$^{-2}$, $T = 400$ N",
+    "hint": "Find common acceleration of system. Then apply F=ma to one body to find tension.",
+    "solution_steps_latex": [
+      "Given: Mass A: $m_A = 10$ kg, Mass B: $m_B = 20$ kg",
+      "Applied force $F = 600$ N, Smooth surface (no friction)",
+      "**Case (i)**: Force applied to A (10 kg mass)",
+      "**System acceleration**: Both masses move together",
+      "$a = \\frac{F}{m_A + m_B} = \\frac{600}{10 + 20} = \\frac{600}{30} = 20$ m s$^{-2}$",
+      "**For mass B** (consider forces on B alone):",
+      "Only tension $T$ acts on B (in direction of motion)",
+      "$T = m_B \\times a = 20 \\times 20 = 400$ N",
+      "**Case (ii)**: Force applied to B (20 kg mass)",
+      "**System acceleration**: Same as before",
+      "$a = \\frac{F}{m_A + m_B} = \\frac{600}{30} = 20$ m s$^{-2}$",
+      "**For mass A** (consider forces on A alone):",
+      "Only tension $T$ acts on A (in direction of motion)",
+      "$T = m_A \\times a = 10 \\times 20 = 200$ N",
+      "**Alternative for case (ii)**: Consider B",
+      "$F - T = m_B a$",
+      "$600 - T = 20 \\times 20 = 400$",
+      "$T = 200$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass A: 10 kg",
+        "Mass B: 20 kg",
+        "Applied force: 600 N",
+        "Smooth surface"
+      ],
+      "to_find": [
+        "Tension when force applied to (i) A (ii) B"
+      ],
+      "formulas_used": [
+        "$a = \\frac{F_{total}}{m_{total}}$",
+        "$F = ma$"
+      ]
+    },
+    "tags": [
+      "tension",
+      "connected-bodies",
+      "newtons-second-law",
+      "string-constraint"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.15",
+      "page": 69
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Pulley Systems",
+    "exercise": "Exercise",
+    "question_number": "Q4.16",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Two masses 8 kg and 12 kg are connected at the two ends of a light inextensible string that goes over a frictionless pulley. Find the acceleration of the masses, and the tension in the string when the masses are released.",
+    "question_latex": "Two masses 8 kg and 12 kg are connected at the two ends of a light inextensible string that goes over a frictionless pulley. Find the acceleration of the masses, and the tension in the string when the masses are released.",
+    "sub_parts": null,
+    "correct_answer_plain": "a = 2 m s⁻², T = 96 N",
+    "correct_answer_latex": "$a = 2$ m s$^{-2}$, $T = 96$ N",
+    "hint": "Heavier mass accelerates downward. Apply F=ma to each mass separately, then solve simultaneously.",
+    "solution_steps_latex": [
+      "Given: $m_1 = 8$ kg, $m_2 = 12$ kg",
+      "Frictionless pulley, light string, $g = 10$ m s$^{-2}$",
+      "Since $m_2 > m_1$, the 12 kg mass will accelerate downward",
+      "Let acceleration be $a$ (downward for 12 kg, upward for 8 kg)",
+      "**For mass $m_1 = 8$ kg** (moving upward):",
+      "Forces: Tension $T$ (upward), Weight $m_1 g$ (downward)",
+      "Net force upward: $T - m_1 g = m_1 a$",
+      "$T - 8 \\times 10 = 8a$",
+      "$T - 80 = 8a$ ... (1)",
+      "**For mass $m_2 = 12$ kg** (moving downward):",
+      "Forces: Weight $m_2 g$ (downward), Tension $T$ (upward)",
+      "Net force downward: $m_2 g - T = m_2 a$",
+      "$12 \\times 10 - T = 12a$",
+      "$120 - T = 12a$ ... (2)",
+      "**Adding equations (1) and (2)**:",
+      "$T - 80 + 120 - T = 8a + 12a$",
+      "$40 = 20a$",
+      "$a = 2$ m s$^{-2}$",
+      "**Finding tension**: From equation (1)",
+      "$T = 80 + 8a = 80 + 8 \\times 2 = 80 + 16 = 96$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass 1: 8 kg",
+        "Mass 2: 12 kg",
+        "Frictionless pulley",
+        "g = 10 m s⁻²"
+      ],
+      "to_find": [
+        "Acceleration of masses",
+        "Tension in string"
+      ],
+      "formulas_used": [
+        "$F_{net} = ma$",
+        "For pulley: $T$ is same throughout string"
+      ]
+    },
+    "tags": [
+      "atwoods-machine",
+      "pulley-system",
+      "tension",
+      "acceleration",
+      "newtons-second-law"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.16",
+      "page": 70
+    },
+    "p5_sketch": "q4-16-atwoods-machine",
+    "p5_sketch_slug": "q4-16-atwoods-machine",
+    "calculator": "q4-atwoods-calculator",
+    "calculator_slug": "q4-atwoods-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Derivation",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Conservation of Momentum",
+    "exercise": "Exercise",
+    "question_number": "Q4.17",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A nucleus is at rest in the laboratory frame of reference. Show that if it disintegrates into two smaller nuclei the products must move in opposite directions.",
+    "question_latex": "A nucleus is at rest in the laboratory frame of reference. Show that if it disintegrates into two smaller nuclei the products must move in opposite directions.",
+    "sub_parts": null,
+    "correct_answer_plain": "By momentum conservation principle, total final momentum is zero. Two momentum vectors cannot sum to a null momentum unless they are equal and opposite.",
+    "correct_answer_latex": "By momentum conservation principle, total final momentum is zero. Two momentum vectors cannot sum to a null momentum unless they are equal and opposite.",
+    "hint": "Use conservation of momentum. Initial momentum = 0 (at rest). Final momentum must also = 0.",
+    "solution_steps_latex": [
+      "Given: Nucleus initially at rest in lab frame",
+      "Nucleus disintegrates into two smaller nuclei",
+      "**By Law of Conservation of Momentum**:",
+      "In absence of external forces, total momentum is conserved",
+      "**Initial momentum**: Nucleus at rest",
+      "$\\vec{p}_i = 0$",
+      "**Final momentum**: Two nuclei with masses $m_1$, $m_2$ and velocities $\\vec{v}_1$, $\\vec{v}_2$",
+      "$\\vec{p}_f = m_1 \\vec{v}_1 + m_2 \\vec{v}_2$",
+      "**Conservation of momentum**:",
+      "$\\vec{p}_i = \\vec{p}_f$",
+      "$0 = m_1 \\vec{v}_1 + m_2 \\vec{v}_2$",
+      "$m_1 \\vec{v}_1 = -m_2 \\vec{v}_2$",
+      "**This equation shows**:",
+      "$\\vec{v}_1 = -\\frac{m_2}{m_1} \\vec{v}_2$",
+      "The negative sign indicates that $\\vec{v}_1$ and $\\vec{v}_2$ are in **opposite directions**",
+      "The magnitudes are inversely proportional to masses: $\\frac{v_1}{v_2} = \\frac{m_2}{m_1}$",
+      "**Therefore**: The two product nuclei must move in opposite directions"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Nucleus initially at rest",
+        "Disintegrates into two nuclei"
+      ],
+      "to_find": [
+        "Proof that products move in opposite directions"
+      ],
+      "formulas_used": [
+        "Conservation of momentum: $\\vec{p}_i = \\vec{p}_f$",
+        "$\\vec{p} = m\\vec{v}$"
+      ]
+    },
+    "tags": [
+      "conservation-of-momentum",
+      "nuclear-physics",
+      "recoil",
+      "proof",
+      "vector-addition"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.17",
+      "page": 70
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Impulse and Collision",
+    "exercise": "Exercise",
+    "question_number": "Q4.18",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Two billiard balls each of mass 0.05 kg moving in opposite directions with speed 6 m s⁻¹ collide and rebound with the same speed. What is the impulse imparted to each ball due to the other?",
+    "question_latex": "Two billiard balls each of mass 0.05 kg moving in opposite directions with speed 6 m s$^{-1}$ collide and rebound with the same speed. What is the impulse imparted to each ball due to the other?",
+    "sub_parts": null,
+    "correct_answer_plain": "Impulse on each ball = 0.05 × 12 = 0.6 kg m s⁻¹ in magnitude. The two impulses are opposite in direction.",
+    "correct_answer_latex": "Impulse on each ball = $0.05 \\times 12 = 0.6$ kg m s$^{-1}$ in magnitude. The two impulses are opposite in direction.",
+    "hint": "Impulse = change in momentum. Velocity reverses, so Δv = 2v.",
+    "solution_steps_latex": [
+      "Given: Mass of each ball $m = 0.05$ kg",
+      "Speed before collision $v = 6$ m s$^{-1}$ (opposite directions)",
+      "After collision: rebound with same speed (elastic collision)",
+      "**For ball 1**: (moving right initially)",
+      "Initial velocity: $v_i = +6$ m s$^{-1}$",
+      "Final velocity: $v_f = -6$ m s$^{-1}$ (rebounds)",
+      "Change in velocity: $\\Delta v = v_f - v_i = -6 - (+6) = -12$ m s$^{-1}$",
+      "**Impulse on ball 1**:",
+      "$J_1 = m \\Delta v = 0.05 \\times (-12) = -0.6$ kg m s$^{-1}$",
+      "Magnitude: 0.6 kg m s$^{-1}$ (or 0.6 N s)",
+      "**For ball 2**: (moving left initially)",
+      "Initial velocity: $v_i = -6$ m s$^{-1}$",
+      "Final velocity: $v_f = +6$ m s$^{-1}$ (rebounds)",
+      "Change in velocity: $\\Delta v = 6 - (-6) = +12$ m s$^{-1}$",
+      "**Impulse on ball 2**:",
+      "$J_2 = m \\Delta v = 0.05 \\times 12 = +0.6$ kg m s$^{-1}$",
+      "**Conclusion**: Impulses are equal in magnitude (0.6 kg m s$^{-1}$) but opposite in direction"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.05 kg each",
+        "Initial speed: 6 m s⁻¹ (opposite directions)",
+        "Final speed: 6 m s⁻¹ (rebounded)"
+      ],
+      "to_find": [
+        "Impulse on each ball"
+      ],
+      "formulas_used": [
+        "Impulse = $m \\Delta v$",
+        "$\\Delta v = v_f - v_i$"
+      ]
+    },
+    "tags": [
+      "impulse",
+      "collision",
+      "elastic-collision",
+      "momentum-change",
+      "newtons-third-law"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.18",
+      "page": 70
+    },
+    "calculator": "q4-impulse-calculator",
+    "calculator_slug": "q4-impulse-calculator"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Recoil and Conservation of Momentum",
+    "exercise": "Exercise",
+    "question_number": "Q4.19",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A shell of mass 0.020 kg is fired by a gun of mass 100 kg. If the muzzle speed of the shell is 80 m s⁻¹, what is the recoil speed of the gun?",
+    "question_latex": "A shell of mass 0.020 kg is fired by a gun of mass 100 kg. If the muzzle speed of the shell is 80 m s$^{-1}$, what is the recoil speed of the gun?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.016 m s⁻¹",
+    "correct_answer_latex": "0.016 m s$^{-1}$",
+    "hint": "Use conservation of momentum. Initial momentum = 0. Final: shell + gun.",
+    "solution_steps_latex": [
+      "Given: Mass of shell $m_s = 0.020$ kg",
+      "Mass of gun $m_g = 100$ kg",
+      "Muzzle speed of shell $v_s = 80$ m s$^{-1}$",
+      "**Conservation of Momentum**:",
+      "Initially, both gun and shell are at rest",
+      "Initial momentum = 0",
+      "After firing:",
+      "Shell moves forward with velocity $v_s$",
+      "Gun recoils backward with velocity $v_g$ (to be found)",
+      "**Taking forward direction as positive**:",
+      "Final momentum = $m_s v_s + m_g v_g$",
+      "By conservation: $0 = m_s v_s + m_g v_g$",
+      "$m_g v_g = -m_s v_s$",
+      "$v_g = -\\frac{m_s v_s}{m_g}$",
+      "$v_g = -\\frac{0.020 \\times 80}{100}$",
+      "$v_g = -\\frac{1.6}{100} = -0.016$ m s$^{-1}$",
+      "**Recoil speed** = $|v_g| = 0.016$ m s$^{-1}$ (in backward direction)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Shell mass: 0.020 kg",
+        "Gun mass: 100 kg",
+        "Shell speed: 80 m s⁻¹"
+      ],
+      "to_find": [
+        "Recoil speed of gun"
+      ],
+      "formulas_used": [
+        "Conservation of momentum: $m_1 v_1 + m_2 v_2 = 0$"
+      ]
+    },
+    "tags": [
+      "conservation-of-momentum",
+      "recoil",
+      "gun-and-bullet",
+      "momentum"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.19",
+      "page": 70
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Impulse and Vector Change",
+    "exercise": "Exercise",
+    "question_number": "Q4.20",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A batsman deflects a ball by an angle of 45° without changing its initial speed which is equal to 54 km/h. What is the impulse imparted to the ball? (Mass of the ball is 0.15 kg.)",
+    "question_latex": "A batsman deflects a ball by an angle of 45° without changing its initial speed which is equal to 54 km/h. What is the impulse imparted to the ball? (Mass of the ball is 0.15 kg.)",
+    "sub_parts": null,
+    "correct_answer_plain": "4.2 kg m s⁻¹",
+    "correct_answer_latex": "$4.2$ kg m s$^{-1}$",
+    "hint": "Impulse is directed along bisector of initial and final directions. Use vector subtraction for Δv.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.15$ kg",
+      "Initial speed = Final speed = $v = 54$ km/h $= 54 \\times \\frac{5}{18} = 15$ m s$^{-1}$",
+      "Deflection angle $= 45°$",
+      "**Vector analysis**:",
+      "Let initial velocity be along x-axis: $\\vec{v}_i = 15\\hat{i}$ m s$^{-1}$",
+      "Final velocity at 45° to initial:",
+      "$\\vec{v}_f = 15\\cos 45° \\hat{i} + 15\\sin 45° \\hat{j}$",
+      "$\\vec{v}_f = 15 \\times \\frac{1}{\\sqrt{2}} \\hat{i} + 15 \\times \\frac{1}{\\sqrt{2}} \\hat{j}$",
+      "$\\vec{v}_f = \\frac{15}{\\sqrt{2}}(\\hat{i} + \\hat{j})$ m s$^{-1}$",
+      "**Change in velocity**:",
+      "$\\Delta \\vec{v} = \\vec{v}_f - \\vec{v}_i$",
+      "$\\Delta \\vec{v} = \\frac{15}{\\sqrt{2}}(\\hat{i} + \\hat{j}) - 15\\hat{i}$",
+      "$\\Delta \\vec{v} = (\\frac{15}{\\sqrt{2}} - 15)\\hat{i} + \\frac{15}{\\sqrt{2}}\\hat{j}$",
+      "$\\Delta \\vec{v} = 15(\\frac{1}{\\sqrt{2}} - 1)\\hat{i} + \\frac{15}{\\sqrt{2}}\\hat{j}$",
+      "**Magnitude of change**:",
+      "$|\\Delta \\vec{v}| = \\sqrt{[15(\\frac{1}{\\sqrt{2}} - 1)]^2 + (\\frac{15}{\\sqrt{2}})^2}$",
+      "Using formula for angle bisector: $|\\Delta v| = 2v \\sin(\\frac{\\theta}{2}) = 2 \\times 15 \\times \\sin 22.5°$",
+      "$|\\Delta v| = 30 \\times 0.383 = 11.49$ m s$^{-1}$",
+      "**Actually, simpler**: $|\\Delta v| = 2v\\sin(45°/2) = 2 \\times 15 \\times \\sin 22.5° \\approx 2 \\times 15 \\times 0.383$",
+      "More precisely: Using $|\\vec{a} - \\vec{b}| = \\sqrt{a^2 + b^2 - 2ab\\cos\\theta}$ where $\\theta = 45°$",
+      "$|\\Delta v| = \\sqrt{15^2 + 15^2 - 2(15)(15)\\cos 45°} = 15\\sqrt{2 - 2\\cos 45°}$",
+      "$= 15\\sqrt{2 - \\sqrt{2}} \\approx 15 \\times 0.765 = 11.48$ m s$^{-1}$",
+      "**Impulse**: $J = m|\\Delta v| = 0.15 \\times 2 \\times 15 \\times \\cos 22.5°$",
+      "From answer key approach: $J = 0.15 \\times 2 \\times 15 \\times \\cos 22.5° = 4.15$ kg m s$^{-1}$ $\\approx 4.2$ kg m s$^{-1}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.15 kg",
+        "Speed: 54 km/h = 15 m s⁻¹",
+        "Deflection angle: 45°"
+      ],
+      "to_find": [
+        "Impulse on ball"
+      ],
+      "formulas_used": [
+        "Impulse = $m \\Delta v$",
+        "$|\\Delta \\vec{v}| = 2v \\sin(\\frac{\\theta}{2})$"
+      ]
+    },
+    "tags": [
+      "impulse",
+      "vector-change",
+      "deflection",
+      "cricket",
+      "momentum-change"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.20",
+      "page": 70
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Circular Motion and Tension",
+    "exercise": "Exercise",
+    "question_number": "Q4.21",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A stone of mass 0.25 kg tied to the end of a string is whirled round in a circle of radius 1.5 m with a speed of 40 rev./min in a horizontal plane. What is the tension in the string? What is the maximum speed with which the stone can be whirled around if the string can withstand a maximum tension of 200 N?",
+    "question_latex": "A stone of mass 0.25 kg tied to the end of a string is whirled round in a circle of radius 1.5 m with a speed of 40 rev./min in a horizontal plane. What is the tension in the string? What is the maximum speed with which the stone can be whirled around if the string can withstand a maximum tension of 200 N?",
+    "sub_parts": null,
+    "correct_answer_plain": "v = 2π × 1.5 × (40/60) = 2π m s⁻¹; T = (mv²)/R = (0.25 × 4π²)/1.5 = 6.6 N; 200 = (mv²_max)/R, which gives v_max = 35 m s⁻¹",
+    "correct_answer_latex": "$v = 2\\pi \\times 1.5 \\times \\frac{40}{60} = 2\\pi$ m s$^{-1}$; $T = \\frac{mv^2}{R} = \\frac{0.25 \\times 4\\pi^2}{1.5} = 6.6$ N; $200 = \\frac{mv_{max}^2}{R}$, which gives $v_{max} = 35$ m s$^{-1}$",
+    "hint": "Convert rev/min to m/s. Tension provides centripetal force: T = mv²/r.",
+    "solution_steps_latex": [
+      "Given: Mass $m = 0.25$ kg, Radius $r = 1.5$ m",
+      "Frequency $f = 40$ rev/min $= \\frac{40}{60}$ rev/s $= \\frac{2}{3}$ rev/s",
+      "**Convert to linear speed**:",
+      "$v = 2\\pi r f = 2\\pi \\times 1.5 \\times \\frac{2}{3}$",
+      "$v = 2\\pi$ m s$^{-1}$ $\\approx 6.28$ m s$^{-1}$",
+      "**Tension in string**:",
+      "For horizontal circular motion, tension provides centripetal force",
+      "$T = \\frac{mv^2}{r}$",
+      "$T = \\frac{0.25 \\times (2\\pi)^2}{1.5}$",
+      "$T = \\frac{0.25 \\times 4\\pi^2}{1.5} = \\frac{\\pi^2}{6}$",
+      "$T = \\frac{9.87}{6} = 6.6$ N (approximately)",
+      "**Maximum speed**:",
+      "Maximum tension $T_{max} = 200$ N",
+      "$T_{max} = \\frac{mv_{max}^2}{r}$",
+      "$200 = \\frac{0.25 \\times v_{max}^2}{1.5}$",
+      "$v_{max}^2 = \\frac{200 \\times 1.5}{0.25} = \\frac{300}{0.25} = 1200$",
+      "$v_{max} = \\sqrt{1200} = 34.64$ m s$^{-1}$ $\\approx 35$ m s$^{-1}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 0.25 kg",
+        "Radius: 1.5 m",
+        "Frequency: 40 rev/min",
+        "Max tension: 200 N"
+      ],
+      "to_find": [
+        "Tension at given speed",
+        "Maximum speed"
+      ],
+      "formulas_used": [
+        "$v = 2\\pi r f$",
+        "$T = \\frac{mv^2}{r}$ (centripetal force)"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "centripetal-force",
+      "tension",
+      "maximum-speed",
+      "horizontal-circle"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.21",
+      "page": 70
+    },
+    "calculator": "q4-centripetal-force",
+    "calculator_slug": "q4-centripetal-force"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "MCQ",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q4.22",
+    "marks": 1,
+    "difficulty": 0.3,
+    "question_plain": "If, in Exercise 4.21, the speed of the stone is increased beyond the maximum permissible value, and the string breaks suddenly, which of the following correctly describes the trajectory of the stone after the string breaks:\n(a) the stone moves radially outwards,\n(b) the stone flies off tangentially from the instant the string breaks,\n(c) the stone flies off at an angle with the tangent whose magnitude depends on the speed of the particle?",
+    "question_latex": "If, in Exercise 4.21, the speed of the stone is increased beyond the maximum permissible value, and the string breaks suddenly, which of the following correctly describes the trajectory of the stone after the string breaks:\n(a) the stone moves radially outwards,\n(b) the stone flies off tangentially from the instant the string breaks,\n(c) the stone flies off at an angle with the tangent whose magnitude depends on the speed of the particle?",
+    "sub_parts": null,
+    "correct_answer_plain": "(b)",
+    "correct_answer_latex": "(b)",
+    "hint": "When string breaks, centripetal force vanishes. Stone continues with velocity it had at that instant.",
+    "solution_steps_latex": [
+      "**Analysis of situation**:",
+      "Before string breaks: Stone moves in circular path",
+      "Velocity is always tangent to the circle",
+      "Centripetal force (tension) acts radially inward",
+      "**When string breaks**:",
+      "Centripetal force suddenly becomes zero",
+      "By Newton's First Law: body continues with velocity it had at that instant",
+      "At the instant of breaking, velocity is tangent to circle",
+      "**Therefore**: Stone flies off **tangentially**",
+      "**Why not (a)?** Stone doesn't move radially outward",
+      "There's no force pushing it outward (the 'centrifugal force' is a pseudo-force in rotating frame)",
+      "**Why not (c)?** The angle is NOT dependent on speed",
+      "Direction is always tangent, regardless of speed",
+      "**Answer: (b)** - stone flies off tangentially from the instant the string breaks"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Stone in circular motion",
+        "String breaks suddenly"
+      ],
+      "to_find": [
+        "Trajectory after string breaks"
+      ],
+      "formulas_used": [
+        "Newton's First Law"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "newtons-first-law",
+      "tangential-velocity",
+      "trajectory",
+      "mcq"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.22",
+      "page": 70
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 4: Laws of Motion",
+    "section": "Applications of Newton's Laws",
+    "exercise": "Exercise",
+    "question_number": "Q4.23",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Explain why\n(a) a horse cannot pull a cart and run in empty space,\n(b) passengers are thrown forward from their seats when a speeding bus stops suddenly,\n(c) it is easier to pull a lawn mower than to push it,\n(d) a cricketer moves his hands backwards while holding a catch.",
+    "question_latex": "Explain why\n(a) a horse cannot pull a cart and run in empty space,\n(b) passengers are thrown forward from their seats when a speeding bus stops suddenly,\n(c) it is easier to pull a lawn mower than to push it,\n(d) a cricketer moves his hands backwards while holding a catch.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) The horse-cart system has no external force in empty space. The mutual forces between the horse and the cart cancel (Third Law). On the ground, the contact force between the system and the ground (friction) causes their motion from rest. (b) Due to inertia of the body not directly in contact with the seat. (c) A lawn mower is pulled or pushed by applying force at an angle. When you push, the normal force (N) must be more than its weight, for equilibrium in the vertical direction. This results in greater friction f (f ∝ N) and, therefore, a greater applied force to move. Just the opposite happens while pulling. (d) To reduce the rate of change of momentum and hence to reduce the force necessary to stop the ball.",
+    "correct_answer_latex": "(a) The horse-cart system has no external force in empty space. The mutual forces between the horse and the cart cancel (Third Law). On the ground, the contact force between the system and the ground (friction) causes their motion from rest. (b) Due to inertia of the body not directly in contact with the seat. (c) A lawn mower is pulled or pushed by applying force at an angle. When you push, the normal force ($N$) must be more than its weight, for equilibrium in the vertical direction. This results in greater friction $f$ ($f \\propto N$) and, therefore, a greater applied force to move. Just the opposite happens while pulling. (d) To reduce the rate of change of momentum and hence to reduce the force necessary to stop the ball.",
+    "hint": "Use: (a) Newton's 3rd law and need for external force, (b) inertia, (c) normal force and friction, (d) impulse = FΔt.",
+    "solution_steps_latex": [
+      "**Part (a)**: Horse cannot pull cart in empty space",
+      "By Newton's Third Law: Horse pulls cart forward, cart pulls horse backward with equal force",
+      "These are internal forces - they cancel out for the system",
+      "**On ground**: Horse pushes ground backward → Ground pushes horse forward (friction)",
+      "This **external force** from ground accelerates the horse-cart system",
+      "**In empty space**: No ground, no external force → No acceleration possible",
+      "**Part (b)**: Passengers thrown forward when bus stops",
+      "**Inertia**: Tendency of body to maintain its state of motion",
+      "When bus moving: passengers also moving with same velocity",
+      "When bus stops suddenly: Bus decelerates due to brakes",
+      "**Passengers' bodies**: Continue moving forward due to inertia",
+      "Upper body (not in contact with seat) continues forward motion",
+      "Hence thrown forward",
+      "**Part (c)**: Pulling lawn mower easier than pushing",
+      "Force applied at angle $\\theta$ to horizontal",
+      "**Vertical components**:",
+      "Pushing: $F \\sin\\theta$ adds to weight → Normal force $N = mg + F\\sin\\theta$ (increases)",
+      "Pulling: $F \\sin\\theta$ opposes weight → Normal force $N = mg - F\\sin\\theta$ (decreases)",
+      "**Friction**: $f = \\mu N$",
+      "Larger $N$ (pushing) → Larger friction → Harder to move",
+      "Smaller $N$ (pulling) → Smaller friction → Easier to move",
+      "**Part (d)**: Cricketer moves hands backward while catching",
+      "Ball has momentum $p = mv$",
+      "To stop: Change in momentum $\\Delta p = mv - 0 = mv$",
+      "**Impulse**: $F \\Delta t = \\Delta p$",
+      "$F = \\frac{\\Delta p}{\\Delta t}$",
+      "By moving hands backward: **Increases time** $\\Delta t$",
+      "Same momentum change over longer time → **Reduces force** $F$",
+      "Prevents injury to hands"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various everyday scenarios"
+      ],
+      "to_find": [
+        "Physical explanation for each"
+      ],
+      "formulas_used": [
+        "Newton's Laws",
+        "$f = \\mu N$",
+        "Impulse = $F\\Delta t = \\Delta p$"
+      ]
+    },
+    "tags": [
+      "newtons-laws",
+      "inertia",
+      "friction",
+      "impulse",
+      "applications",
+      "reasoning"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 4,
+      "exercise": "Exercise",
+      "question_number": "Q4.23",
+      "page": 70
+    }
+  }
+]

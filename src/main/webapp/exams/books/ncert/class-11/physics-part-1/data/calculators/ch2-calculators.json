@@ -1,0 +1,52 @@
+{
+    "q2-kinematics-solver": {
+        "type": "kinematics",
+        "title": "Kinematics Equation Solver",
+        "description": "Solve for any unknown variable in kinematics equations",
+        "formula": "v² = u² + 2as",
+        "variables": [
+            {
+                "id": "u",
+                "label": "Initial Velocity (u)",
+                "unit": "m/s",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "step": 0.1
+            },
+            {
+                "id": "v",
+                "label": "Final Velocity (v)",
+                "unit": "m/s",
+                "min": 0,
+                "max": 100,
+                "default": 20,
+                "step": 0.1
+            },
+            {
+                "id": "a",
+                "label": "Acceleration (a)",
+                "unit": "m/s²",
+                "min": -20,
+                "max": 20,
+                "default": 9.8,
+                "step": 0.1
+            },
+            {
+                "id": "s",
+                "label": "Displacement (s)",
+                "unit": "m",
+                "min": 0,
+                "max": 200,
+                "default": 20,
+                "step": 0.1
+            }
+        ],
+        "equations": [
+            "v = u + at",
+            "s = ut + ½at²",
+            "v² = u² + 2as",
+            "s = (u+v)t/2"
+        ]
+    }
+}

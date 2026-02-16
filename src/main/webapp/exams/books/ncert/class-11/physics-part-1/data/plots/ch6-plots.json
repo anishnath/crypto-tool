@@ -1,0 +1,37 @@
+{
+  "q6-10-omega-vs-t": {
+    "title": "Angular speed ω vs time t (τ = Iα, ω = αt)",
+    "xDomain": [0, 5],
+    "yDomain": [0, 14],
+    "data": [
+      {
+        "fn": "x",
+        "color": "#6366f1",
+        "label": "Hollow cylinder: ω = (τ/I)t, I = mR²"
+      },
+      {
+        "fn": "2.5 * x",
+        "color": "#22c55e",
+        "label": "Solid sphere: ω = (τ/I)t, I = (2/5)mR² (2.5× faster)"
+      }
+    ],
+    "annotations": [
+      {"x": 2, "text": "At t=2s: sphere leads by 2.5×"}
+    ]
+  },
+  "q6-11-ke-vs-omega": {
+    "title": "Rotational KE vs angular speed (KE = ½Iω²)",
+    "xDomain": [0, 150],
+    "yDomain": [0, 8000],
+    "data": [
+      {
+        "fn": "0.3125 * x * x",
+        "color": "#6366f1",
+        "label": "KE = ½Iω², I = ½mR² = 0.625 kg·m² (m=20, R=0.25)"
+      }
+    ],
+    "annotations": [
+      {"x": 100, "text": "ω=100 rad/s → KE = 3125 J"}
+    ]
+  }
+}

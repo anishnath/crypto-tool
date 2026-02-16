@@ -1,0 +1,1674 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Scalars and Vectors",
+    "exercise": "Exercise",
+    "question_number": "Q3.1",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "State, for each of the following physical quantities, if it is a scalar or a vector: volume, mass, speed, acceleration, density, number of moles, velocity, angular frequency, displacement, angular velocity.",
+    "question_latex": "State, for each of the following physical quantities, if it is a scalar or a vector: volume, mass, speed, acceleration, density, number of moles, velocity, angular frequency, displacement, angular velocity.",
+    "sub_parts": null,
+    "correct_answer_plain": "Volume, mass, speed, density, number of moles, angular frequency are scalars; the rest are vectors.",
+    "correct_answer_latex": "Volume, mass, speed, density, number of moles, angular frequency are scalars; the rest are vectors.",
+    "hint": "Scalars have only magnitude. Vectors have both magnitude and direction.",
+    "solution_steps_latex": [
+      "**Scalars** (magnitude only):",
+      "1. **Volume** - only magnitude, no direction",
+      "2. **Mass** - only magnitude, no direction",
+      "3. **Speed** - magnitude of velocity, no direction",
+      "4. **Density** - mass per unit volume, no direction",
+      "5. **Number of moles** - count, no direction",
+      "6. **Angular frequency** - rate of rotation, scalar in nature",
+      "**Vectors** (magnitude and direction):",
+      "1. **Acceleration** - $\\vec{a}$ - rate of change of velocity with direction",
+      "2. **Velocity** - $\\vec{v}$ - rate of change of displacement with direction",
+      "3. **Displacement** - $\\vec{s}$ or $\\Delta \\vec{x}$ - change in position with direction",
+      "4. **Angular velocity** - $\\vec{\\omega}$ - vector along axis of rotation (right-hand rule)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "List of physical quantities"
+      ],
+      "to_find": [
+        "Classification as scalar or vector"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "scalars",
+      "vectors",
+      "classification",
+      "physical-quantities",
+      "basic-concepts"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.1",
+      "page": 46
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Scalars and Vectors",
+    "exercise": "Exercise",
+    "question_number": "Q3.2",
+    "marks": 1,
+    "difficulty": 0.2,
+    "question_plain": "Pick out the two scalar quantities in the following list: force, angular momentum, work, current, linear momentum, electric field, average velocity, magnetic moment, relative velocity.",
+    "question_latex": "Pick out the two scalar quantities in the following list: force, angular momentum, work, current, linear momentum, electric field, average velocity, magnetic moment, relative velocity.",
+    "sub_parts": null,
+    "correct_answer_plain": "Work, current",
+    "correct_answer_latex": "Work, current",
+    "hint": "Work is energy transferred (scalar). Current is charge flow rate (scalar).",
+    "solution_steps_latex": [
+      "Analyzing each quantity:",
+      "**Force** - $\\vec{F}$ - vector (has direction)",
+      "**Angular momentum** - $\\vec{L}$ - vector (direction along axis)",
+      "**Work** - $W$ - **SCALAR** (energy, no direction)",
+      "**Current** - $I$ - **SCALAR** (rate of charge flow, treated as scalar)",
+      "**Linear momentum** - $\\vec{p}$ - vector (has direction)",
+      "**Electric field** - $\\vec{E}$ - vector (has direction)",
+      "**Average velocity** - $\\vec{v}_{avg}$ - vector (has direction)",
+      "**Magnetic moment** - $\\vec{\\mu}$ or $\\vec{m}$ - vector (has direction)",
+      "**Relative velocity** - $\\vec{v}_{rel}$ - vector (has direction)",
+      "**Answer**: The two scalar quantities are **Work** and **Current**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "List of physical quantities"
+      ],
+      "to_find": [
+        "Two scalar quantities"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "scalars",
+      "vectors",
+      "classification",
+      "work",
+      "current"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.2",
+      "page": 46
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Scalars and Vectors",
+    "exercise": "Exercise",
+    "question_number": "Q3.3",
+    "marks": 1,
+    "difficulty": 0.2,
+    "question_plain": "Pick out the only vector quantity in the following list: Temperature, pressure, impulse, time, power, total path length, energy, gravitational potential, coefficient of friction, charge.",
+    "question_latex": "Pick out the only vector quantity in the following list: Temperature, pressure, impulse, time, power, total path length, energy, gravitational potential, coefficient of friction, charge.",
+    "sub_parts": null,
+    "correct_answer_plain": "Impulse",
+    "correct_answer_latex": "Impulse",
+    "hint": "Impulse = Force × time = change in momentum. Since force is a vector, impulse is also a vector.",
+    "solution_steps_latex": [
+      "Analyzing each quantity:",
+      "**Temperature** - scalar (no direction)",
+      "**Pressure** - scalar (force per unit area, but treated as scalar)",
+      "**Impulse** - $\\vec{J} = \\vec{F} \\Delta t = \\Delta \\vec{p}$ - **VECTOR** (change in momentum)",
+      "**Time** - scalar (no direction)",
+      "**Power** - scalar (rate of energy transfer)",
+      "**Total path length** - scalar (distance, no direction)",
+      "**Energy** - scalar (no direction)",
+      "**Gravitational potential** - scalar (energy per unit mass)",
+      "**Coefficient of friction** - $\\mu$ - scalar (dimensionless ratio)",
+      "**Charge** - scalar (no direction)",
+      "**Answer**: The only vector quantity is **Impulse**",
+      "Impulse has both magnitude and direction (same direction as force or change in momentum)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "List of physical quantities"
+      ],
+      "to_find": [
+        "The only vector quantity"
+      ],
+      "formulas_used": [
+        "Impulse = $\\vec{F} \\Delta t = \\Delta \\vec{p}$"
+      ]
+    },
+    "tags": [
+      "scalars",
+      "vectors",
+      "impulse",
+      "classification"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.3",
+      "page": 46
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Operations",
+    "exercise": "Exercise",
+    "question_number": "Q3.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "State with reasons, whether the following algebraic operations with scalar and vector physical quantities are meaningful:\n(a) adding any two scalars,\n(b) adding a scalar to a vector of the same dimensions,\n(c) multiplying any vector by any scalar,\n(d) multiplying any two scalars,\n(e) adding any two vectors,\n(f) adding a component of a vector to the same vector.",
+    "question_latex": "State with reasons, whether the following algebraic operations with scalar and vector physical quantities are meaningful:\n(a) adding any two scalars,\n(b) adding a scalar to a vector of the same dimensions,\n(c) multiplying any vector by any scalar,\n(d) multiplying any two scalars,\n(e) adding any two vectors,\n(f) adding a component of a vector to the same vector.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)",
+      "(f)"
+    ],
+    "correct_answer_plain": "Only (c) and (d) are permissible",
+    "correct_answer_latex": "Only (c) and (d) are permissible",
+    "hint": "Scalars can only be added to scalars. Vectors can only be added to vectors. Check dimensional consistency.",
+    "solution_steps_latex": [
+      "**Part (a)**: Adding any two scalars",
+      "**Not always meaningful** - Scalars must have same dimensions",
+      "Example: Adding mass + time is meaningless",
+      "But adding 5 kg + 3 kg = 8 kg is meaningful",
+      "**Part (b)**: Adding a scalar to a vector of same dimensions",
+      "**Not meaningful** - Cannot add scalar to vector even with same dimensions",
+      "A scalar has no direction; a vector has direction",
+      "Example: Cannot add 5 m (scalar distance) to $\\vec{d}$ = 3 m $\\hat{i}$ (displacement vector)",
+      "**Part (c)**: Multiplying any vector by any scalar",
+      "**Always meaningful** - Scalar multiplication of vector is defined",
+      "$k\\vec{A}$ gives a vector in same (or opposite if $k<0$) direction with magnitude $|k||\\vec{A}|$",
+      "Example: $2 \\times \\vec{v}$ doubles the velocity",
+      "**Part (d)**: Multiplying any two scalars",
+      "**Always meaningful** - Product of scalars is a scalar",
+      "Example: mass $\\times$ speed = momentum magnitude (if considering magnitudes only)",
+      "**Part (e)**: Adding any two vectors",
+      "**Not always meaningful** - Vectors must have same dimensions",
+      "Cannot add force vector to velocity vector (different dimensions)",
+      "But can add $\\vec{F}_1$ + $\\vec{F}_2$ (both forces)",
+      "**Part (f)**: Adding a component of a vector to the same vector",
+      "**Not meaningful** - Component is scalar, vector has direction",
+      "Example: Cannot add $A_x$ (scalar component) to $\\vec{A}$ (vector)",
+      "**Summary**: Only **(c) and (d) are permissible** without restrictions"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various vector and scalar operations"
+      ],
+      "to_find": [
+        "Which operations are meaningful"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "vector-operations",
+      "scalar-operations",
+      "dimensional-consistency",
+      "vector-addition",
+      "scalar-multiplication"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.4",
+      "page": 46
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Properties",
+    "exercise": "Exercise",
+    "question_number": "Q3.5",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Read each statement below carefully and state with reasons, if it is true or false:\n(a) The magnitude of a vector is always a scalar,\n(b) each component of a vector is always a scalar,\n(c) the total path length is always equal to the magnitude of the displacement vector of a particle,\n(d) the average speed of a particle (defined as total path length divided by the time taken to cover the path) is either greater or equal to the magnitude of average velocity of the particle over the same interval of time,\n(e) Three vectors not lying in a plane can never add up to give a null vector.",
+    "question_latex": "Read each statement below carefully and state with reasons, if it is true or false:\n(a) The magnitude of a vector is always a scalar,\n(b) each component of a vector is always a scalar,\n(c) the total path length is always equal to the magnitude of the displacement vector of a particle,\n(d) the average speed of a particle (defined as total path length divided by the time taken to cover the path) is either greater or equal to the magnitude of average velocity of the particle over the same interval of time,\n(e) Three vectors not lying in a plane can never add up to give a null vector.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) T, (b) F, (c) F, (d) T, (e) T",
+    "correct_answer_latex": "(a) T, (b) F, (c) F, (d) T, (e) T",
+    "hint": "Think about: magnitude definition, component sign, straight vs curved path, triangle inequality, coplanar vectors.",
+    "solution_steps_latex": [
+      "**Part (a)**: The magnitude of a vector is always a scalar - **TRUE**",
+      "Magnitude is $|\\vec{A}| = \\sqrt{A_x^2 + A_y^2 + A_z^2}$ - always positive, no direction",
+      "Example: $|\\vec{v}|$ = speed (scalar)",
+      "**Part (b)**: Each component of a vector is always a scalar - **FALSE**",
+      "Components can be positive or negative (they have sign indicating direction)",
+      "Example: $\\vec{A} = 3\\hat{i} - 4\\hat{j}$, component $A_y = -4$ (negative)",
+      "However, components are treated as scalars with sign, not vectors",
+      "More precisely: components are scalar projections (can be negative)",
+      "**Part (c)**: Total path length always equals magnitude of displacement - **FALSE**",
+      "Path length $\\geq$ |displacement|",
+      "Equal only when motion is in straight line without reversal",
+      "Example: Particle moves from A to B to A. Path = 2d, displacement = 0",
+      "**Part (d)**: Average speed $\\geq$ magnitude of average velocity - **TRUE**",
+      "Average speed = $\\frac{\\text{path length}}{\\Delta t}$",
+      "Magnitude of avg velocity = $\\frac{|\\text{displacement}|}{\\Delta t}$",
+      "Since path length $\\geq$ |displacement|, the inequality holds",
+      "Equality when motion is straight without reversal",
+      "**Part (e)**: Three non-coplanar vectors cannot sum to null vector - **TRUE**",
+      "For $\\vec{A} + \\vec{B} + \\vec{C} = \\vec{0}$, we need $\\vec{C} = -(\\vec{A} + \\vec{B})$",
+      "This means $\\vec{C}$ must lie in the plane of $\\vec{A}$ and $\\vec{B}$",
+      "If three vectors don't lie in same plane, they cannot sum to zero",
+      "Only coplanar vectors can form a closed triangle/polygon"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various statements about vectors"
+      ],
+      "to_find": [
+        "Truth value of each statement with reasoning"
+      ],
+      "formulas_used": [
+        "$|\\vec{A}| = \\sqrt{A_x^2 + A_y^2 + A_z^2}$",
+        "Average speed = $\\frac{\\text{path length}}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "vector-magnitude",
+      "vector-components",
+      "displacement",
+      "path-length",
+      "average-velocity",
+      "coplanar-vectors",
+      "true-false"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.5",
+      "page": 46
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Derivation",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Inequalities",
+    "exercise": "Exercise",
+    "question_number": "Q3.6",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "Establish the following vector inequalities geometrically or otherwise:\n(a) |a+b| ≤ |a| + |b|\n(b) |a+b| ≥ ||a| - |b||\n(c) |a-b| ≤ |a| + |b|\n(d) |a-b| ≥ ||a| - |b||\nWhen does the equality sign above apply?",
+    "question_latex": "Establish the following vector inequalities geometrically or otherwise:\n(a) $|\\vec{a}+\\vec{b}| \\leq |\\vec{a}| + |\\vec{b}|$\n(b) $|\\vec{a}+\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$\n(c) $|\\vec{a}-\\vec{b}| \\leq |\\vec{a}| + |\\vec{b}|$\n(d) $|\\vec{a}-\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$\nWhen does the equality sign above apply?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "Hint: The sum (difference) of any two sides of a triangle is never less (greater) than the third side. Equality holds for collinear vectors.",
+    "correct_answer_latex": "Hint: The sum (difference) of any two sides of a triangle is never less (greater) than the third side. Equality holds for collinear vectors.",
+    "hint": "Use triangle inequality. Draw vector triangles. Consider parallel and anti-parallel cases.",
+    "solution_steps_latex": [
+      "**Part (a)**: $|\\vec{a}+\\vec{b}| \\leq |\\vec{a}| + |\\vec{b}|$ (Triangle inequality)",
+      "**Geometric proof**: Using parallelogram law or triangle method",
+      "When vectors $\\vec{a}$ and $\\vec{b}$ are added, they form sides of a triangle",
+      "The resultant $\\vec{a}+\\vec{b}$ is the third side",
+      "By triangle inequality: sum of two sides $\\geq$ third side",
+      "Therefore: $|\\vec{a}| + |\\vec{b}| \\geq |\\vec{a}+\\vec{b}|$",
+      "**Equality**: When $\\vec{a}$ and $\\vec{b}$ are parallel (same direction)",
+      "$\\vec{b} = k\\vec{a}$ where $k > 0$",
+      "**Part (b)**: $|\\vec{a}+\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$",
+      "From triangle: difference of two sides $\\leq$ third side",
+      "$|\\vec{a}+\\vec{b}| \\geq |\\vec{a}| - |\\vec{b}|$ and $|\\vec{a}+\\vec{b}| \\geq |\\vec{b}| - |\\vec{a}|$",
+      "Combining: $|\\vec{a}+\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$",
+      "**Equality**: When $\\vec{a}$ and $\\vec{b}$ are anti-parallel (opposite directions)",
+      "$\\vec{b} = k\\vec{a}$ where $k < 0$",
+      "**Part (c)**: $|\\vec{a}-\\vec{b}| \\leq |\\vec{a}| + |\\vec{b}|$",
+      "Note: $\\vec{a}-\\vec{b} = \\vec{a} + (-\\vec{b})$",
+      "Applying triangle inequality to $\\vec{a}$ and $-\\vec{b}$:",
+      "$|\\vec{a} + (-\\vec{b})| \\leq |\\vec{a}| + |-\\vec{b}|$",
+      "$|\\vec{a}-\\vec{b}| \\leq |\\vec{a}| + |\\vec{b}|$",
+      "**Equality**: When $\\vec{a}$ and $-\\vec{b}$ are parallel, i.e., $\\vec{a}$ and $\\vec{b}$ are anti-parallel",
+      "**Part (d)**: $|\\vec{a}-\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$",
+      "Similar to part (b), applying to $\\vec{a}$ and $-\\vec{b}$:",
+      "$|\\vec{a}-\\vec{b}| \\geq ||\\vec{a}| - |\\vec{b}||$",
+      "**Equality**: When $\\vec{a}$ and $\\vec{b}$ are parallel (same direction)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Vectors a and b"
+      ],
+      "to_find": [
+        "Proof of four vector inequalities",
+        "Conditions for equality"
+      ],
+      "formulas_used": [
+        "Triangle inequality",
+        "Vector addition: $\\vec{a} + \\vec{b}$",
+        "Vector subtraction: $\\vec{a} - \\vec{b} = \\vec{a} + (-\\vec{b})$"
+      ]
+    },
+    "tags": [
+      "vector-inequalities",
+      "triangle-inequality",
+      "vector-addition",
+      "vector-subtraction",
+      "collinear-vectors",
+      "derivation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.6",
+      "page": 46
+    },
+    "p5_sketch": "q3-6-vector-addition",
+    "p5_sketch_slug": "q3-6-vector-addition",
+    "calculator": "q3-6-vector-resultant",
+    "calculator_slug": "q3-6-vector-resultant"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Addition",
+    "exercise": "Exercise",
+    "question_number": "Q3.7",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "Given a + b + c + d = 0, which of the following statements are correct:\n(a) a, b, c, and d must each be a null vector,\n(b) The magnitude of (a + c) equals the magnitude of (b + d),\n(c) The magnitude of a can never be greater than the sum of the magnitudes of b, c, and d,\n(d) b + c must lie in the plane of a and d if a and d are not collinear, and in the line of a and d, if they are collinear?",
+    "question_latex": "Given $\\vec{a} + \\vec{b} + \\vec{c} + \\vec{d} = \\vec{0}$, which of the following statements are correct:\n(a) $\\vec{a}$, $\\vec{b}$, $\\vec{c}$, and $\\vec{d}$ must each be a null vector,\n(b) The magnitude of $(\\vec{a} + \\vec{c})$ equals the magnitude of $(\\vec{b} + \\vec{d})$,\n(c) The magnitude of $\\vec{a}$ can never be greater than the sum of the magnitudes of $\\vec{b}$, $\\vec{c}$, and $\\vec{d}$,\n(d) $\\vec{b} + \\vec{c}$ must lie in the plane of $\\vec{a}$ and $\\vec{d}$ if $\\vec{a}$ and $\\vec{d}$ are not collinear, and in the line of $\\vec{a}$ and $\\vec{d}$, if they are collinear?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "All statements except (a) are correct",
+    "correct_answer_latex": "All statements except (a) are correct",
+    "hint": "From a+b+c+d=0, derive relationships. Check if individual vectors must be zero, if magnitudes are related, and geometric constraints.",
+    "solution_steps_latex": [
+      "Given: $\\vec{a} + \\vec{b} + \\vec{c} + \\vec{d} = \\vec{0}$",
+      "**Part (a)**: Each vector must be null vector - **FALSE**",
+      "Counter-example: $\\vec{a} = \\hat{i}$, $\\vec{b} = \\hat{j}$, $\\vec{c} = -\\hat{i}$, $\\vec{d} = -\\hat{j}$",
+      "Sum = $\\vec{0}$ but individual vectors are not null",
+      "Only constraint is that they form a closed polygon when arranged head-to-tail",
+      "**Part (b)**: $|\\vec{a} + \\vec{c}| = |\\vec{b} + \\vec{d}|$ - **TRUE**",
+      "From given: $\\vec{a} + \\vec{b} + \\vec{c} + \\vec{d} = \\vec{0}$",
+      "Rearranging: $\\vec{a} + \\vec{c} = -(\\vec{b} + \\vec{d})$",
+      "Taking magnitude: $|\\vec{a} + \\vec{c}| = |-（\\vec{b} + \\vec{d})| = |\\vec{b} + \\vec{d}|$",
+      "**Part (c)**: $|\\vec{a}| \\leq |\\vec{b}| + |\\vec{c}| + |\\vec{d}|$ - **TRUE**",
+      "From given: $\\vec{a} = -(\\vec{b} + \\vec{c} + \\vec{d})$",
+      "Taking magnitude: $|\\vec{a}| = |\\vec{b} + \\vec{c} + \\vec{d}|$",
+      "By repeated triangle inequality:",
+      "$|\\vec{b} + \\vec{c} + \\vec{d}| \\leq |\\vec{b}| + |\\vec{c} + \\vec{d}| \\leq |\\vec{b}| + |\\vec{c}| + |\\vec{d}|$",
+      "Therefore: $|\\vec{a}| \\leq |\\vec{b}| + |\\vec{c}| + |\\vec{d}|$ **TRUE**",
+      "**Part (d)**: $\\vec{b} + \\vec{c}$ lies in plane of $\\vec{a}$ and $\\vec{d}$ - **TRUE**",
+      "From given: $\\vec{b} + \\vec{c} = -(\\vec{a} + \\vec{d})$",
+      "Since $\\vec{b} + \\vec{c}$ is a linear combination of $\\vec{a}$ and $\\vec{d}$:",
+      "If $\\vec{a}$ and $\\vec{d}$ are not collinear, they define a plane",
+      "$\\vec{b} + \\vec{c} = -\\vec{a} - \\vec{d}$ lies in this plane",
+      "If $\\vec{a}$ and $\\vec{d}$ are collinear (along a line), $\\vec{b} + \\vec{c}$ lies on same line",
+      "**Answer**: Statements (b), (c), and (d) are correct; (a) is false"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "The PDF shows a diagram illustrating four vectors forming a closed quadrilateral, demonstrating that their sum is zero",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "$\\vec{a} + \\vec{b} + \\vec{c} + \\vec{d} = \\vec{0}$"
+      ],
+      "to_find": [
+        "Which statements are correct"
+      ],
+      "formulas_used": [
+        "Triangle inequality",
+        "$|\\vec{A}| = |-\\vec{A}|$",
+        "Vector addition properties"
+      ]
+    },
+    "tags": [
+      "vector-addition",
+      "null-vector",
+      "vector-magnitude",
+      "coplanar-vectors",
+      "closed-polygon",
+      "reasoning"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.7",
+      "page": 47
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Displacement",
+    "exercise": "Exercise",
+    "question_number": "Q3.8",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Three girls skating on a circular ice ground of radius 200 m start from a point P on the edge of the ground and reach a point Q diametrically opposite to P following different paths as shown in Fig. 3.19. What is the magnitude of the displacement vector for each? For which girl is this equal to the actual length of path skate?",
+    "question_latex": "Three girls skating on a circular ice ground of radius 200 m start from a point P on the edge of the ground and reach a point Q diametrically opposite to P following different paths as shown in Fig. 3.19. What is the magnitude of the displacement vector for each? For which girl is this equal to the actual length of path skate?",
+    "sub_parts": null,
+    "correct_answer_plain": "400 m for each; B",
+    "correct_answer_latex": "400 m for each; B",
+    "hint": "Displacement depends only on initial and final positions, not on path. It's the straight-line distance PQ.",
+    "solution_steps_latex": [
+      "Given: Radius of circular ground $r = 200$ m",
+      "Starting point: P, Ending point: Q (diametrically opposite)",
+      "**Displacement**: Vector from initial to final position (P to Q)",
+      "Since Q is diametrically opposite to P:",
+      "Displacement magnitude = Diameter = $2r = 2 \\times 200 = 400$ m",
+      "**Important**: Displacement is independent of path taken",
+      "**For all three girls**: Displacement magnitude = **400 m**",
+      "**Path lengths**:",
+      "Girl A: Takes a curved path along the circle (more than diameter)",
+      "Girl B: Takes the **straight path** (diameter) = 400 m",
+      "Girl C: Takes another curved path (more than diameter)",
+      "**For which girl is displacement = path length?**",
+      "Only for **Girl B**, who skates along the straight diameter",
+      "For her: Path length = Displacement = 400 m",
+      "For girls A and C: Path length > Displacement"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Circular ice ground with radius 200m. Three paths shown from point P to diametrically opposite point Q: (A) curved path along upper arc, (B) straight line through center (diameter), (C) curved path with different curvature",
+      "figure_reference": "Figure 3.19"
+    },
+    "physical_quantities": {
+      "given": [
+        "Radius of circle: 200 m",
+        "P and Q are diametrically opposite"
+      ],
+      "to_find": [
+        "Magnitude of displacement for each girl",
+        "For which girl displacement = path length"
+      ],
+      "formulas_used": [
+        "Displacement = straight-line distance from initial to final position",
+        "Diameter = $2r$"
+      ]
+    },
+    "tags": [
+      "displacement",
+      "path-length",
+      "circular-motion",
+      "diameter",
+      "vector-magnitude"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.8",
+      "page": 47
+    },
+    "p5_sketch": "q3-8-displacement-path",
+    "p5_sketch_slug": "q3-8-displacement-path"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.9",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A cyclist starts from the centre O of a circular park of radius 1 km, reaches the edge P of the park, then cycles along the circumference, and returns to the centre along QO as shown in Fig. 3.20. If the round trip takes 10 min, what is the (a) net displacement, (b) average velocity, and (c) average speed of the cyclist?",
+    "question_latex": "A cyclist starts from the centre O of a circular park of radius 1 km, reaches the edge P of the park, then cycles along the circumference, and returns to the centre along QO as shown in Fig. 3.20. If the round trip takes 10 min, what is the (a) net displacement, (b) average velocity, and (c) average speed of the cyclist?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) 0; (b) 0; (c) 21.4 km h⁻¹",
+    "correct_answer_latex": "(a) 0; (b) 0; (c) 21.4 km h$^{-1}$",
+    "hint": "Displacement: final position - initial position. Average velocity = displacement/time. Average speed = total path/time.",
+    "solution_steps_latex": [
+      "Given: Radius $r = 1$ km, Total time = 10 min = $\\frac{1}{6}$ h",
+      "Path: O → P → (arc) → Q → O",
+      "**Part (a)**: Net displacement",
+      "Initial position: O (center)",
+      "Final position: O (center, returns to starting point)",
+      "Displacement = Final position - Initial position = O - O = **0**",
+      "**Part (b)**: Average velocity",
+      "Average velocity = $\\frac{\\text{Displacement}}{\\text{Time}}$ = $\\frac{0}{10 \\text{ min}}$ = **0**",
+      "**Part (c)**: Average speed",
+      "**Total path length**:",
+      "OP = radius = 1 km",
+      "Arc PQ: Need to find angle. From figure, appears to be quarter circle (90°)",
+      "Arc length = $\\frac{\\theta}{360°} \\times 2\\pi r$ = $\\frac{90°}{360°} \\times 2\\pi \\times 1$ = $\\frac{\\pi}{2}$ km",
+      "QO = radius = 1 km",
+      "Total path = $1 + \\frac{\\pi}{2} + 1$ = $2 + \\frac{\\pi}{2}$ = $2 + 1.571$ = 3.571 km",
+      "Average speed = $\\frac{3.571}{\\frac{1}{6}}$ = $3.571 \\times 6$ = 21.426 km h$^{-1}$ $\\approx$ **21.4 km h$^{-1}$**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Circular park with center O and radius 1 km. Path shown: straight line from O to P on circumference, arc from P to Q (appears to be quarter circle), straight line from Q back to O",
+      "figure_reference": "Figure 3.20"
+    },
+    "physical_quantities": {
+      "given": [
+        "Radius: 1 km",
+        "Total time: 10 min = 1/6 h",
+        "Path: O→P→arc→Q→O"
+      ],
+      "to_find": [
+        "(a) Net displacement",
+        "(b) Average velocity",
+        "(c) Average speed"
+      ],
+      "formulas_used": [
+        "Displacement = final position - initial position",
+        "Average velocity = $\\frac{\\text{Displacement}}{\\text{Time}}$",
+        "Average speed = $\\frac{\\text{Total path length}}{\\text{Time}}$",
+        "Arc length = $r\\theta$ or $\\frac{\\theta}{360°} \\times 2\\pi r$"
+      ]
+    },
+    "tags": [
+      "displacement",
+      "average-velocity",
+      "average-speed",
+      "circular-path",
+      "arc-length",
+      "round-trip"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.9",
+      "page": 47
+    },
+    "p5_sketch": "q3-9-circular-park",
+    "p5_sketch_slug": "q3-9-circular-park"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Addition",
+    "exercise": "Exercise",
+    "question_number": "Q3.10",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "On an open ground, a motorist follows a track that turns to his left by an angle of 60° after every 500 m. Starting from a given turn, specify the displacement of the motorist at the third, sixth and eighth turn. Compare the magnitude of the displacement with the total path length covered by the motorist in each case.",
+    "question_latex": "On an open ground, a motorist follows a track that turns to his left by an angle of 60$^\\circ$ after every 500 m. Starting from a given turn, specify the displacement of the motorist at the third, sixth and eighth turn. Compare the magnitude of the displacement with the total path length covered by the motorist in each case.",
+    "sub_parts": null,
+    "correct_answer_plain": "Displacement of magnitude 1 km and direction 60° with the initial direction; total path length = 1.5 km (third turn); null displacement vector; path length = 3 km (sixth turn); 866 m, 30°, 4 km (eighth turn)",
+    "correct_answer_latex": "Displacement of magnitude 1 km and direction 60$^\\circ$ with the initial direction; total path length = 1.5 km (third turn); null displacement vector; path length = 3 km (sixth turn); 866 m, 30$^\\circ$, 4 km (eighth turn)",
+    "hint": "Each 60° turn means forming a regular hexagon. After 6 turns, motorist completes full circuit. Use vector addition.",
+    "solution_steps_latex": [
+      "Given: Each straight segment = 500 m = 0.5 km",
+      "Turn angle = 60° to the left after each segment",
+      "Since turns are 60°, the path forms a **regular hexagon** (360°/60° = 6 sides)",
+      "**At third turn**:",
+      "After 3 segments, motorist has turned 3 × 60° = 180° from initial direction",
+      "But traveled only 3 sides of hexagon",
+      "Using vector addition or geometry:",
+      "The three vectors of 0.5 km each at 0°, 60°, 120° from initial direction",
+      "Resultant displacement = 1 km at 60° from initial direction",
+      "Path length = $3 \\times 0.5$ = 1.5 km",
+      "Ratio: $\\frac{1.5}{1}$ = 1.5",
+      "**At sixth turn**:",
+      "After 6 segments, motorist completes one full hexagon",
+      "Returns to starting position",
+      "Displacement = **0** (null vector)",
+      "Path length = $6 \\times 0.5$ = 3 km",
+      "**At eighth turn**:",
+      "Completes hexagon + 2 more sides",
+      "2 sides at angles 0° and 60°",
+      "Displacement: Using vector addition of two 0.5 km vectors at 60° angle",
+      "$|\\vec{d}| = \\sqrt{(0.5)^2 + (0.5)^2 + 2(0.5)(0.5)\\cos 60°}$",
+      "$= \\sqrt{0.25 + 0.25 + 2(0.25)(0.5)} = \\sqrt{0.25 + 0.25 + 0.25} = \\sqrt{0.75}$",
+      "$= 0.866$ km = 866 m",
+      "Direction: 30° from initial direction (bisector of 60° angle)",
+      "Path length = $8 \\times 0.5$ = 4 km",
+      "Ratio: $\\frac{4}{0.866}$ ≈ 4.62"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Segment length: 500 m",
+        "Turn angle: 60° left"
+      ],
+      "to_find": [
+        "Displacement at 3rd, 6th, 8th turn",
+        "Comparison with path length"
+      ],
+      "formulas_used": [
+        "Vector addition",
+        "$|\\vec{A} + \\vec{B}| = \\sqrt{A^2 + B^2 + 2AB\\cos\\theta}$",
+        "Regular hexagon properties"
+      ]
+    },
+    "tags": [
+      "vector-addition",
+      "displacement",
+      "path-length",
+      "regular-hexagon",
+      "angular-motion",
+      "geometry"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.10",
+      "page": 47
+    },
+    "p5_sketch": "q3-10-hexagon-path",
+    "p5_sketch_slug": "q3-10-hexagon-path"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Average Velocity",
+    "exercise": "Exercise",
+    "question_number": "Q3.11",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A passenger arriving in a new town wishes to go from the station to a hotel located 10 km away on a straight road from the station. A dishonest cabman takes him along a circuitous path 23 km long and reaches the hotel in 28 min. What is (a) the average speed of the taxi, (b) the magnitude of average velocity? Are the two equal?",
+    "question_latex": "A passenger arriving in a new town wishes to go from the station to a hotel located 10 km away on a straight road from the station. A dishonest cabman takes him along a circuitous path 23 km long and reaches the hotel in 28 min. What is (a) the average speed of the taxi, (b) the magnitude of average velocity? Are the two equal?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 49.3 km h⁻¹; (b) 21.4 km h⁻¹. No, the average speed equals average velocity magnitude only for a straight path.",
+    "correct_answer_latex": "(a) 49.3 km h$^{-1}$; (b) 21.4 km h$^{-1}$. No, the average speed equals average velocity magnitude only for a straight path.",
+    "hint": "Average speed = total path/time. Average velocity magnitude = displacement/time.",
+    "solution_steps_latex": [
+      "Given: Displacement (straight distance) = 10 km",
+      "Total path length = 23 km",
+      "Time taken = 28 min = $\\frac{28}{60}$ h = $\\frac{7}{15}$ h",
+      "**Part (a)**: Average speed",
+      "Average speed = $\\frac{\\text{Total path length}}{\\text{Time}}$",
+      "$= \\frac{23}{\\frac{7}{15}} = 23 \\times \\frac{15}{7} = \\frac{345}{7}$ = 49.29 km h$^{-1}$ $\\approx$ **49.3 km h$^{-1}$**",
+      "**Part (b)**: Magnitude of average velocity",
+      "Magnitude of average velocity = $\\frac{\\text{Displacement}}{\\text{Time}}$",
+      "$= \\frac{10}{\\frac{7}{15}} = 10 \\times \\frac{15}{7} = \\frac{150}{7}$ = 21.43 km h$^{-1}$ $\\approx$ **21.4 km h$^{-1}$**",
+      "**Are they equal?** No",
+      "Average speed > Magnitude of average velocity",
+      "They are equal only when path length = displacement (straight-line motion without reversal)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Displacement: 10 km",
+        "Path length: 23 km",
+        "Time: 28 min"
+      ],
+      "to_find": [
+        "(a) Average speed",
+        "(b) Magnitude of average velocity",
+        "Are they equal?"
+      ],
+      "formulas_used": [
+        "Average speed = $\\frac{\\text{Total path length}}{\\text{Time}}$",
+        "Average velocity = $\\frac{\\text{Displacement}}{\\text{Time}}$"
+      ]
+    },
+    "tags": [
+      "average-speed",
+      "average-velocity",
+      "displacement",
+      "path-length",
+      "kinematics"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.11",
+      "page": 47
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Projectile Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.12",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "The ceiling of a long hall is 25 m high. What is the maximum horizontal distance that a ball thrown with a speed of 40 m s⁻¹ can go without hitting the ceiling of the hall?",
+    "question_latex": "The ceiling of a long hall is 25 m high. What is the maximum horizontal distance that a ball thrown with a speed of 40 m s$^{-1}$ can go without hitting the ceiling of the hall?",
+    "sub_parts": null,
+    "correct_answer_plain": "150.5 m",
+    "correct_answer_latex": "150.5 m",
+    "hint": "Maximum height constraint: H_max = 25 m. Use H = (u²sin²θ)/(2g) to find θ, then R = (u²sin2θ)/g.",
+    "solution_steps_latex": [
+      "Given: Initial speed $u = 40$ m s$^{-1}$, Maximum height allowed $H = 25$ m, $g = 10$ m s$^{-2}$",
+      "**Constraint**: Maximum height of projectile $\\leq$ 25 m",
+      "Maximum height of projectile: $H_{max} = \\frac{u^2 \\sin^2 \\theta}{2g}$",
+      "For the ball not to hit ceiling: $\\frac{u^2 \\sin^2 \\theta}{2g} = 25$",
+      "$\\frac{(40)^2 \\sin^2 \\theta}{2 \\times 10} = 25$",
+      "$\\frac{1600 \\sin^2 \\theta}{20} = 25$",
+      "$80 \\sin^2 \\theta = 25$",
+      "$\\sin^2 \\theta = \\frac{25}{80} = \\frac{5}{16}$",
+      "$\\sin \\theta = \\frac{\\sqrt{5}}{4}$",
+      "Now, $\\cos^2 \\theta = 1 - \\sin^2 \\theta = 1 - \\frac{5}{16} = \\frac{11}{16}$",
+      "$\\cos \\theta = \\frac{\\sqrt{11}}{4}$",
+      "**Horizontal range**: $R = \\frac{u^2 \\sin 2\\theta}{g} = \\frac{u^2 \\times 2 \\sin \\theta \\cos \\theta}{g}$",
+      "$R = \\frac{(40)^2 \\times 2 \\times \\frac{\\sqrt{5}}{4} \\times \\frac{\\sqrt{11}}{4}}{10}$",
+      "$R = \\frac{1600 \\times 2 \\times \\sqrt{55}}{16 \\times 10} = \\frac{3200 \\times \\sqrt{55}}{160} = 20\\sqrt{55}$",
+      "$R = 20 \\times 7.416 = 148.32$ m",
+      "More accurately using $g = 9.8$ m s$^{-2}$: $R \\approx$ **150.5 m**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial speed: 40 m s⁻¹",
+        "Ceiling height: 25 m",
+        "g = 9.8 m s⁻²"
+      ],
+      "to_find": [
+        "Maximum horizontal distance"
+      ],
+      "formulas_used": [
+        "$H_{max} = \\frac{u^2 \\sin^2 \\theta}{2g}$",
+        "$R = \\frac{u^2 \\sin 2\\theta}{g}$",
+        "$\\sin 2\\theta = 2 \\sin \\theta \\cos \\theta$"
+      ]
+    },
+    "tags": [
+      "projectile-motion",
+      "maximum-height",
+      "range",
+      "angle-of-projection",
+      "constraint-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.12",
+      "page": 47
+    },
+    "p5_sketch": "q3-12-ceiling-projectile",
+    "p5_sketch_slug": "q3-12-ceiling-projectile",
+    "calculator": "q3-projectile-range",
+    "calculator_slug": "q3-projectile-range"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Projectile Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.13",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A cricketer can throw a ball to a maximum horizontal distance of 100 m. How much high above the ground can the cricketer throw the same ball?",
+    "question_latex": "A cricketer can throw a ball to a maximum horizontal distance of 100 m. How much high above the ground can the cricketer throw the same ball?",
+    "sub_parts": null,
+    "correct_answer_plain": "50 m",
+    "correct_answer_latex": "50 m",
+    "hint": "Maximum range occurs at 45°. R_max = u²/g. Maximum height when thrown vertically: H_max = u²/(2g) = R_max/2.",
+    "solution_steps_latex": [
+      "Given: Maximum horizontal range $R_{max} = 100$ m",
+      "**Maximum range** occurs at angle of projection $\\theta = 45°$",
+      "$R_{max} = \\frac{u^2}{g}$ where $u$ is the initial speed",
+      "Therefore: $100 = \\frac{u^2}{g}$",
+      "$u^2 = 100g$",
+      "**Maximum height** the cricketer can throw (vertical throw, $\\theta = 90°$):",
+      "$H_{max} = \\frac{u^2}{2g}$",
+      "Substituting $u^2 = 100g$:",
+      "$H_{max} = \\frac{100g}{2g} = \\frac{100}{2} = 50$ m",
+      "**Alternative reasoning**:",
+      "For projectile at 45°: $H = \\frac{u^2 \\sin^2 45°}{2g} = \\frac{u^2 \\times (1/\\sqrt{2})^2}{2g} = \\frac{u^2}{4g} = \\frac{R_{max}}{4} = 25$ m",
+      "But when thrown vertically (90°): $H = \\frac{u^2}{2g} = \\frac{R_{max}}{2} = 50$ m"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Maximum horizontal range: 100 m"
+      ],
+      "to_find": [
+        "Maximum height when thrown vertically"
+      ],
+      "formulas_used": [
+        "$R_{max} = \\frac{u^2}{g}$ (at 45°)",
+        "$H_{max} = \\frac{u^2}{2g}$ (at 90°)"
+      ]
+    },
+    "tags": [
+      "projectile-motion",
+      "maximum-range",
+      "maximum-height",
+      "vertical-throw",
+      "angle-45-degrees"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.13",
+      "page": 47
+    },
+    "calculator": "q3-projectile-height",
+    "calculator_slug": "q3-projectile-height"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.14",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A stone tied to the end of a string 80 cm long is whirled in a horizontal circle with a constant speed. If the stone makes 14 revolutions in 25 s, what is the magnitude and direction of acceleration of the stone?",
+    "question_latex": "A stone tied to the end of a string 80 cm long is whirled in a horizontal circle with a constant speed. If the stone makes 14 revolutions in 25 s, what is the magnitude and direction of acceleration of the stone?",
+    "sub_parts": null,
+    "correct_answer_plain": "9.9 m s⁻², along the radius at every point towards the centre",
+    "correct_answer_latex": "$9.9$ m s$^{-2}$, along the radius at every point towards the centre",
+    "hint": "Centripetal acceleration = v²/r = ω²r. First find angular velocity ω = 2π × (revolutions/time).",
+    "solution_steps_latex": [
+      "Given: Radius $r = 80$ cm $= 0.8$ m",
+      "Number of revolutions = 14 in time $t = 25$ s",
+      "**Frequency**: $f = \\frac{14}{25} = 0.56$ rev/s",
+      "**Angular velocity**: $\\omega = 2\\pi f = 2\\pi \\times \\frac{14}{25} = \\frac{28\\pi}{25}$ rad/s",
+      "$\\omega = \\frac{28 \\times 3.14}{25} = \\frac{87.92}{25} = 3.517$ rad/s",
+      "**Centripetal acceleration**: $a_c = \\omega^2 r$",
+      "$a_c = (3.517)^2 \\times 0.8$",
+      "$a_c = 12.37 \\times 0.8 = 9.90$ m s$^{-2}$",
+      "**Alternative method using linear speed**:",
+      "Circumference $= 2\\pi r = 2\\pi \\times 0.8 = 1.6\\pi$ m",
+      "Distance in 25 s $= 14 \\times 1.6\\pi = 22.4\\pi$ m",
+      "Speed $v = \\frac{22.4\\pi}{25} = 2.814$ m/s",
+      "$a_c = \\frac{v^2}{r} = \\frac{(2.814)^2}{0.8} = \\frac{7.92}{0.8} = 9.9$ m s$^{-2}$",
+      "**Direction**: Towards the center of the circle (centripetal)",
+      "At every point, acceleration is directed radially inward along the string"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Radius: 80 cm = 0.8 m",
+        "Revolutions: 14 in 25 s"
+      ],
+      "to_find": [
+        "Magnitude and direction of acceleration"
+      ],
+      "formulas_used": [
+        "$\\omega = 2\\pi f$",
+        "$a_c = \\omega^2 r = \\frac{v^2}{r}$"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "centripetal-acceleration",
+      "angular-velocity",
+      "uniform-circular-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.14",
+      "page": 48
+    },
+    "calculator": "q3-centripetal-acceleration",
+    "calculator_slug": "q3-centripetal-acceleration"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.15",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "An aircraft executes a horizontal loop of radius 1.00 km with a steady speed of 900 km/h. Compare its centripetal acceleration with the acceleration due to gravity.",
+    "question_latex": "An aircraft executes a horizontal loop of radius 1.00 km with a steady speed of 900 km/h. Compare its centripetal acceleration with the acceleration due to gravity.",
+    "sub_parts": null,
+    "correct_answer_plain": "6.4 g",
+    "correct_answer_latex": "6.4 g",
+    "hint": "Convert speed to m/s. Calculate a_c = v²/r. Then find ratio a_c/g.",
+    "solution_steps_latex": [
+      "Given: Radius $r = 1.00$ km $= 1000$ m",
+      "Speed $v = 900$ km/h $= 900 \\times \\frac{5}{18}$ = 250 m/s",
+      "$g = 9.8$ m s$^{-2}$ (or 10 m s$^{-2}$ for approximation)",
+      "**Centripetal acceleration**: $a_c = \\frac{v^2}{r}$",
+      "$a_c = \\frac{(250)^2}{1000} = \\frac{62500}{1000} = 62.5$ m s$^{-2}$",
+      "**Comparison with g**:",
+      "$\\frac{a_c}{g} = \\frac{62.5}{9.8} = 6.38 \\approx 6.4$",
+      "Therefore: $a_c = 6.4g$",
+      "**Interpretation**: The centripetal acceleration is **6.4 times** the acceleration due to gravity"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Radius: 1.00 km = 1000 m",
+        "Speed: 900 km/h = 250 m/s",
+        "g = 9.8 m s⁻²"
+      ],
+      "to_find": [
+        "Ratio of centripetal acceleration to g"
+      ],
+      "formulas_used": [
+        "$a_c = \\frac{v^2}{r}$"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "centripetal-acceleration",
+      "comparison",
+      "aircraft-loop"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.15",
+      "page": 48
+    },
+    "calculator": "q3-centripetal-acceleration",
+    "calculator_slug": "q3-centripetal-acceleration"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Circular Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.16",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Read each statement below carefully and state, with reasons, if it is true or false:\n(a) The net acceleration of a particle in circular motion is always along the radius of the circle towards the centre\n(b) The velocity vector of a particle at a point is always along the tangent to the path of the particle at that point\n(c) The acceleration vector of a particle in uniform circular motion averaged over one cycle is a null vector",
+    "question_latex": "Read each statement below carefully and state, with reasons, if it is true or false:\n(a) The net acceleration of a particle in circular motion is always along the radius of the circle towards the centre\n(b) The velocity vector of a particle at a point is always along the tangent to the path of the particle at that point\n(c) The acceleration vector of a particle in uniform circular motion averaged over one cycle is a null vector",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) False (true only for uniform circular motion); (b) True; (c) True",
+    "correct_answer_latex": "(a) False (true only for uniform circular motion); (b) True; (c) True",
+    "hint": "Consider (a) for non-uniform circular motion. (b) velocity direction. (c) vector sum over complete cycle.",
+    "solution_steps_latex": [
+      "**Part (a)**: Net acceleration always along radius towards centre - **FALSE**",
+      "This is true only for **uniform circular motion** (constant speed)",
+      "In uniform circular motion: only centripetal acceleration exists, directed towards center",
+      "In **non-uniform circular motion** (changing speed):",
+      "There are two components of acceleration:",
+      "1. **Centripetal (radial)**: $a_c = \\frac{v^2}{r}$ (towards center)",
+      "2. **Tangential**: $a_t = \\frac{dv}{dt}$ (along tangent, changes speed)",
+      "Net acceleration: $\\vec{a} = \\vec{a}_c + \\vec{a}_t$ (NOT purely radial)",
+      "**Part (b)**: Velocity vector always along tangent - **TRUE**",
+      "Velocity is always tangent to the path at any point",
+      "This is true for **any curved motion**, not just circular",
+      "The velocity vector points in the direction of instantaneous motion",
+      "Mathematically: $\\vec{v} = \\frac{d\\vec{r}}{dt}$ is tangent to trajectory",
+      "**Part (c)**: Average acceleration over one cycle is null vector - **TRUE**",
+      "In uniform circular motion, acceleration has constant magnitude but changing direction",
+      "After one complete revolution, the particle returns to same position and velocity",
+      "Change in velocity over one cycle = $\\Delta \\vec{v} = \\vec{0}$",
+      "Average acceleration = $\\frac{\\Delta \\vec{v}}{T} = \\frac{\\vec{0}}{T} = \\vec{0}$",
+      "The centripetal acceleration vectors at different points cancel out over full cycle"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Statements about circular motion"
+      ],
+      "to_find": [
+        "Truth value with reasoning"
+      ],
+      "formulas_used": [
+        "$a_c = \\frac{v^2}{r}$",
+        "$a_t = \\frac{dv}{dt}$",
+        "$\\vec{v} = \\frac{d\\vec{r}}{dt}$"
+      ]
+    },
+    "tags": [
+      "circular-motion",
+      "centripetal-acceleration",
+      "tangential-acceleration",
+      "velocity-direction",
+      "uniform-circular-motion",
+      "true-false"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.16",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Vector Equations of Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.17",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "The position of a particle is given by\nr = 3.0t î - 2.0t² ĵ + 4.0 k̂ m\nwhere t is in seconds and the coefficients have the proper units for r to be in metres.\n(a) Find the v and a of the particle?\n(b) What is the magnitude and direction of velocity of the particle at t = 2.0 s?",
+    "question_latex": "The position of a particle is given by\n$\\vec{r} = 3.0t \\hat{i} - 2.0t^2 \\hat{j} + 4.0 \\hat{k}$ m\nwhere $t$ is in seconds and the coefficients have the proper units for $\\vec{r}$ to be in metres.\n(a) Find the $\\vec{v}$ and $\\vec{a}$ of the particle?\n(b) What is the magnitude and direction of velocity of the particle at $t = 2.0$ s?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) v(t) = (3.0 î - 4.0t ĵ) m/s, a(t) = -4.0 ĵ m/s²; (b) 8.54 m s⁻¹, 70° with x-axis",
+    "correct_answer_latex": "(a) $\\vec{v}(t) = (3.0 \\hat{i} - 4.0t \\hat{j})$ m/s, $\\vec{a}(t) = -4.0 \\hat{j}$ m/s$^2$; (b) 8.54 m s$^{-1}$, 70° with $x$-axis",
+    "hint": "Velocity = dr/dt, Acceleration = dv/dt. Use vector calculus.",
+    "solution_steps_latex": [
+      "Given: $\\vec{r} = 3.0t \\hat{i} - 2.0t^2 \\hat{j} + 4.0 \\hat{k}$ m",
+      "**Part (a)**: Find velocity and acceleration",
+      "**Velocity**: $\\vec{v} = \\frac{d\\vec{r}}{dt}$",
+      "$\\vec{v} = \\frac{d}{dt}(3.0t \\hat{i} - 2.0t^2 \\hat{j} + 4.0 \\hat{k})$",
+      "$\\vec{v} = 3.0 \\hat{i} - 4.0t \\hat{j} + 0 \\hat{k}$",
+      "$\\vec{v}(t) = (3.0 \\hat{i} - 4.0t \\hat{j})$ m/s",
+      "**Acceleration**: $\\vec{a} = \\frac{d\\vec{v}}{dt}$",
+      "$\\vec{a} = \\frac{d}{dt}(3.0 \\hat{i} - 4.0t \\hat{j})$",
+      "$\\vec{a} = 0 \\hat{i} - 4.0 \\hat{j}$",
+      "$\\vec{a}(t) = -4.0 \\hat{j}$ m/s$^2$ (constant acceleration in negative $y$-direction)",
+      "**Part (b)**: Velocity at $t = 2.0$ s",
+      "$\\vec{v}(2) = 3.0 \\hat{i} - 4.0(2.0) \\hat{j} = 3.0 \\hat{i} - 8.0 \\hat{j}$ m/s",
+      "**Magnitude**: $|\\vec{v}| = \\sqrt{(3.0)^2 + (-8.0)^2} = \\sqrt{9 + 64} = \\sqrt{73}$",
+      "$|\\vec{v}| = 8.544$ m/s $\\approx$ **8.54 m/s**",
+      "**Direction**: Angle with $x$-axis",
+      "$\\tan \\theta = \\frac{v_y}{v_x} = \\frac{-8.0}{3.0} = -2.667$",
+      "$\\theta = \\tan^{-1}(-2.667) = -69.4°$ (below positive $x$-axis)",
+      "Or 70° below the positive $x$-axis, or at angle 290° from positive $x$-axis (measured counterclockwise)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Position vector: $\\vec{r} = 3.0t \\hat{i} - 2.0t^2 \\hat{j} + 4.0 \\hat{k}$ m"
+      ],
+      "to_find": [
+        "(a) Velocity and acceleration vectors",
+        "(b) Magnitude and direction at t=2s"
+      ],
+      "formulas_used": [
+        "$\\vec{v} = \\frac{d\\vec{r}}{dt}$",
+        "$\\vec{a} = \\frac{d\\vec{v}}{dt}$",
+        "$|\\vec{v}| = \\sqrt{v_x^2 + v_y^2 + v_z^2}$",
+        "$\\tan \\theta = \\frac{v_y}{v_x}$"
+      ]
+    },
+    "tags": [
+      "vector-calculus",
+      "velocity",
+      "acceleration",
+      "differentiation",
+      "magnitude-direction",
+      "3d-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.17",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "2D Motion with Constant Acceleration",
+    "exercise": "Exercise",
+    "question_number": "Q3.18",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A particle starts from the origin at t = 0 s with a velocity of 10.0 ĵ m/s and moves in the x-y plane with a constant acceleration of (8.0 î + 2.0 ĵ) m s⁻². (a) At what time is the x-coordinate of the particle 16 m? What is the y-coordinate of the particle at that time? (b) What is the speed of the particle at the time?",
+    "question_latex": "A particle starts from the origin at $t = 0$ s with a velocity of $10.0 \\hat{j}$ m/s and moves in the $x$-$y$ plane with a constant acceleration of $(8.0 \\hat{i} + 2.0 \\hat{j})$ m s$^{-2}$. (a) At what time is the $x$-coordinate of the particle 16 m? What is the $y$-coordinate of the particle at that time? (b) What is the speed of the particle at the time?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 2 s, 24 m, 21.26 m s⁻¹",
+    "correct_answer_latex": "(a) 2 s, 24 m, 21.26 m s$^{-1}$",
+    "hint": "Use r = r₀ + v₀t + ½at². Separate x and y components. Find t from x-equation, substitute in y-equation.",
+    "solution_steps_latex": [
+      "Given: Initial position $\\vec{r}_0 = \\vec{0}$ (at origin)",
+      "Initial velocity $\\vec{v}_0 = 10.0 \\hat{j}$ m/s",
+      "Acceleration $\\vec{a} = 8.0 \\hat{i} + 2.0 \\hat{j}$ m/s$^2$",
+      "**Position equation**: $\\vec{r} = \\vec{r}_0 + \\vec{v}_0 t + \\frac{1}{2}\\vec{a}t^2$",
+      "$\\vec{r} = 0 + (10.0 \\hat{j})t + \\frac{1}{2}(8.0 \\hat{i} + 2.0 \\hat{j})t^2$",
+      "$\\vec{r} = 4.0t^2 \\hat{i} + (10.0t + 1.0t^2) \\hat{j}$",
+      "**Part (a)**: When is $x = 16$ m?",
+      "$x = 4.0t^2 = 16$",
+      "$t^2 = 4$",
+      "$t = 2$ s",
+      "**$y$-coordinate at $t = 2$ s**:",
+      "$y = 10.0t + 1.0t^2 = 10.0(2) + 1.0(2)^2$",
+      "$y = 20 + 4 = 24$ m",
+      "**Part (b)**: Speed at $t = 2$ s",
+      "**Velocity equation**: $\\vec{v} = \\vec{v}_0 + \\vec{a}t$",
+      "$\\vec{v} = 10.0 \\hat{j} + (8.0 \\hat{i} + 2.0 \\hat{j})t$",
+      "$\\vec{v}(t) = 8.0t \\hat{i} + (10.0 + 2.0t) \\hat{j}$",
+      "At $t = 2$ s:",
+      "$\\vec{v}(2) = 8.0(2) \\hat{i} + (10.0 + 2.0(2)) \\hat{j}$",
+      "$\\vec{v}(2) = 16.0 \\hat{i} + 14.0 \\hat{j}$ m/s",
+      "**Speed**: $|\\vec{v}| = \\sqrt{(16.0)^2 + (14.0)^2}$",
+      "$= \\sqrt{256 + 196} = \\sqrt{452} = 21.26$ m/s"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial position: origin",
+        "Initial velocity: 10.0 ĵ m/s",
+        "Acceleration: (8.0 î + 2.0 ĵ) m/s²"
+      ],
+      "to_find": [
+        "(a) Time when x=16m, y-coordinate at that time",
+        "(b) Speed at that time"
+      ],
+      "formulas_used": [
+        "$\\vec{r} = \\vec{r}_0 + \\vec{v}_0 t + \\frac{1}{2}\\vec{a}t^2$",
+        "$\\vec{v} = \\vec{v}_0 + \\vec{a}t$",
+        "$|\\vec{v}| = \\sqrt{v_x^2 + v_y^2}$"
+      ]
+    },
+    "tags": [
+      "2d-motion",
+      "constant-acceleration",
+      "vector-kinematics",
+      "component-analysis",
+      "speed-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.18",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Unit Vectors and Components",
+    "exercise": "Exercise",
+    "question_number": "Q3.19",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "î and ĵ are unit vectors along x- and y-axis respectively. What is the magnitude and direction of the vectors î + ĵ, and î - ĵ? What are the components of a vector A = 2î + 3ĵ along the directions of î + ĵ and î - ĵ? [You may use graphical method]",
+    "question_latex": "$\\hat{i}$ and $\\hat{j}$ are unit vectors along $x$- and $y$-axis respectively. What is the magnitude and direction of the vectors $\\hat{i} + \\hat{j}$, and $\\hat{i} - \\hat{j}$? What are the components of a vector $\\vec{A} = 2\\hat{i} + 3\\hat{j}$ along the directions of $\\hat{i} + \\hat{j}$ and $\\hat{i} - \\hat{j}$? [You may use graphical method]",
+    "sub_parts": null,
+    "correct_answer_plain": "√2, 45° with the x-axis; √2, -45° with the x-axis; (5/√2, -1/√2)",
+    "correct_answer_latex": "$\\sqrt{2}$, 45° with the $x$-axis; $\\sqrt{2}$, -45° with the $x$-axis; $(5/\\sqrt{2}, -1/\\sqrt{2})$",
+    "hint": "Use magnitude formula and tan for direction. For components, use dot product with unit vectors in those directions.",
+    "solution_steps_latex": [
+      "**Part 1**: Magnitude and direction of $\\hat{i} + \\hat{j}$",
+      "Magnitude: $|\\hat{i} + \\hat{j}| = \\sqrt{1^2 + 1^2} = \\sqrt{2}$",
+      "Direction: $\\tan \\theta = \\frac{1}{1} = 1$, so $\\theta = 45°$ with positive $x$-axis",
+      "**Part 2**: Magnitude and direction of $\\hat{i} - \\hat{j}$",
+      "Magnitude: $|\\hat{i} - \\hat{j}| = \\sqrt{1^2 + (-1)^2} = \\sqrt{2}$",
+      "Direction: $\\tan \\theta = \\frac{-1}{1} = -1$, so $\\theta = -45°$ with positive $x$-axis (or 315°)",
+      "**Part 3**: Components of $\\vec{A} = 2\\hat{i} + 3\\hat{j}$ along $\\hat{i} + \\hat{j}$ and $\\hat{i} - \\hat{j}$",
+      "**Unit vector along** $\\hat{i} + \\hat{j}$: $\\hat{u}_1 = \\frac{\\hat{i} + \\hat{j}}{\\sqrt{2}} = \\frac{1}{\\sqrt{2}}\\hat{i} + \\frac{1}{\\sqrt{2}}\\hat{j}$",
+      "**Component along** $\\hat{i} + \\hat{j}$: $A_1 = \\vec{A} \\cdot \\hat{u}_1$",
+      "$A_1 = (2\\hat{i} + 3\\hat{j}) \\cdot (\\frac{1}{\\sqrt{2}}\\hat{i} + \\frac{1}{\\sqrt{2}}\\hat{j})$",
+      "$A_1 = 2 \\times \\frac{1}{\\sqrt{2}} + 3 \\times \\frac{1}{\\sqrt{2}} = \\frac{2 + 3}{\\sqrt{2}} = \\frac{5}{\\sqrt{2}} = \\frac{5\\sqrt{2}}{2}$",
+      "**Unit vector along** $\\hat{i} - \\hat{j}$: $\\hat{u}_2 = \\frac{\\hat{i} - \\hat{j}}{\\sqrt{2}} = \\frac{1}{\\sqrt{2}}\\hat{i} - \\frac{1}{\\sqrt{2}}\\hat{j}$",
+      "**Component along** $\\hat{i} - \\hat{j}$: $A_2 = \\vec{A} \\cdot \\hat{u}_2$",
+      "$A_2 = (2\\hat{i} + 3\\hat{j}) \\cdot (\\frac{1}{\\sqrt{2}}\\hat{i} - \\frac{1}{\\sqrt{2}}\\hat{j})$",
+      "$A_2 = 2 \\times \\frac{1}{\\sqrt{2}} + 3 \\times (-\\frac{1}{\\sqrt{2}}) = \\frac{2 - 3}{\\sqrt{2}} = \\frac{-1}{\\sqrt{2}} = -\\frac{\\sqrt{2}}{2}$",
+      "**Answer**: Components are $(\\frac{5}{\\sqrt{2}}, -\\frac{1}{\\sqrt{2}})$ or $(\\frac{5\\sqrt{2}}{2}, -\\frac{\\sqrt{2}}{2})$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Unit vectors: $\\hat{i}$, $\\hat{j}$",
+        "Vector: $\\vec{A} = 2\\hat{i} + 3\\hat{j}$"
+      ],
+      "to_find": [
+        "Magnitude and direction of $\\hat{i} + \\hat{j}$ and $\\hat{i} - \\hat{j}$",
+        "Components of $\\vec{A}$ along these directions"
+      ],
+      "formulas_used": [
+        "$|\\vec{v}| = \\sqrt{v_x^2 + v_y^2}$",
+        "$\\tan \\theta = \\frac{v_y}{v_x}$",
+        "Component = $\\vec{A} \\cdot \\hat{u}$"
+      ]
+    },
+    "tags": [
+      "unit-vectors",
+      "vector-magnitude",
+      "vector-direction",
+      "vector-components",
+      "dot-product",
+      "projection"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.19",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Equations of Motion",
+    "exercise": "Exercise",
+    "question_number": "Q3.20",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "For any arbitrary motion in space, which of the following relations are true:\n(a) v_average = (1/2)(v(t₁) + v(t₂))\n(b) v_average = [r(t₂) - r(t₁)]/(t₂ - t₁)\n(c) v(t) = v(0) + at\n(d) r(t) = r(0) + v(0)t + (1/2)at²\n(e) a_average = [v(t₂) - v(t₁)]/(t₂ - t₁)\n(The 'average' stands for average of the quantity over the time interval t₁ to t₂)",
+    "question_latex": "For any arbitrary motion in space, which of the following relations are true:\n(a) $\\vec{v}_{average} = (1/2)(\\vec{v}(t_1) + \\vec{v}(t_2))$\n(b) $\\vec{v}_{average} = [\\vec{r}(t_2) - \\vec{r}(t_1)]/(t_2 - t_1)$\n(c) $\\vec{v}(t) = \\vec{v}(0) + \\vec{a}t$\n(d) $\\vec{r}(t) = \\vec{r}(0) + \\vec{v}(0)t + (1/2)\\vec{a}t^2$\n(e) $\\vec{a}_{average} = [\\vec{v}(t_2) - \\vec{v}(t_1)]/(t_2 - t_1)$\n(The 'average' stands for average of the quantity over the time interval $t_1$ to $t_2$)",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(b) and (e)",
+    "correct_answer_latex": "(b) and (e)",
+    "hint": "(b) and (e) are definitions of average velocity and acceleration. (a), (c), (d) require constant acceleration.",
+    "solution_steps_latex": [
+      "**Part (a)**: $\\vec{v}_{avg} = \\frac{1}{2}(\\vec{v}(t_1) + \\vec{v}(t_2))$ - **FALSE** for arbitrary motion",
+      "This is true only for **uniformly accelerated motion** (constant acceleration)",
+      "For arbitrary motion, average velocity is NOT the arithmetic mean of initial and final velocities",
+      "**Part (b)**: $\\vec{v}_{avg} = \\frac{\\vec{r}(t_2) - \\vec{r}(t_1)}{t_2 - t_1}$ - **TRUE**",
+      "This is the **definition** of average velocity",
+      "True for **any motion**, arbitrary or otherwise",
+      "$\\vec{v}_{avg} = \\frac{\\text{Displacement}}{\\text{Time interval}}$",
+      "**Part (c)**: $\\vec{v}(t) = \\vec{v}(0) + \\vec{a}t$ - **FALSE** for arbitrary motion",
+      "This is valid only for **constant acceleration**",
+      "For arbitrary motion, acceleration can vary with time: $\\vec{a} = \\vec{a}(t)$",
+      "Correct form: $\\vec{v}(t) = \\vec{v}(0) + \\int_0^t \\vec{a}(t') dt'$",
+      "**Part (d)**: $\\vec{r}(t) = \\vec{r}(0) + \\vec{v}(0)t + \\frac{1}{2}\\vec{a}t^2$ - **FALSE** for arbitrary motion",
+      "This is valid only for **constant acceleration**",
+      "For arbitrary motion with varying acceleration, this doesn't hold",
+      "**Part (e)**: $\\vec{a}_{avg} = \\frac{\\vec{v}(t_2) - \\vec{v}(t_1)}{t_2 - t_1}$ - **TRUE**",
+      "This is the **definition** of average acceleration",
+      "True for **any motion**, whether acceleration is constant or not",
+      "**Summary**: Only (b) and (e) are true for arbitrary motion"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Five equations of motion"
+      ],
+      "to_find": [
+        "Which are true for arbitrary motion"
+      ],
+      "formulas_used": [
+        "Definition of average velocity",
+        "Definition of average acceleration",
+        "Equations for constant acceleration"
+      ]
+    },
+    "tags": [
+      "equations-of-motion",
+      "average-velocity",
+      "average-acceleration",
+      "constant-acceleration",
+      "arbitrary-motion",
+      "true-false"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.20",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Scalars",
+    "exercise": "Exercise",
+    "question_number": "Q3.21",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Read each statement below carefully and state, with reasons and examples, if it is true or false:\nA scalar quantity is one that\n(a) is conserved in a process\n(b) can never take negative values\n(c) must be dimensionless\n(d) does not vary from one point to another in space\n(e) has the same value for observers with different orientations of axes.",
+    "question_latex": "Read each statement below carefully and state, with reasons and examples, if it is true or false:\nA scalar quantity is one that\n(a) is conserved in a process\n(b) can never take negative values\n(c) must be dimensionless\n(d) does not vary from one point to another in space\n(e) has the same value for observers with different orientations of axes.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "Only (e) is true",
+    "correct_answer_latex": "Only (e) is true",
+    "hint": "A scalar is independent of coordinate system orientation. Can have dimensions, vary in space, be negative, not conserved.",
+    "solution_steps_latex": [
+      "**Part (a)**: Scalar is conserved in a process - **FALSE**",
+      "Conservation is not a defining property of scalars",
+      "**Counter-example**: Temperature is scalar but not conserved (can change)",
+      "Some scalars are conserved (energy in isolated system), some are not (entropy increases)",
+      "**Part (b)**: Scalar can never take negative values - **FALSE**",
+      "Scalars can be positive, negative, or zero",
+      "**Examples**: Temperature can be negative (in Celsius), electric potential can be negative",
+      "Charge is scalar and can be negative",
+      "**Part (c)**: Scalar must be dimensionless - **FALSE**",
+      "Most scalars have dimensions",
+      "**Examples**: Mass (dimension M), temperature (dimension Θ), energy (ML²T⁻²)",
+      "Only pure numbers and ratios of same quantities are dimensionless",
+      "**Part (d)**: Scalar does not vary from point to point - **FALSE**",
+      "Scalars can vary in space (scalar field)",
+      "**Examples**: Temperature varies in a room, pressure varies with altitude",
+      "Gravitational potential varies with position",
+      "**Part (e)**: Scalar has same value for different orientations of axes - **TRUE**",
+      "This is the **defining property** of a scalar",
+      "Scalars are independent of coordinate system orientation",
+      "**Example**: Mass of object is 5 kg regardless of how you orient your axes",
+      "Temperature, energy, work - all remain same under rotation of axes",
+      "**Contrast with vectors**: Vector components change with axis orientation, but scalar values don't"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Statements about scalar quantities"
+      ],
+      "to_find": [
+        "Which statements are true"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "scalars",
+      "scalar-properties",
+      "coordinate-independence",
+      "conservation",
+      "dimensions",
+      "true-false"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.21",
+      "page": 48
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 3: Motion in a Plane",
+    "section": "Geometry and Kinematics",
+    "exercise": "Exercise",
+    "question_number": "Q3.22",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "An aircraft is flying at a height of 3400 m above the ground. If the angle subtended at a ground observation point by the aircraft positions 10.0 s apart is 30°, what is the speed of the aircraft?",
+    "question_latex": "An aircraft is flying at a height of 3400 m above the ground. If the angle subtended at a ground observation point by the aircraft positions 10.0 s apart is 30°, what is the speed of the aircraft?",
+    "sub_parts": null,
+    "correct_answer_plain": "182 m s⁻¹",
+    "correct_answer_latex": "182 m s$^{-1}$",
+    "hint": "Use trigonometry. Distance traveled = 2h tan(15°). Then speed = distance/time.",
+    "solution_steps_latex": [
+      "Given: Height of aircraft $h = 3400$ m",
+      "Time interval $\\Delta t = 10.0$ s",
+      "Angle subtended $\\theta = 30°$",
+      "**Geometry**: Consider observation point O on ground, aircraft at positions A and B",
+      "The angle AOB = 30° where O is the observation point",
+      "Both A and B are at height $h$ above ground",
+      "**Using symmetry**: If we assume aircraft passes overhead (for maximum angle)",
+      "The angle is bisected, so each half makes 15° with vertical",
+      "**Horizontal distance from O to aircraft positions**:",
+      "At position A: $d_1 = h \\tan(15°)$ (on one side)",
+      "At position B: $d_2 = h \\tan(15°)$ (on other side)",
+      "**Total horizontal distance**: $d = d_1 + d_2 = 2h \\tan(15°)$",
+      "$d = 2 \\times 3400 \\times \\tan(15°)$",
+      "$\\tan(15°) = 2 - \\sqrt{3} \\approx 0.2679$",
+      "$d = 2 \\times 3400 \\times 0.2679 = 1821.72$ m",
+      "**Speed**: $v = \\frac{d}{\\Delta t} = \\frac{1821.72}{10.0}$",
+      "$v = 182.2$ m/s $\\approx$ **182 m/s**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Height: 3400 m",
+        "Time interval: 10.0 s",
+        "Angle subtended: 30°"
+      ],
+      "to_find": [
+        "Speed of aircraft"
+      ],
+      "formulas_used": [
+        "$\\tan \\theta = \\frac{\\text{opposite}}{\\text{adjacent}}$",
+        "Speed = $\\frac{\\text{Distance}}{\\text{Time}}$"
+      ]
+    },
+    "tags": [
+      "trigonometry",
+      "kinematics",
+      "speed-calculation",
+      "geometry",
+      "aircraft-motion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 3,
+      "exercise": "Exercise",
+      "question_number": "Q3.22",
+      "page": 48
+    }
+  }
+]

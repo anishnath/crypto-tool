@@ -1,0 +1,95 @@
+{
+    "q1-1-unit-conversion-visual": {
+        "type": "unit-conversion-visual",
+        "title": "Volume Conversion: 1 cm³ → m³ (Q1.1a)",
+        "params": {
+            "mode": "volume",
+            "fromUnit": "cm3",
+            "toUnit": "m3",
+            "value": 1,
+            "width": 600,
+            "height": 300
+        }
+    },
+    "q1-6-vernier-callipers": {
+        "type": "vernier-callipers",
+        "title": "Interactive Vernier Callipers",
+        "params": {
+            "mainScaleDivision": 1,
+            "vernierDivisions": 20,
+            "objectSize": 2.35,
+            "showLeastCount": true,
+            "showReading": true,
+            "interactive": true,
+            "width": 600,
+            "height": 300
+        }
+    },
+    "q1-6-screw-gauge": {
+        "type": "screw-gauge",
+        "title": "Interactive Screw Gauge",
+        "params": {
+            "pitch": 1,
+            "circularDivisions": 100,
+            "objectDiameter": 0.52,
+            "showLeastCount": true,
+            "showReading": true,
+            "interactive": true,
+            "width": 600,
+            "height": 400
+        }
+    },
+    "q1-7-microscope-magnification": {
+        "type": "microscope-magnification",
+        "title": "Microscope Magnification Demo",
+        "params": {
+            "magnification": 100,
+            "observedWidth": 3.5,
+            "actualThickness": 0.035,
+            "showComparison": true,
+            "interactive": true,
+            "width": 600,
+            "height": 400
+        }
+    },
+    "q1-8-thread-winding": {
+        "type": "thread-winding-demo",
+        "title": "Thread Diameter Measurement by Winding",
+        "params": {
+            "threadDiameter": 0.5,
+            "numberOfTurns": 20,
+            "pencilRadius": 4,
+            "animate": true,
+            "showCalculation": true,
+            "interactive": true,
+            "width": 600,
+            "height": 450
+        }
+    },
+    "q1-9-area-magnification": {
+        "type": "area-magnification",
+        "title": "Area Magnification vs Linear Magnification",
+        "params": {
+            "slideArea": 1.75,
+            "screenArea": 15500,
+            "showProjection": true,
+            "showCalculation": true,
+            "animate": true,
+            "width": 600,
+            "height": 400
+        }
+    },
+    "q1-11-significant-figures-demo": {
+        "type": "sig-fig-visualization",
+        "title": "Significant Figures in Calculations",
+        "params": {
+            "operation": "multiplication",
+            "number1": 4.234,
+            "number2": 1.005,
+            "showSteps": true,
+            "highlightSigFigs": true,
+            "width": 600,
+            "height": 400
+        }
+    }
+}

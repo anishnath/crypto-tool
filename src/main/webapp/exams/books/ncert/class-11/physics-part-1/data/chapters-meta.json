@@ -1,0 +1,48 @@
+{
+  "subject": "Physics",
+  "partLabel": "Part 1",
+  "chapters": [
+    {
+      "slug": "units-and-measurements",
+      "num": "1",
+      "name": "Units and Measurement",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 1 Units and Measurement solutions. Units and Measurement, Significant Figures, Dimensional Analysis, Relative Motion."
+    },
+    {
+      "slug": "motion-in-a-straight-line",
+      "num": "2",
+      "name": "Motion in a Straight Line",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 2 Motion in a Straight Line solutions. Point Object and Motion, Position-Time Graphs, Equations of Motion, Motion Under Gravity, Velocity and Acceleration, Speed-Time Graphs."
+    },
+    {
+      "slug": "motion-in-a-plane",
+      "num": "3",
+      "name": "Motion in a Plane",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 3 Motion in a Plane solutions. Scalars and Vectors, Vector Operations, Vector Properties, Vector Inequalities, Vector Addition, Displacement."
+    },
+    {
+      "slug": "laws-of-motion",
+      "num": "4",
+      "name": "Laws of Motion",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 4 Laws of Motion solutions. Net Force and Equilibrium, Force and Acceleration, Force and Frames of Reference, Circular Motion, Newton's Second Law, Vector Addition of Forces."
+    },
+    {
+      "slug": "work-energy-and-power",
+      "num": "5",
+      "name": "Work, Energy and Power",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 5 Work, Energy and Power solutions. Sign of Work, Work and Friction, Potential Energy and Turning Points, Simple Harmonic Motion, Energy Conservation, Energy Concepts."
+    },
+    {
+      "slug": "system-of-particles-and-rotational-motion",
+      "num": "6",
+      "name": "Systems of Particles and Rotational Motion",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 6 Systems of Particles and Rotational Motion solutions. Centre of Mass, Centre of Mass Motion, Cross Product, Scalar Triple Product, Angular Momentum, Angular Momentum Conservation."
+    },
+    {
+      "slug": "gravitation",
+      "num": "7",
+      "name": "Gravitation",
+      "desc": "NCERT Class 11 Physics Part 1 Chapter 7 Gravitation solutions. Gravitational Concepts, Gravity Variations, Kepler's Third Law, Kepler's Third Law Application, Galactic Motion, Satellite Energy."
+    }
+  ]
+}

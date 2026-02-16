@@ -1,0 +1,1382 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Point Object and Motion",
+    "exercise": "Exercise",
+    "question_number": "Q2.1",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "In which of the following examples of motion, can the body be considered approximately a point object:\n(a) a railway carriage moving without jerks between two stations.\n(b) a monkey sitting on top of a man cycling smoothly on a circular track.\n(c) a spinning cricket ball that turns sharply on hitting the ground.\n(d) a tumbling beaker that has slipped off the edge of a table.",
+    "question_latex": "In which of the following examples of motion, can the body be considered approximately a point object:\n(a) a railway carriage moving without jerks between two stations.\n(b) a monkey sitting on top of a man cycling smoothly on a circular track.\n(c) a spinning cricket ball that turns sharply on hitting the ground.\n(d) a tumbling beaker that has slipped off the edge of a table.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) and (b)",
+    "correct_answer_latex": "(a) and (b)",
+    "hint": "A body can be treated as a point object if its size is much smaller than the distance traveled and its orientation/rotation is not relevant to the motion being analyzed.",
+    "solution_steps_latex": [
+      "A body can be considered a point object when its dimensions are negligible compared to the distance covered and when rotational motion is not significant",
+      "**Part (a)**: Railway carriage moving between stations - YES",
+      "The distance between stations is much larger than the size of the carriage. Since it moves without jerks (smoothly), we can treat it as a point object",
+      "**Part (b)**: Monkey on cycling man on circular track - YES",
+      "The size of the system is much smaller than the radius of the circular track. For analyzing the motion along the track, we can treat it as a point object",
+      "**Part (c)**: Spinning cricket ball - NO",
+      "The spinning and turning motion is crucial here. The ball's rotation and orientation matter, so it cannot be treated as a point object",
+      "**Part (d)**: Tumbling beaker - NO",
+      "The tumbling motion means rotation is important. We need to consider the beaker's orientation and rotational motion, so it cannot be treated as a point object"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various scenarios of motion"
+      ],
+      "to_find": [
+        "Which can be treated as point objects"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "point-object",
+      "point-mass",
+      "translational-motion",
+      "rotational-motion",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.1",
+      "page": 24
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Position-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.2",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "The position-time (x-t) graphs for two children A and B returning from their school O to their homes P and Q respectively are shown in Fig. 2.9. Choose the correct entries in the brackets below;\n(a) (A/B) lives closer to the school than (B/A)\n(b) (A/B) starts from the school earlier than (B/A)\n(c) (A/B) walks faster than (B/A)\n(d) A and B reach home at the (same/different) time\n(e) (A/B) overtakes (B/A) on the road (once/twice).",
+    "question_latex": "The position-time ($x$-$t$) graphs for two children A and B returning from their school O to their homes P and Q respectively are shown in Fig. 2.9. Choose the correct entries in the brackets below;\n(a) (A/B) lives closer to the school than (B/A)\n(b) (A/B) starts from the school earlier than (B/A)\n(c) (A/B) walks faster than (B/A)\n(d) A and B reach home at the (same/different) time\n(e) (A/B) overtakes (B/A) on the road (once/twice).",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) A lives closer to school than B, (b) A starts from school earlier than B, (c) B walks faster than A, (d) Same time, (e) B overtakes A once",
+    "correct_answer_latex": "(a) A lives closer to school than B, (b) A starts from school earlier than B, (c) B walks faster than A, (d) Same time, (e) B overtakes A once",
+    "hint": "On an x-t graph: distance from school = final position; start time = x-intercept of time axis; speed = slope; overtaking = intersection of graphs.",
+    "solution_steps_latex": [
+      "From Fig. 2.9, we analyze the position-time graphs for children A and B",
+      "**Part (a)**: Distance from school = final position on x-axis",
+      "Child A reaches position P (lower x-value), Child B reaches position Q (higher x-value)",
+      "Therefore, **A lives closer** to the school than B",
+      "**Part (b)**: Starting time = when the graph begins (t-intercept)",
+      "Child A's graph starts at $t = 0$, Child B's graph starts at a later time",
+      "Therefore, **A starts earlier** than B",
+      "**Part (c)**: Speed = slope of x-t graph",
+      "Slope of B's graph is steeper than A's graph",
+      "Therefore, **B walks faster** than A",
+      "**Part (d)**: Time to reach home = final t-coordinate",
+      "Both graphs end at the **same time** on the t-axis",
+      "**Part (e)**: Overtaking occurs when graphs intersect",
+      "The graphs intersect **once** where B's line crosses A's line",
+      "Therefore, **B overtakes A once**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Position-time graph showing two straight lines. Line A starts from origin (O) at t=0 with gentle slope reaching point P. Line B starts later with steeper slope, intersects line A, and reaches point Q (farther than P) at the same final time as A.",
+      "figure_reference": "Figure 2.9"
+    },
+    "physical_quantities": {
+      "given": [
+        "Position-time graphs for children A and B"
+      ],
+      "to_find": [
+        "Relative distances, start times, speeds, final times, overtaking"
+      ],
+      "formulas_used": [
+        "Speed = slope of $x$-$t$ graph = $\\frac{\\Delta x}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "slope",
+      "velocity",
+      "graph-interpretation",
+      "kinematics"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.2",
+      "page": 24
+    },
+    "p5_sketch": "q2-2-position-time-comparison",
+    "p5_sketch_slug": "q2-2-position-time-comparison"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Diagram",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Position-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A woman starts from her home at 9.00 am, walks with a speed of 5 km h⁻¹ on a straight road up to her office 2.5 km away, stays at the office up to 5.00 pm, and returns home by an auto with a speed of 25 km h⁻¹. Choose suitable scales and plot the x-t graph of her motion.",
+    "question_latex": "A woman starts from her home at 9.00 am, walks with a speed of 5 km h$^{-1}$ on a straight road up to her office 2.5 km away, stays at the office up to 5.00 pm, and returns home by an auto with a speed of 25 km h$^{-1}$. Choose suitable scales and plot the $x$-$t$ graph of her motion.",
+    "sub_parts": null,
+    "correct_answer_plain": "Graph with three segments: (1) linear from (0,0) to (0.5h, 2.5km), (2) horizontal from (0.5h, 2.5km) to (8.5h, 2.5km), (3) linear from (8.5h, 2.5km) to (8.6h, 0)",
+    "correct_answer_latex": "Graph with three segments: (1) linear from (0,0) to (0.5h, 2.5km), (2) horizontal from (0.5h, 2.5km) to (8.5h, 2.5km), (3) linear from (8.5h, 2.5km) to (8.6h, 0)",
+    "hint": "Calculate time for each segment. Walking time = distance/speed. Plot position vs time with three distinct phases.",
+    "solution_steps_latex": [
+      "Let home be at $x = 0$ and time $t = 0$ at 9:00 am",
+      "**Segment 1 - Walking to office**:",
+      "Distance = 2.5 km, Speed = 5 km h$^{-1}$",
+      "Time taken = $\\frac{2.5}{5}$ = 0.5 h = 30 min",
+      "Reaches office at 9:30 am (t = 0.5 h) at position x = 2.5 km",
+      "**Segment 2 - At office**:",
+      "Stays from 9:30 am to 5:00 pm = 7.5 hours",
+      "Position remains at x = 2.5 km from t = 0.5 h to t = 8 h",
+      "**Segment 3 - Returning home**:",
+      "Distance = 2.5 km, Speed = 25 km h$^{-1}$",
+      "Time taken = $\\frac{2.5}{25}$ = 0.1 h = 6 min",
+      "Returns home at 5:06 pm (t = 8.1 h) at position x = 0",
+      "**Graph description**:",
+      "Plot with x-axis: time (0 to 9 h), y-axis: position (0 to 3 km)",
+      "Segment 1: Straight line from (0, 0) to (0.5, 2.5)",
+      "Segment 2: Horizontal line from (0.5, 2.5) to (8, 2.5)",
+      "Segment 3: Steep line from (8, 2.5) to (8.1, 0)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Position-time graph with three segments: (1) upward sloping line representing walk to office, (2) horizontal line representing stay at office, (3) steep downward line representing return journey by auto",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Distance to office: 2.5 km",
+        "Walking speed: 5 km h⁻¹",
+        "Auto speed: 25 km h⁻¹",
+        "Stay duration: 9:30 am to 5:00 pm"
+      ],
+      "to_find": [
+        "Position-time graph"
+      ],
+      "formulas_used": [
+        "Time = $\\frac{\\text{Distance}}{\\text{Speed}}$",
+        "Slope of $x$-$t$ graph = velocity"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "uniform-motion",
+      "graphing",
+      "kinematics",
+      "speed"
+    ],
+    "p5_sketch": "q2-3-daily-commute",
+    "p5_sketch_slug": "q2-3-daily-commute",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.3",
+      "page": 24
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Position-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.4",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A drunkard walking in a narrow lane takes 5 steps forward and 3 steps backward, followed again by 5 steps forward and 3 steps backward, and so on. Each step is 1 m long and requires 1 s. Plot the x-t graph of his motion. Determine graphically and otherwise how long the drunkard takes to fall in a pit 13 m away from the start.",
+    "question_latex": "A drunkard walking in a narrow lane takes 5 steps forward and 3 steps backward, followed again by 5 steps forward and 3 steps backward, and so on. Each step is 1 m long and requires 1 s. Plot the $x$-$t$ graph of his motion. Determine graphically and otherwise how long the drunkard takes to fall in a pit 13 m away from the start.",
+    "sub_parts": null,
+    "correct_answer_plain": "37 s",
+    "correct_answer_latex": "37 s",
+    "hint": "Net displacement per cycle = 5 - 3 = 2 m in 8 s. Calculate how many complete cycles needed, then add remaining steps.",
+    "solution_steps_latex": [
+      "Given: Each step = 1 m, Each step time = 1 s",
+      "Pattern: 5 steps forward, 3 steps backward, repeat",
+      "**Analysis of one cycle**:",
+      "Forward: 5 m in 5 s, Backward: 3 m in 3 s",
+      "Net displacement per cycle = 5 - 3 = 2 m",
+      "Time per cycle = 5 + 3 = 8 s",
+      "**To reach 13 m**:",
+      "After $n$ complete cycles: position = $2n$ m",
+      "We need position $\\geq$ 13 m",
+      "After 6 cycles: position = 12 m, time = 48 s (too much)",
+      "Let's track step by step:",
+      "After 5 steps (5 s): x = 5 m",
+      "After 8 steps (8 s): x = 2 m (5-3)",
+      "After 13 steps (13 s): x = 7 m (2+5)",
+      "After 16 steps (16 s): x = 4 m (7-3)",
+      "After 21 steps (21 s): x = 9 m (4+5)",
+      "After 24 steps (24 s): x = 6 m (9-3)",
+      "After 29 steps (29 s): x = 11 m (6+5)",
+      "After 32 steps (32 s): x = 8 m (11-3)",
+      "After 37 steps (37 s): x = 13 m (8+5)",
+      "**Answer: 37 s**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Zigzag position-time graph showing repeated pattern: upward slope for 5 seconds, downward slope for 3 seconds, creating a saw-tooth pattern with net upward trend reaching x=13m at t=37s",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Step length: 1 m",
+        "Time per step: 1 s",
+        "Pattern: 5 forward, 3 backward",
+        "Distance to pit: 13 m"
+      ],
+      "to_find": [
+        "Time to reach 13 m"
+      ],
+      "formulas_used": [
+        "Net displacement = forward steps - backward steps",
+        "Total time = number of steps $\\times$ 1 s"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "zigzag-motion",
+      "kinematics",
+      "graphical-solution",
+      "pattern-recognition"
+    ],
+    "p5_sketch": "q2-4-velocity-time-analysis",
+    "p5_sketch_slug": "q2-4-velocity-time-analysis",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.4",
+      "page": 24
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Equations of Motion",
+    "exercise": "Exercise",
+    "question_number": "Q2.5",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A car moving along a straight highway with speed of 126 km h⁻¹ is brought to a stop within a distance of 200 m. What is the retardation of the car (assumed uniform), and how long does it take for the car to stop?",
+    "question_latex": "A car moving along a straight highway with speed of 126 km h$^{-1}$ is brought to a stop within a distance of 200 m. What is the retardation of the car (assumed uniform), and how long does it take for the car to stop?",
+    "sub_parts": null,
+    "correct_answer_plain": "3.06 m s⁻² ; 11.4 s",
+    "correct_answer_latex": "$3.06$ m s$^{-2}$ ; $11.4$ s",
+    "hint": "Convert speed to m/s. Use v² = u² + 2as to find acceleration, then v = u + at to find time.",
+    "solution_steps_latex": [
+      "Given: Initial speed $u = 126$ km h$^{-1}$ = $126 \\times \\frac{5}{18}$ = 35 m s$^{-1}$",
+      "Final speed $v = 0$ (car stops)",
+      "Distance $s = 200$ m",
+      "**Finding retardation**:",
+      "Using $v^2 = u^2 + 2as$",
+      "$0^2 = (35)^2 + 2 \\times a \\times 200$",
+      "$0 = 1225 + 400a$",
+      "$a = -\\frac{1225}{400} = -3.0625$ m s$^{-2}$",
+      "Retardation = $|a| = 3.06$ m s$^{-2}$ (magnitude)",
+      "**Finding time**:",
+      "Using $v = u + at$",
+      "$0 = 35 + (-3.0625)t$",
+      "$t = \\frac{35}{3.0625} = 11.43$ s $\\approx 11.4$ s"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial speed: 126 km h⁻¹ = 35 m s⁻¹",
+        "Final speed: 0 m s⁻¹",
+        "Distance: 200 m"
+      ],
+      "to_find": [
+        "Retardation (deceleration)",
+        "Time to stop"
+      ],
+      "formulas_used": [
+        "$v^2 = u^2 + 2as$",
+        "$v = u + at$"
+      ]
+    },
+    "tags": [
+      "equations-of-motion",
+      "retardation",
+      "uniform-acceleration",
+      "kinematics",
+      "stopping-distance"
+    ],
+    "p5_sketch": "q2-5-braking-car",
+    "p5_sketch_slug": "q2-5-braking-car",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.5",
+      "page": 24
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Motion Under Gravity",
+    "exercise": "Exercise",
+    "question_number": "Q2.6",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A player throws a ball upwards with an initial speed of 29.4 m s⁻¹.\n(a) What is the direction of acceleration during the upward motion of the ball?\n(b) What are the velocity and acceleration of the ball at the highest point of its motion?\n(c) Choose the x = 0 m and t = 0 s to be the location and time of the ball at its highest point, vertically downward direction to be the positive direction of x-axis, and give the signs of position, velocity and acceleration of the ball during its upward, and downward motion.\n(d) To what height does the ball rise and after how long does the ball return to the player's hands? (Take g = 9.8 m s⁻² and neglect air resistance).",
+    "question_latex": "A player throws a ball upwards with an initial speed of 29.4 m s$^{-1}$.\n(a) What is the direction of acceleration during the upward motion of the ball?\n(b) What are the velocity and acceleration of the ball at the highest point of its motion?\n(c) Choose the $x = 0$ m and $t = 0$ s to be the location and time of the ball at its highest point, vertically downward direction to be the positive direction of $x$-axis, and give the signs of position, velocity and acceleration of the ball during its upward, and downward motion.\n(d) To what height does the ball rise and after how long does the ball return to the player's hands? (Take $g = 9.8$ m s$^{-2}$ and neglect air resistance).",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) Vertically downwards; (b) zero velocity, acceleration of 9.8 m s⁻² downwards; (c) x > 0 (upward and downward motion); v < 0 (upward), v > 0 (downward), a > 0 throughout; (d) 44.1 m, 6 s",
+    "correct_answer_latex": "(a) Vertically downwards; (b) zero velocity, acceleration of $9.8$ m s$^{-2}$ downwards; (c) $x > 0$ (upward and downward motion); $v < 0$ (upward), $v > 0$ (downward), $a > 0$ throughout; (d) 44.1 m, 6 s",
+    "hint": "Acceleration due to gravity is always downward. At highest point, velocity = 0 but acceleration = g. Use v² = u² - 2gh for height.",
+    "solution_steps_latex": [
+      "Given: Initial speed $u = 29.4$ m s$^{-1}$ (upward)",
+      "Acceleration due to gravity $g = 9.8$ m s$^{-2}$ (downward)",
+      "**Part (a)**: Direction of acceleration during upward motion",
+      "Acceleration is always **vertically downwards** (direction of gravity), even during upward motion",
+      "**Part (b)**: At highest point:",
+      "Velocity $v = 0$ m s$^{-1}$ (instantaneously at rest)",
+      "Acceleration $a = 9.8$ m s$^{-2}$ **downwards** (gravity still acts)",
+      "**Part (c)**: With origin at highest point, downward as positive:",
+      "During **upward motion** (before highest point): $x > 0$, $v < 0$ (moving upward, opposite to positive direction), $a > 0$ (downward, along positive direction)",
+      "During **downward motion** (after highest point): $x > 0$, $v > 0$ (moving downward), $a > 0$ (downward)",
+      "**Part (d)**: Maximum height and time",
+      "Using $v^2 = u^2 - 2gh$ (taking upward as positive initially):",
+      "$0^2 = (29.4)^2 - 2 \\times 9.8 \\times h$",
+      "$h = \\frac{(29.4)^2}{2 \\times 9.8} = \\frac{864.36}{19.6} = 44.1$ m",
+      "Time to reach maximum height using $v = u - gt$:",
+      "$0 = 29.4 - 9.8t$",
+      "$t = \\frac{29.4}{9.8} = 3$ s",
+      "Total time to return = $2t = 6$ s (by symmetry)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial speed: 29.4 m s⁻¹",
+        "Acceleration due to gravity: 9.8 m s⁻²"
+      ],
+      "to_find": [
+        "(a) Direction of acceleration",
+        "(b) Velocity and acceleration at highest point",
+        "(c) Signs of position, velocity, acceleration",
+        "(d) Maximum height and total time"
+      ],
+      "formulas_used": [
+        "$v^2 = u^2 - 2gh$",
+        "$v = u - gt$",
+        "$h = ut - \\frac{1}{2}gt^2$"
+      ]
+    },
+    "tags": [
+      "projectile-motion",
+      "vertical-motion",
+      "gravity",
+      "maximum-height",
+      "time-of-flight",
+      "acceleration"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.6",
+      "page": 24
+    },
+    "p5_sketch": "q2-6-vertical-projectile",
+    "p5_sketch_slug": "q2-6-vertical-projectile"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Velocity and Acceleration",
+    "exercise": "Exercise",
+    "question_number": "Q2.7",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "Read each statement below carefully and state with reasons and examples, if it is true or false;\nA particle in one-dimensional motion\n(a) with zero speed at an instant may have non-zero acceleration at that instant\n(b) with zero speed may have non-zero velocity,\n(c) with constant speed must have zero acceleration,\n(d) with positive value of acceleration must be speeding up.",
+    "question_latex": "Read each statement below carefully and state with reasons and examples, if it is true or false;\nA particle in one-dimensional motion\n(a) with zero speed at an instant may have non-zero acceleration at that instant\n(b) with zero speed may have non-zero velocity,\n(c) with constant speed must have zero acceleration,\n(d) with positive value of acceleration must be speeding up.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) True; (b) False; (c) True (if the particle rebounds instantly with the same speed, it implies infinite acceleration which is unphysical); (d) False (true only when the chosen positive direction is along the direction of motion)",
+    "correct_answer_latex": "(a) True; (b) False; (c) True (if the particle rebounds instantly with the same speed, it implies infinite acceleration which is unphysical); (d) False (true only when the chosen positive direction is along the direction of motion)",
+    "hint": "Think about velocity vs speed, direction matters. Consider examples like ball at highest point, particle changing direction.",
+    "solution_steps_latex": [
+      "**Part (a)**: TRUE - A particle with zero speed at an instant may have non-zero acceleration",
+      "**Example**: A ball thrown vertically upward has zero speed at the highest point, but acceleration = $g = 9.8$ m s$^{-2}$ (downward)",
+      "**Reason**: Acceleration depends on the rate of change of velocity, not on the instantaneous value of velocity",
+      "**Part (b)**: FALSE - A particle with zero speed cannot have non-zero velocity",
+      "**Reason**: Speed is the magnitude of velocity. If speed = 0, then $|\\vec{v}| = 0$, which means $\\vec{v} = 0$",
+      "Velocity and speed are zero simultaneously",
+      "**Part (c)**: TRUE - A particle with constant speed must have zero acceleration (in one-dimensional motion)",
+      "**Reason**: In 1D motion, constant speed means constant velocity (direction doesn't change in 1D)",
+      "If $v$ = constant, then $a = \\frac{dv}{dt} = 0$",
+      "**Note**: If particle rebounds with same speed, there's a discontinuous change requiring infinite acceleration (unphysical)",
+      "**Part (d)**: FALSE - Positive acceleration doesn't necessarily mean speeding up",
+      "**Example**: If velocity is negative (moving in negative direction) and acceleration is positive (in positive direction), the particle is actually slowing down",
+      "**Reason**: Speeding up occurs when velocity and acceleration have the same sign. If they have opposite signs, particle slows down",
+      "The statement is true only when positive direction is chosen along the direction of motion"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various scenarios about speed, velocity, and acceleration"
+      ],
+      "to_find": [
+        "Truth value of each statement with reasoning"
+      ],
+      "formulas_used": [
+        "$a = \\frac{dv}{dt}$",
+        "Speed = $|\\text{velocity}|$"
+      ]
+    },
+    "tags": [
+      "conceptual",
+      "velocity",
+      "speed",
+      "acceleration",
+      "true-false",
+      "reasoning"
+    ],
+    "p5_sketch": "q2-7-free-fall",
+    "p5_sketch_slug": "q2-7-free-fall",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.7",
+      "page": 24
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Diagram",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Speed-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.8",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A ball is dropped from a height of 90 m on a floor. At each collision with the floor, the ball loses one tenth of its speed. Plot the speed-time graph of its motion between t = 0 to 12 s.",
+    "question_latex": "A ball is dropped from a height of 90 m on a floor. At each collision with the floor, the ball loses one tenth of its speed. Plot the speed-time graph of its motion between $t = 0$ to 12 s.",
+    "sub_parts": null,
+    "correct_answer_plain": "Graph showing repeated triangular patterns with decreasing peak speeds: first peak at ~42 m/s, subsequent peaks at 0.9 times previous peak",
+    "correct_answer_latex": "Graph showing repeated triangular patterns with decreasing peak speeds: first peak at $\\approx 42$ m/s, subsequent peaks at 0.9 times previous peak",
+    "hint": "Calculate initial impact speed using v² = u² + 2gh. After each bounce, speed becomes 0.9 times previous. Time for each journey uses t = v/g.",
+    "solution_steps_latex": [
+      "**Initial drop**:",
+      "Height $h = 90$ m, Initial velocity $u = 0$, $g = 10$ m s$^{-2}$ (approx)",
+      "Using $v^2 = u^2 + 2gh$:",
+      "$v^2 = 0 + 2 \\times 10 \\times 90 = 1800$",
+      "$v = \\sqrt{1800} = 42.43$ m s$^{-1}$ $\\approx 42$ m s$^{-1}$",
+      "Time to fall: $v = u + gt$ → $42 = 0 + 10t$ → $t = 4.2$ s",
+      "**First bounce**:",
+      "Speed after collision = $0.9 \\times 42 = 37.8$ m s$^{-1}$ (upward)",
+      "Ball rises and falls with this speed",
+      "Time for up and down = $2 \\times \\frac{37.8}{10} = 7.56$ s",
+      "**Subsequent bounces**: Speed keeps reducing by factor 0.9",
+      "Second bounce: $v = 0.9 \\times 37.8 = 34.02$ m s$^{-1}$",
+      "**Graph description**:",
+      "Speed increases linearly from 0 to 42 m s$^{-1}$ in first 4.2 s",
+      "At each collision, speed drops by 10% (discontinuous drop)",
+      "Between collisions, speed increases (falling) then decreases (rising) linearly",
+      "Triangular wave pattern with decreasing amplitude"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Speed-time graph showing saw-tooth pattern. First peak at ~42 m/s at t≈4.2s, then decreasing triangular waves with peaks at 90% of previous height. Each collision shows sudden 10% drop in speed.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial height: 90 m",
+        "Speed loss per collision: 10%",
+        "g = 9.8 m s⁻² (or 10 m s⁻² approx)"
+      ],
+      "to_find": [
+        "Speed-time graph from t=0 to t=12s"
+      ],
+      "formulas_used": [
+        "$v^2 = u^2 + 2gh$",
+        "$v = u + gt$",
+        "Speed after bounce = $0.9 \\times$ speed before"
+      ]
+    },
+    "tags": [
+      "speed-time-graph",
+      "bouncing-ball",
+      "collision",
+      "energy-loss",
+      "free-fall",
+      "graphing"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.8",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Displacement and Distance",
+    "exercise": "Exercise",
+    "question_number": "Q2.9",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Explain clearly, with examples, the distinction between:\n(a) magnitude of displacement (sometimes called distance) over an interval of time, and the total length of path covered by a particle over the same interval;\n(b) magnitude of average velocity over an interval of time, and the average speed over the same interval. [Average speed of a particle over an interval of time is defined as the total path length divided by the time interval]. Show in both (a) and (b) that the second quantity is either greater than or equal to the first. When is the equality sign true? [For simplicity, consider one-dimensional motion only].",
+    "question_latex": "Explain clearly, with examples, the distinction between:\n(a) magnitude of displacement (sometimes called distance) over an interval of time, and the total length of path covered by a particle over the same interval;\n(b) magnitude of average velocity over an interval of time, and the average speed over the same interval. [Average speed of a particle over an interval of time is defined as the total path length divided by the time interval]. Show in both (a) and (b) that the second quantity is either greater than or equal to the first. When is the equality sign true? [For simplicity, consider one-dimensional motion only].",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) Path length ≥ |displacement|, equality when motion is in straight line without reversal; (b) Average speed ≥ |average velocity|, equality when no reversal of direction",
+    "correct_answer_latex": "(a) Path length $\\geq$ |displacement|, equality when motion is in straight line without reversal; (b) Average speed $\\geq$ |average velocity|, equality when no reversal of direction",
+    "hint": "Displacement is straight-line distance between initial and final positions. Path length is actual distance traveled. Think about motion with direction changes.",
+    "solution_steps_latex": [
+      "**Part (a)**: Displacement vs Path length",
+      "**Displacement**: Vector from initial to final position. Magnitude $|\\Delta \\vec{x}| = |x_f - x_i|$",
+      "**Path length**: Total distance actually traveled",
+      "**Example 1**: Particle moves from $x = 0$ to $x = 5$ m directly",
+      "Displacement = 5 m, Path length = 5 m (Equal)",
+      "**Example 2**: Particle moves from $x = 0$ to $x = 5$ m, then back to $x = 2$ m",
+      "Displacement = $|2 - 0| = 2$ m, Path length = $5 + 3 = 8$ m",
+      "**Proof**: Path length $\\geq$ |Displacement|",
+      "Path length is sum of all segments. Displacement is direct distance.",
+      "By triangle inequality, path length $\\geq$ magnitude of displacement",
+      "**Equality**: When particle moves in one direction without reversal",
+      "**Part (b)**: Average velocity vs Average speed",
+      "**Average velocity**: $\\vec{v}_{avg} = \\frac{\\Delta \\vec{x}}{\\Delta t} = \\frac{x_f - x_i}{t_f - t_i}$",
+      "Magnitude: $|v_{avg}| = \\frac{|x_f - x_i|}{\\Delta t}$",
+      "**Average speed**: $v_{avg,speed} = \\frac{\\text{Total path length}}{\\Delta t}$",
+      "**Relation**: Since path length $\\geq$ |displacement|:",
+      "$\\frac{\\text{Path length}}{\\Delta t} \\geq \\frac{|\\Delta x|}{\\Delta t}$",
+      "Therefore: Average speed $\\geq$ |Average velocity|",
+      "**Equality**: When motion is in one direction without reversal (path length = |displacement|)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two diagrams in the PDF showing: (a) curved path vs straight displacement arrow, (b) circular path showing total path length as circumference vs displacement as diameter",
+      "figure_reference": "Fig. 2.9 (diagrams in question)"
+    },
+    "physical_quantities": {
+      "given": [
+        "General motion scenarios"
+      ],
+      "to_find": [
+        "Distinction between displacement and path length",
+        "Distinction between average velocity and average speed",
+        "Inequality relationships"
+      ],
+      "formulas_used": [
+        "Displacement = $x_f - x_i$",
+        "Average velocity = $\\frac{\\Delta x}{\\Delta t}$",
+        "Average speed = $\\frac{\\text{Total path length}}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "displacement",
+      "distance",
+      "path-length",
+      "average-velocity",
+      "average-speed",
+      "conceptual",
+      "inequality"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.9",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Average Velocity and Speed",
+    "exercise": "Exercise",
+    "question_number": "Q2.10",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A man walks on a straight road from his home to a market 2.5 km away with a speed of 5 km h⁻¹. Finding the market closed, he instantly turns and walks back home with a speed of 7.5 km h⁻¹. What is the\n(a) magnitude of average velocity, and\n(b) average speed of the man over the interval of time (i) 0 to 30 min, (ii) 0 to 50 min, (iii) 0 to 40 min?\n[Note: You will appreciate from this exercise why it is better to define average speed as total path length divided by time, and not as magnitude of average velocity. You would not like to tell the tired man on his return home that his average speed was zero!]",
+    "question_latex": "A man walks on a straight road from his home to a market 2.5 km away with a speed of 5 km h$^{-1}$. Finding the market closed, he instantly turns and walks back home with a speed of 7.5 km h$^{-1}$. What is the\n(a) magnitude of average velocity, and\n(b) average speed of the man over the interval of time (i) 0 to 30 min, (ii) 0 to 50 min, (iii) 0 to 40 min?\n[Note: You will appreciate from this exercise why it is better to define average speed as total path length divided by time, and not as magnitude of average velocity. You would not like to tell the tired man on his return home that his average speed was zero!]",
+    "sub_parts": [
+      "(a)(i)",
+      "(a)(ii)",
+      "(a)(iii)",
+      "(b)(i)",
+      "(b)(ii)",
+      "(b)(iii)"
+    ],
+    "correct_answer_plain": "(a) 5 km h⁻¹, 0, 15/8 km h⁻¹; (b) 5 km h⁻¹, 6 km h⁻¹, 45/8 km h⁻¹",
+    "correct_answer_latex": "(a) 5 km h$^{-1}$, 0, $\\frac{15}{8}$ km h$^{-1}$; (b) 5 km h$^{-1}$, 6 km h$^{-1}$, $\\frac{45}{8}$ km h$^{-1}$",
+    "hint": "First find when he reaches market and returns home. Average velocity = displacement/time. Average speed = total distance/time.",
+    "solution_steps_latex": [
+      "**Given**: Distance to market = 2.5 km",
+      "Speed going = 5 km h$^{-1}$, Speed returning = 7.5 km h$^{-1}$",
+      "**Time calculations**:",
+      "Time to reach market = $\\frac{2.5}{5}$ = 0.5 h = 30 min",
+      "Time to return home = $\\frac{2.5}{7.5}$ = $\\frac{1}{3}$ h = 20 min",
+      "Total time for round trip = 30 + 20 = 50 min",
+      "**Case (i): 0 to 30 min**",
+      "At $t = 30$ min, man just reaches market. Position = 2.5 km from home",
+      "(a) Displacement = 2.5 km, Time = 0.5 h",
+      "Magnitude of average velocity = $\\frac{2.5}{0.5}$ = **5 km h$^{-1}$**",
+      "(b) Path length = 2.5 km",
+      "Average speed = $\\frac{2.5}{0.5}$ = **5 km h$^{-1}$**",
+      "**Case (ii): 0 to 50 min**",
+      "At $t = 50$ min, man returns home. Position = 0 km (back at home)",
+      "(a) Displacement = 0 km",
+      "Magnitude of average velocity = $\\frac{0}{50/60}$ = **0 km h$^{-1}$**",
+      "(b) Path length = 2.5 + 2.5 = 5 km",
+      "Average speed = $\\frac{5}{50/60}$ = $\\frac{5}{5/6}$ = **6 km h$^{-1}$**",
+      "**Case (iii): 0 to 40 min**",
+      "First 30 min: reaches market",
+      "Next 10 min: walks back with speed 7.5 km h$^{-1}$",
+      "Distance covered in return = $7.5 \\times \\frac{10}{60}$ = $7.5 \\times \\frac{1}{6}$ = 1.25 km",
+      "Position at 40 min = $2.5 - 1.25$ = 1.25 km from home",
+      "(a) Displacement = 1.25 km, Time = $\\frac{40}{60}$ = $\\frac{2}{3}$ h",
+      "Magnitude of average velocity = $\\frac{1.25}{2/3}$ = $1.25 \\times \\frac{3}{2}$ = $\\frac{15}{8}$ = **1.875 km h$^{-1}$**",
+      "(b) Path length = $2.5 + 1.25$ = 3.75 km",
+      "Average speed = $\\frac{3.75}{2/3}$ = $3.75 \\times \\frac{3}{2}$ = $\\frac{45}{8}$ = **5.625 km h$^{-1}$**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Distance to market: 2.5 km",
+        "Speed to market: 5 km h⁻¹",
+        "Speed returning: 7.5 km h⁻¹"
+      ],
+      "to_find": [
+        "Average velocity for three time intervals",
+        "Average speed for three time intervals"
+      ],
+      "formulas_used": [
+        "Time = $\\frac{\\text{Distance}}{\\text{Speed}}$",
+        "Average velocity = $\\frac{\\text{Displacement}}{\\text{Time}}$",
+        "Average speed = $\\frac{\\text{Total path length}}{\\text{Time}}$"
+      ]
+    },
+    "tags": [
+      "average-velocity",
+      "average-speed",
+      "displacement",
+      "distance",
+      "round-trip",
+      "kinematics"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.10",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Instantaneous Speed and Velocity",
+    "exercise": "Exercise",
+    "question_number": "Q2.11",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "In Exercises 2.9 and 2.10, we have carefully distinguished between average speed and magnitude of average velocity. No such distinction is necessary when we consider instantaneous speed and magnitude of velocity. The instantaneous speed is always equal to the magnitude of instantaneous velocity. Why?",
+    "question_latex": "In Exercises 2.9 and 2.10, we have carefully distinguished between average speed and magnitude of average velocity. No such distinction is necessary when we consider instantaneous speed and magnitude of velocity. The instantaneous speed is always equal to the magnitude of instantaneous velocity. Why?",
+    "sub_parts": null,
+    "correct_answer_plain": "Because, for an arbitrarily small interval of time, the magnitude of displacement is equal to the length of the path.",
+    "correct_answer_latex": "Because, for an arbitrarily small interval of time, the magnitude of displacement is equal to the length of the path.",
+    "hint": "Think about what happens as time interval approaches zero. Path length and displacement become identical.",
+    "solution_steps_latex": [
+      "**Average quantities** over finite time interval $\\Delta t$:",
+      "Average velocity = $\\frac{\\text{Displacement}}{\\Delta t}$",
+      "Average speed = $\\frac{\\text{Path length}}{\\Delta t}$",
+      "For finite $\\Delta t$, path length $\\geq$ |displacement|, so average speed $\\geq$ |average velocity|",
+      "**Instantaneous quantities** at an instant:",
+      "Instantaneous velocity = $\\vec{v} = \\lim_{\\Delta t \\to 0} \\frac{\\Delta \\vec{x}}{\\Delta t} = \\frac{d\\vec{x}}{dt}$",
+      "Instantaneous speed = $\\lim_{\\Delta t \\to 0} \\frac{\\text{Path length}}{\\Delta t}$",
+      "**Key insight**: As $\\Delta t \\to 0$, the path becomes infinitesimally small",
+      "For an infinitesimally small time interval, the path is essentially a straight line",
+      "Therefore: Path length = |Displacement| when $\\Delta t \\to 0$",
+      "**Conclusion**: Instantaneous speed = $|\\vec{v}|$ = Magnitude of instantaneous velocity",
+      "No distinction is needed because at an instant, the particle moves in a definite direction along a straight path"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Concept of instantaneous vs average quantities"
+      ],
+      "to_find": [
+        "Why instantaneous speed equals magnitude of instantaneous velocity"
+      ],
+      "formulas_used": [
+        "$\\vec{v} = \\lim_{\\Delta t \\to 0} \\frac{\\Delta \\vec{x}}{\\Delta t}$",
+        "$v = |\\vec{v}|$"
+      ]
+    },
+    "tags": [
+      "instantaneous-velocity",
+      "instantaneous-speed",
+      "limits",
+      "calculus",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.11",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Position-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.12",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Look at the graphs (a) to (d) (Fig. 2.10) carefully and state, with reasons, which of these cannot possibly represent one-dimensional motion of a particle.",
+    "question_latex": "Look at the graphs (a) to (d) (Fig. 2.10) carefully and state, with reasons, which of these cannot possibly represent one-dimensional motion of a particle.",
+    "sub_parts": null,
+    "correct_answer_plain": "All the four graphs are impossible. (a) a particle cannot have two different positions at the same time; (b) a particle cannot have velocity in opposite directions at the same time; (c) speed is always non-negative; (d) total path length of a particle can never decrease with time.",
+    "correct_answer_latex": "All the four graphs are impossible. (a) a particle cannot have two different positions at the same time; (b) a particle cannot have velocity in opposite directions at the same time; (c) speed is always non-negative; (d) total path length of a particle can never decrease with time.",
+    "hint": "Check: Can a particle be at two positions simultaneously? Can velocity be multi-valued? Can speed be negative? Can path length decrease?",
+    "solution_steps_latex": [
+      "**Graph (a)**: Position vs Time with two branches at same time",
+      "**Impossible** - A particle cannot have two different positions at the same instant of time",
+      "At a given time $t$, there are two values of $x$, which violates the definition of a function",
+      "Physically, a particle can only be at one location at any instant",
+      "**Graph (b)**: Velocity vs Time with oscillating/multi-valued function",
+      "**Impossible** - A particle cannot have two different velocities at the same time",
+      "At a given time $t$, the velocity has multiple values (both positive and negative)",
+      "This would mean the particle is moving in opposite directions simultaneously",
+      "**Graph (c)**: Speed vs Time showing negative values",
+      "**Impossible** - Speed is always non-negative",
+      "Speed is the magnitude of velocity: $\\text{speed} = |\\vec{v}| \\geq 0$",
+      "The graph shows negative speed, which is physically meaningless",
+      "**Graph (d)**: Total path length vs Time showing decreasing trend",
+      "**Impossible** - Total path length can never decrease with time",
+      "Path length is cumulative - it can only stay constant (rest) or increase (motion)",
+      "A decreasing path length would mean the particle is \"unwalking\" its previous path",
+      "**Note**: The arrows on graphs are meaningless and should be ignored"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Four graphs labeled (a) to (d): (a) shows x vs t with branching curves, (b) shows v vs t with oscillating multi-valued function, (c) shows Speed vs t dipping into negative values, (d) shows Total path length vs t with decreasing segments",
+      "figure_reference": "Figure 2.10"
+    },
+    "physical_quantities": {
+      "given": [
+        "Four different graphs of motion variables vs time"
+      ],
+      "to_find": [
+        "Which graphs are physically impossible and why"
+      ],
+      "formulas_used": [
+        "Speed = $|\\text{velocity}| \\geq 0$",
+        "Path length is monotonically non-decreasing"
+      ]
+    },
+    "tags": [
+      "graph-interpretation",
+      "physical-impossibility",
+      "position-time",
+      "velocity-time",
+      "speed",
+      "path-length",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.12",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Position-Time Graphs",
+    "exercise": "Exercise",
+    "question_number": "Q2.13",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "Figure 2.11 shows the x-t plot of one-dimensional motion of a particle. Is it correct to say from the graph that the particle moves in a straight line for t < 0 and on a parabolic path for t > 0? If not, suggest a suitable physical context for this graph.",
+    "question_latex": "Figure 2.11 shows the $x$-$t$ plot of one-dimensional motion of a particle. Is it correct to say from the graph that the particle moves in a straight line for $t < 0$ and on a parabolic path for $t > 0$? If not, suggest a suitable physical context for this graph.",
+    "sub_parts": null,
+    "correct_answer_plain": "No, wrong. x-t plot does not show the trajectory of a particle. Context: A body is dropped from a tower (x = 0) at t = 0.",
+    "correct_answer_latex": "No, wrong. $x$-$t$ plot does not show the trajectory of a particle. Context: A body is dropped from a tower ($x = 0$) at $t = 0$.",
+    "hint": "x-t graph shows how position changes with time, NOT the actual path taken. Think about vertical motion.",
+    "solution_steps_latex": [
+      "**Answer**: No, it is NOT correct to interpret the graph this way",
+      "**Important distinction**: An $x$-$t$ graph shows position vs time, NOT the trajectory (actual path) of motion",
+      "The shape of the $x$-$t$ graph does not represent the shape of the actual path",
+      "**For $t < 0$**: The straight line means position changes uniformly with time",
+      "This indicates **uniform velocity** (constant speed in one direction), NOT necessarily straight-line path",
+      "**For $t > 0$**: The parabolic curve means position varies as $x \\propto t^2$",
+      "This indicates **uniformly accelerated motion**, NOT parabolic trajectory",
+      "**Suitable physical context**:",
+      "A body is held at position $x = 0$ (say, top of a tower)",
+      "For $t < 0$: Body is being raised with constant velocity (straight line with negative slope)",
+      "At $t = 0$: Body is released from rest at $x = 0$",
+      "For $t > 0$: Body falls freely under gravity",
+      "Using $x = \\frac{1}{2}gt^2$ (taking downward as positive), we get parabolic $x$-$t$ curve",
+      "**The actual motion is along a vertical line** (one-dimensional), not along a parabola"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Position-time graph showing a straight line for t < 0 passing through origin, then a parabolic curve opening upward for t > 0, both meeting at origin (t=0, x=0)",
+      "figure_reference": "Figure 2.11"
+    },
+    "physical_quantities": {
+      "given": [
+        "x-t graph with straight line (t<0) and parabola (t>0)"
+      ],
+      "to_find": [
+        "Correct interpretation of the graph",
+        "Physical context"
+      ],
+      "formulas_used": [
+        "$x = ut + \\frac{1}{2}at^2$",
+        "For free fall: $x = \\frac{1}{2}gt^2$"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "graph-interpretation",
+      "trajectory",
+      "free-fall",
+      "uniform-acceleration",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.13",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Relative Velocity",
+    "exercise": "Exercise",
+    "question_number": "Q2.14",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A police van moving on a highway with a speed of 30 km h⁻¹ fires a bullet at a thief's car speeding away in the same direction with a speed of 192 km h⁻¹. If the muzzle speed of the bullet is 150 m s⁻¹, with what speed does the bullet hit the thief's car? (Note: Obtain that speed which is relevant for damaging the thief's car).",
+    "question_latex": "A police van moving on a highway with a speed of 30 km h$^{-1}$ fires a bullet at a thief's car speeding away in the same direction with a speed of 192 km h$^{-1}$. If the muzzle speed of the bullet is 150 m s$^{-1}$, with what speed does the bullet hit the thief's car? (Note: Obtain that speed which is relevant for damaging the thief's car).",
+    "sub_parts": null,
+    "correct_answer_plain": "105 m s⁻¹",
+    "correct_answer_latex": "$105$ m s$^{-1}$",
+    "hint": "Find relative velocity of bullet with respect to thief's car. Convert all speeds to same units first.",
+    "solution_steps_latex": [
+      "Given: Speed of police van $v_p = 30$ km h$^{-1}$ = $30 \\times \\frac{5}{18}$ = $\\frac{25}{3}$ m s$^{-1}$ $\\approx 8.33$ m s$^{-1}$",
+      "Speed of thief's car $v_t = 192$ km h$^{-1}$ = $192 \\times \\frac{5}{18}$ = $\\frac{160}{3}$ m s$^{-1}$ $\\approx 53.33$ m s$^{-1}$",
+      "Muzzle speed of bullet (relative to police van) = 150 m s$^{-1}$",
+      "**Speed of bullet relative to ground**:",
+      "Since bullet is fired from moving van in same direction:",
+      "$v_{bullet} = v_p + 150 = 8.33 + 150 = 158.33$ m s$^{-1}$",
+      "Or more precisely: $v_{bullet} = \\frac{25}{3} + 150 = \\frac{25 + 450}{3} = \\frac{475}{3}$ m s$^{-1}$",
+      "**Speed relevant for damage = Relative speed of bullet w.r.t. thief's car**:",
+      "$v_{relative} = v_{bullet} - v_t = \\frac{475}{3} - \\frac{160}{3} = \\frac{315}{3} = 105$ m s$^{-1}$",
+      "**Answer**: The bullet hits the thief's car with a relative speed of **105 m s$^{-1}$**",
+      "This is the speed relevant for damaging the car"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Police van speed: 30 km h⁻¹ = 8.33 m s⁻¹",
+        "Thief's car speed: 192 km h⁻¹ = 53.33 m s⁻¹",
+        "Muzzle speed: 150 m s⁻¹"
+      ],
+      "to_find": [
+        "Relative speed of bullet hitting thief's car"
+      ],
+      "formulas_used": [
+        "Velocity addition: $v_{bullet} = v_{van} + v_{muzzle}$",
+        "Relative velocity: $v_{rel} = v_{bullet} - v_{car}$"
+      ]
+    },
+    "tags": [
+      "relative-velocity",
+      "velocity-addition",
+      "kinematics",
+      "unit-conversion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.14",
+      "page": 25
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Graph Interpretation",
+    "exercise": "Exercise",
+    "question_number": "Q2.15",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Suggest a suitable physical situation for each of the following graphs (Fig 2.12):",
+    "question_latex": "Suggest a suitable physical situation for each of the following graphs (Fig 2.12):",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) A ball at rest on a smooth floor is kicked, it rebounds from a wall with reduced speed and moves to the opposite wall which stops it; (b) A ball thrown up with some initial velocity rebounding from the floor with reduced speed after each hit; (c) A uniformly moving cricket ball turned back by hitting it with a bat for a very short time-interval.",
+    "correct_answer_latex": "(a) A ball at rest on a smooth floor is kicked, it rebounds from a wall with reduced speed and moves to the opposite wall which stops it; (b) A ball thrown up with some initial velocity rebounding from the floor with reduced speed after each hit; (c) A uniformly moving cricket ball turned back by hitting it with a bat for a very short time-interval.",
+    "hint": "Analyze each graph for position, velocity, and acceleration changes. Look for sudden changes, oscillations, or rebounds.",
+    "solution_steps_latex": [
+      "**Graph (a)**: Position vs Time",
+      "Shows: Particle at rest (horizontal line at A), sudden position change (vertical drop to B), then remains at new position",
+      "**Physical situation**: ",
+      "A ball resting on a smooth horizontal floor at position A is kicked",
+      "It rebounds from a wall with reduced speed (indicated by less steep return)",
+      "Finally stops when it hits the opposite wall at position B",
+      "Alternative: A book on a table is suddenly pushed to the edge and falls to the floor",
+      "**Graph (b)**: Velocity vs Time",
+      "Shows: Oscillating velocity with decreasing amplitude, changing sign periodically",
+      "Velocity becomes less negative (or less positive) with each cycle",
+      "**Physical situation**:",
+      "A ball is thrown upward with initial velocity",
+      "It bounces on the floor repeatedly, losing speed with each bounce",
+      "Velocity alternates between positive (upward) and negative (downward)",
+      "Each bounce has reduced peak velocity due to energy loss",
+      "**Graph (c)**: Acceleration vs Time",
+      "Shows: Zero acceleration, sudden spike (impulse), then zero again",
+      "Very brief high acceleration pulse",
+      "**Physical situation**:",
+      "A cricket ball moving with uniform velocity (zero acceleration)",
+      "Suddenly hit by a bat applying large force for very short time",
+      "The impulsive force causes brief high acceleration",
+      "After impact, ball moves with new uniform velocity (zero acceleration again)",
+      "This represents an **impulsive force** - large force acting for very short duration"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Three graphs: (a) x vs t showing horizontal line, sudden drop, then horizontal line at lower level; (b) v vs t showing damped oscillation crossing time axis multiple times; (c) a vs t showing zero acceleration with single sharp spike",
+      "figure_reference": "Figure 2.12"
+    },
+    "physical_quantities": {
+      "given": [
+        "Three different graphs of motion variables vs time"
+      ],
+      "to_find": [
+        "Physical situations that match each graph"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "graph-interpretation",
+      "physical-scenarios",
+      "collision",
+      "rebound",
+      "impulse",
+      "damped-oscillation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.15",
+      "page": 26
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Simple Harmonic Motion",
+    "exercise": "Exercise",
+    "question_number": "Q2.16",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "Figure 2.13 gives the x-t plot of a particle executing one-dimensional simple harmonic motion. (You will learn about this motion in more detail in Chapter 13). Give the signs of position, velocity and acceleration variables of the particle at t = 0.3 s, 1.2 s, -1.2 s.",
+    "question_latex": "Figure 2.13 gives the $x$-$t$ plot of a particle executing one-dimensional simple harmonic motion. (You will learn about this motion in more detail in Chapter 13). Give the signs of position, velocity and acceleration variables of the particle at $t = 0.3$ s, $1.2$ s, $-1.2$ s.",
+    "sub_parts": null,
+    "correct_answer_plain": "At t=0.3s: x < 0, v < 0, a > 0; At t=1.2s: x > 0, v > 0, a < 0; At t=-1.2s: x < 0, v > 0, a > 0",
+    "correct_answer_latex": "At $t=0.3$s: $x < 0$, $v < 0$, $a > 0$; At $t=1.2$s: $x > 0$, $v > 0$, $a < 0$; At $t=-1.2$s: $x < 0$, $v > 0$, $a > 0$",
+    "hint": "Position sign from graph directly. Velocity sign from slope. In SHM, acceleration is opposite to displacement: a = -ω²x.",
+    "solution_steps_latex": [
+      "From Figure 2.13, we analyze the sinusoidal (cosine-like) $x$-$t$ graph",
+      "**Key principles**:",
+      "Position $x$: Read directly from graph",
+      "Velocity $v$: Sign from slope of $x$-$t$ curve (positive slope → positive velocity)",
+      "Acceleration in SHM: $a \\propto -x$ (always opposite to displacement)",
+      "**At $t = 0.3$ s**:",
+      "From graph: $x < 0$ (particle below equilibrium)",
+      "Slope is negative (curve going down) → $v < 0$",
+      "Since $x < 0$, acceleration $a \\propto -x$ → $a > 0$ (directed toward equilibrium)",
+      "**Signs**: $x < 0$, $v < 0$, $a > 0$",
+      "**At $t = 1.2$ s**:",
+      "From graph: $x > 0$ (particle above equilibrium)",
+      "Slope is positive (curve going up) → $v > 0$",
+      "Since $x > 0$, acceleration $a \\propto -x$ → $a < 0$ (directed toward equilibrium)",
+      "**Signs**: $x > 0$, $v > 0$, $a < 0$",
+      "**At $t = -1.2$ s**:",
+      "From graph: $x < 0$ (particle below equilibrium)",
+      "Slope is positive (curve rising from left) → $v > 0$",
+      "Since $x < 0$, acceleration $a \\propto -x$ → $a > 0$",
+      "**Signs**: $x < 0$, $v > 0$, $a > 0$"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Sinusoidal position-time graph showing simple harmonic motion. The curve oscillates smoothly about x=0, with marked time points at -2, -1, 0, 1, 2, 3 on t-axis",
+      "figure_reference": "Figure 2.13"
+    },
+    "physical_quantities": {
+      "given": [
+        "x-t graph of SHM",
+        "Time instants: t = 0.3 s, 1.2 s, -1.2 s"
+      ],
+      "to_find": [
+        "Signs of x, v, a at each time instant"
+      ],
+      "formulas_used": [
+        "$v = \\frac{dx}{dt}$ (slope of $x$-$t$ graph)",
+        "In SHM: $a = -\\omega^2 x$ (acceleration opposite to displacement)"
+      ]
+    },
+    "tags": [
+      "simple-harmonic-motion",
+      "position-time-graph",
+      "velocity-from-slope",
+      "acceleration",
+      "sinusoidal-motion",
+      "graph-interpretation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.16",
+      "page": 26
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Graph Analysis",
+    "exercise": "Exercise",
+    "question_number": "Q2.17",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Figure 2.14 gives the x-t plot of a particle in one-dimensional motion. Three different equal intervals of time are shown. In which interval is the average speed greatest, and in which is it the least? Give the sign of average velocity for each interval.",
+    "question_latex": "Figure 2.14 gives the $x$-$t$ plot of a particle in one-dimensional motion. Three different equal intervals of time are shown. In which interval is the average speed greatest, and in which is it the least? Give the sign of average velocity for each interval.",
+    "sub_parts": null,
+    "correct_answer_plain": "Greatest in 3, least in 2; v > 0 in 1 and 2, v < 0 in 3",
+    "correct_answer_latex": "Greatest in 3, least in 2; $v > 0$ in 1 and 2, $v < 0$ in 3",
+    "hint": "Average speed = |displacement|/time. Average velocity = displacement/time (with sign). Look at change in position.",
+    "solution_steps_latex": [
+      "From Figure 2.14, we have three equal time intervals labeled 1, 2, and 3",
+      "**Average speed** = $\\frac{|\\text{displacement}|}{\\text{time interval}}$",
+      "**Average velocity** = $\\frac{\\text{displacement}}{\\text{time interval}}$ (includes sign)",
+      "Let's analyze each interval:",
+      "**Interval 1**:",
+      "Displacement is positive and moderate (moving upward on graph)",
+      "Average velocity: **positive** (moving in +x direction)",
+      "**Interval 2**:",
+      "Displacement is very small (nearly horizontal portion of curve)",
+      "The curve is nearly flat → smallest change in position",
+      "Average velocity: **positive** but very small (slight increase in x)",
+      "**Interval 3**:",
+      "Displacement is negative and large in magnitude (steep downward slope)",
+      "Largest change in position (in magnitude)",
+      "Average velocity: **negative** (moving in -x direction)",
+      "**Comparing average speeds** (magnitudes):",
+      "Interval 1: Moderate",
+      "Interval 2: **Least** (smallest |Δx|)",
+      "Interval 3: **Greatest** (largest |Δx|)",
+      "**Summary**:",
+      "Greatest average speed: **Interval 3**",
+      "Least average speed: **Interval 2**",
+      "Signs: $v > 0$ in intervals 1 and 2, $v < 0$ in interval 3"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Position-time graph showing a curve that rises gradually (interval 1), plateaus (interval 2), then drops steeply (interval 3). Three equal time intervals are marked on the t-axis.",
+      "figure_reference": "Figure 2.14"
+    },
+    "physical_quantities": {
+      "given": [
+        "x-t graph with three equal time intervals"
+      ],
+      "to_find": [
+        "Interval with greatest average speed",
+        "Interval with least average speed",
+        "Sign of average velocity in each interval"
+      ],
+      "formulas_used": [
+        "Average velocity = $\\frac{\\Delta x}{\\Delta t}$",
+        "Average speed = $\\frac{|\\Delta x|}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "position-time-graph",
+      "average-velocity",
+      "average-speed",
+      "graph-interpretation",
+      "displacement"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.17",
+      "page": 26
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 2: Motion in a Straight Line",
+    "section": "Speed-Time Graphs and Acceleration",
+    "exercise": "Exercise",
+    "question_number": "Q2.18",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "Figure 2.15 gives a speed-time graph of a particle in motion along a constant direction. Three equal intervals of time are shown. In which interval is the average acceleration greatest in magnitude? In which interval is the average speed greatest? Choosing the positive direction as the constant direction of motion, give the signs of v and a in the three intervals. What are the accelerations at the points A, B, C and D?",
+    "question_latex": "Figure 2.15 gives a speed-time graph of a particle in motion along a constant direction. Three equal intervals of time are shown. In which interval is the average acceleration greatest in magnitude? In which interval is the average speed greatest? Choosing the positive direction as the constant direction of motion, give the signs of $v$ and $a$ in the three intervals. What are the accelerations at the points A, B, C and D?",
+    "sub_parts": null,
+    "correct_answer_plain": "Acceleration magnitude greatest in 2; speed greatest in 3; v > 0 in 1, 2 and 3; a > 0 in 1 and 3, a < 0 in 2; a = 0 at A, B, C, D",
+    "correct_answer_latex": "Acceleration magnitude greatest in 2; speed greatest in 3; $v > 0$ in 1, 2 and 3; $a > 0$ in 1 and 3, $a < 0$ in 2; $a = 0$ at A, B, C, D",
+    "hint": "Acceleration = slope of v-t graph. At peak/valley points (A,B,C,D), slope = 0. Speed read from graph directly.",
+    "solution_steps_latex": [
+      "From Figure 2.15, analyzing the speed-time graph with three equal intervals",
+      "**Key principles**:",
+      "Speed is always positive (moving in constant direction)",
+      "Acceleration = slope of speed-time graph",
+      "Positive slope → positive acceleration; Negative slope → negative acceleration",
+      "**Average acceleration in each interval**:",
+      "Acceleration = $\\frac{\\Delta v}{\\Delta t}$ = slope",
+      "**Interval 1**: Speed increases from A to B",
+      "Slope is positive but moderate → $a > 0$, moderate magnitude",
+      "**Interval 2**: Speed decreases from B to C (steep negative slope)",
+      "Large negative slope → $a < 0$, **largest magnitude**",
+      "**Interval 3**: Speed increases from C to D",
+      "Positive slope, similar to interval 1 → $a > 0$",
+      "**Greatest average acceleration magnitude**: **Interval 2** (steepest slope)",
+      "**Average speed in each interval**:",
+      "Average speed = average height on the graph",
+      "Interval 1: Moderate values",
+      "Interval 2: High values (near peak)",
+      "Interval 3: **Highest values** (greatest average height)",
+      "**Greatest average speed**: **Interval 3**",
+      "**Signs of $v$ and $a$**:",
+      "Motion is in positive direction throughout, so $v > 0$ always",
+      "Interval 1: $v > 0$, $a > 0$ (speeding up)",
+      "Interval 2: $v > 0$, $a < 0$ (slowing down)",
+      "Interval 3: $v > 0$, $a > 0$ (speeding up again)",
+      "**Accelerations at points A, B, C, D**:",
+      "These are turning points (maxima/minima) where slope = 0",
+      "At A: $a = 0$ (transition from previous motion)",
+      "At B: $a = 0$ (local maximum, slope changes from + to -)",
+      "At C: $a = 0$ (local minimum, slope changes from - to +)",
+      "At D: $a = 0$ (another turning point)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Speed-time graph showing wave-like pattern with points A, B, C, D marked. Three equal time intervals labeled 1, 2, 3. Graph shows speed increasing to B, decreasing to C, then increasing to D.",
+      "figure_reference": "Figure 2.15"
+    },
+    "physical_quantities": {
+      "given": [
+        "Speed-time graph",
+        "Three equal time intervals",
+        "Marked points A, B, C, D"
+      ],
+      "to_find": [
+        "Interval with greatest acceleration magnitude",
+        "Interval with greatest average speed",
+        "Signs of v and a in each interval",
+        "Acceleration at points A, B, C, D"
+      ],
+      "formulas_used": [
+        "Acceleration = slope of $v$-$t$ graph = $\\frac{dv}{dt}$",
+        "Average acceleration = $\\frac{\\Delta v}{\\Delta t}$"
+      ]
+    },
+    "tags": [
+      "speed-time-graph",
+      "acceleration",
+      "slope",
+      "average-speed",
+      "graph-interpretation",
+      "turning-points"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 2,
+      "exercise": "Exercise",
+      "question_number": "Q2.18",
+      "page": 26
+    }
+  }
+]

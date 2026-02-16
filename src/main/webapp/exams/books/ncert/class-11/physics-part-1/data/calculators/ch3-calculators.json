@@ -1,0 +1,51 @@
+{
+  "q3-6-vector-resultant": {
+    "title": "Vector Addition — Resultant Magnitude",
+    "formula_display": "|A + B| = √[(ax+bx)² + (ay+by)²]",
+    "inputs": [
+      {"id": "ax", "label": "Vector A — X component", "unit": "", "default": 3, "min": -10, "max": 10, "step": 0.1},
+      {"id": "ay", "label": "Vector A — Y component", "unit": "", "default": 4, "min": -10, "max": 10, "step": 0.1},
+      {"id": "bx", "label": "Vector B — X component", "unit": "", "default": 5, "min": -10, "max": 10, "step": 0.1},
+      {"id": "by", "label": "Vector B — Y component", "unit": "", "default": 2, "min": -10, "max": 10, "step": 0.1}
+    ],
+    "compute": "sqrt(pow(ax + bx, 2) + pow(ay + by, 2))",
+    "output": {"label": "Resultant |A + B|", "unit": "", "precision": 4},
+    "plot": {"vary": "ax", "range": [-10, 10], "points": 50, "xLabel": "ax", "yLabel": "|A + B|"}
+  },
+  "q3-projectile-range": {
+    "title": "Projectile Motion — Range Calculator",
+    "formula_display": "R = (u² × sin 2θ) / g",
+    "inputs": [
+      {"id": "u", "label": "Initial velocity u", "unit": "m/s", "default": 20, "min": 1, "max": 100, "step": 0.5},
+      {"id": "theta", "label": "Launch angle θ", "unit": "°", "default": 45, "min": 0, "max": 90, "step": 1},
+      {"id": "g", "label": "Gravity g", "unit": "m/s²", "default": 9.8, "min": 1, "max": 20, "step": 0.1}
+    ],
+    "compute": "u * u * sin(2 * theta * PI / 180) / g",
+    "output": {"label": "Range R", "unit": "m", "precision": 4},
+    "plot": {"vary": "theta", "range": [5, 85], "points": 80, "xLabel": "Angle θ (°)", "yLabel": "Range (m)"}
+  },
+  "q3-projectile-height": {
+    "title": "Projectile Motion — Maximum Height",
+    "formula_display": "H = (u² × sin²θ) / (2g)",
+    "inputs": [
+      {"id": "u", "label": "Initial velocity u", "unit": "m/s", "default": 20, "min": 1, "max": 100, "step": 0.5},
+      {"id": "theta", "label": "Launch angle θ", "unit": "°", "default": 45, "min": 0, "max": 90, "step": 1},
+      {"id": "g", "label": "Gravity g", "unit": "m/s²", "default": 9.8, "min": 1, "max": 20, "step": 0.1}
+    ],
+    "compute": "u * u * pow(sin(theta * PI / 180), 2) / (2 * g)",
+    "output": {"label": "Max height H", "unit": "m", "precision": 4},
+    "plot": {"vary": "theta", "range": [5, 90], "points": 80, "xLabel": "Angle θ (°)", "yLabel": "Height (m)"}
+  },
+  "q3-centripetal-acceleration": {
+    "title": "Centripetal Acceleration",
+    "formula_display": "a = v² / r",
+    "inputs": [
+      {"id": "v", "label": "Speed v", "unit": "m/s", "default": 2.24, "min": 0.1, "max": 50, "step": 0.1},
+      {"id": "r", "label": "Radius r", "unit": "m", "default": 0.8, "min": 0.1, "max": 10, "step": 0.01},
+      {"id": "g", "label": "Gravity g", "unit": "m/s²", "default": 9.8, "min": 1, "max": 20, "step": 0.1}
+    ],
+    "compute": "v * v / r",
+    "output": {"label": "Centripetal acceleration a", "unit": "m/s²", "precision": 4},
+    "plot": {"vary": "v", "range": [0.5, 10], "points": 60, "xLabel": "Speed v (m/s)", "yLabel": "a (m/s²)"}
+  }
+}

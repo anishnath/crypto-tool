@@ -1,0 +1,75 @@
+{
+  "q4-force-calculator": {
+    "title": "Newton's Second Law — F = ma",
+    "formula_display": "F = m × a",
+    "inputs": [
+      {"id": "mass", "label": "Mass m", "unit": "kg", "default": 10, "min": 0.1, "max": 500, "step": 0.1},
+      {"id": "acceleration", "label": "Acceleration a", "unit": "m/s²", "default": 9.8, "min": -50, "max": 50, "step": 0.1}
+    ],
+    "compute": "mass * acceleration",
+    "output": {"label": "Force F", "unit": "N", "precision": 4},
+    "plot": {"vary": "acceleration", "range": [-20, 20], "points": 60, "xLabel": "Acceleration (m/s²)", "yLabel": "Force (N)"}
+  },
+  "q4-impulse-calculator": {
+    "title": "Impulse — J = m × Δv",
+    "formula_display": "J = m × (v_f − v_i)",
+    "inputs": [
+      {"id": "mass", "label": "Mass m", "unit": "kg", "default": 1, "min": 0.1, "max": 100, "step": 0.1},
+      {"id": "v_initial", "label": "Initial velocity v_i", "unit": "m/s", "default": 0, "min": -100, "max": 100, "step": 0.5},
+      {"id": "v_final", "label": "Final velocity v_f", "unit": "m/s", "default": 10, "min": -100, "max": 100, "step": 0.5}
+    ],
+    "compute": "mass * (v_final - v_initial)",
+    "output": {"label": "Impulse J", "unit": "N·s", "precision": 4},
+    "direction_rule": "v_final > v_initial ? 'Positive (velocity increased)' : (v_final < v_initial ? 'Negative (velocity decreased)' : 'Zero (no change)')",
+    "plot": {"vary": "v_final", "range": [-20, 20], "points": 60, "xLabel": "Final velocity (m/s)", "yLabel": "Impulse (N·s)"}
+  },
+  "q4-apparent-weight": {
+    "title": "Apparent Weight in Lift",
+    "formula_display": "N = m × (g + a)",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 70, "min": 10, "max": 200, "step": 1},
+      {"id": "g", "label": "Gravity g", "unit": "m/s²", "default": 10, "min": 8, "max": 12, "step": 0.1},
+      {"id": "a", "label": "Lift acceleration a", "unit": "m/s²", "default": 0, "min": -10, "max": 10, "step": 0.5}
+    ],
+    "compute": "m * (g + a)",
+    "output": {"label": "Normal force N (scale reading)", "unit": "N", "precision": 2},
+    "direction_rule": "a > 0 ? 'Lift going up' : (a < 0 ? 'Lift going down' : 'Stationary')",
+    "plot": {"vary": "a", "range": [-10, 10], "points": 60, "xLabel": "Acceleration (m/s²)", "yLabel": "N (N)"}
+  },
+  "q4-perpendicular-forces": {
+    "title": "Perpendicular Forces",
+    "formula_display": "F_net = √(F₁² + F₂²),  a = F_net / m",
+    "inputs": [
+      {"id": "F1", "label": "Force F₁", "unit": "N", "default": 8, "min": 0, "max": 50, "step": 0.5},
+      {"id": "F2", "label": "Force F₂ (⊥ to F₁)", "unit": "N", "default": 6, "min": 0, "max": 50, "step": 0.5},
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 5, "min": 0.1, "max": 50, "step": 0.1}
+    ],
+    "compute": "sqrt(F1*F1 + F2*F2) / m",
+    "output": {"label": "Acceleration a", "unit": "m/s²", "precision": 4},
+    "plot": {"vary": "F1", "range": [0, 20], "points": 50, "xLabel": "F₁ (N)", "yLabel": "a (m/s²)"}
+  },
+  "q4-centripetal-force": {
+    "title": "Centripetal Force",
+    "formula_display": "F = mv² / r",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 0.25, "min": 0.01, "max": 5, "step": 0.01},
+      {"id": "v", "label": "Speed v", "unit": "m/s", "default": 6.28, "min": 0.1, "max": 20, "step": 0.1},
+      {"id": "r", "label": "Radius r", "unit": "m", "default": 1.5, "min": 0.1, "max": 10, "step": 0.1}
+    ],
+    "compute": "m * v * v / r",
+    "output": {"label": "Force F (tension)", "unit": "N", "precision": 4},
+    "plot": {"vary": "v", "range": [1, 15], "points": 60, "xLabel": "Speed (m/s)", "yLabel": "Force (N)"}
+  },
+  "q4-atwoods-calculator": {
+    "title": "Atwood's Machine",
+    "formula_display": "a = (m₂−m₁)g / (m₁+m₂)",
+    "inputs": [
+      {"id": "m1", "label": "Mass m₁", "unit": "kg", "default": 8, "min": 1, "max": 50, "step": 0.5},
+      {"id": "m2", "label": "Mass m₂", "unit": "kg", "default": 12, "min": 1, "max": 50, "step": 0.5},
+      {"id": "g", "label": "Gravity g", "unit": "m/s²", "default": 9.8, "min": 8, "max": 12, "step": 0.1}
+    ],
+    "compute": "(m2 - m1) * g / (m1 + m2)",
+    "output": {"label": "Acceleration a", "unit": "m/s²", "precision": 4},
+    "plot": {"vary": "m2", "range": [1, 30], "points": 50, "xLabel": "m₂ (kg)", "yLabel": "a (m/s²)"}
+  }
+}

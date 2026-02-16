@@ -1,0 +1,39 @@
+{
+    "q4-3-train-drop": {
+        "type": "train-drop",
+        "speed": 3,
+        "description": "Visualize the trajectory of a stone dropped from a moving train from both ground and train frames of reference.",
+        "concepts": [
+            "Inertia",
+            "Frames of Reference",
+            "Relative Velocity"
+        ]
+    },
+    "q4-12-pendulum-cut": {
+        "type": "pendulum-cut",
+        "description": "See what happens when a pendulum string is cut at the mean position vs extreme position.",
+        "concepts": [
+            "Projectile Motion",
+            "Free Fall",
+            "Tangential Velocity"
+        ]
+    },
+    "q4-13-lift-weight": {
+        "type": "lift-apparent-weight",
+        "description": "Explore how the reading on a weighing scale changes in an accelerating lift.",
+        "concepts": [
+            "Apparent Weight",
+            "Normal Force",
+            "Non-inertial Frames"
+        ]
+    },
+    "q4-16-atwoods-machine": {
+        "type": "atwoods-machine",
+        "description": "Simulation of Atwood's machine to study Newton's second law for connected masses.",
+        "concepts": [
+            "Tension",
+            "System Acceleration",
+            "Newton's Second Law"
+        ]
+    }
+}

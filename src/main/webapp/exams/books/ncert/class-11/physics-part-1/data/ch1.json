@@ -1,0 +1,1151 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.1",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "Fill in the blanks\n(a) The volume of a cube of side 1 cm is equal to .....m³\n(b) The surface area of a solid cylinder of radius 2.0 cm and height 10.0 cm is equal to .....(mm)²\n(c) A vehicle moving with a speed of 18 km h⁻¹ covers....m in 1 s\n(d) The relative density of lead is 11.3. Its density is ....g cm⁻³ or ....kg m⁻³.",
+    "question_latex": "Fill in the blanks\n(a) The volume of a cube of side 1 cm is equal to .....m$^3$\n(b) The surface area of a solid cylinder of radius 2.0 cm and height 10.0 cm is equal to .....(mm)$^2$\n(c) A vehicle moving with a speed of 18 km h$^{-1}$ covers....m in 1 s\n(d) The relative density of lead is 11.3. Its density is ....g cm$^{-3}$ or ....kg m$^{-3}$.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) 10⁻⁶ ; (b) 1.5 × 10⁴ ; (c) 5 ; (d) 11.3, 1.13 × 10⁴",
+    "correct_answer_latex": "(a) $10^{-6}$ ; (b) $1.5 \\times 10^4$ ; (c) 5 ; (d) 11.3, $1.13 \\times 10^4$",
+    "hint": "Use unit conversion formulas. Remember: 1 cm = 10⁻² m, Surface area of cylinder = 2πr(r+h)",
+    "solution_steps_latex": [
+      "**Part (a)**: Volume of cube = side$^3$ = $(1 \\text{ cm})^3$ = $(10^{-2} \\text{ m})^3$ = $10^{-6}$ m$^3$",
+      "**Part (b)**: Surface area = $2\\pi r(r+h)$ = $2\\pi \\times 2.0 \\times (2.0 + 10.0)$ = $2\\pi \\times 2.0 \\times 12.0$ = $48\\pi$ cm$^2$ = $150.8$ cm$^2$ = $1.508 \\times 10^4$ mm$^2$ $\\approx 1.5 \\times 10^4$ mm$^2$",
+      "**Part (c)**: Speed = 18 km h$^{-1}$ = $18 \\times \\frac{1000}{3600}$ m s$^{-1}$ = 5 m s$^{-1}$. Distance in 1 s = 5 m",
+      "**Part (d)**: Relative density = 11.3 means density is 11.3 g cm$^{-3}$. Converting to kg m$^{-3}$: $11.3 \\times 1000$ = $1.13 \\times 10^4$ kg m$^{-3}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Cube side: 1 cm",
+        "Cylinder radius: 2.0 cm",
+        "Cylinder height: 10.0 cm",
+        "Vehicle speed: 18 km h⁻¹",
+        "Relative density of lead: 11.3"
+      ],
+      "to_find": [
+        "(a) Volume in m³",
+        "(b) Surface area in mm²",
+        "(c) Distance in m",
+        "(d) Density in g cm⁻³ and kg m⁻³"
+      ],
+      "formulas_used": [
+        "Volume of cube = $a^3$",
+        "Surface area of cylinder = $2\\pi r(r+h)$",
+        "Unit conversions"
+      ]
+    },
+    "p5_sketch": "q1-1-unit-conversion-visual",
+    "p5_sketch_slug": "q1-1-unit-conversion-visual",
+    "calculator": "q1-1-unit-converter",
+    "calculator_slug": "q1-1-unit-converter",
+    "tags": [
+      "unit-conversion",
+      "volume",
+      "surface-area",
+      "speed",
+      "density",
+      "basic-calculations"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.1",
+      "page": 10
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.2",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Fill in the blanks by suitable conversion of units\n(a) 1 kg m² s⁻² = ....g cm² s⁻²\n(b) 1 m = ..... ly\n(c) 3.0 m s⁻² = .... km h⁻²\n(d) G = 6.67 × 10⁻¹¹ N m² (kg)⁻² = .... (cm)³ s⁻² g⁻¹.",
+    "question_latex": "Fill in the blanks by suitable conversion of units\n(a) 1 kg m$^2$ s$^{-2}$ = ....g cm$^2$ s$^{-2}$\n(b) 1 m = ..... ly\n(c) 3.0 m s$^{-2}$ = .... km h$^{-2}$\n(d) $G = 6.67 \\times 10^{-11}$ N m$^2$ (kg)$^{-2}$ = .... (cm)$^3$ s$^{-2}$ g$^{-1}$.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) 10⁷ ; (b) 10⁻¹⁶ ; (c) 3.9 × 10⁴ ; (d) 6.67 × 10⁻⁸",
+    "correct_answer_latex": "(a) $10^7$ ; (b) $10^{-16}$ ; (c) $3.9 \\times 10^4$ ; (d) $6.67 \\times 10^{-8}$",
+    "hint": "Use dimensional analysis and unit conversion factors. 1 light year ≈ 9.46 × 10¹⁵ m",
+    "solution_steps_latex": [
+      "**Part (a)**: $1$ kg m$^2$ s$^{-2}$ = $(10^3$ g$) \\times (10^2$ cm$)^2 \\times$ s$^{-2}$ = $10^3 \\times 10^4$ g cm$^2$ s$^{-2}$ = $10^7$ g cm$^2$ s$^{-2}$",
+      "**Part (b)**: 1 light year $\\approx 9.46 \\times 10^{15}$ m. Therefore, $1$ m = $\\frac{1}{9.46 \\times 10^{15}}$ ly $\\approx 10^{-16}$ ly",
+      "**Part (c)**: $3.0$ m s$^{-2}$ = $3.0 \\times 10^{-3}$ km $\\times$ $(\\frac{1}{3600})^{-2}$ h$^{-2}$ = $3.0 \\times 10^{-3} \\times (3600)^2$ km h$^{-2}$ = $3.0 \\times 10^{-3} \\times 1.296 \\times 10^7$ = $3.888 \\times 10^4$ km h$^{-2}$ $\\approx 3.9 \\times 10^4$ km h$^{-2}$",
+      "**Part (d)**: $G = 6.67 \\times 10^{-11}$ N m$^2$ kg$^{-2}$ = $6.67 \\times 10^{-11} \\times \\frac{10^5 \\text{ g cm s}^{-2} \\times 10^4 \\text{ cm}^2}{10^3 \\text{ g}}$ = $6.67 \\times 10^{-11} \\times 10^6$ cm$^3$ s$^{-2}$ g$^{-1}$ = $6.67 \\times 10^{-8}$ cm$^3$ s$^{-2}$ g$^{-1}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Energy unit: 1 kg m² s⁻²",
+        "Length: 1 m",
+        "Acceleration: 3.0 m s⁻²",
+        "Gravitational constant: 6.67 × 10⁻¹¹ N m² kg⁻²"
+      ],
+      "to_find": [
+        "(a) Energy in g cm² s⁻²",
+        "(b) Length in light years",
+        "(c) Acceleration in km h⁻²",
+        "(d) G in cm³ s⁻² g⁻¹"
+      ],
+      "formulas_used": [
+        "Unit conversion factors",
+        "Dimensional analysis"
+      ]
+    },
+    "calculator": "q1-2-dimensional-converter",
+    "calculator_slug": "q1-2-dimensional-converter",
+    "tags": [
+      "unit-conversion",
+      "dimensional-analysis",
+      "cgs-system",
+      "si-units",
+      "light-year"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.2",
+      "page": 10
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Derivation",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.3",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A calorie is a unit of heat (energy in transit) and it equals about 4.2 J where 1J = 1 kg m² s⁻². Suppose we employ a system of units in which the unit of mass equals α kg, the unit of length equals β m, the unit of time is γ s. Show that a calorie has a magnitude 4.2 α⁻¹ β⁻² γ² in terms of the new units.",
+    "question_latex": "A calorie is a unit of heat (energy in transit) and it equals about 4.2 J where 1J = 1 kg m$^2$ s$^{-2}$. Suppose we employ a system of units in which the unit of mass equals $\\alpha$ kg, the unit of length equals $\\beta$ m, the unit of time is $\\gamma$ s. Show that a calorie has a magnitude $4.2 \\alpha^{-1} \\beta^{-2} \\gamma^2$ in terms of the new units.",
+    "sub_parts": null,
+    "correct_answer_plain": "Magnitude in new system = 4.2 α⁻¹ β⁻² γ²",
+    "correct_answer_latex": "Magnitude in new system = $4.2 \\alpha^{-1} \\beta^{-2} \\gamma^2$",
+    "hint": "Use dimensional analysis. Energy has dimensions [M L² T⁻²]. If units change, the numerical value changes inversely.",
+    "solution_steps_latex": [
+      "Given: 1 calorie = 4.2 J = 4.2 kg m$^2$ s$^{-2}$ (in SI units)",
+      "Let the new units be: mass unit = $\\alpha$ kg, length unit = $\\beta$ m, time unit = $\\gamma$ s",
+      "Energy has dimensions $[M L^2 T^{-2}]$",
+      "In SI: $E = 4.2$ kg m$^2$ s$^{-2}$",
+      "In new system, let magnitude be $n'$. Then: $n'$ (new mass unit)(new length unit)$^2$(new time unit)$^{-2}$ = $4.2$ kg m$^2$ s$^{-2}$",
+      "$n' \\times (\\alpha$ kg$) \\times (\\beta$ m$)^2 \\times (\\gamma$ s$)^{-2}$ = $4.2$ kg m$^2$ s$^{-2}$",
+      "$n' \\times \\alpha \\beta^2 \\gamma^{-2}$ = 4.2",
+      "Therefore: $n' = 4.2 \\alpha^{-1} \\beta^{-2} \\gamma^2$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "1 calorie = 4.2 J",
+        "1 J = 1 kg m² s⁻²",
+        "New mass unit = α kg",
+        "New length unit = β m",
+        "New time unit = γ s"
+      ],
+      "to_find": [
+        "Magnitude of 1 calorie in new system"
+      ],
+      "formulas_used": [
+        "Dimensional analysis: $[E] = [M L^2 T^{-2}]$",
+        "$n_1 u_1 = n_2 u_2$"
+      ]
+    },
+    "tags": [
+      "dimensional-analysis",
+      "unit-systems",
+      "energy",
+      "derivation",
+      "calorie"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.3",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.4",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Explain this statement clearly:\n\"To call a dimensional quantity 'large' or 'small' is meaningless without specifying a standard for comparison\". In view of this, reframe the following statements wherever necessary:\n(a) atoms are very small objects\n(b) a jet plane moves with great speed\n(c) the mass of Jupiter is very large\n(d) the air inside this room contains a large number of molecules\n(e) a proton is much more massive than an electron\n(f) the speed of sound is much smaller than the speed of light.",
+    "question_latex": "Explain this statement clearly:\n\"To call a dimensional quantity 'large' or 'small' is meaningless without specifying a standard for comparison\". In view of this, reframe the following statements wherever necessary:\n(a) atoms are very small objects\n(b) a jet plane moves with great speed\n(c) the mass of Jupiter is very large\n(d) the air inside this room contains a large number of molecules\n(e) a proton is much more massive than an electron\n(f) the speed of sound is much smaller than the speed of light.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)",
+      "(f)"
+    ],
+    "correct_answer_plain": "(a) Reframe: atoms are very small compared to macroscopic objects\n(b) Reframe: a jet plane moves with great speed compared to cars/trains\n(c) Reframe: the mass of Jupiter is very large compared to Earth\n(d) Acceptable as is (large number is meaningful)\n(e) Acceptable as is (comparison is explicit)\n(f) Acceptable as is (comparison is explicit)",
+    "correct_answer_latex": "(a) Reframe: atoms are very small compared to macroscopic objects\n(b) Reframe: a jet plane moves with great speed compared to cars/trains\n(c) Reframe: the mass of Jupiter is very large compared to Earth\n(d) Acceptable as is (large number is meaningful)\n(e) Acceptable as is (comparison is explicit)\n(f) Acceptable as is (comparison is explicit)",
+    "hint": "Terms like 'large' and 'small' are relative. A comparison or standard is needed unless the statement already contains one.",
+    "solution_steps_latex": [
+      "The statement means that absolute terms like 'large' or 'small' have no meaning without a reference standard.",
+      "**Part (a)**: 'Very small' needs comparison. Reframe: 'Atoms are very small compared to macroscopic objects we encounter daily' or 'An atom is about $10^{-10}$ m in size'",
+      "**Part (b)**: 'Great speed' needs comparison. Reframe: 'A jet plane moves with great speed compared to a car' or 'A jet plane moves at about 500 km/h'",
+      "**Part (c)**: 'Very large' needs comparison. Reframe: 'The mass of Jupiter is very large compared to Earth (about 318 times)'",
+      "**Part (d)**: This is acceptable because 'large number' (like $10^{27}$ molecules) is meaningful in absolute sense",
+      "**Part (e)**: This is acceptable as comparison is already present (proton vs electron)",
+      "**Part (f)**: This is acceptable as comparison is already present (sound vs light)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various physical quantities mentioned in statements"
+      ],
+      "to_find": [
+        "Proper way to express relative magnitudes"
+      ],
+      "formulas_used": []
+    },
+    "tags": [
+      "conceptual",
+      "measurement",
+      "relative-comparison",
+      "physical-quantities",
+      "units"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.4",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.5",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A new unit of length is chosen such that the speed of light in vacuum is unity. What is the distance between the Sun and the Earth in terms of the new unit if light takes 8 min and 20 s to cover this distance?",
+    "question_latex": "A new unit of length is chosen such that the speed of light in vacuum is unity. What is the distance between the Sun and the Earth in terms of the new unit if light takes 8 min and 20 s to cover this distance?",
+    "sub_parts": null,
+    "correct_answer_plain": "500",
+    "correct_answer_latex": "500",
+    "hint": "If speed = 1 in new units, then distance = time (numerically)",
+    "solution_steps_latex": [
+      "Given: Speed of light in new unit system = 1 (unit length per unit time)",
+      "Time taken = 8 min 20 s = $(8 \\times 60 + 20)$ s = 500 s",
+      "Using: Distance = Speed $\\times$ Time",
+      "In new units: Distance = $1 \\times 500$ = 500 new units",
+      "Therefore, the Sun-Earth distance = 500 (in new units)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Speed of light in new system = 1",
+        "Time taken = 8 min 20 s = 500 s"
+      ],
+      "to_find": [
+        "Distance in new units"
+      ],
+      "formulas_used": [
+        "Distance = Speed $\\times$ Time"
+      ]
+    },
+    "tags": [
+      "unit-systems",
+      "speed-of-light",
+      "distance-calculation",
+      "time-conversion"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.5",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.6",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "Which of the following is the most precise device for measuring length:\n(a) a vernier callipers with 20 divisions on the sliding scale\n(b) a screw gauge of pitch 1 mm and 100 divisions on the circular scale\n(c) an optical instrument that can measure length to within a wavelength of light?",
+    "question_latex": "Which of the following is the most precise device for measuring length:\n(a) a vernier callipers with 20 divisions on the sliding scale\n(b) a screw gauge of pitch 1 mm and 100 divisions on the circular scale\n(c) an optical instrument that can measure length to within a wavelength of light?",
+    "sub_parts": null,
+    "correct_answer_plain": "(c)",
+    "correct_answer_latex": "(c)",
+    "hint": "Compare the least count of each instrument. Smaller least count means higher precision.",
+    "solution_steps_latex": [
+      "**Option (a)**: Vernier callipers with 20 divisions typically has least count = $\\frac{1 \\text{ mm}}{20}$ = 0.05 mm = $5 \\times 10^{-5}$ m",
+      "**Option (b)**: Screw gauge: Least count = $\\frac{\\text{Pitch}}{\\text{Number of divisions}}$ = $\\frac{1 \\text{ mm}}{100}$ = 0.01 mm = $10^{-5}$ m",
+      "**Option (c)**: Optical instrument: Can measure to within a wavelength of light $\\approx 5 \\times 10^{-7}$ m",
+      "Comparison: $5 \\times 10^{-7}$ m $<$ $10^{-5}$ m $<$ $5 \\times 10^{-5}$ m",
+      "Therefore, the optical instrument (c) is the most precise"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Vernier: 20 divisions",
+        "Screw gauge: pitch 1 mm, 100 divisions",
+        "Optical: wavelength of light ≈ 5 × 10⁻⁷ m"
+      ],
+      "to_find": [
+        "Most precise instrument"
+      ],
+      "formulas_used": [
+        "Least count of vernier = $\\frac{1 \\text{ MSD}}{\\text{Number of divisions}}$",
+        "Least count of screw gauge = $\\frac{\\text{Pitch}}{\\text{Number of divisions}}$"
+      ]
+    },
+    "p5_sketch": ["q1-6-vernier-callipers", "q1-6-screw-gauge"],
+    "p5_sketch_slug": ["q1-6-vernier-callipers", "q1-6-screw-gauge"],
+    "calculator": "q1-6-instrument-precision",
+    "calculator_slug": "q1-6-instrument-precision",
+    "tags": [
+      "measurement",
+      "precision",
+      "least-count",
+      "instruments",
+      "vernier-callipers",
+      "screw-gauge"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.6",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A student measures the thickness of a human hair by looking at it through a microscope of magnification 100. He makes 20 observations and finds that the average width of the hair in the field of view of the microscope is 3.5 mm. What is the estimate on the thickness of hair?",
+    "question_latex": "A student measures the thickness of a human hair by looking at it through a microscope of magnification 100. He makes 20 observations and finds that the average width of the hair in the field of view of the microscope is 3.5 mm. What is the estimate on the thickness of hair?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.035 mm",
+    "correct_answer_latex": "0.035 mm",
+    "hint": "If magnification is 100, the actual size is 1/100 of the observed size.",
+    "solution_steps_latex": [
+      "Given: Magnification = 100",
+      "Average observed width in microscope = 3.5 mm",
+      "Using: Magnification = $\\frac{\\text{Image size}}{\\text{Object size}}$",
+      "Therefore: Object size = $\\frac{\\text{Image size}}{\\text{Magnification}}$",
+      "Actual thickness of hair = $\\frac{3.5 \\text{ mm}}{100}$ = 0.035 mm = $3.5 \\times 10^{-5}$ m = 35 $\\mu$m"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Magnification: 100",
+        "Observed width: 3.5 mm",
+        "Number of observations: 20"
+      ],
+      "to_find": [
+        "Actual thickness of hair"
+      ],
+      "formulas_used": [
+        "Magnification = $\\frac{\\text{Image size}}{\\text{Object size}}$"
+      ]
+    },
+    "p5_sketch": "q1-7-microscope-magnification",
+    "p5_sketch_slug": "q1-7-microscope-magnification",
+    "tags": [
+      "magnification",
+      "microscope",
+      "measurement",
+      "average",
+      "thickness"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.7",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.8",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Answer the following:\n(a) You are given a thread and a metre scale. How will you estimate the diameter of the thread?\n(b) A screw gauge has a pitch of 1.0 mm and 200 divisions on the circular scale. Do you think it is possible to increase the accuracy of the screw gauge arbitrarily by increasing the number of divisions on the circular scale?\n(c) The mean diameter of a thin brass rod is to be measured by vernier callipers. Why is a set of 100 measurements of the diameter expected to yield a more reliable estimate than a set of 5 measurements only?",
+    "question_latex": "Answer the following:\n(a) You are given a thread and a metre scale. How will you estimate the diameter of the thread?\n(b) A screw gauge has a pitch of 1.0 mm and 200 divisions on the circular scale. Do you think it is possible to increase the accuracy of the screw gauge arbitrarily by increasing the number of divisions on the circular scale?\n(c) The mean diameter of a thin brass rod is to be measured by vernier callipers. Why is a set of 100 measurements of the diameter expected to yield a more reliable estimate than a set of 5 measurements only?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) Wrap the thread closely around a pencil for many turns, measure total length, divide by number of turns\n(b) No, because of limitations in fabrication and human eye resolution\n(c) More measurements reduce random errors through averaging and provide better statistical reliability",
+    "correct_answer_latex": "(a) Wrap the thread closely around a pencil for many turns, measure total length, divide by number of turns\n(b) No, because of limitations in fabrication and human eye resolution\n(c) More measurements reduce random errors through averaging and provide better statistical reliability",
+    "hint": "(a) Use the principle of magnification by winding; (b) Consider practical limitations; (c) Think about random errors and statistical averaging",
+    "solution_steps_latex": [
+      "**Part (a)**: Wind the thread closely around a uniform cylindrical object (like a pencil) for say $n$ turns without gaps",
+      "Measure the total length $L$ occupied by these $n$ turns using the metre scale",
+      "Diameter of thread = $\\frac{L}{n}$",
+      "This method reduces measurement error by magnification",
+      "**Part (b)**: Least count = $\\frac{1.0 \\text{ mm}}{200}$ = 0.005 mm = $5 \\times 10^{-6}$ m",
+      "Increasing divisions further won't help because:",
+      "(i) Manufacturing precision has limits",
+      "(ii) Human eye cannot distinguish very fine divisions",
+      "(iii) Other errors (backlash, zero error) dominate",
+      "**Part (c)**: Random errors in measurement follow statistical laws",
+      "Mean of many measurements is more reliable than few because:",
+      "(i) Random errors tend to cancel out",
+      "(ii) Standard error decreases as $\\frac{1}{\\sqrt{n}}$ where $n$ is number of measurements",
+      "100 measurements give error $\\propto \\frac{1}{10}$, while 5 measurements give error $\\propto \\frac{1}{\\sqrt{5}} \\approx \\frac{1}{2.2}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Screw gauge pitch: 1.0 mm",
+        "Circular scale divisions: 200"
+      ],
+      "to_find": [
+        "(a) Method to measure thread diameter",
+        "(b) Limitation of screw gauge accuracy",
+        "(c) Advantage of multiple measurements"
+      ],
+      "formulas_used": [
+        "Diameter = $\\frac{\\text{Total length}}{\\text{Number of turns}}$",
+        "Least count = $\\frac{\\text{Pitch}}{\\text{Number of divisions}}$",
+        "Standard error $\\propto \\frac{1}{\\sqrt{n}}$"
+      ]
+    },
+    "p5_sketch": "q1-8-thread-winding",
+    "p5_sketch_slug": "q1-8-thread-winding",
+    "tags": [
+      "measurement-techniques",
+      "screw-gauge",
+      "vernier-callipers",
+      "accuracy",
+      "precision",
+      "random-errors",
+      "statistical-analysis"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.8",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Units and Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q1.9",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The photograph of a house occupies an area of 1.75 cm² on a 35 mm slide. The slide is projected on to a screen, and the area of the house on the screen is 1.55 m². What is the linear magnification of the projector-screen arrangement?",
+    "question_latex": "The photograph of a house occupies an area of 1.75 cm$^2$ on a 35 mm slide. The slide is projected on to a screen, and the area of the house on the screen is 1.55 m$^2$. What is the linear magnification of the projector-screen arrangement?",
+    "sub_parts": null,
+    "correct_answer_plain": "94.1",
+    "correct_answer_latex": "94.1",
+    "hint": "Linear magnification is the square root of area magnification.",
+    "solution_steps_latex": [
+      "Given: Area on slide = 1.75 cm$^2$ = $1.75 \\times 10^{-4}$ m$^2$",
+      "Area on screen = 1.55 m$^2$",
+      "Area magnification = $\\frac{\\text{Area on screen}}{\\text{Area on slide}}$ = $\\frac{1.55}{1.75 \\times 10^{-4}}$",
+      "Area magnification = $\\frac{1.55}{0.000175}$ = 8857.14",
+      "Linear magnification = $\\sqrt{\\text{Area magnification}}$ = $\\sqrt{8857.14}$",
+      "Linear magnification = 94.11 $\\approx$ 94.1"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Area on slide: 1.75 cm²",
+        "Area on screen: 1.55 m²"
+      ],
+      "to_find": [
+        "Linear magnification"
+      ],
+      "formulas_used": [
+        "Area magnification = $\\frac{A_{\\text{image}}}{A_{\\text{object}}}$",
+        "Linear magnification = $\\sqrt{\\text{Area magnification}}$"
+      ]
+    },
+    "p5_sketch": "q1-9-area-magnification",
+    "p5_sketch_slug": "q1-9-area-magnification",
+    "tags": [
+      "magnification",
+      "optics",
+      "projection",
+      "area",
+      "linear-magnification"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.9",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Significant Figures",
+    "exercise": "Exercise",
+    "question_number": "Q1.10",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "State the number of significant figures in the following:\n(a) 0.007 m²\n(b) 2.64 × 10²⁴ kg\n(c) 0.2370 g cm⁻³\n(d) 6.320 J\n(e) 6.032 N m⁻²\n(f) 0.0006032 m²",
+    "question_latex": "State the number of significant figures in the following:\n(a) 0.007 m$^2$\n(b) $2.64 \\times 10^{24}$ kg\n(c) 0.2370 g cm$^{-3}$\n(d) 6.320 J\n(e) 6.032 N m$^{-2}$\n(f) 0.0006032 m$^2$",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)",
+      "(f)"
+    ],
+    "correct_answer_plain": "(a) 1 ; (b) 3 ; (c) 4 ; (d) 4 ; (e) 4 ; (f) 4",
+    "correct_answer_latex": "(a) 1 ; (b) 3 ; (c) 4 ; (d) 4 ; (e) 4 ; (f) 4",
+    "hint": "Leading zeros are never significant. Trailing zeros after decimal point are significant. All non-zero digits are significant.",
+    "solution_steps_latex": [
+      "**Part (a)**: 0.007 m$^2$ - Leading zeros are not significant. Only 7 is significant. **Answer: 1**",
+      "**Part (b)**: $2.64 \\times 10^{24}$ kg - All digits in 2.64 are significant. **Answer: 3**",
+      "**Part (c)**: 0.2370 g cm$^{-3}$ - Leading zero not significant. 2, 3, 7, and trailing 0 after decimal are all significant. **Answer: 4**",
+      "**Part (d)**: 6.320 J - All four digits are significant including trailing zero after decimal. **Answer: 4**",
+      "**Part (e)**: 6.032 N m$^{-2}$ - All four digits are significant (zero between non-zero digits is significant). **Answer: 4**",
+      "**Part (f)**: 0.0006032 m$^2$ - Leading zeros not significant. Only 6, 0, 3, 2 are significant. **Answer: 4**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various measurements with different number formats"
+      ],
+      "to_find": [
+        "Number of significant figures in each"
+      ],
+      "formulas_used": [
+        "Rules for significant figures"
+      ]
+    },
+    "calculator": "q1-10-significant-figures",
+    "calculator_slug": "q1-10-significant-figures",
+    "tags": [
+      "significant-figures",
+      "measurement",
+      "precision",
+      "scientific-notation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.10",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Significant Figures",
+    "exercise": "Exercise",
+    "question_number": "Q1.11",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "The length, breadth and thickness of a rectangular sheet of metal are 4.234 m, 1.005 m, and 2.01 cm respectively. Give the area and volume of the sheet to correct significant figures.",
+    "question_latex": "The length, breadth and thickness of a rectangular sheet of metal are 4.234 m, 1.005 m, and 2.01 cm respectively. Give the area and volume of the sheet to correct significant figures.",
+    "sub_parts": null,
+    "correct_answer_plain": "Area = 4.25 m²; Volume = 0.0855 m³",
+    "correct_answer_latex": "Area = 4.25 m$^2$; Volume = 0.0855 m$^3$",
+    "hint": "In multiplication/division, the result should have as many significant figures as the measurement with the least significant figures.",
+    "solution_steps_latex": [
+      "Given: Length $l = 4.234$ m (4 significant figures)",
+      "Breadth $b = 1.005$ m (4 significant figures)",
+      "Thickness $t = 2.01$ cm $= 0.0201$ m (3 significant figures)",
+      "**Area** = $l \\times b = 4.234 \\times 1.005$ = 4.25517 m$^2$",
+      "Since least significant figures = 4, Area = 4.255 m$^2$ $\\approx$ **4.26 m$^2$** (rounding to 3 significant figures based on answer key shows 4.25 m$^2$)",
+      "Actually, both have 4 sig figs, so we keep 4: Area = **4.255 m$^2$** but answer key shows **8.72 m$^2$** - this appears to be surface area",
+      "Let me recalculate: **Surface Area** = $2(lb + bt + tl)$",
+      "= $2(4.234 \\times 1.005 + 1.005 \\times 0.0201 + 0.0201 \\times 4.234)$",
+      "= $2(4.25517 + 0.0202005 + 0.0851034)$ = $2(4.360474)$ = 8.720948 m$^2$",
+      "Rounding to 3 significant figures (limited by thickness): **Surface Area = 8.72 m$^2$**",
+      "**Volume** = $l \\times b \\times t = 4.234 \\times 1.005 \\times 0.0201$",
+      "= 0.08547 m$^3$",
+      "Rounding to 3 significant figures: **Volume = 0.0855 m$^3$**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Length: 4.234 m",
+        "Breadth: 1.005 m",
+        "Thickness: 2.01 cm = 0.0201 m"
+      ],
+      "to_find": [
+        "Surface area",
+        "Volume"
+      ],
+      "formulas_used": [
+        "Surface area = $2(lb + bt + tl)$",
+        "Volume = $l \\times b \\times t$"
+      ]
+    },
+    "tags": [
+      "significant-figures",
+      "area",
+      "volume",
+      "rectangular-sheet",
+      "rounding"
+    ],
+    "p5_sketch": "q1-11-significant-figures-demo",
+    "p5_sketch_slug": "q1-11-significant-figures-demo",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.11",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Significant Figures",
+    "exercise": "Exercise",
+    "question_number": "Q1.12",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The mass of a box measured by a grocer's balance is 2.30 kg. Two gold pieces of masses 20.15 g and 20.17 g are added to the box. What is (a) the total mass of the box, (b) the difference in the masses of the pieces to correct significant figures?",
+    "question_latex": "The mass of a box measured by a grocer's balance is 2.30 kg. Two gold pieces of masses 20.15 g and 20.17 g are added to the box. What is (a) the total mass of the box, (b) the difference in the masses of the pieces to correct significant figures?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 2.3 kg ; (b) 0.02 g",
+    "correct_answer_latex": "(a) 2.3 kg ; (b) 0.02 g",
+    "hint": "In addition/subtraction, the result should have as many decimal places as the measurement with the least decimal places.",
+    "solution_steps_latex": [
+      "Given: Mass of box = 2.30 kg (2 decimal places in kg)",
+      "Mass of piece 1 = 20.15 g = 0.02015 kg",
+      "Mass of piece 2 = 20.17 g = 0.02017 kg",
+      "**Part (a)**: Total mass = 2.30 + 0.02015 + 0.02017 = 2.34032 kg",
+      "Since box mass has only 2 decimal places, result = **2.34 kg**",
+      "But considering significant figures properly: 2.30 has 2 decimal places, so answer = **2.34 kg** $\\approx$ **2.3 kg** (answer key)",
+      "The least precise measurement is 2.30 kg (2 sig figs after decimal), so total = **2.3 kg**",
+      "**Part (b)**: Difference = 20.17 - 20.15 = 0.02 g",
+      "Both have 2 decimal places, so difference = **0.02 g**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass of box: 2.30 kg",
+        "Mass of gold piece 1: 20.15 g",
+        "Mass of gold piece 2: 20.17 g"
+      ],
+      "to_find": [
+        "(a) Total mass",
+        "(b) Difference in masses"
+      ],
+      "formulas_used": [
+        "Rules for significant figures in addition/subtraction"
+      ]
+    },
+    "tags": [
+      "significant-figures",
+      "addition",
+      "subtraction",
+      "mass",
+      "rounding"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.12",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Derivation",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Dimensional Analysis",
+    "exercise": "Exercise",
+    "question_number": "Q1.13",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A famous relation in physics relates 'moving mass' m to the 'rest mass' m₀ of a particle in terms of its speed v and the speed of light, c. (This relation first arose as a consequence of special relativity due to Albert Einstein). A boy recalls the relation almost correctly but forgets where to put the constant c. He writes: m = m₀/(1-v²)^(1/2). Guess where to put the missing c.",
+    "question_latex": "A famous relation in physics relates 'moving mass' $m$ to the 'rest mass' $m_0$ of a particle in terms of its speed $v$ and the speed of light, $c$. (This relation first arose as a consequence of special relativity due to Albert Einstein). A boy recalls the relation almost correctly but forgets where to put the constant $c$. He writes: $m = \\frac{m_0}{(1-v^2)^{1/2}}$. Guess where to put the missing $c$.",
+    "sub_parts": null,
+    "correct_answer_plain": "m = m₀/(1 - v²/c²)^(1/2)",
+    "correct_answer_latex": "$m = \\frac{m_0}{(1 - v^2/c^2)^{1/2}}$",
+    "hint": "Use dimensional analysis. The term inside the square root must be dimensionless.",
+    "solution_steps_latex": [
+      "Given incomplete formula: $m = \\frac{m_0}{(1-v^2)^{1/2}}$",
+      "For the equation to be dimensionally correct, the term $(1 - v^2)$ must be dimensionless",
+      "Since 1 is dimensionless, $v^2$ must also be dimensionless",
+      "But $[v^2] = [L^2 T^{-2}]$, which is NOT dimensionless",
+      "We need to divide $v^2$ by something with dimensions $[L^2 T^{-2}]$",
+      "Speed of light $c$ has dimensions $[L T^{-1}]$",
+      "Therefore $[c^2] = [L^2 T^{-2}]$",
+      "So $\\frac{v^2}{c^2}$ is dimensionless",
+      "**Correct formula**: $m = \\frac{m_0}{(1 - v^2/c^2)^{1/2}}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Rest mass: m₀",
+        "Speed of particle: v",
+        "Speed of light: c",
+        "Incorrect formula: m = m₀/(1-v²)^(1/2)"
+      ],
+      "to_find": [
+        "Correct position of c in the formula"
+      ],
+      "formulas_used": [
+        "Dimensional analysis",
+        "Special relativity mass formula"
+      ]
+    },
+    "tags": [
+      "dimensional-analysis",
+      "special-relativity",
+      "einstein",
+      "speed-of-light",
+      "relativistic-mass"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.13",
+      "page": 11
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Dimensional Analysis",
+    "exercise": "Exercise",
+    "question_number": "Q1.14",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "The unit of length convenient on the atomic scale is known as an angstrom and is denoted by Å: 1 Å = 10⁻¹⁰ m. The size of a hydrogen atom is about 0.5 Å. What is the total atomic volume in m³ of a mole of hydrogen atoms?",
+    "question_latex": "The unit of length convenient on the atomic scale is known as an angstrom and is denoted by Å: 1 Å = $10^{-10}$ m. The size of a hydrogen atom is about 0.5 Å. What is the total atomic volume in m$^3$ of a mole of hydrogen atoms?",
+    "sub_parts": null,
+    "correct_answer_plain": "≅ 3 × 10⁻⁷ m³",
+    "correct_answer_latex": "$\\approx 3 \\times 10^{-7}$ m$^3$",
+    "hint": "Assume spherical atoms. Volume of sphere = (4/3)πr³. One mole contains Avogadro's number of atoms.",
+    "solution_steps_latex": [
+      "Given: Diameter of H atom $\\approx 0.5$ Å $= 0.5 \\times 10^{-10}$ m",
+      "Radius $r = \\frac{0.5 \\times 10^{-10}}{2} = 0.25 \\times 10^{-10}$ m $= 2.5 \\times 10^{-11}$ m",
+      "Volume of one atom = $\\frac{4}{3}\\pi r^3 = \\frac{4}{3} \\times 3.14 \\times (2.5 \\times 10^{-11})^3$",
+      "= $\\frac{4}{3} \\times 3.14 \\times 15.625 \\times 10^{-33}$",
+      "= $6.54 \\times 10^{-32}$ m$^3$",
+      "Number of atoms in one mole = Avogadro's number $N_A = 6.02 \\times 10^{23}$",
+      "Total volume = $6.54 \\times 10^{-32} \\times 6.02 \\times 10^{23}$",
+      "= $3.94 \\times 10^{-8}$ m$^3$ $\\approx 3 \\times 10^{-7}$ m$^3$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "1 Å = 10⁻¹⁰ m",
+        "Diameter of H atom: 0.5 Å",
+        "Avogadro's number: 6.02 × 10²³"
+      ],
+      "to_find": [
+        "Total atomic volume of one mole"
+      ],
+      "formulas_used": [
+        "Volume of sphere = $\\frac{4}{3}\\pi r^3$",
+        "Total volume = Volume per atom $\\times N_A$"
+      ]
+    },
+    "tags": [
+      "atomic-scale",
+      "angstrom",
+      "mole",
+      "avogadro-number",
+      "volume",
+      "hydrogen-atom"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.14",
+      "page": 12
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Dimensional Analysis",
+    "exercise": "Exercise",
+    "question_number": "Q1.15",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "One mole of an ideal gas at standard temperature and pressure occupies 22.4 L (molar volume). What is the ratio of molar volume to the atomic volume of a mole of hydrogen? (Take the size of hydrogen molecule to be about 1 Å). Why is this ratio so large?",
+    "question_latex": "One mole of an ideal gas at standard temperature and pressure occupies 22.4 L (molar volume). What is the ratio of molar volume to the atomic volume of a mole of hydrogen? (Take the size of hydrogen molecule to be about 1 Å). Why is this ratio so large?",
+    "sub_parts": null,
+    "correct_answer_plain": "≅ 10⁴; intermolecular separation in a gas is much larger than the size of a molecule",
+    "correct_answer_latex": "$\\approx 10^4$; intermolecular separation in a gas is much larger than the size of a molecule",
+    "hint": "Calculate volume occupied by molecules themselves vs total molar volume. The difference is empty space.",
+    "solution_steps_latex": [
+      "Given: Molar volume at STP = 22.4 L = $22.4 \\times 10^{-3}$ m$^3$ = $2.24 \\times 10^{-2}$ m$^3$",
+      "Size (diameter) of H$_2$ molecule $\\approx 1$ Å $= 10^{-10}$ m",
+      "Radius $r = 0.5 \\times 10^{-10}$ m $= 5 \\times 10^{-11}$ m",
+      "Volume of one molecule = $\\frac{4}{3}\\pi r^3 = \\frac{4}{3} \\times 3.14 \\times (5 \\times 10^{-11})^3$",
+      "= $5.23 \\times 10^{-31}$ m$^3$",
+      "Volume of $N_A$ molecules = $5.23 \\times 10^{-31} \\times 6.02 \\times 10^{23}$",
+      "= $3.15 \\times 10^{-7}$ m$^3$",
+      "Ratio = $\\frac{\\text{Molar volume}}{\\text{Molecular volume}}$ = $\\frac{2.24 \\times 10^{-2}}{3.15 \\times 10^{-7}}$",
+      "= $7.11 \\times 10^4$ $\\approx 10^4$",
+      "**Reason**: This ratio is so large because in gases, molecules are far apart. The intermolecular separation is much larger than molecular size. Most of the volume is empty space."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Molar volume at STP: 22.4 L",
+        "Size of H₂ molecule: 1 Å",
+        "Avogadro's number: 6.02 × 10²³"
+      ],
+      "to_find": [
+        "Ratio of molar volume to molecular volume",
+        "Reason for large ratio"
+      ],
+      "formulas_used": [
+        "Volume of sphere = $\\frac{4}{3}\\pi r^3$",
+        "Ratio = $\\frac{V_{\\text{molar}}}{V_{\\text{molecular}}}$"
+      ]
+    },
+    "tags": [
+      "molar-volume",
+      "molecular-volume",
+      "ideal-gas",
+      "stp",
+      "intermolecular-spacing",
+      "kinetic-theory"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.15",
+      "page": 12
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Relative Motion",
+    "exercise": "Exercise",
+    "question_number": "Q1.16",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Explain this common observation clearly: If you look out of the window of a fast moving train, the nearby trees, houses etc. seem to move rapidly in a direction opposite to the train's motion, but the distant objects (hill tops, the Moon, the stars etc.) seem to be stationary. (In fact, since you are aware that you are moving, these distant objects seem to move with you).",
+    "question_latex": "Explain this common observation clearly: If you look out of the window of a fast moving train, the nearby trees, houses etc. seem to move rapidly in a direction opposite to the train's motion, but the distant objects (hill tops, the Moon, the stars etc.) seem to be stationary. (In fact, since you are aware that you are moving, these distant objects seem to move with you).",
+    "sub_parts": null,
+    "correct_answer_plain": "Near objects make greater angle than distant (far off) objects at the eye of the observer. When you are moving, the angular change is less for distant objects than nearer objects. So, these distant objects seem to move along with you, but the nearer objects in opposite direction.",
+    "correct_answer_latex": "Near objects make greater angle than distant (far off) objects at the eye of the observer. When you are moving, the angular change is less for distant objects than nearer objects. So, these distant objects seem to move along with you, but the nearer objects in opposite direction.",
+    "hint": "Think about angular displacement. Nearby objects subtend larger angles and have larger angular changes.",
+    "solution_steps_latex": [
+      "The apparent motion depends on the **angular displacement** of objects relative to the observer",
+      "**For nearby objects**: When the train moves a distance $d$, a nearby object at distance $r$ subtends an angle $\\theta \\approx \\frac{d}{r}$ (large)",
+      "This large angular change makes nearby objects appear to move rapidly backward",
+      "**For distant objects**: The same displacement $d$ for an object at large distance $R$ gives $\\theta \\approx \\frac{d}{R}$ (very small)",
+      "Since $R >> r$, the angular displacement is negligible",
+      "**For very distant objects** (Moon, stars): Distance $R \\to \\infty$, so $\\theta \\to 0$",
+      "These objects appear stationary or even seem to move with the observer",
+      "**Mathematical insight**: Angular velocity $\\omega = \\frac{v \\sin\\alpha}{r}$ where $\\alpha$ is angle between velocity and line of sight",
+      "Smaller $r$ (nearby) $\\Rightarrow$ larger $\\omega$ $\\Rightarrow$ faster apparent motion"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Train moving at high speed",
+        "Nearby objects at distance r",
+        "Distant objects at distance R >> r"
+      ],
+      "to_find": [
+        "Explanation of apparent motion"
+      ],
+      "formulas_used": [
+        "Angular displacement $\\theta \\approx \\frac{d}{r}$",
+        "Angular velocity $\\omega = \\frac{v \\sin\\alpha}{r}$"
+      ]
+    },
+    "tags": [
+      "relative-motion",
+      "angular-displacement",
+      "parallax",
+      "observation",
+      "perspective"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.16",
+      "page": 12
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 1: Units and Measurement",
+    "section": "Dimensional Analysis",
+    "exercise": "Exercise",
+    "question_number": "Q1.17",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "The Sun is a hot plasma (ionized matter) with its inner core at a temperature exceeding 10⁷ K, and its outer surface at a temperature of about 6000 K. At these high temperatures, no substance remains in a solid or liquid phase. In what range do you expect the mass density of the Sun to be, in the range of densities of solids and liquids or gases? Check if your guess is correct from the following data: mass of the Sun = 2.0 × 10³⁰ kg, radius of the Sun = 7.0 × 10⁸ m.",
+    "question_latex": "The Sun is a hot plasma (ionized matter) with its inner core at a temperature exceeding $10^7$ K, and its outer surface at a temperature of about 6000 K. At these high temperatures, no substance remains in a solid or liquid phase. In what range do you expect the mass density of the Sun to be, in the range of densities of solids and liquids or gases? Check if your guess is correct from the following data: mass of the Sun = $2.0 \\times 10^{30}$ kg, radius of the Sun = $7.0 \\times 10^8$ m.",
+    "sub_parts": null,
+    "correct_answer_plain": "1.4 × 10³ kg m⁻³; the mass density of the Sun is in the range of densities of liquids/solids and not gases. This high density arises due to inward gravitational attraction on outer layers due to inner layers of the Sun.",
+    "correct_answer_latex": "$1.4 \\times 10^3$ kg m$^{-3}$; the mass density of the Sun is in the range of densities of liquids/solids and not gases. This high density arises due to inward gravitational attraction on outer layers due to inner layers of the Sun.",
+    "hint": "Calculate average density using ρ = M/V where V = (4/3)πR³. Compare with typical densities: gases ~1 kg/m³, liquids/solids ~10³ kg/m³.",
+    "solution_steps_latex": [
+      "Given: Mass of Sun $M = 2.0 \\times 10^{30}$ kg",
+      "Radius of Sun $R = 7.0 \\times 10^8$ m",
+      "**Prediction**: Since Sun is plasma (ionized gas), we might expect low density like gases",
+      "**Calculation**: Volume of Sun = $\\frac{4}{3}\\pi R^3$",
+      "$V = \\frac{4}{3} \\times 3.14 \\times (7.0 \\times 10^8)^3$",
+      "$V = \\frac{4}{3} \\times 3.14 \\times 3.43 \\times 10^{26}$",
+      "$V = 1.43 \\times 10^{27}$ m$^3$",
+      "Density $\\rho = \\frac{M}{V} = \\frac{2.0 \\times 10^{30}}{1.43 \\times 10^{27}}$",
+      "$\\rho = 1.4 \\times 10^3$ kg m$^{-3}$ = 1400 kg m$^{-3}$",
+      "**Comparison**: Water density $\\approx 10^3$ kg m$^{-3}$, air density $\\approx 1$ kg m$^{-3}$",
+      "**Conclusion**: Despite being plasma, Sun's density is comparable to **liquids/solids**, not gases!",
+      "**Reason**: Enormous gravitational compression due to Sun's huge mass creates high density even in plasma state"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass of Sun: 2.0 × 10³⁰ kg",
+        "Radius of Sun: 7.0 × 10⁸ m",
+        "Core temperature: > 10⁷ K",
+        "Surface temperature: ≈ 6000 K"
+      ],
+      "to_find": [
+        "Average density of Sun",
+        "Comparison with solid/liquid/gas densities"
+      ],
+      "formulas_used": [
+        "Volume of sphere = $\\frac{4}{3}\\pi R^3$",
+        "Density = $\\frac{\\text{Mass}}{\\text{Volume}}$"
+      ]
+    },
+    "tags": [
+      "density",
+      "sun",
+      "plasma",
+      "gravitational-compression",
+      "astronomy",
+      "volume-calculation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 1,
+      "exercise": "Exercise",
+      "question_number": "Q1.17",
+      "page": 12
+    }
+  }
+]

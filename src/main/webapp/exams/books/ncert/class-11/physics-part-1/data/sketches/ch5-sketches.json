@@ -1,0 +1,22 @@
+{
+    "q5-3-potential-energy": {
+        "type": "potential-energy-graphs",
+        "title": "Potential Energy & Turning Points",
+        "description": "Explore which regions are allowed for a particle with total energy E.",
+        "params": {
+            "initialType": "well"
+        }
+    },
+    "q5-16-collision-outcomes": {
+        "type": "collision-outcomes",
+        "title": "Elastic Collision Scenarios",
+        "description": "Test different collision outcomes to see which one satisfies conservation laws.",
+        "params": {}
+    },
+    "q5-21-windmill": {
+        "type": "windmill-power",
+        "title": "Wind Energy & Power",
+        "description": "Visualize the volume of air sweeping through turbine blades.",
+        "params": {}
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "q6-1-cm-locator": {
+        "type": "center-of-mass-shapes",
+        "title": "Centre of Mass Locator",
+        "description": "Visualize the center of mass for various uniform bodies and see if it lies inside or outside the material.",
+        "params": {}
+    },
+    "q6-3-child-trolley": {
+        "type": "cm-velocity-demo",
+        "title": "Internal Forces & CM Velocity",
+        "description": "Observe how the motion of a child on a trolley affects (or doesn't affect) the velocity of the system's Center of Mass.",
+        "params": {}
+    },
+    "q6-10-rotational-race": {
+        "type": "moment-of-inertia-race",
+        "title": "Torque & Angular Acceleration",
+        "description": "Compare how equal torques affect the angular speed of a Hollow Cylinder vs. a Solid Sphere.",
+        "params": {}
+    }
+}

@@ -1,0 +1,135 @@
+{
+    "q1-1-unit-converter": {
+        "title": "Unit Conversion Calculator",
+        "formula_display": "Converted Value = Original Value × Conversion Factor",
+        "inputs": [
+            {
+                "id": "value",
+                "label": "Value",
+                "unit": "",
+                "default": 1,
+                "min": 0,
+                "max": 1000,
+                "step": 0.01
+            },
+            {
+                "id": "factor",
+                "label": "Conversion Factor",
+                "unit": "",
+                "default": 100,
+                "min": 0.000001,
+                "max": 1000000,
+                "step": 0.01,
+                "exponent": true
+            }
+        ],
+        "compute": "value * factor",
+        "output": {
+            "label": "Converted Value",
+            "unit": "",
+            "precision": 6
+        }
+    },
+    "q1-2-dimensional-converter": {
+        "title": "Dimensional Analysis Converter",
+        "formula_display": "New Value = Original Value × Conversion Factor",
+        "inputs": [
+            {
+                "id": "value",
+                "label": "Original Value",
+                "unit": "",
+                "default": 1,
+                "min": 0,
+                "max": 1e20,
+                "step": 0.01,
+                "exponent": true
+            },
+            {
+                "id": "factor",
+                "label": "Conversion Factor",
+                "unit": "",
+                "default": 1e7,
+                "min": 1e-20,
+                "max": 1e20,
+                "step": 1,
+                "exponent": true
+            }
+        ],
+        "compute": "value * factor",
+        "output": {
+            "label": "Converted Value",
+            "unit": "",
+            "precision": 4
+        }
+    },
+    "q1-6-instrument-precision": {
+        "title": "Instrument Precision Calculator",
+        "formula_display": "Least Count = Main Scale Division / Number of Divisions",
+        "inputs": [
+            {
+                "id": "msd",
+                "label": "Main Scale Division (MSD)",
+                "unit": "mm",
+                "default": 1,
+                "min": 0.1,
+                "max": 10,
+                "step": 0.1
+            },
+            {
+                "id": "divisions",
+                "label": "Number of Divisions",
+                "unit": "",
+                "default": 20,
+                "min": 10,
+                "max": 200,
+                "step": 1
+            }
+        ],
+        "compute": "msd / divisions",
+        "output": {
+            "label": "Least Count",
+            "unit": "mm",
+            "precision": 4
+        },
+        "plot": {
+            "vary": "divisions",
+            "range": [
+                10,
+                200
+            ],
+            "points": 50,
+            "xLabel": "Number of Divisions",
+            "yLabel": "Least Count (mm)"
+        }
+    },
+    "q1-10-significant-figures": {
+        "title": "Significant Figures Calculator",
+        "formula_display": "Result = Number 1 × Number 2",
+        "inputs": [
+            {
+                "id": "num1",
+                "label": "Number 1",
+                "unit": "",
+                "default": 4.234,
+                "min": 0.001,
+                "max": 10000,
+                "step": 0.001
+            },
+            {
+                "id": "num2",
+                "label": "Number 2",
+                "unit": "",
+                "default": 1.005,
+                "min": 0.001,
+                "max": 10000,
+                "step": 0.001
+            }
+        ],
+        "compute": "num1 * num2",
+        "output": {
+            "label": "Product",
+            "unit": "",
+            "precision": 4
+        }
+    }
+}
