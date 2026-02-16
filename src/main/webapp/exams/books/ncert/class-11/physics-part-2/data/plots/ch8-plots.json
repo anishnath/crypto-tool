@@ -1,0 +1,20 @@
+{
+  "q8-2-y-vs-strain": {
+    "title": "Young's Modulus: Stress vs Strain (Y = σ/ε)",
+    "xDomain": [0, 0.004],
+    "yDomain": [0, 3.5e8],
+    "data": [
+      {"fn": "75000000000 * x", "color": "#6366f1", "label": "Linear: σ = Yε, Y = 75 GPa"}
+    ],
+    "annotations": [{"x": 0.002, "text": "At ε=0.002: σ = 150×10⁶ N/m²"}]
+  },
+  "q8-elongation-vs-force": {
+    "title": "Wire Elongation vs Force (ΔL = FL/(AY))",
+    "xDomain": [0, 500],
+    "yDomain": [0, 0.002],
+    "data": [
+      {"fn": "x * 1.5 / (0.000005 * 200000000000)", "color": "#22c55e", "label": "Steel: L=1.5m, A=5×10⁻⁶ m², Y=2×10¹¹ Pa"}
+    ],
+    "annotations": [{"x": 400, "text": "F=400N → ΔL ≈ 6×10⁻⁴ m"}]
+  }
+}

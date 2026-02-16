@@ -1,0 +1,118 @@
+{
+  "q12-molecular-volume-fraction": {
+    "title": "Fraction of Molecular Volume (Q12.1)",
+    "formula_display": "V_molecule = (4/3)πr³;  Fraction = N_A × V_molecule / V_molar",
+    "inputs": [
+      {"id": "d", "label": "Molecular diameter d", "unit": "Å", "default": 3, "min": 1, "max": 10, "step": 0.5},
+      {"id": "NA", "label": "Avogadro constant N_A", "unit": "×10²³", "default": 6.02, "min": 6, "max": 6.05, "step": 0.01},
+      {"id": "Vm", "label": "Molar volume at STP", "unit": "L", "default": 22.4, "min": 20, "max": 25, "step": 0.1}
+    ],
+    "compute": "(NA * 1e23 * (4/3) * 3.14159 * Math.pow(d * 1e-10 / 2, 3)) / (Vm * 1e-3)",
+    "output": {"label": "Fraction", "unit": "", "precision": 4}
+  },
+  "q12-molar-volume-stp": {
+    "title": "Molar Volume at STP: V = nRT/P",
+    "formula_display": "PV = nRT → V = nRT/P",
+    "inputs": [
+      {"id": "n", "label": "Moles n", "unit": "mol", "default": 1, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "T", "label": "Temperature T", "unit": "K", "default": 273, "min": 200, "max": 400, "step": 1},
+      {"id": "P", "label": "Pressure P", "unit": "Pa", "default": 101325, "min": 50000, "max": 200000, "step": 1000}
+    ],
+    "compute": "n * 8.314 * T / P",
+    "output": {"label": "Volume V", "unit": "m³", "precision": 4}
+  },
+  "q12-molecule-count": {
+    "title": "Number of Molecules: N = n × N_A",
+    "formula_display": "PV = nRT,  N = n × N_A",
+    "inputs": [
+      {"id": "P", "label": "Pressure P", "unit": "Pa", "default": 101325, "min": 10000, "max": 500000, "step": 1000},
+      {"id": "V", "label": "Volume V", "unit": "m³", "default": 25, "min": 0.1, "max": 1000, "step": 0.1},
+      {"id": "T", "label": "Temperature T", "unit": "K", "default": 300, "min": 200, "max": 500, "step": 1},
+      {"id": "NA", "label": "N_A", "unit": "×10²³", "default": 6.02, "min": 6, "max": 6.05, "step": 0.01}
+    ],
+    "compute": "(P * V / (8.31 * T)) * NA * 1e23",
+    "output": {"label": "Number of molecules N", "unit": "", "precision": 0}
+  },
+  "q12-cylinder-mass-withdrawn": {
+    "title": "Mass Withdrawn from Cylinder (Gauge Pressure)",
+    "formula_display": "n = PV/(RT),  m = Δn × M;  P_abs = P_gauge + 1 atm",
+    "inputs": [
+      {"id": "V", "label": "Volume", "unit": "L", "default": 30, "min": 5, "max": 100, "step": 1},
+      {"id": "Pg1", "label": "Initial gauge pressure", "unit": "atm", "default": 15, "min": 0, "max": 50, "step": 1},
+      {"id": "T1", "label": "Initial temp T₁", "unit": "K", "default": 300, "min": 250, "max": 400, "step": 1},
+      {"id": "Pg2", "label": "Final gauge pressure", "unit": "atm", "default": 11, "min": 0, "max": 50, "step": 1},
+      {"id": "T2", "label": "Final temp T₂", "unit": "K", "default": 290, "min": 250, "max": 400, "step": 1},
+      {"id": "M", "label": "Molar mass M", "unit": "g/mol", "default": 32, "min": 2, "max": 100, "step": 1}
+    ],
+    "compute": "((Pg1 + 1) * 1.013e5 * V * 0.001 / (8.31 * T1) - (Pg2 + 1) * 1.013e5 * V * 0.001 / (8.31 * T2)) * M * 0.001",
+    "output": {"label": "Mass withdrawn", "unit": "kg", "precision": 3}
+  },
+  "q12-bubble-volume": {
+    "title": "Bubble Volume: P₁V₁/T₁ = P₂V₂/T₂",
+    "formula_display": "P₁ = P_atm + ρgh;  V₂ = V₁ × (P₁/P₂) × (T₂/T₁)",
+    "inputs": [
+      {"id": "V1", "label": "Initial volume V₁", "unit": "cm³", "default": 1, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "h", "label": "Depth h", "unit": "m", "default": 40, "min": 1, "max": 200, "step": 1},
+      {"id": "T1", "label": "Temp at depth T₁", "unit": "K", "default": 285, "min": 270, "max": 310, "step": 1},
+      {"id": "T2", "label": "Temp at surface T₂", "unit": "K", "default": 308, "min": 270, "max": 320, "step": 1},
+      {"id": "Patm", "label": "P_atm", "unit": "Pa", "default": 101000, "min": 90000, "max": 110000, "step": 1000}
+    ],
+    "compute": "V1 * 1e-6 * ((Patm + 1000 * 9.8 * h) / Patm) * (T2 / T1)",
+    "output": {"label": "Final volume V₂", "unit": "m³", "precision": 6}
+  },
+  "q12-thermal-energy-monatomic": {
+    "title": "Average Thermal Energy (Monatomic): E = (3/2)k_B T",
+    "formula_display": "⟨E⟩ = (3/2)k_B T",
+    "inputs": [
+      {"id": "T", "label": "Temperature T", "unit": "K", "default": 300, "min": 1, "max": 10000000, "step": 10},
+      {"id": "kB", "label": "k_B", "unit": "×10⁻²³ J/K", "default": 1.38, "min": 1.37, "max": 1.39, "step": 0.01}
+    ],
+    "compute": "1.5 * kB * 1e-23 * T",
+    "output": {"label": "Average energy ⟨E⟩", "unit": "J", "precision": 4}
+  },
+  "q12-rms-speed": {
+    "title": "RMS Speed: v_rms = √(3RT/M)",
+    "formula_display": "v_rms = √(3RT/M)",
+    "inputs": [
+      {"id": "T", "label": "Temperature T", "unit": "K", "default": 300, "min": 1, "max": 10000, "step": 1},
+      {"id": "M", "label": "Molar mass M", "unit": "g/mol", "default": 28, "min": 2, "max": 400, "step": 1},
+      {"id": "R", "label": "R", "unit": "J/(mol·K)", "default": 8.31, "min": 8.3, "max": 8.32, "step": 0.01}
+    ],
+    "compute": "Math.sqrt(3 * R * T / (M * 0.001))",
+    "output": {"label": "v_rms", "unit": "m/s", "precision": 1}
+  },
+  "q12-rms-temp-match": {
+    "title": "Temperature for Same v_rms: T₂ = T₁ × (M₂/M₁)",
+    "formula_display": "For v_1 = v_2:  T₂/M₂ = T₁/M₁",
+    "inputs": [
+      {"id": "T1", "label": "Temperature T₁ (gas 1)", "unit": "K", "default": 253, "min": 1, "max": 1000, "step": 1},
+      {"id": "M1", "label": "Molar mass M₁", "unit": "g/mol", "default": 4, "min": 2, "max": 50, "step": 1},
+      {"id": "M2", "label": "Molar mass M₂", "unit": "g/mol", "default": 39.9, "min": 2, "max": 250, "step": 0.1}
+    ],
+    "compute": "T1 * M2 / M1",
+    "output": {"label": "Temperature T₂", "unit": "K", "precision": 0}
+  },
+  "q12-mean-free-path": {
+    "title": "Mean Free Path & Collision Frequency",
+    "formula_display": "λ = 1/(√2 π d² n);  ν = v_rms/λ",
+    "inputs": [
+      {"id": "P", "label": "Pressure P", "unit": "Pa", "default": 202600, "min": 10000, "max": 1000000, "step": 1000},
+      {"id": "T", "label": "Temperature T", "unit": "K", "default": 290, "min": 200, "max": 500, "step": 1},
+      {"id": "d", "label": "Molecular diameter d", "unit": "Å", "default": 2, "min": 1, "max": 5, "step": 0.1},
+      {"id": "M", "label": "Molar mass M", "unit": "g/mol", "default": 28, "min": 2, "max": 50, "step": 1}
+    ],
+    "compute": "1 / (1.414 * 3.14159 * Math.pow(d * 1e-10, 2) * (P / (1.38e-23 * T)))",
+    "output": {"label": "Mean free path λ", "unit": "m", "precision": 10}
+  },
+  "q12-pv-over-t": {
+    "title": "PV/T = nR (Ideal Gas)",
+    "formula_display": "PV/T = nR  at low pressure",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 0.001, "min": 0.0001, "max": 0.1, "step": 0.0001},
+      {"id": "M", "label": "Molar mass M", "unit": "g/mol", "default": 32, "min": 2, "max": 200, "step": 1},
+      {"id": "R", "label": "R", "unit": "J/(mol·K)", "default": 8.31, "min": 8.3, "max": 8.32, "step": 0.01}
+    ],
+    "compute": "(m / (M * 0.001)) * R",
+    "output": {"label": "PV/T", "unit": "J/K", "precision": 2}
+  }
+}

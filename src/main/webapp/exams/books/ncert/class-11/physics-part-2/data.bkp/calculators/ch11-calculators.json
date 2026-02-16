@@ -1,0 +1,84 @@
+{
+  "q11-geyser-fuel-rate": {
+    "title": "Geyser Fuel Consumption Rate",
+    "formula_display": "Q = mcΔT per minute;  m_fuel = Q / H",
+    "inputs": [
+      {"id": "flowRate", "label": "Water flow rate", "unit": "L/min", "default": 3, "min": 0.5, "max": 20, "step": 0.5},
+      {"id": "Ti", "label": "Initial temp Tᵢ", "unit": "°C", "default": 27, "min": 0, "max": 50, "step": 1},
+      {"id": "Tf", "label": "Final temp Tf", "unit": "°C", "default": 77, "min": 30, "max": 100, "step": 1},
+      {"id": "H", "label": "Heat of combustion H", "unit": "J/g", "default": 40000, "min": 10000, "max": 100000, "step": 1000}
+    ],
+    "compute": "(flowRate * 1000 * 4.18 * (Tf - Ti)) / H",
+    "output": {"label": "Fuel consumption rate", "unit": "g/min", "precision": 1}
+  },
+  "q11-molar-specific-heat-cp": {
+    "title": "Heat at Constant Pressure: Q = nCₚΔT",
+    "formula_display": "Q = nCₚΔT,  Cₚ = (7/2)R (diatomic)",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 0.02, "min": 0.001, "max": 1, "step": 0.001},
+      {"id": "M", "label": "Molar mass M", "unit": "g/mol", "default": 28, "min": 2, "max": 200, "step": 1},
+      {"id": "dT", "label": "ΔT", "unit": "K", "default": 45, "min": 1, "max": 200, "step": 1},
+      {"id": "R", "label": "R", "unit": "J/(mol·K)", "default": 8.3, "min": 8, "max": 8.5, "step": 0.1}
+    ],
+    "compute": "(m * 1000 / M) * (7 / 2) * R * dT",
+    "output": {"label": "Heat Q", "unit": "J", "precision": 0}
+  },
+  "q11-adiabatic-pressure-ratio": {
+    "title": "Adiabatic Process: P₂/P₁ = (V₁/V₂)^γ",
+    "formula_display": "PV^γ = constant,  γ = 7/5 (diatomic)",
+    "inputs": [
+      {"id": "V1", "label": "Initial volume V₁", "unit": "m³", "default": 1, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "V2", "label": "Final volume V₂", "unit": "m³", "default": 0.5, "min": 0.01, "max": 5, "step": 0.05},
+      {"id": "gamma", "label": "γ (diatomic = 1.4)", "unit": "", "default": 1.4, "min": 1.1, "max": 1.7, "step": 0.05}
+    ],
+    "compute": "Math.pow(V1 / V2, gamma)",
+    "output": {"label": "Pressure ratio P₂/P₁", "unit": "", "precision": 2}
+  },
+  "q11-first-law-rate": {
+    "title": "First Law: dU/dt = dQ/dt − dW/dt",
+    "formula_display": "Rate of internal energy change",
+    "inputs": [
+      {"id": "dQdt", "label": "Heat input rate dQ/dt", "unit": "W", "default": 100, "min": 0, "max": 500, "step": 10},
+      {"id": "dWdt", "label": "Work output rate dW/dt", "unit": "W", "default": 75, "min": 0, "max": 500, "step": 5}
+    ],
+    "compute": "dQdt - dWdt",
+    "output": {"label": "dU/dt", "unit": "W", "precision": 0}
+  },
+  "q11-first-law-deltaU": {
+    "title": "First Law: ΔU = Q − W",
+    "formula_display": "ΔU is path-independent (state function)",
+    "inputs": [
+      {"id": "Q", "label": "Heat absorbed Q", "unit": "J", "default": 39.2, "min": 0, "max": 10000, "step": 1},
+      {"id": "W", "label": "Work done by system W", "unit": "J", "default": 16.9, "min": -1000, "max": 10000, "step": 1}
+    ],
+    "compute": "Q - W",
+    "output": {"label": "Change in internal energy ΔU", "unit": "J", "precision": 1}
+  },
+  "q11-pv-work-trapezoid": {
+    "title": "Work from P-V Diagram: D→E (trapezoid) + E→F (isobaric)",
+    "formula_display": "W = ∫PdV = Area under curve",
+    "inputs": [
+      {"id": "PD", "label": "P_D", "unit": "Pa", "default": 600, "min": 100, "max": 2000, "step": 50},
+      {"id": "PE", "label": "P_E", "unit": "Pa", "default": 300, "min": 50, "max": 1500, "step": 50},
+      {"id": "VD", "label": "V_D", "unit": "m³", "default": 2, "min": 0.5, "max": 10, "step": 0.5},
+      {"id": "VE", "label": "V_E", "unit": "m³", "default": 5, "min": 1, "max": 15, "step": 0.5},
+      {"id": "VF", "label": "V_F", "unit": "m³", "default": 2, "min": 0.5, "max": 10, "step": 0.5}
+    ],
+    "compute": "0.5 * (PD + PE) * (VE - VD) + PE * (VF - VE)",
+    "output": {"label": "Total work W (D→E→F)", "unit": "J", "precision": 0}
+  },
+  "q11-thermal-equilibrium": {
+    "title": "Final Temperature: Two Bodies in Thermal Contact",
+    "formula_display": "T_f = (m₁c₁T₁ + m₂c₂T₂) / (m₁c₁ + m₂c₂)",
+    "inputs": [
+      {"id": "m1", "label": "Mass m₁", "unit": "kg", "default": 1, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "c1", "label": "Specific heat c₁", "unit": "J/(kg·K)", "default": 4200, "min": 100, "max": 5000, "step": 100},
+      {"id": "T1", "label": "Temp T₁", "unit": "°C", "default": 80, "min": 0, "max": 200, "step": 1},
+      {"id": "m2", "label": "Mass m₂", "unit": "kg", "default": 1, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "c2", "label": "Specific heat c₂", "unit": "J/(kg·K)", "default": 900, "min": 100, "max": 5000, "step": 100},
+      {"id": "T2", "label": "Temp T₂", "unit": "°C", "default": 20, "min": 0, "max": 200, "step": 1}
+    ],
+    "compute": "(m1 * c1 * T1 + m2 * c2 * T2) / (m1 * c1 + m2 * c2)",
+    "output": {"label": "Equilibrium temp T_f", "unit": "°C", "precision": 1}
+  }
+}

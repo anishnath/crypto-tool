@@ -1,0 +1,12 @@
+{
+  "q10-linear-expansion-vs-temp": {
+    "title": "Length vs Temperature: L = L₀(1 + αΔT)",
+    "xDomain": [-50, 200],
+    "yDomain": [0.98, 1.02],
+    "data": [
+      {"fn": "1 + 0.000012 * (x - 27)", "color": "#3b82f6", "label": "Steel: α = 1.2×10⁻⁵ K⁻¹"},
+      {"fn": "1 + 0.000017 * (x - 27)", "color": "#f59e0b", "label": "Copper: α = 1.7×10⁻⁵ K⁻¹"}
+    ],
+    "annotations": [{"x": 45, "text": "Hot day: tape reads low"}]
+  }
+}

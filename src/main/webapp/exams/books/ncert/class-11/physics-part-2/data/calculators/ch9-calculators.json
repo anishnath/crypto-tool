@@ -1,0 +1,78 @@
+{
+  "q9-hydrostatic-pressure": {
+    "title": "Hydrostatic Pressure",
+    "formula_display": "P = P₀ + ρgh",
+    "inputs": [
+      {"id": "P0", "label": "Surface pressure P₀", "unit": "Pa", "default": 101300, "min": 0, "max": 200000, "step": 100},
+      {"id": "rho", "label": "Density ρ", "unit": "kg/m³", "default": 1030, "min": 100, "max": 15000, "step": 10},
+      {"id": "h", "label": "Depth h", "unit": "m", "default": 3000, "min": 0, "max": 12000, "step": 10}
+    ],
+    "compute": "P0 + rho * 9.8 * h",
+    "output": {"label": "Pressure P", "unit": "Pa", "precision": 0},
+    "plot": {"vary": "h", "range": [0, 5000], "points": 50, "xLabel": "h (m)", "yLabel": "P (Pa)"}
+  },
+  "q9-pressure-force-area": {
+    "title": "Pressure from Force & Area",
+    "formula_display": "P = F/A = mg/(πr²)",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 50, "min": 1, "max": 500, "step": 1},
+      {"id": "d", "label": "Diameter d", "unit": "m", "default": 0.01, "min": 0.001, "max": 0.2, "step": 0.001}
+    ],
+    "compute": "m * 9.8 / (3.14159265 * (d/2) * (d/2))",
+    "output": {"label": "Pressure P", "unit": "Pa", "precision": 0}
+  },
+  "q9-barometer-height": {
+    "title": "Barometer Column Height",
+    "formula_display": "h = P_atm/(ρg)",
+    "inputs": [
+      {"id": "Patm", "label": "Atmospheric pressure", "unit": "Pa", "default": 101300, "min": 90000, "max": 110000, "step": 100},
+      {"id": "rho", "label": "Fluid density ρ", "unit": "kg/m³", "default": 984, "min": 100, "max": 15000, "step": 10}
+    ],
+    "compute": "Patm / (rho * 9.8)",
+    "output": {"label": "Column height h", "unit": "m", "precision": 2}
+  },
+  "q9-hydraulic-pressure": {
+    "title": "Hydraulic Lift Pressure (Pascal's Law)",
+    "formula_display": "P = F/A (same pressure throughout)",
+    "inputs": [
+      {"id": "m", "label": "Load mass", "unit": "kg", "default": 3000, "min": 100, "max": 10000, "step": 50},
+      {"id": "A", "label": "Piston area A", "unit": "m²", "default": 0.0425, "min": 0.001, "max": 0.5, "step": 0.001}
+    ],
+    "compute": "m * 9.8 / A",
+    "output": {"label": "Pressure P", "unit": "Pa", "precision": 0}
+  },
+  "q9-specific-gravity-u-tube": {
+    "title": "U-tube: Specific Gravity of Spirit",
+    "formula_display": "ρ_w h_w = ρ_s h_s  ⇒  SG_spirit = (h_w/h_s) × SG_water",
+    "inputs": [
+      {"id": "hw", "label": "Water height", "unit": "cm", "default": 10, "min": 1, "max": 50, "step": 0.5},
+      {"id": "hs", "label": "Spirit height", "unit": "cm", "default": 12.5, "min": 1, "max": 50, "step": 0.5}
+    ],
+    "compute": "hw / hs",
+    "output": {"label": "Specific gravity (spirit/water)", "unit": "", "precision": 3}
+  },
+  "q9-poiseuille-pressure": {
+    "title": "Poiseuille's Law: Pressure Difference",
+    "formula_display": "ΔP = 8ηLQ/(πr⁴)",
+    "inputs": [
+      {"id": "eta", "label": "Viscosity η", "unit": "Pa·s", "default": 0.83, "min": 0.001, "max": 10, "step": 0.01},
+      {"id": "L", "label": "Length L", "unit": "m", "default": 1.5, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "Q", "label": "Volume flow rate Q", "unit": "m³/s", "default": 3.08e-6, "min": 1e-8, "max": 1e-2, "step": 1e-7},
+      {"id": "r", "label": "Radius r", "unit": "m", "default": 0.01, "min": 0.001, "max": 0.1, "step": 0.001}
+    ],
+    "compute": "8 * eta * L * Q / (3.14159265 * r * r * r * r)",
+    "output": {"label": "Pressure difference ΔP", "unit": "Pa", "precision": 2}
+  },
+  "q9-bernoulli-lift": {
+    "title": "Aerodynamic Lift (Bernoulli)",
+    "formula_display": "ΔP = ½ρ(v₁² − v₂²),  F_lift = ΔP × A",
+    "inputs": [
+      {"id": "v1", "label": "Upper surface speed v₁", "unit": "m/s", "default": 70, "min": 1, "max": 200, "step": 1},
+      {"id": "v2", "label": "Lower surface speed v₂", "unit": "m/s", "default": 63, "min": 1, "max": 200, "step": 1},
+      {"id": "rho", "label": "Air density ρ", "unit": "kg/m³", "default": 1.3, "min": 0.5, "max": 2, "step": 0.1},
+      {"id": "A", "label": "Wing area A", "unit": "m²", "default": 2.5, "min": 0.1, "max": 50, "step": 0.1}
+    ],
+    "compute": "0.5 * rho * (v1*v1 - v2*v2) * A",
+    "output": {"label": "Lift force F", "unit": "N", "precision": 1}
+  }
+}

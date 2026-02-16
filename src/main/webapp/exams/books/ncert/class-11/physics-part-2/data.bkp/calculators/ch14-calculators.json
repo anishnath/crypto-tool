@@ -1,0 +1,65 @@
+{
+  "q14-wave-speed-string": {
+    "title": "Transverse Wave on String: v = √(T/μ)",
+    "formula_display": "v = √(T/μ),  μ = M/L",
+    "inputs": [
+      {"id": "T", "label": "Tension T", "unit": "N", "default": 200, "min": 1, "max": 1000, "step": 10},
+      {"id": "M", "label": "Mass M", "unit": "kg", "default": 2.5, "min": 0.1, "max": 20, "step": 0.1},
+      {"id": "L", "label": "Length L", "unit": "m", "default": 20, "min": 0.5, "max": 50, "step": 0.5}
+    ],
+    "compute": "Math.sqrt(T / (M / L))",
+    "output": {"label": "Wave speed v", "unit": "m/s", "precision": 1}
+  },
+  "q14-stone-splash-time": {
+    "title": "Stone + Sound: t = √(2h/g) + h/v_sound",
+    "formula_display": "t_fall = √(2h/g),  t_sound = h/v",
+    "inputs": [
+      {"id": "h", "label": "Height h", "unit": "m", "default": 300, "min": 10, "max": 500, "step": 10},
+      {"id": "g", "label": "g", "unit": "m/s²", "default": 9.8, "min": 9.5, "max": 10, "step": 0.1},
+      {"id": "vsound", "label": "Speed of sound", "unit": "m/s", "default": 340, "min": 300, "max": 400, "step": 10}
+    ],
+    "compute": "Math.sqrt(2 * h / g) + h / vsound",
+    "output": {"label": "Total time t", "unit": "s", "precision": 2}
+  },
+  "q14-wave-time": {
+    "title": "Time for Disturbance: t = L/v",
+    "formula_display": "t = L/v",
+    "inputs": [
+      {"id": "L", "label": "Length L", "unit": "m", "default": 20, "min": 1, "max": 100, "step": 1},
+      {"id": "v", "label": "Wave speed v", "unit": "m/s", "default": 40, "min": 1, "max": 500, "step": 1}
+    ],
+    "compute": "L / v",
+    "output": {"label": "Time t", "unit": "s", "precision": 2}
+  },
+  "q14-tension-for-speed": {
+    "title": "Tension for Target Speed: T = μv²",
+    "formula_display": "T = μv²,  μ = M/L",
+    "inputs": [
+      {"id": "M", "label": "Mass M", "unit": "kg", "default": 2.1, "min": 0.1, "max": 20, "step": 0.1},
+      {"id": "L", "label": "Length L", "unit": "m", "default": 12, "min": 0.5, "max": 50, "step": 0.5},
+      {"id": "v", "label": "Target speed v", "unit": "m/s", "default": 343, "min": 10, "max": 500, "step": 1}
+    ],
+    "compute": "(M / L) * v * v",
+    "output": {"label": "Tension T", "unit": "N", "precision": 0}
+  },
+  "q14-wave-parameters": {
+    "title": "Wave Parameters: v = ω/k, λ = 2π/k",
+    "formula_display": "y = A sin(ωt ± kx + φ)",
+    "inputs": [
+      {"id": "omega", "label": "ω", "unit": "rad/s", "default": 36, "min": 1, "max": 200, "step": 1},
+      {"id": "k", "label": "k", "unit": "rad/cm", "default": 0.018, "min": 0.001, "max": 1, "step": 0.001}
+    ],
+    "compute": "omega / k",
+    "output": {"label": "Speed v (cm/s)", "unit": "cm/s", "precision": 1}
+  },
+  "q14-beats-frequency": {
+    "title": "Beats: f_beat = |f₁ − f₂|",
+    "formula_display": "Beat frequency = |f₁ − f₂|",
+    "inputs": [
+      {"id": "f1", "label": "Frequency f₁", "unit": "Hz", "default": 256, "min": 100, "max": 500, "step": 1},
+      {"id": "f2", "label": "Frequency f₂", "unit": "Hz", "default": 260, "min": 100, "max": 500, "step": 1}
+    ],
+    "compute": "Math.abs(f1 - f2)",
+    "output": {"label": "Beat frequency", "unit": "Hz", "precision": 1}
+  }
+}

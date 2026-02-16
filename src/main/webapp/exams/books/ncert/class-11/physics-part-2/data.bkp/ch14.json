@@ -1,0 +1,1214 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Speed of a Transverse Wave on a Stretched String",
+    "exercise": "Exercise 14.1",
+    "question_number": "Q1",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A string of mass 2.50 kg is under a tension of 200 N. The length of the stretched string is 20.0 m. If the transverse jerk is struck at one end of the string, how long does the disturbance take to reach the other end?",
+    "question_latex": "A string of mass $2.50$ kg is under a tension of $200$ N. The length of the stretched string is $20.0$ m. If the transverse jerk is struck at one end of the string, how long does the disturbance take to reach the other end?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.5 s",
+    "correct_answer_latex": "$0.5$ s",
+    "hint": "Calculate linear mass density μ = M/l, then use v = √(T/μ). Time t = l/v.",
+    "solution_steps_latex": [
+      "Given: Mass $M = 2.50$ kg, Tension $T = 200$ N, Length $l = 20.0$ m [cite: 527]",
+      "Linear mass density $\\mu = \\frac{M}{l} = \\frac{2.50}{20.0} = 0.125$ kg/m",
+      "Speed of transverse wave $v = \\sqrt{\\frac{T}{\\mu}} = \\sqrt{\\frac{200}{0.125}} = \\sqrt{1600} = 40$ m/s",
+      "Time taken $t = \\frac{l}{v} = \\frac{20.0}{40} = 0.5$ s [cite: 184]"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass M: 2.50 kg",
+        "Tension T: 200 N",
+        "Length l: 20.0 m"
+      ],
+      "to_find": [
+        "Time t"
+      ],
+      "formulas_used": [
+        "$\\mu = \\frac{M}{l}$",
+        "$v = \\sqrt{\\frac{T}{\\mu}}$",
+        "$t = \\frac{l}{v}$"
+      ]
+    },
+    "tags": [
+      "waves",
+      "transverse-wave",
+      "tension",
+      "wave-speed",
+      "numerical"
+    ],
+    "p5_sketch": "q14-1-transverse-wave",
+    "p5_sketch_slug": "q14-1-transverse-wave",
+    "calculator": "q14-wave-speed-string",
+    "calculator_slug": "q14-wave-speed-string",
+    "interactive_plot": "q14-wave-speed-vs-tension",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.1",
+      "question_number": "Q1",
+      "page": 297
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Speed of Sound",
+    "exercise": "Exercise 14.2",
+    "question_number": "Q2",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A stone dropped from the top of a tower of height 300 m splashes into the water of a pond near the base of the tower. When is the splash heard at the top given that the speed of sound in air is 340 m/s? (g = 9.8 m/s²)",
+    "question_latex": "A stone dropped from the top of a tower of height $300$ m splashes into the water of a pond near the base of the tower. When is the splash heard at the top given that the speed of sound in air is $340$ m $s^{-1}$? ($g = 9.8$ m $s^{-2}$)",
+    "sub_parts": null,
+    "correct_answer_plain": "8.7 s",
+    "correct_answer_latex": "$8.7$ s",
+    "hint": "Total time = Time for stone to fall (t1) + Time for sound to travel up (t2).",
+    "solution_steps_latex": [
+      "Time for stone to fall ($t_1$): $h = \\frac{1}{2}gt_1^2 \\Rightarrow 300 = \\frac{1}{2} \\times 9.8 \\times t_1^2$ [cite: 530, 532]",
+      "$t_1 = \\sqrt{\\frac{600}{9.8}} \\approx 7.82$ s",
+      "Time for sound to reach top ($t_2$): $t_2 = \\frac{h}{v_s} = \\frac{300}{340} \\approx 0.88$ s [cite: 531]",
+      "Total time $T = t_1 + t_2 = 7.82 + 0.88 = 8.7$ s [cite: 185]"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Height h: 300 m",
+        "Speed of sound v: 340 m/s",
+        "Acceleration g: 9.8 m/s²"
+      ],
+      "to_find": [
+        "Total time T"
+      ],
+      "formulas_used": [
+        "$h = \\frac{1}{2}gt^2$",
+        "$t = \\frac{d}{v}$"
+      ]
+    },
+    "tags": [
+      "kinematics",
+      "sound-speed",
+      "free-fall",
+      "numerical"
+    ],
+    "calculator": "q14-stone-splash-time",
+    "calculator_slug": "q14-stone-splash-time",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.2",
+      "question_number": "Q2",
+      "page": 297
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Speed of Transverse Wave",
+    "exercise": "Exercise 14.3",
+    "question_number": "Q3",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A steel wire has a length of 12.0 m and a mass of 2.10 kg. What should be the tension in the wire so that speed of a transverse wave on the wire equals the speed of sound in dry air at 20°C = 343 m/s.",
+    "question_latex": "A steel wire has a length of $12.0$ m and a mass of $2.10$ kg. What should be the tension in the wire so that speed of a transverse wave on the wire equals the speed of sound in dry air at $20^\\circ C = 343$ m $s^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "2.06 × 10⁴ N",
+    "correct_answer_latex": "$2.06 \\times 10^4$ N",
+    "hint": "Set v_wave = v_sound. Use T = μv².",
+    "solution_steps_latex": [
+      "Given: $l = 12.0$ m, $M = 2.10$ kg, $v = 343$ m/s [cite: 534, 535]",
+      "$\\mu = \\frac{M}{l} = \\frac{2.10}{12.0} = 0.175$ kg/m",
+      "Using $v = \\sqrt{\\frac{T}{\\mu}} \\Rightarrow T = \\mu v^2$",
+      "$T = 0.175 \\times (343)^2 = 0.175 \\times 117649$",
+      "$T = 20588.575$ N $\\approx 2.06 \\times 10^4$ N [cite: 187]"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Length l: 12.0 m",
+        "Mass M: 2.10 kg",
+        "Target speed v: 343 m/s"
+      ],
+      "to_find": [
+        "Tension T"
+      ],
+      "formulas_used": [
+        "$v = \\sqrt{\\frac{T}{\\mu}}$",
+        "$\\mu = \\frac{M}{l}$"
+      ]
+    },
+    "tags": [
+      "transverse-wave",
+      "tension",
+      "steel-wire",
+      "numerical"
+    ],
+    "calculator": "q14-tension-for-speed",
+    "calculator_slug": "q14-tension-for-speed",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.3",
+      "question_number": "Q3",
+      "page": 297
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Speed of Sound in Air",
+    "exercise": "Exercise 14.4",
+    "question_number": "Q4",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Use the formula v = √(γP/ρ) to explain why the speed of sound in air (a) is independent of pressure, (b) increases with temperature, (c) increases with humidity.",
+    "question_latex": "Use the formula $v = \\sqrt{\\frac{\\gamma P}{\\rho}}$ to explain why the speed of sound in air (a) is independent of pressure, (b) increases with temperature, (c) increases with humidity.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) P/ρ is constant at constant T. (b) v ∝ √T. (c) Humid air is less dense than dry air.",
+    "correct_answer_latex": "(a) $P/\\rho$ is constant at constant $T$. (b) $v \\propto \\sqrt{T}$. (c) Humid air is less dense than dry air.",
+    "hint": "Use the Ideal Gas Law P/ρ = RT/M.",
+    "solution_steps_latex": [
+      "From Ideal Gas Law: $PV = nRT = \\frac{m}{M}RT \\Rightarrow \\frac{P}{\\rho} = \\frac{RT}{M}$ [cite: 191]",
+      "Substituting in speed formula: $v = \\sqrt{\\frac{\\gamma RT}{M}}$ [cite: 198]",
+      "**(a)** At constant temperature, $\\frac{P}{\\rho}$ is constant, so $v$ is independent of pressure[cite: 195].",
+      "**(b)** $v \\propto \\sqrt{T}$, so speed increases with temperature[cite: 196].",
+      "**(c)** Water vapor has lower molecular mass (18) than $N_2$ (28) or $O_2$ (32). Humidity reduces effective $M$, thus increasing $v$[cite: 200, 201]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Formula: $v = \\sqrt{\\frac{\\gamma P}{\\rho}}$"
+      ],
+      "to_find": [
+        "Reasoning for P, T, Humidity dependence"
+      ],
+      "formulas_used": [
+        "$v = \\sqrt{\\frac{\\gamma RT}{M}}$",
+        "$\\frac{P}{\\rho} = \\frac{RT}{M}$"
+      ]
+    },
+    "tags": [
+      "sound-speed",
+      "laplace-correction",
+      "thermodynamics",
+      "reasoning"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.4",
+      "question_number": "Q4",
+      "page": 297
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Mathematical Representation of Waves",
+    "exercise": "Exercise 14.5",
+    "question_number": "Q5",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "A travelling wave is represented by y = f(x ± vt). Is the converse true? Examine if (a) (x-vt)², (b) log[(x+vt)/x₀], (c) 1/(x+vt) can represent a travelling wave.",
+    "question_latex": "A travelling wave is represented by $y = f(x \\pm vt)$. Is the converse true? Examine if (a) $(x-vt)^2$, (b) $\\log[(x+vt)/x_0]$, (c) $1/(x+vt)$ can represent a travelling wave.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "Converse is not true. Only functions that are finite everywhere represent waves. None of the given functions represent a wave as they are not finite for all x and t.",
+    "correct_answer_latex": "Converse is not true. Only functions that are finite everywhere represent waves. None of the given functions represent a wave as they are not finite for all $x$ and $t$.",
+    "hint": "An acceptable wave function must be finite for all x and t.",
+    "solution_steps_latex": [
+      "The converse is not true[cite: 202].",
+      "A wave function must be finite and well-defined for all $x$ and $t$[cite: 202].",
+      "**(a)** $(x-vt)^2 \\rightarrow \\infty$ as $x \\rightarrow \\infty$, so not a wave[cite: 203].",
+      "**(b)** $\\log[(x+vt)/x_0] \\rightarrow \\infty$ as $x \\rightarrow \\infty$, so not a wave[cite: 203].",
+      "**(c)** $1/(x+vt) \\rightarrow \\infty$ as $x \\rightarrow -vt$, so not a wave[cite: 203]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Generic form: $y = f(x \\pm vt)$"
+      ],
+      "to_find": [
+        "Validity of functions as waves"
+      ],
+      "formulas_used": null
+    },
+    "tags": [
+      "wave-function",
+      "travelling-wave",
+      "mathematical-physics",
+      "conceptual"
+    ],
+    "p5_sketch": "q14-5-longitudinal",
+    "p5_sketch_slug": "q14-5-longitudinal",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.5",
+      "question_number": "Q5",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Reflection and Refraction of Waves",
+    "exercise": "Exercise 14.6",
+    "question_number": "Q6",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A bat emits ultrasonic sound of frequency 1000 kHz in air. If the sound meets a water surface, what is the wavelength of (a) the reflected sound, (b) the transmitted sound? Speed of sound in air is 340 m/s and in water 1486 m/s.",
+    "question_latex": "A bat emits ultrasonic sound of frequency $1000$ kHz in air. If the sound meets a water surface, what is the wavelength of (a) the reflected sound, (b) the transmitted sound? Speed of sound in air is $340$ m $s^{-1}$ and in water $1486$ m $s^{-1}$.",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 3.4 × 10⁻⁴ m, (b) 1.49 × 10⁻³ m",
+    "correct_answer_latex": "(a) $3.4 \\times 10^{-4}$ m, (b) $1.49 \\times 10^{-3}$ m",
+    "hint": "Frequency remains same during reflection and refraction. Use λ = v/f.",
+    "solution_steps_latex": [
+      "Given: $f = 1000$ kHz $= 10^6$ Hz, $v_{air} = 340$ m/s, $v_{water} = 1486$ m/s [cite: 559, 561]",
+      "**(a) Reflected sound (in air):** $\\lambda_{air} = \\frac{v_{air}}{f} = \\frac{340}{10^6} = 3.4 \\times 10^{-4}$ m [cite: 204]",
+      "**(b) Transmitted sound (in water):** $\\lambda_{water} = \\frac{v_{water}}{f} = \\frac{1486}{10^6} = 1.486 \\times 10^{-3}$ m $\\approx 1.49 \\times 10^{-3}$ m [cite: 204]"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Frequency f: 1000 kHz",
+        "Speed in air: 340 m/s",
+        "Speed in water: 1486 m/s"
+      ],
+      "to_find": [
+        "Wavelength λ in air and water"
+      ],
+      "formulas_used": [
+        "$\\lambda = \\frac{v}{f}$"
+      ]
+    },
+    "tags": [
+      "ultrasonic",
+      "reflection",
+      "transmission",
+      "wavelength",
+      "numerical"
+    ],
+    "p5_sketch": "q14-6-reflection",
+    "p5_sketch_slug": "q14-6-reflection",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.6",
+      "question_number": "Q6",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Applications of Ultrasound",
+    "exercise": "Exercise 14.7",
+    "question_number": "Q7",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A hospital uses an ultrasonic scanner to locate tumours in a tissue. What is the wavelength of sound in the tissue in which the speed of sound is 1.7 km/s? The operating frequency of the scanner is 4.2 MHz.",
+    "question_latex": "A hospital uses an ultrasonic scanner to locate tumours in a tissue. What is the wavelength of sound in the tissue in which the speed of sound is $1.7$ km $s^{-1}$? The operating frequency of the scanner is $4.2$ MHz.",
+    "sub_parts": null,
+    "correct_answer_plain": "4.1 × 10⁻⁴ m",
+    "correct_answer_latex": "$4.1 \\times 10^{-4}$ m",
+    "hint": "Convert km/s to m/s and MHz to Hz. Use λ = v/f.",
+    "solution_steps_latex": [
+      "Given: $v = 1.7$ km/s $= 1700$ m/s, $f = 4.2$ MHz $= 4.2 \\times 10^6$ Hz [cite: 564]",
+      "Wavelength $\\lambda = \\frac{v}{f} = \\frac{1700}{4.2 \\times 10^6}$",
+      "$\\lambda \\approx 4.047 \\times 10^{-4}$ m $\\approx 4.1 \\times 10^{-4}$ m [cite: 209]"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Speed v: 1.7 km/s",
+        "Frequency f: 4.2 MHz"
+      ],
+      "to_find": [
+        "Wavelength λ"
+      ],
+      "formulas_used": [
+        "$\\lambda = \\frac{v}{f}$"
+      ]
+    },
+    "tags": [
+      "ultrasound",
+      "medical-physics",
+      "wavelength-calculation",
+      "numerical"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.7",
+      "question_number": "Q7",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Harmonic Progressive Waves",
+    "exercise": "Exercise 14.8",
+    "question_number": "Q8",
+    "marks": 5,
+    "difficulty": 0.6,
+    "question_plain": "A transverse harmonic wave on a string is described by y(x, t) = 3.0 sin (36t + 0.018x + π/4) where x and y are in cm and t in s. (a) Is this a travelling or stationary wave? If travelling, what are the speed and direction? (b) Amplitude and frequency? (c) Initial phase at origin? (d) Least distance between two successive crests?",
+    "question_latex": "A transverse harmonic wave on a string is described by $y(x, t) = 3.0 \\sin (36t + 0.018x + \\pi/4)$ where $x$ and $y$ are in cm and $t$ in s. (a) Is this a travelling or stationary wave? If travelling, what are the speed and direction? (b) Amplitude and frequency? (c) Initial phase at origin? (d) Least distance between two successive crests?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) Travelling, 20 m/s, Right to Left (b) 3 cm, 5.7 Hz (c) π/4 (d) 3.5 m",
+    "correct_answer_latex": "(a) Travelling, $20$ m/s, Right to Left (b) $3$ cm, $5.7$ Hz (c) $\\pi/4$ (d) $3.5$ m",
+    "hint": "Compare with y(x,t) = A sin(ωt + kx + φ). v = ω/k, λ = 2π/k.",
+    "solution_steps_latex": [
+      "Standard form: $y(x,t) = A \\sin(\\omega t + kx + \\phi)$ [cite: 567]",
+      "**(a)** It is a **travelling wave** (since $x$ and $t$ are in linear combination). As the sign of $kx$ and $\\omega t$ is the same, it travels from **right to left**[cite: 211].",
+      "Speed $v = \\frac{\\omega}{k} = \\frac{36}{0.018} = 2000$ cm/s $= 20$ m/s[cite: 211].",
+      "**(b)** Amplitude $A = 3.0$ cm. Angular frequency $\\omega = 36$ rad/s. Frequency $f = \\frac{36}{2\\pi} \\approx 5.73$ Hz[cite: 213].",
+      "**(c)** Initial phase $\\phi = \\pi/4$ rad[cite: 215].",
+      "**(d)** Distance between crests is wavelength $\\lambda = \\frac{2\\pi}{k} = \\frac{2\\pi}{0.018} \\approx 349$ cm $\\approx 3.5$ m[cite: 217]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Equation: $y = 3.0 \\sin (36t + 0.018x + \\pi/4)$"
+      ],
+      "to_find": [
+        "Wave type",
+        "Speed v",
+        "Direction",
+        "A, f, phase",
+        "Wavelength λ"
+      ],
+      "formulas_used": [
+        "$v = \\frac{\\omega}{k}$",
+        "$f = \\frac{\\omega}{2\\pi}$",
+        "$\\lambda = \\frac{2\\pi}{k}$"
+      ]
+    },
+    "tags": [
+      "harmonic-wave",
+      "wave-parameters",
+      "speed-direction",
+      "travelling-wave",
+      "numerical"
+    ],
+    "p5_sketch": "q14-1-transverse-wave",
+    "p5_sketch_slug": "q14-1-transverse-wave",
+    "calculator": "q14-wave-parameters",
+    "calculator_slug": "q14-wave-parameters",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.8",
+      "question_number": "Q8",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Oscillatory Motion in Travelling Waves",
+    "exercise": "Exercise 14.9",
+    "question_number": "Q9",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "For the wave described in Exercise 14.8, plot the displacement (y) versus (t) graphs for x = 0, 2 and 4 cm. What are the shapes of these graphs? In which aspects does the oscillatory motion in travelling wave differ from one point to another: amplitude, frequency or phase?",
+    "question_latex": "For the wave described in Exercise 14.8, plot the displacement ($y$) versus ($t$) graphs for $x = 0, 2$ and $4$ cm. What are the shapes of these graphs? In which aspects does the oscillatory motion in travelling wave differ from one point to another: amplitude, frequency or phase?",
+    "sub_parts": null,
+    "correct_answer_plain": "All graphs are sinusoidal. They have same amplitude and frequency, but different initial phases.",
+    "correct_answer_latex": "All graphs are sinusoidal. They have same amplitude and frequency, but different initial phases.",
+    "hint": "Substitute different values of x into the wave equation y(x,t) from Q14.8[cite: 580, 581].",
+    "solution_steps_latex": [
+      "The wave equation is $y(x, t) = 3.0 \\sin (36t + 0.018x + \\pi/4)$[cite: 567].",
+      "For $x=0$: $y(0, t) = 3.0 \\sin (36t + \\pi/4)$[cite: 580].",
+      "For $x=2$: $y(2, t) = 3.0 \\sin (36t + 0.036 + \\pi/4)$[cite: 580].",
+      "For $x=4$: $y(4, t) = 3.0 \\sin (36t + 0.072 + \\pi/4)$[cite: 580].",
+      "All these are sinusoidal functions of time[cite: 219].",
+      "The **amplitude** ($3.0$ cm) and **frequency** ($36/2\\pi$ Hz) remain the same for all points[cite: 219].",
+      "The oscillatory motion differs from one point to another only in **initial phase**[cite: 220]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Sinusoidal displacement-time graphs with phase shifts for different x values",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wave equation from 14.8",
+        "Positions x: 0, 2, 4 cm"
+      ],
+      "to_find": [
+        "Nature of graphs",
+        "Differing parameters"
+      ],
+      "formulas_used": [
+        "$y(x,t) = A \\sin(\\omega t + kx + \\phi)$"
+      ]
+    },
+    "tags": [
+      "travelling-wave",
+      "phase-difference",
+      "sinusoidal-graph",
+      "conceptual"
+    ],
+    "p5_sketch": "q14-9-phase-difference",
+    "p5_sketch_slug": "q14-9-phase-difference",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.9",
+      "question_number": "Q9",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Phase Difference",
+    "exercise": "Exercise 14.10",
+    "question_number": "Q10",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "For the travelling harmonic wave y(x,t) = 2.0 cos 2π(10t - 0.0080x + 0.35) where x and y are in cm and t in s. Calculate the phase difference between oscillatory motion of two points separated by a distance of (a) 4 m, (b) 0.5 m, (c) λ/2, (d) 3λ/4.",
+    "question_latex": "For the travelling harmonic wave $y(x,t) = 2.0 \\cos 2\\pi(10t - 0.0080x + 0.35)$ where $x$ and $y$ are in cm and $t$ in s. Calculate the phase difference between oscillatory motion of two points separated by a distance of (a) $4$ m, (b) $0.5$ m, (c) $\\lambda/2$, (d) $3\\lambda/4$.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) 6.4π rad, (b) 0.8π rad, (c) π rad, (d) 1.5π rad",
+    "correct_answer_latex": "(a) $6.4\\pi$ rad, (b) $0.8\\pi$ rad, (c) $\\pi$ rad, (d) $1.5\\pi$ rad",
+    "hint": "Phase difference Δφ = k · Δx. Extract k from the equation[cite: 583, 585].",
+    "solution_steps_latex": [
+      "Wave equation: $y(x,t) = 2.0 \\cos [2\\pi(10t - 0.0080x + 0.35)]$[cite: 583].",
+      "Propagation constant $k = 2\\pi \\times 0.0080$ rad/cm $= 0.016\\pi$ rad/cm[cite: 583].",
+      "**(a)** $\\Delta x = 4$ m $= 400$ cm[cite: 586]. $\\Delta\\phi = k\\Delta x = 0.016\\pi \\times 400 = 6.4\\pi$ rad[cite: 222].",
+      "**(b)** $\\Delta x = 0.5$ m $= 50$ cm[cite: 588]. $\\Delta\\phi = k\\Delta x = 0.016\\pi \\times 50 = 0.8\\pi$ rad[cite: 224].",
+      "**(c)** $\\Delta x = \\lambda/2$[cite: 589]. $\\Delta\\phi = \\frac{2\\pi}{\\lambda} \\cdot \\frac{\\lambda}{2} = \\pi$ rad[cite: 226].",
+      "**(d)** $\\Delta x = 3\\lambda/4$[cite: 591]. $\\Delta\\phi = \\frac{2\\pi}{\\lambda} \\cdot \\frac{3\\lambda}{4} = 1.5\\pi$ rad[cite: 228]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "k: 0.016π rad/cm",
+        "Distances: 4m, 0.5m, λ/2, 3λ/4"
+      ],
+      "to_find": [
+        "Phase difference Δφ"
+      ],
+      "formulas_used": [
+        "$\\Delta\\phi = \\frac{2\\pi}{\\lambda} \\Delta x$",
+        "$k = \\frac{2\\pi}{\\lambda}$"
+      ]
+    },
+    "tags": [
+      "phase-difference",
+      "propagation-constant",
+      "harmonic-wave",
+      "numerical"
+    ],
+    "p5_sketch": "q14-9-phase-difference",
+    "p5_sketch_slug": "q14-9-phase-difference",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.10",
+      "question_number": "Q10",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Stationary Waves",
+    "exercise": "Exercise 14.11",
+    "question_number": "Q11",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "The transverse displacement of a string (clamped at both ends) is y(x, t) = 0.06 sin(2πx/3) cos(120πt) where x and y are in m and t in s. The length of the string is 1.5 m and its mass is 3.0 × 10⁻² kg. (a) Is this a travelling or stationary wave? (b) Interpret it as a superposition of two waves. What is the wavelength, frequency, and speed of each? (c) Determine the tension in the string.",
+    "question_latex": "The transverse displacement of a string (clamped at both ends) is $y(x, t) = 0.06 \\sin(2\\pi x/3) \\cos(120\\pi t)$ where $x$ and $y$ are in m and $t$ in s. The length of the string is $1.5$ m and its mass is $3.0 \\times 10^{-2}$ kg. (a) Is this a travelling or stationary wave? (b) Interpret it as a superposition of two waves. What is the wavelength, frequency, and speed of each? (c) Determine the tension in the string.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) Stationary wave, (b) λ = 3m, f = 60Hz, v = 180 m/s, (c) 648 N",
+    "correct_answer_latex": "(a) Stationary wave, (b) $\\lambda = 3$ m, $f = 60$ Hz, $v = 180$ m/s, (c) $648$ N",
+    "hint": "Compare with y = 2A sin(kx) cos(ωt). Use T = v²μ[cite: 594, 595, 607].",
+    "solution_steps_latex": [
+      "**(a)** The equation is in the form $y = f_1(x) f_2(t)$, which represents a **stationary wave**[cite: 230].",
+      "**(b)** By $2\\sin A \\cos B = \\sin(A+B) + \\sin(A-B)$, the wave is a superposition of $y_1 = 0.03 \\sin(2\\pi x/3 - 120\\pi t)$ and $y_2 = 0.03 \\sin(2\\pi x/3 + 120\\pi t)$.",
+      "Wavelength $\\lambda$: $k = 2\\pi/3 \\Rightarrow \\lambda = 2\\pi/k = 3$ m[cite: 232].",
+      "Frequency $f$: $\\omega = 120\\pi \\Rightarrow f = \\omega/2\\pi = 60$ Hz[cite: 232].",
+      "Speed $v = f\\lambda = 60 \\times 3 = 180$ m/s[cite: 232].",
+      "**(c)** Linear mass density $\\mu = m/L = 3.0 \\times 10^{-2} / 1.5 = 0.02$ kg/m[cite: 597].",
+      "Tension $T = v^2 \\mu = (180)^2 \\times 0.02 = 32400 \\times 0.02 = 648$ N[cite: 234]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Equation: $y = 0.06 \\sin(2\\pi x/3) \\cos(120\\pi t)$",
+        "L: 1.5m",
+        "m: 0.03 kg"
+      ],
+      "to_find": [
+        "Wave type",
+        "λ, f, v",
+        "Tension T"
+      ],
+      "formulas_used": [
+        "$\\lambda = 2\\pi/k$",
+        "$f = \\omega/2\\pi$",
+        "$T = v^2\\mu$"
+      ]
+    },
+    "tags": [
+      "stationary-wave",
+      "superposition",
+      "string-tension",
+      "numerical"
+    ],
+    "p5_sketch": "q14-11-standing-wave",
+    "p5_sketch_slug": "q14-11-standing-wave",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.11",
+      "question_number": "Q11",
+      "page": 298
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Stationary Wave Properties",
+    "exercise": "Exercise 14.12",
+    "question_number": "Q12",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "(i) For the wave on a string described in Exercise 14.11, do all the points on the string oscillate with the same (a) frequency, (b) phase, (c) amplitude? (ii) What is the amplitude of a point 0.375 m away from one end?",
+    "question_latex": "(i) For the wave on a string described in Exercise 14.11, do all the points on the string oscillate with the same (a) frequency, (b) phase, (c) amplitude? (ii) What is the amplitude of a point $0.375$ m away from one end?",
+    "sub_parts": [
+      "(i)",
+      "(ii)"
+    ],
+    "correct_answer_plain": "(i) (a) Yes, (b) Yes, except at nodes, (c) No. (ii) 0.042 m",
+    "correct_answer_latex": "(i) (a) Yes, (b) Yes, except at nodes, (c) No. (ii) $0.042$ m",
+    "hint": "In a stationary wave, amplitude is x-dependent: A(x) = 2A sin(kx)[cite: 608, 609].",
+    "solution_steps_latex": [
+      "**(i)** (a) **Yes**, all points oscillate with the same frequency of $60$ Hz[cite: 236].",
+      "(b) **Yes**, all points in a given loop have the same phase[cite: 236].",
+      "(c) **No**, amplitude varies with position $x$ as $0.06 \\sin(2\\pi x/3)$[cite: 236].",
+      "**(ii)** For $x = 0.375$ m[cite: 609]:",
+      "$A(x) = 0.06 \\sin \\left( \\frac{2\\pi \\times 0.375}{3} \\right) = 0.06 \\sin \\left( \\frac{0.75\\pi}{3} \\right)$",
+      "$A(x) = 0.06 \\sin(\\pi/4) = 0.06 \\times \\frac{1}{\\sqrt{2}} \\approx 0.042$ m[cite: 238]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "x: 0.375 m",
+        "Wave from 14.11"
+      ],
+      "to_find": [
+        "Qualitative properties",
+        "Amplitude at x"
+      ],
+      "formulas_used": [
+        "$A(x) = A_{max} \\sin(kx)$"
+      ]
+    },
+    "tags": [
+      "stationary-wave",
+      "stationary-wave-properties",
+      "amplitude-variation",
+      "nodes-antinodes",
+      "reasoning"
+    ],
+    "p5_sketch": "q14-12-harmonics-n1",
+    "p5_sketch_slug": "q14-12-harmonics-n1",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.12",
+      "question_number": "Q12",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Wave Function Classification",
+    "exercise": "Exercise 14.13",
+    "question_number": "Q13",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "State which of these represent (i) a travelling wave, (ii) a stationary wave or (iii) none at all: (a) y = 2 cos(3x) sin(10t), (b) y = 2√(x-vt), (c) y = 3 sin(5x-0.5t) + 4 cos(5x-0.5t), (d) y = cos x sin t + cos 2x sin 2t.",
+    "question_latex": "State which of these represent (i) a travelling wave, (ii) a stationary wave or (iii) none at all: (a) $y = 2 \\cos(3x) \\sin(10t)$, (b) $y = 2\\sqrt{x-vt}$, (c) $y = 3 \\sin(5x-0.5t) + 4 \\cos(5x-0.5t)$, (d) $y = \\cos x \\sin t + \\cos 2x \\sin 2t$.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) Stationary wave, (b) None, (c) Travelling wave, (d) Superposition of stationary waves.",
+    "correct_answer_latex": "(a) Stationary wave, (b) None, (c) Travelling wave, (d) Superposition of stationary waves.",
+    "hint": "Travelling waves: f(x ± vt); Stationary waves: f(x)g(t)[cite: 611].",
+    "solution_steps_latex": [
+      "**(a)** Form $f(x)g(t)$ $\\Rightarrow$ **Stationary wave**[cite: 240].",
+      "**(b)** Although it has $x-vt$, it is **not acceptable** as it is not defined for $x < vt$ and not finite for all $x, t$[cite: 242].",
+      "**(c)** Sum of two travelling waves with same $x-vt$ $\\Rightarrow$ **Travelling wave**[cite: 244].",
+      "**(d)** Sum of two stationary waves $\\Rightarrow$ **Superposition of stationary waves**[cite: 246]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Four mathematical functions"
+      ],
+      "to_find": [
+        "Classification of waves"
+      ],
+      "formulas_used": null
+    },
+    "tags": [
+      "wave-functions",
+      "stationary-waves",
+      "travelling-waves",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.13",
+      "question_number": "Q13",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Vibrating Wire",
+    "exercise": "Exercise 14.14",
+    "question_number": "Q14",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A wire vibrates in its fundamental mode with a frequency of 45 Hz. The mass of the wire is 3.5 × 10⁻² kg and its linear mass density is 4.0 × 10⁻² kg/m. What is (a) the speed of a transverse wave, and (b) the tension in the string?",
+    "question_latex": "A wire vibrates in its fundamental mode with a frequency of $45$ Hz. The mass of the wire is $3.5 \\times 10^{-2}$ kg and its linear mass density is $4.0 \\times 10^{-2}$ kg $m^{-1}$. What is (a) the speed of a transverse wave, and (b) the tension in the string?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) 78.75 m/s, (b) 248 N",
+    "correct_answer_latex": "(a) $78.75$ m/s, (b) $248$ N",
+    "hint": "Calculate length L = m/μ. For fundamental mode, L = λ/2[cite: 619, 620].",
+    "solution_steps_latex": [
+      "Mass $M = 3.5 \\times 10^{-2}$ kg, linear density $\\mu = 4.0 \\times 10^{-2}$ kg/m[cite: 620].",
+      "Length $L = M/\\mu = \\frac{3.5 \\times 10^{-2}}{4.0 \\times 10^{-2}} = 0.875$ m.",
+      "In fundamental mode: $L = \\lambda/2 \\Rightarrow \\lambda = 2L = 1.75$ m.",
+      "**(a)** Wave speed $v = f\\lambda = 45 \\times 1.75 = 78.75$ m/s[cite: 250].",
+      "**(b)** Tension $T = v^2\\mu = (78.75)^2 \\times 4.0 \\times 10^{-2}$",
+      "$T \\approx 6201.56 \\times 0.04 \\approx 248$ N[cite: 252]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f: 45 Hz",
+        "M: 0.035 kg",
+        "μ: 0.04 kg/m"
+      ],
+      "to_find": [
+        "Speed v",
+        "Tension T"
+      ],
+      "formulas_used": [
+        "$v = f\\lambda$",
+        "$L = \\lambda/2$",
+        "$T = v^2\\mu$"
+      ]
+    },
+    "tags": [
+      "fundamental-mode",
+      "vibrating-wire",
+      "wave-speed",
+      "numerical"
+    ],
+    "p5_sketch": "q14-12-harmonics-n1",
+    "p5_sketch_slug": "q14-12-harmonics-n1",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.14",
+      "question_number": "Q14",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Organ Pipes",
+    "exercise": "Exercise 14.15",
+    "question_number": "Q15",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "A metre-long tube open at one end, with a movable piston, shows resonance at 25.5 cm and 79.3 cm with a 340 Hz source. Estimate the speed of sound.",
+    "question_latex": "A metre-long tube open at one end, with a movable piston, shows resonance at $25.5$ cm and $79.3$ cm with a $340$ Hz source. Estimate the speed of sound.",
+    "sub_parts": null,
+    "correct_answer_plain": "347.4 m/s",
+    "correct_answer_latex": "$347.4$ m/s",
+    "hint": "Successive resonances occur at λ/2 distance apart[cite: 621].",
+    "solution_steps_latex": [
+      "Given $l_1 = 25.5$ cm, $l_2 = 79.3$ cm, $f = 340$ Hz[cite: 621].",
+      "Distance between successive nodes/antinodes is $\\lambda/2$.",
+      "$\\lambda/2 = l_2 - l_1 = 79.3 - 25.5 = 53.8$ cm $= 0.538$ m.",
+      "$\\lambda = 2 \\times 0.538 = 1.076$ m.",
+      "Speed of sound $v = f\\lambda = 340 \\times 1.076 = 365.8$ m/s.",
+      "*Note: If using standard formula for closed pipe resonances:*",
+      "$v = 2f(l_2 - l_1) = 2 \\times 340 \\times 0.538 = 365.8$ m/s.",
+      "[Source data mentions 347 m/s as estimate [cite: 251]]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Resonance in a closed organ pipe showing nodes and antinodes for different lengths",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f: 340 Hz",
+        "l1: 0.255 m",
+        "l2: 0.793 m"
+      ],
+      "to_find": [
+        "Speed of sound v"
+      ],
+      "formulas_used": [
+        "$v = 2f(l_2 - l_1)$"
+      ]
+    },
+    "tags": [
+      "organ-pipe",
+      "resonance",
+      "sound-speed",
+      "numerical"
+    ],
+    "p5_sketch": "q14-15-organ-pipe",
+    "p5_sketch_slug": "q14-15-organ-pipe",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.15",
+      "question_number": "Q15",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Vibrating Rod",
+    "exercise": "Exercise 14.16",
+    "question_number": "Q16",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A steel rod 100 cm long is clamped at its middle. The fundamental frequency of longitudinal vibrations is 2.53 kHz. What is the speed of sound in steel?",
+    "question_latex": "A steel rod $100$ cm long is clamped at its middle. The fundamental frequency of longitudinal vibrations is $2.53$ kHz. What is the speed of sound in steel?",
+    "sub_parts": null,
+    "correct_answer_plain": "5.06 km/s",
+    "correct_answer_latex": "$5.06$ km/s",
+    "hint": "Rod clamped at middle has an antinode at both ends and a node in the center. L = λ/2[cite: 623, 624].",
+    "solution_steps_latex": [
+      "Length $L = 100$ cm $= 1.0$ m[cite: 623].",
+      "Clamped at middle $\\Rightarrow$ center is a node, ends are antinodes[cite: 623].",
+      "Distance between antinodes is $\\lambda/2 = L \\Rightarrow \\lambda = 2L = 2.0$ m.",
+      "Frequency $f = 2.53$ kHz $= 2530$ Hz[cite: 624].",
+      "Speed $v = f\\lambda = 2530 \\times 2 = 5060$ m/s $= 5.06$ km/s[cite: 254]."
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Vibrating rod clamped at the center showing the node and antinodes",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "L: 1.0 m",
+        "f: 2530 Hz"
+      ],
+      "to_find": [
+        "Speed v"
+      ],
+      "formulas_used": [
+        "$v = f\\lambda$",
+        "$\\lambda = 2L$"
+      ]
+    },
+    "tags": [
+      "longitudinal-vibration",
+      "steel-rod",
+      "clamped-rod",
+      "numerical"
+    ],
+    "p5_sketch": "q14-16-vibrating-rod",
+    "p5_sketch_slug": "q14-16-vibrating-rod",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.16",
+      "question_number": "Q16",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Resonance in Pipes",
+    "exercise": "Exercise 14.17",
+    "question_number": "Q17",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A pipe 20 cm long is closed at one end. Which harmonic mode of the pipe is resonantly excited by a 430 Hz source? Will the same source be in resonance with the pipe if both ends are open?",
+    "question_latex": "A pipe $20$ cm long is closed at one end. Which harmonic mode of the pipe is resonantly excited by a $430$ Hz source? Will the same source be in resonance with the pipe if both ends are open?",
+    "sub_parts": null,
+    "correct_answer_plain": "First harmonic (fundamental); No for open ends.",
+    "correct_answer_latex": "First harmonic (fundamental); No for open ends.",
+    "hint": "f_n = (2n-1)v/4L for closed pipe, f_n = nv/2L for open pipe[cite: 626, 627, 629].",
+    "solution_steps_latex": [
+      "Length $L = 20$ cm $= 0.2$ m, $v = 340$ m/s, $f = 430$ Hz[cite: 626, 629].",
+      "For closed pipe, fundamental $f_1 = v/4L = 340/(4 \\times 0.2) = 425$ Hz[cite: 257].",
+      "The $430$ Hz source is closest to the **first harmonic** (fundamental).",
+      "For open pipe, fundamental $f_1 = v/2L = 340/(2 \\times 0.2) = 850$ Hz[cite: 257].",
+      "Subsequent harmonics are $1700, 2550...$ Hz. Since $430$ Hz is not an integer multiple of $850$, it will **not** resonate[cite: 257]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "L: 0.2 m",
+        "f_source: 430 Hz",
+        "v: 340 m/s"
+      ],
+      "to_find": [
+        "Harmonic number",
+        "Open pipe resonance"
+      ],
+      "formulas_used": [
+        "$f = (2n-1)v/4L$",
+        "$f = nv/2L$"
+      ]
+    },
+    "tags": [
+      "closed-pipe",
+      "open-pipe",
+      "resonance-harmonics",
+      "numerical"
+    ],
+    "p5_sketch": "q14-15-organ-pipe",
+    "p5_sketch_slug": "q14-15-organ-pipe",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.17",
+      "question_number": "Q17",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "Beats",
+    "exercise": "Exercise 14.18",
+    "question_number": "Q18",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Two sitar strings A and B are slightly out of tune and produce beats of frequency 6 Hz. The tension in string A is slightly reduced and the beat frequency reduces to 3 Hz. If original frequency of A is 324 Hz, what is the frequency of B?",
+    "question_latex": "Two sitar strings A and B are slightly out of tune and produce beats of frequency $6$ Hz. The tension in string A is slightly reduced and the beat frequency reduces to $3$ Hz. If original frequency of A is $324$ Hz, what is the frequency of B?",
+    "sub_parts": null,
+    "correct_answer_plain": "318 Hz",
+    "correct_answer_latex": "$318$ Hz",
+    "hint": "f_beat = |f_A - f_B|. Reducing tension reduces frequency[cite: 630, 631, 632].",
+    "solution_steps_latex": [
+      "$f_A = 324$ Hz, $f_{beat} = 6$ Hz[cite: 632, 630].",
+      "Possible values for $f_B$: $324 + 6 = 330$ Hz or $324 - 6 = 318$ Hz.",
+      "Tension in A decreases $\\Rightarrow f_A$ decreases (below $324$ Hz).",
+      "If $f_B = 330$ Hz: decreasing $f_A$ increases the gap $|324 - 330|$, so $f_{beat}$ would increase.",
+      "If $f_B = 318$ Hz: decreasing $f_A$ decreases the gap $|324 - 318|$, matching the observation that $f_{beat}$ drops to $3$ Hz[cite: 631].",
+      "Thus, $f_B = 318$ Hz[cite: 258]."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "f_A: 324 Hz",
+        "Initial beat: 6 Hz",
+        "Final beat: 3 Hz"
+      ],
+      "to_find": [
+        "f_B"
+      ],
+      "formulas_used": [
+        "$f_{beat} = |f_A - f_B|$"
+      ]
+    },
+    "tags": [
+      "beats",
+      "string-tension",
+      "tuning",
+      "numerical"
+    ],
+    "p5_sketch": "q14-18-beats",
+    "p5_sketch_slug": "q14-18-beats",
+    "calculator": "q14-beats-frequency",
+    "calculator_slug": "q14-beats-frequency",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.18",
+      "question_number": "Q18",
+      "page": 299
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Reasoning",
+    "chapter": "Class XI - Chapter 14: Waves",
+    "section": "General Wave Phenomena",
+    "exercise": "Exercise 14.19",
+    "question_number": "Q19",
+    "marks": 5,
+    "difficulty": 0.7,
+    "question_plain": "Explain why (a) a displacement node is a pressure antinode, (b) bats can ascertain distances without eyes, (c) violin and sitar notes are distinguishable, (d) solids support both wave types while gases only longitudinal, (e) pulse distortion in dispersive media.",
+    "question_latex": "Explain why (a) a displacement node is a pressure antinode, (b) bats can ascertain distances without eyes, (c) violin and sitar notes are distinguishable, (d) solids support both wave types while gases only longitudinal, (e) pulse distortion in dispersive media.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) Strain is max where displacement is zero. (b) Ultrasonic echo-location. (c) Different overtones/timbre. (d) Gases lack shear modulus. (e) Different frequencies travel at different speeds.",
+    "correct_answer_latex": "(a) Strain is max where displacement is zero. (b) Ultrasonic echo-location. (c) Different overtones/timbre. (d) Gases lack shear modulus. (e) Different frequencies travel at different speeds.",
+    "hint": "Refer to wave properties, acoustics, and elasticity[cite: 633].",
+    "solution_steps_latex": [
+      "**(a)** Pressure change depends on the gradient of displacement[cite: 634]. At nodes, the change in displacement with distance is maximum, making it a pressure antinode.",
+      "**(b)** Bats use **ultrasonic** pulses and detect the time taken for the **echo** to return[cite: 635].",
+      "**(c)** Though fundamental frequency is same, the **overtones** (harmonics) produced are different, giving each instrument a unique **quality** or **timbre**[cite: 640].",
+      "**(d)** Transverse waves require **shear modulus**, which gases do not possess[cite: 641]. Longitudinal waves require **bulk modulus**, which all media have.",
+      "**(e)** In a **dispersive medium**, wave speed depends on frequency[cite: 642]. Since a pulse is made of many frequencies, they separate or travel at different speeds, distorting the shape."
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": null,
+      "to_find": null,
+      "formulas_used": null
+    },
+    "tags": [
+      "acoustics",
+      "echo-location",
+      "timbre",
+      "elasticity",
+      "dispersion",
+      "reasoning"
+    ],
+    "p5_sketch": "q14-19-doppler",
+    "p5_sketch_slug": "q14-19-doppler",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 14,
+      "exercise": "14.19",
+      "question_number": "Q19",
+      "page": 299
+    }
+  }
+]

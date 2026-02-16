@@ -1,0 +1,20 @@
+{
+  "q12-1-molecular-fraction": {
+    "type": "gas-molecules-fraction-demo",
+    "title": "Molecular Volume Fraction (Q12.1)",
+    "description": "Molecules occupy ~0.04% of gas volume at STP.",
+    "params": {"fraction": 0.0004}
+  },
+  "q12-5-bubble-rise": {
+    "type": "bubble-rise-demo",
+    "title": "Bubble Expansion (Q12.5)",
+    "description": "P₁V₁/T₁ = P₂V₂/T₂. Bubble grows as it rises.",
+    "params": {"V1": 1, "V2": 5.3}
+  },
+  "q12-8-rms-comparison": {
+    "type": "rms-speed-comparison-demo",
+    "title": "RMS Speed: v_rms ∝ 1/√M (Q12.8)",
+    "description": "Same P,V,T → same n. Lighter molecules have higher v_rms.",
+    "params": {"T": 300}
+  }
+}

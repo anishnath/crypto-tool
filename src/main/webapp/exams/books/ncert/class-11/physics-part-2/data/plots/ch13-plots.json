@@ -1,0 +1,20 @@
+{
+  "q13-shm-x-t": {
+    "title": "SHM Displacement: x = A cos(ωt)",
+    "xDomain": [0, 4],
+    "yDomain": [-1.2, 1.2],
+    "data": [
+      {"fn": "cos(2 * x)", "color": "#3b82f6", "label": "x = A cos(ωt), A=1, ω=2"}
+    ],
+    "annotations": [{"x": 3.14, "text": "Period T = 2π/ω"}]
+  },
+  "q13-spring-period-vs-mass": {
+    "title": "Spring Period T vs Mass m: T = 2π√(m/k)",
+    "xDomain": [0, 10],
+    "yDomain": [0, 1.5],
+    "data": [
+      {"fn": "2 * 3.14159 * (x / 1200)^0.5", "color": "#8b5cf6", "label": "k = 1200 N/m"}
+    ],
+    "annotations": [{"x": 3, "text": "m=3 kg: T≈0.31 s"}]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "q14-wave-speed-vs-tension": {
+    "title": "Wave Speed v = √(T/μ) vs Tension",
+    "xDomain": [0, 500],
+    "yDomain": [0, 70],
+    "data": [
+      {"fn": "(x / 0.125)^0.5", "color": "#3b82f6", "label": "μ = 0.125 kg/m"}
+    ],
+    "annotations": [{"x": 200, "text": "T=200 N: v=40 m/s"}]
+  }
+}

@@ -1,0 +1,882 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Molecular Volume and Intermolecular Distance",
+    "exercise": "Exercise",
+    "question_number": "Q12.1",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "Estimate the fraction of molecular volume to the actual volume occupied by oxygen gas at STP. Take the diameter of an oxygen molecule to be 3 Å.",
+    "question_latex": "Estimate the fraction of molecular volume to the actual volume occupied by oxygen gas at STP. Take the diameter of an oxygen molecule to be $3$ Å.",
+    "sub_parts": null,
+    "correct_answer_plain": "4×10⁻⁴",
+    "correct_answer_latex": "$4 \\times 10^{-4}$",
+    "hint": "Find volume of 1 mole of O₂ molecules (N_A × V_molecule). Divide by molar volume at STP (22.4 L).",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Diameter of O$_2$ molecule: $d = 3$ Å $= 3 \\times 10^{-10}$ m",
+      "Radius: $r = \\frac{d}{2} = 1.5 \\times 10^{-10}$ m",
+      "Avogadro's number: $N_A = 6.02 \\times 10^{23}$ mol$^{-1}$",
+      "Molar volume at STP: $V_m = 22.4$ L $= 22.4 \\times 10^{-3}$ m$^3$",
+      "**Step 1:** Volume of one molecule (assuming spherical):",
+      "$V_{molecule} = \\frac{4}{3}\\pi r^3$",
+      "$V_{molecule} = \\frac{4}{3} \\times 3.14159 \\times (1.5 \\times 10^{-10})^3$",
+      "$V_{molecule} = \\frac{4}{3} \\times 3.14159 \\times 3.375 \\times 10^{-30}$",
+      "$V_{molecule} = 1.414 \\times 10^{-29}$ m$^3$",
+      "**Step 2:** Total volume of molecules in 1 mole:",
+      "$V_{molecular} = N_A \\times V_{molecule}$",
+      "$V_{molecular} = 6.02 \\times 10^{23} \\times 1.414 \\times 10^{-29}$",
+      "$V_{molecular} = 8.512 \\times 10^{-6}$ m$^3$",
+      "**Step 3:** Fraction of molecular volume to actual volume:",
+      "$\\text{Fraction} = \\frac{V_{molecular}}{V_m}$",
+      "$\\text{Fraction} = \\frac{8.512 \\times 10^{-6}}{22.4 \\times 10^{-3}}$",
+      "$\\text{Fraction} = 3.8 \\times 10^{-4} \\approx 4 \\times 10^{-4}$",
+      "**Physical interpretation:**",
+      "• Molecules occupy only $0.04\\%$ of the total volume",
+      "• Remaining $99.96\\%$ is empty space",
+      "• This justifies the assumption that molecules are point particles in ideal gas theory"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "d_molecule: 3 Å",
+        "N_A: 6.02×10²³ mol⁻¹",
+        "V_molar (STP): 22.4 L"
+      ],
+      "to_find": [
+        "Fraction of molecular volume to actual volume"
+      ],
+      "formulas_used": [
+        "$V = \\frac{4}{3}\\pi r^3$",
+        "$V_{total} = N_A \\times V_{molecule}$"
+      ]
+    },
+    "tags": [
+      "kinetic-theory",
+      "molecular-volume",
+      "stp",
+      "avogadro-number",
+      "ideal-gas"
+    ],
+    "p5_sketch": "q12-1-molecular-fraction",
+    "p5_sketch_slug": "q12-1-molecular-fraction",
+    "calculator": "q12-molecular-volume-fraction",
+    "calculator_slug": "q12-molecular-volume-fraction",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.1",
+      "page": 257
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Ideal Gas Law and Molar Volume",
+    "exercise": "Exercise",
+    "question_number": "Q12.2",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "Molar volume is the volume occupied by 1 mol of any (ideal) gas at standard temperature and pressure (STP: 1 atmospheric pressure, 0 °C). Show that it is 22.4 litres.",
+    "question_latex": "Molar volume is the volume occupied by $1$ mol of any (ideal) gas at standard temperature and pressure (STP: $1$ atmospheric pressure, $0$ °C). Show that it is $22.4$ litres.",
+    "sub_parts": null,
+    "correct_answer_plain": "22.4 L (shown)",
+    "correct_answer_latex": "$22.4$ L (shown)",
+    "hint": "Use ideal gas equation: PV = nRT at STP conditions.",
+    "solution_steps_latex": [
+      "**Standard Temperature and Pressure (STP):**",
+      "Temperature: $T = 0$ °C $= 273.15$ K $\\approx 273$ K",
+      "Pressure: $P = 1$ atm $= 101325$ Pa $\\approx 1.01 \\times 10^5$ Pa",
+      "Number of moles: $n = 1$ mol",
+      "Gas constant: $R = 8.314$ J mol$^{-1}$ K$^{-1}$",
+      "**Ideal gas equation:**",
+      "$PV = nRT$",
+      "**Solving for V:**",
+      "$V = \\frac{nRT}{P}$",
+      "$V = \\frac{1 \\times 8.314 \\times 273}{1.01 \\times 10^5}$",
+      "$V = \\frac{2269.722}{1.01 \\times 10^5}$",
+      "$V = 2.247 \\times 10^{-2}$ m$^3$",
+      "**Converting to litres:**",
+      "$V = 2.247 \\times 10^{-2}$ m$^3$ $\\times$ $\\frac{1000 \\text{ L}}{1 \\text{ m}^3}$",
+      "$V = 22.47$ L $\\approx 22.4$ L",
+      "**Conclusion:** At STP, 1 mole of any ideal gas occupies $22.4$ litres",
+      "**This is a universal constant for ideal gases at STP**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "STP conditions: T = 273 K, P = 1 atm",
+        "n: 1 mol",
+        "R: 8.314 J mol⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Molar volume at STP"
+      ],
+      "formulas_used": [
+        "$PV = nRT$"
+      ]
+    },
+    "tags": [
+      "ideal-gas-law",
+      "molar-volume",
+      "stp",
+      "avogadros-law"
+    ],
+    "calculator": "q12-molar-volume-stp",
+    "calculator_slug": "q12-molar-volume-stp",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.2",
+      "page": 257
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Ideal Gas Behavior",
+    "exercise": "Exercise",
+    "question_number": "Q12.3",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Figure 12.8 shows plot of PV/T versus P for 1.00×10⁻³ kg of oxygen gas at two different temperatures. (a) What does the dotted plot signify? (b) Which is true: T₁ > T₂ or T₁ < T₂? (c) What is the value of PV/T where the curves meet on the y-axis? (d) If we obtained similar plots for 1.00×10⁻³ kg of hydrogen, would we get the same value of PV/T at the point where the curves meet on the y-axis? If not, what mass of hydrogen yields the same value of PV/T (for low pressure high temperature region of the plot)? (Molecular mass of H₂ = 2.02 u, of O₂ = 32.0 u, R = 8.31 J mol⁻¹ K⁻¹.)",
+    "question_latex": "Figure 12.8 shows plot of $PV/T$ versus $P$ for $1.00 \\times 10^{-3}$ kg of oxygen gas at two different temperatures. (a) What does the dotted plot signify? (b) Which is true: $T_1 > T_2$ or $T_1 < T_2$? (c) What is the value of $PV/T$ where the curves meet on the y-axis? (d) If we obtained similar plots for $1.00 \\times 10^{-3}$ kg of hydrogen, would we get the same value of $PV/T$ at the point where the curves meet on the y-axis? If not, what mass of hydrogen yields the same value of $PV/T$ (for low pressure high temperature region of the plot)? (Molecular mass of H$_2$ = $2.02$ u, of O$_2$ = $32.0$ u, $R = 8.31$ J mol$^{-1}$ K$^{-1}$.)",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) The dotted plot corresponds to 'ideal' gas behaviour; (b) T₁ > T₂; (c) 0.26 J K⁻¹; (d) No, 6.3×10⁻⁵ kg of H₂ would yield the same value",
+    "correct_answer_latex": "(a) The dotted plot corresponds to 'ideal' gas behaviour; (b) $T_1 > T_2$; (c) $0.26$ J K$^{-1}$; (d) No, $6.3 \\times 10^{-5}$ kg of H$_2$ would yield the same value",
+    "hint": "At low P, gases behave ideally: PV/T = nR. Real gases deviate at high P. Higher T → less deviation.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Mass of O$_2$: $m = 1.00 \\times 10^{-3}$ kg",
+      "Molecular mass of O$_2$: $M_{O_2} = 32.0$ u $= 32.0$ g/mol",
+      "Molecular mass of H$_2$: $M_{H_2} = 2.02$ u $= 2.02$ g/mol",
+      "$R = 8.31$ J mol$^{-1}$ K$^{-1}$",
+      "**(a) What does dotted plot signify:**",
+      "**Dotted horizontal line** represents **ideal gas behavior**",
+      "For ideal gas: $PV = nRT$ → $\\frac{PV}{T} = nR = $ constant (independent of $P$)",
+      "Real gases approach ideal behavior at:",
+      "• **Low pressure** (molecules far apart, negligible intermolecular forces)",
+      "• **High temperature** (high kinetic energy overcomes intermolecular forces)",
+      "**(b) Comparing T₁ and T₂:**",
+      "From graph: Curve for $T_1$ is **closer to ideal behavior** (dotted line) than $T_2$",
+      "At higher temperatures, gases behave more ideally",
+      "**Therefore: $T_1 > T_2$**",
+      "**(c) Value of PV/T at y-axis intercept:**",
+      "**At low pressure** (as $P \\to 0$), gas behaves ideally:",
+      "$\\frac{PV}{T} = nR$",
+      "Number of moles of O$_2$:",
+      "$n = \\frac{m}{M} = \\frac{1.00 \\times 10^{-3} \\text{ kg}}{32.0 \\times 10^{-3} \\text{ kg/mol}}$",
+      "$n = 0.03125$ mol",
+      "$\\frac{PV}{T} = nR = 0.03125 \\times 8.31$",
+      "$\\frac{PV}{T} = 0.2597$ J K$^{-1}$ $\\approx 0.26$ J K$^{-1}$",
+      "**(d) For hydrogen with same mass:**",
+      "Number of moles of H$_2$ with mass $1.00 \\times 10^{-3}$ kg:",
+      "$n_{H_2} = \\frac{1.00 \\times 10^{-3}}{2.02 \\times 10^{-3}} = 0.495$ mol",
+      "$\\left(\\frac{PV}{T}\\right)_{H_2} = 0.495 \\times 8.31 = 4.11$ J K$^{-1}$",
+      "This is **different** from oxygen's value ($0.26$ J K$^{-1}$)",
+      "**To get same PV/T value:**",
+      "Need: $n_{H_2} \\times R = 0.26$ J K$^{-1}$",
+      "$n_{H_2} = \\frac{0.26}{8.31} = 0.03125$ mol (same as O$_2$)",
+      "Mass of H$_2$ required:",
+      "$m_{H_2} = n_{H_2} \\times M_{H_2} = 0.03125 \\times 2.02 \\times 10^{-3}$",
+      "$m_{H_2} = 6.3125 \\times 10^{-5}$ kg $\\approx 6.3 \\times 10^{-5}$ kg"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Graph of PV/T vs P showing two curves at different temperatures T₁ and T₂, with a horizontal dotted line representing ideal gas behavior",
+      "figure_reference": "Fig. 12.8"
+    },
+    "physical_quantities": {
+      "given": [
+        "m_O₂: 1.00×10⁻³ kg",
+        "M_O₂: 32.0 g/mol",
+        "M_H₂: 2.02 g/mol",
+        "R: 8.31 J mol⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Meaning of dotted plot",
+        "Comparison of T₁ and T₂",
+        "Value of PV/T at y-intercept",
+        "Mass of H₂ for same PV/T"
+      ],
+      "formulas_used": [
+        "$PV = nRT$",
+        "$n = \\frac{m}{M}$",
+        "$\\frac{PV}{T} = nR$"
+      ]
+    },
+    "tags": [
+      "ideal-gas-behavior",
+      "real-gas-deviation",
+      "pv-t-plots",
+      "molar-mass"
+    ],
+    "calculator": "q12-pv-over-t",
+    "calculator_slug": "q12-pv-over-t",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.3",
+      "page": 257
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Ideal Gas Law Applications",
+    "exercise": "Exercise",
+    "question_number": "Q12.4",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "An oxygen cylinder of volume 30 litre has an initial gauge pressure of 15 atm and a temperature of 27 °C. After some oxygen is withdrawn from the cylinder, the gauge pressure drops to 11 atm and its temperature drops to 17 °C. Estimate the mass of oxygen taken out of the cylinder (R = 8.31 J mol⁻¹ K⁻¹, molecular mass of O₂ = 32 u).",
+    "question_latex": "An oxygen cylinder of volume $30$ litre has an initial gauge pressure of $15$ atm and a temperature of $27$ °C. After some oxygen is withdrawn from the cylinder, the gauge pressure drops to $11$ atm and its temperature drops to $17$ °C. Estimate the mass of oxygen taken out of the cylinder ($R = 8.31$ J mol$^{-1}$ K$^{-1}$, molecular mass of O$_2$ = $32$ u).",
+    "sub_parts": null,
+    "correct_answer_plain": "0.14 kg",
+    "correct_answer_latex": "$0.14$ kg",
+    "hint": "Use PV=nRT for initial and final states. Gauge pressure = absolute pressure - 1 atm. Find Δn, then mass.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Volume: $V = 30$ L $= 30 \\times 10^{-3}$ m$^3$ $= 0.03$ m$^3$",
+      "Initial gauge pressure: $P_{g1} = 15$ atm",
+      "Initial temperature: $T_1 = 27$ °C $= 300$ K",
+      "Final gauge pressure: $P_{g2} = 11$ atm",
+      "Final temperature: $T_2 = 17$ °C $= 290$ K",
+      "$R = 8.31$ J mol$^{-1}$ K$^{-1}$",
+      "Molecular mass of O$_2$: $M = 32$ g/mol $= 32 \\times 10^{-3}$ kg/mol",
+      "**Note:** Gauge pressure = Absolute pressure - Atmospheric pressure",
+      "Atmospheric pressure $\\approx 1$ atm",
+      "**Step 1:** Absolute pressures:",
+      "$P_1 = P_{g1} + 1 = 15 + 1 = 16$ atm $= 16 \\times 1.013 \\times 10^5 = 16.208 \\times 10^5$ Pa",
+      "$P_2 = P_{g2} + 1 = 11 + 1 = 12$ atm $= 12 \\times 1.013 \\times 10^5 = 12.156 \\times 10^5$ Pa",
+      "**Step 2:** Initial number of moles:",
+      "$P_1V = n_1RT_1$",
+      "$n_1 = \\frac{P_1V}{RT_1} = \\frac{16.208 \\times 10^5 \\times 0.03}{8.31 \\times 300}$",
+      "$n_1 = \\frac{48624}{2493} = 19.50$ mol",
+      "**Step 3:** Final number of moles:",
+      "$n_2 = \\frac{P_2V}{RT_2} = \\frac{12.156 \\times 10^5 \\times 0.03}{8.31 \\times 290}$",
+      "$n_2 = \\frac{36468}{2409.9} = 15.13$ mol",
+      "**Step 4:** Moles of oxygen withdrawn:",
+      "$\\Delta n = n_1 - n_2 = 19.50 - 15.13 = 4.37$ mol",
+      "**Step 5:** Mass of oxygen withdrawn:",
+      "$m = \\Delta n \\times M = 4.37 \\times 32 \\times 10^{-3}$",
+      "$m = 0.1398$ kg $\\approx 0.14$ kg",
+      "**Answer:** Mass of oxygen taken out is $0.14$ kg $= 140$ g"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "V: 30 L",
+        "P_g1: 15 atm, T₁: 27 °C = 300 K",
+        "P_g2: 11 atm, T₂: 17 °C = 290 K",
+        "R: 8.31 J mol⁻¹ K⁻¹",
+        "M_O₂: 32 g/mol"
+      ],
+      "to_find": [
+        "Mass of oxygen withdrawn"
+      ],
+      "formulas_used": [
+        "$PV = nRT$",
+        "$m = nM$",
+        "Absolute pressure = Gauge pressure + Atmospheric pressure"
+      ]
+    },
+    "tags": [
+      "ideal-gas-law",
+      "gauge-pressure",
+      "temperature-change",
+      "moles-calculation"
+    ],
+    "calculator": "q12-cylinder-mass-withdrawn",
+    "calculator_slug": "q12-cylinder-mass-withdrawn",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.4",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Gas Laws - Combined Gas Law",
+    "exercise": "Exercise",
+    "question_number": "Q12.5",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "An air bubble of volume 1.0 cm³ rises from the bottom of a lake 40 m deep at a temperature of 12 °C. To what volume does it grow when it reaches the surface, which is at a temperature of 35 °C?",
+    "question_latex": "An air bubble of volume $1.0$ cm$^3$ rises from the bottom of a lake $40$ m deep at a temperature of $12$ °C. To what volume does it grow when it reaches the surface, which is at a temperature of $35$ °C?",
+    "sub_parts": null,
+    "correct_answer_plain": "5.3×10⁻⁶ m³ = 5.3 cm³",
+    "correct_answer_latex": "$5.3 \\times 10^{-6}$ m$^3$ $= 5.3$ cm$^3$",
+    "hint": "Use combined gas law: P₁V₁/T₁ = P₂V₂/T₂. At depth, P = P_atm + ρgh. At surface, P = P_atm.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Volume at bottom: $V_1 = 1.0$ cm$^3$ $= 1.0 \\times 10^{-6}$ m$^3$",
+      "Depth: $h = 40$ m",
+      "Temperature at bottom: $T_1 = 12$ °C $= 285$ K",
+      "Temperature at surface: $T_2 = 35$ °C $= 308$ K",
+      "Atmospheric pressure: $P_0 = 1.01 \\times 10^5$ Pa",
+      "Density of water: $\\rho = 1000$ kg/m$^3$",
+      "$g = 9.8$ m/s$^2$",
+      "**Step 1:** Pressure at bottom of lake:",
+      "$P_1 = P_0 + \\rho gh$",
+      "$P_1 = 1.01 \\times 10^5 + 1000 \\times 9.8 \\times 40$",
+      "$P_1 = 1.01 \\times 10^5 + 3.92 \\times 10^5$",
+      "$P_1 = 4.93 \\times 10^5$ Pa",
+      "**Step 2:** Pressure at surface:",
+      "$P_2 = P_0 = 1.01 \\times 10^5$ Pa",
+      "**Step 3:** Combined gas law (assuming ideal gas):",
+      "$\\frac{P_1V_1}{T_1} = \\frac{P_2V_2}{T_2}$",
+      "$V_2 = V_1 \\times \\frac{P_1}{P_2} \\times \\frac{T_2}{T_1}$",
+      "$V_2 = 1.0 \\times 10^{-6} \\times \\frac{4.93 \\times 10^5}{1.01 \\times 10^5} \\times \\frac{308}{285}$",
+      "$V_2 = 1.0 \\times 10^{-6} \\times 4.881 \\times 1.081$",
+      "$V_2 = 1.0 \\times 10^{-6} \\times 5.276$",
+      "$V_2 = 5.276 \\times 10^{-6}$ m$^3$",
+      "$V_2 \\approx 5.3 \\times 10^{-6}$ m$^3$ $= 5.3$ cm$^3$",
+      "**Answer:** The bubble grows to a volume of $5.3$ cm$^3$",
+      "**Volume increases by factor of $\\approx 5.3$ due to:**",
+      "• Decrease in pressure (dominant effect: 4.93 atm → 1 atm)",
+      "• Increase in temperature (minor effect: 285 K → 308 K)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "V₁: 1.0 cm³",
+        "Depth: 40 m",
+        "T₁: 12 °C = 285 K",
+        "T₂: 35 °C = 308 K",
+        "ρ_water: 1000 kg/m³",
+        "g: 9.8 m/s²"
+      ],
+      "to_find": [
+        "Final volume V₂ at surface"
+      ],
+      "formulas_used": [
+        "$P = P_0 + \\rho gh$",
+        "$\\frac{P_1V_1}{T_1} = \\frac{P_2V_2}{T_2}$"
+      ]
+    },
+    "tags": [
+      "combined-gas-law",
+      "hydrostatic-pressure",
+      "bubble-expansion",
+      "temperature-pressure-volume"
+    ],
+    "p5_sketch": "q12-5-bubble-rise",
+    "p5_sketch_slug": "q12-5-bubble-rise",
+    "calculator": "q12-bubble-volume",
+    "calculator_slug": "q12-bubble-volume",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.5",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Number of Molecules",
+    "exercise": "Exercise",
+    "question_number": "Q12.6",
+    "marks": 3,
+    "difficulty": 0.4,
+    "question_plain": "Estimate the total number of air molecules (inclusive of oxygen, nitrogen, water vapour and other constituents) in a room of capacity 25.0 m³ at a temperature of 27 °C and 1 atm pressure.",
+    "question_latex": "Estimate the total number of air molecules (inclusive of oxygen, nitrogen, water vapour and other constituents) in a room of capacity $25.0$ m$^3$ at a temperature of $27$ °C and $1$ atm pressure.",
+    "sub_parts": null,
+    "correct_answer_plain": "6.10×10²⁶",
+    "correct_answer_latex": "$6.10 \\times 10^{26}$",
+    "hint": "Use PV = nRT to find moles, then N = n × N_A.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Volume: $V = 25.0$ m$^3$",
+      "Temperature: $T = 27$ °C $= 300$ K",
+      "Pressure: $P = 1$ atm $= 1.01 \\times 10^5$ Pa",
+      "$R = 8.31$ J mol$^{-1}$ K$^{-1}$",
+      "Avogadro's number: $N_A = 6.02 \\times 10^{23}$ mol$^{-1}$",
+      "**Step 1:** Number of moles using ideal gas equation:",
+      "$PV = nRT$",
+      "$n = \\frac{PV}{RT}$",
+      "$n = \\frac{1.01 \\times 10^5 \\times 25.0}{8.31 \\times 300}$",
+      "$n = \\frac{2.525 \\times 10^6}{2493}$",
+      "$n = 1012.6$ mol",
+      "**Step 2:** Total number of molecules:",
+      "$N = n \\times N_A$",
+      "$N = 1012.6 \\times 6.02 \\times 10^{23}$",
+      "$N = 6095.85 \\times 10^{23}$",
+      "$N = 6.096 \\times 10^{26}$",
+      "$N \\approx 6.10 \\times 10^{26}$ molecules",
+      "**Physical interpretation:**",
+      "• A room contains over $10^{26}$ molecules",
+      "• This enormous number justifies statistical treatment in kinetic theory",
+      "• Individual molecular behavior averages out to give macroscopic gas properties"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "V: 25.0 m³",
+        "T: 27 °C = 300 K",
+        "P: 1 atm = 1.01×10⁵ Pa",
+        "R: 8.31 J mol⁻¹ K⁻¹",
+        "N_A: 6.02×10²³ mol⁻¹"
+      ],
+      "to_find": [
+        "Total number of molecules N"
+      ],
+      "formulas_used": [
+        "$PV = nRT$",
+        "$N = n \\times N_A$"
+      ]
+    },
+    "tags": [
+      "ideal-gas-law",
+      "avogadro-number",
+      "molecular-count",
+      "room-temperature-pressure"
+    ],
+    "calculator": "q12-molecule-count",
+    "calculator_slug": "q12-molecule-count",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.6",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Kinetic Energy and Temperature",
+    "exercise": "Exercise",
+    "question_number": "Q12.7",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Estimate the average thermal energy of a helium atom at (i) room temperature (27 °C), (ii) the temperature on the surface of the Sun (6000 K), (iii) the temperature of 10 million kelvin (the typical core temperature in the case of a star).",
+    "question_latex": "Estimate the average thermal energy of a helium atom at (i) room temperature ($27$ °C), (ii) the temperature on the surface of the Sun ($6000$ K), (iii) the temperature of $10$ million kelvin (the typical core temperature in the case of a star).",
+    "sub_parts": [
+      "(i)",
+      "(ii)",
+      "(iii)"
+    ],
+    "correct_answer_plain": "(i) 6.2×10⁻²¹ J (ii) 1.24×10⁻¹⁹ J (iii) 2.1×10⁻¹⁶ J",
+    "correct_answer_latex": "(i) $6.2 \\times 10^{-21}$ J (ii) $1.24 \\times 10^{-19}$ J (iii) $2.1 \\times 10^{-16}$ J",
+    "hint": "For monatomic gas: average KE = (3/2)k_BT.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Boltzmann constant: $k_B = 1.38 \\times 10^{-23}$ J K$^{-1}$",
+      "Helium is a **monatomic** gas",
+      "**Formula for average thermal energy (translational KE):**",
+      "For monatomic gas: $\\langle E \\rangle = \\frac{3}{2}k_BT$",
+      "**(i) At room temperature:**",
+      "$T = 27$ °C $= 300$ K",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 1.38 \\times 10^{-23} \\times 300$",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 4.14 \\times 10^{-21}$",
+      "$\\langle E \\rangle = 6.21 \\times 10^{-21}$ J",
+      "$\\langle E \\rangle \\approx 6.2 \\times 10^{-21}$ J",
+      "**(ii) On the surface of the Sun:**",
+      "$T = 6000$ K",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 1.38 \\times 10^{-23} \\times 6000$",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 8.28 \\times 10^{-20}$",
+      "$\\langle E \\rangle = 1.242 \\times 10^{-19}$ J",
+      "$\\langle E \\rangle \\approx 1.24 \\times 10^{-19}$ J",
+      "**(iii) At stellar core temperature:**",
+      "$T = 10^7$ K $= 10,000,000$ K",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 1.38 \\times 10^{-23} \\times 10^7$",
+      "$\\langle E \\rangle = \\frac{3}{2} \\times 1.38 \\times 10^{-16}$",
+      "$\\langle E \\rangle = 2.07 \\times 10^{-16}$ J",
+      "$\\langle E \\rangle \\approx 2.1 \\times 10^{-16}$ J",
+      "**Comparison:**",
+      "• Room temperature: $6.2 \\times 10^{-21}$ J",
+      "• Sun's surface: $20$ times room temperature energy",
+      "• Stellar core: $10^5$ times room temperature energy",
+      "**Note:** At stellar core temperatures, atoms are completely ionized (plasma state)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "k_B: 1.38×10⁻²³ J K⁻¹",
+        "T₁: 27 °C = 300 K",
+        "T₂: 6000 K",
+        "T₃: 10⁷ K"
+      ],
+      "to_find": [
+        "Average thermal energy at three temperatures"
+      ],
+      "formulas_used": [
+        "$\\langle E \\rangle = \\frac{3}{2}k_BT$ (monatomic)"
+      ]
+    },
+    "tags": [
+      "kinetic-energy",
+      "temperature",
+      "boltzmann-constant",
+      "monatomic-gas",
+      "thermal-energy"
+    ],
+    "calculator": "q12-thermal-energy-monatomic",
+    "calculator_slug": "q12-thermal-energy-monatomic",
+    "interactive_plot": "q12-thermal-energy-vs-t",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.7",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Molecular Speeds and Degrees of Freedom",
+    "exercise": "Exercise",
+    "question_number": "Q12.8",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "Three vessels of equal capacity have gases at the same temperature and pressure. The first vessel contains neon (monatomic), the second contains chlorine (diatomic), and the third contains uranium hexafluoride (polyatomic). Do the vessels contain equal number of respective molecules? Is the root mean square speed of molecules the same in the three cases? If not, in which case is v_rms the largest?",
+    "question_latex": "Three vessels of equal capacity have gases at the same temperature and pressure. The first vessel contains neon (monatomic), the second contains chlorine (diatomic), and the third contains uranium hexafluoride (polyatomic). Do the vessels contain equal number of respective molecules? Is the root mean square speed of molecules the same in the three cases? If not, in which case is $v_{rms}$ the largest?",
+    "sub_parts": null,
+    "correct_answer_plain": "Yes, according to Avogadro's law. No, v_rms is largest for the lightest of the three gases; neon.",
+    "correct_answer_latex": "Yes, according to Avogadro's law. No, $v_{rms}$ is largest for the lightest of the three gases; neon.",
+    "hint": "Same P,V,T → same n (Avogadro's law). v_rms = √(3RT/M) depends on molar mass M.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Three vessels with **equal volume** ($V$)",
+      "All at **same temperature** ($T$) and **same pressure** ($P$)",
+      "Gas 1: Neon (Ne) - monatomic, $M_{Ne} \\approx 20$ g/mol",
+      "Gas 2: Chlorine (Cl$_2$) - diatomic, $M_{Cl_2} \\approx 71$ g/mol",
+      "Gas 3: Uranium hexafluoride (UF$_6$) - polyatomic, $M_{UF_6} \\approx 352$ g/mol",
+      "**Part 1: Do vessels contain equal number of molecules?**",
+      "**Avogadro's Law:** Equal volumes of gases at same $P$ and $T$ contain equal number of molecules",
+      "From ideal gas equation: $PV = nRT$",
+      "If $P$, $V$, and $T$ are same → $n$ (number of moles) is same",
+      "Number of molecules: $N = n \\times N_A$",
+      "Since $n$ is same and $N_A$ is constant:",
+      "**All three vessels contain equal number of molecules**",
+      "**Part 2: Is v_rms the same?**",
+      "**RMS speed formula:**",
+      "$v_{rms} = \\sqrt{\\frac{3RT}{M}}$",
+      "where $M$ is molar mass",
+      "Since $R$ and $T$ are constants:",
+      "$v_{rms} \\propto \\frac{1}{\\sqrt{M}}$",
+      "**$v_{rms}$ is inversely proportional to square root of molar mass**",
+      "**Part 3: Which has largest v_rms?**",
+      "Molar masses: $M_{Ne} < M_{Cl_2} < M_{UF_6}$",
+      "$20 < 71 < 352$ g/mol",
+      "Therefore: $v_{rms}^{Ne} > v_{rms}^{Cl_2} > v_{rms}^{UF_6}$",
+      "**Neon has the largest $v_{rms}$** (lightest molecule)",
+      "**Quantitative comparison:**",
+      "$\\frac{v_{rms}^{Ne}}{v_{rms}^{Cl_2}} = \\sqrt{\\frac{M_{Cl_2}}{M_{Ne}}} = \\sqrt{\\frac{71}{20}} \\approx 1.88$",
+      "$\\frac{v_{rms}^{Ne}}{v_{rms}^{UF_6}} = \\sqrt{\\frac{M_{UF_6}}{M_{Ne}}} = \\sqrt{\\frac{352}{20}} \\approx 4.20$",
+      "Neon molecules move almost twice as fast as chlorine and over 4 times faster than UF$_6$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Equal V, P, T for three gases",
+        "Neon: monatomic, M ≈ 20 g/mol",
+        "Chlorine: diatomic, M ≈ 71 g/mol",
+        "UF₆: polyatomic, M ≈ 352 g/mol"
+      ],
+      "to_find": [
+        "Whether N is same",
+        "Whether v_rms is same",
+        "Which has largest v_rms"
+      ],
+      "formulas_used": [
+        "$PV = nRT$",
+        "$N = n \\times N_A$",
+        "$v_{rms} = \\sqrt{\\frac{3RT}{M}}$"
+      ]
+    },
+    "tags": [
+      "avogadros-law",
+      "rms-speed",
+      "molar-mass-dependence",
+      "kinetic-theory"
+    ],
+    "p5_sketch": "q12-8-rms-comparison",
+    "p5_sketch_slug": "q12-8-rms-comparison",
+    "calculator": "q12-rms-speed",
+    "calculator_slug": "q12-rms-speed",
+    "interactive_plot": "q12-rms-vs-temp",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.8",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "RMS Speed and Temperature",
+    "exercise": "Exercise",
+    "question_number": "Q12.9",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "At what temperature is the root mean square speed of an atom in an argon gas cylinder equal to the rms speed of a helium gas atom at –20 °C? (atomic mass of Ar = 39.9 u, of He = 4.0 u).",
+    "question_latex": "At what temperature is the root mean square speed of an atom in an argon gas cylinder equal to the rms speed of a helium gas atom at $-20$ °C? (atomic mass of Ar = $39.9$ u, of He = $4.0$ u).",
+    "sub_parts": null,
+    "correct_answer_plain": "2.52×10³ K",
+    "correct_answer_latex": "$2.52 \\times 10^3$ K",
+    "hint": "v_rms = √(3RT/M). Set v_Ar = v_He and solve for T_Ar.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Atomic mass of Argon: $M_{Ar} = 39.9$ u",
+      "Atomic mass of Helium: $M_{He} = 4.0$ u",
+      "Temperature of Helium: $T_{He} = -20$ °C $= 253$ K",
+      "**RMS speed formula:**",
+      "$v_{rms} = \\sqrt{\\frac{3RT}{M}}$",
+      "**Step 1:** RMS speed of Helium:",
+      "$v_{He} = \\sqrt{\\frac{3RT_{He}}{M_{He}}}$",
+      "**Step 2:** RMS speed of Argon:",
+      "$v_{Ar} = \\sqrt{\\frac{3RT_{Ar}}{M_{Ar}}}$",
+      "**Step 3:** Setting $v_{Ar} = v_{He}$:",
+      "$\\sqrt{\\frac{3RT_{Ar}}{M_{Ar}}} = \\sqrt{\\frac{3RT_{He}}{M_{He}}}$",
+      "Squaring both sides:",
+      "$\\frac{3RT_{Ar}}{M_{Ar}} = \\frac{3RT_{He}}{M_{He}}$",
+      "$\\frac{T_{Ar}}{M_{Ar}} = \\frac{T_{He}}{M_{He}}$",
+      "**Step 4:** Solving for $T_{Ar}$:",
+      "$T_{Ar} = T_{He} \\times \\frac{M_{Ar}}{M_{He}}$",
+      "$T_{Ar} = 253 \\times \\frac{39.9}{4.0}$",
+      "$T_{Ar} = 253 \\times 9.975$",
+      "$T_{Ar} = 2523.675$ K",
+      "$T_{Ar} \\approx 2.52 \\times 10^3$ K",
+      "**Answer:** Temperature of argon must be $2520$ K (or about $2247$ °C)",
+      "**Physical interpretation:**",
+      "• Argon atoms are about $10$ times heavier than helium",
+      "• To achieve same speed, argon needs about $10$ times higher temperature",
+      "• This shows the inverse relationship between molar mass and temperature for same speed"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "M_Ar: 39.9 u",
+        "M_He: 4.0 u",
+        "T_He: -20 °C = 253 K"
+      ],
+      "to_find": [
+        "Temperature of Ar for same v_rms as He"
+      ],
+      "formulas_used": [
+        "$v_{rms} = \\sqrt{\\frac{3RT}{M}}$",
+        "For equal speeds: $\\frac{T_{Ar}}{M_{Ar}} = \\frac{T_{He}}{M_{He}}$"
+      ]
+    },
+    "tags": [
+      "rms-speed",
+      "temperature",
+      "molar-mass",
+      "kinetic-theory"
+    ],
+    "calculator": "q12-rms-temp-match",
+    "calculator_slug": "q12-rms-temp-match",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.9",
+      "page": 258
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 12: Kinetic Theory",
+    "section": "Mean Free Path and Collision Frequency",
+    "exercise": "Exercise",
+    "question_number": "Q12.10",
+    "marks": 5,
+    "difficulty": 0.8,
+    "question_plain": "Estimate the mean free path and collision frequency of a nitrogen molecule in a cylinder containing nitrogen at 2.0 atm and temperature 17 °C. Take the radius of a nitrogen molecule to be roughly 1.0 Å. Compare the collision time with the time the molecule moves freely between two successive collisions (Molecular mass of N₂ = 28.0 u).",
+    "question_latex": "Estimate the mean free path and collision frequency of a nitrogen molecule in a cylinder containing nitrogen at $2.0$ atm and temperature $17$ °C. Take the radius of a nitrogen molecule to be roughly $1.0$ Å. Compare the collision time with the time the molecule moves freely between two successive collisions (Molecular mass of N$_2$ = $28.0$ u).",
+    "sub_parts": null,
+    "correct_answer_plain": "Mean free path: 1.0×10⁻⁷ m; Collision frequency: 5.1×10⁹ s⁻¹; Collision time: 4×10⁻¹³ s; Free time: 2×10⁻¹⁰ s; Free time is 500 times collision time.",
+    "correct_answer_latex": "Mean free path: $1.0 \\times 10^{-7}$ m; Collision frequency: $5.1 \\times 10^9$ s$^{-1}$; Collision time: $4 \\times 10^{-13}$ s; Free time: $2 \\times 10^{-10}$ s; Free time is $500$ times collision time.",
+    "hint": "λ = 1/(√2 π d² n). Find n from PV=NkT. v_rms for collision frequency. Time = distance/speed.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Pressure: $P = 2.0$ atm $= 2.0 \\times 1.013 \\times 10^5 = 2.026 \\times 10^5$ Pa",
+      "Temperature: $T = 17$ °C $= 290$ K",
+      "Radius of N$_2$ molecule: $r = 1.0$ Å $= 1.0 \\times 10^{-10}$ m",
+      "Diameter: $d = 2r = 2.0 \\times 10^{-10}$ m",
+      "Molecular mass: $M = 28.0$ u $= 28.0 \\times 10^{-3}$ kg/mol",
+      "$k_B = 1.38 \\times 10^{-23}$ J K$^{-1}$, $R = 8.31$ J mol$^{-1}$ K$^{-1}$",
+      "**Step 1:** Number density of molecules:",
+      "From $PV = Nk_BT$:",
+      "$\\frac{N}{V} = n = \\frac{P}{k_BT}$",
+      "$n = \\frac{2.026 \\times 10^5}{1.38 \\times 10^{-23} \\times 290}$",
+      "$n = \\frac{2.026 \\times 10^5}{4.002 \\times 10^{-21}}$",
+      "$n = 5.06 \\times 10^{25}$ m$^{-3}$",
+      "**Step 2:** Mean free path:",
+      "$\\lambda = \\frac{1}{\\sqrt{2}\\pi d^2 n}$",
+      "$\\lambda = \\frac{1}{\\sqrt{2} \\times 3.14159 \\times (2.0 \\times 10^{-10})^2 \\times 5.06 \\times 10^{25}}$",
+      "$\\lambda = \\frac{1}{1.414 \\times 3.14159 \\times 4.0 \\times 10^{-20} \\times 5.06 \\times 10^{25}}$",
+      "$\\lambda = \\frac{1}{8.97 \\times 10^{6}} = 1.115 \\times 10^{-7}$ m",
+      "$\\lambda \\approx 1.0 \\times 10^{-7}$ m $= 100$ nm",
+      "**Step 3:** RMS speed:",
+      "$v_{rms} = \\sqrt{\\frac{3RT}{M}} = \\sqrt{\\frac{3 \\times 8.31 \\times 290}{28.0 \\times 10^{-3}}}$",
+      "$v_{rms} = \\sqrt{\\frac{7229.7}{0.028}} = \\sqrt{2.582 \\times 10^5}$",
+      "$v_{rms} = 508.1$ m/s $\\approx 5.1 \\times 10^2$ m/s",
+      "**Step 4:** Collision frequency:",
+      "$\\nu = \\frac{v_{rms}}{\\lambda} = \\frac{5.1 \\times 10^2}{1.0 \\times 10^{-7}}$",
+      "$\\nu = 5.1 \\times 10^9$ s$^{-1}$ (collisions per second)",
+      "**Step 5:** Time between collisions (free time):",
+      "$t_{free} = \\frac{\\lambda}{v_{rms}} = \\frac{1.0 \\times 10^{-7}}{5.1 \\times 10^2}$",
+      "$t_{free} = 1.96 \\times 10^{-10}$ s $\\approx 2 \\times 10^{-10}$ s",
+      "**Step 6:** Collision time (time for collision):",
+      "Distance covered during collision $\\approx d = 2.0 \\times 10^{-10}$ m",
+      "$t_{collision} = \\frac{d}{v_{rms}} = \\frac{2.0 \\times 10^{-10}}{5.1 \\times 10^2}$",
+      "$t_{collision} = 3.92 \\times 10^{-13}$ s $\\approx 4 \\times 10^{-13}$ s",
+      "**Step 7:** Comparison:",
+      "$\\frac{t_{free}}{t_{collision}} = \\frac{2 \\times 10^{-10}}{4 \\times 10^{-13}} = 500$",
+      "**Conclusion:**",
+      "• Molecule spends $500$ times longer moving freely than colliding",
+      "• About $99.8\\%$ of time is spent in free flight",
+      "• Molecules move essentially free for most of the time"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "P: 2.0 atm",
+        "T: 17 °C = 290 K",
+        "r: 1.0 Å, d: 2.0 Å",
+        "M_N₂: 28.0 u"
+      ],
+      "to_find": [
+        "Mean free path λ",
+        "Collision frequency ν",
+        "Comparison of collision time and free time"
+      ],
+      "formulas_used": [
+        "$\\lambda = \\frac{1}{\\sqrt{2}\\pi d^2 n}$",
+        "$n = \\frac{P}{k_BT}$",
+        "$v_{rms} = \\sqrt{\\frac{3RT}{M}}$",
+        "$\\nu = \\frac{v_{rms}}{\\lambda}$"
+      ]
+    },
+    "tags": [
+      "mean-free-path",
+      "collision-frequency",
+      "kinetic-theory",
+      "molecular-collisions"
+    ],
+    "calculator": "q12-mean-free-path",
+    "calculator_slug": "q12-mean-free-path",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 12,
+      "exercise": "Exercise",
+      "question_number": "Q12.10",
+      "page": 258
+    }
+  }
+]

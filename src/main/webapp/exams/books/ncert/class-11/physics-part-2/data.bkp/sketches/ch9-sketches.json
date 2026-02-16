@@ -1,0 +1,20 @@
+{
+  "q9-1-hydrostatic": {
+    "type": "hydrostatic-pressure-demo",
+    "title": "Hydrostatic Pressure (Q9.1)",
+    "description": "P = P₀ + ρgh. Pressure increases with depth.",
+    "params": {"density": 1050, "maxDepth": 2}
+  },
+  "q9-6-barometer": {
+    "type": "barometer-demo",
+    "title": "Barometer Column (Q9.6)",
+    "description": "P_atm = ρgh. Wine needs taller column than mercury.",
+    "params": {"density": 984, "height": 10.5}
+  },
+  "q9-7-ocean-pressure": {
+    "type": "hydrostatic-pressure-demo",
+    "title": "Pressure at Ocean Depth (Q9.7)",
+    "description": "P = P₀ + ρgh at 3 km depth.",
+    "params": {"density": 1030, "maxDepth": 3}
+  }
+}

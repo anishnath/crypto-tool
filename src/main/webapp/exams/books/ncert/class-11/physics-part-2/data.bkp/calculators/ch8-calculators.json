@@ -1,0 +1,62 @@
+{
+  "q8-youngs-modulus": {
+    "title": "Young's Modulus & Wire Elongation",
+    "formula_display": "Y = FL/(AΔL),  ΔL = FL/(AY)",
+    "inputs": [
+      {"id": "F", "label": "Force F", "unit": "N", "default": 100, "min": 1, "max": 50000, "step": 1},
+      {"id": "L", "label": "Length L", "unit": "m", "default": 1.5, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "A", "label": "Area A", "unit": "m²", "default": 5e-6, "min": 1e-7, "max": 1e-2, "step": 1e-7},
+      {"id": "Y", "label": "Young's modulus Y", "unit": "Pa", "default": 2e11, "min": 1e9, "max": 5e11, "step": 1e9}
+    ],
+    "compute": "F * L / (A * Y)",
+    "output": {"label": "Elongation ΔL", "unit": "m", "precision": 6},
+    "plot": {"vary": "F", "range": [0, 500], "points": 50, "xLabel": "F (N)", "yLabel": "ΔL (m)"}
+  },
+  "q8-youngs-ratio": {
+    "title": "Young's Modulus Ratio (Two Wires)",
+    "formula_display": "Y₁/Y₂ = (L₁A₂)/(L₂A₁) when same F, same ΔL",
+    "inputs": [
+      {"id": "L1", "label": "Length wire 1", "unit": "m", "default": 4.7, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "A1", "label": "Area wire 1", "unit": "m²", "default": 3e-5, "min": 1e-6, "max": 1e-3, "step": 1e-6},
+      {"id": "L2", "label": "Length wire 2", "unit": "m", "default": 3.5, "min": 0.1, "max": 10, "step": 0.1},
+      {"id": "A2", "label": "Area wire 2", "unit": "m²", "default": 4e-5, "min": 1e-6, "max": 1e-3, "step": 1e-6}
+    ],
+    "compute": "(L1 * A2) / (L2 * A1)",
+    "output": {"label": "Y₁/Y₂ ratio", "unit": "", "precision": 3}
+  },
+  "q8-shear-deflection": {
+    "title": "Shear Deflection",
+    "formula_display": "Δx = FL/(AG),  φ = F/(AG)",
+    "inputs": [
+      {"id": "F", "label": "Force F", "unit": "N", "default": 980, "min": 1, "max": 10000, "step": 10},
+      {"id": "L", "label": "Length (edge)", "unit": "m", "default": 0.1, "min": 0.01, "max": 1, "step": 0.01},
+      {"id": "A", "label": "Area A", "unit": "m²", "default": 0.01, "min": 1e-4, "max": 1, "step": 0.001},
+      {"id": "G", "label": "Shear modulus G", "unit": "Pa", "default": 25e9, "min": 1e9, "max": 100e9, "step": 1e9}
+    ],
+    "compute": "F * L / (A * G)",
+    "output": {"label": "Vertical deflection Δx", "unit": "m", "precision": 8},
+    "plot": {"vary": "F", "range": [0, 2000], "points": 50, "xLabel": "F (N)", "yLabel": "Δx (m)"}
+  },
+  "q8-stress-strain": {
+    "title": "Stress & Strain",
+    "formula_display": "σ = F/A,  ε = σ/Y = F/(AY)",
+    "inputs": [
+      {"id": "F", "label": "Force F", "unit": "N", "default": 44500, "min": 1, "max": 100000, "step": 100},
+      {"id": "A", "label": "Area A", "unit": "m²", "default": 2.9e-4, "min": 1e-6, "max": 0.01, "step": 1e-5},
+      {"id": "Y", "label": "Young's modulus Y", "unit": "Pa", "default": 1.2e11, "min": 1e9, "max": 5e11, "step": 1e9}
+    ],
+    "compute": "F / (A * Y)",
+    "output": {"label": "Strain ε", "unit": "", "precision": 6}
+  },
+  "q8-maximum-load": {
+    "title": "Maximum Load (Given Stress Limit)",
+    "formula_display": "F_max = σ_max × A,  A = πr²",
+    "inputs": [
+      {"id": "sigmaMax", "label": "Max stress σ_max", "unit": "N/m²", "default": 1e8, "min": 1e6, "max": 1e9, "step": 1e6},
+      {"id": "r", "label": "Radius r", "unit": "m", "default": 0.015, "min": 0.001, "max": 0.1, "step": 0.001}
+    ],
+    "compute": "sigmaMax * 3.14159265 * r * r",
+    "output": {"label": "Max load F_max", "unit": "N", "precision": 2},
+    "plot": {"vary": "r", "range": [0.005, 0.05], "points": 50, "xLabel": "r (m)", "yLabel": "F_max (N)"}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "q10-1-temp-scales": {
+    "type": "temperature-scales-visual",
+    "title": "Temperature Scales (Q10.1)",
+    "description": "K ↔ °C ↔ °F: t_c = T - 273.15, t_F = (9/5)t_c + 32",
+    "params": {"T_K": 273.16}
+  },
+  "q10-6-linear-expansion": {
+    "type": "linear-expansion-demo",
+    "title": "Linear Thermal Expansion (Q10.6, Q10.8)",
+    "description": "ΔL = L₀αΔT. Steel tape and rod expand with temperature.",
+    "params": {"L0": 1, "alpha": 0.000012, "dT": 18}
+  }
+}

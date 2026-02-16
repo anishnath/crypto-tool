@@ -1,0 +1,26 @@
+{
+  "q13-8-spring-mass": {
+    "type": "spring-mass-oscillator-anim",
+    "title": "Spring-Mass Oscillator (Q13.8, Q13.9)",
+    "description": "Animated SHM: x = A cos(ωt). T = 2π√(m/k).",
+    "params": {"k": 1200, "m": 3, "A": 0.02}
+  },
+  "q13-11-reference-circle": {
+    "type": "shm-reference-circle-anim",
+    "title": "SHM Reference Circle (Q13.11, Q13.12)",
+    "description": "Uniform circular motion projects to SHM on diameter.",
+    "params": {"omega": 2, "radius": 80}
+  },
+  "q13-15-pendulum": {
+    "type": "simple-pendulum-anim",
+    "title": "Simple Pendulum (Q13.15)",
+    "description": "T = 2π√(L/g). SHM for small angles.",
+    "params": {"L": 120, "thetaMax": 0.3}
+  },
+  "q13-2-ball-bowl": {
+    "type": "ball-in-bowl-anim",
+    "title": "Ball in Bowl (Q13.2c)",
+    "description": "SHM for small displacements from lowest point.",
+    "params": {"R": 100, "omega": 3}
+  }
+}

@@ -1,0 +1,1536 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Fluid Pressure",
+    "exercise": "Exercise 9.1",
+    "question_number": "Q9.1",
+    "marks": 3,
+    "difficulty": 0.3,
+    "question_plain": "Explain why: (a) The blood pressure in humans is greater at the feet than at the brain (b) Atmospheric pressure at a height of about 6 km decreases to nearly half of its value at the sea level, though the height of the atmosphere is more than 100 km (c) Hydrostatic pressure is a scalar quantity even though pressure is force divided by area.",
+    "question_latex": "Explain why: (a) The blood pressure in humans is greater at the feet than at the brain (b) Atmospheric pressure at a height of about 6 km decreases to nearly half of its value at the sea level, though the height of the atmosphere is more than 100 km (c) Hydrostatic pressure is a scalar quantity even though pressure is force divided by area.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ],
+    "correct_answer_plain": "(a) Due to height difference and weight of blood column; (b) Air density decreases with height - most air mass is in lower atmosphere; (c) Pressure acts in all directions equally",
+    "correct_answer_latex": "(a) Due to height difference and weight of blood column; (b) Air density decreases with height - most air mass is in lower atmosphere; (c) Pressure acts in all directions equally",
+    "hint": "(a) Use P = P₀ + ρgh. (b) Density decreases exponentially with height. (c) Pressure has no direction.",
+    "solution_steps_latex": [
+      "**Part (a): Blood pressure greater at feet than brain**",
+      "**Explanation**:",
+      "Pressure in a fluid increases with depth: $P = P_0 + \\rho gh$",
+      "When standing, feet are at a **lower level** than the brain",
+      "Height difference $h \\approx 1.5$ to $2$ m",
+      "The **weight of blood column** from brain to feet adds extra pressure",
+      "Additional pressure at feet: $\\Delta P = \\rho_{\\text{blood}} g h$",
+      "$\\Delta P \\approx 1050 \\times 9.8 \\times 1.5 \\approx 15,400$ Pa $\\approx 115$ mm Hg",
+      "**Part (b): Atmospheric pressure halves at 6 km, not at 50 km**",
+      "**Explanation**:",
+      "Although atmosphere extends beyond 100 km, **air density decreases rapidly** with height",
+      "Air is **compressible** - lower layers are compressed by weight of air above",
+      "Most of atmospheric mass (about 50%) is concentrated in the **lowest 6 km**",
+      "Density decreases **exponentially**: $\\rho(h) \\propto e^{-h/H}$ where $H \\approx 8$ km (scale height)",
+      "By 6 km altitude, about half the air mass is below, so pressure is halved",
+      "**Part (c): Pressure is scalar even though P = F/A**",
+      "**Explanation**:",
+      "Although force $\\vec{F}$ is a vector, **pressure has no specific direction**",
+      "At any point in a fluid, pressure acts **equally in all directions** (Pascal's law)",
+      "Pressure is the **magnitude** of normal force per unit area",
+      "Unlike force (which has direction), pressure is **isotropic** at a point",
+      "Therefore, pressure is a **scalar quantity**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Human height difference",
+        "Atmospheric scale height",
+        "Definition of pressure"
+      ],
+      "to_find": [
+        "Explanations for three phenomena"
+      ],
+      "formulas_used": [
+        "$P = P_0 + \\rho gh$",
+        "$\\rho(h) \\propto e^{-h/H}$"
+      ]
+    },
+    "tags": [
+      "fluid-pressure",
+      "hydrostatic-pressure",
+      "atmospheric-pressure",
+      "pascal-law",
+      "conceptual-explanation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.1",
+      "page": 199
+    },
+    "p5_sketch": "q9-1-hydrostatic",
+    "p5_sketch_slug": "q9-1-hydrostatic",
+    "calculator": "q9-hydrostatic-pressure",
+    "calculator_slug": "q9-hydrostatic-pressure"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Surface Tension",
+    "exercise": "Exercise 9.2",
+    "question_number": "Q9.2",
+    "marks": 5,
+    "difficulty": 0.4,
+    "question_plain": "Explain why: (a) The angle of contact of mercury with glass is obtuse, while that of water with glass is acute. (b) Water on a clean glass surface tends to spread out while mercury on the same surface tends to form drops. (Put differently, water wets glass while mercury does not.) (c) Surface tension of a liquid is independent of the area of the surface (d) Water with detergent dissolved in it should have small angles of contact. (e) A drop of liquid under no external forces is always spherical in shape",
+    "question_latex": "Explain why: (a) The angle of contact of mercury with glass is obtuse, while that of water with glass is acute. (b) Water on a clean glass surface tends to spread out while mercury on the same surface tends to form drops. (Put differently, water wets glass while mercury does not.) (c) Surface tension of a liquid is independent of the area of the surface (d) Water with detergent dissolved in it should have small angles of contact. (e) A drop of liquid under no external forces is always spherical in shape",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) Due to different cohesive/adhesive forces; (b) Related to angle of contact; (c) Surface tension is property of interface; (d) Detergent reduces surface tension; (e) Sphere has minimum surface area",
+    "correct_answer_latex": "(a) Due to different cohesive/adhesive forces; (b) Related to angle of contact; (c) Surface tension is property of interface; (d) Detergent reduces surface tension; (e) Sphere has minimum surface area",
+    "hint": "Consider cohesive vs adhesive forces, surface energy minimization, and molecular interactions.",
+    "solution_steps_latex": [
+      "**Part (a): Angle of contact - obtuse for Hg-glass, acute for water-glass**",
+      "**Angle of contact** depends on ratio of cohesive to adhesive forces",
+      "**Mercury-glass**: Cohesive forces (Hg-Hg) > Adhesive forces (Hg-glass)",
+      "Mercury molecules attract each other more strongly than glass",
+      "Result: Mercury forms droplets, angle $> 90^\\circ$ (obtuse)",
+      "**Water-glass**: Adhesive forces (water-glass) > Cohesive forces (water-water)",
+      "Water molecules are attracted to glass surface",
+      "Result: Water spreads, angle $< 90^\\circ$ (acute)",
+      "**Part (b): Water spreads, mercury forms drops**",
+      "This is a direct consequence of angle of contact:",
+      "**Water** ($\\theta < 90^\\circ$): Spreads to maximize contact with glass (wetting)",
+      "**Mercury** ($\\theta > 90^\\circ$): Minimizes contact, forms spherical drops (non-wetting)",
+      "**Part (c): Surface tension independent of area**",
+      "Surface tension $S$ is **force per unit length**: $S = F/L$ (N/m)",
+      "Equivalently: **energy per unit area** of surface",
+      "It's an **intrinsic property** of the liquid-gas (or liquid-solid) interface",
+      "Does not depend on total area - just like density doesn't depend on total mass",
+      "**Part (d): Detergent reduces angle of contact**",
+      "Detergents are **surfactants** - they reduce surface tension",
+      "They weaken cohesive forces between water molecules",
+      "This increases the **adhesive/cohesive ratio**",
+      "Result: **angle of contact decreases** - better wetting, better cleaning",
+      "**Part (e): Liquid drop is spherical**",
+      "Under no external forces, surface tension dominates",
+      "Surface tension creates **inward pressure** to minimize surface area",
+      "For a given volume, **sphere has minimum surface area**",
+      "Therefore, drops naturally form **spherical shape** to minimize surface energy"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Properties of water, mercury, glass",
+        "Surface tension behavior"
+      ],
+      "to_find": [
+        "Explanations for five phenomena"
+      ],
+      "formulas_used": [
+        "Angle of contact depends on cohesive/adhesive forces",
+        "$S = F/L$ (surface tension)",
+        "Surface energy $\\propto$ area"
+      ]
+    },
+    "tags": [
+      "surface-tension",
+      "angle-of-contact",
+      "wetting",
+      "cohesive-adhesive-forces",
+      "spherical-drops",
+      "conceptual-explanation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.2",
+      "page": 199
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Fluid Properties",
+    "exercise": "Exercise 9.3",
+    "question_number": "Q9.3",
+    "marks": 5,
+    "difficulty": 0.3,
+    "question_plain": "Fill in the blanks using the word(s) from the list appended with each statement: (a) Surface tension of liquids generally ... with temperatures (increases / decreases) (b) Viscosity of gases ... with temperature, whereas viscosity of liquids ... with temperature (increases / decreases) (c) For solids with elastic modulus of rigidity, the shearing force is proportional to ... , while for fluids it is proportional to ... (shear strain / rate of shear strain) (d) For a fluid in a steady flow, the increase in flow speed at a constriction follows (conservation of mass / Bernoulli's principle) (e) For the model of a plane in a wind tunnel, turbulence occurs at a ... speed for turbulence for an actual plane (greater / smaller)",
+    "question_latex": "Fill in the blanks using the word(s) from the list appended with each statement: (a) Surface tension of liquids generally ... with temperatures (increases / decreases) (b) Viscosity of gases ... with temperature, whereas viscosity of liquids ... with temperature (increases / decreases) (c) For solids with elastic modulus of rigidity, the shearing force is proportional to ... , while for fluids it is proportional to ... (shear strain / rate of shear strain) (d) For a fluid in a steady flow, the increase in flow speed at a constriction follows (conservation of mass / Bernoulli's principle) (e) For the model of a plane in a wind tunnel, turbulence occurs at a ... speed for turbulence for an actual plane (greater / smaller)",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) decreases; (b) increases, decreases; (c) shear strain, rate of shear strain; (d) conservation of mass; (e) greater",
+    "correct_answer_latex": "(a) decreases; (b) increases, decreases; (c) shear strain, rate of shear strain; (d) conservation of mass; (e) greater",
+    "hint": "Think about molecular motion, flow continuity, and Reynolds number scaling.",
+    "solution_steps_latex": [
+      "**Part (a): Surface tension vs temperature**",
+      "**Answer**: Surface tension of liquids generally **decreases** with temperature",
+      "**Reason**: Higher temperature → more kinetic energy → weaker intermolecular bonds → lower surface tension",
+      "**Part (b): Viscosity vs temperature**",
+      "**Answer**: Viscosity of gases **increases** with temperature",
+      "Viscosity of liquids **decreases** with temperature",
+      "**Reason for gases**: Higher T → more molecular collisions → more momentum transfer → higher viscosity",
+      "**Reason for liquids**: Higher T → more mobility → molecules slip past each other easier → lower viscosity",
+      "**Part (c): Shearing force dependence**",
+      "**Answer**: For solids → proportional to **shear strain**",
+      "For fluids → proportional to **rate of shear strain**",
+      "**Explanation**:",
+      "Solids: $\\tau = G \\times \\phi$ (shear stress $\\propto$ shear strain)",
+      "Fluids: $\\tau = \\eta \\times \\frac{d\\phi}{dt}$ (shear stress $\\propto$ rate of shear strain)",
+      "**Part (d): Flow speed increase at constriction**",
+      "**Answer**: Follows **conservation of mass** (continuity equation)",
+      "**Explanation**: $A_1 v_1 = A_2 v_2$ (mass flow rate constant)",
+      "Smaller area → higher speed (to maintain constant mass flow)",
+      "Bernoulli's principle then explains pressure decrease",
+      "**Part (e): Turbulence in wind tunnel model**",
+      "**Answer**: Turbulence occurs at **greater** speed for model than actual plane",
+      "**Explanation**: Reynolds number $Re = \\frac{\\rho v L}{\\eta}$",
+      "For same $Re$, smaller model (smaller $L$) needs **larger velocity** $v$",
+      "Turbulence depends on $Re$, not absolute speed"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various fluid property relationships"
+      ],
+      "to_find": [
+        "Correct terms to fill in blanks"
+      ],
+      "formulas_used": [
+        "Viscosity: $\\tau = \\eta \\frac{dv}{dy}$",
+        "Continuity: $Av = \\text{constant}$",
+        "Reynolds number: $Re = \\frac{\\rho vL}{\\eta}$"
+      ]
+    },
+    "tags": [
+      "surface-tension",
+      "viscosity",
+      "temperature-effects",
+      "shear-strain",
+      "continuity-equation",
+      "reynolds-number"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.3",
+      "page": 200
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Bernoulli's Principle",
+    "exercise": "Exercise 9.4",
+    "question_number": "Q9.4",
+    "marks": 5,
+    "difficulty": 0.4,
+    "question_plain": "Explain why: (a) To keep a piece of paper horizontal, you should blow over, not under, it (b) When we try to close a water tap with our fingers, fast jets of water gush through the openings between our fingers (c) The size of the needle of a syringe controls flow rate better than the thumb pressure exerted by a doctor while administering an injection (d) A fluid flowing out of a small hole in a vessel results in a backward thrust on the vessel (e) A spinning cricket ball in air does not follow a parabolic trajectory",
+    "question_latex": "Explain why: (a) To keep a piece of paper horizontal, you should blow over, not under, it (b) When we try to close a water tap with our fingers, fast jets of water gush through the openings between our fingers (c) The size of the needle of a syringe controls flow rate better than the thumb pressure exerted by a doctor while administering an injection (d) A fluid flowing out of a small hole in a vessel results in a backward thrust on the vessel (e) A spinning cricket ball in air does not follow a parabolic trajectory",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "All based on Bernoulli's principle, continuity equation, and momentum conservation",
+    "correct_answer_latex": "All based on Bernoulli's principle, continuity equation, and momentum conservation",
+    "hint": "Use Bernoulli: higher speed → lower pressure. Also consider continuity and momentum.",
+    "solution_steps_latex": [
+      "**Part (a): Blowing over paper keeps it horizontal**",
+      "**Explanation** (Bernoulli's principle):",
+      "When air flows **over** the paper → high speed → **low pressure** (Bernoulli)",
+      "Below the paper → stationary air → **normal atmospheric pressure**",
+      "Net upward force keeps paper horizontal",
+      "If you blow **under** → pressure below increases → paper bends down",
+      "**Part (b): Fast water jets when closing tap with fingers**",
+      "**Explanation** (Continuity equation):",
+      "Water flow rate $Q = Av$ must remain constant (continuity)",
+      "When fingers partially close tap → **area decreases** drastically",
+      "To maintain same $Q$, **velocity must increase**: $v \\propto 1/A$",
+      "Result: Fast jets through small openings",
+      "**Part (c): Needle size controls flow rate better than thumb pressure**",
+      "**Explanation**: Flow rate $Q = Av$",
+      "From Poiseuille's law for viscous flow: $Q \\propto r^4$ (radius to 4th power!)",
+      "Small change in needle radius → **huge** change in flow rate",
+      "Pressure has linear effect, but area (radius$^2$) and resistance (radius$^{-4}$) dominate",
+      "Therefore, **needle size is the primary control**",
+      "**Part (d): Backward thrust when fluid flows out**",
+      "**Explanation** (Conservation of momentum):",
+      "Fluid gains **forward momentum** as it exits the hole",
+      "By Newton's 3rd law, vessel experiences **equal and opposite momentum**",
+      "This creates **backward thrust** on the vessel (like rocket exhaust)",
+      "**Part (e): Spinning cricket ball deviates from parabolic path**",
+      "**Explanation** (Magnus effect):",
+      "Spinning ball drags air around it (boundary layer)",
+      "On one side: ball rotation **adds to** airflow → higher speed → **lower pressure**",
+      "On other side: rotation **opposes** airflow → lower speed → **higher pressure**",
+      "Net pressure difference creates **sideways force** (Magnus force)",
+      "Ball curves in direction of pressure gradient (not parabolic path)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various fluid flow scenarios"
+      ],
+      "to_find": [
+        "Explanations based on fluid dynamics"
+      ],
+      "formulas_used": [
+        "Bernoulli: $P + \\frac{1}{2}\\rho v^2 + \\rho gh = \\text{constant}$",
+        "Continuity: $Av = \\text{constant}$",
+        "Poiseuille: $Q \\propto r^4$",
+        "Momentum conservation"
+      ]
+    },
+    "tags": [
+      "bernoulli-principle",
+      "continuity-equation",
+      "magnus-effect",
+      "momentum-conservation",
+      "fluid-flow",
+      "conceptual-explanation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.4",
+      "page": 200
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Pressure",
+    "exercise": "Exercise 9.5",
+    "question_number": "Q9.5",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "A 50 kg girl wearing high heel shoes balances on a single heel. The heel is circular with a diameter 1.0 cm. What is the pressure exerted by the heel on the horizontal floor?",
+    "question_latex": "A 50 kg girl wearing high heel shoes balances on a single heel. The heel is circular with a diameter 1.0 cm. What is the pressure exerted by the heel on the horizontal floor?",
+    "sub_parts": null,
+    "correct_answer_plain": "Pressure = 6.2×10⁶ Pa",
+    "correct_answer_latex": "Pressure = $6.2 \\times 10^6$ Pa",
+    "hint": "P = F/A = mg/(πr²)",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Mass $m = 50$ kg",
+      "Heel diameter $d = 1.0$ cm $= 0.01$ m",
+      "Radius $r = d/2 = 0.005$ m",
+      "**Force on floor** (weight):",
+      "$F = mg = 50 \\times 9.8 = 490$ N",
+      "**Contact area** (circular heel):",
+      "$A = \\pi r^2 = \\pi (0.005)^2$",
+      "$A = \\pi \\times 25 \\times 10^{-6} = 7.85 \\times 10^{-5}$ m$^2$",
+      "**Pressure on floor**:",
+      "$P = \\frac{F}{A} = \\frac{490}{7.85 \\times 10^{-5}}$",
+      "$P = 6.24 \\times 10^6$ Pa",
+      "$P \\approx 6.2 \\times 10^6$ Pa",
+      "**Comparison**: This is about **61 atmospheres** of pressure!",
+      "This is why high heels can damage floors"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Mass: 50 kg",
+        "Heel diameter: 1.0 cm"
+      ],
+      "to_find": [
+        "Pressure on floor"
+      ],
+      "formulas_used": [
+        "$P = \\frac{F}{A}$",
+        "$A = \\pi r^2$"
+      ]
+    },
+    "tags": [
+      "pressure",
+      "force-area",
+      "circular-contact",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.5",
+      "page": 200
+    },
+    "calculator": "q9-pressure-force-area",
+    "calculator_slug": "q9-pressure-force-area"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Barometer",
+    "exercise": "Exercise 9.6",
+    "question_number": "Q9.6",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Torricelli's barometer used mercury. Pascal duplicated it using French wine of density 984 kg/m³. Determine the height of the wine column for normal atmospheric pressure.",
+    "question_latex": "Torricelli's barometer used mercury. Pascal duplicated it using French wine of density 984 kg/m$^3$. Determine the height of the wine column for normal atmospheric pressure.",
+    "sub_parts": null,
+    "correct_answer_plain": "Height = 10.5 m",
+    "correct_answer_latex": "Height = $10.5$ m",
+    "hint": "P_atm = ρgh. Use P_atm = 1.013×10⁵ Pa.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Density of wine $\\rho = 984$ kg/m$^3$",
+      "Atmospheric pressure $P_{\\text{atm}} = 1.013 \\times 10^5$ Pa",
+      "**Barometer principle**: Atmospheric pressure supports fluid column",
+      "$P_{\\text{atm}} = \\rho g h$",
+      "**Solving for height**:",
+      "$h = \\frac{P_{\\text{atm}}}{\\rho g}$",
+      "$h = \\frac{1.013 \\times 10^5}{984 \\times 9.8}$",
+      "$h = \\frac{1.013 \\times 10^5}{9643.2}$",
+      "$h = 10.5$ m",
+      "**Comparison with mercury barometer**:",
+      "Mercury: $\\rho_{Hg} = 13,600$ kg/m$^3$, $h_{Hg} = 0.76$ m = 76 cm",
+      "Wine is **13.8 times less dense** → needs **13.8 times taller** column",
+      "This shows why mercury is preferred - more practical size!"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Wine density: 984 kg/m³",
+        "Atmospheric pressure: 1.013×10⁵ Pa"
+      ],
+      "to_find": [
+        "Height of wine column"
+      ],
+      "formulas_used": [
+        "$P = \\rho g h$"
+      ]
+    },
+    "tags": [
+      "barometer",
+      "atmospheric-pressure",
+      "fluid-column",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.6",
+      "page": 200
+    },
+    "p5_sketch": "q9-6-barometer",
+    "p5_sketch_slug": "q9-6-barometer",
+    "calculator": "q9-barometer-height",
+    "calculator_slug": "q9-barometer-height"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Pressure at Depth",
+    "exercise": "Exercise 9.7",
+    "question_number": "Q9.7",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "A vertical off-shore structure is built to withstand a maximum stress of 10⁹ Pa. Is the structure suitable for putting up on top of an oil well in the ocean? Take the depth of the ocean to be roughly 3 km, and ignore ocean currents.",
+    "question_latex": "A vertical off-shore structure is built to withstand a maximum stress of $10^9$ Pa. Is the structure suitable for putting up on top of an oil well in the ocean? Take the depth of the ocean to be roughly 3 km, and ignore ocean currents.",
+    "sub_parts": null,
+    "correct_answer_plain": "Yes, suitable. Pressure at 3 km depth ≈ 3×10⁷ Pa, which is far less than 10⁹ Pa.",
+    "correct_answer_latex": "Yes, suitable. Pressure at 3 km depth $\\approx 3 \\times 10^7$ Pa, which is far less than $10^9$ Pa.",
+    "hint": "Calculate pressure at depth: P = P₀ + ρgh",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Ocean depth $h = 3$ km $= 3000$ m",
+      "Maximum stress structure can withstand $= 10^9$ Pa",
+      "Density of seawater $\\rho \\approx 1030$ kg/m$^3$",
+      "Atmospheric pressure $P_0 = 1.01 \\times 10^5$ Pa",
+      "**Pressure at depth 3 km**:",
+      "$P = P_0 + \\rho g h$",
+      "$P = 1.01 \\times 10^5 + 1030 \\times 9.8 \\times 3000$",
+      "$P = 1.01 \\times 10^5 + 3.028 \\times 10^7$",
+      "$P \\approx 3.0 \\times 10^7$ Pa (atmospheric pressure negligible compared to depth pressure)",
+      "**Comparison**:",
+      "Pressure at depth: $P = 3.0 \\times 10^7$ Pa",
+      "Maximum withstanding stress: $10^9$ Pa",
+      "**Ratio**: $\\frac{10^9}{3.0 \\times 10^7} \\approx 33$",
+      "**Conclusion**: Structure can withstand **33 times** the actual pressure",
+      "**Therefore, the structure is SUITABLE** for the oil well"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Ocean depth: 3 km",
+        "Max stress: 10⁹ Pa",
+        "Seawater density: 1030 kg/m³"
+      ],
+      "to_find": [
+        "Whether structure is suitable"
+      ],
+      "formulas_used": [
+        "$P = P_0 + \\rho g h$"
+      ]
+    },
+    "tags": [
+      "hydrostatic-pressure",
+      "ocean-depth",
+      "stress-analysis",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.7",
+      "page": 200
+    },
+    "p5_sketch": "q9-7-ocean-pressure",
+    "p5_sketch_slug": "q9-7-ocean-pressure",
+    "calculator": "q9-hydrostatic-pressure",
+    "calculator_slug": "q9-hydrostatic-pressure",
+    "interactive_plot": "q9-pressure-vs-depth"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Hydraulic Lift",
+    "exercise": "Exercise 9.8",
+    "question_number": "Q9.8",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A hydraulic automobile lift is designed to lift cars with a maximum mass of 3000 kg. The area of cross-section of the piston carrying the load is 425 cm². What maximum pressure would the smaller piston have to bear?",
+    "question_latex": "A hydraulic automobile lift is designed to lift cars with a maximum mass of 3000 kg. The area of cross-section of the piston carrying the load is 425 cm$^2$. What maximum pressure would the smaller piston have to bear?",
+    "sub_parts": null,
+    "correct_answer_plain": "Maximum pressure = 6.92×10⁵ Pa",
+    "correct_answer_latex": "Maximum pressure = $6.92 \\times 10^5$ Pa",
+    "hint": "By Pascal's law, pressure is same throughout. P = F/A on large piston.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Maximum mass to lift $m = 3000$ kg",
+      "Area of load-carrying piston $A = 425$ cm$^2$ $= 425 \\times 10^{-4}$ m$^2$ $= 0.0425$ m$^2$",
+      "**Force on large piston** (weight of car):",
+      "$F = mg = 3000 \\times 9.8 = 29,400$ N",
+      "**Pascal's Law**: Pressure is transmitted equally throughout the fluid",
+      "$P_{\\text{small}} = P_{\\text{large}}$",
+      "**Pressure on large piston**:",
+      "$P = \\frac{F}{A} = \\frac{29,400}{0.0425}$",
+      "$P = 6.918 \\times 10^5$ Pa",
+      "$P \\approx 6.92 \\times 10^5$ Pa",
+      "**This is approximately 6.8 atmospheres**",
+      "The small piston must bear the **same pressure** = $6.92 \\times 10^5$ Pa"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Maximum mass: 3000 kg",
+        "Large piston area: 425 cm²"
+      ],
+      "to_find": [
+        "Pressure on small piston"
+      ],
+      "formulas_used": [
+        "Pascal's law: $P_1 = P_2$",
+        "$P = \\frac{F}{A}$"
+      ]
+    },
+    "tags": [
+      "pascal-law",
+      "hydraulic-lift",
+      "pressure-transmission",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.8",
+      "page": 200
+    },
+    "calculator": "q9-hydraulic-pressure",
+    "calculator_slug": "q9-hydraulic-pressure"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "U-tube Manometer",
+    "exercise": "Exercise 9.9",
+    "question_number": "Q9.9",
+    "marks": 2,
+    "difficulty": 0.6,
+    "question_plain": "A U-tube contains water and methylated spirit separated by mercury. The mercury columns in the two arms are in level with 10.0 cm of water in one arm and 12.5 cm of spirit in the other. What is the specific gravity of spirit?",
+    "question_latex": "A U-tube contains water and methylated spirit separated by mercury. The mercury columns in the two arms are in level with 10.0 cm of water in one arm and 12.5 cm of spirit in the other. What is the specific gravity of spirit?",
+    "sub_parts": null,
+    "correct_answer_plain": "Specific gravity = 0.800",
+    "correct_answer_latex": "Specific gravity = $0.800$",
+    "hint": "Equal pressure at mercury level: ρ_water × h_water = ρ_spirit × h_spirit",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Height of water column $h_w = 10.0$ cm",
+      "Height of spirit column $h_s = 12.5$ cm",
+      "Mercury columns are at **same level** in both arms",
+      "**Principle**: Pressure at mercury surface must be **equal** in both arms",
+      "$P_{\\text{atm}} + \\rho_w g h_w = P_{\\text{atm}} + \\rho_s g h_s$",
+      "$\\rho_w g h_w = \\rho_s g h_s$",
+      "$\\rho_w h_w = \\rho_s h_s$",
+      "**Specific gravity of spirit**:",
+      "Specific gravity $= \\frac{\\rho_s}{\\rho_w}$",
+      "$\\frac{\\rho_s}{\\rho_w} = \\frac{h_w}{h_s}$",
+      "$\\text{Specific gravity} = \\frac{10.0}{12.5}$",
+      "$\\text{Specific gravity} = 0.800$",
+      "**Interpretation**: Spirit is less dense than water (as expected for alcohol)"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "U-tube with water (10 cm) in left arm and methylated spirit (12.5 cm) in right arm, separated by mercury at bottom. Mercury levels are equal in both arms.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Water column height: 10.0 cm",
+        "Spirit column height: 12.5 cm",
+        "Mercury levels equal"
+      ],
+      "to_find": [
+        "Specific gravity of spirit"
+      ],
+      "formulas_used": [
+        "$P = P_0 + \\rho g h$",
+        "Specific gravity $= \\rho/\\rho_w$"
+      ]
+    },
+    "tags": [
+      "u-tube",
+      "manometer",
+      "specific-gravity",
+      "pressure-balance",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.9",
+      "page": 200
+    },
+    "calculator": "q9-specific-gravity-u-tube",
+    "calculator_slug": "q9-specific-gravity-u-tube"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "U-tube with Added Liquid",
+    "exercise": "Exercise 9.10",
+    "question_number": "Q9.10",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "In the previous problem, if 15.0 cm of water and spirit each are further poured into the respective arms of the tube, what is the difference in the levels of mercury in the two arms? (Specific gravity of mercury = 13.6)",
+    "question_latex": "In the previous problem, if 15.0 cm of water and spirit each are further poured into the respective arms of the tube, what is the difference in the levels of mercury in the two arms? (Specific gravity of mercury = 13.6)",
+    "sub_parts": null,
+    "correct_answer_plain": "Difference = 0.221 cm; mercury rises in arm with spirit",
+    "correct_answer_latex": "Difference = $0.221$ cm; mercury rises in arm with spirit",
+    "hint": "After adding, pressure difference = difference in mercury column heights × ρ_Hg × g",
+    "solution_steps_latex": [
+      "**Given from Q9.9**: $\\rho_s = 0.800 \\rho_w$",
+      "**After pouring**:",
+      "Water arm: total height $= 10.0 + 15.0 = 25.0$ cm",
+      "Spirit arm: total height $= 12.5 + 15.0 = 27.5$ cm",
+      "Specific gravity of mercury $S_{Hg} = 13.6$",
+      "**Let mercury level difference be $h$**",
+      "Mercury rises in spirit arm (less dense fluid)",
+      "**Pressure balance at bottom**:",
+      "Left arm (water): $P_0 + \\rho_w g \\times 25.0 + \\rho_{Hg} g(h_{Hg,left})$",
+      "Right arm (spirit): $P_0 + \\rho_s g \\times 27.5 + \\rho_{Hg} g(h_{Hg,right})$",
+      "Let difference in Hg levels $= h$, with Hg higher in spirit arm",
+      "**Equal pressure at bottom**:",
+      "$\\rho_w \\times 25.0 + \\rho_{Hg} \\times 0 = \\rho_s \\times 27.5 + \\rho_{Hg} \\times (-h)$",
+      "(Taking water arm Hg level as reference)",
+      "$\\rho_w \\times 25.0 = \\rho_s \\times 27.5 - \\rho_{Hg} \\times h$",
+      "$\\rho_w \\times 25.0 = 0.800\\rho_w \\times 27.5 - \\rho_{Hg} \\times h$",
+      "$\\rho_w(25.0 - 22.0) = \\rho_{Hg} \\times h$",
+      "$3.0 \\rho_w = 13.6 \\rho_w \\times h$",
+      "$h = \\frac{3.0}{13.6} = 0.221$ cm",
+      "**Mercury level is 0.221 cm higher in the spirit arm**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Initial: 10 cm water, 12.5 cm spirit",
+        "Added: 15 cm each",
+        "Specific gravity spirit: 0.800",
+        "Specific gravity Hg: 13.6"
+      ],
+      "to_find": [
+        "Difference in mercury levels"
+      ],
+      "formulas_used": [
+        "$P = P_0 + \\rho g h$",
+        "Pressure balance at bottom"
+      ]
+    },
+    "tags": [
+      "u-tube",
+      "mercury-manometer",
+      "pressure-balance",
+      "specific-gravity",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.10",
+      "page": 200
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Bernoulli's Equation Applicability",
+    "exercise": "Exercise 9.11",
+    "question_number": "Q9.11",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "Can Bernoulli's equation be used to describe the flow of water through a rapid in a river? Explain.",
+    "question_latex": "Can Bernoulli's equation be used to describe the flow of water through a rapid in a river? Explain.",
+    "sub_parts": null,
+    "correct_answer_plain": "No, Bernoulli's principle applies to streamline flow only. Rapids have turbulent flow.",
+    "correct_answer_latex": "No, Bernoulli's principle applies to streamline flow only. Rapids have turbulent flow.",
+    "hint": "Consider whether flow is streamline (laminar) or turbulent.",
+    "solution_steps_latex": [
+      "**Question**: Can Bernoulli's equation be used for rapids?",
+      "**Answer**: **NO**",
+      "**Reason**:",
+      "**Bernoulli's equation** is derived assuming:",
+      "1. **Streamline (laminar) flow** - smooth, orderly flow",
+      "2. **Non-viscous fluid** - no internal friction",
+      "3. **Incompressible fluid**",
+      "4. **Steady flow** - properties don't change with time",
+      "**Rapids in a river**:",
+      "Rapids involve **turbulent flow** with:",
+      "- Chaotic, irregular motion",
+      "- Formation of eddies and vortices",
+      "- Mixing and churning of water",
+      "- Significant energy dissipation due to viscosity",
+      "**Conclusion**: Bernoulli's equation is **NOT applicable** to rapids",
+      "It can only be used for **smooth, streamline flow** sections of the river"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "River rapids scenario"
+      ],
+      "to_find": [
+        "Whether Bernoulli's equation is applicable"
+      ],
+      "formulas_used": [
+        "Bernoulli: $P + \\frac{1}{2}\\rho v^2 + \\rho gh = \\text{constant}$ (for streamline flow only)"
+      ]
+    },
+    "tags": [
+      "bernoulli-equation",
+      "streamline-flow",
+      "turbulent-flow",
+      "applicability",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.11",
+      "page": 200
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Gauge Pressure in Bernoulli's Equation",
+    "exercise": "Exercise 9.12",
+    "question_number": "Q9.12",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Does it matter if one uses gauge instead of absolute pressures in applying Bernoulli's equation? Explain.",
+    "question_latex": "Does it matter if one uses gauge instead of absolute pressures in applying Bernoulli's equation? Explain.",
+    "sub_parts": null,
+    "correct_answer_plain": "No, unless atmospheric pressures at two points are significantly different.",
+    "correct_answer_latex": "No, unless atmospheric pressures at two points are significantly different.",
+    "hint": "Bernoulli compares pressures. P_gauge = P_absolute - P_atm. Does P_atm cancel?",
+    "solution_steps_latex": [
+      "**Question**: Does it matter if we use gauge or absolute pressure?",
+      "**Answer**: Generally **NO**, but with a condition",
+      "**Explanation**:",
+      "**Bernoulli's equation**:",
+      "$P_1 + \\frac{1}{2}\\rho v_1^2 + \\rho g h_1 = P_2 + \\frac{1}{2}\\rho v_2^2 + \\rho g h_2$",
+      "**Gauge pressure**: $P_{\\text{gauge}} = P_{\\text{absolute}} - P_{\\text{atm}}$",
+      "**Using gauge pressure**:",
+      "$(P_{g1} + P_{\\text{atm}}) + \\frac{1}{2}\\rho v_1^2 + \\rho g h_1 = (P_{g2} + P_{\\text{atm}}) + \\frac{1}{2}\\rho v_2^2 + \\rho g h_2$",
+      "If $P_{\\text{atm}}$ is **same at both points**, it cancels:",
+      "$P_{g1} + \\frac{1}{2}\\rho v_1^2 + \\rho g h_1 = P_{g2} + \\frac{1}{2}\\rho v_2^2 + \\rho g h_2$",
+      "**Conclusion**:",
+      "**Gauge pressure works** if atmospheric pressure is same at both points",
+      "**Use absolute pressure** if:",
+      "- Points are at very different altitudes (different $P_{\\text{atm}}$)",
+      "- Weather conditions differ significantly",
+      "For most practical problems (same altitude), **either works**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Bernoulli's equation application"
+      ],
+      "to_find": [
+        "Whether gauge or absolute pressure matters"
+      ],
+      "formulas_used": [
+        "$P_{\\text{gauge}} = P_{\\text{absolute}} - P_{\\text{atm}}$",
+        "Bernoulli's equation"
+      ]
+    },
+    "tags": [
+      "bernoulli-equation",
+      "gauge-pressure",
+      "absolute-pressure",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.12",
+      "page": 200
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Viscous Flow - Poiseuille's Law",
+    "exercise": "Exercise 9.13",
+    "question_number": "Q9.13",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "Glycerine flows steadily through a horizontal tube of length 1.5 m and radius 1.0 cm. If the amount of glycerine collected per second at one end is 4.0 × 10⁻³ kg/s, what is the pressure difference between the two ends of the tube? (Density of glycerine = 1.3 × 10³ kg/m³ and viscosity of glycerine = 0.83 Pa s). [You may also like to check if the assumption of laminar flow in the tube is correct].",
+    "question_latex": "Glycerine flows steadily through a horizontal tube of length 1.5 m and radius 1.0 cm. If the amount of glycerine collected per second at one end is $4.0 \\times 10^{-3}$ kg/s, what is the pressure difference between the two ends of the tube? (Density of glycerine = $1.3 \\times 10^3$ kg/m$^3$ and viscosity of glycerine = 0.83 Pa s). [You may also like to check if the assumption of laminar flow in the tube is correct].",
+    "sub_parts": null,
+    "correct_answer_plain": "ΔP = 9.8×10² Pa; Reynolds number ≈ 0.3, so flow is laminar",
+    "correct_answer_latex": "$\\Delta P = 9.8 \\times 10^2$ Pa; Reynolds number $\\approx 0.3$, so flow is laminar",
+    "hint": "Use Poiseuille's law: Q = (πr⁴ΔP)/(8ηL). Check Re = ρvd/η < 2000 for laminar.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Length $L = 1.5$ m",
+      "Radius $r = 1.0$ cm $= 0.01$ m",
+      "Mass flow rate $\\dot{m} = 4.0 \\times 10^{-3}$ kg/s",
+      "Density $\\rho = 1.3 \\times 10^3$ kg/m$^3$",
+      "Viscosity $\\eta = 0.83$ Pa·s",
+      "**Volume flow rate**:",
+      "$Q = \\frac{\\dot{m}}{\\rho} = \\frac{4.0 \\times 10^{-3}}{1.3 \\times 10^3}$",
+      "$Q = 3.077 \\times 10^{-6}$ m$^3$/s",
+      "**Poiseuille's Law** (for viscous flow in pipe):",
+      "$Q = \\frac{\\pi r^4 \\Delta P}{8 \\eta L}$",
+      "**Solving for pressure difference**:",
+      "$\\Delta P = \\frac{8 \\eta L Q}{\\pi r^4}$",
+      "$\\Delta P = \\frac{8 \\times 0.83 \\times 1.5 \\times 3.077 \\times 10^{-6}}{\\pi \\times (0.01)^4}$",
+      "$\\Delta P = \\frac{3.06 \\times 10^{-5}}{\\pi \\times 10^{-8}}$",
+      "$\\Delta P = \\frac{3.06 \\times 10^{-5}}{3.14 \\times 10^{-8}}$",
+      "$\\Delta P = 9.75 \\times 10^2$ Pa",
+      "$\\Delta P \\approx 9.8 \\times 10^2$ Pa",
+      "**Checking for laminar flow**:",
+      "**Average velocity**: $v = \\frac{Q}{\\pi r^2} = \\frac{3.077 \\times 10^{-6}}{\\pi (0.01)^2} = 0.098$ m/s",
+      "**Reynolds number**: $Re = \\frac{\\rho v d}{\\eta} = \\frac{\\rho v (2r)}{\\eta}$",
+      "$Re = \\frac{1.3 \\times 10^3 \\times 0.098 \\times 0.02}{0.83}$",
+      "$Re = \\frac{2.548}{0.83} = 3.07 \\approx 0.3$",
+      "Since $Re < 2000$, **flow is definitely laminar** ✓"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Tube length: 1.5 m",
+        "Tube radius: 1.0 cm",
+        "Mass flow rate: 4.0×10⁻³ kg/s",
+        "Glycerine: ρ = 1.3×10³ kg/m³, η = 0.83 Pa·s"
+      ],
+      "to_find": [
+        "Pressure difference",
+        "Check if flow is laminar"
+      ],
+      "formulas_used": [
+        "$Q = \\frac{\\pi r^4 \\Delta P}{8\\eta L}$ (Poiseuille)",
+        "$Re = \\frac{\\rho v d}{\\eta}$ (Reynolds number)"
+      ]
+    },
+    "tags": [
+      "poiseuille-law",
+      "viscous-flow",
+      "laminar-flow",
+      "reynolds-number",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.13",
+      "page": 200
+    },
+    "calculator": "q9-poiseuille-pressure",
+    "calculator_slug": "q9-poiseuille-pressure"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Aerodynamic Lift",
+    "exercise": "Exercise 9.14",
+    "question_number": "Q9.14",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "In a test experiment on a model aeroplane in a wind tunnel, the flow speeds on the upper and lower surfaces of the wing are 70 m/s and 63 m/s respectively. What is the lift on the wing if its area is 2.5 m²? Take the density of air to be 1.3 kg/m³.",
+    "question_latex": "In a test experiment on a model aeroplane in a wind tunnel, the flow speeds on the upper and lower surfaces of the wing are 70 m/s and 63 m/s respectively. What is the lift on the wing if its area is 2.5 m$^2$? Take the density of air to be 1.3 kg/m$^3$.",
+    "sub_parts": null,
+    "correct_answer_plain": "Lift = 1.5×10³ N",
+    "correct_answer_latex": "Lift = $1.5 \\times 10^3$ N",
+    "hint": "Use Bernoulli to find pressure difference, then F = ΔP × A.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Upper surface speed $v_1 = 70$ m/s",
+      "Lower surface speed $v_2 = 63$ m/s",
+      "Wing area $A = 2.5$ m$^2$",
+      "Air density $\\rho = 1.3$ kg/m$^3$",
+      "**Bernoulli's equation** (same height for both surfaces):",
+      "$P_1 + \\frac{1}{2}\\rho v_1^2 = P_2 + \\frac{1}{2}\\rho v_2^2$",
+      "**Pressure difference**:",
+      "$P_2 - P_1 = \\frac{1}{2}\\rho(v_1^2 - v_2^2)$",
+      "$\\Delta P = \\frac{1}{2} \\times 1.3 \\times [(70)^2 - (63)^2]$",
+      "$\\Delta P = \\frac{1}{2} \\times 1.3 \\times [4900 - 3969]$",
+      "$\\Delta P = \\frac{1}{2} \\times 1.3 \\times 931$",
+      "$\\Delta P = 0.65 \\times 931 = 605.15$ Pa",
+      "**Lift force** (upward):",
+      "Pressure is **higher below** (slower speed)",
+      "Pressure is **lower above** (faster speed)",
+      "$F_{\\text{lift}} = \\Delta P \\times A$",
+      "$F_{\\text{lift}} = 605.15 \\times 2.5$",
+      "$F_{\\text{lift}} = 1512.9$ N",
+      "$F_{\\text{lift}} \\approx 1.5 \\times 10^3$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Upper speed: 70 m/s",
+        "Lower speed: 63 m/s",
+        "Wing area: 2.5 m²",
+        "Air density: 1.3 kg/m³"
+      ],
+      "to_find": [
+        "Lift force on wing"
+      ],
+      "formulas_used": [
+        "Bernoulli: $P + \\frac{1}{2}\\rho v^2 = \\text{constant}$",
+        "$F = \\Delta P \\times A$"
+      ]
+    },
+    "tags": [
+      "bernoulli-principle",
+      "aerodynamic-lift",
+      "pressure-difference",
+      "aerofoil",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.14",
+      "page": 200
+    },
+    "calculator": "q9-bernoulli-lift",
+    "calculator_slug": "q9-bernoulli-lift"
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Bernoulli's Principle Application",
+    "exercise": "Exercise 9.15",
+    "question_number": "Q9.15",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Figures 9.20(a) and (b) refer to the steady flow of a (non-viscous) liquid. Which of the two figures is incorrect? Why?",
+    "question_latex": "Figures 9.20(a) and (b) refer to the steady flow of a (non-viscous) liquid. Which of the two figures is incorrect? Why?",
+    "sub_parts": null,
+    "correct_answer_plain": "Figure (a) is incorrect. At constriction, speed increases so pressure must decrease (Bernoulli), but diagram shows pressure increase.",
+    "correct_answer_latex": "Figure (a) is incorrect. At constriction, speed increases so pressure must decrease (Bernoulli), but diagram shows pressure increase.",
+    "hint": "At constriction: area decreases → speed increases → pressure decreases.",
+    "solution_steps_latex": [
+      "**Question**: Which figure is incorrect?",
+      "**Answer**: **Figure (a) is incorrect**",
+      "**Reason**:",
+      "**At a constriction** (narrower section):",
+      "**From continuity equation**: $A_1 v_1 = A_2 v_2$",
+      "Smaller area → **higher speed** (to maintain constant flow rate)",
+      "**From Bernoulli's equation** (horizontal pipe):",
+      "$P + \\frac{1}{2}\\rho v^2 = \\text{constant}$",
+      "Higher speed → **lower pressure**",
+      "**Therefore**:",
+      "At constriction: **speed ↑**, **pressure ↓**",
+      "**Figure (a) shows**: Pressure **increasing** at constriction → **WRONG**",
+      "**Figure (b) shows**: Pressure **decreasing** at constriction → **CORRECT**",
+      "**Assumption**: Fluid is incompressible (which is stated in problem)",
+      "This is a direct application of Bernoulli's principle"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Two diagrams showing fluid flow through pipes with constrictions. Figure (a) shows pressure increasing at constriction (incorrect). Figure (b) shows pressure decreasing at constriction (correct).",
+      "figure_reference": "Figure 9.20"
+    },
+    "physical_quantities": {
+      "given": [
+        "Steady flow of non-viscous liquid",
+        "Two diagrams showing pressure variation"
+      ],
+      "to_find": [
+        "Which diagram is incorrect and why"
+      ],
+      "formulas_used": [
+        "Continuity: $Av = \\text{constant}$",
+        "Bernoulli: $P + \\frac{1}{2}\\rho v^2 = \\text{constant}$"
+      ]
+    },
+    "tags": [
+      "bernoulli-principle",
+      "continuity-equation",
+      "venturi-effect",
+      "conceptual-diagram"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.15",
+      "page": 201
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Flow Speed - Continuity",
+    "exercise": "Exercise 9.16",
+    "question_number": "Q9.16",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The cylindrical tube of a spray pump has a cross-section of 8.0 cm² one end of which has 40 fine holes each of diameter 1.0 mm. If the liquid flow inside the tube is 1.5 m/min, what is the speed of ejection of the liquid through the holes?",
+    "question_latex": "The cylindrical tube of a spray pump has a cross-section of 8.0 cm$^2$ one end of which has 40 fine holes each of diameter 1.0 mm. If the liquid flow inside the tube is 1.5 m/min, what is the speed of ejection of the liquid through the holes?",
+    "sub_parts": null,
+    "correct_answer_plain": "Ejection speed = 0.64 m/s",
+    "correct_answer_latex": "Ejection speed = $0.64$ m/s",
+    "hint": "Use continuity: A₁v₁ = A₂v₂. Find total area of 40 holes.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Cross-section of tube $A_1 = 8.0$ cm$^2$ $= 8.0 \\times 10^{-4}$ m$^2$",
+      "Number of holes $= 40$",
+      "Diameter of each hole $d = 1.0$ mm $= 1.0 \\times 10^{-3}$ m",
+      "Flow speed in tube $v_1 = 1.5$ m/min $= \\frac{1.5}{60}$ m/s $= 0.025$ m/s",
+      "**Area of one hole**:",
+      "$a = \\pi r^2 = \\pi \\left(\\frac{d}{2}\\right)^2 = \\pi \\left(\\frac{1.0 \\times 10^{-3}}{2}\\right)^2$",
+      "$a = \\pi \\times (0.5 \\times 10^{-3})^2 = \\pi \\times 0.25 \\times 10^{-6}$",
+      "$a = 7.85 \\times 10^{-7}$ m$^2$",
+      "**Total area of 40 holes**:",
+      "$A_2 = 40 \\times a = 40 \\times 7.85 \\times 10^{-7}$",
+      "$A_2 = 3.14 \\times 10^{-5}$ m$^2$",
+      "**From continuity equation**:",
+      "$A_1 v_1 = A_2 v_2$",
+      "$v_2 = \\frac{A_1 v_1}{A_2}$",
+      "$v_2 = \\frac{8.0 \\times 10^{-4} \\times 0.025}{3.14 \\times 10^{-5}}$",
+      "$v_2 = \\frac{2.0 \\times 10^{-5}}{3.14 \\times 10^{-5}}$",
+      "$v_2 = 0.637$ m/s",
+      "$v_2 \\approx 0.64$ m/s"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Spray pump with cylindrical tube connected to nozzle with 40 fine holes. Liquid flows through tube and exits as spray through multiple holes.",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Tube area: 8.0 cm²",
+        "Number of holes: 40",
+        "Hole diameter: 1.0 mm",
+        "Tube flow speed: 1.5 m/min"
+      ],
+      "to_find": [
+        "Ejection speed through holes"
+      ],
+      "formulas_used": [
+        "$A_1 v_1 = A_2 v_2$ (continuity)",
+        "$A = \\pi r^2$"
+      ]
+    },
+    "tags": [
+      "continuity-equation",
+      "flow-rate",
+      "spray-pump",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.16",
+      "page": 201
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Surface Tension Measurement",
+    "exercise": "Exercise 9.17",
+    "question_number": "Q9.17",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A U-shaped wire is dipped in a soap solution, and removed. The thin soap film formed between the wire and the light slider supports a weight of 1.5 × 10⁻² N (which includes the small weight of the slider). The length of the slider is 30 cm. What is the surface tension of the film?",
+    "question_latex": "A U-shaped wire is dipped in a soap solution, and removed. The thin soap film formed between the wire and the light slider supports a weight of $1.5 \\times 10^{-2}$ N (which includes the small weight of the slider). The length of the slider is 30 cm. What is the surface tension of the film?",
+    "sub_parts": null,
+    "correct_answer_plain": "Surface tension = 2.5×10⁻² N/m",
+    "correct_answer_latex": "Surface tension = $2.5 \\times 10^{-2}$ N/m",
+    "hint": "Film has TWO surfaces. Force = S × (2L).",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Weight supported $F = 1.5 \\times 10^{-2}$ N",
+      "Length of slider $L = 30$ cm $= 0.30$ m",
+      "**Important**: Soap film has **TWO surfaces** (front and back)",
+      "**Surface tension force**:",
+      "Force due to surface tension acts along the perimeter",
+      "For **one surface**: $F_1 = S \\times L$",
+      "For **two surfaces** (film): $F_{\\text{total}} = 2SL$",
+      "**This force supports the weight**:",
+      "$2SL = F$",
+      "$S = \\frac{F}{2L}$",
+      "$S = \\frac{1.5 \\times 10^{-2}}{2 \\times 0.30}$",
+      "$S = \\frac{1.5 \\times 10^{-2}}{0.60}$",
+      "$S = 2.5 \\times 10^{-2}$ N/m",
+      "**This is a typical value for soap solution surface tension**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Weight supported: 1.5×10⁻² N",
+        "Slider length: 30 cm"
+      ],
+      "to_find": [
+        "Surface tension of soap film"
+      ],
+      "formulas_used": [
+        "$F = 2SL$ (for soap film with two surfaces)"
+      ]
+    },
+    "tags": [
+      "surface-tension",
+      "soap-film",
+      "two-surfaces",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.17",
+      "page": 201
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Surface Tension and Geometry",
+    "exercise": "Exercise 9.18",
+    "question_number": "Q9.18",
+    "marks": 2,
+    "difficulty": 0.5,
+    "question_plain": "Figure 9.21 (a) shows a thin liquid film supporting a small weight = 4.5 × 10⁻² N. What is the weight supported by a film of the same liquid at the same temperature in Fig. (b) and (c)? Explain your answer physically.",
+    "question_latex": "Figure 9.21 (a) shows a thin liquid film supporting a small weight = $4.5 \\times 10^{-2}$ N. What is the weight supported by a film of the same liquid at the same temperature in Fig. (b) and (c)? Explain your answer physically.",
+    "sub_parts": null,
+    "correct_answer_plain": "4.5×10⁻² N for both (b) and (c), same as (a)",
+    "correct_answer_latex": "$4.5 \\times 10^{-2}$ N for both (b) and (c), same as (a)",
+    "hint": "Surface tension is independent of area. Force depends only on length of contact.",
+    "solution_steps_latex": [
+      "**Given**: Film in (a) supports weight $F = 4.5 \\times 10^{-2}$ N",
+      "**Question**: Weight supported in (b) and (c)?",
+      "**Answer**: **Same weight** = $4.5 \\times 10^{-2}$ N in both cases",
+      "**Physical Explanation**:",
+      "**Surface tension** $S$ is a **property of the liquid** (independent of area)",
+      "Force due to surface tension = $F = S \\times 2L$",
+      "where $L$ is the **length of the slider** (not the area of film)",
+      "Factor of 2 because film has **two surfaces**",
+      "**In figures (b) and (c)**:",
+      "The **length of slider** is the **same** as in (a)",
+      "The **liquid is the same** (same $S$)",
+      "The **temperature is the same** (so $S$ doesn't change)",
+      "Therefore, **force remains the same** = $S \\times 2L$",
+      "**Note**: The **shape** or **area** of the film doesn't matter",
+      "Only the **perimeter length** in contact with slider matters",
+      "This demonstrates that **surface tension is independent of surface area**"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Three diagrams (a), (b), (c) showing soap films of different shapes/areas but same slider length, all supporting weights.",
+      "figure_reference": "Figure 9.21"
+    },
+    "physical_quantities": {
+      "given": [
+        "Weight in (a): 4.5×10⁻² N",
+        "Same liquid, same temperature",
+        "Same slider length"
+      ],
+      "to_find": [
+        "Weight in (b) and (c)"
+      ],
+      "formulas_used": [
+        "$F = 2SL$",
+        "Surface tension independent of area"
+      ]
+    },
+    "tags": [
+      "surface-tension",
+      "force-independence",
+      "area-independence",
+      "conceptual"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.18",
+      "page": 201
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Excess Pressure in Drops",
+    "exercise": "Exercise 9.19",
+    "question_number": "Q9.19",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "What is the pressure inside the drop of mercury of radius 3.00 mm at room temperature? Surface tension of mercury at that temperature (20°C) is 4.65 × 10⁻¹ N/m. The atmospheric pressure is 1.01 × 10⁵ Pa. Also give the excess pressure inside the drop.",
+    "question_latex": "What is the pressure inside the drop of mercury of radius 3.00 mm at room temperature? Surface tension of mercury at that temperature (20°C) is $4.65 \\times 10^{-1}$ N/m. The atmospheric pressure is $1.01 \\times 10^5$ Pa. Also give the excess pressure inside the drop.",
+    "sub_parts": null,
+    "correct_answer_plain": "Excess pressure = 310 Pa; Total pressure = 1.01×10⁵ Pa (to 3 sig figs)",
+    "correct_answer_latex": "Excess pressure = 310 Pa; Total pressure = $1.01 \\times 10^5$ Pa (to 3 sig figs)",
+    "hint": "Excess pressure in drop = 2S/r. Total = P_atm + excess.",
+    "solution_steps_latex": [
+      "**Given**:",
+      "Radius $r = 3.00$ mm $= 3.00 \\times 10^{-3}$ m",
+      "Surface tension $S = 4.65 \\times 10^{-1}$ N/m $= 0.465$ N/m",
+      "Atmospheric pressure $P_0 = 1.01 \\times 10^5$ Pa",
+      "**Excess pressure** in a spherical drop (one free surface):",
+      "$\\Delta P = \\frac{2S}{r}$",
+      "$\\Delta P = \\frac{2 \\times 0.465}{3.00 \\times 10^{-3}}$",
+      "$\\Delta P = \\frac{0.93}{3.00 \\times 10^{-3}}$",
+      "$\\Delta P = 310$ Pa",
+      "**Total pressure inside drop**:",
+      "$P_{\\text{inside}} = P_0 + \\Delta P$",
+      "$P_{\\text{inside}} = 1.01 \\times 10^5 + 310$",
+      "$P_{\\text{inside}} = 101,310$ Pa",
+      "$P_{\\text{inside}} = 1.0131 \\times 10^5$ Pa",
+      "**However**, since data is given to **3 significant figures**:",
+      "We should write total pressure as $P_{\\text{inside}} = 1.01 \\times 10^5$ Pa",
+      "(The excess pressure 310 Pa is negligible compared to atmospheric pressure)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Drop radius: 3.00 mm",
+        "Surface tension: 0.465 N/m",
+        "Atmospheric pressure: 1.01×10⁵ Pa"
+      ],
+      "to_find": [
+        "Excess pressure",
+        "Total pressure inside drop"
+      ],
+      "formulas_used": [
+        "$\\Delta P = \\frac{2S}{r}$ (for drop)",
+        "$P_{\\text{total}} = P_0 + \\Delta P$"
+      ]
+    },
+    "tags": [
+      "excess-pressure",
+      "mercury-drop",
+      "surface-tension",
+      "spherical-drop",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.19",
+      "page": 201
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 9: Mechanical Properties of Fluids",
+    "section": "Excess Pressure in Bubbles",
+    "exercise": "Exercise 9.20",
+    "question_number": "Q9.20",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "What is the excess pressure inside a bubble of soap solution of radius 5.00 mm, given that the surface tension of soap solution at the temperature (20°C) is 2.50 × 10⁻² N/m? If an air bubble of the same dimension were formed at depth of 40.0 cm inside a container containing the soap solution (of relative density 1.20), what would be the pressure inside the bubble? (1 atmospheric pressure is 1.01 × 10⁵ Pa).",
+    "question_latex": "What is the excess pressure inside a bubble of soap solution of radius 5.00 mm, given that the surface tension of soap solution at the temperature (20°C) is $2.50 \\times 10^{-2}$ N/m? If an air bubble of the same dimension were formed at depth of 40.0 cm inside a container containing the soap solution (of relative density 1.20), what would be the pressure inside the bubble? (1 atmospheric pressure is $1.01 \\times 10^5$ Pa).",
+    "sub_parts": null,
+    "correct_answer_plain": "Soap bubble excess = 20.0 Pa; Air bubble excess = 10.0 Pa; Total pressure in air bubble = 1.06×10⁵ Pa",
+    "correct_answer_latex": "Soap bubble excess = 20.0 Pa; Air bubble excess = 10.0 Pa; Total pressure in air bubble = $1.06 \\times 10^5$ Pa",
+    "hint": "Soap bubble: ΔP = 4S/r (two surfaces). Air bubble in liquid: ΔP = 2S/r (one surface). Add hydrostatic pressure.",
+    "solution_steps_latex": [
+      "**Part 1: Excess pressure in soap bubble (in air)**",
+      "**Given**: $r = 5.00$ mm $= 5.00 \\times 10^{-3}$ m, $S = 2.50 \\times 10^{-2}$ N/m",
+      "**Soap bubble has TWO surfaces** (inside and outside):",
+      "$\\Delta P_{\\text{soap}} = \\frac{4S}{r}$",
+      "$\\Delta P_{\\text{soap}} = \\frac{4 \\times 2.50 \\times 10^{-2}}{5.00 \\times 10^{-3}}$",
+      "$\\Delta P_{\\text{soap}} = \\frac{0.10}{5.00 \\times 10^{-3}} = 20.0$ Pa",
+      "**Part 2: Air bubble in soap solution at depth**",
+      "**Given**: Depth $h = 40.0$ cm $= 0.40$ m",
+      "Relative density of solution $= 1.20$",
+      "Density $\\rho = 1.20 \\times 1000 = 1200$ kg/m$^3$",
+      "**Air bubble has ONE surface** (liquid-air interface):",
+      "$\\Delta P_{\\text{air}} = \\frac{2S}{r} = \\frac{2 \\times 2.50 \\times 10^{-2}}{5.00 \\times 10^{-3}}$",
+      "$\\Delta P_{\\text{air}} = \\frac{0.05}{5.00 \\times 10^{-3}} = 10.0$ Pa",
+      "**Outside pressure** (at depth 40 cm):",
+      "$P_{\\text{outside}} = P_0 + \\rho g h$",
+      "$P_{\\text{outside}} = 1.01 \\times 10^5 + 1200 \\times 9.8 \\times 0.40$",
+      "$P_{\\text{outside}} = 1.01 \\times 10^5 + 4704$",
+      "$P_{\\text{outside}} = 1.01 \\times 10^5 + 0.047 \\times 10^5$",
+      "$P_{\\text{outside}} = 1.057 \\times 10^5$ Pa",
+      "**Total pressure inside air bubble**:",
+      "$P_{\\text{inside}} = P_{\\text{outside}} + \\Delta P_{\\text{air}}$",
+      "$P_{\\text{inside}} = 1.057 \\times 10^5 + 10.0$",
+      "$P_{\\text{inside}} = 1.058 \\times 10^5$ Pa",
+      "To 3 significant figures: $P_{\\text{inside}} = 1.06 \\times 10^5$ Pa",
+      "(Excess pressure 10 Pa is negligible compared to hydrostatic pressure)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Bubble radius: 5.00 mm",
+        "Surface tension: 2.50×10⁻² N/m",
+        "Depth: 40.0 cm",
+        "Solution density: 1.20×10³ kg/m³",
+        "Atmospheric pressure: 1.01×10⁵ Pa"
+      ],
+      "to_find": [
+        "Excess pressure in soap bubble",
+        "Pressure in air bubble at depth"
+      ],
+      "formulas_used": [
+        "$\\Delta P = \\frac{4S}{r}$ (soap bubble, 2 surfaces)",
+        "$\\Delta P = \\frac{2S}{r}$ (air bubble, 1 surface)",
+        "$P = P_0 + \\rho gh$"
+      ]
+    },
+    "tags": [
+      "excess-pressure",
+      "soap-bubble",
+      "air-bubble",
+      "surface-tension",
+      "hydrostatic-pressure",
+      "numerical-problem"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 9,
+      "exercise": "Exercise",
+      "question_number": "Q9.20",
+      "page": 201
+    }
+  }
+]

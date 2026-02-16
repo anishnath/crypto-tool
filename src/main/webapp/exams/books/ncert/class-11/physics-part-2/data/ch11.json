@@ -1,0 +1,689 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Heat and Work",
+    "exercise": "Exercise",
+    "question_number": "Q11.1",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A geyser heats water flowing at the rate of 3.0 litres per minute from 27 °C to 77 °C. If the geyser operates on a gas burner, what is the rate of consumption of the fuel if its heat of combustion is 4.0×10⁴ J/g?",
+    "question_latex": "A geyser heats water flowing at the rate of $3.0$ litres per minute from $27$ °C to $77$ °C. If the geyser operates on a gas burner, what is the rate of consumption of the fuel if its heat of combustion is $4.0 \\times 10^4$ J/g?",
+    "sub_parts": null,
+    "correct_answer_plain": "16 g per min",
+    "correct_answer_latex": "$16$ g per min",
+    "hint": "Heat required per minute = mass of water × specific heat × ΔT. Divide by heat of combustion to get fuel consumption.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Rate of water flow: $3.0$ litres/min $= 3000$ g/min (since density of water = 1 g/mL)",
+      "Initial temperature: $T_i = 27$ °C",
+      "Final temperature: $T_f = 77$ °C",
+      "Heat of combustion of fuel: $H = 4.0 \\times 10^4$ J/g",
+      "Specific heat of water: $c = 4.18$ J g$^{-1}$ K$^{-1}$ (or 4200 J kg$^{-1}$ K$^{-1}$)",
+      "**Step 1:** Temperature rise:",
+      "$\\Delta T = 77 - 27 = 50$ K",
+      "**Step 2:** Heat required per minute to heat water:",
+      "$Q = mc\\Delta T$",
+      "$Q = 3000 \\times 4.18 \\times 50$",
+      "$Q = 627,000$ J/min",
+      "**Step 3:** Mass of fuel required per minute:",
+      "Heat from fuel: $Q = m_{fuel} \\times H$",
+      "$m_{fuel} = \\frac{Q}{H} = \\frac{627,000}{4.0 \\times 10^4}$",
+      "$m_{fuel} = \\frac{627,000}{40,000} = 15.675$ g/min",
+      "$m_{fuel} \\approx 16$ g/min",
+      "**Answer:** Rate of fuel consumption is $16$ g per minute"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Water flow rate: 3.0 L/min",
+        "T_initial: 27 °C",
+        "T_final: 77 °C",
+        "Heat of combustion: 4.0×10⁴ J/g",
+        "c_water: 4.18 J g⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Rate of fuel consumption"
+      ],
+      "formulas_used": [
+        "$Q = mc\\Delta T$",
+        "$Q = m_{fuel} \\times H$"
+      ]
+    },
+    "tags": [
+      "heat-transfer",
+      "combustion",
+      "specific-heat",
+      "calorimetry",
+      "energy-efficiency"
+    ],
+    "calculator": "q11-geyser-fuel-rate",
+    "calculator_slug": "q11-geyser-fuel-rate",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.1",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Molar Specific Heat",
+    "exercise": "Exercise",
+    "question_number": "Q11.2",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "What amount of heat must be supplied to 2.0×10⁻² kg of nitrogen (at room temperature) to raise its temperature by 45 °C at constant pressure? (Molecular mass of N₂ = 28; R = 8.3 J mol⁻¹ K⁻¹.)",
+    "question_latex": "What amount of heat must be supplied to $2.0 \\times 10^{-2}$ kg of nitrogen (at room temperature) to raise its temperature by $45$ °C at constant pressure? (Molecular mass of N$_2$ = $28$; $R = 8.3$ J mol$^{-1}$ K$^{-1}$.)",
+    "sub_parts": null,
+    "correct_answer_plain": "934 J",
+    "correct_answer_latex": "$934$ J",
+    "hint": "For diatomic gas at constant pressure: C_p = (7/2)R. Q = nC_pΔT. Find n from mass and molar mass.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Mass of nitrogen: $m = 2.0 \\times 10^{-2}$ kg $= 20$ g",
+      "Molecular mass of N$_2$: $M = 28$ g/mol",
+      "Temperature rise: $\\Delta T = 45$ K",
+      "Gas constant: $R = 8.3$ J mol$^{-1}$ K$^{-1}$",
+      "**Step 1:** Number of moles:",
+      "$n = \\frac{m}{M} = \\frac{20}{28} = 0.714$ mol",
+      "**Step 2:** Molar specific heat at constant pressure for diatomic gas:",
+      "For diatomic gas (N$_2$): $C_p = \\frac{7}{2}R$",
+      "$C_p = \\frac{7}{2} \\times 8.3 = 3.5 \\times 8.3 = 29.05$ J mol$^{-1}$ K$^{-1}$",
+      "**Relation:** $C_p = C_v + R$",
+      "For diatomic: $C_v = \\frac{5}{2}R$, so $C_p = \\frac{5}{2}R + R = \\frac{7}{2}R$",
+      "**Step 3:** Heat required at constant pressure:",
+      "$Q = nC_p\\Delta T$",
+      "$Q = 0.714 \\times 29.05 \\times 45$",
+      "$Q = 933.4$ J",
+      "$Q \\approx 934$ J",
+      "**Answer:** Heat required is $934$ J"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "m: 2.0×10⁻² kg = 20 g",
+        "M_N₂: 28 g/mol",
+        "ΔT: 45 K",
+        "R: 8.3 J mol⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Heat supplied at constant pressure"
+      ],
+      "formulas_used": [
+        "$n = \\frac{m}{M}$",
+        "$C_p = \\frac{7}{2}R$ (diatomic)",
+        "$Q = nC_p\\Delta T$"
+      ]
+    },
+    "tags": [
+      "molar-specific-heat",
+      "diatomic-gas",
+      "constant-pressure",
+      "thermodynamics"
+    ],
+    "calculator": "q11-molar-specific-heat-cp",
+    "calculator_slug": "q11-molar-specific-heat-cp",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.2",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Thermodynamic Processes",
+    "exercise": "Exercise",
+    "question_number": "Q11.3",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Explain why: (a) Two bodies at different temperatures T₁ and T₂ if brought in thermal contact do not necessarily settle to the mean temperature (T₁ + T₂)/2. (b) The coolant in a chemical or a nuclear plant (i.e., the liquid used to prevent the different parts of a plant from getting too hot) should have high specific heat. (c) Air pressure in a car tyre increases during driving. (d) The climate of a harbour town is more temperate than that of a town in a desert at the same latitude.",
+    "question_latex": "Explain why: (a) Two bodies at different temperatures $T_1$ and $T_2$ if brought in thermal contact do not necessarily settle to the mean temperature $(T_1 + T_2)/2$. (b) The coolant in a chemical or a nuclear plant (i.e., the liquid used to prevent the different parts of a plant from getting too hot) should have high specific heat. (c) Air pressure in a car tyre increases during driving. (d) The climate of a harbour town is more temperate than that of a town in a desert at the same latitude.",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) Final temperature depends on heat capacities: T_f = (m₁c₁T₁ + m₂c₂T₂)/(m₁c₁ + m₂c₂). (b) High specific heat means it can absorb large amounts of heat with small temperature rise. (c) Friction generates heat, increasing temperature and pressure (Gay-Lussac's law). (d) Water has high specific heat, moderates temperature fluctuations.",
+    "correct_answer_latex": "(a) Final temperature depends on heat capacities: $T_f = \\frac{m_1c_1T_1 + m_2c_2T_2}{m_1c_1 + m_2c_2}$. (b) High specific heat means it can absorb large amounts of heat with small temperature rise. (c) Friction generates heat, increasing temperature and pressure (Gay-Lussac's law). (d) Water has high specific heat, moderates temperature fluctuations.",
+    "hint": "(a) Consider heat capacities (b) Q = mcΔT (c) Friction→Heat (d) Water's high specific heat",
+    "solution_steps_latex": [
+      "**(a) Why not mean temperature:**",
+      "**Principle of Calorimetry:** Heat lost = Heat gained",
+      "For two bodies with masses $m_1$, $m_2$ and specific heats $c_1$, $c_2$:",
+      "$m_1c_1(T_1 - T_f) = m_2c_2(T_f - T_2)$ (assuming $T_1 > T_2$)",
+      "$m_1c_1T_1 - m_1c_1T_f = m_2c_2T_f - m_2c_2T_2$",
+      "$m_1c_1T_1 + m_2c_2T_2 = T_f(m_1c_1 + m_2c_2)$",
+      "$T_f = \\frac{m_1c_1T_1 + m_2c_2T_2}{m_1c_1 + m_2c_2}$",
+      "**This equals mean** $\\frac{T_1 + T_2}{2}$ **only if** $m_1c_1 = m_2c_2$ (equal heat capacities)",
+      "**Example:** If $m_1c_1 >> m_2c_2$, then $T_f \\approx T_1$ (final temperature closer to body 1)",
+      "**(b) Why coolant needs high specific heat:**",
+      "$Q = mc\\Delta T$ → $\\Delta T = \\frac{Q}{mc}$",
+      "For a given heat absorbed $Q$ and mass $m$:",
+      "• **High $c$** → **Small $\\Delta T$** (temperature rise is small)",
+      "• Coolant can absorb **large amounts of heat** without getting too hot",
+      "• Prevents overheating of plant components",
+      "• Water is commonly used (high $c = 4200$ J kg$^{-1}$ K$^{-1}$)",
+      "**(c) Why tyre pressure increases during driving:**",
+      "**Causes:**",
+      "1. **Friction** between tyre and road generates heat",
+      "2. **Repeated compression** and expansion of tyre (flexing) generates heat",
+      "**Effect:**",
+      "• Temperature of air inside tyre **increases**",
+      "• For approximately constant volume: **Gay-Lussac's Law** $\\frac{P}{T} = $ constant",
+      "• $\\frac{P_1}{T_1} = \\frac{P_2}{T_2}$ → If $T_2 > T_1$, then $P_2 > P_1$",
+      "• **Pressure increases** proportionally with absolute temperature",
+      "**(d) Why harbour towns have temperate climate:**",
+      "**Key factor:** Water has **very high specific heat** ($c_{water} = 4200$ J kg$^{-1}$ K$^{-1}$)",
+      "**Comparison:** $c_{sand} \\approx 800$ J kg$^{-1}$ K$^{-1}$ (desert)",
+      "**During day:**",
+      "• Both absorb same solar energy",
+      "• Water: Small temperature rise ($\\Delta T = \\frac{Q}{mc}$ is small)",
+      "• Sand: Large temperature rise (desert gets very hot)",
+      "**During night:**",
+      "• Water: Releases heat slowly, small temperature drop (stays warm)",
+      "• Sand: Releases heat quickly, large temperature drop (desert gets very cold)",
+      "**Result:** Harbour towns have **moderate temperatures** year-round",
+      "• Smaller temperature fluctuations (day-night, summer-winter)",
+      "• Desert towns have **extreme temperatures** (very hot days, very cold nights)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various thermodynamic scenarios"
+      ],
+      "to_find": [
+        "Explanations for thermal phenomena"
+      ],
+      "formulas_used": [
+        "$Q = mc\\Delta T$",
+        "Heat lost = Heat gained",
+        "$\\frac{P}{T} = $ constant (Gay-Lussac's law)"
+      ]
+    },
+    "tags": [
+      "thermal-equilibrium",
+      "specific-heat",
+      "gay-lussacs-law",
+      "heat-capacity",
+      "climate"
+    ],
+    "calculator": "q11-thermal-equilibrium",
+    "calculator_slug": "q11-thermal-equilibrium",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.3",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Adiabatic Process",
+    "exercise": "Exercise",
+    "question_number": "Q11.4",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A cylinder with a movable piston contains 3 moles of hydrogen at standard temperature and pressure. The walls of the cylinder are made of a heat insulator, and the piston is insulated by having a pile of sand on it. By what factor does the pressure of the gas increase if the gas is compressed to half its original volume?",
+    "question_latex": "A cylinder with a movable piston contains $3$ moles of hydrogen at standard temperature and pressure. The walls of the cylinder are made of a heat insulator, and the piston is insulated by having a pile of sand on it. By what factor does the pressure of the gas increase if the gas is compressed to half its original volume?",
+    "sub_parts": null,
+    "correct_answer_plain": "2.64",
+    "correct_answer_latex": "$2.64$",
+    "hint": "Adiabatic process (no heat exchange). Use PVᵞ = constant. For H₂ (diatomic), γ = 7/5 = 1.4.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Number of moles: $n = 3$ mol",
+      "Gas: Hydrogen (H$_2$) - diatomic",
+      "Initial state: STP (Standard Temperature and Pressure)",
+      "Process: **Adiabatic** (heat insulated walls and piston)",
+      "Volume change: $V_2 = \\frac{V_1}{2}$",
+      "**Step 1:** For adiabatic process:",
+      "$PV^{\\gamma} = $ constant",
+      "$P_1V_1^{\\gamma} = P_2V_2^{\\gamma}$",
+      "**Step 2:** Value of γ for diatomic gas (H$_2$):",
+      "$\\gamma = \\frac{C_p}{C_v} = \\frac{7/2 R}{5/2 R} = \\frac{7}{5} = 1.4$",
+      "**Step 3:** Finding pressure ratio:",
+      "$\\frac{P_2}{P_1} = \\left(\\frac{V_1}{V_2}\\right)^{\\gamma}$",
+      "$\\frac{P_2}{P_1} = \\left(\\frac{V_1}{V_1/2}\\right)^{1.4}$",
+      "$\\frac{P_2}{P_1} = 2^{1.4}$",
+      "**Step 4:** Calculating $2^{1.4}$:",
+      "$2^{1.4} = 2^{7/5} = (2^7)^{1/5} = 128^{1/5} = 128^{0.2}$",
+      "Using logarithms or calculator:",
+      "$2^{1.4} = 2.639 \\approx 2.64$",
+      "**Answer:** Pressure increases by a factor of $2.64$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "n: 3 moles H₂",
+        "Initial: STP",
+        "V₂ = V₁/2",
+        "Process: Adiabatic",
+        "γ: 1.4 (diatomic)"
+      ],
+      "to_find": [
+        "Pressure ratio P₂/P₁"
+      ],
+      "formulas_used": [
+        "$PV^{\\gamma} = $ constant",
+        "$\\gamma = \\frac{C_p}{C_v}$"
+      ]
+    },
+    "tags": [
+      "adiabatic-process",
+      "diatomic-gas",
+      "compression",
+      "thermodynamics"
+    ],
+    "calculator": "q11-adiabatic-pressure-ratio",
+    "calculator_slug": "q11-adiabatic-pressure-ratio",
+    "interactive_plot": "q11-adiabatic-pv",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.4",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "First Law of Thermodynamics",
+    "exercise": "Exercise",
+    "question_number": "Q11.5",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "In changing the state of a gas adiabatically from an equilibrium state A to another equilibrium state B, an amount of work equal to 22.3 J is done on the system. If the gas is taken from state A to B via a process in which the net heat absorbed by the system is 9.35 cal, how much is the net work done by the system in the latter case? (Take 1 cal = 4.19 J)",
+    "question_latex": "In changing the state of a gas adiabatically from an equilibrium state A to another equilibrium state B, an amount of work equal to $22.3$ J is done on the system. If the gas is taken from state A to B via a process in which the net heat absorbed by the system is $9.35$ cal, how much is the net work done by the system in the latter case? (Take $1$ cal $= 4.19$ J)",
+    "sub_parts": null,
+    "correct_answer_plain": "16.9 J",
+    "correct_answer_latex": "$16.9$ J",
+    "hint": "ΔU is same for both paths (state function). Adiabatic: Q=0, ΔU=-W. Second path: ΔU = Q - W.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "**Path 1 (Adiabatic A→B):** Work done **on** system: $W_1 = 22.3$ J",
+      "**Path 2 (A→B):** Heat absorbed **by** system: $Q_2 = 9.35$ cal",
+      "Conversion: $1$ cal $= 4.19$ J",
+      "**Key concept:** Internal energy $U$ is a **state function**",
+      "→ Change in internal energy $\\Delta U$ depends only on initial and final states, **not on path**",
+      "$\\Delta U_{A \\to B}$ is **same** for both processes",
+      "**Step 1:** For adiabatic process (Path 1):",
+      "Adiabatic → $Q_1 = 0$ (no heat exchange)",
+      "First law: $\\Delta U = Q - W$",
+      "Sign convention: Work done **on** system is **negative** for work term",
+      "$\\Delta U_1 = Q_1 - W_1 = 0 - (-22.3) = 22.3$ J",
+      "**Alternative sign convention:** If $W_{on}$ is work done on system:",
+      "$\\Delta U = Q + W_{on} = 0 + 22.3 = 22.3$ J",
+      "**Step 2:** Convert heat in second process:",
+      "$Q_2 = 9.35$ cal $= 9.35 \\times 4.19 = 39.18$ J",
+      "**Step 3:** For second process (Path 2):",
+      "$\\Delta U_2 = \\Delta U_1 = 22.3$ J (same states)",
+      "First law: $\\Delta U_2 = Q_2 - W_2$",
+      "$22.3 = 39.18 - W_2$",
+      "$W_2 = 39.18 - 22.3 = 16.88$ J",
+      "$W_2 \\approx 16.9$ J",
+      "**Answer:** Net work done **by** the system in the second case is $16.9$ J",
+      "**Physical interpretation:**",
+      "• System absorbs $39.18$ J of heat",
+      "• Internal energy increases by only $22.3$ J",
+      "• Remaining $16.9$ J is converted to **work done by the system**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Path 1 (Adiabatic): W_on = 22.3 J",
+        "Path 2: Q = 9.35 cal = 39.18 J"
+      ],
+      "to_find": [
+        "Work done by system in Path 2"
+      ],
+      "formulas_used": [
+        "$\\Delta U = Q - W$",
+        "First law of thermodynamics",
+        "ΔU is path-independent"
+      ]
+    },
+    "tags": [
+      "first-law-thermodynamics",
+      "adiabatic-process",
+      "state-function",
+      "internal-energy"
+    ],
+    "calculator": "q11-first-law-deltaU",
+    "calculator_slug": "q11-first-law-deltaU",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.5",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Free Expansion",
+    "exercise": "Exercise",
+    "question_number": "Q11.6",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "Two cylinders A and B of equal capacity are connected to each other via a stopcock. A contains a gas at standard temperature and pressure. B is completely evacuated. The entire system is thermally insulated. The stopcock is suddenly opened. Answer the following: (a) What is the final pressure of the gas in A and B? (b) What is the change in internal energy of the gas? (c) What is the change in the temperature of the gas? (d) Do the intermediate states of the system (before settling to the final equilibrium state) lie on its P-V-T surface?",
+    "question_latex": "Two cylinders A and B of equal capacity are connected to each other via a stopcock. A contains a gas at standard temperature and pressure. B is completely evacuated. The entire system is thermally insulated. The stopcock is suddenly opened. Answer the following: (a) What is the final pressure of the gas in A and B? (b) What is the change in internal energy of the gas? (c) What is the change in the temperature of the gas? (d) Do the intermediate states of the system (before settling to the final equilibrium state) lie on its P-V-T surface?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) 0.5 atm (b) zero (c) zero (assuming the gas to be ideal) (d) No, since the process (called free expansion) is rapid and cannot be controlled. The intermediate states are non-equilibrium states and do not satisfy the gas equation. In due course, the gas does return to an equilibrium state.",
+    "correct_answer_latex": "(a) $0.5$ atm (b) zero (c) zero (assuming the gas to be ideal) (d) No, since the process (called free expansion) is rapid and cannot be controlled. The intermediate states are non-equilibrium states and do not satisfy the gas equation. In due course, the gas does return to an equilibrium state.",
+    "hint": "Free expansion: Q=0 (insulated), W=0 (expansion into vacuum). ΔU=0 for ideal gas.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Cylinder A: Gas at STP (1 atm, 273 K)",
+      "Cylinder B: Evacuated (vacuum)",
+      "Volumes: $V_A = V_B$ (equal capacity)",
+      "System: Thermally insulated",
+      "Process: **Free expansion** (expansion into vacuum)",
+      "**(a) Final pressure:**",
+      "**Initial state:**",
+      "• A: $P_1 = 1$ atm, $V_1 = V_A$",
+      "• B: vacuum",
+      "**Final state:**",
+      "• Gas occupies both cylinders",
+      "• Total volume: $V_2 = V_A + V_B = 2V_A$",
+      "**For isothermal process** (temperature constant for ideal gas, see part c):",
+      "$P_1V_1 = P_2V_2$",
+      "$1 \\times V_A = P_2 \\times 2V_A$",
+      "$P_2 = \\frac{1}{2} = 0.5$ atm",
+      "**Final pressure in both A and B:** $0.5$ atm",
+      "**(b) Change in internal energy:**",
+      "**Free expansion characteristics:**",
+      "• $Q = 0$ (thermally insulated, no heat exchange)",
+      "• $W = 0$ (gas expands into vacuum, no external pressure to work against)",
+      "**First law:** $\\Delta U = Q - W = 0 - 0 = 0$",
+      "**Change in internal energy:** $\\Delta U = 0$",
+      "**(c) Change in temperature:**",
+      "For **ideal gas:** Internal energy depends only on temperature",
+      "$U = nC_VT$ (for ideal gas)",
+      "Since $\\Delta U = 0$ (from part b):",
+      "$nC_V\\Delta T = 0$",
+      "$\\Delta T = 0$",
+      "**Temperature remains constant** (isothermal free expansion)",
+      "**Note:** For real gases, $\\Delta T \\neq 0$ (Joule-Thomson effect)",
+      "**(d) Intermediate states on P-V-T surface:**",
+      "**No**, intermediate states do **not** lie on P-V-T surface",
+      "**Reasons:**",
+      "1. **Non-equilibrium process:** Expansion is **rapid and uncontrolled**",
+      "2. **No uniform state:** During expansion, different parts of gas have different P, V, T",
+      "3. **Turbulence:** Gas rushes into vacuum, creating eddies and non-uniform flow",
+      "4. **Not quasi-static:** Cannot define single P, V, T for entire system at intermediate times",
+      "**P-V-T surface** represents **equilibrium states** only",
+      "• Initial state (all gas in A): **on** P-V-T surface ✓",
+      "• Final state (gas in both A and B): **on** P-V-T surface ✓",
+      "• Intermediate states: **NOT** on P-V-T surface ✗",
+      "**Eventually:** System settles to new equilibrium state"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "A: Gas at STP (1 atm, 273 K)",
+        "B: Evacuated",
+        "V_A = V_B",
+        "System: Thermally insulated"
+      ],
+      "to_find": [
+        "Final pressure",
+        "Change in internal energy",
+        "Change in temperature",
+        "Status of intermediate states"
+      ],
+      "formulas_used": [
+        "$PV = nRT$",
+        "$\\Delta U = Q - W$",
+        "For ideal gas: $U = nC_VT$"
+      ]
+    },
+    "tags": [
+      "free-expansion",
+      "first-law-thermodynamics",
+      "ideal-gas",
+      "non-equilibrium-process",
+      "isothermal-process"
+    ],
+    "p5_sketch": "q11-6-free-expansion",
+    "p5_sketch_slug": "q11-6-free-expansion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.6",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "First Law of Thermodynamics",
+    "exercise": "Exercise",
+    "question_number": "Q11.7",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "An electric heater supplies heat to a system at a rate of 100W. If system performs work at a rate of 75 joules per second. At what rate is the internal energy increasing?",
+    "question_latex": "An electric heater supplies heat to a system at a rate of $100$W. If system performs work at a rate of $75$ joules per second. At what rate is the internal energy increasing?",
+    "sub_parts": null,
+    "correct_answer_plain": "25 W",
+    "correct_answer_latex": "$25$ W",
+    "hint": "First law: dU/dt = dQ/dt - dW/dt. Heat in = 100 W, Work out = 75 W.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Rate of heat supply: $\\frac{dQ}{dt} = 100$ W $= 100$ J/s",
+      "Rate of work done **by** system: $\\frac{dW}{dt} = 75$ J/s",
+      "**First Law of Thermodynamics:**",
+      "$\\Delta U = Q - W$",
+      "**Taking time derivative:**",
+      "$\\frac{d(\\Delta U)}{dt} = \\frac{dQ}{dt} - \\frac{dW}{dt}$",
+      "$\\frac{dU}{dt} = \\frac{dQ}{dt} - \\frac{dW}{dt}$",
+      "**Step 1:** Rate of change of internal energy:",
+      "$\\frac{dU}{dt} = 100 - 75 = 25$ J/s $= 25$ W",
+      "**Answer:** Internal energy is increasing at the rate of $25$ W (or $25$ J/s)",
+      "**Physical interpretation:**",
+      "• System receives $100$ J/s as heat",
+      "• System does $75$ J/s of work on surroundings",
+      "• Net increase in internal energy: $25$ J/s"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "dQ/dt: 100 W",
+        "dW/dt: 75 J/s"
+      ],
+      "to_find": [
+        "Rate of increase of internal energy dU/dt"
+      ],
+      "formulas_used": [
+        "$\\frac{dU}{dt} = \\frac{dQ}{dt} - \\frac{dW}{dt}$"
+      ]
+    },
+    "tags": [
+      "first-law-thermodynamics",
+      "power",
+      "internal-energy",
+      "rate-of-change"
+    ],
+    "calculator": "q11-first-law-rate",
+    "calculator_slug": "q11-first-law-rate",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.7",
+      "page": 242
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 11: Thermodynamics",
+    "section": "Work Done in Thermodynamic Processes",
+    "exercise": "Exercise",
+    "question_number": "Q11.8",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A thermodynamic system is taken from an original state to an intermediate state by the linear process shown in Fig. (11.13). Its volume is then reduced to the original value from E to F by an isobaric process. Calculate the total work done by the gas from D to E to F.",
+    "question_latex": "A thermodynamic system is taken from an original state to an intermediate state by the linear process shown in Fig. (11.13). Its volume is then reduced to the original value from E to F by an isobaric process. Calculate the total work done by the gas from D to E to F.",
+    "sub_parts": null,
+    "correct_answer_plain": "450 J",
+    "correct_answer_latex": "$450$ J",
+    "hint": "Work = Area under P-V curve. D→E: trapezoid area. E→F: rectangle (negative, compression).",
+    "solution_steps_latex": [
+      "**From the figure (Fig. 11.11):**",
+      "Point D: $P_D = 600$ N/m$^2$, $V_D = 2.0$ m$^3$",
+      "Point E: $P_E = 300$ N/m$^2$, $V_E = 5.0$ m$^3$",
+      "Point F: $P_F = 300$ N/m$^2$, $V_F = 2.0$ m$^3$",
+      "**Path D→E:** Linear process (straight line on P-V diagram)",
+      "**Path E→F:** Isobaric process (constant pressure)",
+      "**Work done by gas = Area under P-V curve**",
+      "**Step 1: Work done in process D→E**",
+      "Linear process forms a **trapezoid** under the curve",
+      "Area of trapezoid $= \\frac{1}{2}(P_D + P_E)(V_E - V_D)$",
+      "$W_{D \\to E} = \\frac{1}{2}(600 + 300)(5.0 - 2.0)$",
+      "$W_{D \\to E} = \\frac{1}{2} \\times 900 \\times 3.0$",
+      "$W_{D \\to E} = 450 \\times 3.0 = 1350$ J",
+      "**Step 2: Work done in process E→F**",
+      "Isobaric (constant pressure) process:",
+      "$W_{E \\to F} = P_E(V_F - V_E)$",
+      "$W_{E \\to F} = 300(2.0 - 5.0)$",
+      "$W_{E \\to F} = 300 \\times (-3.0) = -900$ J",
+      "**Negative** because gas is **compressed** (volume decreases)",
+      "**Step 3: Total work done from D→E→F**",
+      "$W_{total} = W_{D \\to E} + W_{E \\to F}$",
+      "$W_{total} = 1350 + (-900) = 450$ J",
+      "**Answer:** Total work done by the gas is $450$ J",
+      "**Verification:** Net area under curve = Area of trapezoid - Area of rectangle",
+      "$= 1350 - 900 = 450$ J ✓"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": true,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "P-V diagram showing path D→E (linear) and E→F (isobaric). D at (2.0 m³, 600 N/m²), E at (5.0 m³, 300 N/m²), F at (2.0 m³, 300 N/m²)",
+      "figure_reference": "Fig. 11.11"
+    },
+    "physical_quantities": {
+      "given": [
+        "D: V = 2.0 m³, P = 600 N/m²",
+        "E: V = 5.0 m³, P = 300 N/m²",
+        "F: V = 2.0 m³, P = 300 N/m²"
+      ],
+      "to_find": [
+        "Total work done from D→E→F"
+      ],
+      "formulas_used": [
+        "$W = \\int P dV$ (area under curve)",
+        "$W = P\\Delta V$ (isobaric)",
+        "Area of trapezoid: $\\frac{1}{2}(b_1 + b_2)h$"
+      ]
+    },
+    "tags": [
+      "work-done",
+      "pv-diagram",
+      "isobaric-process",
+      "linear-process",
+      "thermodynamic-cycles"
+    ],
+    "p5_sketch": "q11-8-pv-diagram",
+    "p5_sketch_slug": "q11-8-pv-diagram",
+    "calculator": "q11-pv-work-trapezoid",
+    "calculator_slug": "q11-pv-work-trapezoid",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 11,
+      "exercise": "Exercise",
+      "question_number": "Q11.8",
+      "page": 243
+    }
+  }
+]

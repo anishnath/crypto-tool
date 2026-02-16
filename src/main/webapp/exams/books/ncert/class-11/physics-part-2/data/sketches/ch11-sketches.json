@@ -1,0 +1,14 @@
+{
+  "q11-6-free-expansion": {
+    "type": "free-expansion-demo",
+    "title": "Free Expansion (Q11.6)",
+    "description": "Gas expands into vacuum. Q=0, W=0, ΔU=0 for ideal gas.",
+    "params": {"fillFrac": 1}
+  },
+  "q11-8-pv-diagram": {
+    "type": "pv-diagram-demo",
+    "title": "P-V Diagram: Work D→E→F (Q11.8)",
+    "description": "Work = area under curve. D→E trapezoid, E→F isobaric.",
+    "params": {"PD": 600, "PE": 300, "VD": 2, "VE": 5, "VF": 2}
+  }
+}

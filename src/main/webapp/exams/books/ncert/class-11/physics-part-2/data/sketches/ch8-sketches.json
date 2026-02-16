@@ -1,0 +1,33 @@
+{
+  "q8-2-stress-strain-curve": {
+    "type": "stress-strain-curve",
+    "title": "Stress-Strain Curve (Q8.2)",
+    "description": "Young's modulus = slope; yield strength where curve deviates from linear.",
+    "params": {
+      "youngsModulus": 75e9,
+      "yieldStress": 3e8
+    }
+  },
+  "q8-3-stress-strain-comparison": {
+    "type": "stress-strain-curve",
+    "title": "Stress-Strain: Materials A vs B",
+    "description": "Steeper slope = greater Young's modulus. Higher break stress = stronger.",
+    "params": {
+      "youngsModulus": 100e9,
+      "yieldStress": 3.5e8
+    }
+  },
+  "q8-5-wire-loading": {
+    "type": "wire-loading-demo",
+    "title": "Steel & Brass Wires with Loads (Fig 8.11)",
+    "description": "Steel supports 4 kg; brass supports 4+6=10 kg. Elongation ΔL = FL/(AY).",
+    "params": {
+      "steelLength": 1.5,
+      "brassLength": 1.0,
+      "mass1": 4,
+      "mass2": 6,
+      "deltaL1": 0.00015,
+      "deltaL2": 0.00013
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "q12-thermal-energy-vs-t": {
+    "title": "Average Thermal Energy vs T: ⟨E⟩ = (3/2)k_B T",
+    "xDomain": [0, 500],
+    "yDomain": [0, 1.5e-20],
+    "data": [
+      {"fn": "1.5 * 1.38e-23 * x", "color": "#3b82f6", "label": "Monatomic: ⟨E⟩ = (3/2)k_B T"}
+    ],
+    "annotations": [{"x": 300, "text": "Room temp: ~6.2×10⁻²¹ J"}]
+  },
+  "q12-rms-vs-temp": {
+    "title": "v_rms vs Temperature: v = √(3RT/M)",
+    "xDomain": [0, 600],
+    "yDomain": [0, 2000],
+    "data": [
+      {"fn": "(3 * 8.31 * x / 0.004)^0.5", "color": "#22c55e", "label": "He: M=4 g/mol"},
+      {"fn": "(3 * 8.31 * x / 0.028)^0.5", "color": "#3b82f6", "label": "N₂: M=28 g/mol"},
+      {"fn": "(3 * 8.31 * x / 0.032)^0.5", "color": "#f59e0b", "label": "O₂: M=32 g/mol"}
+    ],
+    "annotations": [{"x": 300, "text": "v_rms ∝ √T"}]
+  }
+}

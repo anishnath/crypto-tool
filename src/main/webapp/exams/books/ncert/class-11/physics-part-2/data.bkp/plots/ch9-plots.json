@@ -1,0 +1,11 @@
+{
+  "q9-pressure-vs-depth": {
+    "title": "Hydrostatic Pressure vs Depth (P = P₀ + ρgh)",
+    "xDomain": [0, 5000],
+    "yDomain": [0, 6e7],
+    "data": [
+      {"fn": "101300 + 1030 * 9.8 * x", "color": "#6366f1", "label": "Seawater: ρ=1030 kg/m³"}
+    ],
+    "annotations": [{"x": 3000, "text": "At 3 km: P ≈ 3×10⁷ Pa"}]
+  }
+}

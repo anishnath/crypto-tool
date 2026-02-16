@@ -1,0 +1,88 @@
+{
+  "q10-temp-conversion": {
+    "title": "Temperature Conversion (K ↔ °C ↔ °F)",
+    "formula_display": "t_c = T - 273.15,  t_F = (9/5)t_c + 32",
+    "inputs": [
+      {"id": "T_K", "label": "Temperature", "unit": "K", "default": 273.16, "min": 0, "max": 600, "step": 0.1}
+    ],
+    "compute": "(T_K - 273.15)",
+    "output": {"label": "Celsius", "unit": "°C", "precision": 2},
+    "plot": {"vary": "T_K", "range": [200, 400], "points": 50, "xLabel": "T (K)", "yLabel": "t_c (°C)"}
+  },
+  "q10-linear-expansion": {
+    "title": "Linear Thermal Expansion",
+    "formula_display": "ΔL = L₀αΔT,  L = L₀(1 + αΔT)",
+    "inputs": [
+      {"id": "L0", "label": "Original length L₀", "unit": "m", "default": 1, "min": 0.01, "max": 10, "step": 0.01},
+      {"id": "alpha", "label": "Coefficient α", "unit": "K⁻¹", "default": 1.2e-5, "min": 1e-7, "max": 1e-3, "step": 1e-6},
+      {"id": "dT", "label": "Temp change ΔT", "unit": "K", "default": 18, "min": -200, "max": 500, "step": 1}
+    ],
+    "compute": "L0 * alpha * dT",
+    "output": {"label": "Change in length ΔL", "unit": "m", "precision": 6}
+  },
+  "q10-resistance-thermometer": {
+    "title": "Resistance Thermometer: R = R₀[1 + α(T−T₀)]",
+    "inputs": [
+      {"id": "R0", "label": "R₀ at T₀", "unit": "Ω", "default": 101.6, "min": 1, "max": 500, "step": 0.1},
+      {"id": "T0", "label": "Reference T₀", "unit": "K", "default": 273.16, "min": 200, "max": 400, "step": 0.1},
+      {"id": "R", "label": "Resistance R", "unit": "Ω", "default": 123.4, "min": 50, "max": 200, "step": 0.1},
+      {"id": "alpha", "label": "α", "unit": "K⁻¹", "default": 0.00192, "min": 0.0001, "max": 0.01, "step": 0.0001}
+    ],
+    "compute": "T0 + (R/R0 - 1) / alpha",
+    "output": {"label": "Temperature T", "unit": "K", "precision": 2}
+  },
+  "q10-gas-thermometer": {
+    "title": "Ideal Gas Thermometer",
+    "formula_display": "T/T_tp = P/P_tp",
+    "inputs": [
+      {"id": "Ttp", "label": "Triple-point T_tp", "unit": "K", "default": 273.16, "min": 200, "max": 300, "step": 0.01},
+      {"id": "Ptp", "label": "Pressure at triple-point", "unit": "Pa", "default": 125000, "min": 10000, "max": 500000, "step": 1000},
+      {"id": "P", "label": "Pressure P", "unit": "Pa", "default": 179700, "min": 10000, "max": 500000, "step": 1000}
+    ],
+    "compute": "Ttp * P / Ptp",
+    "output": {"label": "Temperature T", "unit": "K", "precision": 2}
+  },
+  "q10-thermal-stress": {
+    "title": "Thermal Stress in Constrained Rod",
+    "formula_display": "Stress = Y×α×ΔT,  F = Stress×A",
+    "inputs": [
+      {"id": "Y", "label": "Young's modulus Y", "unit": "Pa", "default": 0.91e11, "min": 1e9, "max": 5e11, "step": 1e9},
+      {"id": "alpha", "label": "α", "unit": "K⁻¹", "default": 2e-5, "min": 1e-6, "max": 1e-3, "step": 1e-6},
+      {"id": "dT", "label": "|ΔT|", "unit": "K", "default": 66, "min": 1, "max": 200, "step": 1},
+      {"id": "d", "label": "Diameter d", "unit": "m", "default": 0.002, "min": 0.0001, "max": 0.02, "step": 0.0001}
+    ],
+    "compute": "Y * alpha * dT * 3.14159265 * (d/2) * (d/2)",
+    "output": {"label": "Tension F", "unit": "N", "precision": 1}
+  },
+  "q10-calorimetry-q-mcdt": {
+    "title": "Heat: Q = mcΔT",
+    "formula_display": "Q = mcΔT",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 8, "min": 0.1, "max": 100, "step": 0.1},
+      {"id": "c", "label": "Specific heat c", "unit": "J/(kg·K)", "default": 910, "min": 100, "max": 5000, "step": 10},
+      {"id": "dT", "label": "Temperature change ΔT", "unit": "K", "default": 103, "min": 0.1, "max": 500, "step": 1}
+    ],
+    "compute": "m * c * dT",
+    "output": {"label": "Heat Q", "unit": "J", "precision": 0}
+  },
+  "q10-heat-of-fusion": {
+    "title": "Heat of Fusion: Q = mL",
+    "formula_display": "Q = mL (heat to melt/freeze)",
+    "inputs": [
+      {"id": "m", "label": "Mass m", "unit": "kg", "default": 1.5, "min": 0.01, "max": 10, "step": 0.01},
+      {"id": "L", "label": "Latent heat L", "unit": "J/g", "default": 335, "min": 50, "max": 600, "step": 1}
+    ],
+    "compute": "m * 1000 * L",
+    "output": {"label": "Heat Q", "unit": "J", "precision": 0}
+  },
+  "q10-volume-expansion-density": {
+    "title": "Fractional Change in Density (Volume Expansion)",
+    "formula_display": "Δρ/ρ₀ = −γΔT",
+    "inputs": [
+      {"id": "gamma", "label": "Volume expansion γ", "unit": "K⁻¹", "default": 49e-5, "min": 1e-6, "max": 1e-2, "step": 1e-5},
+      {"id": "dT", "label": "Temp change ΔT", "unit": "K", "default": 30, "min": 1, "max": 200, "step": 1}
+    ],
+    "compute": "gamma * dT",
+    "output": {"label": "|Δρ/ρ₀|", "unit": "", "precision": 4}
+  }
+}

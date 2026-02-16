@@ -1,0 +1,52 @@
+{
+  "subject": "Physics",
+  "partLabel": "Part 2",
+  "chapters": [
+    {
+      "slug": "mechanical-properties-of-solids",
+      "num": "8",
+      "name": "Mechanical Properties Of Solids",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 8 Mechanical Properties of Solids solutions. Fluid Pressure, Surface Tension, Fluid Properties, Bernoulli's Principle, Pressure, Barometer."
+    },
+    {
+      "slug": "mechanical-properties-of-fluids",
+      "num": "9",
+      "name": "Mechanical Properties Of Fluids",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 9 Thermal Properties of fluids. Temperature Scales, Absolute Temperature Scales, Resistance Thermometer, Temperature Measurement, Gas Thermometer, Linear Thermal Expansion."
+    },
+    {
+      "slug": "thermal-properties-of-matter",
+      "num": "10",
+      "name": "Thermal Properties Of Matter",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 10 Thermal Properties of Matter solutions. Heat and Work, Molar Specific Heat, Thermodynamic Processes, Adiabatic Process, First Law of Thermodynamics, Free Expansion."
+
+    },
+    {
+      "slug": "thermodynamics",
+      "num": "11",
+      "name": "Thermodynamics",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 11 Thermodynamics solutions. Heat and Work, Molar Specific Heat, Thermodynamic Processes, Adiabatic Process, First Law of Thermodynamics, Free Expansion."
+
+    },
+    {
+      "slug": "kinetic-theory",
+      "num": "12",
+      "name": "kinetic Theory",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 12 Kinetic Theory solutions. Molecular Volume and Intermolecular Distance, Ideal Gas Law and Molar Volume, Ideal Gas Behavior, Ideal Gas Law Applications, Gas Laws - Combined Gas Law, Number of Molecules."
+
+    },
+    {
+      "slug": "oscillations",
+      "num": "13",
+      "name": "Oscillations",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 13 Oscillations solutions. Periodic Motion, Simple Harmonic Motion, Periodic Motion from Graphs, SHM Functions, Signs in SHM, SHM Condition."
+
+    },
+    {
+      "slug": "waves",
+      "num": "14",
+      "name": "Waves",
+      "desc": "NCERT Class 11 Physics Part 2 Chapter 14 Waves solutions. Speed of a Transverse Wave on a Stretched String, Speed of Sound, Speed of Transverse Wave, Speed of Sound in Air, Mathematical Representation of Waves, Reflection and Refraction of Waves."
+    }
+  ]
+}

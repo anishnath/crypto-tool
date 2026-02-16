@@ -1,0 +1,11 @@
+{
+  "q11-adiabatic-pv": {
+    "title": "Adiabatic Process: PV^γ = constant",
+    "xDomain": [0.5, 2],
+    "yDomain": [0, 800],
+    "data": [
+      {"fn": "300 * (1/x)^1.4", "color": "#8b5cf6", "label": "Adiabatic: γ = 1.4 (diatomic)"}
+    ],
+    "annotations": [{"x": 1, "text": "V₂ = V₁/2 → P₂/P₁ = 2.64"}]
+  }
+}

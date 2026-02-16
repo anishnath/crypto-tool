@@ -1,0 +1,1659 @@
+[
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Temperature Scales",
+    "exercise": "Exercise",
+    "question_number": "Q10.1",
+    "marks": 2,
+    "difficulty": 0.3,
+    "question_plain": "The triple points of neon and carbon dioxide are 24.57 K and 216.55 K respectively. Express these temperatures on the Celsius and Fahrenheit scales.",
+    "question_latex": "The triple points of neon and carbon dioxide are $24.57$ K and $216.55$ K respectively. Express these temperatures on the Celsius and Fahrenheit scales.",
+    "sub_parts": null,
+    "correct_answer_plain": "Neon: –248.58 °C = –415.44 °F; CO₂: –56.60 °C = –69.88 °F",
+    "correct_answer_latex": "Neon: $-248.58$ °C $= -415.44$ °F; CO$_2$: $-56.60$ °C $= -69.88$ °F",
+    "hint": "Use T = t_c + 273.15 and t_F = (9/5)t_c + 32 for conversion.",
+    "solution_steps_latex": [
+      "**Temperature conversion formulas:**",
+      "Celsius to Kelvin: $T = t_c + 273.15$",
+      "Celsius to Fahrenheit: $t_F = \\frac{9}{5}t_c + 32$",
+      "**For Neon** ($T = 24.57$ K):",
+      "$t_c = T - 273.15 = 24.57 - 273.15 = -248.58$ °C",
+      "$t_F = \\frac{9}{5} \\times (-248.58) + 32 = -447.44 + 32 = -415.44$ °F",
+      "**For Carbon Dioxide** ($T = 216.55$ K):",
+      "$t_c = T - 273.15 = 216.55 - 273.15 = -56.60$ °C",
+      "$t_F = \\frac{9}{5} \\times (-56.60) + 32 = -101.88 + 32 = -69.88$ °F",
+      "**Final Answers:**",
+      "Neon: $-248.58$ °C $= -415.44$ °F",
+      "CO$_2$: $-56.60$ °C $= -69.88$ °F"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "T_neon: 24.57 K",
+        "T_CO2: 216.55 K"
+      ],
+      "to_find": [
+        "Temperatures in Celsius scale",
+        "Temperatures in Fahrenheit scale"
+      ],
+      "formulas_used": [
+        "$T = t_c + 273.15$",
+        "$t_F = \\frac{9}{5}t_c + 32$"
+      ]
+    },
+    "tags": [
+      "temperature-scales",
+      "kelvin-celsius-conversion",
+      "celsius-fahrenheit-conversion",
+      "triple-point"
+    ],
+    "p5_sketch": "q10-1-temp-scales",
+    "p5_sketch_slug": "q10-1-temp-scales",
+    "calculator": "q10-temp-conversion",
+    "calculator_slug": "q10-temp-conversion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.1",
+      "page": 223
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Absolute Temperature Scales",
+    "exercise": "Exercise",
+    "question_number": "Q10.2",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "Two absolute scales A and B have triple points of water defined to be 200 A and 350 B. What is the relation between T_A and T_B?",
+    "question_latex": "Two absolute scales A and B have triple points of water defined to be $200$ A and $350$ B. What is the relation between $T_A$ and $T_B$?",
+    "sub_parts": null,
+    "correct_answer_plain": "T_A = (4/7)T_B",
+    "correct_answer_latex": "$T_A = \\frac{4}{7}T_B$",
+    "hint": "The triple point of water is the same physical temperature. Set up ratio: T_A/200 = T_B/350.",
+    "solution_steps_latex": [
+      "**Given:** Triple point of water on scale A: $200$ A",
+      "Triple point of water on scale B: $350$ B",
+      "**Key concept:** The triple point of water represents the same physical temperature on both scales",
+      "**For scale A:** Let temperature be $T_A$ on scale A",
+      "**For scale B:** Let corresponding temperature be $T_B$ on scale B",
+      "**For triple point of water:**",
+      "$\\frac{T_A}{200} = \\frac{T_B}{350}$",
+      "$T_A = \\frac{200}{350} T_B$",
+      "$T_A = \\frac{4}{7} T_B$",
+      "**Verification:** If $T_B = 350$ B (water's triple point), then $T_A = \\frac{4}{7} \\times 350 = 200$ A ✓"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Triple point on scale A: 200 A",
+        "Triple point on scale B: 350 B"
+      ],
+      "to_find": [
+        "Relation between T_A and T_B"
+      ],
+      "formulas_used": [
+        "Temperature ratio at same physical point: $\\frac{T_A}{T_A^{tp}} = \\frac{T_B}{T_B^{tp}}$"
+      ]
+    },
+    "tags": [
+      "temperature-scales",
+      "absolute-scales",
+      "triple-point",
+      "scale-conversion"
+    ],
+    "calculator": "q10-temp-conversion",
+    "calculator_slug": "q10-temp-conversion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.2",
+      "page": 223
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Resistance Thermometer",
+    "exercise": "Exercise",
+    "question_number": "Q10.3",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "The electrical resistance in ohms of a certain thermometer varies with temperature according to the approximate law: R = R₀[1 + α(T – T₀)]. The resistance is 101.6 Ω at the triple-point of water 273.16 K, and 165.5 Ω at the normal melting point of lead (600.5 K). What is the temperature when the resistance is 123.4 Ω?",
+    "question_latex": "The electrical resistance in ohms of a certain thermometer varies with temperature according to the approximate law: $R = R_0[1 + \\alpha(T - T_0)]$. The resistance is $101.6$ Ω at the triple-point of water $273.16$ K, and $165.5$ Ω at the normal melting point of lead ($600.5$ K). What is the temperature when the resistance is $123.4$ Ω?",
+    "sub_parts": null,
+    "correct_answer_plain": "384.8 K",
+    "correct_answer_latex": "$384.8$ K",
+    "hint": "First find R₀ and α using the two given data points, then solve for T when R = 123.4 Ω.",
+    "solution_steps_latex": [
+      "**Given:** $R = R_0[1 + \\alpha(T - T_0)]$",
+      "At triple point of water: $R_1 = 101.6$ Ω, $T_1 = 273.16$ K",
+      "At melting point of lead: $R_2 = 165.5$ Ω, $T_2 = 600.5$ K",
+      "**Step 1:** Using data at triple point (taking $T_0 = 273.16$ K):",
+      "$101.6 = R_0[1 + \\alpha(273.16 - 273.16)]$",
+      "$101.6 = R_0 \\times 1$",
+      "$R_0 = 101.6$ Ω",
+      "**Step 2:** Using data at melting point of lead:",
+      "$165.5 = 101.6[1 + \\alpha(600.5 - 273.16)]$",
+      "$\\frac{165.5}{101.6} = 1 + \\alpha(327.34)$",
+      "$1.629 = 1 + 327.34\\alpha$",
+      "$\\alpha = \\frac{0.629}{327.34} = 1.921 \\times 10^{-3}$ K$^{-1}$",
+      "**Step 3:** Finding temperature when $R = 123.4$ Ω:",
+      "$123.4 = 101.6[1 + 1.921 \\times 10^{-3}(T - 273.16)]$",
+      "$\\frac{123.4}{101.6} = 1 + 1.921 \\times 10^{-3}(T - 273.16)$",
+      "$1.2146 = 1 + 1.921 \\times 10^{-3}(T - 273.16)$",
+      "$0.2146 = 1.921 \\times 10^{-3}(T - 273.16)$",
+      "$T - 273.16 = \\frac{0.2146}{1.921 \\times 10^{-3}} = 111.7$ K",
+      "$T = 273.16 + 111.7 = 384.86$ K $\\approx 384.8$ K"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "R₁: 101.6 Ω at T₁ = 273.16 K",
+        "R₂: 165.5 Ω at T₂ = 600.5 K",
+        "R: 123.4 Ω"
+      ],
+      "to_find": [
+        "Temperature T when R = 123.4 Ω"
+      ],
+      "formulas_used": [
+        "$R = R_0[1 + \\alpha(T - T_0)]$"
+      ]
+    },
+    "tags": [
+      "resistance-thermometer",
+      "temperature-coefficient",
+      "linear-expansion",
+      "thermometry"
+    ],
+    "calculator": "q10-resistance-thermometer",
+    "calculator_slug": "q10-resistance-thermometer",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.3",
+      "page": 223
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Temperature Measurement",
+    "exercise": "Exercise",
+    "question_number": "Q10.4",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Answer the following: (a) The triple-point of water is a standard fixed point in modern thermometry. Why? What is wrong in taking the melting point of ice and the boiling point of water as standard fixed points (as was originally done in the Celsius scale)? (b) There were two fixed points in the original Celsius scale as mentioned above which were assigned the number 0 °C and 100 °C respectively. On the absolute scale, one of the fixed points is the triple-point of water, which on the Kelvin absolute scale is assigned the number 273.16 K. What is the other fixed point on this (Kelvin) scale? (c) The absolute temperature (Kelvin scale) T is related to the temperature t_c on the Celsius scale by t_c = T – 273.15. Why do we have 273.15 in this relation, and not 273.16? (d) What is the temperature of the triple-point of water on an absolute scale whose unit interval size is equal to that of the Fahrenheit scale?",
+    "question_latex": "Answer the following: (a) The triple-point of water is a standard fixed point in modern thermometry. Why? What is wrong in taking the melting point of ice and the boiling point of water as standard fixed points (as was originally done in the Celsius scale)? (b) There were two fixed points in the original Celsius scale as mentioned above which were assigned the number $0$ °C and $100$ °C respectively. On the absolute scale, one of the fixed points is the triple-point of water, which on the Kelvin absolute scale is assigned the number $273.16$ K. What is the other fixed point on this (Kelvin) scale? (c) The absolute temperature (Kelvin scale) $T$ is related to the temperature $t_c$ on the Celsius scale by $t_c = T - 273.15$. Why do we have $273.15$ in this relation, and not $273.16$? (d) What is the temperature of the triple-point of water on an absolute scale whose unit interval size is equal to that of the Fahrenheit scale?",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)"
+    ],
+    "correct_answer_plain": "(a) Triple-point has a unique temperature; fusion point and boiling point temperatures depend on pressure. (b) The other fixed point is absolute zero itself. (c) Triple-point is 0.01 °C, not 0 °C. (d) 491.69",
+    "correct_answer_latex": "(a) Triple-point has a unique temperature; fusion point and boiling point temperatures depend on pressure. (b) The other fixed point is absolute zero itself. (c) Triple-point is $0.01$ °C, not $0$ °C. (d) $491.69$",
+    "hint": "(a) Consider pressure dependence (b) Think of lowest possible temperature (c) Triple point is slightly above 0°C (d) Use Fahrenheit-sized units starting from absolute zero.",
+    "solution_steps_latex": [
+      "**(a) Why triple-point is preferred:**",
+      "• Triple-point of water has a **unique temperature** ($273.16$ K) at which ice, water, and water vapor coexist in equilibrium",
+      "• This occurs at a specific pressure and temperature combination",
+      "• **Problem with melting/boiling points:** These depend on external pressure",
+      "- Melting point of ice changes with pressure (about $-0.0075$ K/atm)",
+      "- Boiling point of water varies significantly with pressure",
+      "• Triple-point is reproducible and pressure-independent, making it a better standard",
+      "**(b) Other fixed point on Kelvin scale:**",
+      "• The other fixed point is **absolute zero** ($0$ K)",
+      "• This is the lowest possible temperature where molecular motion ceases",
+      "• The Kelvin scale has only one defined point (triple point at $273.16$ K) and absolute zero as the other reference",
+      "**(c) Why 273.15 and not 273.16:**",
+      "• Triple-point of water: $273.16$ K",
+      "• In Celsius: $t_c = T - 273.15$, so triple-point $= 273.16 - 273.15 = 0.01$ °C",
+      "• **Ice point** (melting point at 1 atm) is defined as $0$ °C, which corresponds to $273.15$ K",
+      "• Triple-point is $0.01$ °C **above** the ice point, hence the difference",
+      "**(d) Temperature on Fahrenheit-sized absolute scale:**",
+      "• Fahrenheit scale: $180$ divisions between ice point and steam point",
+      "• Celsius scale: $100$ divisions for same range",
+      "• Fahrenheit unit = $\\frac{5}{9}$ of Celsius unit (or Celsius unit = $\\frac{9}{5}$ Fahrenheit units)",
+      "• Triple-point in Kelvin: $273.16$ K",
+      "• On Fahrenheit-sized absolute scale: $T_F = 273.16 \\times \\frac{9}{5} = 491.688 \\approx 491.69$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Triple point of water: 273.16 K",
+        "Ice point: 0 °C = 273.15 K"
+      ],
+      "to_find": [
+        "Explanation of temperature scale concepts",
+        "Temperature on Fahrenheit-sized absolute scale"
+      ],
+      "formulas_used": [
+        "$t_c = T - 273.15$",
+        "Fahrenheit conversion: $\\frac{9}{5}$ ratio"
+      ]
+    },
+    "tags": [
+      "triple-point",
+      "temperature-scales",
+      "kelvin-scale",
+      "fahrenheit-scale",
+      "thermometry-standards"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.4",
+      "page": 223
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Gas Thermometer",
+    "exercise": "Exercise",
+    "question_number": "Q10.5",
+    "marks": 4,
+    "difficulty": 0.6,
+    "question_plain": "Two ideal gas thermometers A and B use oxygen and hydrogen respectively. The following observations are made: At triple-point of water, P_A = 1.250×10⁵ Pa and P_B = 0.200×10⁵ Pa. At normal melting point of sulphur, P_A = 1.797×10⁵ Pa and P_B = 0.287×10⁵ Pa. (a) What is the absolute temperature of normal melting point of sulphur as read by thermometers A and B? (b) What do you think is the reason behind the slight difference in answers of thermometers A and B? (The thermometers are not faulty). What further procedure is needed in the experiment to reduce the discrepancy between the two readings?",
+    "question_latex": "Two ideal gas thermometers A and B use oxygen and hydrogen respectively. The following observations are made: At triple-point of water, $P_A = 1.250 \\times 10^5$ Pa and $P_B = 0.200 \\times 10^5$ Pa. At normal melting point of sulphur, $P_A = 1.797 \\times 10^5$ Pa and $P_B = 0.287 \\times 10^5$ Pa. (a) What is the absolute temperature of normal melting point of sulphur as read by thermometers A and B? (b) What do you think is the reason behind the slight difference in answers of thermometers A and B? (The thermometers are not faulty). What further procedure is needed in the experiment to reduce the discrepancy between the two readings?",
+    "sub_parts": [
+      "(a)",
+      "(b)"
+    ],
+    "correct_answer_plain": "(a) T_A = 392.69 K, T_B = 391.98 K; (b) The discrepancy arises because the gases are not perfectly ideal. To reduce the discrepancy, readings should be taken for lower and lower pressures and the plot between temperature measured versus absolute pressure of the gas at triple point should be extrapolated to obtain temperature in the limit pressure tends to zero, when the gases approach ideal gas behaviour.",
+    "correct_answer_latex": "(a) $T_A = 392.69$ K, $T_B = 391.98$ K; (b) The discrepancy arises because the gases are not perfectly ideal. To reduce the discrepancy, readings should be taken for lower and lower pressures and the plot between temperature measured versus absolute pressure of the gas at triple point should be extrapolated to obtain temperature in the limit pressure tends to zero, when the gases approach ideal gas behaviour.",
+    "hint": "For ideal gas at constant volume: T/T_tp = P/P_tp. The difference arises from non-ideal behavior.",
+    "solution_steps_latex": [
+      "**Given data:**",
+      "Triple-point of water: $T_{tp} = 273.16$ K",
+      "Thermometer A (Oxygen): $P_A^{tp} = 1.250 \\times 10^5$ Pa, $P_A^s = 1.797 \\times 10^5$ Pa",
+      "Thermometer B (Hydrogen): $P_B^{tp} = 0.200 \\times 10^5$ Pa, $P_B^s = 0.287 \\times 10^5$ Pa",
+      "**(a) Temperature at melting point of sulphur:**",
+      "**For ideal gas thermometer:** At constant volume, $\\frac{T}{T_{tp}} = \\frac{P}{P_{tp}}$",
+      "**Thermometer A:**",
+      "$\\frac{T_A}{273.16} = \\frac{1.797 \\times 10^5}{1.250 \\times 10^5}$",
+      "$\\frac{T_A}{273.16} = 1.4376$",
+      "$T_A = 273.16 \\times 1.4376 = 392.69$ K",
+      "**Thermometer B:**",
+      "$\\frac{T_B}{273.16} = \\frac{0.287 \\times 10^5}{0.200 \\times 10^5}$",
+      "$\\frac{T_B}{273.16} = 1.435$",
+      "$T_B = 273.16 \\times 1.435 = 391.98$ K",
+      "**(b) Reason for discrepancy and improvement:**",
+      "**Reason:** The slight difference ($392.69 - 391.98 = 0.71$ K) arises because:",
+      "• Real gases (O$_2$ and H$_2$) deviate from ideal gas behavior",
+      "• At finite pressures, intermolecular forces and molecular volumes become significant",
+      "• Different gases deviate differently from ideal behavior",
+      "**Procedure to reduce discrepancy:**",
+      "• Take readings at **progressively lower pressures** (reduce gas amount)",
+      "• Plot measured temperature vs. pressure at triple point",
+      "• **Extrapolate** the plot to $P \\to 0$ (zero pressure limit)",
+      "• At very low pressures, all gases approach ideal gas behavior",
+      "• Both thermometers will give the same reading in this limit"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Table showing pressure readings for thermometers A and B at triple point of water and melting point of sulphur",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "T_tp: 273.16 K",
+        "P_A at triple point: 1.250×10⁵ Pa",
+        "P_B at triple point: 0.200×10⁵ Pa",
+        "P_A at sulphur m.p.: 1.797×10⁵ Pa",
+        "P_B at sulphur m.p.: 0.287×10⁵ Pa"
+      ],
+      "to_find": [
+        "Temperature of sulphur m.p. from both thermometers",
+        "Reason for discrepancy and improvement method"
+      ],
+      "formulas_used": [
+        "$\\frac{T}{T_{tp}} = \\frac{P}{P_{tp}}$ (at constant volume)"
+      ]
+    },
+    "tags": [
+      "gas-thermometer",
+      "ideal-gas",
+      "temperature-measurement",
+      "real-gas-effects",
+      "extrapolation"
+    ],
+    "calculator": "q10-gas-thermometer",
+    "calculator_slug": "q10-gas-thermometer",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.5",
+      "page": 223
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Linear Thermal Expansion",
+    "exercise": "Exercise",
+    "question_number": "Q10.6",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A steel tape 1 m long is correctly calibrated for a temperature of 27.0 °C. The length of a steel rod measured by this tape is found to be 63.0 cm on a hot day when the temperature is 45.0 °C. What is the actual length of the steel rod on that day? What is the length of the same steel rod on a day when the temperature is 27.0 °C? Coefficient of linear expansion of steel = 1.20×10⁻⁵ K⁻¹.",
+    "question_latex": "A steel tape $1$ m long is correctly calibrated for a temperature of $27.0$ °C. The length of a steel rod measured by this tape is found to be $63.0$ cm on a hot day when the temperature is $45.0$ °C. What is the actual length of the steel rod on that day? What is the length of the same steel rod on a day when the temperature is $27.0$ °C? Coefficient of linear expansion of steel $= 1.20 \\times 10^{-5}$ K$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "Actual length at 45.0 °C = 63.0136 cm; Length at 27.0 °C = 63.0 cm",
+    "correct_answer_latex": "Actual length at $45.0$ °C $= 63.0136$ cm; Length at $27.0$ °C $= 63.0$ cm",
+    "hint": "The tape expands at 45°C, so its markings are farther apart. When it reads 63 cm, the actual distance is greater.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Original tape length: $L_0 = 1$ m $= 100$ cm at $T_0 = 27.0$ °C",
+      "Temperature on hot day: $T = 45.0$ °C",
+      "Measured length of rod: $63.0$ cm (on expanded tape)",
+      "Coefficient of linear expansion: $\\alpha = 1.20 \\times 10^{-5}$ K$^{-1}$",
+      "**Step 1:** Expansion of the tape at 45.0 °C",
+      "Temperature change: $\\Delta T = 45.0 - 27.0 = 18.0$ K",
+      "New length of 1 m section of tape:",
+      "$L = L_0(1 + \\alpha \\Delta T)$",
+      "$L = 100(1 + 1.20 \\times 10^{-5} \\times 18.0)$",
+      "$L = 100(1 + 2.16 \\times 10^{-4})$",
+      "$L = 100 \\times 1.000216 = 100.0216$ cm",
+      "**Step 2:** What tape reads as 1 cm is actually:",
+      "Actual length per tape cm $= \\frac{100.0216}{100} = 1.000216$ cm",
+      "**Step 3:** Actual length when tape reads 63.0 cm:",
+      "Actual length $= 63.0 \\times 1.000216 = 63.0136$ cm",
+      "**Step 4:** Length at 27.0 °C:",
+      "At $27.0$ °C, both tape and rod are at calibration temperature",
+      "The rod also contracts when cooled from $45.0$ °C to $27.0$ °C",
+      "$L_{27} = L_{45}(1 - \\alpha \\Delta T)$",
+      "$L_{27} = 63.0136 \\times (1 - 1.20 \\times 10^{-5} \\times 18)$",
+      "$L_{27} = 63.0136 \\times (1 - 2.16 \\times 10^{-4})$",
+      "$L_{27} = 63.0136 \\times 0.999784 = 63.0$ cm",
+      "**Alternatively:** At $27$ °C, the tape reads correctly, so actual length $= 63.0$ cm"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "L₀: 1 m = 100 cm at 27.0 °C",
+        "Measured length: 63.0 cm at 45.0 °C",
+        "α_steel: 1.20×10⁻⁵ K⁻¹"
+      ],
+      "to_find": [
+        "Actual length at 45.0 °C",
+        "Length at 27.0 °C"
+      ],
+      "formulas_used": [
+        "$L = L_0(1 + \\alpha \\Delta T)$"
+      ]
+    },
+    "tags": [
+      "linear-expansion",
+      "thermal-expansion",
+      "measurement-error",
+      "temperature-correction"
+    ],
+    "p5_sketch": "q10-6-linear-expansion",
+    "p5_sketch_slug": "q10-6-linear-expansion",
+    "calculator": "q10-linear-expansion",
+    "calculator_slug": "q10-linear-expansion",
+    "interactive_plot": "q10-linear-expansion-vs-temp",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.6",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Linear Thermal Expansion",
+    "exercise": "Exercise",
+    "question_number": "Q10.7",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A large steel wheel is to be fitted on to a shaft of the same material. At 27 °C, the outer diameter of the shaft is 8.70 cm and the diameter of the central hole in the wheel is 8.69 cm. The shaft is cooled using 'dry ice'. At what temperature of the shaft does the wheel slip on the shaft? Assume coefficient of linear expansion of the steel to be constant over the required temperature range: α_steel = 1.20×10⁻⁵ K⁻¹.",
+    "question_latex": "A large steel wheel is to be fitted on to a shaft of the same material. At $27$ °C, the outer diameter of the shaft is $8.70$ cm and the diameter of the central hole in the wheel is $8.69$ cm. The shaft is cooled using 'dry ice'. At what temperature of the shaft does the wheel slip on the shaft? Assume coefficient of linear expansion of the steel to be constant over the required temperature range: $\\alpha_{steel} = 1.20 \\times 10^{-5}$ K$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "–69 °C",
+    "correct_answer_latex": "$-69$ °C",
+    "hint": "Shaft must contract to diameter 8.69 cm. Use ΔL/L₀ = αΔT.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Initial temperature: $T_0 = 27$ °C",
+      "Diameter of shaft at $27$ °C: $D_0 = 8.70$ cm",
+      "Diameter of hole in wheel: $D_h = 8.69$ cm",
+      "$\\alpha_{steel} = 1.20 \\times 10^{-5}$ K$^{-1}$",
+      "**Step 1:** For wheel to slip on shaft:",
+      "The shaft diameter must contract to $8.69$ cm",
+      "**Step 2:** Linear expansion formula:",
+      "$D = D_0(1 + \\alpha \\Delta T)$",
+      "Where $\\Delta T = T - T_0$",
+      "**Step 3:** Setting $D = 8.69$ cm:",
+      "$8.69 = 8.70(1 + 1.20 \\times 10^{-5} \\times (T - 27))$",
+      "$\\frac{8.69}{8.70} = 1 + 1.20 \\times 10^{-5}(T - 27)$",
+      "$0.998851 = 1 + 1.20 \\times 10^{-5}(T - 27)$",
+      "$-0.001149 = 1.20 \\times 10^{-5}(T - 27)$",
+      "$T - 27 = \\frac{-0.001149}{1.20 \\times 10^{-5}}$",
+      "$T - 27 = -95.75$ K",
+      "$T = 27 - 95.75 = -68.75$ °C",
+      "$T \\approx -69$ °C",
+      "**Answer:** The shaft must be cooled to approximately $-69$ °C"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "D₀ (shaft): 8.70 cm at 27 °C",
+        "D_hole: 8.69 cm",
+        "α_steel: 1.20×10⁻⁵ K⁻¹"
+      ],
+      "to_find": [
+        "Temperature at which wheel slips on shaft"
+      ],
+      "formulas_used": [
+        "$D = D_0(1 + \\alpha \\Delta T)$"
+      ]
+    },
+    "tags": [
+      "linear-expansion",
+      "thermal-contraction",
+      "shrink-fitting",
+      "cooling"
+    ],
+    "calculator": "q10-linear-expansion",
+    "calculator_slug": "q10-linear-expansion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.7",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Linear Thermal Expansion",
+    "exercise": "Exercise",
+    "question_number": "Q10.8",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "A hole is drilled in a copper sheet. The diameter of the hole is 4.24 cm at 27.0 °C. What is the change in the diameter of the hole when the sheet is heated to 227 °C? Coefficient of linear expansion of copper = 1.70×10⁻⁵ K⁻¹.",
+    "question_latex": "A hole is drilled in a copper sheet. The diameter of the hole is $4.24$ cm at $27.0$ °C. What is the change in the diameter of the hole when the sheet is heated to $227$ °C? Coefficient of linear expansion of copper $= 1.70 \\times 10^{-5}$ K$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "1.44×10⁻² cm = 0.0144 cm",
+    "correct_answer_latex": "$1.44 \\times 10^{-2}$ cm $= 0.0144$ cm",
+    "hint": "The hole expands just like a solid disk of the same material would. Use ΔD = D₀αΔT.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Initial diameter: $D_0 = 4.24$ cm at $T_0 = 27.0$ °C",
+      "Final temperature: $T = 227$ °C",
+      "$\\alpha_{copper} = 1.70 \\times 10^{-5}$ K$^{-1}$",
+      "**Key concept:** When a sheet with a hole is heated, the hole expands as if it were made of the same material",
+      "**Step 1:** Temperature change:",
+      "$\\Delta T = 227 - 27 = 200$ K",
+      "**Step 2:** Change in diameter:",
+      "$\\Delta D = D_0 \\alpha \\Delta T$",
+      "$\\Delta D = 4.24 \\times 1.70 \\times 10^{-5} \\times 200$",
+      "$\\Delta D = 4.24 \\times 3.40 \\times 10^{-3}$",
+      "$\\Delta D = 14.416 \\times 10^{-3}$ cm",
+      "$\\Delta D = 1.4416 \\times 10^{-2}$ cm",
+      "$\\Delta D \\approx 1.44 \\times 10^{-2}$ cm $= 0.0144$ cm",
+      "**Final diameter:** $D = D_0 + \\Delta D = 4.24 + 0.0144 = 4.2544$ cm"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "D₀: 4.24 cm at 27.0 °C",
+        "Final temperature: 227 °C",
+        "α_copper: 1.70×10⁻⁵ K⁻¹"
+      ],
+      "to_find": [
+        "Change in diameter ΔD"
+      ],
+      "formulas_used": [
+        "$\\Delta D = D_0 \\alpha \\Delta T$"
+      ]
+    },
+    "tags": [
+      "linear-expansion",
+      "thermal-expansion",
+      "hole-expansion",
+      "copper"
+    ],
+    "p5_sketch": "q10-6-linear-expansion",
+    "p5_sketch_slug": "q10-6-linear-expansion",
+    "calculator": "q10-linear-expansion",
+    "calculator_slug": "q10-linear-expansion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.8",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Thermal Stress",
+    "exercise": "Exercise",
+    "question_number": "Q10.9",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A brass wire 1.8 m long at 27 °C is held taut with little tension between two rigid supports. If the wire is cooled to a temperature of –39 °C, what is the tension developed in the wire, if its diameter is 2.0 mm? Co-efficient of linear expansion of brass = 2.0×10⁻⁵ K⁻¹; Young's modulus of brass = 0.91×10¹¹ Pa.",
+    "question_latex": "A brass wire $1.8$ m long at $27$ °C is held taut with little tension between two rigid supports. If the wire is cooled to a temperature of $-39$ °C, what is the tension developed in the wire, if its diameter is $2.0$ mm? Co-efficient of linear expansion of brass $= 2.0 \\times 10^{-5}$ K$^{-1}$; Young's modulus of brass $= 0.91 \\times 10^{11}$ Pa.",
+    "sub_parts": null,
+    "correct_answer_plain": "3.8×10² N = 380 N",
+    "correct_answer_latex": "$3.8 \\times 10^2$ N $= 380$ N",
+    "hint": "Wire wants to contract but is prevented. Thermal strain = αΔT. Stress = Y×strain. Tension = Stress×Area.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Initial length: $L_0 = 1.8$ m at $T_0 = 27$ °C",
+      "Final temperature: $T = -39$ °C",
+      "Diameter: $d = 2.0$ mm $= 2.0 \\times 10^{-3}$ m",
+      "$\\alpha_{brass} = 2.0 \\times 10^{-5}$ K$^{-1}$",
+      "Young's modulus: $Y = 0.91 \\times 10^{11}$ Pa",
+      "**Step 1:** Temperature change:",
+      "$\\Delta T = -39 - 27 = -66$ K",
+      "**Step 2:** Thermal strain (if wire were free to contract):",
+      "Strain $= \\alpha |\\Delta T| = 2.0 \\times 10^{-5} \\times 66 = 1.32 \\times 10^{-3}$",
+      "**Step 3:** Since wire is held fixed, this strain produces stress:",
+      "**Young's modulus:** $Y = \\frac{\\text{Stress}}{\\text{Strain}}$",
+      "Stress $= Y \\times$ Strain",
+      "Stress $= 0.91 \\times 10^{11} \\times 1.32 \\times 10^{-3}$",
+      "Stress $= 1.2012 \\times 10^{8}$ Pa",
+      "**Step 4:** Cross-sectional area of wire:",
+      "$A = \\pi r^2 = \\pi \\left(\\frac{d}{2}\\right)^2 = \\pi \\left(1.0 \\times 10^{-3}\\right)^2$",
+      "$A = \\pi \\times 10^{-6} = 3.1416 \\times 10^{-6}$ m$^2$",
+      "**Step 5:** Tension in wire:",
+      "$F = \\text{Stress} \\times A$",
+      "$F = 1.2012 \\times 10^{8} \\times 3.1416 \\times 10^{-6}$",
+      "$F = 3.774 \\times 10^{2}$ N",
+      "$F \\approx 3.8 \\times 10^{2}$ N $= 380$ N"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "L₀: 1.8 m at 27 °C",
+        "T_final: -39 °C",
+        "d: 2.0 mm",
+        "α_brass: 2.0×10⁻⁵ K⁻¹",
+        "Y_brass: 0.91×10¹¹ Pa"
+      ],
+      "to_find": [
+        "Tension developed in wire"
+      ],
+      "formulas_used": [
+        "Strain $= \\alpha |\\Delta T|$",
+        "$Y = \\frac{\\text{Stress}}{\\text{Strain}}$",
+        "$F = \\text{Stress} \\times A$"
+      ]
+    },
+    "tags": [
+      "thermal-stress",
+      "youngs-modulus",
+      "thermal-strain",
+      "linear-expansion",
+      "brass-wire"
+    ],
+    "calculator": "q10-thermal-stress",
+    "calculator_slug": "q10-thermal-stress",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.9",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Linear Thermal Expansion - Composite Rods",
+    "exercise": "Exercise",
+    "question_number": "Q10.10",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A brass rod of length 50 cm and diameter 3.0 mm is joined to a steel rod of the same length and diameter. What is the change in length of the combined rod at 250 °C, if the original lengths are at 40.0 °C? Is there a 'thermal stress' developed at the junction? The ends of the rod are free to expand (Co-efficient of linear expansion of brass = 2.0×10⁻⁵ K⁻¹, steel = 1.2×10⁻⁵ K⁻¹).",
+    "question_latex": "A brass rod of length $50$ cm and diameter $3.0$ mm is joined to a steel rod of the same length and diameter. What is the change in length of the combined rod at $250$ °C, if the original lengths are at $40.0$ °C? Is there a 'thermal stress' developed at the junction? The ends of the rod are free to expand (Co-efficient of linear expansion of brass $= 2.0 \\times 10^{-5}$ K$^{-1}$, steel $= 1.2 \\times 10^{-5}$ K$^{-1}$).",
+    "sub_parts": null,
+    "correct_answer_plain": "Δl_brass = 0.21 cm, Δl_steel = 0.13 cm, Total change = 0.34 cm. No thermal stress is developed at the junction since the rods freely expand.",
+    "correct_answer_latex": "$\\Delta l_{brass} = 0.21$ cm, $\\Delta l_{steel} = 0.13$ cm, Total change $= 0.34$ cm. No thermal stress is developed at the junction since the rods freely expand.",
+    "hint": "Each rod expands independently. Calculate separately and add. No stress since ends are free.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Length of brass rod: $L_{brass} = 50$ cm $= 0.50$ m",
+      "Length of steel rod: $L_{steel} = 50$ cm $= 0.50$ m",
+      "Initial temperature: $T_0 = 40.0$ °C",
+      "Final temperature: $T = 250$ °C",
+      "$\\alpha_{brass} = 2.0 \\times 10^{-5}$ K$^{-1}$",
+      "$\\alpha_{steel} = 1.2 \\times 10^{-5}$ K$^{-1}$",
+      "**Step 1:** Temperature change:",
+      "$\\Delta T = 250 - 40 = 210$ K",
+      "**Step 2:** Change in length of brass rod:",
+      "$\\Delta l_{brass} = L_{brass} \\alpha_{brass} \\Delta T$",
+      "$\\Delta l_{brass} = 0.50 \\times 2.0 \\times 10^{-5} \\times 210$",
+      "$\\Delta l_{brass} = 2.1 \\times 10^{-3}$ m $= 0.21$ cm",
+      "**Step 3:** Change in length of steel rod:",
+      "$\\Delta l_{steel} = L_{steel} \\alpha_{steel} \\Delta T$",
+      "$\\Delta l_{steel} = 0.50 \\times 1.2 \\times 10^{-5} \\times 210$",
+      "$\\Delta l_{steel} = 1.26 \\times 10^{-3}$ m $= 0.126$ cm $\\approx 0.13$ cm",
+      "**Step 4:** Total change in length:",
+      "$\\Delta l_{total} = \\Delta l_{brass} + \\Delta l_{steel}$",
+      "$\\Delta l_{total} = 0.21 + 0.13 = 0.34$ cm",
+      "**Step 5:** Is there thermal stress at junction?",
+      "**No thermal stress** is developed at the junction because:",
+      "• The ends of the combined rod are **free to expand**",
+      "• Each rod expands independently without constraint",
+      "• No forces are applied to prevent expansion",
+      "• Thermal stress occurs only when expansion is **prevented** or **constrained**"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "L_brass: 50 cm at 40.0 °C",
+        "L_steel: 50 cm at 40.0 °C",
+        "T_final: 250 °C",
+        "α_brass: 2.0×10⁻⁵ K⁻¹",
+        "α_steel: 1.2×10⁻⁵ K⁻¹"
+      ],
+      "to_find": [
+        "Total change in length",
+        "Whether thermal stress develops"
+      ],
+      "formulas_used": [
+        "$\\Delta l = L_0 \\alpha \\Delta T$"
+      ]
+    },
+    "tags": [
+      "linear-expansion",
+      "composite-rod",
+      "thermal-expansion",
+      "thermal-stress"
+    ],
+    "calculator": "q10-linear-expansion",
+    "calculator_slug": "q10-linear-expansion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.10",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Volume Expansion",
+    "exercise": "Exercise",
+    "question_number": "Q10.11",
+    "marks": 2,
+    "difficulty": 0.4,
+    "question_plain": "The coefficient of volume expansion of glycerine is 49×10⁻⁵ K⁻¹. What is the fractional change in its density for a 30 °C rise in temperature?",
+    "question_latex": "The coefficient of volume expansion of glycerine is $49 \\times 10^{-5}$ K$^{-1}$. What is the fractional change in its density for a $30$ °C rise in temperature?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.0147 = 1.5×10⁻² (decrease)",
+    "correct_answer_latex": "$0.0147 = 1.5 \\times 10^{-2}$ (decrease)",
+    "hint": "Density is inversely related to volume: ρ = m/V. As volume increases, density decreases.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Coefficient of volume expansion: $\\gamma = 49 \\times 10^{-5}$ K$^{-1}$",
+      "Temperature rise: $\\Delta T = 30$ K",
+      "**Relationship between density and volume:**",
+      "$\\rho = \\frac{m}{V}$ where mass $m$ remains constant",
+      "**Step 1:** Volume expansion:",
+      "$V = V_0(1 + \\gamma \\Delta T)$",
+      "$V = V_0(1 + 49 \\times 10^{-5} \\times 30)$",
+      "$V = V_0(1 + 1.47 \\times 10^{-2})$",
+      "$V = V_0(1 + 0.0147)$",
+      "**Step 2:** Density at higher temperature:",
+      "$\\rho = \\frac{m}{V} = \\frac{m}{V_0(1 + \\gamma \\Delta T)}$",
+      "$\\rho = \\frac{\\rho_0}{1 + \\gamma \\Delta T}$",
+      "$\\rho = \\frac{\\rho_0}{1 + 0.0147}$",
+      "**Step 3:** For small $\\gamma \\Delta T$, using binomial approximation:",
+      "$\\rho \\approx \\rho_0(1 - \\gamma \\Delta T)$",
+      "$\\rho \\approx \\rho_0(1 - 0.0147)$",
+      "**Step 4:** Fractional change in density:",
+      "$\\frac{\\Delta \\rho}{\\rho_0} = \\frac{\\rho - \\rho_0}{\\rho_0} = -\\gamma \\Delta T$",
+      "$\\frac{\\Delta \\rho}{\\rho_0} = -0.0147 = -1.47 \\times 10^{-2} \\approx -1.5 \\times 10^{-2}$",
+      "**The negative sign indicates density decreases**",
+      "Fractional change (magnitude) $= 0.0147 = 1.5 \\times 10^{-2}$"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "γ: 49×10⁻⁵ K⁻¹",
+        "ΔT: 30 K"
+      ],
+      "to_find": [
+        "Fractional change in density"
+      ],
+      "formulas_used": [
+        "$V = V_0(1 + \\gamma \\Delta T)$",
+        "$\\rho = \\frac{m}{V}$",
+        "$\\frac{\\Delta \\rho}{\\rho_0} = -\\gamma \\Delta T$"
+      ]
+    },
+    "tags": [
+      "volume-expansion",
+      "density-change",
+      "thermal-expansion",
+      "glycerine"
+    ],
+    "calculator": "q10-volume-expansion-density",
+    "calculator_slug": "q10-volume-expansion-density",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.11",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Specific Heat and Calorimetry",
+    "exercise": "Exercise",
+    "question_number": "Q10.12",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A 10 kW drilling machine is used to drill a bore in a small aluminium block of mass 8.0 kg. How much is the rise in temperature of the block in 2.5 minutes, assuming 50% of power is used up in heating the machine itself or lost to the surroundings. Specific heat of aluminium = 0.91 J g⁻¹ K⁻¹.",
+    "question_latex": "A $10$ kW drilling machine is used to drill a bore in a small aluminium block of mass $8.0$ kg. How much is the rise in temperature of the block in $2.5$ minutes, assuming $50\\%$ of power is used up in heating the machine itself or lost to the surroundings. Specific heat of aluminium $= 0.91$ J g$^{-1}$ K$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "103 °C",
+    "correct_answer_latex": "$103$ °C",
+    "hint": "Only 50% of power heats the block. Q = Pt (for 50%). Then use Q = mcΔT.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Power of drilling machine: $P = 10$ kW $= 10,000$ W",
+      "Mass of aluminium block: $m = 8.0$ kg $= 8000$ g",
+      "Time: $t = 2.5$ min $= 2.5 \\times 60 = 150$ s",
+      "Efficiency (heat absorbed by block): $50\\%$",
+      "Specific heat of aluminium: $c = 0.91$ J g$^{-1}$ K$^{-1}$",
+      "**Step 1:** Total energy supplied by machine:",
+      "$E_{total} = P \\times t = 10,000 \\times 150 = 1.5 \\times 10^6$ J",
+      "**Step 2:** Energy absorbed by aluminium block (50% of total):",
+      "$Q = 0.5 \\times E_{total} = 0.5 \\times 1.5 \\times 10^6 = 7.5 \\times 10^5$ J",
+      "**Step 3:** Using heat capacity formula:",
+      "$Q = mc\\Delta T$",
+      "$\\Delta T = \\frac{Q}{mc}$",
+      "$\\Delta T = \\frac{7.5 \\times 10^5}{8000 \\times 0.91}$",
+      "$\\Delta T = \\frac{7.5 \\times 10^5}{7280}$",
+      "$\\Delta T = 103.02$ K $\\approx 103$ K",
+      "**Since temperature change in Kelvin equals change in Celsius:**",
+      "$\\Delta T = 103$ °C",
+      "**Answer:** The temperature of the block rises by $103$ °C"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "P: 10 kW",
+        "m: 8.0 kg = 8000 g",
+        "t: 2.5 min = 150 s",
+        "Efficiency: 50%",
+        "c_Al: 0.91 J g⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Rise in temperature ΔT"
+      ],
+      "formulas_used": [
+        "$E = Pt$",
+        "$Q = mc\\Delta T$"
+      ]
+    },
+    "tags": [
+      "specific-heat",
+      "calorimetry",
+      "power",
+      "heat-transfer",
+      "aluminium"
+    ],
+    "calculator": "q10-calorimetry-q-mcdt",
+    "calculator_slug": "q10-calorimetry-q-mcdt",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.12",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Calorimetry and Heat of Fusion",
+    "exercise": "Exercise",
+    "question_number": "Q10.13",
+    "marks": 3,
+    "difficulty": 0.5,
+    "question_plain": "A copper block of mass 2.5 kg is heated in a furnace to a temperature of 500 °C and then placed on a large ice block. What is the maximum amount of ice that can melt? (Specific heat of copper = 0.39 J g⁻¹ K⁻¹; heat of fusion of water = 335 J g⁻¹).",
+    "question_latex": "A copper block of mass $2.5$ kg is heated in a furnace to a temperature of $500$ °C and then placed on a large ice block. What is the maximum amount of ice that can melt? (Specific heat of copper $= 0.39$ J g$^{-1}$ K$^{-1}$; heat of fusion of water $= 335$ J g$^{-1}$).",
+    "sub_parts": null,
+    "correct_answer_plain": "1.5 kg",
+    "correct_answer_latex": "$1.5$ kg",
+    "hint": "Heat lost by copper = Heat gained by ice. Q_copper = mcΔT. Q_ice = mL_f.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Mass of copper block: $m_c = 2.5$ kg $= 2500$ g",
+      "Initial temperature of copper: $T_i = 500$ °C",
+      "Final temperature (equilibrium with ice): $T_f = 0$ °C",
+      "Specific heat of copper: $c_c = 0.39$ J g$^{-1}$ K$^{-1}$",
+      "Heat of fusion of ice: $L_f = 335$ J g$^{-1}$",
+      "**Step 1:** Heat lost by copper block:",
+      "$Q_{lost} = m_c c_c \\Delta T$",
+      "$\\Delta T = T_i - T_f = 500 - 0 = 500$ K",
+      "$Q_{lost} = 2500 \\times 0.39 \\times 500$",
+      "$Q_{lost} = 487,500$ J",
+      "**Step 2:** Heat gained by ice for melting:",
+      "$Q_{gained} = m_{ice} \\times L_f$",
+      "**Step 3:** By principle of calorimetry:",
+      "Heat lost by copper = Heat gained by ice",
+      "$487,500 = m_{ice} \\times 335$",
+      "$m_{ice} = \\frac{487,500}{335}$",
+      "$m_{ice} = 1455.2$ g",
+      "$m_{ice} \\approx 1455$ g $= 1.455$ kg $\\approx 1.5$ kg",
+      "**Answer:** Maximum amount of ice that can melt is $1.5$ kg"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "m_copper: 2.5 kg = 2500 g",
+        "T_initial: 500 °C",
+        "T_final: 0 °C",
+        "c_copper: 0.39 J g⁻¹ K⁻¹",
+        "L_f (ice): 335 J g⁻¹"
+      ],
+      "to_find": [
+        "Maximum mass of ice that can melt"
+      ],
+      "formulas_used": [
+        "$Q = mc\\Delta T$",
+        "$Q = mL_f$",
+        "Heat lost = Heat gained"
+      ]
+    },
+    "tags": [
+      "calorimetry",
+      "heat-of-fusion",
+      "specific-heat",
+      "phase-change",
+      "heat-transfer"
+    ],
+    "calculator": "q10-heat-of-fusion",
+    "calculator_slug": "q10-heat-of-fusion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.13",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Calorimetry and Specific Heat",
+    "exercise": "Exercise",
+    "question_number": "Q10.14",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "In an experiment on the specific heat of a metal, a 0.20 kg block of the metal at 150 °C is dropped in a copper calorimeter (of water equivalent 0.025 kg) containing 150 cm³ of water at 27 °C. The final temperature is 40 °C. Compute the specific heat of the metal. If heat losses to the surroundings are not negligible, is your answer greater or smaller than the actual value for specific heat of the metal?",
+    "question_latex": "In an experiment on the specific heat of a metal, a $0.20$ kg block of the metal at $150$ °C is dropped in a copper calorimeter (of water equivalent $0.025$ kg) containing $150$ cm$^3$ of water at $27$ °C. The final temperature is $40$ °C. Compute the specific heat of the metal. If heat losses to the surroundings are not negligible, is your answer greater or smaller than the actual value for specific heat of the metal?",
+    "sub_parts": null,
+    "correct_answer_plain": "0.43 J g⁻¹ K⁻¹; smaller",
+    "correct_answer_latex": "$0.43$ J g$^{-1}$ K$^{-1}$; smaller",
+    "hint": "Heat lost by metal = Heat gained by (water + calorimeter). With heat losses, calculated c is less than actual.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Mass of metal block: $m_m = 0.20$ kg $= 200$ g",
+      "Initial temp of metal: $T_{m,i} = 150$ °C",
+      "Water equivalent of calorimeter: $m_c = 0.025$ kg $= 25$ g",
+      "Volume of water: $V_w = 150$ cm$^3$ → mass $m_w = 150$ g (density of water = 1 g/cm³)",
+      "Initial temp of water and calorimeter: $T_{w,i} = 27$ °C",
+      "Final equilibrium temperature: $T_f = 40$ °C",
+      "Specific heat of water: $c_w = 1$ cal g$^{-1}$ K$^{-1} = 4.18$ J g$^{-1}$ K$^{-1}$",
+      "**Step 1:** Heat lost by metal:",
+      "$Q_{lost} = m_m c_m (T_{m,i} - T_f)$",
+      "$Q_{lost} = 200 \\times c_m \\times (150 - 40)$",
+      "$Q_{lost} = 200 \\times c_m \\times 110 = 22000 c_m$ J",
+      "**Step 2:** Heat gained by water:",
+      "$Q_w = m_w c_w (T_f - T_{w,i})$",
+      "$Q_w = 150 \\times 4.18 \\times (40 - 27)$",
+      "$Q_w = 150 \\times 4.18 \\times 13 = 8151$ J",
+      "**Step 3:** Heat gained by calorimeter (water equivalent):",
+      "$Q_c = m_c c_w (T_f - T_{w,i})$",
+      "$Q_c = 25 \\times 4.18 \\times 13 = 1358.5$ J",
+      "**Step 4:** Total heat gained:",
+      "$Q_{gained} = Q_w + Q_c = 8151 + 1358.5 = 9509.5$ J",
+      "**Step 5:** Assuming no heat loss to surroundings:",
+      "$Q_{lost} = Q_{gained}$",
+      "$22000 c_m = 9509.5$",
+      "$c_m = \\frac{9509.5}{22000} = 0.432$ J g$^{-1}$ K$^{-1}$",
+      "$c_m \\approx 0.43$ J g$^{-1}$ K$^{-1}$",
+      "**Step 6:** Effect of heat losses:",
+      "If heat losses to surroundings are not negligible:",
+      "• Some heat from the metal is lost to the surroundings",
+      "• Less heat reaches the water and calorimeter than actually lost by metal",
+      "• Our calculation assumes all heat from metal goes to water/calorimeter",
+      "• This gives $c_m$ **smaller** than actual value",
+      "• Actual $c_m$ would be **larger** (metal lost more heat than we calculated)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "m_metal: 0.20 kg = 200 g at 150 °C",
+        "m_water: 150 g at 27 °C",
+        "Water equivalent of calorimeter: 0.025 kg = 25 g",
+        "T_final: 40 °C",
+        "c_water: 4.18 J g⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Specific heat of metal",
+        "Effect of heat losses on calculated value"
+      ],
+      "formulas_used": [
+        "$Q = mc\\Delta T$",
+        "Heat lost = Heat gained"
+      ]
+    },
+    "tags": [
+      "calorimetry",
+      "specific-heat",
+      "water-equivalent",
+      "heat-loss",
+      "experimental-error"
+    ],
+    "calculator": "q10-calorimetry-q-mcdt",
+    "calculator_slug": "q10-calorimetry-q-mcdt",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.14",
+      "page": 224
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Molar Specific Heat of Gases",
+    "exercise": "Exercise",
+    "question_number": "Q10.15",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "Given below are observations on molar specific heats at room temperature of some common gases. Gas: Hydrogen, Nitrogen, Oxygen, Nitric oxide, Carbon monoxide, Chlorine. Molar specific heat (C_v) in cal mol⁻¹ K⁻¹: 4.87, 4.97, 5.02, 4.99, 5.01, 6.17 respectively. The measured molar specific heats of these gases are markedly different from those for monatomic gases. Typically, molar specific heat of a monatomic gas is 2.92 cal/mol K. Explain this difference. What can you infer from the somewhat larger (than the rest) value for chlorine?",
+    "question_latex": "Given below are observations on molar specific heats at room temperature of some common gases. Gas: Hydrogen, Nitrogen, Oxygen, Nitric oxide, Carbon monoxide, Chlorine. Molar specific heat ($C_v$) in cal mol$^{-1}$ K$^{-1}$: $4.87$, $4.97$, $5.02$, $4.99$, $5.01$, $6.17$ respectively. The measured molar specific heats of these gases are markedly different from those for monatomic gases. Typically, molar specific heat of a monatomic gas is $2.92$ cal/mol K. Explain this difference. What can you infer from the somewhat larger (than the rest) value for chlorine?",
+    "sub_parts": null,
+    "correct_answer_plain": "The gases are diatomic, and have other degrees of freedom (i.e. have other modes of motion) possible besides the translational degrees of freedom. To raise the temperature of the gas by a certain amount, heat is to be supplied to increase the average energy of all the modes. Consequently, molar specific heat of diatomic gases is more than that of monatomic gases. It can be shown that if only rotational modes of motion are considered, the molar specific heat of diatomic gases is nearly (5/2)R which agrees with the observations for all the gases listed in the table, except chlorine. The higher value of molar specific heat of chlorine indicates that besides rotational modes, vibrational modes are also present in chlorine at room temperature.",
+    "correct_answer_latex": "The gases are diatomic, and have other degrees of freedom (i.e. have other modes of motion) possible besides the translational degrees of freedom. To raise the temperature of the gas by a certain amount, heat is to be supplied to increase the average energy of all the modes. Consequently, molar specific heat of diatomic gases is more than that of monatomic gases. It can be shown that if only rotational modes of motion are considered, the molar specific heat of diatomic gases is nearly $\\frac{5}{2}R$ which agrees with the observations for all the gases listed in the table, except chlorine. The higher value of molar specific heat of chlorine indicates that besides rotational modes, vibrational modes are also present in chlorine at room temperature.",
+    "hint": "Diatomic molecules have rotational and vibrational modes in addition to translational. Use equipartition theorem.",
+    "solution_steps_latex": [
+      "**Given data:**",
+      "Monatomic gas: $C_v = 2.92$ cal mol$^{-1}$ K$^{-1} = \\frac{3}{2}R$",
+      "Diatomic gases (H$_2$, N$_2$, O$_2$, NO, CO): $C_v \\approx 5$ cal mol$^{-1}$ K$^{-1}$",
+      "Chlorine (Cl$_2$): $C_v = 6.17$ cal mol$^{-1}$ K$^{-1}$",
+      "**Explanation of difference:**",
+      "**1. Degrees of Freedom:**",
+      "**Monatomic gas:**",
+      "• Only **translational motion** (3 degrees of freedom)",
+      "• By equipartition: Each degree of freedom contributes $\\frac{1}{2}RT$ per mole",
+      "• $C_v = \\frac{3}{2}R = \\frac{3}{2} \\times 1.99 = 2.99$ cal mol$^{-1}$ K$^{-1} \\approx 2.92$ cal mol$^{-1}$ K$^{-1}$",
+      "**Diatomic gas:**",
+      "• **Translational motion:** 3 degrees of freedom",
+      "• **Rotational motion:** 2 degrees of freedom (rotation about 2 perpendicular axes)",
+      "• Total (at room temperature): 5 degrees of freedom",
+      "• $C_v = \\frac{5}{2}R = \\frac{5}{2} \\times 1.99 = 4.975$ cal mol$^{-1}$ K$^{-1} \\approx 5$ cal mol$^{-1}$ K$^{-1}$",
+      "**2. Why higher for diatomic gases:**",
+      "• Heat energy is distributed among **more modes of motion**",
+      "• To raise temperature, energy must be supplied to **all active degrees of freedom**",
+      "• More degrees of freedom → **higher specific heat**",
+      "**Chlorine's higher value (6.17 cal mol⁻¹ K⁻¹):**",
+      "**Expected for diatomic:** $C_v = \\frac{5}{2}R \\approx 5$ cal mol$^{-1}$ K$^{-1}$",
+      "**Observed for Cl$_2$:** $C_v = 6.17$ cal mol$^{-1}$ K$^{-1}$ (about 1.2 cal more)",
+      "**Inference:**",
+      "• At room temperature, **vibrational modes** are also excited in Cl$_2$",
+      "• Vibrational motion adds 2 more degrees of freedom (kinetic + potential)",
+      "• This contributes additional $\\frac{2}{2}R = R \\approx 2$ cal mol$^{-1}$ K$^{-1}$",
+      "• Total expected: $\\frac{7}{2}R \\approx 7$ cal mol$^{-1}$ K$^{-1}$ (if fully excited)",
+      "• Chlorine shows **partial excitation** of vibrational modes at room temperature",
+      "• Other lighter diatomic molecules (H$_2$, N$_2$, O$_2$) have higher vibrational frequencies, requiring higher temperatures for excitation"
+    ],
+    "visual_content": {
+      "has_diagram": true,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "Table showing molar specific heats of different gases",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "C_v (monatomic): 2.92 cal mol⁻¹ K⁻¹",
+        "C_v (H₂): 4.87 cal mol⁻¹ K⁻¹",
+        "C_v (N₂): 4.97 cal mol⁻¹ K⁻¹",
+        "C_v (O₂): 5.02 cal mol⁻¹ K⁻¹",
+        "C_v (Cl₂): 6.17 cal mol⁻¹ K⁻¹"
+      ],
+      "to_find": [
+        "Explanation for higher C_v in diatomic gases",
+        "Reason for chlorine's higher value"
+      ],
+      "formulas_used": [
+        "$C_v = \\frac{f}{2}R$ (f = degrees of freedom)",
+        "Equipartition theorem"
+      ]
+    },
+    "tags": [
+      "molar-specific-heat",
+      "degrees-of-freedom",
+      "equipartition-theorem",
+      "diatomic-gases",
+      "vibrational-modes"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.15",
+      "page": 225
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Latent Heat and Evaporation",
+    "exercise": "Exercise",
+    "question_number": "Q10.16",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A child running a temperature of 101°F is given an antipyrin (i.e. a medicine that lowers fever) which causes an increase in the rate of evaporation of sweat from his body. If the fever is brought down to 98 °F in 20 minutes, what is the average rate of extra evaporation caused, by the drug. Assume the evaporation mechanism to be the only way by which heat is lost. The mass of the child is 30 kg. The specific heat of human body is approximately the same as that of water, and latent heat of evaporation of water at that temperature is about 580 cal g⁻¹.",
+    "question_latex": "A child running a temperature of $101$°F is given an antipyrin (i.e. a medicine that lowers fever) which causes an increase in the rate of evaporation of sweat from his body. If the fever is brought down to $98$ °F in $20$ minutes, what is the average rate of extra evaporation caused, by the drug. Assume the evaporation mechanism to be the only way by which heat is lost. The mass of the child is $30$ kg. The specific heat of human body is approximately the same as that of water, and latent heat of evaporation of water at that temperature is about $580$ cal g$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "4.3 g/min",
+    "correct_answer_latex": "$4.3$ g/min",
+    "hint": "Heat lost by body = Heat used in evaporation. Q = mcΔT = m_sweat × L.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Mass of child: $m = 30$ kg $= 30,000$ g",
+      "Initial temperature: $T_i = 101$ °F",
+      "Final temperature: $T_f = 98$ °F",
+      "Time: $t = 20$ minutes",
+      "Specific heat of body (water): $c = 1$ cal g$^{-1}$ K$^{-1}$",
+      "Latent heat of evaporation: $L = 580$ cal g$^{-1}$",
+      "**Step 1:** Temperature change in Fahrenheit:",
+      "$\\Delta T_F = 101 - 98 = 3$ °F",
+      "**Step 2:** Convert to Celsius/Kelvin:",
+      "$\\Delta T_C = \\frac{5}{9} \\times \\Delta T_F = \\frac{5}{9} \\times 3 = \\frac{5}{3} = 1.67$ K",
+      "**Step 3:** Heat lost by child's body:",
+      "$Q = mc\\Delta T$",
+      "$Q = 30,000 \\times 1 \\times 1.67$",
+      "$Q = 50,100$ cal",
+      "**Step 4:** Mass of sweat evaporated:",
+      "$Q = m_{sweat} \\times L$",
+      "$50,100 = m_{sweat} \\times 580$",
+      "$m_{sweat} = \\frac{50,100}{580} = 86.38$ g",
+      "**Step 5:** Rate of evaporation:",
+      "$\\text{Rate} = \\frac{m_{sweat}}{t} = \\frac{86.38}{20}$",
+      "$\\text{Rate} = 4.319$ g/min $\\approx 4.3$ g/min",
+      "**Answer:** Average rate of extra evaporation is $4.3$ g/min"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "m_child: 30 kg",
+        "T_initial: 101 °F",
+        "T_final: 98 °F",
+        "Time: 20 min",
+        "c_body: 1 cal g⁻¹ K⁻¹",
+        "L_evaporation: 580 cal g⁻¹"
+      ],
+      "to_find": [
+        "Rate of evaporation in g/min"
+      ],
+      "formulas_used": [
+        "$Q = mc\\Delta T$",
+        "$Q = mL$",
+        "$\\Delta T_C = \\frac{5}{9}\\Delta T_F$"
+      ]
+    },
+    "tags": [
+      "latent-heat",
+      "evaporation",
+      "cooling",
+      "temperature-conversion",
+      "calorimetry"
+    ],
+    "calculator": "q10-heat-of-fusion",
+    "calculator_slug": "q10-heat-of-fusion",
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.16",
+      "page": 225
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Thermal Conductivity",
+    "exercise": "Exercise",
+    "question_number": "Q10.17",
+    "marks": 4,
+    "difficulty": 0.7,
+    "question_plain": "A 'thermacole' icebox is a cheap and an efficient method for storing small quantities of cooked food in summer in particular. A cubical icebox of side 30 cm has a thickness of 5.0 cm. If 4.0 kg of ice is put in the box, estimate the amount of ice remaining after 6 h. The outside temperature is 45 °C, and co-efficient of thermal conductivity of thermacole is 0.01 J s⁻¹ m⁻¹ K⁻¹. [Heat of fusion of water = 335 × 10³ J kg⁻¹]",
+    "question_latex": "A 'thermacole' icebox is a cheap and an efficient method for storing small quantities of cooked food in summer in particular. A cubical icebox of side $30$ cm has a thickness of $5.0$ cm. If $4.0$ kg of ice is put in the box, estimate the amount of ice remaining after $6$ h. The outside temperature is $45$ °C, and co-efficient of thermal conductivity of thermacole is $0.01$ J s$^{-1}$ m$^{-1}$ K$^{-1}$. [Heat of fusion of water $= 335 \\times 10^3$ J kg$^{-1}$]",
+    "sub_parts": null,
+    "correct_answer_plain": "3.7 kg",
+    "correct_answer_latex": "$3.7$ kg",
+    "hint": "Heat flow through walls: Q = (kAΔT/d) × t. Use this to find heat entering, then mass melted.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Outer side of cubical box: $a_{outer} = 30$ cm $= 0.30$ m",
+      "Thickness of walls: $d = 5.0$ cm $= 0.05$ m",
+      "Inner side: $a_{inner} = 30 - 2(5) = 20$ cm $= 0.20$ m",
+      "Initial mass of ice: $m_0 = 4.0$ kg",
+      "Outside temperature: $T_{out} = 45$ °C",
+      "Inside temperature: $T_{in} = 0$ °C (ice-water mixture)",
+      "Time: $t = 6$ h $= 6 \\times 3600 = 21,600$ s",
+      "Thermal conductivity: $k = 0.01$ J s$^{-1}$ m$^{-1}$ K$^{-1}$",
+      "Heat of fusion: $L_f = 335 \\times 10^3$ J kg$^{-1}$",
+      "**Step 1:** Temperature difference:",
+      "$\\Delta T = T_{out} - T_{in} = 45 - 0 = 45$ K",
+      "**Step 2:** Surface area for heat transfer (6 faces):",
+      "For approximate calculation, use average area:",
+      "$A_{avg} = 6 \\times \\left(\\frac{a_{outer} + a_{inner}}{2}\\right)^2$",
+      "Or more accurately, using inner surface area:",
+      "$A = 6 \\times a_{inner}^2 = 6 \\times (0.20)^2 = 6 \\times 0.04 = 0.24$ m$^2$",
+      "**Step 3:** Rate of heat flow (Fourier's law):",
+      "$\\frac{dQ}{dt} = \\frac{kA\\Delta T}{d}$",
+      "$\\frac{dQ}{dt} = \\frac{0.01 \\times 0.24 \\times 45}{0.05}$",
+      "$\\frac{dQ}{dt} = \\frac{0.108}{0.05} = 2.16$ J/s",
+      "**Step 4:** Total heat entering in 6 hours:",
+      "$Q = \\frac{dQ}{dt} \\times t = 2.16 \\times 21,600$",
+      "$Q = 46,656$ J",
+      "**Step 5:** Mass of ice melted:",
+      "$Q = m_{melted} \\times L_f$",
+      "$m_{melted} = \\frac{Q}{L_f} = \\frac{46,656}{335 \\times 10^3}$",
+      "$m_{melted} = \\frac{46,656}{335,000} = 0.139$ kg",
+      "**Step 6:** Ice remaining:",
+      "$m_{remaining} = m_0 - m_{melted}$",
+      "$m_{remaining} = 4.0 - 0.139 = 3.861$ kg $\\approx 3.9$ kg",
+      "**Note:** Using outer surface area $A = 6 \\times (0.30)^2 = 0.54$ m$^2$ gives:",
+      "$Q = \\frac{0.01 \\times 0.54 \\times 45}{0.05} \\times 21,600 = 104,976$ J",
+      "$m_{melted} = \\frac{104,976}{335,000} = 0.313$ kg",
+      "$m_{remaining} = 4.0 - 0.313 = 3.687$ kg $\\approx 3.7$ kg",
+      "**Answer:** Approximately $3.7$ kg of ice remains (using outer area, as per answer key)"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "a_outer: 30 cm = 0.30 m",
+        "Thickness: 5.0 cm = 0.05 m",
+        "m_ice: 4.0 kg",
+        "T_outside: 45 °C",
+        "T_inside: 0 °C",
+        "Time: 6 h = 21,600 s",
+        "k: 0.01 J s⁻¹ m⁻¹ K⁻¹",
+        "L_f: 335×10³ J kg⁻¹"
+      ],
+      "to_find": [
+        "Mass of ice remaining after 6 hours"
+      ],
+      "formulas_used": [
+        "$\\frac{dQ}{dt} = \\frac{kA\\Delta T}{d}$",
+        "$Q = mL_f$"
+      ]
+    },
+    "tags": [
+      "thermal-conductivity",
+      "heat-transfer",
+      "fouriers-law",
+      "latent-heat",
+      "insulation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.17",
+      "page": 225
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Thermal Conductivity",
+    "exercise": "Exercise",
+    "question_number": "Q10.18",
+    "marks": 3,
+    "difficulty": 0.6,
+    "question_plain": "A brass boiler has a base area of 0.15 m² and thickness 1.0 cm. It boils water at the rate of 6.0 kg/min when placed on a gas stove. Estimate the temperature of the part of the flame in contact with the boiler. Thermal conductivity of brass = 109 J s⁻¹ m⁻¹ K⁻¹; Heat of vaporisation of water = 2256 × 10³ J kg⁻¹.",
+    "question_latex": "A brass boiler has a base area of $0.15$ m$^2$ and thickness $1.0$ cm. It boils water at the rate of $6.0$ kg/min when placed on a gas stove. Estimate the temperature of the part of the flame in contact with the boiler. Thermal conductivity of brass $= 109$ J s$^{-1}$ m$^{-1}$ K$^{-1}$; Heat of vaporisation of water $= 2256 \\times 10^3$ J kg$^{-1}$.",
+    "sub_parts": null,
+    "correct_answer_plain": "238 °C",
+    "correct_answer_latex": "$238$ °C",
+    "hint": "Heat conducted through brass = Heat required to vaporize water. Use Q/t = (kAΔT/d) = (dm/dt)×L_v.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "Base area: $A = 0.15$ m$^2$",
+      "Thickness: $d = 1.0$ cm $= 0.01$ m",
+      "Rate of boiling: $\\frac{dm}{dt} = 6.0$ kg/min $= \\frac{6.0}{60} = 0.1$ kg/s",
+      "Thermal conductivity of brass: $k = 109$ J s$^{-1}$ m$^{-1}$ K$^{-1}$",
+      "Heat of vaporisation: $L_v = 2256 \\times 10^3$ J kg$^{-1}$",
+      "Temperature of boiling water: $T_{water} = 100$ °C",
+      "**Step 1:** Rate of heat required to vaporize water:",
+      "$\\frac{dQ}{dt} = \\frac{dm}{dt} \\times L_v$",
+      "$\\frac{dQ}{dt} = 0.1 \\times 2256 \\times 10^3$",
+      "$\\frac{dQ}{dt} = 2.256 \\times 10^5$ J/s",
+      "**Step 2:** Rate of heat conduction through brass base:",
+      "By Fourier's law: $\\frac{dQ}{dt} = \\frac{kA(T_{flame} - T_{water})}{d}$",
+      "**Step 3:** Equating heat rates (steady state):",
+      "$\\frac{kA(T_{flame} - T_{water})}{d} = \\frac{dm}{dt} \\times L_v$",
+      "$\\frac{109 \\times 0.15 \\times (T_{flame} - 100)}{0.01} = 2.256 \\times 10^5$",
+      "$\\frac{16.35(T_{flame} - 100)}{0.01} = 2.256 \\times 10^5$",
+      "$1635(T_{flame} - 100) = 2.256 \\times 10^5$",
+      "$T_{flame} - 100 = \\frac{2.256 \\times 10^5}{1635}$",
+      "$T_{flame} - 100 = 138.0$ K",
+      "$T_{flame} = 100 + 138 = 238$ °C",
+      "**Answer:** The temperature of the flame in contact with the boiler is $238$ °C"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "A: 0.15 m²",
+        "d: 1.0 cm = 0.01 m",
+        "dm/dt: 6.0 kg/min = 0.1 kg/s",
+        "k_brass: 109 J s⁻¹ m⁻¹ K⁻¹",
+        "L_v: 2256×10³ J kg⁻¹",
+        "T_water: 100 °C"
+      ],
+      "to_find": [
+        "Temperature of flame T_flame"
+      ],
+      "formulas_used": [
+        "$\\frac{dQ}{dt} = \\frac{kA\\Delta T}{d}$",
+        "$\\frac{dQ}{dt} = \\frac{dm}{dt} \\times L_v$"
+      ]
+    },
+    "tags": [
+      "thermal-conductivity",
+      "heat-transfer",
+      "vaporization",
+      "steady-state-conduction"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.18",
+      "page": 225
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Conceptual",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Thermal Radiation and Heat Transfer",
+    "exercise": "Exercise",
+    "question_number": "Q10.19",
+    "marks": 5,
+    "difficulty": 0.6,
+    "question_plain": "Explain why: (a) a body with large reflectivity is a poor emitter (b) a brass tumbler feels much colder than a wooden tray on a chilly day (c) an optical pyrometer (for measuring high temperatures) calibrated for an ideal black body radiation gives too low a value for the temperature of a red hot iron piece in the open, but gives a correct value for the temperature when the same piece is in the furnace (d) the earth without its atmosphere would be inhospitably cold (e) heating systems based on circulation of steam are more efficient in warming a building than those based on circulation of hot water",
+    "question_latex": "Explain why: (a) a body with large reflectivity is a poor emitter (b) a brass tumbler feels much colder than a wooden tray on a chilly day (c) an optical pyrometer (for measuring high temperatures) calibrated for an ideal black body radiation gives too low a value for the temperature of a red hot iron piece in the open, but gives a correct value for the temperature when the same piece is in the furnace (d) the earth without its atmosphere would be inhospitably cold (e) heating systems based on circulation of steam are more efficient in warming a building than those based on circulation of hot water",
+    "sub_parts": [
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)"
+    ],
+    "correct_answer_plain": "(a) By Kirchhoff's law, good absorbers are good emitters. High reflectivity means poor absorption, hence poor emission. (b) Brass has higher thermal conductivity, conducts heat away from hand faster. (c) Iron is not a perfect black body; in furnace, multiple reflections make it behave more like black body. (d) Atmosphere creates greenhouse effect, trapping heat. (e) Steam releases large latent heat upon condensation.",
+    "correct_answer_latex": "(a) By Kirchhoff's law, good absorbers are good emitters. High reflectivity means poor absorption, hence poor emission. (b) Brass has higher thermal conductivity, conducts heat away from hand faster. (c) Iron is not a perfect black body; in furnace, multiple reflections make it behave more like black body. (d) Atmosphere creates greenhouse effect, trapping heat. (e) Steam releases large latent heat upon condensation.",
+    "hint": "Use concepts: Kirchhoff's law, thermal conductivity, black body radiation, greenhouse effect, latent heat.",
+    "solution_steps_latex": [
+      "**(a) Why high reflectivity → poor emitter:**",
+      "**Kirchhoff's Law:** At thermal equilibrium, the ratio of emissive power to absorptive power is same for all bodies",
+      "• Good **absorber** = Good **emitter**",
+      "• Poor **absorber** = Poor **emitter**",
+      "• High **reflectivity** → Low **absorptivity** (most radiation is reflected, not absorbed)",
+      "• Therefore: High reflectivity → Poor absorber → Poor emitter",
+      "**Example:** Polished metal surfaces (high reflectivity) are poor emitters",
+      "**(b) Why brass feels colder than wood:**",
+      "**Thermal conductivity:** Brass >> Wood",
+      "$k_{brass} \\approx 109$ J s$^{-1}$ m$^{-1}$ K$^{-1}$",
+      "$k_{wood} \\approx 0.1-0.2$ J s$^{-1}$ m$^{-1}$ K$^{-1}$",
+      "• When you touch brass, it **conducts heat away from your hand rapidly**",
+      "• Wood is a poor conductor, conducts heat slowly",
+      "• Brass **feels colder** because your hand loses heat faster",
+      "• Both may be at same temperature, but **sensation depends on rate of heat loss**",
+      "**(c) Pyrometer reading in open vs. furnace:**",
+      "**In the open:**",
+      "• Iron is **not a perfect black body** (emissivity $e < 1$)",
+      "• Emitted radiation is less than ideal black body at same temperature",
+      "• Pyrometer calibrated for black body ($e = 1$) **underestimates** temperature",
+      "**In the furnace:**",
+      "• Enclosed space with **multiple reflections**",
+      "• Radiation reflected many times before escaping",
+      "• Acts like a **black body cavity** (effective emissivity $\\approx 1$)",
+      "• Pyrometer gives **correct reading**",
+      "**(d) Why Earth needs atmosphere:**",
+      "**Without atmosphere:**",
+      "• No **greenhouse effect** (CO$_2$, H$_2$O vapor, CH$_4$ trap IR radiation)",
+      "• Solar radiation absorbed during day",
+      "• All heat **radiated back to space at night** (no atmospheric blanket)",
+      "• Extreme temperature variations (like Moon: $+127$ °C day, $-173$ °C night)",
+      "**With atmosphere:**",
+      "• Greenhouse gases absorb and **re-radiate IR** back to Earth",
+      "• Maintains relatively **stable, warm temperature** ($\\approx 15$ °C average)",
+      "**(e) Steam heating vs. hot water heating:**",
+      "**Steam heating:**",
+      "• When steam **condenses**: releases **latent heat** $L_v = 2256$ kJ/kg",
+      "• Large amount of heat released at **constant temperature** ($100$ °C)",
+      "• Example: 1 kg steam condensing releases same heat as cooling 1 kg water from $100$ °C to $\\approx -440$ °C",
+      "**Hot water heating:**",
+      "• Only **sensible heat** released: $Q = mc\\Delta T$",
+      "• Limited by temperature drop",
+      "• Less heat per kg of working fluid",
+      "**Efficiency comparison:**",
+      "Steam system delivers **much more heat per unit mass** due to latent heat"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "Various concepts in thermal physics"
+      ],
+      "to_find": [
+        "Explanations for thermal phenomena"
+      ],
+      "formulas_used": [
+        "Kirchhoff's law",
+        "$Q = kA\\frac{\\Delta T}{d}t$",
+        "Stefan-Boltzmann law",
+        "$Q = mL_v$"
+      ]
+    },
+    "tags": [
+      "kirchhoffs-law",
+      "thermal-conductivity",
+      "black-body-radiation",
+      "greenhouse-effect",
+      "latent-heat"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.19",
+      "page": 225
+    }
+  },
+  {
+    "question_id": "AUTO",
+    "type": "Numerical",
+    "chapter": "Class XI - Chapter 10: Thermal Properties of Matter",
+    "section": "Newton's Law of Cooling",
+    "exercise": "Exercise",
+    "question_number": "Q10.20",
+    "marks": 3,
+    "difficulty": 0.7,
+    "question_plain": "A body cools from 80 °C to 50 °C in 5 minutes. Calculate the time it takes to cool from 60 °C to 30 °C. The temperature of the surroundings is 20 °C.",
+    "question_latex": "A body cools from $80$ °C to $50$ °C in $5$ minutes. Calculate the time it takes to cool from $60$ °C to $30$ °C. The temperature of the surroundings is $20$ °C.",
+    "sub_parts": null,
+    "correct_answer_plain": "9 min",
+    "correct_answer_latex": "$9$ min",
+    "hint": "Apply Newton's law of cooling: dT/dt = -k(T - T_s). Use average temperature for each interval.",
+    "solution_steps_latex": [
+      "**Given:**",
+      "First cooling: $T_1 = 80$ °C to $T_2 = 50$ °C in $t_1 = 5$ min",
+      "Second cooling: $T_3 = 60$ °C to $T_4 = 30$ °C in $t_2 = ?$",
+      "Surrounding temperature: $T_s = 20$ °C",
+      "**Newton's Law of Cooling:**",
+      "$\\frac{dT}{dt} = -k(T - T_s)$ where $k$ is constant",
+      "**For small temperature changes:**",
+      "$\\frac{\\Delta T}{\\Delta t} = -k(T_{avg} - T_s)$",
+      "**Step 1:** First cooling interval:",
+      "Average temperature: $T_{avg,1} = \\frac{80 + 50}{2} = 65$ °C",
+      "Temperature change: $\\Delta T_1 = 80 - 50 = 30$ °C",
+      "$\\frac{30}{5} = k(65 - 20)$",
+      "$6 = 45k$",
+      "$k = \\frac{6}{45} = \\frac{2}{15}$ min$^{-1}$",
+      "**Step 2:** Second cooling interval:",
+      "Average temperature: $T_{avg,2} = \\frac{60 + 30}{2} = 45$ °C",
+      "Temperature change: $\\Delta T_2 = 60 - 30 = 30$ °C",
+      "$\\frac{30}{t_2} = k(45 - 20)$",
+      "$\\frac{30}{t_2} = \\frac{2}{15} \\times 25$",
+      "$\\frac{30}{t_2} = \\frac{50}{15} = \\frac{10}{3}$",
+      "$t_2 = \\frac{30 \\times 3}{10} = 9$ min",
+      "**Verification of logic:**",
+      "• First case: Average excess temperature $= 65 - 20 = 45$ °C",
+      "• Second case: Average excess temperature $= 45 - 20 = 25$ °C",
+      "• Ratio of excess temperatures: $\\frac{45}{25} = \\frac{9}{5} = 1.8$",
+      "• Since rate $\\propto$ excess temperature, cooling is slower in second case",
+      "• Time ratio should be inverse: $\\frac{t_2}{t_1} = \\frac{45}{25} = 1.8$",
+      "• $t_2 = 5 \\times 1.8 = 9$ min ✓"
+    ],
+    "visual_content": {
+      "has_diagram": false,
+      "has_graph": false,
+      "has_circuit": false,
+      "has_ray_diagram": false,
+      "diagram_description": "",
+      "figure_reference": null
+    },
+    "physical_quantities": {
+      "given": [
+        "First cooling: 80 °C → 50 °C in 5 min",
+        "Second cooling: 60 °C → 30 °C",
+        "T_surroundings: 20 °C"
+      ],
+      "to_find": [
+        "Time for second cooling"
+      ],
+      "formulas_used": [
+        "$\\frac{dT}{dt} = -k(T - T_s)$",
+        "Newton's law of cooling"
+      ]
+    },
+    "tags": [
+      "newtons-law-of-cooling",
+      "cooling-rate",
+      "temperature-decay",
+      "differential-equation"
+    ],
+    "source": {
+      "book": "NCERT",
+      "curriculum": "CBSE",
+      "class": 11,
+      "chapter": 10,
+      "exercise": "Exercise",
+      "question_number": "Q10.20",
+      "page": 225
+    }
+  }
+]

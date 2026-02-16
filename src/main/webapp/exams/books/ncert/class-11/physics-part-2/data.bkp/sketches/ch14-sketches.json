@@ -1,0 +1,74 @@
+{
+  "q14-1-transverse-wave": {
+    "type": "transverse-wave-anim",
+    "title": "Travelling Transverse Wave (Q14.1, Q14.8)",
+    "description": "y = A sin(kx − ωt). v = ω/k.",
+    "params": {"A": 25, "k": 0.4, "omega": 4}
+  },
+  "q14-5-longitudinal": {
+    "type": "longitudinal-wave-anim",
+    "title": "Longitudinal Wave (Q14.5)",
+    "description": "Compression and rarefaction. ξ(x,t) = A sin(kx − ωt).",
+    "params": {"k": 0.35, "omega": 3.5}
+  },
+  "q14-6-reflection": {
+    "type": "wave-reflection-anim",
+    "title": "Wave Reflection at Fixed End (Q14.6)",
+    "description": "Pulse reflects with π phase change at rigid boundary.",
+    "params": {}
+  },
+  "q14-9-phase-difference": {
+    "type": "phase-difference-anim",
+    "title": "Phase Difference (Q14.9, Q14.10)",
+    "description": "Different x → different phase. Δφ = kΔx.",
+    "params": {"omega": 4, "k": 0.3}
+  },
+  "q14-11-standing-wave": {
+    "type": "standing-wave-anim",
+    "title": "Standing Wave (Q14.11)",
+    "description": "y = 2A sin(kx) cos(ωt). Nodes and antinodes.",
+    "params": {"A": 30, "k": 0.5, "omega": 5}
+  },
+  "q14-12-harmonics-n1": {
+    "type": "string-harmonics-anim",
+    "title": "Fundamental Mode (Q14.12, Q14.14)",
+    "description": "n = 1: L = λ/2.",
+    "params": {"n": 1, "A": 25, "omega": 4}
+  },
+  "q14-12-harmonics-n2": {
+    "type": "string-harmonics-anim",
+    "title": "Second Harmonic (Q14.12)",
+    "description": "n = 2: L = λ.",
+    "params": {"n": 2, "A": 25, "omega": 4}
+  },
+  "q14-12-harmonics-n3": {
+    "type": "string-harmonics-anim",
+    "title": "Third Harmonic (Q14.12)",
+    "description": "n = 3: L = 3λ/2.",
+    "params": {"n": 3, "A": 25, "omega": 4}
+  },
+  "q14-15-organ-pipe": {
+    "type": "organ-pipe-modes-anim",
+    "title": "Organ Pipe Modes (Q14.15, Q14.17)",
+    "description": "Closed pipe: node at closed end, antinode at open end.",
+    "params": {"mode": 1, "openEnd": false}
+  },
+  "q14-16-vibrating-rod": {
+    "type": "vibrating-rod-anim",
+    "title": "Rod Clamped at Middle (Q14.16)",
+    "description": "L = λ/2. Node at center, antinodes at ends.",
+    "params": {}
+  },
+  "q14-18-beats": {
+    "type": "beats-anim",
+    "title": "Beats (Q14.18)",
+    "description": "Superposition of two slightly different frequencies.",
+    "params": {"f1": 256, "f2": 260}
+  },
+  "q14-19-doppler": {
+    "type": "doppler-effect-anim",
+    "title": "Doppler Effect (Q14.19)",
+    "description": "Source moving: wavefronts compressed ahead, stretched behind.",
+    "params": {}
+  }
+}
