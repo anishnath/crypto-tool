@@ -2,7 +2,7 @@
 <%
     // High-CTR SEO Meta Tags
     String seoTitle = "Free Practice Exams | NCERT Solutions + Visual Math Lab + Physics Tools + Mental Math";
-    String seoDescription = "2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks. 100% free.";
+    String seoDescription = "2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks. 100% free.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -36,7 +36,7 @@
                 <div class="container">
                     <h1 class="hero-title">Free Practice Exams, NCERT Solutions, Visual Math Lab, Physics Tools & Mental Math</h1>
                     <p class="hero-subtitle">
-                        2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers & calculators,
+                        2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers & calculators,
                         CBSE mock tests + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
                     </p>
                 </div>
@@ -107,9 +107,9 @@
                                 <h3 class="board-card-title">NCERT Solutions</h3>
                                 <p class="board-card-subtitle">Textbook Exercise Solutions</p>
                                 <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">2,046 Questions</span>
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">2,711 Questions</span>
                                 </div>
-                                <p class="text-sm text-muted mt-4">Class 9, 10, 11 & 12 Mathematics</p>
+                                <p class="text-sm text-muted mt-4">Class 9–12 Mathematics & Physics</p>
                             </a>
 
                             <!-- Physics Tools Card -->
@@ -296,7 +296,7 @@
                                 <div class="card text-center">
                                     <div
                                         style="font-size: var(--text-3xl); font-weight: 700; color: var(--accent-primary);">
-                                        2,046</div>
+                                        2,711</div>
                                     <div class="text-muted text-sm">NCERT Solutions</div>
                                 </div>
                                 <div class="card text-center">
@@ -339,7 +339,7 @@
     "@type": "WebPage",
     "@id": "https://8gwifi.org/exams/",
     "name": "Free Practice Exams, NCERT Solutions, Visual Math Lab & Mental Math",
-    "description": "2,046 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks.",
+    "description": "2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks.",
     "url": "https://8gwifi.org/exams/",
     "inLanguage": "en",
     "isPartOf": {
@@ -364,8 +364,8 @@
             "position": 1,
             "item": {
                 "@type": "Course",
-                "name": "NCERT Textbook Solutions - Class 9, 10, 11 & 12 Mathematics",
-                "description": "2,046 step-by-step NCERT solutions with interactive graphs, Venn diagrams, and SVG illustrations for Class 9, 10, 11 & 12 Mathematics",
+                "name": "NCERT Textbook Solutions - Class 9, 10, 11 & 12 Mathematics & Physics",
+                "description": "2,711 step-by-step NCERT solutions with interactive graphs, calculators, and physics tools for Class 9–12 Mathematics and Physics",
                 "url": "https://8gwifi.org/exams/books/ncert/",
                 "provider": {"@type": "Organization", "name": "8gwifi.org"},
                 "isAccessibleForFree": true,
