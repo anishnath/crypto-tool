@@ -256,13 +256,21 @@
                 </div>
             </a>
 
-            <div class="subject-card coming-soon">
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-11/physics-part-1/" class="subject-card">
                 <div class="subject-icon physics">&#9889;</div>
                 <div class="subject-info">
-                    <h3>Physics <span class="coming-badge">Soon</span></h3>
-                    <p>Coming soon</p>
+                    <h3>Physics Part 1</h3>
+                    <p>7 Chapters &bull; 282 Questions</p>
                 </div>
-            </div>
+            </a>
+
+            <a href="<%=request.getContextPath()%>/exams/books/ncert/class-11/physics-part-2/" class="subject-card">
+                <div class="subject-icon physics">&#9889;</div>
+                <div class="subject-info">
+                    <h3>Physics Part 2</h3>
+                    <p>7 Chapters &bull; 222 Questions</p>
+                </div>
+            </a>
 
             <div class="subject-card coming-soon">
                 <div class="subject-icon chemistry">&#9878;</div>
@@ -385,24 +393,36 @@
             {
                 "@type": "ListItem",
                 "position": 4,
+                "name": "Class 11 Physics Part 1",
+                "url": "https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Class 11 Physics Part 2",
+                "url": "https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 6,
                 "name": "Class 12 Mathematics Part 1",
                 "url": "https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/"
             },
             {
                 "@type": "ListItem",
-                "position": 5,
+                "position": 7,
                 "name": "Class 12 Mathematics Part 2",
                 "url": "https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-2/"
             },
             {
                 "@type": "ListItem",
-                "position": 6,
+                "position": 8,
                 "name": "Class 12 Physics Part 1",
                 "url": "https://8gwifi.org/exams/books/ncert/class-12/physics-part-1/"
             },
             {
                 "@type": "ListItem",
-                "position": 7,
+                "position": 9,
                 "name": "Class 12 Physics Part 2",
                 "url": "https://8gwifi.org/exams/books/ncert/class-12/physics-part-2/"
             }
