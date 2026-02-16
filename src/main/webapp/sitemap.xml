@@ -1,9 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<?xml version='1.0' encoding='utf-8'?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
     <loc>https://8gwifi.org/</loc>
@@ -444,12 +440,6 @@
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://8gwifi.org/lewis-structure-generator.jsp</loc>
-    <lastmod>2025-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
     <loc>https://8gwifi.org/linear-equations-solver.jsp</loc>
     <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>
@@ -535,12 +525,6 @@
   </url>
   <url>
     <loc>https://8gwifi.org/series-calculator.jsp</loc>
-    <lastmod>2025-11-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://8gwifi.org/math-art-gallery.jsp</loc>
     <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
@@ -639,12 +623,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://8gwifi.org/ohms-law-calculator.jsp</loc>
-    <lastmod>2025-11-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-<url>
     <loc>https://8gwifi.org/latex-equation-editor.jsp</loc>
 </url>
 <url>
@@ -1519,10 +1497,6 @@
     <loc>https://8gwifi.org/docs/linux-cgroup.jsp</loc>
   </url>
   <url>
-    <loc>https://8gwifi.org/diff.jsp</loc>
-  </url>
-
-  <url>
     <loc>https://8gwifi.org/docs/podman-install.jsp</loc>
   </url>
 
@@ -2071,10 +2045,10 @@
     <priority>0.95</priority>
   </url>
 
-  <!-- Tutorials Hub -->
+  
   <url><loc>https://8gwifi.org/tutorials/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
 
-  <!-- HTML Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/html/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/html/introduction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/html/editors.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2104,7 +2078,7 @@
   <url><loc>https://8gwifi.org/tutorials/html/page-layout.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/html/accessibility.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- CSS Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/css/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/css/introduction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/css/adding-css.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2140,7 +2114,7 @@
   <url><loc>https://8gwifi.org/tutorials/css/css-functions.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/css/best-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- JavaScript Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/javascript/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/javascript/introduction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/javascript/adding-javascript.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2178,7 +2152,7 @@
   <url><loc>https://8gwifi.org/tutorials/javascript/console-debugging.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/javascript/best-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Python Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/python/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/variables.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2253,7 +2227,7 @@
   <url><loc>https://8gwifi.org/tutorials/python/prof-args.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/python/prof-sqlite.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Go Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/go/</loc><lastmod>2025-12-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/go/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/go/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2292,7 +2266,7 @@
   <url><loc>https://8gwifi.org/tutorials/go/compiler-flags.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/go/plugins-loading.jsp</loc><lastmod>2025-12-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- PHP Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/php/</loc><lastmod>2025-12-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/php/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/php/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2362,7 +2336,7 @@
   <url><loc>https://8gwifi.org/tutorials/php/security-practices.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/php/testing-deployment.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- PHP Functions Tutorials -->
+  
   <url><loc>https://8gwifi.org/tutorials/php-functions/</loc><lastmod>2026-01-29</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/php-functions/index.jsp</loc><lastmod>2026-01-29</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/php-functions/abs.jsp</loc><lastmod>2026-01-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2659,7 +2633,7 @@
         <priority>0.7</priority>
     </url>
 
-  <!-- Bash Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/bash/</loc><lastmod>2025-12-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/bash/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/bash/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2717,7 +2691,7 @@
   <url><loc>https://8gwifi.org/tutorials/bash/practices-testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/bash/practices-examples.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Java Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/java/</loc><lastmod>2025-12-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/java/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/java/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2802,7 +2776,7 @@
   <url><loc>https://8gwifi.org/tutorials/java/practices-debugging.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/java/practices-examples.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- TypeScript Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/typescript/</loc><lastmod>2025-12-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/typescript/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/typescript/first-program.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2848,7 +2822,7 @@
   <url><loc>https://8gwifi.org/tutorials/typescript/practices-linting.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/typescript/practices-testing.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Rust Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/rust/</loc><lastmod>2025-12-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/rust/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/rust/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2883,7 +2857,7 @@
   <url><loc>https://8gwifi.org/tutorials/rust/closures.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/rust/smart-pointers.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- Lua Tutorial -->
+  
   <url><loc>https://8gwifi.org/tutorials/lua/</loc><lastmod>2025-12-12</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/lua/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/lua/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2912,7 +2886,7 @@
   <url><loc>https://8gwifi.org/tutorials/lua/file-io.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/lua/performance.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <!-- DSA Tutorials -->
+  
   <url><loc>https://8gwifi.org/tutorials/dsa/index.jsp</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://8gwifi.org/tutorials/dsa/intro.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://8gwifi.org/tutorials/dsa/complexity.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -2976,7 +2950,7 @@
         <priority>0.9</priority>
     </url>
 
-    <!-- CBSE Board Landing Page -->
+    
     <url>
         <loc>https://8gwifi.org/exams/cbse-board/</loc>
         <lastmod>2026-01-17</lastmod>
@@ -2984,7 +2958,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- CBSE Class 10 Mathematics Practice Sets -->
+    
     <url>
         <loc>https://8gwifi.org/exams/cbse-board/mathematics/</loc>
         <lastmod>2026-01-17</lastmod>
@@ -2992,7 +2966,7 @@
         <priority>0.9</priority>
     </url>
 
-    <!-- NCERT Textbook Solutions -->
+    
     <url>
         <loc>https://8gwifi.org/exams/books/</loc>
         <lastmod>2026-01-26</lastmod>
@@ -3012,7 +2986,7 @@
         <priority>0.9</priority>
     </url>
 
-    <!-- NCERT Class 9 Mathematics Chapters -->
+    
     <url>
         <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/number-systems/</loc>
         <lastmod>2026-01-26</lastmod>
@@ -3526,46 +3500,6 @@
     </url>
     <url>
         <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-1-q5.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q1.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q2.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q3.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q4.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q5.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q6.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q7.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-9/mathematics/triangles/ex-7-2-q8.jsp</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -5936,31 +5870,6 @@
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-1-q5.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-1-q6.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-1-q7.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-2-q1.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-2-q2.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
         <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/statistics/ex-13-2-q1.jsp</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
@@ -6066,41 +5975,16 @@
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q9.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q10.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q11.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q12.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q13.jsp</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
         <loc>https://8gwifi.org/exams/books/ncert/class-10/mathematics/probability/ex-14-1-q14.jsp</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
 
-    <!-- Quick Math Sitemap URLs -->
-    <!-- Generated on 2026-01-22T14:36:22.640Z -->
-    <!-- Total: 153 URLs (index + practice + 151 topics) -->
+    
+    
+    
 
-    <!-- Quick Math Main Pages -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/index.jsp</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6114,7 +5998,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Advanced Topics (17 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=probability-basics</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6218,7 +6102,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Algebra (3 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=algebra-linear</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6238,7 +6122,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Commercial Math (28 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=addition-money</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6408,7 +6292,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Data Analysis (5 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=data-mean-shortcut</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6440,7 +6324,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Logical Reasoning (4 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=set-union</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6466,7 +6350,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Mensuration (5 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=mensuration-rectangle</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6498,7 +6382,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Number Series (5 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=series-ap-basics</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6530,7 +6414,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Number Theory (9 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=lcm-shortcut</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6586,7 +6470,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Powers & Roots (5 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=cube-roots</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6618,7 +6502,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Probability & Statistics (7 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=probability-basic</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6662,7 +6546,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Speed Math (37 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=addition-rapid</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6886,7 +6770,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Word Problems (26 topics) -->
+    
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=race-head-start</loc>
         <lastmod>2026-01-22</lastmod>
@@ -6901,12 +6785,6 @@
     </url>
     <url>
         <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=speed-distance-time</loc>
-        <lastmod>2026-01-22</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://8gwifi.org/exams/quick-math/practice.jsp?topic=ratio-proportion</loc>
         <lastmod>2026-01-22</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -7044,7 +6922,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Math Memory Games -->
+    
     <url>
         <loc>https://8gwifi.org/exams/math-memory/</loc>
         <lastmod>2026-01-26</lastmod>
@@ -7779,7 +7657,7 @@
         <priority>0.7</priority>
     </url>
 
-    <!-- Physics Calculators -->
+    
     <url>
         <loc>https://8gwifi.org/physics/</loc>
         <lastmod>2025-02-05</lastmod>
@@ -10299,31 +10177,6 @@
             <priority>0.7</priority>
         </url>
         <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/ex-12-2-q6.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/ex-12-2-q7.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/ex-12-2-q8.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/ex-12-2-q9.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/ex-12-2-q10.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
             <loc>https://8gwifi.org/exams/books/ncert/class-11/mathematics/limits-and-derivatives/misc-q1.jsp</loc>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
@@ -10867,21 +10720,6 @@
         </url>
         <url>
             <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/relations-and-functions/misc-q5.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/relations-and-functions/ex-1-1-q15.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/relations-and-functions/ex-1-1-q16.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/relations-and-functions/misc-q7.jsp</loc>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
         </url>
@@ -12581,51 +12419,6 @@
             <priority>0.7</priority>
         </url>
         <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q9.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q10.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q11.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q12.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q13.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q14.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q15.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q16.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q17.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
             <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-1-q18.jsp</loc>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
@@ -12740,17 +12533,6 @@
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
         </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-3-q2.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-        <url>
-            <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-1/applications-of-derivatives/ex-6-3-q3.jsp</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.7</priority>
-        </url>
-
         <url>
             <loc>https://8gwifi.org/exams/books/ncert/class-12/mathematics-part-2/integrals/ex-7-1-q1.jsp</loc>
             <changefreq>monthly</changefreq>
@@ -16063,7 +15845,7 @@
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
-    <!-- Visual Math Lab -->
+    
     <url>
         <loc>https://8gwifi.org/exams/visual-math/</loc>
         <changefreq>weekly</changefreq>
@@ -16104,7 +15886,7 @@
     <url><loc>https://8gwifi.org/exams/visual-math/matrix-calculator.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/integration-explorer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/permutations-combinations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-    <!-- Visual Physics Lab -->
+    
     <url>
         <loc>https://8gwifi.org/exams/visual-physics/</loc>
         <changefreq>weekly</changefreq>
@@ -16129,4 +15911,1266 @@
     <url><loc>https://8gwifi.org/exams/visual-physics/diffraction.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-physics/photoelectric-effect.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-physics/pulley-systems.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/units-and-measurements/q-Q1-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-straight-line/q-Q2-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-21.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/motion-in-a-plane/q-Q3-22.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-21.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-22.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/laws-of-motion/q-Q4-23.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-21.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-22.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/work-energy-and-power/q-Q5-23.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/system-of-particles-and-rotational-motion/q-Q6-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-1/gravitation/q-Q7-21.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-solids/q-Q8-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/mechanical-properties-of-fluids/q-Q9-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermal-properties-of-matter/q-Q10-20.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/thermodynamics/q-Q11-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/kinetic-theory/q-Q12-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/oscillations/q-Q13-18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q1.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q2.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q3.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q4.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q5.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q6.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q7.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q8.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q9.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q10.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q11.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q12.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q13.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q14.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q15.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q16.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q17.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q18.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/exams/books/ncert/class-11/physics-part-2/waves/q-Q19.jsp</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
 </urlset>
