@@ -107,6 +107,14 @@
         .tool-doc-link{color:var(--tool-primary);font-weight:500;text-decoration:none;white-space:nowrap}
         .tool-doc-link:hover{text-decoration:underline}
 
+        /* Description: text on top, dedicated ad placement below (desktop) */
+        .tool-description-stacked .tool-description-inner{flex-direction:column;align-items:stretch;gap:0}
+        .tool-description-stacked .tool-description-content{flex:none}
+        .tool-description-stacked .tool-description-ad-below{display:flex;justify-content:center;margin-top:1rem;min-height:90px;width:100%}
+        .tool-description-stacked .tool-description-ad-below .ad-container{margin:0 auto;min-height:90px;width:100%;max-width:728px;background:linear-gradient(135deg,var(--bg-secondary,#f1f5f9) 0%,var(--border,#e2e8f0) 100%)}
+        .tool-description-stacked .tool-description-ad-below .ad-container.ad-loaded{background:var(--bg-primary,#fff)}
+        @media(max-width:1023px){.tool-description-stacked .tool-description-ad-below{display:none}}
+
         /* SSH Documentation section – minimal CSS + subtle animations */
         .ssh-doc-section{max-width:900px;margin:0 auto;padding:2rem 1.5rem;background:var(--bg-primary)}
         .ssh-doc-inner{border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;background:var(--bg-secondary)}
@@ -179,13 +187,13 @@
         </div>
     </header>
 
-    <!-- Description + Ad -->
-    <section class="tool-description-section">
+    <!-- Description + Ad (text on top, dedicated ad placement below for desktop) -->
+    <section class="tool-description-section tool-description-stacked">
         <div class="tool-description-inner">
             <div class="tool-description-content">
                 <p>Generate SSH key pairs for <strong>GitHub</strong>, <strong>GitLab</strong>, <strong>AWS</strong>, <strong>Azure</strong>. Works on Windows, Mac, Linux. ED25519 (recommended) or RSA 2048/4096. <strong>Browser-based, client-side</strong>—no signup, no data stored. Download .pem/.pub, copy, email, or run ssh-keygen in the Bash tab. <a href="#ssh-documentation" class="tool-doc-link">How to generate SSH key →</a></p>
             </div>
-            <div class="tool-description-ad">
+            <div class="tool-description-ad-below">
                 <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
