@@ -1,277 +1,176 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix Inverse Calculator Online – Free | 8gwifi.org</title>
-  <meta name="description" content="Free matrix inverse calculator (A⁻¹) using Gauss-Jordan elimination. Step-by-step solutions for 2×2 to 6×6 invertible matrices. Shows augmented matrix [A|I] → [I|A⁻¹]. Singularity check, LaTeX display.">
-  <meta name="keywords" content="matrix inverse calculator, inverse matrix, A inverse, Gauss-Jordan elimination, adjugate matrix, matrix inversion, linear algebra calculator, invertible matrix, A^-1">
-  <link rel="canonical" href="https://8gwifi.org/matrix-inverse-calculator.jsp">
+  <meta name="robots" content="index,follow">
+  <meta name="resource-type" content="document">
+  <meta name="language" content="en">
+  <meta name="author" content="Anish Nath">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Matrix Inverse Calculator Online – Free | 8gwifi.org">
-  <meta property="og:description" content="Free matrix inverse calculator (A⁻¹) using Gauss-Jordan elimination. Step-by-step solutions for 2×2 to 6×6 invertible matrices. Shows augmented matrix [A|I] → [I|A⁻¹]. Singularity check, LaTeX display.">
-  <meta property="og:url" content="https://8gwifi.org/matrix-inverse-calculator.jsp">
+  <jsp:include page="modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Matrix Inverse Calculator | A⁻¹ Free Gauss-Jordan" />
+    <jsp:param name="toolDescription" value="Free matrix inverse calculator A⁻¹. Gauss-Jordan elimination, step-by-step. [A|I]→[I|A⁻¹]. Print worksheet with practice exercises. Share, download. 2×2 to 6×6." />
+    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolUrl" value="matrix-inverse-calculator.jsp" />
+    <jsp:param name="toolKeywords" value="matrix inverse calculator, inverse matrix, A inverse, Gauss-Jordan elimination, adjugate matrix, matrix inversion, linear algebra calculator, invertible matrix, A^-1" />
+    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="toolFeatures" value="Gauss-Jordan elimination,Print worksheet with practice exercises,Share URL and download,Singularity detection,2×2 to 6×6,Step-by-step solutions" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="faq1q" value="How do I find the inverse of a matrix?" />
+    <jsp:param name="faq1a" value="Enter your square matrix and click Calculate. The tool performs Gauss-Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse." />
+    <jsp:param name="faq2q" value="When does a matrix not have an inverse?" />
+    <jsp:param name="faq2a" value="A matrix is non-invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix." />
+    <jsp:param name="faq3q" value="What sizes and checks are supported?" />
+    <jsp:param name="faq3a" value="This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss-Jordan steps." />
+  </jsp:include>
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Matrix Inverse Calculator Online – Free | 8gwifi.org">
-  <meta name="twitter:description" content="Compute A⁻¹ via Gauss-Jordan elimination with step-by-step output and verification.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Matrix Inverse Calculator",
-    "applicationCategory": "EducationalApplication",
-    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-    "description": "Calculate matrix inverse A⁻¹ using Gauss-Jordan elimination. Shows step-by-step augmented matrix transformation [A|I] → [I|A⁻¹].",
-    "url": "https://8gwifi.org/matrix-inverse-calculator.jsp",
-    "featureList": ["Gauss-Jordan elimination", "Singularity detection", "2×2 to 6×6 matrices", "Step-by-step solutions", "Verification A·A⁻¹=I", "Random generator"]
-  }
-  </script>
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/matrix-modern.css?v=<%=cacheVersion%>">
 
-  <%@ include file="header-script.jsp"%>
-  <script>
-    window.MathJax = {
-      loader: { load: ['[tex]/color'] },
-      tex: {
-        packages: { '[+]': ['color'] },
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      startup: {
-        ready: () => {
-          MathJax.startup.defaultReady();
-          console.log('MathJax loaded and ready');
-        }
-      }
-    };
-  </script>
+  <%@ include file="modern/ads/ad-init.jsp"%>
+  <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
-    .inverse-calc .card-header{padding:.6rem .9rem;font-weight:600}
-    .inverse-calc .card-body{padding:.7rem .9rem}
-    .inverse-calc .result-card{border-left:4px solid #8b5cf6;background:linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);border-radius:8px;padding:1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(139,92,246,0.1)}
-    .inverse-calc .verification-card{border-left:4px solid #10b981;background:linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);border-radius:8px;padding:1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(16,185,129,0.1)}
-    .inverse-calc .step-card{
-      border-left:4px solid #6366f1;
-      background:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      padding:1rem 1.25rem;
-      margin:0.75rem 0;
-      border-radius:8px;
-      box-shadow:0 1px 3px rgba(99,102,241,0.08);
-      transition:all 0.2s ease;
-    }
-    .inverse-calc .step-card:hover{
-      box-shadow:0 4px 12px rgba(99,102,241,0.15);
-      transform:translateX(2px);
-    }
-    .inverse-calc .matrix-display{
-      display:block;
-      text-align:center;
-      padding:0.75rem;
-      margin:0.75rem 0;
-      background:white;
-      border-radius:6px;
-      border:1px solid #e0e7ff;
-    }
+    :root { --tool-primary:#3b82f6; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
+    .inverse-calc .verification-card{border-left:4px solid #10b981;background:linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);border-radius:8px;padding:1.25rem;margin:1rem 0}
     .inverse-calc .augmented-matrix{display:inline-block;position:relative}
     .inverse-calc .augmented-divider{position:absolute;left:50%;top:10%;bottom:10%;width:2px;background:#94a3b8}
-
-    .step-number{
-      display:inline-block;
-      background:#6366f1;
-      color:white;
-      padding:0.2rem 0.6rem;
-      border-radius:12px;
-      font-size:0.85rem;
-      font-weight:600;
-      margin-right:0.5rem;
-      min-width:32px;
-      text-align:center;
-    }
-
-    .step-description{
-      font-size:0.95rem;
-      color:#4b5563;
-      line-height:1.6;
-      flex:1;
-    }
-
-    /* Hide LaTeX source when MathJax has rendered */
-    .matrix-display .MathJax_Preview,
-    .matrix-display script[type^="math/tex"] {
-      display: none !important;
-    }
-
-    @media (max-width: 767px) {
-      .inverse-calc h1{font-size:1.5rem}
-      .inverse-calc .card-header{font-size:0.95rem}
-      .inverse-calc button{width:100%;margin:0.25rem 0}
-      .inverse-calc .matrix-display{font-size:0.85em;padding:0.5rem}
-      .inverse-calc .step-card{padding:0.75rem}
-    }
+    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
+    .tool-btn-outline:hover{background:var(--tool-light)}
+    .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
+    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
+    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
+    .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary);margin-bottom:0.5rem}
+    .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
 </head>
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-<div class="container mt-4 inverse-calc">
-  <h1 class="mb-2">Matrix Inverse Calculator</h1>
-  <p class="text-muted mb-3">Calculate the inverse of any square invertible matrix using Gauss-Jordan elimination.</p>
+<body>
+<%@ include file="modern/components/nav-header.jsp"%>
 
-  <div class="row">
-    <div class="col-lg-4 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header">Matrix Input</h5>
-        <div class="card-body">
-          <div class="form-group">
-            <label for="matrixSize">Matrix Size (n×n)</label>
-            <div class="d-flex align-items-center">
-              <input id="matrixSize" type="number" min="2" max="6" class="form-control mr-2" value="3" style="flex:1">
-              <button id="btnRandom" class="btn btn-outline-info btn-sm" title="Generate random matrix">
-                <i class="fas fa-random"></i> Random
-              </button>
-            </div>
-            <small class="text-muted">Supports 2×2 up to 6×6 matrices</small>
+<header class="tool-page-header">
+  <div class="tool-page-header-inner">
+    <div>
+      <h1 class="tool-page-title">Matrix Inverse Calculator</h1>
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <span>Matrix Inverse</span>
+      </nav>
+    </div>
+    <div class="tool-page-badges">
+      <span class="tool-badge">Free</span>
+      <span class="tool-badge">Client-Side</span>
+      <span class="tool-badge">Step-by-Step</span>
+    </div>
+  </div>
+</header>
+
+<section class="tool-description-section">
+  <div class="tool-description-inner">
+    <div class="tool-description-content">
+      <p>Calculate the inverse of any square invertible matrix using Gauss-Jordan elimination. [A|I] → [I|A⁻¹]. <strong>100% client-side</strong>—no data sent to servers. Supports 2×2 to 6×6.</p>
+    </div>
+  </div>
+</section>
+
+<main class="tool-page-container">
+  <div class="tool-input-column">
+    <div class="tool-card matrix-calc inverse-calc">
+      <div class="tool-card-header">Matrix Input</div>
+      <div class="tool-card-body">
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="matrixSize">Matrix Size (n×n)</label>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <input id="matrixSize" type="number" min="2" max="6" class="tool-input" value="3" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);flex:1;font-size:0.875rem">
+            <button type="button" id="btnRandom" class="tool-btn-outline" style="flex-shrink:0" title="Generate random matrix">Random</button>
           </div>
-
-          <div class="form-group">
-            <label for="matrixInput">Matrix Entries</label>
-            <textarea id="matrixInput" class="form-control" rows="8" placeholder="Enter matrix entries:
+          <span class="tool-form-hint">Supports 2×2 up to 6×6 matrices</span>
+        </div>
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="matrixInput">Matrix Entries</label>
+          <textarea id="matrixInput" class="tool-input" rows="8" placeholder="Enter matrix entries:
 1 2 3
 0 1 4
-5 6 0"></textarea>
-            <small class="text-muted">One row per line, space or comma separated</small>
-          </div>
-
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="showSteps" checked>
-              <label class="custom-control-label" for="showSteps">Show detailed steps</label>
-            </div>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="verifyResult" checked>
-              <label class="custom-control-label" for="verifyResult">Verify A × A⁻¹ = I</label>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap">
-            <button id="btnCalculate" class="btn btn-primary btn-sm mr-2 mb-2">Calculate Inverse</button>
-            <button id="btnClear" class="btn btn-outline-secondary btn-sm mb-2">Clear</button>
-          </div>
-          <div id="inputError" class="text-danger small mt-2" style="display:none"></div>
+5 6 0" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);width:100%;font-family:var(--font-mono,'monospace');font-size:0.875rem;resize:vertical"></textarea>
+          <span class="tool-form-hint">One row per line, space or comma separated</span>
         </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Quick Presets</h5>
-        <div class="card-body">
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="identity">Identity (3×3)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="diagonal">Diagonal Matrix</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="example1">Example 1 (3×3)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block" data-preset="example2">Example 2 (2×2)</button>
+        <div class="tool-form-group">
+          <label class="tool-checkbox-wrap"><input type="checkbox" id="showSteps" checked><span>Show detailed steps</span></label>
+          <label class="tool-checkbox-wrap"><input type="checkbox" id="verifyResult" checked><span>Verify A × A⁻¹ = I</span></label>
         </div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem">
+          <button type="button" id="btnCalculate" class="tool-action-btn" style="padding:0.5rem 1rem;margin-top:0">Calculate Inverse</button>
+          <button type="button" id="btnClear" class="tool-btn-outline" style="margin-top:0">Clear</button>
+        </div>
+        <div id="inputError" class="tool-form-hint" style="color:var(--error,#ef4444);display:none;margin-top:0.5rem"></div>
       </div>
     </div>
 
-    <div class="col-lg-8 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex flex-wrap justify-content-between align-items-center">
-          <span class="mb-1 mb-sm-0">Inverse Matrix Result</span>
-          <div>
-            <button id="btnShareURL" class="btn btn-outline-primary btn-sm mr-1 mb-1" title="Copy URL to clipboard">
-              <i class="fas fa-share-alt"></i> Share URL
-            </button>
-            <button id="btnDownloadImage" class="btn btn-outline-success btn-sm mb-1" title="Download result as image">
-              <i class="fas fa-download"></i> Download Image
-            </button>
-          </div>
-        </h5>
-        <div class="card-body">
-          <div id="resultArea" class="text-center text-muted">
-            Enter an invertible square matrix and click "Calculate Inverse" to see the result.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Step-by-Step Solution</h5>
-        <div class="card-body">
-          <div id="stepsArea" class="text-muted">
-            Detailed Gauss-Jordan elimination steps will appear here.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">About Matrix Inverse</h5>
-        <div class="card-body small">
-          <p><strong>What is a Matrix Inverse?</strong><br>
-          The inverse of a square matrix A, denoted A⁻¹, is the matrix such that A × A⁻¹ = A⁻¹ × A = I (identity matrix).</p>
-
-          <p><strong>Requirements for Invertibility:</strong></p>
-          <ul>
-            <li>Matrix must be square (n×n)</li>
-            <li>Determinant must be non-zero (det(A) ≠ 0)</li>
-            <li>All rows/columns must be linearly independent</li>
-            <li>Matrix must have full rank (rank = n)</li>
-          </ul>
-
-          <p><strong>Gauss-Jordan Elimination Method:</strong></p>
-          <ol>
-            <li>Create augmented matrix [A | I]</li>
-            <li>Use row operations to transform A into I</li>
-            <li>The right side becomes A⁻¹: [I | A⁻¹]</li>
-          </ol>
-
-          <p><strong>Properties:</strong></p>
-          <ul>
-            <li>(A⁻¹)⁻¹ = A</li>
-            <li>(AB)⁻¹ = B⁻¹A⁻¹</li>
-            <li>(A<sup>T</sup>)⁻¹ = (A⁻¹)<sup>T</sup></li>
-            <li>det(A⁻¹) = 1/det(A)</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Related Calculus Tools</h5>
-        <div class="card-body small">
-          <div class="d-flex flex-wrap mb-2">
-            <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
-            <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
-            <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
-            <a href="series-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">Taylor Series</a>
-          </div>
-          <div class="text-muted">
-            Explore calculus tools for derivatives, integrals, limits, and series expansion.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Related Matrix Tools</h5>
-        <div class="card-body small">
-          <div class="d-flex flex-wrap mb-2">
-            <a href="matrix-type-classifier.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-list"></i> Matrix Type Classifier
-            </a>
-            <a href="matrix-determinant-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-square-root-alt"></i> Determinant Calculator
-            </a>
-            <a href="matrix-eigenvalue-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">
-              <i class="fas fa-wave-square"></i> Eigenvalues &amp; Eigenvectors
-            </a>
-          </div>
-          <div class="text-muted">
-            Explore more matrix computation tools for complete linear algebra analysis.
-          </div>
+    <div class="tool-card matrix-calc inverse-calc">
+      <div class="tool-card-header">Quick Presets</div>
+      <div class="tool-card-body">
+        <div class="matrix-example-grid">
+          <button type="button" class="matrix-example-btn" data-preset="identity">Identity (3×3)</button>
+          <button type="button" class="matrix-example-btn" data-preset="diagonal">Diagonal Matrix</button>
+          <button type="button" class="matrix-example-btn" data-preset="example1">Example 1 (3×3)</button>
+          <button type="button" class="matrix-example-btn" data-preset="example2">Example 2 (2×2)</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="tool-output-column">
+    <div class="tool-card matrix-calc inverse-calc">
+      <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
+        <span>Inverse Matrix Result</span>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+        </div>
+      </div>
+      <div class="tool-card-body">
+        <div id="resultArea" style="text-align:center;color:var(--text-muted);padding:1rem">Enter an invertible square matrix and click "Calculate Inverse" to see the result.</div>
+      </div>
+    </div>
+
+    <div class="tool-card matrix-calc inverse-calc">
+      <div class="tool-card-header">Step-by-Step Solution</div>
+      <div class="tool-card-body">
+        <div id="stepsArea" style="color:var(--text-muted)">Detailed Gauss-Jordan elimination steps will appear here.</div>
+      </div>
+    </div>
+
+    <jsp:include page="modern/components/related-tools.jsp">
+      <jsp:param name="currentToolUrl" value="matrix-inverse-calculator.jsp" />
+      <jsp:param name="keyword" value="matrix" />
+      <jsp:param name="limit" value="6" />
+    </jsp:include>
+  </div>
+
+  <div class="tool-ads-column">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
 <script>
@@ -288,48 +187,11 @@
   const inputError = document.getElementById('inputError');
   const presetButtons = document.querySelectorAll('[data-preset]');
 
-  const EPS = 1e-10;
-
-  function parseMatrix(text, n) {
-    const rows = text.trim().split('\n').filter(r => r.trim());
-    if(rows.length !== n) {
-      throw new Error(`Expected ${n} rows, got ${rows.length}`);
-    }
-    const matrix = [];
-    for(let i = 0; i < n; i++) {
-      const entries = rows[i].trim().split(/[\s,]+/).filter(Boolean);
-      if(entries.length !== n) {
-        throw new Error(`Row ${i+1}: expected ${n} entries, got ${entries.length}`);
-      }
-      const row = entries.map(e => {
-        const num = parseFloat(e);
-        if(!isFinite(num)) throw new Error(`Invalid number: ${e}`);
-        return num;
-      });
-      matrix.push(row);
-    }
-    return matrix;
-  }
-
-  function cloneMatrix(mat) {
-    return mat.map(row => [...row]);
-  }
-
-  function smartFormat(num) {
-    if(Math.abs(num) < EPS) return '0';
-    if(Math.abs(num - Math.round(num)) < EPS) return Math.round(num).toString();
-    return parseFloat(num.toFixed(3)).toString();
-  }
-
-  function formatMatrix(mat) {
-    const rows = mat.map(row =>
-      row.map(val => {
-        const num = Math.abs(val) < EPS ? 0 : val;
-        return smartFormat(num);
-      }).join(' & ')
-    );
-    return '\\begin{bmatrix}' + rows.join(' \\\\ ') + '\\end{bmatrix}';
-  }
+  const EPS = MatrixUtils.EPS;
+  const parseMatrix = (text, n) => MatrixUtils.parseMatrix(text, n, n);
+  const cloneMatrix = MatrixUtils.cloneMatrix;
+  const smartFormat = MatrixUtils.smartFormat;
+  const formatMatrix = MatrixUtils.formatMatrix;
 
   function formatAugmentedMatrix(A, I) {
     const n = A.length;
@@ -350,34 +212,8 @@
     return '\\left[\\begin{array}{' + 'c'.repeat(n) + '|' + 'c'.repeat(n) + '}' + rows.join(' \\\\ ') + '\\end{array}\\right]';
   }
 
-  function createIdentity(n) {
-    const I = [];
-    for(let i = 0; i < n; i++) {
-      I[i] = [];
-      for(let j = 0; j < n; j++) {
-        I[i][j] = i === j ? 1 : 0;
-      }
-    }
-    return I;
-  }
-
-  function multiply(A, B) {
-    const n = A.length;
-    const m = B[0].length;
-    const p = B.length;
-    const result = [];
-    for(let i = 0; i < n; i++) {
-      result[i] = [];
-      for(let j = 0; j < m; j++) {
-        let sum = 0;
-        for(let k = 0; k < p; k++) {
-          sum += A[i][k] * B[k][j];
-        }
-        result[i][j] = sum;
-      }
-    }
-    return result;
-  }
+  const createIdentity = MatrixUtils.createIdentity;
+  const multiply = MatrixUtils.multiply;
 
   function invertMatrix(mat) {
     const n = mat.length;
@@ -495,8 +331,8 @@
             <div class="matrix-display">$$${formatMatrix(product)}$$</div>
             <div class="mt-2">
               ${isIdentity
-                ? '<i class="fas fa-check-circle text-success"></i> Result verified! A × A⁻¹ = I'
-                : '<i class="fas fa-exclamation-triangle text-warning"></i> Minor numerical errors present (expected for floating point)'}
+                ? '✓ Result verified! A × A⁻¹ = I'
+                : '⚠ Minor numerical errors present (expected for floating point)'}
             </div>
           </div>
         `;
@@ -505,12 +341,11 @@
       resultArea.innerHTML = html;
 
       if(showSteps.checked) {
-        let stepsHtml = '<div class="mb-4"><h5 class="text-dark">📋 Gauss-Jordan Steps</h5></div>';
+        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Gauss-Jordan Steps</h5></div>';
         stepsHtml += '<p class="text-muted mb-4" style="font-size:0.95rem">Watch the transformation: [A | I] → [I | A⁻¹]</p>';
 
         result.steps.forEach((step, idx) => {
-          stepsHtml += `<div class="step-card">`;
-          stepsHtml += `<div class="d-flex align-items-start">`;
+          stepsHtml += `<div class="step-card"><div class="step-inner">`;
           stepsHtml += `<span class="step-number">${idx + 1}</span>`;
           stepsHtml += `<div class="step-description">${step.desc}`;
           if(step.showMatrix && step.matrix) {
@@ -532,7 +367,7 @@
     } catch(err) {
       inputError.textContent = err.message;
       inputError.style.display = 'block';
-      resultArea.innerHTML = '<div class="alert alert-danger">' + err.message + '</div>';
+      resultArea.innerHTML = '<div style="padding:1rem;background:rgba(239,68,68,0.1);border:1px solid var(--error);border-radius:0.5rem;color:var(--error)">' + err.message + '</div>';
       stepsArea.innerHTML = '';
     }
   }
@@ -592,199 +427,90 @@
     if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)) calculate();
   });
 
-  // Share URL functionality with matrix data
-  const btnShareURL = document.getElementById('btnShareURL');
-  if(btnShareURL) {
-    btnShareURL.addEventListener('click', function() {
-      try {
-        const n = parseInt(matrixSize.value);
-        const matrixText = matrixInput.value.trim();
-        if(!matrixText) {
-          alert('Please enter a matrix first!');
-          return;
-        }
+  // Share URL
+  MatrixUtils.shareURL(document.getElementById('btnShareURL'), function() {
+    const matrixText = matrixInput.value.trim();
+    if(!matrixText) { alert('Please enter a matrix first!'); return null; }
+    return { size: matrixSize.value, matrix: btoa(encodeURIComponent(matrixText)) };
+  });
 
-        const baseUrl = window.location.origin + window.location.pathname;
-        const params = new URLSearchParams();
-        params.set('size', n);
-        params.set('matrix', btoa(encodeURIComponent(matrixText)));
+  // Download Image
+  MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-inverse', 'No result to download. Please calculate an inverse first.');
+  MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Inverse', { exerciseType: 'inverse' });
 
-        const shareUrl = baseUrl + '?' + params.toString();
-
-        if(navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(shareUrl).then(() => {
-            const originalHTML = btnShareURL.innerHTML;
-            btnShareURL.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            btnShareURL.classList.remove('btn-outline-primary');
-            btnShareURL.classList.add('btn-success');
-            setTimeout(() => {
-              btnShareURL.innerHTML = originalHTML;
-              btnShareURL.classList.remove('btn-success');
-              btnShareURL.classList.add('btn-outline-primary');
-            }, 2000);
-          }).catch(err => {
-            alert('Failed to copy URL: ' + err);
-          });
-        } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = shareUrl;
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-          alert('URL copied to clipboard!');
-        }
-      } catch(err) {
-        console.error('Error creating share URL:', err);
-        alert('Failed to create share URL');
-      }
-    });
-  }
-
-  // Download as Image functionality
-  const btnDownloadImage = document.getElementById('btnDownloadImage');
-  if(btnDownloadImage) {
-      btnDownloadImage.addEventListener('click', async function() {
-          const resultCard = document.querySelector('.card-body #resultArea').closest('.card');
-          if(!resultCard || !resultCard.querySelector('.result-card')) {
-              alert('No result to download. Please calculate an inverse first.');
-              return;
-          }
-
-          const originalHTML = btnDownloadImage.innerHTML;
-          btnDownloadImage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-          btnDownloadImage.disabled = true;
-
-          try {
-              // Ensure MathJax is fully rendered
-              if(window.MathJax && window.MathJax.typesetPromise) {
-                  await MathJax.typesetPromise([resultCard]);
-                  await new Promise(resolve => setTimeout(resolve, 800));
-              }
-
-              // Use dom-to-image-more
-              const dataUrl = await domtoimage.toPng(resultCard, {
-                  quality: 1,
-                  bgcolor: '#ffffff',
-                  width: resultCard.offsetWidth,
-                  height: resultCard.offsetHeight,
-                  style: {
-                      margin: '0',
-                      padding: '20px'
-                  },
-                  filter: (node) => {
-                      // Filter out script tags and MathJax preview elements
-                      if(node.tagName === 'SCRIPT') return false;
-                      if(node.classList && node.classList.contains('MathJax_Preview')) return false;
-
-                      // Hide text nodes with LaTeX source
-                      if(node.nodeType === Node.TEXT_NODE) {
-                          const text = node.textContent || '';
-                          if(text.includes('$$') || text.includes('\\begin{bmatrix}')) {
-                              return false;
-                          }
-                      }
-                      return true;
-                  }
-              });
-
-              // Download the image
-              const link = document.createElement('a');
-              const timestamp = new Date().toISOString().slice(0, 10);
-              link.download = `matrix-inverse-${timestamp}.png`;
-              link.href = dataUrl;
-              link.click();
-
-              btnDownloadImage.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
-              btnDownloadImage.classList.remove('btn-outline-success');
-              btnDownloadImage.classList.add('btn-success');
-              setTimeout(() => {
-                  btnDownloadImage.innerHTML = originalHTML;
-                  btnDownloadImage.classList.remove('btn-success');
-                  btnDownloadImage.classList.add('btn-outline-success');
-                  btnDownloadImage.disabled = false;
-              }, 2000);
-
-          } catch(err) {
-              console.error('Error generating image:', err);
-              alert('Failed to generate image: ' + err.message);
-              btnDownloadImage.innerHTML = originalHTML;
-              btnDownloadImage.disabled = false;
-          }
-      });
-  }
-
-  // Load from URL parameters if present
-  function loadFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('matrix') && urlParams.has('size')) {
-      try {
-        const size = parseInt(urlParams.get('size'));
-        const matrixData = decodeURIComponent(atob(urlParams.get('matrix')));
-
-        matrixSize.value = size;
-        matrixInput.value = matrixData;
-
-        setTimeout(() => calculate(), 100);
-        return true;
-      } catch(err) {
-        console.error('Error loading from URL:', err);
-      }
+  // Load from URL or default
+  const loaded = MatrixUtils.loadFromURL(function(p) {
+    if(p.matrix && p.size) {
+      matrixSize.value = p.size;
+      matrixInput.value = p.matrix;
+      setTimeout(() => calculate(), 100);
+      return true;
     }
     return false;
-  }
-
-  // Load example by default or from URL
-  if(!loadFromURL()) {
+  });
+  if(!loaded) {
     loadPreset('example1');
   }
 })();
 </script>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
-
-<!-- Visible FAQ section (must match JSON-LD below) -->
-<section id="faq" class="mt-5">
-  <h2 class="h5">Matrix Inverse: FAQ</h2>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">How do I find the inverse of a matrix?</h3>
-    <p class="mb-0">Enter your square matrix and click Calculate. The tool performs Gauss‑Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">When does a matrix not have an inverse?</h3>
-    <p class="mb-0">A matrix is non‑invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">What sizes and checks are supported?</h3>
-    <p class="mb-0">This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss‑Jordan steps.</p>
-  </div></div>
+<section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Inverse Tool &amp; Methodology</h2>
+    <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">The inverse A⁻¹ satisfies A × A⁻¹ = I. This tool uses Gauss-Jordan elimination on [A|I] to produce [I|A⁻¹]. A matrix is singular (no inverse) when det(A)=0. <strong>All calculations run client-side</strong>—no data stored.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1.5rem">
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Authorship &amp; Expertise</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">Anish Nath</a></li>
+          <li><strong>Background:</strong> Math and developer tools for education</li>
+          <li><strong>Method:</strong> Gauss-Jordan elimination</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Trust &amp; Privacy</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Privacy:</strong> All calculations run locally; no data stored</li>
+          <li><strong>Client-side:</strong> Your matrices never leave your device</li>
+          <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">@anish2good</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type":"Question","name":"How do I find the inverse of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Enter your square matrix and click Calculate. The tool performs Gauss‑Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse."}},
-    {"@type":"Question","name":"When does a matrix not have an inverse?","acceptedAnswer":{"@type":"Answer","text":"A matrix is non‑invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) < n for an n×n matrix."}},
-    {"@type":"Question","name":"What sizes and checks are supported?","acceptedAnswer":{"@type":"Answer","text":"This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss‑Jordan steps."}}
-  ]
-}
-</script>
+<section id="faq" style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">Matrix Inverse: FAQ</h2>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How do I find the inverse of a matrix?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Enter your square matrix and click Calculate. The tool performs Gauss-Jordan elimination on the augmented matrix [A | I] until it reaches [I | A⁻¹]. If det(A) = 0 at any point, the matrix is singular and has no inverse.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">When does a matrix not have an inverse?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is non-invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and checks are supported?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss-Jordan steps.</p>
+  </div>
+</section>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-    {"@type":"ListItem","position":2,"name":"Matrix Inverse Calculator","item":"https://8gwifi.org/matrix-inverse-calculator.jsp"}
-  ]
-}
-</script>
-</div>
-<%@ include file="body-close.jsp"%>
+<%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+<%@ include file="modern/components/support-section.jsp"%>
+<%@ include file="modern/ads/ad-sticky-footer.jsp"%>
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">&copy; <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 8gwifi.org - Free Online Tools</p>
+    <div class="footer-links">
+      <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+      <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener" class="footer-link">X</a>
+    </div>
+  </div>
+</footer>
+
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
+</body>
+</html>

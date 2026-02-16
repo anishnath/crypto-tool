@@ -1,97 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix Type Classifier Online – Free | 8gwifi.org</title>
-  <meta name="description" content="Free online matrix type classifier. Paste any matrix and instantly detect if it is square, rectangular, diagonal, scalar, identity, symmetric, skew-symmetric, triangular, orthogonal, singular, or stochastic. Shows working steps with rank, determinant, trace and property explanations. Perfect for linear algebra, engineering, machine learning, and competitive exams.">
-  <meta name="keywords" content="matrix type classifier, types of matrices, matrix identifier, symmetric matrix checker, diagonal matrix checker, scalar matrix, orthogonal matrix, singular matrix, stochastic matrix, linear algebra calculator, matrix rank, determinant calculator, matrix classification">
-  <link rel="canonical" href="https://8gwifi.org/matrix-type-classifier.jsp">
-  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
-  <meta name="author" content="8gwifi.org">
-  <meta property="og:title" content="Matrix Type Classifier Online – Free | 8gwifi.org">
-  <meta property="og:description" content="Paste any matrix to detect 15+ matrix types: square, diagonal, identity, symmetric, upper triangular, orthogonal, singular and more. Includes explanations and visualization.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://8gwifi.org/matrix-type-classifier.jsp">
-  <meta property="og:image" content="https://8gwifi.org/images/matrix-classifier.png">
-  <meta property="og:site_name" content="8gwifi.org - Free Online Tools">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Matrix Type Classifier Online – Free | 8gwifi.org">
-  <meta name="twitter:description" content="Detect dozens of matrix properties instantly. Includes proofs, rank/determinant and interactive visualization.">
-  <meta name="twitter:image" content="https://8gwifi.org/images/matrix-classifier.png">
-  <%@ include file="header-script.jsp"%>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"SoftwareApplication",
-    "name":"Matrix Type Classifier",
-    "alternateName":"Matrix Property Identifier",
-    "url":"https://8gwifi.org/matrix-type-classifier.jsp",
-    "applicationCategory":"EducationalApplication",
-    "applicationSubCategory":"Mathematics Tool",
-    "operatingSystem":"Web Browser (All Platforms)",
-    "browserRequirements":"Requires JavaScript. HTML5 Canvas Support.",
-    "softwareVersion":"1.0",
-    "description":"Interactive linear algebra calculator that classifies matrices in real time. Paste any matrix to detect if it is square, diagonal, scalar, identity, symmetric, skew-symmetric, orthogonal, triangular, singular, stochastic and more. Provides determinant, rank, trace, eigenvalue hints, visualization and step-by-step reasoning.",
-    "featureList":[
-      "Matrix dimension & entry validator",
-      "Automatic detection of 15+ matrix classes",
-      "Determinant, rank & trace computation",
-      "Orthogonality & stochastic checks",
-      "Matrix heatmap & diagonal highlighting",
-      "Preset library (identity, symmetric, orthogonal, singular, stochastic)",
-      "Step-by-step proof style explanations",
-      "Export & copy results"
-    ],
-    "offers":{
-      "@type":"Offer",
-      "price":"0",
-      "priceCurrency":"USD",
-      "availability":"https://schema.org/InStock",
-      "priceValidUntil":"2099-12-31"
-    },
-    "provider":{
-      "@type":"Organization",
-      "name":"8gwifi.org",
-      "url":"https://8gwifi.org"
-    },
-    "inLanguage":"en-US",
-    "isAccessibleForFree":true,
-    "audience":{
-      "@type":"EducationalAudience",
-      "educationalRole":"Student, Teacher, Engineer, Data Scientist"
-    },
-    "learningResourceType":"Interactive Calculator",
-    "interactivityType":"active",
-    "teaches":["Matrix Classification","Linear Algebra","Symmetric Matrices","Orthogonal Matrices","Determinant","Rank"],
-    "keywords":"matrix type classifier, matrix type checker, linear algebra calculator, symmetric matrix detector"
-  }
-  </script>
-  <script>
-    window.MathJax = {
-      loader: { load: ['[tex]/color'] },
-      tex: {
-        packages: { '[+]': ['color'] },
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      startup: {
-        ready: () => {
-          MathJax.startup.defaultReady();
-          console.log('MathJax loaded and ready');
-          if(window.__pendingMath && window.__pendingMath.length){
-            MathJax.typesetPromise(window.__pendingMath).finally(() => { window.__pendingMath = []; });
-          }
-        }
-      }
-    };
-  </script>
+
+  <jsp:include page="modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Matrix Type Classifier | 20+ Types Free" />
+    <jsp:param name="toolDescription" value="Identify 20+ matrix types: symmetric, diagonal, triangular, orthogonal. Automatic property analysis. Print worksheet with practice exercises. Share, download. Step-by-step reasoning." />
+    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolUrl" value="matrix-type-classifier.jsp" />
+    <jsp:param name="toolKeywords" value="matrix type classifier, matrix properties, symmetric matrix, orthogonal matrix, diagonal matrix, triangular matrix, positive definite, nilpotent, idempotent, matrix analysis" />
+    <jsp:param name="toolFeatures" value="20+ matrix types,Print worksheet with practice exercises,Share URL and copy matrix,Property analysis,Visual classification,Step-by-step reasoning" />
+    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="faq1q" value="How do you identify the type of a matrix?" />
+    <jsp:param name="faq1a" value="Check dimensions first (square vs rectangular). For square matrices, compare A to A^T (symmetric if A = A^T, skew-symmetric if A = -A^T), inspect diagonal entries, and compute determinant/rank for singularity. The tool automates these steps." />
+    <jsp:param name="faq2q" value="What matrix types does this detect?" />
+    <jsp:param name="faq2a" value="Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints." />
+    <jsp:param name="faq3q" value="Why is my matrix flagged as singular?" />
+    <jsp:param name="faq3a" value="A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular." />
+  </jsp:include>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/matrix-modern.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/matrix-bootstrap-compat.css?v=<%=cacheVersion%>">
+
+  <%@ include file="modern/ads/ad-init.jsp"%>
+  <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script>MatrixUtils.initMathJax();</script>
   <script src="https://d3js.org/d3.v7.min.js"  crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"  crossorigin="anonymous"></script>
   <style>
-    .matrix-classifier .card-header{padding:.6rem .9rem;font-weight:600}
-    .matrix-classifier .card-body{padding:.7rem .9rem}
+    :root { --tool-primary:#3b82f6; --tool-primary-dark:#1d4ed8; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
     .matrix-classifier .form-group{margin-bottom:.55rem}
     #matrixCanvas{width:100%;min-height:320px;border:1px solid #e5e7eb;border-radius:6px;background:#f8fafc}
     .badge-type{display:inline-flex;align-items:center;padding:0.3rem 0.6rem;border-radius:999px;font-size:0.85rem;margin:0.15rem 0.25rem;font-weight:500}
@@ -305,14 +261,37 @@
     }
   </style>
 </head>
-<%@ include file="body-script.jsp"%>
-    <%@ include file="math-menu-nav.jsp"%>
-<div class="container mt-4 matrix-classifier">
-  <h1 class="mb-2">Matrix Type Classifier</h1>
-  <p class="text-muted mb-3">Paste any matrix to instantly detect its properties: square, diagonal, identity, symmetric, triangular, orthogonal, singular, stochastic and more.</p>
+<body>
+<%@ include file="modern/components/nav-header.jsp"%>
 
-  <div class="row">
-    <div class="col-lg-4 col-md-12 order-lg-1 order-2">
+<header class="tool-page-header">
+  <div class="tool-page-header-inner">
+    <div>
+      <h1 class="tool-page-title">Matrix Type Classifier</h1>
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <span>Matrix Type Classifier</span>
+      </nav>
+    </div>
+    <div class="tool-page-badges">
+      <span class="tool-badge">Free</span>
+      <span class="tool-badge">Client-Side</span>
+      <span class="tool-badge">Visual</span>
+    </div>
+  </div>
+</header>
+
+<section class="tool-description-section">
+  <div class="tool-description-inner">
+    <div class="tool-description-content">
+      <p>Identify and classify matrix types automatically: symmetric, orthogonal, diagonal, triangular, Hermitian, positive definite, nilpotent, idempotent, and more. D3 visualization, step-by-step reasoning, and property analysis. <strong>100% client-side</strong>—no data sent to servers.</p>
+    </div>
+  </div>
+</section>
+
+<main class="tool-page-container">
+  <div class="tool-input-column matrix-calc matrix-classifier">
       <div class="card mb-3">
         <h5 class="card-header d-flex justify-content-between align-items-center">
           Matrix Input
@@ -408,12 +387,16 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-lg-8 col-md-12 order-lg-2 order-1">
+  <div class="tool-output-column matrix-calc matrix-classifier">
       <div class="card mb-3">
         <h5 class="card-header d-flex flex-wrap justify-content-between align-items-center">
           <span class="mb-1 mb-sm-0">Matrix Visualization</span>
-          <button id="btnCopyMatrix" class="btn btn-outline-primary btn-sm"><i class="fas fa-copy"></i> Copy Matrix</button>
+          <div class="d-flex flex-wrap gap-1">
+            <button id="btnCopyMatrix" class="btn btn-outline-primary btn-sm"><i class="fas fa-copy"></i> Copy Matrix</button>
+            <button id="btnPrintWorksheet" class="btn btn-sm" style="background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
+          </div>
         </h5>
         <div class="card-body">
           <div id="matrixVisual" class="text-center text-muted">Enter a matrix and click classify to view the visualization.</div>
@@ -446,27 +429,12 @@
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Related Math Tools</h5>
-        <div class="card-body small">
-          <div class="d-flex flex-wrap mb-2">
-            <a href="matrix-determinant-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-square-root-alt"></i> Determinant Calculator
-            </a>
-            <a href="matrix-inverse-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-sync"></i> Matrix Inverse
-            </a>
-            <a href="matrix-eigenvalue-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">
-              <i class="fas fa-wave-square"></i> Eigenvalues &amp; Eigenvectors
-            </a>
-          </div>
-          <div class="text-muted">
-            Solve complementary linear algebra tasks: compute determinants &amp; inverses, or analyse eigenvalues to study stability and diagonalization.
-          </div>
-        </div>
-      </div>
+    <jsp:include page="modern/components/related-tools.jsp">
+      <jsp:param name="currentToolUrl" value="matrix-type-classifier.jsp" />
+      <jsp:param name="keyword" value="matrix" />
+    </jsp:include>
 
-      <div class="card mb-3">
+    <div class="tool-card">
         <h5 class="card-header d-flex justify-content-between align-items-center">
           Matrix Type Examples
           <button id="btnToggleExamples" class="btn btn-outline-secondary btn-sm">Hide Examples</button>
@@ -528,7 +496,11 @@
       </div>
     </div>
   </div>
-</div>
+
+  <div class="tool-ads-column">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+  </div>
+</main>
 
 <script>
 ;(function(){
@@ -1742,11 +1714,15 @@
   }
 
   function copyMatrix(){
-    if(!textarea.value.trim()){
-      return;
-    }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(textarea.value).then(function(){
+    var text = textarea.value.trim();
+    if(!text) return;
+    if(window.ToolUtils && window.ToolUtils.copyToClipboard){
+      ToolUtils.copyToClipboard(text, {
+        toastMessage: 'Matrix copied to clipboard!',
+        showSupportPopup: false
+      });
+    } else if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
         btnCopyMatrix.innerHTML = '<i class="fas fa-check"></i> Copied!';
         btnCopyMatrix.className = 'btn btn-success btn-sm';
         setTimeout(function(){
@@ -1761,6 +1737,12 @@
   btnRandom.addEventListener('click', handleRandom);
   btnClear.addEventListener('click', handleClear);
   btnCopyMatrix.addEventListener('click', copyMatrix);
+  MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Type Classifier', {
+    resultIds: ['matrixVisual', 'classificationSummary'],
+    stepsId: 'stepsContent',
+    cardClass: '.card',
+    exerciseType: 'classifier'
+  });
   textarea.addEventListener('keydown', function(e){
     if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){
       handleAnalyse();
@@ -1873,27 +1855,45 @@
 })();
 </script>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+<section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Type Classifier</h2>
+    <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This tool identifies 20+ matrix types by checking dimensions, transpose relations (A vs Aᵀ), diagonal structure, determinant, rank, and orthogonality. It uses D3 for visualization and provides step-by-step reasoning. <strong>All analysis runs client-side</strong>—no data stored.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1.5rem">
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Authorship &amp; Expertise</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">Anish Nath</a></li>
+          <li><strong>Background:</strong> Math and developer tools for education</li>
+          <li><strong>Method:</strong> Tolerance-aware property checks</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Trust &amp; Privacy</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Privacy:</strong> All analysis runs locally; no data stored</li>
+          <li><strong>Client-side:</strong> Your matrices never leave your device</li>
+          <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">@anish2good</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- Visible FAQ section (must match JSON-LD below) -->
-<section id="faq" class="mt-5">
-  <h2 class="h5">Matrix Type Classifier: FAQ</h2>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">How do you identify the type of a matrix?</h3>
-    <p class="mb-0">Check dimensions first (square vs rectangular). For square matrices, compare A to Aᵀ (symmetric if A = Aᵀ, skew‑symmetric if A = −Aᵀ), inspect diagonal entries (diagonal/scalar/identity), and compute determinant/rank for singularity and full‑rank checks. The tool automates these steps.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">What matrix types does this detect?</h3>
-    <p class="mb-0">Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew‑symmetric, orthogonal, singular/non‑singular, stochastic, and sparse; it also reports trace, determinant, rank and hints about definiteness.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">Why is my matrix flagged as singular?</h3>
-    <p class="mb-0">A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance‑aware elimination; very small determinants relative to entries are treated as singular.</p>
-  </div></div>
+<section id="faq" style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">Matrix Type Classifier: FAQ</h2>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How do you identify the type of a matrix?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Check dimensions first (square vs rectangular). For square matrices, compare A to Aᵀ (symmetric if A = Aᵀ, skew-symmetric if A = −Aᵀ), inspect diagonal entries, and compute determinant/rank for singularity. The tool automates these steps.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What matrix types does this detect?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Why is my matrix flagged as singular?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular.</p>
+  </div>
 </section>
 
 <script type="application/ld+json">
@@ -1901,22 +1901,29 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How do you identify the type of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Check dimensions first (square vs rectangular). For square matrices, compare A to Aᵀ (symmetric if A = Aᵀ, skew‑symmetric if A = −Aᵀ), inspect diagonal entries (diagonal/scalar/identity), and compute determinant/rank for singularity and full‑rank checks. The tool automates these steps."}},
-    {"@type":"Question","name":"What matrix types does this detect?","acceptedAnswer":{"@type":"Answer","text":"Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew‑symmetric, orthogonal, singular/non‑singular, stochastic, and sparse; it also reports trace, determinant, rank and hints about definiteness."}},
-    {"@type":"Question","name":"Why is my matrix flagged as singular?","acceptedAnswer":{"@type":"Answer","text":"A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance‑aware elimination; very small determinants relative to entries are treated as singular."}}
+    {"@type":"Question","name":"How do you identify the type of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Check dimensions first (square vs rectangular). For square matrices, compare A to A^T (symmetric if A = A^T, skew-symmetric if A = -A^T), inspect diagonal entries, and compute determinant/rank for singularity. The tool automates these steps."}},
+    {"@type":"Question","name":"What matrix types does this detect?","acceptedAnswer":{"@type":"Answer","text":"Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints."}},
+    {"@type":"Question","name":"Why is my matrix flagged as singular?","acceptedAnswer":{"@type":"Answer","text":"A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular."}}
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-    {"@type":"ListItem","position":2,"name":"Matrix Type Classifier","item":"https://8gwifi.org/matrix-type-classifier.jsp"}
-  ]
-}
-</script>
-</div>
-<%@ include file="body-close.jsp"%>
+<%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+<%@ include file="modern/components/support-section.jsp"%>
+<%@ include file="modern/ads/ad-sticky-footer.jsp"%>
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">&copy; <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 8gwifi.org - Free Online Tools</p>
+    <div class="footer-links">
+      <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+      <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener" class="footer-link">X</a>
+    </div>
+  </div>
+</footer>
+
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
+</body>
+</html>

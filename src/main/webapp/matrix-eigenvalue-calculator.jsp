@@ -1,178 +1,190 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org</title>
-  <meta name="description" content="Free eigenvalue & eigenvector calculator. Find λ values and eigenvectors v using characteristic polynomial det(A-λI)=0. Supports 2×2 to 5×5 matrices. Power iteration, QR algorithm. Step-by-step solutions, LaTeX display.">
-  <meta name="keywords" content="eigenvalue calculator, eigenvector calculator, characteristic polynomial, power iteration, spectral decomposition, matrix diagonalization, lambda, det(A-lambda*I), QR algorithm">
-  <link rel="canonical" href="https://8gwifi.org/matrix-eigenvalue-calculator.jsp">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org">
-  <meta property="og:description" content="Find eigenvalues λ and eigenvectors v using det(A-λI)=0 with step-by-step solutions for 2×2–4×4 matrices.">
-  <meta property="og:url" content="https://8gwifi.org/matrix-eigenvalue-calculator.jsp">
+  <jsp:include page="modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Eigenvalue Calculator | λ & Eigenvectors Free" />
+    <jsp:param name="toolDescription" value="Free eigenvalue and eigenvector calculator. det(A-λI)=0, power iteration, QR. 2×2 to 4×4. Step-by-step. Print worksheet with practice exercises. Share, download." />
+    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolUrl" value="matrix-eigenvalue-calculator.jsp" />
+    <jsp:param name="toolKeywords" value="eigenvalue calculator, eigenvector calculator, characteristic polynomial, power iteration, spectral decomposition, matrix diagonalization, lambda, det(A-lambda*I), QR algorithm" />
+    <jsp:param name="toolFeatures" value="Eigenvalues and eigenvectors,Print worksheet with practice exercises,Share URL and download,Characteristic polynomial,Power iteration,QR algorithm" />
+    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="faq1q" value="How do I find eigenvalues of a matrix?" />
+    <jsp:param name="faq1a" value="Enter a square matrix and click Calculate. The tool solves det(A − λI) = 0 to get eigenvalues λ, then computes eigenvectors by solving (A − λI)v = 0 for each λ." />
+    <jsp:param name="faq2q" value="What if the eigenvalues are complex?" />
+    <jsp:param name="faq2a" value="For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well." />
+    <jsp:param name="faq3q" value="What sizes and methods are supported?" />
+    <jsp:param name="faq3a" value="This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues." />
+  </jsp:include>
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Eigenvalue & Eigenvector Calculator Online – Free | 8gwifi.org">
-  <meta name="twitter:description" content="Compute eigenvalues and eigenvectors with characteristic polynomial, power iteration, and QR.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Eigenvalue & Eigenvector Calculator",
-    "applicationCategory": "EducationalApplication",
-    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-    "description": "Calculate eigenvalues and eigenvectors using characteristic polynomial method. Shows det(A-λI)=0, power iteration, and eigenvector computation for each λ.",
-    "url": "https://8gwifi.org/matrix-eigenvalue-calculator.jsp",
-    "featureList": ["Characteristic polynomial", "Power iteration method", "Eigenvector computation", "2×2 to 5×5 matrices", "Step-by-step solutions", "Real & complex eigenvalues", "Random generator"]
-  }
-  </script>
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/matrix-modern.css?v=<%=cacheVersion%>">
 
-  <%@ include file="header-script.jsp"%>
-  <script>
-    window.MathJax = {
-      loader: { load: ['[tex]/color'] },
-      tex: {
-        packages: { '[+]': ['color'] },
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      startup: {
-        ready: () => {
-          MathJax.startup.defaultReady();
-          console.log('MathJax loaded and ready');
-        }
-      }
-    };
-  </script>
+  <%@ include file="modern/ads/ad-init.jsp"%>
+  <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
-    .eigen-calc .card-header{padding:.6rem .9rem;font-weight:600}
-    .eigen-calc .card-body{padding:.7rem .9rem}
+    :root { --tool-primary:#f59e0b; --tool-primary-dark:#d97706; --tool-gradient:linear-gradient(135deg,#f59e0b 0%,#d97706 100%); --tool-light:#fffbeb }
+    [data-theme="dark"] { --tool-light:rgba(245,158,11,0.15) }
+    .eigen-calc { --mc-result-color:#f59e0b; --mc-result-bg:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); --mc-result-shadow:rgba(245,158,11,0.1) }
     .eigen-calc .eigenvalue-card{border-left:4px solid #f59e0b;background:#fffbeb;border-radius:6px;padding:1rem;margin:0.75rem 0}
     .eigen-calc .eigenvector-card{border-left:4px solid #3b82f6;background:#eff6ff;border-radius:6px;padding:1rem;margin:0.75rem 0}
-    .eigen-calc .step-card{border-left:3px solid #8b5cf6;background:#f5f3ff;padding:0.75rem;margin:0.5rem 0;border-radius:4px}
-    .eigen-calc .matrix-display{display:inline-block;vertical-align:middle;margin:0.5rem}
     .eigen-calc .eigenvalue-badge{background:#fef3c7;color:#92400e;padding:0.25rem 0.6rem;border-radius:12px;font-weight:600;margin:0.25rem;display:inline-block}
-
-    /* Hide LaTeX source when MathJax has rendered */
-    .matrix-display .MathJax_Preview,
-    .matrix-display script[type^="math/tex"] {
-      display: none !important;
-    }
-
-    @media (max-width: 767px) {
-      .eigen-calc h1{font-size:1.5rem}
-      .eigen-calc .card-header{font-size:0.95rem}
-      .eigen-calc button{width:100%;margin:0.25rem 0}
-      .eigen-calc .matrix-display{font-size:0.85em}
-    }
+    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;border-radius:0.5rem;cursor:pointer}
+    .tool-btn-outline:hover{background:var(--tool-light)}
+    .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
+    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
+    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
+    .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary)}
+    .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
 </head>
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-<div class="container mt-4 eigen-calc">
-  <h1 class="mb-2">Eigenvalue & Eigenvector Calculator</h1>
-  <p class="text-muted mb-3">Calculate eigenvalues and eigenvectors of square matrices with detailed solutions.</p>
+<body>
+<%@ include file="modern/components/nav-header.jsp"%>
 
-  <div class="row">
-    <div class="col-lg-4 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header">Matrix Input</h5>
-        <div class="card-body">
-          <div class="form-group">
-            <label for="matrixSize">Matrix Size (n×n)</label>
-            <div class="d-flex align-items-center">
-              <input id="matrixSize" type="number" min="2" max="4" class="form-control mr-2" value="2" style="flex:1">
-              <button id="btnRandom" class="btn btn-outline-info btn-sm" title="Generate random matrix">
-                <i class="fas fa-random"></i> Random
-              </button>
-            </div>
-            <small class="text-muted">Supports 2×2 to 4×4 matrices</small>
+<header class="tool-page-header">
+  <div class="tool-page-header-inner">
+    <div>
+      <h1 class="tool-page-title">Eigenvalue &amp; Eigenvector Calculator</h1>
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <span>Eigenvalues &amp; Eigenvectors</span>
+      </nav>
+    </div>
+    <div class="tool-page-badges">
+      <span class="tool-badge">Free</span>
+      <span class="tool-badge">Client-Side</span>
+      <span class="tool-badge">Step-by-Step</span>
+    </div>
+  </div>
+</header>
+
+<section class="tool-description-section">
+  <div class="tool-description-inner">
+    <div class="tool-description-content">
+      <p>Calculate eigenvalues and eigenvectors using the characteristic polynomial det(A−λI)=0, power iteration, or QR algorithm. Supports 2×2 to 4×4 matrices with step-by-step solutions. <strong>100% client-side</strong>—no data sent to servers.</p>
+    </div>
+  </div>
+</section>
+
+<main class="tool-page-container">
+  <div class="tool-input-column">
+    <div class="tool-card matrix-calc eigen-calc">
+      <div class="tool-card-header">Matrix Input</div>
+      <div class="tool-card-body">
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="matrixSize">Matrix Size (n×n)</label>
+          <div class="matrix-dim-row" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+            <input id="matrixSize" type="number" min="2" max="4" class="tool-input" value="2" style="flex:1;min-width:60px">
+            <button id="btnRandom" class="tool-btn-outline" title="Generate random matrix" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+              <i class="fas fa-random"></i> Random
+            </button>
           </div>
+          <span class="tool-form-hint">Supports 2×2 to 4×4 matrices</span>
+        </div>
 
-          <div class="form-group">
-            <label for="matrixInput">Matrix Entries</label>
-            <textarea id="matrixInput" class="form-control" rows="6" placeholder="Enter matrix entries:
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="matrixInput">Matrix Entries</label>
+          <textarea id="matrixInput" class="tool-input" rows="6" placeholder="Enter matrix entries:
 4 -2
 1 1"></textarea>
-            <small class="text-muted">One row per line, space or comma separated</small>
-          </div>
+          <span class="tool-form-hint">One row per line, space or comma separated</span>
+        </div>
 
-          <div class="form-group">
-            <label for="methodSelect">Computation Method</label>
-            <select id="methodSelect" class="form-control">
-              <option value="characteristic">Characteristic Polynomial</option>
-              <option value="power">Power Iteration (Dominant)</option>
-              <option value="qr">QR Algorithm (All)</option>
-            </select>
-          </div>
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="methodSelect">Computation Method</label>
+          <select id="methodSelect" class="tool-input" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);color:var(--text-primary);width:100%;font-size:0.875rem">
+            <option value="characteristic">Characteristic Polynomial</option>
+            <option value="power">Power Iteration (Dominant)</option>
+            <option value="qr">QR Algorithm (All)</option>
+          </select>
+        </div>
 
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="showSteps" checked>
-              <label class="custom-control-label" for="showSteps">Show detailed steps</label>
-            </div>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="findEigenvectors" checked>
-              <label class="custom-control-label" for="findEigenvectors">Find eigenvectors</label>
-            </div>
-          </div>
+        <div class="tool-form-group">
+          <label class="tool-checkbox-wrap">
+            <input type="checkbox" id="showSteps" checked>
+            <span>Show detailed steps</span>
+          </label>
+          <label class="tool-checkbox-wrap">
+            <input type="checkbox" id="findEigenvectors" checked>
+            <span>Find eigenvectors</span>
+          </label>
+        </div>
 
-          <div class="d-flex flex-wrap">
-            <button id="btnCalculate" class="btn btn-primary btn-sm mr-2 mb-2">Calculate</button>
-            <button id="btnClear" class="btn btn-outline-secondary btn-sm mb-2">Clear</button>
-          </div>
-          <div id="inputError" class="text-danger small mt-2" style="display:none"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem">
+          <button id="btnCalculate" class="tool-action-btn">Calculate</button>
+          <button id="btnClear" class="tool-btn-outline">Clear</button>
+        </div>
+        <div id="inputError" class="tool-form-hint" style="color:var(--error,#ef4444);display:none;margin-top:0.5rem"></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-card-header">Quick Presets</div>
+      <div class="tool-card-body matrix-example-grid">
+        <button class="matrix-example-btn" data-preset="diagonal">Diagonal (2×2)</button>
+        <button class="matrix-example-btn" data-preset="symmetric">Symmetric (2×2)</button>
+        <button class="matrix-example-btn" data-preset="rotation">Rotation Matrix</button>
+        <button class="matrix-example-btn" data-preset="example">Example (3×3)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-output-column">
+    <div class="tool-card">
+      <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
+        <span>Eigenvalues &amp; Eigenvectors</span>
+        <div style="display:flex;flex-wrap:wrap;gap:0.25rem">
+          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+            <i class="fas fa-share-alt"></i> Share URL
+          </button>
+          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+            <i class="fas fa-download"></i> Download
+          </button>
+          <button id="btnPrintWorksheet" class="tool-btn-outline" title="Print worksheet" style="padding:0.4rem 0.75rem;font-size:0.8125rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
         </div>
       </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Quick Presets</h5>
-        <div class="card-body">
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="diagonal">Diagonal (2×2)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="symmetric">Symmetric (2×2)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-preset="rotation">Rotation Matrix</button>
-          <button class="btn btn-outline-primary btn-sm btn-block" data-preset="example">Example (3×3)</button>
+      <div class="tool-card-body">
+        <div id="resultArea" class="text-center text-muted">
+          Enter a square matrix and click "Calculate" to find eigenvalues and eigenvectors.
         </div>
       </div>
     </div>
 
-    <div class="col-lg-8 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex flex-wrap justify-content-between align-items-center">
-          <span class="mb-1 mb-sm-0">Eigenvalues & Eigenvectors</span>
-          <div>
-            <button id="btnShareURL" class="btn btn-outline-primary btn-sm mr-1 mb-1" title="Copy URL to clipboard">
-              <i class="fas fa-share-alt"></i> Share URL
-            </button>
-            <button id="btnDownloadImage" class="btn btn-outline-success btn-sm mb-1" title="Download result as image">
-              <i class="fas fa-download"></i> Download Image
-            </button>
-          </div>
-        </h5>
-        <div class="card-body">
-          <div id="resultArea" class="text-center text-muted">
-            Enter a square matrix and click "Calculate" to find eigenvalues and eigenvectors.
-          </div>
+    <div class="tool-card">
+      <div class="tool-card-header">Step-by-Step Solution</div>
+      <div class="tool-card-body">
+        <div id="stepsArea" class="text-muted">
+          Detailed computation steps will appear here.
         </div>
       </div>
+    </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Step-by-Step Solution</h5>
-        <div class="card-body">
-          <div id="stepsArea" class="text-muted">
-            Detailed computation steps will appear here.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">About Eigenvalues & Eigenvectors</h5>
-        <div class="card-body small">
+    <div class="tool-card">
+      <div class="tool-card-header">About Eigenvalues &amp; Eigenvectors</div>
+      <div class="tool-card-body" style="font-size:0.875rem">
           <p><strong>What are Eigenvalues and Eigenvectors?</strong><br>
           For a square matrix A, a scalar λ is an eigenvalue and vector v is an eigenvector if: A v = λ v</p>
 
@@ -205,46 +217,19 @@
             <li>Google PageRank algorithm</li>
             <li>Quantum mechanics and vibration analysis</li>
           </ul>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Related Calculus Tools</h5>
-        <div class="card-body small">
-          <div class="d-flex flex-wrap mb-2">
-            <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
-            <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
-            <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
-            <a href="series-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">Taylor Series</a>
-          </div>
-          <div class="text-muted">
-            Explore calculus tools for derivatives, integrals, limits, and series expansion.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Related Matrix Tools</h5>
-        <div class="card-body small">
-          <div class="d-flex flex-wrap mb-2">
-            <a href="matrix-type-classifier.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-list"></i> Matrix Type Classifier
-            </a>
-            <a href="matrix-determinant-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-square-root-alt"></i> Determinant Calculator
-            </a>
-            <a href="matrix-inverse-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">
-              <i class="fas fa-sync"></i> Matrix Inverse
-            </a>
-          </div>
-          <div class="text-muted">
-            Explore more matrix computation tools for complete linear algebra analysis.
-          </div>
-        </div>
       </div>
     </div>
+
+    <jsp:include page="modern/components/related-tools.jsp">
+      <jsp:param name="currentToolUrl" value="matrix-eigenvalue-calculator.jsp" />
+      <jsp:param name="keyword" value="matrix" />
+    </jsp:include>
   </div>
-</div>
+
+  <div class="tool-ads-column">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
 <script>
@@ -262,46 +247,9 @@
   const inputError = document.getElementById('inputError');
   const presetButtons = document.querySelectorAll('[data-preset]');
 
-  const EPS = 1e-10;
-
-  function parseMatrix(text, n) {
-    const rows = text.trim().split('\n').filter(r => r.trim());
-    if(rows.length !== n) {
-      throw new Error(`Expected ${n} rows, got ${rows.length}`);
-    }
-    const matrix = [];
-    for(let i = 0; i < n; i++) {
-      const entries = rows[i].trim().split(/[\s,]+/).filter(Boolean);
-      if(entries.length !== n) {
-        throw new Error(`Row ${i+1}: expected ${n} entries, got ${entries.length}`);
-      }
-      const row = entries.map(e => {
-        const num = parseFloat(e);
-        if(!isFinite(num)) throw new Error(`Invalid number: ${e}`);
-        return num;
-      });
-      matrix.push(row);
-    }
-    return matrix;
-  }
-
-  function formatMatrix(mat) {
-    const rows = mat.map(row =>
-      row.map(val => {
-        const num = Math.abs(val) < EPS ? 0 : val;
-        return num.toFixed(4);
-      }).join(' & ')
-    );
-    return '\\begin{bmatrix}' + rows.join(' \\\\ ') + '\\end{bmatrix}';
-  }
-
-  function formatVector(vec) {
-    const entries = vec.map(val => {
-      const num = Math.abs(val) < EPS ? 0 : val;
-      return num.toFixed(4);
-    }).join(' \\\\ ');
-    return '\\begin{bmatrix}' + entries + '\\end{bmatrix}';
-  }
+  const EPS = MatrixUtils.EPS;
+  const parseMatrix = (text, n) => MatrixUtils.parseMatrix(text, n, n);
+  const formatMatrix = MatrixUtils.formatMatrix;
 
   function trace(mat) {
     let sum = 0;
@@ -468,7 +416,7 @@
         const result = eigenvalues2x2(matrix);
 
         if(result.isComplex) {
-          html += '<div class="alert alert-info">Matrix has complex eigenvalues</div>';
+          html += '<div style="padding:1rem;background:rgba(59,130,246,0.1);border:1px solid var(--tool-primary,#3b82f6);border-radius:0.5rem;color:var(--text-primary)">Matrix has complex eigenvalues</div>';
           result.values.forEach((ev, i) => {
             html += `<div class="eigenvalue-card">
               <strong>Eigenvalue λ${i+1}:</strong>
@@ -541,7 +489,7 @@
     } catch(err) {
       inputError.textContent = err.message;
       inputError.style.display = 'block';
-      resultArea.innerHTML = '<div class="alert alert-danger">' + err.message + '</div>';
+      resultArea.innerHTML = '<div style="padding:1rem;background:rgba(239,68,68,0.1);border:1px solid var(--error);border-radius:0.5rem;color:var(--error)">Error: ' + err.message + '</div>';
       stepsArea.innerHTML = '';
     }
   }
@@ -601,176 +549,72 @@
     if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)) calculate();
   });
 
-  // Share URL functionality with matrix data
-  const btnShareURL = document.getElementById('btnShareURL');
-  if(btnShareURL) {
-    btnShareURL.addEventListener('click', function() {
-      try {
-        const n = parseInt(matrixSize.value);
-        const matrixText = matrixInput.value.trim();
-        if(!matrixText) {
-          alert('Please enter a matrix first!');
-          return;
-        }
+  // Share URL
+  MatrixUtils.shareURL(document.getElementById('btnShareURL'), function() {
+    const matrixText = matrixInput.value.trim();
+    if(!matrixText) { alert('Please enter a matrix first!'); return null; }
+    return { size: matrixSize.value, matrix: btoa(encodeURIComponent(matrixText)) };
+  });
 
-        const baseUrl = window.location.origin + window.location.pathname;
-        const params = new URLSearchParams();
-        params.set('size', n);
-        params.set('matrix', btoa(encodeURIComponent(matrixText)));
+  // Download Image
+  MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-eigenvalue', 'No result to download. Please calculate eigenvalues first.');
+  MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Eigenvalue', { exerciseType: 'eigenvalue' });
 
-        const shareUrl = baseUrl + '?' + params.toString();
-
-        if(navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(shareUrl).then(() => {
-            const originalHTML = btnShareURL.innerHTML;
-            btnShareURL.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            btnShareURL.classList.remove('btn-outline-primary');
-            btnShareURL.classList.add('btn-success');
-            setTimeout(() => {
-              btnShareURL.innerHTML = originalHTML;
-              btnShareURL.classList.remove('btn-success');
-              btnShareURL.classList.add('btn-outline-primary');
-            }, 2000);
-          }).catch(err => {
-            alert('Failed to copy URL: ' + err);
-          });
-        } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = shareUrl;
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-          alert('URL copied to clipboard!');
-        }
-      } catch(err) {
-        console.error('Error creating share URL:', err);
-        alert('Failed to create share URL');
-      }
-    });
-  }
-
-  // Download as Image functionality
-  const btnDownloadImage = document.getElementById('btnDownloadImage');
-  if(btnDownloadImage) {
-      btnDownloadImage.addEventListener('click', async function() {
-          const resultCard = document.querySelector('.card-body #resultArea').closest('.card');
-          if(!resultCard || !resultCard.querySelector('.eigenvalue-card, .eigenvector-card')) {
-              alert('No result to download. Please calculate eigenvalues first.');
-              return;
-          }
-
-          const originalHTML = btnDownloadImage.innerHTML;
-          btnDownloadImage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-          btnDownloadImage.disabled = true;
-
-          try {
-              // Ensure MathJax is fully rendered
-              if(window.MathJax && window.MathJax.typesetPromise) {
-                  await MathJax.typesetPromise([resultCard]);
-                  await new Promise(resolve => setTimeout(resolve, 800));
-              }
-
-              // Use dom-to-image-more
-              const dataUrl = await domtoimage.toPng(resultCard, {
-                  quality: 1,
-                  bgcolor: '#ffffff',
-                  width: resultCard.offsetWidth,
-                  height: resultCard.offsetHeight,
-                  style: {
-                      margin: '0',
-                      padding: '20px'
-                  },
-                  filter: (node) => {
-                      // Filter out script tags and MathJax preview elements
-                      if(node.tagName === 'SCRIPT') return false;
-                      if(node.classList && node.classList.contains('MathJax_Preview')) return false;
-
-                      // Hide text nodes with LaTeX source
-                      if(node.nodeType === Node.TEXT_NODE) {
-                          const text = node.textContent || '';
-                          if(text.includes('$$') || text.includes('\\begin{bmatrix}')) {
-                              return false;
-                          }
-                      }
-                      return true;
-                  }
-              });
-
-              // Download the image
-              const link = document.createElement('a');
-              const timestamp = new Date().toISOString().slice(0, 10);
-              link.download = `matrix-eigenvalue-${timestamp}.png`;
-              link.href = dataUrl;
-              link.click();
-
-              btnDownloadImage.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
-              btnDownloadImage.classList.remove('btn-outline-success');
-              btnDownloadImage.classList.add('btn-success');
-              setTimeout(() => {
-                  btnDownloadImage.innerHTML = originalHTML;
-                  btnDownloadImage.classList.remove('btn-success');
-                  btnDownloadImage.classList.add('btn-outline-success');
-                  btnDownloadImage.disabled = false;
-              }, 2000);
-
-          } catch(err) {
-              console.error('Error generating image:', err);
-              alert('Failed to generate image: ' + err.message);
-              btnDownloadImage.innerHTML = originalHTML;
-              btnDownloadImage.disabled = false;
-          }
-      });
-  }
-
-  // Load from URL parameters if present
-  function loadFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('matrix') && urlParams.has('size')) {
-      try {
-        const size = parseInt(urlParams.get('size'));
-        const matrixData = decodeURIComponent(atob(urlParams.get('matrix')));
-
-        matrixSize.value = size;
-        matrixInput.value = matrixData;
-
-        setTimeout(() => calculate(), 100);
-        return true;
-      } catch(err) {
-        console.error('Error loading from URL:', err);
-      }
+  // Load from URL or default
+  const loaded = MatrixUtils.loadFromURL(function(p) {
+    if(p.matrix && p.size) {
+      matrixSize.value = p.size;
+      matrixInput.value = p.matrix;
+      setTimeout(() => calculate(), 100);
+      return true;
     }
     return false;
-  }
-
-  // Load symmetric example by default or from URL
-  if(!loadFromURL()) {
+  });
+  if(!loaded) {
     loadPreset('symmetric');
   }
 })();
 </script>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+<section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Eigenvalue &amp; Eigenvector Calculator</h2>
+    <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">For a square matrix A, eigenvalues λ satisfy det(A − λI) = 0 and eigenvectors v satisfy A v = λ v. This tool uses the characteristic polynomial for 2×2, power iteration for the dominant eigenvalue, and QR algorithm for all eigenvalues. <strong>All calculations run client-side</strong>—no data stored.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1.5rem">
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Authorship &amp; Expertise</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">Anish Nath</a></li>
+          <li><strong>Background:</strong> Math and developer tools for education</li>
+          <li><strong>Method:</strong> Characteristic polynomial, power iteration, QR</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Trust &amp; Privacy</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Privacy:</strong> All calculations run locally; no data stored</li>
+          <li><strong>Client-side:</strong> Your matrices never leave your device</li>
+          <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">@anish2good</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- Visible FAQ section (must match JSON-LD below) -->
-<section id="faq" class="mt-5">
-  <h2 class="h5">Eigenvalues & Eigenvectors: FAQ</h2>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">How do I find eigenvalues of a matrix?</h3>
-    <p class="mb-0">Enter a square matrix and click Calculate. The tool solves det(A − λI) = 0 to get eigenvalues λ, then computes eigenvectors by solving (A − λI)v = 0 for each λ.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">What if the eigenvalues are complex?</h3>
-    <p class="mb-0">For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">What sizes and methods are supported?</h3>
-    <p class="mb-0">This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues.</p>
-  </div></div>
+<section id="faq" style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">Eigenvalues &amp; Eigenvectors: FAQ</h2>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How do I find eigenvalues of a matrix?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Enter a square matrix and click Calculate. The tool solves det(A − λI) = 0 to get eigenvalues λ, then computes eigenvectors by solving (A − λI)v = 0 for each λ.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What if the eigenvalues are complex?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and methods are supported?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues.</p>
+  </div>
 </section>
 
 <script type="application/ld+json">
@@ -785,15 +629,22 @@
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-    {"@type":"ListItem","position":2,"name":"Eigenvalue & Eigenvector Calculator","item":"https://8gwifi.org/matrix-eigenvalue-calculator.jsp"}
-  ]
-}
-</script>
-</div>
-<%@ include file="body-close.jsp"%>
+<%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+<%@ include file="modern/components/support-section.jsp"%>
+<%@ include file="modern/ads/ad-sticky-footer.jsp"%>
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">&copy; <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 8gwifi.org - Free Online Tools</p>
+    <div class="footer-links">
+      <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+      <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener" class="footer-link">X</a>
+    </div>
+  </div>
+</footer>
+
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
+</body>
+</html>

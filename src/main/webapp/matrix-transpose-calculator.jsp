@@ -1,272 +1,192 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix Transpose Calculator Online – Free | 8gwifi.org</title>
-  <meta name="description" content="Calculate matrix transpose A^T instantly with our free calculator. Check symmetric and skew-symmetric matrices, verify transpose properties like (AB)^T = B^T A^T, and get detailed step-by-step solutions.">
-  <meta name="keywords" content="matrix transpose calculator, A^T calculator, transpose matrix, symmetric matrix checker, skew-symmetric matrix, transpose properties, matrix transposition, (A^T)^T = A, orthogonal matrix, linear algebra calculator">
-  <link rel="canonical" href="https://8gwifi.org/matrix-transpose-calculator.jsp">
+  <meta name="robots" content="index,follow">
+  <meta name="resource-type" content="document">
+  <meta name="language" content="en">
+  <meta name="author" content="Anish Nath">
 
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Matrix Transpose Calculator Online – Free | 8gwifi.org">
-  <meta property="og:description" content="Calculate matrix transpose A^T and check for symmetric and skew-symmetric properties. Verify transpose rules with detailed step-by-step solutions.">
-  <meta property="og:url" content="https://8gwifi.org/matrix-transpose-calculator.jsp">
-  <meta property="og:type" content="website">
+  <jsp:include page="modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Matrix Transpose Calculator | A^T Free with Practice Worksheet" />
+    <jsp:param name="toolDescription" value="Free matrix transpose calculator. Compute A^T, check symmetric and skew-symmetric. Step-by-step solutions. Print practice worksheet with exercises. Share and download. Instant results." />
+    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolUrl" value="matrix-transpose-calculator.jsp" />
+    <jsp:param name="toolKeywords" value="matrix transpose calculator, A^T calculator, transpose matrix, symmetric matrix checker, skew-symmetric matrix, transpose properties, matrix transposition, (A^T)^T = A, orthogonal matrix, linear algebra calculator" />
+    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="toolFeatures" value="Compute A^T transpose,Symmetric and skew-symmetric check,Print worksheet with practice exercises,Share URL and download,Step-by-step solutions,Up to 10×10" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="faq1q" value="What is a matrix transpose and how do you compute A^T?" />
+    <jsp:param name="faq1a" value="The transpose A^T is obtained by swapping rows and columns: (A^T)_ij = A_ji. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T." />
+    <jsp:param name="faq2q" value="How do I check symmetric or skew-symmetric matrices?" />
+    <jsp:param name="faq2a" value="A matrix is symmetric when A = A^T and skew-symmetric when A = -A^T (all diagonal entries are zero). This tool flags these properties automatically." />
+    <jsp:param name="faq3q" value="Does transposing change determinant or rank?" />
+    <jsp:param name="faq3a" value="For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank." />
+  </jsp:include>
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Matrix Transpose Calculator Online – Free | 8gwifi.org">
-  <meta name="twitter:description" content="Compute A^T, detect symmetric/skew‑symmetric matrices, and verify transpose rules with clear steps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-  <!-- JSON-LD WebApplication Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Matrix Transpose Calculator (A^T)",
-    "applicationCategory": "UtilitiesApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Free online matrix transpose calculator that computes A^T by swapping rows and columns. Includes automatic detection of symmetric and skew-symmetric matrices with property verification.",
-    "url": "https://8gwifi.org/matrix-transpose-calculator.jsp",
-    "featureList": [
-      "Calculate transpose A^T for any matrix dimensions",
-      "Automatic symmetric matrix detection (A = A^T)",
-      "Skew-symmetric matrix identification (A = -A^T)",
-      "Verify double transpose property (A^T)^T = A",
-      "Step-by-step element swapping visualization",
-      "Support for rectangular and square matrices up to 10×10",
-      "Visual representation of row-column interchange",
-      "Property badges showing matrix characteristics"
-    ]
-  }
-  </script>
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/matrix-modern.css?v=<%=cacheVersion%>">
 
+  <%@ include file="modern/ads/ad-init.jsp"%>
 
-  <%@ include file="header-script.jsp"%>
-    <%@ include file="math-menu-nav.jsp"%>
-  <script>
-    window.MathJax = {
-      loader: { load: ['[tex]/color'] },
-      tex: {
-        packages: { '[+]': ['color'] },
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      startup: {
-        ready: () => {
-          MathJax.startup.defaultReady();
-          console.log('MathJax loaded and ready');
-        }
-      }
-    };
-  </script>
+  <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
-    .transpose-calc .card-header{padding:.6rem .9rem;font-weight:600}
-    .transpose-calc .card-body{padding:.7rem .9rem}
-    .transpose-calc .result-card{border-left:4px solid #10b981;background:linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);border-radius:8px;padding:1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(16,185,129,0.1)}
-    .transpose-calc .property-card{border-left:4px solid #8b5cf6;background:linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);border-radius:8px;padding:1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(139,92,246,0.1)}
-    .transpose-calc .property-badge{
-      display:inline-flex;
-      align-items:center;
-      padding:0.4rem 0.8rem;
-      border-radius:999px;
-      font-size:0.9rem;
-      font-weight:600;
-      margin:0.25rem;
-    }
+    :root { --tool-primary:#3b82f6; --tool-primary-dark:#1d4ed8; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
+    .transpose-calc { --mc-result-color:#10b981 }
+    .transpose-calc .property-card{border-left:4px solid #8b5cf6;background:linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);border-radius:8px;padding:1.25rem;margin:1rem 0}
+    .transpose-calc .property-badge{display:inline-flex;align-items:center;padding:0.4rem 0.8rem;border-radius:999px;font-size:0.9rem;font-weight:600;margin:0.25rem}
     .property-badge.true{background:#d1fae5;color:#065f46}
     .property-badge.false{background:#fee2e2;color:#991b1b}
-    .transpose-calc .step-card{
-      border-left:4px solid #6366f1;
-      background:linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
-      padding:1rem 1.25rem;
-      margin:0.75rem 0;
-      border-radius:8px;
-      box-shadow:0 1px 3px rgba(99,102,241,0.08);
-      transition:all 0.2s ease;
-    }
-    .transpose-calc .step-card:hover{
-      box-shadow:0 4px 12px rgba(99,102,241,0.15);
-      transform:translateX(2px);
-    }
-    .transpose-calc .matrix-display{
-      display:block;
-      text-align:center;
-      padding:0.75rem;
-      margin:0.5rem 0;
-      background:white;
-      border-radius:6px;
-      border:1px solid #e0e7ff;
-    }
-    .step-number{
-      display:inline-block;
-      background:#6366f1;
-      color:white;
-      padding:0.2rem 0.6rem;
-      border-radius:12px;
-      font-size:0.85rem;
-      font-weight:600;
-      margin-right:0.5rem;
-    }
-    .step-description{
-      font-size:0.95rem;
-      color:#4b5563;
-      line-height:1.6;
-    }
-    .matrix-display .MathJax_Preview,
-    .matrix-display script[type^="math/tex"] {
-      display: none !important;
-    }
-
-    @media (max-width: 767px) {
-      .transpose-calc h1{font-size:1.5rem}
-      .transpose-calc .card-header{font-size:0.95rem}
-      .transpose-calc button{width:100%;margin:0.25rem 0}
-      .transpose-calc .step-card{padding:0.75rem}
-      .transpose-calc .matrix-display{padding:0.5rem;font-size:0.9em}
-    }
+    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
+    .tool-btn-outline:hover{background:var(--tool-light)}
+    .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+    .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
+    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
+    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
+    .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary);margin-bottom:0.5rem}
+    .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
 </head>
-<%@ include file="body-script.jsp"%>
-<div class="container mt-4 transpose-calc">
-  <h1 class="mb-2">Matrix Transpose Calculator (A^T)</h1>
-  <p class="text-muted mb-3">Calculate matrix transpose, check symmetry, and verify transpose properties.</p>
+<body>
+<%@ include file="modern/components/nav-header.jsp"%>
 
-  <div class="row">
-    <div class="col-lg-4 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header">Matrix Input</h5>
-        <div class="card-body">
-          <div class="form-group">
-            <label>Dimensions (m × n)</label>
-            <div class="d-flex">
-              <input id="rows" type="number" min="1" max="10" class="form-control mr-1" value="3" placeholder="rows">
-              <span class="mx-1 mt-2">×</span>
-              <input id="cols" type="number" min="1" max="10" class="form-control ml-1" value="2" placeholder="cols">
-            </div>
+<header class="tool-page-header">
+  <div class="tool-page-header-inner">
+    <div>
+      <h1 class="tool-page-title">Matrix Transpose Calculator (A^T)</h1>
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <span>Matrix Transpose</span>
+      </nav>
+    </div>
+    <div class="tool-page-badges">
+      <span class="tool-badge">Free</span>
+      <span class="tool-badge">Client-Side</span>
+      <span class="tool-badge">Step-by-Step</span>
+    </div>
+  </div>
+</header>
+
+<section class="tool-description-section">
+  <div class="tool-description-inner">
+    <div class="tool-description-content">
+      <p>Calculate matrix transpose A^T, check symmetric and skew-symmetric matrices, and verify transpose properties. <strong>100% client-side</strong>—no data sent to servers. Supports matrices up to 10×10.</p>
+    </div>
+  </div>
+</section>
+
+<main class="tool-page-container">
+  <div class="tool-input-column">
+    <div class="tool-card matrix-calc transpose-calc">
+      <div class="tool-card-header">Matrix Input</div>
+      <div class="tool-card-body">
+        <div class="tool-form-group">
+          <label class="tool-form-label">Dimensions (m × n)</label>
+          <div class="matrix-dim-row">
+            <input id="rows" type="number" min="1" max="10" class="tool-input" value="3" placeholder="rows" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);flex:1;min-width:60px;font-size:0.875rem">
+            <span style="color:var(--text-secondary)">×</span>
+            <input id="cols" type="number" min="1" max="10" class="tool-input" value="2" placeholder="cols" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);flex:1;min-width:60px;font-size:0.875rem">
           </div>
-
-          <div class="form-group">
-            <label for="matrixInput">Matrix Entries</label>
-            <textarea id="matrixInput" class="form-control" rows="6" placeholder="1 2
+        </div>
+        <div class="tool-form-group">
+          <label class="tool-form-label" for="matrixInput">Matrix Entries</label>
+          <textarea id="matrixInput" class="tool-input" rows="6" placeholder="1 2
 3 4
-5 6"></textarea>
-            <small class="text-muted">One row per line, space separated</small>
-          </div>
-
-          <button id="btnRandom" class="btn btn-outline-info btn-sm btn-block mb-2">
-            <i class="fas fa-random"></i> Random Matrix
-          </button>
+5 6" style="padding:0.5rem 0.75rem;border-radius:0.5rem;border:1.5px solid var(--border);background:var(--bg-primary);width:100%;font-family:var(--font-mono,'monospace');font-size:0.875rem;resize:vertical"></textarea>
+          <span class="tool-form-hint">One row per line, space separated</span>
         </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="form-group">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="showProperties" checked>
-              <label class="custom-control-label" for="showProperties">Show matrix properties</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="showSteps" checked>
-              <label class="custom-control-label" for="showSteps">Show detailed steps</label>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap">
-            <button id="btnCalculate" class="btn btn-primary btn-sm mr-2 mb-2">
-              <i class="fas fa-exchange-alt"></i> Calculate A^T
-            </button>
-            <button id="btnClear" class="btn btn-outline-secondary btn-sm mb-2">Clear</button>
-          </div>
-          <div id="inputError" class="text-danger small mt-2" style="display:none"></div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">Quick Examples</h5>
-        <div class="card-body">
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-example="rect">Rectangular (3×2)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-example="symmetric">Symmetric (3×3)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block mb-2" data-example="skew">Skew-Symmetric (3×3)</button>
-          <button class="btn btn-outline-primary btn-sm btn-block" data-example="square">Square (4×4)</button>
-        </div>
+        <button type="button" id="btnRandom" class="tool-btn-outline" style="width:100%;margin-bottom:0.5rem">Random Matrix</button>
       </div>
     </div>
 
-    <div class="col-lg-8 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex flex-wrap justify-content-between align-items-center">
-          <span class="mb-1 mb-sm-0">Result: A^T</span>
-          <div>
-            <button id="btnShareURL" class="btn btn-outline-primary btn-sm mr-1 mb-1" title="Copy URL to clipboard">
-              <i class="fas fa-share-alt"></i> Share URL
-            </button>
-            <button id="btnDownloadImage" class="btn btn-outline-success btn-sm mb-1" title="Download result as image">
-              <i class="fas fa-download"></i> Download Image
-            </button>
-          </div>
-        </h5>
-        <div class="card-body">
-          <div id="resultArea" class="text-center text-muted">
-            Enter a matrix and click "Calculate A^T" to see the transpose.
-          </div>
+    <div class="tool-card matrix-calc transpose-calc">
+      <div class="tool-card-body">
+        <div class="tool-form-group">
+          <label class="tool-checkbox-wrap"><input type="checkbox" id="showProperties" checked><span>Show matrix properties</span></label>
+          <label class="tool-checkbox-wrap"><input type="checkbox" id="showSteps" checked><span>Show detailed steps</span></label>
         </div>
-      </div>
-
-      <div class="card mb-3" id="propertiesCard" style="display:none">
-        <h5 class="card-header">🔍 Matrix Properties</h5>
-        <div class="card-body">
-          <div id="propertiesArea"></div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem">
+          <button type="button" id="btnCalculate" class="tool-action-btn" style="padding:0.5rem 1rem;margin-top:0">Calculate A^T</button>
+          <button type="button" id="btnClear" class="tool-btn-outline" style="margin-top:0">Clear</button>
         </div>
+        <div id="inputError" class="tool-form-hint" style="color:var(--error,#ef4444);display:none;margin-top:0.5rem"></div>
       </div>
+    </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">📋 Computation Steps</h5>
-        <div class="card-body">
-          <div id="stepsArea" class="text-muted">
-            Detailed transpose computation steps will appear here.
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">📚 Related Matrix Tools</h5>
-        <div class="card-body">
-          <div class="d-flex flex-wrap">
-            <a href="matrix-multiplication-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-times"></i> Matrix Multiplication
-            </a>
-            <a href="matrix-addition-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-plus"></i> Matrix Addition
-            </a>
-            <a href="matrix-power-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-superscript"></i> Matrix Powers
-            </a>
-            <a href="matrix-inverse-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-sync"></i> Matrix Inverse
-            </a>
-            <a href="matrix-type-classifier.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">
-              <i class="fas fa-tag"></i> Matrix Types
-            </a>
-            <a href="matrix-determinant-calculator.jsp" class="btn btn-sm btn-outline-primary mb-2">
-              <i class="fas fa-calculator"></i> Determinant
-            </a>
-          </div>
-          <div class="text-muted mt-2">
-            Explore more matrix computation tools for complete linear algebra analysis.
-          </div>
+    <div class="tool-card matrix-calc transpose-calc">
+      <div class="tool-card-header">Quick Examples</div>
+      <div class="tool-card-body">
+        <div class="matrix-example-grid">
+          <button type="button" class="matrix-example-btn" data-example="rect">Rectangular (3×2)</button>
+          <button type="button" class="matrix-example-btn" data-example="symmetric">Symmetric (3×3)</button>
+          <button type="button" class="matrix-example-btn" data-example="skew">Skew-Symmetric (3×3)</button>
+          <button type="button" class="matrix-example-btn" data-example="square">Square (4×4)</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="tool-output-column">
+    <div class="tool-card matrix-calc transpose-calc">
+      <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
+        <span>Result: A^T</span>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+        </div>
+      </div>
+      <div class="tool-card-body">
+        <div id="resultArea" style="text-align:center;color:var(--text-muted);padding:1rem">Enter a matrix and click "Calculate A^T" to see the transpose.</div>
+      </div>
+    </div>
+
+    <div class="tool-card matrix-calc transpose-calc" id="propertiesCard" style="display:none">
+      <div class="tool-card-header">Matrix Properties</div>
+      <div class="tool-card-body">
+        <div id="propertiesArea"></div>
+      </div>
+    </div>
+
+    <div class="tool-card matrix-calc transpose-calc">
+      <div class="tool-card-header">Computation Steps</div>
+      <div class="tool-card-body">
+        <div id="stepsArea" style="color:var(--text-muted)">Detailed transpose computation steps will appear here.</div>
+      </div>
+    </div>
+
+    <jsp:include page="modern/components/related-tools.jsp">
+      <jsp:param name="currentToolUrl" value="matrix-transpose-calculator.jsp" />
+      <jsp:param name="keyword" value="matrix" />
+      <jsp:param name="limit" value="6" />
+    </jsp:include>
+  </div>
+
+  <div class="tool-ads-column">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
 <script>
@@ -286,41 +206,10 @@
   const inputError = document.getElementById('inputError');
   const exampleButtons = document.querySelectorAll('[data-example]');
 
-  const EPS = 1e-10;
-
-  function smartFormat(num) {
-    if(Math.abs(num) < EPS) return '0';
-    if(Math.abs(num - Math.round(num)) < EPS) return Math.round(num).toString();
-    return parseFloat(num.toFixed(3)).toString();
-  }
-
-  function parseMatrix(text, m, n) {
-    const lines = text.trim().split('\n').filter(r => r.trim());
-    if(lines.length !== m) {
-      throw new Error(`Expected ${m} rows, got ${lines.length}`);
-    }
-    const matrix = [];
-    for(let i = 0; i < m; i++) {
-      const entries = lines[i].trim().split(/[\s,]+/).filter(Boolean);
-      if(entries.length !== n) {
-        throw new Error(`Row ${i+1}: Expected ${n} columns, got ${entries.length}`);
-      }
-      matrix[i] = entries.map(e => {
-        const num = parseFloat(e);
-        if(isNaN(num)) throw new Error(`Invalid number: "${e}"`);
-        return num;
-      });
-    }
-    return matrix;
-  }
-
-  function formatMatrix(mat) {
-    if(!mat || mat.length === 0) return '';
-    const rows = mat.map(row =>
-      row.map(val => smartFormat(val)).join(' & ')
-    );
-    return '\\begin{bmatrix}' + rows.join(' \\\\ ') + '\\end{bmatrix}';
-  }
+  const EPS = MatrixUtils.EPS;
+  const smartFormat = MatrixUtils.smartFormat;
+  const parseMatrix = MatrixUtils.parseMatrix;
+  const formatMatrix = MatrixUtils.formatMatrix;
 
   function formatPartialTranspose(AT, currentRow, currentCol, n, m) {
     const rows = [];
@@ -468,7 +357,7 @@
           const badgeClass = prop.value ? 'true' : 'false';
           const icon = prop.value ? '✓' : '✗';
           propHtml += `
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
               <span><strong>${prop.name}:</strong> ${prop.description}</span>
               <span class="property-badge ${badgeClass}">${icon} ${prop.value ? 'True' : 'False'}</span>
             </div>
@@ -483,14 +372,9 @@
 
       // Show steps
       if(showSteps.checked && steps.length > 0) {
-        let stepsHtml = '<div class="mb-4"><h5 class="text-dark">📋 Transpose Process</h5></div>';
+        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Transpose Process</h5></div>';
         steps.forEach((step, idx) => {
-          stepsHtml += `<div class="step-card">
-            <div class="d-flex align-items-start">
-              <span class="step-number">${idx + 1}</span>
-              <div class="step-description">${step}</div>
-            </div>
-          </div>`;
+          stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
         });
         stepsArea.innerHTML = stepsHtml;
       } else {
@@ -504,7 +388,7 @@
     } catch(err) {
       inputError.textContent = err.message;
       inputError.style.display = 'block';
-      resultArea.innerHTML = '<div class="alert alert-danger">Error: ' + err.message + '</div>';
+      resultArea.innerHTML = '<div style="padding:1rem;background:rgba(239,68,68,0.1);border:1px solid var(--error);border-radius:0.5rem;color:var(--error)">Error: ' + err.message + '</div>';
       stepsArea.innerHTML = '';
       propertiesCard.style.display = 'none';
     }
@@ -557,162 +441,89 @@
     btn.addEventListener('click', () => loadExample(btn.dataset.example));
   });
 
-  // Share URL functionality
-  const btnShareURL = document.getElementById('btnShareURL');
-  if(btnShareURL) {
-    btnShareURL.addEventListener('click', function() {
-      try {
-        const baseUrl = window.location.origin + window.location.pathname;
-        const params = new URLSearchParams();
-        params.set('m', rows.value);
-        params.set('n', cols.value);
-        params.set('matrix', btoa(encodeURIComponent(matrixInput.value.trim())));
+  // Share URL
+  MatrixUtils.shareURL(document.getElementById('btnShareURL'), function() {
+    return { m: rows.value, n: cols.value, matrix: btoa(encodeURIComponent(matrixInput.value.trim())) };
+  });
 
-        const shareUrl = baseUrl + '?' + params.toString();
+  // Download Image
+  MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-transpose', 'No result to download. Please calculate transpose first.');
+  MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Transpose', { exerciseType: 'transpose' });
 
-        if(navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(shareUrl).then(() => {
-            const originalHTML = btnShareURL.innerHTML;
-            btnShareURL.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            btnShareURL.classList.remove('btn-outline-primary');
-            btnShareURL.classList.add('btn-success');
-            setTimeout(() => {
-              btnShareURL.innerHTML = originalHTML;
-              btnShareURL.classList.remove('btn-success');
-              btnShareURL.classList.add('btn-outline-primary');
-            }, 2000);
-          });
-        }
-      } catch(err) {
-        console.error('Error creating share URL:', err);
-        alert('Failed to create share URL');
-      }
-    });
-  }
-
-  // Download Image functionality
-  const btnDownloadImage = document.getElementById('btnDownloadImage');
-  if(btnDownloadImage) {
-    btnDownloadImage.addEventListener('click', async function() {
-      const resultCard = document.querySelector('.card-body #resultArea').closest('.card');
-      if(!resultCard || !resultCard.querySelector('.result-card')) {
-        alert('No result to download. Please calculate transpose first.');
-        return;
-      }
-
-      const originalHTML = btnDownloadImage.innerHTML;
-      btnDownloadImage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-      btnDownloadImage.disabled = true;
-
-      try {
-        if(window.MathJax && window.MathJax.typesetPromise) {
-          await MathJax.typesetPromise([resultCard]);
-          await new Promise(resolve => setTimeout(resolve, 800));
-        }
-
-        const dataUrl = await domtoimage.toPng(resultCard, {
-          quality: 1,
-          bgcolor: '#ffffff',
-          filter: (node) => {
-            if(node.tagName === 'SCRIPT') return false;
-            if(node.classList && node.classList.contains('MathJax_Preview')) return false;
-            return true;
-          }
-        });
-
-        const link = document.createElement('a');
-        const timestamp = new Date().toISOString().slice(0, 10);
-        link.download = `matrix-transpose-${timestamp}.png`;
-        link.href = dataUrl;
-        link.click();
-
-        btnDownloadImage.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
-        btnDownloadImage.classList.remove('btn-outline-success');
-        btnDownloadImage.classList.add('btn-success');
-        setTimeout(() => {
-          btnDownloadImage.innerHTML = originalHTML;
-          btnDownloadImage.classList.remove('btn-success');
-          btnDownloadImage.classList.add('btn-outline-success');
-          btnDownloadImage.disabled = false;
-        }, 2000);
-
-      } catch(err) {
-        console.error('Error generating image:', err);
-        alert('Failed to generate image: ' + err.message);
-        btnDownloadImage.innerHTML = originalHTML;
-        btnDownloadImage.disabled = false;
-      }
-    });
-  }
-
-  // Load from URL parameters
-  function loadFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('matrix')) {
-      try {
-        rows.value = urlParams.get('m') || 3;
-        cols.value = urlParams.get('n') || 2;
-        matrixInput.value = decodeURIComponent(atob(urlParams.get('matrix')));
-        setTimeout(() => calculate(), 100);
-        return true;
-      } catch(err) {
-        console.error('Error loading from URL:', err);
-      }
+  // Load from URL or default
+  const loaded = MatrixUtils.loadFromURL(function(p) {
+    if(p.matrix) {
+      rows.value = p.m || 3;
+      cols.value = p.n || 2;
+      matrixInput.value = p.matrix;
+      setTimeout(() => calculate(), 100);
+      return true;
     }
     return false;
-  }
-
-  if(!loadFromURL()) {
+  });
+  if(!loaded) {
     loadExample('rect');
   }
 })();
 </script>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
-
-<!-- Visible FAQ section (must match JSON-LD below) -->
-<section id="faq" class="mt-5">
-  <h2 class="h5">Matrix Transpose: FAQ</h2>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">What is a matrix transpose and how do you compute A^T?</h3>
-    <p class="mb-0">The transpose A^T is obtained by swapping rows and columns: (A^T)<sub>i,j</sub> = A<sub>j,i</sub>. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">How do I check symmetric or skew‑symmetric matrices?</h3>
-    <p class="mb-0">A matrix is symmetric when A = A^T and skew‑symmetric when A = −A^T (all diagonal entries are zero). This tool flags these properties automatically.</p>
-  </div></div>
-  <div class="card mb-3"><div class="card-body">
-    <h3 class="h6">Does transposing change determinant or rank?</h3>
-    <p class="mb-0">For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank.</p>
-  </div></div>
+<section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Transpose Tool &amp; Methodology</h2>
+    <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This matrix transpose calculator computes A^T by swapping rows and columns. All computations run <strong>client-side in your browser</strong>—no matrices are sent to any server. Supports symmetric and skew-symmetric detection, property checks, and step-by-step solutions up to 10×10.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1.5rem">
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Authorship &amp; Expertise</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">Anish Nath</a></li>
+          <li><strong>Background:</strong> Math and developer tools for education</li>
+          <li><strong>Standards:</strong> Standard linear algebra (transpose properties)</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Trust &amp; Privacy</h3>
+        <ul style="margin-left:1rem;color:var(--text-secondary);font-size:0.9rem;line-height:1.7">
+          <li><strong>Privacy:</strong> All calculations run locally; no data stored</li>
+          <li><strong>Client-side:</strong> Your matrices never leave your device</li>
+          <li><strong>Support:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color:var(--tool-primary)">@anish2good</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type":"Question","name":"What is a matrix transpose and how do you compute A^T?","acceptedAnswer":{"@type":"Answer","text":"The transpose A^T is obtained by swapping rows and columns: (A^T) i,j = A j,i. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T."}},
-    {"@type":"Question","name":"How do I check symmetric or skew‑symmetric matrices?","acceptedAnswer":{"@type":"Answer","text":"A matrix is symmetric when A = A^T and skew‑symmetric when A = −A^T (all diagonal entries are zero). This tool flags these properties automatically."}},
-    {"@type":"Question","name":"Does transposing change determinant or rank?","acceptedAnswer":{"@type":"Answer","text":"For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank."}}
-  ]
-}
-</script>
+<section id="faq" style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">Matrix Transpose: FAQ</h2>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is a matrix transpose and how do you compute A^T?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">The transpose A^T is obtained by swapping rows and columns: (A^T)<sub>ij</sub> = A<sub>ji</sub>. If A is m×n, then A^T is n×m. Key rules: (A^T)^T = A, (A+B)^T = A^T + B^T, and (AB)^T = B^T A^T.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How do I check symmetric or skew-symmetric matrices?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is symmetric when A = A^T and skew-symmetric when A = -A^T (all diagonal entries are zero). This tool flags these properties automatically.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Does transposing change determinant or rank?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank.</p>
+  </div>
+</section>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-    {"@type":"ListItem","position":2,"name":"Matrix Transpose Calculator","item":"https://8gwifi.org/matrix-transpose-calculator.jsp"}
-  ]
-}
-</script>
-</div>
-<%@ include file="body-close.jsp"%>
+<%@ include file="modern/ads/ad-in-content-mid.jsp"%>
+<%@ include file="modern/components/support-section.jsp"%>
+<%@ include file="modern/ads/ad-sticky-footer.jsp"%>
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">&copy; <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 8gwifi.org - Free Online Tools</p>
+    <div class="footer-links">
+      <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+      <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener" class="footer-link">X</a>
+    </div>
+  </div>
+</footer>
+
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
+</body>
 </html>

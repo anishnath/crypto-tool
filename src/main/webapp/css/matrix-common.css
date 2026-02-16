@@ -1,0 +1,87 @@
+/* matrix-common.css – shared styles for all matrix calculator pages */
+
+/* ── Custom property defaults (override per page) ── */
+.matrix-calc {
+  --mc-result-color: #10b981;
+  --mc-result-bg: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  --mc-result-shadow: rgba(16,185,129,0.1);
+  --mc-step-color: #6366f1;
+  --mc-step-bg: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
+}
+
+/* ── Card spacing ── */
+.matrix-calc .card-header { padding: .6rem .9rem; font-weight: 600 }
+.matrix-calc .card-body   { padding: .7rem .9rem }
+
+/* ── Result card (accent via custom properties) ── */
+.matrix-calc .result-card {
+  border-left: 4px solid var(--mc-result-color);
+  background: var(--mc-result-bg);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px var(--mc-result-shadow);
+}
+
+/* ── Step card ── */
+.matrix-calc .step-card {
+  border-left: 4px solid var(--mc-step-color);
+  background: var(--mc-step-bg);
+  padding: 1rem 1.25rem;
+  margin: 0.75rem 0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(99,102,241,0.08);
+  transition: all 0.2s ease;
+}
+.matrix-calc .step-card:hover {
+  box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+  transform: translateX(2px);
+}
+
+/* ── LaTeX / MathJax container ── */
+.matrix-calc .matrix-display {
+  display: block;
+  text-align: center;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e7ff;
+}
+
+/* ── Step number badge ── */
+.matrix-calc .step-number {
+  display: inline-block;
+  background: #6366f1;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* ── Step description text ── */
+.matrix-calc .step-description {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ── Hide LaTeX source when MathJax has rendered ── */
+.matrix-calc .matrix-display .MathJax_Preview,
+.matrix-calc .matrix-display script[type^="math/tex"] {
+  display: none !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .matrix-calc h1 { font-size: 1.5rem }
+  .matrix-calc .card-header { font-size: 0.95rem }
+  .matrix-calc button { width: 100%; margin: 0.25rem 0 }
+  .matrix-calc .matrix-display { font-size: 0.85em; padding: 0.5rem }
+  .matrix-calc .step-card { padding: 0.75rem }
+}
