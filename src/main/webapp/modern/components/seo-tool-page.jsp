@@ -300,6 +300,29 @@
 }
 </script>
 
+<!-- LearningResource Schema (for Mathematics - boosts education/search) -->
+<% if (toolCategory != null && (toolCategory.toLowerCase().contains("math") || toolCategory.toLowerCase().contains("mathematics"))) { %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "<%= escapeJson(toolName) %>",
+  "description": "<%= escapeJson(toolDescription) %>",
+  "url": "<%= fullUrl %>",
+  "learningResourceType": "Interactive Tool",
+  "educationalLevel": "High School",
+  "teaches": "Linear algebra, matrix operations",
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "name": "8gwifi.org",
+    "url": "<%= baseUrl %>"
+  }
+}
+</script>
+<% } %>
+
 <!-- HowTo Schema (for tools with steps) -->
 <% if (request.getParameter("hasSteps") != null && "true".equals(request.getParameter("hasSteps"))) { %>
 <script type="application/ld+json">
