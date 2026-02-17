@@ -470,9 +470,11 @@ public class CFExamMarkerFunctionality extends HttpServlet {
 
     // ---- Math steps validation constants ----
     private static final Set<String> ALLOWED_OPERATIONS = new HashSet<>(
-            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve"));
+            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve", "logarithm"));
     private static final Set<String> ALLOWED_VARIABLES = new HashSet<>(
             Arrays.asList("x", "y", "t", "u", "z", "r", "s", "n"));
+    private static final Set<String> ALLOWED_MODES = new HashSet<>(
+            Arrays.asList("solve", "expand", "condense", "simplify", "evaluate"));
     // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, _, etc.
     private static final Pattern MATH_EXPR_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.,|\\\\!=_]+$");
@@ -516,26 +518,29 @@ public class CFExamMarkerFunctionality extends HttpServlet {
             return;
         }
 
-        // 2. answer (required, must look like math)
-        String answer = getJsonString(payload, "answer");
-        if (answer == null || answer.isEmpty()) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "answer is required");
-            return;
-        }
-        if (answer.length() > MAX_ANSWER_LENGTH) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer too long (max " + MAX_ANSWER_LENGTH + " chars)");
-            return;
-        }
-        if (!MATH_EXPR_PATTERN.matcher(answer).matches()) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer contains invalid characters");
-            return;
-        }
-
-        // 3. operation (optional, must be from whitelist)
+        // 2. operation (optional, must be from whitelist) — parsed before answer since answer is optional for logarithm
         String operation = getJsonString(payload, "operation");
         if (operation != null && !operation.isEmpty() && !ALLOWED_OPERATIONS.contains(operation)) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "operation must be one of: " + ALLOWED_OPERATIONS);
             return;
+        }
+
+        // 3. answer (required for most operations, optional for logarithm)
+        String answer = getJsonString(payload, "answer");
+        boolean isLogarithm = "logarithm".equals(operation);
+        if (!isLogarithm && (answer == null || answer.isEmpty())) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "answer is required");
+            return;
+        }
+        if (answer != null && !answer.isEmpty()) {
+            if (answer.length() > MAX_ANSWER_LENGTH) {
+                sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer too long (max " + MAX_ANSWER_LENGTH + " chars)");
+                return;
+            }
+            if (!MATH_EXPR_PATTERN.matcher(answer).matches()) {
+                sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "answer contains invalid characters");
+                return;
+            }
         }
 
         // 4. variable (optional, single letter from whitelist)
@@ -545,7 +550,14 @@ public class CFExamMarkerFunctionality extends HttpServlet {
             return;
         }
 
-        // 5. bounds (optional object with lower/upper)
+        // 5. mode (optional, for logarithm — must be from whitelist)
+        String mode = getJsonString(payload, "mode");
+        if (mode != null && !mode.isEmpty() && !ALLOWED_MODES.contains(mode)) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "mode must be one of: " + ALLOWED_MODES);
+            return;
+        }
+
+        // 6. bounds (optional object with lower/upper)
         if (payload.has("bounds") && !payload.get("bounds").isJsonNull()) {
             try {
                 JsonObject bounds = payload.getAsJsonObject("bounds");
