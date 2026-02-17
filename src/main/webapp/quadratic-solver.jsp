@@ -14,24 +14,24 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Quadratic Equation Solver with Steps - All Forms Free" />
-        <jsp:param name="toolDescription" value="Free quadratic equation solver with step-by-step solutions. Solve in standard, vertex, and factored forms. Quadratic formula, completing the square, factoring methods. Interactive parabola graph, inequality solver with interval notation, Python compiler. No signup." />
+        <jsp:param name="toolName" value="Quadratic Equation Solver & Formula Calculator - Free Steps" />
+        <jsp:param name="toolDescription" value="Solve any quadratic equation step by step using the quadratic formula, completing the square, or factoring. Free calculator with interactive parabola graph." />
         <jsp:param name="toolCategory" value="Mathematics" />
         <jsp:param name="toolUrl" value="quadratic-solver.jsp" />
-        <jsp:param name="toolKeywords" value="quadratic equation solver, quadratic formula calculator, solve quadratic equation step by step, completing the square calculator, factoring quadratics, vertex form calculator, quadratic inequality solver, discriminant calculator, parabola graph, ax2+bx+c=0 solver, quadratic equation calculator free, complex roots calculator" />
+        <jsp:param name="toolKeywords" value="quadratic equation solver, quadratic formula calculator, quadratic equation calculator, solve quadratic equation step by step, completing the square calculator, factoring quadratics calculator, vertex form calculator, quadratic inequality solver, discriminant calculator, parabola graph calculator, complex roots calculator, quadratic formula with steps free" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Solve quadratic equations step by step,Standard vertex and factored form input,Quadratic formula method,Completing the square method,Factoring method,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant analysis and root classification,Built-in Python SymPy compiler,LaTeX export and shareable URLs,Live KaTeX equation preview,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="How do I solve a quadratic equation using the quadratic formula?" />
-        <jsp:param name="faq1a" value="Enter coefficients a, b, and c from your equation ax^2+bx+c=0, then click Solve. The calculator applies the quadratic formula x = (-b +/- sqrt(b^2-4ac)) / 2a, showing every substitution and simplification step. It handles real roots, repeated roots, and complex roots automatically." />
-        <jsp:param name="faq2q" value="What does the discriminant tell you about a quadratic equation?" />
-        <jsp:param name="faq2a" value="The discriminant Delta = b^2 - 4ac determines the nature of roots. If Delta > 0, there are two distinct real roots. If Delta = 0, there is exactly one repeated real root. If Delta < 0, there are two complex conjugate roots. This calculator computes the discriminant and classifies roots automatically." />
-        <jsp:param name="faq3q" value="Can this calculator solve quadratic inequalities?" />
-        <jsp:param name="faq3a" value="Yes. Select the Inequality form, enter coefficients a, b, c and choose an operator (>, <, >=, <=). The solver finds roots, analyzes the sign chart, and provides the solution in interval notation. For example, x^2-5x+6 < 0 gives x in (2, 3). The graph shows the solution region shaded." />
-        <jsp:param name="faq4q" value="How do I convert between standard, vertex, and factored forms?" />
-        <jsp:param name="faq4a" value="Enter your equation in any form and the solver converts it to standard form ax^2+bx+c=0 automatically. Vertex form a(x-h)^2+k uses vertex coordinates. Factored form a(x-r1)(x-r2) uses the roots directly. The solution always shows the equivalent standard form and vertex form." />
-        <jsp:param name="faq5q" value="Is this quadratic equation solver free?" />
-        <jsp:param name="faq5a" value="Yes, completely free with no signup. You get 3 solving methods with step-by-step solutions, interactive Plotly parabola graphs, inequality solving with interval notation, a Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser for instant results." />
+        <jsp:param name="faq1q" value="What is the quadratic formula and how do you use it?" />
+        <jsp:param name="faq1a" value="The quadratic formula is x = (-b +/- sqrt(b^2 - 4ac)) / 2a. It solves any quadratic equation ax^2 + bx + c = 0. Enter your coefficients a, b, and c into this calculator and click Solve to see every substitution step, discriminant calculation, and final roots. Works for real, repeated, and complex roots." />
+        <jsp:param name="faq2q" value="How do you find the discriminant of a quadratic equation?" />
+        <jsp:param name="faq2a" value="The discriminant is Delta = b^2 - 4ac, the expression under the square root in the quadratic formula. If Delta > 0, the equation has two distinct real roots. If Delta = 0, it has one repeated root (the parabola touches the x-axis). If Delta < 0, it has two complex conjugate roots. This calculator computes it automatically." />
+        <jsp:param name="faq3q" value="How do you solve a quadratic equation by completing the square?" />
+        <jsp:param name="faq3a" value="Completing the square rewrites ax^2 + bx + c = 0 as a(x - h)^2 + k = 0, then solves by taking the square root. Steps: divide by a, move the constant, add (b/2a)^2 to both sides, factor the left side as a perfect square, then take the square root. This calculator shows every step with formatted math." />
+        <jsp:param name="faq4q" value="How do you solve quadratic inequalities with interval notation?" />
+        <jsp:param name="faq4a" value="Select the Inequality form, enter a, b, c and choose an operator (>, <, >=, <=). The solver finds the roots, determines where the parabola is above or below zero using a sign chart, and writes the answer in interval notation. For example, x^2 - 5x + 6 < 0 gives x in (2, 3)." />
+        <jsp:param name="faq5q" value="Is this quadratic equation calculator really free?" />
+        <jsp:param name="faq5a" value="Yes, 100% free with no signup or limits. You get 3 solving methods with step-by-step solutions, an interactive parabola graph, inequality solving, a Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser — nothing is sent to a server." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
