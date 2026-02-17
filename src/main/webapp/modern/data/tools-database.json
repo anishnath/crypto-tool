@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-05T00:00:00.000Z",
-  "totalTools": 384,
+  "totalTools": 385,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1328,6 +1328,13 @@
       "description": "LCM/GCD Finder - Free online mathematics tool"
     },
     {
+      "name": "Logarithm Calculator",
+      "url": "logarithm-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "logarithm log ln solver simplify expand mathematics",
+      "description": "Logarithm Calculator - Solve, simplify, expand log equations. Hybrid formula+AI."
+    },
+    {
       "name": "Limit Calculator",
       "url": "limit-calculator.jsp",
       "category": "Mathematics",
@@ -1627,6 +1634,13 @@
       "category": "Mathematics",
       "keywords": "tikz viewer editor latex diagram equation graphics mathematics",
       "description": "TikZ Viewer & Editor - Free online mathematics tool"
+    },
+    {
+      "name": "TikZ Draw - Visual Editor",
+      "url": "tikz-draw.jsp",
+      "category": "Mathematics",
+      "keywords": "tikz draw visual editor latex diagram point click canvas circle line arc rectangle bezier path label mathematics",
+      "description": "TikZ Draw - Visual point-and-click LaTeX diagram editor with automatic TikZ code generation"
     },
     {
       "name": "Tower of Hanoi",
