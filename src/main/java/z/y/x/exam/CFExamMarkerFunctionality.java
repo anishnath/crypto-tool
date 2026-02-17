@@ -470,11 +470,11 @@ public class CFExamMarkerFunctionality extends HttpServlet {
 
     // ---- Math steps validation constants ----
     private static final Set<String> ALLOWED_OPERATIONS = new HashSet<>(
-            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve", "logarithm"));
+            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve", "logarithm", "linear_system"));
     private static final Set<String> ALLOWED_VARIABLES = new HashSet<>(
             Arrays.asList("x", "y", "t", "u", "z", "r", "s", "n"));
     private static final Set<String> ALLOWED_MODES = new HashSet<>(
-            Arrays.asList("solve", "expand", "condense", "simplify", "evaluate"));
+            Arrays.asList("solve", "expand", "condense", "simplify", "evaluate", "gaussian", "gauss_jordan", "lu", "cramer", "inverse", "least_squares"));
     // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, _, etc.
     private static final Pattern MATH_EXPR_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.,|\\\\!=_]+$");
@@ -528,7 +528,8 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         // 3. answer (required for most operations, optional for logarithm)
         String answer = getJsonString(payload, "answer");
         boolean isLogarithm = "logarithm".equals(operation);
-        if (!isLogarithm && (answer == null || answer.isEmpty())) {
+        boolean isLinearSystem = "linear_system".equals(operation);
+        if (!isLogarithm && !isLinearSystem && (answer == null || answer.isEmpty())) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "answer is required");
             return;
         }
