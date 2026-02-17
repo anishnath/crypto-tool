@@ -827,17 +827,19 @@ function requestAISolve(raw) {
                 var el = document.getElementById('lc-ai-step-' + j);
                 if (el && data.steps[j].latex) {
                     var ltx = data.steps[j].latex;
-                    // Detect plain English text (no LaTeX commands/symbols) — render as HTML, not math
-                    var hasLatex = /[\\{}^_]|\\[a-zA-Z]/.test(ltx);
-                    if (hasLatex) {
-                        try {
-                            katex.render(ltx, el, { displayMode: true, throwOnError: false });
-                        } catch (e) { el.textContent = ltx; }
-                    } else {
+                    // Count English words (2+ letters) — if 4+, it's a sentence, not a formula
+                    var wordCount = (ltx.match(/[a-zA-Z]{2,}/g) || []).length;
+                    var isSentence = wordCount >= 4 && ltx.indexOf(' ') >= 0;
+                    if (isSentence) {
+                        // Render as plain text — KaTeX eats spaces in English sentences
                         el.style.color = 'var(--text-secondary)';
                         el.style.fontSize = '0.875rem';
                         el.style.lineHeight = '1.6';
-                        el.textContent = ltx;
+                        el.textContent = ltx.replace(/\\\\/g, '\\');
+                    } else {
+                        try {
+                            katex.render(ltx, el, { displayMode: true, throwOnError: false });
+                        } catch (e) { el.textContent = ltx; }
                     }
                 }
             }
