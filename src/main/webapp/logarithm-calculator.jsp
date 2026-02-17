@@ -826,9 +826,19 @@ function requestAISolve(raw) {
             for (var j = 0; j < data.steps.length; j++) {
                 var el = document.getElementById('lc-ai-step-' + j);
                 if (el && data.steps[j].latex) {
-                    try {
-                        katex.render(data.steps[j].latex, el, { displayMode: true, throwOnError: false });
-                    } catch (e) { el.textContent = data.steps[j].latex; }
+                    var ltx = data.steps[j].latex;
+                    // Detect plain English text (no LaTeX commands/symbols) — render as HTML, not math
+                    var hasLatex = /[\\{}^_]|\\[a-zA-Z]/.test(ltx);
+                    if (hasLatex) {
+                        try {
+                            katex.render(ltx, el, { displayMode: true, throwOnError: false });
+                        } catch (e) { el.textContent = ltx; }
+                    } else {
+                        el.style.color = 'var(--text-secondary)';
+                        el.style.fontSize = '0.875rem';
+                        el.style.lineHeight = '1.6';
+                        el.textContent = ltx;
+                    }
                 }
             }
             resultActions.style.display = 'flex';
