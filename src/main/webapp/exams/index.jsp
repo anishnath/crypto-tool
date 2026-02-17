@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "Free Practice Exams | NCERT Solutions + Visual Math Lab + Physics Tools + Mental Math";
-    String seoDescription = "2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks. 100% free.";
+    String seoTitle = "Free Practice Exams | NCERT Solutions + Math Tools + Physics Tools + Mental Math";
+    String seoDescription = "2,711 NCERT solutions, 21 math calculators, 43 physics solvers, 35 interactive visualizations, CBSE mock tests + 150+ mental math tricks. 100% free.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -128,6 +128,25 @@
                                     <span class="board-card-badge" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">43 Tools</span>
                                 </div>
                                 <p class="text-sm text-muted mt-4">Mechanics • Optics • Electromagnetism • Waves</p>
+                            </a>
+
+                            <!-- Math Tools Card -->
+                            <a href="<%=request.getContextPath()%>/math/"
+                                class="card card-clickable board-card" style="border-color: #16a34a; border-width: 2px;">
+                                <div class="featured-badge" style="background: linear-gradient(135deg, #16a34a, #22c55e);">New</div>
+                                <div class="board-card-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e); color: white;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    </svg>
+                                </div>
+                                <h3 class="board-card-title">Math Tools</h3>
+                                <p class="board-card-subtitle">Calculators with Step-by-Step Solutions</p>
+                                <div class="board-card-meta">
+                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #16a34a, #22c55e); color: white;">21 Tools</span>
+                                </div>
+                                <p class="text-sm text-muted mt-4">Algebra • Calculus • Linear Algebra • Everyday Math</p>
                             </a>
 
                             <!-- Visual Physics Lab Card -->
@@ -357,7 +376,7 @@
     "@type": "ItemList",
     "name": "Exam Preparation Resources",
     "description": "Practice exams and mental math training for board exams and competitive tests",
-    "numberOfItems": 7,
+    "numberOfItems": 8,
     "itemListElement": [
         {
             "@type": "ListItem",
@@ -416,6 +435,19 @@
             "position": 5,
             "item": {
                 "@type": "WebApplication",
+                "name": "Math Tools - Calculators with Step-by-Step Solutions",
+                "applicationCategory": "EducationalApplication",
+                "description": "21 free math calculators covering percentages, exponents, logarithms, quadratics, derivatives, integrals, matrices, and more with step-by-step KaTeX solutions",
+                "url": "https://8gwifi.org/math/",
+                "provider": {"@type": "Organization", "name": "8gwifi.org"},
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 6,
+            "item": {
+                "@type": "WebApplication",
                 "name": "Visual Physics Lab - Interactive Physics Simulations",
                 "applicationCategory": "EducationalApplication",
                 "description": "19 interactive physics simulations covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics",
@@ -426,7 +458,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 6,
+            "position": 7,
             "item": {
                 "@type": "WebApplication",
                 "name": "Visual Math Lab - Interactive Math Visualizations",
@@ -439,7 +471,7 @@
         },
         {
             "@type": "ListItem",
-            "position": 7,
+            "position": 8,
             "item": {
                 "@type": "Course",
                 "name": "CBSE Class 10 Mathematics Practice",

@@ -221,6 +221,7 @@
                     <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
                 </div>
             </div>
+            <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
             <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
             <a href="<%=request.getContextPath()%>/">Tools</a>
             <% if (isLoggedIn) { %>
@@ -431,6 +432,7 @@
         <a href="<%=request.getContextPath()%>/exams/visual-physics/">Visual Physics</a>
         <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
         <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
         <a href="<%=request.getContextPath()%>/exams/math-memory/">Mental Memory</a>
         <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
         <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
