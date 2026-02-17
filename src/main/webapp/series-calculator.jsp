@@ -1,1049 +1,543 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org</title>
-    <meta name="description" content="Free online Taylor and Maclaurin series calculator with step-by-step solutions. Calculate power series expansions for any function around any point. Interactive graphs show approximation convergence. Includes radius of convergence and common series.">
-    <meta name="keywords" content="taylor series calculator, maclaurin series calculator, power series expansion, series approximation, radius of convergence, taylor polynomial, calculus calculator, step by step series, function approximation, polynomial expansion">
-    <link rel="canonical" href="https://8gwifi.org/series-calculator.jsp">
+    <meta name="robots" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org">
-    <meta property="og:description" content="Calculate Taylor and Maclaurin series expansions with detailed step-by-step solutions and interactive visualization.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://8gwifi.org/series-calculator.jsp">
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Taylor & Maclaurin Series Calculator - Free with Steps" />
+        <jsp:param name="toolDescription" value="Free Taylor series calculator with step-by-step derivatives. Expand any function as a Maclaurin or Taylor series. Interactive graph shows convergence in real time." />
+        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolUrl" value="series-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, maclaurin series formula, series approximation calculator, step by step taylor series, function series expansion online free" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Built-in Python SymPy compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="What is a Taylor series in simple terms?" />
+        <jsp:param name="faq1a" value="A Taylor series rewrites any smooth function as an infinite polynomial by using the function's derivatives at a single point. The formula is f(x) = sum of f^(n)(a)/n! times (x-a)^n. When the center is a=0 it is called a Maclaurin series. This calculator computes each derivative step by step and assembles the polynomial automatically." />
+        <jsp:param name="faq2q" value="What is the Taylor series of e^x, sin(x), and cos(x)?" />
+        <jsp:param name="faq2a" value="The three most important Maclaurin series are: e^x = 1 + x + x^2/2! + x^3/3! + ..., sin(x) = x - x^3/3! + x^5/5! - ..., and cos(x) = 1 - x^2/2! + x^4/4! - ... All three converge for every real number (radius of convergence R = infinity). Enter any of these functions and click Calculate to see the full derivation." />
+        <jsp:param name="faq3q" value="How do you find the radius of convergence of a Taylor series?" />
+        <jsp:param name="faq3a" value="Use the ratio test: R = lim |a_n / a_(n+1)| as n approaches infinity. The series converges for |x-a| less than R and diverges beyond. Common results: e^x and trig functions have R = infinity, ln(1+x) has R = 1, 1/(1-x) has R = 1. This calculator shows the convergence interval for every function." />
+        <jsp:param name="faq4q" value="How many terms do you need for a good Taylor approximation?" />
+        <jsp:param name="faq4a" value="It depends on the function and distance from the center point. Near the center, 5 to 7 terms often give 6+ digits of accuracy. Farther away or for functions with small convergence radius you may need 15 to 20 terms. Use the interactive graph with the term slider to see exactly how the approximation improves." />
+        <jsp:param name="faq5q" value="Is this Taylor series calculator really free?" />
+        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup or limits. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, a Python SymPy compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls." />
+    </jsp:include>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Taylor & Maclaurin Series Calculator Online – Free | 8gwifi.org">
-    <meta name="twitter:description" content="Calculate Taylor and Maclaurin series expansions with detailed step-by-step solutions and interactive visualization.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.plot.ly">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Taylor & Maclaurin Series Calculator",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "Free online calculator for Taylor and Maclaurin series expansions with step-by-step solutions",
-      "featureList": [
-        "Taylor series expansion around any point",
-        "Maclaurin series expansion (centered at 0)",
-        "Step-by-step derivative calculations",
-        "Power series representation",
-        "Radius of convergence calculation",
-        "Interactive graph comparison",
-        "Function vs approximation visualization",
-        "Multiple terms support (up to 20 terms)",
-        "Common series library (e^x, sin(x), cos(x), ln(1+x))",
-        "LaTeX output formatting",
-        "Convergence analysis",
-        "Copy results to clipboard",
-        "Example function templates"
-      ],
-      "browserRequirements": "Requires JavaScript enabled"
-    }
-    </script>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/series-calculator.css?v=<%=cacheVersion%>">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is the difference between Taylor and Maclaurin series?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A Taylor series expands a function around any point a: f(x) = f(a) + f'(a)(x-a) + f''(a)(x-a)²/2! + ... A Maclaurin series is a special case where a=0: f(x) = f(0) + f'(0)x + f''(0)x²/2! + ..."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I calculate a Taylor series expansion?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Enter your function, select Taylor series, choose the center point a, and specify the number of terms. The calculator will compute successive derivatives at point a and construct the series: Σ(f⁽ⁿ⁾(a)/n!)(x-a)ⁿ"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the radius of convergence?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The radius of convergence R is the distance from the center point within which the Taylor series converges to the actual function. For |x-a| < R, the series converges; for |x-a| > R, it diverges."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What functions have known series expansions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Common functions with known series: e^x = Σ(xⁿ/n!), sin(x) = Σ((-1)ⁿx^(2n+1)/(2n+1)!), cos(x) = Σ((-1)ⁿx^(2n)/(2n)!), ln(1+x) = Σ((-1)^(n+1)xⁿ/n), 1/(1-x) = Σxⁿ for |x|<1"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How many terms do I need for a good approximation?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It depends on the function and desired accuracy. Near the center point, fewer terms (5-10) often suffice. For points farther from center or complex functions, more terms (15-20) may be needed. Check the interactive graph to see convergence."
-          }
-        }
-      ]
-    }
-    </script>
+    <%@ include file="modern/ads/ad-init.jsp" %>
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": "How to Calculate Taylor and Maclaurin Series",
-      "description": "Step-by-step guide to computing power series expansions",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Enter Function",
-          "text": "Type your function f(x) using standard notation (e.g., e^x, sin(x), x^2)"
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "Select Series Type",
-          "text": "Choose Taylor series (around point a) or Maclaurin series (around 0)"
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "Set Center Point",
-          "text": "For Taylor series, specify the center point a where the series is expanded"
-        },
-        {
-          "@type": "HowToStep",
-          "position": 4,
-          "name": "Choose Number of Terms",
-          "text": "Select how many terms (n) to include in the expansion (more terms = better approximation)"
-        },
-        {
-          "@type": "HowToStep",
-          "position": 5,
-          "name": "Calculate",
-          "text": "Click Calculate to see the series expansion with step-by-step derivatives"
-        },
-        {
-          "@type": "HowToStep",
-          "position": 6,
-          "name": "Analyze Results",
-          "text": "Review the series representation, radius of convergence, and interactive graph showing how the approximation compares to the original function"
-        }
-      ]
-    }
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://8gwifi.org/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Math Tools",
-          "item": "https://8gwifi.org/#math-tools"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Taylor & Maclaurin Series Calculator",
-          "item": "https://8gwifi.org/series-calculator.jsp"
-        }
-      ]
-    }
-    </script>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-        .container {
-            max-width: 1200px;
-        }
-        .calc-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 30px;
-            margin-bottom: 20px;
-        }
-        .calc-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-        }
-        .calc-header h1 {
-            color: #2d3748;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .calc-header p {
-            color: #718096;
-            font-size: 1.1rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
-        .form-control, .form-select {
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .btn-calculate {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 14px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s;
-            width: 100%;
-        }
-        .btn-calculate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        .btn-secondary {
-            background: #718096;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .btn-secondary:hover {
-            background: #4a5568;
-            transform: translateY(-2px);
-        }
-        .result-section {
-            margin-top: 30px;
-            padding: 25px;
-            background: #f7fafc;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-        }
-        .result-section h3 {
-            color: #2d3748;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        .latex-output {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #e2e8f0;
-            margin: 15px 0;
-            font-size: 1.2rem;
-            overflow-x: auto;
-        }
-        .step-item {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 3px solid #9f7aea;
-        }
-        .step-number {
-            display: inline-block;
-            background: #9f7aea;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-        .term-badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        #graphCanvas {
-            width: 100%;
-            height: 400px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #e2e8f0;
-        }
-        .example-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .btn-example {
-            background: #edf2f7;
-            color: #2d3748;
-            border: 2px solid #e2e8f0;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .btn-example:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        .info-box {
-            background: #ebf8ff;
-            border-left: 4px solid #4299e1;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .info-box h4 {
-            color: #2c5282;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .info-box ul {
-            margin-bottom: 0;
-            color: #2d3748;
-        }
-        .convergence-box {
-            background: #f0fff4;
-            border-left: 4px solid #48bb78;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        .convergence-box h4 {
-            color: #22543d;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .error-message {
-            background: #fff5f5;
-            border-left: 4px solid #f56565;
-            padding: 15px;
-            border-radius: 8px;
-            color: #c53030;
-            margin: 15px 0;
-        }
-        .center-input-container {
-            display: none;
-        }
-        .center-input-container.active {
-            display: block;
-        }
-        .series-formula {
-            background: #fefcbf;
-            border: 2px solid #f6e05e;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            text-align: center;
-        }
+        .tool-action-btn { background: var(--sc-gradient) !important; }
+        .tool-badge { background: var(--sc-light); color: var(--sc-tool); }
     </style>
-    <script>
-        window.MathJax = {
-            loader: { load: ['[tex]/color'] },
-            tex: {
-                packages: { '[+]': ['color'] },
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            startup: {
-                ready: () => {
-                    MathJax.startup.defaultReady();
-                    console.log('MathJax loaded and ready');
-                }
-            }
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
-    <%@ include file="header-script.jsp"%>
 </head>
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-<div class="container mt-4">
-        <div class="calc-card">
-            <div class="calc-header">
-                <h1>Taylor & Maclaurin Series Calculator</h1>
-                <p>Expand functions into power series with step-by-step solutions</p>
-            </div>
+<body>
+<%@ include file="modern/components/nav-header.jsp" %>
 
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="mb-4">
-                        <label for="functionInput" class="form-label">Function f(x)</label>
-                        <input type="text" class="form-control" id="functionInput"
-                               placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)"
-                               value="e^x">
-                        <small class="text-muted">Supported: +, -, *, /, ^, sin, cos, tan, exp, ln, log, sqrt</small>
-                    </div>
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Taylor & Maclaurin Series Calculator</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                Series Calculator
+            </nav>
+        </div>
+        <div class="tool-page-badges">
+            <span class="tool-badge">Free Online</span>
+            <span class="tool-badge">Step-by-Step</span>
+            <span class="tool-badge">Up to 20 Terms</span>
+        </div>
+    </div>
+</header>
 
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <label for="seriesType" class="form-label">Series Type</label>
-                            <select class="form-select" id="seriesType" onchange="toggleCenterPoint()">
-                                <option value="maclaurin" selected>Maclaurin (a=0)</option>
-                                <option value="taylor">Taylor (custom a)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 center-input-container" id="centerContainer">
-                            <label for="centerPoint" class="form-label">Center Point (a)</label>
-                            <input type="text" class="form-control" id="centerPoint"
-                                   placeholder="e.g., 0, 1, pi" value="0">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="numTerms" class="form-label">Number of Terms (n)</label>
-                            <input type="number" class="form-control" id="numTerms"
-                                   min="1" max="20" value="5">
-                        </div>
-                    </div>
+<section class="tool-description-section" style="background:var(--sc-light);">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Free <strong>Taylor and Maclaurin series calculator</strong> with <strong>step-by-step derivative solutions</strong>. Expand any function into a <strong>power series</strong> around any point. Interactive convergence graph, <strong>radius of convergence</strong> analysis, and built-in Python compiler.</p>
+        </div>
+    </div>
+</section>
 
-                    <button class="btn btn-calculate" onclick="calculateSeries()">
-                        Calculate Series
-                    </button>
+<main class="tool-page-container">
+    <!-- ==================== INPUT COLUMN ==================== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <div class="tool-card-header" style="background:var(--sc-gradient);">Series Expansion</div>
+            <div class="tool-card-body">
 
-                    <div class="example-buttons">
-                        <button class="btn-example" onclick="loadExample('e^x', 'maclaurin', 5)">e^x</button>
-                        <button class="btn-example" onclick="loadExample('sin(x)', 'maclaurin', 7)">sin(x)</button>
-                        <button class="btn-example" onclick="loadExample('cos(x)', 'maclaurin', 7)">cos(x)</button>
-                        <button class="btn-example" onclick="loadExample('ln(1+x)', 'maclaurin', 6)">ln(1+x)</button>
-                        <button class="btn-example" onclick="loadExample('1/(1-x)', 'maclaurin', 6)">1/(1-x)</button>
-                        <button class="btn-example" onclick="loadExample('sqrt(1+x)', 'maclaurin', 6)">√(1+x)</button>
-                        <button class="btn-example" onclick="loadExample('tan(x)', 'maclaurin', 5)">tan(x)</button>
+                <!-- Series Type Toggle -->
+                <div class="tool-form-group" style="margin-bottom:0.5rem;">
+                    <label class="tool-form-label">Series Type</label>
+                    <div class="sc-type-toggle">
+                        <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
+                        <button type="button" class="sc-type-btn" data-type="taylor">Taylor (custom a)</button>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="info-box">
-                        <h4>Series Formula</h4>
-                        <p style="font-size: 0.9rem; margin-bottom: 10px;">
-                            <strong>Taylor Series:</strong><br>
-                            f(x) = Σ [f⁽ⁿ⁾(a)/n!] · (x-a)ⁿ
-                        </p>
-                        <p style="font-size: 0.9rem; margin-bottom: 0;">
-                            <strong>Maclaurin Series:</strong><br>
-                            f(x) = Σ [f⁽ⁿ⁾(0)/n!] · xⁿ
-                        </p>
+                <!-- Function Input -->
+                <div class="tool-form-group">
+                    <label class="tool-form-label" for="sc-func-input">Function f(x)</label>
+                    <input type="text" class="sc-func-input" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x">
+                    <!-- Function Palette -->
+                    <div class="sc-func-palette" id="sc-func-palette">
+                        <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
+                        <button type="button" class="sc-palette-btn" data-insert="cos(" title="cosine">cos</button>
+                        <button type="button" class="sc-palette-btn" data-insert="tan(" title="tangent">tan</button>
+                        <button type="button" class="sc-palette-btn" data-insert="e^(" title="exponential">e<sup>x</sup></button>
+                        <button type="button" class="sc-palette-btn" data-insert="ln(" title="natural log">ln</button>
+                        <button type="button" class="sc-palette-btn" data-insert="log(" title="logarithm">log</button>
+                        <button type="button" class="sc-palette-btn" data-insert="sqrt(" title="square root">&radic;</button>
+                        <button type="button" class="sc-palette-btn" data-insert="^" title="power">x<sup>n</sup></button>
+                        <button type="button" class="sc-palette-btn" data-insert="pi" title="pi">&pi;</button>
+                        <button type="button" class="sc-palette-btn" data-insert="(" title="open paren">(</button>
+                        <button type="button" class="sc-palette-btn" data-insert=")" title="close paren">)</button>
+                        <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
                     </div>
+                    <div class="tool-form-hint">Click buttons above or type directly. Use ^ for powers, e.g. x^2</div>
+                </div>
 
-                    <div class="info-box" style="background: #fef5e7; border-left-color: #f39c12;">
-                        <h4 style="color: #d68910;">Common Series</h4>
-                        <ul style="font-size: 0.85rem; padding-left: 20px;">
-                            <li>e<sup>x</sup> = Σ x<sup>n</sup>/n!</li>
-                            <li>sin(x) = Σ (-1)<sup>n</sup>x<sup>2n+1</sup>/(2n+1)!</li>
-                            <li>cos(x) = Σ (-1)<sup>n</sup>x<sup>2n</sup>/(2n)!</li>
-                            <li>ln(1+x) = Σ (-1)<sup>n+1</sup>x<sup>n</sup>/n</li>
-                            <li>1/(1-x) = Σ x<sup>n</sup>, |x|&lt;1</li>
-                        </ul>
+                <!-- Parameters -->
+                <div class="sc-param-row">
+                    <div class="sc-param-group" id="sc-center-group" style="display:none;">
+                        <label class="sc-param-label" for="sc-center-point">Center (a)</label>
+                        <input type="text" class="sc-param-input" id="sc-center-point" placeholder="e.g., 0, 1, pi" value="0">
                     </div>
-                </div>
-            </div>
-
-            <div id="resultsContainer" style="display: none;">
-                <div class="result-section">
-                    <h3>Series Expansion</h3>
-                    <div class="latex-output" id="originalFunction"></div>
-                    <div class="series-formula" id="seriesFormula"></div>
-                    <div class="latex-output" id="seriesResult"></div>
-                    <button class="btn btn-secondary btn-sm mt-2" onclick="copyResult()">Copy Result</button>
-                </div>
-
-                <div class="result-section">
-                    <h3 style="cursor: pointer;" onclick="toggleSteps()">
-                        Step-by-Step Solution
-                        <span id="stepsToggle" style="float: right; font-size: 0.8em;">▼ Show</span>
-                    </h3>
-                    <div id="stepsContainer" style="display: none;"></div>
-                </div>
-
-                <div class="result-section" id="convergenceSection">
-                    <h3>Convergence Analysis</h3>
-                    <div id="convergenceContainer"></div>
-                </div>
-
-                <div class="result-section">
-                    <h3>Graph Comparison</h3>
-                    <canvas id="graphCanvas"></canvas>
-                    <div class="mt-2">
-                        <small class="text-muted">
-                            <span style="color: #667eea; font-weight: 600;">■</span> Original Function &nbsp;&nbsp;
-                            <span style="color: #f56565; font-weight: 600;">■</span> Series Approximation
-                        </small>
-                    </div>
-                    <div class="mt-3">
-                        <label for="termSlider" class="form-label">Adjust terms to see convergence: <span id="termCount">5</span></label>
-                        <input type="range" class="form-range" id="termSlider" min="1" max="20" value="5"
-                               oninput="updateGraph(parseInt(this.value))">
+                    <div class="sc-param-group">
+                        <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
+                        <input type="number" class="sc-param-input" id="sc-num-terms" min="1" max="20" value="5">
                     </div>
                 </div>
 
-                <div class="result-section" style="background: #f0f9ff; border-left-color: #3b82f6;">
-                    <h3 style="color: #1e40af;">Related Calculus Tools</h3>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a href="derivative-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Derivative Calculator</a>
-                        <a href="integral-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Integral Calculator</a>
-                        <a href="limit-calculator.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Limit Calculator</a>
-                        <a href="math-art-gallery.jsp" class="btn btn-sm btn-outline-primary mr-2 mb-2">Math Art Gallery</a>
-                        <a href="linear-equations-solver.jsp" class="btn btn-sm btn-outline-primary mb-2">Equation Solver</a>
+                <!-- Live Preview -->
+                <div class="tool-form-group" style="margin-top:0.75rem;">
+                    <label class="tool-form-label">Series Preview</label>
+                    <div class="sc-preview" id="sc-preview"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.5rem;">
+                    <button type="button" class="tool-action-btn" id="sc-solve-btn" style="flex:1">Calculate Series</button>
+                    <button type="button" class="tool-action-btn" id="sc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Quick Examples -->
+                <div class="tool-form-group">
+                    <label class="tool-form-label">Quick Examples</label>
+                    <div class="sc-examples">
+                        <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
+                        <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
+                        <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
+                        <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
+                        <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
                     </div>
-                    <p class="text-muted small mb-0 mt-2">Explore more calculus tools for complete mathematical analysis.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.0/lib/browser/math.min.js"></script>
+    <!-- ==================== OUTPUT COLUMN ==================== -->
+    <div class="tool-output-column">
+        <!-- Tab bar -->
+        <div class="sc-output-tabs">
+            <button type="button" class="sc-output-tab active" data-panel="result">Result</button>
+            <button type="button" class="sc-output-tab" data-panel="graph">Graph</button>
+            <button type="button" class="sc-output-tab" data-panel="python">Python Compiler</button>
+        </div>
 
-    <script>
-        let currentFunction = null;
-        let currentCenter = 0;
-        let currentVariable = 'x';
-        let derivativesAtCenter = [];
-
-        function toggleCenterPoint() {
-            const type = document.getElementById('seriesType').value;
-            const container = document.getElementById('centerContainer');
-            if (type === 'taylor') {
-                container.classList.add('active');
-            } else {
-                container.classList.remove('active');
-                document.getElementById('centerPoint').value = '0';
-            }
-        }
-
-        function factorial(n) {
-            if (n === 0 || n === 1) return 1;
-            let result = 1;
-            for (let i = 2; i <= n; i++) {
-                result *= i;
-            }
-            return result;
-        }
-
-        function calculateSeries() {
-            const funcInput = document.getElementById('functionInput').value.trim();
-            const seriesType = document.getElementById('seriesType').value;
-            const numTerms = parseInt(document.getElementById('numTerms').value);
-            const centerStr = document.getElementById('centerPoint').value.trim() || '0';
-
-            if (!funcInput) {
-                alert('Please enter a function');
-                return;
-            }
-
-            try {
-                // Parse center point
-                currentCenter = math.evaluate(centerStr.replace(/\bpi\b/g, 'pi'));
-                currentVariable = 'x';
-
-                // Preprocess function input - convert ln to log for math.js
-                const processedInput = funcInput
-                    .replace(/\bln\(/g, 'log(')
-                    .replace(/\bpi\b/g, 'pi');
-
-                // Parse the function
-                currentFunction = math.parse(processedInput);
-
-                // Calculate derivatives at center point
-                derivativesAtCenter = [];
-                let derivative = currentFunction;
-
-                for (let n = 0; n < numTerms; n++) {
-                    // Evaluate derivative at center
-                    const compiled = derivative.compile();
-                    const scope = {};
-                    scope[currentVariable] = currentCenter;
-                    const value = compiled.evaluate(scope);
-                    derivativesAtCenter.push(value);
-
-                    // Calculate next derivative
-                    if (n < numTerms - 1) {
-                        derivative = math.derivative(derivative, currentVariable);
-                    }
-                }
-
-                // Build steps
-                const steps = buildSteps(numTerms);
-
-                // Display results
-                displayResults(funcInput, steps, numTerms, seriesType);
-
-                // Draw graph
-                drawGraph(numTerms);
-
-                document.getElementById('resultsContainer').style.display = 'block';
-                document.getElementById('termSlider').max = numTerms;
-                document.getElementById('termSlider').value = numTerms;
-                document.getElementById('termCount').textContent = numTerms;
-
-            } catch (error) {
-                showError('Error calculating series: ' + error.message);
-            }
-        }
-
-        function buildSteps(numTerms) {
-            const steps = [];
-            let derivative = currentFunction;
-
-            for (let n = 0; n < numTerms; n++) {
-                const value = derivativesAtCenter[n];
-                const factorialN = factorial(n);
-
-                // Step: Show derivative calculation
-                const derivativeNotation = n === 0 ? 'f' :
-                                          n === 1 ? "f'" :
-                                          n === 2 ? "f''" :
-                                          n === 3 ? "f'''" :
-                                          `f^{(${n})}`;
-
-                steps.push({
-                    step: n + 1,
-                    description: n === 0 ?
-                        `Evaluate function at x = ${currentCenter}` :
-                        `Calculate ${getOrdinal(n)} derivative and evaluate at x = ${currentCenter}`,
-                    latex: `${derivativeNotation}(${currentCenter}) = ${formatNumber(value)}`,
-                    derivative: toLatex(derivative),
-                    term: `\\frac{${formatNumber(value)}}{${factorialN}}${n === 0 ? '' : n === 1 ? '(x - ' + currentCenter + ')' : '(x - ' + currentCenter + ')^{' + n + '}'}`
-                });
-
-                // Calculate next derivative for display
-                if (n < numTerms - 1) {
-                    derivative = math.derivative(derivative, currentVariable);
-                }
-            }
-
-            return steps;
-        }
-
-        function getOrdinal(n) {
-            const ordinals = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
-            if (n < ordinals.length) return ordinals[n];
-            return n + 'th';
-        }
-
-        function formatNumber(num) {
-            if (Math.abs(num) < 0.0001 && num !== 0) {
-                return num.toExponential(4);
-            }
-            if (Math.abs(num - Math.round(num)) < 0.0001) {
-                return Math.round(num).toString();
-            }
-            return num.toFixed(6).replace(/\.?0+$/, '');
-        }
-
-        function toLatex(expr) {
-            try {
-                let latex = expr.toTex ? expr.toTex() : expr.toString();
-                latex = latex.replace(/\\cdot/g, '\\,');
-                latex = latex.replace(/\*\*/g, '^');
-                // Convert log back to ln for display (math.js uses log for natural log)
-                latex = latex.replace(/\\log/g, '\\ln');
-                latex = latex.replace(/\blog\(/g, 'ln(');
-                return latex;
-            } catch (e) {
-                return expr.toString();
-            }
-        }
-
-        function displayResults(funcInput, steps, numTerms, seriesType) {
-            // Display original function
-            document.getElementById('originalFunction').innerHTML =
-                `$$f(${currentVariable}) = ${toLatex(currentFunction)}$$`;
-
-            // Display series formula
-            const seriesName = seriesType === 'maclaurin' ? 'Maclaurin' : 'Taylor';
-            const centerDisplay = currentCenter === 0 ? '0' : currentCenter;
-            document.getElementById('seriesFormula').innerHTML = `
-                <strong>${seriesName} Series around ${currentVariable} = ${centerDisplay}</strong>
-            `;
-
-            // Build series representation
-            let seriesLatex = '';
-            for (let n = 0; n < numTerms; n++) {
-                const value = derivativesAtCenter[n];
-                const factorialN = factorial(n);
-                const coefficient = value / factorialN;
-
-                if (n > 0 && coefficient >= 0) {
-                    seriesLatex += ' + ';
-                } else if (n > 0) {
-                    seriesLatex += ' ';
-                }
-
-                if (n === 0) {
-                    seriesLatex += formatNumber(coefficient);
-                } else {
-                    const coeffStr = Math.abs(coefficient) === 1 ? (coefficient < 0 ? '-' : '') : formatNumber(coefficient);
-                    const xTerm = currentCenter === 0 ? currentVariable : `(${currentVariable} - ${currentCenter})`;
-                    const power = n === 1 ? '' : `^{${n}}`;
-                    seriesLatex += `${coeffStr}${xTerm}${power}`;
-                }
-            }
-
-            seriesLatex += ' + \\cdots';
-
-            // Display series result
-            document.getElementById('seriesResult').innerHTML =
-                `$$f(${currentVariable}) \\approx ${seriesLatex}$$`;
-
-            // Display steps
-            let stepsHtml = '';
-            for (let step of steps) {
-                const termHtml = `<span class="term-badge">Term ${step.step}</span>`;
-                stepsHtml += `
-                    <div class="step-item">
-                        <span class="step-number">${step.step}</span>
-                        <strong>${step.description}</strong>
-                        ${termHtml}
-                        <div class="latex-output mt-2">
-                            $$${step.latex}$$
-                        </div>
-                        ${step.derivative ? `<div style="font-size: 0.9rem; color: #718096; margin-top: 8px;">
-                            Derivative: $$${step.derivative}$$
-                        </div>` : ''}
+        <!-- Result Panel -->
+        <div class="sc-panel active" id="sc-panel-result">
+            <div class="tool-card tool-result-card">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    <h4>Series Expansion</h4>
+                </div>
+                <div class="tool-result-content" id="sc-result-content">
+                    <div class="tool-empty-state" id="sc-empty-state">
+                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
+                        <h3>Enter a function</h3>
+                        <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
                     </div>
-                `;
-            }
-            document.getElementById('stepsContainer').innerHTML = stepsHtml;
+                </div>
+                <div class="tool-result-actions" id="sc-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
+                    <button type="button" class="tool-action-btn" id="sc-copy-latex-btn">Copy LaTeX</button>
+                    <button type="button" class="tool-action-btn" id="sc-share-btn">Share</button>
+                </div>
+            </div>
 
-            // Display convergence analysis
-            displayConvergence();
+            <div id="sc-steps-area" style="margin-top:1rem"></div>
+            <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
+        </div>
 
-            // Render MathJax
-            if (window.MathJax) {
-                MathJax.typesetPromise();
-            }
-        }
+        <!-- Graph Panel -->
+        <div class="sc-panel" id="sc-panel-graph">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    <h4>Convergence Graph</h4>
+                </div>
+                <div style="flex:1;min-height:0;padding:0.75rem;">
+                    <div id="sc-graph-container"></div>
+                    <p id="sc-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Calculate a series to see the function vs approximation graph.</p>
 
-        function displayConvergence() {
-            const funcStr = currentFunction.toString();
-            let convergenceInfo = '';
-
-            // Determine radius of convergence based on function type
-            if (funcStr.includes('exp') || funcStr === 'e ^ x') {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Radius of Convergence: R = ∞</h4>
-                        <p>The exponential function e<sup>x</sup> converges for all real numbers.</p>
+                    <!-- Term Slider -->
+                    <div class="sc-slider-group">
+                        <span class="sc-slider-label">Terms:</span>
+                        <input type="range" class="sc-slider" id="sc-term-slider" min="1" max="20" value="5">
+                        <span class="sc-slider-value" id="sc-term-slider-value">5</span>
                     </div>
-                `;
-            } else if (funcStr.includes('sin') || funcStr.includes('cos')) {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Radius of Convergence: R = ∞</h4>
-                        <p>Trigonometric functions sin(x) and cos(x) converge for all real numbers.</p>
-                    </div>
-                `;
-            } else if (funcStr.includes('ln')) {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Radius of Convergence: R = 1 (for ln(1+x))</h4>
-                        <p>The series converges for -1 &lt; x ≤ 1.</p>
-                    </div>
-                `;
-            } else if (funcStr.includes('1 / (1 - x)')) {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Radius of Convergence: R = 1</h4>
-                        <p>The geometric series converges for |x| &lt; 1.</p>
-                    </div>
-                `;
-            } else if (funcStr.includes('tan')) {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Radius of Convergence: R = π/2</h4>
-                        <p>The tangent series converges within (-π/2, π/2).</p>
-                    </div>
-                `;
-            } else {
-                convergenceInfo = `
-                    <div class="convergence-box">
-                        <h4>Convergence Analysis</h4>
-                        <p>The radius of convergence depends on the nearest singularity of the function. Use the ratio test or root test to determine R.</p>
-                        <p style="margin-top: 10px; font-size: 0.9rem;"><strong>Ratio Test:</strong> R = lim(n→∞) |a<sub>n</sub>/a<sub>n+1</sub>|</p>
-                    </div>
-                `;
-            }
+                </div>
+            </div>
+        </div>
 
-            document.getElementById('convergenceContainer').innerHTML = convergenceInfo;
-        }
+        <!-- Python Compiler Panel -->
+        <div class="sc-panel" id="sc-panel-python">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <h4>Python Compiler</h4>
+                    <select id="sc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
+                        <option value="sympy-series">SymPy (Series Expansion)</option>
+                        <option value="numpy-approx">NumPy (Numeric Approx)</option>
+                        <option value="sympy-convergence">SymPy (Convergence)</option>
+                    </select>
+                </div>
+                <div style="flex:1;min-height:0;">
+                    <iframe id="sc-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        function drawGraph(maxTerms) {
-            const canvas = document.getElementById('graphCanvas');
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width = canvas.offsetWidth;
-            const height = canvas.height = canvas.offsetHeight;
+    <!-- ==================== ADS COLUMN ==================== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+</main>
 
-            ctx.clearRect(0, 0, width, height);
-
-            // Setup coordinate system
-            const xMin = currentCenter - 5;
-            const xMax = currentCenter + 5;
-            const padding = 40;
-            const graphWidth = width - 2 * padding;
-            const graphHeight = height - 2 * padding;
-
-            // Compile original function
-            const f = currentFunction.compile();
-
-            // Find y range
-            let yMin = Infinity, yMax = -Infinity;
-            const points = 200;
-            for (let i = 0; i < points; i++) {
-                const x = xMin + (xMax - xMin) * i / points;
-                try {
-                    const scope = {};
-                    scope[currentVariable] = x;
-                    const y = f.evaluate(scope);
-                    if (isFinite(y)) {
-                        yMin = Math.min(yMin, y);
-                        yMax = Math.max(yMax, y);
-                    }
-                } catch (e) {}
-            }
-
-            // Also check series approximation
-            for (let i = 0; i < points; i++) {
-                const x = xMin + (xMax - xMin) * i / points;
-                const y = evaluateSeries(x, maxTerms);
-                if (isFinite(y)) {
-                    yMin = Math.min(yMin, y);
-                    yMax = Math.max(yMax, y);
-                }
-            }
-
-            // Add padding to y range
-            const yPadding = (yMax - yMin) * 0.1;
-            yMin -= yPadding;
-            yMax += yPadding;
-
-            if (!isFinite(yMin) || !isFinite(yMax)) {
-                yMin = -10;
-                yMax = 10;
-            }
-
-            // Helper functions
-            function toScreenX(x) {
-                return padding + graphWidth * (x - xMin) / (xMax - xMin);
-            }
-
-            function toScreenY(y) {
-                return padding + graphHeight * (yMax - y) / (yMax - yMin);
-            }
-
-            // Draw grid
-            ctx.strokeStyle = '#e2e8f0';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 10; i++) {
-                const x = padding + graphWidth * i / 10;
-                ctx.beginPath();
-                ctx.moveTo(x, padding);
-                ctx.lineTo(x, height - padding);
-                ctx.stroke();
-
-                const y = padding + graphHeight * i / 10;
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(width - padding, y);
-                ctx.stroke();
-            }
-
-            // Draw axes
-            ctx.strokeStyle = '#cbd5e0';
-            ctx.lineWidth = 2;
-
-            // X-axis
-            const yZero = toScreenY(0);
-            if (yZero >= padding && yZero <= height - padding) {
-                ctx.beginPath();
-                ctx.moveTo(padding, yZero);
-                ctx.lineTo(width - padding, yZero);
-                ctx.stroke();
-            }
-
-            // Y-axis
-            const xZero = toScreenX(0);
-            if (xZero >= padding && xZero <= width - padding) {
-                ctx.beginPath();
-                ctx.moveTo(xZero, padding);
-                ctx.lineTo(xZero, height - padding);
-                ctx.stroke();
-            }
-
-            // Mark center point
-            const xCenter = toScreenX(currentCenter);
-            if (xCenter >= padding && xCenter <= width - padding) {
-                ctx.strokeStyle = '#fbbf24';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([5, 5]);
-                ctx.beginPath();
-                ctx.moveTo(xCenter, padding);
-                ctx.lineTo(xCenter, height - padding);
-                ctx.stroke();
-                ctx.setLineDash([]);
-            }
-
-            // Draw original function
-            ctx.strokeStyle = '#667eea';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            let started = false;
-            for (let i = 0; i < points; i++) {
-                const x = xMin + (xMax - xMin) * i / points;
-                try {
-                    const scope = {};
-                    scope[currentVariable] = x;
-                    const y = f.evaluate(scope);
-                    if (isFinite(y) && y >= yMin && y <= yMax) {
-                        const sx = toScreenX(x);
-                        const sy = toScreenY(y);
-                        if (!started) {
-                            ctx.moveTo(sx, sy);
-                            started = true;
-                        } else {
-                            ctx.lineTo(sx, sy);
-                        }
-                    } else {
-                        started = false;
-                    }
-                } catch (e) {
-                    started = false;
-                }
-            }
-            ctx.stroke();
-
-            // Draw series approximation
-            ctx.strokeStyle = '#f56565';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            started = false;
-            for (let i = 0; i < points; i++) {
-                const x = xMin + (xMax - xMin) * i / points;
-                const y = evaluateSeries(x, maxTerms);
-                if (isFinite(y) && y >= yMin && y <= yMax) {
-                    const sx = toScreenX(x);
-                    const sy = toScreenY(y);
-                    if (!started) {
-                        ctx.moveTo(sx, sy);
-                        started = true;
-                    } else {
-                        ctx.lineTo(sx, sy);
-                    }
-                } else {
-                    started = false;
-                }
-            }
-            ctx.stroke();
-
-            // Draw axis labels
-            ctx.fillStyle = '#2d3748';
-            ctx.font = '14px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(xMin.toFixed(1), padding, height - padding + 20);
-            ctx.fillText(xMax.toFixed(1), width - padding, height - padding + 20);
-            ctx.fillText(currentCenter.toFixed(1), xCenter, height - padding + 20);
-
-            ctx.textAlign = 'right';
-            ctx.fillText(yMax.toFixed(1), padding - 10, padding + 5);
-            ctx.fillText(yMin.toFixed(1), padding - 10, height - padding + 5);
-        }
-
-        function evaluateSeries(x, numTerms) {
-            let sum = 0;
-            for (let n = 0; n < numTerms; n++) {
-                const coefficient = derivativesAtCenter[n] / factorial(n);
-                const power = Math.pow(x - currentCenter, n);
-                sum += coefficient * power;
-            }
-            return sum;
-        }
-
-        function updateGraph(numTerms) {
-            document.getElementById('termCount').textContent = numTerms;
-            drawGraph(numTerms);
-        }
-
-        function loadExample(func, type, terms) {
-            document.getElementById('functionInput').value = func;
-            document.getElementById('seriesType').value = type;
-            document.getElementById('numTerms').value = terms;
-            toggleCenterPoint();
-        }
-
-        function toggleSteps() {
-            const container = document.getElementById('stepsContainer');
-            const toggle = document.getElementById('stepsToggle');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                toggle.textContent = '▲ Hide';
-            } else {
-                container.style.display = 'none';
-                toggle.textContent = '▼ Show';
-            }
-        }
-
-        function copyResult() {
-            const result = document.getElementById('seriesResult').textContent;
-            navigator.clipboard.writeText(result).then(() => {
-                alert('Copied to clipboard!');
-            });
-        }
-
-        function showError(message) {
-            const container = document.getElementById('resultsContainer');
-            container.innerHTML = `<div class="error-message">${message}</div>`;
-            container.style.display = 'block';
-        }
-    </script>
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="addcomments.jsp"%>
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
-<%@ include file="body-close.jsp"%>
+
+<!-- Related Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="series-calculator.jsp"/>
+    <jsp:param name="keyword" value="mathematics"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
+
+<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- ===== 1. WHAT IS A TAYLOR SERIES? ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is a Taylor Series?</h2>
+        <p class="sc-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            A <strong>Taylor series</strong> represents a function as an infinite sum of polynomial terms calculated from the function's <strong>derivatives at a single point</strong>. It is one of the most powerful tools in calculus &mdash; enabling us to approximate complex functions like sin(x), e<sup>x</sup>, and ln(x) using simple polynomials.
+        </p>
+
+        <!-- Taylor Series Formula Breakdown -->
+        <div class="sc-concept-hero">
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-fn">f(x)</div>
+                <div class="sc-concept-label sc-c-fn">Function</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-eq">=</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-eq">&Sigma;</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-deriv">f<sup>(n)</sup>(a)</div>
+                <div class="sc-concept-label sc-c-deriv">nth Derivative</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-eq">/</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-fact">n!</div>
+                <div class="sc-concept-label sc-c-fact">Factorial</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-eq">&middot;</div>
+            </div>
+            <div class="sc-concept-block">
+                <div class="sc-concept-symbol sc-c-power">(x&minus;a)<sup>n</sup></div>
+                <div class="sc-concept-label sc-c-power">Power Term</div>
+            </div>
+        </div>
+
+        <div class="sc-callout sc-callout-insight sc-anim sc-anim-d2">
+            <span class="sc-callout-icon">&#128161;</span>
+            <div class="sc-callout-text">
+                <strong>Why does it work?</strong>
+                Each term matches one more derivative of the original function at the center point. With enough terms, the polynomial approximation becomes indistinguishable from the original function &mdash; at least within the <strong>radius of convergence</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2. COMMON SERIES ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Common Maclaurin Series</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.5rem;">
+            These series are used so frequently in mathematics and physics that they are worth memorizing.
+        </p>
+
+        <div class="sc-series-grid">
+            <div class="sc-series-card sc-anim sc-anim-d1" style="border-left-color:#2563eb;">
+                <h4><span style="color:#2563eb;">&#9679;</span> Exponential</h4>
+                <p>e<sup>x</sup> = 1 + x + x&sup2;/2! + x&sup3;/3! + &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
+            </div>
+            <div class="sc-series-card sc-anim sc-anim-d2" style="border-left-color:#dc2626;">
+                <h4><span style="color:#dc2626;">&#9679;</span> Sine</h4>
+                <p>sin(x) = x &minus; x&sup3;/3! + x<sup>5</sup>/5! &minus; &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
+            </div>
+            <div class="sc-series-card sc-anim sc-anim-d3" style="border-left-color:#059669;">
+                <h4><span style="color:#059669;">&#9679;</span> Cosine</h4>
+                <p>cos(x) = 1 &minus; x&sup2;/2! + x<sup>4</sup>/4! &minus; &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
+            </div>
+            <div class="sc-series-card sc-anim sc-anim-d4" style="border-left-color:#d97706;">
+                <h4><span style="color:#d97706;">&#9679;</span> Natural Log</h4>
+                <p>ln(1+x) = x &minus; x&sup2;/2 + x&sup3;/3 &minus; &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
+            </div>
+            <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#7c3aed;">
+                <h4><span style="color:#7c3aed;">&#9679;</span> Geometric</h4>
+                <p>1/(1&minus;x) = 1 + x + x&sup2; + x&sup3; + &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
+            </div>
+            <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#0891b2;">
+                <h4><span style="color:#0891b2;">&#9679;</span> Square Root</h4>
+                <p>&radic;(1+x) = 1 + x/2 &minus; x&sup2;/8 + &hellip;</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. CONVERGENCE EXPLAINED ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Understanding Convergence</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Not every Taylor series converges everywhere. The <strong>radius of convergence R</strong> tells you how far from the center point the series reliably approximates the function.
+        </p>
+
+        <div class="sc-edu-grid">
+            <div class="sc-edu-card sc-anim sc-anim-d1" style="border-left:3px solid #22c55e;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#22c55e;">&#9679;</span> R = &infin;</h4>
+                <p>Functions like e<sup>x</sup>, sin(x), and cos(x) converge for all real x. Their series approximation works everywhere.</p>
+            </div>
+            <div class="sc-edu-card sc-anim sc-anim-d2" style="border-left:3px solid #f59e0b;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#f59e0b;">&#9679;</span> Finite R</h4>
+                <p>Functions like ln(1+x) and 1/(1&minus;x) only converge within a limited interval around the center. Beyond that, the series diverges.</p>
+            </div>
+            <div class="sc-edu-card sc-anim sc-anim-d3" style="border-left:3px solid #ef4444;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#ef4444;">&#9679;</span> Singularities</h4>
+                <p>The radius of convergence equals the distance to the nearest singularity (point where the function is undefined), even in the complex plane.</p>
+            </div>
+        </div>
+
+        <div class="sc-callout sc-callout-tip sc-anim sc-anim-d4">
+            <span class="sc-callout-icon">&#128073;</span>
+            <div class="sc-callout-text">
+                <strong>Try it!</strong> Enter <code style="background:var(--bg-tertiary);padding:0.125rem 0.375rem;border-radius:0.25rem;font-size:0.8125rem;">ln(1+x)</code> and increase terms to 15. Watch how the graph matches well for |x| &lt; 1 but diverges wildly beyond x = 1.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 4. REAL-WORLD APPLICATIONS ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Applications</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            Taylor series aren&rsquo;t just theoretical &mdash; they power real technology and science every day.
+        </p>
+        <div class="sc-edu-grid">
+            <div class="sc-edu-card" style="border-left:3px solid #2563eb;">
+                <h4>Calculator Chips</h4>
+                <p>Your calculator computes sin(x) and cos(x) using polynomial approximations derived from Taylor series. Hardware implements these as fast multiplications and additions.</p>
+            </div>
+            <div class="sc-edu-card" style="border-left:3px solid #7c3aed;">
+                <h4>Physics Approximations</h4>
+                <p>sin(&theta;) &approx; &theta; for small angles simplifies pendulum equations. Many physics formulas are first-order Taylor approximations.</p>
+            </div>
+            <div class="sc-edu-card" style="border-left:3px solid #059669;">
+                <h4>Machine Learning</h4>
+                <p>Gradient descent uses first-order Taylor approximation. Newton&rsquo;s method uses second-order. Higher-order optimization uses more terms.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the difference between Taylor and Maclaurin series?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">A Taylor series expands a function f(x) around any point a: f(x) = &Sigma; f<sup>(n)</sup>(a)/n! &middot; (x&minus;a)<sup>n</sup>. A Maclaurin series is the special case where a = 0: f(x) = &Sigma; f<sup>(n)</sup>(0)/n! &middot; x<sup>n</sup>. Both represent functions as infinite polynomial sums.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How many terms do I need for a good approximation?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">It depends on the function and how far from the center you evaluate. Near the center, 5&ndash;7 terms often give excellent accuracy. For points farther away, or for functions with small convergence radii, you may need 15&ndash;20 terms. Use the interactive graph with the term slider to see convergence in real time.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the radius of convergence?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The radius of convergence R is the distance from the center point within which the series converges to the actual function. For |x&minus;a| &lt; R, adding more terms gets closer to the true value. For |x&minus;a| &gt; R, the series diverges. Common values: e<sup>x</sup> has R = &infin;, ln(1+x) has R = 1, tan(x) has R = &pi;/2.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What functions can I expand?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Any function built from supported operations: arithmetic (+, -, *, /, ^), trigonometric (sin, cos, tan), exponential (exp, e^x), logarithmic (ln, log), and square root (sqrt). You can compose them freely, e.g., sin(x)*e^x or ln(1+x^2). The calculator uses math.js for symbolic differentiation.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this series calculator free?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes, 100% free with no signup. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Explore More Math -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
+            Explore More Math Tools
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+            <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;font-weight:700;">d/dx</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Derivative Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Step-by-step differentiation with graphs</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/integral-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#4f46e5,#6366f1);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;color:#fff;">&#8747;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Integral Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Step-by-step integration with graphs and PDF export</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">x&sup2;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Quadratic Solver</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Solve quadratic equations with 3 methods and graphs</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
+
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
+
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+<!-- Scroll-triggered animations -->
+<script>
+(function(){
+    var els = document.querySelectorAll('.sc-anim');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+        els.forEach(function(el){ el.classList.add('sc-visible'); });
+        return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if (e.isIntersecting) {
+                e.target.classList.add('sc-visible');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    els.forEach(function(el){ obs.observe(el); });
+})();
+</script>
+
+<!-- Core Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.0/lib/browser/math.min.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/series-calculator-render.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/series-calculator-graph.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/series-calculator-export.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/series-calculator-core.js?v=<%=cacheVersion%>"></script>
+
+<%@ include file="modern/components/analytics.jsp" %>
+</body>
+</html>
