@@ -1,0 +1,1164 @@
+/* ============================================================================
+   TikZ Draw – Clean Minimal CSS
+   Inspired by Texpile's airy aesthetic: white panels, subtle borders, dot grid
+   canvas, pill buttons, light blue accent active states.
+   ============================================================================ */
+
+/* ── Workspace Container ──────────────────────────────────────────────────── */
+.tikz-draw-workspace {
+    font-family: var(--font-sans);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid #e3e3e6;
+    background: #fff;
+    color: #111113;
+    height: calc(100vh - 280px);
+    min-height: 520px;
+}
+[data-theme="dark"] .tikz-draw-workspace {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+    color: #e4e4e7;
+}
+
+/* ── Action Bar (top) ─────────────────────────────────────────────────────── */
+.tikz-draw-workspace .header {
+    background: #fff;
+    border-bottom: 1px solid #e3e3e6;
+    padding: 6px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    min-height: 44px;
+}
+[data-theme="dark"] .tikz-draw-workspace .header {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .header-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Buttons — outlined pill style */
+.tikz-draw-workspace .btn {
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    color: #6b6b74;
+    padding: 5px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.tikz-draw-workspace .btn:hover {
+    border-color: #3478f6;
+    color: #3478f6;
+    background: #f0f5ff;
+}
+[data-theme="dark"] .tikz-draw-workspace .btn {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+[data-theme="dark"] .tikz-draw-workspace .btn:hover {
+    border-color: #5b9bf7;
+    color: #5b9bf7;
+    background: rgba(52,120,246,0.1);
+}
+
+.tikz-draw-workspace .btn-primary {
+    background: #3478f6;
+    border-color: #3478f6;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(52,120,246,0.25);
+}
+.tikz-draw-workspace .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+
+.tikz-draw-workspace .btn-danger {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
+.tikz-draw-workspace .btn-danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.tikz-draw-workspace button[disabled] {
+    pointer-events: none;
+    opacity: 0.35;
+}
+
+/* ── Main Layout ──────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ── Left Toolbar ─────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .toolbar {
+    width: 52px;
+    background: #fff;
+    border-right: 1px solid #e3e3e6;
+    padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+.tikz-draw-workspace .toolbar::-webkit-scrollbar { display: none; }
+[data-theme="dark"] .tikz-draw-workspace .toolbar {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .tool {
+    width: 44px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b6b74;
+    font-size: 9px;
+    gap: 1px;
+    transition: all 0.15s ease;
+}
+.tikz-draw-workspace .tool:hover {
+    background: #f4f4f5;
+    color: #111113;
+}
+[data-theme="dark"] .tikz-draw-workspace .tool:hover {
+    background: #2a2a2e;
+    color: #e4e4e7;
+}
+
+.tikz-draw-workspace .tool.active {
+    background: #eef3ff;
+    color: #3478f6;
+}
+[data-theme="dark"] .tikz-draw-workspace .tool.active {
+    background: rgba(52,120,246,0.15);
+    color: #5b9bf7;
+}
+
+.tikz-draw-workspace .tool-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.tikz-draw-workspace .tool-divider {
+    height: 1px;
+    background: #e3e3e6;
+    margin: 4px 6px;
+}
+[data-theme="dark"] .tikz-draw-workspace .tool-divider {
+    background: #2e2e32;
+}
+
+/* ── Canvas (light with dot grid) ──────────────────────────────────────────── */
+.tikz-draw-workspace .canvas-container {
+    flex: 1;
+    background: #eeeef0;
+    position: relative;
+    overflow: hidden;
+    touch-action: none; /* prevent browser gestures on canvas */
+}
+[data-theme="dark"] .tikz-draw-workspace .canvas-container {
+    background: #141418;
+}
+
+.tikz-draw-workspace #canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ── Right Panel (Objects) ────────────────────────────────────────────────── */
+.tikz-draw-workspace .right-panel {
+    width: 320px;
+    background: #fff;
+    border-left: 1px solid #e3e3e6;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .tikz-draw-workspace .right-panel {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .panel-section {
+    border-bottom: 1px solid #e3e3e6;
+}
+[data-theme="dark"] .tikz-draw-workspace .panel-section {
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .panel-header {
+    padding: 8px 12px;
+    background: #fafafa;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b6b74;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e3e3e6;
+}
+[data-theme="dark"] .tikz-draw-workspace .panel-header {
+    background: #1e1e22;
+    color: #a1a1aa;
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .panel-content {
+    padding: 12px;
+}
+
+/* ── Property Rows ────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .property-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.tikz-draw-workspace .property-row:last-child { margin-bottom: 0; }
+
+.tikz-draw-workspace .property-label {
+    width: 72px;
+    font-size: 11px;
+    color: #6b6b74;
+    flex-shrink: 0;
+    font-weight: 500;
+}
+[data-theme="dark"] .tikz-draw-workspace .property-label { color: #a1a1aa; }
+
+.tikz-draw-workspace .property-input { flex: 1; }
+
+.tikz-draw-workspace .property-input input,
+.tikz-draw-workspace .property-input select,
+.tikz-draw-workspace .property-input textarea {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    color: #111113;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s ease;
+}
+[data-theme="dark"] .tikz-draw-workspace .property-input input,
+[data-theme="dark"] .tikz-draw-workspace .property-input select,
+[data-theme="dark"] .tikz-draw-workspace .property-input textarea {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #e4e4e7;
+}
+
+.tikz-draw-workspace .property-input textarea {
+    font-family: var(--font-mono);
+    resize: vertical;
+    min-height: 28px;
+}
+
+.tikz-draw-workspace .property-input input:focus,
+.tikz-draw-workspace .property-input select:focus,
+.tikz-draw-workspace .property-input textarea:focus {
+    outline: none;
+    border-color: #3478f6;
+    box-shadow: 0 0 0 2px rgba(52, 120, 246, 0.12);
+}
+
+/* ── Color Picker inline ──────────────────────────────────────────────────── */
+.tikz-draw-workspace .color-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tikz-draw-workspace .color-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid #e3e3e6;
+    flex-shrink: 0;
+}
+
+.tikz-draw-workspace .color-row select { flex: 1; }
+
+.tikz-draw-workspace .btn-small {
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    color: #6b6b74;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+.tikz-draw-workspace .btn-small:hover {
+    background: #3478f6;
+    color: #fff;
+    border-color: #3478f6;
+}
+[data-theme="dark"] .tikz-draw-workspace .btn-small {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+
+/* ── Input helpers ────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .radio-group { display: flex; gap: 12px; }
+.tikz-draw-workspace .radio-option {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; cursor: pointer;
+}
+.tikz-draw-workspace .radio-option input,
+.tikz-draw-workspace .checkbox-row input { accent-color: #3478f6; }
+
+.tikz-draw-workspace .coord-inputs { display: flex; gap: 4px; }
+.tikz-draw-workspace .coord-inputs input { width: 50%; }
+
+.tikz-draw-workspace .checkbox-row {
+    display: flex; align-items: center; gap: 8px;
+}
+
+.tikz-draw-workspace .latex-preview {
+    background: #f4f4f5;
+    border: 1px solid #e3e3e6;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    color: #6b6b74;
+    font-size: 11px;
+}
+[data-theme="dark"] .tikz-draw-workspace .latex-preview {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+
+/* ── Object List ──────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .object-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.tikz-draw-workspace .object-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2px 0;
+}
+
+.tikz-draw-workspace .object-item {
+    padding: 4px 8px 4px 4px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    margin: 0 4px;
+    transition: background 0.12s ease;
+}
+.tikz-draw-workspace .object-item:hover {
+    background: #f4f4f5;
+}
+[data-theme="dark"] .tikz-draw-workspace .object-item:hover {
+    background: #252528;
+}
+
+.tikz-draw-workspace .object-item.selected {
+    background: #eef3ff;
+    border-color: #d0dfff;
+    color: #2563eb;
+}
+[data-theme="dark"] .tikz-draw-workspace .object-item.selected {
+    background: rgba(52,120,246,0.12);
+    border-color: rgba(52,120,246,0.25);
+    color: #5b9bf7;
+}
+
+.tikz-draw-workspace .object-item.drag-over {
+    border-top: 2px solid #3478f6;
+}
+.tikz-draw-workspace .object-item.dragging { opacity: 0.35; }
+
+.tikz-draw-workspace .drag-handle {
+    color: #c4c4cc;
+    cursor: grab;
+    font-size: 10px;
+    padding: 2px;
+}
+.tikz-draw-workspace .drag-handle:hover { color: #6b6b74; }
+[data-theme="dark"] .tikz-draw-workspace .drag-handle { color: #52525b; }
+
+.tikz-draw-workspace .lock-btn {
+    color: #c4c4cc;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 2px;
+    opacity: 0.5;
+    transition: opacity 0.12s ease;
+}
+.tikz-draw-workspace .lock-btn:hover { opacity: 1; }
+.tikz-draw-workspace .lock-btn.locked { color: #f59e0b; opacity: 1; }
+.tikz-draw-workspace .object-item.locked { opacity: 0.5; }
+.tikz-draw-workspace .object-item.locked .obj-name { font-style: italic; }
+
+.tikz-draw-workspace .expand-btn {
+    width: 16px;
+    font-size: 10px;
+    color: #c4c4cc;
+    cursor: pointer;
+    text-align: center;
+}
+.tikz-draw-workspace .expand-btn:hover { color: #111113; }
+[data-theme="dark"] .tikz-draw-workspace .expand-btn:hover { color: #e4e4e7; }
+
+.tikz-draw-workspace .obj-icon {
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+    color: #a1a1aa;
+}
+
+.tikz-draw-workspace .obj-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tikz-draw-workspace .subobject {
+    padding-left: 28px;
+    font-size: 11px;
+    color: #a1a1aa;
+}
+.tikz-draw-workspace .subobject:hover { color: #6b6b74; }
+.tikz-draw-workspace .subobject.selected {
+    background: #eef3ff;
+    color: #2563eb;
+}
+[data-theme="dark"] .tikz-draw-workspace .subobject.selected {
+    background: rgba(52,120,246,0.1);
+    color: #5b9bf7;
+}
+
+/* ── Status Bar (subtle, not heavy) ──────────────────────────────────────── */
+.tikz-draw-workspace .status-bar {
+    background: #fafafa;
+    border-top: 1px solid #e3e3e6;
+    color: #6b6b74;
+    padding: 3px 12px;
+    font-size: 11px;
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+    font-weight: 400;
+}
+[data-theme="dark"] .tikz-draw-workspace .status-bar {
+    background: #1e1e22;
+    border-color: #2e2e32;
+    color: #71717a;
+}
+
+.tikz-draw-workspace .status-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── No selection ─────────────────────────────────────────────────────────── */
+.tikz-draw-workspace .no-selection {
+    color: #a1a1aa;
+    font-style: italic;
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+}
+
+/* ── Properties Float (inside canvas) ─────────────────────────────────────── */
+.canvas-properties {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 260px;
+    max-height: calc(100% - 24px);
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: propSlideIn 0.15s ease-out;
+}
+@keyframes propSlideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+[data-theme="dark"] .canvas-properties {
+    background: #1e1e22;
+    border-color: #2e2e32;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.canvas-properties-header {
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #111113;
+    border-bottom: 1px solid #e3e3e6;
+    flex-shrink: 0;
+    cursor: move;
+    user-select: none;
+}
+[data-theme="dark"] .canvas-properties-header {
+    color: #e4e4e7;
+    border-color: #2e2e32;
+}
+
+.canvas-properties-body {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.tikz-draw-workspace .panel-close-btn {
+    background: none;
+    border: none;
+    color: #a1a1aa;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.12s ease;
+}
+.tikz-draw-workspace .panel-close-btn:hover {
+    color: #111113;
+    background: rgba(0,0,0,0.06);
+}
+[data-theme="dark"] .tikz-draw-workspace .panel-close-btn:hover {
+    color: #e4e4e7;
+    background: rgba(255,255,255,0.06);
+}
+
+/* Properties form fields inside canvas float */
+.canvas-properties .property-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.canvas-properties .property-row:last-child { margin-bottom: 0; }
+
+.canvas-properties .property-label {
+    width: 64px;
+    font-size: 11px;
+    color: #6b6b74;
+    flex-shrink: 0;
+    font-weight: 500;
+}
+[data-theme="dark"] .canvas-properties .property-label { color: #a1a1aa; }
+.canvas-properties .property-input { flex: 1; }
+
+.canvas-properties .property-input input,
+.canvas-properties .property-input select,
+.canvas-properties .property-input textarea {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #e3e3e6;
+    color: #111113;
+    padding: 4px 6px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s ease;
+}
+[data-theme="dark"] .canvas-properties .property-input input,
+[data-theme="dark"] .canvas-properties .property-input select,
+[data-theme="dark"] .canvas-properties .property-input textarea {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #e4e4e7;
+}
+.canvas-properties .property-input input:focus,
+.canvas-properties .property-input select:focus,
+.canvas-properties .property-input textarea:focus {
+    outline: none;
+    border-color: #3478f6;
+    box-shadow: 0 0 0 2px rgba(52, 120, 246, 0.12);
+}
+
+.canvas-properties .property-input textarea {
+    font-family: var(--font-mono);
+    resize: vertical;
+    min-height: 24px;
+}
+
+.canvas-properties .color-row { display: flex; align-items: center; gap: 4px; }
+.canvas-properties .color-swatch {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 1px solid #e3e3e6;
+    flex-shrink: 0;
+}
+.canvas-properties .color-row select { flex: 1; }
+
+.canvas-properties .btn-small {
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    color: #6b6b74;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+.canvas-properties .btn-small:hover {
+    background: #3478f6;
+    color: #fff;
+    border-color: #3478f6;
+}
+[data-theme="dark"] .canvas-properties .btn-small {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+
+.canvas-properties .coord-inputs { display: flex; gap: 4px; }
+.canvas-properties .coord-inputs input { width: 50%; }
+.canvas-properties .checkbox-row { display: flex; align-items: center; gap: 6px; }
+.canvas-properties .checkbox-row input { accent-color: #3478f6; }
+.canvas-properties .radio-group { display: flex; gap: 10px; }
+.canvas-properties .radio-option {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 11px; cursor: pointer;
+}
+.canvas-properties .radio-option input { accent-color: #3478f6; }
+
+.canvas-properties .latex-preview {
+    background: #f4f4f5;
+    border: 1px solid #e3e3e6;
+    border-radius: 5px;
+    padding: 4px 6px;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    color: #6b6b74;
+    font-size: 11px;
+}
+[data-theme="dark"] .canvas-properties .latex-preview {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+
+/* ── Code Section (inline in right panel) ────────────────────────────────── */
+.tikz-draw-workspace .code-section {
+    border-top: 1px solid #e3e3e6;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+.tikz-draw-workspace .code-section.collapsed {
+    display: none;
+}
+[data-theme="dark"] .tikz-draw-workspace .code-section {
+    border-color: #2e2e32;
+}
+
+.tikz-draw-workspace .code-output {
+    padding: 10px 12px;
+    margin: 0;
+    font-family: 'JetBrains Mono', var(--font-mono, monospace);
+    font-size: 11px;
+    line-height: 1.5;
+    color: #111113;
+    background: #fafafa;
+    overflow: auto;
+    max-height: 200px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+[data-theme="dark"] .tikz-draw-workspace .code-output {
+    background: #141418;
+    color: #e2e8f0;
+}
+
+.tikz-draw-workspace .panel-copy-btn {
+    background: none;
+    border: 1px solid #e3e3e6;
+    color: #6b6b74;
+    padding: 1px 8px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+.tikz-draw-workspace .panel-copy-btn:hover {
+    border-color: #3478f6;
+    color: #3478f6;
+}
+[data-theme="dark"] .tikz-draw-workspace .panel-copy-btn {
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+[data-theme="dark"] .tikz-draw-workspace .panel-copy-btn:hover {
+    border-color: #5b9bf7;
+    color: #5b9bf7;
+}
+
+/* ============================================================================
+   Modals — outside .tikz-draw-workspace scope
+   ============================================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal, 1050);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.modal-overlay.visible { display: flex; }
+
+.modal-overlay .modal {
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    border-radius: 12px;
+    padding: 20px;
+    width: 320px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    animation: tikzModalIn 0.18s ease-out;
+}
+[data-theme="dark"] .modal-overlay .modal {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+@keyframes tikzModalIn {
+    from { opacity: 0; transform: scale(0.97) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-overlay .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.modal-overlay .modal-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111113;
+}
+[data-theme="dark"] .modal-overlay .modal-header h3 { color: #e4e4e7; }
+
+.modal-overlay .modal-close {
+    background: none;
+    border: none;
+    color: #a1a1aa;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.12s ease;
+}
+.modal-overlay .modal-close:hover {
+    color: #111113;
+    background: #f4f4f5;
+}
+[data-theme="dark"] .modal-overlay .modal-close:hover {
+    color: #e4e4e7;
+    background: #2a2a2e;
+}
+
+.modal-overlay .modal-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+/* Modal buttons — same pill style */
+.modal-overlay .btn {
+    background: #fff;
+    border: 1px solid #e3e3e6;
+    color: #6b6b74;
+    padding: 5px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.modal-overlay .btn:hover {
+    border-color: #3478f6;
+    color: #3478f6;
+}
+[data-theme="dark"] .modal-overlay .btn {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #a1a1aa;
+}
+.modal-overlay .btn-primary {
+    background: #3478f6;
+    border-color: #3478f6;
+    color: #fff;
+}
+.modal-overlay .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+.modal-overlay .btn-danger {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
+.modal-overlay .btn-danger:hover {
+    background: #dc2626;
+}
+
+/* Modal form fields */
+.modal-overlay .property-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.modal-overlay .property-row:last-child { margin-bottom: 0; }
+
+.modal-overlay .property-label {
+    width: 72px;
+    font-size: 11px;
+    color: #6b6b74;
+    flex-shrink: 0;
+    font-weight: 500;
+}
+[data-theme="dark"] .modal-overlay .property-label { color: #a1a1aa; }
+.modal-overlay .property-input { flex: 1; }
+
+.modal-overlay .property-input input,
+.modal-overlay .property-input select,
+.modal-overlay .property-input textarea {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #e3e3e6;
+    color: #111113;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s ease;
+}
+[data-theme="dark"] .modal-overlay .property-input input,
+[data-theme="dark"] .modal-overlay .property-input select,
+[data-theme="dark"] .modal-overlay .property-input textarea {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #e4e4e7;
+}
+.modal-overlay .property-input input:focus,
+.modal-overlay .property-input select:focus,
+.modal-overlay .property-input textarea:focus {
+    outline: none;
+    border-color: #3478f6;
+    box-shadow: 0 0 0 2px rgba(52, 120, 246, 0.12);
+}
+
+.modal-overlay .panel-content { padding: 12px; }
+
+.modal-overlay .latex-preview {
+    background: #f4f4f5;
+    border: 1px solid #e3e3e6;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    color: #6b6b74;
+    font-size: 11px;
+}
+[data-theme="dark"] .modal-overlay .latex-preview {
+    background: #252528;
+    border-color: #3a3a3e;
+}
+
+/* (Properties modal removed — now inline in right panel) */
+
+/* ── Color Picker Modal ───────────────────────────────────────────────────── */
+.color-picker-area {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to top, #000, transparent),
+                linear-gradient(to right, #fff, #f00);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    position: relative;
+    cursor: crosshair;
+}
+
+.color-picker-cursor {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+.hue-slider {
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+    border-radius: 999px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    position: relative;
+}
+
+.hue-cursor {
+    width: 6px;
+    height: 16px;
+    background: #fff;
+    border-radius: 3px;
+    position: absolute;
+    top: -2px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+
+.color-inputs-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.color-input-group { flex: 1; }
+
+.color-input-group label {
+    display: block;
+    font-size: 10px;
+    color: #a1a1aa;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.color-input-group input {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #e3e3e6;
+    color: #111113;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+[data-theme="dark"] .color-input-group input {
+    background: #252528;
+    border-color: #3a3a3e;
+    color: #e4e4e7;
+}
+
+.color-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.color-preview-swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #e3e3e6;
+}
+
+/* ── Export Modal ──────────────────────────────────────────────────────────── */
+.modal-overlay .export-textarea {
+    width: 100%;
+    height: 400px;
+    background: #fafafa;
+    border: 1px solid #e3e3e6;
+    color: #111113;
+    font-family: 'JetBrains Mono', var(--font-mono);
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    resize: none;
+    line-height: 1.6;
+}
+[data-theme="dark"] .modal-overlay .export-textarea {
+    background: #141418;
+    border-color: #2e2e32;
+    color: #e2e8f0;
+}
+
+.modal-overlay .modal.large {
+    width: 600px;
+    max-width: 90vw;
+}
+
+/* ── Toast Notifications ──────────────────────────────────────────────────── */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #111113;
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #e3e3e6;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+[data-theme="dark"] .toast {
+    background: #1a1a1e;
+    border-color: #2e2e32;
+    color: #e4e4e7;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+.toast.show { opacity: 1; }
+.toast.success { border-color: #22c55e; }
+.toast.error   { border-color: #ef4444; }
+.toast.info    { border-color: #3478f6; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+    .tikz-draw-workspace .right-panel { width: 220px; }
+}
+
+@media (max-width: 768px) {
+    .tikz-draw-workspace {
+        height: calc(100vh - 200px);
+        min-height: 400px;
+        border-radius: 8px;
+    }
+
+    .tikz-draw-workspace .toolbar {
+        width: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid #e3e3e6;
+        padding: 4px 8px;
+    }
+    [data-theme="dark"] .tikz-draw-workspace .toolbar {
+        border-color: #2e2e32;
+    }
+
+    .tikz-draw-workspace .tool {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+    .tikz-draw-workspace .tool-divider {
+        width: 1px;
+        height: auto;
+        margin: 0 4px;
+    }
+
+    .tikz-draw-workspace .main {
+        flex-direction: column;
+    }
+
+    .tikz-draw-workspace .right-panel {
+        width: 100%;
+        max-height: 180px;
+        border-left: none;
+        border-top: 1px solid #e3e3e6;
+    }
+    [data-theme="dark"] .tikz-draw-workspace .right-panel {
+        border-color: #2e2e32;
+    }
+
+    .canvas-properties {
+        width: 220px;
+        font-size: 10px;
+    }
+
+    .tikz-draw-workspace .header-buttons { gap: 4px; }
+    .tikz-draw-workspace .btn {
+        padding: 4px 10px;
+        font-size: 11px;
+    }
+
+    .modal-overlay .modal {
+        width: calc(100vw - 2rem);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .modal-overlay .modal.large {
+        width: calc(100vw - 2rem);
+    }
+}
