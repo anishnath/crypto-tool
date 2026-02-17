@@ -310,8 +310,8 @@
   "description": "<%= escapeJson(toolDescription) %>",
   "url": "<%= fullUrl %>",
   "learningResourceType": "Interactive Tool",
-  "educationalLevel": "High School",
-  "teaches": "Linear algebra, matrix operations",
+  "educationalLevel": "<%= request.getParameter("educationalLevel") != null ? escapeJson(request.getParameter("educationalLevel")) : "High School" %>",
+  "teaches": "<%= request.getParameter("teaches") != null ? escapeJson(request.getParameter("teaches")) : "Linear algebra, matrix operations" %>",
   "inLanguage": "en-US",
   "isAccessibleForFree": true,
   "publisher": {
@@ -324,7 +324,10 @@
 <% } %>
 
 <!-- HowTo Schema (for tools with steps) -->
-<% if (request.getParameter("hasSteps") != null && "true".equals(request.getParameter("hasSteps"))) { %>
+<% if (request.getParameter("hasSteps") != null && "true".equals(request.getParameter("hasSteps"))) {
+    // Accept custom steps as pipe-separated "name|text,name|text,name|text"
+    String customSteps = request.getParameter("howToSteps");
+%>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -332,7 +335,20 @@
   "name": "How to use <%= escapeJson(toolName) %>",
   "description": "<%= escapeJson(toolDescription) %>",
   "step": [
-    {
+<% if (customSteps != null && !customSteps.trim().isEmpty()) {
+    String[] stepPairs = customSteps.split(",");
+    for (int si = 0; si < stepPairs.length; si++) {
+        String[] parts = stepPairs[si].split("\\|", 2);
+        String stepName = parts.length > 0 ? parts[0].trim() : "Step " + (si + 1);
+        String stepText = parts.length > 1 ? parts[1].trim() : stepName;
+%>    {
+      "@type": "HowToStep",
+      "name": "<%= escapeJson(stepName) %>",
+      "text": "<%= escapeJson(stepText) %>",
+      "position": <%= si + 1 %>
+    }<%= si < stepPairs.length - 1 ? "," : "" %>
+<% }
+} else { %>    {
       "@type": "HowToStep",
       "name": "Enter your input",
       "text": "Enter or paste your data into the input field",
@@ -350,7 +366,7 @@
       "text": "Copy the generated output to use in your project",
       "position": 3
     }
-  ]
+<% } %>  ]
 }
 </script>
 <% } %>
