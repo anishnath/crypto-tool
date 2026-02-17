@@ -158,17 +158,21 @@
         <div class="tool-card">
             <div class="tool-card-header" style="background:var(--log-gradient);">Logarithm Calculator</div>
             <div class="tool-card-body">
-                <div class="lc-mode-toggle">
-                    <button type="button" class="lc-mode-btn active" data-mode="solve">Solve</button>
-                    <button type="button" class="lc-mode-btn" data-mode="simplify">Simplify</button>
-                    <button type="button" class="lc-mode-btn" data-mode="expand">Expand</button>
-                    <button type="button" class="lc-mode-btn" data-mode="condense">Condense</button>
-                    <button type="button" class="lc-mode-btn" data-mode="evaluate">Evaluate</button>
+                <div class="tool-form-group" style="margin-bottom:0.5rem;">
+                    <label class="tool-form-label">What do you want to do?</label>
+                    <div class="lc-mode-toggle">
+                        <button type="button" class="lc-mode-btn active" data-mode="solve">Solve</button>
+                        <button type="button" class="lc-mode-btn" data-mode="simplify">Simplify</button>
+                        <button type="button" class="lc-mode-btn" data-mode="expand">Expand</button>
+                        <button type="button" class="lc-mode-btn" data-mode="condense">Condense</button>
+                        <button type="button" class="lc-mode-btn" data-mode="evaluate">Evaluate</button>
+                    </div>
+                    <div class="lc-mode-hint" id="lc-mode-hint" style="font-size:0.6875rem;color:var(--text-muted);margin-top:0.375rem;line-height:1.4;">Find the value of x in a log equation</div>
                 </div>
 
                 <div class="tool-form-group">
                     <label class="tool-form-label" for="lc-input">Problem</label>
-                    <input type="text" class="tool-input" id="lc-input" placeholder="e.g. log(x)=2  or  log(x)+log(y)  or  log(x^2*y)" autocomplete="off" spellcheck="false" style="font-family:var(--font-mono);font-size:0.9375rem">
+                    <input type="text" class="tool-input" id="lc-input" placeholder="e.g. log2(x) = 5  or  ln(x) + ln(x-2) = 3" autocomplete="off" spellcheck="false" style="font-family:var(--font-mono);font-size:0.9375rem">
                     <div class="lc-keyboard" id="lc-keyboard">
                         <div class="lc-key-row">
                             <button type="button" class="lc-key-btn log-fn wide" data-insert="log(">log(</button>
@@ -226,7 +230,7 @@
                     </select>
                 </div>
 
-                <button type="button" class="tool-action-btn" id="lc-solve-btn">Solve</button>
+                <button type="button" class="tool-action-btn" id="lc-solve-btn">Solve Equation</button>
 
                 <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
 
@@ -552,11 +556,24 @@ inputEl.addEventListener('input', function() {
     previewTimer = setTimeout(updatePreview, 200);
 });
 
+var modeConfig = {
+    solve:    { btn: 'Solve Equation',       hint: 'Find the value of x in a log equation',                        placeholder: 'e.g. log2(x) = 5  or  ln(x) + ln(x-2) = 3' },
+    simplify: { btn: 'Simplify Expression',  hint: 'Reduce to simplest form, e.g. log(e\u00B2) \u2192 2',         placeholder: 'e.g. log(e^2)  or  ln(1)  or  log10(1000)' },
+    expand:   { btn: 'Expand Logarithm',     hint: 'Break apart using product, quotient, power rules',             placeholder: 'e.g. log(x^2*y)  or  ln(a/b)  or  log(x^3)' },
+    condense: { btn: 'Condense Logarithm',   hint: 'Combine multiple logs into a single log',                      placeholder: 'e.g. 2*log(x)+log(y)  or  ln(a)-ln(b)' },
+    evaluate: { btn: 'Evaluate to Decimal',  hint: 'Compute the numeric decimal value',                            placeholder: 'e.g. log2(10)  or  ln(5)  or  log10(50)' }
+};
+var modeHintEl = document.getElementById('lc-mode-hint');
+
 document.querySelectorAll('.lc-mode-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
         currentMode = this.getAttribute('data-mode');
         document.querySelectorAll('.lc-mode-btn').forEach(function(b){ b.classList.remove('active'); });
         this.classList.add('active');
+        var cfg = modeConfig[currentMode];
+        solveBtn.textContent = cfg.btn;
+        modeHintEl.textContent = cfg.hint;
+        inputEl.placeholder = cfg.placeholder;
         updatePreview();
     });
 });
