@@ -13,11 +13,11 @@
     <meta name="author" content="Anish Nath">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Logarithm Calculator | Solve, Simplify, Expand ln log" />
-        <jsp:param name="toolDescription" value="Free online logarithm calculator with step-by-step solutions. Solve log equations, simplify, expand, condense, and evaluate. Supports ln, log, log2, log10, any base. Interactive graph, Python SymPy compiler, LaTeX export. Hybrid formula + AI solver. No signup required." />
+        <jsp:param name="toolName" value="Logarithm Calculator with Steps - Solve Log Equations Free" />
+        <jsp:param name="toolDescription" value="Free logarithm calculator with step-by-step solutions. Solve, simplify, expand, and condense log equations. Supports ln, log base 2, log base 10, any base. Interactive graph, LaTeX export, Python compiler. No signup." />
         <jsp:param name="toolCategory" value="Mathematics" />
         <jsp:param name="toolUrl" value="logarithm-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="logarithm calculator, log equation solver, simplify logarithms, expand logarithms, condense logarithms, ln calculator, log10, log2, natural log, logarithmic equations, change of base, log rules, step by step" />
+        <jsp:param name="toolKeywords" value="logarithm calculator, logarithm calculator with steps, log equation solver, solve logarithmic equations, simplify logarithms, expand logarithms, condense logarithms, log calculator, ln calculator, natural log calculator, log base 2 calculator, log base 10 calculator, logarithm rules, change of base formula, log solver step by step free" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Solve log equations step by step,Expand and condense using log rules,Simplify and evaluate expressions,Interactive Plotly graph,Built-in Python SymPy compiler,AI-powered fallback for complex problems,ln log log2 log10 any base,Copy LaTeX and share results,Live KaTeX preview,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
@@ -130,7 +130,7 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Logarithm Problem Solver</h1>
+            <h1 class="tool-page-title">Logarithm Calculator with Steps</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
