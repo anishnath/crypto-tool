@@ -1,6 +1,8 @@
 // Cloudflare Worker - AI Exam Marker using OpenAI
 // Evaluates student answers against marking schemes using GPT
 
+import { buildLogarithmPrompt } from './logarithm.js';
+
 const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',
   'https://8gwifi.org',
@@ -673,15 +675,21 @@ async function handleMathSteps(request, env, ctx) {
     return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const { operation, expression, variable, answer, bounds } = payload;
+  const { operation, expression, variable, answer, bounds, mode } = payload;
 
-  if (!expression || !answer) {
-    return jsonResponse({ error: 'Missing required fields: expression, answer' }, { status: 400 });
+  // answer is required for most operations, optional for logarithm
+  if (!expression) {
+    return jsonResponse({ error: 'Missing required field: expression' }, { status: 400 });
+  }
+  if (!answer && operation !== 'logarithm') {
+    return jsonResponse({ error: 'Missing required field: answer' }, { status: 400 });
   }
 
   const op = operation || 'integrate';
   const v = variable || 'x';
-  const cacheKey = buildCacheKey(op, expression, v, bounds);
+  // For logarithm, include mode in cache key since same expr has different results per mode
+  const effectiveBounds = op === 'logarithm' ? { lower: mode || 'solve', upper: '' } : bounds;
+  const cacheKey = buildCacheKey(op, expression, v, effectiveBounds);
 
   // 1. Check DB cache
   if (env.DB) {
@@ -720,7 +728,9 @@ async function handleMathSteps(request, env, ctx) {
 
   // 2. Cache miss — call AI
   try {
-    const prompt = buildMathStepsPrompt(op, expression, v, answer, bounds);
+    const prompt = op === 'logarithm'
+      ? buildLogarithmPrompt(expression, v, answer || 'unknown', mode || 'solve')
+      : buildMathStepsPrompt(op, expression, v, answer, bounds);
 
     const result = await callOpenAI(prompt, env, {
       model: 'gpt-4o-mini',
