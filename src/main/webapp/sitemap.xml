@@ -637,6 +637,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 </url>
+    <url>
+        <loc>https://8gwifi.org/tikz-draw.jsp</loc>
+        <lastmod>2026-02-17</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 <url>
     <loc>https://8gwifi.org/image-resizer.jsp</loc>
     <lastmod>2025-01-23</lastmod>
