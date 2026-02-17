@@ -41,6 +41,18 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/exams/" class="nav-link">
+                    <span>🎓</span>
+                    <span>Education</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/math/" class="nav-link">
+                    <span>🧮</span>
+                    <span>Math Tools</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/tutorials/" class="nav-link">
                     <span>📚</span>
                     <span>Learn to Code</span>
@@ -146,6 +158,18 @@
         <!-- Quick Links -->
         <div class="drawer-section">
             <h3 class="drawer-section-title">Quick Links</h3>
+            <a href="<%=request.getContextPath()%>/exams/" class="drawer-link">
+                <span class="drawer-link-icon">🎓</span>
+                <span>Education</span>
+            </a>
+            <a href="<%=request.getContextPath()%>/math/" class="drawer-link">
+                <span class="drawer-link-icon">🧮</span>
+                <span>Math Tools</span>
+            </a>
+            <a href="<%=request.getContextPath()%>/physics/" class="drawer-link">
+                <span class="drawer-link-icon">⚛️</span>
+                <span>Physics Tools</span>
+            </a>
             <a href="<%=request.getContextPath()%>/tutorials/" class="drawer-link">
                 <span class="drawer-link-icon">📚</span>
                 <span>Tutorials</span>
