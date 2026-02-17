@@ -1,827 +1,582 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exponent Calculator - Power Rules, Laws of Exponents | 8gwifi.org</title>
-  <meta name="description" content="Advanced exponent calculator with all laws of exponents: product rule, quotient rule, power rule, negative exponents, zero exponents, fractional exponents. Step-by-step simplification with detailed explanations.">
-  <meta name="keywords" content="exponent calculator, power calculator, laws of exponents, exponent rules, product rule, quotient rule, power rule, negative exponents, zero exponent, fractional exponents, simplify exponents, exponential expressions">
-  <link rel="canonical" href="https://8gwifi.org/exponent-calculator.jsp">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://8gwifi.org/exponent-calculator.jsp">
-  <meta property="og:title" content="Exponent Calculator - All Power Rules & Laws">
-  <meta property="og:description" content="Calculate and simplify exponential expressions using all laws of exponents with step-by-step solutions.">
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Exponent Calculator with Steps - All 8 Laws of Exponents" />
+        <jsp:param name="toolDescription" value="Free exponent calculator with step-by-step solutions for all 8 laws. Product, quotient, power, negative, zero, and fractional exponent rules. Simplify online." />
+        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolUrl" value="exponent-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="exponent calculator, power calculator, laws of exponents, exponent rules calculator, product rule exponents, quotient rule exponents, power rule exponents, negative exponent calculator, zero exponent, fractional exponents, simplify exponents, exponential expressions calculator, step by step exponents" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="Calculate any base raised to any power,All 8 exponent laws with step-by-step solutions,Product quotient and power rule demonstrations,Negative zero and fractional exponent support,Multi-rule simplification with detailed steps,All Laws comparison mode with custom base,Built-in Python compiler with SymPy,LaTeX export and shareable URLs,8 quick example presets,Dark mode support" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="What are the rules of exponents with examples?" />
+        <jsp:param name="faq1a" value="The 8 rules are: (1) Product Rule a^m times a^n equals a^(m+n) e.g. 2^3 times 2^4 equals 2^7 equals 128, (2) Quotient Rule a^m divided by a^n equals a^(m-n), (3) Power Rule (a^m)^n equals a^(mn), (4) Power of Product (ab)^n equals a^n times b^n, (5) Power of Quotient (a/b)^n equals a^n/b^n, (6) Negative Exponent a^(-n) equals 1/a^n, (7) Zero Exponent a^0 equals 1, (8) Fractional Exponent a^(m/n) equals nth root of a^m. Enter any values to see each rule applied step by step." />
+        <jsp:param name="faq2q" value="How do you solve negative exponents step by step?" />
+        <jsp:param name="faq2a" value="Step 1 write the base with the positive exponent in the denominator. Step 2 calculate the positive power. Step 3 take the reciprocal. Example: 5^(-3) equals 1/5^3 equals 1/125 equals 0.008. The general rule is a^(-n) equals 1/a^n. This works because multiplying a^n times a^(-n) must equal a^0 which equals 1, so a^(-n) equals 1/a^n." />
+        <jsp:param name="faq3q" value="How do you simplify expressions with exponents?" />
+        <jsp:param name="faq3a" value="To simplify exponent expressions: first apply the power rule to nested powers like (a^2)^3 equals a^6, then use the product rule to combine same-base terms like a^6 times a^4 equals a^10, then use the quotient rule for division. For example (x^3)^2 times x^4 divided by x^5 simplifies to x^6 times x^4 divided by x^5 equals x^10 divided by x^5 equals x^5. This calculator shows every intermediate step." />
+        <jsp:param name="faq4q" value="Why is anything to the power of 0 equal to 1?" />
+        <jsp:param name="faq4a" value="By the quotient rule a^n divided by a^n equals a^(n minus n) equals a^0. But any number divided by itself is 1. Therefore a^0 must equal 1. Another way to see it: each time you decrease the exponent by 1 you divide by the base. Starting from 2^3 equals 8, 2^2 equals 4, 2^1 equals 2, so 2^0 equals 1. This holds for every non-zero base. Note 0^0 is undefined." />
+        <jsp:param name="faq5q" value="What is a fractional or rational exponent?" />
+        <jsp:param name="faq5a" value="A fractional exponent a^(m/n) means take the nth root of a raised to the m power. The denominator n is the root index and the numerator m is the power. Example: 27^(2/3) means cube root of 27 squared. Cube root of 27 is 3, then 3 squared is 9. You can also compute 27^2 first to get 729, then take the cube root of 729 which also gives 9. Both methods always yield the same answer." />
+    </jsp:include>
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://8gwifi.org/exponent-calculator.jsp">
-  <meta property="twitter:title" content="Exponent Calculator - Power Rules">
-  <meta property="twitter:description" content="Simplify exponential expressions with product, quotient, power rules and more. Step-by-step solutions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Exponent Calculator",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "Any",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Advanced exponent calculator demonstrating all laws of exponents including product rule, quotient rule, power rule, negative exponents, zero exponents, and fractional exponents with step-by-step solutions.",
-    "url": "https://8gwifi.org/exponent-calculator.jsp",
-    "featureList": [
-      "Product Rule: aᵐ × aⁿ = aᵐ⁺ⁿ",
-      "Quotient Rule: aᵐ ÷ aⁿ = aᵐ⁻ⁿ",
-      "Power Rule: (aᵐ)ⁿ = aᵐⁿ",
-      "Power of Product: (ab)ⁿ = aⁿbⁿ",
-      "Power of Quotient: (a/b)ⁿ = aⁿ/bⁿ",
-      "Negative Exponents: a⁻ⁿ = 1/aⁿ",
-      "Zero Exponent: a⁰ = 1",
-      "Fractional Exponents: aᵐ/ⁿ = ⁿ√(aᵐ)",
-      "Complex expression simplification",
-      "Scientific notation",
-      "Step-by-step solutions",
-      "All laws comparison"
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "2043",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
-  }
-  </script>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/exponent-calculator.css?v=<%=cacheVersion%>">
 
-  <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/ads/ad-init.jsp" %>
 
-  <style>
-  :root {
-    --exp-primary: #f59e0b;
-    --exp-secondary: #d97706;
-    --exp-light: #fef3c7;
-    --exp-dark: #92400e;
-  }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
-  .exp-card {
-    border-left: 4px solid var(--exp-primary);
-    transition: all 0.3s ease;
-  }
-
-  .exp-card:hover {
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
-    transform: translateY(-2px);
-  }
-
-  .result-box {
-    background: linear-gradient(135deg, var(--exp-light), white);
-    border: 2px solid var(--exp-primary);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-top: 1rem;
-  }
-
-  .exp-result {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--exp-dark);
-    background-color: #fffbeb;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-    text-align: center;
-    font-family: 'Times New Roman', serif;
-  }
-
-  .expression-display {
-    font-size: 1.4rem;
-    font-family: 'Times New Roman', serif;
-    background: #f9fafb;
-    padding: 1rem;
-    border-left: 3px solid var(--exp-primary);
-    margin: 0.5rem 0;
-  }
-
-  .step-section {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
-  }
-
-  .step-item {
-    padding: 0.5rem;
-    margin: 0.25rem 0;
-    border-left: 2px solid var(--exp-secondary);
-    padding-left: 1rem;
-  }
-
-  .law-box {
-    background: #dbeafe;
-    border: 1px solid #3b82f6;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin: 0.5rem 0;
-    font-family: 'Times New Roman', serif;
-  }
-
-  .info-card {
-    background: #eff6ff;
-    border-left: 4px solid #3b82f6;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 4px;
-  }
-
-  .method-badge {
-    background: linear-gradient(135deg, var(--exp-primary), var(--exp-secondary));
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: inline-block;
-  }
-
-  .example-box {
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 6px;
-  }
-
-  sup {
-    font-size: 0.75em;
-    vertical-align: super;
-  }
-</style>
+    <style>
+        .tool-action-btn { background: var(--ec-gradient) !important; }
+        .tool-badge { background: var(--ec-light); color: var(--ec-tool); }
+    </style>
 </head>
+<body>
+<%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-
-<div class="container mt-4">
-  <h1 class="mb-2"><i class="fas fa-superscript" style="color: var(--exp-primary);"></i> Exponent Calculator</h1>
-  <p class="text-muted mb-3">Master all laws of exponents: product, quotient, power, negative, zero, and fractional</p>
-
-  <div class="row">
-    <!-- Left Column: Input -->
-    <div class="col-lg-4 col-md-12">
-      <div class="card mb-3">
-        <h5 class="card-header"><i class="fas fa-superscript"></i> Exponent Tools</h5>
-        <div class="card-body">
-
-          <!-- Tab Navigation -->
-          <ul class="nav nav-tabs mb-3" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic-panel" role="tab">
-                <i class="fas fa-calculator"></i> Basic Powers
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="rules-tab" data-toggle="tab" href="#rules-panel" role="tab">
-                <i class="fas fa-book"></i> Apply Rules
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="simplify-tab" data-toggle="tab" href="#simplify-panel" role="tab">
-                <i class="fas fa-compress"></i> Simplify
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compare-panel" role="tab">
-                <i class="fas fa-list"></i> All Laws
-              </a>
-            </li>
-          </ul>
-
-          <!-- Tab Content -->
-          <div class="tab-content">
-
-            <!-- Basic Powers Panel -->
-            <div class="tab-pane fade show active" id="basic-panel" role="tabpanel">
-              <div class="info-card">
-                <strong><i class="fas fa-info-circle"></i> Calculate basic powers:</strong><br>
-                Compute a<sup>n</sup> where a is the base and n is the exponent
-              </div>
-
-              <div class="form-group">
-                <label><strong>Base (a)</strong></label>
-                <input type="number" class="form-control" id="basicBase" value="2" step="any">
-              </div>
-
-              <div class="form-group">
-                <label><strong>Exponent (n)</strong></label>
-                <input type="number" class="form-control" id="basicExponent" value="5" step="any">
-                <small class="form-text text-muted">Can be negative, zero, or fractional</small>
-              </div>
-
-              <button class="btn btn-lg btn-block" style="background: var(--exp-primary); color: white;" onclick="calculateBasicPower()">
-                <i class="fas fa-calculator"></i> Calculate a<sup>n</sup>
-              </button>
-
-              <div class="example-box">
-                <strong>Examples:</strong><br>
-                2<sup>5</sup> = 32<br>
-                3<sup>-2</sup> = 1/9 ≈ 0.111<br>
-                16<sup>1/2</sup> = √16 = 4<br>
-                5<sup>0</sup> = 1
-              </div>
-            </div>
-
-            <!-- Apply Rules Panel -->
-            <div class="tab-pane fade" id="rules-panel" role="tabpanel">
-              <div class="info-card">
-                <strong><i class="fas fa-info-circle"></i> Apply exponent laws:</strong><br>
-                Choose a rule and see step-by-step application
-              </div>
-
-              <div class="form-group">
-                <label><strong>Exponent Rule</strong></label>
-                <select class="form-control" id="ruleType" onchange="updateRuleInputs()">
-                  <option value="product">Product Rule: aᵐ × aⁿ = aᵐ⁺ⁿ</option>
-                  <option value="quotient">Quotient Rule: aᵐ ÷ aⁿ = aᵐ⁻ⁿ</option>
-                  <option value="power">Power Rule: (aᵐ)ⁿ = aᵐⁿ</option>
-                  <option value="product-power">Power of Product: (ab)ⁿ = aⁿbⁿ</option>
-                  <option value="quotient-power">Power of Quotient: (a/b)ⁿ = aⁿ/bⁿ</option>
-                  <option value="negative">Negative Exponent: a⁻ⁿ = 1/aⁿ</option>
-                  <option value="zero">Zero Exponent: a⁰ = 1</option>
-                  <option value="fractional">Fractional Exponent: aᵐ/ⁿ = ⁿ√(aᵐ)</option>
-                </select>
-              </div>
-
-              <div id="ruleInputs">
-                <!-- Product/Quotient Rules -->
-                <div id="productQuotientInputs">
-                  <div class="form-group">
-                    <label><strong>Base (a)</strong></label>
-                    <input type="number" class="form-control" id="ruleBase" value="3" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>First Exponent (m)</strong></label>
-                    <input type="number" class="form-control" id="ruleExp1" value="4" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>Second Exponent (n)</strong></label>
-                    <input type="number" class="form-control" id="ruleExp2" value="3" step="any">
-                  </div>
-                </div>
-
-                <!-- Power Rule -->
-                <div id="powerRuleInputs" style="display: none;">
-                  <div class="form-group">
-                    <label><strong>Base (a)</strong></label>
-                    <input type="number" class="form-control" id="powerBase" value="2" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>Inner Exponent (m)</strong></label>
-                    <input type="number" class="form-control" id="powerExp1" value="3" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>Outer Exponent (n)</strong></label>
-                    <input type="number" class="form-control" id="powerExp2" value="2" step="any">
-                  </div>
-                </div>
-
-                <!-- Product/Quotient Power -->
-                <div id="prodQuotPowerInputs" style="display: none;">
-                  <div class="form-group">
-                    <label><strong>First Base (a)</strong></label>
-                    <input type="number" class="form-control" id="prodBase1" value="2" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>Second Base (b)</strong></label>
-                    <input type="number" class="form-control" id="prodBase2" value="3" step="any">
-                  </div>
-                  <div class="form-group">
-                    <label><strong>Exponent (n)</strong></label>
-                    <input type="number" class="form-control" id="prodPowerExp" value="2" step="any">
-                  </div>
-                </div>
-
-                <!-- Negative/Zero/Fractional -->
-                <div id="specialInputs" style="display: none;">
-                  <div class="form-group">
-                    <label><strong>Base (a)</strong></label>
-                    <input type="number" class="form-control" id="specialBase" value="5" step="any">
-                  </div>
-                  <div class="form-group" id="specialExpDiv">
-                    <label><strong>Exponent</strong></label>
-                    <input type="number" class="form-control" id="specialExp" value="-3" step="any">
-                  </div>
-                  <div id="fractionalExpDiv" style="display: none;">
-                    <div class="form-group">
-                      <label><strong>Numerator (m)</strong></label>
-                      <input type="number" class="form-control" id="fracNum" value="3" step="1">
-                    </div>
-                    <div class="form-group">
-                      <label><strong>Denominator (n)</strong></label>
-                      <input type="number" class="form-control" id="fracDenom" value="2" step="1" min="1">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <button class="btn btn-lg btn-block" style="background: var(--exp-primary); color: white;" onclick="applyRule()">
-                <i class="fas fa-magic"></i> Apply Rule
-              </button>
-            </div>
-
-            <!-- Simplify Panel -->
-            <div class="tab-pane fade" id="simplify-panel" role="tabpanel">
-              <div class="info-card">
-                <strong><i class="fas fa-info-circle"></i> Simplify complex expressions:</strong><br>
-                Enter an expression with multiple exponent operations
-              </div>
-
-              <div class="form-group">
-                <label><strong>Expression Type</strong></label>
-                <select class="form-control" id="simplifyType">
-                  <option value="combo1">(a²)³ × a⁴</option>
-                  <option value="combo2">a⁸ ÷ (a²)³</option>
-                  <option value="combo3">(a³b²)⁴</option>
-                  <option value="combo4">a⁻² × a⁵</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label><strong>Value of a</strong></label>
-                <input type="number" class="form-control" id="simplifyA" value="2" step="any">
-              </div>
-
-              <div class="form-group" id="simplifyBDiv">
-                <label><strong>Value of b (if applicable)</strong></label>
-                <input type="number" class="form-control" id="simplifyB" value="3" step="any">
-              </div>
-
-              <button class="btn btn-lg btn-block" style="background: var(--exp-primary); color: white;" onclick="simplifyExpression()">
-                <i class="fas fa-compress"></i> Simplify Expression
-              </button>
-
-              <div class="example-box">
-                <strong>Simplification Examples:</strong><br>
-                (a²)³ × a⁴ = a⁶ × a⁴ = a¹⁰<br>
-                a⁸ ÷ (a²)³ = a⁸ ÷ a⁶ = a²<br>
-                (a³b²)⁴ = a¹²b⁸
-              </div>
-            </div>
-
-            <!-- All Laws Panel -->
-            <div class="tab-pane fade" id="compare-panel" role="tabpanel">
-              <div class="info-card">
-                <strong><i class="fas fa-info-circle"></i> See all exponent laws with examples</strong>
-              </div>
-
-              <div class="form-group">
-                <label><strong>Example Base</strong></label>
-                <input type="number" class="form-control" id="compareBase" value="2" step="any">
-              </div>
-
-              <button class="btn btn-lg btn-block" style="background: var(--exp-primary); color: white;" onclick="showAllLaws()">
-                <i class="fas fa-list"></i> Show All Laws
-              </button>
-            </div>
-
-          </div>
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Exponent Calculator</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                Exponent Calculator
+            </nav>
         </div>
-      </div>
-
-
+        <div class="tool-page-badges">
+            <span class="tool-badge">Free Online</span>
+            <span class="tool-badge">All 8 Laws</span>
+            <span class="tool-badge">Step-by-Step</span>
+        </div>
     </div>
+</header>
 
-    <!-- Right Column: Results -->
-    <div class="col-lg-8 col-md-12">
-      <div id="results"></div>
-        <!-- Educational Content (Condensed) -->
-        <div class="card mb-3">
-            <h5 class="card-header"><i class="fas fa-book"></i> Guide</h5>
-            <div class="card-body" style="font-size: 0.9rem;">
-                <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>The 8 Laws:</strong></p>
-                <p style="font-size: 0.8rem; line-height: 1.4;">
-                    <strong>1. Product:</strong> aᵐ × aⁿ = aᵐ⁺ⁿ<br>
-                    <strong>2. Quotient:</strong> aᵐ ÷ aⁿ = aᵐ⁻ⁿ<br>
-                    <strong>3. Power:</strong> (aᵐ)ⁿ = aᵐⁿ<br>
-                    <strong>4. Product Power:</strong> (ab)ⁿ = aⁿbⁿ<br>
-                    <strong>5. Quotient Power:</strong> (a/b)ⁿ = aⁿ/bⁿ<br>
-                    <strong>6. Negative:</strong> a⁻ⁿ = 1/aⁿ<br>
-                    <strong>7. Zero:</strong> a⁰ = 1<br>
-                    <strong>8. Fractional:</strong> aᵐ/ⁿ = ⁿ√(aᵐ)
-                </p>
+<section class="tool-description-section" style="background:var(--ec-light);">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Free <strong>exponent calculator</strong> with <strong>step-by-step solutions</strong> for all <strong>8 laws of exponents</strong>. Calculate powers, apply product/quotient/power rules, handle negative, zero, and fractional exponents. Simplify complex expressions instantly.</p>
+        </div>
+    </div>
+</section>
+
+<main class="tool-page-container">
+    <!-- ==================== INPUT COLUMN ==================== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <div class="tool-card-header" style="background:var(--ec-gradient);">Exponent Calculator</div>
+            <div class="tool-card-body">
+
+                <!-- Mode Toggle -->
+                <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                    <label class="tool-form-label">Mode</label>
+                    <div class="ec-mode-toggle">
+                        <button type="button" class="ec-mode-btn active" data-mode="basic">Basic Power</button>
+                        <button type="button" class="ec-mode-btn" data-mode="rules">Apply Rules</button>
+                        <button type="button" class="ec-mode-btn" data-mode="simplify">Simplify</button>
+                        <button type="button" class="ec-mode-btn" data-mode="alllaws">All Laws</button>
+                    </div>
+                </div>
+
+                <!-- ===== BASIC POWER FORM ===== -->
+                <div class="ec-mode-form active" id="ec-form-basic">
+                    <div class="tool-form-group">
+                        <div class="ec-input-row">
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-basic-base">Base (a)</label>
+                                <input type="number" class="ec-input" id="ec-basic-base" value="2" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-basic-exp">Exponent (n)</label>
+                                <input type="number" class="ec-input" id="ec-basic-exp" value="5" step="any">
+                            </div>
+                        </div>
+                        <div class="tool-form-hint">Calculate a<sup>n</sup> with step-by-step solution</div>
+                    </div>
+                </div>
+
+                <!-- ===== APPLY RULES FORM ===== -->
+                <div class="ec-mode-form" id="ec-form-rules">
+                    <div class="tool-form-group" style="margin-bottom:0.5rem;">
+                        <label class="ec-input-label" for="ec-rule-type">Exponent Rule</label>
+                        <select class="ec-rule-select" id="ec-rule-type">
+                            <option value="product">Product Rule: a^m &times; a^n = a^(m+n)</option>
+                            <option value="quotient">Quotient Rule: a^m &divide; a^n = a^(m-n)</option>
+                            <option value="power">Power Rule: (a^m)^n = a^(mn)</option>
+                            <option value="product-power">Power of Product: (ab)^n = a^n b^n</option>
+                            <option value="quotient-power">Power of Quotient: (a/b)^n = a^n/b^n</option>
+                            <option value="negative">Negative Exponent: a^(-n) = 1/a^n</option>
+                            <option value="zero">Zero Exponent: a^0 = 1</option>
+                            <option value="fractional">Fractional Exponent: a^(m/n)</option>
+                        </select>
+                    </div>
+
+                    <!-- Product / Quotient inputs: base, m, n -->
+                    <div id="ec-rule-inputs-pq">
+                        <div class="ec-input-row">
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-rule-base">Base (a)</label>
+                                <input type="number" class="ec-input" id="ec-rule-base" value="3" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-rule-m">m</label>
+                                <input type="number" class="ec-input" id="ec-rule-m" value="4" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-rule-n">n</label>
+                                <input type="number" class="ec-input" id="ec-rule-n" value="3" step="any">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Power rule inputs: base, m, n -->
+                    <div id="ec-rule-inputs-power" style="display:none;">
+                        <div class="ec-input-row">
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-power-base">Base (a)</label>
+                                <input type="number" class="ec-input" id="ec-power-base" value="2" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-power-m">m</label>
+                                <input type="number" class="ec-input" id="ec-power-m" value="3" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-power-n">n</label>
+                                <input type="number" class="ec-input" id="ec-power-n" value="2" step="any">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product power / Quotient power inputs: a, b, n -->
+                    <div id="ec-rule-inputs-prodpow" style="display:none;">
+                        <div class="ec-input-row">
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-prod-a">a</label>
+                                <input type="number" class="ec-input" id="ec-prod-a" value="2" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-prod-b">b</label>
+                                <input type="number" class="ec-input" id="ec-prod-b" value="3" step="any">
+                            </div>
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-prod-n">n</label>
+                                <input type="number" class="ec-input" id="ec-prod-n" value="2" step="any">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Special rules: negative, zero, fractional -->
+                    <div id="ec-rule-inputs-special" style="display:none;">
+                        <div class="ec-input-row">
+                            <div class="ec-input-group">
+                                <label class="ec-input-label" for="ec-special-base">Base (a)</label>
+                                <input type="number" class="ec-input" id="ec-special-base" value="5" step="any">
+                            </div>
+                            <div class="ec-input-group" id="ec-special-exp-group">
+                                <label class="ec-input-label" for="ec-special-exp">Exponent</label>
+                                <input type="number" class="ec-input" id="ec-special-exp" value="-3" step="any">
+                            </div>
+                        </div>
+                        <!-- Fractional exponent inputs -->
+                        <div id="ec-frac-inputs" style="display:none;">
+                            <div class="ec-input-row" style="margin-top:0.5rem;">
+                                <div class="ec-input-group">
+                                    <label class="ec-input-label" for="ec-frac-num">Numerator (m)</label>
+                                    <input type="number" class="ec-input" id="ec-frac-num" value="3" step="1">
+                                </div>
+                                <div class="ec-input-group">
+                                    <label class="ec-input-label" for="ec-frac-denom">Denominator (n)</label>
+                                    <input type="number" class="ec-input" id="ec-frac-denom" value="2" step="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== SIMPLIFY FORM ===== -->
+                <div class="ec-mode-form" id="ec-form-simplify">
+                    <div class="tool-form-group" style="margin-bottom:0.5rem;">
+                        <label class="ec-input-label" for="ec-simplify-type">Expression</label>
+                        <select class="ec-rule-select" id="ec-simplify-type">
+                            <option value="combo1">(a&sup2;)&sup3; &times; a&sup4;</option>
+                            <option value="combo2">a&sup8; &divide; (a&sup2;)&sup3;</option>
+                            <option value="combo3">(a&sup3;b&sup2;)&sup4;</option>
+                            <option value="combo4">a&minus;&sup2; &times; a&sup5;</option>
+                        </select>
+                    </div>
+                    <div class="ec-input-row">
+                        <div class="ec-input-group">
+                            <label class="ec-input-label" for="ec-simplify-a">a</label>
+                            <input type="number" class="ec-input" id="ec-simplify-a" value="2" step="any">
+                        </div>
+                        <div class="ec-input-group" id="ec-simplify-b-group" style="display:none;">
+                            <label class="ec-input-label" for="ec-simplify-b">b</label>
+                            <input type="number" class="ec-input" id="ec-simplify-b" value="3" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== ALL LAWS FORM ===== -->
+                <div class="ec-mode-form" id="ec-form-alllaws">
+                    <div class="tool-form-group">
+                        <label class="ec-input-label" for="ec-compare-base">Base (a)</label>
+                        <input type="number" class="ec-input" id="ec-compare-base" value="2" step="any">
+                        <div class="tool-form-hint">See all 8 exponent laws demonstrated with your chosen base</div>
+                    </div>
+                </div>
+
+                <!-- Live Preview -->
+                <div class="tool-form-group" style="margin-top:0.75rem;">
+                    <label class="tool-form-label">Preview</label>
+                    <div class="ec-preview" id="ec-preview"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.5rem;">
+                    <button type="button" class="tool-action-btn" id="ec-solve-btn" style="flex:1">Calculate</button>
+                    <button type="button" class="tool-action-btn" id="ec-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Quick Examples -->
+                <div class="tool-form-group">
+                    <label class="tool-form-label">Quick Examples</label>
+                    <div class="ec-examples">
+                        <button type="button" class="ec-example-chip" data-example="power-of-2">2<sup>10</sup></button>
+                        <button type="button" class="ec-example-chip" data-example="negative">3<sup>&minus;2</sup></button>
+                        <button type="button" class="ec-example-chip" data-example="fractional">16<sup>0.5</sup></button>
+                        <button type="button" class="ec-example-chip" data-example="zero">7<sup>0</sup></button>
+                        <button type="button" class="ec-example-chip" data-example="product">Product Rule</button>
+                        <button type="button" class="ec-example-chip" data-example="quotient">Quotient Rule</button>
+                        <button type="button" class="ec-example-chip" data-example="simplify1">Simplify</button>
+                        <button type="button" class="ec-example-chip" data-example="all-laws">All Laws</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-  </div>
+
+    <!-- ==================== OUTPUT COLUMN ==================== -->
+    <div class="tool-output-column">
+        <!-- Tab bar -->
+        <div class="ec-output-tabs">
+            <button type="button" class="ec-output-tab active" data-panel="result">Result</button>
+            <button type="button" class="ec-output-tab" data-panel="python">Python Compiler</button>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="ec-panel active" id="ec-panel-result">
+            <div class="tool-card tool-result-card">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--ec-tool);">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    <h4>Result</h4>
+                </div>
+                <div class="tool-result-content" id="ec-result-content">
+                    <div class="tool-empty-state" id="ec-empty-state">
+                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">a<sup>n</sup></div>
+                        <h3>Enter values to calculate</h3>
+                        <p>Master all 8 laws of exponents with step-by-step solutions.</p>
+                    </div>
+                </div>
+                <div class="tool-result-actions" id="ec-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
+                    <button type="button" class="tool-action-btn" id="ec-copy-latex-btn">Copy LaTeX</button>
+                    <button type="button" class="tool-action-btn" id="ec-share-btn">Share</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Python Compiler Panel -->
+        <div class="ec-panel" id="ec-panel-python">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--ec-tool);">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <h4>Python Compiler</h4>
+                    <select id="ec-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
+                        <option value="basic-power">Basic Power</option>
+                        <option value="all-laws">All 8 Laws</option>
+                        <option value="sympy">SymPy (Symbolic)</option>
+                    </select>
+                </div>
+                <div style="flex:1;min-height:0;">
+                    <iframe id="ec-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADS COLUMN ==================== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+</main>
+
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
-<%@ include file="footer_adsense.jsp"%>
+<!-- Related Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="exponent-calculator.jsp"/>
+    <jsp:param name="keyword" value="mathematics"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
 
+<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- ===== 1. WHAT ARE EXPONENTS? ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What are Exponents?</h2>
+        <p class="ec-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            An <strong>exponent</strong> tells you how many times to multiply a number (the <strong>base</strong>) by itself. For example, 2<sup>5</sup> means 2 &times; 2 &times; 2 &times; 2 &times; 2 = 32. Exponents are fundamental in algebra, physics, computer science, and finance &mdash; appearing everywhere from compound interest to binary numbers.
+        </p>
+
+        <div class="ec-callout ec-callout-insight ec-anim ec-anim-d2">
+            <span class="ec-callout-icon">&#128161;</span>
+            <div class="ec-callout-text">
+                <strong>Key Insight:</strong> The 8 laws of exponents let you simplify complex expressions by combining, splitting, and transforming powers &mdash; without ever computing the full result. This is essential for algebra and calculus.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2. THE 8 LAWS ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">The 8 Laws of Exponents</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            These rules govern how exponents behave in multiplication, division, and nesting.
+        </p>
+
+        <div class="ec-laws-grid">
+            <div class="ec-edu-card ec-anim ec-anim-d1" style="border-left:3px solid #d97706;">
+                <h4>1. Product Rule</h4>
+                <p>a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Same base? Add the exponents.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d1" style="border-left:3px solid #f59e0b;">
+                <h4>2. Quotient Rule</h4>
+                <p>a<sup>m</sup> &divide; a<sup>n</sup> = a<sup>m&minus;n</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Same base? Subtract the exponents.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d2" style="border-left:3px solid #dc2626;">
+                <h4>3. Power Rule</h4>
+                <p>(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Power of a power? Multiply.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d2" style="border-left:3px solid #7c3aed;">
+                <h4>4. Power of Product</h4>
+                <p>(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Distribute across multiplication.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d3" style="border-left:3px solid #2563eb;">
+                <h4>5. Power of Quotient</h4>
+                <p>(a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Distribute across division.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d3" style="border-left:3px solid #059669;">
+                <h4>6. Negative Exponent</h4>
+                <p>a<sup>&minus;n</sup> = 1/a<sup>n</sup></p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Flip to the denominator.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d4" style="border-left:3px solid #0891b2;">
+                <h4>7. Zero Exponent</h4>
+                <p>a<sup>0</sup> = 1</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Anything (non-zero) to the zero = 1.</p>
+            </div>
+            <div class="ec-edu-card ec-anim ec-anim-d4" style="border-left:3px solid #be185d;">
+                <h4>8. Fractional Exponent</h4>
+                <p>a<sup>m/n</sup> = <sup>n</sup>&radic;(a<sup>m</sup>)</p>
+                <p style="color:var(--text-muted);font-size:0.6875rem;">Numerator = power, denominator = root.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. REAL-WORLD APPLICATIONS ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Applications</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            Exponents appear throughout mathematics, science, and everyday life.
+        </p>
+        <div class="ec-laws-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+            <div class="ec-edu-card" style="border-left:3px solid #d97706;">
+                <h4>Compound Interest</h4>
+                <p>A = P(1 + r/n)<sup>nt</sup>. Your savings grow exponentially thanks to the power of compounding.</p>
+            </div>
+            <div class="ec-edu-card" style="border-left:3px solid #2563eb;">
+                <h4>Computer Science</h4>
+                <p>Binary uses powers of 2. A 32-bit integer stores values up to 2<sup>32</sup> &minus; 1 = 4,294,967,295.</p>
+            </div>
+            <div class="ec-edu-card" style="border-left:3px solid #059669;">
+                <h4>Physics &amp; Engineering</h4>
+                <p>Radioactive decay (N = N<sub>0</sub> &middot; 2<sup>&minus;t/h</sup>), sound intensity (decibels), and earthquake magnitudes all use exponents.</p>
+            </div>
+        </div>
+
+        <div class="ec-callout ec-callout-tip ec-anim ec-anim-d3">
+            <span class="ec-callout-icon">&#128073;</span>
+            <div class="ec-callout-text">
+                <strong>Try it!</strong> Enter base = 1.08, exponent = 30 to see how $1 grows to $10.06 at 8% annual compound interest over 30 years.
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What are the 8 laws of exponents?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The 8 laws are: (1) Product Rule: a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup>, (2) Quotient Rule: a<sup>m</sup> &divide; a<sup>n</sup> = a<sup>m&minus;n</sup>, (3) Power Rule: (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup>, (4) Power of a Product: (ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup>, (5) Power of a Quotient: (a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup>, (6) Negative Exponent: a<sup>&minus;n</sup> = 1/a<sup>n</sup>, (7) Zero Exponent: a<sup>0</sup> = 1, (8) Fractional Exponent: a<sup>m/n</sup> = <sup>n</sup>&radic;(a<sup>m</sup>).</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do you calculate negative exponents?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">A negative exponent means take the reciprocal: a<sup>&minus;n</sup> = 1/a<sup>n</sup>. For example, 2<sup>&minus;3</sup> = 1/2<sup>3</sup> = 1/8 = 0.125. First compute the positive power, then take the reciprocal.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is a fractional exponent?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">A fractional exponent combines a power and a root. The numerator is the power and the denominator is the root. For example, 8<sup>2/3</sup> means the cube root of 8 squared. Cube root of 8 is 2, then 2 squared is 4. So 8<sup>2/3</sup> = 4.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Why does anything to the zero power equal 1?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Using the quotient rule: a<sup>n</sup> &divide; a<sup>n</sup> = a<sup>n&minus;n</sup> = a<sup>0</sup>. But any number divided by itself equals 1, so a<sup>0</sup> = 1. This holds for any non-zero base. Note that 0<sup>0</sup> is typically considered undefined.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this exponent calculator free?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes, 100% free with no signup. Features include all 8 exponent laws with step-by-step solutions, multi-rule simplification, an All Laws comparison mode, a Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Explore More Math -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
+            Explore More Math Tools
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+            <a href="<%=request.getContextPath()%>/logarithm-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">log</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Logarithm Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Compute logs with step-by-step solutions</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">x&sup2;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Quadratic Solver</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Solve quadratic equations with 3 methods and graphs</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/series-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#2563eb,#3b82f6);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;color:#fff;">&Sigma;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Series Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Taylor &amp; Maclaurin series with convergence graphs</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
+
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
+
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+<!-- Scroll-triggered animations -->
 <script>
-// Update rule inputs based on selected rule
-function updateRuleInputs() {
-  const ruleType = document.getElementById('ruleType').value;
-
-  // Hide all input groups
-  document.getElementById('productQuotientInputs').style.display = 'none';
-  document.getElementById('powerRuleInputs').style.display = 'none';
-  document.getElementById('prodQuotPowerInputs').style.display = 'none';
-  document.getElementById('specialInputs').style.display = 'none';
-  document.getElementById('fractionalExpDiv').style.display = 'none';
-
-  // Show relevant inputs
-  if (ruleType === 'product' || ruleType === 'quotient') {
-    document.getElementById('productQuotientInputs').style.display = 'block';
-  } else if (ruleType === 'power') {
-    document.getElementById('powerRuleInputs').style.display = 'block';
-  } else if (ruleType === 'product-power' || ruleType === 'quotient-power') {
-    document.getElementById('prodQuotPowerInputs').style.display = 'block';
-  } else {
-    document.getElementById('specialInputs').style.display = 'block';
-    if (ruleType === 'zero') {
-      document.getElementById('specialExpDiv').style.display = 'none';
-    } else if (ruleType === 'fractional') {
-      document.getElementById('specialExpDiv').style.display = 'none';
-      document.getElementById('fractionalExpDiv').style.display = 'block';
-    } else {
-      document.getElementById('specialExpDiv').style.display = 'block';
+(function(){
+    var els = document.querySelectorAll('.ec-anim');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+        for (var i = 0; i < els.length; i++) els[i].classList.add('ec-visible');
+        return;
     }
-  }
-}
-
-// Calculate basic power
-function calculateBasicPower() {
-  const base = parseFloat(document.getElementById('basicBase').value);
-  const exp = parseFloat(document.getElementById('basicExponent').value);
-
-  if (isNaN(base) || isNaN(exp)) {
-    alert('Please enter valid numbers');
-    return;
-  }
-
-  if (base === 0 && exp <= 0) {
-    alert('0^0 and 0 to negative powers are undefined');
-    return;
-  }
-
-  const result = Math.pow(base, exp);
-
-  let html = '<div class="result-box">';
-  html += `<h6 class="text-center"><span class="method-badge">Calculate ${base}<sup>${exp}</sup></span></h6>`;
-  html += `<div class="exp-result">${base}<sup>${exp}</sup> = ${result.toFixed(6)}</div>`;
-
-  html += '<div class="step-section">';
-  html += '<h6><i class="fas fa-calculator"></i> Explanation</h6>';
-
-  if (exp === 0) {
-    html += `<div class="step-item"><strong>Zero Exponent Rule:</strong> Any non-zero number to the power of 0 equals 1<br>${base}<sup>0</sup> = 1</div>`;
-  } else if (exp < 0) {
-    html += `<div class="step-item"><strong>Negative Exponent Rule:</strong> a<sup>-n</sup> = 1/a<sup>n</sup><br>${base}<sup>${exp}</sup> = 1/${base}<sup>${-exp}</sup> = 1/${Math.pow(base, -exp).toFixed(6)} = ${result.toFixed(6)}</div>`;
-  } else if (exp % 1 !== 0) {
-    html += `<div class="step-item"><strong>Fractional Exponent:</strong> ${base}<sup>${exp}</sup> represents the ${exp}th power<br>Result: ${result.toFixed(6)}</div>`;
-  } else if (Number.isInteger(exp) && exp > 0 && exp <= 10) {
-    html += `<div class="step-item"><strong>Repeated Multiplication:</strong><br>${base}<sup>${exp}</sup> = `;
-    const parts = [];
-    for (let i = 0; i < exp; i++) {
-      parts.push(base.toString());
-    }
-    html += parts.join(' × ') + ' = ' + result.toFixed(6) + '</div>';
-  } else {
-    html += `<div class="step-item"><strong>Calculation:</strong> ${base}<sup>${exp}</sup> = ${result.toFixed(6)}</div>`;
-  }
-
-  html += '</div>';
-
-  // Scientific notation for very large/small numbers
-  if (Math.abs(result) >= 1000 || (Math.abs(result) < 0.001 && result !== 0)) {
-    html += `<div class="info-card"><strong><i class="fas fa-flask"></i> Scientific Notation:</strong> ${result.toExponential(4)}</div>`;
-  }
-
-  html += '</div>';
-  document.getElementById('results').innerHTML = html;
-}
-
-// Apply exponent rule
-function applyRule() {
-  const ruleType = document.getElementById('ruleType').value;
-  let html = '<div class="result-box">';
-
-  if (ruleType === 'product') {
-    const base = parseFloat(document.getElementById('ruleBase').value);
-    const m = parseFloat(document.getElementById('ruleExp1').value);
-    const n = parseFloat(document.getElementById('ruleExp2').value);
-
-    const result = Math.pow(base, m + n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Product Rule</span></h6>`;
-    html += `<div class="exp-result">${base}<sup>${m}</sup> × ${base}<sup>${n}</sup> = ${base}<sup>${m+n}</sup></div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Product Rule: a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Identify same base</strong><br>Base = ${base}</div>`;
-    html += `<div class="step-item"><strong>Step 2: Add exponents</strong><br>${m} + ${n} = ${m+n}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Write result</strong><br>${base}<sup>${m}</sup> × ${base}<sup>${n}</sup> = ${base}<sup>${m+n}</sup></div>`;
-    html += `<div class="step-item"><strong>Numerical value:</strong> ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'quotient') {
-    const base = parseFloat(document.getElementById('ruleBase').value);
-    const m = parseFloat(document.getElementById('ruleExp1').value);
-    const n = parseFloat(document.getElementById('ruleExp2').value);
-
-    const result = Math.pow(base, m - n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Quotient Rule</span></h6>`;
-    html += `<div class="exp-result">${base}<sup>${m}</sup> ÷ ${base}<sup>${n}</sup> = ${base}<sup>${m-n}</sup></div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Quotient Rule: a<sup>m</sup> ÷ a<sup>n</sup> = a<sup>m-n</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Identify same base</strong><br>Base = ${base}</div>`;
-    html += `<div class="step-item"><strong>Step 2: Subtract exponents</strong><br>${m} - ${n} = ${m-n}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Write result</strong><br>${base}<sup>${m}</sup> ÷ ${base}<sup>${n}</sup> = ${base}<sup>${m-n}</sup></div>`;
-    html += `<div class="step-item"><strong>Numerical value:</strong> ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'power') {
-    const base = parseFloat(document.getElementById('powerBase').value);
-    const m = parseFloat(document.getElementById('powerExp1').value);
-    const n = parseFloat(document.getElementById('powerExp2').value);
-
-    const result = Math.pow(base, m * n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Power Rule</span></h6>`;
-    html += `<div class="exp-result">(${base}<sup>${m}</sup>)<sup>${n}</sup> = ${base}<sup>${m*n}</sup></div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Power Rule: (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Identify base and exponents</strong><br>Base = ${base}, m = ${m}, n = ${n}</div>`;
-    html += `<div class="step-item"><strong>Step 2: Multiply exponents</strong><br>${m} × ${n} = ${m*n}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Write result</strong><br>(${base}<sup>${m}</sup>)<sup>${n}</sup> = ${base}<sup>${m*n}</sup></div>`;
-    html += `<div class="step-item"><strong>Numerical value:</strong> ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'product-power') {
-    const a = parseFloat(document.getElementById('prodBase1').value);
-    const b = parseFloat(document.getElementById('prodBase2').value);
-    const n = parseFloat(document.getElementById('prodPowerExp').value);
-
-    const result = Math.pow(a, n) * Math.pow(b, n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Power of a Product</span></h6>`;
-    html += `<div class="exp-result">(${a} × ${b})<sup>${n}</sup> = ${a}<sup>${n}</sup> × ${b}<sup>${n}</sup></div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Power of Product: (ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Distribute exponent to each base</strong><br>(${a} × ${b})<sup>${n}</sup> = ${a}<sup>${n}</sup> × ${b}<sup>${n}</sup></div>`;
-    html += `<div class="step-item"><strong>Step 2: Calculate each power</strong><br>${a}<sup>${n}</sup> = ${Math.pow(a,n).toFixed(4)}<br>${b}<sup>${n}</sup> = ${Math.pow(b,n).toFixed(4)}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Multiply results</strong><br>${Math.pow(a,n).toFixed(4)} × ${Math.pow(b,n).toFixed(4)} = ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'quotient-power') {
-    const a = parseFloat(document.getElementById('prodBase1').value);
-    const b = parseFloat(document.getElementById('prodBase2').value);
-    const n = parseFloat(document.getElementById('prodPowerExp').value);
-
-    if (b === 0) {
-      alert('Denominator cannot be zero');
-      return;
-    }
-
-    const result = Math.pow(a, n) / Math.pow(b, n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Power of a Quotient</span></h6>`;
-    html += `<div class="exp-result">(${a}/${b})<sup>${n}</sup> = ${a}<sup>${n}</sup>/${b}<sup>${n}</sup></div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Power of Quotient: (a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Distribute exponent</strong><br>(${a}/${b})<sup>${n}</sup> = ${a}<sup>${n}</sup>/${b}<sup>${n}</sup></div>`;
-    html += `<div class="step-item"><strong>Step 2: Calculate each power</strong><br>${a}<sup>${n}</sup> = ${Math.pow(a,n).toFixed(4)}<br>${b}<sup>${n}</sup> = ${Math.pow(b,n).toFixed(4)}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Divide</strong><br>${Math.pow(a,n).toFixed(4)} ÷ ${Math.pow(b,n).toFixed(4)} = ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'negative') {
-    const base = parseFloat(document.getElementById('specialBase').value);
-    const exp = parseFloat(document.getElementById('specialExp').value);
-
-    if (base === 0) {
-      alert('Base cannot be zero for negative exponents');
-      return;
-    }
-
-    const result = Math.pow(base, exp);
-    const positive = Math.pow(base, Math.abs(exp));
-
-    html += `<h6 class="text-center"><span class="method-badge">Negative Exponent</span></h6>`;
-    html += `<div class="exp-result">${base}<sup>${exp}</sup> = 1/${base}<sup>${Math.abs(exp)}</sup> = ${result.toFixed(6)}</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Negative Exponent: a<sup>-n</sup> = 1/a<sup>n</sup></h6>';
-    html += `<div class="step-item"><strong>Step 1: Convert to reciprocal</strong><br>${base}<sup>${exp}</sup> = 1/${base}<sup>${Math.abs(exp)}</sup></div>`;
-    html += `<div class="step-item"><strong>Step 2: Calculate positive power</strong><br>${base}<sup>${Math.abs(exp)}</sup> = ${positive.toFixed(6)}</div>`;
-    html += `<div class="step-item"><strong>Step 3: Take reciprocal</strong><br>1/${positive.toFixed(6)} = ${result.toFixed(6)}</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'zero') {
-    const base = parseFloat(document.getElementById('specialBase').value);
-
-    if (base === 0) {
-      alert('0⁰ is undefined');
-      return;
-    }
-
-    html += `<h6 class="text-center"><span class="method-badge">Zero Exponent</span></h6>`;
-    html += `<div class="exp-result">${base}<sup>0</sup> = 1</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Zero Exponent: a<sup>0</sup> = 1 (where a ≠ 0)</h6>';
-    html += `<div class="step-item"><strong>Rule:</strong> Any non-zero number raised to the power of 0 equals 1</div>`;
-    html += `<div class="step-item"><strong>Why?</strong> Using quotient rule: a<sup>n</sup> ÷ a<sup>n</sup> = a<sup>n-n</sup> = a<sup>0</sup><br>But a<sup>n</sup> ÷ a<sup>n</sup> = 1, therefore a<sup>0</sup> = 1</div>`;
-    html += '</div>';
-
-  } else if (ruleType === 'fractional') {
-    const base = parseFloat(document.getElementById('specialBase').value);
-    const m = parseInt(document.getElementById('fracNum').value);
-    const n = parseInt(document.getElementById('fracDenom').value);
-
-    if (isNaN(m) || isNaN(n) || n === 0) {
-      alert('Please enter valid integers for numerator and denominator');
-      return;
-    }
-
-    const result = Math.pow(base, m/n);
-    const root = Math.pow(base, 1/n);
-    const rootPower = Math.pow(base, m/n);
-
-    html += `<h6 class="text-center"><span class="method-badge">Fractional Exponent</span></h6>`;
-    html += `<div class="exp-result">${base}<sup>${m}/${n}</sup> = <sup>${n}</sup>√(${base}<sup>${m}</sup>) = ${result.toFixed(6)}</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-book"></i> Fractional Exponent: a<sup>m/n</sup> = <sup>n</sup>√(a<sup>m</sup>)</h6>';
-    html += `<div class="step-item"><strong>Step 1: Understand the fraction</strong><br>Numerator (${m}) = power<br>Denominator (${n}) = root</div>`;
-    html += `<div class="step-item"><strong>Step 2: Method 1 - Power first</strong><br>${base}<sup>${m}</sup> = ${Math.pow(base,m).toFixed(4)}<br><sup>${n}</sup>√${Math.pow(base,m).toFixed(4)} = ${result.toFixed(6)}</div>`;
-    html += `<div class="step-item"><strong>Alternative: Root first</strong><br><sup>${n}</sup>√${base} = ${Math.pow(base, 1/n).toFixed(4)}<br>(${Math.pow(base, 1/n).toFixed(4)})<sup>${m}</sup> = ${result.toFixed(6)}</div>`;
-    html += '</div>';
-  }
-
-  html += '</div>';
-  document.getElementById('results').innerHTML = html;
-}
-
-// Simplify complex expression
-function simplifyExpression() {
-  const type = document.getElementById('simplifyType').value;
-  const a = parseFloat(document.getElementById('simplifyA').value);
-  const b = parseFloat(document.getElementById('simplifyB').value);
-
-  let html = '<div class="result-box">';
-
-  if (type === 'combo1') {
-    // (a²)³ × a⁴
-    html += `<h6 class="text-center"><span class="method-badge">Simplify (a²)³ × a⁴</span></h6>`;
-    html += `<div class="exp-result">(${a}²)³ × ${a}⁴ = ${a}¹⁰</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-list-ol"></i> Step-by-Step Solution</h6>';
-    html += `<div class="step-item"><strong>Step 1: Apply power rule to (a²)³</strong><br>(${a}²)³ = ${a}²ˣ³ = ${a}⁶</div>`;
-    html += `<div class="step-item"><strong>Step 2: Apply product rule</strong><br>${a}⁶ × ${a}⁴ = ${a}⁶⁺⁴ = ${a}¹⁰</div>`;
-    html += `<div class="step-item"><strong>Numerical result:</strong> ${Math.pow(a, 10).toExponential(4)}</div>`;
-    html += '</div>';
-
-  } else if (type === 'combo2') {
-    // a⁸ ÷ (a²)³
-    html += `<h6 class="text-center"><span class="method-badge">Simplify a⁸ ÷ (a²)³</span></h6>`;
-    html += `<div class="exp-result">${a}⁸ ÷ (${a}²)³ = ${a}²</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-list-ol"></i> Step-by-Step Solution</h6>';
-    html += `<div class="step-item"><strong>Step 1: Apply power rule to (a²)³</strong><br>(${a}²)³ = ${a}²ˣ³ = ${a}⁶</div>`;
-    html += `<div class="step-item"><strong>Step 2: Apply quotient rule</strong><br>${a}⁸ ÷ ${a}⁶ = ${a}⁸⁻⁶ = ${a}²</div>`;
-    html += `<div class="step-item"><strong>Numerical result:</strong> ${Math.pow(a, 2).toFixed(4)}</div>`;
-    html += '</div>';
-
-  } else if (type === 'combo3') {
-    // (a³b²)⁴
-    html += `<h6 class="text-center"><span class="method-badge">Simplify (a³b²)⁴</span></h6>`;
-    html += `<div class="exp-result">(${a}³ × ${b}²)⁴ = ${a}¹² × ${b}⁸</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-list-ol"></i> Step-by-Step Solution</h6>';
-    html += `<div class="step-item"><strong>Step 1: Apply power of product</strong><br>(a³b²)⁴ = (a³)⁴ × (b²)⁴</div>`;
-    html += `<div class="step-item"><strong>Step 2: Apply power rule to each</strong><br>(a³)⁴ = a³ˣ⁴ = a¹²<br>(b²)⁴ = b²ˣ⁴ = b⁸</div>`;
-    html += `<div class="step-item"><strong>Step 3: Write result</strong><br>a¹²b⁸</div>`;
-    html += `<div class="step-item"><strong>Numerical result:</strong> ${(Math.pow(a, 12) * Math.pow(b, 8)).toExponential(4)}</div>`;
-    html += '</div>';
-
-  } else if (type === 'combo4') {
-    // a⁻² × a⁵
-    html += `<h6 class="text-center"><span class="method-badge">Simplify a⁻² × a⁵</span></h6>`;
-    html += `<div class="exp-result">${a}⁻² × ${a}⁵ = ${a}³</div>`;
-
-    html += '<div class="step-section">';
-    html += '<h6><i class="fas fa-list-ol"></i> Step-by-Step Solution</h6>';
-    html += `<div class="step-item"><strong>Step 1: Apply product rule</strong><br>a⁻² × a⁵ = a⁻²⁺⁵ = a³</div>`;
-    html += `<div class="step-item"><strong>Alternative view:</strong><br>a⁻² = 1/a²<br>1/a² × a⁵ = a⁵/a² = a³</div>`;
-    html += `<div class="step-item"><strong>Numerical result:</strong> ${Math.pow(a, 3).toFixed(4)}</div>`;
-    html += '</div>';
-  }
-
-  html += '</div>';
-  document.getElementById('results').innerHTML = html;
-}
-
-// Show all laws
-function showAllLaws() {
-  const a = parseFloat(document.getElementById('compareBase').value);
-
-  let html = '<div class="result-box">';
-  html += `<h6 class="text-center"><span class="method-badge">All 8 Laws of Exponents (with a = ${a})</span></h6>`;
-
-  const laws = [
-    {
-      title: '1. Product Rule',
-      formula: 'aᵐ × aⁿ = aᵐ⁺ⁿ',
-      example: `${a}³ × ${a}² = ${a}⁵`,
-      value: Math.pow(a, 5)
-    },
-    {
-      title: '2. Quotient Rule',
-      formula: 'aᵐ ÷ aⁿ = aᵐ⁻ⁿ',
-      example: `${a}⁷ ÷ ${a}⁴ = ${a}³`,
-      value: Math.pow(a, 3)
-    },
-    {
-      title: '3. Power Rule',
-      formula: '(aᵐ)ⁿ = aᵐⁿ',
-      example: `(${a}²)³ = ${a}⁶`,
-      value: Math.pow(a, 6)
-    },
-    {
-      title: '4. Power of Product',
-      formula: '(ab)ⁿ = aⁿbⁿ',
-      example: `(${a} × 3)² = ${a}² × 9`,
-      value: Math.pow(a, 2) * 9
-    },
-    {
-      title: '5. Power of Quotient',
-      formula: '(a/b)ⁿ = aⁿ/bⁿ',
-      example: `(${a}/2)² = ${a}²/4`,
-      value: Math.pow(a, 2) / 4
-    },
-    {
-      title: '6. Negative Exponent',
-      formula: 'a⁻ⁿ = 1/aⁿ',
-      example: `${a}⁻² = 1/${a}²`,
-      value: Math.pow(a, -2)
-    },
-    {
-      title: '7. Zero Exponent',
-      formula: 'a⁰ = 1',
-      example: `${a}⁰ = 1`,
-      value: 1
-    },
-    {
-      title: '8. Fractional Exponent',
-      formula: 'aᵐ/ⁿ = ⁿ√(aᵐ)',
-      example: `${a}³/² = √(${a}³)`,
-      value: Math.pow(a, 1.5)
-    }
-  ];
-
-  for (const law of laws) {
-    html += '<div class="step-section">';
-    html += `<h6><span class="method-badge">${law.title}</span></h6>`;
-    html += `<div class="law-box">${law.formula}</div>`;
-    html += `<div class="step-item"><strong>Example:</strong> ${law.example} = ${law.value.toFixed(4)}</div>`;
-    html += '</div>';
-  }
-
-  html += '<div class="info-card">';
-  html += '<strong><i class="fas fa-lightbulb"></i> Mastery Tips:</strong><br>';
-  html += '• Product/Quotient: Add/subtract exponents when bases are the same<br>';
-  html += '• Powers: Multiply exponents when raising to a power<br>';
-  html += '• Negative: Move to reciprocal and make positive<br>';
-  html += '• Fractional: Numerator = power, Denominator = root';
-  html += '</div>';
-
-  html += '</div>';
-  document.getElementById('results').innerHTML = html;
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-  // Update simplify b visibility
-  document.getElementById('simplifyType').addEventListener('change', function() {
-    const needsB = this.value === 'combo3';
-    document.getElementById('simplifyBDiv').style.display = needsB ? 'block' : 'none';
-  });
-});
+    var obs = new IntersectionObserver(function(entries){
+        for (var j = 0; j < entries.length; j++) {
+            if (entries[j].isIntersecting) {
+                entries[j].target.classList.add('ec-visible');
+                obs.unobserve(entries[j].target);
+            }
+        }
+    }, { threshold: 0.15 });
+    for (var k = 0; k < els.length; k++) obs.observe(els[k]);
+})();
 </script>
-</div>
-<%@ include file="body-close.jsp"%>
+
+<!-- Core Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/exponent-calculator-render.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/exponent-calculator-export.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/exponent-calculator-core.js?v=<%=cacheVersion%>"></script>
+
+<%@ include file="modern/components/analytics.jsp" %>
+</body>
+</html>

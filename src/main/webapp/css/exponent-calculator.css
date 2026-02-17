@@ -1,0 +1,321 @@
+/* Exponent Calculator - Component Styles */
+
+:root {
+    --ec-tool: #d97706;
+    --ec-tool-dark: #b45309;
+    --ec-gradient: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    --ec-light: #fef3c7;
+}
+[data-theme="dark"] {
+    --ec-light: rgba(217, 119, 6, 0.15);
+}
+
+/* ===== Mode Toggle ===== */
+.ec-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.ec-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.65rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.ec-mode-btn.active {
+    background: var(--ec-gradient);
+    color: #fff;
+}
+.ec-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .ec-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .ec-mode-btn.active { background: var(--ec-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.ec-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+}
+.ec-input-group {
+    flex: 1;
+    min-width: 0;
+}
+.ec-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.ec-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    transition: border-color 0.15s;
+}
+.ec-input:focus {
+    outline: none;
+    border-color: var(--ec-tool);
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1);
+}
+
+/* ===== Rule Selector ===== */
+.ec-rule-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    cursor: pointer;
+}
+.ec-rule-select:focus {
+    outline: none;
+    border-color: var(--ec-tool);
+}
+
+/* ===== Live Preview ===== */
+.ec-preview {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+}
+.ec-preview .katex { font-size: 1em; }
+
+/* ===== Output Tabs ===== */
+.ec-output-tabs {
+    display: flex;
+    border-bottom: 1.5px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: 0.75rem 0.75rem 0 0;
+    overflow: hidden;
+}
+.ec-output-tab {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    position: relative;
+}
+.ec-output-tab.active {
+    color: var(--ec-tool);
+    background: var(--bg-primary);
+}
+.ec-output-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--ec-tool);
+}
+.ec-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Panels ===== */
+.ec-panel { display: none; }
+.ec-panel.active { display: block; }
+
+/* ===== Mode Forms ===== */
+.ec-mode-form { display: none; }
+.ec-mode-form.active { display: block; }
+
+/* ===== Step-by-Step ===== */
+.ec-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--ec-tool);
+    transition: background 0.15s;
+}
+.ec-step:hover { background: var(--bg-tertiary); }
+.ec-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--ec-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+.ec-step-content { flex: 1; min-width: 0; }
+.ec-step-desc {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+.ec-step-math {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+}
+.ec-step-math .katex { font-size: 0.9em; }
+
+/* ===== Rule Badge ===== */
+.ec-rule-badge {
+    display: inline-block;
+    background: var(--ec-gradient);
+    color: #fff;
+    padding: 0.2rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+/* ===== Law Card (All Laws mode) ===== */
+.ec-law-card {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--ec-tool);
+}
+.ec-law-card h4 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.ec-law-formula {
+    padding: 0.375rem 0.5rem;
+    background: var(--ec-light);
+    border-radius: 0.375rem;
+    margin-bottom: 0.375rem;
+    overflow-x: auto;
+}
+.ec-law-formula .katex { font-size: 0.85em; }
+.ec-law-example {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* ===== Quick Examples ===== */
+.ec-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.ec-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+}
+.ec-example-chip:hover {
+    background: var(--ec-light);
+    color: var(--ec-tool);
+    border-color: var(--ec-tool);
+}
+
+/* ===== Educational Content ===== */
+.ec-laws-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.ec-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+}
+.ec-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.ec-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.ec-callout {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+.ec-callout-icon { font-size: 1.25rem; flex-shrink: 0; }
+.ec-callout-text { font-size: 0.8125rem; line-height: 1.6; color: var(--text-secondary); }
+.ec-callout-insight { background: #fffbeb; border-left: 3px solid #d97706; }
+.ec-callout-tip { background: #ecfdf5; border-left: 3px solid #10b981; }
+[data-theme="dark"] .ec-callout-insight { background: rgba(217, 119, 6, 0.1); }
+[data-theme="dark"] .ec-callout-tip { background: rgba(16, 185, 129, 0.1); }
+
+/* ===== Animations ===== */
+.ec-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.ec-anim.ec-visible { opacity: 1; transform: translateY(0); }
+.ec-anim-d1 { transition-delay: 0.1s; }
+.ec-anim-d2 { transition-delay: 0.2s; }
+.ec-anim-d3 { transition-delay: 0.3s; }
+.ec-anim-d4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .ec-anim { opacity: 1; transform: none; transition: none; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .ec-input-row { flex-direction: column; gap: 0.375rem; }
+    .ec-laws-grid { grid-template-columns: 1fr; }
+}
