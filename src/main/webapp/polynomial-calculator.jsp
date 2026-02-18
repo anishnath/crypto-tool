@@ -116,26 +116,27 @@
         .faq-chevron{transition:transform 0.2s;flex-shrink:0}.faq-item.open .faq-chevron{transform:rotate(180deg)}
     </style>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Polynomial Calculator - Add Subtract Multiply Divide Free Online" />
-        <jsp:param name="toolDescription" value="Free polynomial calculator with step-by-step solutions. Add, subtract, multiply, divide polynomials, find roots, factor any degree. Graph + Python code." />
+        <jsp:param name="toolName" value="Polynomial Calculator with Steps - Factor, Roots, Division" />
+        <jsp:param name="toolDescription" value="Free polynomial calculator with step-by-step solutions. Add, subtract, multiply, divide, factor, find roots of any degree polynomial." />
         <jsp:param name="toolCategory" value="Mathematics" />
         <jsp:param name="toolUrl" value="polynomial-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="polynomial calculator, polynomial addition, polynomial subtraction, polynomial multiplication, polynomial division, polynomial long division, factor polynomial, polynomial roots, polynomial solver, polynomial graph, polynomial operations, algebra calculator" />
+        <jsp:param name="toolKeywords" value="polynomial calculator, polynomial calculator with steps, factor polynomial, polynomial long division calculator, find roots of polynomial, polynomial addition calculator, polynomial multiplication, polynomial solver, polynomial graphing calculator, algebra calculator, polynomial division with remainder" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="7 polynomial operations,Step-by-step KaTeX solutions,Interactive Plotly graph,Polynomial long division,Root finding,Factoring,Python compiler,LaTeX export,Share URL,Dark mode" />
-        <jsp:param name="teaches" value="Polynomial arithmetic, long division, factoring, root finding" />
-        <jsp:param name="educationalLevel" value="High School, College" />
+        <jsp:param name="toolFeatures" value="Add subtract multiply divide polynomials,Step-by-step solutions with LaTeX rendering,Factor polynomials of any degree,Find all real and complex roots,Polynomial long division with remainder,Interactive graph with Plotly,Python code generation,LaTeX and share URL export" />
+        <jsp:param name="teaches" value="Polynomial arithmetic, polynomial long division, polynomial factoring, root finding, Rational Root Theorem, synthetic division" />
+        <jsp:param name="educationalLevel" value="High School, College, University" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter polynomial P(x)|Type your polynomial expression like x^3+2x^2-5x+3 in the P(x) input field,Choose operation|Select an operation: Add Subtract Multiply Divide Factor Roots or Evaluate,Enter Q(x) if needed|For two-polynomial operations enter the second polynomial Q(x),Click Calculate|Click the Calculate button to see the step-by-step solution with LaTeX rendering,View graph|Switch to the Graph tab to see an interactive plot of your polynomial with roots marked,Export result|Copy the LaTeX formula or share your calculation via URL" />
         <jsp:param name="faq1q" value="How do you add and subtract polynomials?" />
-        <jsp:param name="faq1a" value="To add polynomials, combine like terms by adding their coefficients. For example (x^3+2x^2-5x+3) + (x^2-4) = x^3+3x^2-5x-1. To subtract, distribute the negative sign to the second polynomial first, then combine like terms." />
+        <jsp:param name="faq1a" value="To add polynomials, align like terms (same power of x) and add their coefficients. Example: (x^3+2x^2-5x+3) + (x^2-4) = x^3+3x^2-5x-1. To subtract, distribute the negative sign across the second polynomial first, then combine like terms. Our calculator shows each step." />
         <jsp:param name="faq2q" value="How does polynomial long division work?" />
-        <jsp:param name="faq2a" value="Polynomial long division works like numerical long division. Divide the leading term of the dividend by the leading term of the divisor to get the first term of the quotient. Multiply the divisor by this term, subtract from the dividend, and repeat with the remainder until the remainder has lower degree than the divisor." />
+        <jsp:param name="faq2a" value="Polynomial long division follows the same algorithm as numerical long division. Divide the leading term of the dividend by the leading term of the divisor to get the first quotient term. Multiply the entire divisor by that term, subtract from the dividend, then repeat with the remainder. Continue until the remainder degree is less than the divisor degree." />
         <jsp:param name="faq3q" value="How do you factor a polynomial?" />
-        <jsp:param name="faq3a" value="Common factoring methods include: extracting the greatest common factor (GCF), grouping, using special patterns like difference of squares (a^2-b^2 = (a+b)(a-b)), sum/difference of cubes, and for quadratics finding two numbers that multiply to ac and add to b." />
-        <jsp:param name="faq4q" value="What is the Fundamental Theorem of Algebra?" />
-        <jsp:param name="faq4a" value="The Fundamental Theorem of Algebra states that every non-constant polynomial with complex coefficients has at least one complex root. A polynomial of degree n has exactly n roots when counted with multiplicity. This means x^3-1 has exactly 3 roots: one real root (x=1) and two complex roots." />
-        <jsp:param name="faq5q" value="How do you find the roots of a polynomial?" />
-        <jsp:param name="faq5a" value="For quadratics use the quadratic formula. For higher degrees try the Rational Root Theorem to find integer or rational roots, then use synthetic division to reduce the degree. Factor out known roots and repeat. Some polynomials require numerical methods for irrational or complex roots." />
+        <jsp:param name="faq3a" value="Start by factoring out the greatest common factor (GCF). For quadratics, find two numbers that multiply to ac and add to b, or use the quadratic formula. For higher degrees, try the Rational Root Theorem, synthetic division, or special patterns like difference of squares a^2-b^2=(a+b)(a-b) and sum/difference of cubes." />
+        <jsp:param name="faq4q" value="Can this calculator find complex roots?" />
+        <jsp:param name="faq4a" value="Yes. The Fundamental Theorem of Algebra guarantees a degree-n polynomial has exactly n roots (counted with multiplicity) over the complex numbers. Our calculator uses the Nerdamer algebra engine to find both real and complex roots. For example, x^2+1=0 returns the roots i and -i." />
+        <jsp:param name="faq5q" value="What is the Rational Root Theorem?" />
+        <jsp:param name="faq5a" value="The Rational Root Theorem states that any rational root p/q of a polynomial with integer coefficients must have p dividing the constant term and q dividing the leading coefficient. For x^3-6x^2+11x-6, possible rational roots are plus or minus 1, 2, 3, 6. Testing these finds roots at x=1, x=2, and x=3." />
     </jsp:include>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
@@ -165,7 +166,7 @@
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">Polynomial Calculator - Add, Subtract, Multiply, Divide with Steps</h1>
+                <h1 class="tool-page-title">Polynomial Calculator with Steps - Factor, Roots & Division</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
@@ -348,54 +349,264 @@
 
     <!-- ==================== EDUCATIONAL CONTENT ==================== -->
     <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+        <!-- 1. What is a Polynomial -->
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What are Polynomials?</h2>
-            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">A <strong>polynomial</strong> is a mathematical expression consisting of variables, coefficients, and non-negative integer exponents, combined using addition, subtraction, and multiplication. For example, 3x<sup>4</sup> - 2x<sup>2</sup> + 7x - 5 is a polynomial of degree 4.</p>
-            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">Polynomials are classified by <strong>degree</strong> (highest exponent): constant (0), linear (1), quadratic (2), cubic (3), quartic (4), quintic (5), etc. They are also classified by the number of <strong>terms</strong>: monomial (1 term), binomial (2 terms), trinomial (3 terms).</p>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What is a Polynomial?</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">A <strong>polynomial</strong> is an expression built from a variable (usually <em>x</em>), constants called <strong>coefficients</strong>, and non-negative integer exponents, joined by addition and subtraction. The general form is:</p>
+            <div style="background:var(--bg-secondary);border-left:3px solid var(--poly-tool,#0d9488);padding:0.75rem 1rem;border-radius:0 0.375rem 0.375rem 0;margin:0.75rem 0;font-family:var(--font-mono);font-size:0.9375rem;color:var(--text-primary);overflow-x:auto;">
+                P(x) = a<sub>n</sub>x<sup>n</sup> + a<sub>n-1</sub>x<sup>n-1</sup> + &hellip; + a<sub>1</sub>x + a<sub>0</sub>
+            </div>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">where <strong>a<sub>n</sub></strong> is the <em>leading coefficient</em> (must be &ne; 0), <strong>n</strong> is the <em>degree</em>, and <strong>a<sub>0</sub></strong> is the <em>constant term</em>. For example, 3x<sup>4</sup> &minus; 2x<sup>2</sup> + 7x &minus; 5 has degree 4, leading coefficient 3, and constant term &minus;5.</p>
+
+            <!-- Anatomy SVG diagram -->
+            <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" style="max-width:540px;width:100%;margin:1rem 0 0.5rem;">
+                <rect x="0" y="0" width="560" height="130" rx="8" fill="var(--bg-secondary,#f8fafc)"/>
+                <!-- polynomial text -->
+                <text x="280" y="52" text-anchor="middle" font-size="22" font-weight="600" fill="var(--text-primary,#0f172a)" font-family="monospace">3x<tspan baseline-shift="super" font-size="14">4</tspan> &minus; 2x<tspan baseline-shift="super" font-size="14">2</tspan> + 7x &minus; 5</text>
+                <!-- arrows and labels -->
+                <line x1="95" y1="60" x2="95" y2="90" stroke="#0d9488" stroke-width="1.5"/>
+                <text x="95" y="106" text-anchor="middle" font-size="10" fill="#0d9488" font-weight="600">Leading</text>
+                <text x="95" y="118" text-anchor="middle" font-size="10" fill="#0d9488" font-weight="600">Coefficient (3)</text>
+                <line x1="135" y1="30" x2="135" y2="16" stroke="#b45309" stroke-width="1.5"/>
+                <text x="135" y="12" text-anchor="middle" font-size="10" fill="#b45309" font-weight="600">Degree (4)</text>
+                <line x1="480" y1="60" x2="480" y2="90" stroke="#7c3aed" stroke-width="1.5"/>
+                <text x="480" y="106" text-anchor="middle" font-size="10" fill="#7c3aed" font-weight="600">Constant</text>
+                <text x="480" y="118" text-anchor="middle" font-size="10" fill="#7c3aed" font-weight="600">Term (&minus;5)</text>
+                <line x1="280" y1="60" x2="280" y2="85" stroke="#94a3b8" stroke-width="1"/>
+                <text x="280" y="98" text-anchor="middle" font-size="9.5" fill="#94a3b8" font-weight="500">4 terms = polynomial</text>
+            </svg>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Classification by Degree</h3>
+            <table class="poly-ops-table">
+                <thead><tr><th>Degree</th><th>Name</th><th>General Form</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td>0</td><td style="font-family:var(--font-sans);font-weight:500;">Constant</td><td>a<sub>0</sub></td><td>7</td></tr>
+                    <tr><td>1</td><td style="font-family:var(--font-sans);font-weight:500;">Linear</td><td>ax + b</td><td>2x + 3</td></tr>
+                    <tr><td>2</td><td style="font-family:var(--font-sans);font-weight:500;">Quadratic</td><td>ax&sup2; + bx + c</td><td>x&sup2; &minus; 5x + 6</td></tr>
+                    <tr><td>3</td><td style="font-family:var(--font-sans);font-weight:500;">Cubic</td><td>ax&sup3; + bx&sup2; + cx + d</td><td>x&sup3; &minus; 6x&sup2; + 11x &minus; 6</td></tr>
+                    <tr><td>4</td><td style="font-family:var(--font-sans);font-weight:500;">Quartic</td><td>ax<sup>4</sup> + &hellip;</td><td>x<sup>4</sup> &minus; 1</td></tr>
+                    <tr><td>5</td><td style="font-family:var(--font-sans);font-weight:500;">Quintic</td><td>ax<sup>5</sup> + &hellip;</td><td>x<sup>5</sup> &minus; x &minus; 1</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Classification by Number of Terms</h3>
             <div class="poly-edu-grid">
                 <div class="poly-edu-card">
-                    <h4>Degree</h4>
-                    <p>The degree of a polynomial is the highest power of the variable. The degree of 3x<sup>4</sup> - x + 5 is 4.</p>
+                    <h4>Monomial (1 term)</h4>
+                    <p>A single term: 5x&sup3;, &minus;2x, 7. No addition or subtraction involved.</p>
                 </div>
                 <div class="poly-edu-card">
-                    <h4>Leading Coefficient</h4>
-                    <p>The coefficient of the highest-degree term. In 3x<sup>4</sup> - x + 5, the leading coefficient is 3.</p>
+                    <h4>Binomial (2 terms)</h4>
+                    <p>Two terms: x&sup2; &minus; 4, 3x + 1. The difference of squares a&sup2; &minus; b&sup2; is always a binomial.</p>
                 </div>
                 <div class="poly-edu-card">
-                    <h4>Constant Term</h4>
-                    <p>The term with no variable. In 3x<sup>4</sup> - x + 5, the constant term is 5.</p>
+                    <h4>Trinomial (3 terms)</h4>
+                    <p>Three terms: x&sup2; &minus; 5x + 6. Standard quadratics ax&sup2; + bx + c are trinomials.</p>
                 </div>
             </div>
         </div>
 
+        <!-- 2. How to Add and Subtract Polynomials -->
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Polynomial Operations Reference</h2>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">How to Add and Subtract Polynomials</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">Adding and subtracting polynomials means <strong>combining like terms</strong> &mdash; terms with the same variable raised to the same power. The key rule: you can only add or subtract coefficients of matching degree terms.</p>
+
+            <h3 style="font-size:1rem;margin:1rem 0 0.5rem;color:var(--text-primary);">Addition: Step-by-Step</h3>
+            <ol style="color:var(--text-secondary);line-height:2;padding-left:1.25rem;margin:0 0 0.75rem;">
+                <li><strong>Write both polynomials in standard form</strong> (descending powers).</li>
+                <li><strong>Align like terms</strong> vertically &mdash; match x&sup3; with x&sup3;, x&sup2; with x&sup2;, etc.</li>
+                <li><strong>Add the coefficients</strong> of each group of like terms.</li>
+                <li><strong>Write the result</strong> in standard form, dropping any zero-coefficient terms.</li>
+            </ol>
+            <div style="background:var(--bg-secondary);padding:1rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.9;overflow-x:auto;color:var(--text-primary);">
+                &nbsp;&nbsp;(x&sup3; + 2x&sup2; &minus; 5x + 3)<br>
+                + (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x&sup2; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&minus; 4)<br>
+                <span style="border-top:1px solid var(--border);display:inline-block;width:100%;margin:0.125rem 0;"></span>
+                = x&sup3; + 3x&sup2; &minus; 5x &minus; 1
+            </div>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Subtraction: Step-by-Step</h3>
+            <p style="color:var(--text-secondary);margin-bottom:0.5rem;line-height:1.7;">Subtraction has one extra step: <strong>distribute the negative sign</strong> to every term of the second polynomial before combining like terms.</p>
+            <div style="background:var(--bg-secondary);padding:1rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.9;overflow-x:auto;color:var(--text-primary);">
+                (3x&sup3; &minus; x&sup2; + 4) &minus; (x&sup3; + 2x &minus; 1)<br>
+                = 3x&sup3; &minus; x&sup2; + 4 <span style="color:var(--poly-tool,#0d9488);font-weight:600;">&minus; x&sup3; &minus; 2x + 1</span> &nbsp;&larr; distribute the negative<br>
+                = 2x&sup3; &minus; x&sup2; &minus; 2x + 5
+            </div>
+        </div>
+
+        <!-- 3. How to Multiply Polynomials -->
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">How to Multiply Polynomials</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">To multiply polynomials, <strong>distribute each term</strong> of the first polynomial across every term of the second, then combine like terms. For two binomials, this is called the <strong>FOIL method</strong> (First, Outer, Inner, Last).</p>
+
+            <h3 style="font-size:1rem;margin:1rem 0 0.5rem;color:var(--text-primary);">FOIL Method for Binomials</h3>
+            <div style="background:var(--bg-secondary);padding:1rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.9;overflow-x:auto;color:var(--text-primary);">
+                (x + 3)(x &minus; 2)<br>
+                = x&middot;x + x&middot;(&minus;2) + 3&middot;x + 3&middot;(&minus;2) &nbsp;&larr; <span style="color:var(--text-muted);">F + O + I + L</span><br>
+                = x&sup2; &minus; 2x + 3x &minus; 6<br>
+                = x&sup2; + x &minus; 6
+            </div>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">General Distribution</h3>
+            <p style="color:var(--text-secondary);margin-bottom:0.5rem;line-height:1.7;">For polynomials with more than two terms, distribute every term of the first polynomial to every term of the second. The degree of the result equals the sum of the two input degrees.</p>
+            <div style="background:var(--bg-secondary);padding:1rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.9;overflow-x:auto;color:var(--text-primary);">
+                (x&sup2; + 2x + 1)(x &minus; 3)<br>
+                = x&sup2;&middot;x + x&sup2;&middot;(&minus;3) + 2x&middot;x + 2x&middot;(&minus;3) + 1&middot;x + 1&middot;(&minus;3)<br>
+                = x&sup3; &minus; 3x&sup2; + 2x&sup2; &minus; 6x + x &minus; 3<br>
+                = x&sup3; &minus; x&sup2; &minus; 5x &minus; 3
+            </div>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Special Products to Memorize</h3>
             <table class="poly-ops-table">
-                <thead><tr><th style="width:25%;">Operation</th><th style="width:40%;">Rule</th><th>Example</th></tr></thead>
+                <thead><tr><th>Pattern</th><th>Formula</th><th>Example</th></tr></thead>
                 <tbody>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Addition</td><td>Combine like terms</td><td>(x&sup2;+3x) + (2x&sup2;-x) = 3x&sup2;+2x</td></tr>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Subtraction</td><td>Distribute negative, combine</td><td>(x&sup2;+3x) - (2x&sup2;-x) = -x&sup2;+4x</td></tr>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Multiplication</td><td>FOIL / distribute each term</td><td>(x+1)(x-2) = x&sup2;-x-2</td></tr>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Division</td><td>Long division algorithm</td><td>(x&sup3;-1)/(x-1) = x&sup2;+x+1</td></tr>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Factoring</td><td>GCF, grouping, special patterns</td><td>x&sup2;-5x+6 = (x-2)(x-3)</td></tr>
-                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Root Finding</td><td>Solve P(x) = 0</td><td>x&sup2;-4 = 0 &rarr; x = &plusmn;2</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Perfect Square</td><td>(a + b)&sup2; = a&sup2; + 2ab + b&sup2;</td><td>(x + 3)&sup2; = x&sup2; + 6x + 9</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Perfect Square</td><td>(a &minus; b)&sup2; = a&sup2; &minus; 2ab + b&sup2;</td><td>(x &minus; 4)&sup2; = x&sup2; &minus; 8x + 16</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Difference of Squares</td><td>(a + b)(a &minus; b) = a&sup2; &minus; b&sup2;</td><td>(x + 5)(x &minus; 5) = x&sup2; &minus; 25</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Sum of Cubes</td><td>a&sup3; + b&sup3; = (a + b)(a&sup2; &minus; ab + b&sup2;)</td><td>x&sup3; + 8 = (x + 2)(x&sup2; &minus; 2x + 4)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Diff. of Cubes</td><td>a&sup3; &minus; b&sup3; = (a &minus; b)(a&sup2; + ab + b&sup2;)</td><td>x&sup3; &minus; 1 = (x &minus; 1)(x&sup2; + x + 1)</td></tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- 4. Polynomial Long Division -->
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Fundamental Theorem of Algebra</h2>
-            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">The <strong>Fundamental Theorem of Algebra</strong> states that every non-constant polynomial with complex coefficients has at least one complex root. As a corollary, a polynomial of degree <em>n</em> has exactly <em>n</em> roots when counted with multiplicity (in the complex numbers).</p>
-            <p style="color:var(--text-secondary);line-height:1.7;">This means that x<sup>3</sup> - 1 has exactly 3 roots: x = 1 (real) and x = -1/2 &plusmn; (&radic;3/2)i (complex). Our calculator finds all real and complex roots using algebraic methods.</p>
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Polynomial Long Division &mdash; Step by Step</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">Polynomial long division works exactly like the long division you learned with numbers. It divides a polynomial <strong>P(x)</strong> (dividend) by another polynomial <strong>D(x)</strong> (divisor) to produce a <strong>quotient Q(x)</strong> and a <strong>remainder R(x)</strong> such that:</p>
+            <div style="background:var(--bg-secondary);border-left:3px solid var(--poly-tool,#0d9488);padding:0.75rem 1rem;border-radius:0 0.375rem 0.375rem 0;margin:0.75rem 0;font-family:var(--font-mono);font-size:0.9375rem;color:var(--text-primary);overflow-x:auto;">
+                P(x) = D(x) &middot; Q(x) + R(x), &nbsp; where deg(R) &lt; deg(D)
+            </div>
+
+            <h3 style="font-size:1rem;margin:1rem 0 0.5rem;color:var(--text-primary);">Algorithm</h3>
+            <ol style="color:var(--text-secondary);line-height:2;padding-left:1.25rem;margin:0 0 0.75rem;">
+                <li><strong>Divide</strong> the leading term of the dividend by the leading term of the divisor. This gives the first term of the quotient.</li>
+                <li><strong>Multiply</strong> the entire divisor by that quotient term.</li>
+                <li><strong>Subtract</strong> the result from the dividend to get a new (reduced) polynomial.</li>
+                <li><strong>Repeat</strong> steps 1&ndash;3 using the new polynomial as the dividend, until the degree of the remainder is less than the degree of the divisor.</li>
+            </ol>
+
+            <h3 style="font-size:1rem;margin:1rem 0 0.5rem;color:var(--text-primary);">Worked Example: (x&sup3; + 2x&sup2; &minus; 5x + 3) &div; (x &minus; 1)</h3>
+            <div style="background:var(--bg-secondary);padding:1rem 1.25rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:2.2;overflow-x:auto;color:var(--text-primary);">
+                <strong>Step 1:</strong> x&sup3; &div; x = x&sup2;. &nbsp; Multiply: x&sup2;(x &minus; 1) = x&sup3; &minus; x&sup2;. &nbsp; Subtract: 3x&sup2; &minus; 5x + 3<br>
+                <strong>Step 2:</strong> 3x&sup2; &div; x = 3x. &nbsp; Multiply: 3x(x &minus; 1) = 3x&sup2; &minus; 3x. &nbsp; Subtract: &minus;2x + 3<br>
+                <strong>Step 3:</strong> &minus;2x &div; x = &minus;2. &nbsp; Multiply: &minus;2(x &minus; 1) = &minus;2x + 2. &nbsp; Subtract: 1<br>
+                <span style="border-top:1px solid var(--border);display:inline-block;width:100%;margin:0.25rem 0;"></span>
+                <strong>Result:</strong> Q(x) = x&sup2; + 3x &minus; 2, &nbsp; R(x) = 1<br>
+                <strong>Check:</strong> (x &minus; 1)(x&sup2; + 3x &minus; 2) + 1 = x&sup3; + 2x&sup2; &minus; 5x + 3 &nbsp; &#10003;
+            </div>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Synthetic Division (Shortcut)</h3>
+            <p style="color:var(--text-secondary);line-height:1.7;">When dividing by a <strong>linear divisor</strong> of the form (x &minus; c), you can use <strong>synthetic division</strong> instead. Write only the coefficients of the dividend, bring down the first coefficient, multiply by c, add to the next coefficient, and repeat. The last number is the remainder. Synthetic division is faster but only works when the divisor is linear.</p>
         </div>
 
+        <!-- 5. How to Factor Polynomials -->
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">How to Factor Polynomials</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">Factoring means writing a polynomial as a <strong>product of simpler polynomials</strong>. It is the reverse of multiplication. Factoring is essential for solving polynomial equations, simplifying rational expressions, and finding roots.</p>
+
+            <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary);">Factoring Strategy (in order)</h3>
+            <ol style="color:var(--text-secondary);line-height:2;padding-left:1.25rem;margin:0 0 1rem;">
+                <li><strong>Factor out the GCF</strong> (Greatest Common Factor). Always do this first. Example: 6x&sup3; &minus; 9x&sup2; = 3x&sup2;(2x &minus; 3).</li>
+                <li><strong>Count the terms:</strong>
+                    <ul style="margin:0.25rem 0 0.25rem 1rem;line-height:2;">
+                        <li><em>2 terms</em> &rarr; Check difference of squares, sum/difference of cubes.</li>
+                        <li><em>3 terms</em> &rarr; Try trinomial factoring (find two numbers that multiply to ac and add to b), or use the quadratic formula.</li>
+                        <li><em>4+ terms</em> &rarr; Try factoring by grouping.</li>
+                    </ul>
+                </li>
+                <li><strong>Check each factor</strong> to see if it can be factored further.</li>
+                <li><strong>Verify</strong> by multiplying the factors back together.</li>
+            </ol>
+
+            <h3 style="font-size:1rem;margin:0.5rem 0 0.5rem;color:var(--text-primary);">Factoring Formulas Reference</h3>
+            <table class="poly-ops-table">
+                <thead><tr><th style="width:40%;">Pattern</th><th>Factored Form</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Difference of Squares</td><td>a&sup2; &minus; b&sup2; = (a + b)(a &minus; b)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Perfect Square Trinomial</td><td>a&sup2; + 2ab + b&sup2; = (a + b)&sup2;</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Sum of Cubes</td><td>a&sup3; + b&sup3; = (a + b)(a&sup2; &minus; ab + b&sup2;)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Difference of Cubes</td><td>a&sup3; &minus; b&sup3; = (a &minus; b)(a&sup2; + ab + b&sup2;)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Trinomial (a=1)</td><td>x&sup2; + bx + c = (x + p)(x + q) where pq = c, p+q = b</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Grouping (4 terms)</td><td>ax + ay + bx + by = (a + b)(x + y)</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">Worked Example: Factor x&sup3; &minus; 6x&sup2; + 11x &minus; 6</h3>
+            <div style="background:var(--bg-secondary);padding:1rem 1.25rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:2.2;overflow-x:auto;color:var(--text-primary);">
+                <strong>1.</strong> Possible rational roots (p/q): &plusmn;1, &plusmn;2, &plusmn;3, &plusmn;6<br>
+                <strong>2.</strong> Test x = 1: &nbsp; 1 &minus; 6 + 11 &minus; 6 = 0 &nbsp; &#10003; &nbsp; So (x &minus; 1) is a factor<br>
+                <strong>3.</strong> Divide out: (x&sup3; &minus; 6x&sup2; + 11x &minus; 6) &div; (x &minus; 1) = x&sup2; &minus; 5x + 6<br>
+                <strong>4.</strong> Factor the quadratic: x&sup2; &minus; 5x + 6 = (x &minus; 2)(x &minus; 3)<br>
+                <span style="border-top:1px solid var(--border);display:inline-block;width:100%;margin:0.25rem 0;"></span>
+                <strong>Result:</strong> x&sup3; &minus; 6x&sup2; + 11x &minus; 6 = (x &minus; 1)(x &minus; 2)(x &minus; 3)
+            </div>
+        </div>
+
+        <!-- 6. Finding Roots of Polynomials -->
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">How to Find the Roots of a Polynomial</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">The <strong>roots</strong> (or zeros) of a polynomial P(x) are the values of x where P(x) = 0. Graphically, roots are the x-intercepts of the polynomial curve. Finding roots is one of the most important problems in algebra.</p>
+
+            <h3 style="font-size:1rem;margin:1rem 0 0.5rem;color:var(--text-primary);">Methods by Degree</h3>
+            <table class="poly-ops-table">
+                <thead><tr><th>Degree</th><th>Method</th><th>Formula / Technique</th></tr></thead>
+                <tbody>
+                    <tr><td>1 (Linear)</td><td style="font-family:var(--font-sans);font-weight:500;">Isolate x</td><td>ax + b = 0 &rarr; x = &minus;b/a</td></tr>
+                    <tr><td>2 (Quadratic)</td><td style="font-family:var(--font-sans);font-weight:500;">Quadratic Formula</td><td>x = (&minus;b &plusmn; &radic;(b&sup2; &minus; 4ac)) / 2a</td></tr>
+                    <tr><td>3+ (Higher)</td><td style="font-family:var(--font-sans);font-weight:500;">Rational Root Theorem + Synthetic Division</td><td>Test p/q candidates, factor out found roots, reduce degree</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">The Rational Root Theorem</h3>
+            <p style="color:var(--text-secondary);margin-bottom:0.5rem;line-height:1.7;">For a polynomial with <strong>integer coefficients</strong>, any rational root p/q (in lowest terms) must satisfy: <strong>p divides the constant term</strong> and <strong>q divides the leading coefficient</strong>. This gives a finite list of candidates to test.</p>
+            <div style="background:var(--bg-secondary);padding:1rem 1.25rem;border-radius:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:2;overflow-x:auto;color:var(--text-primary);">
+                <strong>Example:</strong> 2x&sup3; &minus; 3x&sup2; &minus; 8x + 12<br>
+                Constant term = 12 &rarr; divisors of 12: &plusmn;1, &plusmn;2, &plusmn;3, &plusmn;4, &plusmn;6, &plusmn;12<br>
+                Leading coefficient = 2 &rarr; divisors of 2: &plusmn;1, &plusmn;2<br>
+                Candidates (p/q): &plusmn;1, &plusmn;2, &plusmn;3, &plusmn;4, &plusmn;6, &plusmn;12, &plusmn;1/2, &plusmn;3/2
+            </div>
+
+            <h3 style="font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--text-primary);">The Discriminant (Quadratic)</h3>
+            <p style="color:var(--text-secondary);line-height:1.7;">For a quadratic ax&sup2; + bx + c, the discriminant <strong>&Delta; = b&sup2; &minus; 4ac</strong> determines the nature of roots: if &Delta; &gt; 0, two distinct real roots; if &Delta; = 0, one repeated real root; if &Delta; &lt; 0, two complex conjugate roots.</p>
+        </div>
+
+        <!-- 7. Fundamental Theorem of Algebra -->
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">The Fundamental Theorem of Algebra</h2>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">The <strong>Fundamental Theorem of Algebra</strong> states that every non-constant polynomial with complex coefficients has at least one complex root. The key consequence: a polynomial of degree <em>n</em> has <strong>exactly n roots</strong> when counted with multiplicity (over the complex numbers).</p>
+            <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">This means any degree-n polynomial can be completely factored into n linear factors:</p>
+            <div style="background:var(--bg-secondary);border-left:3px solid var(--poly-tool,#0d9488);padding:0.75rem 1rem;border-radius:0 0.375rem 0.375rem 0;margin:0.75rem 0;font-family:var(--font-mono);font-size:0.9375rem;color:var(--text-primary);overflow-x:auto;">
+                P(x) = a<sub>n</sub>(x &minus; r<sub>1</sub>)(x &minus; r<sub>2</sub>) &hellip; (x &minus; r<sub>n</sub>)
+            </div>
+            <p style="color:var(--text-secondary);margin-bottom:0;line-height:1.7;"><strong>Example:</strong> x&sup3; &minus; 1 has exactly 3 roots: x = 1 (real), x = &minus;1/2 + (&radic;3/2)i, and x = &minus;1/2 &minus; (&radic;3/2)i (complex conjugate pair). Complex roots of real-coefficient polynomials always come in conjugate pairs.</p>
+        </div>
+
+        <!-- 8. Polynomial Operations Reference (quick table) -->
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Polynomial Operations Quick Reference</h2>
+            <table class="poly-ops-table">
+                <thead><tr><th style="width:20%;">Operation</th><th style="width:35%;">Rule</th><th style="width:25%;">Example</th><th>Result Degree</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Addition</td><td>Combine like terms</td><td>(x&sup2;+3x) + (2x&sup2;&minus;x)</td><td>max(deg P, deg Q)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Subtraction</td><td>Distribute negative, combine</td><td>(x&sup2;+3x) &minus; (2x&sup2;&minus;x)</td><td>max(deg P, deg Q)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Multiplication</td><td>Distribute each term (FOIL)</td><td>(x+1)(x&minus;2)</td><td>deg P + deg Q</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Division</td><td>Long division algorithm</td><td>(x&sup3;&minus;1) &div; (x&minus;1)</td><td>deg P &minus; deg Q</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Factoring</td><td>GCF, grouping, formulas</td><td>x&sup2;&minus;5x+6</td><td>&mdash;</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Roots</td><td>Solve P(x) = 0</td><td>x&sup2;&minus;4 = 0</td><td>n roots (deg n)</td></tr>
+                    <tr><td style="font-family:var(--font-sans);font-weight:500;">Evaluate</td><td>Substitute x = a</td><td>P(2) where P = x&sup2;+1</td><td>scalar</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9. FAQ -->
         <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
             <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you add and subtract polynomials?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To add polynomials, combine like terms by adding their coefficients. For example (x&sup3;+2x&sup2;-5x+3) + (x&sup2;-4) = x&sup3;+3x&sup2;-5x-1. To subtract, distribute the negative sign to the second polynomial first, then combine like terms.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How does polynomial long division work?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Polynomial long division works like numerical long division. Divide the leading term of the dividend by the leading term of the divisor to get the first term of the quotient. Multiply the divisor by this term, subtract from the dividend, and repeat with the remainder until the remainder has lower degree than the divisor.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you factor a polynomial?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Common factoring methods include: extracting the greatest common factor (GCF), grouping, using special patterns like difference of squares (a&sup2;-b&sup2; = (a+b)(a-b)), sum/difference of cubes, and for quadratics finding two numbers that multiply to ac and add to b.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is the Fundamental Theorem of Algebra?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The Fundamental Theorem of Algebra states that every non-constant polynomial with complex coefficients has at least one complex root. A polynomial of degree n has exactly n roots when counted with multiplicity. This means x&sup3;-1 has exactly 3 roots: one real root (x=1) and two complex roots.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you find the roots of a polynomial?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">For quadratics use the quadratic formula. For higher degrees try the Rational Root Theorem to find integer or rational roots, then use synthetic division to reduce the degree. Factor out known roots and repeat. Some polynomials require numerical methods for irrational or complex roots.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you add and subtract polynomials?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To add polynomials, align like terms (same power of x) and add their coefficients. Example: (x&sup3;+2x&sup2;&minus;5x+3) + (x&sup2;&minus;4) = x&sup3;+3x&sup2;&minus;5x&minus;1. To subtract, distribute the negative sign across the second polynomial first, then combine like terms. Our calculator shows each step.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How does polynomial long division work?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Polynomial long division follows the same algorithm as numerical long division. Divide the leading term of the dividend by the leading term of the divisor to get the first quotient term. Multiply the entire divisor by that term, subtract from the dividend, then repeat. Continue until the remainder degree is less than the divisor degree. The result is P(x) = D(x)&middot;Q(x) + R(x).</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do you factor a polynomial?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Start by factoring out the greatest common factor (GCF). For quadratics, find two numbers that multiply to ac and add to b, or use the quadratic formula. For higher degrees, try the Rational Root Theorem to find rational roots, then use synthetic division to reduce the degree. Special patterns include difference of squares a&sup2;&minus;b&sup2;=(a+b)(a&minus;b) and sum/difference of cubes.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can this calculator find complex roots?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Yes. The Fundamental Theorem of Algebra guarantees a degree-n polynomial has exactly n roots (counted with multiplicity) over the complex numbers. Our calculator uses the Nerdamer algebra engine to find both real and complex roots. For example, x&sup2;+1=0 returns the roots i and &minus;i. Complex roots of real-coefficient polynomials always come in conjugate pairs.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is the Rational Root Theorem?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The Rational Root Theorem states that any rational root p/q of a polynomial with integer coefficients must have p dividing the constant term and q dividing the leading coefficient. For x&sup3;&minus;6x&sup2;+11x&minus;6, possible rational roots are &plusmn;1, &plusmn;2, &plusmn;3, &plusmn;6. Testing these finds roots at x=1, x=2, and x=3.</div></div>
         </div>
     </section>
 
