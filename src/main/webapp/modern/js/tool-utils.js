@@ -667,6 +667,74 @@
         },
 
         /**
+         * Download a DOM element as PNG using dom-to-image-more (when loaded).
+         * Prefer this for MathJax/LaTeX content. Falls back to downloadCanvasAsImage (html2canvas) if domtoimage unavailable.
+         *
+         * @param {Element|string} source - DOM element or CSS selector
+         * @param {string} filename - Filename (default: 'download.png')
+         * @param {Object} options - Options
+         * @param {Function} options.filter - Node filter for domtoimage (return false to exclude)
+         * @param {string} options.backgroundColor - Background (default: '#ffffff')
+         * @param {boolean} options.showToast - Show toast (default: true)
+         * @param {string} options.toastMessage - Custom toast message
+         * @param {boolean} options.showSupportPopup - Show support popup (default: true)
+         * @param {string} options.toolName - Tool name for popup
+         * @returns {Promise<boolean>} Success status
+         */
+        downloadDomAsImage: async function (source, filename = 'download.png', options = {}) {
+            var self = this;
+            var el = typeof source === 'string' ? document.querySelector(source) : source;
+            if (!el) {
+                this.showToast('Element not found for image capture', 2000, 'error');
+                return false;
+            }
+            var opts = options || {};
+            var showToast = opts.showToast !== false;
+            var toastMessage = opts.toastMessage || null;
+            var showSupportPopup = opts.showSupportPopup !== false;
+            var toolName = opts.toolName || null;
+
+            try {
+                if (showToast) {
+                    this.showToast('Generating image...', 1500, 'info');
+                }
+                if (typeof domtoimage !== 'undefined' && domtoimage.toPng) {
+                    var domOpts = {
+                        quality: 1,
+                        bgcolor: (opts.backgroundColor || '#ffffff'),
+                        width: el.offsetWidth,
+                        height: el.offsetHeight,
+                        style: { margin: '0', padding: '20px' }
+                    };
+                    if (typeof opts.filter === 'function') {
+                        domOpts.filter = opts.filter;
+                    }
+                    var dataUrl = await domtoimage.toPng(el, domOpts);
+                    var link = document.createElement('a');
+                    link.download = filename;
+                    link.href = dataUrl;
+                    link.click();
+                    if (showToast) {
+                        this.showToast(toastMessage || 'Downloaded ' + filename, 2000, 'success');
+                    }
+                    if (showSupportPopup) {
+                        setTimeout(function () {
+                            self.showSupportPopup(toolName, 'Downloaded: ' + filename);
+                        }, 500);
+                    }
+                    return true;
+                }
+                return await this.downloadCanvasAsImage(source, filename, opts);
+            } catch (err) {
+                console.error('Download image failed:', err);
+                if (showToast) {
+                    this.showToast('Failed to generate image: ' + (err.message || ''), 3000, 'error');
+                }
+                return false;
+            }
+        },
+
+        /**
          * Download a DOM element or canvas as a PNG image with 8gwifi.org watermark
          *
          * Supports:
