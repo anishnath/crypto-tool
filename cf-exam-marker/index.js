@@ -4,6 +4,8 @@
 import { buildLogarithmPrompt } from './logarithm.js';
 import { buildLinearSystemPrompt } from './linear-system.js';
 import { buildPolynomialPrompt } from './polynomial.js';
+import { buildVectorPrompt } from './vector.js';
+import { buildTrigonometryPrompt } from './trigonometry.js';
 
 const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',
@@ -683,7 +685,7 @@ async function handleMathSteps(request, env, ctx) {
   if (!expression) {
     return jsonResponse({ error: 'Missing required field: expression' }, { status: 400 });
   }
-  if (!answer && operation !== 'logarithm' && operation !== 'linear_system' && operation !== 'polynomial') {
+  if (!answer && operation !== 'logarithm' && operation !== 'linear_system' && operation !== 'polynomial' && operation !== 'vector' && operation !== 'trigonometry') {
     return jsonResponse({ error: 'Missing required field: answer' }, { status: 400 });
   }
 
@@ -693,6 +695,8 @@ async function handleMathSteps(request, env, ctx) {
   const effectiveBounds = op === 'logarithm' ? { lower: mode || 'solve', upper: '' }
     : op === 'linear_system' ? { lower: mode || 'gaussian', upper: '' }
     : op === 'polynomial' ? { lower: mode || 'add', upper: '' }
+    : op === 'vector' ? { lower: mode || 'add', upper: '' }
+    : op === 'trigonometry' ? { lower: mode || 'evaluate', upper: '' }
     : bounds;
   const cacheKey = buildCacheKey(op, expression, v, effectiveBounds);
 
@@ -739,7 +743,11 @@ async function handleMathSteps(request, env, ctx) {
         ? buildLinearSystemPrompt(expression, mode || 'gaussian', answer || 'unknown')
         : op === 'polynomial'
           ? buildPolynomialPrompt(expression, v, answer || 'unknown', mode || 'add')
-          : buildMathStepsPrompt(op, expression, v, answer, bounds);
+          : op === 'vector'
+            ? buildVectorPrompt(expression, v, answer || 'unknown', mode || 'add')
+            : op === 'trigonometry'
+              ? buildTrigonometryPrompt(expression, v, answer || 'unknown', mode || 'evaluate')
+              : buildMathStepsPrompt(op, expression, v, answer, bounds);
 
     const result = await callOpenAI(prompt, env, {
       model: 'gpt-4o-mini',
@@ -766,11 +774,11 @@ async function handleMathSteps(request, env, ctx) {
           op,
           expression,
           v,
-          answer,
+          answer || null,
           bounds?.lower || null,
           bounds?.upper || null,
           JSON.stringify(steps),
-          method
+          method || null
         ).run();
         console.log(`Math-steps cache STORE: "${expression}"`);
       } catch (e) {
