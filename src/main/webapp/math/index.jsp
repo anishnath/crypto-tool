@@ -6,15 +6,15 @@
     <jsp:include page="../modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Math Calculators - Free Online Step-by-Step Solvers" />
         <jsp:param name="toolCategory" value="Mathematics" />
-        <jsp:param name="toolDescription" value="21 free math calculators with step-by-step solutions. Percentage, exponents, quadratic equations, logarithms, matrices, calculus, series, and more. All free, no signup." />
+        <jsp:param name="toolDescription" value="22 free math calculators with step-by-step solutions. Percentage, exponents, quadratic equations, logarithms, matrices, calculus, series, and more. All free, no signup." />
         <jsp:param name="toolUrl" value="math/" />
         <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, exponent calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, inequality solver, step by step math, free math solver" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="21 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
+        <jsp:param name="toolFeatures" value="22 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
         <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages" />
         <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
         <jsp:param name="faq1q" value="Are these math calculators free?" />
-        <jsp:param name="faq1a" value="Yes all 21 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
+        <jsp:param name="faq1a" value="Yes all 22 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation so you learn the method not just the answer." />
         <jsp:param name="faq3q" value="What math topics are covered?" />
@@ -28,11 +28,11 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Math Calculators",
-      "description": "21 free math calculators with step-by-step solutions covering percentages, algebra, calculus, linear algebra, and more.",
+      "description": "22 free math calculators with step-by-step solutions covering percentages, algebra, calculus, linear algebra, and more.",
       "url": "https://8gwifi.org/math/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 21,
+        "numberOfItems": 22,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
@@ -54,7 +54,8 @@
           {"@type": "ListItem", "position": 18, "name": "Matrix Addition Calculator", "url": "https://8gwifi.org/matrix-addition-calculator.jsp"},
           {"@type": "ListItem", "position": 19, "name": "Matrix Power Calculator", "url": "https://8gwifi.org/matrix-power-calculator.jsp"},
           {"@type": "ListItem", "position": 20, "name": "Matrix Transpose Calculator", "url": "https://8gwifi.org/matrix-transpose-calculator.jsp"},
-          {"@type": "ListItem", "position": 21, "name": "Matrix Type Classifier", "url": "https://8gwifi.org/matrix-type-classifier.jsp"}
+          {"@type": "ListItem", "position": 21, "name": "Matrix Type Classifier", "url": "https://8gwifi.org/matrix-type-classifier.jsp"},
+          {"@type": "ListItem", "position": 22, "name": "Polynomial Calculator", "url": "https://8gwifi.org/polynomial-calculator.jsp"}
         ]
       }
     }
@@ -300,7 +301,7 @@
             <div class="category-header">
                 <span class="category-icon">&#128200;</span>
                 <h2>Algebra</h2>
-                <span class="category-count">5 tools</span>
+                <span class="category-count">6 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #d97706;">
@@ -376,6 +377,22 @@
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/polynomial-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0d9488;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">P(x)</div>
+                        <div>
+                            <h3>Polynomial Calculator</h3>
+                            <div class="tool-formula">Add, subtract, multiply, divide, factor, roots</div>
+                        </div>
+                    </div>
+                    <p>Perform all polynomial operations with step-by-step solutions. Long division, factoring, root finding for any degree.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
                     </div>
                 </a>
             </div>
@@ -667,7 +684,7 @@
                     Are these math calculators free?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes, all 21 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
+                <div class="faq-answer">Yes, all 22 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
             </div>
 
             <div class="faq-item">
