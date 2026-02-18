@@ -3,6 +3,7 @@
 
 import { buildLogarithmPrompt } from './logarithm.js';
 import { buildLinearSystemPrompt } from './linear-system.js';
+import { buildPolynomialPrompt } from './polynomial.js';
 
 const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',
@@ -682,7 +683,7 @@ async function handleMathSteps(request, env, ctx) {
   if (!expression) {
     return jsonResponse({ error: 'Missing required field: expression' }, { status: 400 });
   }
-  if (!answer && operation !== 'logarithm' && operation !== 'linear_system') {
+  if (!answer && operation !== 'logarithm' && operation !== 'linear_system' && operation !== 'polynomial') {
     return jsonResponse({ error: 'Missing required field: answer' }, { status: 400 });
   }
 
@@ -691,6 +692,7 @@ async function handleMathSteps(request, env, ctx) {
   // For logarithm/linear_system, include mode/method in cache key since same expr has different results per mode
   const effectiveBounds = op === 'logarithm' ? { lower: mode || 'solve', upper: '' }
     : op === 'linear_system' ? { lower: mode || 'gaussian', upper: '' }
+    : op === 'polynomial' ? { lower: mode || 'add', upper: '' }
     : bounds;
   const cacheKey = buildCacheKey(op, expression, v, effectiveBounds);
 
@@ -735,7 +737,9 @@ async function handleMathSteps(request, env, ctx) {
       ? buildLogarithmPrompt(expression, v, answer || 'unknown', mode || 'solve')
       : op === 'linear_system'
         ? buildLinearSystemPrompt(expression, mode || 'gaussian', answer || 'unknown')
-        : buildMathStepsPrompt(op, expression, v, answer, bounds);
+        : op === 'polynomial'
+          ? buildPolynomialPrompt(expression, v, answer || 'unknown', mode || 'add')
+          : buildMathStepsPrompt(op, expression, v, answer, bounds);
 
     const result = await callOpenAI(prompt, env, {
       model: 'gpt-4o-mini',
