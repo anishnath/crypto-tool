@@ -28,11 +28,11 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Math Calculators",
-      "description": "22 free math calculators with step-by-step solutions covering percentages, algebra, calculus, linear algebra, and more.",
+      "description": "25 free math calculators with step-by-step solutions covering percentages, algebra, calculus, linear algebra, trigonometry, and more.",
       "url": "https://8gwifi.org/math/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 22,
+        "numberOfItems": 25,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
@@ -55,7 +55,11 @@
           {"@type": "ListItem", "position": 19, "name": "Matrix Power Calculator", "url": "https://8gwifi.org/matrix-power-calculator.jsp"},
           {"@type": "ListItem", "position": 20, "name": "Matrix Transpose Calculator", "url": "https://8gwifi.org/matrix-transpose-calculator.jsp"},
           {"@type": "ListItem", "position": 21, "name": "Matrix Type Classifier", "url": "https://8gwifi.org/matrix-type-classifier.jsp"},
-          {"@type": "ListItem", "position": 22, "name": "Polynomial Calculator", "url": "https://8gwifi.org/polynomial-calculator.jsp"}
+          {"@type": "ListItem", "position": 22, "name": "Polynomial Calculator", "url": "https://8gwifi.org/polynomial-calculator.jsp"},
+          {"@type": "ListItem", "position": 23, "name": "Vector Calculator", "url": "https://8gwifi.org/vector-calculator.jsp"},
+          {"@type": "ListItem", "position": 24, "name": "Trig Function Calculator", "url": "https://8gwifi.org/trigonometric-function-calculator.jsp"},
+          {"@type": "ListItem", "position": 25, "name": "Trig Identity Calculator", "url": "https://8gwifi.org/trigonometric-identity-calculator.jsp"},
+          {"@type": "ListItem", "position": 26, "name": "Trig Equation Solver", "url": "https://8gwifi.org/trigonometric-equation-solver.jsp"}
         ]
       }
     }
@@ -301,7 +305,7 @@
             <div class="category-header">
                 <span class="category-icon">&#128200;</span>
                 <h2>Algebra</h2>
-                <span class="category-count">6 tools</span>
+                <span class="category-count">9 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #d97706;">
@@ -389,6 +393,68 @@
                         </div>
                     </div>
                     <p>Perform all polynomial operations with step-by-step solutions. Long division, factoring, root finding for any degree.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/vector-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0284c7;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);">&rarr;</div>
+                        <div>
+                            <h3>Vector Calculator</h3>
+                            <div class="tool-formula">Dot, cross, projection, angle &mdash; 2D &amp; 3D</div>
+                        </div>
+                    </div>
+                    <p>13 vector operations with step-by-step solutions. Dot product, cross product, projection, magnitude, and more for 2D and 3D.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/trigonometric-function-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">sin</div>
+                        <div>
+                            <h3>Trig Function Calculator</h3>
+                            <div class="tool-formula">Evaluate, quadrant, coterminal</div>
+                        </div>
+                    </div>
+                    <p>Evaluate all 6 trig functions at any angle. Find quadrants, reference angles, and coterminal angles with unit circle visualization.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/trigonometric-identity-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">&equiv;</div>
+                        <div>
+                            <h3>Trig Identity Calculator</h3>
+                            <div class="tool-formula">Browse &amp; prove identities</div>
+                        </div>
+                    </div>
+                    <p>Browse 8 categories of trig identities (Pythagorean, double angle, sum-to-product, etc.) and prove identities step-by-step.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-python">Prove</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/trigonometric-equation-solver.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">&theta;=</div>
+                        <div>
+                            <h3>Trig Equation Solver</h3>
+                            <div class="tool-formula">Equations, inequalities, simplify</div>
+                        </div>
+                    </div>
+                    <p>Solve trig equations and inequalities with step-by-step solutions. Simplify expressions and find general solutions with periodicity.</p>
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">Graph</span>
