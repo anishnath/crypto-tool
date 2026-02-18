@@ -99,11 +99,11 @@
         @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
 
         /* Three-column grid */
-        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) 1fr 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
-        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) 1fr}.tool-ads-column{display:none}}
-        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
+        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
+        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}
+        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{min-width:0;display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
         .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
-        .tool-output-column{display:flex;flex-direction:column;gap:1rem}
+        .tool-output-column{min-width:0;display:flex;flex-direction:column;gap:1rem}
         .tool-ads-column{height:fit-content}
 
         /* Card + form */
@@ -116,10 +116,10 @@
         .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:1rem;transition:opacity .15s,transform .15s}
 
         /* Result card */
-        .tool-result-card{display:flex;flex-direction:column;height:100%}
+        .tool-result-card{min-width:0;overflow:hidden;display:flex;flex-direction:column;height:100%}
         .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);border-radius:0.75rem 0.75rem 0 0}
         .tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary,#0f172a);flex:1}
-        .tool-result-content{flex:1;padding:1.25rem;min-height:300px;overflow-y:auto}
+        .tool-result-content{min-width:0;flex:1;padding:1.25rem;min-height:300px;overflow-y:auto}
         .tool-result-actions{display:none;gap:0.5rem;padding:1rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;flex-wrap:wrap}
         .tool-result-actions.visible{display:flex}
         .tool-result-actions .tool-action-btn{flex:1;min-width:90px;margin-top:0}
@@ -412,10 +412,10 @@
 
         /* ===== Result display ===== */
         .ic-result-math {
-            padding: 1.5rem;
+            padding: 1.5rem; overflow-x: auto; max-width: 100%;
             text-align: center;
         }
-        .ic-result-math .katex-display { margin: 0.5rem 0; }
+        .ic-result-math .katex-display { margin: 0.5rem 0; overflow-x: auto; overflow-y: hidden; }
         .ic-result-label {
             font-size: 0.75rem;
             font-weight: 600;
@@ -637,7 +637,7 @@
             font-size: 1rem;
             overflow-x: auto;
         }
-        .ic-step-math .katex-display { margin: 0; }
+        .ic-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
         [data-theme="dark"] .ic-steps-container { border-color: var(--border); }
         [data-theme="dark"] .ic-steps-header { background: var(--tool-light); border-bottom-color: var(--border); }
         [data-theme="dark"] .ic-step { border-bottom-color: var(--border); }
