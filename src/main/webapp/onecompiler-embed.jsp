@@ -269,7 +269,8 @@
             'python': 'python', 'java': 'java', 'c': 'c', 'cpp': 'cpp',
             'csharp': 'csharp', 'javascript': 'javascript', 'typescript': 'typescript',
             'go': 'go', 'rust': 'rust', 'php': 'php', 'ruby': 'ruby',
-            'swift': 'swift', 'kotlin': 'kotlin', 'scala': 'scala'
+            'swift': 'swift', 'kotlin': 'kotlin', 'scala': 'scala',
+            'bash': 'shell', 'sh': 'shell', 'shell': 'shell'
         };
 
         // Parse URL params
