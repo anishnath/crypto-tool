@@ -215,11 +215,12 @@
     margin-bottom: 0.25rem;
 }
 .ls-result-math {
+    max-width: 100%;
     padding: 0.75rem 0;
     text-align: center;
     overflow-x: auto;
 }
-.ls-result-math .katex-display { margin: 0; }
+.ls-result-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
 .ls-result-detail {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
@@ -332,7 +333,7 @@
     overflow-x: auto;
     padding: 0.25rem 0;
 }
-.ls-step-math .katex-display { margin: 0; }
+.ls-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
 
 /* ===== Verification ===== */
 .ls-verification {

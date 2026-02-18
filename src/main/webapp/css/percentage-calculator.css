@@ -197,6 +197,7 @@
     padding: 0.25rem 0;
 }
 .pc-step-math .katex { font-size: 0.9em; }
+.pc-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
 
 /* ===== Result Badge ===== */
 .pc-rule-badge {

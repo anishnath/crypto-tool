@@ -1,0 +1,415 @@
+/* Polynomial Calculator - Component Styles */
+
+:root {
+    --poly-tool: #0d9488;
+    --poly-tool-dark: #0f766e;
+    --poly-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    --poly-light: #ccfbf1;
+}
+[data-theme="dark"] {
+    --poly-light: rgba(13, 148, 136, 0.15);
+}
+
+/* ===== Mode Toggle ===== */
+.poly-mode-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.poly-mode-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.625rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    white-space: nowrap;
+}
+.poly-mode-btn.active {
+    background: var(--poly-gradient);
+    color: #fff;
+}
+.poly-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .poly-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .poly-mode-btn.active { background: var(--poly-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.poly-input-group {
+    margin-bottom: 0.75rem;
+}
+.poly-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.poly-input-text {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9375rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+    letter-spacing: -0.02em;
+    resize: vertical;
+    min-height: 40px;
+}
+.poly-input-text:focus {
+    outline: none;
+    border-color: var(--poly-tool);
+    box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.1);
+}
+.poly-input-small {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+}
+.poly-input-small:focus {
+    outline: none;
+    border-color: var(--poly-tool);
+    box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.1);
+}
+
+/* ===== Live Preview ===== */
+.poly-preview {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+}
+.poly-preview .katex { font-size: 1em; max-width: 100%; }
+.poly-preview .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
+[data-theme="dark"] .poly-preview { background: var(--bg-tertiary); border-color: var(--border); }
+
+/* ===== Output Tabs ===== */
+.poly-output-tabs {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+.poly-output-tab {
+    flex: 1;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.poly-output-tab.active {
+    background: var(--poly-gradient);
+    color: #fff;
+}
+.poly-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .poly-output-tab { background: var(--bg-tertiary); }
+[data-theme="dark"] .poly-output-tab.active { background: var(--poly-gradient); color: #fff; }
+
+/* ===== Panels ===== */
+.poly-panel { display: none; flex: 1; min-height: 0; }
+.poly-panel.active { display: flex; flex-direction: column; }
+
+/* ===== Step-by-Step ===== */
+.poly-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--poly-tool);
+    transition: background 0.15s;
+}
+.poly-step:hover { background: var(--bg-tertiary); }
+.poly-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--poly-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+.poly-step-content { flex: 1; min-width: 0; max-width: 100%; overflow: hidden; }
+.poly-step-desc {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+.poly-step-math {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
+    max-width: 100%;
+}
+.poly-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+.poly-step-math .katex { font-size: 0.9em; max-width: 100%; }
+[data-theme="dark"] .poly-step { background: var(--bg-tertiary); }
+
+/* ===== Result Badge ===== */
+.poly-result-badge {
+    display: inline-block;
+    background: var(--poly-gradient);
+    color: #fff;
+    padding: 0.2rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    margin-right: 0.375rem;
+    margin-bottom: 0.375rem;
+}
+
+/* ===== Overflow Prevention ===== */
+.tool-output-column { min-width: 0; }
+.tool-result-card { min-width: 0; overflow: hidden; }
+#poly-result-content { min-width: 0; overflow-x: auto; overflow-y: auto; }
+
+/* ===== Result Section ===== */
+.poly-result-section {
+    padding: 1rem;
+}
+.poly-result-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    margin-top: 0.75rem;
+}
+.poly-result-math {
+    font-size: 1.2rem;
+    padding: 0.75rem 0;
+    overflow-x: auto;
+    max-width: 100%;
+}
+.poly-result-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+.poly-result-math .katex { max-width: 100%; }
+.poly-result-detail {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+[data-theme="dark"] .poly-result-detail { background: var(--bg-tertiary); border-color: var(--border); }
+
+/* ===== Steps Button ===== */
+.poly-steps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--poly-tool);
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--poly-tool);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0.75rem;
+}
+.poly-steps-btn:hover { background: var(--poly-tool); color: #fff; }
+.poly-steps-btn.loading { opacity: 0.7; pointer-events: none; }
+
+/* ===== Steps Container ===== */
+.poly-steps-container {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+.poly-steps-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--poly-light);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--poly-tool);
+}
+[data-theme="dark"] .poly-steps-container { border-color: var(--border); }
+[data-theme="dark"] .poly-steps-header { background: var(--poly-light); border-bottom-color: var(--border); }
+
+/* ===== Error ===== */
+.poly-error {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    color: #92400e;
+}
+.poly-error h4 { margin: 0 0 0.5rem; font-size: 0.9375rem; font-weight: 700; }
+.poly-error p { margin: 0; font-size: 0.8125rem; line-height: 1.6; }
+[data-theme="dark"] .poly-error { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: #fbbf24; }
+
+/* ===== Quick Examples ===== */
+.poly-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.poly-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+}
+.poly-example-chip:hover {
+    background: var(--poly-light);
+    color: var(--poly-tool);
+    border-color: var(--poly-tool);
+}
+[data-theme="dark"] .poly-example-chip { background: var(--bg-tertiary); border-color: var(--border); color: var(--text-secondary); }
+[data-theme="dark"] .poly-example-chip:hover { background: var(--poly-light); color: var(--poly-tool); }
+
+/* ===== Educational Content ===== */
+.poly-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.poly-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--poly-tool);
+}
+.poly-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.poly-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+[data-theme="dark"] .poly-edu-card { background: var(--bg-tertiary); }
+
+.poly-ops-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin-top: 0.75rem;
+}
+.poly-ops-table th, .poly-ops-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.poly-ops-table th {
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+.poly-ops-table td {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+[data-theme="dark"] .poly-ops-table th { background: var(--bg-tertiary); }
+
+/* ===== Spinner ===== */
+@keyframes poly-spin { to { transform: rotate(360deg); } }
+.poly-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--poly-tool);
+    border-radius: 50%;
+    animation: poly-spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+/* ===== Separator ===== */
+.poly-sep {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.75rem 0;
+}
+
+/* ===== Animations ===== */
+.poly-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.poly-anim.poly-visible { opacity: 1; transform: translateY(0); }
+.poly-anim-d1 { transition-delay: 0.1s; }
+.poly-anim-d2 { transition-delay: 0.2s; }
+.poly-anim-d3 { transition-delay: 0.3s; }
+.poly-anim-d4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .poly-anim { opacity: 1; transform: none; transition: none; }
+}
+
+/* ===== Graph ===== */
+#poly-graph-container { width: 100%; min-height: 440px; border-radius: 0.5rem; }
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .poly-mode-toggle { flex-wrap: wrap; }
+    .poly-mode-btn { flex: 1 1 calc(25% - 1px); font-size: 0.5625rem; padding: 0.4rem 0.125rem; }
+    .poly-edu-grid { grid-template-columns: 1fr; }
+    .poly-result-math { font-size: 1rem; }
+    .poly-step-math .katex { font-size: 0.8em; }
+    .poly-preview .katex { font-size: 0.85em; }
+}

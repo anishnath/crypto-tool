@@ -256,6 +256,7 @@
     padding: 0.25rem 0;
 }
 .sc-step-math .katex { font-size: 0.9em; }
+.sc-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
 .sc-step-derivative {
     font-size: 0.75rem;
     color: var(--text-muted);
