@@ -470,14 +470,14 @@ public class CFExamMarkerFunctionality extends HttpServlet {
 
     // ---- Math steps validation constants ----
     private static final Set<String> ALLOWED_OPERATIONS = new HashSet<>(
-            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve", "logarithm", "linear_system"));
+            Arrays.asList("integrate", "differentiate", "limit", "simplify", "solve", "logarithm", "linear_system", "polynomial", "vector", "trigonometry"));
     private static final Set<String> ALLOWED_VARIABLES = new HashSet<>(
             Arrays.asList("x", "y", "t", "u", "z", "r", "s", "n"));
     private static final Set<String> ALLOWED_MODES = new HashSet<>(
-            Arrays.asList("solve", "expand", "condense", "simplify", "evaluate", "gaussian", "gauss_jordan", "lu", "cramer", "inverse", "least_squares"));
-    // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, _, etc.
+            Arrays.asList("solve", "expand", "condense", "simplify", "evaluate", "gaussian", "gauss_jordan", "lu", "cramer", "inverse", "least_squares", "add", "subtract", "multiply", "divide", "factor", "roots", "dot_product", "cross_product", "magnitude", "projection", "angle", "quadrant", "coterminal", "identity", "prove", "solve_equation", "solve_inequality"));
+    // Only math characters: digits, letters, operators, parens, dots, spaces, *, /, ^, =, <, >, _, etc.
     private static final Pattern MATH_EXPR_PATTERN = Pattern.compile(
-            "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.,|\\\\!=_]+$");
+            "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.,|\\\\!=_<>]+$");
     // Bounds: simple number or math const like pi, e, -3, 2.5, pi/2, sqrt(2)
     private static final Pattern BOUND_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9\\s\\+\\-\\*/\\^\\(\\)\\.]+$");
@@ -529,7 +529,10 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         String answer = getJsonString(payload, "answer");
         boolean isLogarithm = "logarithm".equals(operation);
         boolean isLinearSystem = "linear_system".equals(operation);
-        if (!isLogarithm && !isLinearSystem && (answer == null || answer.isEmpty())) {
+        boolean isPolynomial = "polynomial".equals(operation);
+        boolean isVector = "vector".equals(operation);
+        boolean isTrigonometry = "trigonometry".equals(operation);
+        if (!isLogarithm && !isLinearSystem && !isPolynomial && !isVector && !isTrigonometry && (answer == null || answer.isEmpty())) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "answer is required");
             return;
         }
@@ -577,6 +580,12 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "bounds must be an object with lower and upper");
                 return;
             }
+        }
+
+        // Ensure answer is set for answer-optional operations (prevents D1 undefined error in cache store)
+        if (answer == null || answer.isEmpty()) {
+            payload.addProperty("answer", "unknown");
+            requestBody = payload.toString();
         }
 
         // All checks passed — forward to CF Worker
