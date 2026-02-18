@@ -1,7 +1,7 @@
 {
   "version": "1.3",
-  "lastUpdated": "2026-02-05T00:00:00.000Z",
-  "totalTools": 385,
+  "lastUpdated": "2026-02-18T00:00:00.000Z",
+  "totalTools": 387,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -54,11 +54,11 @@
       "description": "libp2p/devp2p Key Gen - Free online blockchain & crypto tool"
     },
     {
-      "name": "Degrees \u2194 Radians",
+      "name": "Degrees ↔ Radians",
       "url": "degree-radian.jsp",
       "category": "Mathematics",
       "keywords": "degrees radians mathematics",
-      "description": "Degrees \u2194 Radians - Free online mathematics tool"
+      "description": "Degrees ↔ Radians - Free online mathematics tool"
     },
     {
       "name": "Apache htpasswd Generator",
@@ -1272,11 +1272,11 @@
       "description": "Graphing Calculator - Free online mathematics tool"
     },
     {
-      "name": "Heron\u2019s Formula Area",
+      "name": "Heron’s Formula Area",
       "url": "heron-area.jsp",
       "category": "Mathematics",
       "keywords": "heron formula area mathematics",
-      "description": "Heron\u2019s Formula Area - Free online mathematics tool"
+      "description": "Heron’s Formula Area - Free online mathematics tool"
     },
     {
       "name": "Hypothesis Test Calculator",
@@ -1489,11 +1489,11 @@
       "description": "Percentile Calculator - Free online mathematics tool"
     },
     {
-      "name": "Polar \u2194 Cartesian",
+      "name": "Polar ↔ Cartesian",
       "url": "polar-cartesian.jsp",
       "category": "Mathematics",
       "keywords": "polar cartesian mathematics",
-      "description": "Polar \u2194 Cartesian - Free online mathematics tool"
+      "description": "Polar ↔ Cartesian - Free online mathematics tool"
     },
     {
       "name": "Prime Number Checker & Generator",
@@ -1531,25 +1531,32 @@
       "description": "Pythagorean Triples - Free online mathematics tool"
     },
     {
-      "name": "Quadratic Equation Solver (ax\u00b2+bx+c=0)",
+      "name": "Quadratic Equation Solver (ax²+bx+c=0)",
       "url": "quadratic-solver.jsp",
       "category": "Mathematics",
       "keywords": "quadratic equation solver mathematics",
-      "description": "Quadratic Equation Solver (ax\u00b2+bx+c=0) - Free online mathematics tool"
+      "description": "Quadratic Equation Solver (ax²+bx+c=0) - Free online mathematics tool"
     },
     {
-      "name": "Radical Simplifier (\u221a, \u221b, Rationalize)",
+      "name": "Polynomial Calculator",
+      "url": "polynomial-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "polynomial calculator mathematics",
+      "description": "Polynomial Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Radical Simplifier (√, ∛, Rationalize)",
       "url": "radical-simplifier.jsp",
       "category": "Mathematics",
       "keywords": "radical simplifier rationalize mathematics",
-      "description": "Radical Simplifier (\u221a, \u221b, Rationalize) - Free online mathematics tool"
+      "description": "Radical Simplifier (√, ∛, Rationalize) - Free online mathematics tool"
     },
     {
-      "name": "Recam\u00e1n's Sequence",
+      "name": "Recamán's Sequence",
       "url": "recaman-sequence.jsp",
       "category": "Mathematics",
       "keywords": "recam sequence mathematics",
-      "description": "Recam\u00e1n's Sequence - Free online mathematics tool"
+      "description": "Recamán's Sequence - Free online mathematics tool"
     },
     {
       "name": "Right-Triangle Trig (SOHCAHTOA)",
@@ -1706,11 +1713,11 @@
       "description": "EXIF Remover - Free online media tools tool"
     },
     {
-      "name": "GIF \u2194 MP4 Converter",
+      "name": "GIF ↔ MP4 Converter",
       "url": "gif-mp4-converter.jsp",
       "category": "Media Tools",
       "keywords": "gif mp4 converter media tools",
-      "description": "GIF \u2194 MP4 Converter - Free online media tools tool"
+      "description": "GIF ↔ MP4 Converter - Free online media tools tool"
     },
     {
       "name": "HEIC to JPG/PNG",
@@ -1727,11 +1734,11 @@
       "description": "Image Resizer - Free online media tools tool"
     },
     {
-      "name": "PNG \u2194 JPG",
+      "name": "PNG ↔ JPG",
       "url": "png-jpg-converter.jsp",
       "category": "Media Tools",
       "keywords": "png jpg media tools",
-      "description": "PNG \u2194 JPG - Free online media tools tool"
+      "description": "PNG ↔ JPG - Free online media tools tool"
     },
     {
       "name": "SVG to PNG/JPG",
