@@ -1,0 +1,668 @@
+/* Trigonometry Calculator - Shared Component Styles (all 3 pages) */
+
+:root {
+    --trig-tool: #7c3aed;
+    --trig-tool-dark: #6d28d9;
+    --trig-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    --trig-light: #ede9fe;
+}
+[data-theme="dark"] {
+    --trig-light: rgba(124, 58, 237, 0.15);
+}
+
+/* ===== Mode Toggle ===== */
+.trig-mode-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.trig-mode-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.6875rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    white-space: nowrap;
+}
+.trig-mode-btn.active {
+    background: var(--trig-gradient);
+    color: #fff;
+}
+.trig-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .trig-mode-btn.active { background: var(--trig-gradient); color: #fff; }
+
+/* ===== Unit Toggle ===== */
+.trig-unit-toggle {
+    display: inline-flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+.trig-unit-btn {
+    padding: 0.375rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.trig-unit-btn.active {
+    background: var(--trig-tool);
+    color: #fff;
+}
+.trig-unit-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-unit-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .trig-unit-btn.active { background: var(--trig-tool); color: #fff; }
+
+/* ===== Identity Select ===== */
+.trig-identity-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+.trig-identity-select:focus {
+    outline: none;
+    border-color: var(--trig-tool);
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+
+/* ===== LHS / RHS Input Groups (prove mode) ===== */
+.trig-lhs-group,
+.trig-rhs-group {
+    margin-bottom: 0.75rem;
+}
+.trig-equals-divider {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--trig-tool);
+    margin: 0.25rem 0;
+}
+
+/* ===== Input Styles ===== */
+.trig-input-group {
+    margin-bottom: 0.75rem;
+}
+.trig-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.trig-input-text {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9375rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+    letter-spacing: -0.02em;
+}
+.trig-input-text:focus {
+    outline: none;
+    border-color: var(--trig-tool);
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+.trig-input-small {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+}
+.trig-input-small:focus {
+    outline: none;
+    border-color: var(--trig-tool);
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+
+/* ===== Live Preview ===== */
+.trig-preview {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+}
+.trig-preview .katex { font-size: 1.05rem; }
+.trig-preview .katex-display { margin: 0; }
+
+/* ===== Output Tabs ===== */
+.trig-output-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1rem;
+    gap: 0;
+}
+.trig-output-tab {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+.trig-output-tab:hover {
+    color: var(--trig-tool);
+}
+.trig-output-tab.active {
+    color: var(--trig-tool);
+    border-bottom-color: var(--trig-tool);
+}
+
+/* ===== Panels ===== */
+.trig-panel {
+    display: none;
+    min-height: 350px;
+}
+.trig-panel.active {
+    display: block;
+}
+
+/* ===== Step Cards ===== */
+.trig-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--border-light, #f1f5f9);
+}
+.trig-step:last-child {
+    border-bottom: none;
+}
+.trig-step-number {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: var(--trig-gradient);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.trig-step-content {
+    flex: 1;
+    min-width: 0;
+}
+.trig-step-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.375rem;
+    line-height: 1.5;
+}
+.trig-step-math {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+}
+.trig-step-math .katex { font-size: 1.05rem; }
+.trig-step-math .katex-display { margin: 0.25rem 0; }
+
+/* ===== Result Badge ===== */
+.trig-result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.75rem;
+    background: var(--trig-light);
+    color: var(--trig-tool);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 9999px;
+    margin-bottom: 0.75rem;
+}
+
+/* ===== Identity Grid & Cards ===== */
+.trig-identity-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+.trig-identity-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--trig-tool);
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 0.875rem 1rem;
+}
+.trig-identity-card-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.375rem;
+}
+.trig-identity-card-math {
+    overflow-x: auto;
+}
+.trig-identity-card-math .katex { font-size: 1.05rem; }
+.trig-identity-card-math .katex-display { margin: 0.25rem 0; }
+
+/* ===== Sign Table (quadrant mode) ===== */
+.trig-sign-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin: 0.75rem 0;
+}
+.trig-sign-table th,
+.trig-sign-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+.trig-sign-table th {
+    background: var(--trig-light);
+    color: var(--trig-tool);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.trig-sign-table td {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+.trig-sign-positive {
+    color: #16a34a;
+    font-weight: 700;
+}
+.trig-sign-negative {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+/* ===== Angle Values Grid ===== */
+.trig-angle-values {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+}
+.trig-angle-value-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+}
+.trig-angle-value-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.25rem;
+}
+.trig-angle-value-math {
+    overflow-x: auto;
+}
+.trig-angle-value-math .katex { font-size: 0.95rem; }
+
+/* ===== Quick Examples ===== */
+.trig-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.trig-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 9999px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+.trig-example-chip:hover {
+    border-color: var(--trig-tool);
+    color: var(--trig-tool);
+    background: var(--trig-light);
+}
+
+/* ===== Separator ===== */
+.trig-sep {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1rem 0;
+}
+
+/* ===== Spinner (AI loading) ===== */
+.trig-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    gap: 1rem;
+}
+.trig-spinner-ring {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--trig-tool);
+    border-radius: 50%;
+    animation: trig-spin 0.8s linear infinite;
+}
+@keyframes trig-spin {
+    to { transform: rotate(360deg); }
+}
+.trig-spinner-text {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+/* ===== Error ===== */
+.trig-error {
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 0.5rem;
+    color: var(--error, #ef4444);
+    font-size: 0.875rem;
+}
+
+/* ===== Related Tools ===== */
+.trig-related {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+.trig-related-link {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+}
+.trig-related-link:hover {
+    border-color: var(--trig-tool);
+    color: var(--trig-tool);
+}
+
+/* ===== Coterminal List ===== */
+.trig-coterminal-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+}
+.trig-coterminal-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+.trig-coterminal-positive { border-left: 3px solid #16a34a; }
+.trig-coterminal-negative { border-left: 3px solid #dc2626; }
+
+/* ===== Educational Content Tables ===== */
+.trig-ops-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin: 0.75rem 0;
+}
+.trig-ops-table th,
+.trig-ops-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+}
+.trig-ops-table th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+.trig-ops-table td {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+}
+
+/* ===== Educational Cards ===== */
+.trig-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+}
+.trig-edu-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+.trig-edu-card h4 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--trig-tool);
+    margin: 0 0 0.375rem;
+}
+.trig-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ===== Animated Unit Circle (educational) ===== */
+.trig-unit-circle-animated {
+    max-width: 280px;
+    margin: 1rem auto;
+}
+.trig-unit-circle-animated .uc-ray {
+    transform-origin: 140px 140px;
+    animation: trig-rotate-ray 8s linear infinite;
+}
+@keyframes trig-rotate-ray {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+.trig-unit-circle-animated .uc-dot {
+    animation: trig-pulse-dot 2s ease-in-out infinite;
+}
+@keyframes trig-pulse-dot {
+    0%, 100% { r: 5; opacity: 1; }
+    50%      { r: 7; opacity: 0.7; }
+}
+
+/* ===== Animated Sine Wave (educational) ===== */
+.trig-wave-animated {
+    max-width: 100%;
+    margin: 1rem 0;
+}
+.trig-wave-animated .wave-path {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: trig-draw-wave 2.5s ease forwards;
+}
+@keyframes trig-draw-wave {
+    to { stroke-dashoffset: 0; }
+}
+
+/* ===== Scroll Reveal Animations ===== */
+.trig-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.trig-anim.trig-visible { opacity: 1; transform: translateY(0); }
+.trig-anim-d1 { transition-delay: 0.1s; }
+.trig-anim-d2 { transition-delay: 0.2s; }
+.trig-anim-d3 { transition-delay: 0.3s; }
+.trig-anim-d4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .trig-anim { opacity: 1; transform: none; transition: none; }
+    .trig-unit-circle-animated .uc-ray { animation: none; }
+    .trig-unit-circle-animated .uc-dot { animation: none; }
+    .trig-wave-animated .wave-path { animation: none; stroke-dashoffset: 0; }
+}
+
+/* ===== Feature Highlight Cards ===== */
+.trig-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.trig-feature-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--trig-tool);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.trig-feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+}
+.trig-feature-card h4 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--trig-tool);
+    margin: 0 0 0.375rem;
+}
+.trig-feature-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+[data-theme="dark"] .trig-feature-card {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Formula Highlight Box ===== */
+.trig-formula-box {
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--trig-tool);
+    padding: 0.75rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+    margin: 0.75rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    overflow-x: auto;
+}
+[data-theme="dark"] .trig-formula-box {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Worked Example Block ===== */
+.trig-worked-example {
+    background: var(--bg-secondary);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 2.2;
+    overflow-x: auto;
+    color: var(--text-primary);
+}
+[data-theme="dark"] .trig-worked-example {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 767px) {
+    .trig-mode-btn { font-size: 0.5625rem; padding: 0.4rem 0.125rem; }
+    .trig-output-tab { padding: 0.5rem 0.625rem; font-size: 0.75rem; }
+    .trig-angle-values { grid-template-columns: repeat(2, 1fr); }
+    .trig-coterminal-list { grid-template-columns: 1fr; }
+    .trig-identity-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Dark mode overrides ===== */
+[data-theme="dark"] .trig-identity-card {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+[data-theme="dark"] .trig-sign-table th {
+    background: rgba(124, 58, 237, 0.15);
+}
+[data-theme="dark"] .trig-angle-value-item {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-coterminal-item {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-example-chip {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-edu-card {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .trig-ops-table th {
+    background: var(--bg-tertiary);
+}
+
+/* ===== KaTeX overflow handling ===== */
+.trig-step-math .katex-html,
+.trig-identity-card-math .katex-html,
+.trig-angle-value-math .katex-html,
+.trig-preview .katex-html {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+}
