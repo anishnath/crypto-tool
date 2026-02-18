@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 387,
+  "totalTools": 390,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1349,13 +1349,6 @@
       "description": "Linear Regression Calculator - Free online mathematics tool"
     },
     {
-      "name": "Logarithm Calculator",
-      "url": "logarithm-calculator.jsp",
-      "category": "Mathematics",
-      "keywords": "logarithm calculator mathematics",
-      "description": "Logarithm Calculator - Free online mathematics tool"
-    },
-    {
       "name": "Magic 1089 Trick",
       "url": "magic-1089.jsp",
       "category": "Mathematics",
@@ -1543,6 +1536,34 @@
       "category": "Mathematics",
       "keywords": "polynomial calculator mathematics",
       "description": "Polynomial Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Vector Calculator",
+      "url": "vector-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "vector calculator dot product cross product magnitude projection angle mathematics",
+      "description": "Vector Calculator - Dot product, cross product, projection, magnitude for 2D and 3D vectors"
+    },
+    {
+      "name": "Trig Function Calculator",
+      "url": "trigonometric-function-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "trig function calculator evaluate sin cos tan unit circle quadrant reference angle coterminal trigonometry",
+      "description": "Trig Function Calculator - Evaluate all 6 trig functions, find quadrants, reference angles and coterminal angles"
+    },
+    {
+      "name": "Trig Identity Calculator",
+      "url": "trigonometric-identity-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "trig identity calculator prove trigonometric identities Pythagorean double angle sum to product",
+      "description": "Trig Identity Calculator - Browse 8 identity categories and prove trig identities step-by-step"
+    },
+    {
+      "name": "Trig Equation Solver",
+      "url": "trigonometric-equation-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "trig equation solver solve trigonometric equations inequalities simplify sin cos tan",
+      "description": "Trig Equation Solver - Solve trig equations, inequalities and simplify expressions with step-by-step solutions"
     },
     {
       "name": "Radical Simplifier (√, ∛, Rationalize)",

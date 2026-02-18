@@ -457,6 +457,30 @@
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
+    <url>
+        <loc>https://8gwifi.org/vector-calculator.jsp</loc>
+        <lastmod>2026-02-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/trigonometric-function-calculator.jsp</loc>
+        <lastmod>2026-02-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/trigonometric-identity-calculator.jsp</loc>
+        <lastmod>2026-02-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/trigonometric-equation-solver.jsp</loc>
+        <lastmod>2026-02-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
   <url>
     <loc>https://8gwifi.org/matrix-determinant-calculator.jsp</loc>
     <lastmod>2025-11-12</lastmod>
