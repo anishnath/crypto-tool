@@ -1,0 +1,920 @@
+/* ============================================================
+   Projectile Motion Simulator - External Stylesheet
+   Indigo-violet theme: #667eea -> #764ba2
+   ============================================================ */
+
+/* --- CSS Variables --- */
+:root {
+  --pm-tool: #667eea;
+  --pm-tool-dark: #764ba2;
+  --pm-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --pm-light: #f0f1ff;
+}
+[data-theme="dark"] {
+  --pm-light: rgba(102, 126, 234, 0.15);
+}
+
+/* --- Three-column grid override --- */
+.pm-page-container.tool-page-container {
+  grid-template-columns: minmax(280px, 340px) 1fr 300px;
+}
+@media (max-width: 1100px) {
+  .pm-page-container.tool-page-container {
+    grid-template-columns: minmax(260px, 320px) 1fr;
+  }
+}
+@media (max-width: 900px) {
+  .pm-page-container.tool-page-container {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+  .pm-page-container .tool-output-column { order: 1; }
+  .pm-page-container .tool-input-column { order: 2; }
+  .pm-page-container .tool-input-column {
+    position: relative;
+    top: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+  #traj { height: 400px; }
+}
+
+/* --- Global PM Styles --- */
+.pm { animation: pmFadeIn 0.6s ease-in; }
+
+/* --- Page Title gradient --- */
+.tool-page-header .tool-page-title {
+  background: var(--pm-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Tool badge theming (in header, outside .pm) --- */
+.tool-page-badges .tool-badge {
+  background: var(--pm-light);
+  color: var(--pm-tool);
+}
+
+/* --- Tool card overrides scoped to .pm --- */
+.pm .tool-card { border: none; box-shadow: 0 2px 12px rgba(0,0,0,.08); transition: all .3s ease; overflow: hidden; }
+.pm .tool-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.12); transform: translateY(-2px); }
+
+.pm .tool-card-header,
+.pm .card-header {
+  padding: .6rem .8rem;
+  font-weight: 700;
+  background: var(--pm-gradient);
+  color: #fff;
+  border: none;
+  font-size: .95rem;
+  letter-spacing: .3px;
+}
+.pm .tool-card-body,
+.pm .card-body { padding: .6rem .8rem; background: #fff; }
+.pm .form-group { margin-bottom: .7rem; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+/* --- Canvas Container --- */
+#canvasWrap {
+  position: relative;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 50%, #f093fb15 100%);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+#canvasWrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(102,126,234,.1) 0%, transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(240,147,251,.1) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+#traj { width: 100%; height: 500px; display: block; position: relative; z-index: 5; }
+
+/* --- Canvas Card --- */
+.pm .tool-card.pm-canvas-card { overflow: visible; border-radius: 12px; }
+
+/* --- Key-Value Display --- */
+.kv { display: grid; grid-template-columns: 1fr auto; gap: .3rem .6rem; }
+.kv .label {
+  color: #64748b;
+  font-size: .8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.kv .value {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: .9rem;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* --- Toolbar --- */
+.pm-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: saturate(1.8) blur(12px);
+  border: 1px solid rgba(102,126,234,.2);
+  border-radius: 12px;
+  padding: .5rem .65rem;
+  box-shadow: 0 4px 20px rgba(102,126,234,.15), 0 1px 3px rgba(0,0,0,.1);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  z-index: 30;
+  transition: all .3s ease;
+}
+.pm-toolbar:hover { box-shadow: 0 6px 30px rgba(102,126,234,.25), 0 2px 8px rgba(0,0,0,.15); }
+
+/* --- Advanced Settings (Air Resistance panel) --- */
+.pm-adv {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: .6rem;
+  margin-top: .3rem;
+  transition: all .3s ease;
+  animation: pmSlideDown 0.3s ease-out;
+}
+.pm-adv:hover { border-color: var(--pm-tool); background: linear-gradient(135deg, #fafbff 0%, #f3f4ff 100%); }
+@keyframes pmSlideDown {
+  from { opacity: 0; max-height: 0; padding: 0; margin: 0; }
+  to   { opacity: 1; max-height: 300px; padding: .6rem; margin-top: .3rem; }
+}
+
+/* --- Control Dock --- */
+.pm-dock {
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  padding: .6rem .8rem;
+  transition: all .3s ease;
+}
+.pm-dock:hover { box-shadow: 0 8px 24px rgba(0,0,0,.12); transform: translateY(-2px); }
+.pm-dock::-webkit-scrollbar { width: 6px; }
+.pm-dock::-webkit-scrollbar-track { background: rgba(102,126,234,.05); border-radius: 3px; }
+.pm-dock::-webkit-scrollbar-thumb { background: var(--pm-gradient); border-radius: 3px; }
+.pm-dock::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--pm-tool-dark), var(--pm-tool)); }
+.pm-dock-header {
+  padding: .6rem .8rem;
+  font-weight: 700;
+  background: var(--pm-gradient);
+  color: #fff;
+  border: none;
+  font-size: .95rem;
+  letter-spacing: .3px;
+  border-radius: 12px 12px 0 0;
+  margin: -.6rem -.8rem .6rem -.8rem;
+}
+.pm-dock .form-group { margin-bottom: .4rem; }
+.pm-dock label {
+  margin-bottom: .15rem;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #475569;
+  display: block;
+}
+
+/* --- Mini Button Group --- */
+.pm-mini { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .3rem; }
+
+/* --- Air Preset Buttons --- */
+.air-preset {
+  transition: all .2s ease;
+  cursor: pointer;
+}
+.air-preset:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102,126,234,.2);
+  background: var(--pm-gradient) !important;
+  color: #fff !important;
+  border-color: var(--pm-tool) !important;
+}
+.air-preset:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(102,126,234,.3);
+}
+
+/* --- Animations --- */
+@keyframes pmFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pmBounce { from { transform: translate(-50%, -140%) translateY(0); } to { transform: translate(-50%, -140%) translateY(-5px); } }
+
+/* ============================================================
+   Bootstrap Shims (scoped to .pm)
+   Only for elements referenced by the engine IIFE
+   ============================================================ */
+
+/* Form Controls */
+.pm .form-control,
+.pm .form-control-sm {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: .9rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1e293b;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.pm .form-control-sm { padding: .25rem .5rem; font-size: .85rem; }
+.pm .form-control:focus,
+.pm .form-control-sm:focus {
+  border-color: var(--pm-tool);
+  box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+  outline: none;
+}
+.pm select.form-control,
+.pm select.form-control-sm {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right .5rem center;
+  background-size: 12px;
+  padding-right: 1.75rem;
+}
+
+/* Range inputs */
+.pm .form-control-range {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #e2e8f0 0%, var(--pm-tool) 100%);
+  outline: none;
+  -webkit-appearance: none;
+}
+.pm .form-control-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--pm-gradient);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102,126,234,.4);
+  transition: all .2s ease;
+}
+.pm .form-control-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(102,126,234,.6);
+}
+.pm .form-control-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--pm-gradient);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102,126,234,.4);
+  transition: all .2s ease;
+}
+.pm .form-control-range::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(102,126,234,.6);
+}
+
+/* Buttons */
+.pm .btn {
+  display: inline-block;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: .9rem;
+  line-height: 1.5;
+  border-radius: 8px;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+.pm .btn-sm { padding: .3rem .6rem; font-size: .85rem; }
+.pm .btn-primary {
+  background: var(--pm-gradient);
+  border: none;
+  color: #fff;
+}
+.pm .btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102,126,234,.3);
+}
+.pm .btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  color: #fff;
+  flex: 1;
+}
+.pm .btn-success:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(16,185,129,.3);
+}
+.pm .btn-outline-secondary {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #64748b;
+}
+.pm .btn-outline-secondary:hover {
+  background: #f8fafc;
+  border-color: var(--pm-tool);
+  color: var(--pm-tool);
+}
+.pm .btn-outline-info {
+  border: 1px solid #06b6d4;
+  background: #fff;
+  color: #06b6d4;
+}
+.pm .btn-outline-info:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(6,182,212,.3);
+}
+
+/* Form Check */
+.pm .form-check { display: flex; align-items: center; gap: .4rem; margin-bottom: .4rem; }
+.pm .form-check-input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.pm .form-check-input[type="checkbox"]:checked {
+  background: var(--pm-gradient);
+  border-color: var(--pm-tool);
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.pm .form-check-label {
+  font-weight: 500;
+  color: #475569;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+/* Nav Pills */
+.pm .nav-pills { display: flex; list-style: none; padding: 0; margin: 0 0 .5rem 0; gap: .25rem; }
+.pm .nav-item { display: inline; }
+.pm .nav-link {
+  display: inline-block;
+  border-radius: 8px;
+  padding: .4rem .8rem;
+  font-weight: 600;
+  transition: all .2s ease;
+  color: #64748b;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: .9rem;
+}
+.pm .nav-link:hover {
+  background: #f8fafc;
+  color: var(--pm-tool);
+  border-color: #e2e8f0;
+}
+.pm .nav-link.active {
+  background: var(--pm-gradient);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(102,126,234,.3);
+}
+
+/* Scrubber */
+.pm #scrub {
+  width: 220px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #e2e8f0 0%, var(--pm-tool) 100%);
+  outline: none;
+  -webkit-appearance: none;
+}
+.pm #scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--pm-tool);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(102,126,234,.4);
+  transition: all .2s ease;
+}
+.pm #scrub::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(102,126,234,.6);
+}
+.pm #scrub::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--pm-tool);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(102,126,234,.4);
+  transition: all .2s ease;
+}
+.pm #scrub::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(102,126,234,.6);
+}
+
+/* Toolbar form controls */
+.pm .pm-toolbar .form-control,
+.pm .pm-toolbar .form-control-range,
+.pm .pm-toolbar select {
+  height: 32px;
+  padding: .2rem .5rem;
+  font-size: .88rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all .2s ease;
+}
+.pm .pm-toolbar .form-control:focus,
+.pm .pm-toolbar select:focus {
+  border-color: var(--pm-tool);
+  box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+  outline: none;
+}
+.pm .pm-toolbar .btn {
+  padding: .3rem .6rem;
+  font-size: .88rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Mini button group sizes */
+.pm .pm-mini .btn {
+  padding: .3rem .6rem;
+  font-size: .82rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.pm .pm-mini .btn-outline-secondary {
+  font-size: .78rem;
+  padding: .25rem .4rem;
+}
+
+/* Screen reader only */
+.pm .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 576px) {
+  .pm-toolbar { left: 8px; right: 8px; flex-wrap: wrap; }
+  .pm #scrub { width: 100%; margin-top: .3rem; }
+  #traj { height: 350px; }
+}
+
+/* ============================================================
+   Dark Mode
+   ============================================================ */
+[data-theme="dark"] .pm .tool-card-body,
+[data-theme="dark"] .pm .card-body {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+[data-theme="dark"] .pm .tool-card {
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+[data-theme="dark"] .pm .pm-dock {
+  background: #1e293b;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+[data-theme="dark"] .pm .pm-dock label { color: #94a3b8; }
+[data-theme="dark"] .pm .pm-adv {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: #334155;
+}
+[data-theme="dark"] .pm .pm-adv:hover { border-color: var(--pm-tool); background: linear-gradient(135deg, #1e293b 0%, #1a1f3a 100%); }
+[data-theme="dark"] .kv .label { color: #94a3b8; }
+[data-theme="dark"] .kv .value { color: #e2e8f0; }
+[data-theme="dark"] #canvasWrap {
+  background: linear-gradient(135deg, rgba(102,126,234,.08) 0%, rgba(118,75,162,.08) 50%, rgba(240,147,251,.05) 100%);
+}
+[data-theme="dark"] #canvasWrap::before {
+  background: radial-gradient(circle at 30% 30%, rgba(102,126,234,.05) 0%, transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(240,147,251,.05) 0%, transparent 60%);
+}
+[data-theme="dark"] .pm-toolbar {
+  background: rgba(30,41,59,.95);
+  border-color: rgba(102,126,234,.3);
+}
+[data-theme="dark"] .pm .form-control,
+[data-theme="dark"] .pm .form-control-sm,
+[data-theme="dark"] .pm .pm-toolbar select {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+[data-theme="dark"] .pm select.form-control,
+[data-theme="dark"] .pm select.form-control-sm {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+[data-theme="dark"] .pm .form-control-range {
+  background: linear-gradient(to right, #334155 0%, var(--pm-tool) 100%);
+}
+[data-theme="dark"] .pm #scrub {
+  background: linear-gradient(to right, #334155 0%, var(--pm-tool) 100%);
+}
+[data-theme="dark"] .pm .form-check-input {
+  background-color: #0f172a;
+  border-color: #475569;
+}
+[data-theme="dark"] .pm .form-check-label { color: #94a3b8; }
+[data-theme="dark"] .pm .btn-outline-secondary {
+  border-color: #475569;
+  background: #1e293b;
+  color: #94a3b8;
+}
+[data-theme="dark"] .pm .btn-outline-secondary:hover {
+  background: #334155;
+  border-color: var(--pm-tool);
+  color: var(--pm-tool);
+}
+[data-theme="dark"] .pm .btn-outline-info {
+  background: #1e293b;
+  border-color: #22d3ee;
+  color: #22d3ee;
+}
+[data-theme="dark"] .pm .btn-outline-info:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: #fff;
+}
+[data-theme="dark"] .pm .nav-link { color: #94a3b8; }
+[data-theme="dark"] .pm .nav-link:hover { background: #334155; color: var(--pm-tool); border-color: #475569; }
+[data-theme="dark"] .pm .air-preset {
+  background: #0f172a !important;
+  border-color: #475569 !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .pm .air-preset:hover {
+  background: var(--pm-gradient) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   Educational Scaffolding — Tooltips, Panels, Formulas, Hints
+   ============================================================ */
+
+/* --- Concept Tooltip "?" circles --- */
+.pm-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--pm-light);
+  color: var(--pm-tool);
+  font-size: .65rem;
+  font-weight: 700;
+  cursor: help;
+  margin-left: .3rem;
+  vertical-align: middle;
+  position: relative;
+  border: 1px solid rgba(102,126,234,.25);
+  transition: all .2s ease;
+  flex-shrink: 0;
+}
+.pm-tip:hover {
+  background: var(--pm-gradient);
+  color: #fff;
+  border-color: var(--pm-tool);
+  transform: scale(1.15);
+}
+.pm-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: .45rem .6rem;
+  border-radius: 8px;
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1.45;
+  width: max-content;
+  max-width: 220px;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+}
+.pm-tip:hover::after {
+  opacity: 1;
+}
+
+/* --- Collapsible Educational Panels --- */
+.pm-edu-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  margin-top: .75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  transition: box-shadow .3s ease;
+}
+.pm-edu-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+}
+.pm-edu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: .6rem .8rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f1ff 100%);
+  border: none;
+  cursor: pointer;
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--pm-tool);
+  transition: all .2s ease;
+}
+.pm-edu-toggle:hover {
+  background: linear-gradient(135deg, #f0f1ff 0%, #e8e9ff 100%);
+}
+.pm-edu-toggle .pm-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform .3s ease;
+  flex-shrink: 0;
+}
+.pm-edu-card.pm-open .pm-edu-toggle .pm-chevron {
+  transform: rotate(180deg);
+}
+.pm-edu-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease, padding .3s ease;
+  padding: 0 .8rem;
+}
+.pm-edu-card.pm-open .pm-edu-body {
+  max-height: 1200px;
+  padding: .6rem .8rem;
+}
+
+/* --- Formula Display --- */
+.pm-formula-group {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.pm-formula {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid var(--pm-tool);
+  border-radius: 6px;
+  padding: .4rem .6rem;
+}
+.pm-formula-label {
+  font-size: .72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: .15rem;
+}
+.pm-formula code {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .82rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+.pm-formula-note {
+  font-size: .72rem;
+  color: #94a3b8;
+  margin-top: .15rem;
+  font-style: italic;
+}
+
+/* --- Learn Hints (annotated results) --- */
+.pm-learn-hint {
+  grid-column: 1 / -1;
+  background: rgba(102,126,234,.06);
+  border-left: 2px solid var(--pm-tool);
+  border-radius: 0 6px 6px 0;
+  padding: .25rem .5rem;
+  font-size: .75rem;
+  color: #64748b;
+  line-height: 1.4;
+  display: none;
+}
+.pm-show-hints .pm-learn-hint {
+  display: block;
+}
+.pm-learn-toggle {
+  grid-column: 1 / -1;
+  background: none;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: .25rem .5rem;
+  font-size: .72rem;
+  color: var(--pm-tool);
+  cursor: pointer;
+  text-align: center;
+  margin-top: .3rem;
+  transition: all .2s ease;
+}
+.pm-learn-toggle:hover {
+  background: rgba(102,126,234,.06);
+  border-color: var(--pm-tool);
+}
+
+/* --- Physics Tips List --- */
+.pm-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.pm-tips-list li {
+  position: relative;
+  padding-left: 1.2rem;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: #475569;
+}
+.pm-tips-list li::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: var(--pm-tool);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+/* --- Guided Experiment Cards --- */
+.pm-experiment {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: .5rem .6rem;
+  margin-bottom: .5rem;
+}
+.pm-experiment:last-child { margin-bottom: 0; }
+.pm-experiment-title {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--pm-tool-dark);
+  margin-bottom: .15rem;
+}
+.pm-experiment-goal {
+  font-size: .75rem;
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: .25rem;
+}
+.pm-experiment-steps {
+  font-size: .78rem;
+  color: #475569;
+  line-height: 1.5;
+  padding-left: 1rem;
+  margin: 0;
+}
+.pm-experiment-steps li { margin-bottom: .15rem; }
+
+/* --- Comparison Tip Box --- */
+.pm-comparison-tip {
+  background: linear-gradient(135deg, rgba(102,126,234,.06) 0%, rgba(118,75,162,.06) 100%);
+  border: 1px solid rgba(102,126,234,.2);
+  border-radius: 8px;
+  padding: .5rem .6rem;
+  margin-top: .4rem;
+  font-size: .8rem;
+  line-height: 1.5;
+  color: #475569;
+}
+.pm-comparison-tip strong {
+  color: var(--pm-tool);
+}
+
+/* --- Energy Explainer --- */
+.pm-energy-explainer {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1px solid #bbf7d0;
+  border-left: 3px solid #10b981;
+  border-radius: 8px;
+  padding: .5rem .65rem;
+  margin-top: .6rem;
+  font-size: .8rem;
+  line-height: 1.55;
+  color: #475569;
+}
+.pm-energy-explainer strong {
+  color: #059669;
+}
+
+/* ============================================================
+   Educational Scaffolding — Dark Mode
+   ============================================================ */
+[data-theme="dark"] .pm-tip {
+  background: rgba(102,126,234,.2);
+  border-color: rgba(102,126,234,.4);
+  color: #a5b4fc;
+}
+[data-theme="dark"] .pm-tip:hover {
+  background: var(--pm-gradient);
+  color: #fff;
+}
+[data-theme="dark"] .pm-tip::after {
+  background: #0f172a;
+  color: #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+}
+[data-theme="dark"] .pm-edu-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+[data-theme="dark"] .pm-edu-toggle {
+  background: linear-gradient(135deg, #1e293b 0%, #1a1f3a 100%);
+  color: #a5b4fc;
+}
+[data-theme="dark"] .pm-edu-toggle:hover {
+  background: linear-gradient(135deg, #1a1f3a 0%, #252b4a 100%);
+}
+[data-theme="dark"] .pm-formula {
+  background: #0f172a;
+  border-color: #334155;
+  border-left-color: var(--pm-tool);
+}
+[data-theme="dark"] .pm-formula code { color: #e2e8f0; }
+[data-theme="dark"] .pm-formula-label { color: #94a3b8; }
+[data-theme="dark"] .pm-formula-note { color: #64748b; }
+[data-theme="dark"] .pm-learn-hint {
+  background: rgba(102,126,234,.1);
+  color: #94a3b8;
+}
+[data-theme="dark"] .pm-learn-toggle {
+  border-color: #475569;
+  color: #a5b4fc;
+}
+[data-theme="dark"] .pm-learn-toggle:hover {
+  background: rgba(102,126,234,.1);
+  border-color: #a5b4fc;
+}
+[data-theme="dark"] .pm-tips-list li { color: #94a3b8; }
+[data-theme="dark"] .pm-experiment {
+  background: #0f172a;
+  border-color: #334155;
+}
+[data-theme="dark"] .pm-experiment-title { color: #a5b4fc; }
+[data-theme="dark"] .pm-experiment-goal { color: #64748b; }
+[data-theme="dark"] .pm-experiment-steps { color: #94a3b8; }
+[data-theme="dark"] .pm-comparison-tip {
+  background: rgba(102,126,234,.08);
+  border-color: rgba(102,126,234,.25);
+  color: #94a3b8;
+}
+[data-theme="dark"] .pm-energy-explainer {
+  background: rgba(16,185,129,.08);
+  border-color: rgba(16,185,129,.25);
+  border-left-color: #10b981;
+  color: #94a3b8;
+}
+[data-theme="dark"] .pm-energy-explainer strong { color: #34d399; }
+
+/* --- Educational Diagram (dark mode) --- */
+[data-theme="dark"] .pm-edu-diagram {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 85%, #14532d 85%, #166534 100%) !important;
+}
