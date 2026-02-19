@@ -243,7 +243,7 @@
       "@type": "ListItem",
       "position": 2,
       "name": "<%= escapeJson(toolCategory) %>",
-      "item": "<%= baseUrl %>/#<%= toolCategory.toLowerCase().replace(" ", "-") %>"
+      "item": "<%= baseUrl %>/<%= toolCategory.toLowerCase().contains("math") ? "math/" : "#" + toolCategory.toLowerCase().replace(" ", "-") %>"
     },
     {
       "@type": "ListItem",
