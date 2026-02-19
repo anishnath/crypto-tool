@@ -1687,11 +1687,11 @@
         });
     };
 
-    /** Prepare LaTeX for KaTeX rendering. If string already contains LaTeX (has \\), pass through unchanged.
-     *  Wrapping in \\text{} corrupts math like e^{-x} by escaping } to \\}, breaking rendering. */
+    /** Prepare LaTeX for KaTeX rendering. Pass through if already LaTeX; only wrap plain text.
+     *  LaTeX can have \\ (commands), ^{} (superscripts), _{} (subscripts) — never wrap those. */
     function prepareLatexForKatex(latex) {
         if (!latex || typeof latex !== 'string') return latex;
-        if (latex.indexOf('\\') >= 0) return latex;  /* Already LaTeX - do not transform */
+        if (/\\|[\^_]|\{[^}]*\}/.test(latex)) return latex;  /* LaTeX: has \, ^, _, or { } */
         return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
     }
 
