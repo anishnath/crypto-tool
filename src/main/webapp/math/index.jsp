@@ -6,15 +6,15 @@
     <jsp:include page="../modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Math Calculators - Free Online Step-by-Step Solvers" />
         <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="47 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
+        <jsp:param name="toolDescription" value="48 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
         <jsp:param name="toolUrl" value="math/" />
         <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, exponent calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, inequality solver, step by step math, free math solver" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="47 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
+        <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
         <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages" />
         <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
         <jsp:param name="faq1q" value="Are these math calculators free?" />
-        <jsp:param name="faq1a" value="Yes all 47 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
+        <jsp:param name="faq1a" value="Yes all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation so you learn the method not just the answer." />
         <jsp:param name="faq3q" value="What math topics are covered?" />
@@ -28,11 +28,11 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Math Calculators",
-      "description": "47 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
+      "description": "48 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
       "url": "https://8gwifi.org/math/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 47,
+        "numberOfItems": 48,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
@@ -80,7 +80,8 @@
           {"@type": "ListItem", "position": 44, "name": "Effect Size Calculator", "url": "https://8gwifi.org/effect-size-calculator.jsp"},
           {"@type": "ListItem", "position": 45, "name": "Standard Error Calculator", "url": "https://8gwifi.org/standard-error-calculator.jsp"},
           {"@type": "ListItem", "position": 46, "name": "Outlier Detection Calculator", "url": "https://8gwifi.org/outlier-detection-calculator.jsp"},
-          {"@type": "ListItem", "position": 47, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"}
+          {"@type": "ListItem", "position": 47, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"},
+          {"@type": "ListItem", "position": 48, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"}
         ]
       }
     }
@@ -271,7 +272,7 @@
             <p>Free step-by-step solvers with KaTeX formulas and Python compilers</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <span class="hero-stat-value">47</span>
+                    <span class="hero-stat-value">48</span>
                     <span class="hero-stat-label">Calculators</span>
                 </div>
                 <div class="hero-stat">
@@ -827,10 +828,25 @@
             <div class="category-header">
                 <span class="category-icon">&#8747;</span>
                 <h2>Calculus</h2>
-                <span class="category-count">4 tools</span>
+                <span class="category-count">5 tools</span>
             </div>
             <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #059669;">
+                <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #8b5cf6;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">&#128200;</div>
+                        <div>
+                            <h3>Graphing Calculator</h3>
+                            <div class="tool-formula">Plot y=f(x), parametric, polar, implicit</div>
+                        </div>
+                    </div>
+                    <p>Plot Cartesian, parametric, polar, and implicit equations. Trace slopes, find intersections, animate sliders, export PNG/SVG. 35+ presets.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #059669;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #059669, #10b981);">d/dx</div>
                         <div>
@@ -846,7 +862,7 @@
                     </div>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/integral-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #4f46e5;">
+                <a href="<%=request.getContextPath()%>/integral-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #4f46e5;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">&int;</div>
                         <div>
@@ -862,7 +878,7 @@
                     </div>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/limit-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #9333ea;">
+                <a href="<%=request.getContextPath()%>/limit-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #9333ea;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #9333ea, #a855f7);">lim</div>
                         <div>
@@ -877,7 +893,7 @@
                     </div>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #2563eb;">
+                <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&Sigma;</div>
                         <div>
@@ -1103,7 +1119,7 @@
                     Are these math calculators free?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes, all 47 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
+                <div class="faq-answer">Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
             </div>
 
             <div class="faq-item">
