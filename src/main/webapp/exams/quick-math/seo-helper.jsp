@@ -67,9 +67,9 @@
     public String getSEOTitle(String topicId, ServletContext context) {
         org.json.JSONObject topic = getTopicSEO(topicId, context);
         if (topic != null) {
-            return topic.optString("seoTitle", "Mental Math Practice | Quick Math");
+            return topic.optString("seoTitle", "Mental Math Tricks | Quick Math");
         }
-        return "Mental Math Practice | Quick Math";
+        return "Mental Math Tricks | Quick Math";
     }
 
     /**

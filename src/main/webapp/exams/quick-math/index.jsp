@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "150+ Mental Math Tricks & Shortcuts | Calculate Faster Than a Calculator";
-    String seoDescription = "Master Vedic math tricks, speed calculation techniques & mental arithmetic shortcuts. Free practice for competitive exams - SSC, Bank, CAT, GRE. Add, multiply, divide instantly!";
+    String seoTitle = "150+ Mental Math Tricks — Multiply, Divide & Calculate Instantly";
+    String seoDescription = "Free mental math shortcuts that actually work. Multiply 2-digit numbers in seconds, calculate percentages instantly, square any number ending in 5. Interactive practice with step-by-step breakdowns.";
     String canonicalUrl = "https://8gwifi.org/exams/quick-math/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -27,7 +27,7 @@
     extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/images/quick-math-og.png\">\n");
 
     // Additional SEO Meta Tags
-    extraHead.append("<meta name=\"keywords\" content=\"mental math tricks, Vedic math, speed math, fast calculation, math shortcuts, competitive exam math, SSC math tricks, bank exam math, CAT quantitative, mental arithmetic, calculation techniques\">\n");
+    extraHead.append("<meta name=\"keywords\" content=\"mental math tricks, speed math, fast calculation, math shortcuts, mental arithmetic, multiplication tricks, percentage shortcuts, mental calculation, math speed tricks, number sense, rapid math techniques\">\n");
     extraHead.append("<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large\">\n");
 
     // JSON-LD: WebPage Schema
@@ -36,7 +36,7 @@
     extraHead.append("  \"@context\": \"https://schema.org\",\n");
     extraHead.append("  \"@type\": \"WebPage\",\n");
     extraHead.append("  \"@id\": \"").append(canonicalUrl).append("\",\n");
-    extraHead.append("  \"name\": \"Mental Math Tricks & Speed Calculation Techniques\",\n");
+    extraHead.append("  \"name\": \"150+ Mental Math Tricks — Multiply, Divide & Calculate Instantly\",\n");
     extraHead.append("  \"description\": \"").append(seoDescription).append("\",\n");
     extraHead.append("  \"url\": \"").append(canonicalUrl).append("\",\n");
     extraHead.append("  \"inLanguage\": \"en\",\n");
@@ -51,8 +51,8 @@
     extraHead.append("  },\n");
     extraHead.append("  \"mainEntity\": {\n");
     extraHead.append("    \"@type\": \"ItemList\",\n");
-    extraHead.append("    \"name\": \"Mental Math Tricks Collection\",\n");
-    extraHead.append("    \"description\": \"150+ mental math tricks covering addition, multiplication, division, percentages, algebra and more\",\n");
+    extraHead.append("    \"name\": \"Mental Math Tricks & Shortcuts\",\n");
+    extraHead.append("    \"description\": \"150+ mental math techniques for fast addition, multiplication, division, percentages, algebra, and more\",\n");
     extraHead.append("    \"numberOfItems\": 150,\n");
     extraHead.append("    \"itemListElement\": [\n");
     extraHead.append("      {\"@type\": \"ListItem\", \"position\": 1, \"name\": \"Addition Tricks\", \"url\": \"").append(canonicalUrl).append("?filter=addition\"},\n");
@@ -71,21 +71,21 @@
     extraHead.append("{\n");
     extraHead.append("  \"@context\": \"https://schema.org\",\n");
     extraHead.append("  \"@type\": \"Course\",\n");
-    extraHead.append("  \"name\": \"Mental Math Mastery: Speed Calculation Techniques\",\n");
-    extraHead.append("  \"description\": \"Learn 150+ mental math tricks to calculate faster. Covers Vedic math, speed arithmetic, and shortcuts for competitive exams.\",\n");
+    extraHead.append("  \"name\": \"Mental Math Mastery: 150+ Speed Calculation Techniques\",\n");
+    extraHead.append("  \"description\": \"Learn 150+ mental math tricks to calculate faster than a calculator. Covers multiplication shortcuts, percentage hacks, and number sense techniques.\",\n");
     extraHead.append("  \"provider\": {\n");
     extraHead.append("    \"@type\": \"Organization\",\n");
     extraHead.append("    \"name\": \"8gwifi.org\",\n");
     extraHead.append("    \"url\": \"https://8gwifi.org\"\n");
     extraHead.append("  },\n");
     extraHead.append("  \"educationalLevel\": \"Beginner to Advanced\",\n");
-    extraHead.append("  \"teaches\": [\"Mental Arithmetic\", \"Vedic Mathematics\", \"Speed Calculation\", \"Math Shortcuts\"],\n");
+    extraHead.append("  \"teaches\": [\"Mental Arithmetic\", \"Speed Calculation\", \"Math Shortcuts\", \"Number Sense\"],\n");
     extraHead.append("  \"inLanguage\": \"en\",\n");
     extraHead.append("  \"isAccessibleForFree\": true,\n");
     extraHead.append("  \"audience\": {\n");
     extraHead.append("    \"@type\": \"EducationalAudience\",\n");
     extraHead.append("    \"educationalRole\": \"student\",\n");
-    extraHead.append("    \"audienceType\": \"Competitive Exam Aspirants\"\n");
+    extraHead.append("    \"audienceType\": \"Students and lifelong learners\"\n");
     extraHead.append("  },\n");
     extraHead.append("  \"hasCourseInstance\": {\n");
     extraHead.append("    \"@type\": \"CourseInstance\",\n");
@@ -132,10 +132,10 @@
     extraHead.append("    },\n");
     extraHead.append("    {\n");
     extraHead.append("      \"@type\": \"Question\",\n");
-    extraHead.append("      \"name\": \"What are Vedic math tricks?\",\n");
+    extraHead.append("      \"name\": \"What are the best mental math techniques?\",\n");
     extraHead.append("      \"acceptedAnswer\": {\n");
     extraHead.append("        \"@type\": \"Answer\",\n");
-    extraHead.append("        \"text\": \"Vedic math is an ancient Indian system of mathematics with 16 sutras (formulas) for fast mental calculation. Popular tricks include: multiplying numbers near 100, squaring numbers ending in 5, and the vertically-crosswise method for multiplication.\"\n");
+    extraHead.append("        \"text\": \"The most useful mental math techniques include: multiplying numbers near 100 (complement method), squaring numbers ending in 5, the lattice/crosswise method for multiplication, and anchor-based percentage calculation. Many come from Vedic math, an ancient system with 16 formulas for fast mental calculation.\"\n");
     extraHead.append("      }\n");
     extraHead.append("    },\n");
     extraHead.append("    {\n");
@@ -183,18 +183,18 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1 class="hero-title">150+ Mental Math Tricks & Shortcuts</h1>
+                    <h1 class="hero-title">150+ Mental Math Tricks &mdash; Calculate Faster Than a Calculator</h1>
                     <p class="hero-subtitle">
-                        Master <strong>Vedic math</strong>, speed calculation, and mental arithmetic.
-                        Learn techniques used by math champions. Practice until you're <em>faster than a calculator</em>.
+                        Multiply 2-digit numbers in seconds. Calculate percentages in your head.
+                        Square any number ending in 5 <em>instantly</em>. Free interactive practice with step-by-step breakdowns.
                     </p>
                     <div class="hero-tags">
-                        <span class="hero-tag">SSC</span>
-                        <span class="hero-tag">Bank Exams</span>
-                        <span class="hero-tag">CAT</span>
-                        <span class="hero-tag">GRE</span>
-                        <span class="hero-tag">GMAT</span>
-                        <span class="hero-tag">Competitive Exams</span>
+                        <span class="hero-tag">Multiplication</span>
+                        <span class="hero-tag">Percentages</span>
+                        <span class="hero-tag">Division</span>
+                        <span class="hero-tag">Algebra</span>
+                        <span class="hero-tag">Roots & Squares</span>
+                        <span class="hero-tag">Speed Math</span>
                     </div>
                 </div>
             </section>
