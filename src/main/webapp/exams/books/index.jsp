@@ -1,9 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
-    request.setAttribute("pageTitle", "Textbook Solutions - NCERT, ICSE & More");
-    request.setAttribute("pageDescription",
-        "Free textbook solutions with step-by-step explanations. NCERT solutions for Class 6-12 Mathematics, Science, Physics, Chemistry. Practice exercises and learn concepts.");
-    request.setAttribute("canonicalUrl", "https://8gwifi.org/exams/books/");
+    String seoTitle = "Textbook Solutions - NCERT, ICSE & More";
+    String seoDescription = "Free textbook solutions with step-by-step explanations. NCERT solutions for Class 6-12 Mathematics, Science, Physics, Chemistry. Practice exercises and learn concepts.";
+    String canonicalUrl = "https://8gwifi.org/exams/books/";
+
+    request.setAttribute("pageTitle", seoTitle);
+    request.setAttribute("pageDescription", seoDescription);
+    request.setAttribute("canonicalUrl", canonicalUrl);
+
+    StringBuilder extraHead = new StringBuilder();
+    extraHead.append("<meta property=\"og:title\" content=\"").append(seoTitle).append("\">\n");
+    extraHead.append("<meta property=\"og:description\" content=\"").append(seoDescription).append("\">\n");
+    extraHead.append("<meta property=\"og:url\" content=\"").append(canonicalUrl).append("\">\n");
+    extraHead.append("<meta property=\"og:type\" content=\"website\">\n");
+    extraHead.append("<meta property=\"og:site_name\" content=\"8gwifi.org\">\n");
+    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/ncert-books-og.svg\">\n");
+    extraHead.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
+    extraHead.append("<meta name=\"twitter:title\" content=\"").append(seoTitle).append("\">\n");
+    extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
+    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/ncert-books-og.svg\">\n");
+    request.setAttribute("extraHeadContent", extraHead.toString());
 %>
 <%@ include file="../components/header.jsp" %>
 

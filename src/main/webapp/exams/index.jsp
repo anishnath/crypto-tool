@@ -18,11 +18,13 @@
     extraHead.append("<meta property=\"og:url\" content=\"").append(canonicalUrl).append("\">\n");
     extraHead.append("<meta property=\"og:type\" content=\"website\">\n");
     extraHead.append("<meta property=\"og:site_name\" content=\"8gwifi.org\">\n");
+    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/exams-landing-og.svg\">\n");
 
     // Twitter Card
     extraHead.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
     extraHead.append("<meta name=\"twitter:title\" content=\"").append(seoTitle).append("\">\n");
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
+    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/exams-landing-og.svg\">\n");
 
     // Keywords
     extraHead.append("<meta name=\"keywords\" content=\"free math calculator, physics solver, interactive math visualizations, mental math tricks, step-by-step solutions, unit circle calculator, matrix calculator, function plotter, math practice problems, physics simulations, brain training games, free mock tests, interactive graphs, algebra calculator, calculus solver\">\n");

@@ -9,9 +9,11 @@
     extraHead.append("\n<meta property=\"og:type\" content=\"website\">");
     extraHead.append("\n<meta property=\"og:url\" content=\"" + canonicalUrl + "\">");
     extraHead.append("\n<meta property=\"og:site_name\" content=\"8gwifi.org\">");
+    extraHead.append("\n<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/visual-physics-og.svg\">");
     extraHead.append("\n<meta name=\"twitter:card\" content=\"summary_large_image\">");
     extraHead.append("\n<meta name=\"twitter:title\" content=\"Visual Physics Lab - 18 Interactive Physics Simulations\">");
     extraHead.append("\n<meta name=\"twitter:description\" content=\"" + seoDescription + "\">");
+    extraHead.append("\n<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/visual-physics-og.svg\">");
     extraHead.append("\n<meta name=\"keywords\" content=\"projectile motion simulator, collisions momentum, inclined plane forces, orbital mechanics kepler, torque rotation, pendulum SHM, lens ray diagram, snells law refraction, diffraction grating, electric field simulator, magnetic field visualizer, circuit simulator, electromagnetic induction, wave interference, standing waves harmonics, doppler effect, ideal gas PV diagram, photoelectric effect, interactive physics, free physics tools\">");
 
     request.setAttribute("pageTitle", seoTitle);

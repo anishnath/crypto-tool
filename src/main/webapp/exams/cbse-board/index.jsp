@@ -1,8 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
-    request.setAttribute("pageTitle", "CBSE Board Practice Tests");
-    request.setAttribute("pageDescription", "Free CBSE Class 10 practice tests and mock exams. Prepare for your board exams with curated question sets following the latest syllabus and exam pattern.");
-    request.setAttribute("canonicalUrl", "https://8gwifi.org/exams/cbse-board/");
+    String seoTitle = "CBSE Board Practice Tests";
+    String seoDescription = "Free CBSE Class 10 practice tests and mock exams. Prepare for your board exams with curated question sets following the latest syllabus and exam pattern.";
+    String canonicalUrl = "https://8gwifi.org/exams/cbse-board/";
+
+    request.setAttribute("pageTitle", seoTitle);
+    request.setAttribute("pageDescription", seoDescription);
+    request.setAttribute("canonicalUrl", canonicalUrl);
+
+    StringBuilder extraHead = new StringBuilder();
+    extraHead.append("<meta property=\"og:title\" content=\"").append(seoTitle).append("\">\n");
+    extraHead.append("<meta property=\"og:description\" content=\"").append(seoDescription).append("\">\n");
+    extraHead.append("<meta property=\"og:url\" content=\"").append(canonicalUrl).append("\">\n");
+    extraHead.append("<meta property=\"og:type\" content=\"website\">\n");
+    extraHead.append("<meta property=\"og:site_name\" content=\"8gwifi.org\">\n");
+    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/cbse-board-og.svg\">\n");
+    extraHead.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
+    extraHead.append("<meta name=\"twitter:title\" content=\"").append(seoTitle).append("\">\n");
+    extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
+    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/cbse-board-og.svg\">\n");
+    request.setAttribute("extraHeadContent", extraHead.toString());
 %>
 <%@ include file="../components/header.jsp" %>
 

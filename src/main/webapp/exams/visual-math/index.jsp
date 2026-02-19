@@ -8,9 +8,11 @@
         extraHead.append("\n<meta property=\"og:type\" content=\"website\">");
         extraHead.append("\n<meta property=\"og:url\" content=\"" + canonicalUrl + "\">");
         extraHead.append("\n<meta property=\"og:site_name\" content=\"8gwifi.org\">");
+        extraHead.append("\n<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/visual-math-og.svg\">");
         extraHead.append("\n<meta name=\"twitter:card\" content=\"summary_large_image\">");
         extraHead.append("\n<meta name=\"twitter:title\" content=\"Visual Math Lab - Interactive Math Tools\">");
         extraHead.append("\n<meta name=\"twitter:description\" content=\"" + seoDescription + "\">");
+        extraHead.append("\n<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/visual-math-og.svg\">");
         extraHead.append("\n<meta name=\"keywords\" content=\"linear equation grapher, systems of equations solver, polynomial roots explorer, exponential logarithm graph, pythagorean theorem calculator, circle theorems, unit circle calculator, riemann sum calculator, matrix transformation visualizer, taylor series calculator, function plotter, central limit theorem simulator, normal distribution calculator, derivative visualizer, quadratic equation grapher, parametric curves, probability distributions, limits continuity, slope fields ODE, regression scatter plot, fractal explorer, venn diagram maker, matrix calculator eigenvalues, integral calculator, permutations combinations calculator, interactive math, math visualization, online math tools\">");
 
         request.setAttribute("pageTitle", seoTitle);
