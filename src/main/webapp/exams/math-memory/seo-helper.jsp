@@ -94,7 +94,7 @@
         if (pageData == null) return "";
 
         StringBuilder html = new StringBuilder();
-        String defaultOgImage = "https://8gwifi.org/exams/images/math-memory-og.png";
+        String defaultOgImage = "https://8gwifi.org/exams/images/exams-practice-og.svg";
         String defaultSiteName = "8gwifi.org";
         String defaultAuthor = "8gwifi.org";
 
@@ -258,40 +258,6 @@
 
         // BreadcrumbList Schema
         appendBreadcrumbJsonLd(json, gameName, canonical);
-
-        // FAQPage Schema for common questions
-        json.append("<script type=\"application/ld+json\">\n");
-        json.append("{\n");
-        json.append("  \"@context\": \"https://schema.org\",\n");
-        json.append("  \"@type\": \"FAQPage\",\n");
-        json.append("  \"mainEntity\": [\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"Question\",\n");
-        json.append("      \"name\": \"Is ").append(escapeJson(gameName)).append(" free to play?\",\n");
-        json.append("      \"acceptedAnswer\": {\n");
-        json.append("        \"@type\": \"Answer\",\n");
-        json.append("        \"text\": \"Yes! ").append(escapeJson(gameName)).append(" is completely free to play. No registration or download required - just open and start training your brain.\"\n");
-        json.append("      }\n");
-        json.append("    },\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"Question\",\n");
-        json.append("      \"name\": \"What skills does ").append(escapeJson(gameName)).append(" improve?\",\n");
-        json.append("      \"acceptedAnswer\": {\n");
-        json.append("        \"@type\": \"Answer\",\n");
-        json.append("        \"text\": \"This game helps improve working memory, mental calculation speed, pattern recognition, and cognitive flexibility. Regular practice can enhance math skills and memory retention.\"\n");
-        json.append("      }\n");
-        json.append("    },\n");
-        json.append("    {\n");
-        json.append("      \"@type\": \"Question\",\n");
-        json.append("      \"name\": \"Can I play on mobile devices?\",\n");
-        json.append("      \"acceptedAnswer\": {\n");
-        json.append("        \"@type\": \"Answer\",\n");
-        json.append("        \"text\": \"Yes! ").append(escapeJson(gameName)).append(" is fully responsive and works on phones, tablets, and desktop computers. Play anywhere with an internet connection.\"\n");
-        json.append("      }\n");
-        json.append("    }\n");
-        json.append("  ]\n");
-        json.append("}\n");
-        json.append("</script>");
 
         return json.toString();
     }

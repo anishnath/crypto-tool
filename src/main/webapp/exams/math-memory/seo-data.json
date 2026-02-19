@@ -1,294 +1,294 @@
 {
     "pages": {
         "index": {
-            "title": "Math Memory Games | Train Your Brain with Number Puzzles",
-            "description": "Free math memory games to boost your mental calculation and recall. Match problems, memorize sequences, grid challenges. Perfect for brain training.",
+            "title": "16 Free Math Memory Games — Train Your Brain Online",
+            "description": "Sharpen working memory, speed, and focus with 16 free math brain games. Grid puzzles, flash calculation, pattern recall, chimp tests, and more. No signup, play instantly.",
             "canonical": "https://8gwifi.org/exams/math-memory/",
-            "keywords": "math memory game, brain training, number puzzles, mental math, memory exercises, math games free, cognitive training",
+            "keywords": "math memory game, brain training games free, number memory test, math brain games, working memory training, cognitive games online",
             "openGraph": {
-                "og:title": "Math Memory Games | Train Your Brain with Number Puzzles",
-                "og:description": "Free math memory games to boost your mental calculation and recall. Match problems, memorize sequences, grid challenges. Perfect for brain training.",
+                "og:title": "16 Free Math Memory Games — Train Your Brain Online",
+                "og:description": "Sharpen working memory, speed, and focus with 16 free math brain games. Grid puzzles, flash calculation, pattern recall, and more. Play instantly.",
                 "og:url": "https://8gwifi.org/exams/math-memory/",
                 "og:type": "website",
-                "og:image": "https://8gwifi.org/exams/images/math-memory-og.png"
+                "og:image": "https://8gwifi.org/exams/images/exams-practice-og.svg"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Math Memory Games | Train Your Brain with Number Puzzles",
-                "twitter:description": "Free math memory games to boost your mental calculation and recall. Match problems, memorize sequences, grid challenges. Perfect for brain training.",
-                "twitter:image": "https://8gwifi.org/exams/images/math-memory-og.png"
+                "twitter:title": "16 Free Math Memory Games — Train Your Brain Online",
+                "twitter:description": "Sharpen working memory, speed, and focus with 16 free math brain games. Grid puzzles, flash calculation, pattern recall, and more. Play instantly.",
+                "twitter:image": "https://8gwifi.org/exams/images/exams-practice-og.svg"
             }
         },
         "flash": {
-            "title": "Flash Math | Speed Calculation Memory Game",
-            "description": "See the problem, it vanishes, type the answer! Train your brain to calculate fast under pressure. Free mental math speed training.",
+            "title": "Flash Math — How Fast Can You Calculate From Memory?",
+            "description": "A math problem appears and vanishes. Type the answer before you forget. Tests mental calculation speed and short-term recall. Free, no signup.",
             "canonical": "https://8gwifi.org/exams/math-memory/flash.jsp",
-            "keywords": "flash math, mental math speed, memory training, fast calculation game",
+            "keywords": "flash math game, speed calculation test, mental math speed, fast math memory game",
             "openGraph": {
-                "og:title": "Flash Math | Speed Calculation Memory Game",
-                "og:description": "See the problem, it vanishes, type the answer! Train your brain to calculate fast under pressure. Free mental math speed training.",
+                "og:title": "Flash Math — How Fast Can You Calculate From Memory?",
+                "og:description": "A math problem appears and vanishes. Type the answer before you forget. Tests mental calculation speed and short-term recall.",
                 "og:url": "https://8gwifi.org/exams/math-memory/flash.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Flash Math | Speed Calculation Memory Game",
-                "twitter:description": "See the problem, it vanishes, type the answer! Train your brain to calculate fast under pressure. Free mental math speed training."
+                "twitter:title": "Flash Math — How Fast Can You Calculate From Memory?",
+                "twitter:description": "A math problem appears and vanishes. Type the answer before you forget. Tests mental calculation speed and short-term recall."
             }
         },
         "match": {
-            "title": "Match Master | Math Memory Card Game",
-            "description": "Match math problems to their answers in this classic memory card game. Train your brain with addition, multiplication, and more.",
+            "title": "Match Master — Pair Math Problems to Answers",
+            "description": "Flip cards to match math problems with their correct answers. A memory card game that tests both recall and arithmetic. Multiple difficulty levels.",
             "canonical": "https://8gwifi.org/exams/math-memory/match.jsp",
-            "keywords": "math matching game, memory card game, math puzzle, mental math match",
+            "keywords": "math matching game, memory card game math, number pair game, math puzzle cards",
             "openGraph": {
-                "og:title": "Match Master | Math Memory Card Game",
-                "og:description": "Match math problems to their answers in this classic memory card game. Train your brain with addition, multiplication, and more.",
+                "og:title": "Match Master — Pair Math Problems to Answers",
+                "og:description": "Flip cards to match math problems with their correct answers. A memory card game that tests both recall and arithmetic.",
                 "og:url": "https://8gwifi.org/exams/math-memory/match.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Match Master | Math Memory Card Game",
-                "twitter:description": "Match math problems to their answers in this classic memory card game. Train your brain with addition, multiplication, and more."
+                "twitter:title": "Match Master — Pair Math Problems to Answers",
+                "twitter:description": "Flip cards to match math problems with their correct answers. A memory card game that tests both recall and arithmetic."
             }
         },
         "grid": {
-            "title": "Grid Genius | Spatial Memory Math Game",
-            "description": "Memorize number positions in a grid then answer questions. Ultimate spatial memory challenge for brain training.",
+            "title": "Grid Genius — Memorize Numbers, Then Answer",
+            "description": "Study a grid of numbers, then the grid vanishes. Answer questions about what was where. A spatial memory challenge that gets harder each round.",
             "canonical": "https://8gwifi.org/exams/math-memory/grid.jsp",
-            "keywords": "spatial memory game, number grid, visual memory training, brain workout",
+            "keywords": "spatial memory game, number grid memory, visual memory test, number position recall",
             "openGraph": {
-                "og:title": "Grid Genius | Spatial Memory Math Game",
-                "og:description": "Memorize number positions in a grid then answer questions. Ultimate spatial memory challenge for brain training.",
+                "og:title": "Grid Genius — Memorize Numbers, Then Answer",
+                "og:description": "Study a grid of numbers, then the grid vanishes. Answer questions about what was where. A spatial memory challenge that gets harder each round.",
                 "og:url": "https://8gwifi.org/exams/math-memory/grid.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Grid Genius | Spatial Memory Math Game",
-                "twitter:description": "Memorize number positions in a grid then answer questions. Ultimate spatial memory challenge for brain training."
+                "twitter:title": "Grid Genius — Memorize Numbers, Then Answer",
+                "twitter:description": "Study a grid of numbers, then the grid vanishes. Answer questions about what was where. Gets harder each round."
             }
         },
         "sequence": {
-            "title": "Sequence Solver | Math Pattern Recognition Game",
-            "description": "Identify the pattern and predict the next number in the sequence. Train your brain with arithmetic, geometric, and Fibonacci sequences.",
+            "title": "Sequence Solver — Spot the Pattern, Predict the Next",
+            "description": "Given a number sequence, figure out the rule and predict what comes next. Covers arithmetic, geometric, Fibonacci, and tricky mixed patterns.",
             "canonical": "https://8gwifi.org/exams/math-memory/sequence.jsp",
-            "keywords": "math sequences, pattern recognition, number patterns, logic puzzle",
+            "keywords": "number sequence game, pattern recognition test, math patterns, what comes next, logic puzzle numbers",
             "openGraph": {
-                "og:title": "Sequence Solver | Math Pattern Recognition Game",
-                "og:description": "Identify the pattern and predict the next number in the sequence. Train your brain with arithmetic, geometric, and Fibonacci sequences.",
+                "og:title": "Sequence Solver — Spot the Pattern, Predict the Next",
+                "og:description": "Given a number sequence, figure out the rule and predict what comes next. Arithmetic, geometric, Fibonacci, and tricky mixed patterns.",
                 "og:url": "https://8gwifi.org/exams/math-memory/sequence.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Sequence Solver | Math Pattern Recognition Game",
-                "twitter:description": "Identify the pattern and predict the next number in the sequence. Train your brain with arithmetic, geometric, and Fibonacci sequences."
+                "twitter:title": "Sequence Solver — Spot the Pattern, Predict the Next",
+                "twitter:description": "Given a number sequence, figure out the rule and predict what comes next. Arithmetic, geometric, Fibonacci, and tricky mixed patterns."
             }
         },
         "speed-round": {
-            "title": "Speed Round | Math Memory Under Pressure",
-            "description": "Solve problems fast, then recall your answers! Ultimate test of attention and memory under time pressure. Free brain training game.",
+            "title": "Speed Round — Solve Fast, Then Recall Your Answers",
+            "description": "Solve a burst of math problems under time pressure, then recall what you answered. Tests attention, speed, and working memory simultaneously.",
             "canonical": "https://8gwifi.org/exams/math-memory/speed-round.jsp",
-            "keywords": "speed math, working memory training, fast math game, brain challenge",
+            "keywords": "speed math game, working memory test, timed math challenge, math under pressure",
             "openGraph": {
-                "og:title": "Speed Round | Math Memory Under Pressure",
-                "og:description": "Solve problems fast, then recall your answers! Ultimate test of attention and memory under time pressure. Free brain training game.",
+                "og:title": "Speed Round — Solve Fast, Then Recall Your Answers",
+                "og:description": "Solve a burst of math problems under time pressure, then recall what you answered. Tests attention, speed, and working memory simultaneously.",
                 "og:url": "https://8gwifi.org/exams/math-memory/speed-round.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Speed Round | Math Memory Under Pressure",
-                "twitter:description": "Solve problems fast, then recall your answers! Ultimate test of attention and memory under time pressure. Free brain training game."
+                "twitter:title": "Speed Round — Solve Fast, Then Recall Your Answers",
+                "twitter:description": "Solve a burst of math problems under time pressure, then recall what you answered. Tests attention, speed, and working memory."
             }
         },
         "hidden-order": {
-            "title": "Hidden Order | Spatial Memory & Chimp Test",
-            "description": "Test your working memory with this classic numerical recall game. Remember the position of numbers as they vanish. Based on the famous 'Chimp Test'.",
+            "title": "Hidden Order — The Chimp Test for Number Memory",
+            "description": "Numbers flash on screen, then hide. Click them in order from memory. Based on the famous chimp test that most humans fail. How far can you go?",
             "canonical": "https://8gwifi.org/exams/math-memory/hidden-order.jsp",
-            "keywords": "chimp test, working memory game, spatial memory, hidden numbers, number recall, brain training",
+            "keywords": "chimp test online, number memory test, working memory game, hidden numbers, sequential recall",
             "openGraph": {
-                "og:title": "Hidden Order | Spatial Memory & Chimp Test",
-                "og:description": "Test your working memory with this classic numerical recall game. Remember the position of numbers as they vanish.",
+                "og:title": "Hidden Order — The Chimp Test for Number Memory",
+                "og:description": "Numbers flash on screen, then hide. Click them in order from memory. Based on the famous chimp test that most humans fail.",
                 "og:url": "https://8gwifi.org/exams/math-memory/hidden-order.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Hidden Order | Spatial Memory & Chimp Test",
-                "twitter:description": "Test your working memory with this classic numerical recall game. Remember the position of numbers as they vanish."
+                "twitter:title": "Hidden Order — The Chimp Test for Number Memory",
+                "twitter:description": "Numbers flash on screen, then hide. Click them in order from memory. Based on the famous chimp test that most humans fail."
             }
         },
         "recall": {
-            "title": "Rapid Recall | Math Memory Training",
-            "description": "Rapidly memorize a set of numbers and answer questions about them. Ultimate working memory test.",
+            "title": "Rapid Recall — Memorize Numbers, Answer Questions",
+            "description": "A set of numbers appears briefly. Memorize them, then answer: What was the largest? The sum? The 3rd number? Tests how much your working memory can hold.",
             "canonical": "https://8gwifi.org/exams/math-memory/recall.jsp",
-            "keywords": "number recall, memory test, working memory training, mental math game",
+            "keywords": "number recall test, digit span test, working memory game, short term memory numbers",
             "openGraph": {
-                "og:title": "Rapid Recall | Math Memory Training",
-                "og:description": "Rapidly memorize a set of numbers and answer questions about them. Ultimate working memory test.",
+                "og:title": "Rapid Recall — Memorize Numbers, Answer Questions",
+                "og:description": "A set of numbers appears briefly. Memorize them, then answer: What was the largest? The sum? The 3rd number?",
                 "og:url": "https://8gwifi.org/exams/math-memory/recall.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Rapid Recall | Math Memory Training",
-                "twitter:description": "Rapidly memorize a set of numbers and answer questions about them. Ultimate working memory test."
+                "twitter:title": "Rapid Recall — Memorize Numbers, Answer Questions",
+                "twitter:description": "A set of numbers appears briefly. Memorize them, then answer: What was the largest? The sum? The 3rd number?"
             }
         },
         "mental-trail": {
-            "title": "Mental Trail | Arithmetic Memory Stream",
-            "description": "Follow a stream of math operations and keep the running total in your head. Test your working memory and calculation speed.",
+            "title": "Mental Trail — Keep a Running Total in Your Head",
+            "description": "Start with a number. Add 7. Subtract 3. Multiply by 2. Can you track the running total as operations stream in? A true test of mental arithmetic.",
             "canonical": "https://8gwifi.org/exams/math-memory/mental-trail.jsp",
-            "keywords": "mental math, running total, working memory, calculation stream, math train",
+            "keywords": "running total game, mental arithmetic test, working memory math, calculation stream game",
             "openGraph": {
-                "og:title": "Mental Trail | Arithmetic Memory Stream",
-                "og:description": "Follow a stream of math operations and keep the running total in your head. Test your working memory and calculation speed.",
+                "og:title": "Mental Trail — Keep a Running Total in Your Head",
+                "og:description": "Start with a number. Add 7. Subtract 3. Multiply by 2. Can you track the running total as operations stream in?",
                 "og:url": "https://8gwifi.org/exams/math-memory/mental-trail.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Mental Trail | Arithmetic Memory Stream",
-                "twitter:description": "Follow a stream of math operations and keep the running total in your head. Test your working memory and calculation speed."
+                "twitter:title": "Mental Trail — Keep a Running Total in Your Head",
+                "twitter:description": "Start with a number. Add 7. Subtract 3. Multiply by 2. Can you track the running total as operations stream in?"
             }
         },
         "equation-echo": {
-            "title": "Equation Echo | Math Structure Recall",
-            "description": "Memorize complex mathematical equations and restore missing parts. Train your brain to chunk mathematical information.",
+            "title": "Equation Echo — Memorize the Equation, Fill the Gaps",
+            "description": "See a complete equation, then parts disappear. Reconstruct it from memory. Trains your brain to chunk and recall mathematical structure.",
             "canonical": "https://8gwifi.org/exams/math-memory/equation-echo.jsp",
-            "keywords": "equation memory, math recall, structure memory, missing number game, brain training restoration",
+            "keywords": "equation memory game, math recall test, fill in the blank math, missing number puzzle",
             "openGraph": {
-                "og:title": "Equation Echo | Math Structure Recall",
-                "og:description": "Memorize complex mathematical equations and restore missing parts. Train your brain to chunk mathematical information.",
+                "og:title": "Equation Echo — Memorize the Equation, Fill the Gaps",
+                "og:description": "See a complete equation, then parts disappear. Reconstruct it from memory. Trains your brain to chunk and recall mathematical structure.",
                 "og:url": "https://8gwifi.org/exams/math-memory/equation-echo.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Equation Echo | Math Structure Recall",
-                "twitter:description": "Memorize complex mathematical equations and restore missing parts. Train your brain to chunk mathematical information."
+                "twitter:title": "Equation Echo — Memorize the Equation, Fill the Gaps",
+                "twitter:description": "See a complete equation, then parts disappear. Reconstruct it from memory."
             }
         },
         "symbol-sums": {
-            "title": "Symbol Sums | Associative Memory Math",
-            "description": "Memorize the values assigned to different symbols, then solve equations using those symbols. Tests associative memory and calculation.",
+            "title": "Symbol Sums — Decode Symbols, Solve the Equation",
+            "description": "Each symbol has a hidden value. Memorize the pairings, then solve equations using symbols instead of numbers. Tests associative memory and mental math.",
             "canonical": "https://8gwifi.org/exams/math-memory/symbol-sums.jsp",
-            "keywords": "associative memory, symbol math, memory calc, brain training, crypto math",
+            "keywords": "symbol math game, associative memory test, decode symbols, cryptarithmetic puzzle",
             "openGraph": {
-                "og:title": "Symbol Sums | Associative Memory Math",
-                "og:description": "Memorize the values assigned to different symbols, then solve equations using those symbols.",
+                "og:title": "Symbol Sums — Decode Symbols, Solve the Equation",
+                "og:description": "Each symbol has a hidden value. Memorize the pairings, then solve equations using symbols instead of numbers.",
                 "og:url": "https://8gwifi.org/exams/math-memory/symbol-sums.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Symbol Sums | Associative Memory Math",
-                "twitter:description": "Memorize the values assigned to different symbols, then solve equations using those symbols."
+                "twitter:title": "Symbol Sums — Decode Symbols, Solve the Equation",
+                "twitter:description": "Each symbol has a hidden value. Memorize the pairings, then solve equations using symbols instead of numbers."
             }
         },
         "matrix-memory": {
-            "title": "Matrix Memory | Number Pattern Recall",
-            "description": "Scan a grid of numbers and memorize locations that match specific math rules (Primes, Evens, etc). Tests selective attention and spatial memory.",
+            "title": "Matrix Memory — Find Primes, Evens & Patterns in a Grid",
+            "description": "Scan a number grid and memorize which cells match a rule (primes, evens, multiples of 3). The grid vanishes — click the right cells from memory.",
             "canonical": "https://8gwifi.org/exams/math-memory/matrix-memory.jsp",
-            "keywords": "matrix memory, number grid game, prime number game, spatial memory test, math patterns",
+            "keywords": "matrix memory game, number grid puzzle, prime number game, spatial memory math, selective attention test",
             "openGraph": {
-                "og:title": "Matrix Memory | Number Pattern Recall",
-                "og:description": "Scan a grid of numbers and memorize locations that match specific math rules. Tests selective attention and spatial memory.",
+                "og:title": "Matrix Memory — Find Primes, Evens & Patterns in a Grid",
+                "og:description": "Scan a number grid and memorize which cells match a rule. The grid vanishes — click the right cells from memory.",
                 "og:url": "https://8gwifi.org/exams/math-memory/matrix-memory.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Matrix Memory | Number Pattern Recall",
-                "twitter:description": "Scan a grid of numbers and memorize locations that match specific math rules. Tests selective attention and spatial memory."
+                "twitter:title": "Matrix Memory — Find Primes, Evens & Patterns in a Grid",
+                "twitter:description": "Scan a number grid and memorize which cells match a rule. The grid vanishes — click the right cells from memory."
             }
         },
         "binary-blitz": {
-            "title": "Binary Blitz | Digital Pattern Memory",
-            "description": "Memorize and reconstruct binary sequences (0s and 1s). Test your pattern recognition and short-term memory in this hacker-themed challenges.",
+            "title": "Binary Blitz — Memorize and Rebuild Binary Sequences",
+            "description": "A binary sequence flashes: 10110010. Reconstruct it from memory. Hacker-themed pattern memory challenge that tests your short-term recall of 0s and 1s.",
             "canonical": "https://8gwifi.org/exams/math-memory/binary-blitz.jsp",
-            "keywords": "binary game, pattern memory, hacker game, 0s and 1s, digital memory test",
+            "keywords": "binary memory game, pattern recall test, 0s and 1s game, digital memory challenge, hacker game",
             "openGraph": {
-                "og:title": "Binary Blitz | Digital Pattern Memory",
-                "og:description": "Memorize and reconstruct binary sequences (0s and 1s). Test your pattern recognition and short-term memory.",
+                "og:title": "Binary Blitz — Memorize and Rebuild Binary Sequences",
+                "og:description": "A binary sequence flashes: 10110010. Reconstruct it from memory. Hacker-themed pattern memory challenge.",
                 "og:url": "https://8gwifi.org/exams/math-memory/binary-blitz.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Binary Blitz | Digital Pattern Memory",
-                "twitter:description": "Memorize and reconstruct binary sequences (0s and 1s). Test your pattern recognition and short-term memory."
+                "twitter:title": "Binary Blitz — Memorize and Rebuild Binary Sequences",
+                "twitter:description": "A binary sequence flashes: 10110010. Reconstruct it from memory. Hacker-themed pattern memory challenge."
             }
         },
         "color-code": {
-            "title": "Color Code | Visual Association Memory",
-            "description": "Memorize the color-number pairings and decode the sequence. A vibrant test of associative memory and recall.",
+            "title": "Color Code — Remember Color-Number Pairs, Decode Fast",
+            "description": "Red = 7, Blue = 3, Green = 5. Memorize the pairings, then decode a color sequence into numbers. Tests visual-associative memory and recall speed.",
             "canonical": "https://8gwifi.org/exams/math-memory/color-code.jsp",
-            "keywords": "color memory, associative memory, brain training colors, memory game, synesthesia game",
+            "keywords": "color memory game, visual association test, color number pairing, associative recall game",
             "openGraph": {
-                "og:title": "Color Code | Visual Association Memory",
-                "og:description": "Memorize the color-number pairings and decode the sequence. A vibrant test of associative memory and recall.",
+                "og:title": "Color Code — Remember Color-Number Pairs, Decode Fast",
+                "og:description": "Red = 7, Blue = 3, Green = 5. Memorize the pairings, then decode a color sequence into numbers.",
                 "og:url": "https://8gwifi.org/exams/math-memory/color-code.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Color Code | Visual Association Memory",
-                "twitter:description": "Memorize the color-number pairings and decode the sequence. A vibrant test of associative memory and recall."
+                "twitter:title": "Color Code — Remember Color-Number Pairs, Decode Fast",
+                "twitter:description": "Red = 7, Blue = 3, Green = 5. Memorize the pairings, then decode a color sequence into numbers."
             }
         },
         "spin-logic": {
-            "title": "Spin Logic | Mental Rotation Math",
-            "description": "Visualize a grid of numbers rotating in your mind and recall values at specific positions. A test of spatial-visual working memory.",
+            "title": "Spin Logic — Mentally Rotate a Number Grid",
+            "description": "See a grid of numbers. Now rotate it 90 degrees in your mind. What number is at position (2,3)? A spatial-visual working memory challenge.",
             "canonical": "https://8gwifi.org/exams/math-memory/spin-logic.jsp",
-            "keywords": "mental rotation, spatial memory, spin logic, grid rotation, brain training visual",
+            "keywords": "mental rotation game, spatial reasoning test, grid rotation puzzle, visual working memory",
             "openGraph": {
-                "og:title": "Spin Logic | Mental Rotation Math",
-                "og:description": "Visualize a grid of numbers rotating in your mind and recall values at specific positions.",
+                "og:title": "Spin Logic — Mentally Rotate a Number Grid",
+                "og:description": "See a grid of numbers. Now rotate it 90 degrees in your mind. What number is at position (2,3)?",
                 "og:url": "https://8gwifi.org/exams/math-memory/spin-logic.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Spin Logic | Mental Rotation Math",
-                "twitter:description": "Visualize a grid of numbers rotating in your mind and recall values at specific positions."
+                "twitter:title": "Spin Logic — Mentally Rotate a Number Grid",
+                "twitter:description": "See a grid of numbers. Now rotate it 90 degrees in your mind. What number is at position (2,3)?"
             }
         },
         "path-finder": {
-            "title": "Path Finder | Trace and Calculate",
-            "description": "Follow a lighting path across a number grid and calculate the sum. Tests sequential visual memory and rapid addition.",
+            "title": "Path Finder — Trace a Lit Path, Add the Numbers",
+            "description": "A path lights up across a number grid, then fades. Recall the path and sum the numbers it touched. Tests sequential visual memory and rapid addition.",
             "canonical": "https://8gwifi.org/exams/math-memory/path-finder.jsp",
-            "keywords": "path memory, visual sequence, rapid math, brain training, trail calculation",
+            "keywords": "path memory game, visual sequence recall, trail calculation, sequential memory test",
             "openGraph": {
-                "og:title": "Path Finder | Trace and Calculate",
-                "og:description": "Follow a lighting path across a number grid and calculate the sum. Tests sequential visual memory and rapid addition.",
+                "og:title": "Path Finder — Trace a Lit Path, Add the Numbers",
+                "og:description": "A path lights up across a number grid, then fades. Recall the path and sum the numbers it touched.",
                 "og:url": "https://8gwifi.org/exams/math-memory/path-finder.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Path Finder | Trace and Calculate",
-                "twitter:description": "Follow a lighting path across a number grid and calculate the sum. Tests sequential visual memory and rapid addition."
+                "twitter:title": "Path Finder — Trace a Lit Path, Add the Numbers",
+                "twitter:description": "A path lights up across a number grid, then fades. Recall the path and sum the numbers it touched."
             }
         },
         "shape-count": {
-            "title": "Shape Count | Selective Focus Math",
-            "description": "Quickly identify and sum numbers inside specific geometric shapes amidst visual chaos. A test of selective attention and processing speed.",
+            "title": "Shape Count — Sum Numbers Inside the Right Shapes",
+            "description": "Numbers sit inside circles, squares, and triangles scattered across the screen. Quickly sum only the numbers inside the target shape. Tests selective focus.",
             "canonical": "https://8gwifi.org/exams/math-memory/shape-count.jsp",
-            "keywords": "selective attention, visual processing, shape math, brain training focus, rapid counting",
+            "keywords": "selective attention game, shape math puzzle, visual processing test, focus training game, rapid counting",
             "openGraph": {
-                "og:title": "Shape Count | Selective Focus Math",
-                "og:description": "Quickly identify and sum numbers inside specific geometric shapes amidst visual chaos. A test of selective attention.",
+                "og:title": "Shape Count — Sum Numbers Inside the Right Shapes",
+                "og:description": "Numbers sit inside circles, squares, and triangles. Quickly sum only the numbers inside the target shape.",
                 "og:url": "https://8gwifi.org/exams/math-memory/shape-count.jsp",
                 "og:type": "website"
             },
             "twitterCard": {
                 "twitter:card": "summary_large_image",
-                "twitter:title": "Shape Count | Selective Focus Math",
-                "twitter:description": "Quickly identify and sum numbers inside specific geometric shapes amidst visual chaos. A test of selective attention."
+                "twitter:title": "Shape Count — Sum Numbers Inside the Right Shapes",
+                "twitter:description": "Numbers sit inside circles, squares, and triangles. Quickly sum only the numbers inside the target shape."
             }
         }
     }
