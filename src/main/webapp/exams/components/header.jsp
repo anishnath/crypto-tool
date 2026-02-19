@@ -203,6 +203,15 @@
         <nav class="header-nav">
             <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT</a>
             <div class="nav-dropdown">
+                <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Tools
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4L5 6.5L7.5 4"/></svg>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
+                    <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
                 <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Labs
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4L5 6.5L7.5 4"/></svg>
                 </button>
@@ -218,11 +227,10 @@
                 <div class="nav-dropdown-menu">
                     <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
                     <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory</a>
-                    <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+                    <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
                 </div>
             </div>
-            <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
-            <a href="<%=request.getContextPath()%>/tutorials/">Tutorials</a>
+            <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
             <a href="<%=request.getContextPath()%>/">Tools</a>
             <% if (isLoggedIn) { %>
             <a href="<%=request.getContextPath()%>/exams/dashboard.jsp">Dashboard</a>
@@ -407,6 +415,23 @@
 [data-theme="dark"] .nav-dropdown-menu {
     box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
+
+/* Mobile menu section labels */
+.mobile-menu-section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: var(--space-2) var(--space-3);
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--border);
+}
+
+.mobile-menu-section-label:first-child {
+    margin-top: 0;
+    border-top: none;
+}
 </style>
 
 <!-- Mobile Menu -->
@@ -426,15 +451,24 @@
         </button>
     </div>
     <nav class="mobile-menu-nav">
+        <div class="mobile-menu-section-label">Study</div>
         <a href="<%=request.getContextPath()%>/exams/">Home</a>
         <a href="<%=request.getContextPath()%>/exams/books/ncert/">NCERT Solutions</a>
+        <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
+
+        <div class="mobile-menu-section-label">Tools & Calculators</div>
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
+        <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
+
+        <div class="mobile-menu-section-label">Interactive Labs</div>
         <a href="<%=request.getContextPath()%>/exams/visual-math/">Visual Math</a>
         <a href="<%=request.getContextPath()%>/exams/visual-physics/">Visual Physics</a>
+
+        <div class="mobile-menu-section-label">Practice & Train</div>
         <a href="<%=request.getContextPath()%>/exams/quick-math/">Quick Math</a>
-        <a href="<%=request.getContextPath()%>/physics/">Physics Tools</a>
-        <a href="<%=request.getContextPath()%>/math/">Math Tools</a>
-        <a href="<%=request.getContextPath()%>/exams/math-memory/">Mental Memory</a>
-        <a href="<%=request.getContextPath()%>/exams/cbse-board/">CBSE Board</a>
+        <a href="<%=request.getContextPath()%>/exams/math-memory/">Math Memory</a>
+
+        <div class="mobile-menu-section-label">More</div>
         <a href="<%=request.getContextPath()%>/tutorials/">Learn to Code</a>
         <a href="<%=request.getContextPath()%>/">Tools</a>
         <% if (isLoggedIn) { %>
