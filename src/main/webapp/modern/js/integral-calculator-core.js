@@ -11,6 +11,10 @@ function normalizeExpr(expr) {
     s = s.replace(/(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\s*(\d+)\s*([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, '$1($2*$3)');
     s = s.replace(/(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\s*([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, '$1($2)');
     s = s.replace(/e\^(\d+)([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, 'e^($1*$2)');
+    /* xe^x without * is parsed by nerdamer as (xe)^x; normalize to x*e^x */
+    s = s.replace(/([a-zA-Z])e\^/g, '$1*e^');
+    /* xsin(x), xcos(x), xlog(x) etc without * are parsed as variables; insert * (skip a to preserve asin, acos, atan) */
+    s = s.replace(/([xtuv])(sin|cos|tan|sec|csc|cot|log|ln)\(/g, '$1*$2(');
     return s;
 }
 
