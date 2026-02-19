@@ -1687,16 +1687,12 @@
         });
     };
 
-    /** Wrap plain text in \\text{} so KaTeX preserves spaces. In math mode, spaces are collapsed. */
+    /** Prepare LaTeX for KaTeX rendering. If string already contains LaTeX (has \\), pass through unchanged.
+     *  Wrapping in \\text{} corrupts math like e^{-x} by escaping } to \\}, breaking rendering. */
     function prepareLatexForKatex(latex) {
         if (!latex || typeof latex !== 'string') return latex;
-        var firstBackslash = latex.indexOf('\\');
-        if (firstBackslash === -1) {
-            return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
-        }
-        if (firstBackslash === 0) return latex;
-        var leading = latex.substring(0, firstBackslash).replace(/\\/g, '\\\\').replace(/}/g, '\\}');
-        return '\\text{' + leading + '}' + latex.substring(firstBackslash);
+        if (latex.indexOf('\\') >= 0) return latex;  /* Already LaTeX - do not transform */
+        return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
     }
 
     function renderSteps(steps, method, isAI) {
