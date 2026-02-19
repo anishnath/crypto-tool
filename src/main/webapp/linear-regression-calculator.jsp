@@ -1,937 +1,403 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- SEO Meta -->
-<title>Linear Regression Calculator Online – Free | 8gwifi.org</title>
-<meta name="description" content="Free linear regression calculator: scatter plot with regression line, slope, intercept, R², correlation, residuals, and predictions.">
-<meta name="keywords" content="linear regression calculator, regression line, r squared calculator, correlation regression, least squares calculator, slope intercept calculator, prediction calculator, scatter plot regression">
-<link rel="canonical" href="https://8gwifi.org/linear-regression-calculator.jsp">
-
-<!-- Open Graph / Twitter -->
-<meta property="og:title" content="Linear Regression Calculator Online – Free | 8gwifi.org">
-<meta property="og:description" content="Linear regression with scatter plot: slope, intercept, R², correlation, residuals, and predictions.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://8gwifi.org/linear-regression-calculator.jsp">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Linear Regression Calculator Online – Free | 8gwifi.org">
-<meta name="twitter:description" content="Free linear regression: regression line, R², correlation, residuals, predictions with plot.">
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
-<%@ include file="header-script.jsp"%>
-
-<!-- JSON-LD Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Linear Regression Calculator",
-  "url": "https://8gwifi.org/linear-regression-calculator.jsp",
-  "description": "Calculate linear regression equations, slope, intercept, R-squared, correlation coefficient, and make predictions with interactive scatter plot visualization. Free online statistical tool.",
-  "applicationCategory": "EducationalApplication",
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "featureList": "Linear regression equation, Slope and intercept calculation, R-squared calculation, Correlation coefficient, Residual analysis, Scatter plot with regression line, Prediction calculator, Standard error of estimate"
-}
-</script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <style>
-        :root {
-            --primary-color: #0891b2;
-            --primary-dark: #0e7490;
-            --primary-light: #67e8f9;
-            --bg-light: #f0fdfa;
-            --border-color: #99f6e4;
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
+        *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+        :root,:root[data-theme="light"]{
+            --primary:#6366f1;--primary-dark:#4f46e5;--primary-light:#818cf8;--primary-50:#eef2ff;--primary-100:#e0e7ff;
+            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;--bg-hover:#f8fafc;
+            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--text-inverse:#fff;
+            --border:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;
+            --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#3b82f6;
+            --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            --font-mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
+            --text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;
+            --leading-tight:1.25;--leading-normal:1.5;
+            --font-normal:400;--font-medium:500;--font-semibold:600;--font-bold:700;
+            --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+            --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+            --z-dropdown:1000;--z-sticky:1020;--z-fixed:1030;--z-modal-backdrop:1040;--z-modal:1050;
+            --transition-fast:150ms ease-in-out;--transition-base:200ms ease-in-out;--transition-slow:300ms ease-in-out;
+            --header-height-mobile:64px;--header-height-desktop:72px;--container-max-width:1280px;
+            --tool-primary:#e11d48;--tool-primary-dark:#be123c;--tool-gradient:linear-gradient(135deg,#e11d48 0%,#f43f5e 100%);--tool-light:#fff1f2
         }
-
-        .calculator-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-        }
-
-        .section-title {
-            color: var(--primary-color);
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control, .form-select {
-            border: 1.5px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 0.5rem 0.75rem;
-            transition: all 0.2s;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
-        }
-
-        .btn-calculate {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: 6px;
-            transition: all 0.2s;
-            width: 100%;
-        }
-
-        .btn-calculate:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
-        }
-
-        .btn-sample {
-            background: white;
-            color: var(--primary-color);
-            border: 1.5px solid var(--primary-color);
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
-        .btn-sample:hover {
-            background: var(--bg-light);
-        }
-
-        .results-panel {
-            background: var(--bg-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 20px;
-        }
-
-        .result-item {
-            background: white;
-            border-left: 4px solid var(--primary-color);
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .result-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .result-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            font-family: 'Courier New', monospace;
-        }
-
-        .result-equation {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-        }
-
-        .interpretation {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 0.75rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            color: #92400e;
-        }
-
-        #regressionPlot, #residualPlot {
-            width: 100%;
-            max-height: 250px;
-            border-radius: 8px;
-        }
-
-        .chart-container {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-
-        .info-box {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-        }
-
-        .info-box i {
-            color: #3b82f6;
-            margin-right: 0.5rem;
-        }
-
-        .educational-section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-top: 2rem;
-        }
-
-        .educational-section h3 {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .educational-section h4 {
-            color: var(--primary-dark);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .formula-box {
-            background: var(--bg-light);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            margin: 1rem 0;
-            text-align: center;
-        }
-
-        .example-table {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-
-        .example-table table {
-            margin-bottom: 0;
-        }
-
-        .example-table th {
-            background: var(--primary-color);
-            color: white;
-            font-weight: 500;
-            padding: 0.75rem;
-        }
-
-        .example-table td {
-            padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .prediction-section {
-            background: white;
-            border: 2px dashed var(--primary-color);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .prediction-input {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .prediction-result {
-            background: var(--bg-light);
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-top: 0.5rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        @media (max-width: 991px) {
-            .results-panel {
-                position: static;
-                margin-top: 1.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-            .result-value {
-                font-size: 1.25rem;
-            }
-        }
+        @media(prefers-color-scheme:dark){:root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b}}
+        [data-theme="dark"]{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b;--tool-light:rgba(225,29,72,0.15)}
+        [data-theme="dark"] body{background-color:var(--bg-primary);color:var(--text-primary)}
+        @media(min-width:768px){:root{--header-height-mobile:72px}}
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
+        .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}.nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}.nav-logo span{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}[data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,#818cf8 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}.nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}.btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}.btn-nav-primary{background:var(--primary,#6366f1);color:#fff}.btn-nav-secondary{background:var(--bg-secondary,#f8fafc);color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}.mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
+        .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}.search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,#f8fafc);font-family:var(--font-sans)}.search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
+        @media(max-width:991px){.modern-nav{height:var(--header-height-mobile,64px)}.nav-container{padding:0 var(--space-3,0.75rem)}.nav-search,.nav-items{display:none}.nav-actions{gap:var(--space-2,0.5rem)}.btn-nav{padding:var(--space-2,0.5rem) var(--space-3,0.75rem);font-size:var(--text-xs,0.75rem)}.mobile-menu-toggle,.mobile-search-toggle{display:flex}.btn-nav .nav-text{display:none}}
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}.tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}.tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}.tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}.tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}.tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}.tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}.tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}.tool-description-content{flex:1}.tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}@media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
+        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}@media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}@media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
+        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}.tool-output-column{display:flex;flex-direction:column;gap:1rem}.tool-ads-column{height:fit-content}
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}.tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}.tool-card-body{padding:1rem}
+        .tool-form-group{margin-bottom:0.875rem}.tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#0f172a);font-size:0.8125rem}.tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
+        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:0.5rem;transition:opacity .15s,transform .15s}.tool-action-btn:hover{opacity:0.9}
+        .tool-result-card{display:flex;flex-direction:column;height:100%}.tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);border-radius:0.75rem 0.75rem 0 0}.tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary,#0f172a);flex:1}.tool-result-content{flex:1;padding:1.25rem;min-height:300px;overflow-y:auto}.tool-result-actions{display:none;gap:0.5rem;padding:1rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;flex-wrap:wrap}
+        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted,#94a3b8)}.tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary,#475569)}.tool-empty-state p{font-size:0.875rem;max-width:280px}
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}[data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}[data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}[data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(225,29,72,0.3)}[data-theme="dark"] .tool-result-header{background:var(--bg-tertiary,#334155);border-bottom-color:var(--border,#475569)}[data-theme="dark"] .tool-result-header h4{color:var(--text-primary,#f1f5f9)}[data-theme="dark"] .tool-result-actions{background:var(--bg-tertiary,#334155);border-top-color:var(--border,#475569)}[data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+        .faq-item{border-bottom:1px solid var(--border,#e2e8f0)}.faq-item:last-child{border-bottom:none}.faq-question{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0.875rem 0;background:none;border:none;font-size:0.875rem;font-weight:600;color:var(--text-primary,#0f172a);cursor:pointer;text-align:left;font-family:var(--font-sans);gap:0.75rem}.faq-answer{display:none;padding:0 0 0.875rem;font-size:0.8125rem;line-height:1.7;color:var(--text-secondary)}.faq-item.open .faq-answer{display:block}.faq-chevron{transition:transform 0.2s;flex-shrink:0}.faq-item.open .faq-chevron{transform:rotate(180deg)}
+        /* Prediction section */
+        .lr-predict-section{margin-top:0.75rem;padding:0.75rem;background:var(--bg-secondary);border:1.5px dashed var(--tool-primary);border-radius:0.5rem;display:none}
+        .lr-predict-section.visible{display:block}
+        .lr-predict-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.375rem}
+        .lr-predict-result{margin-top:0.375rem;padding:0.5rem 0.75rem;background:var(--tool-light);border-radius:0.375rem;font-weight:600;font-size:0.875rem;color:var(--tool-primary)}
+        [data-theme="dark"] .lr-predict-section{background:var(--bg-tertiary);border-color:var(--tool-primary)}
     </style>
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Linear Regression Calculator Online - Slope R-Squared Prediction Free" />
+        <jsp:param name="toolDescription" value="Calculate linear regression equation slope intercept R-squared correlation and make predictions. Interactive scatter plot with regression line residual analysis and Python export." />
+        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolUrl" value="linear-regression-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="linear regression calculator, regression line calculator, r squared calculator, slope intercept calculator, least squares calculator, prediction calculator, scatter plot regression, residual analysis, correlation regression, standard error estimate" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="Regression equation y equals a plus bx,Slope and y-intercept calculation,R-squared coefficient of determination,Correlation coefficient,Standard error of estimate,Residual analysis,Interactive Plotly scatter plot with regression line,Prediction from X value,Step-by-step KaTeX formulas,Python scipy code generation" />
+        <jsp:param name="teaches" value="Linear regression, least squares method, slope, intercept, R-squared, correlation, residuals, prediction, scatter plots" />
+        <jsp:param name="educationalLevel" value="High School, College, University" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter Data|Type X Y pairs one per line separated by comma or space,Click Calculate|Get instant regression equation with step-by-step formulas,Review Results|See slope intercept R-squared correlation and standard error,Make Predictions|Enter any X value to predict Y using the fitted model,View Scatter Plot|See the interactive chart with regression line overlay,Export Code|Run Python scipy code in the embedded compiler" />
+        <jsp:param name="faq1q" value="What does R-squared tell me about the regression?" />
+        <jsp:param name="faq1a" value="R-squared is the proportion of variance in Y explained by the linear model. R-squared of 0.85 means 85 percent of the variation in Y is explained by X. Higher values indicate better fit but always check residuals." />
+        <jsp:param name="faq2q" value="What are the assumptions of linear regression?" />
+        <jsp:param name="faq2a" value="Linear regression assumes linearity between X and Y independence of observations constant variance of residuals called homoscedasticity and approximately normal residuals. Inspect residual plots to check these." />
+        <jsp:param name="faq3q" value="How do I make predictions with the regression equation?" />
+        <jsp:param name="faq3a" value="Plug any X value into the equation y equals intercept plus slope times x. Be cautious about extrapolating far beyond the range of your data as the linear relationship may not hold." />
+        <jsp:param name="faq4q" value="What if the relationship is not linear?" />
+        <jsp:param name="faq4a" value="If residuals show a pattern the relationship may be curved. Consider polynomial regression logarithmic transformation or other nonlinear models. Always visualize data before fitting a linear model." />
+        <jsp:param name="faq5q" value="How do I interpret the slope?" />
+        <jsp:param name="faq5a" value="The slope b tells you how much Y changes for each one unit increase in X. A slope of 2.5 means Y increases by 2.5 units on average when X increases by 1 unit." />
+        <jsp:param name="faq6q" value="What is the standard error of the estimate?" />
+        <jsp:param name="faq6a" value="The standard error of estimate measures the average distance between observed Y values and the regression line predictions. Smaller values indicate predictions are closer to actual data points." />
+    </jsp:include>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+    <%@ include file="modern/ads/ad-init.jsp" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/statistics-calculator.css?v=<%=cacheVersion%>">
 </head>
+<body>
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-
-<div class="container mt-4">
-  <h1>Linear Regression Calculator</h1>
-  <p class="text-muted">Calculate regression equations, R², correlation, and make predictions with interactive visualizations</p>
-
-  <%@ include file="footer_adsense.jsp"%>
-
-  <div class="row">
-            <!-- Left Column: Input -->
-            <div class="col-lg-7">
-                <div class="calculator-section">
-                    <h2 class="section-title"><i class="fas fa-database"></i> Data Input</h2>
-
-                    <div class="info-box">
-                        <i class="fas fa-info-circle"></i>
-                        <strong>Enter your data:</strong> Provide X and Y values as comma-separated pairs, one per line. Example: 1,2 or use the sample data button.
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="dataInput" class="form-label">X, Y Data Pairs (one per line)</label>
-                        <textarea class="form-control" id="dataInput" rows="8" placeholder="Example:&#10;1, 2&#10;2, 4&#10;3, 5&#10;4, 4&#10;5, 5"></textarea>
-                        <button class="btn btn-sample mt-2" onclick="loadSampleData()">
-                            <i class="fas fa-flask"></i> Load Sample Data
-                        </button>
-                    </div>
-
-                    <button class="btn btn-calculate" onclick="calculateRegression()">
-                        <i class="fas fa-calculator"></i> Calculate Regression
-                    </button>
-
-                    <!-- Prediction Section -->
-                    <div class="prediction-section" id="predictionSection" style="display: none;">
-                        <h5 style="color: var(--primary-color); margin-bottom: 1rem;">
-                            <i class="fas fa-crystal-ball"></i> Make Predictions
-                        </h5>
-                        <div class="prediction-input">
-                            <label style="min-width: 80px; margin-bottom: 0;">X Value:</label>
-                            <input type="number" class="form-control" id="predictionX" step="any" placeholder="Enter X value">
-                            <button class="btn btn-sample" onclick="makePrediction()">
-                                <i class="fas fa-search"></i> Predict Y
-                            </button>
-                        </div>
-                        <div id="predictionResult"></div>
-                    </div>
-                </div>
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Linear Regression Calculator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
+                    Linear Regression Calculator
+                </nav>
             </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">Slope &amp; Intercept</span>
+                <span class="tool-badge">R&sup2; &amp; Correlation</span>
+                <span class="tool-badge">Predictions</span>
+                <span class="tool-badge">Free &middot; No Signup</span>
+            </div>
+        </div>
+    </header>
 
-            <!-- Right Column: Results -->
-            <div class="col-lg-5">
-                <div class="results-panel">
-                    <h2 class="section-title"><i class="fas fa-chart-area"></i> Results</h2>
-                    <div id="resultsContent">
-                        <div class="text-center text-muted py-4">
-                            <i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.3;"></i>
-                            <p class="mt-2">Enter data and click Calculate to see results</p>
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Free online <strong>linear regression calculator</strong>: compute the <strong>regression equation</strong> (y = a + bx), <strong>R&sup2;</strong>, <strong>correlation</strong>, <strong>standard error</strong>, and make <strong>predictions</strong>. Interactive Plotly scatter plot with regression line, step-by-step KaTeX formulas, and Python scipy export.</p>
+            </div>
+        </div>
+    </section>
+
+    <main class="tool-page-container">
+        <!-- ==================== INPUT COLUMN ==================== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
+                        <line x1="3" y1="21" x2="21" y2="3"/><circle cx="7" cy="17" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="17" cy="7" r="2"/>
+                    </svg>
+                    Linear Regression
+                </div>
+                <div class="tool-card-body">
+                    <!-- Data input -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label" for="lr-data-input">X, Y Data Pairs (one per line)</label>
+                        <textarea class="stat-input-text lr-input" id="lr-data-input" rows="8" placeholder="Format: x, y&#10;Example:&#10;1, 2&#10;2, 4&#10;3, 5&#10;4, 4&#10;5, 5"></textarea>
+                        <div class="tool-form-hint">Separate X and Y with comma or space. Minimum 2 data points.</div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button type="button" class="tool-action-btn" id="lr-calc-btn">Calculate Regression</button>
+                    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                        <button type="button" class="tool-action-btn" id="lr-clear-btn" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);flex:1;">Clear</button>
+                    </div>
+
+                    <!-- Prediction section (hidden until first calculation) -->
+                    <div class="lr-predict-section" id="lr-predict-section">
+                        <label class="tool-form-label">Make a Prediction</label>
+                        <div class="lr-predict-row">
+                            <span style="font-size:0.8125rem;font-weight:500;white-space:nowrap;">X =</span>
+                            <input type="number" class="stat-input-text lr-input" id="lr-predict-x" step="any" placeholder="Enter X">
+                            <button type="button" class="tool-action-btn" id="lr-predict-btn" style="width:auto;margin:0;padding:0.5rem 0.75rem;font-size:0.75rem;">Predict</button>
+                        </div>
+                        <div id="lr-predict-result"></div>
+                    </div>
+
+                    <hr class="stat-sep">
+
+                    <!-- Quick Examples -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label">Quick Examples</label>
+                        <div class="stat-examples">
+                            <button type="button" class="stat-example-chip" data-lr-example="study-hours">Study Hours</button>
+                            <button type="button" class="stat-example-chip" data-lr-example="sales">Ad Sales</button>
+                            <button type="button" class="stat-example-chip" data-lr-example="temperature">Temperature</button>
+                            <button type="button" class="stat-example-chip" data-lr-example="height-weight">Height/Weight</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Educational Content -->
-        <div class="educational-section">
-            <h3><i class="fas fa-graduation-cap"></i> Understanding Linear Regression</h3>
-
-            <p><strong>Linear regression</strong> is a statistical method for modeling the relationship between a dependent variable (Y) and an independent variable (X). It finds the best-fitting straight line through the data points.</p>
-
-            <h4>The Regression Equation</h4>
-            <p>The linear regression line is expressed as:</p>
-            <div class="formula-box">
-                y = a + bx
-            </div>
-            <p>Where:</p>
-            <ul>
-                <li><strong>y</strong> = predicted value (dependent variable)</li>
-                <li><strong>x</strong> = independent variable (predictor)</li>
-                <li><strong>b</strong> = slope (change in y for each unit change in x)</li>
-                <li><strong>a</strong> = y-intercept (value of y when x = 0)</li>
-            </ul>
-
-            <h4>Key Calculations</h4>
-            <div class="formula-box">
-                <strong>Slope (b):</strong> b = Σ[(xᵢ - x̄)(yᵢ - ȳ)] / Σ(xᵢ - x̄)²
-            </div>
-            <div class="formula-box">
-                <strong>Intercept (a):</strong> a = ȳ - b × x̄
-            </div>
-            <div class="formula-box">
-                <strong>R² (Coefficient of Determination):</strong> R² = 1 - (SS_res / SS_tot)
+        <!-- ==================== OUTPUT COLUMN ==================== -->
+        <div class="tool-output-column">
+            <div class="stat-output-tabs">
+                <button type="button" class="stat-output-tab active" data-tab="lr-result-panel">Result</button>
+                <button type="button" class="stat-output-tab" data-tab="lr-graph-panel">Scatter Plot</button>
+                <button type="button" class="stat-output-tab" data-tab="lr-compiler-panel">Python Compiler</button>
             </div>
 
-            <h4>Understanding R² (R-Squared)</h4>
-            <p>R² measures how well the regression line fits the data:</p>
-            <div class="example-table">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>R² Value</th>
-                            <th>Interpretation</th>
-                            <th>Fit Quality</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>0.90 - 1.00</td>
-                            <td>90-100% of variance explained</td>
-                            <td><span style="color: #10b981; font-weight: 600;">Excellent</span></td>
-                        </tr>
-                        <tr>
-                            <td>0.70 - 0.89</td>
-                            <td>70-89% of variance explained</td>
-                            <td><span style="color: #3b82f6; font-weight: 600;">Good</span></td>
-                        </tr>
-                        <tr>
-                            <td>0.50 - 0.69</td>
-                            <td>50-69% of variance explained</td>
-                            <td><span style="color: #f59e0b; font-weight: 600;">Moderate</span></td>
-                        </tr>
-                        <tr>
-                            <td>0.00 - 0.49</td>
-                            <td>Less than 50% explained</td>
-                            <td><span style="color: #ef4444; font-weight: 600;">Weak</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="stat-panel active" id="lr-result-panel">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <h4>Result</h4>
+                    </div>
+                    <div class="tool-result-content" id="lr-result-content">
+                        <div class="tool-empty-state">
+                            <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#x1F4C9;</div>
+                            <h3>Enter data and click Calculate</h3>
+                            <p>Compute the regression equation, R&sup2;, correlation, and make predictions.</p>
+                        </div>
+                    </div>
+                    <div class="tool-result-actions" id="lr-result-actions"></div>
+                </div>
             </div>
 
-            <h4>Correlation Coefficient (r)</h4>
-            <p>The correlation coefficient measures the strength and direction of the linear relationship:</p>
-            <ul>
-                <li><strong>r = +1:</strong> Perfect positive correlation</li>
-                <li><strong>r = 0:</strong> No linear correlation</li>
-                <li><strong>r = -1:</strong> Perfect negative correlation</li>
-                <li><strong>|r| &gt; 0.7:</strong> Strong correlation</li>
-                <li><strong>0.3 &lt; |r| &lt; 0.7:</strong> Moderate correlation</li>
-                <li><strong>|r| &lt; 0.3:</strong> Weak correlation</li>
-            </ul>
-
-            <h4>Standard Error of Estimate (SEE)</h4>
-            <p>The standard error measures the typical distance between observed and predicted values:</p>
-            <div class="formula-box">
-                SEE = √[Σ(yᵢ - ŷᵢ)² / (n - 2)]
+            <div class="stat-panel" id="lr-graph-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><line x1="3" y1="21" x2="21" y2="3"/><circle cx="7" cy="17" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="17" cy="7" r="1.5"/></svg>
+                        <h4>Scatter Plot &amp; Regression Line</h4>
+                    </div>
+                    <div style="flex:1;padding:1rem;min-height:400px;">
+                        <div id="lr-graph-container"></div>
+                    </div>
+                </div>
             </div>
-            <p>A smaller SEE indicates better predictions.</p>
 
-            <h4>Assumptions of Linear Regression</h4>
-            <ul>
-                <li><strong>Linearity:</strong> The relationship between X and Y is linear</li>
-                <li><strong>Independence:</strong> Observations are independent of each other</li>
-                <li><strong>Homoscedasticity:</strong> Residuals have constant variance</li>
-                <li><strong>Normality:</strong> Residuals are normally distributed</li>
-                <li><strong>No outliers:</strong> Extreme values can disproportionately affect the line</li>
-            </ul>
-
-            <h4>Real-World Applications</h4>
-            <ul>
-                <li><strong>Business:</strong> Sales forecasting, price optimization, demand prediction</li>
-                <li><strong>Economics:</strong> GDP analysis, inflation prediction, market trends</li>
-                <li><strong>Healthcare:</strong> Drug dosage, disease progression, risk factors</li>
-                <li><strong>Science:</strong> Calibration curves, experimental relationships</li>
-                <li><strong>Education:</strong> Grade prediction, study time vs. performance</li>
-                <li><strong>Real Estate:</strong> Property valuation based on features</li>
-            </ul>
-
-            <h4>Interpreting Results</h4>
-            <p><strong>Slope Interpretation:</strong> "For every 1-unit increase in X, Y increases/decreases by b units."</p>
-            <p><strong>Intercept Interpretation:</strong> "When X = 0, the predicted value of Y is a."</p>
-            <p><strong>R² Interpretation:</strong> "The model explains R²×100% of the variance in Y."</p>
-
-            <div class="info-box">
-                <i class="fas fa-lightbulb"></i>
-                <strong>Tip:</strong> Always visualize your data with a scatter plot before performing regression. Linear regression assumes a linear relationship - if your data shows a curved pattern, consider polynomial regression or data transformation.
+            <div class="stat-panel" id="lr-compiler-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h4>Python Compiler</h4>
+                    </div>
+                    <div style="flex:1;min-height:0;">
+                        <iframe id="lr-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-<%@ include file="thanks.jsp"%>
+        <!-- ==================== ADS COLUMN ==================== -->
+        <div class="tool-ads-column"><%@ include file="modern/ads/ad-three-column.jsp" %></div>
+    </main>
 
-  <%@ include file="footer_adsense.jsp"%>
-  <%@ include file="addcomments.jsp"%>
-  <!-- FAQ: inlined (was jspf/faq/math/linear-regression-calculator-faq.jspf) -->
-  <section id="faq" class="mt-5">
-    <h2 class="h5">Linear Regression Calculator: FAQ</h2>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What does R² tell me?</h3>
-      <p class="mb-0">R² is the proportion of variance in Y explained by X using the fitted linear model. Higher values indicate better fit, but check residuals for assumptions.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">Are there key assumptions?</h3>
-      <p class="mb-0">Linearity, independence, homoscedasticity (constant variance), and approximately normal residuals. Inspect residual plots for violations.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">How do I make predictions?</h3>
-      <p class="mb-0">Enter an X value; the model predicts Y = intercept + slope × X. Consider prediction intervals for uncertainty around point estimates.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What if the relationship isn’t linear?</h3>
-      <p class="mb-0">Try transformations (e.g., log) or polynomial terms, or consider non‑linear or robust methods if residual patterns persist.</p>
-    </div></div>
-  </section>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {"@type":"Question","name":"What does R² tell me?","acceptedAnswer":{"@type":"Answer","text":"R² is the proportion of variance in Y explained by X using the fitted linear model. Check residuals for assumptions."}},
-      {"@type":"Question","name":"Are there key assumptions?","acceptedAnswer":{"@type":"Answer","text":"Linearity, independence, homoscedasticity, and approximately normal residuals."}},
-      {"@type":"Question","name":"How do I make predictions?","acceptedAnswer":{"@type":"Answer","text":"Predict Y = intercept + slope × X; consider prediction intervals."}},
-      {"@type":"Question","name":"What if the relationship isn’t linear?","acceptedAnswer":{"@type":"Answer","text":"Use transformations or polynomial terms; consider robust/non‑linear models."}}
-    ]
-  }
-  </script>
-  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/linear-regression-calculator-breadcrumbs.jspf) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-      {"@type":"ListItem","position":2,"name":"Linear Regression Calculator","item":"https://8gwifi.org/linear-regression-calculator.jsp"}
-    ]
-  }
-  </script>
-</div>
+    <div class="tool-mobile-ad-container"><%@ include file="modern/ads/ad-in-content-mid.jsp" %></div>
 
-<%@ include file="body-close.jsp"%>
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="linear-regression-calculator.jsp"/>
+        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
 
-<script>
-        let regressionChart = null;
-        let residualChart = null;
-        let regressionData = null;
+    <!-- ==================== EDUCATIONAL CONTENT ==================== -->
+    <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
 
-        function loadSampleData() {
-            const sampleData = `1, 2.1
-2, 3.9
-3, 6.2
-4, 7.8
-5, 10.1
-6, 11.9
-7, 14.2
-8, 15.8
-9, 18.1
-10, 19.9`;
-            document.getElementById('dataInput').value = sampleData;
-        }
+        <!-- 1. What Is Linear Regression? -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What Is Linear Regression?</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;"><strong>Linear regression</strong> models the relationship between a dependent variable (Y) and independent variable (X) by fitting the best straight line through the data using the <strong>least squares method</strong>.</p>
 
-        function parseData() {
-            const input = document.getElementById('dataInput').value.trim();
-            const lines = input.split('\n');
-            const xValues = [];
-            const yValues = [];
+            <div class="stat-formula-box">
+                <strong>Regression Equation:</strong>&nbsp; y = a + bx
+            </div>
 
-            for (let line of lines) {
-                line = line.trim();
-                if (line === '') continue;
-
-                const parts = line.split(',');
-                if (parts.length !== 2) {
-                    alert('Error: Each line must contain exactly two values (X, Y) separated by a comma.');
-                    return null;
-                }
-
-                const x = parseFloat(parts[0].trim());
-                const y = parseFloat(parts[1].trim());
-
-                if (isNaN(x) || isNaN(y)) {
-                    alert('Error: All values must be valid numbers.');
-                    return null;
-                }
-
-                xValues.push(x);
-                yValues.push(y);
-            }
-
-            if (xValues.length < 2) {
-                alert('Error: You need at least 2 data points for regression.');
-                return null;
-            }
-
-            return { x: xValues, y: yValues };
-        }
-
-        function calculateMean(arr) {
-            return arr.reduce((a, b) => a + b, 0) / arr.length;
-        }
-
-        function calculateRegression() {
-            const data = parseData();
-            if (!data) return;
-
-            const { x, y } = data;
-            const n = x.length;
-
-            // Calculate means
-            const xMean = calculateMean(x);
-            const yMean = calculateMean(y);
-
-            // Calculate slope (b) and intercept (a)
-            let numerator = 0;
-            let denominator = 0;
-
-            for (let i = 0; i < n; i++) {
-                numerator += (x[i] - xMean) * (y[i] - yMean);
-                denominator += Math.pow(x[i] - xMean, 2);
-            }
-
-            const slope = numerator / denominator;
-            const intercept = yMean - slope * xMean;
-
-            // Calculate R² and correlation
-            let ssRes = 0; // Residual sum of squares
-            let ssTot = 0; // Total sum of squares
-            const predicted = [];
-            const residuals = [];
-
-            for (let i = 0; i < n; i++) {
-                const yPred = intercept + slope * x[i];
-                predicted.push(yPred);
-                const residual = y[i] - yPred;
-                residuals.push(residual);
-                ssRes += Math.pow(residual, 2);
-                ssTot += Math.pow(y[i] - yMean, 2);
-            }
-
-            const rSquared = 1 - (ssRes / ssTot);
-            const correlation = Math.sqrt(rSquared) * (slope >= 0 ? 1 : -1);
-
-            // Calculate standard error of estimate
-            const see = Math.sqrt(ssRes / (n - 2));
-
-            // Store regression data for predictions
-            regressionData = { slope, intercept, x, y, predicted, residuals };
-
-            displayResults(slope, intercept, rSquared, correlation, see, n);
-            drawRegressionPlot(x, y, predicted);
-            drawResidualPlot(x, residuals);
-
-            // Show prediction section
-            document.getElementById('predictionSection').style.display = 'block';
-        }
-
-        function displayResults(slope, intercept, rSquared, correlation, see, n) {
-            const equation = `y = ${intercept.toFixed(4)} ${slope >= 0 ? '+' : ''} ${slope.toFixed(4)}x`;
-
-            let rSquaredInterpretation = '';
-            if (rSquared >= 0.9) {
-                rSquaredInterpretation = '<strong style="color: #10b981;">Excellent fit!</strong> The model explains ' + (rSquared * 100).toFixed(1) + '% of the variance.';
-            } else if (rSquared >= 0.7) {
-                rSquaredInterpretation = '<strong style="color: #3b82f6;">Good fit.</strong> The model explains ' + (rSquared * 100).toFixed(1) + '% of the variance.';
-            } else if (rSquared >= 0.5) {
-                rSquaredInterpretation = '<strong style="color: #f59e0b;">Moderate fit.</strong> The model explains ' + (rSquared * 100).toFixed(1) + '% of the variance.';
-            } else {
-                rSquaredInterpretation = '<strong style="color: #ef4444;">Weak fit.</strong> The model explains only ' + (rSquared * 100).toFixed(1) + '% of the variance.';
-            }
-
-            let corrInterpretation = '';
-            const absCorr = Math.abs(correlation);
-            if (absCorr >= 0.7) {
-                corrInterpretation = '<strong>Strong</strong> ' + (correlation > 0 ? 'positive' : 'negative') + ' correlation';
-            } else if (absCorr >= 0.3) {
-                corrInterpretation = '<strong>Moderate</strong> ' + (correlation > 0 ? 'positive' : 'negative') + ' correlation';
-            } else {
-                corrInterpretation = '<strong>Weak</strong> ' + (correlation > 0 ? 'positive' : 'negative') + ' correlation';
-            }
-
-            const html = `
-                <div class="result-item">
-                    <div class="result-label">Regression Equation</div>
-                    <div class="result-equation">${equation}</div>
-                    <div class="interpretation">
-                        <i class="fas fa-info-circle"></i> For every 1-unit increase in X, Y ${slope >= 0 ? 'increases' : 'decreases'} by ${Math.abs(slope).toFixed(4)} units.
-                    </div>
+            <div class="stat-edu-grid" style="margin-top:1rem;">
+                <div class="stat-feature-card stat-anim stat-anim-d1">
+                    <div style="font-size:1.5rem;">&#x1F4C8;</div>
+                    <h4>Slope (b)</h4>
+                    <p>How much Y changes for each 1-unit increase in X. Positive = upward trend, negative = downward.</p>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-label">Slope (b)</div>
-                    <div class="result-value">${slope.toFixed(6)}</div>
+                <div class="stat-feature-card stat-anim stat-anim-d2">
+                    <div style="font-size:1.5rem;">&#x1F3AF;</div>
+                    <h4>Intercept (a)</h4>
+                    <p>The predicted value of Y when X = 0. The starting point of the regression line.</p>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-label">Y-Intercept (a)</div>
-                    <div class="result-value">${intercept.toFixed(6)}</div>
+                <div class="stat-feature-card stat-anim stat-anim-d3">
+                    <div style="font-size:1.5rem;">&#x1F4CA;</div>
+                    <h4>R&sup2; (Fit Quality)</h4>
+                    <p>Proportion of variance in Y explained by X. Ranges from 0 (no fit) to 1 (perfect fit).</p>
                 </div>
+            </div>
+        </div>
 
-                <div class="result-item">
-                    <div class="result-label">R² (R-Squared)</div>
-                    <div class="result-value">${rSquared.toFixed(6)}</div>
-                    <div class="interpretation">
-                        <i class="fas fa-chart-line"></i> ${rSquaredInterpretation}
-                    </div>
+        <!-- 2. Key Formulas -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Key Formulas</h2>
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>Slope:</strong>&nbsp; b = &Sigma;[(x<sub>i</sub> &minus; x&#772;)(y<sub>i</sub> &minus; y&#772;)] / &Sigma;(x<sub>i</sub> &minus; x&#772;)&sup2;
+            </div>
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>Intercept:</strong>&nbsp; a = y&#772; &minus; b &times; x&#772;
+            </div>
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>R&sup2;:</strong>&nbsp; R&sup2; = 1 &minus; SS<sub>res</sub> / SS<sub>tot</sub>
+            </div>
+            <div class="stat-formula-box">
+                <strong>Standard Error:</strong>&nbsp; SEE = &radic;[&Sigma;(y<sub>i</sub> &minus; y&#770;<sub>i</sub>)&sup2; / (n &minus; 2)]
+            </div>
+        </div>
+
+        <!-- 3. R-squared Interpretation -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Understanding R&sup2;</h2>
+            <table class="stat-ops-table">
+                <thead><tr><th>R&sup2; Range</th><th>Interpretation</th><th>Fit Quality</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600;">0.90 &ndash; 1.00</td><td>90&ndash;100% of variance explained</td><td style="color:#10b981;font-weight:600;">Excellent</td></tr>
+                    <tr><td style="font-weight:600;">0.70 &ndash; 0.89</td><td>70&ndash;89% of variance explained</td><td style="color:#3b82f6;font-weight:600;">Good</td></tr>
+                    <tr><td style="font-weight:600;">0.50 &ndash; 0.69</td><td>50&ndash;69% of variance explained</td><td style="color:#f59e0b;font-weight:600;">Moderate</td></tr>
+                    <tr><td style="font-weight:600;">0.00 &ndash; 0.49</td><td>Less than 50% explained</td><td style="color:#ef4444;font-weight:600;">Weak</td></tr>
+                </tbody>
+            </table>
+            <div style="margin-top:1rem;padding:1rem;background:var(--bg-secondary);border-radius:0.5rem;border-left:3px solid var(--info);">
+                <p style="margin:0;font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">
+                    <strong>Tip:</strong> A high R&sup2; does not guarantee a good model. Always visualize residuals to check for patterns that indicate model violations (non-linearity, heteroscedasticity).
+                </p>
+            </div>
+        </div>
+
+        <!-- 4. Assumptions -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Assumptions of Linear Regression</h2>
+            <div class="stat-edu-grid">
+                <div class="stat-edu-card stat-anim stat-anim-d1">
+                    <h4>Linearity</h4>
+                    <p>The relationship between X and Y is approximately linear. Check with a scatter plot.</p>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-label">Correlation (r)</div>
-                    <div class="result-value">${correlation.toFixed(6)}</div>
-                    <div class="interpretation">
-                        <i class="fas fa-link"></i> ${corrInterpretation}
-                    </div>
+                <div class="stat-edu-card stat-anim stat-anim-d2">
+                    <h4>Independence</h4>
+                    <p>Observations are independent of each other. No autocorrelation in residuals.</p>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-label">Standard Error of Estimate</div>
-                    <div class="result-value">${see.toFixed(6)}</div>
-                    <div class="interpretation">
-                        <i class="fas fa-ruler"></i> Average distance between observed and predicted values
-                    </div>
+                <div class="stat-edu-card stat-anim stat-anim-d3">
+                    <h4>Homoscedasticity</h4>
+                    <p>Residuals have constant variance across all X values. Fan-shaped patterns indicate violation.</p>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-label">Sample Size (n)</div>
-                    <div class="result-value">${n}</div>
+                <div class="stat-edu-card stat-anim stat-anim-d4">
+                    <h4>Normality</h4>
+                    <p>Residuals are approximately normally distributed. Less critical for large samples.</p>
                 </div>
-            `;
+            </div>
+        </div>
 
-            document.getElementById('resultsContent').innerHTML = html;
-        }
+        <!-- 5. FAQ -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button class="faq-question">What does R-squared tell me about the regression?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">R&sup2; is the proportion of variance in Y explained by the linear model. An R&sup2; of 0.85 means 85% of the variation in Y is captured by the regression line. Higher is better, but always check residual plots.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What are the assumptions of linear regression?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Linear regression assumes: linearity (X and Y have a linear relationship), independence of observations, homoscedasticity (constant residual variance), and approximately normal residuals. Inspect residual plots to verify.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How do I make predictions with the regression equation?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Plug any X value into y = a + bx. Be cautious about extrapolating far beyond your data range, as the linear relationship may not hold outside the observed domain.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What if the relationship is not linear?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">If residuals show a curve or pattern, consider polynomial regression, logarithmic transformation, or other nonlinear models. Always visualize your data with a scatter plot first.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How do I interpret the slope?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">The slope (b) tells you how much Y changes for each 1-unit increase in X. A slope of 2.5 means Y increases by 2.5 units on average when X increases by 1 unit.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What is the standard error of the estimate?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">SEE measures the average distance between observed Y values and predicted values from the regression line. Smaller SEE means the model makes more precise predictions.</div>
+            </div>
+        </div>
+    </section>
 
-        function drawRegressionPlot(x, y, predicted) {
-            const ctx = document.getElementById('regressionPlot');
+    <%@ include file="modern/components/support-section.jsp" %>
 
-            if (!ctx) {
-                // Create canvas if it doesn't exist
-                const container = document.getElementById('resultsContent');
-                const chartHtml = `
-                    <div class="chart-container">
-                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; font-size: 0.95rem;">
-                            <i class="fas fa-chart-scatter"></i> Scatter Plot with Regression Line
-                        </h5>
-                        <canvas id="regressionPlot"></canvas>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', chartHtml);
-                return drawRegressionPlot(x, y, predicted);
-            }
+    <footer class="page-footer"><div class="footer-content"><p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p><div class="footer-links"><a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a><a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a><a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a></div></div></footer>
 
-            if (regressionChart) {
-                regressionChart.destroy();
-            }
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-            // Create datasets
-            const scatterData = x.map((xi, i) => ({ x: xi, y: y[i] }));
-            const lineData = x.map((xi, i) => ({ x: xi, y: predicted[i] }));
-
-            regressionChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [
-                        {
-                            label: 'Observed Data',
-                            data: scatterData,
-                            backgroundColor: 'rgba(8, 145, 178, 0.6)',
-                            borderColor: 'rgba(8, 145, 178, 1)',
-                            borderWidth: 2,
-                            pointRadius: 5,
-                            pointHoverRadius: 7
-                        },
-                        {
-                            label: 'Regression Line',
-                            data: lineData,
-                            type: 'line',
-                            borderColor: 'rgba(239, 68, 68, 0.8)',
-                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 1.5,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                boxWidth: 12,
-                                font: { size: 10 }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Linear Regression',
-                            font: { size: 11, weight: 'bold' }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': (' +
-                                           context.parsed.x.toFixed(2) + ', ' +
-                                           context.parsed.y.toFixed(2) + ')';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'X',
-                                font: { size: 10, weight: 'bold' }
-                            },
-                            ticks: { font: { size: 9 } }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Y',
-                                font: { size: 10, weight: 'bold' }
-                            },
-                            ticks: { font: { size: 9 } }
-                        }
-                    }
-                }
-            });
-        }
-
-        function drawResidualPlot(x, residuals) {
-            const container = document.getElementById('resultsContent');
-
-            // Check if residual plot already exists
-            let ctx = document.getElementById('residualPlot');
-            if (!ctx) {
-                const chartHtml = `
-                    <div class="chart-container">
-                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; font-size: 0.95rem;">
-                            <i class="fas fa-chart-bar"></i> Residual Plot
-                        </h5>
-                        <canvas id="residualPlot"></canvas>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', chartHtml);
-                ctx = document.getElementById('residualPlot');
-            }
-
-            if (residualChart) {
-                residualChart.destroy();
-            }
-
-            const residualData = x.map((xi, i) => ({ x: xi, y: residuals[i] }));
-
-            residualChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Residuals',
-                        data: residualData,
-                        backgroundColor: 'rgba(147, 51, 234, 0.6)',
-                        borderColor: 'rgba(147, 51, 234, 1)',
-                        borderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }, {
-                        label: 'Zero Line',
-                        data: x.map(xi => ({ x: xi, y: 0 })),
-                        type: 'line',
-                        borderColor: 'rgba(107, 114, 128, 0.5)',
-                        borderWidth: 1,
-                        borderDash: [5, 5],
-                        pointRadius: 0,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 1.5,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                boxWidth: 12,
-                                font: { size: 10 }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Residuals vs X',
-                            font: { size: 11, weight: 'bold' }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    if (context.datasetIndex === 0) {
-                                        return 'Residual: ' + context.parsed.y.toFixed(4) + ' at X=' + context.parsed.x.toFixed(2);
-                                    }
-                                    return '';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'X',
-                                font: { size: 10, weight: 'bold' }
-                            },
-                            ticks: { font: { size: 9 } }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Residual (Y - Ŷ)',
-                                font: { size: 10, weight: 'bold' }
-                            },
-                            ticks: { font: { size: 9 } }
-                        }
-                    }
-                }
-            });
-        }
-
-        function makePrediction() {
-            if (!regressionData) {
-                alert('Please calculate regression first!');
-                return;
-            }
-
-            const xValue = parseFloat(document.getElementById('predictionX').value);
-            if (isNaN(xValue)) {
-                alert('Please enter a valid X value.');
-                return;
-            }
-
-            const { slope, intercept } = regressionData;
-            const yPredicted = intercept + slope * xValue;
-
-            const resultHtml = `
-                <div class="prediction-result">
-                    <i class="fas fa-arrow-right"></i>
-                    For <strong>X = ${xValue}</strong>, predicted <strong>Y = ${yPredicted.toFixed(4)}</strong>
-                </div>
-            `;
-            document.getElementById('predictionResult').innerHTML = resultHtml;
-        }
-</script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-common.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-graph.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-export.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/linear-regression-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+</body>
+</html>

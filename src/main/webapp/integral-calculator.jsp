@@ -748,7 +748,8 @@
                     <!-- Function input -->
                     <div class="tool-form-group">
                         <label class="tool-form-label" for="ic-expr">Function f(x)</label>
-                        <input type="text" class="tool-input tool-input-mono" id="ic-expr" placeholder="e.g. x^2 + 3*sin(x)" autocomplete="off" spellcheck="false">
+                        <input type="text" class="tool-input tool-input-mono" id="ic-expr" placeholder="e.g. sin(3*x), x^2, e^x" autocomplete="off" spellcheck="false">
+                        <span class="tool-form-hint">Both sin3x and sin(3*x) work</span>
                     </div>
 
                     <!-- Live preview -->
@@ -791,6 +792,7 @@
                     <div class="tool-form-group">
                         <label class="tool-form-label">Quick Examples</label>
                         <div class="ic-examples" id="ic-examples">
+                            <button type="button" class="ic-example-chip" data-expr="sin(3*x)">sin(3x)</button>
                             <button type="button" class="ic-example-chip" data-expr="x^2+3*x">x&sup2;+3x</button>
                             <button type="button" class="ic-example-chip" data-expr="sin(x)*cos(x)">sin&middot;cos</button>
                             <button type="button" class="ic-example-chip" data-expr="e^x*x^2">e^x&middot;x&sup2;</button>
@@ -811,8 +813,10 @@
                             <svg class="ic-syntax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                         </button>
                         <div class="ic-syntax-content" id="ic-syntax-content">
-                            x^2 &rarr; x&sup2; &nbsp;&nbsp; sin(x) &nbsp;&nbsp; cos(x) &nbsp;&nbsp; tan(x)<br>
-                            e^x &nbsp;&nbsp; log(x) = ln(x) &nbsp;&nbsp; sqrt(x)<br>
+                            <strong>Trig:</strong> Use parentheses. <code>sin(3*x)</code> for sin&nbsp;3x, <code>cos(2*t)</code> for cos&nbsp;2t.<br>
+                            Shorthand works too: <code>sin3x</code> &rarr; sin(3x), <code>sinx</code> &rarr; sin(x)<br>
+                            x^2 &nbsp;&nbsp; sin(x) &nbsp;&nbsp; cos(x) &nbsp;&nbsp; tan(x)<br>
+                            e^x &nbsp;&nbsp; log(x)=ln(x) &nbsp;&nbsp; sqrt(x)<br>
                             sec(x) &nbsp;&nbsp; csc(x) &nbsp;&nbsp; cot(x)<br>
                             sinh(x) &nbsp;&nbsp; cosh(x) &nbsp;&nbsp; tanh(x)<br>
                             asin(x) &nbsp;&nbsp; acos(x) &nbsp;&nbsp; atan(x)<br>
@@ -1177,6 +1181,7 @@
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=cacheVersion%>"></script>
 
     <!-- Plotly (deferred until graph tab clicked) -->
     <script>
@@ -1197,6 +1202,10 @@
     <script>
     (function() {
     'use strict';
+
+    var normalizeExpr = IntegralCalculatorCore.normalizeExpr;
+    var checkNonElementaryIntegral = IntegralCalculatorCore.checkNonElementaryIntegral;
+    var evalBound = function(s) { return IntegralCalculatorCore.evalBound(s, nerdamer); };
 
     // ========== DOM References ==========
     var exprInput    = document.getElementById('ic-expr');
@@ -1299,7 +1308,8 @@
             return;
         }
         try {
-            var latex = exprToLatex(expr);
+            var normalized = normalizeExpr(expr);
+            var latex = exprToLatex(normalized);
             var integralLatex;
             if (currentMode === 'definite') {
                 var a = lowerInput.value.trim() || 'a';
@@ -1337,9 +1347,10 @@
     });
 
     function doIntegrate() {
-        var expr = exprInput.value.trim();
+        var rawExpr = exprInput.value.trim();
+        var expr = normalizeExpr(rawExpr);
         var v = varSelect.value;
-        if (!expr) {
+        if (!rawExpr) {
             if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please enter a function.', 2000, 'warning');
             return;
         }
@@ -1357,6 +1368,14 @@
 
             var resultTeX = result.toTeX();
             var resultText = result.text();
+
+            // Detect known non-elementary integrals (Nerdamer may return incorrect results)
+            var nonElem = checkNonElementaryIntegral(expr, v);
+            if (nonElem) {
+                showNonElementaryError(expr, v, nonElem);
+                return;
+            }
+
             var method = identifyMethod(expr);
 
             if (currentMode === 'indefinite') {
@@ -1372,10 +1391,15 @@
                     defResult = nerdamer('defint(' + expr + ', ' + a + ', ' + b + ', ' + v + ')');
                     numericVal = parseFloat(defResult.text('decimals'));
                 } catch (e2) {
-                    // Fallback: evaluate antiderivative at bounds
+                    // Fallback: evaluate antiderivative at bounds (use actual variable; evalBound for pi/e)
                     try {
-                        var Fb = nerdamer(result.text()).evaluate({ x: b });
-                        var Fa = nerdamer(result.text()).evaluate({ x: a });
+                        var aNum = evalBound(a);
+                        var bNum = evalBound(b);
+                        var scope = {};
+                        scope[v] = aNum;
+                        var Fa = nerdamer(result.text()).evaluate(scope);
+                        scope[v] = bNum;
+                        var Fb = nerdamer(result.text()).evaluate(scope);
                         numericVal = parseFloat(Fb.text('decimals')) - parseFloat(Fa.text('decimals'));
                         defResult = nerdamer(Fb.text() + '-(' + Fa.text() + ')');
                     } catch (e3) {
@@ -1465,6 +1489,18 @@
 
         katex.render('\\int_{' + a + '}^{' + b + '} ' + exprTeX + ' \\, d' + v + ' =', document.getElementById('ic-r-integral'), { displayMode: true, throwOnError: false });
         katex.render(resultTeX + ' + C', document.getElementById('ic-r-antideriv'), { displayMode: true, throwOnError: false });
+    }
+
+    function showNonElementaryError(expr, v, info) {
+        resultActions.classList.remove('visible');
+        var html = '<div class="ic-error">';
+        html += '<h4>Non-Elementary Integral</h4>';
+        html += '<p>The integral of <strong>' + escapeHtml(info.name) + '</strong> cannot be expressed in terms of elementary functions (polynomials, exponentials, logs, trig).</p>';
+        html += '<p>It defines the <strong>' + escapeHtml(info.symbol) + '</strong> function: ' + escapeHtml(info.desc) + '</p>';
+        html += '<p>Use a <strong>definite integral</strong> with bounds for a numeric result.</p>';
+        html += '</div>';
+        resultContent.innerHTML = html;
+        if (emptyState) emptyState.style.display = 'none';
     }
 
     // ========== Error State ==========
@@ -1822,14 +1858,6 @@
         }
     }
 
-    function evalBound(s) {
-        try {
-            return parseFloat(nerdamer(s).evaluate().text('decimals'));
-        } catch (e) {
-            return parseFloat(s) || 0;
-        }
-    }
-
     // ========== Python Compiler ==========
     function nerdamerToPython(expr) {
         // Convert e^(...) to exp(...) BEFORE ^ -> ** conversion
@@ -1841,7 +1869,7 @@
     }
 
     function buildCompilerCode(template) {
-        var expr = exprInput.value.trim() || 'x**2';
+        var expr = normalizeExpr(exprInput.value.trim()) || 'x**2';
         var pyExpr = nerdamerToPython(expr);
         var v = varSelect.value;
         var a = lowerInput.value.trim() || '0';

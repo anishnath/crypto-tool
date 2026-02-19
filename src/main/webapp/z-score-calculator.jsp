@@ -1,937 +1,521 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- SEO Meta -->
-<title>Z-Score Calculator Online – Free | 8gwifi.org</title>
-<meta name="description" content="Free online Z‑score calculator: convert raw scores to Z, get percentiles and probabilities on the standard normal distribution with charts and step‑by‑step modes.">
-<meta name="keywords" content="z-score calculator, standard score, z score, percentile calculator, normal distribution calculator, standardization, z-table calculator, standard normal">
-<link rel="canonical" href="https://8gwifi.org/z-score-calculator.jsp">
-
-<!-- Open Graph / Twitter -->
-<meta property="og:title" content="Z-Score Calculator Online – Free | 8gwifi.org">
-<meta property="og:description" content="Free online Z‑score calculator for standard normal: convert scores to Z, percentiles and probabilities with interactive charts.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://8gwifi.org/z-score-calculator.jsp">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Z-Score Calculator Online – Free | 8gwifi.org">
-<meta name="twitter:description" content="Free Z‑score calculator: raw→Z, percentiles, probabilities with normal curve visualization.">
-<!-- og:image/twitter:image intentionally omitted until an asset is available -->
-
-<%@ include file="header-script.jsp"%>
-
-<style>
-  /* Sticky results panel */
-  .sticky-side {
-    position: sticky;
-    top: 80px;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-  }
-
-  /* Hero Result */
-  .result-hero {
-    text-align: center;
-    padding: 2rem 1rem;
-    background: linear-gradient(135deg, #7c3aed, #a78bfa);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  .result-hero .z-value {
-    font-size: 3rem;
-    font-weight: 800;
-    color: white;
-    margin: 0;
-    line-height: 1;
-  }
-  .result-hero .z-label {
-    color: rgba(255,255,255,0.9);
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-  }
-
-  .form-group { margin-bottom: 1rem; }
-  .form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #374151;
-    font-size: 0.9rem;
-  }
-  .form-group input {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-  .form-group input:focus {
-    outline: none;
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
-  }
-  .form-group small {
-    display: block;
-    margin-top: 0.25rem;
-    color: #6b7280;
-    font-size: 0.8rem;
-  }
-
-  /* Action Button */
-  .btn-calc {
-    width: 100%;
-    padding: 0.9rem;
-    background: #7c3aed;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1.05rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-calc:hover { background: #6d28d9; transform: translateY(-1px); }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-  .stat-item {
-    background: #faf5ff;
-    padding: 0.75rem;
-    border-radius: 6px;
-    text-align: center;
-  }
-  .stat-item label {
-    display: block;
-    font-size: 0.75rem;
-    color: #7c3aed;
-    margin-bottom: 0.25rem;
-    font-weight: 600;
-  }
-  .stat-item .value {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #6d28d9;
-  }
-
-  .interpretation {
-    background: #faf5ff;
-    border-left: 4px solid #7c3aed;
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 1rem 0;
-    line-height: 1.6;
-    font-size: 0.9rem;
-  }
-
-  #normalCurve {
-    width: 100%;
-    max-height: 250px;
-  }
-
-  /* Educational section */
-  .edu-card {
-    background: #f5f3ff;
-    border-left: 4px solid #7c3aed;
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-  }
-  .edu-card h6 {
-    color: #5b21b6;
-    margin: 0 0 0.5rem 0;
-    font-weight: 700;
-  }
-  .edu-card p {
-    margin: 0;
-    line-height: 1.6;
-    color: #374151;
-  }
-
-  .table-responsive {
-    overflow-x: auto;
-  }
-  .table-sm th, .table-sm td {
-    padding: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 768px) {
-    .result-hero .z-value { font-size: 2rem; }
-    .stats-grid { grid-template-columns: 1fr; }
-  }
-</style>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"Z-Score Calculator",
-  "url":"https://8gwifi.org/z-score-calculator.jsp",
-  "description":"Calculate Z-scores, percentiles, and probabilities from the standard normal distribution. Free online tool with interactive visualization for standardization and statistical analysis.",
-  "applicationCategory":"EducationalApplication",
-  "operatingSystem":"Any",
-  "browserRequirements":"Requires JavaScript",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "featureList": "Z-score calculation, Percentile calculation, Probability from Z-score, Raw score from Z-score, Normal distribution visualization, Z-table lookup, Area under curve"
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.plot.ly">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
+        *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+        :root,:root[data-theme="light"]{
+            --primary:#6366f1;--primary-dark:#4f46e5;--primary-light:#818cf8;--primary-50:#eef2ff;--primary-100:#e0e7ff;
+            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;--bg-hover:#f8fafc;
+            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--text-inverse:#fff;
+            --border:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;
+            --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#3b82f6;
+            --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            --font-mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
+            --text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;
+            --leading-tight:1.25;--leading-normal:1.5;
+            --font-normal:400;--font-medium:500;--font-semibold:600;--font-bold:700;
+            --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+            --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+            --z-dropdown:1000;--z-sticky:1020;--z-fixed:1030;--z-modal-backdrop:1040;--z-modal:1050;
+            --transition-fast:150ms ease-in-out;--transition-base:200ms ease-in-out;--transition-slow:300ms ease-in-out;
+            --header-height-mobile:64px;--header-height-desktop:72px;--container-max-width:1280px;
+            --tool-primary:#e11d48;--tool-primary-dark:#be123c;--tool-gradient:linear-gradient(135deg,#e11d48 0%,#f43f5e 100%);--tool-light:#fff1f2
+        }
+        @media(prefers-color-scheme:dark){:root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b}}
+        [data-theme="dark"]{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b;--tool-light:rgba(225,29,72,0.15)}
+        [data-theme="dark"] body{background-color:var(--bg-primary);color:var(--text-primary)}
+        @media(min-width:768px){:root{--header-height-mobile:72px}}
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
+        .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}
+        .nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}
+        .nav-logo span{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
+        [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,#818cf8 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}
+        .nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}
+        .btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}
+        .btn-nav-primary{background:var(--primary,#6366f1);color:#fff}
+        .btn-nav-secondary{background:var(--bg-secondary,#f8fafc);color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}
+        .mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
+        .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}
+        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,#f8fafc);font-family:var(--font-sans)}
+        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
+        @media(max-width:991px){.modern-nav{height:var(--header-height-mobile,64px)}.nav-container{padding:0 var(--space-3,0.75rem)}.nav-search,.nav-items{display:none}.nav-actions{gap:var(--space-2,0.5rem)}.btn-nav{padding:var(--space-2,0.5rem) var(--space-3,0.75rem);font-size:var(--text-xs,0.75rem)}.mobile-menu-toggle,.mobile-search-toggle{display:flex}.btn-nav .nav-text{display:none}}
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
+        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}
+        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+        .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
+        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
+        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
+        .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
+        .tool-description-content{flex:1}
+        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
+        @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
+        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
+        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}
+        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
+        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
+        .tool-output-column{display:flex;flex-direction:column;gap:1rem}
+        .tool-ads-column{height:fit-content}
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}
+        .tool-card-body{padding:1rem}
+        .tool-form-group{margin-bottom:0.875rem}
+        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#0f172a);font-size:0.8125rem}
+        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
+        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:0.5rem;transition:opacity .15s,transform .15s}
+        .tool-action-btn:hover{opacity:0.9}
+        .tool-result-card{display:flex;flex-direction:column;height:100%}
+        .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);border-radius:0.75rem 0.75rem 0 0}
+        .tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary,#0f172a);flex:1}
+        .tool-result-content{flex:1;padding:1.25rem;min-height:300px;overflow-y:auto}
+        .tool-result-actions{display:none;gap:0.5rem;padding:1rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;flex-wrap:wrap}
+        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted,#94a3b8)}
+        .tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary,#475569)}
+        .tool-empty-state p{font-size:0.875rem;max-width:280px}
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(225,29,72,0.3)}
+        [data-theme="dark"] .tool-result-header{background:var(--bg-tertiary,#334155);border-bottom-color:var(--border,#475569)}
+        [data-theme="dark"] .tool-result-header h4{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-result-actions{background:var(--bg-tertiary,#334155);border-top-color:var(--border,#475569)}
+        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+        .faq-item{border-bottom:1px solid var(--border,#e2e8f0)}.faq-item:last-child{border-bottom:none}
+        .faq-question{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0.875rem 0;background:none;border:none;font-size:0.875rem;font-weight:600;color:var(--text-primary,#0f172a);cursor:pointer;text-align:left;font-family:var(--font-sans);gap:0.75rem}
+        .faq-answer{display:none;padding:0 0 0.875rem;font-size:0.8125rem;line-height:1.7;color:var(--text-secondary)}
+        .faq-item.open .faq-answer{display:block}
+        .faq-chevron{transition:transform 0.2s;flex-shrink:0}.faq-item.open .faq-chevron{transform:rotate(180deg)}
+        /* Z-score specific: select styling */
+        .zs-select{width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:0.5rem;font-size:0.875rem;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+        .zs-select:focus{outline:none;border-color:var(--tool-primary);box-shadow:0 0 0 3px rgba(225,29,72,0.1)}
+        [data-theme="dark"] .zs-select{background:var(--bg-tertiary);border-color:var(--border)}
+    </style>
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Z-Score Calculator Online - Percentile &amp; Probability Free" />
+        <jsp:param name="toolDescription" value="Convert raw scores to Z-scores, find probabilities and percentiles on the standard normal distribution. Interactive normal curve, step-by-step formulas, and Python export." />
+        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolUrl" value="z-score-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="z-score calculator, standard score calculator, z score to percentile, normal distribution calculator, z-table calculator, standard normal, percentile to z-score, probability calculator, standardization, inverse normal" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="Raw score to Z-score conversion,Z-score to probability with area types,Percentile to Z-score inverse normal,Z-score to raw score denormalization,Interactive Plotly normal curve,Step-by-step KaTeX formulas,Python scipy code generation,LaTeX export and share URL" />
+        <jsp:param name="teaches" value="Z-scores, standard normal distribution, standardization, percentiles, cumulative probability, inverse normal function" />
+        <jsp:param name="educationalLevel" value="High School, College, University" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Choose Mode|Select Score to Z or Z to Probability or Percentile to Z or Z to Score,Enter Values|Input your raw score mean and standard deviation or Z-score,Click Calculate|Get instant Z-score percentile and probability results,Review Steps|See step-by-step KaTeX formula derivation,View Normal Curve|Explore the interactive shaded normal distribution,Export Results|Copy LaTeX share URL or run Python code" />
+        <jsp:param name="faq1q" value="What is a Z-score and how is it calculated?" />
+        <jsp:param name="faq1a" value="A Z-score measures how many standard deviations a value is from the mean. The formula is Z equals x minus mu divided by sigma. A positive Z-score means the value is above the mean and a negative Z-score means it is below the mean. Z equals zero means the value equals the mean." />
+        <jsp:param name="faq2q" value="How do I convert a Z-score to a percentile?" />
+        <jsp:param name="faq2a" value="Use the standard normal cumulative distribution function. The percentile equals Phi of z times 100 percent where Phi is the CDF. For example Z equals 1.96 corresponds to the 97.5th percentile. This calculator does the lookup automatically." />
+        <jsp:param name="faq3q" value="What is the 68-95-99.7 rule?" />
+        <jsp:param name="faq3a" value="For normal distributions approximately 68 percent of data falls within plus or minus 1 standard deviation of the mean, 95 percent within plus or minus 2, and 99.7 percent within plus or minus 3. These correspond to Z-score ranges of negative 1 to 1, negative 2 to 2, and negative 3 to 3." />
+        <jsp:param name="faq4q" value="What is the difference between left tail and right tail probability?" />
+        <jsp:param name="faq4a" value="Left tail probability P of Z less than or equal to z is the area under the normal curve to the left of z. Right tail probability P of Z greater than or equal to z is the area to the right. They always sum to 1. Between plus or minus z gives the central area and outside gives the two tails combined." />
+        <jsp:param name="faq5q" value="When should I use Z-scores versus t-scores?" />
+        <jsp:param name="faq5a" value="Use Z-scores when the population standard deviation is known or the sample size is large, typically n greater than 30. Use t-scores when the population standard deviation is unknown and the sample is small. The t-distribution has heavier tails and approaches the normal as n increases." />
+        <jsp:param name="faq6q" value="Can I use Z-scores with non-normal data?" />
+        <jsp:param name="faq6a" value="You can always calculate Z-scores for any data but the probability and percentile interpretations assume normality. For non-normal data consider transforming the data first using log or Box-Cox transformations. The Central Limit Theorem helps when working with sample means of large samples." />
+    </jsp:include>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+    <%@ include file="modern/ads/ad-init.jsp" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/statistics-calculator.css?v=<%=cacheVersion%>">
 </head>
+<body>
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-
-<div class="container mt-4">
-  <h1>Z-Score Calculator</h1>
-  <p class="text-muted">Calculate Z-scores, percentiles, and probabilities from the standard normal distribution.</p>
-
-  <%@ include file="footer_adsense.jsp"%>
-
-  <div class="row mt-4">
-    <!-- Left Column - Input Forms -->
-    <div class="col-lg-7 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Z-Score Calculations</h5>
-
-          <!-- Calculation Mode Tabs -->
-          <ul class="nav nav-tabs mb-3" id="modeTabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="score-tab" data-toggle="tab" href="#scoreTab" role="tab">Score → Z</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="prob-tab" data-toggle="tab" href="#probTab" role="tab">Z → Probability</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="percentile-tab" data-toggle="tab" href="#percentileTab" role="tab">Percentile → Z</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="reverse-tab" data-toggle="tab" href="#reverseTab" role="tab">Z → Score</a>
-            </li>
-          </ul>
-
-          <div class="tab-content" id="modeTabContent">
-            <!-- Score to Z-Score Tab -->
-            <div class="tab-pane fade show active" id="scoreTab" role="tabpanel">
-              <div class="alert alert-info mb-3" style="font-size: 0.85rem;">
-                <strong>Standardization:</strong> Convert a raw score to a Z-score (standard score).
-              </div>
-              <div class="form-group">
-                <label>Raw Score (x)</label>
-                <input type="number" id="rawScore" value="85" step="0.01" class="form-control">
-                <small>The value you want to standardize</small>
-              </div>
-              <div class="form-group">
-                <label>Mean (μ)</label>
-                <input type="number" id="mean" value="75" step="0.01" class="form-control">
-                <small>Population or sample mean</small>
-              </div>
-              <div class="form-group">
-                <label>Standard Deviation (σ)</label>
-                <input type="number" id="stdDev" value="10" step="0.01" min="0.01" class="form-control">
-                <small>Population or sample standard deviation</small>
-              </div>
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Z-Score Calculator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
+                    Z-Score Calculator
+                </nav>
             </div>
-
-            <!-- Z-Score to Probability Tab -->
-            <div class="tab-pane fade" id="probTab" role="tabpanel">
-              <div class="alert alert-info mb-3" style="font-size: 0.85rem;">
-                <strong>Probability:</strong> Find the area under the normal curve for a given Z-score.
-              </div>
-              <div class="form-group">
-                <label>Z-Score</label>
-                <input type="number" id="zScoreProb" value="1.96" step="0.01" class="form-control">
-                <small>Standard score (positive or negative)</small>
-              </div>
-              <div class="form-group">
-                <label>Area Type</label>
-                <select id="areaType" class="form-control">
-                  <option value="left">Left tail (P(Z ≤ z))</option>
-                  <option value="right">Right tail (P(Z ≥ z))</option>
-                  <option value="between">Between ±z</option>
-                  <option value="outside">Outside ±z</option>
-                </select>
-                <small>Which area to calculate</small>
-              </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">Score &harr; Z</span>
+                <span class="tool-badge">Probability</span>
+                <span class="tool-badge">Normal Curve</span>
+                <span class="tool-badge">Free &middot; No Signup</span>
             </div>
-
-            <!-- Percentile to Z-Score Tab -->
-            <div class="tab-pane fade" id="percentileTab" role="tabpanel">
-              <div class="alert alert-info mb-3" style="font-size: 0.85rem;">
-                <strong>Inverse Normal:</strong> Find the Z-score for a given percentile/probability.
-              </div>
-              <div class="form-group">
-                <label>Percentile (%)</label>
-                <input type="number" id="percentile" value="95" step="0.01" min="0.01" max="99.99" class="form-control">
-                <small>Enter percentile (e.g., 95 for 95th percentile)</small>
-              </div>
-            </div>
-
-            <!-- Z-Score to Raw Score Tab -->
-            <div class="tab-pane fade" id="reverseTab" role="tabpanel">
-              <div class="alert alert-info mb-3" style="font-size: 0.85rem;">
-                <strong>Denormalization:</strong> Convert a Z-score back to the original scale.
-              </div>
-              <div class="form-group">
-                <label>Z-Score</label>
-                <input type="number" id="zScoreReverse" value="1.5" step="0.01" class="form-control">
-                <small>Standard score to convert</small>
-              </div>
-              <div class="form-group">
-                <label>Mean (μ)</label>
-                <input type="number" id="meanReverse" value="100" step="0.01" class="form-control">
-                <small>Population or sample mean</small>
-              </div>
-              <div class="form-group">
-                <label>Standard Deviation (σ)</label>
-                <input type="number" id="stdDevReverse" value="15" step="0.01" min="0.01" class="form-control">
-                <small>Population or sample standard deviation</small>
-              </div>
-            </div>
-          </div>
-
-          <button class="btn-calc mt-3" id="btnCalc">Calculate</button>
         </div>
-      </div>
-    </div>
+    </header>
 
-    <!-- Right Column - Results -->
-    <div class="col-lg-5 mb-4">
-      <div class="card shadow-sm sticky-side">
-        <div class="card-body">
-          <h5 class="card-title">Results</h5>
-          <div id="resultDisplay">
-            <p class="text-muted">Select a calculation mode and enter your values to see results.</p>
-          </div>
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Free online <strong>Z-score calculator</strong> with four modes: convert <strong>raw scores to Z-scores</strong>, find <strong>probabilities</strong> from Z, look up <strong>Z from percentile</strong>, or convert <strong>Z back to raw score</strong>. Interactive normal curve visualization, step-by-step KaTeX formulas, and Python scipy export.</p>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Educational Content -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Understanding Z-Scores & the Standard Normal Distribution</h5>
+    <main class="tool-page-container">
+        <!-- ==================== INPUT COLUMN ==================== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    Z-Score Calculator
+                </div>
+                <div class="tool-card-body">
+                    <!-- Mode Toggle -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label">Calculation Mode</label>
+                        <div class="stat-mode-toggle" style="display:flex;flex-wrap:wrap;">
+                            <button type="button" class="stat-mode-btn active" id="zs-mode-score" style="flex:1;min-width:0;font-size:0.75rem;padding:0.5rem 0.25rem;">Score&rarr;Z</button>
+                            <button type="button" class="stat-mode-btn" id="zs-mode-prob" style="flex:1;min-width:0;font-size:0.75rem;padding:0.5rem 0.25rem;">Z&rarr;Prob</button>
+                            <button type="button" class="stat-mode-btn" id="zs-mode-percentile" style="flex:1;min-width:0;font-size:0.75rem;padding:0.5rem 0.25rem;">Pctl&rarr;Z</button>
+                            <button type="button" class="stat-mode-btn" id="zs-mode-reverse" style="flex:1;min-width:0;font-size:0.75rem;padding:0.5rem 0.25rem;">Z&rarr;Score</button>
+                        </div>
+                    </div>
+
+                    <!-- Score → Z inputs -->
+                    <div id="zs-input-score">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-raw-score">Raw Score (x)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-raw-score" value="85" step="any" style="height:auto;padding:0.5rem 0.75rem;">
+                            <div class="tool-form-hint">The value you want to standardize</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-mean">Mean (&mu;)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-mean" value="75" step="any" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-stddev">Standard Deviation (&sigma;)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-stddev" value="10" step="any" min="0.01" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                    </div>
+
+                    <!-- Z → Probability inputs -->
+                    <div id="zs-input-prob" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-z-prob">Z-Score</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-z-prob" value="1.96" step="any" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-area-type">Area Type</label>
+                            <select class="zs-select zs-input" id="zs-area-type">
+                                <option value="left">Left tail P(Z &le; z)</option>
+                                <option value="right">Right tail P(Z &ge; z)</option>
+                                <option value="between">Between &plusmn;z</option>
+                                <option value="outside">Outside &plusmn;z</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Percentile → Z inputs -->
+                    <div id="zs-input-percentile" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-percentile">Percentile (%)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-percentile" value="95" step="any" min="0.01" max="99.99" style="height:auto;padding:0.5rem 0.75rem;">
+                            <div class="tool-form-hint">e.g. 95 for the 95th percentile</div>
+                        </div>
+                    </div>
+
+                    <!-- Z → Score inputs -->
+                    <div id="zs-input-reverse" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-z-reverse">Z-Score</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-z-reverse" value="1.5" step="any" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-mean-reverse">Mean (&mu;)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-mean-reverse" value="100" step="any" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="zs-stddev-reverse">Standard Deviation (&sigma;)</label>
+                            <input type="number" class="stat-input-text zs-input" id="zs-stddev-reverse" value="15" step="any" min="0.01" style="height:auto;padding:0.5rem 0.75rem;">
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button type="button" class="tool-action-btn" id="zs-calc-btn">Calculate Z-Score</button>
+                    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                        <button type="button" class="tool-action-btn" id="zs-clear-btn" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);flex:1;">Clear</button>
+                    </div>
+
+                    <hr class="stat-sep">
+
+                    <!-- Quick Examples -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label">Quick Examples</label>
+                        <div class="stat-examples">
+                            <button type="button" class="stat-example-chip" data-zs-example="sat">SAT Score</button>
+                            <button type="button" class="stat-example-chip" data-zs-example="iq">IQ Score</button>
+                            <button type="button" class="stat-example-chip" data-zs-example="95ci">95% CI</button>
+                            <button type="button" class="stat-example-chip" data-zs-example="top5">Top 5%</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="edu-card">
-                <h6>What is a Z-Score?</h6>
-                <p>A Z-score (standard score) measures how many standard deviations a data point is from the mean. It standardizes values from different distributions onto a common scale, making comparisons possible.</p>
-                <p class="mt-2"><strong>Formula:</strong> Z = (x - μ) / σ</p>
-              </div>
 
-              <div class="edu-card">
-                <h6>Why Use Z-Scores?</h6>
-                <p><strong>Standardization:</strong> Compare values from different distributions (e.g., SAT vs ACT scores)<br><br>
-                <strong>Outlier Detection:</strong> Identify unusual values (typically |Z| > 3)<br><br>
-                <strong>Probability:</strong> Calculate probabilities using the standard normal distribution<br><br>
-                <strong>Hypothesis Testing:</strong> Foundation for many statistical tests</p>
-              </div>
-
-              <div class="edu-card">
-                <h6>The 68-95-99.7 Rule (Empirical Rule)</h6>
-                <p>For normal distributions:<br>
-                <strong>68%</strong> of data falls within ±1 standard deviation (|Z| ≤ 1)<br>
-                <strong>95%</strong> of data falls within ±2 standard deviations (|Z| ≤ 2)<br>
-                <strong>99.7%</strong> of data falls within ±3 standard deviations (|Z| ≤ 3)</p>
-              </div>
-
-              <h6 class="mt-3">Common Z-Scores & Percentiles</h6>
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Z-Score</th>
-                      <th>Percentile</th>
-                      <th>Interpretation</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>-3.0</td>
-                      <td>0.13%</td>
-                      <td>Extremely low</td>
-                    </tr>
-                    <tr>
-                      <td>-2.0</td>
-                      <td>2.28%</td>
-                      <td>Significantly low</td>
-                    </tr>
-                    <tr>
-                      <td>-1.0</td>
-                      <td>15.87%</td>
-                      <td>Below average</td>
-                    </tr>
-                    <tr>
-                      <td>0.0</td>
-                      <td>50%</td>
-                      <td>Mean/Average</td>
-                    </tr>
-                    <tr>
-                      <td>1.0</td>
-                      <td>84.13%</td>
-                      <td>Above average</td>
-                    </tr>
-                    <tr>
-                      <td>1.645</td>
-                      <td>95%</td>
-                      <td>90% CI critical value</td>
-                    </tr>
-                    <tr>
-                      <td>1.96</td>
-                      <td>97.5%</td>
-                      <td>95% CI critical value</td>
-                    </tr>
-                    <tr>
-                      <td>2.0</td>
-                      <td>97.72%</td>
-                      <td>Significantly high</td>
-                    </tr>
-                    <tr>
-                      <td>2.576</td>
-                      <td>99.5%</td>
-                      <td>99% CI critical value</td>
-                    </tr>
-                    <tr>
-                      <td>3.0</td>
-                      <td>99.87%</td>
-                      <td>Extremely high</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+        <!-- ==================== OUTPUT COLUMN ==================== -->
+        <div class="tool-output-column">
+            <div class="stat-output-tabs">
+                <button type="button" class="stat-output-tab active" data-tab="zs-result-panel">Result</button>
+                <button type="button" class="stat-output-tab" data-tab="zs-graph-panel">Normal Curve</button>
+                <button type="button" class="stat-output-tab" data-tab="zs-compiler-panel">Python Compiler</button>
             </div>
 
-            <div class="col-md-6">
-              <h6>Interpreting Z-Scores</h6>
-
-              <div class="card mb-3" style="border-left: 4px solid #7c3aed;">
-                <div class="card-body">
-                  <h6 class="card-title text-purple">Positive Z-Score</h6>
-                  <p class="card-text small mb-1">Value is <strong>above</strong> the mean</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> Z = 1.5 means the score is 1.5 standard deviations above average</p>
+            <div class="stat-panel active" id="zs-result-panel">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <h4>Result</h4>
+                    </div>
+                    <div class="tool-result-content" id="zs-result-content">
+                        <div class="tool-empty-state">
+                            <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#x1F4CA;</div>
+                            <h3>Enter values and click Calculate</h3>
+                            <p>Convert scores to Z-scores, find probabilities, percentiles, and more.</p>
+                        </div>
+                    </div>
+                    <div class="tool-result-actions" id="zs-result-actions"></div>
                 </div>
-              </div>
+            </div>
 
-              <div class="card mb-3" style="border-left: 4px solid #ef4444;">
-                <div class="card-body">
-                  <h6 class="card-title text-danger">Negative Z-Score</h6>
-                  <p class="card-text small mb-1">Value is <strong>below</strong> the mean</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> Z = -1.5 means the score is 1.5 standard deviations below average</p>
+            <div class="stat-panel" id="zs-graph-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        <h4>Normal Distribution Curve</h4>
+                    </div>
+                    <div style="flex:1;min-height:0;padding:0.75rem;overflow-y:auto;" id="zs-graph-content">
+                        <div class="tool-empty-state"><div style="font-size:2rem;opacity:0.5;">&#x1F4C8;</div><h3>No graph yet</h3><p>Calculate to see the normal curve.</p></div>
+                    </div>
                 </div>
-              </div>
+            </div>
 
-              <div class="card mb-3" style="border-left: 4px solid #6b7280;">
-                <div class="card-body">
-                  <h6 class="card-title text-secondary">Zero Z-Score</h6>
-                  <p class="card-text small mb-1">Value equals the mean</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> Z = 0 means the score is exactly average</p>
+            <div class="stat-panel" id="zs-compiler-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h4>Python Compiler</h4>
+                    </div>
+                    <div style="flex:1;min-height:0;">
+                        <iframe id="zs-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                    </div>
                 </div>
-              </div>
-
-              <h6 class="mt-3">Real-World Applications</h6>
-              <div class="alert alert-success" style="font-size: 0.9rem;">
-                <strong>Standardized Testing:</strong> SAT, ACT, IQ scores use Z-scores to compare performance<br>
-                <strong>Quality Control:</strong> Manufacturing uses Z-scores to detect defects<br>
-                <strong>Finance:</strong> Stock returns are standardized for risk comparison<br>
-                <strong>Medical:</strong> Growth charts, lab results use percentiles from Z-scores<br>
-                <strong>Research:</strong> Standardizing variables before analysis
-              </div>
-
-              <h6 class="mt-3">Normal Distribution Visualization</h6>
-              <canvas id="normalExample" height="180"></canvas>
-              <div class="text-center mt-2">
-                <small class="text-muted">Standard normal distribution with key Z-scores marked</small>
-              </div>
-
-              <h6 class="mt-3">Key Formulas</h6>
-              <div class="card" style="background: #f9fafb;">
-                <div class="card-body" style="font-family: monospace; font-size: 0.85rem;">
-                  <strong>Z-Score:</strong> Z = (x - μ) / σ<br>
-                  <strong>Raw Score:</strong> x = μ + Z × σ<br>
-                  <strong>Percentile:</strong> P = Φ(Z) × 100%<br>
-                  <strong>Z from Percentile:</strong> Z = Φ⁻¹(P/100)
-                </div>
-              </div>
             </div>
-          </div>
-
-          <hr class="my-4">
-
-          <h6>Common Mistakes to Avoid</h6>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="alert alert-danger" style="font-size: 0.85rem;">
-                <strong>Wrong Distribution:</strong><br>
-                Z-scores assume normal distribution. Non-normal data needs transformation first.
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="alert alert-warning" style="font-size: 0.85rem;">
-                <strong>Sample vs Population:</strong><br>
-                Use sample SD (s) for sample data, population SD (σ) for population data.
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="alert alert-info" style="font-size: 0.85rem;">
-                <strong>Interpretation:</strong><br>
-                Z-score tells position relative to mean, not absolute quality or performance.
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="mt-4">
-    <div class="sharethis-inline-share-buttons"></div>
-    <%@ include file="thanks.jsp"%>
-  </div>
-  <hr>
-  <%@ include file="footer_adsense.jsp"%>
-  <%@ include file="addcomments.jsp"%>
-  <!-- FAQ: inlined (was jspf/faq/math/z-score-calculator-faq.jspf) -->
-  <section id="faq" class="mt-5">
-    <h2 class="h5">Z‑Score Calculator: Frequently Asked Questions</h2>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What is a Z‑score?</h3>
-      <p class="mb-0">A Z‑score (standard score) tells how many standard deviations a value is above or below the mean: Z = (x − μ) ÷ σ. Positive Z means above average; negative Z means below.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">How do I convert a raw score to a Z‑score?</h3>
-      <p class="mb-0">Enter the raw score, mean (μ), and standard deviation (σ), then click Calculate under the “Score → Z” tab. The tool also shows the percentile and tail probabilities.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">When should I use Z‑scores?</h3>
-      <p class="mb-0">Use Z‑scores to compare values from the same normal (or approximately normal) distribution, find tail probabilities, or convert between scores and percentiles.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What’s the difference between left, right, and two‑tail probabilities?</h3>
-      <p class="mb-0">Left tail is P(Z ≤ z), right tail is P(Z ≥ z), and two‑tail often refers to the probability outside ±|z|. Choose the area type that matches your hypothesis or interpretation.</p>
-    </div></div>
-  </section>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {"@type": "Question","name": "What is a Z‑score?","acceptedAnswer": {"@type": "Answer","text": "A Z‑score (standard score) tells how many standard deviations a value is above or below the mean: Z = (x − μ) ÷ σ. Positive Z means above average; negative Z means below."}},
-      {"@type": "Question","name": "How do I convert a raw score to a Z‑score?","acceptedAnswer": {"@type": "Answer","text": "Enter the raw score, mean (μ), and standard deviation (σ), then click Calculate under the “Score → Z” tab. The tool also shows the percentile and tail probabilities."}},
-      {"@type": "Question","name": "When should I use Z‑scores?","acceptedAnswer": {"@type": "Answer","text": "Use Z‑scores to compare values from the same normal (or approximately normal) distribution, find tail probabilities, or convert between scores and percentiles."}},
-      {"@type": "Question","name": "What’s the difference between left, right, and two‑tail probabilities?","acceptedAnswer": {"@type": "Answer","text": "Left tail is P(Z ≤ z), right tail is P(Z ≥ z), and two‑tail often refers to the probability outside ±|z|. Choose the area type that matches your hypothesis or interpretation."}}
-    ]
-  }
-  </script>
-</div>
-</div>
-<%@ include file="body-close.jsp"%>
+        <!-- ==================== ADS COLUMN ==================== -->
+        <div class="tool-ads-column"><%@ include file="modern/ads/ad-three-column.jsp" %></div>
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
-<script>
-(function(){
-  let mode = 'score';
-  let normalChartInstance = null, exampleChartInstance = null;
+    <div class="tool-mobile-ad-container"><%@ include file="modern/ads/ad-in-content-mid.jsp" %></div>
 
-  const btnCalc = document.getElementById('btnCalc');
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="z-score-calculator.jsp"/>
+        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
 
-  // Tab switching
-  $('#modeTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    const target = $(e.target).attr('href');
-    if(target === '#scoreTab') mode = 'score';
-    else if(target === '#probTab') mode = 'prob';
-    else if(target === '#percentileTab') mode = 'percentile';
-    else if(target === '#reverseTab') mode = 'reverse';
-  });
+    <!-- ==================== EDUCATIONAL CONTENT ==================== -->
+    <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
 
-  // Standard normal CDF
-  function normalCDF(z){
-    return jStat.normal.cdf(z, 0, 1);
-  }
+        <!-- 1. What Is a Z-Score? -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What Is a Z-Score?</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">A <strong>Z-score</strong> (standard score) measures how many standard deviations a data point is from the mean. It standardizes values from different distributions onto a common scale, making comparisons possible.</p>
 
-  // Inverse normal (quantile)
-  function normalInv(p){
-    return jStat.normal.inv(p, 0, 1);
-  }
+            <div class="stat-formula-box">
+                <strong>Z-Score Formula:</strong>&nbsp; Z = (x &minus; &mu;) / &sigma;
+            </div>
 
-  // Normal PDF for visualization
-  function normalPDF(z){
-    return jStat.normal.pdf(z, 0, 1);
-  }
+            <div class="stat-edu-grid" style="margin-top:1rem;">
+                <div class="stat-feature-card stat-anim stat-anim-d1">
+                    <div style="font-size:1.5rem;">&#x2795;</div>
+                    <h4>Positive Z</h4>
+                    <p>Value is above the mean. Z = 1.5 means 1.5 standard deviations above average.</p>
+                </div>
+                <div class="stat-feature-card stat-anim stat-anim-d2">
+                    <div style="font-size:1.5rem;">&#x2796;</div>
+                    <h4>Negative Z</h4>
+                    <p>Value is below the mean. Z = &minus;2.0 means 2 standard deviations below average.</p>
+                </div>
+                <div class="stat-feature-card stat-anim stat-anim-d3">
+                    <div style="font-size:1.5rem;">&#x1F3AF;</div>
+                    <h4>Zero Z</h4>
+                    <p>Value equals the mean exactly. The 50th percentile on a normal distribution.</p>
+                </div>
+            </div>
+        </div>
 
-  function drawNormalCurve(z, areaType = 'left'){
-    const ctx = document.getElementById('normalCurve');
-    if(!ctx) return;
-    if(normalChartInstance) normalChartInstance.destroy();
+        <!-- 2. The 68-95-99.7 Rule -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">The 68-95-99.7 Rule (Empirical Rule)</h2>
 
-    // Generate normal curve data
-    const xValues = [];
-    const yValues = [];
-    for(let x = -4; x <= 4; x += 0.1){
-      xValues.push(x);
-      yValues.push(normalPDF(x));
-    }
+            <!-- Animated SVG Bell Curve -->
+            <div style="text-align:center;margin-bottom:1.5rem;" class="stat-anim stat-anim-d1">
+                <svg viewBox="0 0 500 200" style="max-width:500px;width:100%;" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bell curve path -->
+                    <path d="M 30,170 C 60,170 80,168 110,160 C 140,148 160,120 180,80 C 200,45 220,20 250,15 C 280,20 300,45 320,80 C 340,120 360,148 390,160 C 420,168 440,170 470,170" fill="none" stroke="#e11d48" stroke-width="2.5" class="stat-bell-animated"/>
+                    <!-- 68% region -->
+                    <rect x="180" y="70" width="140" height="100" fill="rgba(225,29,72,0.08)" rx="2"/>
+                    <text x="250" y="135" text-anchor="middle" fill="#e11d48" font-size="13" font-weight="600" font-family="Inter,sans-serif">68%</text>
+                    <!-- 95% region -->
+                    <rect x="110" y="140" width="280" height="20" fill="rgba(225,29,72,0.05)" rx="2"/>
+                    <text x="250" y="155" text-anchor="middle" fill="#be123c" font-size="11" font-family="Inter,sans-serif">95%</text>
+                    <!-- 99.7% region -->
+                    <rect x="60" y="162" width="380" height="8" fill="rgba(225,29,72,0.03)" rx="1"/>
+                    <!-- Labels -->
+                    <text x="110" y="188" text-anchor="middle" fill="currentColor" font-size="10" font-family="Inter,sans-serif">&minus;2&sigma;</text>
+                    <text x="180" y="188" text-anchor="middle" fill="currentColor" font-size="10" font-family="Inter,sans-serif">&minus;1&sigma;</text>
+                    <text x="250" y="188" text-anchor="middle" fill="currentColor" font-size="10" font-weight="600" font-family="Inter,sans-serif">&mu;</text>
+                    <text x="320" y="188" text-anchor="middle" fill="currentColor" font-size="10" font-family="Inter,sans-serif">+1&sigma;</text>
+                    <text x="390" y="188" text-anchor="middle" fill="currentColor" font-size="10" font-family="Inter,sans-serif">+2&sigma;</text>
+                </svg>
+            </div>
 
-    // Determine shaded area
-    let fillData = [];
-    if(areaType === 'left'){
-      fillData = xValues.map((x, i) => x <= z ? yValues[i] : null);
-    } else if(areaType === 'right'){
-      fillData = xValues.map((x, i) => x >= z ? yValues[i] : null);
-    } else if(areaType === 'between'){
-      fillData = xValues.map((x, i) => (x >= -Math.abs(z) && x <= Math.abs(z)) ? yValues[i] : null);
-    } else if(areaType === 'outside'){
-      fillData = xValues.map((x, i) => (x <= -Math.abs(z) || x >= Math.abs(z)) ? yValues[i] : null);
-    }
+            <table class="stat-ops-table">
+                <thead><tr><th>Range</th><th>Z-Score</th><th>% of Data</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600;">&mu; &plusmn; 1&sigma;</td><td>|Z| &le; 1</td><td>68.27%</td><td>Most values (typical)</td></tr>
+                    <tr><td style="font-weight:600;">&mu; &plusmn; 2&sigma;</td><td>|Z| &le; 2</td><td>95.45%</td><td>Nearly all values</td></tr>
+                    <tr><td style="font-weight:600;">&mu; &plusmn; 3&sigma;</td><td>|Z| &le; 3</td><td>99.73%</td><td>Virtually all values</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-    normalChartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: xValues,
-        datasets: [{
-          label: 'Normal Distribution',
-          data: yValues,
-          borderColor: 'rgba(124, 58, 237, 1)',
-          borderWidth: 2,
-          fill: false,
-          pointRadius: 0
-        }, {
-          label: 'Shaded Area',
-          data: fillData,
-          backgroundColor: 'rgba(124, 58, 237, 0.3)',
-          borderColor: 'rgba(124, 58, 237, 1)',
-          borderWidth: 0,
-          fill: true,
-          pointRadius: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio: 2,
-        plugins: {
-          legend: {display: false},
-          title: {
-            display: true,
-            text: 'Standard Normal Distribution',
-            font: {size: 12, weight: 'bold'}
-          }
-        },
-        scales: {
-          x: {
-            type: 'linear',
-            title: {display: true, text: 'Z-Score', font: {size: 10}},
-            ticks: {font: {size: 9}}
-          },
-          y: {
-            title: {display: true, text: 'Density', font: {size: 10}},
-            ticks: {font: {size: 9}}
-          }
-        }
-      }
-    });
-  }
+        <!-- 3. Common Z-Scores Reference -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Common Z-Scores &amp; Percentiles</h2>
 
-  function calculate(){
-    let statsHTML = '', interp = '';
+            <table class="stat-ops-table">
+                <thead><tr><th>Z-Score</th><th>Percentile</th><th>Interpretation</th></tr></thead>
+                <tbody>
+                    <tr><td>&minus;3.0</td><td>0.13%</td><td>Extremely low</td></tr>
+                    <tr><td>&minus;2.0</td><td>2.28%</td><td>Significantly low</td></tr>
+                    <tr><td>&minus;1.0</td><td>15.87%</td><td>Below average</td></tr>
+                    <tr><td style="font-weight:700;">0.0</td><td style="font-weight:700;">50.00%</td><td style="font-weight:700;">Mean / Average</td></tr>
+                    <tr><td>+1.0</td><td>84.13%</td><td>Above average</td></tr>
+                    <tr><td>+1.645</td><td>95.00%</td><td>90% CI critical value</td></tr>
+                    <tr><td>+1.960</td><td>97.50%</td><td>95% CI critical value</td></tr>
+                    <tr><td>+2.0</td><td>97.72%</td><td>Significantly high</td></tr>
+                    <tr><td>+2.576</td><td>99.50%</td><td>99% CI critical value</td></tr>
+                    <tr><td>+3.0</td><td>99.87%</td><td>Extremely high</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-    try {
-      if(mode === 'score'){
-        const x = parseFloat(document.getElementById('rawScore').value);
-        const mu = parseFloat(document.getElementById('mean').value);
-        const sigma = parseFloat(document.getElementById('stdDev').value);
+        <!-- 4. Real-World Applications -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Real-World Applications</h2>
+            <div class="stat-edu-grid">
+                <div class="stat-edu-card stat-anim stat-anim-d1">
+                    <h4>Standardized Testing</h4>
+                    <p>SAT, ACT, and IQ scores use Z-scores to rank test-takers against the population and set percentile-based cutoffs.</p>
+                </div>
+                <div class="stat-edu-card stat-anim stat-anim-d2">
+                    <h4>Quality Control</h4>
+                    <p>Manufacturing uses Six Sigma (Z = &plusmn;6) to maintain defect rates below 3.4 per million.</p>
+                </div>
+                <div class="stat-edu-card stat-anim stat-anim-d3">
+                    <h4>Finance &amp; Risk</h4>
+                    <p>Stock returns are standardized for risk comparison. Value-at-Risk (VaR) models use Z-scores for tail risk estimation.</p>
+                </div>
+                <div class="stat-edu-card stat-anim stat-anim-d4">
+                    <h4>Medical Research</h4>
+                    <p>Growth charts, lab results, and BMI use Z-scores to compare patients against age/sex-matched reference populations.</p>
+                </div>
+            </div>
+        </div>
 
-        if(isNaN(x) || isNaN(mu) || isNaN(sigma) || sigma <= 0)
-          return alert('Enter valid parameters (σ > 0)');
+        <!-- 5. FAQ -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button class="faq-question">What is a Z-score and how is it calculated?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">A Z-score measures how many standard deviations a value is from the mean. The formula is Z = (x &minus; &mu;) / &sigma;. A positive Z means above the mean, negative means below, and zero means exactly at the mean.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How do I convert a Z-score to a percentile?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Use the standard normal CDF: Percentile = &Phi;(z) &times; 100%. For example, Z = 1.96 corresponds to the 97.5th percentile. This calculator performs the lookup automatically using jStat.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What is the 68-95-99.7 rule?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">For normal distributions: 68% of data falls within &plusmn;1&sigma;, 95% within &plusmn;2&sigma;, and 99.7% within &plusmn;3&sigma;. These correspond to Z-score ranges of &minus;1 to 1, &minus;2 to 2, and &minus;3 to 3.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What is the difference between left and right tail probability?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Left tail P(Z &le; z) is the area under the curve to the left of z. Right tail P(Z &ge; z) is the area to the right. They always sum to 1. &ldquo;Between &plusmn;z&rdquo; gives the central area, and &ldquo;Outside &plusmn;z&rdquo; gives the combined two-tail area.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">When should I use Z-scores versus t-scores?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Use Z-scores when the population standard deviation is known or n &gt; 30. Use t-scores when &sigma; is unknown and the sample is small. The t-distribution has heavier tails but approaches the normal as n increases.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I use Z-scores with non-normal data?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">You can calculate Z-scores for any data, but the probability and percentile interpretations assume normality. For non-normal data, consider log or Box-Cox transformations first. The Central Limit Theorem helps when working with sample means of large samples.</div>
+            </div>
+        </div>
+    </section>
 
-        const z = (x - mu) / sigma;
-        const percentile = normalCDF(z) * 100;
+    <%@ include file="modern/components/support-section.jsp" %>
 
-        statsHTML = `
-          <div class="stat-item"><label>Z-Score</label><div class="value">${z.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Percentile</label><div class="value">${percentile.toFixed(2)}%</div></div>
-          <div class="stat-item"><label>Left Tail P</label><div class="value">${(normalCDF(z)).toFixed(4)}</div></div>
-          <div class="stat-item"><label>Right Tail P</label><div class="value">${(1 - normalCDF(z)).toFixed(4)}</div></div>
-        `;
+    <footer class="page-footer"><div class="footer-content"><p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p><div class="footer-links"><a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a><a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a><a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a></div></div></footer>
 
-        interp = `The raw score of <strong>${x}</strong> is <strong>${Math.abs(z).toFixed(2)} standard deviations ${z >= 0 ? 'above' : 'below'}</strong> the mean. `;
-        interp += `This corresponds to the <strong>${percentile.toFixed(2)}th percentile</strong>. `;
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-        if(Math.abs(z) < 1) interp += 'This is within 1 SD of the mean (typical/average range).';
-        else if(Math.abs(z) < 2) interp += 'This is between 1-2 SD from the mean (somewhat unusual).';
-        else if(Math.abs(z) < 3) interp += 'This is between 2-3 SD from the mean (unusual/outlier).';
-        else interp += 'This is more than 3 SD from the mean (extreme outlier).';
-
-        const html = `
-          <div class="result-hero">
-            <div class="z-value">Z = ${z.toFixed(4)}</div>
-            <div class="z-label">${percentile.toFixed(2)}th Percentile</div>
-          </div>
-
-          <h6 class="mt-3">Statistics</h6>
-          <div class="stats-grid">
-            ${statsHTML}
-          </div>
-
-          <div class="interpretation">
-            ${interp}
-          </div>
-
-          <hr class="my-3">
-
-          <h6 class="mt-3">Normal Distribution</h6>
-          <canvas id="normalCurve"></canvas>
-        `;
-
-        document.getElementById('resultDisplay').innerHTML = html;
-        drawNormalCurve(z, 'left');
-
-      } else if(mode === 'prob'){
-        const z = parseFloat(document.getElementById('zScoreProb').value);
-        const areaType = document.getElementById('areaType').value;
-
-        if(isNaN(z))
-          return alert('Enter valid Z-score');
-
-        let prob, probText;
-        if(areaType === 'left'){
-          prob = normalCDF(z);
-          probText = `P(Z ≤ ${z.toFixed(2)})`;
-        } else if(areaType === 'right'){
-          prob = 1 - normalCDF(z);
-          probText = `P(Z ≥ ${z.toFixed(2)})`;
-        } else if(areaType === 'between'){
-          prob = normalCDF(Math.abs(z)) - normalCDF(-Math.abs(z));
-          probText = `P(-${Math.abs(z).toFixed(2)} ≤ Z ≤ ${Math.abs(z).toFixed(2)})`;
-        } else {
-          prob = (1 - normalCDF(Math.abs(z))) + normalCDF(-Math.abs(z));
-          probText = `P(Z ≤ -${Math.abs(z).toFixed(2)} or Z ≥ ${Math.abs(z).toFixed(2)})`;
-        }
-
-        const percentile = prob * 100;
-
-        statsHTML = `
-          <div class="stat-item"><label>Probability</label><div class="value">${prob.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Percentage</label><div class="value">${percentile.toFixed(2)}%</div></div>
-        `;
-
-        interp = `The probability ${probText} = <strong>${prob.toFixed(4)}</strong> or <strong>${percentile.toFixed(2)}%</strong>.`;
-
-        const html = `
-          <div class="result-hero">
-            <div class="z-value">${prob.toFixed(4)}</div>
-            <div class="z-label">${probText}</div>
-          </div>
-
-          <h6 class="mt-3">Statistics</h6>
-          <div class="stats-grid">
-            ${statsHTML}
-          </div>
-
-          <div class="interpretation">
-            ${interp}
-          </div>
-
-          <hr class="my-3">
-
-          <h6 class="mt-3">Normal Distribution</h6>
-          <canvas id="normalCurve"></canvas>
-        `;
-
-        document.getElementById('resultDisplay').innerHTML = html;
-        drawNormalCurve(z, areaType);
-
-      } else if(mode === 'percentile'){
-        const percentile = parseFloat(document.getElementById('percentile').value);
-
-        if(isNaN(percentile) || percentile <= 0 || percentile >= 100)
-          return alert('Enter valid percentile (0 < p < 100)');
-
-        const p = percentile / 100;
-        const z = normalInv(p);
-
-        statsHTML = `
-          <div class="stat-item"><label>Z-Score</label><div class="value">${z.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Percentile</label><div class="value">${percentile.toFixed(2)}%</div></div>
-          <div class="stat-item"><label>Probability</label><div class="value">${p.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Area Left</label><div class="value">${p.toFixed(4)}</div></div>
-        `;
-
-        interp = `The <strong>${percentile.toFixed(2)}th percentile</strong> corresponds to a Z-score of <strong>${z.toFixed(4)}</strong>. `;
-        interp += `This means ${percentile.toFixed(2)}% of values fall below this point.`;
-
-        const html = `
-          <div class="result-hero">
-            <div class="z-value">Z = ${z.toFixed(4)}</div>
-            <div class="z-label">${percentile.toFixed(2)}th Percentile</div>
-          </div>
-
-          <h6 class="mt-3">Statistics</h6>
-          <div class="stats-grid">
-            ${statsHTML}
-          </div>
-
-          <div class="interpretation">
-            ${interp}
-          </div>
-
-          <hr class="my-3">
-
-          <h6 class="mt-3">Normal Distribution</h6>
-          <canvas id="normalCurve"></canvas>
-        `;
-
-        document.getElementById('resultDisplay').innerHTML = html;
-        drawNormalCurve(z, 'left');
-
-      } else if(mode === 'reverse'){
-        const z = parseFloat(document.getElementById('zScoreReverse').value);
-        const mu = parseFloat(document.getElementById('meanReverse').value);
-        const sigma = parseFloat(document.getElementById('stdDevReverse').value);
-
-        if(isNaN(z) || isNaN(mu) || isNaN(sigma) || sigma <= 0)
-          return alert('Enter valid parameters (σ > 0)');
-
-        const x = mu + z * sigma;
-        const percentile = normalCDF(z) * 100;
-
-        statsHTML = `
-          <div class="stat-item"><label>Raw Score</label><div class="value">${x.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Z-Score</label><div class="value">${z.toFixed(4)}</div></div>
-          <div class="stat-item"><label>Percentile</label><div class="value">${percentile.toFixed(2)}%</div></div>
-          <div class="stat-item"><label>Distance from Mean</label><div class="value">${Math.abs(x - mu).toFixed(2)}</div></div>
-        `;
-
-        interp = `A Z-score of <strong>${z.toFixed(4)}</strong> converts to a raw score of <strong>${x.toFixed(4)}</strong> `;
-        interp += `on a scale with mean = ${mu} and SD = ${sigma}. `;
-        interp += `This is at the <strong>${percentile.toFixed(2)}th percentile</strong>.`;
-
-        const html = `
-          <div class="result-hero">
-            <div class="z-value">x = ${x.toFixed(4)}</div>
-            <div class="z-label">Raw Score</div>
-          </div>
-
-          <h6 class="mt-3">Statistics</h6>
-          <div class="stats-grid">
-            ${statsHTML}
-          </div>
-
-          <div class="interpretation">
-            ${interp}
-          </div>
-
-          <hr class="my-3">
-
-          <h6 class="mt-3">Normal Distribution</h6>
-          <canvas id="normalCurve"></canvas>
-        `;
-
-        document.getElementById('resultDisplay').innerHTML = html;
-        drawNormalCurve(z, 'left');
-      }
-
-    } catch(e){
-      console.error(e);
-      alert('Error in calculation');
-    }
-  }
-
-  // Draw educational example chart
-  function drawExampleChart(){
-    const ctx = document.getElementById('normalExample');
-    if(!ctx) return;
-
-    const xValues = [];
-    const yValues = [];
-    for(let x = -4; x <= 4; x += 0.1){
-      xValues.push(x);
-      yValues.push(normalPDF(x));
-    }
-
-    exampleChartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: xValues,
-        datasets: [{
-          label: 'Standard Normal',
-          data: yValues,
-          borderColor: 'rgba(124, 58, 237, 1)',
-          backgroundColor: 'rgba(124, 58, 237, 0.1)',
-          borderWidth: 2,
-          fill: true,
-          pointRadius: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: {display: false},
-          title: {
-            display: true,
-            text: 'Standard Normal Distribution (μ=0, σ=1)',
-            font: {size: 11, weight: 'bold'}
-          },
-          annotation: {
-            annotations: {
-              line1: {
-                type: 'line',
-                xMin: -1.96,
-                xMax: -1.96,
-                borderColor: 'rgba(239, 68, 68, 0.5)',
-                borderWidth: 2,
-                borderDash: [5, 5],
-                label: {
-                  content: 'Z=-1.96',
-                  enabled: true,
-                  position: 'start'
-                }
-              },
-              line2: {
-                type: 'line',
-                xMin: 1.96,
-                xMax: 1.96,
-                borderColor: 'rgba(239, 68, 68, 0.5)',
-                borderWidth: 2,
-                borderDash: [5, 5]
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            type: 'linear',
-            title: {display: true, text: 'Z-Score', font: {size: 9}},
-            ticks: {font: {size: 9}}
-          },
-          y: {
-            title: {display: true, text: 'Density', font: {size: 9}},
-            ticks: {font: {size: 9}}
-          }
-        }
-      }
-    });
-  }
-
-  btnCalc.addEventListener('click', calculate);
-  document.addEventListener('keypress', e => e.key === 'Enter' && calculate());
-  window.addEventListener('load', drawExampleChart);
-})();
-</script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-common.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-graph.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-export.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/z-score-calculator-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+</body>
+</html>

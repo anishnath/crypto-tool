@@ -1,793 +1,558 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- SEO Meta -->
-<title>Sample Size Calculator Online – Free | 8gwifi.org</title>
-<meta name="description" content="Free sample size calculator: surveys, A/B tests, and research. Compute size for proportions/means with confidence level and margin of error.">
-<meta name="keywords" content="sample size calculator, survey sample size, a/b test sample size, statistical power, confidence level, margin of error, research sample size">
-<link rel="canonical" href="https://8gwifi.org/sample-size-calculator.jsp">
-
-<!-- Open Graph / Twitter -->
-<meta property="og:title" content="Sample Size Calculator Online – Free | 8gwifi.org">
-<meta property="og:description" content="Calculate sample size for surveys, A/B tests, and studies — proportions or means with confidence and error margins.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://8gwifi.org/sample-size-calculator.jsp">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sample Size Calculator Online – Free | 8gwifi.org">
-<meta name="twitter:description" content="Free sample size calculator for surveys, A/B tests, and research (proportions/means).">
-
-<%@ include file="header-script.jsp"%>
-
-<style>
-  /* Sticky results panel */
-  .sticky-side {
-    position: sticky;
-    top: 80px;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-  }
-
-  /* Hero Result */
-  .result-hero {
-    text-align: center;
-    padding: 2rem 1rem;
-    background: linear-gradient(135deg, #065f46, #059669);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  .result-hero .sample-size {
-    font-size: 3rem;
-    font-weight: 800;
-    color: white;
-    margin: 0;
-    line-height: 1;
-  }
-  .result-hero .subtitle {
-    color: rgba(255,255,255,0.9);
-    margin-top: 0.5rem;
-    font-size: 1rem;
-  }
-
-  /* Confidence Pills */
-  .conf-selector {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1rem 0;
-    flex-wrap: wrap;
-  }
-  .conf-pill {
-    padding: 0.5rem 1rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 20px;
-    background: white;
-    cursor: pointer;
-    font-weight: 600;
-    color: #6b7280;
-    transition: all 0.2s;
-  }
-  .conf-pill:hover { border-color: #10b981; }
-  .conf-pill.active { border-color: #10b981; background: #ecfdf5; color: #10b981; }
-
-  .form-group { margin-bottom: 1rem; }
-  .form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #374151;
-    font-size: 0.9rem;
-  }
-  .form-group input {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-  .form-group input:focus {
-    outline: none;
-    border-color: #10b981;
-    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
-  }
-  .form-group small {
-    display: block;
-    margin-top: 0.25rem;
-    color: #6b7280;
-    font-size: 0.8rem;
-  }
-
-  /* Action Button */
-  .btn-calc {
-    width: 100%;
-    padding: 0.9rem;
-    background: #10b981;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1.05rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-calc:hover { background: #059669; transform: translateY(-1px); }
-
-  .formula-line {
-    padding: 0.4rem 0;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.7;
-  }
-  .formula-line strong { color: #10b981; }
-
-  .interpretation {
-    background: #f9fafb;
-    border-left: 4px solid #10b981;
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 1rem 0;
-    line-height: 1.6;
-  }
-
-  #customConfInput {
-    width: 70px;
-    padding: 0.25rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    margin-left: 0.5rem;
-  }
-
-  /* Educational section */
-  .edu-card {
-    background: #f0fdf4;
-    border-left: 4px solid #10b981;
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-  }
-  .edu-card h6 {
-    color: #065f46;
-    margin: 0 0 0.5rem 0;
-    font-weight: 700;
-  }
-  .edu-card p {
-    margin: 0;
-    line-height: 1.6;
-    color: #374151;
-  }
-
-  .table-responsive {
-    overflow-x: auto;
-  }
-  .table-sm th, .table-sm td {
-    padding: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 768px) {
-    .result-hero .sample-size { font-size: 2.5rem; }
-  }
-</style>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"Sample Size Calculator",
-  "url":"https://8gwifi.org/sample-size-calculator.jsp",
-  "description":"Calculate required sample size for surveys, experiments, and statistical studies with confidence intervals. Free online tool for researchers, statisticians, and data scientists.",
-  "applicationCategory":"EducationalApplication",
-  "operatingSystem":"Any",
-  "browserRequirements":"Requires JavaScript",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "featureList": "Survey sample size, Mean estimation, A/B test calculator, Two-sample comparison, Confidence interval calculation, Statistical power analysis",
-  "screenshot": "https://8gwifi.org/images/sample-size-calculator.png",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.7",
-    "ratingCount": "980"
-  }
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
+        *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+        :root,:root[data-theme="light"]{
+            --primary:#6366f1;--primary-dark:#4f46e5;--primary-light:#818cf8;--primary-50:#eef2ff;--primary-100:#e0e7ff;
+            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;--bg-hover:#f8fafc;
+            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--text-inverse:#fff;
+            --border:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;
+            --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#3b82f6;
+            --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            --font-mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
+            --text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;
+            --leading-tight:1.25;--leading-normal:1.5;
+            --font-normal:400;--font-medium:500;--font-semibold:600;--font-bold:700;
+            --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+            --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+            --z-dropdown:1000;--z-sticky:1020;--z-fixed:1030;--z-modal-backdrop:1040;--z-modal:1050;
+            --transition-fast:150ms ease-in-out;--transition-base:200ms ease-in-out;--transition-slow:300ms ease-in-out;
+            --header-height-mobile:64px;--header-height-desktop:72px;--container-max-width:1280px;
+            --tool-primary:#e11d48;--tool-primary-dark:#be123c;--tool-gradient:linear-gradient(135deg,#e11d48 0%,#f43f5e 100%);--tool-light:#fff1f2
+        }
+        @media(prefers-color-scheme:dark){:root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b}}
+        [data-theme="dark"]{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b;--tool-light:rgba(225,29,72,0.15)}
+        [data-theme="dark"] body{background-color:var(--bg-primary);color:var(--text-primary)}
+        @media(min-width:768px){:root{--header-height-mobile:72px}}
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
+        .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}
+        .nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}
+        .nav-logo span{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
+        [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,#818cf8 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}
+        .nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}
+        .btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}
+        .btn-nav-primary{background:var(--primary,#6366f1);color:#fff}
+        .btn-nav-secondary{background:var(--bg-secondary,#f8fafc);color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}
+        .mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
+        .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}
+        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,#f8fafc);font-family:var(--font-sans)}
+        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
+        @media(max-width:991px){.modern-nav{height:var(--header-height-mobile,64px)}.nav-container{padding:0 var(--space-3,0.75rem)}.nav-search,.nav-items{display:none}.nav-actions{gap:var(--space-2,0.5rem)}.btn-nav{padding:var(--space-2,0.5rem) var(--space-3,0.75rem);font-size:var(--text-xs,0.75rem)}.mobile-menu-toggle,.mobile-search-toggle{display:flex}.btn-nav .nav-text{display:none}}
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
+        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}
+        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+        .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
+        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
+        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
+        .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
+        .tool-description-content{flex:1}
+        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
+        @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
+        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
+        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}
+        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
+        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
+        .tool-output-column{display:flex;flex-direction:column;gap:1rem}
+        .tool-ads-column{height:fit-content}
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}
+        .tool-card-body{padding:1rem}
+        .tool-form-group{margin-bottom:0.875rem}
+        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#0f172a);font-size:0.8125rem}
+        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
+        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:0.5rem;transition:opacity .15s,transform .15s}
+        .tool-action-btn:hover{opacity:0.9}
+        .tool-result-card{display:flex;flex-direction:column;height:100%}
+        .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);border-radius:0.75rem 0.75rem 0 0}
+        .tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary,#0f172a);flex:1}
+        .tool-result-content{flex:1;padding:1.25rem;min-height:300px;overflow-y:auto}
+        .tool-result-actions{display:none;gap:0.5rem;padding:1rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;flex-wrap:wrap}
+        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted,#94a3b8)}
+        .tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary,#475569)}
+        .tool-empty-state p{font-size:0.875rem;max-width:280px}
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(225,29,72,0.3)}
+        [data-theme="dark"] .tool-result-header{background:var(--bg-tertiary,#334155);border-bottom-color:var(--border,#475569)}
+        [data-theme="dark"] .tool-result-header h4{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-result-actions{background:var(--bg-tertiary,#334155);border-top-color:var(--border,#475569)}
+        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+        .faq-item{border-bottom:1px solid var(--border,#e2e8f0)}.faq-item:last-child{border-bottom:none}
+        .faq-question{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0.875rem 0;background:none;border:none;font-size:0.875rem;font-weight:600;color:var(--text-primary,#0f172a);cursor:pointer;text-align:left;font-family:var(--font-sans);gap:0.75rem}
+        .faq-answer{display:none;padding:0 0 0.875rem;font-size:0.8125rem;line-height:1.7;color:var(--text-secondary)}
+        .faq-item.open .faq-answer{display:block}
+        .faq-chevron{transition:transform 0.2s;flex-shrink:0}.faq-item.open .faq-chevron{transform:rotate(180deg)}
+        /* Confidence pills */
+        .ss-conf-pills{display:flex;gap:0.375rem;flex-wrap:wrap;margin-top:0.25rem}
+        .ss-conf-pill{padding:0.375rem 0.75rem;border:1.5px solid var(--border);border-radius:9999px;background:var(--bg-primary);cursor:pointer;font-weight:600;color:var(--text-secondary);font-size:0.75rem;transition:all 0.15s;font-family:var(--font-sans)}
+        .ss-conf-pill:hover{border-color:var(--tool-primary)}
+        .ss-conf-pill.active{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
+        [data-theme="dark"] .ss-conf-pill{background:var(--bg-tertiary);border-color:var(--border)}
+        [data-theme="dark"] .ss-conf-pill.active{background:var(--tool-light);color:var(--tool-primary);border-color:var(--tool-primary)}
+        .ss-custom-input{width:60px;padding:0.25rem 0.375rem;border:1.5px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);margin-left:0.25rem}
+        .ss-custom-input:focus{outline:none;border-color:var(--tool-primary)}
+    </style>
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Sample Size Calculator Online - Survey A/B Test Research Free" />
+        <jsp:param name="toolDescription" value="Calculate required sample size for surveys proportions means A/B tests and comparing groups. Confidence level margin of error power analysis finite population correction with interactive chart and Python export." />
+        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolUrl" value="sample-size-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="sample size calculator, survey sample size, a/b test sample size, statistical power, margin of error, confidence level, research sample size, sample size determination, finite population correction, power analysis calculator" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="Survey proportion sample size with finite population correction,Mean estimation sample size,A/B test sample size with power analysis,Two-group mean comparison sample size,Confidence level 90% 95% 99% and custom,Step-by-step KaTeX formulas,Interactive Plotly chart showing size vs margin of error,Python code generation" />
+        <jsp:param name="teaches" value="Sample size determination, margin of error, statistical power, confidence intervals, finite population correction, power analysis" />
+        <jsp:param name="educationalLevel" value="High School, College, University" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Choose Calculation Type|Select survey or mean estimation or A/B test or comparing means,Set Confidence Level|Pick 90% or 95% or 99% or enter a custom level,Enter Parameters|Input proportion margin of error or effect size and power,Click Calculate|Get required sample size with step-by-step formula,View Chart|See how sample size changes with margin of error or power,Export Code|Run Python code in the embedded compiler" />
+        <jsp:param name="faq1q" value="What sample size do I need for a survey?" />
+        <jsp:param name="faq1a" value="For a typical survey with 95% confidence and 5% margin of error use p=0.5 for maximum conservatism. This gives about 385 respondents for a large population. Smaller margins need larger samples." />
+        <jsp:param name="faq2q" value="Why use p equals 0.5 for proportions?" />
+        <jsp:param name="faq2a" value="Using p=0.5 maximizes the product p times 1 minus p which gives the largest possible sample size. This is the most conservative estimate when you do not know the true proportion in advance." />
+        <jsp:param name="faq3q" value="Does population size affect sample size?" />
+        <jsp:param name="faq3a" value="For large populations sample size depends mainly on confidence and margin of error. Finite population correction matters when sampling more than about 5% of the population reducing the required size." />
+        <jsp:param name="faq4q" value="What is statistical power and why does it matter?" />
+        <jsp:param name="faq4a" value="Power equals 1 minus beta is the probability of detecting a real effect. 80% power means a 20% chance of missing a true effect. Higher power requires larger samples but gives more reliable results." />
+        <jsp:param name="faq5q" value="How do I determine sample size for an A/B test?" />
+        <jsp:param name="faq5a" value="You need the baseline conversion rate the minimum detectable effect and desired power. Smaller effects need much larger samples. A 1% improvement from 10% to 11% needs about 15000 per group at 80% power." />
+        <jsp:param name="faq6q" value="What if I cannot afford the calculated sample size?" />
+        <jsp:param name="faq6a" value="You can accept a wider margin of error lower confidence level or lower power. For A/B tests you can also focus on detecting larger effects only or use sequential testing methods." />
+    </jsp:include>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+    <%@ include file="modern/ads/ad-init.jsp" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/statistics-calculator.css?v=<%=cacheVersion%>">
 </head>
+<body>
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="math-menu-nav.jsp"%>
-
-<div class="container mt-4">
-  <h1>Sample Size Calculator</h1>
-  <p class="text-muted">Determine the optimal sample size for your surveys, experiments, and research studies.</p>
-
-  
-  <%@ include file="footer_adsense.jsp"%>
-
-  <div class="row mt-4">
-    <!-- Left Column - Input Forms -->
-    <div class="col-lg-7 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Sample Size Parameters</h5>
-
-          <!-- Calculation Type Tabs -->
-          <ul class="nav nav-tabs mb-3" id="calcTypeTabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="prop-tab" data-toggle="tab" href="#propTab" role="tab">Survey</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="mean-tab" data-toggle="tab" href="#meanTab" role="tab">Mean</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="ab-tab" data-toggle="tab" href="#abTab" role="tab">A/B Test</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compareTab" role="tab">Compare</a>
-            </li>
-          </ul>
-
-          <!-- Confidence Level -->
-          <div class="mb-3">
-            <label style="display:block; margin-bottom:0.5rem; font-weight:600; color:#374151;">Confidence Level:</label>
-            <div class="conf-selector">
-              <div class="conf-pill" data-conf="90">90%</div>
-              <div class="conf-pill active" data-conf="95">95%</div>
-              <div class="conf-pill" data-conf="99">99%</div>
-              <div class="conf-pill" data-conf="custom">Custom
-                <input type="number" id="customConfInput" value="95" step="0.1" min="50" max="99.99" style="display:none;">
-              </div>
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Sample Size Calculator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
+                    Sample Size Calculator
+                </nav>
             </div>
-          </div>
-
-          <div class="tab-content" id="calcTypeTabContent">
-            <!-- Proportion Tab -->
-            <div class="tab-pane fade show active" id="propTab" role="tabpanel">
-              <div class="form-group">
-                <label>Expected Proportion (p)</label>
-                <input type="number" id="proportion" value="0.5" step="0.01" min="0" max="1" class="form-control">
-                <small>Use 0.5 for maximum (most conservative)</small>
-              </div>
-              <div class="form-group">
-                <label>Margin of Error (E)</label>
-                <input type="number" id="marginError" value="0.05" step="0.01" min="0.001" max="1" class="form-control">
-                <small>e.g., ±5% = 0.05</small>
-              </div>
-              <div class="form-group">
-                <label>Population Size (optional)</label>
-                <input type="number" id="popSize" placeholder="Leave blank if large" class="form-control">
-                <small>For finite population correction</small>
-              </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">Survey &amp; A/B Test</span>
+                <span class="tool-badge">Power Analysis</span>
+                <span class="tool-badge">Finite Population</span>
+                <span class="tool-badge">Free &middot; No Signup</span>
             </div>
-
-            <!-- Mean Tab -->
-            <div class="tab-pane fade" id="meanTab" role="tabpanel">
-              <div class="form-group">
-                <label>Standard Deviation (σ)</label>
-                <input type="number" id="stdDev" value="15" step="0.1" min="0" class="form-control">
-                <small>From pilot study or historical data</small>
-              </div>
-              <div class="form-group">
-                <label>Margin of Error (E)</label>
-                <input type="number" id="marginErrorMean" value="5" step="0.1" min="0" class="form-control">
-                <small>Desired precision</small>
-              </div>
-              <div class="form-group">
-                <label>Population Size (optional)</label>
-                <input type="number" id="popSizeMean" placeholder="Leave blank if large" class="form-control">
-                <small>For finite population correction</small>
-              </div>
-            </div>
-
-            <!-- A/B Test Tab -->
-            <div class="tab-pane fade" id="abTab" role="tabpanel">
-              <div class="form-group">
-                <label>Baseline Proportion (p1)</label>
-                <input type="number" id="p1" value="0.10" step="0.01" min="0" max="1" class="form-control">
-                <small>Control group rate</small>
-              </div>
-              <div class="form-group">
-                <label>Expected Proportion (p2)</label>
-                <input type="number" id="p2" value="0.15" step="0.01" min="0" max="1" class="form-control">
-                <small>Treatment group rate</small>
-              </div>
-              <div class="form-group">
-                <label>Statistical Power (%)</label>
-                <input type="number" id="power" value="80" step="1" min="50" max="99" class="form-control">
-                <small>Usually 80% or 90%</small>
-              </div>
-            </div>
-
-            <!-- Compare Means Tab -->
-            <div class="tab-pane fade" id="compareTab" role="tabpanel">
-              <div class="form-group">
-                <label>Pooled Std Dev (σ)</label>
-                <input type="number" id="stdDevBoth" value="10" step="0.1" min="0" class="form-control">
-                <small>Assumed equal for both groups</small>
-              </div>
-              <div class="form-group">
-                <label>Effect Size (|μ1 - μ2|)</label>
-                <input type="number" id="effectSize" value="5" step="0.1" min="0" class="form-control">
-                <small>Minimum detectable difference</small>
-              </div>
-              <div class="form-group">
-                <label>Statistical Power (%)</label>
-                <input type="number" id="powerMeans" value="80" step="1" min="50" max="99" class="form-control">
-                <small>Usually 80% or 90%</small>
-              </div>
-            </div>
-          </div>
-
-          <button class="btn-calc mt-3" id="btnCalc">Calculate Sample Size</button>
         </div>
-      </div>
-    </div>
+    </header>
 
-    <!-- Right Column - Results -->
-    <div class="col-lg-5 mb-4">
-      <div class="card shadow-sm sticky-side">
-        <div class="card-body">
-          <h5 class="card-title">Results</h5>
-          <div id="resultDisplay">
-            <p class="text-muted">Enter your parameters and click "Calculate Sample Size" to see results.</p>
-          </div>
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Free online <strong>sample size calculator</strong> for <strong>surveys</strong>, <strong>A/B tests</strong>, and <strong>research studies</strong>. Compute required sample size with confidence level, margin of error, power analysis, finite population correction, step-by-step formulas, interactive Plotly chart, and Python export.</p>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Educational Content -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Understanding Sample Size & Statistical Power</h5>
+    <main class="tool-page-container">
+        <!-- ==================== INPUT COLUMN ==================== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
+                        <path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/>
+                    </svg>
+                    Sample Size
+                </div>
+                <div class="tool-card-body">
+                    <!-- Mode Toggle -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label">Calculation Type</label>
+                        <div class="stat-mode-toggle" style="display:flex;flex-wrap:wrap;">
+                            <button type="button" class="stat-mode-btn active" id="ss-mode-survey" style="flex:1;min-width:0;font-size:0.7rem;padding:0.5rem 0.25rem;">Survey</button>
+                            <button type="button" class="stat-mode-btn" id="ss-mode-mean" style="flex:1;min-width:0;font-size:0.7rem;padding:0.5rem 0.25rem;">Mean</button>
+                            <button type="button" class="stat-mode-btn" id="ss-mode-ab" style="flex:1;min-width:0;font-size:0.7rem;padding:0.5rem 0.25rem;">A/B Test</button>
+                            <button type="button" class="stat-mode-btn" id="ss-mode-compare" style="flex:1;min-width:0;font-size:0.7rem;padding:0.5rem 0.25rem;">Compare</button>
+                        </div>
+                    </div>
+
+                    <!-- Confidence Level -->
+                    <div class="tool-form-group">
+                        <label class="tool-form-label">Confidence Level</label>
+                        <div class="ss-conf-pills">
+                            <button type="button" class="ss-conf-pill" data-conf="90">90%</button>
+                            <button type="button" class="ss-conf-pill active" data-conf="95">95%</button>
+                            <button type="button" class="ss-conf-pill" data-conf="99">99%</button>
+                            <button type="button" class="ss-conf-pill" data-conf="custom">Custom
+                                <input type="number" class="ss-custom-input" id="ss-custom-conf" value="95" min="50" max="99.99" step="0.1" style="display:none;">
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Survey Proportion inputs (visible by default) -->
+                    <div id="ss-input-survey">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-proportion">Expected Proportion (p)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-proportion" value="0.5" step="0.01" min="0" max="1">
+                            <div class="tool-form-hint">Use 0.5 for maximum (most conservative)</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-margin-error">Margin of Error (E)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-margin-error" value="0.05" step="0.001" min="0">
+                            <div class="tool-form-hint">e.g. &plusmn;5% = 0.05</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-pop-size">Population Size (optional)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-pop-size" step="1" min="1">
+                            <div class="tool-form-hint">For finite population correction</div>
+                        </div>
+                    </div>
+
+                    <!-- Mean Estimation inputs -->
+                    <div id="ss-input-mean" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-std-dev">Standard Deviation (&sigma;)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-std-dev" value="15" step="0.01" min="0">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-margin-error-mean">Margin of Error (E)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-margin-error-mean" value="5" step="0.01" min="0">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-pop-size-mean">Population Size (optional)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-pop-size-mean" step="1" min="1">
+                        </div>
+                    </div>
+
+                    <!-- A/B Test inputs -->
+                    <div id="ss-input-ab" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-p1">Baseline Proportion (p&#8321;)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-p1" value="0.10" step="0.01" min="0" max="1">
+                            <div class="tool-form-hint">Control group rate</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-p2">Expected Proportion (p&#8322;)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-p2" value="0.15" step="0.01" min="0" max="1">
+                            <div class="tool-form-hint">Treatment group rate</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-power">Statistical Power (%)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-power" value="80" step="1" min="50" max="99">
+                            <div class="tool-form-hint">Usually 80% or 90%</div>
+                        </div>
+                    </div>
+
+                    <!-- Compare Means inputs -->
+                    <div id="ss-input-compare" style="display:none;">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-pooled-sd">Pooled Std Dev (&sigma;)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-pooled-sd" value="10" step="0.01" min="0">
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-effect-size">Effect Size (|&mu;&#8321; &minus; &mu;&#8322;|)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-effect-size" value="5" step="0.01" min="0">
+                            <div class="tool-form-hint">Minimum detectable difference</div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="ss-power-means">Statistical Power (%)</label>
+                            <input type="number" class="stat-input-text ss-input" id="ss-power-means" value="80" step="1" min="50" max="99">
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button type="button" class="tool-action-btn" id="ss-calc-btn">Calculate Sample Size</button>
+                    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                        <button type="button" class="tool-action-btn" id="ss-clear-btn" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);flex:1;">Clear</button>
+                    </div>
+
+                    <hr class="stat-sep">
+
+                    <!-- Quick Examples -->
+                    <div class="tool-form-group" id="ss-examples">
+                        <label class="tool-form-label">Quick Examples</label>
+                        <div class="stat-examples">
+                            <button type="button" class="stat-example-chip" data-example="election-poll">Election Poll</button>
+                            <button type="button" class="stat-example-chip" data-example="customer-survey">Customer Survey</button>
+                            <button type="button" class="stat-example-chip" data-example="ab-conversion">A/B Conversion</button>
+                            <button type="button" class="stat-example-chip" data-example="clinical-trial">Clinical Trial</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="edu-card">
-                <h6>What is Sample Size?</h6>
-                <p>Sample size (n) is the number of observations or participants needed in a study to draw reliable conclusions about a population. Larger samples generally provide more accurate estimates but cost more to collect.</p>
-              </div>
 
-              <div class="edu-card">
-                <h6>Why Sample Size Matters</h6>
-                <p><strong>Too Small:</strong> Results may be unreliable, missing important effects (Type II error)<br>
-                <strong>Too Large:</strong> Wastes resources, time, and money<br>
-                <strong>Just Right:</strong> Balances statistical power with practical constraints</p>
-              </div>
+        <!-- ==================== OUTPUT COLUMN ==================== -->
+        <div class="tool-output-column">
+            <div class="stat-output-tabs">
+                <button type="button" class="stat-output-tab active" data-tab="ss-result-panel">Result</button>
+                <button type="button" class="stat-output-tab" data-tab="ss-graph-panel">Chart</button>
+                <button type="button" class="stat-output-tab" data-tab="ss-compiler-panel">Python Compiler</button>
+            </div>
 
-              <div class="edu-card">
-                <h6>Key Factors Affecting Sample Size</h6>
-                <p>
-                  <strong>Confidence Level:</strong> How certain you want to be (95% is standard)<br>
-                  <strong>Margin of Error:</strong> Acceptable uncertainty in your estimate<br>
-                  <strong>Expected Variability:</strong> Standard deviation or proportion<br>
-                  <strong>Effect Size:</strong> The minimum difference you want to detect
+            <div class="stat-panel active" id="ss-result-panel">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <h4>Result</h4>
+                    </div>
+                    <div class="tool-result-content" id="ss-result-content">
+                        <div class="tool-empty-state">
+                            <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#x1F4CA;</div>
+                            <h3>Enter parameters and click Calculate</h3>
+                            <p>Compute required sample size for surveys, A/B tests, and research studies.</p>
+                        </div>
+                    </div>
+                    <div class="tool-result-actions" id="ss-result-actions"></div>
+                </div>
+            </div>
+
+            <div class="stat-panel" id="ss-graph-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/></svg>
+                        <h4>Sample Size Visualization</h4>
+                    </div>
+                    <div style="flex:1;padding:1rem;min-height:300px;">
+                        <div id="ss-graph-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-panel" id="ss-compiler-panel">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h4>Python Compiler</h4>
+                    </div>
+                    <div style="flex:1;min-height:0;">
+                        <iframe id="ss-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ADS COLUMN ==================== -->
+        <div class="tool-ads-column"><%@ include file="modern/ads/ad-three-column.jsp" %></div>
+    </main>
+
+    <div class="tool-mobile-ad-container"><%@ include file="modern/ads/ad-in-content-mid.jsp" %></div>
+
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="sample-size-calculator.jsp"/>
+        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
+
+    <!-- ==================== EDUCATIONAL CONTENT ==================== -->
+    <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+        <!-- 1. What Is Sample Size? -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">What Is Sample Size?</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;"><strong>Sample size</strong> is the number of observations or respondents needed in a study to draw reliable conclusions about a population. Choosing the right sample size balances statistical rigor with practical constraints like cost and time.</p>
+
+            <!-- Animated SVG: Population to Sample -->
+            <div style="text-align:center;margin:1.5rem 0;">
+                <svg viewBox="0 0 400 80" style="max-width:400px;width:100%;" aria-label="Population to sample illustration">
+                    <ellipse cx="100" cy="40" rx="70" ry="30" fill="none" stroke="var(--border-dark,#cbd5e1)" stroke-width="2"/>
+                    <text x="100" y="44" text-anchor="middle" font-size="11" fill="var(--text-secondary,#475569)">Population (N)</text>
+                    <line x1="175" y1="40" x2="225" y2="40" stroke="#e11d48" stroke-width="2" marker-end="url(#ss-arrow)" class="stat-anim stat-anim-d1"/>
+                    <defs><marker id="ss-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#e11d48"/></marker></defs>
+                    <ellipse cx="300" cy="40" rx="55" ry="25" fill="var(--tool-light)" stroke="#e11d48" stroke-width="2" class="stat-anim stat-anim-d2"/>
+                    <text x="300" y="44" text-anchor="middle" font-size="11" fill="#e11d48" font-weight="600" class="stat-anim stat-anim-d3">Sample (n)</text>
+                </svg>
+            </div>
+
+            <div class="stat-edu-grid" style="margin-top:1rem;">
+                <div class="stat-feature-card stat-anim stat-anim-d1">
+                    <div style="font-size:1.5rem;">&#x1F3AF;</div>
+                    <h4>Precision</h4>
+                    <p>Larger samples yield narrower confidence intervals and smaller margins of error, giving more precise estimates.</p>
+                </div>
+                <div class="stat-feature-card stat-anim stat-anim-d2">
+                    <div style="font-size:1.5rem;">&#x26A1;</div>
+                    <h4>Power</h4>
+                    <p>Adequate sample size ensures enough statistical power to detect real effects and avoid false negatives.</p>
+                </div>
+                <div class="stat-feature-card stat-anim stat-anim-d3">
+                    <div style="font-size:1.5rem;">&#x2696;&#xFE0F;</div>
+                    <h4>Efficiency</h4>
+                    <p>Too large wastes resources; too small produces unreliable results. Proper calculation finds the optimum.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Sample Size Formulas -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Sample Size Formulas</h2>
+
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>Survey (proportion):</strong>&nbsp; n = z&sup2; &times; p(1&minus;p) / E&sup2;
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">z = critical value, p = expected proportion, E = margin of error</div>
+            </div>
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>Mean estimation:</strong>&nbsp; n = z&sup2; &times; &sigma;&sup2; / E&sup2;
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">&sigma; = population standard deviation, E = margin of error</div>
+            </div>
+            <div class="stat-formula-box" style="margin-bottom:0.75rem;">
+                <strong>A/B test (two proportions):</strong>&nbsp; n = (z<sub>&alpha;/2</sub> + z<sub>&beta;</sub>)&sup2; &times; [p&#8321;(1&minus;p&#8321;) + p&#8322;(1&minus;p&#8322;)] / (p&#8321;&minus;p&#8322;)&sup2;
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">Per group. z<sub>&beta;</sub> from desired power (e.g. 0.84 for 80%)</div>
+            </div>
+            <div class="stat-formula-box">
+                <strong>Compare means:</strong>&nbsp; n = 2(z<sub>&alpha;/2</sub> + z<sub>&beta;</sub>)&sup2; &times; &sigma;&sup2; / &delta;&sup2;
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">Per group. &delta; = minimum detectable difference</div>
+            </div>
+        </div>
+
+        <!-- 3. Key Factors -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Key Factors Affecting Sample Size</h2>
+
+            <table class="stat-ops-table">
+                <thead><tr><th>Factor</th><th>Effect on Sample Size</th><th>Explanation</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600;">Confidence Level</td><td>Higher &rarr; larger n</td><td>99% confidence requires more data than 90% for the same precision</td></tr>
+                    <tr><td style="font-weight:600;">Margin of Error</td><td>Smaller &rarr; larger n</td><td>Halving the margin of error quadruples the required sample size</td></tr>
+                    <tr><td style="font-weight:600;">Variability</td><td>Higher &rarr; larger n</td><td>More variable populations need larger samples to estimate accurately</td></tr>
+                    <tr><td style="font-weight:600;">Power</td><td>Higher &rarr; larger n</td><td>90% power needs about 30% more samples than 80% power</td></tr>
+                    <tr><td style="font-weight:600;">Effect Size</td><td>Smaller &rarr; larger n</td><td>Detecting small differences requires substantially more observations</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 4. Statistical Power -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Statistical Power</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;"><strong>Statistical power</strong> (1 &minus; &beta;) is the probability that a study will detect a true effect when one exists. Under-powered studies waste resources because they are unlikely to produce significant results even when the effect is real.</p>
+
+            <div class="stat-worked-example" style="margin-top:1rem;">
+                <strong>Worked Example:</strong> A/B test with p&#8321;=0.10, p&#8322;=0.12, 95% confidence. Compare 80% vs 90% power.
+                <div style="margin-top:0.5rem;padding-left:1rem;border-left:3px solid var(--tool-primary);color:var(--text-secondary);font-size:0.875rem;">
+                    z<sub>0.025</sub> = 1.96<br>
+                    80% power: z<sub>&beta;</sub> = 0.842 &rarr; n &asymp; <strong>3,623 per group</strong><br>
+                    90% power: z<sub>&beta;</sub> = 1.282 &rarr; n &asymp; <strong>4,862 per group</strong><br>
+                    Going from 80% to 90% power increases sample size by ~34%.
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;padding:1rem;background:var(--bg-secondary);border-radius:0.5rem;border-left:3px solid var(--warning);">
+                <p style="margin:0;font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">
+                    <strong>Rule of thumb:</strong> Use 80% power as a minimum for most studies. Use 90% for confirmatory trials or when the cost of a false negative is high.
                 </p>
-              </div>
-
-              <h6 class="mt-3">Common Confidence Levels</h6>
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Confidence Level</th>
-                      <th>Z-Score</th>
-                      <th>Use Case</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>90%</td>
-                      <td>1.645</td>
-                      <td>Quick surveys, preliminary studies</td>
-                    </tr>
-                    <tr>
-                      <td>95%</td>
-                      <td>1.96</td>
-                      <td>Standard for most research</td>
-                    </tr>
-                    <tr>
-                      <td>99%</td>
-                      <td>2.576</td>
-                      <td>High-stakes decisions, medical studies</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
-
-            <div class="col-md-6">
-              <h6>Interpretation Guide</h6>
-
-              <div class="card mb-3" style="border-left: 4px solid #10b981;">
-                <div class="card-body">
-                  <h6 class="card-title text-success">Survey / Proportion</h6>
-                  <p class="card-text small mb-1"><strong>Formula:</strong> n = (Z² × p × (1-p)) / E²</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> To estimate election results within ±3% at 95% confidence, you need ~1,067 voters</p>
-                </div>
-              </div>
-
-              <div class="card mb-3" style="border-left: 4px solid #3b82f6;">
-                <div class="card-body">
-                  <h6 class="card-title text-primary">Mean Estimation</h6>
-                  <p class="card-text small mb-1"><strong>Formula:</strong> n = (Z² × σ²) / E²</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> To estimate average height within ±2cm (σ=10cm) at 95% confidence, you need ~97 people</p>
-                </div>
-              </div>
-
-              <div class="card mb-3" style="border-left: 4px solid #f59e0b;">
-                <div class="card-body">
-                  <h6 class="card-title text-warning">A/B Testing</h6>
-                  <p class="card-text small mb-1"><strong>Formula:</strong> n = 2 × (Z + Z_β)² × p̄(1-p̄) / Δ²</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> To detect a 5% improvement (10%→15%) with 80% power, you need ~620 per group</p>
-                </div>
-              </div>
-
-              <div class="card mb-3" style="border-left: 4px solid #8b5cf6;">
-                <div class="card-body">
-                  <h6 class="card-title text-purple">Comparing Means</h6>
-                  <p class="card-text small mb-1"><strong>Formula:</strong> n = 2 × [(Z + Z_β) × σ / Δ]²</p>
-                  <p class="card-text small mb-0"><strong>Example:</strong> To detect a 5-point difference (σ=10) with 80% power, you need ~64 per group</p>
-                </div>
-              </div>
-
-              <h6 class="mt-3">Statistical Power</h6>
-              <div class="alert alert-info" style="font-size: 0.9rem;">
-                <strong>Power = 1 - β</strong> is the probability of detecting an effect when it truly exists.<br>
-                <strong>80% Power:</strong> Standard for most studies (20% chance of missing a real effect)<br>
-                <strong>90% Power:</strong> More conservative, requires larger samples
-              </div>
-
-              <h6 class="mt-3">Sample Size Visualization</h6>
-              <canvas id="sampleSizeChart" height="200"></canvas>
-              <div class="text-center mt-2">
-                <small class="text-muted">Shows how sample size increases with confidence level (for a typical survey)</small>
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <h6>Practical Tips</h6>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="alert alert-success" style="font-size: 0.85rem;">
-                <strong>For Surveys:</strong><br>
-                • Use p=0.5 if unsure (most conservative)<br>
-                • ±3-5% margin is typical<br>
-                • Consider response rates
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="alert alert-warning" style="font-size: 0.85rem;">
-                <strong>For A/B Tests:</strong><br>
-                • Smaller effects need larger samples<br>
-                • 80% power is standard<br>
-                • Account for conversion rates
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="alert alert-info" style="font-size: 0.85rem;">
-                <strong>For Experiments:</strong><br>
-                • Pilot studies help estimate σ<br>
-                • Consider practical significance<br>
-                • Budget and time constraints
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-4">
-    <div class="sharethis-inline-share-buttons"></div>
-    <%@ include file="thanks.jsp"%>
-  </div>
-  <hr>
-  <%@ include file="footer_adsense.jsp"%>
-  <%@ include file="addcomments.jsp"%>
-  <!-- FAQ: inlined (was jspf/faq/math/sample-size-calculator-faq.jspf) -->
-  <section id="faq" class="mt-5">
-    <h2 class="h5">Sample Size Calculator: FAQ</h2>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What inputs do I need?</h3>
-      <p class="mb-0">Choose confidence level and margin of error. For proportions, provide an estimated p (use 0.5 if unknown). For means, provide population SD if available.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">Why use p = 0.5 for proportions?</h3>
-      <p class="mb-0">p = 0.5 maximizes variability and yields the largest required sample size when no prior estimate is known.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">Does population size matter?</h3>
-      <p class="mb-0">For large populations, required sample size mainly depends on confidence and error. Finite population correction matters when the sample is a large fraction of N.</p>
-    </div></div>
-    <div class="card mb-3"><div class="card-body">
-      <h3 class="h6">What about power analysis?</h3>
-      <p class="mb-0">Power‑based sizing needs effect size and desired power (1−β). This tool focuses on precision (margin‑of‑error) sizing; use power analysis for hypothesis tests.</p>
-    </div></div>
-  </section>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {"@type":"Question","name":"What inputs do I need?","acceptedAnswer":{"@type":"Answer","text":"Choose confidence and margin of error; use p estimate for proportions (0.5 if unknown), SD for means."}},
-      {"@type":"Question","name":"Why use p = 0.5 for proportions?","acceptedAnswer":{"@type":"Answer","text":"It maximizes variability, yielding a conservative (largest) required sample size."}},
-      {"@type":"Question","name":"Does population size matter?","acceptedAnswer":{"@type":"Answer","text":"For large N, size depends mostly on confidence and error; apply FPC when sampling a large fraction of N."}},
-      {"@type":"Question","name":"What about power analysis?","acceptedAnswer":{"@type":"Answer","text":"Power sizing needs effect size and desired power; this tool emphasizes precision (MoE)."}}
-    ]
-  }
-  </script>
-  <!-- Breadcrumbs: inlined (was jspf/breadcrumbs/math/sample-size-calculator-breadcrumbs.jspf) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-      {"@type":"ListItem","position":2,"name":"Sample Size Calculator","item":"https://8gwifi.org/sample-size-calculator.jsp"}
-    ]
-  }
-  </script>
-</div>
-</div>
-<%@ include file="body-close.jsp"%>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-<script>
-(function(){
-  let calcType = 'proportion', confidence = 95;
-  let sampleSizeChartInstance = null;
-
-  const confPills = document.querySelectorAll('.conf-pill');
-  const customInput = document.getElementById('customConfInput');
-  const btnCalc = document.getElementById('btnCalc');
-
-  // Tab switching - determine calc type based on active tab
-  $('#calcTypeTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    const target = $(e.target).attr('href');
-    if(target === '#propTab') calcType = 'proportion';
-    else if(target === '#meanTab') calcType = 'mean';
-    else if(target === '#abTab') calcType = 'twoProps';
-    else if(target === '#compareTab') calcType = 'twoMeans';
-  });
-
-  // Confidence switching
-  confPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      confPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-
-      if(pill.dataset.conf === 'custom'){
-        customInput.style.display = 'inline-block';
-        confidence = parseFloat(customInput.value);
-      } else {
-        customInput.style.display = 'none';
-        confidence = parseFloat(pill.dataset.conf);
-      }
-    });
-  });
-
-  customInput.addEventListener('input', () => confidence = parseFloat(customInput.value));
-
-  function getZScore(conf){
-    if(conf >= 99.9) return 3.291;
-    if(conf >= 99.5) return 2.807;
-    if(conf >= 99) return 2.576;
-    if(conf >= 98) return 2.326;
-    if(conf >= 95) return 1.96;
-    if(conf >= 90) return 1.645;
-    if(conf >= 85) return 1.44;
-    if(conf >= 80) return 1.28;
-    return Math.sqrt(-2 * Math.log(1 - (conf / 100 + 1) / 2));
-  }
-
-  function calculate(){
-    const z = getZScore(confidence);
-    let n = 0, formula = '', interp = '', subtitle = '';
-
-    try {
-      if(calcType === 'proportion'){
-        const p = parseFloat(document.getElementById('proportion').value);
-        const e = parseFloat(document.getElementById('marginError').value);
-        const N = document.getElementById('popSize').value;
-
-        if(isNaN(p) || isNaN(e) || p < 0 || p > 1 || e <= 0)
-          return alert('Enter valid proportion and margin of error');
-
-        let n0 = (z * z * p * (1 - p)) / (e * e);
-
-        if(N && !isNaN(N) && N > 0){
-          const Nval = parseFloat(N);
-          n = Math.ceil(n0 / (1 + (n0 - 1) / Nval));
-          formula = `<div class="formula-line">n₀ = (Z² × p × (1-p)) / E² = ${Math.ceil(n0)}</div>`;
-          formula += `<div class="formula-line">n = n₀ / (1 + (n₀-1) / N) = <strong>${n}</strong></div>`;
-        } else {
-          n = Math.ceil(n0);
-          formula = `<div class="formula-line">n = (Z² × p × (1-p)) / E²</div>`;
-          formula += `<div class="formula-line">n = (${z.toFixed(3)}² × ${p} × ${1-p}) / ${e}²</div>`;
-          formula += `<div class="formula-line"><strong>n = ${n}</strong></div>`;
-        }
-
-        interp = `For <strong>${confidence}% confidence</strong> with <strong>±${(e*100).toFixed(1)}% margin of error</strong>, you need <strong>${n} respondents</strong>.`;
-        subtitle = 'respondents needed';
-
-      } else if(calcType === 'mean'){
-        const sigma = parseFloat(document.getElementById('stdDev').value);
-        const e = parseFloat(document.getElementById('marginErrorMean').value);
-        const N = document.getElementById('popSizeMean').value;
-
-        if(isNaN(sigma) || isNaN(e) || sigma <= 0 || e <= 0)
-          return alert('Enter valid standard deviation and margin of error');
-
-        let n0 = (z * z * sigma * sigma) / (e * e);
-
-        if(N && !isNaN(N) && N > 0){
-          const Nval = parseFloat(N);
-          n = Math.ceil(n0 / (1 + (n0 - 1) / Nval));
-          formula = `<div class="formula-line">n₀ = (Z² × σ²) / E² = ${Math.ceil(n0)}</div>`;
-          formula += `<div class="formula-line">n = n₀ / (1 + (n₀-1) / N) = <strong>${n}</strong></div>`;
-        } else {
-          n = Math.ceil(n0);
-          formula = `<div class="formula-line">n = (Z² × σ²) / E²</div>`;
-          formula += `<div class="formula-line">n = (${z.toFixed(3)}² × ${sigma}²) / ${e}²</div>`;
-          formula += `<div class="formula-line"><strong>n = ${n}</strong></div>`;
-        }
-
-        interp = `For <strong>${confidence}% confidence</strong> with <strong>±${e} margin of error</strong>, you need <strong>${n} observations</strong>.`;
-        subtitle = 'observations needed';
-
-      } else if(calcType === 'twoProps'){
-        const p1 = parseFloat(document.getElementById('p1').value);
-        const p2 = parseFloat(document.getElementById('p2').value);
-        const power = parseFloat(document.getElementById('power').value);
-
-        if(isNaN(p1) || isNaN(p2) || isNaN(power) || p1 < 0 || p1 > 1 || p2 < 0 || p2 > 1)
-          return alert('Enter valid proportions and power');
-
-        const zBeta = getZScore(power);
-        const pAvg = (p1 + p2) / 2;
-        const delta = Math.abs(p2 - p1);
-
-        n = Math.ceil(2 * Math.pow((z + zBeta), 2) * pAvg * (1 - pAvg) / Math.pow(delta, 2));
-
-        formula = `<div class="formula-line">n per group = 2 × (Z + Z_β)² × p̄(1-p̄) / Δ²</div>`;
-        formula += `<div class="formula-line">p̄ = ${pAvg.toFixed(4)}, Δ = ${delta.toFixed(4)}</div>`;
-        formula += `<div class="formula-line"><strong>n per group = ${n}</strong></div>`;
-        formula += `<div class="formula-line"><strong>Total = ${n * 2}</strong></div>`;
-
-        interp = `To detect a difference from <strong>${(p1*100).toFixed(1)}%</strong> to <strong>${(p2*100).toFixed(1)}%</strong> with <strong>${power}% power</strong>, you need <strong>${n} per group</strong> (total: ${n*2}).`;
-        subtitle = `per group (total: ${n * 2})`;
-
-      } else if(calcType === 'twoMeans'){
-        const sigma = parseFloat(document.getElementById('stdDevBoth').value);
-        const delta = parseFloat(document.getElementById('effectSize').value);
-        const power = parseFloat(document.getElementById('powerMeans').value);
-
-        if(isNaN(sigma) || isNaN(delta) || isNaN(power) || sigma <= 0 || delta <= 0)
-          return alert('Enter valid parameters');
-
-        const zBeta = getZScore(power);
-        n = Math.ceil(2 * Math.pow((z + zBeta) * sigma / delta, 2));
-
-        formula = `<div class="formula-line">n per group = 2 × [(Z + Z_β) × σ / Δ]²</div>`;
-        formula += `<div class="formula-line">Z = ${z.toFixed(3)}, Z_β = ${zBeta.toFixed(3)}</div>`;
-        formula += `<div class="formula-line"><strong>n per group = ${n}</strong></div>`;
-        formula += `<div class="formula-line"><strong>Total = ${n * 2}</strong></div>`;
-
-        interp = `To detect a difference of <strong>${delta}</strong> with <strong>${power}% power</strong>, you need <strong>${n} per group</strong> (total: ${n*2}).`;
-        subtitle = `per group (total: ${n * 2})`;
-      }
-
-      // Display results in right panel
-      const html = `
-        <div class="result-hero">
-          <div class="sample-size">n = ${n.toLocaleString()}</div>
-          <div class="subtitle">${subtitle}</div>
         </div>
 
-        <h6 class="mt-3">Calculation Details</h6>
-        ${formula}
+        <!-- 5. Practical Tips -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Practical Tips</h2>
 
-        <div class="interpretation">
-          ${interp}
+            <div class="stat-edu-grid">
+                <div class="stat-edu-card stat-anim stat-anim-d1">
+                    <h4>&#x1F4CB; Surveys</h4>
+                    <p>Use p=0.5 when unsure of the true proportion. Apply finite population correction when sampling &gt;5% of the population. Account for expected non-response by inflating the sample size (e.g. divide by expected response rate).</p>
+                </div>
+                <div class="stat-edu-card stat-anim stat-anim-d2">
+                    <h4>&#x1F50D; A/B Tests</h4>
+                    <p>Define the minimum detectable effect before starting. Smaller effects need much larger samples. Consider using sequential testing to stop early if the effect is large. Always run the test for the full planned duration.</p>
+                </div>
+                <div class="stat-edu-card stat-anim stat-anim-d3">
+                    <h4>&#x1F3E5; Clinical Research</h4>
+                    <p>Regulatory agencies typically require 80&ndash;90% power. Account for dropout rates by over-enrolling. Pre-register your sample size calculation. Use interim analyses with appropriate alpha-spending functions.</p>
+                </div>
+            </div>
         </div>
-      `;
 
-      document.getElementById('resultDisplay').innerHTML = html;
+        <!-- 6. FAQ -->
+        <div class="tool-card stat-anim" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button class="faq-question">What sample size do I need for a survey?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">For a typical survey with 95% confidence and 5% margin of error, use p=0.5 for maximum conservatism. This gives about 385 respondents for a large population. Smaller margins need larger samples.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Why use p equals 0.5 for proportions?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Using p=0.5 maximizes the product p&times;(1&minus;p), which gives the largest possible sample size. This is the most conservative estimate when you do not know the true proportion in advance.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Does population size affect sample size?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">For large populations, sample size depends mainly on confidence and margin of error. Finite population correction matters when sampling more than about 5% of the population, reducing the required size.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What is statistical power and why does it matter?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Power (1&minus;&beta;) is the probability of detecting a real effect. 80% power means a 20% chance of missing a true effect. Higher power requires larger samples but gives more reliable results.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How do I determine sample size for an A/B test?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">You need the baseline conversion rate, the minimum detectable effect, and desired power. Smaller effects need much larger samples. A 1% improvement from 10% to 11% needs about 15,000 per group at 80% power.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What if I cannot afford the calculated sample size?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">You can accept a wider margin of error, lower confidence level, or lower power. For A/B tests, you can also focus on detecting larger effects only or use sequential testing methods.</div>
+            </div>
+        </div>
+    </section>
 
-    } catch(e){
-      console.error(e);
-      alert('Error calculating sample size');
-    }
-  }
+    <%@ include file="modern/components/support-section.jsp" %>
 
-  // Draw static educational chart showing relationship between confidence and sample size
-  function drawEducationalChart(){
-    const ctx = document.getElementById('sampleSizeChart');
-    if(!ctx) return;
+    <footer class="page-footer"><div class="footer-content"><p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p><div class="footer-links"><a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a><a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a><a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a></div></div></footer>
 
-    if(sampleSizeChartInstance){
-      sampleSizeChartInstance.destroy();
-    }
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-    // Calculate sample sizes for different confidence levels (p=0.5, E=0.05)
-    const confLevels = [80, 85, 90, 95, 98, 99, 99.5];
-    const sampleSizes = confLevels.map(conf => {
-      const z = getZScore(conf);
-      return Math.ceil((z * z * 0.5 * 0.5) / (0.05 * 0.05));
-    });
-
-    sampleSizeChartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: confLevels.map(c => c + '%'),
-        datasets: [{
-          label: 'Sample Size Required',
-          data: sampleSizes,
-          borderColor: 'rgba(16, 185, 129, 1)',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointRadius: 5,
-          pointHoverRadius: 7
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          },
-          title: {
-            display: true,
-            text: 'Sample Size vs Confidence Level (p=0.5, E=±5%)',
-            font: { size: 14, weight: 'bold' }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return 'n = ' + context.parsed.y.toLocaleString();
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Confidence Level',
-              font: { weight: 'bold' }
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Sample Size (n)',
-              font: { weight: 'bold' }
-            },
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
-
-  btnCalc.addEventListener('click', calculate);
-  document.addEventListener('keypress', e => e.key === 'Enter' && calculate());
-
-  // Draw educational chart on page load
-  window.addEventListener('load', drawEducationalChart);
-})();
-</script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-common.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-graph.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/stats-export.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/sample-size-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+</body>
+</html>
