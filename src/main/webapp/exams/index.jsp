@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     // High-CTR SEO Meta Tags
-    String seoTitle = "Free Practice Exams | NCERT Solutions + Math Tools + Physics Tools + Mental Math";
-    String seoDescription = "2,711 NCERT solutions, 21 math calculators, 43 physics solvers, 35 interactive visualizations, CBSE mock tests + 150+ mental math tricks. 100% free.";
+    String seoTitle = "150+ Free Math & Physics Tools — Solve, Visualize, Practice";
+    String seoDescription = "Instant step-by-step solvers for algebra, calculus & physics. 35 interactive visual labs, 2,700+ practice problems, and 150 mental math tricks. No signup, 100% free.";
     String canonicalUrl = "https://8gwifi.org/exams/";
 
     request.setAttribute("pageTitle", seoTitle);
@@ -25,7 +25,7 @@
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
 
     // Keywords
-    extraHead.append("<meta name=\"keywords\" content=\"NCERT solutions Class 11, NCERT solutions Class 10, NCERT solutions Class 9, CBSE practice exams, mental math tricks, visual math tools, interactive math visualizations, unit circle calculator, matrix calculator, function plotter, competitive exam preparation, SSC math, bank exam quantitative, CAT quant practice, free mock tests, interactive graphs\">\n");
+    extraHead.append("<meta name=\"keywords\" content=\"free math calculator, physics solver, interactive math visualizations, mental math tricks, step-by-step solutions, unit circle calculator, matrix calculator, function plotter, math practice problems, physics simulations, brain training games, free mock tests, interactive graphs, algebra calculator, calculus solver\">\n");
 
     request.setAttribute("extraHeadContent", extraHead.toString());
 %>
@@ -34,10 +34,10 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1 class="hero-title">Free Practice Exams, NCERT Solutions, Visual Math Lab, Physics Tools & Mental Math</h1>
+                    <h1 class="hero-title">Solve It. See It. Master It.</h1>
                     <p class="hero-subtitle">
-                        2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers & calculators,
-                        CBSE mock tests + 150+ mental math tricks for <strong>SSC, Bank, CAT, GRE</strong>.
+                        150+ free math & physics tools &mdash; step-by-step solvers, interactive visual labs,
+                        2,700+ practice problems, and mental math tricks. No signup required.
                     </p>
                 </div>
             </section>
@@ -53,186 +53,170 @@
                             Choose your exam board or sharpen your skills with mental math.
                         </p>
 
-                        <div class="grid grid-3">
-                            <!-- Quick Math Card -->
-                            <a href="<%=request.getContextPath()%>/exams/quick-math/"
-                                class="card card-clickable board-card featured-card" style="border-color: var(--accent-primary); border-width: 2px;">
-                                <div class="featured-badge">Popular</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 2v20M2 12h20M7 7l10 10M17 7L7 17"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Quick Math</h3>
-                                <p class="board-card-subtitle">Vedic Math & Mental Arithmetic</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge"
-                                        style="background: linear-gradient(135deg, #10b981, #059669); color: white;">150+ Tricks</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">SSC • Bank • CAT • GRE</p>
-                            </a>
-
-                            <!-- Math Memory Games Card -->
-                            <a href="<%=request.getContextPath()%>/exams/math-memory/"
-                                class="card card-clickable board-card" style="border-color: #22d3ee; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Math Memory</h3>
-                                <p class="board-card-subtitle">Brain Training Games</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #a855f7, #7c3aed); color: white;">16 Games</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Memory • Speed • Logic</p>
-                            </a>
-
-                            <!-- NCERT Books Card -->
-                            <a href="<%=request.getContextPath()%>/exams/books/ncert/"
-                                class="card card-clickable board-card" style="border-color: #22c55e; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                        <line x1="9" y1="7" x2="15" y2="7"></line>
-                                        <line x1="9" y1="11" x2="15" y2="11"></line>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">NCERT Solutions</h3>
-                                <p class="board-card-subtitle">Textbook Exercise Solutions</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white;">2,711 Questions</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Class 9–12 Mathematics & Physics</p>
-                            </a>
-
-                            <!-- Physics Tools Card -->
-                            <a href="<%=request.getContextPath()%>/physics/"
-                                class="card card-clickable board-card" style="border-color: #f97316; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Physics Tools</h3>
-                                <p class="board-card-subtitle">Interactive Solvers & Calculators</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">43 Tools</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Mechanics • Optics • Electromagnetism • Waves</p>
-                            </a>
-
-                            <!-- Math Tools Card -->
-                            <a href="<%=request.getContextPath()%>/math/"
-                                class="card card-clickable board-card" style="border-color: #16a34a; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #16a34a, #22c55e);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Math Tools</h3>
-                                <p class="board-card-subtitle">Calculators with Step-by-Step Solutions</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #16a34a, #22c55e); color: white;">21 Tools</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Algebra • Calculus • Linear Algebra • Everyday Math</p>
-                            </a>
-
-                            <!-- Visual Physics Lab Card -->
-                            <a href="<%=request.getContextPath()%>/exams/visual-physics/"
-                                class="card card-clickable board-card" style="border-color: #10b981; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #10b981, #059669);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Visual Physics Lab</h3>
-                                <p class="board-card-subtitle">Interactive Physics Simulations</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">19 Tools</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Mechanics &bull; Optics &bull; E&amp;M &bull; Waves &bull; Thermo &bull; Modern</p>
-                            </a>
-
-                            <!-- Visual Math Lab Card -->
-                            <a href="<%=request.getContextPath()%>/exams/visual-math/"
-                                class="card card-clickable board-card" style="border-color: #8b5cf6; border-width: 2px;">
-                                <div class="featured-badge" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">New</div>
-                                <div class="board-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">Visual Math Lab</h3>
-                                <p class="board-card-subtitle">Interactive Math Visualizations</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white;">35 Tools</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Algebra • Trig • Calculus • Statistics</p>
-                            </a>
-
-                            <!-- CBSE Board Card -->
-                            <a href="<%=request.getContextPath()%>/exams/cbse-board/"
-                                class="card card-clickable board-card">
-                                <div class="board-card-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">CBSE Board</h3>
-                                <p class="board-card-subtitle">Central Board of Secondary Education</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge">5 Practice Sets</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Class 10 Mathematics</p>
-                            </a>
-
-                            <!-- ICSE Board Card (Coming Soon) -->
-                            <div class="card board-card" style="opacity: 0.7;">
-                                <div class="board-card-icon" style="background: var(--bg-tertiary);">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        style="color: var(--text-muted);">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">ICSE Board</h3>
-                                <p class="board-card-subtitle">Indian Certificate of Secondary Education</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge coming-soon">Coming Soon</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Class 10</p>
+                        <!-- Study & Exam Prep -->
+                        <div class="path-group">
+                            <div class="path-group-label">Study & Exam Prep</div>
+                            <div class="path-list">
+                                <a href="<%=request.getContextPath()%>/exams/books/ncert/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                            <line x1="9" y1="7" x2="15" y2="7"></line>
+                                            <line x1="9" y1="11" x2="15" y2="11"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">NCERT Solutions</div>
+                                        <div class="path-desc">Textbook Exercise Solutions</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">2,711 Questions</span>
+                                        <span class="path-tag">Class 9–12</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                                <a href="<%=request.getContextPath()%>/exams/cbse-board/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">CBSE Board</div>
+                                        <div class="path-desc">Central Board of Secondary Education</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">5 Practice Sets</span>
+                                        <span class="path-tag">Class 10</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
                             </div>
+                        </div>
 
-                            <!-- State Boards Card (Coming Soon) -->
-                            <div class="card board-card" style="opacity: 0.7;">
-                                <div class="board-card-icon" style="background: var(--bg-tertiary);">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        style="color: var(--text-muted);">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                        <circle cx="12" cy="10" r="3"></circle>
-                                    </svg>
-                                </div>
-                                <h3 class="board-card-title">State Boards</h3>
-                                <p class="board-card-subtitle">Various State Education Boards</p>
-                                <div class="board-card-meta">
-                                    <span class="board-card-badge coming-soon">Coming Soon</span>
-                                </div>
-                                <p class="text-sm text-muted mt-4">Multiple States</p>
+                        <!-- Calculators & Solvers -->
+                        <div class="path-group">
+                            <div class="path-group-label">Calculators & Solvers</div>
+                            <div class="path-list">
+                                <a href="<%=request.getContextPath()%>/math/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Math Tools</div>
+                                        <div class="path-desc">Step-by-Step Calculators</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">21 Tools</span>
+                                        <span class="path-tag">Algebra &bull; Calculus &bull; Linear Algebra</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                                <a href="<%=request.getContextPath()%>/physics/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Physics Tools</div>
+                                        <div class="path-desc">Interactive Solvers & Calculators</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">43 Tools</span>
+                                        <span class="path-tag">Mechanics &bull; Optics &bull; E&amp;M &bull; Waves</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Labs -->
+                        <div class="path-group">
+                            <div class="path-group-label">Interactive Labs</div>
+                            <div class="path-list">
+                                <a href="<%=request.getContextPath()%>/exams/visual-math/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Visual Math Lab</div>
+                                        <div class="path-desc">Interactive Math Visualizations</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">35 Tools</span>
+                                        <span class="path-tag">Algebra &bull; Trig &bull; Calculus &bull; Statistics</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                                <a href="<%=request.getContextPath()%>/exams/visual-physics/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Visual Physics Lab</div>
+                                        <div class="path-desc">Interactive Physics Simulations</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">19 Tools</span>
+                                        <span class="path-tag">Mechanics &bull; Optics &bull; Thermo &bull; Modern</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Practice & Brain Training -->
+                        <div class="path-group">
+                            <div class="path-group-label">Practice & Brain Training</div>
+                            <div class="path-list">
+                                <a href="<%=request.getContextPath()%>/exams/quick-math/" class="path-row path-row--popular">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 2v20M2 12h20M7 7l10 10M17 7L7 17"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Quick Math <span class="path-popular-badge">Popular</span></div>
+                                        <div class="path-desc">Vedic Math & Mental Arithmetic</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">150+ Tricks</span>
+                                        <span class="path-tag">SSC &bull; Bank &bull; CAT &bull; GRE</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
+                                <a href="<%=request.getContextPath()%>/exams/math-memory/" class="path-row">
+                                    <div class="path-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                        </svg>
+                                    </div>
+                                    <div class="path-info">
+                                        <div class="path-title">Math Memory</div>
+                                        <div class="path-desc">Brain Training Games</div>
+                                    </div>
+                                    <div class="path-meta">
+                                        <span class="path-stat">16 Games</span>
+                                        <span class="path-tag">Memory &bull; Speed &bull; Logic</span>
+                                    </div>
+                                    <svg class="path-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -357,8 +341,8 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "@id": "https://8gwifi.org/exams/",
-    "name": "Free Practice Exams, NCERT Solutions, Visual Math Lab & Mental Math",
-    "description": "2,711 NCERT solutions, 35 interactive math visualizations, 43 physics solvers, CBSE mock tests + 150+ mental math tricks.",
+    "name": "150+ Free Math & Physics Tools — Solve, Visualize, Practice",
+    "description": "Instant step-by-step solvers for algebra, calculus and physics. 35 interactive visual labs, 2,700+ practice problems, and 150 mental math tricks. No signup, 100% free.",
     "url": "https://8gwifi.org/exams/",
     "inLanguage": "en",
     "isPartOf": {
@@ -374,8 +358,8 @@
 {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Exam Preparation Resources",
-    "description": "Practice exams and mental math training for board exams and competitive tests",
+    "name": "Math & Physics Learning Resources",
+    "description": "Free calculators, solvers, interactive labs, practice problems, and mental math training for students",
     "numberOfItems": 8,
     "itemListElement": [
         {
@@ -500,23 +484,133 @@
 
                     <!-- Page-specific styles -->
                     <style>
-                        .featured-card {
-                            position: relative;
-                            overflow: visible;
+                        .path-group {
+                            margin-bottom: var(--space-6);
                         }
-                        .featured-badge {
-                            position: absolute;
-                            top: -10px;
-                            right: 16px;
-                            background: linear-gradient(135deg, #f59e0b, #d97706);
-                            color: white;
+                        .path-group-label {
                             font-size: 0.7rem;
                             font-weight: 700;
                             text-transform: uppercase;
+                            letter-spacing: 1px;
+                            color: var(--text-muted);
+                            margin-bottom: var(--space-2);
+                            padding-left: 2px;
+                        }
+                        .path-list {
+                            border: 1px solid var(--border);
+                            border-radius: var(--radius-lg);
+                            overflow: hidden;
+                            background: var(--bg-secondary);
+                        }
+                        .path-row {
+                            display: flex;
+                            align-items: center;
+                            gap: var(--space-4);
+                            padding: var(--space-4) var(--space-5);
+                            text-decoration: none;
+                            color: inherit;
+                            transition: background 0.15s ease;
+                            border-bottom: 1px solid var(--border);
+                        }
+                        .path-row:last-child {
+                            border-bottom: none;
+                        }
+                        .path-row:hover {
+                            background: var(--bg-tertiary);
+                        }
+                        .path-row:hover .path-arrow {
+                            opacity: 1;
+                            transform: translateX(2px);
+                        }
+                        .path-row--popular {
+                            background: color-mix(in srgb, var(--accent-primary) 4%, transparent);
+                        }
+                        .path-icon {
+                            flex-shrink: 0;
+                            width: 44px;
+                            height: 44px;
+                            border-radius: var(--radius-md);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                        }
+                        .path-icon svg {
+                            width: 22px;
+                            height: 22px;
+                        }
+                        .path-info {
+                            flex: 1;
+                            min-width: 0;
+                        }
+                        .path-title {
+                            font-size: var(--text-base);
+                            font-weight: 600;
+                            color: var(--text-primary);
+                            display: flex;
+                            align-items: center;
+                            gap: var(--space-2);
+                        }
+                        .path-desc {
+                            font-size: var(--text-sm);
+                            color: var(--text-muted);
+                            margin-top: 1px;
+                        }
+                        .path-meta {
+                            flex-shrink: 0;
+                            text-align: right;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px;
+                        }
+                        .path-stat {
+                            font-size: var(--text-sm);
+                            font-weight: 600;
+                            color: var(--text-primary);
+                        }
+                        .path-tag {
+                            font-size: 0.7rem;
+                            color: var(--text-muted);
+                        }
+                        .path-arrow {
+                            flex-shrink: 0;
+                            width: 18px;
+                            height: 18px;
+                            color: var(--text-muted);
+                            opacity: 0.4;
+                            transition: all 0.15s ease;
+                        }
+                        .path-popular-badge {
+                            font-size: 0.6rem;
+                            font-weight: 700;
+                            text-transform: uppercase;
                             letter-spacing: 0.5px;
-                            padding: 4px 10px;
-                            border-radius: 12px;
-                            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+                            background: linear-gradient(135deg, #f59e0b, #d97706);
+                            color: white;
+                            padding: 2px 7px;
+                            border-radius: 8px;
+                        }
+
+                        /* Mobile: stack meta below info */
+                        @media (max-width: 640px) {
+                            .path-row {
+                                flex-wrap: wrap;
+                                gap: var(--space-3);
+                                padding: var(--space-3) var(--space-4);
+                            }
+                            .path-meta {
+                                flex-basis: 100%;
+                                text-align: left;
+                                flex-direction: row;
+                                gap: var(--space-2);
+                                padding-left: 56px;
+                            }
+                            .path-tag {
+                                display: none;
+                            }
+                            .path-arrow {
+                                display: none;
+                            }
                         }
                     </style>
 
