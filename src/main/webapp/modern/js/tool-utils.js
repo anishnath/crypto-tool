@@ -1781,5 +1781,25 @@
         document.head.appendChild(style);
     }
 
+    // ==================== FAQ Toggle ====================
+
+    /**
+     * Toggle FAQ item open/closed
+     * Works with onclick="toggleFaq(this)" or auto-wired below
+     */
+    window.toggleFaq = function(btn) {
+        btn.parentElement.classList.toggle('open');
+    };
+
+    // Auto-wire all .faq-question buttons that lack onclick
+    document.addEventListener('DOMContentLoaded', function() {
+        var btns = document.querySelectorAll('.faq-question:not([onclick])');
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        }
+    });
+
 })();
 
