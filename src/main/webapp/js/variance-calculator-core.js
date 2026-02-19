@@ -124,12 +124,12 @@
         var data = C.parseNumbers(els.dataInput.value);
         if (data.length === 0) {
             C.showError(els.resultContent, 'Please enter at least one valid number.');
-            if (els.resultActions) els.resultActions.style.display = 'none';
+            E.hideActionButtons(els.resultActions);
             return;
         }
         if (data.length < 2 && state.isSample) {
             C.showError(els.resultContent, 'Sample variance requires at least 2 data points.');
-            if (els.resultActions) els.resultActions.style.display = 'none';
+            E.hideActionButtons(els.resultActions);
             return;
         }
 
@@ -140,7 +140,12 @@
         prepareGraph();
         updatePreview();
 
-        if (els.resultActions) els.resultActions.style.display = 'flex';
+        E.renderActionButtons(els.resultActions, {
+            toolName: 'Variance Calculator',
+            getLatex: function() { return state.stats ? E.buildLatex('Variance', state.stats) : ''; },
+            getShareState: function() { return { data: els.dataInput ? els.dataInput.value : '', mode: state.isSample ? 'sample' : 'population' }; },
+            resultEl: '#var-result-content'
+        });
         if (els.compilerIframe) els.compilerIframe.removeAttribute('src');
     }
 
@@ -385,29 +390,13 @@
         state.stats = null;
         state.pendingGraph = null;
         C.showEmpty(els.resultContent, '\uD83D\uDCC9', 'Enter data and click Calculate', 'Paste numbers to compute variance with step-by-step breakdown.');
-        if (els.resultActions) els.resultActions.style.display = 'none';
+        E.hideActionButtons(els.resultActions);
         if (els.graphContent) els.graphContent.innerHTML = '<div class="tool-empty-state"><div style="font-size:2rem;opacity:0.5;">&#x1F4C8;</div><h3>No graph yet</h3><p>Calculate to see deviation chart.</p></div>';
         updatePreview();
     }
 
-    /* ===== Actions ===== */
-
-    function initActions() {
-        var copyLatexBtn = document.getElementById('var-copy-latex-btn');
-        if (copyLatexBtn) {
-            copyLatexBtn.addEventListener('click', function() {
-                if (state.stats) E.copyLatex('Variance Calculator', state.stats);
-            });
-        }
-        var shareBtn = document.getElementById('var-share-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', function() {
-                if (els.dataInput) {
-                    E.copyShareUrl({ data: els.dataInput.value, mode: state.isSample ? 'sample' : 'population' });
-                }
-            });
-        }
-    }
+    /* ===== Actions (handled by E.renderActionButtons) ===== */
+    function initActions() {}
 
     /* ===== Init ===== */
 

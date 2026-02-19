@@ -120,7 +120,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="T-Test Calculator Online - One Sample Two Sample Paired Welch Free" />
         <jsp:param name="toolDescription" value="Perform one-sample two-sample paired and Welch t-tests. Get t-statistic p-value degrees of freedom critical value confidence interval Cohen d effect size with t-distribution chart and Python scipy export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="t-test-calculator.jsp" />
         <jsp:param name="toolKeywords" value="t-test calculator, student t test, one sample t test, two sample t test, paired t test, welch t test, t statistic, p value calculator, degrees of freedom, critical value, cohen d effect size, hypothesis testing calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -388,7 +388,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="t-test-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

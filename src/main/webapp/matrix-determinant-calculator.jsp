@@ -15,7 +15,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Determinant Calculator | det(A) 2×2 to 10×10 Free" />
     <jsp:param name="toolDescription" value="Free matrix determinant calculator. det(A) for 2×2 to 10×10. LU, cofactor expansion, Gaussian elimination. Step-by-step. Print worksheet with practice exercises. Share, download." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-determinant-calculator.jsp" />
     <jsp:param name="toolKeywords" value="determinant calculator, det(A), matrix determinant, 2x2 3x3 determinant, cofactor expansion, LU decomposition, linear algebra, homework help" />
     <jsp:param name="toolImage" value="logo.png" />
@@ -74,7 +74,7 @@
       <h1 class="tool-page-title">Matrix Determinant Calculator</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Determinant</span>
       </nav>
     </div>

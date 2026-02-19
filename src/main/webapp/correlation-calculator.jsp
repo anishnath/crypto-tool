@@ -73,7 +73,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Correlation Calculator Online - Pearson Spearman R-Squared Free" />
         <jsp:param name="toolDescription" value="Calculate Pearson and Spearman correlation coefficients with R-squared p-value significance test interactive scatter plot and Python export. Free online correlation analysis tool." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="correlation-calculator.jsp" />
         <jsp:param name="toolKeywords" value="correlation calculator, pearson correlation, spearman correlation, r squared calculator, correlation coefficient, scatter plot, p-value correlation, statistical correlation, rank correlation, data analysis" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -261,7 +261,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="correlation-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

@@ -143,7 +143,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Inequality Solver - Solve Inequalities Step by Step Free" />
         <jsp:param name="toolDescription" value="Free online inequality solver with step-by-step solutions and sign chart. Solve linear, quadratic, polynomial, rational, and absolute value inequalities. Shows interval notation, set-builder notation, number line graph. No signup." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="inequality-solver.jsp" />
         <jsp:param name="toolKeywords" value="inequality solver, solve inequalities online, inequality calculator with steps, quadratic inequality solver, polynomial inequality calculator, rational inequality solver, absolute value inequality, interval notation calculator, sign chart method, inequality graphing calculator, solve inequalities step by step free" />
         <jsp:param name="toolImage" value="logo.png" />

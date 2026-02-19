@@ -5,20 +5,20 @@
 <head>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Math Calculators - Free Online Step-by-Step Solvers" />
-        <jsp:param name="toolCategory" value="Mathematics" />
-        <jsp:param name="toolDescription" value="22 free math calculators with step-by-step solutions. Percentage, exponents, quadratic equations, logarithms, matrices, calculus, series, and more. All free, no signup." />
+        <jsp:param name="toolCategory" value="Math Tools" />
+        <jsp:param name="toolDescription" value="47 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
         <jsp:param name="toolUrl" value="math/" />
         <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, exponent calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, inequality solver, step by step math, free math solver" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="22 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
+        <jsp:param name="toolFeatures" value="47 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
         <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages" />
         <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
         <jsp:param name="faq1q" value="Are these math calculators free?" />
-        <jsp:param name="faq1a" value="Yes all 22 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
+        <jsp:param name="faq1a" value="Yes all 47 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation so you learn the method not just the answer." />
         <jsp:param name="faq3q" value="What math topics are covered?" />
-        <jsp:param name="faq3a" value="We cover everyday math like percentages and significant figures, algebra including quadratic equations linear systems and inequalities, calculus with derivatives integrals and limits, linear algebra with 8 matrix calculators, and more including logarithms exponents and Taylor series." />
+        <jsp:param name="faq3a" value="We cover everyday math like percentages and significant figures, algebra including quadratic equations linear systems and inequalities, 21 statistics calculators covering descriptive stats hypothesis testing regression and ANOVA, calculus with derivatives integrals and limits, linear algebra with 9 matrix calculators, and more including logarithms exponents and Taylor series." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -28,11 +28,11 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Math Calculators",
-      "description": "25 free math calculators with step-by-step solutions covering percentages, algebra, calculus, linear algebra, trigonometry, and more.",
+      "description": "47 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
       "url": "https://8gwifi.org/math/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 25,
+        "numberOfItems": 47,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
@@ -59,7 +59,28 @@
           {"@type": "ListItem", "position": 23, "name": "Vector Calculator", "url": "https://8gwifi.org/vector-calculator.jsp"},
           {"@type": "ListItem", "position": 24, "name": "Trig Function Calculator", "url": "https://8gwifi.org/trigonometric-function-calculator.jsp"},
           {"@type": "ListItem", "position": 25, "name": "Trig Identity Calculator", "url": "https://8gwifi.org/trigonometric-identity-calculator.jsp"},
-          {"@type": "ListItem", "position": 26, "name": "Trig Equation Solver", "url": "https://8gwifi.org/trigonometric-equation-solver.jsp"}
+          {"@type": "ListItem", "position": 26, "name": "Trig Equation Solver", "url": "https://8gwifi.org/trigonometric-equation-solver.jsp"},
+          {"@type": "ListItem", "position": 27, "name": "Summary Statistics Calculator", "url": "https://8gwifi.org/summary-statistics-calculator.jsp"},
+          {"@type": "ListItem", "position": 28, "name": "Standard Deviation Calculator", "url": "https://8gwifi.org/standard-deviation.jsp"},
+          {"@type": "ListItem", "position": 29, "name": "Mean Median Mode Calculator", "url": "https://8gwifi.org/mean-median-mode.jsp"},
+          {"@type": "ListItem", "position": 30, "name": "Variance Calculator", "url": "https://8gwifi.org/variance-calculator.jsp"},
+          {"@type": "ListItem", "position": 31, "name": "Percentile Calculator", "url": "https://8gwifi.org/percentile-calculator.jsp"},
+          {"@type": "ListItem", "position": 32, "name": "Z-Score Calculator", "url": "https://8gwifi.org/z-score-calculator.jsp"},
+          {"@type": "ListItem", "position": 33, "name": "Normal Distribution Calculator", "url": "https://8gwifi.org/normal-distribution-calculator.jsp"},
+          {"@type": "ListItem", "position": 34, "name": "Binomial Distribution Calculator", "url": "https://8gwifi.org/binomial-distribution-calculator.jsp"},
+          {"@type": "ListItem", "position": 35, "name": "Probability Calculator", "url": "https://8gwifi.org/probability-calculator.jsp"},
+          {"@type": "ListItem", "position": 36, "name": "Confidence Interval Calculator", "url": "https://8gwifi.org/confidence-interval-calculator.jsp"},
+          {"@type": "ListItem", "position": 37, "name": "Hypothesis Test Calculator", "url": "https://8gwifi.org/hypothesis-test-calculator.jsp"},
+          {"@type": "ListItem", "position": 38, "name": "T-Test Calculator", "url": "https://8gwifi.org/t-test-calculator.jsp"},
+          {"@type": "ListItem", "position": 39, "name": "Chi-Square Calculator", "url": "https://8gwifi.org/chi-square-calculator.jsp"},
+          {"@type": "ListItem", "position": 40, "name": "ANOVA Calculator", "url": "https://8gwifi.org/anova-calculator.jsp"},
+          {"@type": "ListItem", "position": 41, "name": "Correlation Calculator", "url": "https://8gwifi.org/correlation-calculator.jsp"},
+          {"@type": "ListItem", "position": 42, "name": "Linear Regression Calculator", "url": "https://8gwifi.org/linear-regression-calculator.jsp"},
+          {"@type": "ListItem", "position": 43, "name": "Sample Size Calculator", "url": "https://8gwifi.org/sample-size-calculator.jsp"},
+          {"@type": "ListItem", "position": 44, "name": "Effect Size Calculator", "url": "https://8gwifi.org/effect-size-calculator.jsp"},
+          {"@type": "ListItem", "position": 45, "name": "Standard Error Calculator", "url": "https://8gwifi.org/standard-error-calculator.jsp"},
+          {"@type": "ListItem", "position": 46, "name": "Outlier Detection Calculator", "url": "https://8gwifi.org/outlier-detection-calculator.jsp"},
+          {"@type": "ListItem", "position": 47, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"}
         ]
       }
     }
@@ -193,6 +214,24 @@
         .formula-item strong { display: block; color: var(--text-primary, #1e293b); font-size: 0.85rem; margin-bottom: 0.2rem; }
         .formula-item code { font-family: 'Times New Roman', Georgia, serif; font-size: 1.05rem; color: var(--math-primary); }
 
+        /* FAQ */
+        .faq-item { border-bottom: 1px solid var(--border-color, #e2e8f0); }
+        .faq-question {
+            width: 100%; background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 0; font-size: 1rem; font-weight: 600;
+            color: var(--text-primary, #1e293b); text-align: left; font-family: inherit; gap: 0.75rem;
+        }
+        .faq-question:hover { color: var(--math-primary); }
+        .faq-chevron { transition: transform 0.3s ease; flex-shrink: 0; }
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            color: var(--text-secondary, #64748b); line-height: 1.7;
+            transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;
+        }
+        .faq-item.open .faq-answer { max-height: 500px; padding: 0 0 1rem 0; }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
         /* Scroll animations */
         .math-anim { opacity: 0; transform: translateY(1.5rem); transition: opacity 0.5s ease, transform 0.5s ease; }
         .math-anim.math-visible { opacity: 1; transform: translateY(0); }
@@ -232,7 +271,7 @@
             <p>Free step-by-step solvers with KaTeX formulas and Python compilers</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <span class="hero-stat-value">21</span>
+                    <span class="hero-stat-value">47</span>
                     <span class="hero-stat-label">Calculators</span>
                 </div>
                 <div class="hero-stat">
@@ -305,7 +344,7 @@
             <div class="category-header">
                 <span class="category-icon">&#128200;</span>
                 <h2>Algebra</h2>
-                <span class="category-count">9 tools</span>
+                <span class="category-count">10 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #d97706;">
@@ -459,6 +498,320 @@
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">Graph</span>
                         <span class="badge badge-python">Python</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ==================== STATISTICS ==================== -->
+        <section class="category">
+            <div class="category-header">
+                <span class="category-icon">&#128202;</span>
+                <h2>Statistics</h2>
+                <span class="category-count">21 tools</span>
+            </div>
+            <div class="tools-grid">
+                <a href="<%=request.getContextPath()%>/summary-statistics-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&Sigma;x</div>
+                        <div>
+                            <h3>Summary Statistics Calculator</h3>
+                            <div class="tool-formula">Mean, median, mode, SD, quartiles, skewness</div>
+                        </div>
+                    </div>
+                    <p>Complete descriptive statistics with interactive histogram, box plot, frequency table, and Python scipy export.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/standard-deviation.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&sigma;</div>
+                        <div>
+                            <h3>Standard Deviation Calculator</h3>
+                            <div class="tool-formula">Sample &amp; population SD, variance</div>
+                        </div>
+                    </div>
+                    <p>Calculate standard deviation and variance for sample and population data with step-by-step worked examples.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/mean-median-mode.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">x&#772;</div>
+                        <div>
+                            <h3>Mean, Median, Mode</h3>
+                            <div class="tool-formula">Central tendency measures</div>
+                        </div>
+                    </div>
+                    <p>Calculate mean, median, and mode with step-by-step solutions and visual comparison.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/variance-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">s&sup2;</div>
+                        <div>
+                            <h3>Variance Calculator</h3>
+                            <div class="tool-formula">Sample &amp; population variance</div>
+                        </div>
+                    </div>
+                    <p>Compute variance with step-by-step deviation calculations for both sample and population data.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/percentile-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">P<sub>k</sub></div>
+                        <div>
+                            <h3>Percentile Calculator</h3>
+                            <div class="tool-formula">Percentile rank &amp; value</div>
+                        </div>
+                    </div>
+                    <p>Find the percentile rank of a value or compute the value at a given percentile in your dataset.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/z-score-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">Z</div>
+                        <div>
+                            <h3>Z-Score Calculator</h3>
+                            <div class="tool-formula">z = (x &minus; &mu;) / &sigma;</div>
+                        </div>
+                    </div>
+                    <p>Calculate z-scores, find probabilities from the standard normal distribution, and look up z-table values.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/normal-distribution-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">N</div>
+                        <div>
+                            <h3>Normal Distribution Calculator</h3>
+                            <div class="tool-formula">PDF, CDF, inverse normal</div>
+                        </div>
+                    </div>
+                    <p>Compute probabilities for normal distributions. Find P(X &lt; a), P(a &lt; X &lt; b), and inverse normal values.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/binomial-distribution-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">B</div>
+                        <div>
+                            <h3>Binomial Distribution</h3>
+                            <div class="tool-formula">P(X=k) = C(n,k) p<sup>k</sup>(1-p)<sup>n-k</sup></div>
+                        </div>
+                    </div>
+                    <p>Compute binomial probabilities, cumulative distribution, expected value, and variance for Bernoulli trials.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/probability-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">P</div>
+                        <div>
+                            <h3>Probability Calculator</h3>
+                            <div class="tool-formula">Combinations, permutations, Bayes</div>
+                        </div>
+                    </div>
+                    <p>Calculate probabilities for events, combinations, permutations, and conditional probability with Bayes' theorem.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/confidence-interval-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">CI</div>
+                        <div>
+                            <h3>Confidence Interval Calculator</h3>
+                            <div class="tool-formula">x&#772; &plusmn; z &middot; s/&radic;n</div>
+                        </div>
+                    </div>
+                    <p>Compute confidence intervals for means and proportions at 90%, 95%, or 99% confidence levels.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/hypothesis-test-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">H<sub>0</sub></div>
+                        <div>
+                            <h3>Hypothesis Test Calculator</h3>
+                            <div class="tool-formula">z-test, t-test, p-value</div>
+                        </div>
+                    </div>
+                    <p>Perform one-sample and two-sample hypothesis tests with p-value computation and decision rules.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/t-test-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">t</div>
+                        <div>
+                            <h3>T-Test Calculator</h3>
+                            <div class="tool-formula">One-sample, two-sample, paired</div>
+                        </div>
+                    </div>
+                    <p>Perform t-tests for means comparison with degrees of freedom, critical values, and p-value interpretation.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/chi-square-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&chi;&sup2;</div>
+                        <div>
+                            <h3>Chi-Square Calculator</h3>
+                            <div class="tool-formula">Goodness of fit &amp; independence</div>
+                        </div>
+                    </div>
+                    <p>Chi-square tests for goodness of fit and independence with observed vs expected comparison and p-values.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/anova-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">F</div>
+                        <div>
+                            <h3>ANOVA Calculator</h3>
+                            <div class="tool-formula">One-way analysis of variance</div>
+                        </div>
+                    </div>
+                    <p>Compare means across multiple groups with F-statistic, sum of squares, and post-hoc analysis.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/correlation-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">r</div>
+                        <div>
+                            <h3>Correlation Calculator</h3>
+                            <div class="tool-formula">Pearson r, Spearman &rho;</div>
+                        </div>
+                    </div>
+                    <p>Calculate Pearson and Spearman correlation coefficients with scatter plot and significance testing.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/linear-regression-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">y&#770;</div>
+                        <div>
+                            <h3>Linear Regression Calculator</h3>
+                            <div class="tool-formula">y = mx + b, R&sup2;</div>
+                        </div>
+                    </div>
+                    <p>Fit a least-squares regression line with slope, intercept, R-squared, residuals, and scatter plot.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/sample-size-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">n</div>
+                        <div>
+                            <h3>Sample Size Calculator</h3>
+                            <div class="tool-formula">n = (z&middot;&sigma;/E)&sup2;</div>
+                        </div>
+                    </div>
+                    <p>Determine the required sample size for surveys and experiments given confidence level, margin of error, and population size.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/effect-size-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">d</div>
+                        <div>
+                            <h3>Effect Size Calculator</h3>
+                            <div class="tool-formula">Cohen's d, &eta;&sup2;, Cramér's V</div>
+                        </div>
+                    </div>
+                    <p>Calculate Cohen's d, eta-squared, odds ratio, and other effect size measures with interpretation guidelines.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/standard-error-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">SE</div>
+                        <div>
+                            <h3>Standard Error Calculator</h3>
+                            <div class="tool-formula">SE = s / &radic;n</div>
+                        </div>
+                    </div>
+                    <p>Compute standard error of the mean, proportion, and difference between means with step-by-step formulas.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/outlier-detection-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&#8861;</div>
+                        <div>
+                            <h3>Outlier Detection Calculator</h3>
+                            <div class="tool-formula">IQR, Z-score, Grubbs' test</div>
+                        </div>
+                    </div>
+                    <p>Detect outliers using IQR method, Z-score method, and Grubbs' test with step-by-step identification.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/p-value-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">p</div>
+                        <div>
+                            <h3>P-Value Calculator</h3>
+                            <div class="tool-formula">z, t, &chi;&sup2;, F distributions</div>
+                        </div>
+                    </div>
+                    <p>Calculate p-values from z-scores, t-statistics, chi-square, and F-statistics with one-tail and two-tail options.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
                     </div>
                 </a>
             </div>
@@ -750,7 +1103,7 @@
                     Are these math calculators free?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes, all 22 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
+                <div class="faq-answer">Yes, all 47 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
             </div>
 
             <div class="faq-item">
@@ -766,7 +1119,7 @@
                     What math topics are covered?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">We cover everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities, exponents, logarithms), calculus (derivatives, integrals, limits, Taylor series), and linear algebra (9 matrix calculators covering determinants, multiplication, inverse, eigenvalues, rank, and more).</div>
+                <div class="faq-answer">We cover everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities, polynomials, vectors, trigonometry), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA, distributions, and more), calculus (derivatives, integrals, limits, Taylor series), and linear algebra (9 matrix calculators covering determinants, multiplication, inverse, eigenvalues, rank, and more).</div>
             </div>
         </section>
     </main>
@@ -774,7 +1127,7 @@
     <!-- Footer -->
     <footer class="page-footer">
         <div class="footer-content">
-            <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Math Calculators</p>
+            <p class="footer-text">&copy; 2026 8gwifi.org - Free Online Math Calculators</p>
             <div class="footer-links">
                 <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
                 <a href="<%=request.getContextPath()%>/physics/" class="footer-link">Physics</a>
@@ -812,15 +1165,14 @@
 
     <!-- FAQ toggle -->
     <script>
-    function toggleFaq(btn) {
-        var item = btn.parentElement;
-        var answer = item.querySelector('.faq-answer');
-        var chevron = btn.querySelector('.faq-chevron');
-        var isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
-        answer.style.maxHeight = isOpen ? '0px' : answer.scrollHeight + 'px';
-        answer.style.padding = isOpen ? '0 1rem' : '0.75rem 1rem';
-        if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
-    }
+    (function(){
+        var btns = document.querySelectorAll('.faq-question');
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        }
+    })();
     </script>
 
     <%@ include file="../modern/components/analytics.jsp" %>

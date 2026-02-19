@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Standard Deviation Calculator Online - Sample &amp; Population SD Free" />
         <jsp:param name="toolDescription" value="Paste your data to instantly calculate standard deviation, variance, and mean with sample or population toggle. Interactive bell curve, step-by-step formulas, and Python export included." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="standard-deviation.jsp" />
         <jsp:param name="toolKeywords" value="standard deviation calculator, sd calculator online, variance calculator, population standard deviation, sample standard deviation, bell curve calculator, normal distribution, standard deviation formula, 68-95-99.7 rule, free statistics calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -270,10 +270,7 @@
                             <p>Paste numbers to compute standard deviation with step-by-step solution.</p>
                         </div>
                     </div>
-                    <div class="tool-result-actions" id="sd-result-actions">
-                        <button type="button" class="tool-action-btn" id="sd-copy-latex-btn">&#128203; Copy LaTeX</button>
-                        <button type="button" class="tool-action-btn" id="sd-share-btn">&#128279; Share</button>
-                    </div>
+                    <div class="tool-result-actions" id="sd-result-actions"></div>
                 </div>
             </div>
 
@@ -312,7 +309,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="standard-deviation.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

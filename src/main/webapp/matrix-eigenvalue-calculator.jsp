@@ -11,7 +11,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Eigenvalue Calculator | λ & Eigenvectors Free" />
     <jsp:param name="toolDescription" value="Free eigenvalue and eigenvector calculator. det(A-λI)=0, power iteration, QR. 2×2 to 4×4. Step-by-step. Print worksheet with practice exercises. Share, download." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-eigenvalue-calculator.jsp" />
     <jsp:param name="toolKeywords" value="eigenvalue calculator, eigenvector calculator, characteristic polynomial, power iteration, spectral decomposition, matrix diagonalization, lambda, det(A-lambda*I), QR algorithm" />
     <jsp:param name="toolFeatures" value="Eigenvalues and eigenvectors,Print worksheet with practice exercises,Share URL and download,Characteristic polynomial,Power iteration,QR algorithm" />
@@ -69,7 +69,7 @@
       <h1 class="tool-page-title">Eigenvalue &amp; Eigenvector Calculator</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Eigenvalues &amp; Eigenvectors</span>
       </nav>
     </div>

@@ -11,7 +11,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Rank Calculator | rank(A) Free Online" />
     <jsp:param name="toolDescription" value="Free matrix rank calculator. rank(A), nullity, pivot positions. Row echelon form, Gaussian elimination. Print worksheet with practice exercises. Share, download. Step-by-step." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-rank-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix rank calculator, rank of matrix, row echelon form, pivot positions, nullity, linear algebra, rank nullity theorem, linearly independent, REF" />
     <jsp:param name="toolFeatures" value="Rank and nullity,Print worksheet with practice exercises,Share URL and download,Row echelon form,Gaussian elimination,Pivot positions" />
@@ -68,7 +68,7 @@
       <h1 class="tool-page-title">Matrix Rank Calculator</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Rank</span>
       </nav>
     </div>

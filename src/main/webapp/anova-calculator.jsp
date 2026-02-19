@@ -116,7 +116,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="ANOVA Calculator Online - One-Way Analysis of Variance Free" />
         <jsp:param name="toolDescription" value="One-way ANOVA calculator. Compare means of multiple groups with F-statistic p-value ANOVA table eta-squared effect size box plots and Python scipy export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="anova-calculator.jsp" />
         <jsp:param name="toolKeywords" value="anova calculator, analysis of variance, one-way anova, f-test, f-statistic, compare group means, sum of squares, mean square, eta squared, post-hoc test" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -315,7 +315,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="anova-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

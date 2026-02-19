@@ -101,7 +101,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Trigonometric Function Calculator Online - Unit Circle & Values" />
         <jsp:param name="toolDescription" value="Free trigonometric function calculator with step-by-step solutions. Evaluate sin, cos, tan, csc, sec, cot instantly. Find quadrants, reference angles, coterminal angles with interactive unit circle." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="trigonometric-function-calculator.jsp" />
         <jsp:param name="toolKeywords" value="trigonometric function calculator, trig calculator online, evaluate sin cos tan, unit circle calculator, quadrant calculator, reference angle calculator, coterminal angles, special angle values, ASTC rule, trig values table" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -487,7 +487,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="trigonometric-function-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="trigonometry"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

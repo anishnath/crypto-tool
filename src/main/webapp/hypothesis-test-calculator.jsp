@@ -120,7 +120,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Hypothesis Test Calculator Online - Z-Test T-Test Proportion Free" />
         <jsp:param name="toolDescription" value="Perform hypothesis tests for means and proportions. Z-test T-test one-proportion and two-proportion tests with p-value critical value decision and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="hypothesis-test-calculator.jsp" />
         <jsp:param name="toolKeywords" value="hypothesis test calculator, z-test calculator, t-test calculator, proportion test, statistical significance, p-value, null hypothesis, alternative hypothesis, two-tailed test, one-tailed test" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -448,7 +448,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="hypothesis-test-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

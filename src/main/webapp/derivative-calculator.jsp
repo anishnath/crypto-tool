@@ -117,7 +117,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Derivative Calculator with Steps | Free Derivative Solver" />
         <jsp:param name="toolDescription" value="Free derivative calculator with step-by-step solutions. Find derivatives using power, product, quotient, and chain rules. Interactive graph, LaTeX export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="derivative-calculator.jsp" />
         <jsp:param name="toolKeywords" value="derivative calculator, derivative calculator with steps, derivative calculator online free, differentiation calculator, derivative solver, how to find derivative, second derivative calculator, implicit differentiation calculator, partial derivative calculator, power rule calculator, product rule calculator, quotient rule calculator, chain rule calculator, nth derivative calculator, find derivative of a function, tangent line calculator, critical points calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -274,7 +274,8 @@
                 <div class="tool-card-body">
                     <div class="tool-form-group">
                         <label class="tool-form-label" for="dc-expr">Function f(x)</label>
-                        <input type="text" class="tool-input tool-input-mono" id="dc-expr" placeholder="e.g. x^3 + 2*x" autocomplete="off" spellcheck="false">
+                        <input type="text" class="tool-input tool-input-mono" id="dc-expr" placeholder="e.g. sin(3*x), x^3+2*x, e^x" autocomplete="off" spellcheck="false">
+                        <span class="tool-form-hint">Both sin3x and sin(3*x) work</span>
                     </div>
                     <div class="tool-form-group">
                         <label class="tool-form-label">Live Preview</label>
@@ -391,7 +392,7 @@
     <div class="tool-mobile-ad-container"><%@ include file="modern/ads/ad-in-content-mid.jsp" %></div>
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="derivative-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="calculus"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
     <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
@@ -515,6 +516,8 @@
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/derivative-calculator-core.js?v=<%=cacheVersion%>"></script>
     <script>
     var __plotlyLoaded=false;
     function loadPlotly(cb){if(__plotlyLoaded){if(cb)cb();return;}var s=document.createElement('script');s.src='https://cdn.plot.ly/plotly-2.27.0.min.js';s.onload=function(){__plotlyLoaded=true;if(cb)cb();};document.head.appendChild(s);}
@@ -525,6 +528,7 @@
     <script>
     (function(){
     'use strict';
+    var normalizeExpr=(typeof DerivativeCalculatorCore!=='undefined'&&DerivativeCalculatorCore.normalizeExpr)?DerivativeCalculatorCore.normalizeExpr:function(e){return(e&&e.trim)?e.trim():'';};
     var exprInput=document.getElementById('dc-expr');
     var previewEl=document.getElementById('dc-preview');
     var varSelect=document.getElementById('dc-var');
@@ -595,10 +599,11 @@
     varSelect.addEventListener('change',updatePreview);
 
     function updatePreview(){
-        var expr=exprInput.value.trim();
+        var raw=exprInput.value.trim();
         var v=varSelect.value;
-        if(!expr){previewEl.innerHTML='<span style="color:var(--text-muted);font-size:0.8125rem;">Type a function above\u2026</span>';return;}
+        if(!raw){previewEl.innerHTML='<span style="color:var(--text-muted);font-size:0.8125rem;">Type a function above\u2026</span>';return;}
         try{
+            var expr=normalizeExpr(raw);
             var latex=exprToLatex(expr);
             var derivLatex;
             if(currentOrder===1){derivLatex='\\frac{d}{d'+v+'}\\left['+latex+'\\right]';}
@@ -620,10 +625,11 @@
     exprInput.addEventListener('keydown',function(e){if(e.key==='Enter')doDifferentiate();});
 
     function doDifferentiate(){
-        var expr=exprInput.value.trim();
+        var raw=exprInput.value.trim();
         var v=varSelect.value;
-        if(!expr){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Please enter a function.',2000,'warning');return;}
+        if(!raw){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Please enter a function.',2000,'warning');return;}
         try{
+            var expr=normalizeExpr(raw);
             var intermediates=[];
             var current=expr;
             for(var i=0;i<currentOrder;i++){
@@ -647,7 +653,7 @@
             resultActions.classList.add('visible');
             if(emptyState)emptyState.style.display='none';
         }catch(err){
-            showError(expr,err.message);
+            showError(raw,err.message);
         }
     }
 

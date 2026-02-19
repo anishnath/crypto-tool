@@ -16,7 +16,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Exponent Calculator with Steps - All 8 Laws of Exponents" />
         <jsp:param name="toolDescription" value="Free exponent calculator with step-by-step solutions for all 8 laws. Product, quotient, power, negative, zero, and fractional exponent rules. Simplify online." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="exponent-calculator.jsp" />
         <jsp:param name="toolKeywords" value="exponent calculator, power calculator, laws of exponents, exponent rules calculator, product rule exponents, quotient rule exponents, power rule exponents, negative exponent calculator, zero exponent, fractional exponents, simplify exponents, exponential expressions calculator, step by step exponents" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -67,7 +67,7 @@
             <h1 class="tool-page-title">Exponent Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Exponent Calculator
             </nav>
         </div>

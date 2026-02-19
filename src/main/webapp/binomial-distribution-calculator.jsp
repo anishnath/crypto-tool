@@ -117,7 +117,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Binomial Distribution Calculator Online - PMF, CDF &amp; Visualization Free" />
         <jsp:param name="toolDescription" value="Calculate binomial probabilities P(X=k), cumulative P(X le k), and range probabilities. Interactive PMF bar chart, step-by-step formulas, and Python scipy export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="binomial-distribution-calculator.jsp" />
         <jsp:param name="toolKeywords" value="binomial distribution calculator, binomial probability calculator, PMF calculator, CDF calculator, binomial coefficient, bernoulli trials, success probability, number of trials, discrete probability, binomial theorem" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -337,7 +337,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="binomial-distribution-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

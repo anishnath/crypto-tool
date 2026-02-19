@@ -101,7 +101,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Trigonometric Equation Solver Online - Step-by-Step Solutions" />
         <jsp:param name="toolDescription" value="Free trig equation solver with step-by-step solutions. Solve trigonometric equations, inequalities and simplify expressions. Find general solutions with periodicity, interactive graphs and Python code." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="trigonometric-equation-solver.jsp" />
         <jsp:param name="toolKeywords" value="trigonometric equation solver, solve trig equations online, trig inequality solver, trig simplifier, general solution trig, solve sin cos tan equations, trig equation calculator, simplify trig expressions" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -452,7 +452,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="trigonometric-equation-solver.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="trigonometry"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

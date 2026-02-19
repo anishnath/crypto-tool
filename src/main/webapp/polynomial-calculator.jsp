@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Polynomial Calculator with Steps - Factor, Roots, Division" />
         <jsp:param name="toolDescription" value="Free polynomial calculator with step-by-step solutions. Add, subtract, multiply, divide, factor, find roots of any degree polynomial." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="polynomial-calculator.jsp" />
         <jsp:param name="toolKeywords" value="polynomial calculator, polynomial calculator with steps, factor polynomial, polynomial long division calculator, find roots of polynomial, polynomial addition calculator, polynomial multiplication, polynomial solver, polynomial graphing calculator, algebra calculator, polynomial division with remainder" />
         <jsp:param name="toolImage" value="logo.png" />

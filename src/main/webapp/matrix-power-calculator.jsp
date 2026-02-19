@@ -11,7 +11,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Power Calculator | A^n Free with Practice Worksheet" />
     <jsp:param name="toolDescription" value="Free matrix power calculator A^n. Repeated squaring, diagonalization. Step-by-step. Print worksheet with practice exercises. Share, download. Markov chains support." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-power-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix power calculator, A^n calculator, matrix exponentiation, matrix to power n, repeated matrix multiplication, diagonalization, matrix powers, square matrix calculator, nilpotent matrix, idempotent matrix, Markov chain calculator" />
     <jsp:param name="toolFeatures" value="Compute A^n powers,Print worksheet with practice exercises,Share URL and download,Repeated squaring,Diagonal optimization,Markov chains" />
@@ -69,7 +69,7 @@
       <h1 class="tool-page-title">Matrix Power Calculator (A<sup>n</sup>)</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Power</span>
       </nav>
     </div>

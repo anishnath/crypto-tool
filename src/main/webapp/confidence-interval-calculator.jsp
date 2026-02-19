@@ -129,7 +129,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Confidence Interval Calculator Online - Mean Proportion Free" />
         <jsp:param name="toolDescription" value="Calculate confidence intervals for means proportions and differences. One-sample and two-sample CIs with t-distribution z-score margin of error interactive chart and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="confidence-interval-calculator.jsp" />
         <jsp:param name="toolKeywords" value="confidence interval calculator, CI calculator, mean confidence interval, proportion confidence interval, 95% confidence interval, margin of error calculator, t-distribution CI, two-sample CI, difference in means, difference in proportions, Welch t-test" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -416,7 +416,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="confidence-interval-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

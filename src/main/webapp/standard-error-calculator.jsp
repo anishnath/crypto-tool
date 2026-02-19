@@ -129,7 +129,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Standard Error Calculator Online - SE Mean Proportion Free" />
         <jsp:param name="toolDescription" value="Calculate standard error for means proportions and differences. SE of mean SE of proportion difference of means and proportions with margin of error confidence intervals and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="standard-error-calculator.jsp" />
         <jsp:param name="toolKeywords" value="standard error calculator, SE calculator, standard error of mean, standard error of proportion, margin of error calculator, confidence interval, sampling error, SE of difference, standard error formula" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -400,7 +400,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="standard-error-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

@@ -16,7 +16,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Percentage Calculator with Steps - All Formulas Free Online" />
         <jsp:param name="toolDescription" value="Free percentage calculator with step-by-step solutions. Find percent of, percent change, increase, decrease, reverse percentage, and discount with tax." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="percentage-calculator.jsp" />
         <jsp:param name="toolKeywords" value="percentage calculator, percent of calculator, percent change calculator, percent increase calculator, percent decrease calculator, discount calculator, reverse percentage, percentage formula, step by step percentage, tax calculator, percentage solver" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -70,7 +70,7 @@
             <h1 class="tool-page-title">Percentage Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Percentage Calculator
             </nav>
         </div>

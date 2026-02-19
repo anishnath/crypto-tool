@@ -15,7 +15,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Addition Calculator | A+B, A-B, cA, aA+bB Free" />
     <jsp:param name="toolDescription" value="Free matrix addition calculator. Add A+B, subtract A-B, scalar multiply cA, linear combinations. Step-by-step solutions. Print worksheet with practice exercises. Share URL, download. 100% client-side." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-addition-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix addition calculator, A+B calculator, matrix subtraction, scalar multiplication cA, linear combination aA+bB, matrix arithmetic, homework help, printable worksheet" />
     <jsp:param name="toolImage" value="logo.png" />
@@ -78,7 +78,7 @@
       <h1 class="tool-page-title">Matrix Addition &amp; Subtraction Calculator</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Addition</span>
       </nav>
     </div>

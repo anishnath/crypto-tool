@@ -16,7 +16,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Taylor & Maclaurin Series Calculator - Free with Steps" />
         <jsp:param name="toolDescription" value="Free Taylor series calculator with step-by-step derivatives. Expand any function as a Maclaurin or Taylor series. Interactive graph shows convergence in real time." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="series-calculator.jsp" />
         <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, maclaurin series formula, series approximation calculator, step by step taylor series, function series expansion online free" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -68,7 +68,7 @@
             <h1 class="tool-page-title">Taylor & Maclaurin Series Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Series Calculator
             </nav>
         </div>
@@ -263,7 +263,7 @@
 <!-- Related Tools -->
 <jsp:include page="modern/components/related-tools.jsp">
     <jsp:param name="currentToolUrl" value="series-calculator.jsp"/>
-    <jsp:param name="keyword" value="mathematics"/>
+    <jsp:param name="keyword" value="calculus"/>
     <jsp:param name="limit" value="6"/>
 </jsp:include>
 

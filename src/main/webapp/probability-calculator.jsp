@@ -119,7 +119,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Probability Calculator Online - Bayes Theorem &amp; Conditional Free" />
         <jsp:param name="toolDescription" value="Calculate basic probability, conditional probability P(A|B), Bayes theorem posterior, and AND/OR/NOT for multiple events. Step-by-step KaTeX formulas and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="probability-calculator.jsp" />
         <jsp:param name="toolKeywords" value="probability calculator, bayes theorem calculator, conditional probability calculator, AND OR probability, complement probability, independent events, mutually exclusive, joint probability, posterior probability, odds calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -346,7 +346,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="probability-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

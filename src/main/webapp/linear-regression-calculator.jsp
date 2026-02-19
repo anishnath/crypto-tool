@@ -76,7 +76,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Linear Regression Calculator Online - Slope R-Squared Prediction Free" />
         <jsp:param name="toolDescription" value="Calculate linear regression equation slope intercept R-squared correlation and make predictions. Interactive scatter plot with regression line residual analysis and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="linear-regression-calculator.jsp" />
         <jsp:param name="toolKeywords" value="linear regression calculator, regression line calculator, r squared calculator, slope intercept calculator, least squares calculator, prediction calculator, scatter plot regression, residual analysis, correlation regression, standard error estimate" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -259,7 +259,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="linear-regression-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

@@ -11,7 +11,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Type Classifier | 20+ Types Free" />
     <jsp:param name="toolDescription" value="Identify 20+ matrix types: symmetric, diagonal, triangular, orthogonal. Automatic property analysis. Print worksheet with practice exercises. Share, download. Step-by-step reasoning." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-type-classifier.jsp" />
     <jsp:param name="toolKeywords" value="matrix type classifier, matrix properties, symmetric matrix, orthogonal matrix, diagonal matrix, triangular matrix, positive definite, nilpotent, idempotent, matrix analysis" />
     <jsp:param name="toolFeatures" value="20+ matrix types,Print worksheet with practice exercises,Share URL and copy matrix,Property analysis,Visual classification,Step-by-step reasoning" />
@@ -270,7 +270,7 @@
       <h1 class="tool-page-title">Matrix Type Classifier</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Type Classifier</span>
       </nav>
     </div>

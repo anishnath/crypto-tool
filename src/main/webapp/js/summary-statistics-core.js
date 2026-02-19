@@ -115,7 +115,7 @@
         var data = C.parseNumbers(els.dataInput.value);
         if (data.length === 0) {
             C.showError(els.resultContent, 'Please enter at least one valid number.');
-            if (els.resultActions) els.resultActions.style.display = 'none';
+            E.hideActionButtons(els.resultActions);
             return;
         }
 
@@ -135,7 +135,12 @@
         updatePreview();
 
         // Show result actions
-        if (els.resultActions) els.resultActions.style.display = 'flex';
+        E.renderActionButtons(els.resultActions, {
+            toolName: 'Summary Statistics',
+            getLatex: function() { return state.stats ? E.buildLatex('Summary Statistics', state.stats) : ''; },
+            getShareState: function() { return { data: els.dataInput ? els.dataInput.value : '' }; },
+            resultEl: '#stat-result-content'
+        });
 
         // Reset compiler iframe for fresh load on tab switch
         if (els.compilerIframe) els.compilerIframe.removeAttribute('src');
@@ -368,30 +373,13 @@
         state.pendingGraph = null;
 
         C.showEmpty(els.resultContent, '\uD83D\uDCCA', 'Enter data and click Calculate', 'Paste numbers separated by commas, spaces, or newlines for instant descriptive statistics.');
-        if (els.resultActions) els.resultActions.style.display = 'none';
+        E.hideActionButtons(els.resultActions);
         if (els.graphContainer) els.graphContainer.innerHTML = '<div class="tool-empty-state"><div style="font-size:2rem;opacity:0.5;">&#x1F4C8;</div><h3>No graph yet</h3><p>Calculate statistics to see interactive charts.</p></div>';
         updatePreview();
     }
 
-    /* ===== Action Buttons ===== */
-
-    function initActions() {
-        var copyLatexBtn = document.getElementById('stat-copy-latex-btn');
-        if (copyLatexBtn) {
-            copyLatexBtn.addEventListener('click', function() {
-                if (state.stats) E.copyLatex('Summary Statistics', state.stats);
-            });
-        }
-
-        var shareBtn = document.getElementById('stat-share-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', function() {
-                if (els.dataInput) {
-                    E.copyShareUrl({ data: els.dataInput.value });
-                }
-            });
-        }
-    }
+    /* ===== Action Buttons (handled by E.renderActionButtons) ===== */
+    function initActions() {}
 
     /* ===== Share URL Restore ===== */
 

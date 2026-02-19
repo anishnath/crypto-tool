@@ -16,7 +16,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Quadratic Equation Solver & Formula Calculator - Free Steps" />
         <jsp:param name="toolDescription" value="Solve any quadratic equation step by step using the quadratic formula, completing the square, or factoring. Free calculator with interactive parabola graph." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="quadratic-solver.jsp" />
         <jsp:param name="toolKeywords" value="quadratic equation solver, quadratic formula calculator, quadratic equation calculator, solve quadratic equation step by step, completing the square calculator, factoring quadratics calculator, vertex form calculator, quadratic inequality solver, discriminant calculator, parabola graph calculator, complex roots calculator, quadratic formula with steps free" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -68,7 +68,7 @@
             <h1 class="tool-page-title">Quadratic Equation Solver</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Quadratic Equation Solver
             </nav>
         </div>

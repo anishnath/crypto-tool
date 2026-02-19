@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Mean Median Mode Calculator Online - Instant Results Free" />
         <jsp:param name="toolDescription" value="Paste your data to instantly calculate mean, median, and mode with outlier detection, sorted values, interactive histogram, box plot, and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="mean-median-mode.jsp" />
         <jsp:param name="toolKeywords" value="mean median mode calculator, average calculator online, central tendency calculator, outlier detection, IQR calculator, histogram maker, descriptive statistics, mode finder, median calculator, free statistics tool" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -261,10 +261,7 @@
                             <p>Paste numbers to find mean, median, mode with step-by-step solution.</p>
                         </div>
                     </div>
-                    <div class="tool-result-actions" id="mmm-result-actions">
-                        <button type="button" class="tool-action-btn" id="mmm-copy-latex-btn">&#128203; Copy LaTeX</button>
-                        <button type="button" class="tool-action-btn" id="mmm-share-btn">&#128279; Share</button>
-                    </div>
+                    <div class="tool-result-actions" id="mmm-result-actions"></div>
                 </div>
             </div>
 
@@ -303,7 +300,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="mean-median-mode.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

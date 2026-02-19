@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Variance Calculator Online - Sample &amp; Population Variance Free" />
         <jsp:param name="toolDescription" value="Paste your data to instantly calculate sample and population variance with step-by-step breakdown, deviation table, interactive chart, and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="variance-calculator.jsp" />
         <jsp:param name="toolKeywords" value="variance calculator, sample variance, population variance, variance formula, standard deviation calculator, coefficient of variation, sum of squares, Bessel correction, deviation table, free statistics calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -269,10 +269,7 @@
                             <p>Paste numbers to compute variance with step-by-step breakdown.</p>
                         </div>
                     </div>
-                    <div class="tool-result-actions" id="var-result-actions">
-                        <button type="button" class="tool-action-btn" id="var-copy-latex-btn">&#128203; Copy LaTeX</button>
-                        <button type="button" class="tool-action-btn" id="var-share-btn">&#128279; Share</button>
-                    </div>
+                    <div class="tool-result-actions" id="var-result-actions"></div>
                 </div>
             </div>
 
@@ -309,7 +306,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="variance-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

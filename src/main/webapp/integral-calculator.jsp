@@ -151,7 +151,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Integral Calculator with Steps - Solve Integrals Step by Step Free" />
         <jsp:param name="toolDescription" value="Free online integral calculator with detailed step-by-step solutions. Solve indefinite and definite integrals instantly. Shows full working with AI-powered explanations, interactive graph with shaded area, LaTeX output, and PDF export. Supports polynomials, trigonometric, exponential, logarithmic, rational, and hyperbolic functions. No signup required." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="integral-calculator.jsp" />
         <jsp:param name="toolKeywords" value="integral calculator with steps, integration calculator step by step, antiderivative calculator, definite integral calculator, indefinite integral calculator, symbolic integration, solve integrals online free, calculus calculator with steps, integral solver, how to integrate, integration by parts calculator, u substitution calculator, trig integral calculator, download integral solution pdf" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -920,7 +920,7 @@
     <!-- Related Tools -->
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="integral-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="calculus"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

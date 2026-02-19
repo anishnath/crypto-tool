@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Summary Statistics Calculator Online - Instant Results Free" />
         <jsp:param name="toolDescription" value="Paste your data for instant mean, median, mode, standard deviation, variance, quartiles, skewness and kurtosis. Interactive histogram and box plot included." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="summary-statistics-calculator.jsp" />
         <jsp:param name="toolKeywords" value="summary statistics calculator, descriptive statistics calculator, mean median mode calculator, standard deviation calculator online, variance calculator, quartiles calculator, IQR calculator, skewness kurtosis, data analysis tool, free statistics calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -280,10 +280,7 @@
                             <p>Paste numbers separated by commas, spaces, or newlines for instant descriptive statistics.</p>
                         </div>
                     </div>
-                    <div class="tool-result-actions" id="stat-result-actions">
-                        <button type="button" class="tool-action-btn" id="stat-copy-latex-btn">&#128203; Copy LaTeX</button>
-                        <button type="button" class="tool-action-btn" id="stat-share-btn">&#128279; Share</button>
-                    </div>
+                    <div class="tool-result-actions" id="stat-result-actions"></div>
                 </div>
             </div>
 
@@ -322,7 +319,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="summary-statistics-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

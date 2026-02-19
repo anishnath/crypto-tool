@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Percentile Calculator Online - Rank, Quartiles &amp; Box Plot Free" />
         <jsp:param name="toolDescription" value="Find percentile rank of any value, calculate value at any percentile, or get full quartile summary with IQR, outlier detection, and interactive box plot." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="percentile-calculator.jsp" />
         <jsp:param name="toolKeywords" value="percentile calculator, percentile rank calculator, quartile calculator, IQR calculator, box plot generator, five number summary, interquartile range, outlier detection, percentile formula, free statistics calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -314,7 +314,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="percentile-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

@@ -16,7 +16,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="System of Equations Calculator with Steps" />
         <jsp:param name="toolDescription" value="Free system of equations solver with step-by-step solutions. Solve linear systems using Gaussian elimination, Gauss-Jordan RREF, LU decomposition, Cramer's rule, and matrix inverse. Shows every row operation. Interactive 2D/3D graphs, Python compiler, LaTeX export. Solve up to 10x10 matrices instantly in your browser." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="linear-equations-solver.jsp" />
         <jsp:param name="toolKeywords" value="system of equations calculator, system of equations solver, linear equations solver, gaussian elimination calculator, gauss jordan elimination calculator, RREF calculator, matrix equation solver, solve system of equations step by step, Ax=b solver, cramer's rule calculator, LU decomposition calculator, augmented matrix calculator, least squares calculator, simultaneous equations solver, matrix solver online free" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -68,7 +68,7 @@
             <h1 class="tool-page-title">System of Equations Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 System of Equations Solver
             </nav>
         </div>

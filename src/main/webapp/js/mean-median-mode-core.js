@@ -103,7 +103,7 @@
         var data = C.parseNumbers(els.dataInput.value);
         if (data.length === 0) {
             C.showError(els.resultContent, 'Please enter at least one valid number.');
-            if (els.resultActions) els.resultActions.style.display = 'none';
+            E.hideActionButtons(els.resultActions);
             return;
         }
 
@@ -116,7 +116,12 @@
         prepareGraph();
         updatePreview();
 
-        if (els.resultActions) els.resultActions.style.display = 'flex';
+        E.renderActionButtons(els.resultActions, {
+            toolName: 'Mean Median Mode',
+            getLatex: function() { return state.stats ? E.buildLatex('Mean, Median, Mode', state.stats) : ''; },
+            getShareState: function() { return { data: els.dataInput ? els.dataInput.value : '' }; },
+            resultEl: '#mmm-result-content'
+        });
         if (els.compilerIframe) els.compilerIframe.removeAttribute('src');
     }
 
@@ -403,29 +408,13 @@
         state.quartiles = null;
         state.pendingGraph = null;
         C.showEmpty(els.resultContent, '\uD83D\uDCCA', 'Enter data and click Calculate', 'Paste numbers to find mean, median, mode with step-by-step solution.');
-        if (els.resultActions) els.resultActions.style.display = 'none';
+        E.hideActionButtons(els.resultActions);
         if (els.graphContent) els.graphContent.innerHTML = '<div class="tool-empty-state"><div style="font-size:2rem;opacity:0.5;">&#x1F4C8;</div><h3>No graph yet</h3><p>Calculate to see histogram and box plot.</p></div>';
         updatePreview();
     }
 
-    /* ===== Actions ===== */
-
-    function initActions() {
-        var copyLatexBtn = document.getElementById('mmm-copy-latex-btn');
-        if (copyLatexBtn) {
-            copyLatexBtn.addEventListener('click', function() {
-                if (state.stats) E.copyLatex('Mean, Median, Mode', state.stats);
-            });
-        }
-        var shareBtn = document.getElementById('mmm-share-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', function() {
-                if (els.dataInput) {
-                    E.copyShareUrl({ data: els.dataInput.value });
-                }
-            });
-        }
-    }
+    /* ===== Actions (handled by E.renderActionButtons) ===== */
+    function initActions() {}
 
     /* ===== Init ===== */
 

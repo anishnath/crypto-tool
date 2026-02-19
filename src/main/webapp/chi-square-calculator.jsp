@@ -127,7 +127,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Chi-Square Calculator Online - Independence Goodness of Fit Free" />
         <jsp:param name="toolDescription" value="Perform chi-square test of independence and goodness of fit. Compute chi-square statistic expected frequencies p-value degrees of freedom critical value Cramers V with distribution chart and Python scipy export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="chi-square-calculator.jsp" />
         <jsp:param name="toolKeywords" value="chi-square calculator, chi square test, test of independence, goodness of fit, contingency table calculator, chi-square statistic, expected frequency, cramers v, categorical data analysis, chi-square distribution" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -356,7 +356,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="chi-square-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

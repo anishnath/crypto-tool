@@ -15,7 +15,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Multiplication Calculator | A×B Free Online" />
     <jsp:param name="toolDescription" value="Free matrix multiplication calculator. Multiply A×B with dimension checker. Step-by-step dot product. Print worksheet with practice exercises. Share, download. Instant results." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-multiplication-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix multiplication calculator, A×B calculator, matrix multiply, matrix product, linear algebra calculator, step by step matrix multiplication, matrix dimensions, compatible matrices, dot product, matrix operations" />
     <jsp:param name="toolImage" value="logo.png" />
@@ -76,7 +76,7 @@
       <h1 class="tool-page-title">Matrix Multiplication Calculator (A × B)</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Multiplication</span>
       </nav>
     </div>

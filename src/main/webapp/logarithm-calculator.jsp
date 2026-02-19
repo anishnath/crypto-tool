@@ -15,7 +15,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Logarithm Calculator with Steps - Solve Log Equations Free" />
         <jsp:param name="toolDescription" value="Free logarithm calculator with step-by-step solutions. Solve, simplify, expand, and condense log equations. Supports ln, log base 2, log base 10, any base. Interactive graph, LaTeX export, Python compiler. No signup." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="logarithm-calculator.jsp" />
         <jsp:param name="toolKeywords" value="logarithm calculator, logarithm calculator with steps, log equation solver, solve logarithmic equations, simplify logarithms, expand logarithms, condense logarithms, log calculator, ln calculator, natural log calculator, log base 2 calculator, log base 10 calculator, logarithm rules, change of base formula, log solver step by step free" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -133,7 +133,7 @@
             <h1 class="tool-page-title">Logarithm Calculator with Steps</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Logarithm Calculator
             </nav>
         </div>

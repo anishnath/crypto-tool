@@ -101,7 +101,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Trigonometric Identity Calculator - Prove & Verify Step by Step" />
         <jsp:param name="toolDescription" value="Free trig identity calculator with AI-powered step-by-step proofs. Browse all Pythagorean, double angle, sum-to-product identities. Verify or disprove any trigonometric identity online." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="trigonometric-identity-calculator.jsp" />
         <jsp:param name="toolKeywords" value="trigonometric identity calculator, prove trig identity, trig identity solver, Pythagorean identity, double angle formula, half angle formula, sum to product formula, product to sum, verify trig identity, trig identity list" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -450,7 +450,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="trigonometric-identity-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="trigonometry"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

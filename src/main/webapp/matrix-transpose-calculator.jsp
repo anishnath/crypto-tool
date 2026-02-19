@@ -15,7 +15,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Transpose Calculator | A^T Free with Practice Worksheet" />
     <jsp:param name="toolDescription" value="Free matrix transpose calculator. Compute A^T, check symmetric and skew-symmetric. Step-by-step solutions. Print practice worksheet with exercises. Share and download. Instant results." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-transpose-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix transpose calculator, A^T calculator, transpose matrix, symmetric matrix checker, skew-symmetric matrix, transpose properties, matrix transposition, (A^T)^T = A, orthogonal matrix, linear algebra calculator" />
     <jsp:param name="toolImage" value="logo.png" />
@@ -76,7 +76,7 @@
       <h1 class="tool-page-title">Matrix Transpose Calculator (A^T)</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Transpose</span>
       </nav>
     </div>

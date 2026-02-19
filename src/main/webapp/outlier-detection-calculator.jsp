@@ -123,7 +123,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Outlier Detection Calculator Online - IQR Z-Score MAD Free" />
         <jsp:param name="toolDescription" value="Detect outliers using IQR method Z-score and Modified Z-score MAD. Compare all methods identify consensus outliers with interactive scatter plot and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="outlier-detection-calculator.jsp" />
         <jsp:param name="toolKeywords" value="outlier detection calculator, outlier calculator, IQR method, z-score outliers, modified z-score, MAD, Tukey fences, box plot outliers, anomaly detection, outlier analysis" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -345,7 +345,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="outlier-detection-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

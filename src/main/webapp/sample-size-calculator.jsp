@@ -125,7 +125,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Sample Size Calculator Online - Survey A/B Test Research Free" />
         <jsp:param name="toolDescription" value="Calculate required sample size for surveys proportions means A/B tests and comparing groups. Confidence level margin of error power analysis finite population correction with interactive chart and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="sample-size-calculator.jsp" />
         <jsp:param name="toolKeywords" value="sample size calculator, survey sample size, a/b test sample size, statistical power, margin of error, confidence level, research sample size, sample size determination, finite population correction, power analysis calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -385,7 +385,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="sample-size-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

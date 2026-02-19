@@ -128,7 +128,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Effect Size Calculator Online - Cohen d Pearson r Eta Squared Free" />
         <jsp:param name="toolDescription" value="Calculate effect sizes including Cohen d Pearson r Eta-squared Odds Ratio and Risk Ratio with confidence intervals interpretation guidelines and visualization." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="effect-size-calculator.jsp" />
         <jsp:param name="toolKeywords" value="effect size calculator, cohen d calculator, pearson r effect size, eta squared calculator, odds ratio calculator, risk ratio calculator, hedges g, statistical effect size, meta-analysis, practical significance" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -446,7 +446,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="effect-size-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

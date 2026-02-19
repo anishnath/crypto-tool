@@ -1149,7 +1149,7 @@
       "name": "ANOVA Calculator",
       "url": "anova-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "anova calculator mathematics",
+      "keywords": "anova calculator statistics f-test analysis variance groups mathematics",
       "description": "ANOVA Calculator - Free online mathematics tool"
     },
     {
@@ -1177,14 +1177,14 @@
       "name": "Binomial Distribution Calculator",
       "url": "binomial-distribution-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "binomial distribution calculator mathematics",
+      "keywords": "binomial distribution calculator statistics probability trials success mathematics",
       "description": "Binomial Distribution Calculator - Free online mathematics tool"
     },
     {
       "name": "Chi-Square Calculator",
       "url": "chi-square-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "chi square calculator mathematics",
+      "keywords": "chi square calculator statistics goodness fit independence test mathematics",
       "description": "Chi-Square Calculator - Free online mathematics tool"
     },
     {
@@ -1198,21 +1198,21 @@
       "name": "Confidence Interval Calculator",
       "url": "confidence-interval-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "confidence interval calculator mathematics",
+      "keywords": "confidence interval calculator statistics margin error proportion mean mathematics",
       "description": "Confidence Interval Calculator - Free online mathematics tool"
     },
     {
       "name": "Correlation Calculator",
       "url": "correlation-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "correlation calculator mathematics",
+      "keywords": "correlation calculator statistics pearson spearman scatter plot r-squared mathematics",
       "description": "Correlation Calculator - Free online mathematics tool"
     },
     {
       "name": "Derivative Calculator",
       "url": "derivative-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "derivative calculator mathematics",
+      "keywords": "derivative calculator calculus differentiation chain rule product rule power rule mathematics",
       "description": "Derivative Calculator - Free online mathematics tool"
     },
     {
@@ -1226,7 +1226,7 @@
       "name": "Effect Size Calculator",
       "url": "effect-size-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "effect size calculator mathematics",
+      "keywords": "effect size calculator statistics cohens d eta squared cramers v odds ratio mathematics",
       "description": "Effect Size Calculator - Free online mathematics tool"
     },
     {
@@ -1282,7 +1282,7 @@
       "name": "Hypothesis Test Calculator",
       "url": "hypothesis-test-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "hypothesis test calculator mathematics",
+      "keywords": "hypothesis test calculator statistics p-value z-test t-test significance mathematics",
       "description": "Hypothesis Test Calculator - Free online mathematics tool"
     },
     {
@@ -1296,7 +1296,7 @@
       "name": "Integral Calculator (Definite & Indefinite)",
       "url": "integral-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "integral calculator definite indefinite mathematics",
+      "keywords": "integral calculator calculus definite indefinite substitution integration parts mathematics",
       "description": "Integral Calculator (Definite & Indefinite) - Free online mathematics tool"
     },
     {
@@ -1338,14 +1338,14 @@
       "name": "Limit Calculator",
       "url": "limit-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "limit calculator mathematics",
+      "keywords": "limit calculator calculus lhopital indeterminate infinity squeeze theorem mathematics",
       "description": "Limit Calculator - Free online mathematics tool"
     },
     {
       "name": "Linear Regression Calculator",
       "url": "linear-regression-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "linear regression calculator mathematics",
+      "keywords": "linear regression calculator statistics least squares slope intercept r-squared residuals mathematics",
       "description": "Linear Regression Calculator - Free online mathematics tool"
     },
     {
@@ -1422,7 +1422,7 @@
       "name": "Mean, Median, Mode Finder",
       "url": "mean-median-mode.jsp",
       "category": "Mathematics",
-      "keywords": "mean median mode finder mathematics",
+      "keywords": "mean median mode finder statistics central tendency descriptive mathematics",
       "description": "Mean, Median, Mode Finder - Free online mathematics tool"
     },
     {
@@ -1443,22 +1443,29 @@
       "name": "Normal Distribution Calculator",
       "url": "normal-distribution-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "normal distribution calculator mathematics",
+      "keywords": "normal distribution calculator statistics bell curve pdf cdf probability z-score mathematics",
       "description": "Normal Distribution Calculator - Free online mathematics tool"
     },
     {
       "name": "Outlier Detection Calculator",
       "url": "outlier-detection-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "outlier detection calculator mathematics",
+      "keywords": "outlier detection calculator statistics iqr z-score grubbs test data cleaning mathematics",
       "description": "Outlier Detection Calculator - Free online mathematics tool"
     },
     {
       "name": "P-Value Calculator",
       "url": "p-value-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "value calculator mathematics",
+      "keywords": "p-value calculator statistics significance test z t chi-square f-distribution mathematics",
       "description": "P-Value Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Probability Calculator",
+      "url": "probability-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "probability calculator statistics combinations permutations bayes theorem conditional mathematics",
+      "description": "Probability Calculator - Free online statistics tool"
     },
     {
       "name": "Pascal's Triangle Explorer",
@@ -1478,7 +1485,7 @@
       "name": "Percentile Calculator",
       "url": "percentile-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "percentile calculator mathematics",
+      "keywords": "percentile calculator statistics percentile rank quartiles data analysis mathematics",
       "description": "Percentile Calculator - Free online mathematics tool"
     },
     {
@@ -1597,7 +1604,7 @@
       "name": "Sample Size Calculator",
       "url": "sample-size-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "sample size calculator mathematics",
+      "keywords": "sample size calculator statistics margin error confidence level survey power mathematics",
       "description": "Sample Size Calculator - Free online mathematics tool"
     },
     {
@@ -1618,8 +1625,15 @@
       "name": "Standard Deviation Calculator",
       "url": "standard-deviation.jsp",
       "category": "Mathematics",
-      "keywords": "standard deviation calculator mathematics",
+      "keywords": "standard deviation calculator statistics variance dispersion sample population mathematics",
       "description": "Standard Deviation Calculator - Free online mathematics tool"
+    },
+    {
+      "name": "Standard Error Calculator",
+      "url": "standard-error-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "standard error calculator statistics sem mean proportion difference sampling distribution mathematics",
+      "description": "Standard Error Calculator - Free online statistics tool"
     },
     {
       "name": "Sudoku Solver",
@@ -1632,7 +1646,7 @@
       "name": "Summary Statistics Calculator (All-in-One)",
       "url": "summary-statistics-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "summary statistics calculator all one mathematics",
+      "keywords": "summary statistics calculator statistics descriptive mean median mode sd quartiles histogram mathematics",
       "description": "Summary Statistics Calculator (All-in-One) - Free online mathematics tool"
     },
     {
@@ -1646,14 +1660,14 @@
       "name": "T-Test Calculator",
       "url": "t-test-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "test calculator mathematics",
+      "keywords": "t-test calculator statistics hypothesis means comparison paired two-sample mathematics",
       "description": "T-Test Calculator - Free online mathematics tool"
     },
     {
       "name": "Taylor/Maclaurin Series Calculator",
       "url": "series-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "taylor maclaurin series calculator mathematics",
+      "keywords": "taylor maclaurin series calculator calculus convergence expansion power series mathematics",
       "description": "Taylor/Maclaurin Series Calculator - Free online mathematics tool"
     },
     {
@@ -1709,14 +1723,14 @@
       "name": "Variance Calculator",
       "url": "variance-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "variance calculator mathematics",
+      "keywords": "variance calculator statistics dispersion sample population deviation squared mathematics",
       "description": "Variance Calculator - Free online mathematics tool"
     },
     {
       "name": "Z-Score Calculator",
       "url": "z-score-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "score calculator mathematics",
+      "keywords": "z-score calculator statistics standard score normal distribution probability table mathematics",
       "description": "Z-Score Calculator - Free online mathematics tool"
     },
     {

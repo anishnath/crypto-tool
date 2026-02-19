@@ -15,7 +15,7 @@
   <jsp:include page="modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Matrix Inverse Calculator | A⁻¹ Free Gauss-Jordan" />
     <jsp:param name="toolDescription" value="Free matrix inverse calculator A⁻¹. Gauss-Jordan elimination, step-by-step. [A|I]→[I|A⁻¹]. Print worksheet with practice exercises. Share, download. 2×2 to 6×6." />
-    <jsp:param name="toolCategory" value="Mathematics" />
+    <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-inverse-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix inverse calculator, inverse matrix, A inverse, Gauss-Jordan elimination, adjugate matrix, matrix inversion, linear algebra calculator, invertible matrix, A^-1" />
     <jsp:param name="toolImage" value="logo.png" />
@@ -72,7 +72,7 @@
       <h1 class="tool-page-title">Matrix Inverse Calculator</h1>
       <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
         <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-        <a href="<%=request.getContextPath()%>/index.jsp#mathematics">Mathematics</a> /
+        <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
         <span>Matrix Inverse</span>
       </nav>
     </div>

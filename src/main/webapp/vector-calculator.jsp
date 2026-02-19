@@ -118,7 +118,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Vector Calculator - Dot Product, Cross Product & Magnitude" />
         <jsp:param name="toolDescription" value="Free vector calculator with step-by-step solutions. Dot product, cross product, magnitude, unit vector, projection & angle for 2D and 3D vectors." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="vector-calculator.jsp" />
         <jsp:param name="toolKeywords" value="vector calculator, dot product calculator, cross product calculator, vector magnitude, angle between vectors, vector projection, unit vector calculator, vector addition, scalar multiplication, linear algebra calculator, 3D vector calculator" />
         <jsp:param name="toolImage" value="logo.png" />

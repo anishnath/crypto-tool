@@ -141,7 +141,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Sig Fig Calculator - Count, Round & Convert" />
         <jsp:param name="toolDescription" value="Free sig fig calculator with step-by-step solutions. Count significant figures, round to N digits, perform arithmetic with proper rules, and convert to scientific notation." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="significant-figures-calculator.jsp" />
         <jsp:param name="toolKeywords" value="significant figures calculator, sig figs calculator, significant digits, sig fig counter, scientific notation, chemistry calculator, rounding sig figs, sig fig rules" />
         <jsp:param name="toolImage" value="logo.png" />

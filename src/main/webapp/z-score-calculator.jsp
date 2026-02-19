@@ -121,7 +121,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Z-Score Calculator Online - Percentile &amp; Probability Free" />
         <jsp:param name="toolDescription" value="Convert raw scores to Z-scores, find probabilities and percentiles on the standard normal distribution. Interactive normal curve, step-by-step formulas, and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="z-score-calculator.jsp" />
         <jsp:param name="toolKeywords" value="z-score calculator, standard score calculator, z score to percentile, normal distribution calculator, z-table calculator, standard normal, percentile to z-score, probability calculator, standardization, inverse normal" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -356,7 +356,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="z-score-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

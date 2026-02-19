@@ -129,7 +129,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="P-Value Calculator Online - Z T Chi-Square F Test Free" />
         <jsp:param name="toolDescription" value="Calculate p-values from Z-score t-statistic chi-square and F-test statistics. One-tailed and two-tailed tests with distribution visualization and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="p-value-calculator.jsp" />
         <jsp:param name="toolKeywords" value="p-value calculator, p value, statistical significance, z-score to p-value, t-test p-value, chi-square p-value, f-test p-value, hypothesis testing, one-tailed test, two-tailed test" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -368,7 +368,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="p-value-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

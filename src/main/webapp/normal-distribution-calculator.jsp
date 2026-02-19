@@ -121,7 +121,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Normal Distribution Calculator Online - Probability &amp; Percentile Free" />
         <jsp:param name="toolDescription" value="Calculate probabilities, Z-scores, and percentiles for any normal distribution with custom mean and standard deviation. Interactive bell curve, step-by-step formulas, and Python export." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="normal-distribution-calculator.jsp" />
         <jsp:param name="toolKeywords" value="normal distribution calculator, gaussian distribution calculator, bell curve calculator, normal probability calculator, z-score calculator, percentile calculator, standard deviation, inverse normal, range probability, CDF calculator" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -346,7 +346,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="normal-distribution-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="statistics"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 

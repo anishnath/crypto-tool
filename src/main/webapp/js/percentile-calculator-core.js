@@ -176,17 +176,20 @@
         }
 
         prepareGraph();
-        els.resultActions.innerHTML =
-            '<button class="stat-action-btn" onclick="document.querySelector(\'[data-tab=pct-graph-panel]\').click()" title="View box plot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></button>' +
-            '<button class="stat-action-btn" onclick="StatsExport.copyLatex(\'Percentile\', window._pctLatexStats)" title="Copy LaTeX"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>' +
-            '<button class="stat-action-btn" onclick="StatsExport.copyShareUrl({d:document.getElementById(\'pct-data-input\').value,m:\'' + state.mode + '\',t:document.getElementById(\'pct-target-input\')?.value||\'\'} )" title="Share URL"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>';
-
-        // Store latex stats for copy
-        window._pctLatexStats = {
-            n: state.stats.n, mean: state.stats.mean, median: state.stats.median,
-            q1: state.quartiles.q1, q3: state.quartiles.q3, iqr: state.quartiles.iqr,
-            min: state.quartiles.min, max: state.quartiles.max
-        };
+        E.renderActionButtons(els.resultActions, {
+            toolName: 'Percentile Calculator',
+            getLatex: function() {
+                return E.buildLatex('Percentile', {
+                    n: state.stats.n, mean: state.stats.mean, median: state.stats.median,
+                    q1: state.quartiles.q1, q3: state.quartiles.q3, iqr: state.quartiles.iqr,
+                    min: state.quartiles.min, max: state.quartiles.max
+                });
+            },
+            getShareState: function() {
+                return { d: els.dataInput.value, m: state.mode, t: els.targetInput ? els.targetInput.value : '' };
+            },
+            resultEl: '#pct-result-content'
+        });
 
         // Reset compiler — reload if Python tab is active, otherwise just clear
         var compilerTab = document.querySelector('[data-tab="pct-compiler-panel"]');
@@ -507,7 +510,7 @@
         els.targetInput.value = '';
         updatePreview();
         C.showEmpty(els.resultContent, '\u{1F4CA}', 'No Data Yet', 'Enter numbers and click Calculate');
-        els.resultActions.innerHTML = '';
+        E.hideActionButtons(els.resultActions);
         if (els.compilerIframe.src) els.compilerIframe.src = '';
         var gc = document.getElementById('pct-graph-content');
         if (gc && gc.data) Plotly.purge(gc);

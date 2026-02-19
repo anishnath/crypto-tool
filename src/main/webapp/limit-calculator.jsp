@@ -117,7 +117,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Limit Calculator with Steps | Free Online Limit Solver" />
         <jsp:param name="toolDescription" value="Free limit calculator with step-by-step solutions. Solve one-sided, two-sided, and infinity limits using L'Hopital's rule, factoring, and squeeze theorem." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="limit-calculator.jsp" />
         <jsp:param name="toolKeywords" value="limit calculator, limit calculator with steps, limit solver, limit calculator online free, calculus limit calculator, l'hopital rule calculator, evaluate limit calculator, one sided limit calculator, two sided limit calculator, limit at infinity calculator, indeterminate form calculator, find limit calculator, limit finder, squeeze theorem calculator, how to find limit of a function, left hand limit calculator, right hand limit calculator, 0/0 limit" />
         <jsp:param name="toolImage" value="logo.png" />
@@ -393,7 +393,7 @@
     <div class="tool-mobile-ad-container"><%@ include file="modern/ads/ad-in-content-mid.jsp" %></div>
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="limit-calculator.jsp"/>
-        <jsp:param name="keyword" value="mathematics"/>
+        <jsp:param name="keyword" value="calculus"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
     <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
