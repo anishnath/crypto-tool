@@ -8,13 +8,26 @@
 function normalizeExpr(expr) {
     if (!expr || typeof expr !== 'string') return expr;
     var s = expr.trim();
-    s = s.replace(/(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\s*(\d+)\s*([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, '$1($2*$3)');
-    s = s.replace(/(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\s*([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, '$1($2)');
+    var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|log|ln|sqrt';
+    /* Lookahead: operator, close-paren, whitespace, comma, end-of-string,
+       OR the start of another known function name (handles sinxcosx). */
+    var LA = '(?=[+\\-*/^)\\s,]|$|(?:' + FUNS + '))';
+    /* --- trig / hyp / log / sqrt shorthand without parens --- */
+    /* sin2x → sin(2*x), ln3t → ln(3*t), sqrt2x → sqrt(2*x) */
+    s = s.replace(new RegExp('(' + FUNS + ')\\s*(\\d+)\\s*([a-zA-Z])' + LA, 'g'), '$1($2*$3)');
+    /* sinx → sin(x), lnx → ln(x), sqrtx → sqrt(x) */
+    s = s.replace(new RegExp('(' + FUNS + ')\\s*([a-zA-Z])' + LA, 'g'), '$1($2)');
+    /* e^3t → e^(3*t) */
     s = s.replace(/e\^(\d+)([a-zA-Z])(?=[+\-*\/^)\s,]|$)/g, 'e^($1*$2)');
     /* xe^x without * is parsed by nerdamer as (xe)^x; normalize to x*e^x */
     s = s.replace(/([a-zA-Z])e\^/g, '$1*e^');
-    /* xsin(x), xcos(x), xlog(x) etc without * are parsed as variables; insert * (skip a to preserve asin, acos, atan) */
-    s = s.replace(/([xtuv])(sin|cos|tan|sec|csc|cot|log|ln)\(/g, '$1*$2(');
+    /* xsin(x), ycos(x), xsinh(x), xlog(x) etc — insert * before known functions.
+       Skip 'a' prefix to preserve asin, acos, atan. */
+    s = s.replace(new RegExp('([b-zB-Z])(' + FUNS + ')\\(', 'g'), '$1*$2(');
+    /* Also handle digit prefix: 2sqrt(x) → 2*sqrt(x), 2sin(x) → 2*sin(x) */
+    s = s.replace(new RegExp('(\\d)(' + FUNS + ')\\(', 'g'), '$1*$2(');
+    /* ln → log (nerdamer uses log for natural logarithm) */
+    s = s.replace(/\bln\(/g, 'log(');
     return s;
 }
 
