@@ -7,18 +7,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index,follow">
-    <meta name="resource-type" content="document">
-    <meta name="language" content="en">
-    <meta name="author" content="Anish Nath">
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Graphing Calculator Online - Plot Functions Free" />
-        <jsp:param name="toolDescription" value="Plot Cartesian, parametric, polar, and implicit equations instantly. Trace slopes, find intersections, shade integrals, animate sliders. Free, no signup." />
+        <jsp:param name="toolName" value="Free Online Graphing Calculator - Plot Equations & Functions" />
+        <jsp:param name="toolDescription" value="Free online graphing calculator. Plot multiple functions, equations, and inequalities with interactive pan/zoom. Graph y=f(x), parabolas, trig, polar, and parametric equations. No download needed." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="graphing-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="graphing calculator, online graphing calculator, free graphing calculator, plot functions online, graph equations, desmos alternative, equation plotter, function grapher, calculus calculator, derivative calculator, integral calculator, polar graph, parametric equations, implicit functions" />
+        <jsp:param name="toolKeywords" value="graphing calculator, online graphing calculator, graphing calculator online free, function plotter, equation grapher, graph equations online, plot function online, math graphing tool, interactive graph plotter, free graphing calculator no download, graph y=f(x), graph parabola calculator, plot multiple functions, desmos alternative, graph inequalities online, polar graph, parametric equations, implicit functions, calculus calculator" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Cartesian function plotting y=f(x),Parametric equations x(t) y(t),Polar coordinates r=f(theta),Implicit functions like x^2+y^2=25,Piecewise function support,Statistical distribution plotting,Derivative visualization and integration shading,Parameter sliders with animation,Trace mode with slope calculation,Equation solver and intersection finder,Export graphs as PNG or SVG,Save share and load graph sets,35+ built-in presets for math physics and ML,Text-to-graph converter,Regression analysis" />
         <jsp:param name="hasSteps" value="true" />
