@@ -122,6 +122,9 @@
             <a class="dropdown-item" href="limit-calculator.jsp">
               <i class="fas fa-arrows-alt-h text-warning"></i> Limit Calculator
             </a>
+            <a class="dropdown-item" href="logarithm-calculator.jsp">
+              <i class="fas fa-sort-numeric-down text-warning"></i> Logarithm Solver
+            </a>
             <a class="dropdown-item" href="series-calculator.jsp">
               <i class="fas fa-infinity text-warning"></i> Taylor/Maclaurin Series
             </a>

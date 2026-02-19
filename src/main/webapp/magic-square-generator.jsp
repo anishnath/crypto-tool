@@ -141,7 +141,7 @@
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Magic Square Generator - Free Online Tool" />
         <jsp:param name="toolDescription" value="Free magic square generator for sizes 3x3 to 9x9 with animated construction, interactive sum verification, and step-by-step method explanations. Explore Siamese, Strachey, and Conway LUX algorithms instantly in your browser." />
-        <jsp:param name="toolCategory" value="Mathematics" />
+        <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="magic-square-generator.jsp" />
         <jsp:param name="toolKeywords" value="magic square generator, magic square calculator, create magic square, 3x3 magic square, 5x5 magic square, magic square solver, magic constant, siamese method, strachey method, conway lux, lo shu square, recreational math" />
         <jsp:param name="toolImage" value="logo.png" />
