@@ -18,13 +18,13 @@
     extraHead.append("<meta property=\"og:url\" content=\"").append(canonicalUrl).append("\">\n");
     extraHead.append("<meta property=\"og:type\" content=\"website\">\n");
     extraHead.append("<meta property=\"og:site_name\" content=\"8gwifi.org\">\n");
-    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/images/quick-math-og.png\">\n");
+    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/exams-practice-og.svg\">\n");
 
     // Twitter Card Tags
     extraHead.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
     extraHead.append("<meta name=\"twitter:title\" content=\"").append(seoTitle).append("\">\n");
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
-    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/images/quick-math-og.png\">\n");
+    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/exams-practice-og.svg\">\n");
 
     // Additional SEO Meta Tags
     extraHead.append("<meta name=\"keywords\" content=\"mental math tricks, speed math, fast calculation, math shortcuts, mental arithmetic, multiplication tricks, percentage shortcuts, mental calculation, math speed tricks, number sense, rapid math techniques\">\n");
