@@ -277,7 +277,8 @@
                 <div class="tool-card-body">
                     <div class="tool-form-group">
                         <label class="tool-form-label" for="lc-expr">Function f(x)</label>
-                        <input type="text" class="tool-input tool-input-mono" id="lc-expr" placeholder="e.g. (x^2-1)/(x-1)" autocomplete="off" spellcheck="false">
+                        <input type="text" class="tool-input tool-input-mono" id="lc-expr" placeholder="e.g. sin(3*x)/x, (x^2-1)/(x-1)" autocomplete="off" spellcheck="false">
+                        <span class="tool-form-hint">Both sin3x and sin(3*x) work</span>
                     </div>
                     <div class="tool-form-group">
                         <label class="tool-form-label">Live Preview</label>
@@ -536,6 +537,8 @@
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/limit-calculator-core.js?v=<%=cacheVersion%>"></script>
     <script>
     var __plotlyLoaded=false;
     function loadPlotly(cb){if(__plotlyLoaded){if(cb)cb();return;}var s=document.createElement('script');s.src='https://cdn.plot.ly/plotly-2.27.0.min.js';s.onload=function(){__plotlyLoaded=true;if(cb)cb();};document.head.appendChild(s);}

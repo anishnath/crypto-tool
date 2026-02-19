@@ -1,6 +1,7 @@
 (function(){
 'use strict';
 var CTX=window.__LC_CTX||'';
+var normalizeExpr=(typeof LimitCalculatorCore!=='undefined'&&LimitCalculatorCore.normalizeExpr)?LimitCalculatorCore.normalizeExpr:function(e){return(e&&e.trim)?e.trim():'';};
 var exprInput=document.getElementById('lc-expr');
 var previewEl=document.getElementById('lc-preview');
 var varSelect=document.getElementById('lc-var');
@@ -76,10 +77,11 @@ pointInput.addEventListener('input',function(){clearTimeout(previewTimer);previe
 varSelect.addEventListener('change',updatePreview);
 
 function updatePreview(){
-    var expr=exprInput.value.trim();
+    var raw=exprInput.value.trim();
     var v=varSelect.value;
     var pt=pointInput.value.trim()||'a';
-    if(!expr){previewEl.innerHTML='<span style="color:var(--text-muted);font-size:0.8125rem;">Type a function above\u2026</span>';return;}
+    if(!raw){previewEl.innerHTML='<span style="color:var(--text-muted);font-size:0.8125rem;">Type a function above\u2026</span>';return;}
+    var expr=normalizeExpr(raw);
     try{
         var latex=exprToLatex(expr);
         var ptLatex=pointToLatex(pt);
@@ -124,14 +126,15 @@ exprInput.addEventListener('keydown',function(e){if(e.key==='Enter')doCalculateL
 pointInput.addEventListener('keydown',function(e){if(e.key==='Enter')doCalculateLimit();});
 
 function doCalculateLimit(){
-    var expr=exprInput.value.trim();
+    var raw=exprInput.value.trim();
     var v=varSelect.value;
     var ptStr=pointInput.value.trim();
-    if(!expr){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Please enter a function.',2000,'warning');return;}
+    if(!raw){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Please enter a function.',2000,'warning');return;}
     if(!ptStr){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Please enter a limit point.',2000,'warning');return;}
     var a=parsePoint(ptStr);
     if(a===null){if(typeof ToolUtils!=='undefined')ToolUtils.showToast('Invalid limit point.',2000,'warning');return;}
 
+    var expr=normalizeExpr(raw);
     try{
         var result=computeLimit(expr,v,a,currentDir);
         showResult(expr,v,ptStr,a,result);
@@ -139,7 +142,7 @@ function doCalculateLimit(){
         resultActions.classList.add('visible');
         if(emptyState)emptyState.style.display='none';
     }catch(err){
-        showError(expr,err.message);
+        showError(raw,err.message);
     }
 }
 
