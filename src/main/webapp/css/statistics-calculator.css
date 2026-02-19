@@ -1,0 +1,610 @@
+/* Statistics Calculator - Shared Component Styles (Rose Theme) */
+
+:root {
+    --stat-tool: #e11d48;
+    --stat-tool-dark: #be123c;
+    --stat-gradient: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+    --stat-light: #fff1f2;
+}
+[data-theme="dark"] {
+    --stat-light: rgba(225, 29, 72, 0.15);
+}
+
+/* ===== Mode Toggle (sample/population) ===== */
+.stat-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.stat-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    white-space: nowrap;
+}
+.stat-mode-btn.active {
+    background: var(--stat-gradient);
+    color: #fff;
+}
+.stat-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .stat-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .stat-mode-btn.active { background: var(--stat-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.stat-input-group {
+    margin-bottom: 0.75rem;
+}
+.stat-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.stat-input-text {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+    line-height: 1.5;
+}
+textarea.stat-input-text {
+    resize: vertical;
+    min-height: 120px;
+}
+input.stat-input-text {
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-sans);
+}
+.stat-input-text:focus {
+    outline: none;
+    border-color: var(--stat-tool);
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1);
+}
+
+/* ===== Live Preview ===== */
+.stat-preview {
+    min-height: 2rem;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+.stat-preview-count {
+    font-weight: 700;
+    color: var(--stat-tool);
+    font-family: var(--font-mono);
+}
+[data-theme="dark"] .stat-preview { background: var(--bg-tertiary); }
+
+/* ===== Output Tabs ===== */
+.stat-output-tabs {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+.stat-output-tab {
+    flex: 1;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.stat-output-tab.active {
+    background: var(--stat-gradient);
+    color: #fff;
+}
+.stat-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .stat-output-tab { background: var(--bg-tertiary); }
+[data-theme="dark"] .stat-output-tab.active { background: var(--stat-gradient); color: #fff; }
+
+/* ===== Panels ===== */
+.stat-panel { display: none; flex: 1; min-height: 0; }
+.stat-panel.active { display: flex; flex-direction: column; }
+
+/* ===== Step Display ===== */
+.stat-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--stat-tool);
+    transition: background 0.15s;
+}
+.stat-step:hover { background: var(--bg-tertiary); }
+.stat-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--stat-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+.stat-step-content { flex: 1; min-width: 0; max-width: 100%; overflow: hidden; }
+.stat-step-desc {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+.stat-step-math {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
+    max-width: 100%;
+}
+.stat-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+.stat-step-math .katex { font-size: 0.9em; max-width: 100%; }
+[data-theme="dark"] .stat-step { background: var(--bg-tertiary); }
+
+/* ===== Result Badge ===== */
+.stat-result-badge {
+    display: inline-block;
+    background: var(--stat-gradient);
+    color: #fff;
+    padding: 0.2rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    margin-right: 0.375rem;
+    margin-bottom: 0.375rem;
+}
+
+/* ===== Stat Sections (grouped rows) ===== */
+.stat-section {
+    margin-bottom: 1rem;
+}
+.stat-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stat-tool);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 2px solid var(--stat-light);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8125rem;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.stat-value {
+    font-weight: 600;
+    color: var(--stat-tool);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+}
+
+/* ===== Frequency Table ===== */
+.stat-freq-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+}
+.stat-freq-table th, .stat-freq-table td {
+    padding: 0.375rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.stat-freq-table th {
+    font-weight: 600;
+    color: #fff;
+    background: var(--stat-gradient);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.stat-freq-table td {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+}
+.stat-freq-table tr:hover td { background: var(--bg-secondary); }
+[data-theme="dark"] .stat-freq-table th { background: var(--stat-gradient); }
+
+/* ===== Interpretation Boxes ===== */
+.stat-interpretation {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 0.75rem 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+}
+.stat-interpretation-normal {
+    background: linear-gradient(135deg, #d1fae5, var(--bg-primary));
+    border-left: 4px solid #10b981;
+    color: #065f46;
+}
+.stat-interpretation-warning {
+    background: linear-gradient(135deg, #fef3c7, var(--bg-primary));
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+}
+[data-theme="dark"] .stat-interpretation-normal {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+[data-theme="dark"] .stat-interpretation-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+/* ===== Example Chips ===== */
+.stat-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.stat-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.stat-example-chip:hover {
+    background: var(--stat-light);
+    color: var(--stat-tool);
+    border-color: var(--stat-tool);
+}
+[data-theme="dark"] .stat-example-chip { background: var(--bg-tertiary); border-color: var(--border); color: var(--text-secondary); }
+[data-theme="dark"] .stat-example-chip:hover { background: var(--stat-light); color: var(--stat-tool); }
+
+/* ===== Educational Content ===== */
+.stat-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.stat-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--stat-tool);
+}
+.stat-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.stat-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+[data-theme="dark"] .stat-edu-card { background: var(--bg-tertiary); }
+
+/* ===== Feature Cards ===== */
+.stat-feature-card {
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15);
+}
+.stat-feature-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0.5rem 0 0.375rem;
+}
+.stat-feature-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+[data-theme="dark"] .stat-feature-card { background: var(--bg-tertiary); border-color: var(--border); }
+
+/* ===== Formula Box ===== */
+.stat-formula-box {
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--stat-tool);
+    padding: 0.75rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+    margin: 0.75rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    overflow-x: auto;
+}
+.stat-formula-box .katex { font-size: 1em; }
+[data-theme="dark"] .stat-formula-box { background: var(--bg-tertiary); }
+
+/* ===== Worked Example ===== */
+.stat-worked-example {
+    background: var(--bg-secondary);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 2;
+    overflow-x: auto;
+    color: var(--text-primary);
+    margin: 0.75rem 0;
+}
+[data-theme="dark"] .stat-worked-example { background: var(--bg-tertiary); }
+
+/* ===== Ops Table ===== */
+.stat-ops-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin-top: 0.75rem;
+}
+.stat-ops-table th, .stat-ops-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.stat-ops-table th {
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+.stat-ops-table td {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+[data-theme="dark"] .stat-ops-table th { background: var(--bg-tertiary); }
+
+/* ===== Checkbox Options ===== */
+.stat-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.stat-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+.stat-checkbox input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--stat-tool);
+    cursor: pointer;
+}
+
+/* ===== Error ===== */
+.stat-error {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    color: #92400e;
+}
+.stat-error h4 { margin: 0 0 0.5rem; font-size: 0.9375rem; font-weight: 700; }
+.stat-error p { margin: 0; font-size: 0.8125rem; line-height: 1.6; }
+[data-theme="dark"] .stat-error { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: #fbbf24; }
+
+/* ===== Separator ===== */
+.stat-sep {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.75rem 0;
+}
+
+/* ===== Spinner ===== */
+@keyframes stat-spin { to { transform: rotate(360deg); } }
+.stat-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--stat-tool);
+    border-radius: 50%;
+    animation: stat-spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+/* ===== Overflow Prevention ===== */
+.tool-output-column { min-width: 0; }
+#stat-result-content { min-width: 0; overflow-x: auto; overflow-y: auto; }
+
+/* ===== Graph Container ===== */
+#stat-graph-container { width: 100%; min-height: 440px; border-radius: 0.5rem; }
+
+/* ===== Scroll Reveal Animations ===== */
+.stat-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.stat-anim.stat-visible { opacity: 1; transform: translateY(0); }
+.stat-anim-d1 { transition-delay: 0.1s; }
+.stat-anim-d2 { transition-delay: 0.2s; }
+.stat-anim-d3 { transition-delay: 0.3s; }
+.stat-anim-d4 { transition-delay: 0.4s; }
+
+/* ===== Animated Bell Curve SVG ===== */
+.stat-bell-animated .bell-path {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+    animation: stat-draw-bell 2s ease forwards;
+}
+@keyframes stat-draw-bell { to { stroke-dashoffset: 0; } }
+
+/* ===== Animated Data Flow SVG ===== */
+.stat-data-flow .data-dot {
+    animation: stat-flow 1.5s ease infinite;
+}
+@keyframes stat-flow {
+    0% { opacity: 0; transform: translateY(-10px); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(10px); }
+}
+
+/* ===== FAQ Toggle ===== */
+.stat-faq-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.875rem 0;
+    background: none;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-sans);
+    gap: 0.75rem;
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    .stat-anim { opacity: 1; transform: none; transition: none; }
+    .stat-bell-animated .bell-path { animation: none; stroke-dashoffset: 0; }
+    .stat-data-flow .data-dot { animation: none; opacity: 1; }
+    .stat-feature-card { transition: none; }
+}
+
+/* ===== ANOVA Group Inputs ===== */
+.av-group-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+[data-theme="dark"] .av-group-box { background: var(--bg-tertiary); border-color: var(--border); }
+.av-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.375rem;
+}
+.av-group-header h5 {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.av-remove-group-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1;
+}
+.av-remove-group-btn:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+[data-theme="dark"] .av-remove-group-btn:hover { background: rgba(239, 68, 68, 0.15); }
+
+/* ===== Compact Textarea (for ANOVA groups, etc.) ===== */
+.stat-textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 50px;
+}
+.stat-textarea:focus {
+    outline: none;
+    border-color: var(--stat-tool);
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1);
+}
+[data-theme="dark"] .stat-textarea { background: var(--bg-secondary); border-color: var(--border); }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .stat-row { font-size: 0.75rem; }
+    .stat-freq-table { font-size: 0.6875rem; }
+}
+
+@media (max-width: 640px) {
+    .stat-mode-toggle { flex-wrap: wrap; }
+    .stat-mode-btn { flex: 1 1 50%; font-size: 0.6875rem; }
+    .stat-edu-grid { grid-template-columns: 1fr; }
+    .stat-step-math .katex { font-size: 0.8em; }
+    .stat-section-title { font-size: 0.6875rem; }
+}
