@@ -6,8 +6,8 @@
     String topicParam = request.getParameter("topic");
 
     // Default SEO values
-    String seoTitle = "Mental Math Practice | Quick Math";
-    String seoDescription = "Practice mental math tricks and speed math techniques.";
+    String seoTitle = "Mental Math Tricks | Quick Math Practice";
+    String seoDescription = "Free interactive mental math practice with step-by-step breakdowns. Multiply, divide, and calculate faster in your head.";
     String seoH1 = "Mental Math Practice";
     String extraHead = "";
     String canonicalUrl = "https://8gwifi.org/exams/quick-math/practice.jsp";
