@@ -1,0 +1,1114 @@
+/* Molecular Geometry Calculator - Component Styles */
+
+:root {
+    --mg-tool: #059669;
+    --mg-tool-dark: #047857;
+    --mg-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    --mg-light: #ecfdf5;
+}
+[data-theme="dark"] {
+    --mg-light: rgba(5, 150, 105, 0.15);
+}
+
+/* ===== Mode Toggle ===== */
+.mg-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.mg-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.7rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.mg-mode-btn.active {
+    background: var(--mg-gradient);
+    color: #fff;
+}
+.mg-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .mg-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .mg-mode-btn.active { background: var(--mg-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.mg-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+}
+.mg-input-group {
+    flex: 1;
+    min-width: 0;
+}
+.mg-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.mg-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+.mg-input:focus {
+    outline: none;
+    border-color: var(--mg-tool);
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+}
+.mg-formula-input {
+    text-align: left;
+    font-size: 1rem;
+    padding: 0.625rem 0.75rem;
+}
+.mg-input-hint {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+/* ===== Output Tabs ===== */
+.mg-output-tabs {
+    display: flex;
+    border-bottom: 1.5px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: 0.75rem 0.75rem 0 0;
+    overflow: hidden;
+}
+.mg-output-tab {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    position: relative;
+}
+.mg-output-tab.active {
+    color: var(--mg-tool);
+    background: var(--bg-primary);
+}
+.mg-output-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--mg-tool);
+}
+.mg-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Panels ===== */
+.mg-panel { display: none; }
+.mg-panel.active { display: block; }
+
+/* ===== Mode Forms ===== */
+.mg-mode-form { display: none; }
+.mg-mode-form.active { display: block; }
+
+/* ===== Step-by-Step ===== */
+.mg-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--mg-tool);
+    transition: background 0.15s;
+}
+.mg-step:hover { background: var(--bg-tertiary); }
+.mg-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+.mg-step-content { flex: 1; min-width: 0; }
+.mg-step-desc {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+.mg-step-math {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ===== Result Badge ===== */
+.mg-badge {
+    display: inline-block;
+    background: var(--mg-gradient);
+    color: #fff;
+    padding: 0.2rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+/* ===== Geometry Card ===== */
+.mg-geom-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--mg-tool);
+    margin: 0.5rem 0;
+}
+.mg-geom-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+/* ===== Result Grid ===== */
+.mg-result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+}
+.mg-result-item {
+    padding: 0.625rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+.mg-result-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.mg-result-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* ===== Diagram Box ===== */
+.mg-diagram {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border: 1.5px solid var(--border);
+    margin: 0.75rem 0;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+    text-align: center;
+}
+.mg-diagram-legend {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* ===== Molecule Table ===== */
+.mg-search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
+}
+.mg-search-input:focus {
+    outline: none;
+    border-color: var(--mg-tool);
+}
+.mg-table-wrap {
+    overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+}
+.mg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+.mg-table th {
+    position: sticky;
+    top: 0;
+    background: var(--mg-light);
+    color: var(--mg-tool-dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.625rem;
+    padding: 0.5rem 0.625rem;
+    text-align: left;
+    border-bottom: 1.5px solid var(--border);
+    z-index: 1;
+}
+.mg-table td {
+    padding: 0.4375rem 0.625rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+.mg-table tr:hover td {
+    background: var(--bg-tertiary);
+}
+.mg-table-btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    border: 1px solid var(--mg-tool);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--mg-tool);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.mg-table-btn:hover {
+    background: var(--mg-gradient);
+    color: #fff;
+    border-color: transparent;
+}
+.mg-geom-badge {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    background: var(--mg-light);
+    color: var(--mg-tool-dark);
+    font-size: 0.6875rem;
+    font-weight: 500;
+}
+
+/* ===== Quick Examples ===== */
+.mg-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.mg-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+}
+.mg-example-chip:hover {
+    background: var(--mg-light);
+    color: var(--mg-tool);
+    border-color: var(--mg-tool);
+}
+
+/* ===== Educational Content ===== */
+.mg-geom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.mg-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+}
+.mg-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.mg-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.mg-callout {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+.mg-callout-icon { font-size: 1.25rem; flex-shrink: 0; }
+.mg-callout-text { font-size: 0.8125rem; line-height: 1.6; color: var(--text-secondary); }
+.mg-callout-insight { background: #ecfdf5; border-left: 3px solid #059669; }
+.mg-callout-tip { background: #fffbeb; border-left: 3px solid #d97706; }
+[data-theme="dark"] .mg-callout-insight { background: rgba(5, 150, 105, 0.1); }
+[data-theme="dark"] .mg-callout-tip { background: rgba(217, 119, 6, 0.1); }
+
+/* ===== Notation Visual ===== */
+.mg-notation-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    margin: 1rem 0;
+}
+.mg-notation-block {
+    text-align: center;
+    padding: 0.25rem 0.375rem;
+}
+.mg-notation-symbol {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+.mg-notation-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+.mg-c-a { color: #059669; }
+.mg-c-x { color: #2563eb; }
+.mg-c-e { color: #dc2626; }
+.mg-c-eq { color: var(--text-muted); }
+
+/* ===== VSEPR Reference Table ===== */
+.mg-ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+.mg-ref-table th {
+    background: var(--mg-light);
+    color: var(--mg-tool-dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.6875rem;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--mg-tool);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.mg-ref-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+.mg-ref-table tr:hover td {
+    background: var(--bg-tertiary);
+}
+.mg-ref-table .mg-row-group td {
+    background: var(--mg-light);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--mg-tool-dark);
+    padding: 0.375rem 0.75rem;
+    border-bottom: 1px solid var(--mg-tool);
+}
+.mg-ref-wrap {
+    overflow-x: auto;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+/* ===== Step Process ===== */
+.mg-process {
+    position: relative;
+    padding-left: 2.5rem;
+}
+.mg-process::before {
+    content: '';
+    position: absolute;
+    left: 1.0625rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--mg-tool) 0%, rgba(5,150,105,0.15) 100%);
+}
+.mg-process-step {
+    position: relative;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--mg-tool);
+}
+.mg-process-step::before {
+    content: attr(data-step);
+    position: absolute;
+    left: -2.5rem;
+    top: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 1;
+}
+.mg-process-step h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+}
+.mg-process-step p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ===== Visual Steps (Section 2) ===== */
+.mg-visual-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.mg-vstep {
+    display: flex;
+    gap: 0.75rem;
+    background: var(--bg-secondary, #f8fafc);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--border, #e2e8f0);
+    transition: box-shadow 0.3s;
+}
+.mg-vstep:hover {
+    box-shadow: 0 2px 12px rgba(5,150,105,0.1);
+}
+.mg-vstep-num {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.mg-vstep-body { flex: 1; min-width: 0; }
+.mg-vstep-body h4 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+.mg-vstep-body p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0 0;
+    line-height: 1.6;
+}
+
+/* Step diagram area */
+.mg-vstep-diagram {
+    background: var(--bg-primary, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+/* Step 1: CSS Lewis Structure */
+.mg-lewis-css {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.mg-lewis-row {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+}
+.mg-atom {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+.mg-atom-central {
+    background: var(--mg-gradient);
+    color: #fff;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+    box-shadow: 0 0 0 3px rgba(5,150,105,0.2);
+}
+.mg-atom-h {
+    background: #dbeafe;
+    color: #2563eb;
+    border: 1.5px solid #93c5fd;
+}
+.mg-bond {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    padding: 0 0.125rem;
+}
+.mg-dots {
+    display: flex;
+    gap: 0.25rem;
+    justify-content: center;
+}
+.mg-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+    display: inline-block;
+}
+.mg-dots-top .mg-dot,
+.mg-dots-bottom .mg-dot {
+    animation: mg-dot-pulse 2s ease-in-out infinite;
+}
+.mg-dots-bottom .mg-dot { animation-delay: 1s; }
+@keyframes mg-dot-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.4); opacity: 1; }
+}
+.mg-vstep-labels {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+.mg-vlabel {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+}
+.mg-vlabel-bond { background: #dbeafe; color: #2563eb; }
+.mg-vlabel-lone { background: #fee2e2; color: #dc2626; }
+
+/* Step 2: Electron groups */
+.mg-egroups {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.mg-egroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    width: 3rem;
+    padding: 0.375rem;
+    border-radius: 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+.mg-egroup-bond { background: #dbeafe; color: #2563eb; }
+.mg-egroup-lone { background: #fee2e2; color: #dc2626; }
+.mg-egroup-icon { font-size: 1.125rem; line-height: 1; }
+.mg-egroup-total {
+    font-size: 0.8125rem;
+    color: var(--mg-tool);
+    font-weight: 700;
+}
+.mg-visible .mg-egroup {
+    animation: mg-pop 0.4s ease backwards;
+}
+.mg-visible .mg-egroup:nth-child(1) { animation-delay: 0.1s; }
+.mg-visible .mg-egroup:nth-child(2) { animation-delay: 0.25s; }
+.mg-visible .mg-egroup:nth-child(3) { animation-delay: 0.4s; }
+.mg-visible .mg-egroup:nth-child(4) { animation-delay: 0.55s; }
+@keyframes mg-pop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Step 3: Tetrahedral shape + lookup table */
+.mg-vstep-diagram:has(.mg-shape-tetra) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+.mg-shape-tetra {
+    display: grid;
+    grid-template-columns: 2.5rem 2px 2.5rem 2px 2.5rem;
+    grid-template-rows: 2rem 2px 2rem 2px 2rem;
+    align-items: center;
+    justify-items: center;
+    width: 8rem;
+    height: 7rem;
+    position: relative;
+}
+.mg-shape-center {
+    grid-column: 3;
+    grid-row: 3;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+.mg-shape-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.75rem;
+    z-index: 2;
+}
+.mg-shape-top { grid-column: 3; grid-row: 1; background: #fee2e2; color: #dc2626; gap: 2px; }
+.mg-shape-bot { grid-column: 3; grid-row: 5; background: #fee2e2; color: #dc2626; gap: 2px; }
+.mg-shape-left { grid-column: 1; grid-row: 5; background: #dbeafe; color: #2563eb; }
+.mg-shape-right { grid-column: 5; grid-row: 5; background: #dbeafe; color: #2563eb; }
+.mg-shape-line {
+    position: absolute;
+    background: var(--border, #cbd5e1);
+    z-index: 1;
+}
+.mg-shape-line-tl { width: 2px; height: 2.5rem; top: 1.25rem; left: 3.75rem; transform: rotate(20deg); transform-origin: bottom center; }
+.mg-shape-line-tr { width: 2px; height: 2.5rem; top: 1.25rem; right: 3.75rem; transform: rotate(-20deg); transform-origin: bottom center; }
+.mg-shape-line-bl { width: 2px; height: 2rem; bottom: 0.75rem; left: 2.5rem; transform: rotate(-35deg); transform-origin: top center; }
+.mg-shape-line-br { width: 2px; height: 2rem; bottom: 0.75rem; right: 2.5rem; transform: rotate(35deg); transform-origin: top center; }
+
+/* Lookup mini-table */
+.mg-shape-lookup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.6875rem;
+}
+.mg-lookup-row {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--text-secondary);
+}
+.mg-lookup-active {
+    background: var(--mg-light);
+    color: var(--mg-tool);
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1.5px var(--mg-tool);
+}
+.mg-visible .mg-lookup-active {
+    animation: mg-highlight 0.6s ease 0.5s backwards;
+}
+@keyframes mg-highlight {
+    0% { background: transparent; box-shadow: none; }
+    100% { background: var(--mg-light); box-shadow: inset 0 0 0 1.5px var(--mg-tool); }
+}
+
+/* Step 4: Transformation before → after */
+.mg-transform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+.mg-transform-before,
+.mg-transform-after {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+}
+.mg-transform-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.3;
+}
+.mg-transform-result {
+    color: var(--mg-tool) !important;
+    font-size: 0.8125rem !important;
+}
+.mg-transform-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    font-size: 1.25rem;
+    color: var(--mg-tool);
+    font-weight: 700;
+}
+.mg-cross-lp {
+    font-size: 0.625rem;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    text-decoration: line-through;
+}
+
+/* Mini molecule shapes */
+.mg-mini-shape {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0.125rem;
+    align-items: center;
+    justify-items: center;
+    width: 5rem;
+    height: 4.5rem;
+}
+.mg-mini-center {
+    grid-column: span 2;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mg-mini-lp {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mg-mini-bond {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mg-mini-bent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 5rem;
+    height: 4.5rem;
+    justify-content: center;
+}
+.mg-bent-arms {
+    display: flex;
+    gap: 1.25rem;
+}
+.mg-visible .mg-transform-after {
+    animation: mg-reveal 0.5s ease 0.6s backwards;
+}
+@keyframes mg-reveal {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.mg-visible .mg-cross-lp {
+    animation: mg-strike 0.4s ease 0.3s backwards;
+}
+@keyframes mg-strike {
+    0% { opacity: 0; transform: translateX(-10px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .mg-atom-h { background: rgba(37,99,235,0.2); border-color: rgba(59,130,246,0.4); }
+[data-theme="dark"] .mg-egroup-bond { background: rgba(37,99,235,0.2); }
+[data-theme="dark"] .mg-egroup-lone { background: rgba(220,38,38,0.2); }
+[data-theme="dark"] .mg-vlabel-bond { background: rgba(37,99,235,0.2); }
+[data-theme="dark"] .mg-vlabel-lone { background: rgba(220,38,38,0.2); }
+[data-theme="dark"] .mg-shape-top,
+[data-theme="dark"] .mg-shape-bot { background: rgba(220,38,38,0.2); }
+[data-theme="dark"] .mg-shape-left,
+[data-theme="dark"] .mg-shape-right { background: rgba(37,99,235,0.2); }
+[data-theme="dark"] .mg-mini-lp { background: rgba(220,38,38,0.2); }
+[data-theme="dark"] .mg-mini-bond { background: rgba(37,99,235,0.2); }
+[data-theme="dark"] .mg-cross-lp { background: rgba(220,38,38,0.2); }
+
+@media (max-width: 640px) {
+    .mg-vstep { flex-direction: column; }
+    .mg-vstep-diagram:has(.mg-shape-tetra) { flex-direction: column; gap: 0.75rem; }
+    .mg-transform { flex-direction: column; }
+}
+
+/* ===== Comparison Visual ===== */
+.mg-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin: 1rem 0;
+}
+.mg-compare-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+.mg-compare-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+.mg-compare-card p {
+    font-size: 0.8125rem;
+    margin: 0;
+    line-height: 1.6;
+}
+.mg-compare-card .mg-compare-diagram {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    padding: 0.75rem 0;
+    line-height: 1.3;
+    white-space: pre;
+}
+.mg-compare-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+.mg-compare-electron {
+    background: rgba(37,99,235,0.08);
+    border: 1.5px solid rgba(37,99,235,0.2);
+}
+.mg-compare-electron h4 { color: #2563eb; }
+.mg-compare-molecular {
+    background: rgba(5,150,105,0.08);
+    border: 1.5px solid rgba(5,150,105,0.2);
+}
+.mg-compare-molecular h4 { color: #059669; }
+[data-theme="dark"] .mg-compare-electron { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.3); }
+[data-theme="dark"] .mg-compare-molecular { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.3); }
+
+/* ===== Angle Compression Visual ===== */
+.mg-angle-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+.mg-angle-label {
+    min-width: 5.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+}
+.mg-angle-track {
+    flex: 1;
+    height: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+.mg-angle-fill {
+    height: 100%;
+    border-radius: 0.75rem;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+}
+.mg-angle-fill-ideal { background: linear-gradient(90deg, #059669, #10b981); }
+.mg-angle-fill-lp1 { background: linear-gradient(90deg, #d97706, #f59e0b); }
+.mg-angle-fill-lp2 { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.mg-angle-val {
+    min-width: 3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ===== Polarity Cards ===== */
+.mg-polar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.mg-polar-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+.mg-polar-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.375rem;
+}
+.mg-polar-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+.mg-polar-molecule {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0.5rem 0;
+}
+.mg-polar-nonpolar {
+    background: rgba(5,150,105,0.08);
+    border: 1.5px solid rgba(5,150,105,0.2);
+}
+.mg-polar-nonpolar h4 { color: #059669; }
+.mg-polar-polar {
+    background: rgba(37,99,235,0.08);
+    border: 1.5px solid rgba(37,99,235,0.2);
+}
+.mg-polar-polar h4 { color: #2563eb; }
+[data-theme="dark"] .mg-polar-nonpolar { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.3); }
+[data-theme="dark"] .mg-polar-polar { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.3); }
+
+/* ===== Section Numbering ===== */
+.mg-section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--mg-gradient);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* ===== Animations ===== */
+.mg-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.mg-anim.mg-visible { opacity: 1; transform: translateY(0); }
+.mg-anim-d1 { transition-delay: 0.1s; }
+.mg-anim-d2 { transition-delay: 0.2s; }
+.mg-anim-d3 { transition-delay: 0.3s; }
+.mg-anim-d4 { transition-delay: 0.4s; }
+.mg-anim-d5 { transition-delay: 0.5s; }
+.mg-anim-d6 { transition-delay: 0.6s; }
+
+/* Bar animation */
+.mg-angle-fill { width: 0 !important; }
+.mg-visible .mg-angle-fill { width: var(--fill) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    .mg-anim { opacity: 1; transform: none; transition: none; }
+    .mg-angle-fill { width: var(--fill) !important; transition: none; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .mg-input-row { flex-direction: column; gap: 0.375rem; }
+    .mg-result-grid { grid-template-columns: 1fr; }
+    .mg-geom-grid { grid-template-columns: 1fr; }
+    .mg-notation-hero { gap: 0.25rem; padding: 1rem 0.5rem; }
+    .mg-notation-symbol { font-size: 1.25rem; }
+    .mg-compare { grid-template-columns: 1fr; }
+    .mg-compare-vs { padding: 0.25rem 0; }
+    .mg-polar-grid { grid-template-columns: 1fr; }
+    .mg-process { padding-left: 2rem; }
+    .mg-process-step::before { left: -2rem; width: 1.5rem; height: 1.5rem; font-size: 0.6875rem; }
+}

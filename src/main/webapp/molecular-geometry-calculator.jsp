@@ -1,949 +1,863 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Molecular Geometry Calculator | VSEPR Theory | 8gwifi.org</title>
-    <meta name="description" content="Calculate molecular geometry using VSEPR theory. Determine electron geometry, molecular shape, bond angles, and hybridization from chemical formula or electron pairs. Free chemistry tool with 3D geometry visualization.">
-    <meta name="keywords" content="molecular geometry calculator, VSEPR theory, electron geometry, molecular shape, bond angles, hybridization, Lewis structure, chemistry calculator">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
 
-    <link rel="canonical" href="https://8gwifi.org/molecular-geometry-calculator.jsp">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Molecular Geometry Calculator | VSEPR Shapes & Bond Angles" />
+        <jsp:param name="toolDescription" value="Free molecular geometry calculator using VSEPR theory. Enter any formula to find molecular shape, bond angles, hybridization, and electron geometry instantly. 54-molecule database, printable VSEPR chart, practice worksheets, and step-by-step Lewis structure analysis. Supports multi-center molecules like glucose." />
+        <jsp:param name="toolCategory" value="Chemistry Tools" />
+        <jsp:param name="toolUrl" value="molecular-geometry-calculator.jsp" />
+        <jsp:param name="toolKeywords" value="molecular geometry calculator, VSEPR calculator, molecular shape calculator, bond angle calculator, electron geometry calculator, hybridization calculator, VSEPR shapes chart, molecular geometry of H2O, molecular geometry practice worksheet, Lewis structure geometry, AXnEm notation, molecular geometry of CH4 NH3 CO2 SF6" />
+        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolFeatures" value="VSEPR geometry from bonding and lone pairs,Dynamic formula parser for any molecule,54-molecule database with search,Step-by-step VSEPR analysis with diagrams,Multi-center molecule support (glucose ethanol),Printable VSEPR reference chart PDF,Practice worksheet generator for teachers,Hybridization and bond angle calculation,Ion support (NH4+ SO4 2-),Download results as PDF" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="What is VSEPR theory and how does it predict molecular geometry?" />
+        <jsp:param name="faq1a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts 3D molecular shapes by assuming electron pairs around a central atom repel each other and arrange to maximize distance. Count bonding pairs and lone pairs, determine the electron geometry, then remove lone pairs to get the molecular geometry. For example, water has 4 electron pairs (2 bonding, 2 lone) giving tetrahedral electron geometry but bent molecular shape." />
+        <jsp:param name="faq2q" value="How do you determine molecular geometry from a chemical formula?" />
+        <jsp:param name="faq2a" value="Step 1: Draw the Lewis structure and identify the central atom. Step 2: Count bonding pairs (atoms bonded to center) and lone pairs on the central atom. Step 3: Use the AXnEm notation where n is bonding pairs and m is lone pairs. Step 4: Look up the VSEPR table. For example, CH4 has 4 bonding pairs and 0 lone pairs (AX4) giving tetrahedral geometry at 109.5 degrees." />
+        <jsp:param name="faq3q" value="What is the difference between electron geometry and molecular geometry?" />
+        <jsp:param name="faq3a" value="Electron geometry considers ALL electron pairs (bonding plus lone pairs) around the central atom. Molecular geometry only considers the positions of atoms (bonding pairs). For NH3, electron geometry is tetrahedral (4 electron pairs total) but molecular geometry is trigonal pyramidal (3 bonding pairs visible, 1 lone pair invisible). They only match when there are zero lone pairs." />
+        <jsp:param name="faq4q" value="What are the main molecular geometry shapes in VSEPR theory?" />
+        <jsp:param name="faq4a" value="The main shapes are: Linear (180 degrees), Bent (104-120 degrees), Trigonal Planar (120 degrees), Trigonal Pyramidal (107 degrees), Tetrahedral (109.5 degrees), See-Saw, T-Shaped, Square Planar (90 degrees), Square Pyramidal, Trigonal Bipyramidal (90 and 120 degrees), Octahedral (90 degrees), and Pentagonal Bipyramidal (72 and 90 degrees)." />
+        <jsp:param name="faq5q" value="Is this molecular geometry calculator free?" />
+        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup. Features include VSEPR analysis by electron pairs or formula, a 54-molecule database, step-by-step analysis, downloadable PDF results, printable VSEPR reference charts, practice worksheets for teachers, multi-center molecule support (glucose, ethanol), and shareable URLs. Everything runs in your browser." />
+        <jsp:param name="faq6q" value="Can this calculator handle complex molecules like glucose?" />
+        <jsp:param name="faq6a" value="Yes. For multi-center molecules like glucose (C6H12O6), ethanol (C2H6O), or benzene (C6H6), the calculator automatically detects multiple atom centers and analyzes each one individually using VSEPR theory. It shows the geometry, bond angles, and hybridization for each unique atom type, plus the Index of Hydrogen Deficiency (IHD) to identify rings and double bonds." />
+    </jsp:include>
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Molecular Geometry Calculator",
-      "description": "Calculate molecular geometry and shape using VSEPR theory from electron pairs or chemical formula.",
-      "url": "https://8gwifi.org/molecular-geometry-calculator.jsp",
-      "applicationCategory": "EducationalApplication",
-      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
-    }
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [{
-        "@type": "Question",
-        "name": "What is VSEPR theory?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron pairs arrange themselves to minimize repulsion, determining the 3D shape of molecules."
-        }
-      },{
-        "@type": "Question",
-        "name": "How do you determine molecular geometry?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Count bonding pairs and lone pairs around the central atom. The total gives electron geometry. Subtract lone pairs to get molecular geometry. For example, 4 electron pairs with 2 lone pairs gives tetrahedral electron geometry but bent molecular shape."
-        }
-      }]
-    }
-    </script>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/molecular-geometry.css?v=<%=cacheVersion%>">
 
-    <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <style>
+        .tool-action-btn { background: var(--mg-gradient) !important; }
+        .tool-badge { background: var(--mg-light); color: var(--mg-tool); }
+    </style>
 </head>
+<body>
+<%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-
-<%@ include file="chem-menu-nav.jsp"%>
-
-<div class="container mt-4">
-    <h1 class="text-center mb-4"><i class="fas fa-cube"></i> Molecular Geometry Calculator</h1>
-    <p class="text-center text-muted mb-4">
-        Determine molecular shape using VSEPR theory<br>
-        <span class="badge badge-success"><i class="fas fa-magic"></i> Dynamic Formula Parser - Enter ANY Chemical Formula!</span>
-    </p>
-
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-body">
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="pairs-tab" data-toggle="tab" href="#pairs" role="tab">
-                                <i class="fas fa-atom"></i> By Electron Pairs
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="formula-tab" data-toggle="tab" href="#formula" role="tab">
-                                <i class="fas fa-flask"></i> By Formula
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="database-tab" data-toggle="tab" href="#database" role="tab">
-                                <i class="fas fa-database"></i> Molecule Database
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content">
-                        <!-- By Electron Pairs Tab -->
-                        <div class="tab-pane fade show active" id="pairs" role="tabpanel">
-                            <form onsubmit="calculateByPairs(); return false;">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Bonding Pairs (BP)</label>
-                                        <input type="number" class="form-control" id="bondingPairs" min="1" max="7" value="4" required>
-                                        <small class="form-text text-muted">Number of atoms bonded to central atom</small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Lone Pairs (LP)</label>
-                                        <input type="number" class="form-control" id="lonePairs" min="0" max="4" value="0" required>
-                                        <small class="form-text text-muted">Number of lone electron pairs</small>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    <i class="fas fa-calculator"></i> Calculate Geometry
-                                </button>
-                            </form>
-                            <div id="pairsResult" class="mt-4"></div>
-                        </div>
-
-                        <!-- By Formula Tab -->
-                        <div class="tab-pane fade" id="formula" role="tabpanel">
-                            <form onsubmit="calculateByFormula(); return false;">
-                                <div class="form-group">
-                                    <label>Chemical Formula</label>
-                                    <input type="text" class="form-control form-control-lg" id="chemFormula"
-                                           placeholder="e.g., CH4, NH3, H2O, SF6, NH4+, SO4(2-)" required>
-                                    <small class="form-text text-muted">
-                                        <strong><i class="fas fa-magic"></i> Dynamic Calculator:</strong> Enter ANY chemical formula!
-                                        Supports ions (e.g., NH4+, SO4(2-)). Central atom should be first.
-                                    </small>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    <i class="fas fa-calculator"></i> Determine Geometry
-                                </button>
-                            </form>
-                            <div id="formulaResult" class="mt-4"></div>
-                        </div>
-
-                        <!-- Molecule Database Tab -->
-                        <div class="tab-pane fade" id="database" role="tabpanel">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="searchMolecule"
-                                       placeholder="Search molecules..." onkeyup="searchMolecules()">
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover" id="moleculeTable">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Formula</th>
-                                            <th>Name</th>
-                                            <th>BP</th>
-                                            <th>LP</th>
-                                            <th>Geometry</th>
-                                            <th>Bond Angle</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="moleculeTableBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Molecular Geometry Calculator</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp">Chemistry Tools</a> /
+                Molecular Geometry
+            </nav>
         </div>
+        <div class="tool-page-badges">
+            <span class="tool-badge">VSEPR Theory</span>
+            <span class="tool-badge">54 Molecules</span>
+            <span class="tool-badge">Step-by-Step</span>
+        </div>
+    </div>
+</header>
 
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-magic"></i> Dynamic Calculator</h5>
+<section class="tool-description-section" style="background:var(--mg-light);">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Free <strong>molecular geometry calculator</strong> using <strong>VSEPR theory</strong>. Enter any <strong>chemical formula</strong> or electron pairs to find <strong>molecular shape</strong>, <strong>bond angles</strong>, hybridization, and electron geometry instantly. 54-molecule database, downloadable <strong>VSEPR chart</strong>, printable <strong>practice worksheets</strong>, and support for multi-center molecules like glucose.</p>
+        </div>
+    </div>
+</section>
+
+<main class="tool-page-container">
+    <!-- ==================== INPUT COLUMN ==================== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <div class="tool-card-header" style="background:var(--mg-gradient);">VSEPR Analysis</div>
+            <div class="tool-card-body">
+
+                <!-- Mode Toggle -->
+                <div class="mg-mode-toggle">
+                    <button type="button" class="mg-mode-btn active" data-mode="pairs">By Pairs</button>
+                    <button type="button" class="mg-mode-btn" data-mode="formula">By Formula</button>
                 </div>
-                <div class="card-body">
-                    <div class="alert alert-success small mb-3">
-                        <strong>Enter ANY chemical formula!</strong><br>
-                        Automatically calculates geometry using VSEPR theory and valence electrons.
+
+                <!-- By Pairs Form -->
+                <div class="mg-mode-form active" id="mg-form-pairs">
+                    <div class="mg-input-row">
+                        <div class="mg-input-group">
+                            <label class="mg-input-label" for="mg-bp">Bonding Pairs (BP)</label>
+                            <input type="number" class="mg-input" id="mg-bp" min="1" max="7" value="4">
+                        </div>
+                        <div class="mg-input-group">
+                            <label class="mg-input-label" for="mg-lp">Lone Pairs (LP)</label>
+                            <input type="number" class="mg-input" id="mg-lp" min="0" max="4" value="0">
+                        </div>
                     </div>
+                    <div class="mg-input-hint">Atoms bonded to central atom (BP) and lone electron pairs (LP)</div>
+                </div>
 
-                    <h6>Features</h6>
-                    <ul class="small">
-                        <li>✓ Parse any formula (CH4, NH3, etc.)</li>
-                        <li>✓ Support ions (NH4+, SO4(2-))</li>
-                        <li>✓ Auto-detect central atom</li>
-                        <li>✓ Calculate bonding/lone pairs</li>
-                        <li>✓ Show 3D ASCII diagrams</li>
-                        <li>✓ 26 geometries covered</li>
-                    </ul>
+                <!-- By Formula Form -->
+                <div class="mg-mode-form" id="mg-form-formula">
+                    <div class="tool-form-group">
+                        <label class="mg-input-label" for="mg-formula">Chemical Formula</label>
+                        <input type="text" class="mg-input mg-formula-input" id="mg-formula" placeholder="e.g., CH4, NH3, H2O, SF6, NH4+">
+                        <div class="mg-input-hint">Enter any formula. Supports ions (NH4+, SO4(2-)). Central atom first.</div>
+                    </div>
+                </div>
 
-                    <h6>Try These Examples</h6>
-                    <button class="btn btn-sm btn-outline-success btn-block" onclick="loadFormulaExample('SiH4')">SiH₄ (Silane)</button>
-                    <button class="btn btn-sm btn-outline-success btn-block" onclick="loadFormulaExample('AsF5')">AsF₅ (Arsenic Pentafluoride)</button>
-                    <button class="btn btn-sm btn-outline-success btn-block" onclick="loadFormulaExample('NH4+')">NH₄⁺ (Ammonium)</button>
-                    <button class="btn btn-sm btn-outline-success btn-block" onclick="loadFormulaExample('ClO2-')">ClO₂⁻ (Chlorite)</button>
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+                    <button type="button" class="tool-action-btn" id="mg-solve-btn" style="flex:1">Calculate Geometry</button>
+                    <button type="button" class="tool-action-btn" id="mg-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
+                </div>
+
+                <!-- Always-available resource buttons -->
+                <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+                    <button type="button" class="tool-action-btn" id="mg-download-chart-btn" style="flex:1;width:auto;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;background:var(--bg-secondary)!important;color:var(--text-primary);border:1px solid var(--border)">&#128202; VSEPR Chart</button>
+                    <button type="button" class="tool-action-btn" id="mg-practice-btn" style="flex:1;width:auto;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;background:var(--bg-secondary)!important;color:var(--text-primary);border:1px solid var(--border)">&#128218; Practice Sheet</button>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Quick Examples -->
+                <div class="tool-form-group">
+                    <label class="tool-form-label">Quick Examples</label>
+                    <div class="mg-examples">
+                        <button type="button" class="mg-example-chip" data-example="ch4">CH&#8324;</button>
+                        <button type="button" class="mg-example-chip" data-example="h2o">H&#8322;O</button>
+                        <button type="button" class="mg-example-chip" data-example="nh3">NH&#8323;</button>
+                        <button type="button" class="mg-example-chip" data-example="co2">CO&#8322;</button>
+                        <button type="button" class="mg-example-chip" data-example="sf6">SF&#8326;</button>
+                        <button type="button" class="mg-example-chip" data-example="bf3">BF&#8323;</button>
+                        <button type="button" class="mg-example-chip" data-example="xef4">XeF&#8324;</button>
+                        <button type="button" class="mg-example-chip" data-example="pcl5">PCl&#8325;</button>
+                        <button type="button" class="mg-example-chip" data-example="nh4+">NH&#8324;&#8314;</button>
+                        <button type="button" class="mg-example-chip" data-example="sf4">SF&#8324;</button>
+                        <button type="button" class="mg-example-chip" data-example="clf3">ClF&#8323;</button>
+                        <button type="button" class="mg-example-chip" data-example="if7">IF&#8327;</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="card mt-3">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> VSEPR Theory</h5>
-                </div>
-                <div class="card-body">
-                    <h6>Notation</h6>
-                    <div class="alert alert-info small">
-                        <strong>AX<sub>n</sub>E<sub>m</sub></strong><br>
-                        A = Central atom<br>
-                        X = Bonding pairs (n)<br>
-                        E = Lone pairs (m)
-                    </div>
-
-                    <h6>Common Geometries</h6>
-                    <ul class="small">
-                        <li><strong>Linear:</strong> 180°</li>
-                        <li><strong>Trigonal Planar:</strong> 120°</li>
-                        <li><strong>Tetrahedral:</strong> 109.5°</li>
-                        <li><strong>Trigonal Bipyramidal:</strong> 90°, 120°</li>
-                        <li><strong>Octahedral:</strong> 90°</li>
-                        <li><strong>Pentagonal Bipyramidal:</strong> 72°, 90°</li>
-                    </ul>
-                </div>
-            </div>
-
-            <%@ include file="related-encoders.jsp"%>
         </div>
     </div>
 
-    <%@ include file="thanks.jsp"%>
-    <hr>
-    <%@ include file="addcomments.jsp"%>
+    <!-- ==================== OUTPUT COLUMN ==================== -->
+    <div class="tool-output-column">
+        <!-- Tab bar -->
+        <div class="mg-output-tabs">
+            <button type="button" class="mg-output-tab active" data-panel="result">Result</button>
+            <button type="button" class="mg-output-tab" data-panel="database">Database</button>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="mg-panel active" id="mg-panel-result">
+            <div class="tool-card tool-result-card">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--mg-tool);">
+                        <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-3.5-6.5l-2.8 2.8m-7.4 7.4l-2.8 2.8m0-13l2.8 2.8m7.4 7.4l2.8 2.8"/>
+                    </svg>
+                    <h4>Molecular Geometry</h4>
+                </div>
+                <div class="tool-result-content" id="mg-result-content">
+                    <div class="tool-empty-state" id="mg-empty-state">
+                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#9883;</div>
+                        <h3>Enter molecule details</h3>
+                        <p>Determine molecular geometry using VSEPR theory with step-by-step analysis.</p>
+                    </div>
+                </div>
+                <div class="tool-result-actions" id="mg-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
+                    <button type="button" class="tool-action-btn" id="mg-download-pdf-btn" style="flex:1 1 auto;width:auto;min-width:80px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;">&#128196; Download PDF</button>
+                    <a id="mg-lewis-btn" href="#" target="_blank" class="tool-action-btn" style="flex:1 1 auto;width:auto;min-width:80px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;text-align:center;text-decoration:none;display:none;">&#9883; Lewis Structure</a>
+                    <button type="button" class="tool-action-btn" id="mg-share-btn" style="flex:0 0 auto;width:auto;min-width:60px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Share</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Panel -->
+        <div class="mg-panel" id="mg-panel-database">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--mg-tool);">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    </svg>
+                    <h4>Molecule Database (54)</h4>
+                </div>
+                <div style="padding:0.75rem;">
+                    <input type="text" class="mg-search-input" id="mg-search" placeholder="Search by formula, name, or geometry...">
+                    <div class="mg-table-wrap">
+                        <table class="mg-table">
+                            <thead>
+                                <tr>
+                                    <th>Formula</th>
+                                    <th>Name</th>
+                                    <th>BP</th>
+                                    <th>LP</th>
+                                    <th>Geometry</th>
+                                    <th>Angle</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="mg-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== ADS COLUMN ==================== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+</main>
+
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
-<%@ include file="footer_adsense.jsp"%>
+<!-- Related Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="molecular-geometry-calculator.jsp"/>
+    <jsp:param name="keyword" value="chemistry"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
 
+<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- ===== 1. WHAT IS VSEPR THEORY? ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">1</span> What is VSEPR Theory?
+        </h2>
+        <p class="mg-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            <strong>VSEPR</strong> (Valence Shell Electron Pair Repulsion) theory states that <strong>electron pairs repel each other</strong> whether they are bonding pairs or lone pairs. They position themselves around a central atom to <strong>minimize repulsion</strong>, which determines the 3D shape of the molecule. An electron group can be a bond pair, lone pair, single unpaired electron, or multiple bond.
+        </p>
+
+        <!-- AXnEm Notation Visual -->
+        <div class="mg-notation-hero mg-anim mg-anim-d1">
+            <div class="mg-notation-block">
+                <div class="mg-notation-symbol mg-c-a">A</div>
+                <div class="mg-notation-label mg-c-a">Central Atom</div>
+            </div>
+            <div class="mg-notation-block">
+                <div class="mg-notation-symbol mg-c-x">X<sub>n</sub></div>
+                <div class="mg-notation-label mg-c-x">Bonding Pairs</div>
+            </div>
+            <div class="mg-notation-block">
+                <div class="mg-notation-symbol mg-c-e">E<sub>m</sub></div>
+                <div class="mg-notation-label mg-c-e">Lone Pairs</div>
+            </div>
+            <div class="mg-notation-block">
+                <div class="mg-notation-symbol mg-c-eq">=</div>
+                <div class="mg-notation-label mg-c-eq">Shape</div>
+            </div>
+        </div>
+
+        <div class="mg-callout mg-callout-insight mg-anim mg-anim-d2">
+            <span class="mg-callout-icon">&#128161;</span>
+            <div class="mg-callout-text">
+                <strong>Two critical concepts:</strong> <em>Electron-group geometry</em> is determined solely by the number of electron groups around the central atom. <em>Molecular geometry</em> depends on both electron groups AND how many are lone pairs. They only match when there are zero lone pairs.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2. HOW TO DETERMINE MOLECULAR GEOMETRY ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">2</span> How to Determine Molecular Geometry
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Follow these four steps for any molecule. This is the exact process our calculator automates:
+        </p>
+
+        <!-- Visual 4-step walkthrough using H₂O -->
+        <div class="mg-visual-steps">
+
+            <!-- Step 1: Lewis Structure -->
+            <div class="mg-vstep mg-anim mg-anim-d1">
+                <div class="mg-vstep-num">1</div>
+                <div class="mg-vstep-body">
+                    <h4>Draw the Lewis Structure</h4>
+                    <div class="mg-vstep-diagram">
+                        <div class="mg-lewis-css">
+                            <div class="mg-dots mg-dots-top">
+                                <span class="mg-dot"></span><span class="mg-dot"></span>
+                            </div>
+                            <div class="mg-lewis-row">
+                                <span class="mg-atom mg-atom-h">H</span>
+                                <span class="mg-bond">&mdash;</span>
+                                <span class="mg-atom mg-atom-central">O</span>
+                                <span class="mg-bond">&mdash;</span>
+                                <span class="mg-atom mg-atom-h">H</span>
+                            </div>
+                            <div class="mg-dots mg-dots-bottom">
+                                <span class="mg-dot"></span><span class="mg-dot"></span>
+                            </div>
+                        </div>
+                        <div class="mg-vstep-labels">
+                            <span class="mg-vlabel mg-vlabel-bond">2 bonding pairs</span>
+                            <span class="mg-vlabel mg-vlabel-lone">2 lone pairs</span>
+                        </div>
+                    </div>
+                    <p>O is central (6 e&#x207b;), each H has 1 e&#x207b;. Total: 8 valence electrons.</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Count electron groups -->
+            <div class="mg-vstep mg-anim mg-anim-d2">
+                <div class="mg-vstep-num">2</div>
+                <div class="mg-vstep-body">
+                    <h4>Count Electron Groups</h4>
+                    <div class="mg-vstep-diagram">
+                        <div class="mg-egroups">
+                            <div class="mg-egroup mg-egroup-bond"><span class="mg-egroup-icon">&#9135;</span><span>Bond</span></div>
+                            <div class="mg-egroup mg-egroup-bond"><span class="mg-egroup-icon">&#9135;</span><span>Bond</span></div>
+                            <div class="mg-egroup mg-egroup-lone"><span class="mg-egroup-icon">&#8759;</span><span>LP</span></div>
+                            <div class="mg-egroup mg-egroup-lone"><span class="mg-egroup-icon">&#8759;</span><span>LP</span></div>
+                        </div>
+                        <div class="mg-egroup-total">= <strong>4</strong> electron groups</div>
+                    </div>
+                    <p>Each bond or lone pair = 1 group. Double/triple bonds count as <strong>one</strong> group.</p>
+                </div>
+            </div>
+
+            <!-- Step 3: Electron geometry -->
+            <div class="mg-vstep mg-anim mg-anim-d3">
+                <div class="mg-vstep-num">3</div>
+                <div class="mg-vstep-body">
+                    <h4>Electron Geometry &rarr; Tetrahedral</h4>
+                    <div class="mg-vstep-diagram">
+                        <div class="mg-shape-tetra">
+                            <div class="mg-shape-node mg-shape-top"><span class="mg-dot"></span><span class="mg-dot"></span></div>
+                            <div class="mg-shape-line mg-shape-line-tl"></div>
+                            <div class="mg-shape-line mg-shape-line-tr"></div>
+                            <div class="mg-shape-center">O</div>
+                            <div class="mg-shape-line mg-shape-line-bl"></div>
+                            <div class="mg-shape-line mg-shape-line-br"></div>
+                            <div class="mg-shape-node mg-shape-left">H</div>
+                            <div class="mg-shape-node mg-shape-right">H</div>
+                            <div class="mg-shape-node mg-shape-bot"><span class="mg-dot"></span><span class="mg-dot"></span></div>
+                        </div>
+                        <div class="mg-shape-lookup">
+                            <div class="mg-lookup-row"><span>2 groups</span><span>&rarr;</span><span>Linear</span></div>
+                            <div class="mg-lookup-row"><span>3 groups</span><span>&rarr;</span><span>Trig. Planar</span></div>
+                            <div class="mg-lookup-row mg-lookup-active"><span>4 groups</span><span>&rarr;</span><span>Tetrahedral</span></div>
+                            <div class="mg-lookup-row"><span>5 groups</span><span>&rarr;</span><span>Trig. Bipyramidal</span></div>
+                            <div class="mg-lookup-row"><span>6 groups</span><span>&rarr;</span><span>Octahedral</span></div>
+                        </div>
+                    </div>
+                    <p>4 electron groups arrange at tetrahedral corners (109.5&deg;).</p>
+                </div>
+            </div>
+
+            <!-- Step 4: Remove lone pairs → molecular geometry -->
+            <div class="mg-vstep mg-anim mg-anim-d4">
+                <div class="mg-vstep-num">4</div>
+                <div class="mg-vstep-body">
+                    <h4>Remove Lone Pairs &rarr; Bent!</h4>
+                    <div class="mg-vstep-diagram">
+                        <div class="mg-transform">
+                            <div class="mg-transform-before">
+                                <div class="mg-mini-shape">
+                                    <span class="mg-mini-lp">:</span>
+                                    <span class="mg-mini-lp">:</span>
+                                    <span class="mg-mini-center">O</span>
+                                    <span class="mg-mini-bond">H</span>
+                                    <span class="mg-mini-bond">H</span>
+                                </div>
+                                <div class="mg-transform-label">Tetrahedral<br>(electron)</div>
+                            </div>
+                            <div class="mg-transform-arrow">
+                                <span class="mg-cross-lp">&times; LP</span>
+                                <span>&rArr;</span>
+                            </div>
+                            <div class="mg-transform-after">
+                                <div class="mg-mini-bent">
+                                    <span class="mg-mini-center">O</span>
+                                    <div class="mg-bent-arms">
+                                        <span class="mg-mini-bond">H</span>
+                                        <span class="mg-mini-bond">H</span>
+                                    </div>
+                                </div>
+                                <div class="mg-transform-label mg-transform-result">Bent<br>104.5&deg;</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>AX&#8322;E&#8322; &rarr; <strong>Bent</strong>. Lone pairs compress bond angle from 109.5&deg; to 104.5&deg;.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. ELECTRON VS MOLECULAR GEOMETRY ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">3</span> Electron Geometry vs Molecular Geometry
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            This is the most common point of confusion. Both start from the same electron arrangement, but molecular geometry only shows where atoms sit &mdash; lone pairs are invisible to the eye.
+        </p>
+
+        <!-- NH3 comparison -->
+        <h3 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:1rem 0 0.5rem;">Example: Ammonia (NH&#8323;) &mdash; AX&#8323;E</h3>
+        <div class="mg-compare mg-anim mg-anim-d1">
+            <div class="mg-compare-card mg-compare-electron">
+                <h4>Electron Geometry</h4>
+                <div class="mg-compare-diagram">    :
+    |
+ H&mdash;N&mdash;H
+    |
+    H</div>
+                <p><strong>Tetrahedral</strong><br>4 electron groups (3 bonds + 1 lone pair) arrange tetrahedrally</p>
+            </div>
+            <div class="mg-compare-vs">&rarr;</div>
+            <div class="mg-compare-card mg-compare-molecular">
+                <h4>Molecular Geometry</h4>
+                <div class="mg-compare-diagram">
+ H&mdash;N&mdash;H
+    |
+    H</div>
+                <p><strong>Trigonal Pyramidal</strong><br>Remove the lone pair &mdash; only 3 atoms remain in a pyramid shape</p>
+            </div>
+        </div>
+
+        <!-- H2O comparison -->
+        <h3 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:1.25rem 0 0.5rem;">Example: Water (H&#8322;O) &mdash; AX&#8322;E&#8322;</h3>
+        <div class="mg-compare mg-anim mg-anim-d2">
+            <div class="mg-compare-card mg-compare-electron">
+                <h4>Electron Geometry</h4>
+                <div class="mg-compare-diagram">  : :
+   |
+H&mdash;O&mdash;H</div>
+                <p><strong>Tetrahedral</strong><br>4 electron groups (2 bonds + 2 lone pairs)</p>
+            </div>
+            <div class="mg-compare-vs">&rarr;</div>
+            <div class="mg-compare-card mg-compare-molecular">
+                <h4>Molecular Geometry</h4>
+                <div class="mg-compare-diagram">
+H&mdash;O&mdash;H</div>
+                <p><strong>Bent</strong><br>Two lone pairs hidden &mdash; only the V-shape remains at 104.5&deg;</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 4. COMPLETE VSEPR REFERENCE TABLE ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">4</span> Complete VSEPR Reference Table
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Every electron group count mapped to its electron geometry, molecular geometry, and bond angle. This is the master table used by chemists worldwide.
+        </p>
+
+        <div class="mg-ref-wrap mg-anim mg-anim-d1">
+            <table class="mg-ref-table">
+                <thead>
+                    <tr>
+                        <th>Groups</th>
+                        <th>Electron Geometry</th>
+                        <th>LP</th>
+                        <th>VSEPR</th>
+                        <th>Molecular Shape</th>
+                        <th>Bond Angle</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="mg-row-group"><td colspan="7">2 Electron Groups</td></tr>
+                    <tr><td>2</td><td>Linear</td><td>0</td><td>AX&#8322;</td><td>Linear</td><td>180&deg;</td><td>CO&#8322;, BeCl&#8322;</td></tr>
+                    <tr class="mg-row-group"><td colspan="7">3 Electron Groups</td></tr>
+                    <tr><td>3</td><td>Trigonal Planar</td><td>0</td><td>AX&#8323;</td><td>Trigonal Planar</td><td>120&deg;</td><td>BF&#8323;, SO&#8323;</td></tr>
+                    <tr><td>3</td><td>Trigonal Planar</td><td>1</td><td>AX&#8322;E</td><td>Bent</td><td>~119&deg;</td><td>SO&#8322;, O&#8323;</td></tr>
+                    <tr class="mg-row-group"><td colspan="7">4 Electron Groups</td></tr>
+                    <tr><td>4</td><td>Tetrahedral</td><td>0</td><td>AX&#8324;</td><td>Tetrahedral</td><td>109.5&deg;</td><td>CH&#8324;, CCl&#8324;</td></tr>
+                    <tr><td>4</td><td>Tetrahedral</td><td>1</td><td>AX&#8323;E</td><td>Trigonal Pyramidal</td><td>~107&deg;</td><td>NH&#8323;, PCl&#8323;</td></tr>
+                    <tr><td>4</td><td>Tetrahedral</td><td>2</td><td>AX&#8322;E&#8322;</td><td>Bent</td><td>~104.5&deg;</td><td>H&#8322;O, H&#8322;S</td></tr>
+                    <tr class="mg-row-group"><td colspan="7">5 Electron Groups</td></tr>
+                    <tr><td>5</td><td>Trigonal Bipyramidal</td><td>0</td><td>AX&#8325;</td><td>Trigonal Bipyramidal</td><td>90&deg;, 120&deg;</td><td>PCl&#8325;, PF&#8325;</td></tr>
+                    <tr><td>5</td><td>Trigonal Bipyramidal</td><td>1</td><td>AX&#8324;E</td><td>See-Saw</td><td>~102&deg;, ~173&deg;</td><td>SF&#8324;, TeCl&#8324;</td></tr>
+                    <tr><td>5</td><td>Trigonal Bipyramidal</td><td>2</td><td>AX&#8323;E&#8322;</td><td>T-Shaped</td><td>~87.5&deg;</td><td>ClF&#8323;, BrF&#8323;</td></tr>
+                    <tr><td>5</td><td>Trigonal Bipyramidal</td><td>3</td><td>AX&#8322;E&#8323;</td><td>Linear</td><td>180&deg;</td><td>XeF&#8322;, I&#8323;&#8315;</td></tr>
+                    <tr class="mg-row-group"><td colspan="7">6 Electron Groups</td></tr>
+                    <tr><td>6</td><td>Octahedral</td><td>0</td><td>AX&#8326;</td><td>Octahedral</td><td>90&deg;</td><td>SF&#8326;, PF&#8326;&#8315;</td></tr>
+                    <tr><td>6</td><td>Octahedral</td><td>1</td><td>AX&#8325;E</td><td>Square Pyramidal</td><td>~84&deg;</td><td>BrF&#8325;, IF&#8325;</td></tr>
+                    <tr><td>6</td><td>Octahedral</td><td>2</td><td>AX&#8324;E&#8322;</td><td>Square Planar</td><td>90&deg;</td><td>XeF&#8324;, ICl&#8324;&#8315;</td></tr>
+                    <tr class="mg-row-group"><td colspan="7">7 Electron Groups</td></tr>
+                    <tr><td>7</td><td>Pentagonal Bipyramidal</td><td>0</td><td>AX&#8327;</td><td>Pentagonal Bipyramidal</td><td>72&deg;, 90&deg;</td><td>IF&#8327;</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== 5. LONE PAIR EFFECTS ON BOND ANGLES ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">5</span> How Lone Pairs Compress Bond Angles
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Lone pairs are held <strong>closer to the nucleus</strong> than bonding pairs, so they occupy more angular space. This extra repulsion pushes bonding pairs closer together, compressing the bond angle. Each lone pair reduces the angle by roughly 2&ndash;3&deg;.
+        </p>
+
+        <p style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Tetrahedral family &mdash; bond angle compression</p>
+        <div class="mg-anim mg-anim-d1">
+            <div class="mg-angle-bar">
+                <div class="mg-angle-label">CH&#8324; (0 LP)</div>
+                <div class="mg-angle-track">
+                    <div class="mg-angle-fill mg-angle-fill-ideal" style="--fill:60.8%;">109.5&deg;</div>
+                </div>
+                <div class="mg-angle-val">ideal</div>
+            </div>
+            <div class="mg-angle-bar">
+                <div class="mg-angle-label">NH&#8323; (1 LP)</div>
+                <div class="mg-angle-track">
+                    <div class="mg-angle-fill mg-angle-fill-lp1" style="--fill:59.4%;">107&deg;</div>
+                </div>
+                <div class="mg-angle-val">&minus;2.5&deg;</div>
+            </div>
+            <div class="mg-angle-bar">
+                <div class="mg-angle-label">H&#8322;O (2 LP)</div>
+                <div class="mg-angle-track">
+                    <div class="mg-angle-fill mg-angle-fill-lp2" style="--fill:58.1%;">104.5&deg;</div>
+                </div>
+                <div class="mg-angle-val">&minus;5&deg;</div>
+            </div>
+        </div>
+
+        <p style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin:1.25rem 0 0.5rem;">Repulsion strength order</p>
+        <div class="mg-anim mg-anim-d2" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;padding:1rem;background:var(--bg-secondary);border-radius:0.5rem;">
+            <span style="padding:0.375rem 0.75rem;background:#dc2626;color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">LP&ndash;LP</span>
+            <span style="font-size:1.25rem;color:var(--text-muted);">&gt;</span>
+            <span style="padding:0.375rem 0.75rem;background:#d97706;color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">LP&ndash;BP</span>
+            <span style="font-size:1.25rem;color:var(--text-muted);">&gt;</span>
+            <span style="padding:0.375rem 0.75rem;background:#059669;color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">BP&ndash;BP</span>
+            <span style="font-size:0.8125rem;color:var(--text-secondary);margin-left:0.5rem;">(strongest &rarr; weakest)</span>
+        </div>
+
+        <div class="mg-callout mg-callout-insight mg-anim mg-anim-d3">
+            <span class="mg-callout-icon">&#128161;</span>
+            <div class="mg-callout-text">
+                <strong>Why this order?</strong> Lone pairs spread out more because they are attracted to only one nucleus (the central atom). Bonding pairs are shared between two nuclei, which keeps them more tightly confined.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 6. COMMON GEOMETRIES ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">6</span> Common Molecular Geometries
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.5rem;">
+            The six most common shapes you will encounter in chemistry courses:
+        </p>
+
+        <div class="mg-geom-grid">
+            <div class="mg-edu-card mg-anim mg-anim-d1" style="border-left:3px solid #059669;">
+                <h4><span style="color:#059669;">&#9679;</span> Linear (AX&#8322;)</h4>
+                <p>180&deg; &bull; sp &bull; CO&#8322;, BeCl&#8322;, HCN</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d2" style="border-left:3px solid #2563eb;">
+                <h4><span style="color:#2563eb;">&#9679;</span> Trigonal Planar (AX&#8323;)</h4>
+                <p>120&deg; &bull; sp&sup2; &bull; BF&#8323;, SO&#8323;, AlCl&#8323;</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d3" style="border-left:3px solid #7c3aed;">
+                <h4><span style="color:#7c3aed;">&#9679;</span> Tetrahedral (AX&#8324;)</h4>
+                <p>109.5&deg; &bull; sp&sup3; &bull; CH&#8324;, CCl&#8324;, SiH&#8324;</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d4" style="border-left:3px solid #dc2626;">
+                <h4><span style="color:#dc2626;">&#9679;</span> Bent (AX&#8322;E / AX&#8322;E&#8322;)</h4>
+                <p>104&ndash;120&deg; &bull; sp&sup2; or sp&sup3; &bull; H&#8322;O, SO&#8322;, O&#8323;</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d5" style="border-left:3px solid #d97706;">
+                <h4><span style="color:#d97706;">&#9679;</span> Trigonal Pyramidal (AX&#8323;E)</h4>
+                <p>~107&deg; &bull; sp&sup3; &bull; NH&#8323;, PCl&#8323;, AsH&#8323;</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d6" style="border-left:3px solid #0891b2;">
+                <h4><span style="color:#0891b2;">&#9679;</span> Octahedral (AX&#8326;)</h4>
+                <p>90&deg; &bull; sp&sup3;d&sup2; &bull; SF&#8326;, PF&#8326;&#8315;</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 7. HYBRIDIZATION EXPLAINED ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">7</span> Understanding Hybridization
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Hybridization describes how atomic orbitals mix to form new hybrid orbitals for bonding. The total number of <strong>electron domains</strong> (bonding + lone pairs) determines the hybridization type.
+        </p>
+
+        <div class="mg-geom-grid">
+            <div class="mg-edu-card mg-anim mg-anim-d1" style="border-left:3px solid #22c55e;">
+                <h4>2 domains &rarr; sp</h4>
+                <p>Two hybrid orbitals at 180&deg;. Linear. Examples: CO&#8322;, BeCl&#8322;, HCN.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d2" style="border-left:3px solid #f59e0b;">
+                <h4>3 domains &rarr; sp&sup2;</h4>
+                <p>Three hybrid orbitals at 120&deg;. Trigonal planar. Examples: BF&#8323;, SO&#8322;, O&#8323;.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d3" style="border-left:3px solid #ef4444;">
+                <h4>4 domains &rarr; sp&sup3;</h4>
+                <p>Four hybrid orbitals at 109.5&deg;. Tetrahedral. Examples: CH&#8324;, NH&#8323;, H&#8322;O.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d4" style="border-left:3px solid #7c3aed;">
+                <h4>5 domains &rarr; sp&sup3;d</h4>
+                <p>Five hybrid orbitals at 90&deg; &amp; 120&deg;. Trigonal bipyramidal. Examples: PCl&#8325;, SF&#8324;.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d5" style="border-left:3px solid #0891b2;">
+                <h4>6 domains &rarr; sp&sup3;d&sup2;</h4>
+                <p>Six hybrid orbitals at 90&deg;. Octahedral. Examples: SF&#8326;, XeF&#8324;.</p>
+            </div>
+        </div>
+
+        <div class="mg-callout mg-callout-tip mg-anim mg-anim-d6">
+            <span class="mg-callout-icon">&#128073;</span>
+            <div class="mg-callout-text">
+                <strong>Quick rule:</strong> Count the total number of electron pairs (bonding + lone) around the central atom. That count equals the number of hybrid orbitals needed: 2&rarr;sp, 3&rarr;sp&sup2;, 4&rarr;sp&sup3;, 5&rarr;sp&sup3;d, 6&rarr;sp&sup3;d&sup2;.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 8. POLARITY & DIPOLE MOMENTS ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">8</span> Polarity &amp; Dipole Moments
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            Molecular geometry directly determines whether a molecule is polar or nonpolar. When electrons are not distributed equally, the molecule has a <strong>net dipole moment</strong> (&mu; = &delta; &times; d). Electronegativity differences between atoms create partial charges (&delta;+ and &delta;&minus;).
+        </p>
+
+        <div class="mg-polar-grid mg-anim mg-anim-d1">
+            <div class="mg-polar-card mg-polar-nonpolar">
+                <h4>Nonpolar</h4>
+                <div class="mg-polar-molecule">O=C=O</div>
+                <p><strong>CO&#8322;</strong> is linear &mdash; two equal C=O dipoles point in opposite directions and <strong>cancel out</strong>. Net dipole = 0.</p>
+            </div>
+            <div class="mg-polar-card mg-polar-polar">
+                <h4>Polar</h4>
+                <div class="mg-polar-molecule">H&mdash;O&mdash;H</div>
+                <p><strong>H&#8322;O</strong> is bent &mdash; the two O&ndash;H dipoles point in similar directions and do <strong>not cancel</strong>. Net dipole &ne; 0.</p>
+            </div>
+        </div>
+
+        <h3 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:1.25rem 0 0.5rem;">Quick Polarity Rules</h3>
+        <div class="mg-anim mg-anim-d2" style="display:grid;gap:0.5rem;">
+            <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.625rem 0.75rem;background:var(--bg-secondary);border-radius:0.5rem;">
+                <span style="background:#059669;color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">1</span>
+                <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.5;">No lone pairs on central atom + all identical terminal atoms = <strong>nonpolar</strong> (e.g., CH&#8324;, BF&#8323;, SF&#8326;)</p>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.625rem 0.75rem;background:var(--bg-secondary);border-radius:0.5rem;">
+                <span style="background:#d97706;color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">2</span>
+                <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.5;">Symmetric geometry can still be nonpolar even with polar bonds &mdash; dipoles cancel by symmetry (e.g., CO&#8322; linear, XeF&#8324; square planar)</p>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.625rem 0.75rem;background:var(--bg-secondary);border-radius:0.5rem;">
+                <span style="background:#dc2626;color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">3</span>
+                <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.5;">Lone pairs on the central atom almost always make the molecule <strong>polar</strong> (e.g., NH&#8323;, H&#8322;O, SF&#8324;)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 9. REAL-WORLD APPLICATIONS ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="mg-section-num">9</span> Why Molecular Geometry Matters
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            Molecular shape determines physical and chemical properties, from boiling points to biological activity.
+        </p>
+        <div class="mg-geom-grid">
+            <div class="mg-edu-card mg-anim mg-anim-d1" style="border-left:3px solid #2563eb;">
+                <h4>Drug Design</h4>
+                <p>Pharmaceutical molecules must have the right 3D shape to bind to protein targets. Geometry determines whether a drug fits its receptor like a key in a lock.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d2" style="border-left:3px solid #7c3aed;">
+                <h4>Polarity &amp; Solubility</h4>
+                <p>CO&#8322; is linear and nonpolar (dissolves in oil), while H&#8322;O is bent and highly polar (universal solvent). Same atoms, different geometry, different properties.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d3" style="border-left:3px solid #059669;">
+                <h4>Material Science</h4>
+                <p>Silicon&rsquo;s tetrahedral bonding (sp&sup3;) creates the diamond cubic crystal structure that makes semiconductor chips possible.</p>
+            </div>
+            <div class="mg-edu-card mg-anim mg-anim-d4" style="border-left:3px solid #d97706;">
+                <h4>Biological Activity</h4>
+                <p>Enzyme active sites recognize substrates by their exact 3D shape. A single bond angle difference can make a molecule biologically inactive or toxic.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the difference between electron geometry and molecular geometry?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Electron geometry considers all electron pairs (bonding + lone) while molecular geometry only considers atom positions. For example, NH&#8323; has tetrahedral electron geometry (4 total pairs) but trigonal pyramidal molecular geometry (3 visible bonds). They match only when there are zero lone pairs on the central atom.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do I find the central atom in a molecule?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The central atom is usually the least electronegative atom (excluding hydrogen, which is always terminal). In most formulas, the central atom is written first: C in CH&#8324;, N in NH&#8323;, S in SF&#8326;. For oxoacids, the non-oxygen non-hydrogen atom is central (S in H&#8322;SO&#8324;).</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Why do lone pairs affect bond angles?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Lone pairs are held closer to the nucleus than bonding pairs, so they occupy more angular space. This extra repulsion compresses the bond angles. The repulsion order is: LP&ndash;LP &gt; LP&ndash;BP &gt; BP&ndash;BP. Each lone pair reduces bond angles by roughly 2&ndash;3&deg; from the ideal geometry. That is why water (2 lone pairs) has 104.5&deg; instead of 109.5&deg;.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do I determine if a molecule is polar or nonpolar?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">First determine the molecular geometry. If the molecule is perfectly symmetric with identical terminal atoms and no lone pairs (like CH&#8324;, CO&#8322;, SF&#8326;), it is nonpolar because dipoles cancel. If there are lone pairs on the central atom or different terminal atoms, the molecule is usually polar (like H&#8322;O, NH&#8323;, CHCl&#8323;). The key is whether individual bond dipoles cancel by symmetry.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What molecules does this calculator support?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The database contains 54 molecules covering all VSEPR geometries from linear to pentagonal bipyramidal. The dynamic formula parser handles any molecule built from known elements (H through Rn), including multi-center molecules like glucose (C&#8326;H&#8321;&#8322;O&#8326;) and ethanol (C&#8322;H&#8326;O). It supports ions with + or &minus; charge notation (NH4+, SO4(2-)). Enter the central atom first in the formula for best results.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this molecular geometry calculator free?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes, 100% free with no signup. Features include VSEPR analysis by electron pairs or formula, 54-molecule database, step-by-step analysis, downloadable PDF results, printable VSEPR reference charts, practice worksheets for teachers, multi-center molecule support, and shareable URLs. All computation runs in your browser.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Can this handle complex molecules like glucose or ethanol?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes. For multi-center molecules like glucose (C&#8326;H&#8321;&#8322;O&#8326;), ethanol (C&#8322;H&#8326;O), or benzene (C&#8326;H&#8326;), the calculator detects multiple atom centers and analyzes each one using VSEPR theory. It shows geometry, bond angles, and hybridization per atom type, plus the Index of Hydrogen Deficiency (IHD) for rings and double bonds.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Explore More Chemistry Tools -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
+            Explore More Chemistry Tools
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+            <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Lewis Structure Generator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Draw Lewis structures with VSEPR shapes</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">&#8652;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Chemical Equation Balancer</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Balance chemical equations step by step</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/electron-configuration-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">e&#8315;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Electron Configuration</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Find electron configurations for any element</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Practice NCERT Problems -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem;">
+        <h2 style="font-size:1.125rem;margin-bottom:0.75rem;">Practice NCERT Problems</h2>
+        <p style="color:var(--text-secondary);margin-bottom:1rem;">Apply your molecular geometry knowledge to NCERT chemistry and physics problems:</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:0.75rem;">
+            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,#f1f5f9);border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,#e2e8f0);">Class 11 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,#f1f5f9);border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,#e2e8f0);">Class 12 Physics Part 1</a></li>
+        </ul>
+    </div>
+</section>
+
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
+
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
+
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+<!-- Scroll-triggered animations -->
 <script>
-// Molecular geometry database
-const molecules = [
-    // Linear (2 electron pairs)
-    { formula: 'CO2', name: 'Carbon Dioxide', bp: 2, lp: 0, geometry: 'Linear', angle: '180°', hybridization: 'sp' },
-    { formula: 'BeCl2', name: 'Beryllium Chloride', bp: 2, lp: 0, geometry: 'Linear', angle: '180°', hybridization: 'sp' },
-    { formula: 'CO', name: 'Carbon Monoxide', bp: 1, lp: 1, geometry: 'Linear', angle: '180°', hybridization: 'sp' },
-
-    // Trigonal Planar (3 electron pairs)
-    { formula: 'BF3', name: 'Boron Trifluoride', bp: 3, lp: 0, geometry: 'Trigonal Planar', angle: '120°', hybridization: 'sp²' },
-    { formula: 'SO3', name: 'Sulfur Trioxide', bp: 3, lp: 0, geometry: 'Trigonal Planar', angle: '120°', hybridization: 'sp²' },
-    { formula: 'NO3-', name: 'Nitrate Ion', bp: 3, lp: 0, geometry: 'Trigonal Planar', angle: '120°', hybridization: 'sp²' },
-    { formula: 'SO2', name: 'Sulfur Dioxide', bp: 2, lp: 1, geometry: 'Bent', angle: '119°', hybridization: 'sp²' },
-    { formula: 'O3', name: 'Ozone', bp: 2, lp: 1, geometry: 'Bent', angle: '117°', hybridization: 'sp²' },
-
-    // Tetrahedral (4 electron pairs)
-    { formula: 'CH4', name: 'Methane', bp: 4, lp: 0, geometry: 'Tetrahedral', angle: '109.5°', hybridization: 'sp³' },
-    { formula: 'CCl4', name: 'Carbon Tetrachloride', bp: 4, lp: 0, geometry: 'Tetrahedral', angle: '109.5°', hybridization: 'sp³' },
-    { formula: 'NH4+', name: 'Ammonium Ion', bp: 4, lp: 0, geometry: 'Tetrahedral', angle: '109.5°', hybridization: 'sp³' },
-    { formula: 'NH3', name: 'Ammonia', bp: 3, lp: 1, geometry: 'Trigonal Pyramidal', angle: '107°', hybridization: 'sp³' },
-    { formula: 'PCl3', name: 'Phosphorus Trichloride', bp: 3, lp: 1, geometry: 'Trigonal Pyramidal', angle: '107°', hybridization: 'sp³' },
-    { formula: 'H3O+', name: 'Hydronium Ion', bp: 3, lp: 1, geometry: 'Trigonal Pyramidal', angle: '107°', hybridization: 'sp³' },
-    { formula: 'H2O', name: 'Water', bp: 2, lp: 2, geometry: 'Bent', angle: '104.5°', hybridization: 'sp³' },
-    { formula: 'H2S', name: 'Hydrogen Sulfide', bp: 2, lp: 2, geometry: 'Bent', angle: '92°', hybridization: 'sp³' },
-    { formula: 'OF2', name: 'Oxygen Difluoride', bp: 2, lp: 2, geometry: 'Bent', angle: '103°', hybridization: 'sp³' },
-
-    // Trigonal Bipyramidal (5 electron pairs)
-    { formula: 'PCl5', name: 'Phosphorus Pentachloride', bp: 5, lp: 0, geometry: 'Trigonal Bipyramidal', angle: '90°, 120°', hybridization: 'sp³d' },
-    { formula: 'PF5', name: 'Phosphorus Pentafluoride', bp: 5, lp: 0, geometry: 'Trigonal Bipyramidal', angle: '90°, 120°', hybridization: 'sp³d' },
-    { formula: 'SF4', name: 'Sulfur Tetrafluoride', bp: 4, lp: 1, geometry: 'See-Saw', angle: '~102°, ~173°', hybridization: 'sp³d' },
-    { formula: 'ClF3', name: 'Chlorine Trifluoride', bp: 3, lp: 2, geometry: 'T-Shaped', angle: '~87.5°', hybridization: 'sp³d' },
-    { formula: 'BrF3', name: 'Bromine Trifluoride', bp: 3, lp: 2, geometry: 'T-Shaped', angle: '~86°', hybridization: 'sp³d' },
-    { formula: 'XeF2', name: 'Xenon Difluoride', bp: 2, lp: 3, geometry: 'Linear', angle: '180°', hybridization: 'sp³d' },
-    { formula: 'I3-', name: 'Triiodide Ion', bp: 2, lp: 3, geometry: 'Linear', angle: '180°', hybridization: 'sp³d' },
-
-    // Octahedral (6 electron pairs)
-    { formula: 'SF6', name: 'Sulfur Hexafluoride', bp: 6, lp: 0, geometry: 'Octahedral', angle: '90°', hybridization: 'sp³d²' },
-    { formula: 'PF6-', name: 'Hexafluorophosphate Ion', bp: 6, lp: 0, geometry: 'Octahedral', angle: '90°', hybridization: 'sp³d²' },
-    { formula: 'BrF5', name: 'Bromine Pentafluoride', bp: 5, lp: 1, geometry: 'Square Pyramidal', angle: '~84°', hybridization: 'sp³d²' },
-    { formula: 'IF5', name: 'Iodine Pentafluoride', bp: 5, lp: 1, geometry: 'Square Pyramidal', angle: '~81°', hybridization: 'sp³d²' },
-    { formula: 'XeF4', name: 'Xenon Tetrafluoride', bp: 4, lp: 2, geometry: 'Square Planar', angle: '90°', hybridization: 'sp³d²' },
-    { formula: 'ICl4-', name: 'Tetrachloroiodate Ion', bp: 4, lp: 2, geometry: 'Square Planar', angle: '90°', hybridization: 'sp³d²' },
-
-    // Pentagonal Bipyramidal (7 electron pairs) - Rare
-    { formula: 'IF7', name: 'Iodine Heptafluoride', bp: 7, lp: 0, geometry: 'Pentagonal Bipyramidal', angle: '72°, 90°', hybridization: 'sp³d³' },
-
-    // Other common molecules
-    { formula: 'CH2O', name: 'Formaldehyde', bp: 3, lp: 0, geometry: 'Trigonal Planar', angle: '120°', hybridization: 'sp²' },
-    { formula: 'C2H4', name: 'Ethylene', bp: 3, lp: 0, geometry: 'Trigonal Planar', angle: '120°', hybridization: 'sp²' },
-    { formula: 'NO2-', name: 'Nitrite Ion', bp: 2, lp: 1, geometry: 'Bent', angle: '115°', hybridization: 'sp²' },
-];
-
-// VSEPR geometry data
-const geometryData = {
-    '1-0': {
-        electronGeom: 'Linear',
-        molecularGeom: 'Linear',
-        angle: 'N/A',
-        hybridization: 's',
-        notation: 'AX',
-        examples: ['H⁺', 'Li', 'Na'],
-        description: 'Single atom or monatomic ion.',
-        diagram: 'A—X'
-    },
-    '2-0': {
-        electronGeom: 'Linear',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp',
-        notation: 'AX₂',
-        examples: ['CO₂', 'BeCl₂', 'CS₂'],
-        description: 'Two bonding pairs arrange in a straight line to minimize repulsion.',
-        diagram: 'X—A—X'
-    },
-    '1-1': {
-        electronGeom: 'Linear',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp',
-        notation: 'AXE',
-        examples: ['CO', 'NO⁺', 'CN⁻'],
-        description: 'One bond and one lone pair in linear arrangement.',
-        diagram: ':—A—X'
-    },
-    '3-0': {
-        electronGeom: 'Trigonal Planar',
-        molecularGeom: 'Trigonal Planar',
-        angle: '120°',
-        hybridization: 'sp²',
-        notation: 'AX₃',
-        examples: ['BF₃', 'SO₃', 'AlCl₃'],
-        description: 'Three bonding pairs form a flat triangle in one plane.',
-        diagram: '    X\n    |\n X—A—X'
-    },
-    '2-1': {
-        electronGeom: 'Trigonal Planar',
-        molecularGeom: 'Bent',
-        angle: '~119°',
-        hybridization: 'sp²',
-        notation: 'AX₂E',
-        examples: ['SO₂', 'NO₂⁻', 'O₃'],
-        description: 'Lone pair pushes bonding pairs closer, creating bent shape.',
-        diagram: '    :\n    |\n X—A—X'
-    },
-    '1-2': {
-        electronGeom: 'Trigonal Planar',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp²',
-        notation: 'AXE₂',
-        examples: ['SnCl₂ (gas)', 'NO₂⁺ (excited)'],
-        description: 'Two lone pairs leave single bonding pair (very rare).',
-        diagram: ': A—X :'
-    },
-    '4-0': {
-        electronGeom: 'Tetrahedral',
-        molecularGeom: 'Tetrahedral',
-        angle: '109.5°',
-        hybridization: 'sp³',
-        notation: 'AX₄',
-        examples: ['CH₄', 'CCl₄', 'SiH₄'],
-        description: 'Four bonding pairs arrange at corners of a tetrahedron.',
-        diagram: '    X\n    |\n X—A—X\n    |\n    X'
-    },
-    '3-1': {
-        electronGeom: 'Tetrahedral',
-        molecularGeom: 'Trigonal Pyramidal',
-        angle: '~107°',
-        hybridization: 'sp³',
-        notation: 'AX₃E',
-        examples: ['NH₃', 'PCl₃', 'AsH₃'],
-        description: 'Lone pair occupies one tetrahedral position, forming pyramid.',
-        diagram: '    :\n    |\n X—A—X\n    |\n    X'
-    },
-    '2-2': {
-        electronGeom: 'Tetrahedral',
-        molecularGeom: 'Bent',
-        angle: '104.5°',
-        hybridization: 'sp³',
-        notation: 'AX₂E₂',
-        examples: ['H₂O', 'H₂S', 'SCl₂'],
-        description: 'Two lone pairs compress bond angle below tetrahedral.',
-        diagram: '  : :\n   |\n X—A—X'
-    },
-    '1-3': {
-        electronGeom: 'Tetrahedral',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp³',
-        notation: 'AXE₃',
-        examples: ['ClO⁻ (theoretical)'],
-        description: 'Three lone pairs leave single bond (extremely rare/unstable).',
-        diagram: ': : : A—X'
-    },
-    '5-0': {
-        electronGeom: 'Trigonal Bipyramidal',
-        molecularGeom: 'Trigonal Bipyramidal',
-        angle: '90°, 120°',
-        hybridization: 'sp³d',
-        notation: 'AX₅',
-        examples: ['PCl₅', 'PF₅', 'AsF₅'],
-        description: 'Five bonding pairs with axial (90°) and equatorial (120°) positions.',
-        diagram: '     X\n     |\n X—A—X\n   / | \\\n  X  X'
-    },
-    '4-1': {
-        electronGeom: 'Trigonal Bipyramidal',
-        molecularGeom: 'See-Saw',
-        angle: '~102°, ~173°',
-        hybridization: 'sp³d',
-        notation: 'AX₄E',
-        examples: ['SF₄', 'XeO₂F₂', 'IF₄⁺'],
-        description: 'Lone pair in equatorial position creates see-saw shape.',
-        diagram: '     X\n     |\n :—A—X\n     |\n     X'
-    },
-    '3-2': {
-        electronGeom: 'Trigonal Bipyramidal',
-        molecularGeom: 'T-Shaped',
-        angle: '~87.5°',
-        hybridization: 'sp³d',
-        notation: 'AX₃E₂',
-        examples: ['ClF₃', 'BrF₃', 'ICl₃'],
-        description: 'Two lone pairs in equatorial positions form T-shape.',
-        diagram: '     X\n     |\n : A :\n     |\n     X'
-    },
-    '2-3': {
-        electronGeom: 'Trigonal Bipyramidal',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp³d',
-        notation: 'AX₂E₃',
-        examples: ['XeF₂', 'I₃⁻', 'ICl₂⁻'],
-        description: 'Three lone pairs in equatorial plane leave linear molecule.',
-        diagram: ': : : A X—X'
-    },
-    '1-4': {
-        electronGeom: 'Trigonal Bipyramidal',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp³d',
-        notation: 'AXE₄',
-        examples: ['Theoretical only'],
-        description: 'Four lone pairs with single bond (extremely unstable).',
-        diagram: ': : : : A—X'
-    },
-    '6-0': {
-        electronGeom: 'Octahedral',
-        molecularGeom: 'Octahedral',
-        angle: '90°',
-        hybridization: 'sp³d²',
-        notation: 'AX₆',
-        examples: ['SF₆', 'PF₆⁻', 'SiF₆²⁻'],
-        description: 'Six bonding pairs form regular octahedron.',
-        diagram: '     X\n     |\n X—A—X\n   / | \\\n  X  |  X\n     X'
-    },
-    '5-1': {
-        electronGeom: 'Octahedral',
-        molecularGeom: 'Square Pyramidal',
-        angle: '~84°',
-        hybridization: 'sp³d²',
-        notation: 'AX₅E',
-        examples: ['BrF₅', 'IF₅', 'XeOF₄'],
-        description: 'Lone pair at one position creates square pyramid.',
-        diagram: '     X\n     |\n X—A—X\n   / | \\\n  X  :  X'
-    },
-    '4-2': {
-        electronGeom: 'Octahedral',
-        molecularGeom: 'Square Planar',
-        angle: '90°',
-        hybridization: 'sp³d²',
-        notation: 'AX₄E₂',
-        examples: ['XeF₄', 'ICl₄⁻', 'BrF₄⁻'],
-        description: 'Two opposite lone pairs leave square planar shape.',
-        diagram: '     :\n     |\n X—A—X\n   / | \\\n  X  :  X'
-    },
-    '3-3': {
-        electronGeom: 'Octahedral',
-        molecularGeom: 'T-Shaped',
-        angle: '~90°',
-        hybridization: 'sp³d²',
-        notation: 'AX₃E₃',
-        examples: ['XeF₃⁻ (theoretical)', 'Very rare'],
-        description: 'Three lone pairs create T-shaped geometry (extremely rare).',
-        diagram: '     X\n     |\n : A :\n     |\n     X\n     :\n     X'
-    },
-    '2-4': {
-        electronGeom: 'Octahedral',
-        molecularGeom: 'Linear',
-        angle: '180°',
-        hybridization: 'sp³d²',
-        notation: 'AX₂E₄',
-        examples: ['Theoretical only'],
-        description: 'Four lone pairs leave linear geometry (extremely unstable).',
-        diagram: ': : X—A—X : :'
-    },
-    '7-0': {
-        electronGeom: 'Pentagonal Bipyramidal',
-        molecularGeom: 'Pentagonal Bipyramidal',
-        angle: '72°, 90°',
-        hybridization: 'sp³d³',
-        notation: 'AX₇',
-        examples: ['IF₇', 'ReF₇', 'OsF₇'],
-        description: 'Seven bonding pairs form pentagonal bipyramid (rare, heavy elements only).',
-        diagram: '       X\n       |\n   X—A—X\n  / /|\\ \\\n X X | X X\n     X'
-    },
-    '6-1': {
-        electronGeom: 'Pentagonal Bipyramidal',
-        molecularGeom: 'Pentagonal Pyramidal',
-        angle: '~72°, ~90°',
-        hybridization: 'sp³d³',
-        notation: 'AX₆E',
-        examples: ['XeOF₅⁻ (theoretical)', 'Very rare'],
-        description: 'Lone pair at axial position creates pentagonal pyramid (very rare).',
-        diagram: '       X\n       |\n   X—A—X\n  / /|\\ \\\n X : | X X\n     X'
-    },
-    '5-2': {
-        electronGeom: 'Pentagonal Bipyramidal',
-        molecularGeom: 'Pentagonal Planar',
-        angle: '72°',
-        hybridization: 'sp³d³',
-        notation: 'AX₅E₂',
-        examples: ['XeF₅⁻ (theoretical)'],
-        description: 'Two axial lone pairs leave pentagonal plane (very rare).',
-        diagram: '       :\n       |\n   X—A—X\n  / /|\\ \\\n X : | X X\n     :\n     X'
-    },
-    '4-3': {
-        electronGeom: 'Pentagonal Bipyramidal',
-        molecularGeom: 'Square Planar',
-        angle: '~90°',
-        hybridization: 'sp³d³',
-        notation: 'AX₄E₃',
-        examples: ['Theoretical'],
-        description: 'Three lone pairs create square planar geometry (extremely rare).',
-        diagram: '   : X :\n     |\n   X—A—X\n     |\n     X'
-    }
-};
-
-function calculateByPairs() {
-    const bp = parseInt(document.getElementById('bondingPairs').value);
-    const lp = parseInt(document.getElementById('lonePairs').value);
-    const key = `${bp}-${lp}`;
-
-    if (!geometryData[key]) {
-        document.getElementById('pairsResult').innerHTML = `
-            <div class="alert alert-warning">
-                <strong>Invalid combination:</strong> ${bp} bonding pairs and ${lp} lone pairs.
-                Please try a different combination.
-            </div>
-        `;
+(function(){
+    var els = document.querySelectorAll('.mg-anim');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+        els.forEach(function(el){ el.classList.add('mg-visible'); });
         return;
     }
-
-    const data = geometryData[key];
-    const totalPairs = bp + lp;
-
-    let resultHTML = `
-        <div class="card border-success">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-check-circle"></i> Molecular Geometry Results</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-primary">VSEPR Notation</h6>
-                        <p class="h4">${data.notation}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-primary">Total Electron Pairs</h6>
-                        <p class="h4">${totalPairs}</p>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-info">Electron Geometry</h6>
-                        <p class="lead">${data.electronGeom}</p>
-                        <small class="text-muted">Based on all electron pairs (${totalPairs})</small>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-success">Molecular Geometry</h6>
-                        <p class="lead"><strong>${data.molecularGeom}</strong></p>
-                        <small class="text-muted">Based on atom positions only</small>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-primary">Bond Angle</h6>
-                        <p class="h4">${data.angle}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-primary">Hybridization</h6>
-                        <p class="h4">${data.hybridization}</p>
-                    </div>
-                </div>
-
-                <div class="alert alert-secondary mt-3">
-                    <h6><i class="fas fa-shapes"></i> 3D Structure Diagram</h6>
-                    <pre class="mb-0" style="font-size: 1.1rem; line-height: 1.4; font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 5px; border: 2px solid #6c757d;">${data.diagram}
-
-<small style="font-size: 0.8rem; color: #6c757d;">Legend: A = central atom, X = bonded atom, : = lone pair</small></pre>
-                </div>
-
-                <div class="alert alert-info">
-                    <h6><i class="fas fa-lightbulb"></i> Description</h6>
-                    <p class="mb-0">${data.description}</p>
-                </div>
-
-                <div class="alert alert-light">
-                    <h6><i class="fas fa-flask"></i> Example Molecules</h6>
-                    <p class="mb-0"><strong>${data.examples.join(', ')}</strong></p>
-                </div>
-
-                <h6 class="mt-3"><i class="fas fa-calculator"></i> Summary</h6>
-                <ul>
-                    <li>Bonding Pairs: <strong>${bp}</strong></li>
-                    <li>Lone Pairs: <strong>${lp}</strong></li>
-                    <li>Total Electron Pairs: <strong>${totalPairs}</strong></li>
-                    <li>Electron Geometry: <strong>${data.electronGeom}</strong></li>
-                    <li>Molecular Shape: <strong>${data.molecularGeom}</strong></li>
-                </ul>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('pairsResult').innerHTML = resultHTML;
-}
-
-function calculateByFormula() {
-    const formula = document.getElementById('chemFormula').value.trim().toUpperCase();
-
-    // First, try to find molecule in database
-    const molecule = molecules.find(m => m.formula.toUpperCase() === formula);
-
-    if (molecule) {
-        // Use database entry
-        displayMoleculeResult(molecule);
-        return;
-    }
-
-    // If not in database, try dynamic calculation
-    try {
-        const result = parseMolecularFormula(formula);
-        displayDynamicResult(result);
-    } catch (error) {
-        document.getElementById('formulaResult').innerHTML = `
-            <div class="alert alert-warning">
-                <strong>Could not parse formula:</strong> ${error.message}<br>
-                <small>Please check the formula or use the "By Electron Pairs" tab for manual entry.</small>
-            </div>
-        `;
-    }
-}
-
-function parseMolecularFormula(formula) {
-    // Remove spaces and handle ions
-    let charge = 0;
-    let cleanFormula = formula.replace(/\s+/g, '');
-
-    // Handle charges like NH4+, SO4(2-), etc.
-    const chargeMatch = cleanFormula.match(/([+-]\d*|\(\d*[+-]\))$/);
-    if (chargeMatch) {
-        const chargeStr = chargeMatch[0].replace(/[()]/g, '');
-        if (chargeStr.includes('+')) {
-            charge = chargeStr === '+' ? -1 : -parseInt(chargeStr.replace('+', ''));
-        } else if (chargeStr.includes('-')) {
-            charge = chargeStr === '-' ? 1 : parseInt(chargeStr.replace('-', ''));
-        }
-        cleanFormula = cleanFormula.replace(chargeMatch[0], '');
-    }
-
-    // Parse elements and counts
-    const elementRegex = /([A-Z][a-z]?)(\d*)/g;
-    const elements = [];
-    let match;
-
-    while ((match = elementRegex.exec(cleanFormula)) !== null) {
-        if (match[1]) {
-            elements.push({
-                symbol: match[1],
-                count: match[2] ? parseInt(match[2]) : 1
-            });
-        }
-    }
-
-    if (elements.length === 0) {
-        throw new Error('No valid elements found in formula');
-    }
-
-    // Identify central atom (usually first element, or least electronegative)
-    const centralAtom = elements[0].symbol;
-
-    // Calculate bonding pairs (sum of all surrounding atoms)
-    let bondingPairs = 0;
-    for (let i = 1; i < elements.length; i++) {
-        bondingPairs += elements[i].count;
-    }
-
-    // Get valence electrons
-    const centralValence = getValenceElectrons(centralAtom);
-
-    // Calculate total valence electrons
-    let totalValence = centralValence * elements[0].count;
-    for (let i = 1; i < elements.length; i++) {
-        totalValence += getValenceElectrons(elements[i].symbol) * elements[i].count;
-    }
-    totalValence += charge; // Add/subtract for ions
-
-    // Calculate lone pairs on central atom
-    // Total electron pairs = totalValence / 2
-    // Bonding pairs are used in bonds
-    // Remaining pairs are lone pairs
-    const totalPairs = Math.floor(totalValence / 2);
-    const lonePairs = totalPairs - bondingPairs;
-
-    // Get geometry
-    const key = `${bondingPairs}-${lonePairs}`;
-    const data = geometryData[key];
-
-    if (!data) {
-        throw new Error(`No geometry data for ${bondingPairs} bonding pairs and ${lonePairs} lone pairs`);
-    }
-
-    return {
-        formula: formula,
-        centralAtom: centralAtom,
-        bondingPairs: bondingPairs,
-        lonePairs: lonePairs,
-        totalValence: totalValence,
-        charge: charge,
-        data: data,
-        elements: elements
-    };
-}
-
-function getValenceElectrons(element) {
-    const valenceMap = {
-        // Group 1
-        'H': 1, 'LI': 1, 'NA': 1, 'K': 1, 'RB': 1, 'CS': 1,
-        // Group 2
-        'BE': 2, 'MG': 2, 'CA': 2, 'SR': 2, 'BA': 2,
-        // Group 13
-        'B': 3, 'AL': 3, 'GA': 3, 'IN': 3,
-        // Group 14
-        'C': 4, 'SI': 4, 'GE': 4, 'SN': 4, 'PB': 4,
-        // Group 15
-        'N': 5, 'P': 5, 'AS': 5, 'SB': 5, 'BI': 5,
-        // Group 16
-        'O': 6, 'S': 6, 'SE': 6, 'TE': 6,
-        // Group 17
-        'F': 7, 'CL': 7, 'BR': 7, 'I': 7, 'AT': 7,
-        // Group 18
-        'HE': 8, 'NE': 8, 'AR': 8, 'KR': 8, 'XE': 8, 'RN': 8
-    };
-
-    const valence = valenceMap[element.toUpperCase()];
-    if (valence === undefined) {
-        throw new Error(`Unknown element: ${element}`);
-    }
-    return valence;
-}
-
-function displayDynamicResult(result) {
-    const totalPairs = result.bondingPairs + result.lonePairs;
-    const chargeStr = result.charge > 0 ? `${result.charge}+` : result.charge < 0 ? `${Math.abs(result.charge)}-` : '';
-
-    let resultHTML = `
-        <div class="card border-info">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-atom"></i> Dynamic Analysis: ${result.formula}${chargeStr}</h5>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-success">
-                    <strong><i class="fas fa-magic"></i> Automatically calculated from formula!</strong>
-                    Not found in database - computed using VSEPR theory.
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-primary">VSEPR Notation</h6>
-                        <p class="h4">${result.data.notation}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-primary">Molecular Geometry</h6>
-                        <p class="h4">${result.data.molecularGeom}</p>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6 class="text-info">Central Atom</h6>
-                        <p class="lead">${result.centralAtom}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6 class="text-info">Bond Angle</h6>
-                        <p class="lead">${result.data.angle}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6 class="text-info">Hybridization</h6>
-                        <p class="lead">${result.data.hybridization}</p>
-                    </div>
-                </div>
-
-                <div class="alert alert-secondary mt-3">
-                    <h6><i class="fas fa-shapes"></i> 3D Structure Diagram</h6>
-                    <pre class="mb-0" style="font-size: 1.1rem; line-height: 1.4; font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 5px; border: 2px solid #6c757d;">${result.data.diagram}
-
-<small style="font-size: 0.8rem; color: #6c757d;">Legend: A = central atom, X = bonded atom, : = lone pair</small></pre>
-                </div>
-
-                <div class="alert alert-info">
-                    <h6><i class="fas fa-lightbulb"></i> Description</h6>
-                    <p class="mb-0">${result.data.description}</p>
-                </div>
-
-                <h6 class="mt-3"><i class="fas fa-calculator"></i> Calculation Details</h6>
-                <ul>
-                    <li>Formula: <strong>${result.formula}${chargeStr}</strong></li>
-                    <li>Central Atom: <strong>${result.centralAtom}</strong></li>
-                    <li>Bonding Pairs: <strong>${result.bondingPairs}</strong></li>
-                    <li>Lone Pairs: <strong>${result.lonePairs}</strong></li>
-                    <li>Total Electron Pairs: <strong>${totalPairs}</strong></li>
-                    <li>Total Valence Electrons: <strong>${result.totalValence}</strong></li>
-                    <li>Electron Geometry: <strong>${result.data.electronGeom}</strong></li>
-                    <li>Molecular Geometry: <strong>${result.data.molecularGeom}</strong></li>
-                </ul>
-
-                <div class="alert alert-light">
-                    <h6><i class="fas fa-flask"></i> Similar Example Molecules</h6>
-                    <p class="mb-0"><strong>${result.data.examples.join(', ')}</strong></p>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('formulaResult').innerHTML = resultHTML;
-}
-
-function displayMoleculeResult(molecule) {
-
-    const key = `${molecule.bp}-${molecule.lp}`;
-    const data = geometryData[key];
-    const totalPairs = molecule.bp + molecule.lp;
-
-    let resultHTML = `
-        <div class="card border-success">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-check-circle"></i> ${molecule.name} (${molecule.formula})</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-primary">VSEPR Notation</h6>
-                        <p class="h4">${data.notation}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-primary">Molecular Geometry</h6>
-                        <p class="h4">${molecule.geometry}</p>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6 class="text-info">Bond Angle</h6>
-                        <p class="lead">${molecule.angle}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6 class="text-info">Hybridization</h6>
-                        <p class="lead">${molecule.hybridization}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6 class="text-info">Electron Pairs</h6>
-                        <p class="lead">${totalPairs}</p>
-                    </div>
-                </div>
-
-                <div class="alert alert-secondary mt-3">
-                    <h6><i class="fas fa-shapes"></i> 3D Structure Diagram</h6>
-                    <pre class="mb-0" style="font-size: 1.1rem; line-height: 1.4; font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 5px; border: 2px solid #6c757d;">${data.diagram}
-
-<small style="font-size: 0.8rem; color: #6c757d;">Legend: A = central atom, X = bonded atom, : = lone pair</small></pre>
-                </div>
-
-                <div class="alert alert-info">
-                    <h6><i class="fas fa-lightbulb"></i> Description</h6>
-                    <p class="mb-0">${data.description}</p>
-                </div>
-
-                <h6 class="mt-3"><i class="fas fa-atom"></i> Structure Details</h6>
-                <ul>
-                    <li>Bonding Pairs: <strong>${molecule.bp}</strong></li>
-                    <li>Lone Pairs: <strong>${molecule.lp}</strong></li>
-                    <li>Electron Geometry: <strong>${data.electronGeom}</strong></li>
-                    <li>Molecular Geometry: <strong>${molecule.geometry}</strong></li>
-                </ul>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('formulaResult').innerHTML = resultHTML;
-}
-
-function loadPairsExample(bp, lp) {
-    document.getElementById('bondingPairs').value = bp;
-    document.getElementById('lonePairs').value = lp;
-    $('#pairs-tab').tab('show');
-    calculateByPairs();
-}
-
-function loadFormulaExample(formula) {
-    document.getElementById('chemFormula').value = formula;
-    $('#formula-tab').tab('show');
-    calculateByFormula();
-}
-
-function loadMolecule(formula) {
-    document.getElementById('chemFormula').value = formula;
-    $('#formula-tab').tab('show');
-    calculateByFormula();
-}
-
-function searchMolecules() {
-    const searchTerm = document.getElementById('searchMolecule').value.toLowerCase();
-    const filteredMolecules = molecules.filter(m =>
-        m.formula.toLowerCase().includes(searchTerm) ||
-        m.name.toLowerCase().includes(searchTerm) ||
-        m.geometry.toLowerCase().includes(searchTerm)
-    );
-
-    displayMoleculeTable(filteredMolecules);
-}
-
-function displayMoleculeTable(moleculeList) {
-    const tbody = document.getElementById('moleculeTableBody');
-    tbody.innerHTML = '';
-
-    moleculeList.forEach(molecule => {
-        const row = `
-            <tr>
-                <td><strong>${molecule.formula}</strong></td>
-                <td>${molecule.name}</td>
-                <td>${molecule.bp}</td>
-                <td>${molecule.lp}</td>
-                <td><span class="badge badge-info">${molecule.geometry}</span></td>
-                <td>${molecule.angle}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="loadMolecule('${molecule.formula}')">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-                </td>
-            </tr>
-        `;
-        tbody.innerHTML += row;
-    });
-}
-
-// Initialize molecule table on page load
-document.addEventListener('DOMContentLoaded', function() {
-    displayMoleculeTable(molecules);
-});
+    var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if (e.isIntersecting) {
+                e.target.classList.add('mg-visible');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    els.forEach(function(el){ obs.observe(el); });
+})();
 </script>
 
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="body-close.jsp"%>
+<!-- Core Scripts -->
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/molecular-geometry-render.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/molecular-geometry-core.js?v=<%=cacheVersion%>"></script>
+
+<%@ include file="modern/components/analytics.jsp" %>
+</body>
+</html>
