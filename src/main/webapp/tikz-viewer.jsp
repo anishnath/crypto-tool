@@ -580,7 +580,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>Create LaTeX TikZ diagrams instantly in your browser. Render, edit, and export to PNG/SVG/PDF with real-time preview, syntax highlighting, and 26+ example templates. No installation required!</p>
+                <p>Create LaTeX TikZ diagrams instantly in your browser. Render, edit, and export to PNG/SVG/PDF with real-time preview, syntax highlighting, and 26+ example templates. No installation required! Need full document compilation? Try our <a href="<%=request.getContextPath()%>/latex/editor.jsp" style="color:var(--tool-primary);font-weight:600;">LaTeX Editor Online</a>.</p>
             </div>
             <div class="tool-description-ad">
                 <%@ include file="modern/ads/ad-in-content-top.jsp" %>
@@ -808,6 +808,8 @@
                     </ol>
 
                     <p class="tool-highlight-box"><strong>Why Choose Our TikZ Editor?</strong> Unlike desktop LaTeX editors that require full installation and setup, our online tool works instantly in any modern web browser. It's perfect for quick diagrams, learning TikZ syntax, or sharing visual concepts with colleagues. The tool is completely free, requires no registration, and processes everything locally in your browser for privacy and speed.</p>
+
+                    <p class="tool-highlight-box"><strong>Need a Full LaTeX Editor?</strong> If you need to write complete LaTeX documents with live PDF preview, try our <a href="<%=request.getContextPath()%>/latex/editor.jsp" style="color:var(--tool-primary);font-weight:600;">LaTeX Editor Online</a> — a free Overleaf alternative with syntax highlighting, autocomplete, image uploads, and instant PDF compilation. No signup required.</p>
                 </div>
             </div>
         </div>
