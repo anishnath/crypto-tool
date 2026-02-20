@@ -29,7 +29,7 @@
     <jsp:param name="toolCategory" value="Developer Tools" />
     <jsp:param name="toolUrl" value="editor" />
     <jsp:param name="toolKeywords" value="latex editor online, online latex compiler, latex to pdf, free latex editor, overleaf alternative, latex editor free, write latex online, latex compiler online, latex pdf preview, latex syntax highlighting" />
-    <jsp:param name="toolImage" value="latex-editor.png" />
+    <jsp:param name="toolImage" value="latex-editor.svg" />
     <jsp:param name="toolFeatures" value="Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Multiple templates (Article Report Beamer CV Letter),File upload for images,Download PDF and .tex source,Project save to localStorage,Dark and light theme support,No registration required" />
     <jsp:param name="hasSteps" value="true" />
     <jsp:param name="howToSteps" value="Write LaTeX|Write your LaTeX code in the editor with syntax highlighting and 170+ autocomplete commands,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file" />
