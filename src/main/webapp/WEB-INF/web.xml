@@ -579,6 +579,59 @@
 		</user-data-constraint>
 	</security-constraint>
 
+    <!-- LaTeX Editor Servlets -->
+    <servlet>
+        <servlet-name>EditorServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.EditorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditorServlet</servlet-name>
+        <url-pattern>/editor</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CompileServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.CompileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompileServlet</servlet-name>
+        <url-pattern>/compile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PDFProxyServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.PDFProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PDFProxyServlet</servlet-name>
+        <url-pattern>/pdf/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogProxyServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.LogProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogProxyServlet</servlet-name>
+        <url-pattern>/logs/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UploadProxyServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.UploadProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadProxyServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>JobStatusServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.JobStatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JobStatusServlet</servlet-name>
+        <url-pattern>/jobs/*</url-pattern>
+    </servlet-mapping>
 
 </web-app>
