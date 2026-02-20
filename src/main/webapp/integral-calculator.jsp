@@ -1369,10 +1369,11 @@
             var resultTeX = result.toTeX();
             var resultText = result.text();
 
-            // Detect known non-elementary integrals (Nerdamer may return incorrect results)
+            // Detect known non-elementary integrals (Nerdamer returns incorrect results for these)
+            // Route to SymPy which can return correct special-function answers (erf, Si, li, etc.)
             var nonElem = checkNonElementaryIntegral(expr, v);
             if (nonElem) {
-                showNonElementaryError(expr, v, nonElem);
+                sympyFallback(expr, v);
                 return;
             }
 
