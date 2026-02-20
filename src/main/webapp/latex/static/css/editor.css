@@ -1,0 +1,321 @@
+/* CodeMirror theme overrides for dark LaTeX editor */
+.CodeMirror {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.CodeMirror-gutters {
+  background: var(--gutter) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.CodeMirror-linenumber {
+  color: var(--text3) !important;
+  font-size: 11px !important;
+}
+
+.CodeMirror-cursor {
+  border-left: 2px solid var(--accent) !important;
+}
+
+.CodeMirror-selected { background: rgba(110,231,183,0.12) !important; }
+.CodeMirror-focused .CodeMirror-selected { background: rgba(110,231,183,0.15) !important; }
+.CodeMirror-activeline-background { background: rgba(255,255,255,0.025) !important; }
+
+.CodeMirror-matchingbracket {
+  color: var(--accent) !important;
+  border-bottom: 1px solid var(--accent);
+  background: rgba(110,231,183,0.08);
+}
+
+/* Syntax highlighting for stex mode */
+.cm-s-material-darker .cm-keyword { color: #c084fc; }
+.cm-s-material-darker .cm-tag { color: #67e8f9; }
+.cm-s-material-darker .cm-bracket { color: #fde68a; }
+.cm-s-material-darker .cm-atom { color: #fb923c; }
+.cm-s-material-darker .cm-comment { color: #4b5268; font-style: italic; }
+.cm-s-material-darker .cm-string { color: #86efac; }
+.cm-s-material-darker .cm-variable { color: var(--text); }
+.cm-s-material-darker .cm-builtin { color: #a78bfa; }
+
+/* ── Error gutter marker ── */
+.error-gutter {
+  width: 12px;
+}
+
+.error-gutter-marker {
+  color: var(--error);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.error-gutter-marker:hover {
+  transform: scale(1.3);
+}
+
+/* ── Error line background highlight ── */
+.error-line-highlight {
+  background: rgba(248,113,113,0.06) !important;
+  border-left: 2px solid var(--error);
+}
+
+/* ── Error line pulse animation (on jump) ── */
+.error-line-pulse {
+  animation: errorPulse 1.5s ease-out;
+}
+
+@keyframes errorPulse {
+  0%   { background: rgba(248,113,113,0.25) !important; }
+  30%  { background: rgba(248,113,113,0.15) !important; }
+  100% { background: transparent !important; }
+}
+
+/* ── Inline error widget (below error line) ── */
+.cm-error-widget {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 12px 6px 36px;
+  background: rgba(248,113,113,0.06);
+  border-left: 2px solid var(--error);
+  border-bottom: 1px solid rgba(248,113,113,0.1);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #fca5a5;
+  animation: widgetSlideIn 0.2s ease-out;
+}
+
+@keyframes widgetSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cm-error-widget-icon {
+  color: var(--error);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cm-error-widget-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+.cm-error-widget-dismiss {
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.cm-error-widget-dismiss:hover {
+  color: var(--text);
+}
+
+/* ── Clickable log lines ── */
+.log-line.clickable {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.log-line.clickable:hover {
+  background: var(--surface2);
+}
+
+.log-line-ref {
+  display: inline-block;
+  background: rgba(248,113,113,0.12);
+  color: var(--error);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  vertical-align: middle;
+}
+
+.log-line.warn .log-line-ref {
+  background: rgba(251,146,60,0.12);
+  color: var(--warn);
+}
+
+/* ── Status bar error count ── */
+.sb-errors {
+  color: var(--error) !important;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.sb-errors:hover {
+  opacity: 0.8;
+}
+
+/* ── Error navigation in log header ── */
+.error-nav {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  margin-left: 8px;
+}
+
+.error-nav-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: none;
+  background: none;
+  color: var(--text3);
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.error-nav-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.error-count {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--error);
+  padding: 1px 6px;
+  background: rgba(248,113,113,0.12);
+  border-radius: 3px;
+  display: none;
+}
+
+/* ── Autocomplete popup ── */
+.CodeMirror-hints {
+  background: var(--surface2) !important;
+  border: 1px solid var(--border2) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  font-family: 'DM Sans', 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  padding: 4px 0 !important;
+  max-height: 280px !important;
+  min-width: 300px !important;
+  overflow-y: auto;
+}
+
+.CodeMirror-hint {
+  color: var(--text2) !important;
+  padding: 5px 12px !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.CodeMirror-hint-active {
+  background: rgba(110,231,183,0.1) !important;
+  color: var(--accent) !important;
+}
+
+/* Category-specific colors for hint icons */
+.hint-math .CodeMirror-hint-active,
+.CodeMirror-hint.hint-math:hover { color: var(--accent2) !important; }
+.hint-greek .CodeMirror-hint-active,
+.CodeMirror-hint.hint-greek:hover { color: #67e8f9 !important; }
+.hint-section .CodeMirror-hint-active,
+.CodeMirror-hint.hint-section:hover { color: #c084fc !important; }
+.hint-format .CodeMirror-hint-active,
+.CodeMirror-hint.hint-format:hover { color: #fb923c !important; }
+
+/* ── Snippet tab-stop fields ── */
+.cm-snippet-field {
+  background: rgba(129,140,248,0.08);
+  border-bottom: 1px dashed rgba(129,140,248,0.3);
+  border-radius: 2px;
+}
+
+.cm-snippet-active {
+  background: rgba(110,231,183,0.15) !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+/* ── Light theme: CodeMirror overrides ── */
+[data-theme="light"] .CodeMirror-selected { background: rgba(6,150,105,0.12) !important; }
+[data-theme="light"] .CodeMirror-focused .CodeMirror-selected { background: rgba(6,150,105,0.18) !important; }
+[data-theme="light"] .CodeMirror-activeline-background { background: rgba(0,0,0,0.03) !important; }
+[data-theme="light"] .CodeMirror-matchingbracket {
+  color: #059669 !important;
+  border-bottom-color: #059669;
+  background: rgba(6,150,105,0.08);
+}
+
+/* Light theme syntax colors (default theme) */
+[data-theme="light"] .cm-s-default .cm-keyword { color: #7c3aed; }
+[data-theme="light"] .cm-s-default .cm-tag { color: #0891b2; }
+[data-theme="light"] .cm-s-default .cm-bracket { color: #b45309; }
+[data-theme="light"] .cm-s-default .cm-atom { color: #c2410c; }
+[data-theme="light"] .cm-s-default .cm-comment { color: #94a3b8; font-style: italic; }
+[data-theme="light"] .cm-s-default .cm-string { color: #059669; }
+[data-theme="light"] .cm-s-default .cm-variable { color: #1e293b; }
+[data-theme="light"] .cm-s-default .cm-builtin { color: #6366f1; }
+
+/* Light theme autocomplete popup */
+[data-theme="light"] .CodeMirror-hints {
+  background: #fff !important;
+  border-color: #dde0e8 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+}
+[data-theme="light"] .CodeMirror-hint { color: #475569 !important; }
+[data-theme="light"] .CodeMirror-hint-active {
+  background: rgba(6,150,105,0.08) !important;
+  color: #059669 !important;
+}
+
+/* Light theme snippet fields */
+[data-theme="light"] .cm-snippet-field {
+  background: rgba(99,102,241,0.08);
+  border-bottom-color: rgba(99,102,241,0.3);
+}
+[data-theme="light"] .cm-snippet-active {
+  background: rgba(6,150,105,0.12) !important;
+  border-bottom-color: #059669 !important;
+}
+
+/* Light theme error widget */
+[data-theme="light"] .cm-error-widget {
+  background: rgba(220,38,38,0.04);
+  color: #b91c1c;
+}
+
+/* Scrollbar styling */
+.CodeMirror-vscrollbar::-webkit-scrollbar,
+.CodeMirror-hscrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-track,
+.CodeMirror-hscrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
+.CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
+.CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--border2);
+}

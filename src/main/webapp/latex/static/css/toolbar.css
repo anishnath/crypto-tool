@@ -1,0 +1,126 @@
+/* ── TOOLBAR ── */
+.toolbar {
+  height: 42px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  border-right: 1px solid var(--border);
+}
+
+.toolbar-group:last-child { border-right: none; }
+
+.tb-btn {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  color: var(--text2);
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tb-btn:hover { background: var(--surface2); color: var(--text); }
+
+.tb-btn.primary {
+  background: var(--accent);
+  color: #0e0f14;
+  font-weight: 600;
+  padding: 0 14px;
+}
+
+.tb-btn.primary:hover { background: #4dd4a0; }
+
+.tb-btn.primary .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #0e0f14;
+  opacity: 0.5;
+}
+
+.tb-btn.primary.compiling .dot {
+  animation: tbPulse 0.8s infinite;
+}
+
+@keyframes tbPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.tb-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tb-btn:disabled:hover {
+  background: none;
+  color: var(--text2);
+}
+
+.tb-select {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  outline: none;
+}
+
+.tb-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Dirty state — source changed since last compile */
+.tb-btn.primary.dirty {
+  animation: dirtyPulse 2s ease-in-out infinite;
+}
+
+@keyframes dirtyPulse {
+  0%, 100% { background: var(--accent); }
+  50% { background: #5cc9a0; }
+}
+
+/* Shortcut hint next to compile button */
+.tb-shortcut {
+  font-size: 9px;
+  color: var(--text3);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+
+.compile-status {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.compile-status.done { color: var(--accent); background: rgba(110,231,183,0.08); }
+.compile-status.error { color: var(--error); background: rgba(248,113,113,0.08); }
+.compile-status.compiling { color: var(--accent2); background: rgba(129,140,248,0.08); }
