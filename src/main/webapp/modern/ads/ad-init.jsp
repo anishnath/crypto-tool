@@ -120,6 +120,30 @@
         }
         
         // ============================================
+        // AD SLOT 7: Hero Banner (Above Tool Content)
+        // Placement: Hero section, above-the-fold, loads immediately
+        // ============================================
+        if (width >= 992) {
+            // Desktop: Wide banner (970x90, 728x90)
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_970x90_hero_desktop',
+                [[970,90],[728,90],[970,250],[728,250]],
+                'site_8gwifi_org_hero_banner')
+                .addService(googletag.pubads());
+        } else if (width >= 768) {
+            // Tablet: 728x90
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_hero_tablet',
+                [[728,90],[468,60]],
+                'site_8gwifi_org_hero_banner')
+                .addService(googletag.pubads());
+        } else {
+            // Mobile: 320x100 or 320x50
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_320x100_hero_mobile',
+                [[320,100],[320,50],[300,100],[300,50]],
+                'site_8gwifi_org_hero_banner')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
         // GPT Configuration
         // ============================================
         googletag.pubads().disableInitialLoad();  // Lazy load ads
