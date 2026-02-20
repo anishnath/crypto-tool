@@ -300,8 +300,8 @@
 }
 </script>
 
-<!-- LearningResource Schema (for Mathematics - boosts education/search) -->
-<% if (toolCategory != null && (toolCategory.toLowerCase().contains("math") || toolCategory.toLowerCase().contains("mathematics"))) { %>
+<!-- LearningResource Schema (for Education/Science tools - boosts search) -->
+<% if (toolCategory != null && (toolCategory.toLowerCase().contains("math") || toolCategory.toLowerCase().contains("mathematics") || toolCategory.toLowerCase().contains("chemistry") || toolCategory.toLowerCase().contains("physics") || toolCategory.toLowerCase().contains("science") || toolCategory.toLowerCase().contains("education"))) { %>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

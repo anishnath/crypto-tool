@@ -280,13 +280,35 @@ function downloadPdf() {
         container.appendChild(grid);
     }
 
-    // ASCII diagram
-    var diagram = resultContent.querySelector('.mg-diagram');
-    if (diagram) {
-        var diagramEl = document.createElement('div');
-        diagramEl.style.cssText = 'padding:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:14px;white-space:pre;text-align:center;margin-bottom:20px;';
-        diagramEl.textContent = diagram.textContent;
-        container.appendChild(diagramEl);
+    // 3D model snapshot — capture WebGL canvas from the viewer
+    var viewerCanvas = resultContent.querySelector('.mg-3d-viewer canvas');
+    var captured3D = false;
+    if (viewerCanvas) {
+        try {
+            var modelLabel = document.createElement('div');
+            modelLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;';
+            modelLabel.textContent = '3D Molecular Model';
+            container.appendChild(modelLabel);
+
+            var modelImg = document.createElement('img');
+            modelImg.src = viewerCanvas.toDataURL('image/png');
+            modelImg.style.cssText = 'width:100%;max-height:360px;object-fit:contain;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:20px;display:block;';
+            container.appendChild(modelImg);
+            captured3D = true;
+        } catch (e) {
+            // WebGL canvas capture failed, fall through to ASCII
+        }
+    }
+
+    // ASCII diagram (fallback if no 3D capture)
+    if (!captured3D) {
+        var diagram = resultContent.querySelector('.mg-diagram');
+        if (diagram) {
+            var diagramEl = document.createElement('div');
+            diagramEl.style.cssText = 'padding:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:14px;white-space:pre;text-align:center;margin-bottom:20px;';
+            diagramEl.textContent = diagram.textContent;
+            container.appendChild(diagramEl);
+        }
     }
 
     // Steps
@@ -654,6 +676,45 @@ function downloadPracticeSheet() {
         });
 }
 
+// ==================== Compare ====================
+
+function runCompare() {
+    var input1 = $('mg-cmp-1');
+    var input2 = $('mg-cmp-2');
+    var result1 = $('mg-cmp-result-1');
+    var result2 = $('mg-cmp-result-2');
+    var diff = $('mg-cmp-diff');
+
+    if (!input1 || !input2 || !result1 || !result2) return;
+
+    var v1 = input1.value.trim();
+    var v2 = input2.value.trim();
+
+    if (!v1 && !v2) {
+        if (diff) diff.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--text-muted);font-size:0.75rem;">Enter two formulas or names to compare</div>';
+        return;
+    }
+
+    var mol1 = v1 ? R.resolveMolecule(v1) : null;
+    var mol2 = v2 ? R.resolveMolecule(v2) : null;
+
+    if (v1 && !mol1) {
+        result1.innerHTML = '<div style="padding:0.5rem;color:#dc2626;font-size:0.75rem;">Could not find: ' + v1.replace(/[<>&"]/g, '') + '</div>';
+    } else {
+        R.renderCompareSide(result1, mol1);
+    }
+
+    if (v2 && !mol2) {
+        result2.innerHTML = '<div style="padding:0.5rem;color:#dc2626;font-size:0.75rem;">Could not find: ' + v2.replace(/[<>&"]/g, '') + '</div>';
+    } else {
+        R.renderCompareSide(result2, mol2);
+    }
+
+    if (diff) {
+        R.renderCompareDiff(diff, mol1, mol2);
+    }
+}
+
 // ==================== Initialization ====================
 
 function init() {
@@ -737,6 +798,31 @@ function init() {
     for (var c = 0; c < chips.length; c++) {
         chips[c].addEventListener('click', function() {
             loadExample(this.getAttribute('data-example'));
+        });
+    }
+
+    // Compare feature
+    var cmpBtn = $('mg-cmp-btn');
+    if (cmpBtn) {
+        cmpBtn.addEventListener('click', runCompare);
+    }
+    var cmp1 = $('mg-cmp-1');
+    var cmp2 = $('mg-cmp-2');
+    if (cmp1) cmp1.addEventListener('keydown', function(e) { if (e.key === 'Enter') runCompare(); });
+    if (cmp2) cmp2.addEventListener('keydown', function(e) { if (e.key === 'Enter') runCompare(); });
+
+    // Compare preset chips
+    var cmpPresets = document.querySelectorAll('.mg-compare-preset');
+    for (var cp = 0; cp < cmpPresets.length; cp++) {
+        cmpPresets[cp].addEventListener('click', function() {
+            var pair = this.getAttribute('data-cmp').split(',');
+            if (pair.length === 2) {
+                var inp1 = $('mg-cmp-1');
+                var inp2 = $('mg-cmp-2');
+                if (inp1) inp1.value = pair[0];
+                if (inp2) inp2.value = pair[1];
+                runCompare();
+            }
         });
     }
 

@@ -317,6 +317,878 @@ function unicodeFormula(formula) {
     });
 }
 
+// ==================== PubChem 3D Integration ====================
+
+var pubchemCache = {};
+
+/**
+ * Fetch 3D SDF from PubChem for a given formula or name.
+ * Returns a Promise that resolves to { sdf: string, cid: number } or null.
+ */
+function fetchPubChem3D(query) {
+    // Normalize query: strip charges, whitespace
+    var clean = query.replace(/\s+/g, '').replace(/\(\d*[+-]\)$/, '').replace(/[+-]$/, '');
+    if (!clean) return Promise.resolve(null);
+
+    // Check cache
+    if (pubchemCache[clean.toUpperCase()]) {
+        return Promise.resolve(pubchemCache[clean.toUpperCase()]);
+    }
+
+    // Step 1: Resolve formula/name to CID
+    // Try by formula first, then by name
+    var cidUrl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/formula/' +
+        encodeURIComponent(clean) + '/cids/JSON?MaxRecords=1';
+    var nameUrl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/' +
+        encodeURIComponent(clean) + '/cids/JSON?MaxRecords=1';
+
+    return fetchCIDFromUrl(cidUrl)
+        .then(function(cid) {
+            if (cid) return cid;
+            // Fallback: try by name
+            return fetchCIDFromUrl(nameUrl);
+        })
+        .then(function(cid) {
+            if (!cid) return null;
+            // Step 2: Fetch 3D SDF conformer
+            var sdfUrl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/' +
+                cid + '/SDF?record_type=3d';
+            return fetch(sdfUrl)
+                .then(function(resp) {
+                    if (!resp.ok) return null;
+                    return resp.text();
+                })
+                .then(function(sdf) {
+                    if (!sdf || sdf.indexOf('V2000') === -1 && sdf.indexOf('V3000') === -1) {
+                        return null;
+                    }
+                    var result = { sdf: sdf, cid: cid };
+                    pubchemCache[clean.toUpperCase()] = result;
+                    return result;
+                });
+        })
+        .catch(function() {
+            return null;
+        });
+}
+
+function fetchCIDFromUrl(url) {
+    return fetch(url)
+        .then(function(resp) {
+            if (!resp.ok) return null;
+            return resp.json();
+        })
+        .then(function(data) {
+            if (data && data.IdentifierList && data.IdentifierList.CID &&
+                data.IdentifierList.CID.length > 0) {
+                return data.IdentifierList.CID[0];
+            }
+            // PubChem formula endpoint returns "Waiting" for async lookups
+            if (data && data.Waiting) {
+                // Wait and retry once
+                var listKey = data.Waiting.ListKey;
+                return new Promise(function(resolve) { setTimeout(resolve, 2000); })
+                    .then(function() {
+                        return fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/listkey/' +
+                            listKey + '/cids/JSON?MaxRecords=1');
+                    })
+                    .then(function(resp) { return resp.ok ? resp.json() : null; })
+                    .then(function(data2) {
+                        if (data2 && data2.IdentifierList && data2.IdentifierList.CID &&
+                            data2.IdentifierList.CID.length > 0) {
+                            return data2.IdentifierList.CID[0];
+                        }
+                        return null;
+                    })
+                    .catch(function() { return null; });
+            }
+            return null;
+        })
+        .catch(function() { return null; });
+}
+
+/**
+ * Parse an SDF string to extract atom positions and bonds.
+ * Returns { atoms: [{elem, x, y, z}], bonds: [{from, to, order}] } or null.
+ */
+function parseSDF(sdf) {
+    var lines = sdf.split('\n');
+    // Find counts line (V2000 format): line index 3 typically
+    var countsIdx = -1;
+    for (var i = 0; i < Math.min(lines.length, 10); i++) {
+        if (lines[i].indexOf('V2000') !== -1 || lines[i].indexOf('V3000') !== -1) {
+            countsIdx = i;
+            break;
+        }
+    }
+    if (countsIdx === -1) return null;
+
+    var countsParts = lines[countsIdx].trim().split(/\s+/);
+    var numAtoms = parseInt(countsParts[0]);
+    var numBonds = parseInt(countsParts[1]);
+    if (isNaN(numAtoms) || isNaN(numBonds) || numAtoms < 1) return null;
+
+    var atoms = [];
+    for (var a = 0; a < numAtoms; a++) {
+        var line = lines[countsIdx + 1 + a];
+        if (!line) continue;
+        var parts = line.trim().split(/\s+/);
+        if (parts.length < 4) continue;
+        atoms.push({
+            x: parseFloat(parts[0]),
+            y: parseFloat(parts[1]),
+            z: parseFloat(parts[2]),
+            elem: parts[3]
+        });
+    }
+
+    var bonds = [];
+    for (var b = 0; b < numBonds; b++) {
+        var bline = lines[countsIdx + 1 + numAtoms + b];
+        if (!bline) continue;
+        var bparts = bline.trim().split(/\s+/);
+        if (bparts.length < 3) continue;
+        bonds.push({
+            from: parseInt(bparts[0]) - 1, // 0-indexed
+            to: parseInt(bparts[1]) - 1,
+            order: parseInt(bparts[2])
+        });
+    }
+
+    return { atoms: atoms, bonds: bonds };
+}
+
+/**
+ * Calculate the angle in degrees between three points (a-b-c) where b is center.
+ */
+function calcAngle(a, b, c) {
+    var v1 = { x: a.x - b.x, y: a.y - b.y, z: a.z - b.z };
+    var v2 = { x: c.x - b.x, y: c.y - b.y, z: c.z - b.z };
+    var dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    var mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+    var mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+    if (mag1 === 0 || mag2 === 0) return 0;
+    var cosAngle = Math.max(-1, Math.min(1, dot / (mag1 * mag2)));
+    return Math.acos(cosAngle) * 180 / Math.PI;
+}
+
+/**
+ * Calculate distance between two points.
+ */
+function calcDistance(a, b) {
+    var dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+/**
+ * Find the central (heaviest non-H) atom index in parsed SDF data.
+ */
+function findCentralAtom(parsed) {
+    // The central atom is typically the heaviest non-H atom, or the one with most bonds
+    var bondCounts = new Array(parsed.atoms.length);
+    for (var i = 0; i < bondCounts.length; i++) bondCounts[i] = 0;
+    for (var b = 0; b < parsed.bonds.length; b++) {
+        bondCounts[parsed.bonds[b].from]++;
+        bondCounts[parsed.bonds[b].to]++;
+    }
+
+    var bestIdx = 0;
+    var bestScore = -1;
+    for (var j = 0; j < parsed.atoms.length; j++) {
+        if (parsed.atoms[j].elem === 'H') continue;
+        // Prefer atom with most bonds, then heaviest
+        var score = bondCounts[j] * 100 + (valenceMap[parsed.atoms[j].elem.toUpperCase()] || 0);
+        if (score > bestScore) {
+            bestScore = score;
+            bestIdx = j;
+        }
+    }
+    return bestIdx;
+}
+
+/**
+ * Build a 3Dmol viewer from PubChem SDF data with lone pair overlays and measurements.
+ * Returns the wrapper element, or null on failure.
+ */
+function buildPubChem3DViewer(container, sdfData, bp, lp, formula, cid) {
+    if (typeof $3Dmol === 'undefined') return null;
+
+    var parsed = parseSDF(sdfData);
+    if (!parsed || parsed.atoms.length === 0) return null;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'mg-3d-wrapper';
+
+    var viewerDiv = document.createElement('div');
+    viewerDiv.className = 'mg-3d-viewer';
+    wrapper.appendChild(viewerDiv);
+
+    container.appendChild(wrapper);
+
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var bgColor = isDark ? '#1e293b' : '#ffffff';
+
+    var viewer = $3Dmol.createViewer(viewerDiv, {
+        backgroundColor: bgColor,
+        antialias: true,
+        preserveDrawingBuffer: true
+    });
+
+    // Load the SDF into the viewer
+    viewer.addModel(sdfData, 'sdf');
+    viewer.setStyle({}, {
+        stick: { radius: 0.12, colorscheme: 'Jmol' },
+        sphere: { scale: 0.3, colorscheme: 'Jmol' }
+    });
+
+    // Add atom labels for all non-H atoms
+    var model = viewer.getModel();
+    var allAtoms = model.selectedAtoms({});
+    for (var i = 0; i < allAtoms.length; i++) {
+        var a = allAtoms[i];
+        if (a.elem !== 'H') {
+            viewer.addLabel(a.elem, {
+                position: { x: a.x, y: a.y, z: a.z },
+                fontSize: 12,
+                fontColor: isDark ? '#f1f5f9' : '#1e293b',
+                backgroundColor: 'transparent',
+                borderThickness: 0,
+                showBackground: false
+            });
+        }
+    }
+
+    // Add lone pair lobes on the central atom using VSEPR positions
+    var centralIdx = findCentralAtom(parsed);
+    var centralPos = parsed.atoms[centralIdx];
+
+    if (lp > 0) {
+        // Get neighbors of central atom
+        var neighbors = [];
+        for (var b = 0; b < parsed.bonds.length; b++) {
+            if (parsed.bonds[b].from === centralIdx) neighbors.push(parsed.atoms[parsed.bonds[b].to]);
+            if (parsed.bonds[b].to === centralIdx) neighbors.push(parsed.atoms[parsed.bonds[b].from]);
+        }
+
+        // Calculate average bond direction
+        var lpPositions = calculateLonePairPositions(centralPos, neighbors, lp);
+        for (var lpi = 0; lpi < lpPositions.length; lpi++) {
+            viewer.addSphere({
+                center: lpPositions[lpi],
+                radius: 0.4,
+                color: '#FFD700',
+                opacity: 0.35
+            });
+            viewer.addLabel('LP', {
+                position: lpPositions[lpi],
+                fontSize: 10,
+                fontColor: '#b8860b',
+                backgroundColor: 'transparent',
+                borderThickness: 0,
+                showBackground: false
+            });
+        }
+    }
+
+    // Add bond angle measurements on the central atom
+    var centralNeighborIndices = [];
+    for (var bn = 0; bn < parsed.bonds.length; bn++) {
+        if (parsed.bonds[bn].from === centralIdx) centralNeighborIndices.push(parsed.bonds[bn].to);
+        if (parsed.bonds[bn].to === centralIdx) centralNeighborIndices.push(parsed.bonds[bn].from);
+    }
+
+    // Show first non-trivial bond angle measurement
+    var angleLabelsAdded = 0;
+    if (centralNeighborIndices.length >= 2 && angleLabelsAdded < 2) {
+        for (var ai = 0; ai < centralNeighborIndices.length - 1 && angleLabelsAdded < 2; ai++) {
+            for (var aj = ai + 1; aj < centralNeighborIndices.length && angleLabelsAdded < 2; aj++) {
+                var atomA = parsed.atoms[centralNeighborIndices[ai]];
+                var atomC = parsed.atoms[centralNeighborIndices[aj]];
+                // Skip H-center-H angles if there are non-H atoms
+                var hasNonH = centralNeighborIndices.some(function(idx) { return parsed.atoms[idx].elem !== 'H'; });
+                if (hasNonH && atomA.elem === 'H' && atomC.elem === 'H') continue;
+
+                var angle = calcAngle(atomA, centralPos, atomC);
+                // Label position: midpoint of the angle arc
+                var mid = {
+                    x: (atomA.x + atomC.x) / 2,
+                    y: (atomA.y + atomC.y) / 2,
+                    z: (atomA.z + atomC.z) / 2
+                };
+                // Offset slightly toward center
+                var labelPos = {
+                    x: mid.x * 0.6 + centralPos.x * 0.4,
+                    y: mid.y * 0.6 + centralPos.y * 0.4,
+                    z: mid.z * 0.6 + centralPos.z * 0.4
+                };
+                viewer.addLabel(angle.toFixed(1) + '\u00b0', {
+                    position: labelPos,
+                    fontSize: 11,
+                    fontColor: isDark ? '#fbbf24' : '#d97706',
+                    backgroundColor: isDark ? 'rgba(30,41,59,0.8)' : 'rgba(255,255,255,0.85)',
+                    borderThickness: 1,
+                    borderColor: isDark ? '#fbbf24' : '#d97706',
+                    showBackground: true
+                });
+                angleLabelsAdded++;
+            }
+        }
+    }
+
+    // Show one bond distance label
+    if (centralNeighborIndices.length >= 1) {
+        var nIdx = centralNeighborIndices[0];
+        var nAtom = parsed.atoms[nIdx];
+        var dist = calcDistance(centralPos, nAtom);
+        var distMid = {
+            x: (centralPos.x + nAtom.x) / 2,
+            y: (centralPos.y + nAtom.y) / 2,
+            z: (centralPos.z + nAtom.z) / 2
+        };
+        viewer.addLabel(dist.toFixed(2) + ' \u00c5', {
+            position: distMid,
+            fontSize: 10,
+            fontColor: isDark ? '#94a3b8' : '#6b7280',
+            backgroundColor: isDark ? 'rgba(30,41,59,0.8)' : 'rgba(255,255,255,0.85)',
+            borderThickness: 1,
+            borderColor: isDark ? '#475569' : '#d1d5db',
+            showBackground: true
+        });
+    }
+
+    viewer.zoomTo();
+    viewer.render();
+    viewer.spin('y', 0.5);
+
+    // Controls
+    var controls = document.createElement('div');
+    controls.className = 'mg-viewer-controls';
+
+    var spinning = true;
+    var lpVisible = true;
+    var measureVisible = true;
+
+    // Spin toggle
+    var spinBtn = document.createElement('button');
+    spinBtn.className = 'mg-viewer-ctrl-btn';
+    spinBtn.textContent = 'Spin: On';
+    spinBtn.onclick = function() {
+        spinning = !spinning;
+        viewer.spin(spinning ? 'y' : false, 0.5);
+        spinBtn.textContent = 'Spin: ' + (spinning ? 'On' : 'Off');
+    };
+    controls.appendChild(spinBtn);
+
+    // Reset view
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'mg-viewer-ctrl-btn';
+    resetBtn.textContent = 'Reset View';
+    resetBtn.onclick = function() { viewer.zoomTo(); viewer.render(); };
+    controls.appendChild(resetBtn);
+
+    // Style toggle: ball-and-stick vs space-fill
+    var styleMode = 'ballstick';
+    var styleBtn = document.createElement('button');
+    styleBtn.className = 'mg-viewer-ctrl-btn';
+    styleBtn.textContent = 'Space Fill';
+    styleBtn.onclick = function() {
+        if (styleMode === 'ballstick') {
+            viewer.setStyle({}, { sphere: { scale: 0.8, colorscheme: 'Jmol' } });
+            styleMode = 'spacefill';
+            styleBtn.textContent = 'Ball & Stick';
+        } else {
+            viewer.setStyle({}, {
+                stick: { radius: 0.12, colorscheme: 'Jmol' },
+                sphere: { scale: 0.3, colorscheme: 'Jmol' }
+            });
+            styleMode = 'ballstick';
+            styleBtn.textContent = 'Space Fill';
+        }
+        viewer.render();
+    };
+    controls.appendChild(styleBtn);
+
+    wrapper.appendChild(controls);
+
+    // Interaction hint
+    var hintDiv = document.createElement('div');
+    hintDiv.className = 'mg-viewer-hint';
+    hintDiv.textContent = 'Drag to rotate \u00b7 Scroll to zoom \u00b7 Right-drag to pan';
+    wrapper.appendChild(hintDiv);
+
+    return wrapper;
+}
+
+/**
+ * Calculate lone pair positions relative to a central atom and its neighbors.
+ * Uses the real bond geometry to place LPs opposite to bonded atoms.
+ */
+function calculateLonePairPositions(centralPos, neighbors, numLP) {
+    var positions = [];
+    var lpDist = 0.8; // distance from central atom (shorter than bonds)
+
+    if (neighbors.length === 0) {
+        // No neighbors, just place LP along +y
+        for (var i = 0; i < numLP; i++) {
+            var angle = (i / numLP) * 2 * Math.PI;
+            positions.push({
+                x: centralPos.x + lpDist * Math.cos(angle),
+                y: centralPos.y + lpDist * Math.sin(angle),
+                z: centralPos.z
+            });
+        }
+        return positions;
+    }
+
+    // Calculate the average direction of all bonds
+    var avgDir = { x: 0, y: 0, z: 0 };
+    for (var n = 0; n < neighbors.length; n++) {
+        var dx = neighbors[n].x - centralPos.x;
+        var dy = neighbors[n].y - centralPos.y;
+        var dz = neighbors[n].z - centralPos.z;
+        var mag = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+        avgDir.x += dx / mag;
+        avgDir.y += dy / mag;
+        avgDir.z += dz / mag;
+    }
+
+    // Lone pairs go OPPOSITE to the average bond direction
+    var oppMag = Math.sqrt(avgDir.x * avgDir.x + avgDir.y * avgDir.y + avgDir.z * avgDir.z) || 1;
+    var oppDir = {
+        x: -avgDir.x / oppMag,
+        y: -avgDir.y / oppMag,
+        z: -avgDir.z / oppMag
+    };
+
+    if (numLP === 1) {
+        positions.push({
+            x: centralPos.x + oppDir.x * lpDist,
+            y: centralPos.y + oppDir.y * lpDist,
+            z: centralPos.z + oppDir.z * lpDist
+        });
+    } else if (numLP >= 2) {
+        // Find a perpendicular vector for spreading
+        var perp = { x: 0, y: 0, z: 0 };
+        if (Math.abs(oppDir.x) < 0.9) {
+            perp = { x: 1, y: 0, z: 0 };
+        } else {
+            perp = { x: 0, y: 1, z: 0 };
+        }
+        // Cross product: oppDir x perp
+        var cross = {
+            x: oppDir.y * perp.z - oppDir.z * perp.y,
+            y: oppDir.z * perp.x - oppDir.x * perp.z,
+            z: oppDir.x * perp.y - oppDir.y * perp.x
+        };
+        var crossMag = Math.sqrt(cross.x * cross.x + cross.y * cross.y + cross.z * cross.z) || 1;
+        cross.x /= crossMag; cross.y /= crossMag; cross.z /= crossMag;
+
+        var spread = 0.4; // spread angle
+        for (var k = 0; k < numLP; k++) {
+            var spreadAngle = (k - (numLP - 1) / 2) * spread;
+            var dir = {
+                x: oppDir.x * Math.cos(spreadAngle) + cross.x * Math.sin(spreadAngle),
+                y: oppDir.y * Math.cos(spreadAngle) + cross.y * Math.sin(spreadAngle),
+                z: oppDir.z * Math.cos(spreadAngle) + cross.z * Math.sin(spreadAngle)
+            };
+            positions.push({
+                x: centralPos.x + dir.x * lpDist,
+                y: centralPos.y + dir.y * lpDist,
+                z: centralPos.z + dir.z * lpDist
+            });
+        }
+    }
+
+    return positions;
+}
+
+// ==================== CPK Color Scheme ====================
+
+var cpkColors = {
+    'H': '#FFFFFF', 'C': '#555555', 'N': '#3050F8', 'O': '#FF0D0D',
+    'F': '#90E050', 'CL': '#1FF01F', 'BR': '#A62929', 'I': '#940094',
+    'S': '#FFFF30', 'P': '#FF8000', 'B': '#FFB5B5', 'BE': '#C2FF00',
+    'SI': '#F0C8A0', 'XE': '#429EB0', 'KR': '#5CB8D1', 'SE': '#FFA100',
+    'TE': '#D47A00', 'AS': '#BD80E3', 'AL': '#BFA6A6', 'W': '#2194D6',
+    'RE': '#267DAB', 'MO': '#54B5B5'
+};
+
+function getCPKColor(element) {
+    if (!element) return '#FF69B4';
+    return cpkColors[element.toUpperCase()] || '#FF69B4';
+}
+
+// ==================== VSEPR 3D Coordinate Generator ====================
+
+function getVSEPRPositions(bp, lp) {
+    var total = bp + lp;
+    var allPositions = [];
+    var sqrt3_2 = Math.sqrt(3) / 2;
+    var sqrt6_3 = Math.sqrt(6) / 3;
+    var sqrt2_3 = Math.sqrt(2) / 3;
+    var sqrt8_3 = Math.sqrt(8) / 3;
+
+    switch (total) {
+        case 1:
+            allPositions = [{x:0, y:0, z:1}];
+            break;
+        case 2:
+            allPositions = [{x:0, y:0, z:1}, {x:0, y:0, z:-1}];
+            break;
+        case 3:
+            // Trigonal planar in xz-plane
+            allPositions = [
+                {x:0, y:0, z:1},
+                {x:sqrt3_2, y:0, z:-0.5},
+                {x:-sqrt3_2, y:0, z:-0.5}
+            ];
+            break;
+        case 4:
+            // Tetrahedral
+            allPositions = [
+                {x:0, y:1, z:0},
+                {x:0, y:-1/3, z:sqrt8_3},
+                {x:sqrt6_3, y:-1/3, z:-sqrt2_3},
+                {x:-sqrt6_3, y:-1/3, z:-sqrt2_3}
+            ];
+            break;
+        case 5:
+            // Trigonal bipyramidal: axial first, then equatorial
+            // Lone pairs prefer equatorial positions
+            allPositions = [
+                // Equatorial (indices 0,1,2) — lone pairs go here first
+                {x:0, y:0, z:1},
+                {x:sqrt3_2, y:0, z:-0.5},
+                {x:-sqrt3_2, y:0, z:-0.5},
+                // Axial (indices 3,4)
+                {x:0, y:1, z:0},
+                {x:0, y:-1, z:0}
+            ];
+            break;
+        case 6:
+            // Octahedral: lone pairs go to opposite positions (trans)
+            allPositions = [
+                {x:1, y:0, z:0},   // 0
+                {x:-1, y:0, z:0},  // 1
+                {x:0, y:0, z:1},   // 2
+                {x:0, y:0, z:-1},  // 3
+                {x:0, y:1, z:0},   // 4 — first LP here
+                {x:0, y:-1, z:0}   // 5 — second LP opposite
+            ];
+            break;
+        case 7:
+            // Pentagonal bipyramidal: equatorial first, then axial
+            var pentPositions = [];
+            for (var i = 0; i < 5; i++) {
+                var angle = i * 2 * Math.PI / 5;
+                pentPositions.push({x: Math.cos(angle), y: 0, z: Math.sin(angle)});
+            }
+            pentPositions.push({x:0, y:1, z:0});
+            pentPositions.push({x:0, y:-1, z:0});
+            allPositions = pentPositions;
+            break;
+        default:
+            // Fallback: distribute evenly
+            allPositions = [{x:0, y:0, z:1}];
+            break;
+    }
+
+    // Assign lone pair positions based on VSEPR rules
+    var bondPositions = [];
+    var lonePairPositions = [];
+
+    if (total === 5) {
+        // TBP: lone pairs occupy equatorial positions first (indices 0,1,2), then axial (3,4)
+        var lpOrder5 = [0, 1, 2, 3, 4]; // equatorial first, then axial
+        var lpSet5 = {};
+        for (var j5 = 0; j5 < lp && j5 < lpOrder5.length; j5++) {
+            lpSet5[lpOrder5[j5]] = true;
+        }
+        for (var j = 0; j < allPositions.length; j++) {
+            if (lpSet5[j]) {
+                lonePairPositions.push(allPositions[j]);
+            } else {
+                bondPositions.push(allPositions[j]);
+            }
+        }
+    } else if (total === 6) {
+        // Octahedral: LP placement order: index 4, then 5 (trans), then 1, then 0, ...
+        var lpOrder6 = [4, 5, 1, 0, 2, 3];
+        var lpSet6 = {};
+        for (var k6 = 0; k6 < lp && k6 < lpOrder6.length; k6++) {
+            lpSet6[lpOrder6[k6]] = true;
+        }
+        for (var k = 0; k < allPositions.length; k++) {
+            if (lpSet6[k]) {
+                lonePairPositions.push(allPositions[k]);
+            } else {
+                bondPositions.push(allPositions[k]);
+            }
+        }
+    } else if (total === 7) {
+        // Pentagonal bipyramidal: LP in equatorial first
+        var lpCount7 = 0;
+        for (var m = 0; m < allPositions.length; m++) {
+            if (lpCount7 < lp && m < 5) {
+                lonePairPositions.push(allPositions[m]);
+                lpCount7++;
+            } else {
+                bondPositions.push(allPositions[m]);
+            }
+        }
+    } else {
+        // For 2,3,4 total pairs: lone pairs take the last positions
+        for (var n = 0; n < allPositions.length; n++) {
+            if (n < bp) {
+                bondPositions.push(allPositions[n]);
+            } else {
+                lonePairPositions.push(allPositions[n]);
+            }
+        }
+    }
+
+    return { bondPositions: bondPositions, lonePairPositions: lonePairPositions };
+}
+
+function scalePos(pos, factor) {
+    return {x: pos.x * factor, y: pos.y * factor, z: pos.z * factor};
+}
+
+// ==================== 3D Viewer Builder ====================
+
+function build3DViewer(container, bp, lp, centralAtom, terminalAtoms) {
+    if (typeof $3Dmol === 'undefined') {
+        // Fallback: return null so caller can use ASCII diagram
+        return null;
+    }
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'mg-3d-wrapper';
+
+    // Viewer div
+    var viewerDiv = document.createElement('div');
+    viewerDiv.className = 'mg-3d-viewer';
+    wrapper.appendChild(viewerDiv);
+
+    container.appendChild(wrapper);
+
+    // Determine background based on theme
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var bgColor = isDark ? '#1e293b' : '#ffffff';
+
+    var viewer = $3Dmol.createViewer(viewerDiv, {
+        backgroundColor: bgColor,
+        antialias: true,
+        preserveDrawingBuffer: true
+    });
+
+    var positions = getVSEPRPositions(bp, lp);
+    var bondLength = 2.0;
+    var lpDistance = 1.2;
+
+    // Central atom
+    viewer.addSphere({
+        center: {x:0, y:0, z:0},
+        radius: 0.45,
+        color: getCPKColor(centralAtom)
+    });
+    viewer.addLabel(centralAtom || 'A', {
+        position: {x:0, y:0, z:0},
+        fontSize: 14,
+        fontColor: isDark ? '#f1f5f9' : '#1e293b',
+        backgroundColor: 'transparent',
+        borderThickness: 0,
+        showBackground: false
+    });
+
+    // Terminal atoms + bonds
+    for (var i = 0; i < positions.bondPositions.length; i++) {
+        var pos = scalePos(positions.bondPositions[i], bondLength);
+        var termAtom = (terminalAtoms && terminalAtoms[i]) ? terminalAtoms[i] : 'X';
+
+        // Bond cylinder
+        viewer.addCylinder({
+            start: {x:0, y:0, z:0},
+            end: pos,
+            radius: 0.08,
+            color: isDark ? '#94a3b8' : '#888888',
+            fromCap: false,
+            toCap: false
+        });
+
+        // Terminal atom sphere
+        viewer.addSphere({
+            center: pos,
+            radius: 0.35,
+            color: getCPKColor(termAtom)
+        });
+
+        // Terminal atom label
+        viewer.addLabel(termAtom, {
+            position: pos,
+            fontSize: 12,
+            fontColor: isDark ? '#f1f5f9' : '#1e293b',
+            backgroundColor: 'transparent',
+            borderThickness: 0,
+            showBackground: false
+        });
+    }
+
+    // Lone pairs as translucent lobes
+    for (var j = 0; j < positions.lonePairPositions.length; j++) {
+        var lpPos = scalePos(positions.lonePairPositions[j], lpDistance);
+        viewer.addSphere({
+            center: lpPos,
+            radius: 0.45,
+            color: '#FFD700',
+            opacity: 0.35
+        });
+        // Small "LP" label
+        viewer.addLabel('LP', {
+            position: lpPos,
+            fontSize: 10,
+            fontColor: '#b8860b',
+            backgroundColor: 'transparent',
+            borderThickness: 0,
+            showBackground: false
+        });
+    }
+
+    viewer.zoomTo();
+    viewer.render();
+    viewer.spin('y', 0.5);
+
+    // Controls bar
+    var controls = document.createElement('div');
+    controls.className = 'mg-viewer-controls';
+
+    var spinning = true;
+    var lpVisible = true;
+
+    // Spin toggle
+    var spinBtn = document.createElement('button');
+    spinBtn.className = 'mg-viewer-ctrl-btn';
+    spinBtn.textContent = 'Spin: On';
+    spinBtn.onclick = function() {
+        spinning = !spinning;
+        if (spinning) {
+            viewer.spin('y', 0.5);
+            spinBtn.textContent = 'Spin: On';
+        } else {
+            viewer.spin(false);
+            spinBtn.textContent = 'Spin: Off';
+        }
+    };
+    controls.appendChild(spinBtn);
+
+    // Reset view
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'mg-viewer-ctrl-btn';
+    resetBtn.textContent = 'Reset View';
+    resetBtn.onclick = function() {
+        viewer.zoomTo();
+        viewer.render();
+    };
+    controls.appendChild(resetBtn);
+
+    // Toggle lone pairs
+    if (lp > 0) {
+        var lpBtn = document.createElement('button');
+        lpBtn.className = 'mg-viewer-ctrl-btn';
+        lpBtn.textContent = 'LP: Visible';
+        lpBtn.onclick = function() {
+            lpVisible = !lpVisible;
+            // Rebuild viewer to toggle LP visibility
+            // Simple approach: rebuild the entire scene
+            viewer.removeAllShapes();
+            viewer.removeAllLabels();
+
+            // Re-add central atom
+            viewer.addSphere({
+                center: {x:0, y:0, z:0},
+                radius: 0.45,
+                color: getCPKColor(centralAtom)
+            });
+            viewer.addLabel(centralAtom || 'A', {
+                position: {x:0, y:0, z:0},
+                fontSize: 14,
+                fontColor: isDark ? '#f1f5f9' : '#1e293b',
+                backgroundColor: 'transparent',
+                borderThickness: 0,
+                showBackground: false
+            });
+
+            // Re-add bonds and terminal atoms
+            for (var ii = 0; ii < positions.bondPositions.length; ii++) {
+                var p = scalePos(positions.bondPositions[ii], bondLength);
+                var ta = (terminalAtoms && terminalAtoms[ii]) ? terminalAtoms[ii] : 'X';
+                viewer.addCylinder({
+                    start: {x:0, y:0, z:0},
+                    end: p,
+                    radius: 0.08,
+                    color: isDark ? '#94a3b8' : '#888888',
+                    fromCap: false,
+                    toCap: false
+                });
+                viewer.addSphere({ center: p, radius: 0.35, color: getCPKColor(ta) });
+                viewer.addLabel(ta, {
+                    position: p, fontSize: 12,
+                    fontColor: isDark ? '#f1f5f9' : '#1e293b',
+                    backgroundColor: 'transparent', borderThickness: 0, showBackground: false
+                });
+            }
+
+            // Conditionally re-add lone pairs
+            if (lpVisible) {
+                for (var jj = 0; jj < positions.lonePairPositions.length; jj++) {
+                    var lpp = scalePos(positions.lonePairPositions[jj], lpDistance);
+                    viewer.addSphere({ center: lpp, radius: 0.45, color: '#FFD700', opacity: 0.35 });
+                    viewer.addLabel('LP', {
+                        position: lpp, fontSize: 10, fontColor: '#b8860b',
+                        backgroundColor: 'transparent', borderThickness: 0, showBackground: false
+                    });
+                }
+            }
+
+            viewer.render();
+            lpBtn.textContent = lpVisible ? 'LP: Visible' : 'LP: Hidden';
+        };
+        controls.appendChild(lpBtn);
+    }
+
+    wrapper.appendChild(controls);
+
+    // Interaction hint
+    var hint = document.createElement('div');
+    hint.className = 'mg-viewer-hint';
+    hint.textContent = 'Drag to rotate \u00b7 Scroll to zoom \u00b7 Right-drag to pan';
+    wrapper.appendChild(hint);
+
+    return wrapper;
+}
+
+/**
+ * Build terminal atoms array from formula elements.
+ * Returns array like ['F','F','F','F'] for SF4.
+ */
+function buildTerminalAtoms(elements, bp) {
+    if (!elements || elements.length < 2) {
+        var generic = [];
+        for (var i = 0; i < bp; i++) generic.push('X');
+        return generic;
+    }
+    var atoms = [];
+    for (var j = 1; j < elements.length; j++) {
+        for (var k = 0; k < elements[j].count; k++) {
+            atoms.push(elements[j].symbol);
+        }
+    }
+    // Pad or trim to match bp
+    while (atoms.length < bp) atoms.push('X');
+    if (atoms.length > bp) atoms = atoms.slice(0, bp);
+    return atoms;
+}
+
 // ==================== DOM Builders ====================
 
 function buildStep(number, desc, detail) {
@@ -368,6 +1240,30 @@ function buildDiagram(diagramText) {
     return wrap;
 }
 
+function buildStepsSection(steps) {
+    var frag = document.createDocumentFragment();
+
+    var toggle = document.createElement('button');
+    toggle.className = 'mg-steps-toggle';
+    toggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Step-by-step analysis';
+    frag.appendChild(toggle);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'mg-steps-wrap';
+    for (var i = 0; i < steps.length; i++) {
+        wrap.appendChild(steps[i]);
+    }
+    frag.appendChild(wrap);
+
+    toggle.onclick = function() {
+        var isOpen = wrap.classList.contains('open');
+        wrap.classList.toggle('open');
+        toggle.classList.toggle('open');
+    };
+
+    return frag;
+}
+
 // ==================== Render Results ====================
 
 function renderByPairs(container, bp, lp) {
@@ -395,20 +1291,26 @@ function renderByPairs(container, bp, lp) {
         { label: 'VSEPR Notation', value: data.notation }
     ]));
 
-    container.appendChild(buildDiagram(data.diagram));
+    // 3D viewer (with ASCII fallback)
+    var viewer3d = build3DViewer(container, bp, lp, 'A', null);
+    if (!viewer3d) {
+        container.appendChild(buildDiagram(data.diagram));
+    }
 
-    container.appendChild(buildStep(1, '<strong>Count electron pairs</strong>',
-        'Bonding: ' + bp + ', Lone: ' + lp + ', Total: ' + totalPairs));
-    container.appendChild(buildStep(2, '<strong>Determine electron geometry</strong>',
-        totalPairs + ' electron pairs \u2192 <strong>' + data.electronGeom + '</strong>'));
-    container.appendChild(buildStep(3, '<strong>Determine molecular geometry</strong>',
-        'Remove lone pairs from geometry \u2192 <strong>' + data.molecularGeom + '</strong>'));
-    container.appendChild(buildStep(4, '<strong>Description</strong>', data.description));
-
+    var steps = [
+        buildStep(1, '<strong>Count electron pairs</strong>',
+            'Bonding: ' + bp + ', Lone: ' + lp + ', Total: ' + totalPairs),
+        buildStep(2, '<strong>Determine electron geometry</strong>',
+            totalPairs + ' electron pairs \u2192 <strong>' + data.electronGeom + '</strong>'),
+        buildStep(3, '<strong>Determine molecular geometry</strong>',
+            'Remove lone pairs from geometry \u2192 <strong>' + data.molecularGeom + '</strong>'),
+        buildStep(4, '<strong>Description</strong>', data.description)
+    ];
     if (data.examples && data.examples.length > 0) {
-        container.appendChild(buildStep('\u26d7', '<strong>Example molecules</strong>',
+        steps.push(buildStep('\u26d7', '<strong>Example molecules</strong>',
             data.examples.join(', ')));
     }
+    container.appendChild(buildStepsSection(steps));
 
     return data;
 }
@@ -418,10 +1320,23 @@ function renderByFormula(container, formula) {
 
     var molecule = null;
     var upperFormula = formula.toUpperCase();
+    var lowerFormula = formula.toLowerCase().trim();
+
+    // 1. Try matching by formula (e.g., "CH4", "H2O")
     for (var i = 0; i < molecules.length; i++) {
         if (molecules[i].formula.toUpperCase() === upperFormula) {
             molecule = molecules[i];
             break;
+        }
+    }
+
+    // 2. Try matching by name (e.g., "Methane", "Water", "Ammonia")
+    if (!molecule) {
+        for (var j = 0; j < molecules.length; j++) {
+            if (molecules[j].name.toLowerCase() === lowerFormula) {
+                molecule = molecules[j];
+                break;
+            }
         }
     }
 
@@ -430,6 +1345,7 @@ function renderByFormula(container, formula) {
         return molecule;
     }
 
+    // 3. Try parsing as chemical formula
     try {
         var result = parseMolecularFormula(formula);
         if (result.multiCenter) {
@@ -439,9 +1355,67 @@ function renderByFormula(container, formula) {
         }
         return result;
     } catch (e) {
-        showError(container, 'Could not parse formula: ' + e.message);
+        // 4. Last resort: try PubChem name/formula lookup
+        renderByNameLookup(container, formula);
         return null;
     }
+}
+
+function renderByNameLookup(container, query) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    var loadingDiv = document.createElement('div');
+    loadingDiv.className = 'mg-3d-loading';
+    loadingDiv.innerHTML = '<div class="mg-3d-loading-spinner"></div>';
+    container.appendChild(loadingDiv);
+
+    fetchPubChem3D(query).then(function(pubchemData) {
+        container.innerHTML = '';
+        if (!pubchemData || !pubchemData.sdf) {
+            showError(container, 'Could not find "' + query.replace(/[<>&"]/g, '') +
+                '". Try a chemical formula (e.g., CH4, H2O) or a common name (e.g., Methane, Water).');
+            return;
+        }
+
+        // Parse the SDF to extract info
+        var parsed = parseSDF(pubchemData.sdf);
+        var centralIdx = findCentralAtom(parsed);
+        var centralAtom = parsed.atoms[centralIdx];
+
+        // Count bonds to central atom
+        var bp = 0;
+        for (var b = 0; b < parsed.bonds.length; b++) {
+            if (parsed.bonds[b].from === centralIdx || parsed.bonds[b].to === centralIdx) {
+                bp++;
+            }
+        }
+
+        // Header
+        var header = document.createElement('div');
+        header.style.cssText = 'text-align:center;margin-bottom:0.75rem;';
+        header.innerHTML = '<span class="mg-badge">' + query.replace(/[<>&"]/g, '') +
+            ' (from PubChem CID: ' + pubchemData.cid + ')</span>';
+        container.appendChild(header);
+
+        // Basic info grid
+        container.appendChild(buildResultGrid([
+            { label: 'Central Atom', value: centralAtom.elem },
+            { label: 'Bonds to Central', value: bp },
+            { label: 'Total Atoms', value: parsed.atoms.length },
+            { label: 'PubChem CID', value: pubchemData.cid }
+        ]));
+
+        // 3D viewer
+        var viewerDiv = document.createElement('div');
+        viewerDiv.className = 'mg-3d-placeholder';
+        container.appendChild(viewerDiv);
+
+        var pubchemViewer = buildPubChem3DViewer(viewerDiv, pubchemData.sdf, bp, 0, query, pubchemData.cid);
+        if (!pubchemViewer) {
+            showError(viewerDiv, '3Dmol.js could not render the structure. Ensure WebGL is supported.');
+        }
+    });
 }
 
 function renderKnownMolecule(container, mol) {
@@ -466,17 +1440,50 @@ function renderKnownMolecule(container, mol) {
         { label: 'Lone Pairs', value: mol.lp }
     ]));
 
-    if (data) container.appendChild(buildDiagram(data.diagram));
+    // 3D viewer: try PubChem real coordinates first, then VSEPR fallback
+    var viewerPlaceholder = document.createElement('div');
+    viewerPlaceholder.className = 'mg-3d-placeholder';
+    viewerPlaceholder.innerHTML = '<div class="mg-3d-loading"><div class="mg-3d-loading-spinner"></div><div class="mg-3d-loading-text">Loading 3D model\u2026</div></div>';
+    container.appendChild(viewerPlaceholder);
 
-    container.appendChild(buildStep(1, '<strong>Molecule identified</strong>',
-        mol.name + ' (' + displayFormula + ') found in database'));
-    container.appendChild(buildStep(2, '<strong>Electron pairs</strong>',
-        'Bonding: ' + mol.bp + ', Lone: ' + mol.lp + ', Total: ' + totalPairs));
-    container.appendChild(buildStep(3, '<strong>VSEPR classification</strong>',
-        (data ? data.notation : 'N/A') + ' \u2192 ' + mol.geometry));
+    // Try PubChem, with VSEPR fallback
+    (function(placeholder, molecule, geoData) {
+        var formulaClean = molecule.formula.replace(/[+-]$/, '').replace(/\(\d*[+-]\)$/, '');
+        fetchPubChem3D(formulaClean).then(function(pubchemData) {
+            placeholder.innerHTML = '';
+            if (pubchemData && pubchemData.sdf) {
+                var pubchemViewer = buildPubChem3DViewer(placeholder, pubchemData.sdf, molecule.bp, molecule.lp, molecule.formula, pubchemData.cid);
+                if (pubchemViewer) return;
+            }
+            // Fallback to VSEPR programmatic viewer
+            var termAtoms = buildTerminalAtoms(null, molecule.bp);
+            try {
+                var parsed = parseMolecularFormula(molecule.formula);
+                if (!parsed.multiCenter && parsed.elements) {
+                    termAtoms = buildTerminalAtoms(parsed.elements, molecule.bp);
+                }
+            } catch(e) { /* use default */ }
+            var centralMatch = molecule.formula.match(/^([A-Z][a-z]?)/);
+            var centralEl = (centralMatch && centralMatch[1]) ? centralMatch[1] : 'A';
+            var viewer3d = build3DViewer(placeholder, molecule.bp, molecule.lp, centralEl, termAtoms);
+            if (!viewer3d && geoData) {
+                placeholder.appendChild(buildDiagram(geoData.diagram));
+            }
+        });
+    })(viewerPlaceholder, mol, data);
+
+    var steps = [
+        buildStep(1, '<strong>Molecule identified</strong>',
+            mol.name + ' (' + displayFormula + ') found in database'),
+        buildStep(2, '<strong>Electron pairs</strong>',
+            'Bonding: ' + mol.bp + ', Lone: ' + mol.lp + ', Total: ' + totalPairs),
+        buildStep(3, '<strong>VSEPR classification</strong>',
+            (data ? data.notation : 'N/A') + ' \u2192 ' + mol.geometry)
+    ];
     if (data) {
-        container.appendChild(buildStep(4, '<strong>Description</strong>', data.description));
+        steps.push(buildStep(4, '<strong>Description</strong>', data.description));
     }
+    container.appendChild(buildStepsSection(steps));
 }
 
 function renderDynamic(container, result) {
@@ -498,22 +1505,45 @@ function renderDynamic(container, result) {
         { label: 'Valence Electrons', value: result.totalValence }
     ]));
 
-    container.appendChild(buildDiagram(result.data.diagram));
+    // 3D viewer: try PubChem first, then VSEPR fallback
+    var viewerPlaceholder = document.createElement('div');
+    viewerPlaceholder.className = 'mg-3d-placeholder';
+    viewerPlaceholder.innerHTML = '<div class="mg-3d-loading"><div class="mg-3d-loading-spinner"></div><div class="mg-3d-loading-text">Loading 3D model\u2026</div></div>';
+    container.appendChild(viewerPlaceholder);
 
-    container.appendChild(buildStep(1, '<strong>Parse formula</strong>',
-        'Central atom: ' + result.centralAtom + ', Surrounding atoms: ' + result.bondingPairs));
-    container.appendChild(buildStep(2, '<strong>Count valence electrons</strong>',
-        'Total: ' + result.totalValence + (result.charge !== 0 ? ' (charge adjusted)' : '')));
-    container.appendChild(buildStep(3, '<strong>Determine pairs</strong>',
-        'Bonding: ' + result.bondingPairs + ', Lone: ' + result.lonePairs + ', Total: ' + totalPairs));
-    container.appendChild(buildStep(4, '<strong>VSEPR classification</strong>',
-        result.data.notation + ' \u2192 ' + result.data.molecularGeom));
-    container.appendChild(buildStep(5, '<strong>Description</strong>', result.data.description));
+    (function(placeholder, res) {
+        var formulaClean = res.formula.replace(/[+-]$/, '').replace(/\(\d*[+-]\)$/, '');
+        fetchPubChem3D(formulaClean).then(function(pubchemData) {
+            placeholder.innerHTML = '';
+            if (pubchemData && pubchemData.sdf) {
+                var pubchemViewer = buildPubChem3DViewer(placeholder, pubchemData.sdf, res.bondingPairs, res.lonePairs, res.formula, pubchemData.cid);
+                if (pubchemViewer) return;
+            }
+            // Fallback to VSEPR
+            var termAtoms = buildTerminalAtoms(res.elements, res.bondingPairs);
+            var viewer3d = build3DViewer(placeholder, res.bondingPairs, res.lonePairs, res.centralAtom, termAtoms);
+            if (!viewer3d) {
+                placeholder.appendChild(buildDiagram(res.data.diagram));
+            }
+        });
+    })(viewerPlaceholder, result);
 
+    var steps = [
+        buildStep(1, '<strong>Parse formula</strong>',
+            'Central atom: ' + result.centralAtom + ', Surrounding atoms: ' + result.bondingPairs),
+        buildStep(2, '<strong>Count valence electrons</strong>',
+            'Total: ' + result.totalValence + (result.charge !== 0 ? ' (charge adjusted)' : '')),
+        buildStep(3, '<strong>Determine pairs</strong>',
+            'Bonding: ' + result.bondingPairs + ', Lone: ' + result.lonePairs + ', Total: ' + totalPairs),
+        buildStep(4, '<strong>VSEPR classification</strong>',
+            result.data.notation + ' \u2192 ' + result.data.molecularGeom),
+        buildStep(5, '<strong>Description</strong>', result.data.description)
+    ];
     if (result.data.examples && result.data.examples.length > 0) {
-        container.appendChild(buildStep('\u26d7', '<strong>Similar molecules</strong>',
+        steps.push(buildStep('\u26d7', '<strong>Similar molecules</strong>',
             result.data.examples.join(', ')));
     }
+    container.appendChild(buildStepsSection(steps));
 }
 
 // ==================== Molecule Table ====================
@@ -564,6 +1594,23 @@ function renderMultiCenter(container, result) {
     }
     container.appendChild(buildResultGrid(summaryItems));
 
+    // Full molecule 3D view from PubChem
+    var multiViewerPlaceholder = document.createElement('div');
+    multiViewerPlaceholder.className = 'mg-3d-placeholder';
+    multiViewerPlaceholder.innerHTML = '<div class="mg-3d-loading"><div class="mg-3d-loading-spinner"></div><div class="mg-3d-loading-text">Loading 3D model\u2026</div></div>';
+    container.appendChild(multiViewerPlaceholder);
+
+    (function(placeholder, formula) {
+        var formulaClean = formula.replace(/[+-]$/, '').replace(/\(\d*[+-]\)$/, '');
+        fetchPubChem3D(formulaClean).then(function(pubchemData) {
+            placeholder.innerHTML = '';
+            if (pubchemData && pubchemData.sdf) {
+                buildPubChem3DViewer(placeholder, pubchemData.sdf, 0, 0, formula, pubchemData.cid);
+            }
+            // If PubChem fails, no fallback for multi-center (individual centers have their own viewers)
+        });
+    })(multiViewerPlaceholder, result.formula);
+
     // IHD explanation step
     var ihdNote = result.ihd === 0 ? 'Fully saturated (no rings or double bonds)' :
         result.ihd + ' degree' + (result.ihd !== 1 ? 's' : '') + ' of unsaturation (rings and/or \u03c0 bonds)';
@@ -608,8 +1655,9 @@ function renderMultiCenter(container, result) {
         }
         card.appendChild(infoGrid);
 
-        // Diagram
-        if (c.diagram) {
+        // 3D mini-viewer for each center
+        var centerViewer = build3DViewer(card, c.bp, c.lp, c.symbol, null);
+        if (!centerViewer && c.diagram) {
             var diag = document.createElement('pre');
             diag.className = 'mg-diagram';
             diag.style.cssText = 'margin:0.5rem 0 0;padding:0.5rem;font-size:0.75rem;';
@@ -645,6 +1693,125 @@ function showError(container, message) {
 
 // ==================== Exports ====================
 
+// ==================== Compare Renderer ====================
+
+function resolveMolecule(input) {
+    if (!input) return null;
+    var clean = input.trim();
+    var upper = clean.toUpperCase();
+    var lower = clean.toLowerCase();
+
+    // Try formula match
+    for (var i = 0; i < molecules.length; i++) {
+        if (molecules[i].formula.toUpperCase() === upper) return molecules[i];
+    }
+    // Try name match
+    for (var j = 0; j < molecules.length; j++) {
+        if (molecules[j].name.toLowerCase() === lower) return molecules[j];
+    }
+    // Try formula parse
+    try {
+        var parsed = parseMolecularFormula(clean);
+        if (!parsed.multiCenter) {
+            return {
+                formula: clean,
+                display: unicodeFormula(clean),
+                name: unicodeFormula(clean),
+                bp: parsed.bondingPairs,
+                lp: parsed.lonePairs,
+                geometry: parsed.data.molecularGeom,
+                angle: parsed.data.angle,
+                hybridization: parsed.data.hybridization,
+                _parsed: parsed
+            };
+        }
+    } catch(e) { /* not a parseable formula */ }
+    return null;
+}
+
+function renderCompareSide(container, mol) {
+    container.innerHTML = '';
+    if (!mol) {
+        container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:0.75rem;">Enter a formula or name</div>';
+        return;
+    }
+
+    var displayFormula = mol.display || unicodeFormula(mol.formula);
+
+    // Badge
+    var header = document.createElement('div');
+    header.style.cssText = 'text-align:center;margin-bottom:0.375rem;';
+    header.innerHTML = '<span class="mg-badge">' + (mol.name || displayFormula) + '</span>';
+    container.appendChild(header);
+
+    // Compact result grid
+    container.appendChild(buildResultGrid([
+        { label: 'Shape', value: mol.geometry },
+        { label: 'Angle', value: mol.angle },
+        { label: 'Hybrid', value: mol.hybridization },
+        { label: 'BP / LP', value: mol.bp + ' / ' + mol.lp }
+    ]));
+
+    // 3D viewer
+    var viewerPlaceholder = document.createElement('div');
+    viewerPlaceholder.className = 'mg-3d-placeholder';
+    viewerPlaceholder.innerHTML = '<div class="mg-3d-loading"><div class="mg-3d-loading-spinner"></div><div class="mg-3d-loading-text">Loading 3D model\u2026</div></div>';
+    container.appendChild(viewerPlaceholder);
+
+    (function(placeholder, molecule) {
+        var formulaClean = molecule.formula.replace(/[+-]$/, '').replace(/\(\d*[+-]\)$/, '');
+        fetchPubChem3D(formulaClean).then(function(pubchemData) {
+            placeholder.innerHTML = '';
+            if (pubchemData && pubchemData.sdf) {
+                var pv = buildPubChem3DViewer(placeholder, pubchemData.sdf, molecule.bp, molecule.lp, molecule.formula, pubchemData.cid);
+                if (pv) return;
+            }
+            // VSEPR fallback
+            var termAtoms = buildTerminalAtoms(null, molecule.bp);
+            try {
+                var parsed = parseMolecularFormula(molecule.formula);
+                if (!parsed.multiCenter && parsed.elements) termAtoms = buildTerminalAtoms(parsed.elements, molecule.bp);
+            } catch(e) {}
+            var centralMatch = molecule.formula.match(/^([A-Z][a-z]?)/);
+            var centralEl = (centralMatch && centralMatch[1]) ? centralMatch[1] : 'A';
+            build3DViewer(placeholder, molecule.bp, molecule.lp, centralEl, termAtoms);
+        });
+    })(viewerPlaceholder, mol);
+}
+
+function renderCompareDiff(container, mol1, mol2) {
+    container.innerHTML = '';
+    if (!mol1 || !mol2) return;
+
+    var table = document.createElement('table');
+    table.className = 'mg-compare-diff-table';
+
+    var thead = '<thead><tr><th>Property</th><th>' + (mol1.display || unicodeFormula(mol1.formula)) +
+        '</th><th>' + (mol2.display || unicodeFormula(mol2.formula)) + '</th></tr></thead>';
+
+    var props = [
+        { label: 'Geometry', key: 'geometry' },
+        { label: 'Bond Angle', key: 'angle' },
+        { label: 'Hybridization', key: 'hybridization' },
+        { label: 'Bonding Pairs', key: 'bp' },
+        { label: 'Lone Pairs', key: 'lp' }
+    ];
+
+    var tbody = '<tbody>';
+    for (var i = 0; i < props.length; i++) {
+        var v1 = String(mol1[props[i].key]);
+        var v2 = String(mol2[props[i].key]);
+        var cls = v1 === v2 ? 'mg-compare-diff-match' : 'mg-compare-diff-diff';
+        tbody += '<tr><td><strong>' + props[i].label + '</strong></td>' +
+            '<td class="' + cls + '">' + v1 + '</td>' +
+            '<td class="' + cls + '">' + v2 + '</td></tr>';
+    }
+    tbody += '</tbody>';
+
+    table.innerHTML = thead + tbody;
+    container.appendChild(table);
+}
+
 window.MolGeomRender = {
     molecules: molecules,
     geometryData: geometryData,
@@ -653,6 +1820,9 @@ window.MolGeomRender = {
     renderByPairs: renderByPairs,
     renderByFormula: renderByFormula,
     renderMoleculeTable: renderMoleculeTable,
+    resolveMolecule: resolveMolecule,
+    renderCompareSide: renderCompareSide,
+    renderCompareDiff: renderCompareDiff,
     showError: showError,
     buildStep: buildStep
 };

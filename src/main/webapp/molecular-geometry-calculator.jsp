@@ -14,26 +14,29 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Molecular Geometry Calculator | VSEPR Shapes & Bond Angles" />
-        <jsp:param name="toolDescription" value="Free molecular geometry calculator using VSEPR theory. Enter any formula to find molecular shape, bond angles, hybridization, and electron geometry instantly. 54-molecule database, printable VSEPR chart, practice worksheets, and step-by-step Lewis structure analysis. Supports multi-center molecules like glucose." />
+        <jsp:param name="toolName" value="3D Molecular Geometry Calculator | Interactive VSEPR Visualizer" />
+        <jsp:param name="toolDescription" value="Free interactive 3D molecular geometry tool with real PubChem coordinates. Rotate, zoom, and explore any molecule in 3D. VSEPR shapes, bond angles, lone pairs visualized as translucent lobes. Compare molecules side-by-side. 54+ molecule database. PDF export with 3D snapshots." />
         <jsp:param name="toolCategory" value="Chemistry Tools" />
         <jsp:param name="toolUrl" value="molecular-geometry-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="molecular geometry calculator, VSEPR calculator, molecular shape calculator, bond angle calculator, electron geometry calculator, hybridization calculator, VSEPR shapes chart, molecular geometry of H2O, molecular geometry practice worksheet, Lewis structure geometry, AXnEm notation, molecular geometry of CH4 NH3 CO2 SF6" />
+        <jsp:param name="toolKeywords" value="3D molecular geometry calculator, VSEPR 3D visualizer, interactive molecule viewer, molecular shape calculator, bond angle calculator, 3D molecule viewer online free, VSEPR theory calculator, molecular geometry of H2O, molecular geometry of CH4 NH3 CO2 SF6, compare molecular geometry, lone pair visualization, hybridization calculator, VSEPR shapes chart, molecular geometry practice worksheet" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="VSEPR geometry from bonding and lone pairs,Dynamic formula parser for any molecule,54-molecule database with search,Step-by-step VSEPR analysis with diagrams,Multi-center molecule support (glucose ethanol),Printable VSEPR reference chart PDF,Practice worksheet generator for teachers,Hybridization and bond angle calculation,Ion support (NH4+ SO4 2-),Download results as PDF" />
+        <jsp:param name="toolFeatures" value="Interactive 3D molecular models with rotate and zoom,Real 3D coordinates from PubChem database,Lone pairs shown as translucent golden lobes,Side-by-side molecule comparison with diff table,Search by formula or molecule name (e.g. Water Methane),54-molecule database with instant search,Step-by-step VSEPR analysis,Multi-center molecule support (glucose ethanol benzene),Bond angle measurements on 3D model,PDF export with 3D model snapshot,Printable VSEPR reference chart,Practice worksheet generator for teachers" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter a formula or molecule name|Type a chemical formula like H2O or CH4 or a name like Water or Methane into the formula input field,View the interactive 3D model|The tool fetches real 3D coordinates from PubChem and renders an interactive model you can rotate zoom and pan. Lone pairs appear as golden translucent lobes,Read the VSEPR analysis|Check the molecular shape bond angles hybridization and electron geometry in the results grid with step-by-step explanation,Compare two molecules|Switch to Compare tab and enter two formulas side-by-side to see geometry differences highlighted in a diff table,Export as PDF|Click Download PDF to save results with a 3D model snapshot for homework or reference" />
+        <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+        <jsp:param name="teaches" value="VSEPR theory, molecular geometry, bond angles, hybridization, electron geometry, lone pair effects, 3D molecular structure" />
         <jsp:param name="faq1q" value="What is VSEPR theory and how does it predict molecular geometry?" />
-        <jsp:param name="faq1a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts 3D molecular shapes by assuming electron pairs around a central atom repel each other and arrange to maximize distance. Count bonding pairs and lone pairs, determine the electron geometry, then remove lone pairs to get the molecular geometry. For example, water has 4 electron pairs (2 bonding, 2 lone) giving tetrahedral electron geometry but bent molecular shape." />
-        <jsp:param name="faq2q" value="How do you determine molecular geometry from a chemical formula?" />
-        <jsp:param name="faq2a" value="Step 1: Draw the Lewis structure and identify the central atom. Step 2: Count bonding pairs (atoms bonded to center) and lone pairs on the central atom. Step 3: Use the AXnEm notation where n is bonding pairs and m is lone pairs. Step 4: Look up the VSEPR table. For example, CH4 has 4 bonding pairs and 0 lone pairs (AX4) giving tetrahedral geometry at 109.5 degrees." />
+        <jsp:param name="faq1a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts 3D molecular shapes by assuming electron pairs around a central atom repel each other and arrange to maximize distance. Count bonding pairs and lone pairs, determine the electron geometry, then remove lone pairs to get the molecular geometry. For example, water has 4 electron pairs (2 bonding, 2 lone) giving tetrahedral electron geometry but bent molecular shape with 104.5 degree bond angle." />
+        <jsp:param name="faq2q" value="How does the 3D molecular viewer work?" />
+        <jsp:param name="faq2a" value="The tool fetches real 3D atomic coordinates from the PubChem database and renders them using WebGL-based 3Dmol.js. You can rotate the model by dragging, zoom with scroll, and pan with right-drag. Lone pairs are shown as translucent golden lobes positioned using VSEPR geometry. Bond angle measurements are displayed directly on the 3D model. If PubChem data is unavailable, the tool falls back to mathematically computed VSEPR positions." />
         <jsp:param name="faq3q" value="What is the difference between electron geometry and molecular geometry?" />
-        <jsp:param name="faq3a" value="Electron geometry considers ALL electron pairs (bonding plus lone pairs) around the central atom. Molecular geometry only considers the positions of atoms (bonding pairs). For NH3, electron geometry is tetrahedral (4 electron pairs total) but molecular geometry is trigonal pyramidal (3 bonding pairs visible, 1 lone pair invisible). They only match when there are zero lone pairs." />
-        <jsp:param name="faq4q" value="What are the main molecular geometry shapes in VSEPR theory?" />
-        <jsp:param name="faq4a" value="The main shapes are: Linear (180 degrees), Bent (104-120 degrees), Trigonal Planar (120 degrees), Trigonal Pyramidal (107 degrees), Tetrahedral (109.5 degrees), See-Saw, T-Shaped, Square Planar (90 degrees), Square Pyramidal, Trigonal Bipyramidal (90 and 120 degrees), Octahedral (90 degrees), and Pentagonal Bipyramidal (72 and 90 degrees)." />
-        <jsp:param name="faq5q" value="Is this molecular geometry calculator free?" />
-        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup. Features include VSEPR analysis by electron pairs or formula, a 54-molecule database, step-by-step analysis, downloadable PDF results, printable VSEPR reference charts, practice worksheets for teachers, multi-center molecule support (glucose, ethanol), and shareable URLs. Everything runs in your browser." />
-        <jsp:param name="faq6q" value="Can this calculator handle complex molecules like glucose?" />
-        <jsp:param name="faq6a" value="Yes. For multi-center molecules like glucose (C6H12O6), ethanol (C2H6O), or benzene (C6H6), the calculator automatically detects multiple atom centers and analyzes each one individually using VSEPR theory. It shows the geometry, bond angles, and hybridization for each unique atom type, plus the Index of Hydrogen Deficiency (IHD) to identify rings and double bonds." />
+        <jsp:param name="faq3a" value="Electron geometry considers ALL electron pairs (bonding plus lone pairs) around the central atom. Molecular geometry only considers the positions of atoms (bonding pairs). For NH3, electron geometry is tetrahedral (4 electron pairs total) but molecular geometry is trigonal pyramidal (3 bonding pairs visible, 1 lone pair invisible). The 3D viewer shows both: atoms as colored spheres and lone pairs as translucent golden lobes." />
+        <jsp:param name="faq4q" value="Can I compare two molecules side by side?" />
+        <jsp:param name="faq4a" value="Yes. Click the Compare tab and enter two formulas or molecule names. The tool renders both molecules in interactive 3D viewers side by side and shows a comparison table highlighting matching and differing properties including geometry, bond angle, hybridization, bonding pairs, and lone pairs. Try presets like H2O vs NH3 or CH4 vs CCl4 to see how substituents affect molecular shape." />
+        <jsp:param name="faq5q" value="What are the main molecular geometry shapes in VSEPR theory?" />
+        <jsp:param name="faq5a" value="The main shapes are: Linear (180 degrees, e.g. CO2), Bent (104-120 degrees, e.g. H2O), Trigonal Planar (120 degrees, e.g. BF3), Trigonal Pyramidal (107 degrees, e.g. NH3), Tetrahedral (109.5 degrees, e.g. CH4), See-Saw (e.g. SF4), T-Shaped (e.g. ClF3), Square Planar (90 degrees, e.g. XeF4), Square Pyramidal (e.g. BrF5), Trigonal Bipyramidal (90 and 120 degrees, e.g. PCl5), and Octahedral (90 degrees, e.g. SF6). All shapes can be explored in interactive 3D on this tool." />
+        <jsp:param name="faq6q" value="Can this tool handle complex molecules like glucose or benzene?" />
+        <jsp:param name="faq6a" value="Yes. For multi-center molecules like glucose (C6H12O6), ethanol (C2H6O), or benzene (C6H6), the tool fetches the full 3D structure from PubChem and renders it as an interactive model. It also analyzes each atom center individually using VSEPR theory, showing geometry, bond angles, and hybridization per center, plus the Index of Hydrogen Deficiency (IHD) to identify rings and double bonds." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,17 +67,18 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Molecular Geometry Calculator</h1>
+            <h1 class="tool-page-title">3D Molecular Geometry Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp">Chemistry Tools</a> /
-                Molecular Geometry
+                3D Molecular Geometry
             </nav>
         </div>
         <div class="tool-page-badges">
+            <span class="tool-badge">Interactive 3D</span>
             <span class="tool-badge">VSEPR Theory</span>
-            <span class="tool-badge">54 Molecules</span>
-            <span class="tool-badge">Step-by-Step</span>
+            <span class="tool-badge">54+ Molecules</span>
+            <span class="tool-badge">Compare</span>
         </div>
     </div>
 </header>
@@ -119,8 +123,8 @@
                 <div class="mg-mode-form" id="mg-form-formula">
                     <div class="tool-form-group">
                         <label class="mg-input-label" for="mg-formula">Chemical Formula</label>
-                        <input type="text" class="mg-input mg-formula-input" id="mg-formula" placeholder="e.g., CH4, NH3, H2O, SF6, NH4+">
-                        <div class="mg-input-hint">Enter any formula. Supports ions (NH4+, SO4(2-)). Central atom first.</div>
+                        <input type="text" class="mg-input mg-formula-input" id="mg-formula" placeholder="e.g., CH4, H2O, Methane, Water">
+                        <div class="mg-input-hint">Enter a formula (CH4, NH3, SF6, NH4+) or molecule name (Methane, Water, Ammonia).</div>
                     </div>
                 </div>
 
@@ -165,6 +169,7 @@
         <!-- Tab bar -->
         <div class="mg-output-tabs">
             <button type="button" class="mg-output-tab active" data-panel="result">Result</button>
+            <button type="button" class="mg-output-tab" data-panel="compare">Compare</button>
             <button type="button" class="mg-output-tab" data-panel="database">Database</button>
         </div>
 
@@ -188,6 +193,50 @@
                     <button type="button" class="tool-action-btn" id="mg-download-pdf-btn" style="flex:1 1 auto;width:auto;min-width:80px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;">&#128196; Download PDF</button>
                     <a id="mg-lewis-btn" href="#" target="_blank" class="tool-action-btn" style="flex:1 1 auto;width:auto;min-width:80px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;text-align:center;text-decoration:none;display:none;">&#9883; Lewis Structure</a>
                     <button type="button" class="tool-action-btn" id="mg-share-btn" style="flex:0 0 auto;width:auto;min-width:60px;margin-top:0;font-size:0.8rem;padding:0.6rem 0.5rem;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Share</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare Panel -->
+        <div class="mg-panel" id="mg-panel-compare">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--mg-tool);">
+                        <rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/>
+                    </svg>
+                    <h4>Compare Molecules</h4>
+                </div>
+                <div style="padding:0.75rem;">
+                    <!-- Preset comparisons -->
+                    <div class="mg-compare-presets">
+                        <button type="button" class="mg-compare-preset" data-cmp="H2O,NH3">H&#8322;O vs NH&#8323;</button>
+                        <button type="button" class="mg-compare-preset" data-cmp="CH4,CCl4">CH&#8324; vs CCl&#8324;</button>
+                        <button type="button" class="mg-compare-preset" data-cmp="CO2,H2O">CO&#8322; vs H&#8322;O</button>
+                        <button type="button" class="mg-compare-preset" data-cmp="BF3,NH3">BF&#8323; vs NH&#8323;</button>
+                        <button type="button" class="mg-compare-preset" data-cmp="SF6,SF4">SF&#8326; vs SF&#8324;</button>
+                        <button type="button" class="mg-compare-preset" data-cmp="PCl5,PCl3">PCl&#8325; vs PCl&#8323;</button>
+                    </div>
+                    <!-- Inputs -->
+                    <div class="mg-compare-container">
+                        <div class="mg-compare-side">
+                            <div class="mg-compare-input-row">
+                                <input type="text" class="mg-compare-input" id="mg-cmp-1" placeholder="e.g., H2O">
+                            </div>
+                            <div id="mg-cmp-result-1"></div>
+                        </div>
+                        <div class="mg-compare-side">
+                            <div class="mg-compare-input-row">
+                                <input type="text" class="mg-compare-input" id="mg-cmp-2" placeholder="e.g., NH3">
+                            </div>
+                            <div id="mg-cmp-result-2"></div>
+                        </div>
+                    </div>
+                    <!-- Compare button -->
+                    <div style="text-align:center;margin:0.5rem 0;">
+                        <button type="button" class="mg-compare-go-btn" id="mg-cmp-btn">Compare</button>
+                    </div>
+                    <!-- Diff table -->
+                    <div id="mg-cmp-diff"></div>
                 </div>
             </div>
         </div>
@@ -854,6 +903,7 @@ H&mdash;O&mdash;H</div>
 </script>
 
 <!-- Core Scripts -->
+<script src="https://3Dmol.org/build/3Dmol-min.js" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/molecular-geometry-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/molecular-geometry-core.js?v=<%=cacheVersion%>"></script>
