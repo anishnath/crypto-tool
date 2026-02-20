@@ -19,7 +19,7 @@
         <jsp:param name="toolCategory" value="Chemistry Tools" />
         <jsp:param name="toolUrl" value="molecular-geometry-calculator.jsp" />
         <jsp:param name="toolKeywords" value="3D molecular geometry calculator, VSEPR 3D visualizer, interactive molecule viewer, molecular shape calculator, bond angle calculator, 3D molecule viewer online free, VSEPR theory calculator, molecular geometry of H2O, molecular geometry of CH4 NH3 CO2 SF6, compare molecular geometry, lone pair visualization, hybridization calculator, VSEPR shapes chart, molecular geometry practice worksheet" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="molecular-geometry-3d.svg" />
         <jsp:param name="toolFeatures" value="Interactive 3D molecular models with rotate and zoom,Real 3D coordinates from PubChem database,Lone pairs shown as translucent golden lobes,Side-by-side molecule comparison with diff table,Search by formula or molecule name (e.g. Water Methane),54-molecule database with instant search,Step-by-step VSEPR analysis,Multi-center molecule support (glucose ethanol benzene),Bond angle measurements on 3D model,PDF export with 3D model snapshot,Printable VSEPR reference chart,Practice worksheet generator for teachers" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Enter a formula or molecule name|Type a chemical formula like H2O or CH4 or a name like Water or Methane into the formula input field,View the interactive 3D model|The tool fetches real 3D coordinates from PubChem and renders an interactive model you can rotate zoom and pan. Lone pairs appear as golden translucent lobes,Read the VSEPR analysis|Check the molecular shape bond angles hybridization and electron geometry in the results grid with step-by-step explanation,Compare two molecules|Switch to Compare tab and enter two formulas side-by-side to see geometry differences highlighted in a diff table,Export as PDF|Click Download PDF to save results with a 3D model snapshot for homework or reference" />
@@ -86,9 +86,15 @@
 <section class="tool-description-section" style="background:var(--mg-light);">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Free <strong>molecular geometry calculator</strong> using <strong>VSEPR theory</strong>. Enter any <strong>chemical formula</strong> or electron pairs to find <strong>molecular shape</strong>, <strong>bond angles</strong>, hybridization, and electron geometry instantly. 54-molecule database, downloadable <strong>VSEPR chart</strong>, printable <strong>practice worksheets</strong>, and support for multi-center molecules like glucose.</p>
+            <p>Free <strong>interactive 3D molecular geometry</strong> tool using <strong>VSEPR theory</strong> with real <strong>PubChem coordinates</strong>. Enter any <strong>chemical formula</strong> or molecule name to explore <strong>molecular shapes</strong> in 3D &mdash; rotate, zoom, and see <strong>lone pairs</strong> as translucent lobes. <strong>Compare molecules</strong> side-by-side, download <strong>PDF with 3D snapshots</strong>, and generate <strong>practice worksheets</strong>.</p>
         </div>
     </div>
+</section>
+
+<section style="max-width:900px;margin:0 auto;padding:0.75rem 1rem;">
+    <img src="<%=request.getContextPath()%>/images/site/molecular-geometry-3d.svg"
+         alt="VSEPR molecular geometry shapes diagram showing Linear CO2, Trigonal Planar BF3, Bent H2O with lone pairs, Tetrahedral CH4, Trigonal Pyramidal NH3, Trigonal Bipyramidal PCl5, Octahedral SF6, and See-Saw SF4 with bond angles and hybridization"
+         width="1200" height="630" loading="eager" style="width:100%;height:auto;border-radius:0.75rem;" />
 </section>
 
 <main class="tool-page-container">

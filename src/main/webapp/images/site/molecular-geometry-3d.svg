@@ -1,0 +1,381 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ecfdf5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0fdf4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f766e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0891b2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0e7490;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d97706;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b45309;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#d1fae5" stroke-width="0.5"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="url(#emeraldGrad)"/>
+  <text x="600" y="38" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle" fill="white" letter-spacing="0.5">
+    3D Molecular Geometry &amp; VSEPR Theory
+  </text>
+  <text x="600" y="62" font-family="Inter, Arial, sans-serif" font-size="14" text-anchor="middle" fill="#a7f3d0" letter-spacing="0.3">
+    Interactive 3D Models \u00b7 Real PubChem Coordinates \u00b7 Bond Angles \u00b7 Lone Pair Visualization
+  </text>
+
+  <!-- ==================== ROW 1: Linear, Trigonal Planar, Bent ==================== -->
+
+  <!-- 1. LINEAR (CO2) - AX2 -->
+  <g transform="translate(80, 110)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#emeraldGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#emeraldGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">Linear</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 110)">
+      <!-- Bonds -->
+      <line x1="-55" y1="0" x2="-14" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="14" y1="0" x2="55" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Oxygen left -->
+      <circle cx="-55" cy="0" r="14" fill="#FF0D0D"/>
+      <text x="-55" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">O</text>
+      <!-- Carbon center -->
+      <circle cx="0" cy="0" r="14" fill="#555555"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">C</text>
+      <!-- Oxygen right -->
+      <circle cx="55" cy="0" r="14" fill="#FF0D0D"/>
+      <text x="55" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">O</text>
+      <!-- Angle arc -->
+      <path d="M -25 0 A 25 25 0 0 1 25 0" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <text x="0" y="-14" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="middle" fill="#059669">180\u00b0</text>
+    </g>
+    <!-- Info -->
+    <text x="90" y="155" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">CO\u2082 \u00b7 AX\u2082</text>
+    <text x="90" y="172" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp hybridization</text>
+    <text x="90" y="188" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">BP: 2 \u00b7 LP: 0</text>
+  </g>
+
+  <!-- 2. TRIGONAL PLANAR (BF3) - AX3 -->
+  <g transform="translate(300, 110)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#cyanGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#cyanGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">Trigonal Planar</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 105)">
+      <!-- Bonds -->
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="-40" y2="25" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="40" y2="25" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Fluorine atoms -->
+      <circle cx="0" cy="-45" r="13" fill="#90E050"/>
+      <text x="0" y="-41" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="-40" cy="25" r="13" fill="#90E050"/>
+      <text x="-40" y="29" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="40" cy="25" r="13" fill="#90E050"/>
+      <text x="40" y="29" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <!-- Boron center -->
+      <circle cx="0" cy="0" r="13" fill="#FFB5B5"/>
+      <text x="0" y="4" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#1e293b">B</text>
+      <!-- Angle -->
+      <text x="0" y="48" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="middle" fill="#0891b2">120\u00b0</text>
+    </g>
+    <text x="90" y="155" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">BF\u2083 \u00b7 AX\u2083</text>
+    <text x="90" y="172" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b2 hybridization</text>
+    <text x="90" y="188" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">BP: 3 \u00b7 LP: 0</text>
+  </g>
+
+  <!-- 3. BENT (H2O) - AX2E2 -->
+  <g transform="translate(520, 110)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#violetGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#violetGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">Bent</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 100)">
+      <!-- Bonds -->
+      <line x1="0" y1="0" x2="-40" y2="30" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="40" y2="30" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Lone pairs (translucent golden lobes) -->
+      <ellipse cx="-18" cy="-28" rx="12" ry="18" fill="#FFD700" opacity="0.35" transform="rotate(-20, -18, -28)"/>
+      <ellipse cx="18" cy="-28" rx="12" ry="18" fill="#FFD700" opacity="0.35" transform="rotate(20, 18, -28)"/>
+      <text x="-18" y="-24" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#b8860b">LP</text>
+      <text x="18" y="-24" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#b8860b">LP</text>
+      <!-- Hydrogen atoms -->
+      <circle cx="-40" cy="30" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="-40" y="34" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <circle cx="40" cy="30" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="40" y="34" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <!-- Oxygen center -->
+      <circle cx="0" cy="0" r="14" fill="#FF0D0D"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">O</text>
+      <!-- Angle arc -->
+      <path d="M -18 14 A 22 22 0 0 1 18 14" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <text x="0" y="55" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="middle" fill="#7c3aed">104.5\u00b0</text>
+    </g>
+    <text x="90" y="160" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">H\u2082O \u00b7 AX\u2082E\u2082</text>
+    <text x="90" y="177" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3 hybridization</text>
+    <text x="90" y="193" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">BP: 2 \u00b7 LP: 2</text>
+  </g>
+
+  <!-- 4. TETRAHEDRAL (CH4) - AX4 -->
+  <g transform="translate(740, 110)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#blueGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#blueGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">Tetrahedral</text>
+    <!-- Molecule diagram - 3D perspective -->
+    <g transform="translate(90, 105)">
+      <!-- Back bonds (dashed for depth) -->
+      <line x1="0" y1="0" x2="-30" y2="35" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="30" y2="35" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <!-- Front bonds (solid) -->
+      <line x1="0" y1="0" x2="0" y2="-42" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Wedge bond (front) -->
+      <polygon points="-2,0 -14,30 14,30 2,0" fill="#94a3b8" opacity="0.6"/>
+      <!-- H atoms -->
+      <circle cx="0" cy="-42" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="0" y="-38" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <circle cx="-30" cy="35" r="10" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5" opacity="0.7"/>
+      <text x="-30" y="39" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#64748b">H</text>
+      <circle cx="30" cy="35" r="10" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5" opacity="0.7"/>
+      <text x="30" y="39" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#64748b">H</text>
+      <circle cx="0" cy="30" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="0" y="34" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <!-- Carbon center -->
+      <circle cx="0" cy="0" r="14" fill="#555555"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">C</text>
+      <!-- Angle -->
+      <text x="48" y="0" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="start" fill="#2563eb">109.5\u00b0</text>
+    </g>
+    <text x="90" y="155" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">CH\u2084 \u00b7 AX\u2084</text>
+    <text x="90" y="172" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3 hybridization</text>
+    <text x="90" y="188" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">BP: 4 \u00b7 LP: 0</text>
+  </g>
+
+  <!-- 5. TRIGONAL PYRAMIDAL (NH3) - AX3E -->
+  <g transform="translate(960, 110)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#amberGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#amberGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">Trigonal Pyramidal</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 100)">
+      <!-- Bonds -->
+      <line x1="0" y1="0" x2="-38" y2="32" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="38" y2="32" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="0" y2="40" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <!-- Lone pair -->
+      <ellipse cx="0" cy="-30" rx="14" ry="20" fill="#FFD700" opacity="0.35"/>
+      <text x="0" y="-26" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#b8860b">LP</text>
+      <!-- H atoms -->
+      <circle cx="-38" cy="32" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="-38" y="36" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <circle cx="38" cy="32" r="11" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="38" y="36" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill="#334155">H</text>
+      <circle cx="0" cy="40" r="10" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5" opacity="0.7"/>
+      <text x="0" y="44" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#64748b">H</text>
+      <!-- Nitrogen center -->
+      <circle cx="0" cy="0" r="14" fill="#3050F8"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">N</text>
+      <!-- Angle -->
+      <text x="0" y="60" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="middle" fill="#d97706">107\u00b0</text>
+    </g>
+    <text x="90" y="160" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">NH\u2083 \u00b7 AX\u2083E</text>
+    <text x="90" y="177" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3 hybridization</text>
+    <text x="90" y="193" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">BP: 3 \u00b7 LP: 1</text>
+  </g>
+
+  <!-- ==================== ROW 2: Trig Bipyramidal, Octahedral, See-Saw ==================== -->
+
+  <!-- 6. TRIGONAL BIPYRAMIDAL (PCl5) - AX5 -->
+  <g transform="translate(80, 350)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#tealGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#tealGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">Trigonal Bipyramidal</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 110)">
+      <!-- Axial bonds -->
+      <line x1="0" y1="0" x2="0" y2="-50" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="0" y2="50" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Equatorial bonds -->
+      <line x1="0" y1="0" x2="-45" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="22" y2="-18" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="22" y2="18" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <!-- Cl atoms -->
+      <circle cx="0" cy="-50" r="12" fill="#1FF01F"/>
+      <text x="0" y="-46" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">Cl</text>
+      <circle cx="0" cy="50" r="12" fill="#1FF01F"/>
+      <text x="0" y="54" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">Cl</text>
+      <circle cx="-45" cy="0" r="12" fill="#1FF01F"/>
+      <text x="-45" y="4" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">Cl</text>
+      <circle cx="22" cy="-18" r="10" fill="#1FF01F" opacity="0.7"/>
+      <text x="22" y="-14" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle" fill="#1e293b">Cl</text>
+      <circle cx="22" cy="18" r="10" fill="#1FF01F" opacity="0.7"/>
+      <text x="22" y="22" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle" fill="#1e293b">Cl</text>
+      <!-- P center -->
+      <circle cx="0" cy="0" r="14" fill="#FF8000"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="white">P</text>
+      <!-- Angles -->
+      <text x="50" y="-8" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" text-anchor="start" fill="#0d9488">90\u00b0/120\u00b0</text>
+    </g>
+    <text x="90" y="175" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">PCl\u2085 \u00b7 AX\u2085</text>
+    <text x="90" y="192" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3d \u00b7 BP: 5 \u00b7 LP: 0</text>
+  </g>
+
+  <!-- 7. OCTAHEDRAL (SF6) - AX6 -->
+  <g transform="translate(300, 350)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#emeraldGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#emeraldGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">Octahedral</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 110)">
+      <!-- Bonds -->
+      <line x1="0" y1="0" x2="0" y2="-48" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="0" y2="48" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="-48" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="48" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="24" y2="-20" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="-24" y2="20" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+      <!-- F atoms -->
+      <circle cx="0" cy="-48" r="11" fill="#90E050"/>
+      <text x="0" y="-44" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="0" cy="48" r="11" fill="#90E050"/>
+      <text x="0" y="52" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="-48" cy="0" r="11" fill="#90E050"/>
+      <text x="-48" y="4" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="48" cy="0" r="11" fill="#90E050"/>
+      <text x="48" y="4" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="24" cy="-20" r="9" fill="#90E050" opacity="0.7"/>
+      <text x="24" y="-16" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="-24" cy="20" r="9" fill="#90E050" opacity="0.7"/>
+      <text x="-24" y="24" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <!-- S center -->
+      <circle cx="0" cy="0" r="14" fill="#FFFF30" stroke="#e0e000" stroke-width="1"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#1e293b">S</text>
+      <!-- Angle -->
+      <text x="52" y="-30" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" text-anchor="start" fill="#059669">90\u00b0</text>
+    </g>
+    <text x="90" y="175" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">SF\u2086 \u00b7 AX\u2086</text>
+    <text x="90" y="192" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3d\u00b2 \u00b7 BP: 6 \u00b7 LP: 0</text>
+  </g>
+
+  <!-- 8. SEE-SAW (SF4) - AX4E -->
+  <g transform="translate(520, 350)">
+    <rect width="180" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="12" fill="url(#violetGrad)"/>
+    <rect x="0" y="18" width="180" height="18" fill="url(#violetGrad)"/>
+    <text x="90" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">See-Saw</text>
+    <!-- Molecule diagram -->
+    <g transform="translate(90, 108)">
+      <!-- Axial bonds -->
+      <line x1="0" y1="0" x2="0" y2="-48" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="0" y2="48" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Equatorial bonds -->
+      <line x1="0" y1="0" x2="-42" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="42" y2="0" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Lone pair (equatorial position) -->
+      <ellipse cx="30" cy="-20" rx="14" ry="10" fill="#FFD700" opacity="0.35" transform="rotate(-40, 30, -20)"/>
+      <text x="30" y="-17" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#b8860b">LP</text>
+      <!-- F atoms -->
+      <circle cx="0" cy="-48" r="11" fill="#90E050"/>
+      <text x="0" y="-44" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="0" cy="48" r="11" fill="#90E050"/>
+      <text x="0" y="52" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="-42" cy="0" r="11" fill="#90E050"/>
+      <text x="-42" y="4" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <circle cx="42" cy="0" r="11" fill="#90E050"/>
+      <text x="42" y="4" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle" fill="#1e293b">F</text>
+      <!-- S center -->
+      <circle cx="0" cy="0" r="14" fill="#FFFF30" stroke="#e0e000" stroke-width="1"/>
+      <text x="0" y="5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#1e293b">S</text>
+    </g>
+    <text x="90" y="175" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#334155" font-weight="600">SF\u2084 \u00b7 AX\u2084E</text>
+    <text x="90" y="192" font-family="Inter, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#64748b">sp\u00b3d \u00b7 BP: 4 \u00b7 LP: 1</text>
+  </g>
+
+  <!-- ==================== LEGEND / KEY BOX ==================== -->
+  <g transform="translate(740, 350)">
+    <rect width="400" height="210" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect width="400" height="36" rx="12" fill="#334155"/>
+    <rect x="0" y="18" width="400" height="18" fill="#334155"/>
+    <text x="200" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="white">VSEPR Notation &amp; Legend</text>
+
+    <!-- Notation explanation -->
+    <text x="20" y="58" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#334155">AX\u2099E\u2098 Notation:</text>
+    <text x="20" y="76" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">A = Central atom</text>
+    <text x="120" y="76" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">X = Bonding pairs (n)</text>
+    <text x="260" y="76" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">E = Lone pairs (m)</text>
+
+    <!-- Color legend -->
+    <text x="20" y="100" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#334155">Atom Colors (CPK):</text>
+    <!-- Row 1 -->
+    <circle cx="30" cy="118" r="8" fill="#555555"/>
+    <text x="44" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">C</text>
+    <circle cx="75" cy="118" r="8" fill="#3050F8"/>
+    <text x="89" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">N</text>
+    <circle cx="120" cy="118" r="8" fill="#FF0D0D"/>
+    <text x="134" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">O</text>
+    <circle cx="165" cy="118" r="8" fill="#90E050"/>
+    <text x="179" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">F/Cl</text>
+    <circle cx="220" cy="118" r="8" fill="#FFFF30" stroke="#e0e000" stroke-width="1"/>
+    <text x="234" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">S</text>
+    <circle cx="265" cy="118" r="8" fill="#FF8000"/>
+    <text x="279" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">P</text>
+    <circle cx="310" cy="118" r="8" fill="#FFB5B5"/>
+    <text x="324" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">B</text>
+    <circle cx="355" cy="118" r="8" fill="#FFFFFF" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="369" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">H</text>
+
+    <!-- Lone pair legend -->
+    <text x="20" y="146" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#334155">Visualization:</text>
+    <ellipse cx="30" cy="164" rx="10" ry="14" fill="#FFD700" opacity="0.35"/>
+    <text x="48" y="168" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">= Lone pair (translucent lobe)</text>
+    <line x1="210" y1="164" x2="245" y2="164" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+    <text x="253" y="168" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">= Bond (front)</text>
+    <line x1="210" y1="182" x2="245" y2="182" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+    <text x="253" y="186" font-family="Inter, Arial, sans-serif" font-size="10" fill="#64748b">= Bond (back / depth)</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="1188" y="620" font-family="Inter, Arial, sans-serif" font-size="12" fill="#94a3b8" text-anchor="end">8gwifi.org</text>
+</svg>
