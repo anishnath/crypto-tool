@@ -1362,7 +1362,7 @@
             try { failed = result.hasIntegral(); } catch (e) { /* hasIntegral may not exist in some builds */ }
 
             if (failed) {
-                showError(expr);
+                sympyFallback(expr, v);
                 return;
             }
 
@@ -1415,7 +1415,7 @@
             if (emptyState) emptyState.style.display = 'none';
 
         } catch (err) {
-            showError(expr, err.message);
+            sympyFallback(expr, v);
         }
     }
 
@@ -1517,6 +1517,88 @@
         html += '</div>';
         resultContent.innerHTML = html;
         if (emptyState) emptyState.style.display = 'none';
+    }
+
+    // ========== SymPy Fallback via OneCompiler ==========
+    function sympyFallback(expr, v) {
+        var pyExpr = nerdamerToPython(expr);
+        var a = lowerInput.value.trim() || '0';
+        var b = upperInput.value.trim() || '1';
+        var isDefinite = (currentMode === 'definite');
+
+        // Show loading state
+        resultActions.classList.remove('visible');
+        resultContent.innerHTML = '<div style="text-align:center;padding:2rem;">' +
+            '<div class="ic-spinner" style="width:24px;height:24px;border-width:3px;margin:0 auto 1rem;"></div>' +
+            '<p style="color:var(--text-secondary);font-size:0.9375rem;">Trying advanced solver (SymPy)...</p></div>';
+        if (emptyState) emptyState.style.display = 'none';
+
+        var code;
+        if (isDefinite) {
+            code = 'from sympy import *\n' +
+                v + ' = symbols(\'' + v + '\')\n' +
+                'expr = ' + pyExpr + '\n' +
+                'result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
+                'print(\'LATEX:\' + latex(result))\n' +
+                'print(\'TEXT:\' + str(result))\n' +
+                'try:\n' +
+                '    print(\'NUMERIC:\' + str(float(result)))\n' +
+                'except:\n' +
+                '    print(\'NUMERIC:NaN\')';
+        } else {
+            code = 'from sympy import *\n' +
+                v + ' = symbols(\'' + v + '\')\n' +
+                'expr = ' + pyExpr + '\n' +
+                'result = integrate(expr, ' + v + ')\n' +
+                'print(\'LATEX:\' + latex(result))\n' +
+                'print(\'TEXT:\' + str(result))';
+        }
+
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, 15000);
+
+        fetch('OneCompilerFunctionality?action=execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
+            signal: controller.signal
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            clearTimeout(timeoutId);
+            var stdout = (data.Stdout || data.stdout || '').trim();
+            var stderr = (data.Stderr || data.stderr || '').trim();
+
+            if (stderr || !stdout || stdout.indexOf('Integral(') !== -1) {
+                showError(expr, stderr || 'SymPy could not solve this integral');
+                return;
+            }
+
+            var method = 'SymPy (Advanced Solver)';
+            var latexMatch = stdout.match(/LATEX:(.+)/);
+            var textMatch = stdout.match(/TEXT:(.+)/);
+            var resultTeX = latexMatch ? latexMatch[1].trim() : stdout;
+            var resultText = textMatch ? textMatch[1].trim() : resultTeX;
+
+            if (isDefinite) {
+                var numericMatch = stdout.match(/NUMERIC:(.+)/);
+                var numericStr = numericMatch ? numericMatch[1].trim() : 'NaN';
+                var numericVal = parseFloat(numericStr);
+                var exactText = resultText;
+
+                showDefiniteResult(expr, v, a, b, resultTeX, resultText, exactText, numericVal, method);
+                resultActions.classList.add('visible');
+                try { prepareGraph(expr, v, pyExpr, 'definite', a, b); } catch(e) {}
+            } else {
+                showIndefiniteResult(expr, v, resultTeX, resultText, method);
+                resultActions.classList.add('visible');
+                try { prepareGraph(expr, v, pyExpr, 'indefinite', null, null); } catch(e) {}
+            }
+        })
+        .catch(function(err) {
+            clearTimeout(timeoutId);
+            showError(expr, err.name === 'AbortError' ? 'SymPy request timed out' : err.message);
+        });
     }
 
     // ========== Step-by-Step Solutions ==========
