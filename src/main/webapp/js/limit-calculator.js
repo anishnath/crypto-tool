@@ -102,7 +102,12 @@ function exprToLatex(expr){
 }
 
 function pointToLatex(pt){
-    var p=pt.trim().toLowerCase();
+    var p=pt.trim()
+        .replace(/\u221e/g,'infinity').replace(/\u03c0/g,'pi').replace(/\u2212/g,'-')
+        .replace(/\u2080/g,'0').replace(/\u2081/g,'1').replace(/\u2082/g,'2').replace(/\u2083/g,'3')
+        .replace(/\u2084/g,'4').replace(/\u2085/g,'5').replace(/\u2086/g,'6').replace(/\u2087/g,'7')
+        .replace(/\u2088/g,'8').replace(/\u2089/g,'9')
+        .toLowerCase();
     if(p==='infinity'||p==='inf')return'\\infty';
     if(p==='-infinity'||p==='-inf')return'-\\infty';
     if(p==='pi')return'\\pi';

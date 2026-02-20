@@ -22,6 +22,12 @@ function normalizeExpr(expr) {
          .replace(/\u2212/g, '-')                               // − (minus sign)
          .replace(/\u00f7/g, '/')                               // ÷
          .replace(/\u00d7/g, '*');                              // ×
+    /* Unicode subscript digits → regular digits */
+    s = s.replace(/\u2080/g, '0').replace(/\u2081/g, '1')
+         .replace(/\u2082/g, '2').replace(/\u2083/g, '3')
+         .replace(/\u2084/g, '4').replace(/\u2085/g, '5')
+         .replace(/\u2086/g, '6').replace(/\u2087/g, '7')
+         .replace(/\u2088/g, '8').replace(/\u2089/g, '9');
     var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|log|ln|sqrt';
     /* Lookahead: operator, close-paren, whitespace, comma, end-of-string,
        OR the start of another known function name (handles sinxcosx). */

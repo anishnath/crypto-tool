@@ -1312,8 +1312,8 @@
             var latex = exprToLatex(normalized);
             var integralLatex;
             if (currentMode === 'definite') {
-                var a = lowerInput.value.trim() || 'a';
-                var b = upperInput.value.trim() || 'b';
+                var a = boundToLatex(lowerInput.value.trim()) || 'a';
+                var b = boundToLatex(upperInput.value.trim()) || 'b';
                 integralLatex = '\\int_{' + a + '}^{' + b + '} ' + latex + ' \\, d' + v;
             } else {
                 integralLatex = '\\int ' + latex + ' \\, d' + v;
@@ -1338,6 +1338,20 @@
                 .replace(/sqrt\(/g, '\\sqrt{').replace(/\)/g, '}')
                 .replace(/\^(\w)/g, '^{$1}');
         }
+    }
+
+    function boundToLatex(s) {
+        return s.replace(/\u221e/g, '\\infty')                      // ∞
+                .replace(/\u03c0/g, '\\pi')                          // π
+                .replace(/\u2212/g, '-')                              // − (Unicode minus)
+                .replace(/\u2080/g, '0').replace(/\u2081/g, '1')    // ₀ ₁
+                .replace(/\u2082/g, '2').replace(/\u2083/g, '3')    // ₂ ₃
+                .replace(/\u2084/g, '4').replace(/\u2085/g, '5')    // ₄ ₅
+                .replace(/\u2086/g, '6').replace(/\u2087/g, '7')    // ₆ ₇
+                .replace(/\u2088/g, '8').replace(/\u2089/g, '9')    // ₈ ₉
+                .replace(/\binfinity\b/gi, '\\infty')
+                .replace(/\binf\b/gi, '\\infty')
+                .replace(/\bpi\b/gi, '\\pi');
     }
 
     // ========== Integration ==========
