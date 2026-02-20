@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0e0f14"/>
+      <stop offset="100%" stop-color="#1a1c28"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03" stroke="#6ee7b7" stroke-width="0.5">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
+    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
+    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+  </g>
+
+  <!-- Left side: Editor mockup -->
+  <g transform="translate(60, 80)">
+    <!-- Editor window frame -->
+    <rect width="500" height="470" rx="12" fill="#14151c" stroke="#2a2d3e" stroke-width="1.5"/>
+
+    <!-- Titlebar -->
+    <rect width="500" height="36" rx="12" fill="#1c1e28"/>
+    <rect y="24" width="500" height="12" fill="#1c1e28"/>
+    <circle cx="18" cy="18" r="5" fill="#f87171" opacity="0.8"/>
+    <circle cx="36" cy="18" r="5" fill="#fbbf24" opacity="0.8"/>
+    <circle cx="54" cy="18" r="5" fill="#34d399" opacity="0.8"/>
+    <text x="250" y="22" text-anchor="middle" fill="#8b8fa8" font-family="monospace" font-size="11">main.tex — LaTeX Editor</text>
+
+    <!-- Line numbers gutter -->
+    <rect x="0" y="36" width="38" height="434" fill="#1a1c26" rx="0"/>
+
+    <!-- Code lines -->
+    <g font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="12.5">
+      <!-- Line numbers -->
+      <g fill="#555870" text-anchor="end">
+        <text x="32" y="62">1</text><text x="32" y="82">2</text>
+        <text x="32" y="102">3</text><text x="32" y="122">4</text>
+        <text x="32" y="142">5</text><text x="32" y="162">6</text>
+        <text x="32" y="182">7</text><text x="32" y="202">8</text>
+        <text x="32" y="222">9</text><text x="32" y="242">10</text>
+        <text x="32" y="262">11</text><text x="32" y="282">12</text>
+        <text x="32" y="302">13</text><text x="32" y="322">14</text>
+        <text x="32" y="342">15</text><text x="32" y="362">16</text>
+        <text x="32" y="382">17</text><text x="32" y="402">18</text>
+        <text x="32" y="422">19</text><text x="32" y="442">20</text>
+        <text x="32" y="462">21</text>
+      </g>
+
+      <!-- Code content -->
+      <g>
+        <!-- \documentclass -->
+        <text x="48" y="62"><tspan fill="#c084fc">\documentclass</tspan><tspan fill="#fde68a">[</tspan><tspan fill="#fb923c">12pt</tspan><tspan fill="#fde68a">]</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">article</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank line 2 -->
+        <!-- \usepackage -->
+        <text x="48" y="102"><tspan fill="#c084fc">\usepackage</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">amsmath, amssymb</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="48" y="122"><tspan fill="#c084fc">\usepackage</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">graphicx</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank -->
+        <!-- \title -->
+        <text x="48" y="162"><tspan fill="#c084fc">\title</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">My Document</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="48" y="182"><tspan fill="#c084fc">\author</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">Author Name</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank -->
+        <!-- \begin{document} -->
+        <text x="48" y="222"><tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="48" y="242"><tspan fill="#c084fc">\maketitle</tspan></text>
+        <!-- blank -->
+        <!-- \section -->
+        <text x="48" y="282"><tspan fill="#c084fc">\section</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">Introduction</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="48" y="302"><tspan fill="#e2e4f0">The equation </tspan><tspan fill="#86efac">$E = mc^2$</tspan></text>
+        <text x="48" y="322"><tspan fill="#e2e4f0">is fundamental.</tspan></text>
+        <!-- blank -->
+        <!-- equation -->
+        <text x="48" y="362"><tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">equation</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="48" y="382"><tspan fill="#86efac">  \int_0^\infty e^{-x^2} dx</tspan></text>
+        <text x="48" y="402"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">equation</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank -->
+        <text x="48" y="442"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
+      </g>
+    </g>
+
+    <!-- Active line highlight -->
+    <rect x="38" y="370" width="462" height="20" fill="#6ee7b7" opacity="0.04"/>
+
+    <!-- Cursor blink -->
+    <rect x="310" y="372" width="2" height="16" fill="#6ee7b7" opacity="0.9"/>
+  </g>
+
+  <!-- Right side: PDF preview mockup -->
+  <g transform="translate(620, 80)">
+    <!-- PDF frame -->
+    <rect width="520" height="470" rx="12" fill="#f5f5f0" stroke="#d5d5cc" stroke-width="1.5"/>
+
+    <!-- Preview toolbar -->
+    <rect width="520" height="34" rx="12" fill="#eeeee8"/>
+    <rect y="22" width="520" height="12" fill="#eeeee8"/>
+    <text x="16" y="22" fill="#888" font-family="sans-serif" font-size="10" font-weight="600">PDF Preview</text>
+    <rect x="420" y="8" width="44" height="18" rx="4" fill="#059669"/>
+    <text x="442" y="21" text-anchor="middle" fill="white" font-family="sans-serif" font-size="9" font-weight="700">PDF</text>
+    <rect x="468" y="8" width="44" height="18" rx="4" fill="white" stroke="#ccc" stroke-width="0.5"/>
+    <text x="490" y="21" text-anchor="middle" fill="#666" font-family="sans-serif" font-size="9">Canvas</text>
+
+    <!-- Paper -->
+    <rect x="60" y="50" width="400" height="400" rx="2" fill="white" filter="drop-shadow(0 2px 8px rgba(0,0,0,0.1))"/>
+
+    <!-- Rendered document content -->
+    <g font-family="'Times New Roman', Georgia, serif" transform="translate(90, 90)">
+      <!-- Title -->
+      <text x="170" y="0" text-anchor="middle" fill="#1a1a1a" font-size="22" font-weight="bold">My Document</text>
+      <text x="170" y="22" text-anchor="middle" fill="#555" font-size="12">Author Name</text>
+
+      <!-- Horizontal rule -->
+      <line x1="40" y1="38" x2="300" y2="38" stroke="#ccc" stroke-width="0.5"/>
+
+      <!-- Section heading -->
+      <text x="0" y="70" fill="#1a1a1a" font-size="16" font-weight="bold">1  Introduction</text>
+
+      <!-- Body text -->
+      <text x="0" y="96" fill="#333" font-size="11">The equation <tspan font-style="italic">E = mc</tspan><tspan font-size="8" dy="-4">2</tspan><tspan dy="4"> is fundamental.</tspan></text>
+
+      <!-- Equation block -->
+      <rect x="20" y="120" width="300" height="50" rx="2" fill="#f8f8f5"/>
+      <g transform="translate(170, 152)" text-anchor="middle">
+        <text fill="#1a1a1a" font-size="18" font-style="italic">
+          <tspan font-size="26" dy="2">∫</tspan>
+          <tspan font-size="8" dx="-18" dy="10">0</tspan>
+          <tspan font-size="8" dx="-4" dy="-18">∞</tspan>
+          <tspan dx="4" dy="4" font-size="16">e</tspan>
+          <tspan font-size="10" dy="-8">−x²</tspan>
+          <tspan dy="8" font-size="16"> dx</tspan>
+        </text>
+      </g>
+      <text x="320" y="152" fill="#888" font-size="11">(1)</text>
+
+      <!-- More fake body lines -->
+      <rect x="0" y="190" width="320" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="0" y="206" width="280" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="0" y="222" width="300" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="0" y="238" width="200" height="8" rx="2" fill="#e0e0e0"/>
+
+      <rect x="0" y="264" width="310" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="0" y="280" width="260" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="0" y="296" width="290" height="8" rx="2" fill="#e0e0e0"/>
+    </g>
+  </g>
+
+  <!-- Arrow between editor and preview -->
+  <g transform="translate(572, 300)">
+    <rect x="-4" y="-18" width="38" height="36" rx="18" fill="#6ee7b7" opacity="0.15"/>
+    <path d="M0 0 L20 0 L14 -8 M20 0 L14 8" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Bottom: branding bar -->
+  <rect y="570" width="1200" height="60" fill="#0a0b0f"/>
+
+  <!-- Tool name -->
+  <text x="80" y="605" fill="#6ee7b7" font-family="'Syne', sans-serif" font-size="20" font-weight="800">LaTeX Editor</text>
+  <text x="242" y="605" fill="#555870" font-family="sans-serif" font-size="14">|</text>
+  <text x="260" y="605" fill="#8b8fa8" font-family="sans-serif" font-size="14">Write, Compile, Download PDF — Free &amp; No Signup</text>
+
+  <!-- 8gwifi.org logo -->
+  <text x="1120" y="605" text-anchor="end" fill="#555870" font-family="'Syne', sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+
+  <!-- Top accent line -->
+  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
+</svg>
