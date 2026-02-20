@@ -494,6 +494,10 @@
             background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
             color: white;
         }
+        .icon-education {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: white;
+        }
 
         /* Footer */
         .page-footer {
@@ -919,6 +923,38 @@
                     <li><a href="sip-calculator.jsp" class="tool-link">SIP Calculator</a></li>
                 </ul>
             </div>
+
+            <!-- Education & Science -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-education">📚</div>
+                    <div>
+                        <h3 class="tool-title">Education & Science</h3>
+                    </div>
+                </div>
+                <p class="tool-description">NCERT solutions, physics simulators, chemistry tools, and math calculators for students.</p>
+                <ul class="tool-links">
+                    <li><a href="exams/books/ncert/index.jsp" class="tool-link">NCERT Solutions</a></li>
+                    <li><a href="math/index.jsp" class="tool-link">Math Tools</a></li>
+                    <li><a href="physics/index.jsp" class="tool-link">Physics Tools</a></li>
+                    <li><a href="exams/books/ncert/class-12/mathematics-part-1/index.jsp" class="tool-link">Class 12 Maths</a></li>
+                    <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" class="tool-link">Class 11 Physics</a></li>
+                    <li><a href="exams/books/ncert/class-10/mathematics/index.jsp" class="tool-link">Class 10 Maths</a></li>
+                </ul>
+                <button class="tool-more-btn" onclick="toggleToolMore(event, this, 'educationMore')">View All →</button>
+                <div id="educationMore" class="tool-more-content">
+                    <ul class="tool-links">
+                        <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" class="tool-link">Class 12 Physics</a></li>
+                        <li><a href="exams/books/ncert/class-11/mathematics/index.jsp" class="tool-link">Class 11 Maths</a></li>
+                        <li><a href="exams/books/ncert/class-9/mathematics/index.jsp" class="tool-link">Class 9 Maths</a></li>
+                        <li><a href="lewis-structure-generator.jsp" class="tool-link">Lewis Structure</a></li>
+                        <li><a href="integral-calculator.jsp" class="tool-link">Integral Calculator</a></li>
+                        <li><a href="inclined-plane-calculator.jsp" class="tool-link">Inclined Plane</a></li>
+                        <li><a href="projectile-motion-simulator.jsp" class="tool-link">Projectile Motion</a></li>
+                        <li><a href="molecular-geometry-calculator.jsp" class="tool-link">Molecular Geometry</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -933,6 +969,7 @@
         <div class="footer-content">
             <p class="footer-text">© 2024 8gwifi.org - Free Online Tools</p>
             <div class="footer-links">
+                <a href="exams/books/ncert/index.jsp" class="footer-link">NCERT Solutions</a>
                 <a href="tutorials/" class="footer-link">Tutorials</a>
                 <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
                 <a href="https://buymeacoffee.com/8gwifi.org" target="_blank" rel="noopener" class="footer-link">Support</a>

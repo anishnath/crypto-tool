@@ -1049,6 +1049,18 @@
     <jsp:param name="limit" value="6"/>
 </jsp:include>
 
+<!-- Practice NCERT Problems -->
+<section style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="tool-card" style="padding: 1.5rem;">
+        <h2 style="font-size: 1.125rem; margin-bottom: 0.75rem;">Practice NCERT Problems</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Apply your Lewis structure knowledge to NCERT chemistry and physics problems:</p>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, #f1f5f9); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 11 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, #f1f5f9); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 12 Physics Part 1</a></li>
+        </ul>
+    </div>
+</section>
+
 <!-- E-E-A-T: Experience, Expertise, Authoritativeness, Trustworthiness -->
 <section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
     <div class="tool-card" style="padding: 2rem;">
