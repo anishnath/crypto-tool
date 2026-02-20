@@ -91,12 +91,6 @@
     </div>
 </section>
 
-<section style="max-width:900px;margin:0 auto;padding:0.75rem 1rem;">
-    <img src="<%=request.getContextPath()%>/images/site/molecular-geometry-3d.svg"
-         alt="VSEPR molecular geometry shapes diagram showing Linear CO2, Trigonal Planar BF3, Bent H2O with lone pairs, Tetrahedral CH4, Trigonal Pyramidal NH3, Trigonal Bipyramidal PCl5, Octahedral SF6, and See-Saw SF4 with bond angles and hybridization"
-         width="1200" height="630" loading="eager" style="width:100%;height:auto;border-radius:0.75rem;" />
-</section>
-
 <main class="tool-page-container">
     <!-- ==================== INPUT COLUMN ==================== -->
     <div class="tool-input-column">
@@ -623,8 +617,16 @@ H&mdash;O&mdash;H</div>
         <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);display:flex;align-items:center;">
             <span class="mg-section-num">6</span> Common Molecular Geometries
         </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            The most common VSEPR shapes with bond angles, hybridization, and lone pair positions:
+        </p>
+
+        <img src="<%=request.getContextPath()%>/images/site/molecular-geometry-3d.svg"
+             alt="VSEPR molecular geometry shapes diagram showing Linear CO2, Trigonal Planar BF3, Bent H2O with lone pairs, Tetrahedral CH4, Trigonal Pyramidal NH3, Trigonal Bipyramidal PCl5, Octahedral SF6, and See-Saw SF4 with bond angles and hybridization"
+             width="1200" height="630" loading="lazy" style="width:100%;height:auto;border-radius:0.75rem;margin-bottom:1.25rem;" />
+
         <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.5rem;">
-            The six most common shapes you will encounter in chemistry courses:
+            Quick reference cards:
         </p>
 
         <div class="mg-geom-grid">
