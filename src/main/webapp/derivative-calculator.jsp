@@ -640,10 +640,13 @@
             var finalResult=intermediates[intermediates.length-1];
             var method=identifyDiffMethod(expr);
             var evalResult=null;
-            var evalPt=evalPointInput.value.trim();
+            var evalPt=evalPointInput.value.trim()
+                .replace(/\u03c0/g,'pi').replace(/\u221e/g,'Infinity').replace(/\u2212/g,'-')
+                .replace(/\u00b2/g,'^2').replace(/\u00b3/g,'^3');
             if(evalPt){
                 try{
-                    var scope={};scope[v]=parseFloat(evalPt);
+                    var evalNum=evalPt.toLowerCase()==='pi'?Math.PI:evalPt.toLowerCase()==='e'?Math.E:parseFloat(evalPt);
+                    var scope={};scope[v]=evalNum;
                     var numVal=parseFloat(nerdamer(finalResult.text).evaluate(scope).text('decimals'));
                     if(isFinite(numVal))evalResult={point:evalPt,value:numVal};
                 }catch(ex){}

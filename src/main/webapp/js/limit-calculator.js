@@ -111,7 +111,10 @@ function pointToLatex(pt){
 }
 
 function parsePoint(pt){
-    var p=pt.trim().toLowerCase();
+    var p=pt.trim()
+        .replace(/\u03c0/g,'pi').replace(/\u221e/g,'infinity').replace(/\u2212/g,'-')
+        .replace(/\u00b2/g,'^2').replace(/\u00b3/g,'^3')
+        .toLowerCase();
     if(p==='infinity'||p==='inf')return Infinity;
     if(p==='-infinity'||p==='-inf')return -Infinity;
     if(p==='pi')return Math.PI;
