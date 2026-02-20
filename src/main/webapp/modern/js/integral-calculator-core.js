@@ -8,6 +8,20 @@
 function normalizeExpr(expr) {
     if (!expr || typeof expr !== 'string') return expr;
     var s = expr.trim();
+    /* Unicode math → ASCII: superscripts, symbols, operators */
+    s = s.replace(/\u00b2/g, '^2').replace(/\u00b3/g, '^3')   // ² ³
+         .replace(/\u2074/g, '^4').replace(/\u2075/g, '^5')    // ⁴ ⁵
+         .replace(/\u2076/g, '^6').replace(/\u2077/g, '^7')    // ⁶ ⁷
+         .replace(/\u2078/g, '^8').replace(/\u2079/g, '^9')    // ⁸ ⁹
+         .replace(/\u2070/g, '^0').replace(/\u00b9/g, '^1')    // ⁰ ¹
+         .replace(/\u207b/g, '-')                               // ⁻ (superscript minus)
+         .replace(/\u03c0/g, 'pi')                              // π
+         .replace(/\u221e/g, 'Infinity')                        // ∞
+         .replace(/\u221a/g, 'sqrt')                            // √
+         .replace(/\u00b7/g, '*').replace(/\u22c5/g, '*')      // · ⋅
+         .replace(/\u2212/g, '-')                               // − (minus sign)
+         .replace(/\u00f7/g, '/')                               // ÷
+         .replace(/\u00d7/g, '*');                              // ×
     var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|log|ln|sqrt';
     /* Lookahead: operator, close-paren, whitespace, comma, end-of-string,
        OR the start of another known function name (handles sinxcosx). */
@@ -48,9 +62,17 @@ function checkNonElementaryIntegral(expr, v) {
 }
 
 function evalBound(s, nerdamer) {
-    var str = (s || '').toString().trim().toLowerCase();
+    var str = (s || '').toString().trim()
+        .replace(/\u03c0/g, 'pi')          // π
+        .replace(/\u221e/g, 'Infinity')     // ∞
+        .replace(/\u2212/g, '-')            // − (Unicode minus)
+        .replace(/\u00b2/g, '^2')           // ²
+        .replace(/\u00b3/g, '^3')           // ³
+        .toLowerCase();
     if (str === 'pi') return Math.PI;
     if (str === 'e') return Math.E;
+    if (str === 'infinity' || str === 'inf') return Infinity;
+    if (str === '-infinity' || str === '-inf') return -Infinity;
     var nm = nerdamer || (typeof global !== 'undefined' && global.nerdamer) || (typeof window !== 'undefined' && window.nerdamer);
     if (nm) {
         try {

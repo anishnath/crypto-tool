@@ -1521,10 +1521,16 @@
     }
 
     // ========== SymPy Fallback via OneCompiler ==========
+    function boundToSympy(s) {
+        return s.replace(/\u03c0/g, 'pi').replace(/\u221e/g, 'oo').replace(/\u2212/g, '-')
+                .replace(/^-?infinity$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; })
+                .replace(/^-?inf$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; });
+    }
+
     function sympyFallback(expr, v) {
         var pyExpr = nerdamerToPython(expr);
-        var a = lowerInput.value.trim() || '0';
-        var b = upperInput.value.trim() || '1';
+        var a = boundToSympy(lowerInput.value.trim()) || '0';
+        var b = boundToSympy(upperInput.value.trim()) || '1';
         var isDefinite = (currentMode === 'definite');
 
         // Show loading state
