@@ -2035,6 +2035,13 @@
       "description": "Molecular Geometry Calculator - Free online chemistry tool"
     },
     {
+      "name": "Electronegativity & Polarity Checker",
+      "url": "electronegativity-polarity-checker.jsp",
+      "category": "Chemistry",
+      "keywords": "electronegativity polarity checker bond dipole calculator chemistry",
+      "description": "Electronegativity & Polarity Checker - Check EN differences and molecular polarity with 3D heatmaps"
+    },
+    {
       "name": "Percent Composition Calculator",
       "url": "percent-composition-calculator.jsp",
       "category": "Chemistry",
