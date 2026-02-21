@@ -847,6 +847,13 @@ H&mdash;O&mdash;H</div>
                     <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Balance chemical equations step by step</p>
                 </div>
             </a>
+            <a href="<%=request.getContextPath()%>/electronegativity-polarity-checker.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#4f46e5,#818cf8);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">&#916;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Polarity Checker</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Check EN differences and molecular polarity with 3D heatmaps</p>
+                </div>
+            </a>
             <a href="<%=request.getContextPath()%>/electron-configuration-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
                 <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">e&#8315;</div>
                 <div>
