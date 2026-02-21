@@ -225,6 +225,28 @@ function parseSDF(sdf) {
     return { atoms: atoms, bonds: bonds };
 }
 
+// ==================== Parse MMFF94 Charges from SDF Properties ====================
+
+function parseChargesFromSDF(sdf) {
+    if (!sdf) return null;
+    var marker = '> <PUBCHEM_MMFF94_PARTIAL_CHARGES>';
+    var idx = sdf.indexOf(marker);
+    if (idx === -1) return null;
+    var after = sdf.substring(idx + marker.length).trim();
+    var lines = after.split('\n');
+    if (lines.length < 2) return null;
+    var count = parseInt(lines[0].trim());
+    if (!count || count === 0) return null;
+    var charges = {};
+    for (var i = 1; i <= count && i < lines.length; i++) {
+        var parts = lines[i].trim().split(/\s+/);
+        if (parts.length >= 2) {
+            charges[parseInt(parts[0]) - 1] = parseFloat(parts[1]);
+        }
+    }
+    return Object.keys(charges).length > 0 ? charges : null;
+}
+
 // ==================== EN Color Mapping ====================
 
 // Map EN value to color: blue (low, 0.82) -> white (mid, ~2.4) -> red (high, 3.98)
@@ -786,7 +808,19 @@ function renderByFormula(container, query) {
         return;
     }
 
-    // Show loading state first
+    // Check local SDF cache first (instant, no network)
+    var lookupQuery = analysis.name || analysis.formula;
+    var cached = window.EPSdfCache && window.EPSdfCache.get(lookupQuery);
+    if (!cached) cached = window.EPSdfCache && window.EPSdfCache.get(analysis.formula);
+
+    if (cached) {
+        // Instant render from embedded cache — no network request
+        var cachedCharges = parseChargesFromSDF(cached.sdf);
+        renderENResult(container, analysis, cached.sdf, cachedCharges);
+        return;
+    }
+
+    // Not cached — show loading state and fetch from PubChem (hybrid fallback)
     container.innerHTML = '';
     var loadingBadge = document.createElement('div');
     loadingBadge.className = 'ep-verdict-badge ' + (analysis.polar ? 'ep-verdict-polar' : 'ep-verdict-nonpolar');
@@ -802,8 +836,7 @@ function renderByFormula(container, query) {
     container.appendChild(placeholder);
     container.appendChild(buildStepsSection(analysis));
 
-    // Fetch 3D data first, then use CID for charges
-    var lookupQuery = analysis.name || analysis.formula;
+    // Fetch 3D data from PubChem, then use CID for charges
     fetchPubChem3D(lookupQuery)
         .then(function(pubchem) {
             if (!pubchem) {
@@ -880,7 +913,8 @@ window.EPRender = {
     showError: showError,
     findMolecule: findMolecule,
     unicodeFormula: unicodeFormula,
-    enToColor: enToColor
+    enToColor: enToColor,
+    parseChargesFromSDF: parseChargesFromSDF
 };
 
 })();

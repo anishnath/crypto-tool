@@ -556,6 +556,7 @@
 <!-- Core Scripts -->
 <script src="https://3Dmol.org/build/3Dmol-min.js" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-sdf-cache.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/electronegativity-polarity-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/electronegativity-polarity-core.js?v=<%=cacheVersion%>"></script>
 
