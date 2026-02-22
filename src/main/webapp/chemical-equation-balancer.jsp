@@ -1,982 +1,570 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chemical Equation Balancer | Balance Equations + Steps (Free) | 8gwifi.org</title>
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://8gwifi.org/chemical-equation-balancer.jsp">
-  <meta name="description" content="Free online chemical equation balancer. Balance reactions with steps, atom counts, and formatted output. Supports parentheses and hydrates. No sign‑up; runs in your browser.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="8gwifi.org">
-  <meta property="og:title" content="Chemical Equation Balancer | Balance Equations + Steps (Free)">
-  <meta property="og:description" content="Balance chemical equations online with steps, atom counts, and formatted output. Free and browser‑only.">
-  <meta property="og:url" content="https://8gwifi.org/chemical-equation-balancer.jsp">
-  <meta property="og:image" content="https://8gwifi.org/images/site/chem-balance.png">
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Chemical Equation Balancer - Free with Steps & Atom Counts" />
+        <jsp:param name="toolDescription" value="Free online chemical equation balancer with steps and atom counts. Balance reactions instantly in your browser. Supports parentheses, hydrates, and redox half-reactions. Copy as text or LaTeX. No sign-up required." />
+        <jsp:param name="toolCategory" value="Chemistry Tools" />
+        <jsp:param name="toolUrl" value="chemical-equation-balancer.jsp" />
+        <jsp:param name="toolKeywords" value="chemical equation balancer, balance chemical equations, equation balancer with steps, balance equations online free, atom count checker, chemical reaction balancer, stoichiometry calculator, redox equation balancer, LaTeX chemical equation, balance combustion reaction, balance acid base reaction" />
+        <jsp:param name="toolImage" value="chem-balance.png" />
+        <jsp:param name="toolFeatures" value="Instant balancing with integer coefficients using matrix method,Step-by-step atom count verification table,Live equation preview with subscript formatting,Reactant and product chips with coefficient adjustment,12 built-in example equations covering all reaction types,Copy balanced equation as text or LaTeX,Export as PNG image,Shareable URL with equation pre-loaded,Redox half-reaction combiner (beta),Searchable database of common reactions,Supports parentheses and hydrate dot notation,Dark mode support" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter unbalanced equation|Type a chemical equation like Fe + O2 -> Fe2O3 using + between species and -> or => as the arrow,Click Balance|The tool computes the smallest integer coefficients using Gaussian elimination on the atom matrix,Review results|Check the balanced equation and atom count table to verify every element is conserved on both sides" />
+        <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+        <jsp:param name="teaches" value="chemical equation balancing, stoichiometry, law of conservation of mass, reaction types, redox reactions, half-reaction method" />
+        <jsp:param name="faq1q" value="How does the chemical equation balancer work?" />
+        <jsp:param name="faq1a" value="The balancer builds a matrix where each row represents an element and each column represents a species. It then performs Gaussian elimination using exact fraction arithmetic (via math.js) to find the nullspace, which gives the smallest set of integer coefficients that conserve all atoms. This is mathematically rigorous and works for any valid equation." />
+        <jsp:param name="faq2q" value="Does it support parentheses and hydrates?" />
+        <jsp:param name="faq2a" value="Yes. The parser handles nested parentheses like Ca3(PO4)2 and square brackets. Hydrate notation with the middle dot is also supported, for example CuSO4 dot 5H2O. The formula parser recursively processes groups and multiplies element counts by the subscript outside each group." />
+        <jsp:param name="faq3q" value="What arrow formats are accepted?" />
+        <jsp:param name="faq3a" value="You can use -> or => or the Unicode arrows (right arrow and double right arrow) or --> or even a single equals sign. The balancer recognizes all common arrow notations used in chemistry textbooks and online resources." />
+        <jsp:param name="faq4q" value="Can I balance redox equations?" />
+        <jsp:param name="faq4a" value="Yes, there are two ways. For simple redox equations, the atom balance mode works by finding integer coefficients. For complex redox with explicit electron transfer, use the Redox tab to enter oxidation and reduction half-reactions separately. The tool equalizes electrons and combines them into a net ionic equation." />
+        <jsp:param name="faq5q" value="How do I copy the balanced equation as LaTeX?" />
+        <jsp:param name="faq5a" value="After balancing, click the LaTeX button in the result area. The tool converts the equation to LaTeX notation with subscripts as _{n} and the reaction arrow as rightarrow. The LaTeX string is copied to your clipboard, ready to paste into a document or online LaTeX editor." />
+        <jsp:param name="faq6q" value="Is this chemical equation balancer free and private?" />
+        <jsp:param name="faq6a" value="Yes, 100 percent free with no signup required. All computation runs entirely in your browser using JavaScript. No data is sent to any server. You can use it offline once the page loads. Features include text copy, LaTeX export, PNG export, and shareable URLs." />
+    </jsp:include>
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@anish2good">
-  <meta name="twitter:title" content="Chemical Equation Balancer | Free Online Tool">
-  <meta name="twitter:description" content="Balance equations, see steps and atom counts. Works in your browser.">
-  <meta name="twitter:image" content="https://8gwifi.org/images/site/chem-balance.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-  <style>
-    .min-h-result { min-height: 220px; max-height: 600px; overflow-y: auto; }
-    @media (min-width: 992px) { .min-h-result { min-height: 280px; max-height: 70vh; } }
-    .sticky-side { position: -webkit-sticky; position: sticky; top: 80px; max-height: calc(100vh - 100px); }
-    .sticky-side .card-body { overflow-y: auto; max-height: calc(100vh - 150px); }
-    .monospace { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .eq-input { font-size: 1.05rem; }
-    .coeff { font-weight: 600; margin-right: .25rem; }
-    .atom-equal { color: #28a745; }
-    .atom-mismatch { color: #dc3545; }
-    .nowrap { white-space: nowrap; }
-    .chip-bar { display: flex; flex-wrap: wrap; gap: .5rem; }
-    .chip { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .5rem; border: 1px solid #ced4da; border-radius: 16px; background: #f8f9fa; }
-    .chip .chip-formula { cursor: pointer; }
-    .chip .btn-xs { padding: .05rem .35rem; font-size: .75rem; }
-    .section-title { font-weight: 600; margin-top: .25rem; margin-bottom: .25rem; }
-    .options-bar { display:flex; flex-wrap: wrap; gap: .75rem; align-items:center; }
-    .examples a { margin-right: .5rem; }
-  </style>
-  <%@ include file="header-script.jsp"%>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/chemical-equation-balancer.css?v=<%=cacheVersion%>">
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <style>
+        .tool-action-btn { background: var(--cb-gradient) !important; }
+        .tool-badge { background: var(--cb-light); color: var(--cb-tool); }
+    </style>
 </head>
+<body>
+<%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="chem-menu-nav.jsp"%>
-<div class="container mt-5">
-  <h1 class="mb-3">Chemical Equation Balancer</h1>
-  <p class="lead mb-4">Balance chemical equations in your browser. Get integer coefficients, atom counts on each side, and a formatted balanced equation you can copy or share.</p>
-
-  <!-- Tabs for Atom Balance and Redox (beta) -->
-  <ul class="nav nav-tabs mb-3" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" id="tab-atom" href="#" role="tab" onclick="switchSection('atom'); return false;">Atom Balance</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="tab-redox" href="#" role="tab" onclick="switchSection('redox'); return false;">Redox (beta)</a>
-    </li>
-  </ul>
-
-  <!-- Intro helper moved to Learn section below -->
-
-  <div id="sectionAtom">
-  <div class="row">
-    <div class="col-lg-7 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="card-title">Input</h5>
-          <form id="eqForm" onsubmit="event.preventDefault(); balanceEquation();">
-            <div class="form-group">
-              <label for="eq">Unbalanced Equation</label>
-              <input type="text" id="eq" class="form-control eq-input monospace" placeholder="e.g., C3H8 + O2 -> CO2 + H2O" value="Fe + O2 -> Fe2O3">
-              <small class="form-text text-muted">Use "+" to separate species, and "->" or "=>" between reactants and products.</small>
-              <div id="eqPreview" class="small text-muted mt-2"></div>
-            </div>
-
-            <div class="options-bar mb-3">
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="optAuto" checked>
-                <label class="form-check-label" for="optAuto">Auto balance</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="optHide1" checked>
-                <label class="form-check-label" for="optHide1">Hide coefficient 1</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="optFrac">
-                <label class="form-check-label" for="optFrac">Show fractions</label>
-              </div>
-            </div>
-
-            <div class="mb-2 examples">
-              <span class="text-muted mr-2">Examples:</span>
-              <a href="#" onclick="loadExample('C3H8 + O2 -> CO2 + H2O');return false;">Combustion</a>
-              <a href="#" onclick="loadExample('Fe + O2 -> Fe2O3');return false;">Oxidation</a>
-              <a href="#" onclick="loadExample('Ca(OH)2 + H3PO4 -> Ca3(PO4)2 + H2O');return false;">Acid-Base</a>
-              <a href="#" onclick="loadExample('CuSO4·5H2O -> CuSO4 + H2O');return false;">Hydrate</a>
-            </div>
-
-            <div class="mb-3">
-              <div class="section-title">Reactants</div>
-              <div id="chipsLeft" class="chip-bar mb-2"></div>
-              <div class="input-group input-group-sm mb-3" style="max-width:420px;">
-                <input id="addLeft" type="text" class="form-control monospace" placeholder="Add reactant (e.g., H2SO4)">
-                <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" onclick="addSpecies('left')">Add</button></div>
-              </div>
-
-              <div class="section-title">Products</div>
-              <div id="chipsRight" class="chip-bar mb-2"></div>
-              <div class="input-group input-group-sm" style="max-width:420px;">
-                <input id="addRight" type="text" class="form-control monospace" placeholder="Add product (e.g., NaCl)">
-                <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" onclick="addSpecies('right')">Add</button></div>
-              </div>
-            </div>
-            <div class="d-flex align-items-center">
-              <button type="submit" class="btn btn-primary mr-2">Balance</button>
-              <button type="reset" class="btn btn-outline-secondary" onclick="resetUI()">Reset</button>
-            </div>
-          </form>
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Chemical Equation Balancer</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp">Chemistry Tools</a> /
+                Equation Balancer
+            </nav>
         </div>
-      </div>
+        <div class="tool-page-badges">
+            <span class="tool-badge">Atom Balance</span>
+            <span class="tool-badge">Redox</span>
+            <span class="tool-badge">LaTeX Export</span>
+            <span class="tool-badge">12 Examples</span>
+        </div>
     </div>
-    <div class="col-lg-5">
-      <div class="card shadow-sm sticky-side">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Result</h5>
-          <div id="result" class="min-h-result"></div>
-          <div class="mt-3">
-            <h6 class="mb-2">History</h6>
-            <div id="historyList" class="small"></div>
-            <button class="btn btn-sm btn-link p-0 mt-1" onclick="clearHistory()">Clear history</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-  <!-- End Atom section -->
+</header>
 
-  <!-- Redox (beta) section -->
-  <div id="sectionRedox" style="display:none;">
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Redox Balance (Half-Reaction Method)</h5>
-        <p class="text-muted mb-3">Guide: Enter two half‑reactions that are already balanced for atoms and charge in your chosen medium, including electrons (e<sup>−</sup>). This tool will equalize electrons and combine them into a net reaction.</p>
-        <div class="form-row">
-          <div class="form-group col-lg-6">
-            <label for="redoxMedia">Medium</label>
-            <select id="redoxMedia" class="form-control form-control-sm" style="max-width:220px;">
-              <option value="acidic">Acidic (H<sup>+</sup>, H<sub>2</sub>O)</option>
-              <option value="basic">Basic (OH<sup>−</sup>, H<sub>2</sub>O)</option>
-            </select>
-          </div>
+<section class="tool-description-section" style="background:var(--cb-light);">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Free <strong>chemical equation balancer</strong> with <strong>step-by-step atom counts</strong>. Enter any reaction to get the smallest <strong>integer coefficients</strong> instantly. Supports <strong>parentheses</strong>, <strong>hydrates</strong>, and <strong>redox half-reactions</strong>. Copy results as <strong>text</strong>, <strong>LaTeX</strong>, or <strong>PNG</strong>.</p>
         </div>
-        <div class="form-group">
-          <label for="halfOx">Oxidation Half‑Reaction (include e<sup>−</sup>)</label>
-          <input id="halfOx" type="text" class="form-control monospace" placeholder="e.g., Fe2+ -> Fe3+ + e-" value="Fe2+ -> Fe3+ + e-">
-        </div>
-        <div class="form-group">
-          <label for="halfRed">Reduction Half‑Reaction (include e<sup>−</sup>)</label>
-          <input id="halfRed" type="text" class="form-control monospace" placeholder="e.g., MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O" value="MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O">
-        </div>
-        <div class="d-flex align-items-center mb-3">
-          <button class="btn btn-primary mr-2" onclick="combineHalfReactions()">Combine Half‑Reactions</button>
-          <button class="btn btn-outline-secondary" onclick="resetRedox()">Reset</button>
-        </div>
-        <div id="redoxResult" class="min-h-result"></div>
-      </div>
     </div>
-  </div>
+</section>
+
+<main class="tool-page-container">
+    <!-- ==================== INPUT COLUMN ==================== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <div class="tool-card-header" style="background:var(--cb-gradient);">Balance Equation</div>
+            <div class="tool-card-body">
+
+                <!-- Equation Input -->
+                <div style="margin-bottom:0.75rem;">
+                    <label class="cb-input-label" for="cb-eq">Unbalanced Equation</label>
+                    <input type="text" class="cb-input" id="cb-eq" placeholder="e.g., C3H8 + O2 -> CO2 + H2O" value="Fe + O2 -> Fe2O3">
+                    <div class="cb-input-hint">Use + between species and -&gt; or =&gt; as the reaction arrow.</div>
+                    <div class="cb-eq-preview" id="cb-eqPreview"></div>
+                </div>
+
+                <!-- Options -->
+                <div class="cb-options">
+                    <label class="cb-option"><input type="checkbox" id="cb-optAuto" checked> Auto balance</label>
+                    <label class="cb-option"><input type="checkbox" id="cb-optHide1" checked> Hide 1</label>
+                    <label class="cb-option"><input type="checkbox" id="cb-optFrac"> Fractions</label>
+                </div>
+
+                <!-- Reactant Chips -->
+                <div class="cb-chips-section">
+                    <div class="cb-chips-title">Reactants</div>
+                    <div class="cb-chip-bar" id="cb-chipsLeft"></div>
+                    <div class="cb-add-row">
+                        <input type="text" class="cb-add-input" id="cb-addLeft" placeholder="Add reactant">
+                        <button type="button" class="cb-add-btn" id="cb-addLeftBtn">Add</button>
+                    </div>
+                </div>
+
+                <!-- Product Chips -->
+                <div class="cb-chips-section">
+                    <div class="cb-chips-title">Products</div>
+                    <div class="cb-chip-bar" id="cb-chipsRight"></div>
+                    <div class="cb-add-row">
+                        <input type="text" class="cb-add-input" id="cb-addRight" placeholder="Add product">
+                        <button type="button" class="cb-add-btn" id="cb-addRightBtn">Add</button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+                    <button type="button" class="tool-action-btn" id="cb-balance-btn" style="flex:1">Balance</button>
+                    <button type="button" class="tool-action-btn" id="cb-reset-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Reset</button>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Quick Examples -->
+                <div style="margin-bottom:0.75rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.375rem;">
+                        <label class="cb-input-label" style="margin-bottom:0;">Quick Examples</label>
+                        <button type="button" class="cb-random-btn" id="cb-random-btn" title="Load random equation">&#127922; Random</button>
+                    </div>
+                    <div class="cb-examples">
+                        <button type="button" class="cb-example-chip" data-eq="C3H8 + O2 -> CO2 + H2O">Combustion</button>
+                        <button type="button" class="cb-example-chip" data-eq="Fe + O2 -> Fe2O3">Oxidation</button>
+                        <button type="button" class="cb-example-chip" data-eq="Ca(OH)2 + H3PO4 -> Ca3(PO4)2 + H2O">Acid-Base</button>
+                        <button type="button" class="cb-example-chip" data-eq="CuSO4.5H2O -> CuSO4 + H2O">Hydrate</button>
+                        <button type="button" class="cb-example-chip" data-eq="Zn + HCl -> ZnCl2 + H2">Single Repl.</button>
+                        <button type="button" class="cb-example-chip" data-eq="AgNO3 + NaCl -> AgCl + NaNO3">Double Repl.</button>
+                        <button type="button" class="cb-example-chip" data-eq="KClO3 -> KCl + O2">Decomposition</button>
+                        <button type="button" class="cb-example-chip" data-eq="H2 + O2 -> H2O">Synthesis</button>
+                        <button type="button" class="cb-example-chip" data-eq="HCl + NaOH -> NaCl + H2O">Neutralization</button>
+                        <button type="button" class="cb-example-chip" data-eq="CO2 + H2O -> C6H12O6 + O2">Photosynthesis</button>
+                        <button type="button" class="cb-example-chip" data-eq="Al2(SO4)3 + Ca(OH)2 -> Al(OH)3 + CaSO4">Polyatomic</button>
+                        <button type="button" class="cb-example-chip" data-eq="BaCl2 + Al2(SO4)3 -> BaSO4 + AlCl3">Precipitation</button>
+                    </div>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0">
+
+                <!-- Worksheet Generator -->
+                <div>
+                    <label class="cb-input-label">Worksheet Generator</label>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">Generate a printable worksheet with random equations and an answer key.</p>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                        <select id="cb-worksheet-count" style="padding:0.35rem 0.5rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.375rem;background:var(--bg-primary);color:var(--text-primary);">
+                            <option value="5">5 questions</option>
+                            <option value="10" selected>10 questions</option>
+                            <option value="15">15 questions</option>
+                            <option value="20">20 questions</option>
+                        </select>
+                        <button type="button" class="cb-worksheet-btn" id="cb-worksheet-btn">Print Worksheet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== OUTPUT COLUMN ==================== -->
+    <div class="tool-output-column">
+        <!-- Tab bar -->
+        <div class="cb-output-tabs">
+            <button type="button" class="cb-output-tab active" data-panel="result">Result</button>
+            <button type="button" class="cb-output-tab" data-panel="redox">Redox</button>
+            <button type="button" class="cb-output-tab" data-panel="database">Database</button>
+            <button type="button" class="cb-output-tab" data-panel="learn">Learn</button>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="cb-panel active" id="cb-panel-result">
+            <div class="tool-card tool-result-card">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--cb-tool);">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <h4>Balanced Equation</h4>
+                </div>
+                <div class="tool-result-content" id="cb-result-content">
+                    <div class="tool-empty-state" id="cb-empty-state">
+                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#8652;</div>
+                        <h3>Enter an equation</h3>
+                        <p>Type a chemical equation above to balance it automatically.</p>
+                    </div>
+                </div>
+                <!-- History -->
+                <div class="cb-history" id="cb-history-section">
+                    <div class="cb-history-title">History</div>
+                    <div class="cb-history-list" id="cb-historyList"></div>
+                    <button type="button" class="cb-history-clear" id="cb-historyClear">Clear history</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Redox Panel -->
+        <div class="cb-panel" id="cb-panel-redox">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--cb-tool);">
+                        <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                    </svg>
+                    <h4>Redox Half-Reaction Combiner (Beta)</h4>
+                </div>
+                <div style="padding:0.75rem;">
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin-bottom:0.75rem;">Enter balanced half-reactions with electrons (e-). The tool equalizes electrons and combines into a net reaction.</p>
+
+                    <div class="cb-redox-group">
+                        <label class="cb-redox-label" for="cb-halfOx">Oxidation Half-Reaction</label>
+                        <input type="text" class="cb-redox-input" id="cb-halfOx" placeholder="e.g., Fe2+ -> Fe3+ + e-" value="Fe2+ -> Fe3+ + e-">
+                    </div>
+                    <div class="cb-redox-group">
+                        <label class="cb-redox-label" for="cb-halfRed">Reduction Half-Reaction</label>
+                        <input type="text" class="cb-redox-input" id="cb-halfRed" placeholder="e.g., MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O" value="MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O">
+                    </div>
+                    <div class="cb-redox-group">
+                        <label class="cb-redox-label" for="cb-redoxMedia">Medium</label>
+                        <select class="cb-medium-select" id="cb-redoxMedia">
+                            <option value="acidic">Acidic (H+, H2O)</option>
+                            <option value="basic">Basic (OH-, H2O)</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+                        <button type="button" class="tool-action-btn" id="cb-redox-combine" style="flex:1">Combine Half-Reactions</button>
+                        <button type="button" class="tool-action-btn" id="cb-redox-reset" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Reset</button>
+                    </div>
+                    <div id="cb-redoxResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Panel -->
+        <div class="cb-panel" id="cb-panel-database">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--cb-tool);">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    </svg>
+                    <h4>Reaction Database</h4>
+                </div>
+                <div style="padding:0.75rem;">
+                    <input type="text" class="cb-search-input" id="cb-db-search" placeholder="Search by type, formula, or equation...">
+                    <div class="cb-db-table-wrap">
+                        <table class="cb-db-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Unbalanced</th>
+                                    <th>Balanced</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cb-db-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learn Panel -->
+        <div class="cb-panel" id="cb-panel-learn">
+            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                <div class="tool-result-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--cb-tool);">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                    <h4>Learn: Balancing Equations</h4>
+                </div>
+                <div class="cb-learn-section">
+                    <h4>What Is a Chemical Equation?</h4>
+                    <p>A chemical equation represents a reaction using chemical formulas. Reactants appear on the left and products on the right, separated by an arrow (&rarr;). Balancing ensures the <strong>law of conservation of mass</strong> is met: every atom on the left must appear on the right.</p>
+
+                    <h4>How to Balance (Quick Steps)</h4>
+                    <ol>
+                        <li>Write the unbalanced equation with correct formulas.</li>
+                        <li>Count atoms of each element on both sides.</li>
+                        <li>Add integer coefficients to equalize atom counts.</li>
+                        <li>Balance metals first, then non-metals, then H and O last.</li>
+                        <li>Reduce to the smallest whole-number ratio.</li>
+                    </ol>
+
+                    <h4>Common Reaction Types</h4>
+                    <ul>
+                        <li><strong>Combustion:</strong> Hydrocarbon + O&#8322; &rarr; CO&#8322; + H&#8322;O</li>
+                        <li><strong>Acid-Base:</strong> Acid + Base &rarr; Salt + Water</li>
+                        <li><strong>Redox:</strong> Electron transfer changes oxidation states</li>
+                        <li><strong>Synthesis:</strong> A + B &rarr; AB</li>
+                        <li><strong>Decomposition:</strong> AB &rarr; A + B</li>
+                        <li><strong>Single Replacement:</strong> A + BC &rarr; AC + B</li>
+                        <li><strong>Double Replacement:</strong> AB + CD &rarr; AD + CB</li>
+                    </ul>
+
+                    <h4>Redox Primer</h4>
+                    <p>Redox reactions involve electron transfer. Balance using the half-reaction method: split into oxidation and reduction half-reactions, balance atoms and charge separately, equalize electrons, then combine.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== ADS COLUMN ==================== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+</main>
+
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
-<!-- Learn Section: moved below for better task-first UX -->
-<div class="container mt-4">
-  <div id="learn" class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title mb-3">What Is a Chemical Equation?</h5>
-      <p>A chemical equation represents a reaction using chemical formulas. Reactants appear on the left and products on the right, separated by an arrow (&rarr;). Balancing ensures the <strong>law of conservation of mass</strong> is met: the number of atoms of each element is the same on both sides.</p>
+<!-- Related Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="chemical-equation-balancer.jsp"/>
+    <jsp:param name="keyword" value="chemistry"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
 
-      <h6 class="mt-4">How to Balance (At a Glance)</h6>
-      <ol class="mb-3">
-        <li>Write the unbalanced equation (formulas correct).</li>
-        <li>Count atoms of each element on both sides.</li>
-        <li>Add coefficients (whole numbers) to species to equalize counts.</li>
-        <li>Balance elements that appear in fewer species first (often metals, then non‑metals, then H and O).</li>
-        <li>Reduce coefficients to the smallest whole‑number ratio and double‑check counts.</li>
-      </ol>
+<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
 
-      <h6>Common Reaction Types</h6>
-      <ul class="mb-3">
-        <li><strong>Combustion:</strong> Hydrocarbon + O<sub>2</sub> &rarr; CO<sub>2</sub> + H<sub>2</sub>O</li>
-        <li><strong>Acid–Base:</strong> Acid + Base &rarr; Salt + Water</li>
-        <li><strong>Redox:</strong> Electron transfer changes oxidation states (balance via half‑reactions)</li>
-        <li><strong>Synthesis/Decomposition:</strong> A + B &rarr; AB, or AB &rarr; A + B</li>
-      </ul>
+    <!-- 1. What is a Chemical Equation? -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="cb-section-num">1</span> What is a Chemical Equation?
+        </h2>
+        <p class="cb-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            A <strong>chemical equation</strong> is a symbolic representation of a chemical reaction. <strong>Reactants</strong> appear on the left side and <strong>products</strong> on the right, separated by an arrow (&rarr;). Each substance is written as a <strong>chemical formula</strong> (e.g., H&#8322;O for water). The <strong>law of conservation of mass</strong> requires that every atom present in the reactants must also appear in the products &mdash; nothing is created or destroyed, only rearranged.
+        </p>
+        <div class="cb-callout cb-callout-insight cb-anim cb-anim-d1">
+            <span class="cb-callout-icon">&#128161;</span>
+            <div class="cb-callout-text">
+                <strong>Key insight:</strong> Balancing an equation means finding the smallest set of <strong>integer coefficients</strong> that make atom counts equal on both sides. This tool uses <strong>Gaussian elimination</strong> on the atom matrix for a mathematically rigorous solution.
+            </div>
+        </div>
+    </div>
 
-      <h5 class="mt-3 mb-2">Worked Examples</h5>
-      <div class="mb-3">
-        <p class="mb-1"><strong>1) Combustion of Propane</strong></p>
-        <p class="mb-1">Unbalanced: C<sub>3</sub>H<sub>8</sub> + O<sub>2</sub> &rarr; CO<sub>2</sub> + H<sub>2</sub>O</p>
-        <p class="mb-1">Balanced: C<sub>3</sub>H<sub>8</sub> + 5 O<sub>2</sub> &rarr; 3 CO<sub>2</sub> + 4 H<sub>2</sub>O</p>
-        <ul class="mb-2">
-          <li>Balance C: 3 CO<sub>2</sub></li>
-          <li>Balance H: 4 H<sub>2</sub>O</li>
-          <li>Balance O: 3×2 + 4×1 = 10 &rarr; 5 O<sub>2</sub></li>
-        </ul>
-        <a href="#" onclick="loadExample('C3H8 + O2 -> CO2 + H2O');return false;">Load this example</a>
-      </div>
+    <!-- 2. How to Balance -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="cb-section-num">2</span> How to Balance Chemical Equations
+        </h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Follow these four steps for any equation. This is the exact process our balancer automates:
+        </p>
+        <div class="cb-steps-grid">
+            <div class="cb-step-card cb-anim cb-anim-d1">
+                <div class="cb-step-num">1</div>
+                <h4>Write Formulas</h4>
+                <p>Write correct chemical formulas for all reactants and products. Do not change subscripts.</p>
+            </div>
+            <div class="cb-step-card cb-anim cb-anim-d2">
+                <div class="cb-step-num">2</div>
+                <h4>Count Atoms</h4>
+                <p>Count atoms of each element on both sides. Include atoms inside parentheses.</p>
+            </div>
+            <div class="cb-step-card cb-anim cb-anim-d3">
+                <div class="cb-step-num">3</div>
+                <h4>Add Coefficients</h4>
+                <p>Place whole-number coefficients before formulas to equalize counts. Start with metals.</p>
+            </div>
+            <div class="cb-step-card cb-anim cb-anim-d4">
+                <div class="cb-step-num">4</div>
+                <h4>Verify &amp; Simplify</h4>
+                <p>Double-check every element. Reduce coefficients to the smallest whole-number ratio.</p>
+            </div>
+        </div>
+    </div>
 
-      <div class="mb-2">
-        <p class="mb-1"><strong>2) Formation of Iron(III) Oxide</strong></p>
-        <p class="mb-1">Unbalanced: Fe + O<sub>2</sub> &rarr; Fe<sub>2</sub>O<sub>3</sub></p>
-        <p class="mb-1">Balanced: 4 Fe + 3 O<sub>2</sub> &rarr; 2 Fe<sub>2</sub>O<sub>3</sub></p>
-        <ul class="mb-2">
-          <li>Balance Fe to even: 2 Fe<sub>2</sub>O<sub>3</sub> &rarr; 4 Fe</li>
-          <li>Balance O: 2×3 = 6 &rarr; 3 O<sub>2</sub></li>
-        </ul>
-        <a href="#" onclick="loadExample('Fe + O2 -> Fe2O3');return false;">Load this example</a>
-      </div>
+    <!-- 3. Common Reaction Types -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="cb-section-num">3</span> Common Reaction Types
+        </h2>
+        <div class="cb-reaction-grid">
+            <div class="cb-reaction-card cb-anim cb-anim-d1" style="border-left:3px solid #ef4444;">
+                <h4>Combustion</h4>
+                <p>C&#8323;H&#8328; + 5O&#8322; &rarr; 3CO&#8322; + 4H&#8322;O</p>
+            </div>
+            <div class="cb-reaction-card cb-anim cb-anim-d2" style="border-left:3px solid #3b82f6;">
+                <h4>Acid-Base</h4>
+                <p>HCl + NaOH &rarr; NaCl + H&#8322;O</p>
+            </div>
+            <div class="cb-reaction-card cb-anim cb-anim-d3" style="border-left:3px solid #8b5cf6;">
+                <h4>Synthesis</h4>
+                <p>2H&#8322; + O&#8322; &rarr; 2H&#8322;O</p>
+            </div>
+            <div class="cb-reaction-card cb-anim cb-anim-d4" style="border-left:3px solid #f59e0b;">
+                <h4>Decomposition</h4>
+                <p>2KClO&#8323; &rarr; 2KCl + 3O&#8322;</p>
+            </div>
+            <div class="cb-reaction-card cb-anim cb-anim-d1" style="border-left:3px solid #059669;">
+                <h4>Single Replacement</h4>
+                <p>Zn + 2HCl &rarr; ZnCl&#8322; + H&#8322;</p>
+            </div>
+            <div class="cb-reaction-card cb-anim cb-anim-d2" style="border-left:3px solid #ec4899;">
+                <h4>Double Replacement</h4>
+                <p>AgNO&#8323; + NaCl &rarr; AgCl + NaNO&#8323;</p>
+            </div>
+        </div>
+    </div>
 
-      <hr>
-      <h5 class="mt-3 mb-2">More Examples</h5>
-      <div id="examplesCarousel" class="carousel slide" data-ride="carousel" data-interval="7000">
-        <ol class="carousel-indicators">
-          <li data-target="#examplesCarousel" data-slide-to="0" class="active"></li>
-          <li data-target="#examplesCarousel" data-slide-to="1"></li>
-          <li data-target="#examplesCarousel" data-slide-to="2"></li>
-          <li data-target="#examplesCarousel" data-slide-to="3"></li>
-          <li data-target="#examplesCarousel" data-slide-to="4"></li>
-          <li data-target="#examplesCarousel" data-slide-to="5"></li>
-          <li data-target="#examplesCarousel" data-slide-to="6"></li>
-          <li data-target="#examplesCarousel" data-slide-to="7"></li>
+    <!-- 4. Redox Primer -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);display:flex;align-items:center;">
+            <span class="cb-section-num">4</span> Redox Reactions Primer
+        </h2>
+        <p class="cb-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            <strong>Redox</strong> (reduction&ndash;oxidation) reactions involve <strong>electron transfer</strong>. The substance that loses electrons is <strong>oxidized</strong>; the one that gains electrons is <strong>reduced</strong>. Use the <strong>half-reaction method</strong> to balance:
+        </p>
+        <ol style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;padding-left:1.25rem;margin-bottom:1rem;">
+            <li>Split into oxidation and reduction half-reactions</li>
+            <li>Balance atoms other than O and H</li>
+            <li>Balance O with H&#8322;O and H with H&#8314; (acidic) or OH&#8315; (basic)</li>
+            <li>Balance charge with electrons (e&#8315;)</li>
+            <li>Equalize electrons between half-reactions and combine</li>
         </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="p-3">
-              <p class="mb-1"><strong>Single Replacement</strong></p>
-              <p class="mb-1">Unbalanced: Zn + HCl &rarr; ZnCl<sub>2</sub> + H<sub>2</sub></p>
-              <p class="mb-1">Balanced: Zn + 2 HCl &rarr; ZnCl<sub>2</sub> + H<sub>2</sub></p>
-              <a href="#" onclick="loadExample('Zn + HCl -> ZnCl2 + H2');return false;">Load this example</a>
+        <div class="cb-callout cb-callout-insight cb-anim cb-anim-d1">
+            <span class="cb-callout-icon">&#128073;</span>
+            <div class="cb-callout-text">
+                <strong>Tip:</strong> Use the Redox tab in our tool to enter your balanced half-reactions directly. It will equalize electrons and produce the net ionic equation automatically.
             </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Double Replacement</strong></p>
-              <p class="mb-1">Unbalanced: AgNO<sub>3</sub> + NaCl &rarr; AgCl + NaNO<sub>3</sub></p>
-              <p class="mb-1">Balanced: AgNO<sub>3</sub> + NaCl &rarr; AgCl + NaNO<sub>3</sub></p>
-              <a href="#" onclick="loadExample('AgNO3 + NaCl -> AgCl + NaNO3');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Decomposition</strong></p>
-              <p class="mb-1">Unbalanced: KClO<sub>3</sub> &rarr; KCl + O<sub>2</sub></p>
-              <p class="mb-1">Balanced: 2 KClO<sub>3</sub> &rarr; 2 KCl + 3 O<sub>2</sub></p>
-              <a href="#" onclick="loadExample('KClO3 -> KCl + O2');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Synthesis</strong></p>
-              <p class="mb-1">Unbalanced: H<sub>2</sub> + O<sub>2</sub> &rarr; H<sub>2</sub>O</p>
-              <p class="mb-1">Balanced: 2 H<sub>2</sub> + O<sub>2</sub> &rarr; 2 H<sub>2</sub>O</p>
-              <a href="#" onclick="loadExample('H2 + O2 -> H2O');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Neutralization</strong></p>
-              <p class="mb-1">Unbalanced: HCl + NaOH &rarr; NaCl + H<sub>2</sub>O</p>
-              <p class="mb-1">Balanced: HCl + NaOH &rarr; NaCl + H<sub>2</sub>O</p>
-              <a href="#" onclick="loadExample('HCl + NaOH -> NaCl + H2O');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Photosynthesis</strong></p>
-              <p class="mb-1">Unbalanced: CO<sub>2</sub> + H<sub>2</sub>O &rarr; C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + O<sub>2</sub></p>
-              <p class="mb-1">Balanced: 6 CO<sub>2</sub> + 6 H<sub>2</sub>O &rarr; C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 6 O<sub>2</sub></p>
-              <a href="#" onclick="loadExample('CO2 + H2O -> C6H12O6 + O2');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Polyatomic Neutralization</strong></p>
-              <p class="mb-1">Unbalanced: Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub> + Ca(OH)<sub>2</sub> &rarr; Al(OH)<sub>3</sub> + CaSO<sub>4</sub></p>
-              <p class="mb-1">Balanced: Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub> + 3 Ca(OH)<sub>2</sub> &rarr; 2 Al(OH)<sub>3</sub> + 3 CaSO<sub>4</sub></p>
-              <a href="#" onclick="loadExample('Al2(SO4)3 + Ca(OH)2 -> Al(OH)3 + CaSO4');return false;">Load this example</a>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="p-3">
-              <p class="mb-1"><strong>Double Replacement (with parentheses)</strong></p>
-              <p class="mb-1">Unbalanced: BaCl<sub>2</sub> + Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub> &rarr; BaSO<sub>4</sub> + AlCl<sub>3</sub></p>
-              <p class="mb-1">Balanced: 3 BaCl<sub>2</sub> + Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub> &rarr; 3 BaSO<sub>4</sub> + 2 AlCl<sub>3</sub></p>
-              <a href="#" onclick="loadExample('BaCl2 + Al2(SO4)3 -> BaSO4 + AlCl3');return false;">Load this example</a>
-            </div>
-          </div>
         </div>
-        <a class="carousel-control-prev" href="#examplesCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#examplesCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-
-      <hr>
-      <h5 class="mt-3 mb-2">Redox Primer (Acidic/Basic)</h5>
-      <p>Redox (reduction–oxidation) reactions involve electron transfer. Balancing typically uses the <em>half‑reaction method</em>:</p>
-      <ol class="mb-2">
-        <li>Split into oxidation and reduction half‑reactions; assign oxidation states.</li>
-        <li>Balance atoms other than O and H.</li>
-        <li>Balance O with H<sub>2</sub>O and H with H<sup>+</sup> (acidic) or OH<sup>−</sup> (basic).</li>
-        <li>Balance charge with electrons (e<sup>−</sup>).</li>
-        <li>Equalize electrons and add half‑reactions; simplify.</li>
-      </ol>
-      <div class="mb-2">
-        <p class="mb-1"><strong>Example (Acidic):</strong> Fe<sup>2+</sup> + MnO<sub>4</sub><sup>−</sup> + H<sup>+</sup> &rarr; Fe<sup>3+</sup> + Mn<sup>2+</sup> + H<sub>2</sub>O</p>
-        <p class="mb-1">Balanced: 5 Fe<sup>2+</sup> + MnO<sub>4</sub><sup>−</sup> + 8 H<sup>+</sup> &rarr; 5 Fe<sup>3+</sup> + Mn<sup>2+</sup> + 4 H<sub>2</sub>O</p>
-        <small class="text-muted">Note: This tool balances by atoms and does not track charge explicitly; use the steps above for charged redox systems.</small>
-      </div>
     </div>
-  </div>
-</div>
-<%--    </div>--%>
-<%--  </div>--%>
-<%--</div>--%>
 
-<script>
-  function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ let t=b; b=a%b; a=t; } return a||1; }
-  function lcm(a,b){ return a/gcd(a,b)*b; }
-  function lcmArr(arr){ return arr.reduce((x,y)=>lcm(x,y),1); }
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
 
-  function formatFormulaHTML(formula){
-    // Pretty hydrates and subscripts: element/group counts become subscripts, '.' → middle dot
-    let out = escapeHtml(formula || '').replace(/\./g,'&middot;');
-    out = out.replace(/([A-Za-z\)\]])(\d+)/g, (m,p1,p2)=> `${p1}<sub>${p2}</sub>`);
-    return out;
-  }
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                How does the chemical equation balancer work?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">The balancer builds a matrix where each row represents an element and each column represents a species. It performs Gaussian elimination using exact fraction arithmetic (via math.js) to find the nullspace &mdash; the smallest set of integer coefficients that conserve all atoms. This is mathematically rigorous and works for any valid equation.</div>
+        </div>
 
-  function renderEqPreview(){
-    var el = document.getElementById('eq');
-    var prev = document.getElementById('eqPreview');
-    if(!el || !prev) return;
-    var text = el.value || '';
-    if(!text.trim()){ prev.innerHTML=''; return; }
-    try{
-      const {left,right,arrow} = parseEquation(text);
-      const fmt = (side)=> side.map(({coef,formula})=>`${coef>1?`<span class=\"coeff\">${coef}</span>`:''}${formatFormulaHTML(formula)}`).join(' + ');
-      const arrowSymbol = (arrow==='=>' || arrow==='⇒' ? '&rArr;' : '&rarr;');
-      prev.innerHTML = `Preview: ${fmt(left)} ${arrowSymbol} ${fmt(right)}`;
-    }catch(e){
-      // Fallback: best-effort formatting without full parsing
-      let out = formatFormulaHTML(text).replace(/(=&gt;|=>|->|→|⇒|-->|=)/g, m=> (m.includes('=>')||m.includes('⇒')?'&rArr;':'&rarr;'));
-      prev.innerHTML = `Preview: ${out}`;
-    }
-  }
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                Does it support parentheses and hydrates?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">Yes. The parser handles nested parentheses like Ca&#8323;(PO&#8324;)&#8322; and square brackets. Hydrate notation with the middle dot (&middot;) is also supported, for example CuSO&#8324;&middot;5H&#8322;O. The formula parser recursively processes groups and multiplies element counts by the subscript.</div>
+        </div>
 
-  // --- Chip state management ---
-  let state = { left: [], right: [] };
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                What arrow formats are accepted?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">You can use -&gt; or =&gt; or the Unicode arrows (&rarr; and &rArr;) or --&gt; or even a single equals sign (=). The balancer recognizes all common arrow notations used in chemistry textbooks and online resources.</div>
+        </div>
 
-  function buildStateFromInput(){
-    try{
-      const {left,right} = parseEquation((document.getElementById('eq').value||'').trim());
-      state.left = left.map(x=>({coef: Math.max(1, x.coef||1), formula: x.formula}));
-      state.right = right.map(x=>({coef: Math.max(1, x.coef||1), formula: x.formula}));
-    }catch(e){
-      // fallback: naive split by arrow and plus
-      const raw = (document.getElementById('eq').value||'').split(/=>|->/);
-      const L = (raw[0]||'').split('+').map(s=>s.trim()).filter(Boolean);
-      const R = (raw[1]||'').split('+').map(s=>s.trim()).filter(Boolean);
-      state.left = L.map(f=>({coef:1, formula:f}));
-      state.right = R.map(f=>({coef:1, formula:f}));
-    }
-  }
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                Can I balance redox equations?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">Yes, there are two ways. For simple redox equations, the atom balance mode works by finding integer coefficients. For complex redox with explicit electron transfer, use the Redox tab to enter oxidation and reduction half-reactions separately. The tool equalizes electrons and combines them into a net ionic equation.</div>
+        </div>
 
-  function applyStateToInput(){
-    function sideToText(arr){
-      return arr.map(x=> (x.coef>1? (x.coef+'') : '') + x.formula).join(' + ');
-    }
-    const eq = `${sideToText(state.left)} -> ${sideToText(state.right)}`.replace(/^\s*\+\s*/,'').replace(/\+\s*$/,'');
-    const el = document.getElementById('eq');
-    el.value = eq;
-    renderEqPreview();
-    if(document.getElementById('optAuto').checked){ debounceBalance(); }
-  }
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                How do I copy the balanced equation as LaTeX?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">After balancing, click the LaTeX button in the result area. The tool converts the equation to LaTeX notation with subscripts as _{n} and the reaction arrow as \rightarrow. The LaTeX string is copied to your clipboard.</div>
+        </div>
 
-  function renderChips(){
-    const cL = document.getElementById('chipsLeft');
-    const cR = document.getElementById('chipsRight');
-    function chipHTML(x, idx, side){
-      return `<span class="chip" data-side="${side}" data-idx="${idx}">
-        <button class="btn btn-outline-secondary btn-xs" onclick="adjustCoef('${side}', ${idx}, -1)">−</button>
-        <span class="coeff">${x.coef}</span>
-        <span class="chip-formula" onclick="editSpecies('${side}', ${idx})">${formatFormulaHTML(x.formula)}</span>
-        <button class="btn btn-outline-secondary btn-xs" onclick="adjustCoef('${side}', ${idx}, 1)">+</button>
-        <button class="btn btn-outline-danger btn-xs" onclick="deleteSpecies('${side}', ${idx})">×</button>
-      </span>`;
-    }
-    cL.innerHTML = state.left.map((x,i)=>chipHTML(x,i,'left')).join('');
-    cR.innerHTML = state.right.map((x,i)=>chipHTML(x,i,'right')).join('');
-  }
+        <div class="cb-faq-item">
+            <button class="cb-faq-question">
+                Is this chemical equation balancer free and private?
+                <svg class="cb-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cb-faq-answer">Yes, 100% free with no signup. All computation runs entirely in your browser using JavaScript. No data is sent to any server. Features include text copy, LaTeX export, PNG export, and shareable URLs.</div>
+        </div>
+    </div>
+</section>
 
-  function adjustCoef(side, idx, delta){
-    const arr = state[side];
-    if(!arr || !arr[idx]) return;
-    arr[idx].coef = Math.max(1, (arr[idx].coef||1) + delta);
-    renderChips();
-    applyStateToInput();
-  }
-  function deleteSpecies(side, idx){
-    const arr = state[side];
-    if(!arr || !arr[idx]) return;
-    arr.splice(idx,1);
-    renderChips();
-    applyStateToInput();
-  }
-  function editSpecies(side, idx){
-    const arr = state[side];
-    if(!arr || !arr[idx]) return;
-    const val = prompt('Edit formula', arr[idx].formula);
-    if(val!=null){ arr[idx].formula = val.trim(); renderChips(); applyStateToInput(); }
-  }
-  function addSpecies(side){
-    const inp = document.getElementById(side==='left'?'addLeft':'addRight');
-    if(!inp) return; const v = (inp.value||'').trim(); if(!v) return;
-    state[side].push({coef:1, formula:v});
-    inp.value=''; renderChips(); applyStateToInput();
-  }
+<!-- Explore More Chemistry Tools -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
+            Explore More Chemistry Tools
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+            <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Lewis Structure Generator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Draw Lewis structures with VSEPR shapes</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">3D</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">3D Molecular Geometry</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Interactive VSEPR 3D visualizer</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/electronegativity-polarity-checker.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#4f46e5,#818cf8);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">&#916;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Polarity Checker</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Check EN differences and molecular polarity</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/electron-configuration-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">e&#8315;</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Electron Configuration</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Find electron configurations for any element</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
 
-  // --- Options and history ---
-  let balanceTimer=null;
-  function debounceBalance(){ clearTimeout(balanceTimer); balanceTimer=setTimeout(balanceEquation, 350); }
-  function saveHistory(eq){
-    try{
-      const key='chem_eq_history';
-      const arr = JSON.parse(localStorage.getItem(key)||'[]');
-      if(eq && arr[0]!==eq){ arr.unshift(eq); }
-      while(arr.length>10) arr.pop();
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderHistory();
-    }catch(e){}
-  }
-  function renderHistory(){
-    try{
-      const key='chem_eq_history';
-      const arr = JSON.parse(localStorage.getItem(key)||'[]');
-      const el = document.getElementById('historyList'); if(!el) return;
-      el.innerHTML = arr.map(x=>`<a href="#" onclick="loadExample('${escapeHtml(x)}');return false;">${escapeHtml(x)}</a>`).join('<br>');
-    }catch(e){}
-  }
-  function clearHistory(){ localStorage.removeItem('chem_eq_history'); renderHistory(); }
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
 
-  // Load a provided example into the input and update UI/state
-  function loadExample(eq){
-    // Ensure Atom Balance tab is active so users see the result
-    switchSection('atom');
-    const el = document.getElementById('eq');
-    if(!el) return false;
-    el.value = eq;
-    buildStateFromInput();
-    renderChips();
-    renderEqPreview();
-    // Always balance on example load for immediate feedback
-    balanceEquation();
-    saveHistory(eq);
-    try { el.focus(); el.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e) {}
-    return false;
-  }
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
 
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
-  // Parse a chemical formula into element counts, supports parentheses and hydrates with '.'
-  function parseFormula(formula){
-    // Replace hydrate dot with plus to treat like separate species internally
-    formula = formula.replace(/·/g, '.');
-    let i=0;
-    function parseGroup(){
-      let counts = {};
-      while(i < formula.length){
-        if(formula[i] === '(' || formula[i] === '['){
-          i++; // skip '('
-          let inner = parseGroup();
-          if(i >= formula.length || (formula[i] !== ')' && formula[i] !== ']')) break;
-          i++; // skip ')'
-          let mult = readNumber();
-          for(const el in inner){ counts[el]=(counts[el]||0)+inner[el]*mult; }
-        } else if(formula[i] === ')' || formula[i] === ']'){
-          break;
-        } else if(formula[i] === '.'){
-          // Hydrate separator, treat as break in this group
-          i++;
-        } else if(/[A-Z]/.test(formula[i])){
-          let el = formula[i++];
-          while(i<formula.length && /[a-z]/.test(formula[i])) el += formula[i++];
-          let num = readNumber();
-          counts[el]=(counts[el]||0)+num;
-        } else if(/\s/.test(formula[i])){
-          i++;
-        } else {
-          // unknown char
-          i++;
-        }
-      }
-      return counts;
-    }
-    function readNumber(){
-      let start=i; while(i<formula.length && /\d/.test(formula[i])) i++;
-      return start===i?1:parseInt(formula.slice(start,i),10);
-    }
-    return parseGroup();
-  }
+<!-- Core Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.0.1/math.min.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/chemical-equation-balancer-render.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/chemical-equation-balancer-core.js?v=<%=cacheVersion%>"></script>
 
-  function tokenizeSide(side){
-    // split by '+' and handle leading coefficients like '2H2O'
-    return side.split('+').map(s=>s.trim()).filter(Boolean).map(sp=>{
-      let m = sp.match(/^(\d+)\s*(.*)$/);
-      let coef = 1, formula = sp;
-      if(m){ coef = parseInt(m[1],10); formula = m[2].trim(); }
-      return {coef, formula};
-    });
-  }
-
-  function parseEquation(input){
-    const m = input.match(/(=>|->|→|⇒|-->|=)/);
-    if(!m) throw new Error('NO_ARROW');
-    const arrow = m[0];
-    const parts = input.split(/=>|->|→|⇒|-->|=/);
-    if(parts.length!==2) throw new Error('MULTI_ARROW');
-    const left = tokenizeSide(parts[0]);
-    const right = tokenizeSide(parts[1]);
-    return {left,right,arrow};
-  }
-
-  function uniqueElements(left,right){
-    const set = new Set();
-    [...left,...right].forEach(sp=>{ const c=parseFormula(sp.formula); Object.keys(c).forEach(e=>set.add(e)); });
-    return Array.from(set).sort();
-  }
-
-  function buildMatrix(elements,left,right){
-    // rows: elements; cols: species (left then right)
-    const cols = left.length + right.length;
-    const A = elements.map(()=>Array(cols).fill(0));
-    const fill = (sp,offset,sign)=>{
-      sp.forEach((s,j)=>{
-        const counts = parseFormula(s.formula);
-        elements.forEach((el,i)=>{ A[i][offset+j] = (counts[el]||0)*sign; });
-      });
-    };
-    fill(left,0, 1); // reactants positive
-    fill(right,left.length, -1); // products negative
-    return A;
-  }
-
-  // Compute a non-trivial integer solution to A*x=0 using Gaussian elimination, return smallest integers
-  function nullspaceInt(A){
-    const rows=A.length, cols=A[0].length;
-    // Convert to rational numbers using fractions represented by [num,den]
-    const M = A.map(r=>r.map(v=>[v,1]));
-    function simplify([n,d]){ const g=gcd(n,d); d<0 && (n=-n,d=-d); return [n/g,d/g]; }
-    function add(a,b){ return simplify([a[0]*b[1]+b[0]*a[1], a[1]*b[1]]); }
-    function sub(a,b){ return add(a,[-b[0],b[1]]); }
-    function mul(a,b){ return simplify([a[0]*b[0], a[1]*b[1]]); }
-    function div(a,b){ return simplify([a[0]*b[1], a[1]*b[0]]); }
-
-    let r=0;
-    for(let c=0;c<cols && r<rows;c++){
-      // find pivot
-      let piv=r; while(piv<rows && M[piv][c][0]===0) piv++;
-      if(piv===rows) continue;
-      // swap
-      if(piv!==r){ const tmp=M[r]; M[r]=M[piv]; M[piv]=tmp; }
-      // normalize row r
-      const pivVal=M[r][c];
-      for(let j=c;j<cols;j++) M[r][j]=div(M[r][j],pivVal);
-      // eliminate others
-      for(let i=0;i<rows;i++) if(i!==r && M[i][c][0]!==0){
-        const f=M[i][c];
-        for(let j=c;j<cols;j++) M[i][j]=sub(M[i][j], mul(f,M[r][j]));
-      }
-      r++;
-    }
-    // Identify free variables (those without pivot). Set last free var = 1, backsolve others = 1 or determined
-    const pivotCol = Array(rows).fill(-1);
-    let row=0;
-    for(let c=0;c<cols && row<rows;c++){
-      if(Math.abs(M[row][c][0])===1 && M[row][c][1]===1){ pivotCol[row]=c; row++; }
-    }
-    const isPivotCol = Array(cols).fill(false);
-    pivotCol.forEach(c=>{ if(c>=0) isPivotCol[c]=true; });
-    const free = [];
-    for(let c=0;c<cols;c++) if(!isPivotCol[c]) free.push(c);
-    if(free.length===0){
-      // trivial or fully determined, set last variable to 1 as free
-      free.push(cols-1);
-    }
-    const x = Array(cols).fill([0,1]);
-    // set free vars = 1
-    free.forEach(c=>{ x[c]=[1,1]; });
-    // backsolve pivot rows: for each pivot row, x[pivot] = - sum(other * coeff)
-    for(let i=rows-1;i>=0;i--){
-      const pc = pivotCol[i];
-      if(pc<0) continue;
-      let sum=[0,1];
-      for(let j=pc+1;j<cols;j++) if(M[i][j][0]!==0){ sum = add(sum, mul(M[i][j], x[j])); }
-      x[pc]=simplify([-sum[0], sum[1]]);
-    }
-    // Convert rationals to integers by lcm of denominators
-    const dens = x.map(fr=>fr[1]);
-    const L = lcmArr(dens);
-    let ints = x.map(fr=> (fr[0]* (L/fr[1])) );
-    // normalize: make them positive and reduce gcd
-    const allNeg = ints.every(v=>v<=0);
-    if(allNeg) ints = ints.map(v=>-v);
-    const G = ints.reduce((a,b)=>gcd(a,b), Math.abs(ints[0])||1);
-    ints = ints.map(v=> v/G);
-    return ints;
-  }
-
-  function balanceEquation(){
-    const inp = document.getElementById('eq').value.trim();
-    const res = document.getElementById('result');
-    try{
-      const {left,right,arrow} = parseEquation(inp);
-      const elements = uniqueElements(left,right);
-      if(elements.length===0) throw new Error('Could not find any chemical elements.');
-      const A = buildMatrix(elements,left,right);
-      const coeffs = nullspaceInt(A);
-      const split = {left: coeffs.slice(0,left.length), right: coeffs.slice(left.length)};
-      // Build output
-      function formatFormulaHTML(formula){
-        // Pretty hydrates and subscripts for counts after element or group
-        let out = escapeHtml(formula).replace(/\./g,'&middot;');
-        out = out.replace(/([A-Za-z\)\]])(\d+)/g, (m,p1,p2)=> `${p1}<sub>${p2}</sub>`);
-        return out;
-      }
-      const hide1 = document.getElementById('optHide1') && document.getElementById('optHide1').checked;
-      const showFrac = document.getElementById('optFrac') && document.getElementById('optFrac').checked;
-
-      const fmtSide = (side, coefs)=> side.map((s,i)=>{
-        const c = coefs[i];
-        const cStr = (hide1 && c===1)? '' : `<span class=\"coeff\">${c}</span>`;
-        return `<span class="nowrap">${cStr}${formatFormulaHTML(s.formula)}</span>`;
-      }).join(' + ');
-
-      const arrowSymbol = (arrow==='=>' || arrow==='⇒' ? '&rArr;' : '&rarr;');
-      let eqHtml = `<div class="mb-2"><strong>Balanced:</strong><br>${fmtSide(left, split.left)} ${arrowSymbol} ${fmtSide(right, split.right)}</div>`;
-
-      // Fractions view (optional): scale so first nonzero is 1 and show others as p/q
-      if(showFrac){
-        const first = coeffs.find(v=>v!==0) || 1;
-        function toFrac(n, d){
-          const g=gcd(n,d); n/=g; d/=g; return d===1? `${n}` : `${n}/${d}`; }
-        const fracSide = (side, coefs)=> side.map((s,i)=>{
-          const num = coefs[i]; const den = first; // represent as num/first
-          const cStr = (hide1 && num===first)? '' : `<span class=\"coeff\">${toFrac(num, den)}</span>`;
-          return `<span class="nowrap">${cStr}${formatFormulaHTML(s.formula)}</span>`;
-        }).join(' + ');
-        eqHtml += `<div class="mt-2"><small class="text-muted">Fractions view:</small><br>${fracSide(left, split.left)} ${arrowSymbol} ${fracSide(right, split.right)}</div>`;
-      }
-
-      // Atom counts table
-      function totalCounts(spList, coefs){
-        const totals={};
-        spList.forEach((s,i)=>{
-          const c=parseFormula(s.formula);
-          Object.keys(c).forEach(el=>{
-            totals[el]=(totals[el]||0)+c[el]*coefs[i];
-          });
-        });
-        return totals;
-      }
-      const totL = totalCounts(left, split.left);
-      const totR = totalCounts(right, split.right);
-      const rows = elements.map(el=>{
-        const a=totL[el]||0, b=totR[el]||0;
-        const cls = (a===b)?'atom-equal':'atom-mismatch';
-        return `<tr><td>${el}</td><td>${a}</td><td>${b}</td><td class="${cls}">${a===b?'✓':'✗'}</td></tr>`;
-      }).join('');
-
-      const table = `<div class="table-responsive"><table class="table table-sm">
-        <thead><tr><th>Element</th><th>Left</th><th>Right</th><th>Status</th></tr></thead>
-        <tbody>${rows}</tbody></table></div>`;
-
-      const actions = `<div class="mt-2">
-        <button class="btn btn-outline-secondary btn-sm mr-2" onclick="copyBalanced()" title="Copy balanced equation">📋 Copy</button>
-        <button class="btn btn-outline-secondary btn-sm mr-2" onclick="copyLaTeX()" title="Copy LaTeX">𝛌 LaTeX</button>
-        <button class="btn btn-outline-secondary btn-sm mr-2" onclick="exportPNG()" title="Export as PNG">🖼 PNG</button>
-        <button class="btn btn-outline-secondary btn-sm" onclick="shareLink()" title="Share link with equation">🔗 Share</button>
-      </div>`;
-
-      res.innerHTML = eqHtml + table + actions;
-      res.dataset.balanced = stripHtml(eqHtml);
-      res.dataset.latex = toLaTeXEquation(left, right, split.left, split.right, hide1);
-      res.dataset.pretty = toUnicodePretty(left, right, split.left, split.right, hide1, arrowSymbol==='&rArr;'?'⇒':'→');
-      saveHistory(inp);
-    }catch(e){
-      if(e && e.message==='NO_ARROW'){
-        showSingleSideAnalysis(inp);
-        return;
-      }
-      res.innerHTML = `<div class="alert alert-warning">${escapeHtml(e.message || 'Error parsing equation')}</div>`;
-    }
-  }
-
-  function copyBalanced(){
-    const res = document.getElementById('result');
-    const text = res && res.dataset.balanced ? res.dataset.balanced : '';
-    if(!text) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); return; }
-    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-  }
-
-  function shareLink(){
-    const inp = document.getElementById('eq').value.trim();
-    const url = new URL(window.location.href.split('#')[0]);
-    url.searchParams.set('q', inp);
-    if(document.getElementById('optAuto').checked) url.searchParams.set('auto','1');
-    if(document.getElementById('optHide1').checked) url.searchParams.set('hide1','1');
-    if(document.getElementById('optFrac').checked) url.searchParams.set('frac','1');
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url.toString()); }
-    window.history.replaceState({}, '', url.toString());
-  }
-
-  function resetUI(){
-    const res = document.getElementById('result');
-    if(res) res.innerHTML='';
-  }
-
-  function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
-  function stripHtml(s){ const div=document.createElement('div'); div.innerHTML=s; return div.textContent || div.innerText || ''; }
-
-  // Build LaTeX string for the balanced equation
-  function toLaTeXFormula(formula){
-    // replace counts with _{n}, keep parentheses, replace hydrate dot with \cdot
-    let f = formula.replace(/\./g,' \\cdot ');
-    // Insert _{n} after element/group + digits
-    f = f.replace(/([A-Za-z\)\]])(\d+)/g, (m,p1,p2)=> `${p1}_\{${p2}\}`);
-    // charges like 2+ or 3- at end: convert to ^{2+}
-    f = f.replace(/([A-Za-z\]\)])(\d*)([\+\-])$/g, (m,p1,p2,p3)=> `${p1}^{${(p2||'')+p3}}`);
-    return f;
-  }
-  function toLaTeXEquation(left, right, coL, coR, hide1){
-    const fmt = (side, coefs)=> side.map((s,i)=>{
-      const c=coefs[i]; const cStr = (hide1 && c===1)? '' : c+'';
-      return `${cStr}${toLaTeXFormula(s.formula)}`;
-    }).join(' + ');
-    return `${fmt(left, coL)} \\rightarrow ${fmt(right, coR)}`;
-  }
-
-  // Pretty unicode subscripts for quick PNG export
-  function subNum(n){ const map={'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'}; return n.replace(/[0-9]/g, d=>map[d]); }
-  function toUnicodePretty(left, right, coL, coR, hide1, arrow){
-    const fmt = (side, coefs)=> side.map((s,i)=>{
-      const c=coefs[i]; const cStr = (hide1 && c===1)? '' : (c+' ');
-      let f = s.formula.replace(/\./g,'·');
-      f = f.replace(/([A-Za-z\)\]])(\d+)/g, (m,p1,p2)=> `${p1}${subNum(p2)}`);
-      return `${cStr}${f}`;
-    }).join(' + ');
-    return `${fmt(left,coL)} ${arrow} ${fmt(right,coR)}`;
-  }
-
-  function copyLaTeX(){
-    const res = document.getElementById('result');
-    const tex = res && res.dataset.latex; if(!tex) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(tex); return; }
-    const ta=document.createElement('textarea'); ta.value=tex; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-  }
-
-  function exportPNG(){
-    const res = document.getElementById('result');
-    const text = res && res.dataset.pretty; if(!text) return;
-    const pad=20; const font='20px Arial';
-    const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d');
-    // rough width estimate
-    const tmp=document.createElement('canvas').getContext('2d'); tmp.font=font; const w=tmp.measureText(text).width; const h=34;
-    canvas.width = Math.ceil(w)+pad*2; canvas.height = h+pad*2;
-    ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#000000'; ctx.font=font; ctx.fillText(text, pad, pad+h*0.7);
-    const a=document.createElement('a'); a.href=canvas.toDataURL('image/png'); a.download='balanced-equation.png'; a.click();
-  }
-
-  function switchSection(which){
-    const atom=document.getElementById('sectionAtom');
-    const redox=document.getElementById('sectionRedox');
-    const ta=document.getElementById('tab-atom'); const tr=document.getElementById('tab-redox');
-    if(which==='redox'){ atom.style.display='none'; redox.style.display='block'; ta.classList.remove('active'); tr.classList.add('active'); }
-    else { redox.style.display='none'; atom.style.display='block'; tr.classList.remove('active'); ta.classList.add('active'); }
-  }
-
-  // --- Redox combiner (beta): equalize electrons and merge ---
-  function tokenizeSideSimple(side){
-    return side.split('+').map(s=>s.trim()).filter(Boolean).map(sp=>{
-      let m = sp.match(/^(\d+)\s*(.*)$/); let coef=1, formula=sp;
-      if(m){ coef=parseInt(m[1],10); formula=m[2].trim(); }
-      return {coef, formula};
-    });
-  }
-  function parseHalf(text){
-    const parts = text.split(/=>|->/); if(parts.length!==2) throw new Error('Half‑reaction needs one arrow');
-    return { left: tokenizeSideSimple(parts[0]), right: tokenizeSideSimple(parts[1]) };
-  }
-  function speciesKey(s){ return s.formula.replace(/\s+/g,''); }
-  function scaleList(list, k){ return list.map(x=>({coef:x.coef*k, formula:x.formula})); }
-  function combineLists(a,b,sign){
-    // sign=+1 add to left, sign=-1 subtract to cancel
-    const map=new Map();
-    function addList(lst, mult){
-      lst.forEach(x=>{
-        const key=speciesKey(x); const cur=map.get(key)||0; map.set(key, cur + mult*x.coef);
-      });
-    }
-    addList(a, +1); addList(b, sign);
-    const out=[]; map.forEach((v,k)=>{ if(v!==0) out.push({coef:v, formula:k}); });
-    return out;
-  }
-  function formatSideText(list){ return list.map(x=> (x.coef===1? '' : x.coef+' ')+x.formula).join(' + '); }
-
-  function combineHalfReactions(){
-    const out = document.getElementById('redoxResult');
-    try{
-      const h1 = parseHalf((document.getElementById('halfOx').value||'').trim());
-      const h2 = parseHalf((document.getElementById('halfRed').value||'').trim());
-      const e = 'e-';
-      const eProd = (lst)=> (lst.find(x=>x.formula===e)||{coef:0}).coef;
-      const eCons = (lst)=> (lst.find(x=>x.formula===e)||{coef:0}).coef;
-      const e1 = eProd(h1.right) - eCons(h1.left); // positive if produced on right
-      const e2 = eCons(h2.left) - eProd(h2.right); // positive if consumed on left
-      if(e1<=0 || e2<=0) throw new Error('Provide oxidation with e- on the product side and reduction with e- on the reactant side.');
-      const L = lcm(e1, e2);
-      const k1 = L / e1; const k2 = L / e2;
-      const H1L = scaleList(h1.left, k1), H1R = scaleList(h1.right, k1);
-      const H2L = scaleList(h2.left, k2), H2R = scaleList(h2.right, k2);
-      // Remove electrons
-      function removeE(list){ return list.filter(x=>x.formula!==e); }
-      const leftCombined = combineLists(removeE(H1L), removeE(H2L), -1); // will be fixed below
-      // Actually build net: (H1L + H2L) -> (H1R + H2R), then cancel common species across sides
-      const netL = removeE(H1L).concat(removeE(H2L));
-      const netR = removeE(H1R).concat(removeE(H2R));
-      // cancel common species
-      const mapL=new Map(); netL.forEach(x=>{ const k=speciesKey(x); mapL.set(k,(mapL.get(k)||0)+x.coef); });
-      const mapR=new Map(); netR.forEach(x=>{ const k=speciesKey(x); mapR.set(k,(mapR.get(k)||0)+x.coef); });
-      const allKeys=new Set([...mapL.keys(), ...mapR.keys()]);
-      const outL=[], outR=[];
-      allKeys.forEach(k=>{
-        const l = mapL.get(k)||0, r = mapR.get(k)||0;
-        if(l>r) outL.push({coef:l-r, formula:k});
-        else if(r>l) outR.push({coef:r-l, formula:k});
-      });
-      const eqText = `${formatSideText(outL)} → ${formatSideText(outR)}`;
-      out.innerHTML = `<div class="mb-2"><strong>Net Reaction (beta):</strong><br>${escapeHtml(eqText)}</div>`;
-    }catch(e){ out.innerHTML = `<div class="alert alert-warning">${escapeHtml(e.message)}</div>`; }
-  }
-  function resetRedox(){
-    document.getElementById('halfOx').value='';
-    document.getElementById('halfRed').value='';
-    document.getElementById('redoxResult').innerHTML='';
-  }
-
-  // Load from query param
-  (function(){
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get('q'); if(q){ document.getElementById('eq').value=q; }
-    // live preview
-    const inp = document.getElementById('eq');
-    if(inp){ inp.addEventListener('input', renderEqPreview); }
-    renderEqPreview();
-    // options from URL
-    if(params.get('auto')==='1') document.getElementById('optAuto').checked = true;
-    if(params.get('hide1')==='1') document.getElementById('optHide1').checked = true;
-    if(params.get('frac')==='1') document.getElementById('optFrac').checked = true;
-
-    buildStateFromInput();
-    renderChips();
-    renderHistory();
-    if(q){ balanceEquation(); }
-  })();
-
-  // Helper: show best-effort analysis when no arrow is present
-  function showSingleSideAnalysis(text){
-    const res = document.getElementById('result');
-    const species = text.split('+').map(s=>s.trim()).filter(Boolean);
-    if(species.length===0){ res.innerHTML = `<div class="alert alert-warning">No formula detected. Add species like H2 + O2 and a reaction arrow.</div>`; return; }
-    // build per-species counts and totals
-    function countsFor(form){ const c=parseFormula(form); return c; }
-    const elementsSet = new Set();
-    const rows = species.map(f=>{ const c=countsFor(f); Object.keys(c).forEach(e=>elementsSet.add(e)); return {f, c}; });
-    const elements = Array.from(elementsSet).sort();
-    // totals
-    const totals={}; rows.forEach(r=>{ elements.forEach(e=>{ totals[e]=(totals[e]||0)+(r.c[e]||0); }); });
-    const head = `<thead><tr><th>Species</th>${elements.map(e=>`<th>${e}</th>`).join('')}</tr></thead>`;
-    const body = rows.map(r=>`<tr><td>${formatFormulaHTML(r.f)}</td>${elements.map(e=>`<td>${r.c[e]||0}</td>`).join('')}</tr>`).join('');
-    const totalRow = `<tr class="font-weight-bold"><td>Total</td>${elements.map(e=>`<td>${totals[e]||0}</td>`).join('')}</tr>`;
-    res.innerHTML = `<div class="alert alert-info mb-2">No reaction arrow detected. Showing single‑side analysis. Add an arrow (->, =>, →, ⇒, -->, or =) to balance.</div>
-    <div class="table-responsive"><table class="table table-sm">${head}<tbody>${body}${totalRow}</tbody></table></div>`;
-  }
-</script>
-
-<!-- JSON-LD: WebPage + Breadcrumbs + FAQ + HowTo -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Chemical Equation Balancer",
-  "alternateName": ["Balance Chemical Equations Online", "Equation Balancer"],
-  "applicationCategory": "EducationalApplication",
-  "operatingSystem": "Any",
-  "inLanguage": "en",
-  "isAccessibleForFree": true,
-  "url": "https://8gwifi.org/chemical-equation-balancer.jsp",
-  "image": "https://8gwifi.org/images/site/chem-balance.png",
-  "description": "Free online chemical equation balancer with steps and atom counts. Balance reactions in your browser and copy results as text or LaTeX.",
-  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-  "publisher": {
-    "@type": "Organization",
-    "name": "8gwifi.org",
-    "url": "https://8gwifi.org",
-    "logo": {"@type": "ImageObject", "url": "https://8gwifi.org/images/site/8gwifiorg-logos_white.png"}
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Chemical Equation Balancer",
-  "url": "https://8gwifi.org/chemical-equation-balancer.jsp",
-  "description": "Balance chemical equations online with steps and atom counts.",
-  "isPartOf": {"@id": "https://8gwifi.org#website"}
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org"},
-    {"@type": "ListItem", "position": 2, "name": "Chemical Equation Balancer", "item": "https://8gwifi.org/chemical-equation-balancer.jsp"}
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type": "Question", "name": "How do you balance equations?", "acceptedAnswer": {"@type": "Answer", "text": "We apply a matrix (Gaussian elimination) method to compute the smallest integer coefficients that conserve each element."}},
-    {"@type": "Question", "name": "Does it support parentheses and hydrates?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, common parentheses and hydrate dots (·) are supported. Complex nested cases are handled in most scenarios."}},
-    {"@type": "Question", "name": "Is it free and private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs in your browser and is free to use. No sign‑up required."}}
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Balance a chemical equation online",
-  "description": "Free browser‑only chemical equation balancer.",
-  "totalTime": "PT1M",
-  "step": [
-    {"@type": "HowToStep", "name": "Enter equation", "text": "Type an unbalanced equation, e.g., Fe + O2 -> Fe2O3."},
-    {"@type": "HowToStep", "name": "Balance", "text": "Click Balance to compute integer coefficients."},
-    {"@type": "HowToStep", "name": "Review", "text": "Check atom counts for both sides and copy the result."}
-  ],
-  "url": "https://8gwifi.org/chemical-equation-balancer.jsp"
-}
-</script>
-
-<%@ include file="thanks.jsp"%>
-<hr>
-
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="body-close.jsp"%>
+<%@ include file="modern/components/analytics.jsp" %>
+</body>
+</html>
