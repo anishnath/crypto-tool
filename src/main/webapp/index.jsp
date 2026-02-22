@@ -494,6 +494,10 @@
             background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
             color: white;
         }
+        .icon-chemistry {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
         .icon-education {
             background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
             color: white;
@@ -679,6 +683,7 @@
                 <a href="#tools" class="category-pill">DevOps</a>
                 <a href="#tools" class="category-pill">Cryptography</a>
                 <a href="#tools" class="category-pill">Mathematics</a>
+                <a href="#tools" class="category-pill">Chemistry</a>
                 <a href="#tools" class="category-pill">Finance</a>
             </div>
         </div>
@@ -922,6 +927,36 @@
                     <li><a href="stock-calc.jsp" class="tool-link">Stock Profit</a></li>
                     <li><a href="sip-calculator.jsp" class="tool-link">SIP Calculator</a></li>
                 </ul>
+            </div>
+
+            <!-- Chemistry -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-chemistry">🧪</div>
+                    <div>
+                        <h3 class="tool-title">Chemistry</h3>
+                    </div>
+                </div>
+                <p class="tool-description">Periodic table, molecular geometry, equation balancer, stoichiometry, thermochemistry, and electrochemistry tools.</p>
+                <ul class="tool-links">
+                    <li><a href="chemistry/index.jsp" class="tool-link">All Chemistry Tools</a></li>
+                    <li><a href="periodic-table.jsp" class="tool-link">Periodic Table</a></li>
+                    <li><a href="chemical-equation-balancer.jsp" class="tool-link">Equation Balancer</a></li>
+                    <li><a href="molecular-geometry-calculator.jsp" class="tool-link">Molecular Geometry</a></li>
+                    <li><a href="lewis-structure-generator.jsp" class="tool-link">Lewis Structures</a></li>
+                    <li><a href="stoichiometry-calculator.jsp" class="tool-link">Stoichiometry</a></li>
+                </ul>
+                <button class="tool-more-btn" onclick="toggleToolMore(event, this, 'chemMore')">View All →</button>
+                <div id="chemMore" class="tool-more-content">
+                    <ul class="tool-links">
+                        <li><a href="electron-configuration-calculator.jsp" class="tool-link">Electron Config</a></li>
+                        <li><a href="electronegativity-polarity-checker.jsp" class="tool-link">Electronegativity</a></li>
+                        <li><a href="molar-mass-calculator.jsp" class="tool-link">Molar Mass</a></li>
+                        <li><a href="molarity-dilution-calculator.jsp" class="tool-link">Molarity & Dilution</a></li>
+                        <li><a href="thermochemistry-calculator.jsp" class="tool-link">Thermochemistry</a></li>
+                        <li><a href="electrochemistry-calculator.jsp" class="tool-link">Electrochemistry</a></li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Education & Science -->
