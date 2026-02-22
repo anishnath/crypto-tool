@@ -512,6 +512,21 @@
                 var resultTeX = result.toTeX();
                 var resultText = result.text();
 
+                // Validate nerdamer result by evaluating at test points
+                // Catches cases where nerdamer returns expressions with hidden division by zero
+                try {
+                    var testScope = {};
+                    testScope[v] = 1;
+                    var testVal = parseFloat(nerdamer(resultText).evaluate(testScope).text('decimals'));
+                    if (!isFinite(testVal)) throw new Error('non-finite');
+                    testScope[v] = 2;
+                    testVal = parseFloat(nerdamer(resultText).evaluate(testScope).text('decimals'));
+                    if (!isFinite(testVal)) throw new Error('non-finite');
+                } catch (evalErr) {
+                    sympyFallback(expr, v);
+                    return;
+                }
+
                 // Detect known non-elementary integrals (Nerdamer returns incorrect results for these)
                 // Route to SymPy which can return correct special-function answers (erf, Si, li, etc.)
                 var nonElem = checkNonElementaryIntegral(expr, v);
@@ -551,6 +566,11 @@
                         }
                     }
                     var exactText = defResult ? defResult.text() : '';
+                    // If nerdamer returned non-finite definite result, fall through to SymPy
+                    if (!isFinite(numericVal)) {
+                        sympyFallback(expr, v);
+                        return;
+                    }
                     showDefiniteResult(expr, v, a, b, resultTeX, resultText, exactText, numericVal, method);
                     prepareGraph(expr, v, result.text(), 'definite', a, b);
                 }
@@ -606,7 +626,9 @@
         function showDefiniteResult(expr, v, a, b, resultTeX, resultText, exactText, numericVal, method, sympyStepsCache) {
             var exprTeX = exprToLatex(expr);
             var numStr = isFinite(numericVal) ? numericVal.toFixed(6) : 'N/A';
-            lastResultLatex = '\\int_{' + a + '}^{' + b + '} ' + exprTeX + ' \\, d' + v + ' = ' + (exactText || numStr);
+            var aTeX = boundToLatex(a);
+            var bTeX = boundToLatex(b);
+            lastResultLatex = '\\int_{' + aTeX + '}^{' + bTeX + '} ' + exprTeX + ' \\, d' + v + ' = ' + (exactText || numStr);
             lastResultText = 'integral from ' + a + ' to ' + b + ' of ' + expr + ' d' + v + ' = ' + (exactText || numStr);
 
             lastIntegrationContext = { expr: expr, v: v, resultTeX: resultTeX, resultText: resultText + (exactText ? ' = ' + exactText : ''), method: method, mode: 'definite', a: a, b: b, sympyStepsCache: sympyStepsCache || null };
@@ -624,7 +646,7 @@
 
             if (isFinite(numericVal)) {
                 html += '<div class="ic-result-detail">';
-                html += 'F(' + escapeHtml(b) + ') - F(' + escapeHtml(a) + ') = ' + escapeHtml(numStr);
+                html += 'F(' + escapeHtml(boundToLatex(b)) + ') - F(' + escapeHtml(boundToLatex(a)) + ') = ' + escapeHtml(numStr);
                 html += '<br><span class="ic-method-badge" style="margin-top:0.375rem;">' + escapeHtml(method) + '</span>';
                 html += '</div>';
             }
@@ -637,7 +659,7 @@
             var stepsBtn = document.getElementById('ic-steps-btn');
             if (stepsBtn) stepsBtn.addEventListener('click', function() { window.showSteps && window.showSteps(); });
 
-            katex.render('\\int_{' + a + '}^{' + b + '} ' + exprTeX + ' \\, d' + v + ' =', document.getElementById('ic-r-integral'), { displayMode: true, throwOnError: false });
+            katex.render('\\int_{' + aTeX + '}^{' + bTeX + '} ' + exprTeX + ' \\, d' + v + ' =', document.getElementById('ic-r-integral'), { displayMode: true, throwOnError: false });
             katex.render(resultTeX, document.getElementById('ic-r-antideriv'), { displayMode: true, throwOnError: false });
         }
 
@@ -930,7 +952,7 @@
                 var a = opts.a, b = opts.b;
                 code = 'import json\n' +
                     'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule, RewriteRule, AddRule, ConstantTimesRule, URule, ReciprocalRule, ArctanRule, PartsRule, ExpRule, PowerRule, ConstantRule, AlternativeRule\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule, RewriteRule, AddRule, ConstantTimesRule, URule, ReciprocalRule, ArctanRule, PartsRule, ExpRule, PowerRule, ConstantRule, AlternativeRule, TrigSubstitutionRule, SinRule, CosRule, CoshRule, SinhRule, Sec2Rule, Csc2Rule, SecTanRule, CscCotRule, ArcsinRule, ArcsinhRule, CompleteSquareRule, CyclicPartsRule, SqrtQuadraticRule, ReciprocalSqrtQuadraticRule, PiecewiseRule, ErfRule, SiRule, LiRule, EiRule, CiRule, ChiRule, ShiRule, UpperGammaRule, FresnelCRule, FresnelSRule, EllipticERule, EllipticFRule, DiracDeltaRule, HeavisideRule, NestedPowRule, DerivativeRule\n' +
                     'def _c(r): return getattr(r,"integrand",None) or getattr(r,"context",None)\n' +
                     'def _s(r): return getattr(r,"variable",None) or getattr(r,"symbol",None)\n' +
                     'def r2s(rule,v,st=None):\n' +
@@ -955,6 +977,35 @@
                     '        elif isinstance(rule,ExpRule): st.append({"title":"Exponential","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ExpRule"})\n' +
                     '        elif isinstance(rule,PowerRule): st.append({"title":"Power rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"PowerRule"})\n' +
                     '        elif isinstance(rule,ConstantRule): st.append({"title":"Constant","latex":r"\\\\int "+latex(rule.constant)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ConstantRule"})\n' +
+                    '        elif isinstance(rule,TrigSubstitutionRule):\n' +
+                    '            st.append({"title":"Trig substitution","latex":r"Let\\\\ "+vs+r" = "+latex(rule.func)+r",\\\\quad d"+vs+r" = "+latex(diff(rule.func,rule.theta))+r"\\\\,d"+latex(rule.theta),"rule":"TrigSubstitutionRule"}); st.append({"title":"Rewrite integrand","latex":r"\\\\int "+latex(rule.rewritten)+r" \\\\,d"+latex(rule.theta),"rule":"TrigSubstitutionRule"}); r2s(rule.substep,v,st); st.append({"title":"Back substitute","latex":"= "+latex(res),"rule":"TrigSubstitutionRule"}) if res else None\n' +
+                    '        elif isinstance(rule,(SinRule,CosRule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"TrigRule"})\n' +
+                    '        elif isinstance(rule,(SinhRule,CoshRule)): st.append({"title":"Hyperbolic rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"HyperbolicRule"})\n' +
+                    '        elif isinstance(rule,(Sec2Rule,Csc2Rule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"TrigRule"})\n' +
+                    '        elif isinstance(rule,(SecTanRule,CscCotRule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"TrigRule"})\n' +
+                    '        elif isinstance(rule,ArcsinRule): st.append({"title":"Arcsin","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ArcsinRule"})\n' +
+                    '        elif isinstance(rule,ArcsinhRule): st.append({"title":"Arcsinh","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ArcsinhRule"})\n' +
+                    '        elif isinstance(rule,CompleteSquareRule):\n' +
+                    '            st.append({"title":"Complete the square","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = \\\\int "+latex(rule.rewritten)+r" \\\\,d"+vs,"rule":"CompleteSquareRule"}); r2s(rule.substep,v,st)\n' +
+                    '        elif isinstance(rule,CyclicPartsRule):\n' +
+                    '            prs=rule.parts_rules\n' +
+                    '            for i,pr in enumerate(prs): st.append({"title":"By parts (round "+str(i+1)+")","latex":r"u = "+latex(pr.u)+r",\\\\ dv = "+latex(pr.dv)+r" \\\\,d"+vs,"rule":"CyclicPartsRule"})\n' +
+                    '            st.append({"title":"Solve for integral","latex":"= "+latex(res),"rule":"CyclicPartsRule"}) if res else None\n' +
+                    '        elif isinstance(rule,(SqrtQuadraticRule,ReciprocalSqrtQuadraticRule)): st.append({"title":"Standard form","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":type(rule).__name__})\n' +
+                    '        elif isinstance(rule,PiecewiseRule):\n' +
+                    '            st.append({"title":"Piecewise","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs,"rule":"PiecewiseRule"})\n' +
+                    '            for sc in (rule.subfunctions if hasattr(rule,"subfunctions") else []): r2s(sc,v,st)\n' +
+                    '            st.append({"title":"Result","latex":"= "+latex(res),"rule":"PiecewiseRule"}) if res else None\n' +
+                    '        elif isinstance(rule,ErfRule): st.append({"title":"Error function","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ErfRule"})\n' +
+                    '        elif isinstance(rule,(SiRule,LiRule,EiRule,CiRule,ChiRule,ShiRule)): st.append({"title":"Special function","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":type(rule).__name__})\n' +
+                    '        elif isinstance(rule,UpperGammaRule): st.append({"title":"Upper incomplete gamma","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"UpperGammaRule"})\n' +
+                    '        elif isinstance(rule,(FresnelCRule,FresnelSRule)): st.append({"title":"Fresnel integral","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":type(rule).__name__})\n' +
+                    '        elif isinstance(rule,(EllipticERule,EllipticFRule)): st.append({"title":"Elliptic integral","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":type(rule).__name__})\n' +
+                    '        elif isinstance(rule,DiracDeltaRule): st.append({"title":"Dirac delta","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"DiracDeltaRule"})\n' +
+                    '        elif isinstance(rule,HeavisideRule):\n' +
+                    '            st.append({"title":"Heaviside step","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs,"rule":"HeavisideRule"}); r2s(rule.substep,v,st); st.append({"title":"Result","latex":"= "+latex(res),"rule":"HeavisideRule"}) if res else None\n' +
+                    '        elif isinstance(rule,NestedPowRule): st.append({"title":"Nested power","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = \\\\int "+vs+r"^{"+latex(rule.exp)+r"} \\\\,d"+vs+r" = "+latex(res),"rule":"NestedPowRule"})\n' +
+                    '        elif isinstance(rule,DerivativeRule): st.append({"title":"Derivative rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"DerivativeRule"})\n' +
                     '        elif isinstance(rule,AlternativeRule): [r2s(a,v,st) for a in rule.alternatives[:1]]; st.append({"title":"Result","latex":"= "+latex(res)}) if not st and res else None\n' +
                     '        else: st.append({"title":type(rule).__name__.replace("Rule",""),"latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)}) if ctx and res else None\n' +
                     '    except: st.append({"title":"Result","latex":"= "+latex(res)}) if res else None\n' +
@@ -992,7 +1043,7 @@
             } else {
                 code = 'import json\n' +
                 'from sympy import *\n' +
-                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule, RewriteRule, AddRule, ConstantTimesRule, URule, ReciprocalRule, ArctanRule, PartsRule, ExpRule, PowerRule, ConstantRule, AlternativeRule\n' +
+                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule, RewriteRule, AddRule, ConstantTimesRule, URule, ReciprocalRule, ArctanRule, PartsRule, ExpRule, PowerRule, ConstantRule, AlternativeRule, TrigSubstitutionRule, SinRule, CosRule, CoshRule, SinhRule, Sec2Rule, Csc2Rule, SecTanRule, CscCotRule, ArcsinRule, ArcsinhRule, CompleteSquareRule, CyclicPartsRule, SqrtQuadraticRule, ReciprocalSqrtQuadraticRule, PiecewiseRule, ErfRule, SiRule, LiRule, EiRule, CiRule, ChiRule, ShiRule, UpperGammaRule, FresnelCRule, FresnelSRule, EllipticERule, EllipticFRule, DiracDeltaRule, HeavisideRule, NestedPowRule, DerivativeRule\n' +
                 'def _c(r): return getattr(r,"integrand",None) or getattr(r,"context",None)\n' +
                 'def _s(r): return getattr(r,"variable",None) or getattr(r,"symbol",None)\n' +
                 'def r2s(rule,v,st=None):\n' +
@@ -1017,6 +1068,35 @@
                 '        elif isinstance(rule,ExpRule): st.append({"title":"Exponential","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"ExpRule"})\n' +
                 '        elif isinstance(rule,PowerRule): st.append({"title":"Power rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"PowerRule"})\n' +
                 '        elif isinstance(rule,ConstantRule): st.append({"title":"Constant","latex":r"\\\\int "+latex(rule.constant)+r" \\\\,d"+vs+r" = "+latex(res),"rule":"ConstantRule"})\n' +
+                '        elif isinstance(rule,TrigSubstitutionRule):\n' +
+                '            st.append({"title":"Trig substitution","latex":r"Let\\\\ "+vs+r" = "+latex(rule.func)+r",\\\\quad d"+vs+r" = "+latex(diff(rule.func,rule.theta))+r"\\\\,d"+latex(rule.theta),"rule":"TrigSubstitutionRule"}); st.append({"title":"Rewrite integrand","latex":r"\\\\int "+latex(rule.rewritten)+r" \\\\,d"+latex(rule.theta),"rule":"TrigSubstitutionRule"}); r2s(rule.substep,v,st); st.append({"title":"Back substitute","latex":"= "+latex(res)+r" + C","rule":"TrigSubstitutionRule"}) if res else None\n' +
+                '        elif isinstance(rule,(SinRule,CosRule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"TrigRule"})\n' +
+                '        elif isinstance(rule,(SinhRule,CoshRule)): st.append({"title":"Hyperbolic rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"HyperbolicRule"})\n' +
+                '        elif isinstance(rule,(Sec2Rule,Csc2Rule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"TrigRule"})\n' +
+                '        elif isinstance(rule,(SecTanRule,CscCotRule)): st.append({"title":"Trig rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"TrigRule"})\n' +
+                '        elif isinstance(rule,ArcsinRule): st.append({"title":"Arcsin","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"ArcsinRule"})\n' +
+                '        elif isinstance(rule,ArcsinhRule): st.append({"title":"Arcsinh","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"ArcsinhRule"})\n' +
+                '        elif isinstance(rule,CompleteSquareRule):\n' +
+                '            st.append({"title":"Complete the square","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = \\\\int "+latex(rule.rewritten)+r" \\\\,d"+vs,"rule":"CompleteSquareRule"}); r2s(rule.substep,v,st)\n' +
+                '        elif isinstance(rule,CyclicPartsRule):\n' +
+                '            prs=rule.parts_rules\n' +
+                '            for i,pr in enumerate(prs): st.append({"title":"By parts (round "+str(i+1)+")","latex":r"u = "+latex(pr.u)+r",\\\\ dv = "+latex(pr.dv)+r" \\\\,d"+vs,"rule":"CyclicPartsRule"})\n' +
+                '            st.append({"title":"Solve for integral","latex":"= "+latex(res)+r" + C","rule":"CyclicPartsRule"}) if res else None\n' +
+                '        elif isinstance(rule,(SqrtQuadraticRule,ReciprocalSqrtQuadraticRule)): st.append({"title":"Standard form","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":type(rule).__name__})\n' +
+                '        elif isinstance(rule,PiecewiseRule):\n' +
+                '            st.append({"title":"Piecewise","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs,"rule":"PiecewiseRule"})\n' +
+                '            for sc in (rule.subfunctions if hasattr(rule,"subfunctions") else []): r2s(sc,v,st)\n' +
+                '            st.append({"title":"Result","latex":"= "+latex(res)+r" + C","rule":"PiecewiseRule"}) if res else None\n' +
+                '        elif isinstance(rule,ErfRule): st.append({"title":"Error function","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"ErfRule"})\n' +
+                '        elif isinstance(rule,(SiRule,LiRule,EiRule,CiRule,ChiRule,ShiRule)): st.append({"title":"Special function","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":type(rule).__name__})\n' +
+                '        elif isinstance(rule,UpperGammaRule): st.append({"title":"Upper incomplete gamma","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"UpperGammaRule"})\n' +
+                '        elif isinstance(rule,(FresnelCRule,FresnelSRule)): st.append({"title":"Fresnel integral","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":type(rule).__name__})\n' +
+                '        elif isinstance(rule,(EllipticERule,EllipticFRule)): st.append({"title":"Elliptic integral","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":type(rule).__name__})\n' +
+                '        elif isinstance(rule,DiracDeltaRule): st.append({"title":"Dirac delta","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"DiracDeltaRule"})\n' +
+                '        elif isinstance(rule,HeavisideRule):\n' +
+                '            st.append({"title":"Heaviside step","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs,"rule":"HeavisideRule"}); r2s(rule.substep,v,st); st.append({"title":"Result","latex":"= "+latex(res)+r" + C","rule":"HeavisideRule"}) if res else None\n' +
+                '        elif isinstance(rule,NestedPowRule): st.append({"title":"Nested power","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = \\\\int "+vs+r"^{"+latex(rule.exp)+r"} \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"NestedPowRule"})\n' +
+                '        elif isinstance(rule,DerivativeRule): st.append({"title":"Derivative rule","latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C","rule":"DerivativeRule"})\n' +
                 '        elif isinstance(rule,AlternativeRule): [r2s(a,v,st) for a in rule.alternatives[:1]]; st.append({"title":"Result","latex":"= "+latex(res)+r" + C"}) if not st and res else None\n' +
                 '        else: st.append({"title":type(rule).__name__.replace("Rule",""),"latex":r"\\\\int "+latex(ctx)+r" \\\\,d"+vs+r" = "+latex(res)+r" + C"}) if ctx and res else None\n' +
                 '    except: st.append({"title":"Result","latex":"= "+latex(res)+r" + C"}) if res else None\n' +

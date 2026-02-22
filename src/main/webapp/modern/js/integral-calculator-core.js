@@ -9,12 +9,18 @@ function normalizeExpr(expr) {
     if (!expr || typeof expr !== 'string') return expr;
     var s = expr.trim();
     /* Unicode math → ASCII: superscripts, symbols, operators */
+    /* Superscript minus + digits → ^(-N) before individual replacements */
+    var supDigit = '\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u2070\u00b9';
+    var supMap = {'\u00b2':'2','\u00b3':'3','\u2074':'4','\u2075':'5','\u2076':'6','\u2077':'7','\u2078':'8','\u2079':'9','\u2070':'0','\u00b9':'1'};
+    s = s.replace(new RegExp('\u207b([' + supDigit + ']+)', 'g'), function(_, ds) {
+        return '^(-' + ds.replace(new RegExp('[' + supDigit + ']', 'g'), function(c) { return supMap[c]; }) + ')';
+    });
     s = s.replace(/\u00b2/g, '^2').replace(/\u00b3/g, '^3')   // ² ³
          .replace(/\u2074/g, '^4').replace(/\u2075/g, '^5')    // ⁴ ⁵
          .replace(/\u2076/g, '^6').replace(/\u2077/g, '^7')    // ⁶ ⁷
          .replace(/\u2078/g, '^8').replace(/\u2079/g, '^9')    // ⁸ ⁹
          .replace(/\u2070/g, '^0').replace(/\u00b9/g, '^1')    // ⁰ ¹
-         .replace(/\u207b/g, '-')                               // ⁻ (superscript minus)
+         .replace(/\u207b/g, '-')                               // ⁻ (superscript minus, standalone fallback)
          .replace(/\u03c0/g, 'pi')                              // π
          .replace(/\u221e/g, 'Infinity')                        // ∞
          .replace(/\u221a/g, 'sqrt')                            // √
