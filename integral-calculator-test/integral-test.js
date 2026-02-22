@@ -178,12 +178,18 @@ testNormalize('xsin(x)', 'x*sin(x)');
 testNormalize('xcos(x)', 'x*cos(x)');
 testNormalize('xlog(x)', 'x*log(x)');
 testNormalize('xtan(x)', 'x*tan(x)');
-testNormalize('2xe^x', '2x*e^x');
-testNormalize('3xe^x', '3x*e^x');
+testNormalize('2xe^x', '2*x*e^x');
+testNormalize('3xe^x', '3*x*e^x');
 testNormalize('te^t', 't*e^t');
 testNormalize('tsin(t)', 't*sin(t)');
 testNormalize('xe^2x', 'x*e^(2*x)');
 testNormalize('xe^(-x)', 'x*e^(-x)');
+// Implicit multiplication: digit-variable inside parens
+testNormalize('sin(3x)', 'sin(3*x)');
+testNormalize('cos(5x)', 'cos(5*x)');
+testNormalize('sin(3x)^6*cos(3x)^7', 'sin(3*x)^6*cos(3*x)^7');
+testNormalize('tan(2x)', 'tan(2*x)');
+testNormalize('log(2x)', 'log(2*x)');
 // Preserve asin, acos, atan (arc functions)
 testNormalize('asin(x)', 'asin(x)');
 testNormalize('acos(x)', 'acos(x)');

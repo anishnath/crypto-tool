@@ -242,7 +242,12 @@
             var py = (expr || '')
                 .replace(/e\^(\([^)]+\))/g, 'exp$1')
                 .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
-                .replace(/\^/g, '**');
+                .replace(/\^/g, '**')
+                // Insert * between digit and variable: 3x → 3*x, 2pi → 2*pi
+                .replace(/(\d)([a-zA-Z])/g, '$1*$2')
+                // Insert * between closing paren and opening paren or variable: )(  )x
+                .replace(/\)(\()/g, ')*$1')
+                .replace(/\)([a-zA-Z])/g, ')*$1');
             return py;
         }
 
@@ -760,7 +765,7 @@
             }
 
             var controller = new AbortController();
-            var timeoutId = setTimeout(function() { controller.abort(); }, 15000);
+            var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
 
             fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
                 method: 'POST',
@@ -774,7 +779,8 @@
                     var stdout = (data.Stdout || data.stdout || '').trim();
                     var stderr = (data.Stderr || data.stderr || '').trim();
 
-                    if (stderr || !stdout || stdout.indexOf('Integral(') !== -1) {
+                    // Only fail on real errors (not SymPy warnings); require no stdout
+                    if ((!stdout && stderr) || (!stdout && !stderr) || stdout.indexOf('Integral(') !== -1) {
                         showError(expr, stderr || 'Could not solve this integral');
                         return;
                     }
@@ -1119,7 +1125,7 @@
             }
 
             var controller = new AbortController();
-            var timeoutId = setTimeout(function() { controller.abort(); }, 12000);
+            var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
 
             fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
                 method: 'POST',
@@ -1132,7 +1138,8 @@
                     clearTimeout(timeoutId);
                     var stdout = (data.Stdout || data.stdout || '').trim();
                     var stderr = (data.Stderr || data.stderr || '').trim();
-                    if (stderr) { cb(null); return; }
+                    // Only fail on real errors, not SymPy deprecation warnings
+                    if (stderr && /error|exception|traceback/i.test(stderr) && !stdout) { cb(null); return; }
                     var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?=\nRESULT|\nEXPR|\nRULES|$)/);
                     var resultMatch = stdout.match(/RESULT=(.*?)(?:\n|$)/s);
                     var exprMatch = stdout.match(/EXPR=([\s\S]*?)(?=\nRULES|$)/);
@@ -1234,32 +1241,56 @@
                causes commands like \int, \frac, \quad to arrive as \\int, \\frac etc.
                KaTeX needs single-backslash commands, so we collapse every \\ → \. */
             latex = latex.replace(/\\\\/g, '\\');
-            if (/\\|[\^_]|\{[^}]*\}/.test(latex)) return latex;  /* LaTeX: has \, ^, _, or { } */
-            return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
+            var hasLatex = /\\|[\^_]|\{[^}]*\}/.test(latex);
+            if (!hasLatex) {
+                /* Pure plain text — wrap entirely in \text{} */
+                return '\\text{' + latex.replace(/\\/g, '\\\\').replace(/}/g, '\\}') + '}';
+            }
+            /* Mixed content (AI-generated or SymPy): wrap sequences of 2+ English words
+               (each 2+ chars) in \text{} so spaces are preserved in KaTeX math mode.
+               Matches: "Use the substitution method" but not single-char variables like u, x */
+            latex = latex.replace(/((?:[A-Za-z]{2,} ){2,}[A-Za-z]{2,})/g, '\\text{$1}');
+            /* Wrap leading words like "Let", "Solve" before math (common in SymPy steps) */
+            latex = latex.replace(/^([A-Z][a-z]+)\\ /g, '\\text{$1} ');
+            return latex;
         }
+
+        var STEP_COLLAPSE_THRESHOLD = 8; // collapse if more than this many steps
+        var STEP_VISIBLE_HEAD = 3;        // show first N steps when collapsed
+        var STEP_VISIBLE_TAIL = 2;        // show last N steps when collapsed
 
         function renderSteps(steps, method, isAI) {
             var container = document.getElementById('ic-steps-area');
             if (!container) return;
+            var shouldCollapse = steps.length > STEP_COLLAPSE_THRESHOLD;
 
             var html = '<div class="ic-steps-container">';
             html += '<div class="ic-steps-header">';
             html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>';
-            html += 'Solution Steps';
+            html += 'Solution Steps <span style="font-weight:400;color:var(--text-muted);margin-left:0.25rem;">(' + steps.length + ')</span>';
             if (isAI) {
                 html += '<span class="ic-steps-ai-badge">AI Generated</span>';
             }
             html += '</div>';
 
+            html += '<div class="ic-steps-scroll' + (shouldCollapse ? ' collapsed' : '') + '">';
             for (var i = 0; i < steps.length; i++) {
-                html += '<div class="ic-step">';
+                var hidden = shouldCollapse && i >= STEP_VISIBLE_HEAD && i < steps.length - STEP_VISIBLE_TAIL;
+                html += '<div class="ic-step' + (hidden ? ' ic-step-hidden' : '') + '">';
                 html += '<span class="ic-step-num">' + (i + 1) + '</span>';
                 html += '<div class="ic-step-body">';
                 html += '<div class="ic-step-title">' + escapeHtml(steps[i].title) + '</div>';
                 html += '<div class="ic-step-math" id="ic-step-math-' + i + '"></div>';
                 html += '</div></div>';
+                if (hidden && i === STEP_VISIBLE_HEAD) {
+                    var hiddenCount = steps.length - STEP_VISIBLE_HEAD - STEP_VISIBLE_TAIL;
+                    html += '<button type="button" class="ic-steps-expand-btn" id="ic-steps-expand">';
+                    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>';
+                    html += 'Show all ' + steps.length + ' steps (' + hiddenCount + ' hidden)';
+                    html += '</button>';
+                }
             }
-            html += '</div>';
+            html += '</div></div>';
             container.innerHTML = html;
 
             for (var j = 0; j < steps.length; j++) {
@@ -1273,17 +1304,35 @@
                     }
                 }
             }
+
+            if (shouldCollapse) {
+                var expandBtn = document.getElementById('ic-steps-expand');
+                if (expandBtn) {
+                    expandBtn.addEventListener('click', function() {
+                        var scroll = container.querySelector('.ic-steps-scroll');
+                        if (!scroll) return;
+                        var isCollapsed = scroll.classList.contains('collapsed');
+                        scroll.classList.toggle('collapsed');
+                        var hiddenCount = steps.length - STEP_VISIBLE_HEAD - STEP_VISIBLE_TAIL;
+                        this.innerHTML = isCollapsed
+                            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Collapse steps (' + hiddenCount + ' shown)'
+                            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Show all ' + steps.length + ' steps (' + hiddenCount + ' hidden)';
+                    });
+                }
+            }
         }
 
         /** SymPy steps with tabs: paths = [{name, steps, rules}, ...]. Tabs = path names, or "All" + rule names per path. */
         function renderStepsWithTabs(paths, method) {
             var container = document.getElementById('ic-steps-area');
             if (!container || !paths || paths.length === 0) return;
+            var totalSteps = 0;
+            for (var ti = 0; ti < paths.length; ti++) totalSteps += (paths[ti].steps || []).length;
 
             var html = '<div class="ic-steps-container">';
             html += '<div class="ic-steps-header">';
             html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>';
-            html += 'Solution Steps';
+            html += 'Solution Steps <span style="font-weight:400;color:var(--text-muted);margin-left:0.25rem;">(' + totalSteps + ')</span>';
             html += '<span class="ic-steps-sympy-badge">CAS</span>';
             html += '</div>';
 
@@ -1312,18 +1361,28 @@
             for (var pi = 0; pi < paths.length; pi++) {
                 var path = paths[pi];
                 var steps = path.steps || [];
+                var shouldCollapse = steps.length > STEP_COLLAPSE_THRESHOLD;
                 html += '<div class="ic-steps-panel' + (pi === 0 ? ' active' : '') + '" data-path="' + pi + '">';
+                html += '<div class="ic-steps-scroll' + (shouldCollapse ? ' collapsed' : '') + '" data-panel="' + pi + '">';
                 for (var si = 0; si < steps.length; si++) {
                     var st = steps[si];
                     var ruleCls = st.rule ? ' ic-step-rule-' + st.rule : '';
-                    html += '<div class="ic-step' + ruleCls + '" data-rule="' + (st.rule || '') + '">';
+                    var hidden = shouldCollapse && si >= STEP_VISIBLE_HEAD && si < steps.length - STEP_VISIBLE_TAIL;
+                    html += '<div class="ic-step' + ruleCls + (hidden ? ' ic-step-hidden' : '') + '" data-rule="' + (st.rule || '') + '">';
                     html += '<span class="ic-step-num">' + (si + 1) + '</span>';
                     html += '<div class="ic-step-body">';
                     html += '<div class="ic-step-title">' + escapeHtml(st.title) + '</div>';
                     html += '<div class="ic-step-math" id="ic-step-math-' + pi + '-' + si + '"></div>';
                     html += '</div></div>';
+                    if (hidden && si === STEP_VISIBLE_HEAD) {
+                        var hiddenCount = steps.length - STEP_VISIBLE_HEAD - STEP_VISIBLE_TAIL;
+                        html += '<button type="button" class="ic-steps-expand-btn" data-expand-panel="' + pi + '">';
+                        html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>';
+                        html += 'Show all ' + steps.length + ' steps (' + hiddenCount + ' hidden)';
+                        html += '</button>';
+                    }
                 }
-                html += '</div>';
+                html += '</div></div>';
             }
             html += '</div></div>';
             container.innerHTML = html;
@@ -1359,6 +1418,22 @@
                             p.classList.toggle('active', p.getAttribute('data-path') === pathIdx);
                         });
                     }
+                });
+            });
+
+            // Expand/collapse buttons for panels with many steps
+            container.querySelectorAll('.ic-steps-expand-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var panelIdx = this.getAttribute('data-expand-panel');
+                    var scroll = container.querySelector('.ic-steps-scroll[data-panel="' + panelIdx + '"]');
+                    if (!scroll) return;
+                    var isCollapsed = scroll.classList.contains('collapsed');
+                    scroll.classList.toggle('collapsed');
+                    var panelSteps = paths[parseInt(panelIdx)].steps || [];
+                    var hiddenCount = panelSteps.length - STEP_VISIBLE_HEAD - STEP_VISIBLE_TAIL;
+                    this.innerHTML = isCollapsed
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Collapse steps (' + hiddenCount + ' shown)'
+                        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Show all ' + panelSteps.length + ' steps (' + hiddenCount + ' hidden)';
                 });
             });
         }

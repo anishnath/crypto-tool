@@ -52,6 +52,9 @@ function normalizeExpr(expr) {
     s = s.replace(new RegExp('([b-zB-Z])(' + FUNS + ')\\(', 'g'), '$1*$2(');
     /* Also handle digit prefix: 2sqrt(x) → 2*sqrt(x), 2sin(x) → 2*sin(x) */
     s = s.replace(new RegExp('(\\d)(' + FUNS + ')\\(', 'g'), '$1*$2(');
+    /* Implicit multiplication: 3x → 3*x, 2y → 2*y (digit followed by variable).
+       Function names (sin, cos, ...) already handled above with parens inserted. */
+    s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
     /* ln → log (nerdamer uses log for natural logarithm) */
     s = s.replace(/\bln\(/g, 'log(');
     return s;

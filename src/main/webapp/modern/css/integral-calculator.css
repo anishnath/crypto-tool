@@ -661,6 +661,35 @@ border-color: transparent;
 }
 .ic-steps-panel { display: none; }
 .ic-steps-panel.active { display: block; }
+/* Scrollable steps area when many steps */
+.ic-steps-scroll {
+max-height: 600px;
+overflow-y: auto;
+scroll-behavior: smooth;
+}
+/* Collapsed state: hide middle steps */
+.ic-steps-scroll.collapsed .ic-step.ic-step-hidden { display: none; }
+.ic-steps-expand-btn {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.375rem;
+width: 100%;
+padding: 0.5rem 1rem;
+border: none;
+border-bottom: 1px solid var(--border-light);
+background: var(--bg-secondary);
+color: var(--tool-primary);
+font-size: 0.8125rem;
+font-weight: 600;
+cursor: pointer;
+transition: background 0.15s;
+}
+.ic-steps-expand-btn:hover { background: var(--tool-light); }
+.ic-steps-expand-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.ic-steps-scroll:not(.collapsed) .ic-steps-expand-btn svg { transform: rotate(180deg); }
+[data-theme="dark"] .ic-steps-expand-btn { background: var(--bg-secondary); }
+[data-theme="dark"] .ic-steps-expand-btn:hover { background: var(--tool-light); }
 @keyframes ic-spin {
 to { transform: rotate(360deg); }
 }
