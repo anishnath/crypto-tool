@@ -2282,11 +2282,11 @@
       "description": "PGP Decrypt files - Free online security & pki tool"
     },
     {
-      "name": "PGP Encryption/Decryption",
+      "name": "PGP Encrypt & Decrypt Tool",
       "url": "pgpencdec.jsp",
       "category": "Security & PKI",
-      "keywords": "pgp encryption decryption security & pki",
-      "description": "PGP Encryption/Decryption - Free online security & pki tool"
+      "keywords": "pgp encryption online pgp decryption online free pgp tool pgp encrypt decrypt openpgp rfc 4880 pgp python tutorial pgp encryption python code pgp public key encryption browser-based pgp python compiler",
+      "description": "Free online PGP encrypt & decrypt tool with built-in Python compiler. Encrypt with public keys, decrypt with private keys, run PGP Python code in browser."
     },
     {
       "name": "PGP Key Generation",
