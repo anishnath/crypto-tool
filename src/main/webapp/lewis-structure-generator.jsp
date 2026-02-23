@@ -596,16 +596,18 @@
         .tool-result-actions.visible { display: flex; }
 
         .tool-result-actions .tool-action-btn {
-            flex: 1;
-            min-width: 90px;
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 80px;
             margin-top: 0;
+            padding: 0.6rem 0.5rem;
+            font-size: 0.8rem;
         }
 
         /* Tool result card */
         .tool-result-card {
             display: flex;
             flex-direction: column;
-            height: 100%;
         }
 
         .tool-result-header {
@@ -790,6 +792,14 @@
                         &#11042; Predict Geometry
                     </button>
                 </div>
+
+                <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" class="lewis-related-link" style="display:flex;align-items:center;gap:0.75rem;margin-top:1rem;padding:0.75rem 1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;color:var(--text-primary);font-size:0.875rem;transition:all 0.2s;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg-secondary)'">
+                    <span style="width:2rem;height:2rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.375rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;color:#fff;">3D</span>
+                    <div>
+                        <strong>3D Molecular Geometry Calculator</strong>
+                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">Interactive 3D models, PubChem coordinates, rotate & zoom molecules</p>
+                    </div>
+                </a>
             </div>
 
             <!-- ========== Tab 3: Formal Charge ========== -->
@@ -861,14 +871,20 @@
                 <div id="resultDisplay"></div>
             </div>
             <div class="tool-result-actions" id="resultActions">
-                <button type="button" class="tool-action-btn" id="copyResultBtn">
-                    <span>&#128203;</span> Copy
+                <button type="button" class="tool-action-btn" id="downloadPdfBtn">
+                    <span>&#128196;</span> Download PDF
                 </button>
                 <button type="button" class="tool-action-btn" id="downloadPngBtn">
                     <span>&#8681;</span> Download PNG
                 </button>
-                <button type="button" class="tool-action-btn" id="shareUrlBtn">
-                    <span>&#128279;</span> Share URL
+                <button type="button" class="tool-action-btn" id="practiceSheetBtn" title="Generate a printable practice worksheet">
+                    <span>&#128218;</span> Practice Sheet
+                </button>
+                <button type="button" class="tool-action-btn" id="copyResultBtn" style="background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border);">
+                    <span>&#128203;</span> Copy
+                </button>
+                <button type="button" class="tool-action-btn" id="shareUrlBtn" style="background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border);">
+                    <span>&#128279;</span> Share
                 </button>
             </div>
         </div>
@@ -3843,11 +3859,12 @@
     document.getElementById('downloadPngBtn').addEventListener('click', function() {
         var canvas = document.querySelector('#lewisCanvasContainer canvas');
         if (canvas) {
+            var f = document.getElementById('molecularFormula').value.trim() || 'molecule';
             canvas.toBlob(function(blob) {
                 var url = URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = 'lewis-structure.png';
+                a.download = 'lewis-structure-' + f.replace(/[^a-zA-Z0-9]/g, '_') + '.png';
                 a.click();
                 URL.revokeObjectURL(url);
                 ToolUtils.showToast('PNG downloaded!', 2000, 'success');
@@ -3870,6 +3887,208 @@
         } else {
             ToolUtils.showToast('Enter a formula first to share', 2000, 'warning');
         }
+    });
+
+    // ========== DOWNLOAD PDF ==========
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+        var canvas = document.querySelector('#lewisCanvasContainer canvas');
+        if (!canvas) {
+            ToolUtils.showToast('No Lewis structure to download. Generate one first.', 2000, 'warning');
+            return;
+        }
+        var formula = document.getElementById('molecularFormula').value.trim() || 'molecule';
+        ToolUtils.showToast('Generating PDF...', 1500, 'info');
+
+        // Build styled off-screen container
+        var container = document.createElement('div');
+        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+        document.body.appendChild(container);
+
+        // Title
+        var title = document.createElement('div');
+        title.style.cssText = 'font-size:22px;font-weight:700;margin-bottom:6px;color:#2563eb;';
+        title.textContent = 'Lewis Structure \u2014 8gwifi.org';
+        container.appendChild(title);
+        var divider = document.createElement('div');
+        divider.style.cssText = 'height:2px;background:linear-gradient(90deg,#2563eb,#60a5fa,transparent);margin-bottom:20px;';
+        container.appendChild(divider);
+
+        // Formula label
+        var formulaLabel = document.createElement('div');
+        formulaLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:4px;';
+        formulaLabel.textContent = 'Molecule';
+        container.appendChild(formulaLabel);
+        var formulaEl = document.createElement('div');
+        formulaEl.style.cssText = 'font-size:24px;font-weight:700;color:#0f172a;margin-bottom:20px;font-family:JetBrains Mono,monospace;';
+        formulaEl.textContent = formula;
+        container.appendChild(formulaEl);
+
+        // Canvas image
+        var imgEl = document.createElement('img');
+        imgEl.src = canvas.toDataURL('image/png');
+        imgEl.style.cssText = 'display:block;max-width:100%;margin:0 auto 20px;border:1px solid #e2e8f0;border-radius:8px;';
+        container.appendChild(imgEl);
+
+        // Result text
+        var resultEl = document.getElementById('resultDisplay');
+        if (resultEl && resultEl.innerHTML) {
+            var infoLabel = document.createElement('div');
+            infoLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;border-top:1px solid #e2e8f0;padding-top:16px;';
+            infoLabel.textContent = 'Analysis';
+            container.appendChild(infoLabel);
+            var infoClone = document.createElement('div');
+            infoClone.style.cssText = 'font-size:13px;color:#334155;line-height:1.7;';
+            infoClone.textContent = currentResultText;
+            container.appendChild(infoClone);
+        }
+
+        // Footer
+        var footer = document.createElement('div');
+        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
+        footer.innerHTML = '<span>Generated by 8gwifi.org Lewis Structure Generator</span><span>' + new Date().toLocaleDateString() + '</span>';
+        container.appendChild(footer);
+
+        // Render PDF
+        var loadHtml2Canvas = (typeof html2canvas !== 'undefined') ? Promise.resolve() : ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        loadHtml2Canvas
+            .then(function() { return ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); })
+            .then(function() { return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }); })
+            .then(function(c) {
+                document.body.removeChild(container);
+                var imgData = c.toDataURL('image/png');
+                var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                var pw = pdf.internal.pageSize.getWidth(), margin = 10, uw = pw - margin * 2;
+                var iw = uw, ih = (c.height * uw) / c.width;
+                var uh = pdf.internal.pageSize.getHeight() - margin * 2;
+                if (ih > uh) { ih = uh; iw = (c.width * uh) / c.height; }
+                pdf.addImage(imgData, 'PNG', (pw - iw) / 2, margin, iw, ih);
+                var fname = 'lewis-structure-' + formula.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
+                pdf.save(fname);
+                ToolUtils.showToast('PDF downloaded!', 2000, 'success');
+                setTimeout(function() { ToolUtils.showSupportPopup(TOOL_NAME, 'Downloaded: ' + fname); }, 500);
+            })
+            .catch(function(err) {
+                if (container.parentNode) document.body.removeChild(container);
+                ToolUtils.showToast('PDF generation failed: ' + (err.message || ''), 3000, 'error');
+            });
+    });
+
+    // ========== PRACTICE SHEET ==========
+    document.getElementById('practiceSheetBtn').addEventListener('click', function() {
+        ToolUtils.showToast('Generating practice sheet...', 1500, 'info');
+
+        var practiceProblems = [
+            { formula: 'H\u2082O', name: 'Water', hint: '2 bonds, 2 lone pairs on O' },
+            { formula: 'CO\u2082', name: 'Carbon Dioxide', hint: 'Double bonds to each O' },
+            { formula: 'NH\u2083', name: 'Ammonia', hint: '3 bonds, 1 lone pair on N' },
+            { formula: 'CH\u2084', name: 'Methane', hint: '4 single bonds, no lone pairs' },
+            { formula: 'O\u2082', name: 'Oxygen', hint: 'Double bond between O atoms' },
+            { formula: 'N\u2082', name: 'Nitrogen', hint: 'Triple bond between N atoms' },
+            { formula: 'HCN', name: 'Hydrogen Cyanide', hint: 'Triple bond between C and N' },
+            { formula: 'SO\u2082', name: 'Sulfur Dioxide', hint: 'Lone pair on S, resonance' },
+            { formula: 'CCl\u2084', name: 'Carbon Tetrachloride', hint: '4 single bonds' },
+            { formula: 'BF\u2083', name: 'Boron Trifluoride', hint: 'B has only 6 electrons' },
+            { formula: 'PCl\u2085', name: 'Phosphorus Pentachloride', hint: 'Expanded octet' },
+            { formula: 'SF\u2086', name: 'Sulfur Hexafluoride', hint: 'Expanded octet, 6 bonds' },
+        ];
+
+        var container = document.createElement('div');
+        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+        document.body.appendChild(container);
+
+        // Header
+        var header = document.createElement('div');
+        header.style.cssText = 'text-align:center;margin-bottom:4px;';
+        header.innerHTML = '<div style="font-size:22px;font-weight:700;color:#2563eb;">Lewis Structure Practice Worksheet</div>';
+        container.appendChild(header);
+        var subtitle = document.createElement('div');
+        subtitle.style.cssText = 'text-align:center;font-size:12px;color:#64748b;margin-bottom:4px;';
+        subtitle.textContent = '8gwifi.org \u2014 Chemistry Tools';
+        container.appendChild(subtitle);
+
+        // Student info line
+        var studentLine = document.createElement('div');
+        studentLine.style.cssText = 'display:flex;gap:24px;margin-bottom:6px;padding:8px 0;border-bottom:2px solid #2563eb;';
+        studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:#64748b;">Name: ___________________________</div>' +
+            '<div style="font-size:12px;color:#64748b;">Date: ______________</div>' +
+            '<div style="font-size:12px;color:#64748b;">Score: ______ / ' + practiceProblems.length + '</div>';
+        container.appendChild(studentLine);
+
+        // Instructions
+        var instr = document.createElement('div');
+        instr.style.cssText = 'padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.5;';
+        instr.innerHTML = '<strong>Instructions:</strong> For each molecule below, draw the complete Lewis structure in the box provided. ' +
+            'Show all bonding pairs as lines and lone pairs as dots. Then fill in the blanks for valence electrons, molecular geometry, and bond angle.';
+        container.appendChild(instr);
+
+        // Problems grid
+        var grid = document.createElement('div');
+        grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;';
+
+        for (var i = 0; i < practiceProblems.length; i++) {
+            var p = practiceProblems[i];
+            var card = document.createElement('div');
+            card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
+
+            // Problem header
+            var pHeader = document.createElement('div');
+            pHeader.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;';
+            pHeader.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
+                '<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;">' + (i + 1) + '</span>' +
+                '<span style="font-size:15px;font-weight:700;font-family:JetBrains Mono,monospace;">' + p.formula + '</span></div>' +
+                '<span style="font-size:10px;color:#94a3b8;font-style:italic;">' + p.name + '</span>';
+            card.appendChild(pHeader);
+
+            // Drawing box
+            var drawBox = document.createElement('div');
+            drawBox.style.cssText = 'width:100%;height:100px;border:1px dashed #cbd5e1;border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;';
+            drawBox.innerHTML = '<span style="font-size:10px;color:#cbd5e1;">Draw Lewis Structure Here</span>';
+            card.appendChild(drawBox);
+
+            // Answer blanks
+            var blanks = document.createElement('div');
+            blanks.style.cssText = 'font-size:10px;color:#475569;line-height:1.8;';
+            blanks.innerHTML = 'Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________';
+            card.appendChild(blanks);
+
+            // Hint (light, small)
+            var hint = document.createElement('div');
+            hint.style.cssText = 'font-size:9px;color:#94a3b8;font-style:italic;margin-top:2px;';
+            hint.textContent = 'Hint: ' + p.hint;
+            card.appendChild(hint);
+
+            grid.appendChild(card);
+        }
+        container.appendChild(grid);
+
+        // Footer
+        var pFooter = document.createElement('div');
+        pFooter.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;display:flex;justify-content:space-between;';
+        pFooter.innerHTML = '<span>Generated by 8gwifi.org Lewis Structure Generator</span><span>' + new Date().toLocaleDateString() + '</span>';
+        container.appendChild(pFooter);
+
+        // Generate PDF
+        var loadHtml2Canvas = (typeof html2canvas !== 'undefined') ? Promise.resolve() : ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        loadHtml2Canvas
+            .then(function() { return ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); })
+            .then(function() { return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }); })
+            .then(function(c) {
+                document.body.removeChild(container);
+                var imgData = c.toDataURL('image/png');
+                var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                var pw = pdf.internal.pageSize.getWidth(), margin = 8, uw = pw - margin * 2;
+                var iw = uw, ih = (c.height * uw) / c.width;
+                var uh = pdf.internal.pageSize.getHeight() - margin * 2;
+                if (ih > uh) { ih = uh; iw = (c.width * uh) / c.height; }
+                pdf.addImage(imgData, 'PNG', (pw - iw) / 2, margin, iw, ih);
+                pdf.save('lewis-structure-practice-sheet.pdf');
+                ToolUtils.showToast('Practice sheet downloaded!', 2000, 'success');
+                setTimeout(function() { ToolUtils.showSupportPopup(TOOL_NAME, 'Downloaded practice worksheet'); }, 500);
+            })
+            .catch(function(err) {
+                if (container.parentNode) document.body.removeChild(container);
+                ToolUtils.showToast('Practice sheet generation failed: ' + (err.message || ''), 3000, 'error');
+            });
     });
 
     // ========== URL PARAMETER LOADING ==========
