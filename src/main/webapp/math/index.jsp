@@ -828,7 +828,7 @@
             <div class="category-header">
                 <span class="category-icon">&#8747;</span>
                 <h2>Calculus</h2>
-                <span class="category-count">5 tools</span>
+                <span class="category-count">6 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #8b5cf6;">
@@ -890,6 +890,23 @@
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-python">Python</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/vector-calculus-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0284c7;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0284c7, #4f46e5);">&#8711;</div>
+                        <div>
+                            <h3>Vector Calculus Calculator</h3>
+                            <div class="tool-formula">&#8711;f, &#8711;&middot;F, &#8711;&times;F</div>
+                        </div>
+                    </div>
+                    <p>Compute gradient, divergence, and curl with step-by-step partial derivatives, 3D cone plots, and printable worksheets.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">3D Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
                     </div>
                 </a>
 

@@ -837,7 +837,7 @@
             <div class="category-header">
                 <span class="category-icon">🧲</span>
                 <h2>Electromagnetism</h2>
-                <span class="category-count">6 tools</span>
+                <span class="category-count">7 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/physics/electrostatics.jsp" class="tool-card" style="--card-accent: #2563eb;">
@@ -920,6 +920,21 @@
                     </div>
                     <p>Speed of light, E–B relations, intensity &amp; energy density, EM spectrum bands, displacement current and radiation pressure.</p>
                     <div class="tool-badges">
+                        <span class="badge badge-interactive">Interactive</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/vector-calculus-calculator.jsp" class="tool-card" style="--card-accent: #0284c7;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0284c7, #4f46e5);">&#8711;</div>
+                        <div>
+                            <h3>Vector Calculus Calculator</h3>
+                            <div class="tool-formula">&#8711;f, &#8711;&middot;F, &#8711;&times;F</div>
+                        </div>
+                    </div>
+                    <p>Compute gradient, divergence, and curl with step-by-step partial derivatives, 3D visualization, and printable worksheets.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-essential">Essential</span>
                         <span class="badge badge-interactive">Interactive</span>
                     </div>
                 </a>
