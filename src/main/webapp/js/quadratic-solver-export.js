@@ -43,6 +43,26 @@ function copyLatex(a, b, c, roots, method) {
     }
 }
 
+function copyHorizontalLatex(r) {
+    var f = R.fmt;
+    var a = r.a, b = r.b, c = r.c;
+    var v = r.vertex, p = r.p;
+    var latex = '';
+    latex += 'x = ';
+    if (a !== 0) latex += (a === 1 ? '' : (a === -1 ? '-' : f(a))) + 'y^2';
+    if (b !== 0) latex += (b > 0 ? ' + ' : ' - ') + (Math.abs(b) === 1 ? '' : f(Math.abs(b))) + 'y';
+    if (c !== 0) latex += (c > 0 ? ' + ' : ' - ') + f(Math.abs(c));
+    latex += '\n\n';
+    latex += 'k = \\frac{-b}{2a} = ' + f(v.k) + ', \\quad h = c - \\frac{b^2}{4a} = ' + f(v.h) + '\n\n';
+    latex += 'p = \\frac{1}{4a} = ' + f(p) + '\n\n';
+    latex += '(y - ' + f(v.k) + ')^2 = ' + f(4 * p) + '(x - ' + f(v.h) + ')';
+    if (typeof ToolUtils !== 'undefined') {
+        ToolUtils.copyToClipboard(latex, { toastMessage: 'LaTeX copied!' });
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(latex);
+    }
+}
+
 // ==================== Share URL ====================
 
 function buildShareUrl(state) {
@@ -57,6 +77,10 @@ function buildShareUrl(state) {
         data.vh = state.vertexH;
         data.vk = state.vertexK;
         data.va = state.vertexA;
+    } else if (state.formType === 'horizontal') {
+        data.ha = state.a;
+        data.hb = state.b;
+        data.hc = state.c;
     } else if (state.formType === 'factored') {
         data.fa = state.factorA;
         data.fr1 = state.factorR1;
@@ -86,7 +110,11 @@ function parseShareUrl() {
     if (!type) return null;
 
     var result = { t: type };
-    if (type === 'standard' || type === 'inequality') {
+    if (type === 'horizontal') {
+        result.ha = parseFloat(params.get('ha')) || 0;
+        result.hb = parseFloat(params.get('hb')) || 0;
+        result.hc = parseFloat(params.get('hc')) || 0;
+    } else if (type === 'standard' || type === 'inequality') {
         result.a = parseFloat(params.get('a')) || 0;
         result.b = parseFloat(params.get('b')) || 0;
         result.c = parseFloat(params.get('c')) || 0;
@@ -231,6 +259,7 @@ function getCompilerUrl(template, a, b, c, contextPath) {
 window.QuadraticSolverExport = {
     buildFullLatex: buildFullLatex,
     copyLatex: copyLatex,
+    copyHorizontalLatex: copyHorizontalLatex,
     buildShareUrl: buildShareUrl,
     parseShareUrl: parseShareUrl,
     copyShareUrl: copyShareUrl,

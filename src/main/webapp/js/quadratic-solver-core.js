@@ -19,7 +19,6 @@ var state = {
     factorA: 1, factorR1: 0, factorR2: 0,
     operator: '>',
     lastResult: null,
-    compilerLoaded: false,
     pendingGraph: false
 };
 
@@ -33,7 +32,8 @@ function initDOM() {
         standard: document.getElementById('qs-form-standard'),
         vertex: document.getElementById('qs-form-vertex'),
         factored: document.getElementById('qs-form-factored'),
-        inequality: document.getElementById('qs-form-inequality')
+        inequality: document.getElementById('qs-form-inequality'),
+        horizontal: document.getElementById('qs-form-horizontal')
     };
     els.formHint = document.getElementById('qs-form-hint');
 
@@ -58,6 +58,11 @@ function initDOM() {
     els.ineqC = document.getElementById('qs-ineq-c');
     els.ineqOp = document.getElementById('qs-ineq-op');
 
+    // Horizontal parabola inputs
+    els.horizA = document.getElementById('qs-horiz-a');
+    els.horizB = document.getElementById('qs-horiz-b');
+    els.horizC = document.getElementById('qs-horiz-c');
+
     // Preview
     els.preview = document.getElementById('qs-preview');
 
@@ -74,8 +79,6 @@ function initDOM() {
     els.stepsArea = document.getElementById('qs-steps-area');
     els.resultActions = document.getElementById('qs-result-actions');
     els.graphHint = document.getElementById('qs-graph-hint');
-    els.compilerIframe = document.getElementById('qs-compiler-iframe');
-    els.compilerTemplate = document.getElementById('qs-compiler-template');
 
     // Tabs
     els.tabBtns = document.querySelectorAll('.qs-output-tab');
@@ -84,6 +87,8 @@ function initDOM() {
     // Action buttons
     els.copyLatexBtn = document.getElementById('qs-copy-latex-btn');
     els.shareBtn = document.getElementById('qs-share-btn');
+    els.downloadPdfBtn = document.getElementById('qs-download-pdf-btn');
+    els.printWorksheetBtn = document.getElementById('qs-print-worksheet-btn');
 }
 
 // ==================== Form Type Switching ====================
@@ -107,15 +112,16 @@ function switchFormType(type) {
             standard: 'ax\u00B2 + bx + c = 0',
             vertex: 'a(x \u2212 h)\u00B2 + k = 0',
             factored: 'a(x \u2212 r\u2081)(x \u2212 r\u2082) = 0',
-            inequality: 'ax\u00B2 + bx + c \u2277 0'
+            inequality: 'ax\u00B2 + bx + c \u2277 0',
+            horizontal: 'x = ay\u00B2 + by + c'
         };
         els.formHint.textContent = hints[type] || '';
     }
 
-    // Show/hide method selector for inequality
+    // Show/hide method selector for inequality or horizontal
     var methodGroup = document.getElementById('qs-method-group');
     if (methodGroup) {
-        methodGroup.style.display = type === 'inequality' ? 'none' : 'block';
+        methodGroup.style.display = (type === 'inequality' || type === 'horizontal') ? 'none' : 'block';
     }
 
     updatePreview();
@@ -155,6 +161,11 @@ function getStandardCoeffs() {
             b = parseFloat(els.ineqB.value) || 0;
             c = parseFloat(els.ineqC.value) || 0;
             state.operator = els.ineqOp ? els.ineqOp.value : '>';
+            break;
+        case 'horizontal':
+            a = parseFloat(els.horizA && els.horizA.value) || 0;
+            b = parseFloat(els.horizB && els.horizB.value) || 0;
+            c = parseFloat(els.horizC && els.horizC.value) || 0;
             break;
         default:
             a = 0; b = 0; c = 0;
@@ -220,6 +231,53 @@ function solveInequalityResult(a, b, c, roots, op) {
     return result;
 }
 
+// ==================== Horizontal Parabola (x = ay^2 + by + c) ====================
+
+function solveHorizontal(a, b, c) {
+    // Vertex: (h, k) where h = c - b^2/(4a), k = -b/(2a)
+    var k = -b / (2 * a);
+    var h = c - (b * b) / (4 * a);
+    var p = 1 / (4 * a);  // (y-k)^2 = 4p(x-h)
+    var focusX = h + p;
+    var focusY = k;
+    var directrixX = h - p;
+    var opensRight = a > 0;
+
+    var result = {
+        isHorizontal: true,
+        a: a, b: b, c: c,
+        vertex: { h: h, k: k },
+        focus: { x: focusX, y: focusY },
+        directrix: directrixX,
+        p: p,
+        opensRight: opensRight
+    };
+    state.lastResult = result;
+
+    var html = R.renderHorizontalSolution(result);
+    if (els.resultContent) els.resultContent.innerHTML = html;
+    if (els.emptyState) els.emptyState.style.display = 'none';
+
+    R.postRenderHorizontal(result);
+
+    if (els.resultActions) els.resultActions.style.display = 'flex';
+
+    var stepsFrag = R.renderHorizontalSteps(result);
+    if (els.stepsArea) {
+        els.stepsArea.innerHTML = '';
+        if (stepsFrag) els.stepsArea.appendChild(stepsFrag);
+    }
+
+    state.pendingGraph = true;
+    state.pendingGraphHorizontal = true;
+    if (els.graphHint) els.graphHint.style.display = 'none';
+
+    var graphPanel = document.getElementById('qs-panel-graph');
+    if (graphPanel && graphPanel.classList.contains('active')) {
+        renderPendingGraph();
+    }
+}
+
 // ==================== Solve ====================
 
 function solve() {
@@ -231,6 +289,12 @@ function solve() {
         if (els.emptyState) els.emptyState.style.display = 'none';
         if (els.resultActions) els.resultActions.style.display = 'none';
         if (els.stepsArea) els.stepsArea.innerHTML = '';
+        return;
+    }
+
+    // Horizontal parabola: x = ay^2 + by + c (different output: vertex, focus, directrix)
+    if (state.formType === 'horizontal') {
+        solveHorizontal(a, b, c);
         return;
     }
 
@@ -285,11 +349,6 @@ function solve() {
     if (graphPanel && graphPanel.classList.contains('active')) {
         renderPendingGraph();
     }
-
-    // Update compiler if loaded
-    if (state.compilerLoaded) {
-        loadCompiler();
-    }
 }
 
 // ==================== Preview ====================
@@ -305,7 +364,15 @@ function updatePreview() {
         var f = R.fmt;
 
         var latex = '';
-        if (state.formType === 'vertex') {
+        if (state.formType === 'horizontal') {
+            var ha = parseFloat(els.horizA && els.horizA.value) || 0;
+            var hb = parseFloat(els.horizB && els.horizB.value) || 0;
+            var hc = parseFloat(els.horizC && els.horizC.value) || 0;
+            latex = 'x = ';
+            if (ha !== 0) latex += (ha === 1 ? '' : (ha === -1 ? '-' : f(ha))) + 'y^2';
+            if (hb !== 0) latex += (hb > 0 ? ' + ' : ' - ') + (Math.abs(hb) === 1 ? '' : f(Math.abs(hb))) + 'y';
+            if (hc !== 0) latex += (hc > 0 ? ' + ' : ' - ') + f(Math.abs(hc));
+        } else if (state.formType === 'vertex') {
             var va = state.vertexA, vh = state.vertexH, vk = state.vertexK;
             var aStr = va === 1 ? '' : (va === -1 ? '-' : f(va));
             var hSign = vh >= 0 ? '-' : '+';
@@ -353,8 +420,12 @@ function renderPendingGraph() {
     if (!state.pendingGraph || !state.lastResult) return;
     G.loadPlotly(function() {
         var r = state.lastResult;
-        var ineqOp = r.isInequality ? r.operator : null;
-        G.renderParabola('qs-graph-container', r.a, r.b, r.c, r.roots, ineqOp);
+        if (r.isHorizontal) {
+            G.renderHorizontalParabola('qs-graph-container', r.a, r.b, r.c, r.vertex, r.focus);
+        } else {
+            var ineqOp = r.isInequality ? r.operator : null;
+            G.renderParabola('qs-graph-container', r.a, r.b, r.c, r.roots, ineqOp);
+        }
     });
 }
 
@@ -367,6 +438,7 @@ var examples = {
     'difference-squares': { type: 'standard', a: 1, b: 0, c: -16 },
     'vertex-form': { type: 'vertex', a: 2, h: 3, k: -8 },
     'inequality': { type: 'inequality', a: 1, b: -5, c: 6, op: '<' },
+    'horizontal': { type: 'horizontal', a: 1, b: -4, c: 2 },
     'random': null
 };
 
@@ -405,6 +477,10 @@ function loadExample(name) {
         if (els.ineqB) els.ineqB.value = ex.b;
         if (els.ineqC) els.ineqC.value = ex.c;
         if (els.ineqOp) els.ineqOp.value = ex.op || '>';
+    } else if (ex.type === 'horizontal') {
+        if (els.horizA) els.horizA.value = ex.a;
+        if (els.horizB) els.horizB.value = ex.b;
+        if (els.horizC) els.horizC.value = ex.c;
     }
 
     updatePreview();
@@ -424,6 +500,10 @@ function loadFromURL() {
         if (els.vertexA) els.vertexA.value = shared.va;
         if (els.vertexH) els.vertexH.value = shared.vh || 0;
         if (els.vertexK) els.vertexK.value = shared.vk || 0;
+    } else if (type === 'horizontal' && shared.ha !== undefined) {
+        if (els.horizA) els.horizA.value = shared.ha;
+        if (els.horizB) els.horizB.value = shared.hb || 0;
+        if (els.horizC) els.horizC.value = shared.hc || 0;
     } else if (type === 'factored' && shared.fa !== undefined) {
         if (els.factorA) els.factorA.value = shared.fa;
         if (els.factorR1) els.factorR1.value = shared.fr1 || 0;
@@ -466,6 +546,9 @@ function clearAll() {
     if (els.ineqA) els.ineqA.value = 1;
     if (els.ineqB) els.ineqB.value = 0;
     if (els.ineqC) els.ineqC.value = 0;
+    if (els.horizA) els.horizA.value = 1;
+    if (els.horizB) els.horizB.value = -4;
+    if (els.horizC) els.horizC.value = 2;
 
     if (els.resultContent) els.resultContent.innerHTML = '';
     if (els.emptyState) els.emptyState.style.display = 'flex';
@@ -478,16 +561,258 @@ function clearAll() {
     updatePreview();
 }
 
-// ==================== Compiler ====================
+// ==================== PDF Download ====================
 
-function loadCompiler() {
-    if (!els.compilerIframe) return;
-    var coeffs = getStandardCoeffs();
-    if (!coeffs.a) return;
-    var template = els.compilerTemplate ? els.compilerTemplate.value : 'sympy-solve';
-    var contextMeta = document.querySelector('meta[name="context-path"]');
-    var contextPath = contextMeta ? contextMeta.content : '';
-    els.compilerIframe.src = E.getCompilerUrl(template, coeffs.a, coeffs.b, coeffs.c, contextPath);
+function downloadResultPdf() {
+    if (!state.lastResult) {
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('No result to download', 2000, 'warning');
+        return;
+    }
+
+    var container = document.createElement('div');
+    container.style.cssText = 'position:absolute;left:-9999px;top:0;width:700px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+    document.body.appendChild(container);
+
+    var title = document.createElement('div');
+    title.style.cssText = 'font-size:22px;font-weight:700;margin-bottom:8px;color:#7c3aed;';
+    title.textContent = 'Quadratic Equation Solver — 8gwifi.org';
+    container.appendChild(title);
+
+    var divider = document.createElement('div');
+    divider.style.cssText = 'height:2px;background:linear-gradient(90deg,#7c3aed,#a78bfa,transparent);margin-bottom:24px;';
+    container.appendChild(divider);
+
+    if (els.resultContent) {
+        var resultClone = els.resultContent.cloneNode(true);
+        var emptyEl = resultClone.querySelector('.tool-empty-state');
+        if (emptyEl) emptyEl.remove();
+        resultClone.style.background = 'transparent';
+        container.appendChild(resultClone);
+    }
+
+    if (els.stepsArea && els.stepsArea.children.length > 0) {
+        var stepsLabel = document.createElement('div');
+        stepsLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin:20px 0 12px;padding-top:16px;border-top:1px solid #e2e8f0;';
+        stepsLabel.textContent = 'Step-by-Step Solution';
+        container.appendChild(stepsLabel);
+        container.appendChild(els.stepsArea.cloneNode(true));
+    }
+
+    var footer = document.createElement('div');
+    footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
+    footer.innerHTML = '<span>Generated by 8gwifi.org</span><span>' + new Date().toLocaleDateString() + '</span>';
+    container.appendChild(footer);
+
+    if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Generating PDF...', 1500, 'info');
+
+    var loadHtml2Canvas = (typeof html2canvas !== 'undefined')
+        ? Promise.resolve()
+        : (ToolUtils && ToolUtils._loadScript ? ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js') : Promise.reject('ToolUtils not found'));
+
+    loadHtml2Canvas.then(function() {
+        return ToolUtils && ToolUtils._loadScript ? ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js') : Promise.reject('ToolUtils not found');
+    }).then(function() {
+        return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+    }).then(function(canvas) {
+        document.body.removeChild(container);
+        var imgData = canvas.toDataURL('image/png');
+        var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+        var margin = 10;
+        var usableWidth = pageWidth - margin * 2;
+        var imgWidth = usableWidth;
+        var imgHeight = (canvas.height * usableWidth) / canvas.width;
+        var usableHeight = pageHeight - margin * 2;
+        if (imgHeight > usableHeight) {
+            imgHeight = usableHeight;
+            imgWidth = (canvas.width * usableHeight) / canvas.height;
+        }
+        var x = (pageWidth - imgWidth) / 2;
+        pdf.addImage(imgData, 'PNG', x, margin, imgWidth, imgHeight);
+        var r = state.lastResult;
+        var baseName = r.isHorizontal ? 'horizontal-parabola' : (r.isInequality ? 'quadratic-inequality' : 'quadratic');
+        var filename = baseName + '-solution.pdf';
+        pdf.save(filename);
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('PDF downloaded!', 2000, 'success');
+    }).catch(function(err) {
+        console.error('PDF generation failed:', err);
+        if (container.parentNode) document.body.removeChild(container);
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('PDF generation failed', 3000, 'error');
+    });
+}
+
+// ==================== Print Worksheet ====================
+
+function getAnswer(p) {
+    if (p.ineq) {
+        var r1 = (-p.b - Math.sqrt(p.b * p.b - 4 * p.a * p.c)) / (2 * p.a);
+        var r2 = (-p.b + Math.sqrt(p.b * p.b - 4 * p.a * p.c)) / (2 * p.a);
+        var lo = Math.min(r1, r2), hi = Math.max(r1, r2);
+        if (p.op === '<') return 'x \u2208 (' + lo.toFixed(2) + ', ' + hi.toFixed(2) + ')';
+        if (p.op === '>') return 'x \u2208 (-\u221e, ' + lo.toFixed(2) + ') \u222a (' + hi.toFixed(2) + ', +\u221e)';
+        if (p.op === '\u2264') return 'x \u2208 [' + lo.toFixed(2) + ', ' + hi.toFixed(2) + ']';
+        return 'x \u2208 (-\u221e, ' + lo.toFixed(2) + '] \u222a [' + hi.toFixed(2) + ', +\u221e)';
+    }
+    if (p.horiz) {
+        var k = -p.b / (2 * p.a), h = p.c - p.b * p.b / (4 * p.a);
+        return 'Vertex (' + h.toFixed(2) + ', ' + k.toFixed(2) + '), p = ' + (1 / (4 * p.a)).toFixed(2);
+    }
+    var disc = p.b * p.b - 4 * p.a * p.c;
+    if (disc >= 0) {
+        var x1 = (-p.b + Math.sqrt(disc)) / (2 * p.a);
+        var x2 = (-p.b - Math.sqrt(disc)) / (2 * p.a);
+        var s1 = Math.abs(x1) < 1e-6 ? '0' : (Math.abs(x1 - Math.round(x1)) < 1e-6 ? String(Math.round(x1 * 100) / 100) : x1.toFixed(2));
+        var s2 = Math.abs(x2) < 1e-6 ? '0' : (Math.abs(x2 - Math.round(x2)) < 1e-6 ? String(Math.round(x2 * 100) / 100) : x2.toFixed(2));
+        if (Math.abs(x1 - x2) < 1e-9) return 'x = ' + s1 + ' (double)';
+        return 'x = ' + s1 + ', ' + s2;
+    }
+    var re = -p.b / (2 * p.a), im = Math.sqrt(-disc) / (2 * p.a);
+    return 'x = ' + re.toFixed(2) + ' \u00B1 ' + im.toFixed(2) + 'i';
+}
+
+function eqToString(a, b, c) {
+    var parts = [];
+    if (a !== 0) parts.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x\u00B2');
+    if (b !== 0) parts.push((b > 0 ? '+' : '') + (Math.abs(b) === 1 ? '' : b) + 'x');
+    if (c !== 0) parts.push((c > 0 ? '+' : '') + c);
+    return (parts.length ? parts.join(' ') : '0') + ' = 0';
+}
+
+function generateWorksheetProblems() {
+    var rnd = function(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; };
+    var problems = [];
+    var used = {};
+
+    function addEasy() {
+        var key, r1, r2, a, b, c;
+        if (rnd(0, 2) === 0) {
+            r1 = rnd(-4, 4);
+            a = 1; b = -2 * r1; c = r1 * r1;
+            key = 'psq:' + r1;
+        } else if (rnd(0, 2) === 1) {
+            r1 = rnd(2, 8);
+            a = 1; b = 0; c = -r1 * r1;
+            key = 'dos:' + r1;
+        } else {
+            r1 = rnd(-5, 5); r2 = rnd(-5, 5);
+            while (r1 === r2) r2 = rnd(-5, 5);
+            a = 1; b = -(r1 + r2); c = r1 * r2;
+            key = 'int:' + r1 + ',' + r2;
+        }
+        if (used[key]) return false;
+        used[key] = true;
+        problems.push({ type: 'easy', a: a, b: b, c: c, eq: eqToString(a, b, c) });
+        return true;
+    }
+
+    function addMedium() {
+        var key, r1, r2, a, b, c, k, h;
+        if (rnd(0, 3) === 0) {
+            k = rnd(-2, 2); h = rnd(-2, 2);
+            a = 1; b = -2 * k; c = h + k * k;
+            key = 'horiz:' + k + ',' + h;
+            if (used[key]) return false;
+            used[key] = true;
+            var hEq = 'x = y\u00B2' + (b >= 0 ? '+' : '') + b + 'y' + (c >= 0 ? '+' : '') + c;
+            problems.push({ type: 'medium', horiz: true, a: a, b: b, c: c, eq: hEq });
+            return true;
+        }
+        r1 = rnd(-4, 4); r2 = rnd(-4, 4);
+        while (r1 === r2) r2 = rnd(-4, 4);
+        a = rnd(1, 3); b = -a * (r1 + r2); c = a * r1 * r2;
+        key = 'med:' + a + ',' + r1 + ',' + r2;
+        if (used[key]) return false;
+        used[key] = true;
+        problems.push({ type: 'medium', a: a, b: b, c: c, eq: eqToString(a, b, c) });
+        return true;
+    }
+
+    function addHard() {
+        var key, a, b, c, r1, r2;
+        if (rnd(0, 2) === 0) {
+            var p = rnd(-2, 2), q = rnd(1, 3);
+            a = 1; b = -2 * p; c = p * p + q * q;
+            key = 'cpx:' + p + ',' + q;
+            if (used[key]) return false;
+            used[key] = true;
+            problems.push({ type: 'hard', a: a, b: b, c: c, eq: eqToString(a, b, c) });
+            return true;
+        }
+        if (rnd(0, 2) === 1) {
+            r1 = rnd(-3, 3); r2 = rnd(-3, 3);
+            while (r1 >= r2) { r1 = rnd(-3, 3); r2 = rnd(-3, 3); }
+            a = 1; b = -(r1 + r2); c = r1 * r2;
+            var op = ['<', '>', '\u2264', '\u2265'][rnd(0, 3)];
+            key = 'ineq:' + a + ',' + b + ',' + c + op;
+            if (used[key]) return false;
+            used[key] = true;
+            problems.push({ type: 'hard', ineq: true, op: op, a: a, b: b, c: c,
+                eq: eqToString(a, b, c).replace(' = 0', ' ' + op + ' 0') });
+            return true;
+        }
+        a = 1; b = rnd(1, 5); c = rnd(-5, -1);
+        var tries = 0;
+        while ((b * b - 4 * a * c <= 0 || Math.sqrt(b * b - 4 * a * c) % 1 === 0) && tries++ < 50) {
+            b = rnd(1, 5); c = rnd(-5, -1);
+        }
+        if (tries >= 50) return addHard();
+        key = 'irr:' + a + ',' + b + ',' + c;
+        if (used[key]) return false;
+        used[key] = true;
+        problems.push({ type: 'hard', a: a, b: b, c: c, eq: eqToString(a, b, c) });
+        return true;
+    }
+
+    while (problems.length < 50) {
+        var target = problems.length;
+        if (target < 17) { addEasy(); }
+        else if (target < 34) { addMedium(); }
+        else { addHard(); }
+        if (problems.length === target) addEasy();
+    }
+
+    return problems;
+}
+
+function printWorksheet() {
+    var problems = generateWorksheetProblems();
+    var html = '<div class="qs-print-wrapper">';
+    html += '<div class="qs-print-title">Quadratic Equation Practice Worksheet (50 Problems)</div>';
+    html += '<div class="qs-print-info">Name: _____________________  Date: _____________  Solve each equation. Show your work.</div>';
+    html += '<div class="qs-print-problems">';
+    var prevType = '';
+    for (var i = 0; i < problems.length; i++) {
+        var p = problems[i];
+        if (p.type !== prevType) {
+            html += '<div class="qs-print-section">' + p.type.charAt(0).toUpperCase() + p.type.slice(1) + '</div>';
+            prevType = p.type;
+        }
+        html += '<div class="qs-print-item">';
+        html += '<span class="qs-print-num">' + (i + 1) + '.</span>';
+        html += '<span class="qs-print-eq">' + p.eq + '</span>';
+        html += '<span class="qs-print-blank"></span>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="qs-print-answer-key">';
+    html += '<div class="qs-print-answer-title">ANSWER KEY (Teacher Use)</div>';
+    for (var j = 0; j < problems.length; j++) {
+        html += '<div class="qs-print-answer-row"><span>' + (j + 1) + '.</span> ' + getAnswer(problems[j]) + '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="qs-print-footer">Generated by 8gwifi.org Quadratic Formula Calculator</div>';
+    html += '</div>';
+
+    var printArea = document.createElement('div');
+    printArea.id = 'qsPrintArea';
+    printArea.className = 'qs-print-root';
+    printArea.innerHTML = html;
+    document.body.appendChild(printArea);
+    window.print();
+    setTimeout(function() { if (printArea.parentNode) printArea.parentNode.removeChild(printArea); }, 1000);
 }
 
 // ==================== Event Binding ====================
@@ -521,10 +846,6 @@ function init() {
             if (panel === 'graph' && state.pendingGraph) {
                 renderPendingGraph();
             }
-            if (panel === 'python' && !state.compilerLoaded) {
-                loadCompiler();
-                state.compilerLoaded = true;
-            }
         });
     });
 
@@ -534,7 +855,7 @@ function init() {
     });
 
     // Input change → preview update
-    var allInputs = document.querySelectorAll('.qs-coeff-input, #qs-ineq-op');
+    var allInputs = document.querySelectorAll('.qs-coeff-input, #qs-ineq-op, #qs-horiz-a, #qs-horiz-b, #qs-horiz-c');
     allInputs.forEach(function(input) {
         input.addEventListener('input', updatePreview);
         input.addEventListener('change', updatePreview);
@@ -545,20 +866,28 @@ function init() {
         els.copyLatexBtn.addEventListener('click', function() {
             if (state.lastResult) {
                 var r = state.lastResult;
-                E.copyLatex(r.a, r.b, r.c, r.roots, r.method);
+                if (r.isHorizontal) {
+                    E.copyHorizontalLatex(r);
+                } else {
+                    E.copyLatex(r.a, r.b, r.c, r.roots, r.method);
+                }
             }
         });
     }
 
     if (els.shareBtn) {
         els.shareBtn.addEventListener('click', function() {
+            getStandardCoeffs();  // refresh state from form before building share URL
             E.copyShareUrl(state);
         });
     }
 
-    // Compiler template change
-    if (els.compilerTemplate) {
-        els.compilerTemplate.addEventListener('change', loadCompiler);
+    if (els.downloadPdfBtn) {
+        els.downloadPdfBtn.addEventListener('click', downloadResultPdf);
+    }
+
+    if (els.printWorksheetBtn) {
+        els.printWorksheetBtn.addEventListener('click', printWorksheet);
     }
 
     // Example chips

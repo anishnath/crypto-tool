@@ -14,24 +14,33 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Quadratic Equation Solver & Formula Calculator - Free Steps" />
-        <jsp:param name="toolDescription" value="Solve any quadratic equation step by step using the quadratic formula, completing the square, or factoring. Free calculator with interactive parabola graph." />
+        <jsp:param name="toolName" value="Quadratic Formula Calculator — Step-by-Step Solutions" />
+        <jsp:param name="toolDescription" value="Free quadratic formula calculator. Solve ax²+bx+c=0 with steps. Printable practice worksheet with 50 problems and answer key for teachers. Quadratic formula, completing the square, factoring. Graph, PDF export." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="quadratic-solver.jsp" />
-        <jsp:param name="toolKeywords" value="quadratic equation solver, quadratic formula calculator, quadratic equation calculator, solve quadratic equation step by step, completing the square calculator, factoring quadratics calculator, vertex form calculator, quadratic inequality solver, discriminant calculator, parabola graph calculator, complex roots calculator, quadratic formula with steps free" />
+        <jsp:param name="toolKeywords" value="quadratic formula calculator, quadratic equation solver, quadratic equation worksheet, quadratic formula worksheet printable, algebra 2 quadratic worksheet, solve quadratic equation step by step, quadratic practice problems with answers, completing the square calculator, factoring quadratics calculator, vertex form calculator, discriminant calculator, parabola graph calculator" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Solve quadratic equations step by step,Standard vertex and factored form input,Quadratic formula method,Completing the square method,Factoring method,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant analysis and root classification,Built-in Python SymPy compiler,LaTeX export and shareable URLs,Live KaTeX equation preview,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Printable practice worksheet 50 problems with answer key,Quadratic formula with full substitution steps,Completing the square method,Factoring method,5 input forms including vertex factored and horizontal parabola,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant and root classification,LaTeX export and PDF download,Shareable URLs" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="educationalLevel" value="High School, College" />
+        <jsp:param name="teaches" value="quadratic equations, quadratic formula, discriminant, parabola, vertex form, completing the square, factoring" />
+        <jsp:param name="howToSteps" value="Select form|Choose standard vertex factored inequality or horizontal parabola|Enter coefficients|Type a b c for ax²+bx+c=0|Click Solve|View roots discriminant vertex and step-by-step derivation|Download PDF|Export full solution with one click" />
         <jsp:param name="faq1q" value="What is the quadratic formula and how do you use it?" />
-        <jsp:param name="faq1a" value="The quadratic formula is x = (-b +/- sqrt(b^2 - 4ac)) / 2a. It solves any quadratic equation ax^2 + bx + c = 0. Enter your coefficients a, b, and c into this calculator and click Solve to see every substitution step, discriminant calculation, and final roots. Works for real, repeated, and complex roots." />
+        <jsp:param name="faq1a" value="The quadratic formula is x = (-b ± √(b² - 4ac)) / 2a. It solves any quadratic equation ax² + bx + c = 0. Enter coefficients a, b, and c, then click Solve to see every substitution step, discriminant, and roots. Handles real, repeated, and complex roots." />
         <jsp:param name="faq2q" value="How do you find the discriminant of a quadratic equation?" />
-        <jsp:param name="faq2a" value="The discriminant is Delta = b^2 - 4ac, the expression under the square root in the quadratic formula. If Delta > 0, the equation has two distinct real roots. If Delta = 0, it has one repeated root (the parabola touches the x-axis). If Delta < 0, it has two complex conjugate roots. This calculator computes it automatically." />
+        <jsp:param name="faq2a" value="The discriminant Δ = b² - 4ac is under the square root in the quadratic formula. Δ > 0: two real roots. Δ = 0: one repeated root. Δ < 0: complex conjugate roots. This calculator computes it automatically and classifies the roots." />
         <jsp:param name="faq3q" value="How do you solve a quadratic equation by completing the square?" />
-        <jsp:param name="faq3a" value="Completing the square rewrites ax^2 + bx + c = 0 as a(x - h)^2 + k = 0, then solves by taking the square root. Steps: divide by a, move the constant, add (b/2a)^2 to both sides, factor the left side as a perfect square, then take the square root. This calculator shows every step with formatted math." />
+        <jsp:param name="faq3a" value="Completing the square rewrites ax² + bx + c = 0 as a(x - h)² + k = 0. Steps: divide by a, add (b/2a)² to both sides, factor as a perfect square, then take the square root. This calculator shows every step with formatted math." />
         <jsp:param name="faq4q" value="How do you solve quadratic inequalities with interval notation?" />
-        <jsp:param name="faq4a" value="Select the Inequality form, enter a, b, c and choose an operator (>, <, >=, <=). The solver finds the roots, determines where the parabola is above or below zero using a sign chart, and writes the answer in interval notation. For example, x^2 - 5x + 6 < 0 gives x in (2, 3)." />
-        <jsp:param name="faq5q" value="Is this quadratic equation calculator really free?" />
-        <jsp:param name="faq5a" value="Yes, 100% free with no signup or limits. You get 3 solving methods with step-by-step solutions, an interactive parabola graph, inequality solving, a Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser — nothing is sent to a server." />
+        <jsp:param name="faq4a" value="Select the Inequality form, enter a, b, c and choose >, <, ≥, or ≤. The solver finds roots, uses a sign chart, and writes the answer in interval notation. Example: x² - 5x + 6 < 0 gives x ∈ (2, 3)." />
+        <jsp:param name="faq5q" value="Is this quadratic formula calculator really free?" />
+        <jsp:param name="faq5a" value="Yes, 100% free with no signup. You get 3 methods (formula, completing the square, factoring), interactive parabola graph, inequality solver, LaTeX export, PDF download, and shareable URLs. All computation runs in your browser." />
+        <jsp:param name="faq6q" value="How do I solve using the quadratic formula?" />
+        <jsp:param name="faq6a" value="Enter your equation as ax² + bx + c = 0. Identify a, b, c and type them into the calculator. Click Solve. You'll see the discriminant, then x = (-b ± √Δ) / 2a with every substitution step shown. Works for fractions and decimals." />
+        <jsp:param name="faq7q" value="Can this calculator solve horizontal parabolas (x = ay² + by + c)?" />
+        <jsp:param name="faq7a" value="Yes. Select the Horizontal form and enter a, b, c for x = ay² + by + c. The solver finds the vertex, focus, directrix, and axis of symmetry. You get a step-by-step derivation and interactive graph of the horizontal parabola." />
+        <jsp:param name="faq8q" value="Where can I get a free quadratic equation worksheet with answers?" />
+        <jsp:param name="faq8a" value="Click Print Worksheet on this page for a free 50-problem practice sheet (Easy, Medium, Hard). Each click generates new problems. The Answer Key is included for teachers. No signup, no download—print directly from your browser." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,17 +74,18 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Quadratic Equation Solver</h1>
+            <h1 class="tool-page-title">Quadratic Formula Calculator with Step-by-Step Solutions</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
-                Quadratic Equation Solver
+                Quadratic Formula Calculator
             </nav>
         </div>
         <div class="tool-page-badges">
             <span class="tool-badge">Free Online</span>
-            <span class="tool-badge">4 Forms</span>
+            <span class="tool-badge">5 Forms</span>
             <span class="tool-badge">Step-by-Step</span>
+            <span class="tool-badge">No Signup</span>
         </div>
     </div>
 </header>
@@ -83,7 +93,7 @@
 <section class="tool-description-section" style="background:var(--qs-light);">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Free <strong>quadratic equation solver</strong> with <strong>step-by-step solutions</strong>. Solve in <strong>standard, vertex, and factored forms</strong>. Uses the <strong>quadratic formula</strong>, <strong>completing the square</strong>, and <strong>factoring</strong>. Interactive parabola graph, inequality solver with interval notation, and built-in Python compiler.</p>
+            <p>Free <strong>quadratic formula calculator</strong> — solve <strong>ax² + bx + c = 0</strong> with <strong>step-by-step solutions</strong>. Uses the <strong>quadratic formula</strong>, <strong>completing the square</strong>, and <strong>factoring</strong>. Input in standard, vertex, factored, inequality, or <strong>horizontal parabola</strong> form. <strong>Free printable practice worksheet</strong> with 50 problems and answer key for teachers and students. Interactive graph, PDF export. No signup required.</p>
         </div>
     </div>
 </section>
@@ -103,6 +113,7 @@
                         <button type="button" class="qs-form-btn" data-type="vertex">Vertex</button>
                         <button type="button" class="qs-form-btn" data-type="factored">Factored</button>
                         <button type="button" class="qs-form-btn" data-type="inequality">Inequality</button>
+                        <button type="button" class="qs-form-btn" data-type="horizontal">Horizontal</button>
                     </div>
                     <div class="tool-form-hint" id="qs-form-hint">ax&sup2; + bx + c = 0</div>
                 </div>
@@ -159,6 +170,25 @@
                             <input type="number" id="qs-factor-r2" class="qs-coeff-input" value="-3" step="any">
                         </div>
                     </div>
+                </div>
+
+                <!-- Horizontal Parabola Form (x = ay² + by + c) -->
+                <div id="qs-form-horizontal" style="display:none;">
+                    <div class="qs-coeff-row">
+                        <div class="qs-coeff-group">
+                            <label class="qs-coeff-label">a (y&sup2;)</label>
+                            <input type="number" id="qs-horiz-a" class="qs-coeff-input" value="1" step="any">
+                        </div>
+                        <div class="qs-coeff-group">
+                            <label class="qs-coeff-label">b (y)</label>
+                            <input type="number" id="qs-horiz-b" class="qs-coeff-input" value="-4" step="any">
+                        </div>
+                        <div class="qs-coeff-group">
+                            <label class="qs-coeff-label">c</label>
+                            <input type="number" id="qs-horiz-c" class="qs-coeff-input" value="2" step="any">
+                        </div>
+                    </div>
+                    <p class="tool-form-hint" style="margin-top:0.5rem;font-size:0.8125rem;color:var(--text-muted);">x = ay&sup2; + by + c &mdash; e.g. y&sup2; &minus; x &minus; 4y + 2 = 0 &rarr; a=1, b=&minus;4, c=2</p>
                 </div>
 
                 <!-- Inequality Form -->
@@ -223,8 +253,17 @@
                         <button type="button" class="qs-example-chip" data-example="difference-squares">x&sup2;&minus;16</button>
                         <button type="button" class="qs-example-chip" data-example="vertex-form">Vertex Form</button>
                         <button type="button" class="qs-example-chip" data-example="inequality">Inequality</button>
+                        <button type="button" class="qs-example-chip" data-example="horizontal">Horizontal</button>
                         <button type="button" class="qs-example-chip" data-example="random">Random</button>
                     </div>
+                </div>
+
+                <!-- Print Worksheet -->
+                <div class="tool-form-group" style="margin-top:1rem;">
+                    <button type="button" class="tool-action-btn" id="qs-print-worksheet-btn" style="background:linear-gradient(135deg,#64748b,#475569);width:100%;">
+                        &#128424; Print Worksheet
+                    </button>
+                    <p class="tool-form-hint" style="margin-top:0.5rem;font-size:0.75rem;color:var(--text-muted);">50 problems (Easy/Medium/Hard) with Answer Key. New sheet each time.</p>
                 </div>
             </div>
         </div>
@@ -236,7 +275,6 @@
         <div class="qs-output-tabs">
             <button type="button" class="qs-output-tab active" data-panel="result">Result</button>
             <button type="button" class="qs-output-tab" data-panel="graph">Graph</button>
-            <button type="button" class="qs-output-tab" data-panel="python">Python Compiler</button>
         </div>
 
         <!-- Result Panel -->
@@ -252,15 +290,16 @@
                     <div class="tool-empty-state" id="qs-empty-state">
                         <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">ax&sup2;+bx+c</div>
                         <h3>Enter a quadratic equation</h3>
-                        <p>Solve with 3 methods. Step-by-step solutions, interactive graph, Python code.</p>
+                        <p>Solve with 3 methods. Step-by-step solutions, interactive graph.</p>
                     </div>
-                </div>
-                <div class="tool-result-actions" id="qs-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
-                    <button type="button" class="tool-action-btn" id="qs-copy-latex-btn">Copy LaTeX</button>
-                    <button type="button" class="tool-action-btn" id="qs-share-btn">Share</button>
                 </div>
             </div>
             <div id="qs-steps-area" style="margin-top:1rem"></div>
+            <div class="tool-result-actions" id="qs-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap;margin-top:1rem">
+                <button type="button" class="tool-action-btn" id="qs-copy-latex-btn">Copy LaTeX</button>
+                <button type="button" class="tool-action-btn" id="qs-share-btn">Share</button>
+                <button type="button" class="tool-action-btn" id="qs-download-pdf-btn">&#128196; Download PDF</button>
+            </div>
         </div>
 
         <!-- Graph Panel -->
@@ -279,25 +318,6 @@
             </div>
         </div>
 
-        <!-- Python Compiler Panel -->
-        <div class="qs-panel" id="qs-panel-python">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--qs-tool);">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <h4>Python Compiler</h4>
-                    <select id="qs-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
-                        <option value="sympy-solve">SymPy (Symbolic Solver)</option>
-                        <option value="numpy-plot">NumPy (Numeric Analysis)</option>
-                        <option value="sympy-steps">SymPy (Step-by-Step)</option>
-                    </select>
-                </div>
-                <div style="flex:1;min-height:0;">
-                    <iframe id="qs-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- ==================== ADS COLUMN ==================== -->
@@ -320,6 +340,14 @@
 
 <!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
 <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- ===== FREE QUADRATIC EQUATION WORKSHEET ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;border:2px solid var(--qs-tool);background:linear-gradient(135deg, rgba(124,58,237,0.05), rgba(167,139,250,0.05));">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Free Quadratic Equation Practice Worksheet</h2>
+        <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            Teachers and students: generate a <strong>printable 50-problem practice worksheet</strong> with one click. Problems range from <strong>Easy</strong> (factorable, perfect square) to <strong>Medium</strong> (larger coefficients, horizontal parabolas) to <strong>Hard</strong> (irrational roots, complex roots, inequalities). Each click creates a <strong>new set of problems</strong>. The <strong>Answer Key</strong> is included for grading. Scroll up and click <strong>Print Worksheet</strong>—no signup, no download required.
+        </p>
+    </div>
 
     <!-- ===== 1. WHAT IS A QUADRATIC EQUATION? ===== -->
     <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
@@ -547,7 +575,31 @@
                 Is this quadratic equation solver free?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes, completely free with no signup. You get 3 solving methods with step-by-step solutions, an interactive Plotly parabola graph, inequality solving with interval notation, a Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs entirely in your browser for instant results and privacy.</div>
+            <div class="faq-answer">Yes, completely free with no signup. You get 3 solving methods with step-by-step solutions, an interactive Plotly parabola graph, inequality solving with interval notation, LaTeX export, PDF download, and shareable URLs. All computation runs entirely in your browser for instant results and privacy.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do I solve using the quadratic formula?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Enter your equation as ax&sup2;+bx+c=0. Identify a, b, c and type them into the calculator. Click Solve. You&rsquo;ll see the discriminant, then x = (-b &pm; &radic;&Delta;) / 2a with every substitution step shown. Works for fractions and decimals.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Can this calculator solve horizontal parabolas (x = ay&sup2; + by + c)?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes. Select the Horizontal form and enter a, b, c for x = ay&sup2;+by+c. The solver finds the vertex, focus, directrix, and axis of symmetry. You get a step-by-step derivation and interactive graph of the horizontal parabola.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Where can I get a free quadratic equation worksheet with answers?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Click <strong>Print Worksheet</strong> on this page for a free 50-problem practice sheet (Easy, Medium, Hard). Each click generates new problems. The Answer Key is included for teachers. No signup, no download—print directly from your browser.</div>
         </div>
     </div>
 </section>

@@ -595,6 +595,42 @@
     margin: 0;
 }
 
+/* ===== Print Worksheet ===== */
+@media print {
+    body > *:not(#qsPrintArea) { display: none !important; }
+    #qsPrintArea {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+}
+.qs-print-root {
+    position: absolute; left: -9999px; top: 0;
+    width: 700px; padding: 30px;
+    font-family: Inter, sans-serif; font-size: 11px;
+    background: #fff; color: #0f172a;
+}
+.qs-print-wrapper { max-width: 100%; }
+.qs-print-title { text-align: center; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
+.qs-print-info { text-align: center; color: #333; font-size: 0.8rem; margin-bottom: 0.75rem; }
+.qs-print-problems { font-size: 0.85rem; }
+.qs-print-section { font-weight: 700; font-size: 0.9rem; margin: 0.5rem 0 0.25rem; padding-bottom: 0.15rem; border-bottom: 1px solid #333; }
+.qs-print-item { display: flex; align-items: baseline; gap: 0.35rem; margin-bottom: 0.4rem; }
+.qs-print-num { font-weight: 600; min-width: 1.2rem; }
+.qs-print-eq { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 0.85rem; }
+.qs-print-blank { flex: 1; border-bottom: 1px solid #333; margin-left: 0.25rem; min-width: 40px; }
+.qs-print-answer-key {
+    margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #333;
+    page-break-before: always;
+}
+.qs-print-answer-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+.qs-print-answer-row { font-size: 0.75rem; margin-bottom: 0.2rem; }
+.qs-print-footer { text-align: center; color: #666; font-size: 0.7rem; margin-top: 1rem; }
+
 /* ===== Responsive ===== */
 @media (max-width: 767px) {
     .qs-coeff-input { font-size: 0.8125rem; }

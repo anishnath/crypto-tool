@@ -206,6 +206,120 @@ function renderParabola(containerId, a, b, c, roots, inequalityOp) {
     });
 }
 
+function renderHorizontalParabola(containerId, a, b, c, vertex, focus) {
+    if (!window.Plotly) return;
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var colors = getPlotColors();
+    var h = vertex.h, k = vertex.k;
+
+    // y range centered on vertex k
+    var yMin = k - 8, yMax = k + 8;
+    var nPts = 200;
+    var step = (yMax - yMin) / nPts;
+
+    var ys = [], xs = [];
+    for (var i = 0; i <= nPts; i++) {
+        var y = yMin + step * i;
+        ys.push(y);
+        xs.push(a * y * y + b * y + c);
+    }
+
+    var traces = [];
+    traces.push({
+        x: xs, y: ys,
+        mode: 'lines',
+        name: 'x = ' + formatHorizEq(a, b, c),
+        line: { color: colors.parabolaColor, width: 3 }
+    });
+
+    // Axis of symmetry (horizontal dashed)
+    var xRange = Math.max.apply(null, xs.map(Math.abs));
+    traces.push({
+        x: [h - xRange * 0.8, h + xRange * 0.8],
+        y: [k, k],
+        mode: 'lines',
+        name: 'Axis: y = ' + k.toFixed(2),
+        line: { color: colors.axisColor, width: 1.5, dash: 'dash' }
+    });
+
+    // Vertex
+    traces.push({
+        x: [h], y: [k],
+        mode: 'markers+text',
+        name: 'Vertex S (' + h.toFixed(2) + ', ' + k.toFixed(2) + ')',
+        marker: { color: colors.vertexColor, size: 10, symbol: 'diamond', line: { color: '#fff', width: 2 } },
+        text: ['Vertex S'],
+        textposition: 'top center',
+        textfont: { size: 11, color: colors.textColor }
+    });
+
+    // Focus
+    traces.push({
+        x: [focus.x], y: [focus.y],
+        mode: 'markers+text',
+        name: 'Focus F (' + focus.x.toFixed(2) + ', ' + focus.y.toFixed(2) + ')',
+        marker: { color: colors.yInterceptColor, size: 10, symbol: 'circle', line: { color: '#fff', width: 2 } },
+        text: ['Focus F'],
+        textposition: 'bottom center',
+        textfont: { size: 11, color: colors.textColor }
+    });
+
+    var xMin = Math.min.apply(null, xs), xMax = Math.max.apply(null, xs);
+    var xPad = (xMax - xMin) * 0.1 || 2;
+
+    var layout = {
+        title: { text: 'Horizontal Parabola', font: { size: 14, color: colors.textColor } },
+        xaxis: {
+            title: 'x',
+            gridcolor: colors.gridColor,
+            zerolinecolor: colors.gridColor,
+            zerolinewidth: 2,
+            color: colors.textColor,
+            range: [xMin - xPad, xMax + xPad]
+        },
+        yaxis: {
+            title: 'y',
+            gridcolor: colors.gridColor,
+            zerolinecolor: colors.gridColor,
+            zerolinewidth: 2,
+            color: colors.textColor,
+            range: [yMin, yMax]
+        },
+        plot_bgcolor: colors.bg,
+        paper_bgcolor: colors.paper,
+        font: { family: 'Inter, sans-serif', color: colors.textColor },
+        showlegend: true,
+        legend: { x: 0, y: 1, bgcolor: 'rgba(0,0,0,0)', font: { size: 11 } },
+        margin: { t: 40, r: 20, b: 50, l: 50 }
+    };
+
+    Plotly.newPlot(container, traces, layout, {
+        responsive: true,
+        displayModeBar: true,
+        modeBarButtonsToRemove: ['lasso2d', 'select2d']
+    });
+}
+
+function formatHorizEq(a, b, c) {
+    var eq = '';
+    if (a !== 0) eq += (a === 1 ? '' : (a === -1 ? '-' : a)) + 'y\u00B2';
+    if (b !== 0) {
+        if (eq && b > 0) eq += ' + ';
+        if (eq && b < 0) eq += ' - ';
+        if (!eq && b < 0) eq += '-';
+        var absB = Math.abs(b);
+        eq += (absB === 1 ? '' : absB) + 'y';
+    }
+    if (c !== 0) {
+        if (eq && c > 0) eq += ' + ';
+        if (eq && c < 0) eq += ' - ';
+        eq += Math.abs(c);
+    }
+    return eq || '0';
+}
+
 function formatEq(a, b, c) {
     var eq = '';
     if (a !== 0) eq += (a === 1 ? '' : (a === -1 ? '-' : a)) + 'x\u00B2';
@@ -228,7 +342,8 @@ function formatEq(a, b, c) {
 
 window.QuadraticSolverGraph = {
     loadPlotly: loadPlotly,
-    renderParabola: renderParabola
+    renderParabola: renderParabola,
+    renderHorizontalParabola: renderHorizontalParabola
 };
 
 })();

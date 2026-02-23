@@ -127,6 +127,62 @@ function renderSolution(result) {
     return html;
 }
 
+function renderHorizontalSolution(result) {
+    var v = result.vertex, f = result.focus;
+    var html = '<div class="qs-result-section">';
+    html += '<div class="qs-result-badge qs-badge-info">Horizontal Parabola</div>';
+    html += '<div class="qs-result-label">Standard Form</div>';
+    html += '<div class="qs-result-math" id="qs-horiz-std-math"></div>';
+    html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+    html += '<strong>Vertex S:</strong> (' + fmt(v.h) + ', ' + fmt(v.k) + ') &nbsp; ';
+    html += '<strong>Focus F:</strong> (' + fmt(f.x) + ', ' + fmt(f.y) + ') &nbsp; ';
+    html += '<strong>Directrix:</strong> x = ' + fmt(result.directrix) + ' &nbsp; ';
+    html += '<strong>Opens:</strong> ' + (result.opensRight ? 'Right' : 'Left');
+    html += '</div>';
+    html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+    html += '<strong>Parameter a (4p):</strong> ' + fmt(result.p) + ' &nbsp; ';
+    html += '<strong>Equation:</strong> (y ' + (v.k >= 0 ? '\u2212 ' + fmt(v.k) : '+ ' + fmt(-v.k)) + ')\u00B2 = ' + fmt(4 * result.p) + '(x ' + (v.h >= 0 ? '\u2212 ' + fmt(v.h) : '+ ' + fmt(-v.h)) + ')';
+    html += '</div>';
+    html += '</div>';
+    return html;
+}
+
+function postRenderHorizontal(result) {
+    var el = document.getElementById('qs-horiz-std-math');
+    if (!el) return;
+    var v = result.vertex;
+    var signH = v.h >= 0 ? '-' : '+';
+    var signK = v.k >= 0 ? '-' : '+';
+    var latex = '(y ' + signK + ' ' + fmt(Math.abs(v.k)) + ')^2 = ' + fmt(4 * result.p) + '(x ' + signH + ' ' + fmt(Math.abs(v.h)) + ')';
+    renderKaTeX(el, latex);
+}
+
+function renderHorizontalSteps(result) {
+    var a = result.a, b = result.b, c = result.c;
+    var v = result.vertex, p = result.p;
+    var frag = document.createDocumentFragment();
+
+    frag.appendChild(buildStepDOM(1, '<strong>Start with</strong> x = ay\u00B2 + by + c',
+        'x = ' + fmt(a) + 'y^2 ' + (b >= 0 ? '+' : '-') + ' ' + fmt(Math.abs(b)) + 'y ' + (c >= 0 ? '+' : '-') + ' ' + fmt(Math.abs(c))));
+
+    var k = -b / (2 * a);
+    frag.appendChild(buildStepDOM(2, '<strong>Complete the square in y</strong>. Vertex y-coordinate: k = -b/(2a)',
+        'k = \\frac{-(' + fmt(b) + ')}{2(' + fmt(a) + ')} = ' + fmt(k)));
+
+    var h = c - (b * b) / (4 * a);
+    frag.appendChild(buildStepDOM(3, '<strong>Vertex x-coordinate</strong>: h = c - b\u00B2/(4a)',
+        'h = ' + fmt(c) + ' - \\frac{(' + fmt(b) + ')^2}{4(' + fmt(a) + ')} = ' + fmt(h)));
+
+    frag.appendChild(buildStepDOM(4, '<strong>Standard form</strong> (y \u2212 k)\u00B2 = 4p(x \u2212 h). Parameter p = 1/(4a)',
+        'p = \\frac{1}{4(' + fmt(a) + ')} = ' + fmt(p) + ', \\quad (y - ' + fmt(k) + ')^2 = ' + fmt(4 * p) + '(x - ' + fmt(h) + ')'));
+
+    var fx = h + p;
+    frag.appendChild(buildStepDOM(5, '<strong>Focus</strong> F = (h + p, k) &nbsp; <strong>Directrix</strong> x = h \u2212 p',
+        'F = (' + fmt(fx) + ', ' + fmt(k) + '), \\quad \\text{Directrix: } x = ' + fmt(result.directrix)));
+
+    return frag;
+}
+
 function renderInequality(result) {
     var html = '<div class="qs-result-section">';
     html += '<div class="qs-result-badge qs-badge-info">Inequality Solution</div>';
@@ -370,8 +426,11 @@ function showError(container, message) {
 window.QuadraticSolverRender = {
     renderSolution: renderSolution,
     renderInequality: renderInequality,
+    renderHorizontalSolution: renderHorizontalSolution,
     postRenderRoots: postRenderRoots,
+    postRenderHorizontal: postRenderHorizontal,
     renderSteps: renderSteps,
+    renderHorizontalSteps: renderHorizontalSteps,
     showError: showError,
     buildStepDOM: buildStepDOM,
     renderKaTeX: renderKaTeX,
