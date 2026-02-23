@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 390,
+  "totalTools": 391,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1298,6 +1298,13 @@
       "category": "Mathematics",
       "keywords": "integral calculator calculus definite indefinite substitution integration parts mathematics",
       "description": "Integral Calculator (Definite & Indefinite) - Free online mathematics tool"
+    },
+    {
+      "name": "Vector Calculus Calculator (Gradient, Divergence, Curl)",
+      "url": "vector-calculus-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "vector calculus calculator gradient divergence curl nabla del operator partial derivatives multivariable calculus electromagnetic fields fluid dynamics step by step",
+      "description": "Vector Calculus Calculator - Compute gradient, divergence, and curl with step-by-step solutions and 3D visualization"
     },
     {
       "name": "Language Detector",

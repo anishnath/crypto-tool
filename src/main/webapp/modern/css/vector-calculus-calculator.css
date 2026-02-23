@@ -1,0 +1,527 @@
+/**
+ * Vector Calculus Calculator - page-specific styles
+ * Loaded by vector-calculus-calculator.jsp
+ * Shared styles (nav, grid, cards, form, result, empty state) come from
+ * design-system.css, navigation.css, three-column-tool.css
+ */
+
+/* ===== Tool color tokens ===== */
+:root {
+    --tool-primary: #4f46e5;
+    --tool-primary-dark: #4338ca;
+    --tool-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --tool-light: #eef2ff;
+}
+[data-theme="dark"] {
+    --tool-light: rgba(79, 70, 229, 0.15);
+}
+
+/* ===== Mode toggle (3 buttons: Gradient | Divergence | Curl) ===== */
+.vc-mode-toggle {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+    margin-bottom: 0.875rem;
+}
+.vc-mode-btn {
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.vc-mode-btn.active {
+    background: var(--tool-gradient);
+    color: #fff;
+}
+.vc-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .vc-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .vc-mode-btn.active { background: var(--tool-gradient); color: #fff; }
+[data-theme="dark"] .vc-mode-btn:hover:not(.active) { background: rgba(255, 255, 255, 0.08); }
+
+/* ===== Live preview ===== */
+.vc-preview {
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    font-size: 1.1rem;
+}
+.vc-preview .katex-display { margin: 0; }
+[data-theme="dark"] .vc-preview {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+
+/* ===== Vector field inputs (Fx, Fy, Fz) ===== */
+.vc-vector-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+}
+.vc-vector-field-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.vc-vector-field-label {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--tool-gradient);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vc-vector-field-group .tool-input {
+    flex: 1;
+}
+
+/* ===== Quick examples ===== */
+.vc-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.vc-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-full, 9999px);
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.vc-example-chip:hover {
+    background: var(--tool-primary);
+    color: #fff;
+    border-color: var(--tool-primary);
+}
+[data-theme="dark"] .vc-example-chip {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+[data-theme="dark"] .vc-example-chip:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+
+/* ===== Syntax help ===== */
+.vc-syntax-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    width: 100%;
+    font-family: var(--font-sans);
+}
+.vc-syntax-content {
+    display: none;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding-bottom: 0.5rem;
+}
+.vc-syntax-content.open { display: block; }
+.vc-syntax-chevron {
+    transition: transform 0.2s;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+.vc-syntax-content.open ~ .vc-syntax-toggle .vc-syntax-chevron,
+.open > .vc-syntax-toggle .vc-syntax-chevron {
+    transform: rotate(180deg);
+}
+
+/* ===== Output tabs ===== */
+.vc-output-tabs {
+    display: flex;
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+}
+.vc-output-tab {
+    flex: 1;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.vc-output-tab.active {
+    background: var(--tool-gradient);
+    color: #fff;
+}
+.vc-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .vc-output-tab { background: var(--bg-tertiary); }
+[data-theme="dark"] .vc-output-tab.active { background: var(--tool-gradient); color: #fff; }
+[data-theme="dark"] .vc-output-tab:hover:not(.active) { background: rgba(255, 255, 255, 0.08); }
+
+/* ===== Panels ===== */
+.vc-panel { display: none; flex: 1; min-height: 0; }
+.vc-panel.active { display: flex; flex-direction: column; }
+#vc-panel-result .tool-result-card { flex: 1; }
+
+/* ===== Result display ===== */
+.vc-result-math {
+    padding: 1.5rem;
+    overflow-x: auto;
+    max-width: 100%;
+    text-align: center;
+}
+.vc-result-math .katex-display {
+    margin: 0.5rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.vc-result-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+.vc-result-main {
+    font-size: 1.3rem;
+    padding: 1rem 0;
+}
+
+/* ===== Vector result (component1 i + component2 j + component3 k) ===== */
+.vc-vector-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem;
+    font-size: 1.15rem;
+    font-family: var(--font-mono);
+}
+.vc-vector-result .vc-plus {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ===== Component badges (i, j, k unit vectors) ===== */
+.vc-component-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--tool-gradient);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-style: italic;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .vc-component-badge {
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+/* ===== Vector component display ===== */
+.vc-vector-component {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+[data-theme="dark"] .vc-vector-component {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+
+/* ===== Result detail ===== */
+.vc-result-detail {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+[data-theme="dark"] .vc-result-detail {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+
+/* ===== Method badge ===== */
+.vc-method-badge {
+    display: inline-block;
+    background: var(--tool-light);
+    color: var(--tool-primary);
+    padding: 0.2rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+/* ===== Error state ===== */
+.vc-error {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    color: #92400e;
+}
+.vc-error h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+}
+.vc-error ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+}
+[data-theme="dark"] .vc-error {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: #fbbf24;
+}
+
+/* ===== Steps ===== */
+.vc-steps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--tool-primary);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--tool-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0.75rem;
+}
+.vc-steps-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+.vc-steps-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+.vc-steps-container {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.vc-steps-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--tool-light);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--tool-primary);
+}
+.vc-step {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+.vc-step:last-child { border-bottom: none; }
+.vc-step-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--tool-gradient);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vc-step-body { flex: 1; min-width: 0; }
+.vc-step-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+.vc-step-math {
+    font-size: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.vc-step-math .katex-display {
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    min-width: min-content;
+}
+.vc-steps-sympy-badge {
+    font-size: 0.625rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    margin-left: auto;
+}
+[data-theme="dark"] .vc-steps-container { border-color: var(--border); }
+[data-theme="dark"] .vc-steps-header { background: var(--tool-light); border-bottom-color: var(--border); }
+[data-theme="dark"] .vc-step { border-bottom-color: var(--border); }
+
+/* Scrollable steps area */
+.vc-steps-scroll {
+    max-height: 600px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+.vc-steps-scroll.collapsed .vc-step.vc-step-hidden { display: none; }
+.vc-steps-expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--tool-primary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.vc-steps-expand-btn:hover { background: var(--tool-light); }
+.vc-steps-expand-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.vc-steps-scroll:not(.collapsed) .vc-steps-expand-btn svg { transform: rotate(180deg); }
+[data-theme="dark"] .vc-steps-expand-btn { background: var(--bg-secondary); }
+[data-theme="dark"] .vc-steps-expand-btn:hover { background: var(--tool-light); }
+
+/* ===== Graph ===== */
+#vc-graph-container {
+    width: 100%;
+    min-height: 440px;
+    border-radius: var(--radius-md);
+}
+#vc-panel-graph { min-height: 480px; }
+#vc-panel-python { min-height: 540px; }
+#vc-panel-result .tool-result-card { flex: 1; }
+
+/* ===== Action row (Compute + Random) ===== */
+.vc-action-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+.vc-action-row .vc-compute-btn {
+    flex: 1;
+    margin-top: 0;
+}
+.vc-random-btn {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--tool-primary);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--bg-primary);
+    color: var(--tool-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+.vc-random-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+.vc-random-btn:active {
+    transform: scale(0.96);
+}
+[data-theme="dark"] .vc-random-btn {
+    background: var(--bg-tertiary);
+    border-color: var(--tool-primary);
+    color: var(--primary-light, #818cf8);
+}
+[data-theme="dark"] .vc-random-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+
+/* ===== Separator ===== */
+.vc-sep {
+    border: none;
+    border-top: 1px solid var(--border, #e2e8f0);
+    margin: 0.75rem 0;
+}
+
+/* ===== Spinner ===== */
+@keyframes vc-spin {
+    to { transform: rotate(360deg); }
+}
+.vc-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--tool-primary);
+    border-radius: 50%;
+    animation: vc-spin 0.6s linear infinite;
+}
