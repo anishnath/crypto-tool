@@ -319,6 +319,14 @@ function solve() {
         result.intervalHtml = ineqResult.intervalHtml;
     }
 
+    // Area under parabola between roots (when two distinct real roots)
+    if (roots.type === 'real' && disc > 0) {
+        var r1 = Math.min(roots.x1, roots.x2);
+        var r2 = Math.max(roots.x1, roots.x2);
+        var F = function(x) { return (a / 3) * x * x * x + (b / 2) * x * x + c * x; };
+        result.areaBetweenRoots = Math.abs(F(r2) - F(r1));
+    }
+
     state.lastResult = result;
 
     // Render result

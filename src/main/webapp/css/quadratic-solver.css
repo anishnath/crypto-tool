@@ -196,6 +196,11 @@
 [data-theme="dark"] .qs-result-detail {
     background: var(--bg-tertiary);
 }
+.qs-area-box {
+    border-left: 4px solid var(--qs-tool) !important;
+}
+.qs-area-value { font-weight: 700; color: var(--qs-tool); font-family: var(--font-mono, 'JetBrains Mono', monospace); }
+.qs-area-hint { font-size: 0.75rem; color: var(--text-muted); }
 .qs-method-badge {
     display: inline-block;
     background: var(--qs-light);

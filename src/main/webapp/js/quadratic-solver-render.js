@@ -123,6 +123,15 @@ function renderSolution(result) {
     html += '<strong>Opens:</strong> ' + (result.a > 0 ? 'Upward' : 'Downward');
     html += '</div>';
 
+    // Area under parabola between roots (when two distinct real roots)
+    if (result.areaBetweenRoots !== undefined) {
+        html += '<div class="qs-result-detail qs-area-box" style="margin-top:0.75rem;">';
+        html += '<strong>Area under parabola</strong> (between roots x&#8321; and x&#8322;): ';
+        html += '<span class="qs-area-value">' + fmt(result.areaBetweenRoots) + '</span>';
+        html += ' <span class="qs-area-hint">square units</span>';
+        html += '</div>';
+    }
+
     html += '</div>';
     return html;
 }
@@ -189,6 +198,12 @@ function renderInequality(result) {
     html += '<div class="qs-result-label">Solution Set</div>';
     html += '<div class="qs-result-math" id="qs-root-math"></div>';
     html += '<div class="qs-result-detail">' + result.intervalHtml + '</div>';
+    if (result.areaBetweenRoots !== undefined) {
+        html += '<div class="qs-result-detail qs-area-box" style="margin-top:0.75rem;">';
+        html += '<strong>Area under parabola</strong> (between roots): ';
+        html += '<span class="qs-area-value">' + fmt(result.areaBetweenRoots) + '</span> square units';
+        html += '</div>';
+    }
     html += '</div>';
     return html;
 }
@@ -241,6 +256,12 @@ function renderFormulaSteps(result) {
         } else {
             rootLatex = 'x = \\frac{' + fmt(-b) + '}{' + fmt(2 * a) + '} = ' + fmt(roots.x1);
             frag.appendChild(buildStepDOM(4, '<strong>Single root</strong> (&Delta; = 0)', rootLatex));
+        }
+        if (result.areaBetweenRoots !== undefined) {
+            var r1 = Math.min(roots.x1, roots.x2);
+            var r2 = Math.max(roots.x1, roots.x2);
+            frag.appendChild(buildStepDOM(7, '<strong>Area under parabola</strong> (between roots)',
+                '\\int_{' + fmt(r1) + '}^{' + fmt(r2) + '} (' + fmt(a) + 'x^2 ' + (b >= 0 ? '+' : '') + fmt(b) + 'x ' + (c >= 0 ? '+' : '') + fmt(c) + ')\\,dx = ' + fmt(result.areaBetweenRoots) + ' \\text{ sq units}'));
         }
     } else {
         var sqrtNegDisc = Math.sqrt(-disc);
