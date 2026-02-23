@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 396,
+  "totalTools": 397,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1340,6 +1340,14 @@
       "category": "Mathematics",
       "keywords": "convolution calculator convolution integral discrete convolution continuous convolution signal processing impulse response LTI systems convolution theorem flip and slide step by step",
       "description": "Convolution Calculator - Compute continuous and discrete convolution with step-by-step solutions, interactive graphs, and properties table"
+    },
+    {
+      "name": "Finite Difference Calculator",
+      "url": "finite-difference-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "finite difference calculator numerical differentiation forward difference central difference backward difference finite difference weights stencil numerical derivative finite difference approximation step by step",
+      "description": "Finite Difference Calculator - Compute finite difference approximations with forward, central, and backward methods, step-by-step solutions, and interactive graphs",
+      "isNew": true
     },
     {
       "name": "Language Detector",

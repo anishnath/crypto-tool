@@ -995,6 +995,23 @@
                     </div>
                 </a>
 
+                <a href="<%=request.getContextPath()%>/finite-difference-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #0d9488;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">&Delta;</div>
+                        <div>
+                            <h3>Finite Difference Calculator</h3>
+                            <div class="tool-formula">&Delta;f = f(x+h) &minus; f(x)</div>
+                        </div>
+                    </div>
+                    <p>Compute finite difference approximations with forward, central, and backward methods. Symbolic, numerical, and weights modes.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&Sigma;</div>
