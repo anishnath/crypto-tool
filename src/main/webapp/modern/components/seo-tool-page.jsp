@@ -385,10 +385,16 @@
     String faq5a = request.getParameter("faq5a");
     String faq6q = request.getParameter("faq6q");
     String faq6a = request.getParameter("faq6a");
+    String faq7q = request.getParameter("faq7q");
+    String faq7a = request.getParameter("faq7a");
+    String faq8q = request.getParameter("faq8q");
+    String faq8a = request.getParameter("faq8a");
     boolean hasFaq = (faq1q != null && faq1a != null);
     boolean hasFaq4 = (faq4q != null && faq4a != null);
     boolean hasFaq5 = (faq5q != null && faq5a != null);
     boolean hasFaq6 = (faq6q != null && faq6a != null);
+    boolean hasFaq7 = (faq7q != null && faq7a != null);
+    boolean hasFaq8 = (faq8q != null && faq8a != null);
 %>
 <% if (hasFaq) { %>
 <script type="application/ld+json">
@@ -404,7 +410,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq1a) %>"
       }
-    }<% if (faq2q != null || faq3q != null || hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
+    }<% if (faq2q != null || faq3q != null || hasFaq4 || hasFaq5 || hasFaq6 || hasFaq7 || hasFaq8) { %>,<% } %>
     <% } %>
     <% if (faq2q != null && faq2a != null) { %>
     {
@@ -414,7 +420,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq2a) %>"
       }
-    }<% if (faq3q != null || hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
+    }<% if (faq3q != null || hasFaq4 || hasFaq5 || hasFaq6 || hasFaq7 || hasFaq8) { %>,<% } %>
     <% } %>
     <% if (faq3q != null && faq3a != null) { %>
     {
@@ -424,7 +430,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq3a) %>"
       }
-    }<% if (hasFaq4 || hasFaq5 || hasFaq6) { %>,<% } %>
+    }<% if (hasFaq4 || hasFaq5 || hasFaq6 || hasFaq7 || hasFaq8) { %>,<% } %>
     <% } %>
     <% if (hasFaq4) { %>
     {
@@ -434,7 +440,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq4a) %>"
       }
-    }<% if (hasFaq5 || hasFaq6) { %>,<% } %>
+    }<% if (hasFaq5 || hasFaq6 || hasFaq7 || hasFaq8) { %>,<% } %>
     <% } %>
     <% if (hasFaq5) { %>
     {
@@ -444,7 +450,7 @@
         "@type": "Answer",
         "text": "<%= escapeJson(faq5a) %>"
       }
-    }<% if (hasFaq6) { %>,<% } %>
+    }<% if (hasFaq6 || hasFaq7 || hasFaq8) { %>,<% } %>
     <% } %>
     <% if (hasFaq6) { %>
     {
@@ -453,6 +459,26 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "<%= escapeJson(faq6a) %>"
+      }
+    }<% if (hasFaq7 || hasFaq8) { %>,<% } %>
+    <% } %>
+    <% if (hasFaq7) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq7q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq7a) %>"
+      }
+    }<% if (hasFaq8) { %>,<% } %>
+    <% } %>
+    <% if (hasFaq8) { %>
+    {
+      "@type": "Question",
+      "name": "<%= escapeJson(faq8q) %>",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<%= escapeJson(faq8a) %>"
       }
     }
     <% } %>

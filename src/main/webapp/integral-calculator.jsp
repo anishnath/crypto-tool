@@ -49,6 +49,10 @@
         <jsp:param name="faq5a" value="Use standard math notation: x^2 for x squared, sin(x) for sine, e^x for exponential, ln(x) for natural log, sqrt(x) for square root, 1/x for reciprocal, sec(x)^2 for secant squared. Multiplication can be explicit (2*x) or implicit. A live KaTeX preview shows your expression in rendered math notation as you type, so you can verify the input before integrating." />
         <jsp:param name="faq6q" value="Is this integral calculator free? Do I need to sign up?" />
         <jsp:param name="faq6a" value="This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a built-in Python compiler. All computation runs in your browser for instant results." />
+        <jsp:param name="faq7q" value="How does u-substitution work in this integral calculator?" />
+        <jsp:param name="faq7a" value="U-substitution (or change of variables) rewrites an integral of the form integral f(g(x))g'(x)dx as integral f(u)du by letting u=g(x). This calculator automatically detects when u-substitution applies and shows the substitution step. For example, integral 2x*cos(x^2)dx becomes integral cos(u)du with u=x^2. Click Show Steps after integrating to see the full u-sub workflow." />
+        <jsp:param name="faq8q" value="What is the power rule for integrals?" />
+        <jsp:param name="faq8a" value="The power rule states that integral x^n dx = x^(n+1)/(n+1) + C for any n not equal to -1. For n=-1, integral 1/x dx = ln|x| + C. This calculator applies the power rule automatically for polynomial terms and shows it in the step-by-step solution. Try x^3 or x^(-2) to see it in action." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -518,6 +522,22 @@
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a built-in Python compiler. All computation runs in your browser for instant results.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How does u-substitution work in this integral calculator?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">U-substitution (or change of variables) rewrites an integral of the form &#8747;f(g(x))g'(x)dx as &#8747;f(u)du by letting u=g(x). This calculator automatically detects when u-substitution applies and shows the substitution step. For example, &#8747;2x&#183;cos(x&#178;)dx becomes &#8747;cos(u)du with u=x&#178;. Click Show Steps after integrating to see the full u-sub workflow.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the power rule for integrals?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The power rule states that &#8747;x<sup>n</sup> dx = x<sup>n+1</sup>/(n+1) + C for any n not equal to -1. For n=-1, &#8747;1/x dx = ln|x| + C. This calculator applies the power rule automatically for polynomial terms and shows it in the step-by-step solution. Try x&#179; or x<sup>-2</sup> to see it in action.</div>
         </div>
     </div>
 </section>

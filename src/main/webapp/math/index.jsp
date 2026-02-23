@@ -828,7 +828,7 @@
             <div class="category-header">
                 <span class="category-icon">&#8747;</span>
                 <h2>Calculus</h2>
-                <span class="category-count">9 tools</span>
+                <span class="category-count">10 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #8b5cf6;">
@@ -1004,6 +1004,23 @@
                         </div>
                     </div>
                     <p>Compute finite difference approximations with forward, central, and backward methods. Symbolic, numerical, and weights modes.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/ode-solver-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #db2777;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #db2777, #f472b6); font-size: 0.85rem; font-weight: 700;">y'</div>
+                        <div>
+                            <h3>ODE Solver Calculator</h3>
+                            <div class="tool-formula">y' = f(x, y)</div>
+                        </div>
+                    </div>
+                    <p>Solve first and second-order ordinary differential equations with step-by-step solutions, direction field plots, and ODE classification.</p>
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">Graph</span>

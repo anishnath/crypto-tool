@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 397,
+  "totalTools": 398,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1347,6 +1347,14 @@
       "category": "Mathematics",
       "keywords": "finite difference calculator numerical differentiation forward difference central difference backward difference finite difference weights stencil numerical derivative finite difference approximation step by step",
       "description": "Finite Difference Calculator - Compute finite difference approximations with forward, central, and backward methods, step-by-step solutions, and interactive graphs",
+      "isNew": true
+    },
+    {
+      "name": "ODE Solver Calculator",
+      "url": "ode-solver-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "ODE solver ordinary differential equation solver first order second order IVP initial value problem separable linear Bernoulli exact direction field slope field dsolve step by step",
+      "description": "ODE Solver Calculator - Solve first and second-order ordinary differential equations with step-by-step solutions, direction field graphs, and Python code",
       "isNew": true
     },
     {
