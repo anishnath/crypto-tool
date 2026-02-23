@@ -961,6 +961,40 @@
                     </div>
                 </a>
 
+                <a href="<%=request.getContextPath()%>/bode-plot-generator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #dc2626;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444); font-size: 0.85rem; font-weight: 700;">H(s)</div>
+                        <div>
+                            <h3>Bode Plot Generator</h3>
+                            <div class="tool-formula">|H(j&omega;)| dB, &angle;H(j&omega;)&deg;</div>
+                        </div>
+                    </div>
+                    <p>Generate Bode magnitude and phase plots for transfer functions with step-by-step analysis and interactive graphs.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/convolution-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #d97706;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">&ast;</div>
+                        <div>
+                            <h3>Convolution Calculator</h3>
+                            <div class="tool-formula">(f&ast;g)(t) = &int;f(&tau;)g(t&minus;&tau;)d&tau;</div>
+                        </div>
+                    </div>
+                    <p>Compute continuous and discrete convolution with step-by-step solutions, interactive graphs, and properties table.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&Sigma;</div>
