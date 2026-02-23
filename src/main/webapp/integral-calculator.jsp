@@ -24,19 +24,22 @@
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/integral-calculator.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/integral-calculator.css?v=<%=cacheVersion%>"></noscript>
 
-    <!-- SEO -->
+    <!-- SEO (competitive targeting: integral-calculator.com #1, Symbolab, Wolfram, Mathway) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Integral Calculator with Steps - Solve Integrals Step by Step Free" />
-        <jsp:param name="toolDescription" value="Free online integral calculator with detailed step-by-step solutions. Solve indefinite and definite integrals instantly. Shows full working with AI-powered explanations, interactive graph with shaded area, LaTeX output, and PDF export. Supports polynomials, trigonometric, exponential, logarithmic, rational, and hyperbolic functions. No signup required." />
+        <jsp:param name="toolName" value="Integral Calculator • With Steps!" />
+        <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions. Solve indefinite &amp; definite integrals instantly. AI explanations, interactive graph, PDF &amp; LaTeX export. No signup required." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="integral-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="integral calculator with steps, integration calculator step by step, antiderivative calculator, definite integral calculator, indefinite integral calculator, symbolic integration, solve integrals online free, calculus calculator with steps, integral solver, how to integrate, integration by parts calculator, u substitution calculator, trig integral calculator, download integral solution pdf" />
+        <jsp:param name="toolKeywords" value="integral calculator, integral calculator with steps, definite integral calculator, antiderivative calculator, indefinite integral calculator, integration by parts calculator, symbolic integration, solve integrals online free, calculus calculator with steps, u substitution calculator, trig integral calculator, download integral solution pdf" />
+        <jsp:param name="educationalLevel" value="High School, College" />
+        <jsp:param name="teaches" value="Calculus, integration, antiderivatives, definite integrals" />
+        <jsp:param name="howToSteps" value="Enter your function|Type your integral using math notation (e.g. sin(x), x^2, e^x) in the function input field,Select indefinite or definite mode|Toggle between indefinite (antiderivative) and definite (with bounds) integral,Click Integrate|Click the Integrate button to compute the result,View steps &amp; result|See the symbolic answer, step-by-step solution with AI explanations, and interactive graph" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Step-by-step solutions with AI explanations,Indefinite and definite integral evaluation,Live LaTeX math preview as you type,Interactive Plotly graph with shaded area,AI-powered detailed solution steps,Download result as PDF,Polynomials and rational functions,Trigonometric and hyperbolic integration,Exponential and logarithmic functions,Integration by parts and substitution,Copy LaTeX or plain text output,Share results via URL,Built-in Python compiler,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What types of integrals can this calculator solve?" />
         <jsp:param name="faq1a" value="This calculator solves indefinite integrals (antiderivatives) and definite integrals for polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x), rational functions, hyperbolic functions (sinh, cosh, tanh), inverse trig (arctan, arcsin), and products solved by integration by parts. It handles power rule, u-substitution, partial fractions, and more." />
-        <jsp:param name="faq2q" value="Does this integral calculator show step-by-step solutions?" />
+        <jsp:param name="faq2q" value="Does this integral calculator show step-by-step solutions for integration by parts?" />
         <jsp:param name="faq2a" value="Yes. After computing a result, click the Show Steps button to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly. For complex integrals like integration by parts or partial fractions, AI-powered steps explain each algebraic manipulation, substitution, and simplification in 5-8 clear steps with full LaTeX math rendering." />
         <jsp:param name="faq3q" value="Can I download or share my integral solution?" />
         <jsp:param name="faq3a" value="Yes. After computing a result you can: (1) Download as PDF with the question, answer, method, and step-by-step solution beautifully formatted, (2) Copy the result as LaTeX for use in papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL that loads your exact integral with one click. The PDF includes the 8gwifi.org watermark and current date." />
@@ -479,7 +482,7 @@
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Does this integral calculator show step-by-step solutions?
+                Does this integral calculator show step-by-step solutions for integration by parts?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">Yes. After computing a result, click the Show Steps button to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly. For complex integrals like integration by parts or partial fractions, AI-powered steps explain each algebraic manipulation, substitution, and simplification in 5-8 clear steps with full LaTeX math rendering.</div>
