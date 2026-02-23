@@ -446,11 +446,11 @@
                     <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">Forward &amp; inverse Fourier transforms for signal analysis</p>
                 </div>
             </a>
-            <a href="<%=request.getContextPath()%>/convolution-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(5,150,105,0.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #d97706, #f59e0b); border-radius: 0.625rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.4rem; color: #fff;">&ast;</div>
+            <a href="<%=request.getContextPath()%>/finite-difference-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(5,150,105,0.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #0d9488, #14b8a6); border-radius: 0.625rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.4rem; color: #fff;">&#916;</div>
                 <div>
-                    <h4 style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin: 0 0 0.25rem;">Convolution Calculator</h4>
-                    <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">Continuous &amp; discrete convolution with steps and graphs</p>
+                    <h4 style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin: 0 0 0.25rem;">Finite Difference Calculator</h4>
+                    <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">Forward, central &amp; backward differences with steps</p>
                 </div>
             </a>
         </div>
