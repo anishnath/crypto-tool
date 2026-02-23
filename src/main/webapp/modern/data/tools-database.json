@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 391,
+  "totalTools": 394,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -1305,6 +1305,27 @@
       "category": "Mathematics",
       "keywords": "vector calculus calculator gradient divergence curl nabla del operator partial derivatives multivariable calculus electromagnetic fields fluid dynamics step by step",
       "description": "Vector Calculus Calculator - Compute gradient, divergence, and curl with step-by-step solutions and 3D visualization"
+    },
+    {
+      "name": "Laplace Transform Calculator (Forward & Inverse)",
+      "url": "laplace-transform-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "laplace transform calculator inverse laplace transform partial fractions region of convergence differential equations control systems transfer function step by step",
+      "description": "Laplace Transform Calculator - Compute forward and inverse Laplace transforms with step-by-step solutions, partial fractions, and graphs"
+    },
+    {
+      "name": "Fourier Transform Calculator (Forward & Inverse)",
+      "url": "fourier-transform-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "fourier transform calculator inverse fourier transform frequency domain signal processing DFT convolution theorem fourier pairs spectrum analysis step by step",
+      "description": "Fourier Transform Calculator - Compute forward and inverse Fourier transforms with step-by-step solutions, frequency domain analysis, and graphs"
+    },
+    {
+      "name": "Z-Transform Calculator (Forward & Inverse)",
+      "url": "z-transform-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "z-transform calculator inverse z-transform discrete-time signals digital signal processing transfer function difference equations region of convergence partial fractions step by step",
+      "description": "Z-Transform Calculator - Compute forward and inverse Z-transforms with step-by-step solutions, ROC, stem plots, and graphs"
     },
     {
       "name": "Language Detector",

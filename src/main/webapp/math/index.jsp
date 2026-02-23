@@ -828,7 +828,7 @@
             <div class="category-header">
                 <span class="category-icon">&#8747;</span>
                 <h2>Calculus</h2>
-                <span class="category-count">6 tools</span>
+                <span class="category-count">9 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #8b5cf6;">
@@ -905,6 +905,57 @@
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">3D Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/laplace-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0891b2;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">&#8466;</div>
+                        <div>
+                            <h3>Laplace Transform Calculator</h3>
+                            <div class="tool-formula">L{f(t)} &harr; F(s), forward &amp; inverse</div>
+                        </div>
+                    </div>
+                    <p>Forward and inverse Laplace transforms with step-by-step solutions, partial fractions, ROC, and common pairs table.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/fourier-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">&#8497;</div>
+                        <div>
+                            <h3>Fourier Transform Calculator</h3>
+                            <div class="tool-formula">F{f(t)} &harr; F(&omega;)</div>
+                        </div>
+                    </div>
+                    <p>Forward and inverse Fourier transforms with step-by-step solutions, frequency domain analysis, and common pairs table.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/z-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #059669;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #059669, #10b981);">Z</div>
+                        <div>
+                            <h3>Z-Transform Calculator</h3>
+                            <div class="tool-formula">Z{x[n]} &harr; X(z)</div>
+                        </div>
+                    </div>
+                    <p>Forward and inverse Z-transforms with step-by-step solutions, ROC, stem plots, and common pairs table.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
                         <span class="badge badge-python">Python</span>
                         <span class="badge badge-new">New</span>
                     </div>

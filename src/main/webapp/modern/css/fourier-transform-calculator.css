@@ -1,0 +1,476 @@
+/**
+ * Fourier Transform Calculator - page-specific styles
+ * Loaded by fourier-transform-calculator.jsp
+ * Shared styles (nav, grid, cards, form, result, empty state) come from
+ * design-system.css, navigation.css, three-column-tool.css
+ */
+
+/* ===== Tool color tokens ===== */
+:root {
+    --tool-primary: #7c3aed;
+    --tool-primary-dark: #6d28d9;
+    --tool-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    --tool-light: #f5f3ff;
+}
+[data-theme="dark"] {
+    --tool-light: rgba(124, 58, 237, 0.15);
+}
+
+/* ===== Mode toggle (2 buttons: Forward | Inverse) ===== */
+.ft-mode-toggle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+    margin-bottom: 0.875rem;
+}
+.ft-mode-btn {
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.ft-mode-btn.active {
+    background: var(--tool-gradient);
+    color: #fff;
+}
+.ft-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .ft-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .ft-mode-btn.active { background: var(--tool-gradient); color: #fff; }
+[data-theme="dark"] .ft-mode-btn:hover:not(.active) { background: rgba(255, 255, 255, 0.08); }
+
+/* ===== Live preview ===== */
+.ft-preview {
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    font-size: 1.1rem;
+}
+.ft-preview .katex-display { margin: 0; }
+[data-theme="dark"] .ft-preview {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+
+/* ===== Quick examples ===== */
+.ft-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.ft-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    background: var(--bg-secondary, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-full, 9999px);
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.ft-example-chip:hover {
+    background: var(--tool-primary);
+    color: #fff;
+    border-color: var(--tool-primary);
+}
+[data-theme="dark"] .ft-example-chip {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+[data-theme="dark"] .ft-example-chip:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+
+/* ===== Fourier Pairs Table ===== */
+.ft-pairs-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    width: 100%;
+    font-family: var(--font-sans);
+}
+.ft-pairs-content {
+    display: none;
+    padding-bottom: 0.5rem;
+}
+.ft-pairs-content.open { display: block; }
+.ft-pairs-chevron {
+    transition: transform 0.2s;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+.ft-pairs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    margin-top: 0.5rem;
+}
+.ft-pairs-table th {
+    background: var(--tool-light);
+    color: var(--tool-primary);
+    font-weight: 600;
+    padding: 0.5rem 0.625rem;
+    text-align: left;
+    border-bottom: 1.5px solid var(--border);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.ft-pairs-table td {
+    padding: 0.4375rem 0.625rem;
+    border-bottom: 1px solid var(--border-light, #f1f5f9);
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
+.ft-pairs-table tr:last-child td { border-bottom: none; }
+[data-theme="dark"] .ft-pairs-table th { background: var(--tool-light); }
+[data-theme="dark"] .ft-pairs-table td { border-bottom-color: var(--border); }
+
+/* ===== Syntax help ===== */
+.ft-syntax-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    width: 100%;
+    font-family: var(--font-sans);
+}
+.ft-syntax-content {
+    display: none;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding-bottom: 0.5rem;
+}
+.ft-syntax-content.open { display: block; }
+.ft-syntax-chevron {
+    transition: transform 0.2s;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* ===== Output tabs ===== */
+.ft-output-tabs {
+    display: flex;
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+}
+.ft-output-tab {
+    flex: 1;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.ft-output-tab.active {
+    background: var(--tool-gradient);
+    color: #fff;
+}
+.ft-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .ft-output-tab { background: var(--bg-tertiary); }
+[data-theme="dark"] .ft-output-tab.active { background: var(--tool-gradient); color: #fff; }
+[data-theme="dark"] .ft-output-tab:hover:not(.active) { background: rgba(255, 255, 255, 0.08); }
+
+/* ===== Panels ===== */
+.ft-panel { display: none; flex: 1; min-height: 0; }
+.ft-panel.active { display: flex; flex-direction: column; }
+#ft-panel-result .tool-result-card { flex: 1; }
+
+/* ===== Result display ===== */
+.ft-result-math {
+    padding: 1.5rem;
+    overflow-x: auto;
+    max-width: 100%;
+    text-align: center;
+}
+.ft-result-math .katex-display {
+    margin: 0.5rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.ft-result-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+.ft-result-main {
+    font-size: 1.3rem;
+    padding: 1rem 0;
+}
+
+/* ===== Convergence badge ===== */
+.ft-convergence-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.75rem;
+    background: var(--tool-light);
+    color: var(--tool-primary);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+/* ===== Result detail ===== */
+.ft-result-detail {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+[data-theme="dark"] .ft-result-detail {
+    background: var(--bg-tertiary);
+    border-color: var(--border);
+}
+
+/* ===== Method badge ===== */
+.ft-method-badge {
+    display: inline-block;
+    background: var(--tool-light);
+    color: var(--tool-primary);
+    padding: 0.2rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+/* ===== Error state ===== */
+.ft-error {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    color: #92400e;
+}
+.ft-error h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+}
+.ft-error ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+}
+[data-theme="dark"] .ft-error {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: #fbbf24;
+}
+
+/* ===== Steps ===== */
+.ft-steps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--tool-primary);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--tool-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0.75rem;
+}
+.ft-steps-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+.ft-steps-container {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.ft-steps-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--tool-light);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--tool-primary);
+}
+.ft-step {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+.ft-step:last-child { border-bottom: none; }
+.ft-step-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--tool-gradient);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ft-step-body { flex: 1; min-width: 0; }
+.ft-step-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+.ft-step-math {
+    font-size: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.ft-step-math .katex-display {
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    min-width: min-content;
+}
+.ft-steps-sympy-badge {
+    font-size: 0.625rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    margin-left: auto;
+}
+[data-theme="dark"] .ft-steps-container { border-color: var(--border); }
+[data-theme="dark"] .ft-steps-header { background: var(--tool-light); border-bottom-color: var(--border); }
+[data-theme="dark"] .ft-step { border-bottom-color: var(--border); }
+
+/* ===== Graph ===== */
+#ft-graph-container {
+    width: 100%;
+    min-height: 440px;
+    border-radius: var(--radius-md);
+}
+#ft-panel-graph { min-height: 480px; }
+#ft-panel-python { min-height: 540px; }
+#ft-panel-result .tool-result-card { flex: 1; }
+
+/* ===== Action row (Compute + Random) ===== */
+.ft-action-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+.ft-action-row .ft-compute-btn {
+    flex: 1;
+    margin-top: 0;
+}
+.ft-random-btn {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--tool-primary);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--bg-primary);
+    color: var(--tool-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+.ft-random-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+.ft-random-btn:active {
+    transform: scale(0.96);
+}
+[data-theme="dark"] .ft-random-btn {
+    background: var(--bg-tertiary);
+    border-color: var(--tool-primary);
+    color: #a78bfa;
+}
+[data-theme="dark"] .ft-random-btn:hover {
+    background: var(--tool-primary);
+    color: #fff;
+}
+
+/* ===== Separator ===== */
+.ft-sep {
+    border: none;
+    border-top: 1px solid var(--border, #e2e8f0);
+    margin: 0.75rem 0;
+}
+
+/* ===== Spinner ===== */
+@keyframes ft-spin {
+    to { transform: rotate(360deg); }
+}
+.ft-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--tool-primary);
+    border-radius: 50%;
+    animation: ft-spin 0.6s linear infinite;
+}
