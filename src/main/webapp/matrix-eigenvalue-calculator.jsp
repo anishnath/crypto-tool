@@ -9,8 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Eigenvalue Calculator | λ & Eigenvectors Free" />
-    <jsp:param name="toolDescription" value="Free eigenvalue and eigenvector calculator. det(A-λI)=0, power iteration, QR. 2×2 to 4×4. Step-by-step. Print worksheet with practice exercises. Share, download." />
+    <jsp:param name="toolName" value="Eigenvalue & Eigenvector Calculator — Free Online" />
+    <jsp:param name="toolDescription" value="Find eigenvalues and eigenvectors for 2×2 to 4×4 matrices. Characteristic polynomial, QR algorithm, step-by-step. Free, instant." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-eigenvalue-calculator.jsp" />
     <jsp:param name="toolKeywords" value="eigenvalue calculator, eigenvector calculator, characteristic polynomial, power iteration, spectral decomposition, matrix diagonalization, lambda, det(A-lambda*I), QR algorithm" />
@@ -23,6 +23,10 @@
     <jsp:param name="faq2a" value="For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well." />
     <jsp:param name="faq3q" value="What sizes and methods are supported?" />
     <jsp:param name="faq3a" value="This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style eigenvalue questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates eigenvalue problems at Easy (diagonal matrices), Medium (2×2 general), or Hard (trace/determinant relationships) with instant scoring." />
+    <jsp:param name="faq5q" value="What is the spectral theorem and why does it matter?" />
+    <jsp:param name="faq5a" value="The spectral theorem states that every real symmetric matrix can be diagonalized by an orthogonal matrix. This means its eigenvalues are all real and eigenvectors are orthogonal — essential for PCA, physics, and optimization." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +46,8 @@
   <%@ include file="modern/ads/ad-init.jsp"%>
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
@@ -51,8 +57,6 @@
     .eigen-calc .eigenvalue-card{border-left:4px solid #f59e0b;background:#fffbeb;border-radius:6px;padding:1rem;margin:0.75rem 0}
     .eigen-calc .eigenvector-card{border-left:4px solid #3b82f6;background:#eff6ff;border-radius:6px;padding:1rem;margin:0.75rem 0}
     .eigen-calc .eigenvalue-badge{background:#fef3c7;color:#92400e;padding:0.25rem 0.6rem;border-radius:12px;font-weight:600;margin:0.25rem;display:inline-block}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
     .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
@@ -157,17 +161,17 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Eigenvalues &amp; Eigenvectors</span>
         <div style="display:flex;flex-wrap:wrap;gap:0.25rem">
-          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">
             <i class="fas fa-share-alt"></i> Share URL
           </button>
-          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">
             <i class="fas fa-download"></i> Download
           </button>
-          <button id="btnPrintWorksheet" class="tool-btn-outline" title="Print worksheet" style="padding:0.4rem 0.75rem;font-size:0.8125rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
+          <button id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
-        <div id="resultArea" class="text-center text-muted">
+        <div id="resultArea" style="text-align:center;color:var(--text-muted)">
           Enter a square matrix and click "Calculate" to find eigenvalues and eigenvectors.
         </div>
       </div>
@@ -176,7 +180,7 @@
     <div class="tool-card">
       <div class="tool-card-header">Step-by-Step Solution</div>
       <div class="tool-card-body">
-        <div id="stepsArea" class="text-muted">
+        <div id="stepsArea" style="color:var(--text-muted)">
           Detailed computation steps will appear here.
         </div>
       </div>
@@ -403,7 +407,7 @@
       const method = methodSelect.value;
 
       let html = `
-        <div class="mb-3">
+        <div style="margin-bottom:0.75rem">
           <strong>Input Matrix A:</strong>
           <div class="matrix-display">$$A = ${formatMatrix(matrix)}$$</div>
         </div>
@@ -442,7 +446,7 @@
         }
 
         if(showSteps.checked) {
-          stepsHtml = '<div class="mb-3"><strong>Solution Steps:</strong></div>';
+          stepsHtml = '<div style="margin-bottom:0.75rem"><strong>Solution Steps:</strong></div>';
           result.steps.forEach((step, idx) => {
             stepsHtml += `<div class="step-card"><strong>Step ${idx + 1}:</strong> ${step}</div>`;
           });
@@ -454,7 +458,7 @@
         html += `<div class="eigenvalue-card">
           <strong>Dominant Eigenvalue:</strong>
           <div class="eigenvalue-badge">${result.eigenvalue.toFixed(6)}</div>
-          <div class="small text-muted mt-2">Converged in ${result.iterations} iterations</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem">Converged in ${result.iterations} iterations</div>
         </div>`;
 
         html += `<div class="eigenvector-card">
@@ -463,7 +467,7 @@
         </div>`;
 
         if(showSteps.checked) {
-          stepsHtml = '<div class="mb-3"><strong>Power Iteration Steps:</strong></div>';
+          stepsHtml = '<div style="margin-bottom:0.75rem"><strong>Power Iteration Steps:</strong></div>';
           result.steps.forEach((step, idx) => {
             stepsHtml += `<div class="step-card">${step}</div>`;
           });
@@ -473,14 +477,14 @@
         html += '<div class="alert alert-warning">Full QR algorithm implementation coming soon. Use Characteristic Polynomial for 2×2 matrices or Power Iteration for dominant eigenvalue.</div>';
       }
 
-      html += `<div class="mt-3 small text-muted">
+      html += `<div style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted)">
         <strong>Properties:</strong><br>
         Trace(A) = ${trace(matrix).toFixed(4)}<br>
         ${n === 2 ? `Determinant = ${determinant2x2(matrix).toFixed(4)}` : ''}
       </div>`;
 
       resultArea.innerHTML = html;
-      stepsArea.innerHTML = stepsHtml || '<div class="text-muted">Enable "Show detailed steps" to see the solution process.</div>';
+      stepsArea.innerHTML = stepsHtml || '<div style="color:var(--text-muted)">Enable "Show detailed steps" to see the solution process.</div>';
 
       if(window.MathJax && window.MathJax.typesetPromise) {
         MathJax.typesetPromise([resultArea, stepsArea]).catch(err => console.error(err));
@@ -496,8 +500,8 @@
 
   function clear() {
     matrixInput.value = '';
-    resultArea.innerHTML = '<div class="text-center text-muted">Enter a square matrix and click "Calculate" to find eigenvalues and eigenvectors.</div>';
-    stepsArea.innerHTML = '<div class="text-muted">Detailed computation steps will appear here.</div>';
+    resultArea.innerHTML = '<div style="text-align:center;color:var(--text-muted)">Enter a square matrix and click "Calculate" to find eigenvalues and eigenvectors.</div>';
+    stepsArea.innerHTML = '<div style="color:var(--text-muted)">Detailed computation steps will appear here.</div>';
     inputError.style.display = 'none';
   }
 
@@ -559,6 +563,7 @@
   // Download Image
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-eigenvalue', 'No result to download. Please calculate eigenvalues first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Eigenvalue', { exerciseType: 'eigenvalue' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   // Load from URL or default
   const loaded = MatrixUtils.loadFromURL(function(p) {
@@ -573,10 +578,31 @@
   if(!loaded) {
     loadPreset('symmetric');
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Eigenvalue Practice',
+      toolColor: '#f59e0b',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: 'Diagonal matrices' },
+        { id: 'medium', label: 'Medium', description: '2×2 general' },
+        { id: 'hard', label: 'Hard', description: 'Trace/det relations' }
+      ],
+      generateProblems: MatrixPractice.eigenvalue
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Eigenvalue &amp; Eigenvector Calculator</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">For a square matrix A, eigenvalues λ satisfy det(A − λI) = 0 and eigenvectors v satisfy A v = λ v. This tool uses the characteristic polynomial for 2×2, power iteration for the dominant eigenvalue, and QR algorithm for all eigenvalues. <strong>All calculations run client-side</strong>—no data stored.</p>
@@ -611,9 +637,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What if the eigenvalues are complex?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For some real matrices the characteristic polynomial has complex roots; these appear as complex conjugate pairs and the corresponding eigenvectors are complex as well.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and methods are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This calculator supports 2×2 to 4×4 matrices and offers characteristic polynomial, power iteration (dominant eigenvalue), and QR algorithm to find all eigenvalues.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is the spectral theorem and why does it matter?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">The spectral theorem states that every real symmetric matrix can be diagonalized by an orthogonal matrix. This means its eigenvalues are all real and eigenvectors are orthogonal — essential for PCA, physics, and optimization.</p>
   </div>
 </section>
 

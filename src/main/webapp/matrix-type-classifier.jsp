@@ -9,8 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Type Classifier | 20+ Types Free" />
-    <jsp:param name="toolDescription" value="Identify 20+ matrix types: symmetric, diagonal, triangular, orthogonal. Automatic property analysis. Print worksheet with practice exercises. Share, download. Step-by-step reasoning." />
+    <jsp:param name="toolName" value="Matrix Type Classifier — Identify 20+ Types Free" />
+    <jsp:param name="toolDescription" value="Classify matrices automatically: symmetric, orthogonal, diagonal, triangular, and 20+ types. D3 visualization, step-by-step reasoning. Free." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-type-classifier.jsp" />
     <jsp:param name="toolKeywords" value="matrix type classifier, matrix properties, symmetric matrix, orthogonal matrix, diagonal matrix, triangular matrix, positive definite, nilpotent, idempotent, matrix analysis" />
@@ -23,6 +23,10 @@
     <jsp:param name="faq2a" value="Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints." />
     <jsp:param name="faq3q" value="Why is my matrix flagged as singular?" />
     <jsp:param name="faq3a" value="A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style classification questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates classification problems at Easy (diagonal/identity/zero), Medium (symmetric/triangular), or Hard (orthogonal/positive-definite) with instant scoring." />
+    <jsp:param name="faq5q" value="How are matrix properties related to each other?" />
+    <jsp:param name="faq5a" value="Many properties overlap: every identity matrix is diagonal, symmetric, and orthogonal. Every orthogonal matrix has det = ±1. Positive-definite matrices are always symmetric and non-singular. Understanding these relationships helps classify matrices quickly." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,32 +47,42 @@
   <%@ include file="modern/ads/ad-init.jsp"%>
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://d3js.org/d3.v7.min.js"  crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"  crossorigin="anonymous"></script>
   <style>
     :root { --tool-primary:#3b82f6; --tool-primary-dark:#1d4ed8; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
-    .matrix-classifier .form-group{margin-bottom:.55rem}
-    #matrixCanvas{width:100%;min-height:320px;border:1px solid #e5e7eb;border-radius:6px;background:#f8fafc}
+    .matrix-classifier .tool-card-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:0.75rem 1.25rem;font-size:1rem;font-weight:600;color:var(--text-primary,#1e293b);border-bottom:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:var(--radius-lg,12px) var(--radius-lg,12px) 0 0}
+    .matrix-classifier .tool-card-body{padding:1.25rem;color:var(--text-primary,#1e293b)}
+    #matrixCanvas{width:100%;min-height:320px;border:1px solid var(--border,#e5e7eb);border-radius:6px;background:var(--bg-secondary,#f8fafc)}
     .badge-type{display:inline-flex;align-items:center;padding:0.3rem 0.6rem;border-radius:999px;font-size:0.85rem;margin:0.15rem 0.25rem;font-weight:500}
     .badge-core{background:#dbeafe;color:#1d4ed8}
     .badge-structure{background:#dcfce7;color:#166534}
     .badge-warning{background:#fee2e2;color:#b91c1c}
-    .badge-neutral{background:#e2e8f0;color:#1e293b}
+    .badge-neutral{background:var(--bg-tertiary,#e2e8f0);color:var(--text-primary,#1e293b)}
     .matrix-grid{display:inline-block;border-collapse:collapse;margin-top:0.5rem}
-    .matrix-grid td{padding:0.35rem 0.6rem;border:1px solid #cbd5e1;font-family:monospace;font-size:0.95rem;min-width:48px;text-align:center}
+    .matrix-grid td{padding:0.35rem 0.6rem;border:1px solid var(--border,#cbd5e1);font-family:monospace;font-size:0.95rem;min-width:48px;text-align:center;color:var(--text-primary,#1e293b)}
     .matrix-grid .diag{background:#fef3c7}
-    .matrix-grid .offdiag{background:#f8fafc}
+    .matrix-grid .offdiag{background:var(--bg-primary,#f8fafc)}
     .matrix-grid .highlight{background:#fecdd3;color:#7f1d1d}
-    .matrix-grid .zero{color:#94a3b8}
-    .classification-card{border-left:4px solid #3b82f6;background:#eff6ff;border-radius:4px;padding:0.6rem;margin-bottom:0.6rem}
-    .explain-step{border-left:3px solid #6366f1;padding-left:0.6rem;margin-bottom:0.5rem}
-    .preset-btn{margin:0.2rem 0.3rem}
-    .matrix-meta{font-family:monospace;font-size:0.95rem;color:#334155}
+    .matrix-grid .zero{color:var(--text-muted,#94a3b8)}
+    .classification-card{border-left:4px solid #3b82f6;background:var(--tool-light,#eff6ff);color:var(--text-primary,#1e293b);border-radius:4px;padding:0.6rem;margin-bottom:0.6rem}
+    .classification-card strong{color:var(--text-primary,#1e293b)}
+    .explain-step{border-left:3px solid #6366f1;padding-left:0.6rem;margin-bottom:0.5rem;color:var(--text-primary,#1e293b)}
+    .mc-preset-btn{display:inline-block;padding:0.3rem 0.6rem;font-size:0.78rem;font-weight:500;border:1px solid var(--border,#cbd5e1);border-radius:6px;background:var(--bg-primary,#fff);color:var(--text-secondary,#475569);cursor:pointer;transition:all 0.15s ease;white-space:nowrap}
+    .mc-preset-btn:hover{border-color:var(--tool-primary);color:var(--tool-primary);background:var(--tool-light)}
+    .mc-preset-btn.active{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary);font-weight:600}
+    [data-theme="dark"] .mc-preset-btn{background:var(--bg-tertiary,#334155);border-color:var(--border,#475569);color:var(--text-secondary,#94a3b8)}
+    [data-theme="dark"] .mc-preset-btn:hover{border-color:#60a5fa;color:#93c5fd;background:rgba(59,130,246,0.12)}
+    [data-theme="dark"] .mc-preset-btn.active{border-color:#60a5fa;color:#93c5fd;background:rgba(59,130,246,0.15)}
+    .matrix-meta{font-family:monospace;font-size:0.95rem;color:var(--text-primary,#334155)}
     .matrix-svg-wrapper{
       position:relative;
       overflow:visible;
-      background:linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      background:var(--bg-primary,#fff);
+      border:1px solid var(--border,#e2e8f0);
       border-radius:12px;
       padding:20px;
       box-shadow:0 4px 6px rgba(0,0,0,0.05), 0 10px 25px rgba(0,0,0,0.03);
@@ -101,22 +115,22 @@
       border-right:6px solid transparent;
       border-top:6px solid rgba(15,23,42,0.95);
     }
-    .matrix-legend-label{font-size:0.75rem;fill:#475569;font-weight:500}
+    .matrix-legend-label{font-size:0.75rem;fill:var(--text-secondary,#475569);font-weight:500}
     .matrix-cell-value{
       font-family:'SF Mono','Monaco','Fira Code',monospace;
       font-size:0.8rem;
-      fill:#0f172a;
+      fill:var(--text-primary,#0f172a);
       font-weight:600;
       transition:all 0.2s ease;
     }
     .matrix-axis-label{
       font-size:0.8rem;
-      fill:#475569;
+      fill:var(--text-secondary,#475569);
       font-weight:600;
       text-transform:uppercase;
       letter-spacing:0.05em;
     }
-    .matrix-axis-tick{font-size:0.7rem;fill:#64748b}
+    .matrix-axis-tick{font-size:0.7rem;fill:var(--text-muted,#64748b)}
     .matrix-diagonal-outline{
       stroke:#f59e0b;
       stroke-width:2.5;
@@ -125,7 +139,7 @@
       pointer-events:none;
       filter:drop-shadow(0 0 3px rgba(245,158,11,0.4));
     }
-    .matrix-zero-dot{fill:#cbd5e1;opacity:0.5}
+    .matrix-zero-dot{fill:var(--text-muted,#cbd5e1);opacity:0.5}
     .matrix-cell{
       transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       filter:drop-shadow(0 1px 2px rgba(0,0,0,0.05));
@@ -144,24 +158,38 @@
       transition:opacity 0.2s ease;
     }
 
+    /* ===== Dark Mode ===== */
+    [data-theme="dark"] .matrix-classifier .tool-card-header{background:var(--bg-tertiary,#334155);color:var(--text-primary,#f1f5f9);border-bottom-color:var(--border,#475569)}
+    [data-theme="dark"] .matrix-classifier .tool-card-body{background:var(--bg-secondary,#1e293b);color:var(--text-primary,#f1f5f9)}
+    [data-theme="dark"] .classification-card{background:rgba(59,130,246,0.12);border-left-color:#60a5fa;color:var(--text-primary,#f1f5f9)}
+    [data-theme="dark"] .classification-card strong{color:#93c5fd}
+    [data-theme="dark"] .explain-step{border-left-color:#818cf8;color:var(--text-primary,#f1f5f9)}
+    [data-theme="dark"] .badge-core{background:rgba(59,130,246,0.2);color:#93c5fd}
+    [data-theme="dark"] .badge-structure{background:rgba(34,197,94,0.15);color:#86efac}
+    [data-theme="dark"] .badge-warning{background:rgba(239,68,68,0.15);color:#fca5a5}
+    [data-theme="dark"] .badge-neutral{background:var(--bg-tertiary,#334155);color:var(--text-secondary,#cbd5e1)}
+    [data-theme="dark"] .matrix-grid td{border-color:var(--border,#475569);color:var(--text-primary,#f1f5f9)}
+    [data-theme="dark"] .matrix-grid .diag{background:rgba(251,191,36,0.15)}
+    [data-theme="dark"] .matrix-grid .offdiag{background:var(--bg-secondary,#1e293b)}
+    [data-theme="dark"] .matrix-grid .highlight{background:rgba(239,68,68,0.2);color:#fca5a5}
+    [data-theme="dark"] .matrix-svg-wrapper{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155);box-shadow:0 4px 6px rgba(0,0,0,0.2)}
+    [data-theme="dark"] #matrixCanvas{border-color:var(--border,#475569);background:var(--bg-secondary,#1e293b)}
+    [data-theme="dark"] .matrix-meta{color:var(--text-secondary,#cbd5e1)}
+    [data-theme="dark"] .matrix-classifier label{color:var(--text-primary,#f1f5f9)}
+    [data-theme="dark"] #gridContainer input{background:var(--bg-tertiary,#334155);color:var(--text-primary,#f1f5f9);border-color:var(--border,#475569)}
+    [data-theme="dark"] .matrix-classifier strong{color:var(--text-primary,#f1f5f9)}
+
     /* Mobile Responsive Styles */
     @media (max-width: 991px) {
       .matrix-classifier h1{font-size:1.75rem}
-      .matrix-classifier .card{margin-bottom:1rem}
-      .matrix-classifier .card-header{font-size:0.95rem;padding:0.5rem 0.75rem}
-      .matrix-classifier .card-body{padding:0.75rem}
-
-      /* Make buttons full-width on mobile */
-      .matrix-classifier .btn-group{display:flex;flex-direction:column}
-      .matrix-classifier .d-flex.flex-wrap button{flex:1 1 auto;margin:0.25rem 0}
+      .matrix-classifier .tool-card{margin-bottom:1rem}
+      .matrix-classifier .tool-card-header{font-size:0.95rem;padding:0.5rem 0.75rem}
+      .matrix-classifier .tool-card-body{padding:0.75rem}
 
       /* Adjust form inputs for better touch targets */
       .matrix-classifier input[type="number"],
       .matrix-classifier textarea,
-      .matrix-classifier .form-control{font-size:16px;padding:0.5rem 0.75rem}
-
-      /* Stack dimension inputs vertically on very small screens */
-      .matrix-classifier .form-group .d-flex{flex-wrap:wrap}
+      .matrix-classifier .tool-input{font-size:16px;padding:0.5rem 0.75rem}
 
       /* Make badges wrap better */
       .badge-type{font-size:0.8rem;padding:0.25rem 0.5rem;margin:0.1rem 0.15rem}
@@ -173,25 +201,18 @@
       .matrix-tooltip{font-size:0.9rem;padding:0.6rem 0.85rem;max-width:90vw;white-space:normal}
 
       /* Improve example section for mobile */
-      #examplesContent .row{margin:0}
-      #examplesContent .col-md-6{padding:0.5rem}
       #examplesContent h6{font-size:0.9rem}
-      #examplesContent .text-muted{font-size:0.8rem}
     }
 
     @media (max-width: 767px) {
       .matrix-classifier h1{font-size:1.5rem;margin-bottom:0.5rem}
-      .matrix-classifier .text-muted{font-size:0.9rem}
 
       /* Make action buttons stack vertically */
       #btnAnalyse,#btnRandom,#btnClear{width:100%;margin:0.25rem 0}
 
       /* Simplify header on mobile */
-      .card-header.d-flex{flex-direction:column;align-items:flex-start!important}
-      .card-header button{margin-top:0.5rem;width:100%}
-
-      /* Better spacing for mobile */
-      .matrix-classifier .form-group{margin-bottom:0.75rem}
+      .matrix-classifier .tool-card-header{flex-direction:column;align-items:flex-start!important}
+      .tool-card-header button{margin-top:0.5rem;width:100%}
 
       /* Optimize matrix meta display */
       .matrix-meta{font-size:0.85rem;line-height:1.6}
@@ -202,20 +223,12 @@
 
       /* Better example section for small mobile */
       #examplesContent{max-height:400px}
-      #examplesContent .col-md-6{padding:0.25rem;margin-bottom:0.75rem}
-
-      /* Reduce padding in related tools section */
-      .card-body.small{font-size:0.85rem}
-      .card-body.small .btn-sm{font-size:0.75rem;padding:0.25rem 0.5rem}
     }
 
     @media (max-width: 575px) {
       /* Extra small devices - further optimize */
       .container{padding-left:10px;padding-right:10px}
       .matrix-classifier h1{font-size:1.3rem}
-
-      /* Make preset dropdown full width */
-      .dropdown-menu{min-width:100%;left:0!important}
 
       /* Compact grid editor for tiny screens */
       #gridContainer input{font-size:14px;padding:0.25rem}
@@ -224,18 +237,14 @@
       .matrix-classifier .MathJax{font-size:0.9em!important;max-width:100%}
 
       /* Optimize quick tips section */
-      .card-body ul{padding-left:1.25rem;font-size:0.85rem}
-      .card-body ul li{margin-bottom:0.25rem}
+      .tool-card-body ul{padding-left:1.25rem;font-size:0.85rem}
+      .tool-card-body ul li{margin-bottom:0.25rem}
     }
 
     /* Touch-specific improvements */
     @media (hover: none) and (pointer: coarse) {
       /* Increase touch targets */
-      .matrix-classifier button,
-      .matrix-classifier .btn{min-height:44px;padding:0.5rem 1rem}
-
-      /* Make dropdowns easier to tap */
-      .dropdown-item{padding:0.75rem 1rem;font-size:1rem}
+      .matrix-classifier button{min-height:44px;padding:0.5rem 1rem}
 
       /* Disable hover effects on touch devices */
       .matrix-cell:hover{filter:drop-shadow(0 1px 2px rgba(0,0,0,0.05))}
@@ -248,15 +257,14 @@
     @media (max-width: 991px) and (orientation: landscape) {
       .matrix-classifier{padding-top:1rem}
       #examplesContent{max-height:300px}
-      .card-body{padding:0.5rem}
+      .tool-card-body{padding:0.5rem}
     }
 
     /* Print styles */
     @media print {
-      .matrix-classifier .btn,
       .matrix-classifier button,
       .sharethis-inline-share-buttons{display:none}
-      .matrix-classifier .card{border:1px solid #ddd;box-shadow:none}
+      .matrix-classifier .tool-card{border:1px solid #ddd;box-shadow:none}
       .matrix-classifier{padding:0}
     }
   </style>
@@ -292,92 +300,89 @@
 
 <main class="tool-page-container">
   <div class="tool-input-column matrix-calc matrix-classifier">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex justify-content-between align-items-center">
-          Matrix Input
-          <button id="btnPresetMenu" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Presets</button>
-          <div class="dropdown-menu" aria-labelledby="btnPresetMenu">
-            <h6 class="dropdown-header">Square</h6>
-            <a class="dropdown-item" href="#" data-preset="identity3">Identity (3×3)</a>
-            <a class="dropdown-item" href="#" data-preset="symmetric3">Symmetric (3×3)</a>
-            <a class="dropdown-item" href="#" data-preset="orthogonal3">Orthogonal (3×3)</a>
-            <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Triangular</h6>
-            <a class="dropdown-item" href="#" data-preset="upper4">Upper Triangular (4×4)</a>
-            <a class="dropdown-item" href="#" data-preset="lower4">Lower Triangular (4×4)</a>
-            <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Special</h6>
-            <a class="dropdown-item" href="#" data-preset="singular3">Singular (rank deficient)</a>
-            <a class="dropdown-item" href="#" data-preset="stochastic3">Column-Stochastic</a>
-            <a class="dropdown-item" href="#" data-preset="rectangular23">Rectangular (2×3)</a>
-          </div>
-        </h5>
-        <div class="card-body">
-          <div class="form-group">
-            <label for="rowCount">Dimensions</label>
-            <div class="d-flex">
-              <input id="rowCount" type="number" min="1" max="10" class="form-control mr-2" value="3">
-              <span class="align-self-center">×</span>
-              <input id="colCount" type="number" min="1" max="10" class="form-control ml-2" value="3">
+      <div class="tool-card" style="margin-bottom:1rem">
+        <div class="tool-card-header">Matrix Input</div>
+        <div class="tool-card-body">
+          <!-- Presets -->
+          <div class="mc-presets" style="margin-bottom:0.75rem">
+            <label class="tool-form-label" style="margin-bottom:0.4rem;display:block;font-size:0.8rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.03em">Presets</label>
+            <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+              <button type="button" class="mc-preset-btn" data-preset="identity3">Identity 3×3</button>
+              <button type="button" class="mc-preset-btn" data-preset="symmetric3">Symmetric 3×3</button>
+              <button type="button" class="mc-preset-btn" data-preset="orthogonal3">Orthogonal 3×3</button>
+              <button type="button" class="mc-preset-btn" data-preset="upper4">Upper Tri 4×4</button>
+              <button type="button" class="mc-preset-btn" data-preset="lower4">Lower Tri 4×4</button>
+              <button type="button" class="mc-preset-btn" data-preset="singular3">Singular</button>
+              <button type="button" class="mc-preset-btn" data-preset="stochastic3">Stochastic</button>
+              <button type="button" class="mc-preset-btn" data-preset="rectangular23">Rect 2×3</button>
             </div>
-            <small class="text-muted">Supports up to 10×10 matrices. Use commas or spaces between entries, newline per row.</small>
           </div>
 
-          <div class="form-group">
-            <label for="matrixInput">Matrix Entries</label>
-            <textarea id="matrixInput" class="form-control" rows="6" placeholder="Example (3×3):
+          <div class="tool-form-group" style="margin-bottom:0.55rem">
+            <label class="tool-form-label" for="rowCount">Dimensions</label>
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <input id="rowCount" type="number" min="1" max="10" class="tool-input" value="3" style="width:70px;text-align:center">
+              <span style="color:var(--text-secondary);font-weight:600">×</span>
+              <input id="colCount" type="number" min="1" max="10" class="tool-input" value="3" style="width:70px;text-align:center">
+            </div>
+            <span class="tool-form-hint">Up to 10×10. Use commas or spaces, newline per row.</span>
+          </div>
+
+          <div class="tool-form-group" style="margin-bottom:0.55rem">
+            <label class="tool-form-label" for="matrixInput">Matrix Entries</label>
+            <textarea id="matrixInput" class="tool-input" rows="6" placeholder="Example (3×3):
 1 0 0
 0 1 0
-0 0 1"></textarea>
-            <small class="text-muted">Accepted delimiters: space, comma, semicolon. For complex numbers use a+bi format.</small>
+0 0 1" style="font-family:var(--font-mono,'monospace');resize:vertical;width:100%"></textarea>
+            <span class="tool-form-hint">Delimiters: space, comma, semicolon. Complex: a+bi.</span>
           </div>
-          <div id="matrixTelemetry" class="small text-muted mb-2"></div>
+          <div id="matrixTelemetry" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem"></div>
 
-          <button id="btnGridEditor" type="button" class="btn btn-outline-info btn-sm mb-3"><i class="fas fa-table"></i> Open Grid Editor</button>
-          <div id="gridEditor" class="mb-3" style="display:none">
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
-              <strong class="mb-2 mb-md-0">Cell Editor</strong>
-              <div class="d-flex flex-wrap">
-                <button id="btnGridAddRow" type="button" class="btn btn-outline-secondary btn-sm mr-1 mb-1">+ Row</button>
-                <button id="btnGridAddCol" type="button" class="btn btn-outline-secondary btn-sm mr-1 mb-1">+ Column</button>
-                <button id="btnGridSync" type="button" class="btn btn-primary btn-sm mb-1">Apply to Text</button>
+          <button id="btnGridEditor" type="button" class="tool-btn-outline" style="margin-bottom:0.75rem"><i class="fas fa-table"></i> Grid Editor</button>
+          <div id="gridEditor" style="display:none;margin-bottom:0.75rem">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+              <strong style="font-size:0.875rem;color:var(--text-primary)">Cell Editor</strong>
+              <div style="display:flex;gap:0.35rem;flex-wrap:wrap">
+                <button id="btnGridAddRow" type="button" class="tool-btn-outline">+ Row</button>
+                <button id="btnGridAddCol" type="button" class="tool-btn-outline">+ Col</button>
+                <button id="btnGridSync" type="button" class="tool-action-btn" style="padding:0.4rem 0.75rem;font-size:0.8125rem">Apply</button>
               </div>
             </div>
-            <div id="gridContainer" class="table-responsive"></div>
+            <div id="gridContainer" style="overflow-x:auto"></div>
           </div>
 
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="allowComplex">
-              <label class="custom-control-label" for="allowComplex">Allow complex entries (a + bi)</label>
-            </div>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="showIntermediate" checked>
-              <label class="custom-control-label" for="showIntermediate">Show intermediate calculations</label>
-            </div>
+          <div class="tool-form-group" style="margin-bottom:0.55rem">
+            <label class="tool-checkbox-wrap">
+              <input type="checkbox" id="allowComplex">
+              <span>Allow complex entries (a + bi)</span>
+            </label>
+            <label class="tool-checkbox-wrap">
+              <input type="checkbox" id="showIntermediate" checked>
+              <span>Show intermediate calculations</span>
+            </label>
           </div>
 
-          <div class="d-flex flex-wrap">
-            <button id="btnAnalyse" class="btn btn-primary btn-sm mr-2 mb-2">Classify Matrix</button>
-            <button id="btnRandom" class="btn btn-outline-primary btn-sm mr-2 mb-2">Random Matrix</button>
-            <button id="btnClear" class="btn btn-outline-secondary btn-sm mb-2">Clear</button>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem">
+            <button id="btnAnalyse" class="tool-action-btn" style="padding:0.5rem 1rem">Classify Matrix</button>
+            <button id="btnRandom" class="tool-btn-outline">Random Matrix</button>
+            <button id="btnClear" class="tool-btn-outline">Clear</button>
           </div>
-          <div id="inputError" class="text-danger small mt-2" style="display:none"></div>
+          <div id="inputError" style="font-size:0.8rem;color:var(--error,#ef4444);display:none;margin-top:0.5rem"></div>
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Detected Types</h5>
-        <div class="card-body">
-          <div id="typeBadges" class="mb-2"></div>
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header">Detected Types</h5>
+        <div class="tool-card-body">
+          <div id="typeBadges" style="margin-bottom:0.5rem"></div>
           <div id="matrixMeta" class="matrix-meta"></div>
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Quick Tips</h5>
-        <div class="card-body small">
-          <ul class="mb-0 pl-3">
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header">Quick Tips</h5>
+        <div class="tool-card-body" style="font-size:0.85rem">
+          <ul style="margin-bottom:0;padding-left:1rem">
             <li>Diagonal matrices have zero off-diagonal entries.</li>
             <li>Scalar matrix ⇒ diagonal with constant diagonal values.</li>
             <li>Orthogonal matrices satisfy AᵀA = I (columns are orthonormal).</li>
@@ -390,42 +395,42 @@
   </div>
 
   <div class="tool-output-column matrix-calc matrix-classifier">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex flex-wrap justify-content-between align-items-center">
-          <span class="mb-1 mb-sm-0">Matrix Visualization</span>
-          <div class="d-flex flex-wrap gap-1">
-            <button id="btnCopyMatrix" class="btn btn-outline-primary btn-sm"><i class="fas fa-copy"></i> Copy Matrix</button>
-            <button id="btnPrintWorksheet" class="btn btn-sm" style="background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center">
+          <span>Matrix Visualization</span>
+          <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+            <button id="btnCopyMatrix" class="tool-btn-outline"><i class="fas fa-copy"></i> Copy Matrix</button>
+            <button id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print">&#128424; Print Worksheet</button>
           </div>
         </h5>
-        <div class="card-body">
-          <div id="matrixVisual" class="text-center text-muted">Enter a matrix and click classify to view the visualization.</div>
+        <div class="tool-card-body">
+          <div id="matrixVisual" style="text-align:center;color:var(--text-muted)">Enter a matrix and click classify to view the visualization.</div>
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Classification Summary</h5>
-        <div class="card-body">
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header">Classification Summary</h5>
+        <div class="tool-card-body">
           <div id="classificationSummary"></div>
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Step-by-Step Reasoning</h5>
-        <div class="card-body small">
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header">Step-by-Step Reasoning</h5>
+        <div class="tool-card-body" style="font-size:0.85rem">
           <div id="stepsContent" style="line-height:1.8"></div>
         </div>
       </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">About Matrix Types</h5>
-        <div class="card-body small">
+      <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header">About Matrix Types</h5>
+        <div class="tool-card-body" style="font-size:0.85rem">
           <div><strong>Square vs Rectangular:</strong> A matrix with equal rows and columns is square (n×n), enabling determinant, inverse, eigenvalue and orthogonality checks. Rectangular matrices are either row (1×n) or column (m×1) matrices.</div>
-          <div class="mt-2"><strong>Diagonal &amp; Scalar:</strong> A diagonal matrix has non-zero entries only on its main diagonal. A scalar matrix is diagonal with equal diagonal entries. The identity matrix is a scalar matrix with all ones on the diagonal.</div>
-          <div class="mt-2"><strong>Symmetric &amp; Skew-Symmetric:</strong> A matrix is symmetric if A = Aᵀ. It is skew-symmetric if A = -Aᵀ (diagonal entries must be zero). Symmetric matrices have real eigenvalues and orthogonal eigenvectors.</div>
-          <div class="mt-2"><strong>Orthogonal Matrices:</strong> A matrix A is orthogonal if AᵀA = AAᵀ = I. Columns (and rows) are orthonormal. Orthogonal matrices preserve lengths and angles, and their inverse equals their transpose.</div>
-          <div class="mt-2"><strong>Singular vs Non-Singular:</strong> Determinant zero ⇒ singular (not invertible). Determinant non-zero ⇒ non-singular (invertible). Rank reveals number of independent rows/columns.</div>
-          <div class="mt-2"><strong>Stochastic Matrices:</strong> In Markov chains, column-stochastic matrices have non-negative entries with each column summing to 1. They represent transition probabilities.</div>
+          <div style="margin-top:0.5rem"><strong>Diagonal &amp; Scalar:</strong> A diagonal matrix has non-zero entries only on its main diagonal. A scalar matrix is diagonal with equal diagonal entries. The identity matrix is a scalar matrix with all ones on the diagonal.</div>
+          <div style="margin-top:0.5rem"><strong>Symmetric &amp; Skew-Symmetric:</strong> A matrix is symmetric if A = Aᵀ. It is skew-symmetric if A = -Aᵀ (diagonal entries must be zero). Symmetric matrices have real eigenvalues and orthogonal eigenvectors.</div>
+          <div style="margin-top:0.5rem"><strong>Orthogonal Matrices:</strong> A matrix A is orthogonal if AᵀA = AAᵀ = I. Columns (and rows) are orthonormal. Orthogonal matrices preserve lengths and angles, and their inverse equals their transpose.</div>
+          <div style="margin-top:0.5rem"><strong>Singular vs Non-Singular:</strong> Determinant zero ⇒ singular (not invertible). Determinant non-zero ⇒ non-singular (invertible). Rank reveals number of independent rows/columns.</div>
+          <div style="margin-top:0.5rem"><strong>Stochastic Matrices:</strong> In Markov chains, column-stochastic matrices have non-negative entries with each column summing to 1. They represent transition probabilities.</div>
         </div>
       </div>
 
@@ -434,62 +439,62 @@
       <jsp:param name="keyword" value="matrix" />
     </jsp:include>
 
-    <div class="tool-card">
-        <h5 class="card-header d-flex justify-content-between align-items-center">
+    <div class="tool-card" style="margin-bottom:1rem">
+        <h5 class="tool-card-header" style="display:flex;justify-content:space-between;align-items:center">
           Matrix Type Examples
-          <button id="btnToggleExamples" class="btn btn-outline-secondary btn-sm">Hide Examples</button>
+          <button id="btnToggleExamples" class="tool-btn-outline">Hide Examples</button>
         </h5>
-        <div id="examplesContent" class="card-body small" style="max-height:600px;overflow-y:auto">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Identity Matrix (I)</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{1} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{blue}{1} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{1} \end{pmatrix}$$</div>
-              <div class="text-muted">Diagonal of ones, zeros elsewhere. Special case of diagonal, scalar, and symmetric matrices.</div>
+        <div id="examplesContent" class="tool-card-body" style="font-size:0.85rem;max-height:600px;overflow-y:auto">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem">
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Identity Matrix (I)</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{1} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{blue}{1} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{1} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">Diagonal of ones, zeros elsewhere. Special case of diagonal, scalar, and symmetric matrices.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Zero Matrix (O)</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \end{pmatrix}$$</div>
-              <div class="text-muted">All elements are zero. Singular matrix with determinant 0 and rank 0.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Zero Matrix (O)</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">All elements are zero. Singular matrix with determinant 0 and rank 0.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Diagonal Matrix</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{5} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{blue}{-3} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{2} \end{pmatrix}$$</div>
-              <div class="text-muted">Non-zero entries only on main diagonal. Easy to compute powers and determinant.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Diagonal Matrix</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{5} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{blue}{-3} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{2} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">Non-zero entries only on main diagonal. Easy to compute powers and determinant.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Symmetric Matrix</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{4} & \textcolor{green}{1} & \textcolor{green}{2} \\ \textcolor{green}{1} & \textcolor{blue}{3} & \textcolor{gray}{0} \\ \textcolor{green}{2} & \textcolor{gray}{0} & \textcolor{blue}{5} \end{pmatrix}$$</div>
-              <div class="text-muted">A = Aᵀ. Real eigenvalues, orthogonal eigenvectors. Common in physics and optimization.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Symmetric Matrix</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{4} & \textcolor{green}{1} & \textcolor{green}{2} \\ \textcolor{green}{1} & \textcolor{blue}{3} & \textcolor{gray}{0} \\ \textcolor{green}{2} & \textcolor{gray}{0} & \textcolor{blue}{5} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">A = Aᵀ. Real eigenvalues, orthogonal eigenvectors. Common in physics and optimization.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Upper Triangular</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{2} & \textcolor{green}{4} & \textcolor{green}{1} \\ \textcolor{gray}{0} & \textcolor{blue}{3} & \textcolor{red}{-1} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{5} \end{pmatrix}$$</div>
-              <div class="text-muted">All entries below diagonal are zero. Determinant = product of diagonal entries.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Upper Triangular</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{2} & \textcolor{green}{4} & \textcolor{green}{1} \\ \textcolor{gray}{0} & \textcolor{blue}{3} & \textcolor{red}{-1} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{blue}{5} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">All entries below diagonal are zero. Determinant = product of diagonal entries.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Lower Triangular</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{3} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{red}{-1} & \textcolor{blue}{2} & \textcolor{gray}{0} \\ \textcolor{green}{4} & \textcolor{green}{5} & \textcolor{blue}{1} \end{pmatrix}$$</div>
-              <div class="text-muted">All entries above diagonal are zero. Used in LU decomposition.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Lower Triangular</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{3} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{red}{-1} & \textcolor{blue}{2} & \textcolor{gray}{0} \\ \textcolor{green}{4} & \textcolor{green}{5} & \textcolor{blue}{1} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">All entries above diagonal are zero. Used in LU decomposition.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Orthogonal Matrix</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{gray}{0} & \textcolor{blue}{1} & \textcolor{gray}{0} \\ \textcolor{blue}{1} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{red}{-1} \end{pmatrix}$$</div>
-              <div class="text-muted">AᵀA = I. Preserves lengths and angles. Represents rotations/reflections.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Orthogonal Matrix</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{gray}{0} & \textcolor{blue}{1} & \textcolor{gray}{0} \\ \textcolor{blue}{1} & \textcolor{gray}{0} & \textcolor{gray}{0} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{red}{-1} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">AᵀA = I. Preserves lengths and angles. Represents rotations/reflections.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Singular Matrix</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{2} & \textcolor{green}{4} & \textcolor{green}{6} \\ \textcolor{blue}{1} & \textcolor{green}{2} & \textcolor{green}{3} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \end{pmatrix}$$</div>
-              <div class="text-muted">det(A) = 0. Not invertible. Rows/columns are linearly dependent.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Singular Matrix</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{2} & \textcolor{green}{4} & \textcolor{green}{6} \\ \textcolor{blue}{1} & \textcolor{green}{2} & \textcolor{green}{3} \\ \textcolor{gray}{0} & \textcolor{gray}{0} & \textcolor{gray}{0} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">det(A) = 0. Not invertible. Rows/columns are linearly dependent.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Column Stochastic</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{green}{0.5} & \textcolor{green}{0.2} & \textcolor{green}{0.3} \\ \textcolor{green}{0.3} & \textcolor{green}{0.5} & \textcolor{green}{0.3} \\ \textcolor{green}{0.2} & \textcolor{green}{0.3} & \textcolor{green}{0.4} \end{pmatrix}$$</div>
-              <div class="text-muted">Non-negative entries, each column sums to 1. Used in Markov chains.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Column Stochastic</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{green}{0.5} & \textcolor{green}{0.2} & \textcolor{green}{0.3} \\ \textcolor{green}{0.3} & \textcolor{green}{0.5} & \textcolor{green}{0.3} \\ \textcolor{green}{0.2} & \textcolor{green}{0.3} & \textcolor{green}{0.4} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">Non-negative entries, each column sums to 1. Used in Markov chains.</div>
             </div>
-            <div class="col-md-6 mb-3">
-              <h6 class="font-weight-bold">Rectangular Matrix</h6>
-              <div class="mb-1">$$\begin{pmatrix} \textcolor{blue}{1} & \textcolor{green}{2} & \textcolor{green}{3} \\ \textcolor{green}{4} & \textcolor{blue}{5} & \textcolor{green}{6} \end{pmatrix}$$</div>
-              <div class="text-muted">Rows ≠ columns. No determinant or eigenvalues, but has rank and singular values.</div>
+            <div style="margin-bottom:0">
+              <h6 style="font-weight:700;font-size:0.9rem;margin:0 0 0.25rem;color:var(--text-primary)">Rectangular Matrix</h6>
+              <div style="margin-bottom:0.25rem">$$\begin{pmatrix} \textcolor{blue}{1} & \textcolor{green}{2} & \textcolor{green}{3} \\ \textcolor{green}{4} & \textcolor{blue}{5} & \textcolor{green}{6} \end{pmatrix}$$</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin:0;line-height:1.5">Rows ≠ columns. No determinant or eigenvalues, but has rank and singular values.</div>
             </div>
           </div>
         </div>
@@ -681,10 +686,10 @@
 
     let html = `<div><strong>Detected:</strong> ${rowCount} × ${colCount}${consistent ? '' : ' (inconsistent row lengths)'}</div>`;
     if(!consistent){
-      html += `<div class="text-danger">Row lengths: ${lengths.join(' | ')} — fix highlighted rows.</div>`;
+      html += `<div style="color:var(--error,#ef4444)">Row lengths: ${lengths.join(' | ')} — fix highlighted rows.</div>`;
     }
     if(mismatchRows || mismatchCols){
-      html += `<div class="mt-1"><button id="btnApplyDetected" type="button" class="btn btn-link btn-sm p-0">Use detected size (${rowCount}×${colCount})</button></div>`;
+      html += `<div style="margin-top:0.25rem"><button id="btnApplyDetected" type="button" style="background:none;border:none;color:var(--tool-primary);cursor:pointer;padding:0;font-size:0.8rem;text-decoration:underline">Use detected size (${rowCount}×${colCount})</button></div>`;
     }
     matrixTelemetry.innerHTML = html;
 
@@ -699,7 +704,7 @@
       applyBtn.addEventListener('click', function(){
         rowCountInput.value = rowCount;
         colCountInput.value = colCount;
-        matrixTelemetry.innerHTML = `<div class="text-success">Applied detected dimensions (${rowCount}×${colCount}).</div>`;
+        matrixTelemetry.innerHTML = `<div style="color:#16a34a">Applied detected dimensions (${rowCount}×${colCount}).</div>`;
         if(gridEditorOpen){
           buildGridFromText();
         }
@@ -719,12 +724,12 @@
       return `<mark style="background:#fee2e2;color:#991b1b">${segment}</mark>`;
     });
     matrixVisual.dataset.state = 'telemetry';
-    matrixVisual.innerHTML = `<div class="text-danger small mb-2">Rows highlighted below have inconsistent entry counts.</div><pre class="bg-light p-2 rounded" style="max-height:200px;overflow:auto">${highlighted.join('\n')}</pre>`;
+    matrixVisual.innerHTML = `<div style="color:var(--error,#ef4444);font-size:0.85rem;margin-bottom:0.5rem">Rows highlighted below have inconsistent entry counts.</div><pre style="background:var(--bg-secondary,#f1f5f9);padding:0.5rem;border-radius:0.375rem;max-height:200px;overflow:auto">${highlighted.join('\n')}</pre>`;
   }
 
   function clearHighlights(){
     matrixVisual.dataset.state = '';
-    matrixVisual.innerHTML = '<div class="text-muted">Enter a matrix and click classify to view the visualization.</div>';
+    matrixVisual.innerHTML = '<div style="color:var(--text-muted)">Enter a matrix and click classify to view the visualization.</div>';
   }
 
   function isComplexMatrix(mat){
@@ -1144,7 +1149,7 @@
   function renderMatrix(matrix, metadata){
     const rows = matrix.length;
     const cols = matrix[0].length;
-    matrixVisual.classList.remove('text-muted');
+    matrixVisual.style.color = '';
     matrixVisual.innerHTML = '';
     matrixVisual.dataset.state = 'matrix';
 
@@ -1172,9 +1177,10 @@
     // Fallback to table if d3 unavailable
     if(typeof d3 === 'undefined'){
       const latexWrapper = document.createElement('div');
-      latexWrapper.className = 'latex-matrix text-left';
+      latexWrapper.className = 'latex-matrix';
+      latexWrapper.style.textAlign = 'left';
       const label = document.createElement('div');
-      label.className = 'text-muted small mb-1';
+      label.style.cssText = 'color:var(--text-muted);font-size:0.85rem;margin-bottom:0.25rem';
       label.textContent = 'Matrix notation';
       const latexContainer = document.createElement('div');
       latexWrapper.appendChild(label);
@@ -1475,9 +1481,10 @@
       }).join(' & ')
     );
     const latexDiv = document.createElement('div');
-    latexDiv.className = 'mt-3 latex-matrix text-left';
+    latexDiv.className = 'latex-matrix';
+    latexDiv.style.cssText = 'margin-top:0.75rem;text-align:left';
     const latexLabel = document.createElement('div');
-    latexLabel.className = 'text-muted small mb-1';
+    latexLabel.style.cssText = 'color:var(--text-muted);font-size:0.85rem;margin-bottom:0.25rem';
     latexLabel.textContent = 'Matrix notation';
     const latexContainer = document.createElement('div');
     latexDiv.appendChild(latexLabel);
@@ -1505,7 +1512,7 @@
 
   function renderTypes(types){
     if(!types.length){
-      typeBadges.innerHTML = '<span class="text-muted">No classifications found.</span>';
+      typeBadges.innerHTML = '<span style="color:var(--text-muted)">No classifications found.</span>';
       return;
     }
     const html = types.map(t => {
@@ -1520,7 +1527,7 @@
 
   function renderSteps(steps){
     if(!steps.length){
-      stepsContent.innerHTML = '<div class="text-muted">Run the classifier to see step-by-step reasoning.</div>';
+      stepsContent.innerHTML = '<div style="color:var(--text-muted)">Run the classifier to see step-by-step reasoning.</div>';
       return;
     }
     const html = steps.map(step => '<div class="explain-step"><strong>'+step.title+':</strong> '+step.description+'</div>').join('');
@@ -1547,7 +1554,7 @@
       const matrix = parseMatrix(textarea.value, rows, cols, allowComplex.checked);
       buildGridFromMatrix(matrix);
     } catch(err){
-      gridContainer.innerHTML = '<div class="text-danger small">Cannot load editor: '+err.message+'</div>';
+      gridContainer.innerHTML = '<div style="color:var(--error,#ef4444);font-size:0.85rem">Cannot load editor: '+err.message+'</div>';
     }
   }
 
@@ -1555,12 +1562,12 @@
     currentGridMatrix = cloneMatrix(matrix);
     const rows = matrix.length;
     const cols = matrix[0].length;
-    let html = '<table class="table table-bordered table-sm mb-0"><tbody>';
+    let html = '<table style="border-collapse:collapse;width:100%;margin-bottom:0"><tbody>';
     for(let r=0;r<rows;r++){
       html += '<tr>';
       for(let c=0;c<cols;c++){
         const val = typeof matrix[r][c] === 'object' ? prettyValue(matrix[r][c],4) : matrix[r][c];
-        html += `<td style="min-width:70px"><input type="text" class="form-control form-control-sm grid-cell" data-row="${r}" data-col="${c}" value="${val}"></td>`;
+        html += `<td style="min-width:70px;border:1px solid var(--border,#e2e8f0);padding:0.15rem"><input type="text" class="tool-input grid-cell" data-row="${r}" data-col="${c}" value="${val}" style="padding:0.25rem 0.4rem;font-size:0.85rem"></td>`;
       }
       html += '</tr>';
     }
@@ -1624,7 +1631,7 @@
       if(detected && !detected.consistent){
         highlightInconsistentRows(detected.lengths);
       } else if(matrixVisual.dataset.state !== 'matrix'){
-        matrixVisual.innerHTML = '<div class="text-danger">'+err.message+'</div>';
+        matrixVisual.innerHTML = '<div style="color:var(--error,#ef4444)">'+err.message+'</div>';
       }
       inputError.textContent = err.message;
       inputError.style.display = 'block';
@@ -1648,7 +1655,7 @@
     typeBadges.innerHTML = '';
     classificationSummary.innerHTML = '';
     stepsContent.innerHTML = '';
-    matrixVisual.innerHTML = '<div class="text-muted">Enter a matrix and click classify to view the visualization.</div>';
+    matrixVisual.innerHTML = '<div style="color:var(--text-muted)">Enter a matrix and click classify to view the visualization.</div>';
     matrixVisual.dataset.state = '';
     matrixMeta.innerHTML = '';
     inputError.style.display = 'none';
@@ -1724,10 +1731,12 @@
     } else if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(function(){
         btnCopyMatrix.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        btnCopyMatrix.className = 'btn btn-success btn-sm';
+        btnCopyMatrix.className = 'tool-btn-outline';
+        btnCopyMatrix.style.cssText = 'color:#16a34a;border-color:#16a34a';
         setTimeout(function(){
           btnCopyMatrix.innerHTML = '<i class="fas fa-copy"></i> Copy Matrix';
-          btnCopyMatrix.className = 'btn btn-outline-primary btn-sm';
+          btnCopyMatrix.className = 'tool-btn-outline';
+          btnCopyMatrix.style.cssText = '';
         }, 2000);
       });
     }
@@ -1738,11 +1747,9 @@
   btnClear.addEventListener('click', handleClear);
   btnCopyMatrix.addEventListener('click', copyMatrix);
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Type Classifier', {
-    resultIds: ['matrixVisual', 'classificationSummary'],
-    stepsId: 'stepsContent',
-    cardClass: '.card',
     exerciseType: 'classifier'
   });
+  var _stepsEl = document.getElementById('stepsContent'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
   textarea.addEventListener('keydown', function(e){
     if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){
       handleAnalyse();
@@ -1811,6 +1818,8 @@
   presetItems.forEach(item => {
     item.addEventListener('click', function(e){
       e.preventDefault();
+      presetItems.forEach(b => b.classList.remove('active'));
+      item.classList.add('active');
       const preset = item.getAttribute('data-preset');
       presetMatrix(preset);
     });
@@ -1840,6 +1849,8 @@
 
   // Initialize with identity
   presetMatrix('identity3');
+  var initPreset = document.querySelector('[data-preset="identity3"]');
+  if (initPreset) initPreset.classList.add('active');
   updateTelemetry();
 
   // Render examples on page load
@@ -1852,10 +1863,31 @@
       }
     });
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Classifier Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: 'Diagonal / identity / zero' },
+        { id: 'medium', label: 'Medium', description: 'Symmetric / triangular' },
+        { id: 'hard', label: 'Hard', description: 'Orthogonal / positive-definite' }
+      ],
+      generateProblems: MatrixPractice.classifier
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Type Classifier</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This tool identifies 20+ matrix types by checking dimensions, transpose relations (A vs Aᵀ), diagonal structure, determinant, rank, and orthogonality. It uses D3 for visualization and provides step-by-step reasoning. <strong>All analysis runs client-side</strong>—no data stored.</p>
@@ -1890,23 +1922,15 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What matrix types does this detect?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Why is my matrix flagged as singular?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular.</p>
   </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How are matrix properties related to each other?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Many properties overlap: every identity matrix is diagonal, symmetric, and orthogonal. Every orthogonal matrix has det = ±1. Positive-definite matrices are always symmetric and non-singular. Understanding these relationships helps classify matrices quickly.</p>
+  </div>
 </section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type":"Question","name":"How do you identify the type of a matrix?","acceptedAnswer":{"@type":"Answer","text":"Check dimensions first (square vs rectangular). For square matrices, compare A to A^T (symmetric if A = A^T, skew-symmetric if A = -A^T), inspect diagonal entries, and compute determinant/rank for singularity. The tool automates these steps."}},
-    {"@type":"Question","name":"What matrix types does this detect?","acceptedAnswer":{"@type":"Answer","text":"Rectangular, square, row, column, zero, diagonal, scalar, identity, upper/lower triangular, symmetric, skew-symmetric, orthogonal, singular/non-singular, stochastic, and sparse; plus trace, determinant, rank and definiteness hints."}},
-    {"@type":"Question","name":"Why is my matrix flagged as singular?","acceptedAnswer":{"@type":"Answer","text":"A matrix is singular when det(A) = 0 or rows are linearly dependent. The tool uses tolerance-aware elimination; very small determinants relative to entries are treated as singular."}}
-  ]
-}
-</script>
 
 <%@ include file="modern/ads/ad-in-content-mid.jsp"%>
 <%@ include file="modern/components/support-section.jsp"%>

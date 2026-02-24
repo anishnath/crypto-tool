@@ -9,8 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Rank Calculator | rank(A) Free Online" />
-    <jsp:param name="toolDescription" value="Free matrix rank calculator. rank(A), nullity, pivot positions. Row echelon form, Gaussian elimination. Print worksheet with practice exercises. Share, download. Step-by-step." />
+    <jsp:param name="toolName" value="Matrix Rank & Nullity Calculator — Free Online" />
+    <jsp:param name="toolDescription" value="Find rank, nullity, and pivot positions via row echelon form. Step-by-step Gaussian elimination. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-rank-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix rank calculator, rank of matrix, row echelon form, pivot positions, nullity, linear algebra, rank nullity theorem, linearly independent, REF" />
@@ -23,6 +23,10 @@
     <jsp:param name="faq2a" value="Nullity is the dimension of the null space. For an m×n matrix, the rank-nullity theorem states rank(A) + nullity(A) = n." />
     <jsp:param name="faq3q" value="What does rank tell me about a matrix?" />
     <jsp:param name="faq3a" value="Full rank means maximum linearly independent columns. If rank(A) &lt; n for an n×n square matrix, A is singular and not invertible." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style rank questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates rank problems at Easy (2×3), Medium (3×3), or Hard (3×4 with rank and nullity) with instant scoring and answer reveal." />
+    <jsp:param name="faq5q" value="What is the rank-nullity theorem?" />
+    <jsp:param name="faq5a" value="For an m×n matrix A, rank(A) + nullity(A) = n. This means the number of pivot columns plus the number of free variables always equals the total number of columns. It connects the column space and null space dimensions." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +46,8 @@
   <%@ include file="modern/ads/ad-init.jsp"%>
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
@@ -51,8 +57,6 @@
     .rank-calc .rank-value{font-size:2.5rem;font-weight:700;color:#7c3aed;font-family:monospace}
     .rank-calc .info-badge{display:inline-block;background:#e0e7ff;color:#4338ca;padding:0.4rem 0.8rem;border-radius:8px;font-weight:600;margin:0.25rem;font-size:0.9rem}
     .rank-calc .pivot-indicator{color:#7c3aed;font-weight:700}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
     .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
@@ -140,17 +144,17 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result</span>
         <div style="display:flex;flex-wrap:wrap;gap:0.25rem">
-          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">
             <i class="fas fa-share-alt"></i> Share URL
           </button>
-          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">
             <i class="fas fa-download"></i> Download
           </button>
-          <button id="btnPrintWorksheet" class="tool-btn-outline" title="Print worksheet" style="padding:0.4rem 0.75rem;font-size:0.8125rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
+          <button id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
-        <div id="resultArea" class="text-center text-muted">
+        <div id="resultArea" style="text-align:center;color:var(--text-muted)">
           Enter a matrix and click "Calculate Rank" to see the result.
         </div>
       </div>
@@ -159,7 +163,7 @@
     <div class="tool-card">
       <div class="tool-card-header">Step-by-Step Solution</div>
       <div class="tool-card-body">
-        <div id="stepsArea" class="text-muted">
+        <div id="stepsArea" style="color:var(--text-muted)">
           Detailed row reduction steps will appear here.
         </div>
       </div>
@@ -246,8 +250,8 @@
     const steps = [];
     const pivotPositions = [];
 
-    steps.push(`<span class="text-primary">Starting with ${m}×${n} matrix</span>`);
-    steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A)}$$</div>`);
+    steps.push(`<span style="color:var(--tool-primary)">Starting with ${m}×${n} matrix</span>`);
+    steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A)}$$</div>`);
 
     let currentRow = 0;
 
@@ -263,15 +267,15 @@
 
       // Skip if no pivot found
       if(Math.abs(A[pivotRow][col]) < EPS) {
-        steps.push(`<span class="text-secondary">Column ${col+1} has no pivot, moving to next column</span>`);
+        steps.push(`<span style="color:var(--text-secondary)">Column ${col+1} has no pivot, moving to next column</span>`);
         continue;
       }
 
       // Swap rows if needed
       if(pivotRow !== currentRow) {
         [A[pivotRow], A[currentRow]] = [A[currentRow], A[pivotRow]];
-        steps.push(`<span class="text-info">Row swap: R${currentRow+1} ↔ R${pivotRow+1}</span>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, pivotPositions)}$$</div>`);
+        steps.push(`<span style="color:#0891b2">Row swap: R${currentRow+1} ↔ R${pivotRow+1}</span>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, pivotPositions)}$$</div>`);
       }
 
       // Record pivot position
@@ -283,8 +287,8 @@
         for(let j = 0; j < n; j++) {
           A[currentRow][j] /= pivotVal;
         }
-        steps.push(`<span class="text-secondary">Scale R${currentRow+1} by 1/${smartFormat(pivotVal)}</span>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, pivotPositions)}$$</div>`);
+        steps.push(`<span style="color:var(--text-secondary)">Scale R${currentRow+1} by 1/${smartFormat(pivotVal)}</span>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, pivotPositions)}$$</div>`);
       }
 
       // Eliminate below pivot
@@ -300,8 +304,8 @@
       }
 
       if(eliminated.length > 0) {
-        steps.push(`<div class="text-secondary">${eliminated.join(', ')}</div>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, pivotPositions)}$$</div>`);
+        steps.push(`<div style="color:var(--text-secondary)">${eliminated.join(', ')}</div>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, pivotPositions)}$$</div>`);
       }
 
       currentRow++;
@@ -309,8 +313,8 @@
 
     const rank = pivotPositions.length;
 
-    steps.push(`<span class="text-success">Row echelon form achieved with ${rank} pivot${rank !== 1 ? 's' : ''}</span>`);
-    steps.push(`<div class="matrix-display mt-2 mb-3">$$${formatMatrix(A, pivotPositions)}$$</div>`);
+    steps.push(`<span style="color:#16a34a">Row echelon form achieved with ${rank} pivot${rank !== 1 ? 's' : ''}</span>`);
+    steps.push(`<div class="matrix-display" style="margin-top:0.5rem;margin-bottom:0.75rem">$$${formatMatrix(A, pivotPositions)}$$</div>`);
 
     return {
       rank,
@@ -339,22 +343,22 @@
 
       let html = `
         <div class="result-card">
-          <div class="text-center mb-3">
-            <div class="mb-2" style="font-size:1.1rem;color:#64748b">Rank of Matrix:</div>
+          <div style="text-align:center;margin-bottom:0.75rem">
+            <div style="margin-bottom:0.5rem" style="font-size:1.1rem;color:#64748b">Rank of Matrix:</div>
             <div class="rank-value">${result.rank}</div>
           </div>
 
-          <div class="mt-4">
-            <div class="mb-2">
+          <div style="margin-top:1rem">
+            <div style="margin-bottom:0.5rem">
               <span class="info-badge">📐 Dimensions: ${rows}×${cols}</span>
               <span class="info-badge">📊 Nullity: ${result.nullity}</span>
               ${isFullRank ? '<span class="info-badge" style="background:#d1fae5;color:#065f46">✓ Full Rank</span>' : '<span class="info-badge" style="background:#fee2e2;color:#991b1b">⚠ Rank Deficient</span>'}
             </div>
 
-            <div class="mt-3 small">
+            <div style="margin-top:0.75rem;font-size:0.85rem">
               <div><strong>Pivot columns:</strong> ${pivotCols}</div>
-              <div class="mt-1"><strong>Free variables:</strong> ${result.nullity} (columns: ${result.nullity > 0 ? 'not in pivot positions' : 'none'})</div>
-              ${rows === cols ? `<div class="mt-1"><strong>Invertible:</strong> ${isFullRank ? 'Yes ✓' : 'No (singular)'}</div>` : ''}
+              <div style="margin-top:0.25rem"><strong>Free variables:</strong> ${result.nullity} (columns: ${result.nullity > 0 ? 'not in pivot positions' : 'none'})</div>
+              ${rows === cols ? `<div style="margin-top:0.25rem"><strong>Invertible:</strong> ${isFullRank ? 'Yes ✓' : 'No (singular)'}</div>` : ''}
             </div>
           </div>
         </div>
@@ -362,8 +366,8 @@
 
       resultArea.innerHTML = html;
 
-      let stepsHtml = '<div class="mb-4"><h5 class="text-dark">📋 Row Reduction Steps</h5></div>';
-      stepsHtml += '<p class="text-muted mb-4" style="font-size:0.95rem">Transform to row echelon form (pivots in <span class="pivot-indicator">purple</span>):</p>';
+      let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="color:var(--text-primary)">📋 Row Reduction Steps</h5></div>';
+      stepsHtml += '<p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.95rem">Transform to row echelon form (pivots in <span class="pivot-indicator">purple</span>):</p>';
       result.steps.forEach((step, idx) => {
         stepsHtml += `<div class="step-card">
           <div class="step-inner">
@@ -387,8 +391,8 @@
 
   function clear() {
     matrixInput.value = '';
-    resultArea.innerHTML = '<div class="text-center text-muted">Enter a matrix and click "Calculate Rank" to see the result.</div>';
-    stepsArea.innerHTML = '<div class="text-muted">Detailed row reduction steps will appear here.</div>';
+    resultArea.innerHTML = '<div style="text-align:center;color:var(--text-muted)">Enter a matrix and click "Calculate Rank" to see the result.</div>';
+    stepsArea.innerHTML = '<div style="color:var(--text-muted)">Detailed row reduction steps will appear here.</div>';
     inputError.style.display = 'none';
   }
 
@@ -455,6 +459,7 @@
   // Download Image
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-rank', 'No result to download. Please calculate rank first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Rank', { exerciseType: 'rank' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   // Load from URL or default
   const loaded = MatrixUtils.loadFromURL(function(p) {
@@ -470,10 +475,31 @@
   if(!loaded) {
     loadExample('full');
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Rank Practice',
+      toolColor: '#8b5cf6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×3 matrices' },
+        { id: 'medium', label: 'Medium', description: '3×3 matrices' },
+        { id: 'hard', label: 'Hard', description: '3×4 rank + nullity' }
+      ],
+      generateProblems: MatrixPractice.rank
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Rank Calculator &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">The rank of a matrix is the maximum number of linearly independent rows (or columns). This tool uses Gaussian elimination to reduce to row echelon form (REF), then counts non-zero pivot rows. The rank-nullity theorem: rank(A) + nullity(A) = n. <strong>All calculations run client-side</strong>—no data stored.</p>
@@ -508,9 +534,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is nullity and how is it related to rank?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Nullity is the dimension of the null space. For an m×n matrix, the rank-nullity theorem states rank(A) + nullity(A) = n.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What does rank tell me about a matrix?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Full rank means maximum linearly independent columns. If rank(A) &lt; n for an n×n square matrix, A is singular and not invertible.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is the rank-nullity theorem?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For an m×n matrix A, rank(A) + nullity(A) = n. This means the number of pivot columns plus the number of free variables always equals the total number of columns. It connects the column space and null space dimensions.</p>
   </div>
 </section>
 

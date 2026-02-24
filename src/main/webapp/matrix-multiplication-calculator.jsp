@@ -13,8 +13,8 @@
   <meta name="author" content="Anish Nath">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Multiplication Calculator | A×B Free Online" />
-    <jsp:param name="toolDescription" value="Free matrix multiplication calculator. Multiply A×B with dimension checker. Step-by-step dot product. Print worksheet with practice exercises. Share, download. Instant results." />
+    <jsp:param name="toolName" value="Matrix Multiplication Calculator — Free Step-by-Step" />
+    <jsp:param name="toolDescription" value="Multiply matrices A×B with step-by-step dot-product solutions. Dimension checker, up to 10×10, practice worksheets. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-multiplication-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix multiplication calculator, A×B calculator, matrix multiply, matrix product, linear algebra calculator, step by step matrix multiplication, matrix dimensions, compatible matrices, dot product, matrix operations" />
@@ -27,6 +27,10 @@
     <jsp:param name="faq2a" value="No. Matrix multiplication is generally not commutative: A×B ≠ B×A. It is associative and distributive, and obeys (AB)^T = B^T A^T." />
     <jsp:param name="faq3q" value="What sizes are supported?" />
     <jsp:param name="faq3a" value="This tool supports rectangular and square matrices with dimensions up to 10×10, showing step-by-step computations." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style multiplication questions?" />
+    <jsp:param name="faq4a" value="Yes. Use the Exam-Style Practice section below to generate problems at Easy (2×2), Medium (2×3 × 3×2), or Hard (3×3) difficulty with instant answer checking and scoring." />
+    <jsp:param name="faq5q" value="What dimension rules must I follow for matrix multiplication?" />
+    <jsp:param name="faq5a" value="For A×B, the number of columns in A must equal the number of rows in B. If A is m×n and B is n×p, the result is m×p. Unlike addition, the matrices do not need the same dimensions." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +52,8 @@
 
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
 
@@ -56,8 +62,6 @@
     .matmul-calc .dimension-badge{display:inline-flex;align-items:center;padding:0.4rem 0.8rem;border-radius:999px;font-size:0.9rem;font-weight:600;background:var(--tool-light);color:var(--tool-primary);margin:0.25rem}
     .matmul-calc .compatible{background:#d1fae5;color:#065f46}
     .matmul-calc .incompatible{background:#fee2e2;color:#991b1b}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-dim-row input{flex:1;min-width:60px}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
@@ -172,9 +176,9 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result: A × B</span>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
-          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
-          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+          <button type="button" id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
@@ -202,6 +206,12 @@
 </main>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Multiplication Tool &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This matrix multiplication calculator computes C = A×B using the standard dot product formula. All computations run <strong>client-side in your browser</strong>—no matrices are sent to any server. Supports compatible dimensions (columns of A = rows of B) up to 10×10 with step-by-step solutions.</p>
@@ -236,9 +246,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Is A×B the same as B×A?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">No. Matrix multiplication is generally not commutative: A×B ≠ B×A. It is associative and distributive, and obeys (AB)^T = B^T A^T.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This tool supports rectangular and square matrices with dimensions up to 10×10, showing step-by-step computations.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What dimension rules must I follow for matrix multiplication?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For A×B, the number of columns in A must equal the number of rows in B. If A is m×n and B is n×p, the result is m×p. Unlike addition, the matrices do not need the same dimensions.</p>
   </div>
 </section>
 
@@ -317,11 +331,11 @@
     const steps = [];
 
     if(withSteps) {
-      steps.push(`<span class="text-primary">Matrix A is ${m}×${n}, Matrix B is ${p}×${q}</span>`);
-      steps.push(`<span class="text-success">✓ Compatible! Result C will be ${m}×${q}</span>`);
-      steps.push(`<div class="mt-3 mb-2"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="mt-3 mb-2"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
-      steps.push(`<div class="mt-4 text-primary">Computing C = A × B, where:</div><div class="matrix-display">$$c_{ij} = \\sum_{k=1}^{${n}} a_{ik} \\cdot b_{kj}$$</div>`);
+      steps.push(`<span style="color:var(--tool-primary)">Matrix A is ${m}×${n}, Matrix B is ${p}×${q}</span>`);
+      steps.push(`<span style="color:#16a34a">✓ Compatible! Result C will be ${m}×${q}</span>`);
+      steps.push(`<div style="margin:0.75rem 0 0.5rem"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="margin:0.75rem 0 0.5rem"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
+      steps.push(`<div style="margin-top:1rem;color:var(--tool-primary)">Computing C = A × B, where:</div><div class="matrix-display">$$c_{ij} = \\sum_{k=1}^{${n}} a_{ik} \\cdot b_{kj}$$</div>`);
     }
 
     for(let i = 0; i < m; i++) {
@@ -338,11 +352,11 @@
 
         if(withSteps) {
           const expr = computation.join(' + ');
-          steps.push(`<div class="text-secondary matrix-display">$$c_{${i+1},${j+1}} = ${expr} = ${smartFormat(sum)}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$c_{${i+1},${j+1}} = ${expr} = ${smartFormat(sum)}$$</div>`);
 
           const showFrequency = m * q <= 9 ? 1 : (m * q <= 16 ? 2 : 3);
           if((i * q + j + 1) % showFrequency === 0 || (i === m - 1 && j === q - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
           }
         }
       }
@@ -377,13 +391,13 @@
 
       let html = `
         <div class="result-card">
-          <div class="mb-3">
+          <div style="margin-bottom:0.75rem">
             <span class="dimension-badge">A: ${m}×${n}</span>
             <span class="dimension-badge ${compatClass}">${compatText}</span>
             <span class="dimension-badge">B: ${p}×${q}</span>
             <span class="dimension-badge">→ C: ${m}×${q}</span>
           </div>
-          <div class="mb-2"><strong>Result Matrix C = A × B:</strong></div>
+          <div style="margin-bottom:0.5rem"><strong>Result Matrix C = A × B:</strong></div>
           <div class="matrix-display">$$C = ${formatMatrix(result)}$$</div>
         </div>
       `;
@@ -391,7 +405,7 @@
       resultArea.innerHTML = html;
 
       if(showSteps.checked && steps.length > 0) {
-        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Multiplication Process</h5></div>';
+        let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Multiplication Process</h5></div>';
         steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
         });
@@ -484,6 +498,7 @@
 
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-multiplication', 'No result to download. Please multiply matrices first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Multiplication', { exerciseType: 'multiplication' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   const loaded = MatrixUtils.loadFromURL(function(p) {
     if(p.A && p.B) {
@@ -497,6 +512,21 @@
     return false;
   });
   if(!loaded) loadExample('2x3');
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Multiplication Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×2 matrices' },
+        { id: 'medium', label: 'Medium', description: '2×3 × 3×2' },
+        { id: 'hard', label: 'Hard', description: '3×3 × 3×3' }
+      ],
+      generateProblems: MatrixPractice.multiplication
+    });
+  }
 })();
 </script>
 

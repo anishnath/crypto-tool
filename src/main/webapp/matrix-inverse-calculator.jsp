@@ -13,8 +13,8 @@
   <meta name="author" content="Anish Nath">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Inverse Calculator | A⁻¹ Free Gauss-Jordan" />
-    <jsp:param name="toolDescription" value="Free matrix inverse calculator A⁻¹. Gauss-Jordan elimination, step-by-step. [A|I]→[I|A⁻¹]. Print worksheet with practice exercises. Share, download. 2×2 to 6×6." />
+    <jsp:param name="toolName" value="Matrix Inverse Calculator — Free Step-by-Step" />
+    <jsp:param name="toolDescription" value="Find A⁻¹ using Gauss-Jordan elimination with step-by-step solutions. Supports 2×2 to 6×6, verifies A×A⁻¹=I. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-inverse-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix inverse calculator, inverse matrix, A inverse, Gauss-Jordan elimination, adjugate matrix, matrix inversion, linear algebra calculator, invertible matrix, A^-1" />
@@ -27,6 +27,10 @@
     <jsp:param name="faq2a" value="A matrix is non-invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix." />
     <jsp:param name="faq3q" value="What sizes and checks are supported?" />
     <jsp:param name="faq3a" value="This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss-Jordan steps." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style inverse questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates inverse problems at Easy (2×2), Medium (3×3 with integer inverses), or Hard (invertibility checks with singular traps) with instant scoring." />
+    <jsp:param name="faq5q" value="When does a matrix have no inverse?" />
+    <jsp:param name="faq5a" value="A square matrix has no inverse when its determinant is zero (singular). This happens when rows are linearly dependent, the matrix has a zero row/column, or rank(A) &lt; n. Non-square matrices never have a standard inverse." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +51,8 @@
   <%@ include file="modern/ads/ad-init.jsp"%>
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
@@ -54,8 +60,6 @@
     .inverse-calc .verification-card{border-left:4px solid #10b981;background:linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);border-radius:8px;padding:1.25rem;margin:1rem 0}
     .inverse-calc .augmented-matrix{display:inline-block;position:relative}
     .inverse-calc .augmented-divider{position:absolute;left:50%;top:10%;bottom:10%;width:2px;background:#94a3b8}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
     .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
@@ -143,9 +147,9 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Inverse Matrix Result</span>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
-          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
-          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+          <button type="button" id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
@@ -305,9 +309,9 @@
 
       let html = `
         <div class="result-card">
-          <div class="mb-2"><strong>Original Matrix A:</strong></div>
+          <div style="margin-bottom:0.5rem"><strong>Original Matrix A:</strong></div>
           <div class="matrix-display">$$A = ${formatMatrix(matrix)}$$</div>
-          <div class="mt-3 mb-2"><strong>Inverse Matrix A⁻¹:</strong></div>
+          <div style="margin:0.75rem 0 0.5rem"><strong>Inverse Matrix A⁻¹:</strong></div>
           <div class="matrix-display">$$A^{-1} = ${formatMatrix(result.inverse)}$$</div>
         </div>
       `;
@@ -327,9 +331,9 @@
 
         html += `
           <div class="verification-card">
-            <div class="mb-2"><strong>Verification: A × A⁻¹</strong></div>
+            <div style="margin-bottom:0.5rem"><strong>Verification: A × A⁻¹</strong></div>
             <div class="matrix-display">$$${formatMatrix(product)}$$</div>
-            <div class="mt-2">
+            <div style="margin-top:0.5rem">
               ${isIdentity
                 ? '✓ Result verified! A × A⁻¹ = I'
                 : '⚠ Minor numerical errors present (expected for floating point)'}
@@ -341,8 +345,8 @@
       resultArea.innerHTML = html;
 
       if(showSteps.checked) {
-        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Gauss-Jordan Steps</h5></div>';
-        stepsHtml += '<p class="text-muted mb-4" style="font-size:0.95rem">Watch the transformation: [A | I] → [I | A⁻¹]</p>';
+        let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Gauss-Jordan Steps</h5></div>';
+        stepsHtml += '<p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.95rem">Watch the transformation: [A | I] → [I | A⁻¹]</p>';
 
         result.steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner">`;
@@ -350,14 +354,14 @@
           stepsHtml += `<div class="step-description">${step.desc}`;
           if(step.showMatrix && step.matrix) {
             // Show augmented matrix
-            stepsHtml += `<div class="matrix-display mt-2">$$${formatAugmentedMatrix(step.matrix.A, step.matrix.I)}$$</div>`;
+            stepsHtml += `<div class="matrix-display" style="margin-top:0.5rem">$$${formatAugmentedMatrix(step.matrix.A, step.matrix.I)}$$</div>`;
           }
           stepsHtml += `</div></div></div>`;
         });
 
         stepsArea.innerHTML = stepsHtml;
       } else {
-        stepsArea.innerHTML = '<div class="text-muted">Enable "Show detailed steps" to see the solution process.</div>';
+        stepsArea.innerHTML = '<div style="color:var(--text-muted)">Enable "Show detailed steps" to see the solution process.</div>';
       }
 
       if(window.MathJax && window.MathJax.typesetPromise) {
@@ -374,8 +378,8 @@
 
   function clear() {
     matrixInput.value = '';
-    resultArea.innerHTML = '<div class="text-center text-muted">Enter an invertible square matrix and click "Calculate Inverse" to see the result.</div>';
-    stepsArea.innerHTML = '<div class="text-muted">Detailed Gauss-Jordan elimination steps will appear here.</div>';
+    resultArea.innerHTML = '<div style="text-align:center;color:var(--text-muted)">Enter an invertible square matrix and click "Calculate Inverse" to see the result.</div>';
+    stepsArea.innerHTML = '<div style="color:var(--text-muted)">Detailed Gauss-Jordan elimination steps will appear here.</div>';
     inputError.style.display = 'none';
   }
 
@@ -437,6 +441,7 @@
   // Download Image
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-inverse', 'No result to download. Please calculate an inverse first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Inverse', { exerciseType: 'inverse' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   // Load from URL or default
   const loaded = MatrixUtils.loadFromURL(function(p) {
@@ -451,10 +456,31 @@
   if(!loaded) {
     loadPreset('example1');
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Inverse Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×2 matrices' },
+        { id: 'medium', label: 'Medium', description: '3×3 (nice integers)' },
+        { id: 'hard', label: 'Hard', description: 'Invertibility checks' }
+      ],
+      generateProblems: MatrixPractice.inverse
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Inverse Tool &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">The inverse A⁻¹ satisfies A × A⁻¹ = I. This tool uses Gauss-Jordan elimination on [A|I] to produce [I|A⁻¹]. A matrix is singular (no inverse) when det(A)=0. <strong>All calculations run client-side</strong>—no data stored.</p>
@@ -489,9 +515,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">When does a matrix not have an inverse?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is non-invertible (singular) when det(A) = 0. This typically happens when rows or columns are linearly dependent, or rank(A) &lt; n for an n×n matrix.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and checks are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This calculator supports 2×2 up to 6×6 matrices. It includes optional verification that A × A⁻¹ = I, and shows intermediate Gauss-Jordan steps.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">When does a matrix have no inverse?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A square matrix has no inverse when its determinant is zero (singular). This happens when rows are linearly dependent, the matrix has a zero row/column, or rank(A) &lt; n. Non-square matrices never have a standard inverse.</p>
   </div>
 </section>
 

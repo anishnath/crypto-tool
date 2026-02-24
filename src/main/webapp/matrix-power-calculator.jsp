@@ -9,8 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Power Calculator | A^n Free with Practice Worksheet" />
-    <jsp:param name="toolDescription" value="Free matrix power calculator A^n. Repeated squaring, diagonalization. Step-by-step. Print worksheet with practice exercises. Share, download. Markov chains support." />
+    <jsp:param name="toolName" value="Matrix Power Calculator A^n — Free Step-by-Step" />
+    <jsp:param name="toolDescription" value="Compute A^n with efficient repeated squaring. Step-by-step solutions, idempotent/nilpotent detection. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-power-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix power calculator, A^n calculator, matrix exponentiation, matrix to power n, repeated matrix multiplication, diagonalization, matrix powers, square matrix calculator, nilpotent matrix, idempotent matrix, Markov chain calculator" />
@@ -23,6 +23,10 @@
     <jsp:param name="faq2a" value="Markov chains (long-run behavior), graph theory (path counts via adjacency powers), linear recurrences (e.g., Fibonacci), repeated geometric transforms, and systems of differential equations." />
     <jsp:param name="faq3q" value="What sizes and exponents are supported?" />
     <jsp:param name="faq3a" value="Supports square matrices and integer exponents in a practical range (including 0). For large n, repeated squaring keeps computations fast and stable." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style matrix power questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates problems at Easy (A²), Medium (A³), or Hard (idempotent/nilpotent identification) with instant scoring and answer reveal." />
+    <jsp:param name="faq5q" value="What are idempotent and nilpotent matrices?" />
+    <jsp:param name="faq5a" value="An idempotent matrix satisfies A² = A (projection matrices). A nilpotent matrix satisfies Aⁿ = 0 for some n (strictly upper/lower triangular matrices). These special types appear frequently in exams and applications." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +46,8 @@
   <%@ include file="modern/ads/ad-init.jsp"%>
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
@@ -50,8 +56,6 @@
     .power-calc { --mc-result-color:#3b82f6; --mc-result-bg:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); --mc-result-shadow:rgba(59,130,246,0.1) }
     .power-calc .power-value{font-size:2rem;font-weight:700;color:#2563eb;font-family:monospace}
     .power-calc .info-badge{display:inline-block;background:#dbeafe;color:#1e40af;padding:0.4rem 0.8rem;border-radius:8px;font-weight:600;margin:0.25rem;font-size:0.9rem}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
     .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
@@ -149,17 +153,17 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result</span>
         <div style="display:flex;flex-wrap:wrap;gap:0.25rem">
-          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">
             <i class="fas fa-share-alt"></i> Share URL
           </button>
-          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image" style="padding:0.4rem 0.75rem;font-size:0.8125rem">
+          <button id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">
             <i class="fas fa-download"></i> Download
           </button>
-          <button id="btnPrintWorksheet" class="tool-btn-outline" title="Print worksheet" style="padding:0.4rem 0.75rem;font-size:0.8125rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none">&#128424; Print Worksheet</button>
+          <button id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
-        <div id="resultArea" class="text-center text-muted">
+        <div id="resultArea" style="text-align:center;color:var(--text-muted)">
           Enter a matrix and power, then click "Calculate A<sup>n</sup>" to see the result.
         </div>
       </div>
@@ -168,7 +172,7 @@
     <div class="tool-card">
       <div class="tool-card-header">Calculation Details</div>
       <div class="tool-card-body">
-        <div id="stepsArea" class="text-muted">
+        <div id="stepsArea" style="color:var(--text-muted)">
           Computation details will appear here.
         </div>
       </div>
@@ -254,27 +258,27 @@
     // Special case: n = 0
     if(n === 0) {
       const I = createIdentity(size);
-      steps.push(`<span class="text-primary">A<sup>0</sup> = I (identity matrix)</span>`);
-      steps.push(`<div class="matrix-display mt-2">$$A^0 = ${formatMatrix(I)}$$</div>`);
+      steps.push(`<span style="color:var(--tool-primary)">A<sup>0</sup> = I (identity matrix)</span>`);
+      steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$A^0 = ${formatMatrix(I)}$$</div>`);
       return {result: I, steps, method: 'identity'};
     }
 
     // Check if diagonal
     if(isDiagonal(A)) {
-      steps.push(`<span class="text-info">Matrix is diagonal - using element-wise power</span>`);
+      steps.push(`<span style="color:#0891b2">Matrix is diagonal - using element-wise power</span>`);
       const result = cloneMatrix(A);
       for(let i = 0; i < size; i++) {
         const original = A[i][i];
         result[i][i] = Math.pow(original, n);
-        steps.push(`<div class="text-secondary">Diagonal element [${i+1},${i+1}]: ${smartFormat(original)}<sup>${n}</sup> = ${smartFormat(result[i][i])}</div>`);
+        steps.push(`<div style="color:var(--text-secondary)">Diagonal element [${i+1},${i+1}]: ${smartFormat(original)}<sup>${n}</sup> = ${smartFormat(result[i][i])}</div>`);
       }
-      steps.push(`<div class="matrix-display mt-2">$$A^{${n}} = ${formatMatrix(result)}$$</div>`);
+      steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$A^{${n}} = ${formatMatrix(result)}$$</div>`);
       return {result, steps, method: 'diagonal'};
     }
 
     // Use repeated squaring for efficiency
-    steps.push(`<span class="text-primary">Using repeated squaring method for efficiency</span>`);
-    steps.push(`<div class="text-secondary small">Computing A<sup>${n}</sup> using O(log n) multiplications</div>`);
+    steps.push(`<span style="color:var(--tool-primary)">Using repeated squaring method for efficiency</span>`);
+    steps.push(`<div style="color:var(--text-secondary);font-size:0.85rem">Computing A<sup>${n}</sup> using O(log n) multiplications</div>`);
 
     let result = createIdentity(size);
     let base = cloneMatrix(A);
@@ -297,18 +301,18 @@
     if(trackSteps && n <= 10) {
       // Show intermediate powers for small n
       let current = createIdentity(size);
-      steps.push(`<div class="matrix-display mt-2">$$A^0 = ${formatMatrix(current)}$$</div>`);
+      steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$A^0 = ${formatMatrix(current)}$$</div>`);
 
       for(let i = 1; i <= n; i++) {
         current = multiplyMatrices(current, A);
         if(i <= 5 || i === n) {
-          steps.push(`<div class="matrix-display mt-2">$$A^{${i}} = ${formatMatrix(current)}$$</div>`);
+          steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$A^{${i}} = ${formatMatrix(current)}$$</div>`);
         } else if(i === 6) {
-          steps.push(`<div class="text-secondary">... (intermediate steps omitted) ...</div>`);
+          steps.push(`<div style="color:var(--text-secondary)">... (intermediate steps omitted) ...</div>`);
         }
       }
     } else {
-      steps.push(`<div class="text-secondary">Computation used ${intermediateSteps.length} matrix multiplication(s)</div>`);
+      steps.push(`<div style="color:var(--text-secondary)">Computation used ${intermediateSteps.length} matrix multiplication(s)</div>`);
     }
 
     return {result, steps, method: 'repeated-squaring'};
@@ -336,28 +340,28 @@
 
       let html = `
         <div class="result-card">
-          <div class="mb-3">
+          <div style="margin-bottom:0.75rem">
             <span class="info-badge">📊 Method: ${methodName}</span>
             <span class="info-badge">⚡ Size: ${n}×${n}</span>
           </div>
 
-          <div class="mb-2"><strong>Original Matrix A:</strong></div>
-          <div class="matrix-display mb-3">$$A = ${formatMatrix(matrix)}$$</div>
+          <div style="margin-bottom:0.5rem"><strong>Original Matrix A:</strong></div>
+          <div class="matrix-display" style="margin-bottom:0.75rem">$$A = ${formatMatrix(matrix)}$$</div>
 
-          <div class="mb-2"><strong>Result A<sup>${power}</sup>:</strong></div>
+          <div style="margin-bottom:0.5rem"><strong>Result A<sup>${power}</sup>:</strong></div>
           <div class="matrix-display">$$A^{${power}} = ${formatMatrix(result.result)}$$</div>
         </div>
       `;
 
       resultArea.innerHTML = html;
 
-      let stepsHtml = '<div class="mb-4"><h5 class="text-dark">📋 Computation Process</h5></div>';
+      let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="color:var(--text-primary)">📋 Computation Process</h5></div>';
       if(showSteps.checked || result.method !== 'repeated-squaring') {
         result.steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
         });
       } else {
-        stepsHtml += `<p class="text-muted">Enable "Show intermediate powers" to see step-by-step calculation.<br>
+        stepsHtml += `<p style="color:var(--text-muted)">Enable "Show intermediate powers" to see step-by-step calculation.<br>
         Large powers use efficient repeated squaring algorithm.</p>`;
         result.steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
@@ -378,8 +382,8 @@
 
   function clear() {
     matrixInput.value = '';
-    resultArea.innerHTML = '<div class="text-center text-muted">Enter a matrix and power, then click "Calculate A<sup>n</sup>" to see the result.</div>';
-    stepsArea.innerHTML = '<div class="text-muted">Computation details will appear here.</div>';
+    resultArea.innerHTML = '<div style="text-align:center;color:var(--text-muted)">Enter a matrix and power, then click "Calculate A<sup>n</sup>" to see the result.</div>';
+    stepsArea.innerHTML = '<div style="color:var(--text-muted)">Computation details will appear here.</div>';
     inputError.style.display = 'none';
   }
 
@@ -441,6 +445,7 @@
   // Download Image
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-power', 'No result to download. Please calculate a power first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Power', { exerciseType: 'power' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   // Load from URL or default
   const loaded = MatrixUtils.loadFromURL(function(p) {
@@ -456,10 +461,31 @@
   if(!loaded) {
     loadExample('diagonal');
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Power Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: 'A² (2×2)' },
+        { id: 'medium', label: 'Medium', description: 'A³ (2×2)' },
+        { id: 'hard', label: 'Hard', description: 'Idempotent / nilpotent' }
+      ],
+      generateProblems: MatrixPractice.power
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Power Calculator &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">Matrix exponentiation A<sup>n</sup> multiplies a square matrix by itself n times. This tool uses efficient repeated squaring (O(log n)) and optimizations for diagonal, idempotent, and nilpotent matrices. A<sup>0</sup> = I by definition. <strong>All calculations run client-side</strong>—no data stored.</p>
@@ -494,9 +520,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What are common applications of matrix powers?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Markov chains (long-run behavior), graph theory (path counts via adjacency powers), linear recurrences (e.g., Fibonacci), repeated geometric transforms, and systems of differential equations.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and exponents are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Supports square matrices and integer exponents in a practical range (including 0). For large n, repeated squaring keeps computations fast and stable.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What are idempotent and nilpotent matrices?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">An idempotent matrix satisfies A² = A (projection matrices). A nilpotent matrix satisfies Aⁿ = 0 for some n (strictly upper/lower triangular matrices). These special types appear frequently in exams and applications.</p>
   </div>
 </section>
 

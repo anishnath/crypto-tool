@@ -13,8 +13,8 @@
   <meta name="author" content="Anish Nath">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Determinant Calculator | det(A) 2×2 to 10×10 Free" />
-    <jsp:param name="toolDescription" value="Free matrix determinant calculator. det(A) for 2×2 to 10×10. LU, cofactor expansion, Gaussian elimination. Step-by-step. Print worksheet with practice exercises. Share, download." />
+    <jsp:param name="toolName" value="Matrix Determinant Calculator — Free Step-by-Step" />
+    <jsp:param name="toolDescription" value="Calculate det(A) for 2×2 to 10×10 matrices. Cofactor expansion, row reduction, LU decomposition with step-by-step solutions. Free, instant." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-determinant-calculator.jsp" />
     <jsp:param name="toolKeywords" value="determinant calculator, det(A), matrix determinant, 2x2 3x3 determinant, cofactor expansion, LU decomposition, linear algebra, homework help" />
@@ -29,6 +29,10 @@
     <jsp:param name="faq3a" value="det(A) = 0 indicates the matrix is singular: rows/columns are linearly dependent, rank is less than n, and A is not invertible." />
     <jsp:param name="faq4q" value="Can I print determinant practice worksheets?" />
     <jsp:param name="faq4a" value="Yes. Click Print Worksheet to get your result plus practice exercises (2×2 and 3×3 determinants) with answer blanks for homework or exams." />
+    <jsp:param name="faq5q" value="Can I practice with exam-style determinant questions?" />
+    <jsp:param name="faq5a" value="Yes. The Exam-Style Practice section generates problems at Easy (2×2), Medium (3×3), or Hard (4×4 and singularity checks) with instant scoring and answer reveal." />
+    <jsp:param name="faq6q" value="What are useful properties of determinants?" />
+    <jsp:param name="faq6a" value="Key properties: det(AB) = det(A)det(B), det(A^T) = det(A), det(cA) = c^n det(A) for n×n, swapping rows flips the sign, and a row of zeros makes det = 0." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +54,8 @@
 
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
 
@@ -57,8 +63,6 @@
     :root { --tool-primary:#3b82f6; --tool-primary-dark:#1d4ed8; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
     .det-calculator .result-value{font-size:2rem;font-weight:700;color:#059669;font-family:monospace}
     .method-badge{display:inline-flex;align-items:center;padding:0.3rem 0.6rem;border-radius:999px;font-size:0.85rem;margin:0.25rem;font-weight:500;background:var(--tool-light);color:var(--tool-primary)}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
     .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
@@ -149,9 +153,9 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result</span>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
-          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
-          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+          <button type="button" id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
@@ -179,6 +183,12 @@
 </main>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Determinant Tool &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">The determinant det(A) is a scalar computed from a square matrix. Key properties: det(I)=1, det(AB)=det(A)×det(B), det(A<sup>T</sup>)=det(A). If det(A)=0 the matrix is singular (not invertible). This tool computes det(A) using LU decomposition, cofactor expansion, or Gaussian elimination. <strong>All calculations run client-side</strong>—no data stored.</p>
@@ -213,9 +223,17 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes and methods are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This calculator supports square matrices from 2×2 up to 10×10 and can display cofactor expansion steps, row-operation reductions, and LU-based computations.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What does det(A) = 0 mean?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">det(A) = 0 indicates the matrix is singular: rows/columns are linearly dependent, rank is less than n, and A is not invertible.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Can I practice with exam-style determinant questions?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Yes. The Exam-Style Practice section generates problems at Easy (2×2), Medium (3×3), or Hard (4×4 and singularity checks) with instant scoring and answer reveal.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What are useful properties of determinants?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Key properties: det(AB) = det(A)det(B), det(A^T) = det(A), det(cA) = c^n det(A) for n×n, swapping rows flips the sign, and a row of zeros makes det = 0.</p>
   </div>
 </section>
 
@@ -272,22 +290,22 @@
     let det = 1;
     let swaps = 0;
     const steps = [];
-    steps.push(`<span class="text-primary">Starting LU decomposition for ${n}×${n} matrix</span>`);
-    steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A)}$$</div>`);
+    steps.push(`<span style="color:var(--tool-primary)">Starting LU decomposition for ${n}×${n} matrix</span>`);
+    steps.push(`<div class="matrix-display" style="margin:0.5rem 0 0.75rem">$$${formatMatrix(A)}$$</div>`);
     for(let i = 0; i < n; i++) {
       let pivot = i;
       for(let r = i + 1; r < n; r++) {
         if(Math.abs(A[r][i]) > Math.abs(A[pivot][i])) pivot = r;
       }
       if(Math.abs(A[pivot][i]) < EPS) {
-        steps.push(`<span class="text-danger">Zero pivot found at row ${i+1}, determinant = 0</span>`);
+        steps.push(`<span style="color:var(--error,#ef4444)">Zero pivot found at row ${i+1}, determinant = 0</span>`);
         return {det: 0, steps};
       }
       if(pivot !== i) {
         [A[pivot], A[i]] = [A[i], A[pivot]];
         swaps++;
-        steps.push(`<span class="text-info">Row swap: R${i+1} ↔ R${pivot+1}</span>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, true)}$$</div>`);
+        steps.push(`<span style="color:var(--info,#0ea5e9)">Row swap: R${i+1} ↔ R${pivot+1}</span>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, true)}$$</div>`);
       }
       const pivotVal = A[i][i];
       det *= pivotVal;
@@ -298,11 +316,11 @@
       const showInterval = n <= 4 ? 1 : Math.max(1, Math.floor(n/3));
       if(i < n - 1 && (n <= 4 || i % showInterval === 0)) {
         steps.push(`Eliminated column ${i+1} below pivot`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, true)}$$</div>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, true)}$$</div>`);
       }
     }
-    steps.push(`<span class="text-success">Final upper triangular form (diagonal in blue, zeros in gray):</span>`);
-    steps.push(`<div class="matrix-display mt-2 mb-3">$$${formatMatrix(A, true)}$$</div>`);
+    steps.push(`<span style="color:#16a34a">Final upper triangular form (diagonal in blue, zeros in gray):</span>`);
+    steps.push(`<div class="matrix-display" style="margin:0.5rem 0 0.75rem">$$${formatMatrix(A, true)}$$</div>`);
     det = swaps % 2 === 0 ? det : -det;
     steps.push(`<strong>det(A) = ${swaps % 2 === 0 ? '+' : '−'}(product of diagonal)</strong> = ${det.toFixed(6)}`);
     return {det, steps};
@@ -342,23 +360,23 @@
     let det = 1;
     let swaps = 0;
     const steps = [];
-    steps.push(`<span class="text-primary">Using Gaussian elimination to reduce to upper triangular form</span>`);
-    steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A)}$$</div>`);
+    steps.push(`<span style="color:var(--tool-primary)">Using Gaussian elimination to reduce to upper triangular form</span>`);
+    steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A)}$$</div>`);
     for(let i = 0; i < n; i++) {
       let pivot = i;
       for(let r = i + 1; r < n; r++) {
         if(Math.abs(A[r][i]) > Math.abs(A[pivot][i])) pivot = r;
       }
       if(Math.abs(A[pivot][i]) < EPS) {
-        steps.push(`<span class="text-danger">Zero column at position ${i+1}, determinant = 0</span>`);
+        steps.push(`<span style="color:var(--error,#ef4444)">Zero column at position ${i+1}, determinant = 0</span>`);
         return {det: 0, steps};
       }
       if(pivot !== i) {
         [A[pivot], A[i]] = [A[i], A[pivot]];
         swaps++;
         det *= -1;
-        steps.push(`<span class="text-info">Row swap: R${i+1} ↔ R${pivot+1}</span>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, true)}$$</div>`);
+        steps.push(`<span style="color:var(--info,#0ea5e9)">Row swap: R${i+1} ↔ R${pivot+1}</span>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, true)}$$</div>`);
       }
       let rowOpsInStep = [];
       for(let r = i + 1; r < n; r++) {
@@ -369,13 +387,13 @@
         for(let c = i; c < n; c++) A[r][c] -= factor * A[i][c];
       }
       if(rowOpsInStep.length > 0) {
-        steps.push(`<div class="text-secondary">${rowOpsInStep.join(', ')}</div>`);
-        steps.push(`<div class="matrix-display mt-2">$$${formatMatrix(A, true)}$$</div>`);
+        steps.push(`<div style="color:var(--text-secondary)">${rowOpsInStep.join(', ')}</div>`);
+        steps.push(`<div class="matrix-display" style="margin-top:0.5rem">$$${formatMatrix(A, true)}$$</div>`);
       }
     }
     for(let i = 0; i < n; i++) det *= A[i][i];
-    steps.push(`<span class="text-success">Upper triangular matrix achieved (diagonal in blue):</span>`);
-    steps.push(`<div class="matrix-display mt-2 mb-3">$$${formatMatrix(A, true)}$$</div>`);
+    steps.push(`<span style="color:#16a34a">Upper triangular matrix achieved (diagonal in blue):</span>`);
+    steps.push(`<div class="matrix-display" style="margin:0.5rem 0 0.75rem">$$${formatMatrix(A, true)}$$</div>`);
     steps.push(`<strong>det(A) = product of diagonal</strong> = ${det.toFixed(6)}`);
     return {det, steps};
   }
@@ -398,10 +416,10 @@
 
       resultArea.innerHTML = `
         <div class="result-card">
-          <div class="mb-2">Original Matrix:</div>
-          <div class="matrix-display mb-3">$$${formatMatrix(matrix)}$$</div>
-          <div class="mb-2"><span class="method-badge">${methodName}</span></div>
-          <div class="mt-3">
+          <div style="margin-bottom:0.5rem">Original Matrix:</div>
+          <div class="matrix-display" style="margin-bottom:0.75rem">$$${formatMatrix(matrix)}$$</div>
+          <div style="margin-bottom:0.5rem"><span class="method-badge">${methodName}</span></div>
+          <div style="margin-top:0.75rem">
             <div style="font-size:1.1rem;color:var(--text-secondary)">Determinant:</div>
             <div class="result-value">${result.det.toFixed(6)}</div>
           </div>
@@ -409,7 +427,7 @@
         </div>
       `;
 
-      let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Computation Steps</h5></div>';
+      let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Computation Steps</h5></div>';
       stepsHtml += '<p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.95rem">Watch how the matrix transforms at each step:</p>';
       result.steps.forEach((step, idx) => {
         stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
@@ -488,6 +506,7 @@
 
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-determinant', 'No result to download. Please calculate a determinant first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Determinant', { exerciseType: 'determinant' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   const loaded = MatrixUtils.loadFromURL(function(p) {
     if(p.matrix && p.size) {
@@ -500,6 +519,21 @@
     return false;
   });
   if(!loaded) loadPreset('identity');
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Determinant Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×2 matrices' },
+        { id: 'medium', label: 'Medium', description: '3×3 matrices' },
+        { id: 'hard', label: 'Hard', description: '4×4 and conceptual' }
+      ],
+      generateProblems: MatrixPractice.determinant
+    });
+  }
 })();
 </script>
 

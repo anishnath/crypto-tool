@@ -13,8 +13,8 @@
   <meta name="author" content="Anish Nath">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Addition Calculator | A+B, A-B, cA, aA+bB Free" />
-    <jsp:param name="toolDescription" value="Free matrix addition calculator. Add A+B, subtract A-B, scalar multiply cA, linear combinations. Step-by-step solutions. Print worksheet with practice exercises. Share URL, download. 100% client-side." />
+    <jsp:param name="toolName" value="Matrix Addition & Subtraction Calculator — Free Online" />
+    <jsp:param name="toolDescription" value="Add, subtract, and scale matrices with step-by-step solutions. Supports A+B, A−B, cA, and aA+bB up to 10×10. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-addition-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix addition calculator, A+B calculator, matrix subtraction, scalar multiplication cA, linear combination aA+bB, matrix arithmetic, homework help, printable worksheet" />
@@ -29,6 +29,10 @@
     <jsp:param name="faq3a" value="This tool supports matrices up to 10×10 and shows element-wise steps for A+B, A−B, cA, and aA+bB." />
     <jsp:param name="faq4q" value="Can I print practice worksheets?" />
     <jsp:param name="faq4a" value="Yes. Click Print Worksheet to generate a PDF-ready sheet with your result plus practice exercises (A+B, A−B, cA, aA+bB) with answer blanks." />
+    <jsp:param name="faq5q" value="Can I practice with exam-style questions?" />
+    <jsp:param name="faq5a" value="Yes. Scroll to the Exam-Style Practice section and choose Easy (2×2), Medium (3×3), or Hard (linear combinations). Generate problems, enter answers, and get instant scoring with detailed solutions." />
+    <jsp:param name="faq6q" value="What are common mistakes in matrix addition?" />
+    <jsp:param name="faq6a" value="The most common errors are adding matrices of different dimensions (not allowed), forgetting to negate every entry in subtraction, and misapplying scalar multiplication to only some entries instead of all." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +54,8 @@
 
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
 
@@ -57,8 +63,6 @@
     :root { --tool-primary:#3b82f6; --tool-primary-dark:#1d4ed8; --tool-gradient:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%); --tool-light:#eff6ff }
     [data-theme="dark"] { --tool-light:rgba(59,130,246,0.15) }
     .matrix-calc .operation-badge{display:inline-flex;align-items:center;padding:0.4rem 0.8rem;border-radius:999px;font-size:0.95rem;font-weight:600;background:var(--tool-light);color:var(--tool-primary);margin:0.25rem}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-dim-row input{flex:1;min-width:60px}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
@@ -201,9 +205,9 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result</span>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
-          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
-          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+          <button type="button" id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
@@ -235,6 +239,12 @@
 </main>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Addition Tool &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This matrix addition calculator performs element-wise operations using standard linear algebra rules. All computations run <strong>client-side in your browser</strong>—no matrices are sent to any server. Supports A+B, A−B, scalar multiplication cA, and linear combinations aA+bB with step-by-step solutions up to 10×10.</p>
@@ -269,9 +279,17 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is scalar multiplication and a linear combination?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Scalar multiplication multiplies each entry by a constant c. Linear combinations have the form aA + bB with matching dimensions, fundamental for many linear algebra applications.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What sizes are supported?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">This tool supports matrices up to 10×10 and shows element-wise steps for A+B, A−B, cA, and aA+bB.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Can I practice with exam-style questions?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Yes. Scroll to the Exam-Style Practice section and choose Easy (2×2), Medium (3×3), or Hard (linear combinations). Generate problems, enter answers, and get instant scoring with detailed solutions.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What are common mistakes in matrix addition?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">The most common errors are adding matrices of different dimensions (not allowed), forgetting to negate every entry in subtraction, and misapplying scalar multiplication to only some entries instead of all.</p>
   </div>
 </section>
 
@@ -347,19 +365,19 @@
     const C = Array(m).fill(0).map(() => Array(n).fill(undefined));
     const steps = [];
     if(withSteps) {
-      steps.push(`<div class="mb-2"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="mb-2"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
-      steps.push(`<div class="text-primary">Adding element-wise:</div><div class="matrix-display">$$c_{ij} = a_{ij} + b_{ij}$$</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Adding element-wise:</div><div class="matrix-display">$$c_{ij} = a_{ij} + b_{ij}$$</div>`);
     }
     for(let i = 0; i < m; i++) {
       for(let j = 0; j < n; j++) {
         C[i][j] = A[i][j] + B[i][j];
         if(withSteps) {
-          steps.push(`<div class="text-secondary matrix-display">$$c_{${i+1},${j+1}} = ${smartFormat(A[i][j])} + ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$c_{${i+1},${j+1}} = ${smartFormat(A[i][j])} + ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
           const totalElements = m * n;
           const showFrequency = totalElements <= 9 ? 1 : (totalElements <= 16 ? 2 : 4);
           if((i * n + j + 1) % showFrequency === 0 || (i === m - 1 && j === n - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
           }
         }
       }
@@ -373,19 +391,19 @@
     const C = Array(m).fill(0).map(() => Array(n).fill(undefined));
     const steps = [];
     if(withSteps) {
-      steps.push(`<div class="mb-2"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="mb-2"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
-      steps.push(`<div class="text-primary">Subtracting element-wise:</div><div class="matrix-display">$$c_{ij} = a_{ij} - b_{ij}$$</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Subtracting element-wise:</div><div class="matrix-display">$$c_{ij} = a_{ij} - b_{ij}$$</div>`);
     }
     for(let i = 0; i < m; i++) {
       for(let j = 0; j < n; j++) {
         C[i][j] = A[i][j] - B[i][j];
         if(withSteps) {
-          steps.push(`<div class="text-secondary matrix-display">$$c_{${i+1},${j+1}} = ${smartFormat(A[i][j])} - ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$c_{${i+1},${j+1}} = ${smartFormat(A[i][j])} - ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
           const totalElements = m * n;
           const showFrequency = totalElements <= 9 ? 1 : (totalElements <= 16 ? 2 : 4);
           if((i * n + j + 1) % showFrequency === 0 || (i === m - 1 && j === n - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
           }
         }
       }
@@ -399,19 +417,19 @@
     const C = Array(m).fill(0).map(() => Array(n).fill(undefined));
     const steps = [];
     if(withSteps) {
-      steps.push(`<div class="text-primary">Scalar: c = ${smartFormat(c)}</div>`);
-      steps.push(`<div class="mb-2"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="text-primary">Multiplying each element by ${smartFormat(c)}:</div><div class="matrix-display">$$c_{ij} = ${smartFormat(c)} \\times a_{ij}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Scalar: c = ${smartFormat(c)}</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Multiplying each element by ${smartFormat(c)}:</div><div class="matrix-display">$$c_{ij} = ${smartFormat(c)} \\times a_{ij}$$</div>`);
     }
     for(let i = 0; i < m; i++) {
       for(let j = 0; j < n; j++) {
         C[i][j] = c * A[i][j];
         if(withSteps) {
-          steps.push(`<div class="text-secondary matrix-display">$$c_{${i+1},${j+1}} = ${smartFormat(c)} \\times ${smartFormat(A[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$c_{${i+1},${j+1}} = ${smartFormat(c)} \\times ${smartFormat(A[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
           const totalElements = m * n;
           const showFrequency = totalElements <= 9 ? 1 : (totalElements <= 16 ? 2 : 4);
           if((i * n + j + 1) % showFrequency === 0 || (i === m - 1 && j === n - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
           }
         }
       }
@@ -425,20 +443,20 @@
     const C = Array(m).fill(0).map(() => Array(n).fill(undefined));
     const steps = [];
     if(withSteps) {
-      steps.push(`<div class="text-primary">Linear Combination: ${smartFormat(a)}A + ${smartFormat(b)}B</div>`);
-      steps.push(`<div class="mb-2"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="mb-2"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
-      steps.push(`<div class="text-primary">Computing:</div><div class="matrix-display">$$c_{ij} = ${smartFormat(a)} \\times a_{ij} + ${smartFormat(b)} \\times b_{ij}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Linear Combination: ${smartFormat(a)}A + ${smartFormat(b)}B</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Matrix B:</strong></div><div class="matrix-display">$$B = ${formatMatrix(B)}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Computing:</div><div class="matrix-display">$$c_{ij} = ${smartFormat(a)} \\times a_{ij} + ${smartFormat(b)} \\times b_{ij}$$</div>`);
     }
     for(let i = 0; i < m; i++) {
       for(let j = 0; j < n; j++) {
         C[i][j] = a * A[i][j] + b * B[i][j];
         if(withSteps) {
-          steps.push(`<div class="text-secondary matrix-display">$$c_{${i+1},${j+1}} = ${smartFormat(a)} \\times ${smartFormat(A[i][j])} + ${smartFormat(b)} \\times ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$c_{${i+1},${j+1}} = ${smartFormat(a)} \\times ${smartFormat(A[i][j])} + ${smartFormat(b)} \\times ${smartFormat(B[i][j])} = ${smartFormat(C[i][j])}$$</div>`);
           const totalElements = m * n;
           const showFrequency = totalElements <= 9 ? 1 : (totalElements <= 16 ? 2 : 4);
           if((i * n + j + 1) % showFrequency === 0 || (i === m - 1 && j === n - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Result C so far:</strong></div><div class="matrix-display">$$C = ${formatPartialMatrix(C, i, j)}$$</div>`);
           }
         }
       }
@@ -479,12 +497,12 @@
         opLabel = `${smartFormat(a)}A + ${smartFormat(b)}B`;
       }
       let html = `<div class="result-card">
-        <div class="mb-3"><span class="operation-badge">${opLabel}</span><span class="operation-badge">Dimensions: ${m}×${n}</span></div>
-        <div class="mb-2"><strong>Result:</strong></div>
+        <div style="margin-bottom:0.75rem"><span class="operation-badge">${opLabel}</span><span class="operation-badge">Dimensions: ${m}×${n}</span></div>
+        <div style="margin-bottom:0.5rem"><strong>Result:</strong></div>
         <div class="matrix-display">$$${formatMatrix(result)}$$</div></div>`;
       resultArea.innerHTML = html;
       if(showSteps.checked && steps.length > 0) {
-        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Computation Process</h5></div>';
+        let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Computation Process</h5></div>';
         steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
         });
@@ -578,6 +596,7 @@
 
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-addition', 'No result to download. Please calculate first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Addition', { exerciseType: 'addition' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   const loaded = MatrixUtils.loadFromURL(function(p) {
     if(p.A) {
@@ -596,6 +615,21 @@
     return false;
   });
   if(!loaded) loadExample('add');
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Addition Practice',
+      toolColor: '#3b82f6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×2 matrices' },
+        { id: 'medium', label: 'Medium', description: '3×3 matrices' },
+        { id: 'hard', label: 'Hard', description: 'Linear combinations aA+bB' }
+      ],
+      generateProblems: MatrixPractice.addition
+    });
+  }
 })();
 </script>
 

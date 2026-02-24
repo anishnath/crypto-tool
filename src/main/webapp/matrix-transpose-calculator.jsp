@@ -13,8 +13,8 @@
   <meta name="author" content="Anish Nath">
 
   <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Matrix Transpose Calculator | A^T Free with Practice Worksheet" />
-    <jsp:param name="toolDescription" value="Free matrix transpose calculator. Compute A^T, check symmetric and skew-symmetric. Step-by-step solutions. Print practice worksheet with exercises. Share and download. Instant results." />
+    <jsp:param name="toolName" value="Matrix Transpose Calculator — Free Online" />
+    <jsp:param name="toolDescription" value="Compute A^T and check symmetric, skew-symmetric properties. Step-by-step solutions up to 10×10. Free, instant, no signup." />
     <jsp:param name="toolCategory" value="Math Tools" />
     <jsp:param name="toolUrl" value="matrix-transpose-calculator.jsp" />
     <jsp:param name="toolKeywords" value="matrix transpose calculator, A^T calculator, transpose matrix, symmetric matrix checker, skew-symmetric matrix, transpose properties, matrix transposition, (A^T)^T = A, orthogonal matrix, linear algebra calculator" />
@@ -27,6 +27,10 @@
     <jsp:param name="faq2a" value="A matrix is symmetric when A = A^T and skew-symmetric when A = -A^T (all diagonal entries are zero). This tool flags these properties automatically." />
     <jsp:param name="faq3q" value="Does transposing change determinant or rank?" />
     <jsp:param name="faq3a" value="For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank." />
+    <jsp:param name="faq4q" value="Can I practice with exam-style transpose questions?" />
+    <jsp:param name="faq4a" value="Yes. The Exam-Style Practice section generates transpose problems at Easy (2×3), Medium (3×3), or Hard (symmetric/skew-symmetric identification) with instant scoring." />
+    <jsp:param name="faq5q" value="What is the relationship between symmetry and transpose?" />
+    <jsp:param name="faq5a" value="A symmetric matrix satisfies A = A^T (mirror across diagonal). A skew-symmetric matrix satisfies A = -A^T (diagonal must be zero). Every square matrix can be decomposed as the sum of a symmetric and skew-symmetric part." />
   </jsp:include>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +52,8 @@
 
   <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
   <script src="<%=request.getContextPath()%>/js/matrix-common.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/modern/js/practice-sheet.js?v=<%=cacheVersion%>"></script>
+  <script src="<%=request.getContextPath()%>/js/matrix-practice-problems.js?v=<%=cacheVersion%>"></script>
   <script>MatrixUtils.initMathJax();</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" crossorigin="anonymous"></script>
   <style>
@@ -57,8 +63,6 @@
     .transpose-calc .property-badge{display:inline-flex;align-items:center;padding:0.4rem 0.8rem;border-radius:999px;font-size:0.9rem;font-weight:600;margin:0.25rem}
     .property-badge.true{background:#d1fae5;color:#065f46}
     .property-badge.false{background:#fee2e2;color:#991b1b}
-    .tool-btn-outline{background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);padding:0.5rem 1rem;font-size:0.875rem;border-radius:0.5rem;cursor:pointer}
-    .tool-btn-outline:hover{background:var(--tool-light)}
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
     .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
@@ -152,9 +156,9 @@
       <div class="tool-card-header" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem">
         <span>Result: A^T</span>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button type="button" id="btnShareURL" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Copy URL to clipboard">Share URL</button>
-          <button type="button" id="btnDownloadImage" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem" title="Download result as image">Download Image</button>
-          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline" style="padding:0.375rem 0.75rem;font-size:0.75rem;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:none" title="Print worksheet">&#128424; Print Worksheet</button>
+          <button type="button" id="btnShareURL" class="tool-btn-outline" title="Copy URL to clipboard">Share URL</button>
+          <button type="button" id="btnDownloadImage" class="tool-btn-outline" title="Download result as image">Download Image</button>
+          <button type="button" id="btnPrintWorksheet" class="tool-btn-outline tool-btn-print" title="Print worksheet">&#128424; Print Worksheet</button>
         </div>
       </div>
       <div class="tool-card-body">
@@ -238,22 +242,22 @@
     const steps = [];
 
     if(withSteps) {
-      steps.push(`<div class="text-primary">Transposing ${m}×${n} matrix A</div>`);
-      steps.push(`<div class="mb-2"><strong>Original Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
-      steps.push(`<div class="text-primary">Creating A^T (${n}×${m}) by swapping rows and columns:</div><div class="matrix-display">$$(A^T)_{ij} = A_{ji}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Transposing ${m}×${n} matrix A</div>`);
+      steps.push(`<div style="margin-bottom:0.5rem"><strong>Original Matrix A:</strong></div><div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>`);
+      steps.push(`<div style="color:var(--tool-primary)">Creating A^T (${n}×${m}) by swapping rows and columns:</div><div class="matrix-display">$$(A^T)_{ij} = A_{ji}$$</div>`);
     }
 
     for(let j = 0; j < n; j++) {
       for(let i = 0; i < m; i++) {
         AT[j][i] = A[i][j];
         if(withSteps) {
-          steps.push(`<div class="text-secondary matrix-display">$$(A^T)_{${j+1},${i+1}} = A_{${i+1},${j+1}} = ${smartFormat(A[i][j])}$$</div>`);
+          steps.push(`<div class="matrix-display" style="color:var(--text-secondary)">$$(A^T)_{${j+1},${i+1}} = A_{${i+1},${j+1}} = ${smartFormat(A[i][j])}$$</div>`);
 
           // Show partial transpose matrix periodically
           const totalElements = n * m;
           const showFrequency = totalElements <= 9 ? 1 : (totalElements <= 16 ? 2 : 4);
           if((j * m + i + 1) % showFrequency === 0 || (j === n - 1 && i === m - 1)) {
-            steps.push(`<div class="mt-2 mb-3"><strong>Transpose A^T so far:</strong></div><div class="matrix-display">$$A^T = ${formatPartialTranspose(AT, j, i, n, m)}$$</div>`);
+            steps.push(`<div style="margin:0.5rem 0 0.75rem"><strong>Transpose A^T so far:</strong></div><div class="matrix-display">$$A^T = ${formatPartialTranspose(AT, j, i, n, m)}$$</div>`);
           }
         }
       }
@@ -336,13 +340,13 @@
 
       let html = `
         <div class="result-card">
-          <div class="mb-3">
+          <div style="margin-bottom:0.75rem">
             <span class="property-badge" style="background:#dbeafe;color:#1e40af">Original: ${m}×${n}</span>
             <span class="property-badge" style="background:#fef3c7;color:#92400e">Transpose: ${n}×${m}</span>
           </div>
-          <div class="mb-2"><strong>Matrix A:</strong></div>
+          <div style="margin-bottom:0.5rem"><strong>Matrix A:</strong></div>
           <div class="matrix-display">$$A = ${formatMatrix(A)}$$</div>
-          <div class="mb-2 mt-4"><strong>Transpose A^T:</strong></div>
+          <div style="margin-bottom:0.5rem;margin-top:1rem"><strong>Transpose A^T:</strong></div>
           <div class="matrix-display">$$A^T = ${formatMatrix(transpose)}$$</div>
         </div>
       `;
@@ -372,13 +376,13 @@
 
       // Show steps
       if(showSteps.checked && steps.length > 0) {
-        let stepsHtml = '<div class="mb-4"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Transpose Process</h5></div>';
+        let stepsHtml = '<div style="margin-bottom:1rem"><h5 style="font-size:1rem;margin-bottom:0.75rem;color:var(--text-primary)">Transpose Process</h5></div>';
         steps.forEach((step, idx) => {
           stepsHtml += `<div class="step-card"><div class="step-inner"><span class="step-number">${idx + 1}</span><div class="step-description">${step}</div></div></div>`;
         });
         stepsArea.innerHTML = stepsHtml;
       } else {
-        stepsArea.innerHTML = '<div class="text-muted">Enable "Show detailed steps" to see the transpose process.</div>';
+        stepsArea.innerHTML = '<div style="color:var(--text-muted)">Enable "Show detailed steps" to see the transpose process.</div>';
       }
 
       if(window.MathJax && window.MathJax.typesetPromise) {
@@ -396,8 +400,8 @@
 
   function clear() {
     matrixInput.value = '';
-    resultArea.innerHTML = '<div class="text-center text-muted">Enter a matrix and click "Calculate A^T" to see the transpose.</div>';
-    stepsArea.innerHTML = '<div class="text-muted">Detailed transpose computation steps will appear here.</div>';
+    resultArea.innerHTML = '<div style="text-align:center;color:var(--text-muted)">Enter a matrix and click "Calculate A^T" to see the transpose.</div>';
+    stepsArea.innerHTML = '<div style="color:var(--text-muted)">Detailed transpose computation steps will appear here.</div>';
     propertiesCard.style.display = 'none';
     inputError.style.display = 'none';
   }
@@ -449,6 +453,7 @@
   // Download Image
   MatrixUtils.downloadImage(document.getElementById('btnDownloadImage'), 'matrix-transpose', 'No result to download. Please calculate transpose first.');
   MatrixUtils.printWorksheet(document.getElementById('btnPrintWorksheet'), 'Matrix Transpose', { exerciseType: 'transpose' });
+  var _stepsEl = document.getElementById('stepsArea'); if(_stepsEl) MatrixUtils.makeStepsCollapsible(_stepsEl.closest('.tool-card'));
 
   // Load from URL or default
   const loaded = MatrixUtils.loadFromURL(function(p) {
@@ -464,10 +469,31 @@
   if(!loaded) {
     loadExample('rect');
   }
+
+  // Exam-style practice
+  if (typeof ToolUtils !== 'undefined' && ToolUtils.PracticeSheet) {
+    ToolUtils.PracticeSheet.init({
+      containerId: 'practiceSection',
+      title: 'Matrix Transpose Practice',
+      toolColor: '#8b5cf6',
+      difficulties: [
+        { id: 'easy', label: 'Easy', description: '2×3 matrices' },
+        { id: 'medium', label: 'Medium', description: '3×3 matrices' },
+        { id: 'hard', label: 'Hard', description: 'Symmetry identification' }
+      ],
+      generateProblems: MatrixPractice.transpose
+    });
+  }
 })();
 </script>
 
 <section style="max-width:900px;margin:2rem auto;padding:0 1.5rem">
+  <!-- Exam-Style Practice -->
+  <div class="tool-card" style="margin-bottom:1.5rem;padding:0;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)"><h3 style="margin:0;font-size:1.15rem;color:var(--text-primary)">Exam-Style Practice</h3></div>
+    <div style="padding:1.5rem" id="practiceSection"></div>
+  </div>
+
   <div class="tool-card" style="padding:2rem;border:1px solid var(--border);border-radius:0.75rem;background:var(--bg-secondary)">
     <h2 id="eeat" style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary)">About This Matrix Transpose Tool &amp; Methodology</h2>
     <p style="margin-bottom:1rem;color:var(--text-secondary);line-height:1.7">This matrix transpose calculator computes A^T by swapping rows and columns. All computations run <strong>client-side in your browser</strong>—no matrices are sent to any server. Supports symmetric and skew-symmetric detection, property checks, and step-by-step solutions up to 10×10.</p>
@@ -502,9 +528,13 @@
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">How do I check symmetric or skew-symmetric matrices?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A matrix is symmetric when A = A^T and skew-symmetric when A = -A^T (all diagonal entries are zero). This tool flags these properties automatically.</p>
   </div>
-  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+  <div class="tool-card" style="margin-bottom:0.75rem;padding:1.25rem">
     <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">Does transposing change determinant or rank?</h3>
     <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">For square matrices, det(A^T) = det(A) and rank(A^T) = rank(A). Transpose preserves determinant magnitude and rank.</p>
+  </div>
+  <div class="tool-card" style="margin-bottom:0;padding:1.25rem">
+    <h3 style="font-size:1rem;margin:0 0 0.5rem;color:var(--text-primary)">What is the relationship between symmetry and transpose?</h3>
+    <p style="margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.6">A symmetric matrix satisfies A = A^T (mirror across diagonal). A skew-symmetric matrix satisfies A = -A^T (diagonal must be zero). Every square matrix can be decomposed as the sum of a symmetric and skew-symmetric part.</p>
   </div>
 </section>
 

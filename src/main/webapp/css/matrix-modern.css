@@ -191,6 +191,104 @@
 .matrix-calc .small { font-size: 0.8125rem; color: var(--text-secondary) }
 .matrix-calc .font-weight-bold { font-weight: 600 }
 
+/* ── Action buttons (Share URL, Download Image, Print Worksheet) ── */
+.matrix-calc .tool-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1.5px solid var(--border, #cbd5e1);
+  color: var(--text-secondary, #475569);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.matrix-calc .tool-btn-outline:hover {
+  border-color: var(--tool-primary, #3b82f6);
+  color: var(--tool-primary, #3b82f6);
+  background: var(--mc-accent-muted, rgba(59,130,246,0.08));
+}
+.matrix-calc .tool-btn-outline:active {
+  transform: scale(0.97);
+}
+.matrix-calc .tool-btn-outline i,
+.matrix-calc .tool-btn-outline svg {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+.matrix-calc .tool-btn-print {
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: #fff;
+  border: none;
+}
+.matrix-calc .tool-btn-print:hover {
+  background: linear-gradient(135deg, #475569, #334155);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(71,85,105,0.3);
+}
+
+[data-theme="dark"] .matrix-calc .tool-btn-outline {
+  border-color: var(--border, #475569);
+  color: var(--text-secondary, #94a3b8);
+}
+[data-theme="dark"] .matrix-calc .tool-btn-outline:hover {
+  border-color: #60a5fa;
+  color: #93c5fd;
+  background: rgba(59,130,246,0.12);
+}
+[data-theme="dark"] .matrix-calc .tool-btn-print {
+  background: linear-gradient(135deg, #475569, #334155);
+}
+[data-theme="dark"] .matrix-calc .tool-btn-print:hover {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ── Collapsible steps section ── */
+.matrix-steps-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+}
+.matrix-steps-toggle .steps-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.25rem;
+  transition: transform 0.2s ease, background 0.15s;
+  font-size: 0.75rem;
+  color: var(--text-muted, #94a3b8);
+}
+.matrix-steps-toggle:hover .steps-chevron {
+  background: var(--mc-accent-muted, rgba(99,102,241,0.1));
+  color: var(--tool-primary, #6366f1);
+}
+.matrix-steps-toggle[aria-expanded="false"] .steps-chevron {
+  transform: rotate(-90deg);
+}
+.matrix-steps-toggle[aria-expanded="true"] .steps-chevron {
+  transform: rotate(0deg);
+}
+.matrix-steps-body {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+.matrix-steps-body.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 /* ── Print Worksheet (align with magic-square-generator) ── */
 @media print {
   body * { visibility: hidden !important; }
