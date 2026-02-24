@@ -133,6 +133,17 @@
         [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
         [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(99,102,241,0.3)}
 
+        /* FAQ */
+        .faq-item{border:1px solid var(--border,#e2e8f0);border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
+        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,#0f172a);background:var(--bg-secondary,#f8fafc);border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
+        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.875rem;color:var(--text-secondary,#475569);line-height:1.6;border-top:1px solid var(--border,#e2e8f0)}
+        .faq-item.open .faq-answer{display:block}
+        .faq-item.open .faq-chevron{transform:rotate(180deg)}
+        .faq-chevron{transition:transform 0.2s;flex-shrink:0}
+        [data-theme="dark"] .faq-question{background:var(--bg-tertiary,#334155);color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .faq-answer{color:var(--text-secondary,#cbd5e1);border-top-color:var(--border,#334155)}
+        [data-theme="dark"] .faq-item{border-color:var(--border,#334155)}
+
         /* Utility */
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
     </style>
@@ -140,19 +151,22 @@
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Lewis Structure Generator & VSEPR Calculator | 8gwifi.org" />
-        <jsp:param name="toolDescription" value="Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions. Draw Lewis dot structures, calculate formal charges, and visualize 3D molecular shapes." />
+        <jsp:param name="toolDescription" value="Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions. Printable practice worksheet for teachers and students. Draw Lewis dot structures, calculate formal charges, and visualize 3D molecular shapes." />
         <jsp:param name="toolCategory" value="Chemistry" />
         <jsp:param name="toolUrl" value="lewis-structure-generator.jsp" />
-        <jsp:param name="toolKeywords" value="lewis structure, lewis dot structure, vsepr theory, molecular geometry, electron geometry, bond angles, formal charge calculator, octet rule, valence electrons, molecular shape, polarity" />
+        <jsp:param name="toolKeywords" value="lewis structure, lewis dot structure, lewis structure worksheet, lewis structure practice sheet, lewis structure worksheet printable, vsepr theory, molecular geometry, electron geometry, bond angles, formal charge calculator, octet rule, valence electrons, molecular shape, polarity, chemistry worksheet for teachers" />
         <jsp:param name="toolImage" value="lewis-structure-og.png" />
-        <jsp:param name="toolFeatures" value="Lewis structure generation,VSEPR geometry prediction,Formal charge calculation,Bond angle determination,Molecular polarity analysis,Interactive molecular visualization,Electron domain geometry,Octet rule validation" />
+        <jsp:param name="toolFeatures" value="Printable practice worksheet with answer key,Lewis structure generation,VSEPR geometry prediction,Formal charge calculation,Bond angle determination,Molecular polarity analysis,Interactive molecular visualization,Electron domain geometry,Octet rule validation" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Count valence electrons|Add up all valence electrons from each atom. For ions add for negative or subtract for positive charge,Arrange atoms|Place least electronegative atom in center. Hydrogen is always terminal,Draw single bonds|Connect atoms with single bonds. Each bond uses 2 electrons,Complete octets|Distribute remaining electrons as lone pairs for octet rule,Form multiple bonds|Convert lone pairs to double or triple bonds if central atom lacks octet,Check formal charges|Calculate formal charges. Best structure has charges closest to zero" />
         <jsp:param name="faq1q" value="What is a Lewis structure?" />
         <jsp:param name="faq1a" value="A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules." />
         <jsp:param name="faq2q" value="What is VSEPR theory?" />
         <jsp:param name="faq2a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules." />
         <jsp:param name="faq3q" value="How do you calculate formal charge?" />
         <jsp:param name="faq3a" value="Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms." />
+        <jsp:param name="faq4q" value="Where can I get a free Lewis structure practice worksheet?" />
+        <jsp:param name="faq4a" value="Click Practice Sheet on this page to generate a printable Lewis structure worksheet. Each click randomly selects 12 molecules from a pool of 80+ (H2O, CO2, NH3, O2, N2, SO2, XeF2, IF5, and more). Answer key with valence electrons, geometry, and bond angles included for teachers. Download as PDF. No signup required." />
     </jsp:include>
 
     <!-- OG, Twitter, canonical, JSON-LD all handled by seo-tool-page.jsp above -->
@@ -264,6 +278,13 @@
 
         .tool-form-actions {
             margin-top: 1.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .tool-form-actions .tool-action-btn {
+            flex: 1 1 auto;
+            min-width: 140px;
         }
 
         /* Form sections visibility toggle */
@@ -583,11 +604,19 @@
         .lewis-fc-result.negative { color: #3b82f6; background: rgba(59,130,246,0.1); }
 
         /* Result actions bar */
-        .tool-result-actions {
-            display: none;
+        .tool-result-actions-practice {
+            display: flex;
             gap: 0.5rem;
             padding: 1rem 1.25rem;
             border-top: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, #f8fafc);
+            flex-wrap: wrap;
+        }
+
+        .tool-result-actions {
+            display: none;
+            gap: 0.5rem;
+            padding: 0 1.25rem 1rem 1.25rem;
             background: var(--bg-secondary, #f8fafc);
             border-radius: 0 0 0.75rem 0.75rem;
             flex-wrap: wrap;
@@ -595,6 +624,7 @@
 
         .tool-result-actions.visible { display: flex; }
 
+        .tool-result-actions-practice .tool-action-btn,
         .tool-result-actions .tool-action-btn {
             flex: 1 1 auto;
             width: auto;
@@ -638,10 +668,12 @@
         @media (max-width: 768px) {
             .lewis-info-grid { grid-template-columns: repeat(2, 1fr); }
 
+            .tool-result-actions-practice,
             .tool-result-actions {
                 flex-direction: column;
             }
 
+            .tool-result-actions-practice .tool-action-btn,
             .tool-result-actions .tool-action-btn {
                 width: 100%;
             }
@@ -675,7 +707,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Generate Lewis dot structures, predict molecular geometry using VSEPR theory, calculate bond angles, and analyze molecular polarity. Visualize molecular structures with interactive diagrams.</p>
+            <p>Generate Lewis dot structures, predict molecular geometry using VSEPR theory, calculate bond angles, and analyze molecular polarity. <strong>Free printable practice worksheet</strong>—each click generates a random 12-molecule sheet from 80+ options (H&#8322;O, CO&#8322;, NH&#8323;, O&#8322;, N&#8322;, XeF&#8322;, IF&#8325;, and more). Drawing boxes and answer blanks included. No signup required.</p>
         </div>
     </div>
 </section>
@@ -745,6 +777,9 @@
                 <div class="tool-form-actions">
                     <button type="button" class="tool-action-btn" id="generateLewisBtn">
                         &#9883; Generate Lewis Structure
+                    </button>
+                    <button type="button" class="tool-action-btn" id="practiceSheetBtn" title="Generate a printable practice worksheet">
+                        <span>&#128218;</span> Practice Sheet
                     </button>
                 </div>
             </div>
@@ -877,9 +912,6 @@
                 <button type="button" class="tool-action-btn" id="downloadPngBtn">
                     <span>&#8681;</span> Download PNG
                 </button>
-                <button type="button" class="tool-action-btn" id="practiceSheetBtn" title="Generate a printable practice worksheet">
-                    <span>&#128218;</span> Practice Sheet
-                </button>
                 <button type="button" class="tool-action-btn" id="copyResultBtn" style="background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border);">
                     <span>&#128203;</span> Copy
                 </button>
@@ -903,6 +935,14 @@
 
 <!-- ========== EDUCATIONAL CONTENT (below-the-fold, SEO-visible) ========== -->
 <section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+
+    <!-- Free Lewis Structure Practice Worksheet -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem; border: 2px solid var(--tool-primary); background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));">
+        <h2 style="font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text-primary);">Free Lewis Structure Practice Worksheet</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+            Teachers and students: generate a <strong>printable practice worksheet</strong> with one click. Each click randomly picks 12 molecules from a pool of 80+ (H&#8322;O, CO&#8322;, NH&#8323;, O&#8322;, N&#8322;, SO&#8322;, XeF&#8322;, IF&#8325;, and more). <strong>Answer key</strong> with valence electrons, geometry, and bond angles included for teachers. Download as PDF—no signup required.
+        </p>
+    </div>
 
     <!-- Lewis Structures Guide -->
     <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
@@ -1054,6 +1094,43 @@
             <li style="margin-bottom: 0.4rem;"><strong>CO&#8323;&#178;&#8315; (carbonate):</strong> Three equivalent resonance structures with a real bond order of 1.33 for each C&ndash;O bond.</li>
             <li style="margin-bottom: 0.4rem;"><strong>Tip:</strong> This tool alerts you when resonance is likely &mdash; look for the &ldquo;Resonance&rdquo; badge in the results when identical atoms have different bond orders.</li>
         </ul>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is a Lewis structure?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is VSEPR theory?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do you calculate formal charge?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Formal charge = (Valence electrons) &minus; (Non-bonding electrons) &minus; (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Where can I get a free Lewis structure practice worksheet?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Click <strong>Practice Sheet</strong> on this page to generate a printable Lewis structure worksheet. Each click randomly selects 12 molecules from 80+ options. <strong>Answer key</strong> with valence electrons, geometry, and bond angles included for teachers. Download as PDF. No signup required.</div>
+        </div>
     </div>
 
 </section>
@@ -3973,11 +4050,77 @@
             });
     });
 
+    // ========== PRACTICE SHEET ANSWER CALCULATOR ==========
+    // Uses the same logic as the Lewis generator: parseMolecularFormula, valenceElectrons, bonding analysis, vseprData
+    function computeWorksheetAnswer(formula) {
+        try {
+            var formulaNorm = normalizeFormulaForDisplay(formula);
+            var atoms = parseMolecularFormula(formula);
+            var charge = 0;
+            var totalValence = 0;
+            for (var el in atoms) {
+                if (!valenceElectrons[el]) return null;
+                totalValence += valenceElectrons[el] * atoms[el];
+            }
+            totalValence -= charge;
+
+            var atomKeys = Object.keys(atoms);
+            var centralAtom = atomKeys.find(function(a) { return a !== 'H' && a !== 'F'; }) || atomKeys[0];
+
+            var bonding = null;
+            var centralCount = atoms[centralAtom] || 0;
+            var isChain = !detectOxyacid(atoms, centralAtom) && !detectAlcohol(atoms) && !detectEther(formulaNorm) && !detectRing(atoms) && centralCount >= 2;
+            if (detectOxyacid(atoms, centralAtom)) {
+                bonding = analyzeOxyacidBonding(atoms, centralAtom, totalValence);
+            } else if (detectAlcohol(atoms) || detectEther(formulaNorm) || detectRing(atoms) || isChain) {
+                return { valence: totalValence, geometry: null, angle: null };
+            } else {
+                var tpl = getPredefinedLewisTemplate(atoms, charge);
+                if (tpl && tpl.bonding && !tpl.kind) {
+                    bonding = tpl.bonding;
+                }
+                if (!bonding) {
+                    bonding = analyzeBonding(atoms, centralAtom, totalValence);
+                }
+            }
+            if (!bonding || !bonding.peripherals) return { valence: totalValence, geometry: null, angle: null };
+
+            var bonds = bonding.peripherals.length;
+            var lone = (bonding.centralLonePairs || 0) + (bonding.unpairedElectrons > 0 ? 1 : 0);
+            var steric = bonds + lone;
+            var key = steric + '-' + lone;
+            var geom = vseprData[key];
+            if (!geom) return { valence: totalValence, geometry: null, angle: null };
+            return { valence: totalValence, geometry: geom.molecular, angle: geom.angle };
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // Render Lewis structure for a formula, return image data URL (uses main container)
+    function renderLewisToImage(formula) {
+        var molInput = document.getElementById('molecularFormula');
+        var chargeInput = document.getElementById('molecularCharge');
+        if (!molInput) return null;
+        var formulaNorm = normalizeFormulaForDisplay(formula);
+        molInput.value = formulaNorm;
+        chargeInput.value = '0';
+        try {
+            generateLewis();
+        } catch (e) {
+            return null;
+        }
+        var canvas = document.querySelector('#lewisCanvasContainer canvas');
+        return canvas ? canvas.toDataURL('image/png') : null;
+    }
+
     // ========== PRACTICE SHEET ==========
     document.getElementById('practiceSheetBtn').addEventListener('click', function() {
-        ToolUtils.showToast('Generating practice sheet...', 1500, 'info');
+        var savedFormula = (document.getElementById('molecularFormula') || {}).value || '';
+        var savedCharge = (document.getElementById('molecularCharge') || {}).value || '0';
+        ToolUtils.showToast('Generating Lewis diagrams...', 2000, 'info');
 
-        var practiceProblems = [
+        var fullMoleculePool = [
             { formula: 'H\u2082O', name: 'Water', hint: '2 bonds, 2 lone pairs on O' },
             { formula: 'CO\u2082', name: 'Carbon Dioxide', hint: 'Double bonds to each O' },
             { formula: 'NH\u2083', name: 'Ammonia', hint: '3 bonds, 1 lone pair on N' },
@@ -3990,105 +4133,243 @@
             { formula: 'BF\u2083', name: 'Boron Trifluoride', hint: 'B has only 6 electrons' },
             { formula: 'PCl\u2085', name: 'Phosphorus Pentachloride', hint: 'Expanded octet' },
             { formula: 'SF\u2086', name: 'Sulfur Hexafluoride', hint: 'Expanded octet, 6 bonds' },
+            { formula: 'F\u2082', name: 'Fluorine', hint: 'Single bond between F atoms' },
+            { formula: 'Cl\u2082', name: 'Chlorine', hint: 'Single bond between Cl atoms' },
+            { formula: 'HCl', name: 'Hydrogen Chloride', hint: 'Single bond, 3 lone pairs on Cl' },
+            { formula: 'HF', name: 'Hydrogen Fluoride', hint: 'Single bond, 3 lone pairs on F' },
+            { formula: 'H\u2082S', name: 'Hydrogen Sulfide', hint: '2 bonds, 2 lone pairs on S' },
+            { formula: 'BeCl\u2082', name: 'Beryllium Chloride', hint: 'Linear, Be has only 4 electrons' },
+            { formula: 'O\u2083', name: 'Ozone', hint: 'Resonance, bent geometry' },
+            { formula: 'C\u2082H\u2082', name: 'Acetylene', hint: 'Triple bond between C atoms' },
+            { formula: 'C\u2082H\u2084', name: 'Ethene', hint: 'Double bond between C atoms' },
+            { formula: 'C\u2082H\u2086', name: 'Ethane', hint: 'Single bonds, sp\u00b3 carbons' },
+            { formula: 'PCl\u2083', name: 'Phosphorus Trichloride', hint: '3 bonds, 1 lone pair on P' },
+            { formula: 'SO\u2083', name: 'Sulfur Trioxide', hint: 'Resonance, trigonal planar' },
+            { formula: 'NO\u2082', name: 'Nitrogen Dioxide', hint: 'Odd electron, bent' },
+            { formula: 'N\u2082O', name: 'Nitrous Oxide', hint: 'N-N-O or N-O-N resonance' },
+            { formula: 'XeF\u2082', name: 'Xenon Difluoride', hint: 'Linear, 3 lone pairs on Xe' },
+            { formula: 'XeF\u2084', name: 'Xenon Tetrafluoride', hint: 'Square planar, 2 lone pairs' },
+            { formula: 'BrF\u2083', name: 'Bromine Trifluoride', hint: 'T-shaped, expanded octet' },
+            { formula: 'ClF\u2083', name: 'Chlorine Trifluoride', hint: 'T-shaped, 2 lone pairs' },
+            { formula: 'SF\u2084', name: 'Sulfur Tetrafluoride', hint: 'Seesaw, 1 lone pair' },
+            { formula: 'H\u2082CO', name: 'Formaldehyde', hint: 'Double bond C=O, H on C' },
+            { formula: 'CH\u2083OH', name: 'Methanol', hint: 'O-H bond, 2 lone pairs on O' },
+            { formula: 'CO', name: 'Carbon Monoxide', hint: 'Triple bond, formal charges' },
+            { formula: 'NF\u2083', name: 'Nitrogen Trifluoride', hint: '3 bonds, 1 lone pair on N' },
+            { formula: 'COCl\u2082', name: 'Phosgene', hint: 'C=O, 2 C-Cl bonds' },
+            { formula: 'C\u2083H\u2088', name: 'Propane', hint: '3 carbons in a chain' },
+            { formula: 'H\u2082', name: 'Hydrogen', hint: 'Single bond between H atoms' },
+            { formula: 'Br\u2082', name: 'Bromine', hint: 'Single bond between Br atoms' },
+            { formula: 'I\u2082', name: 'Iodine', hint: 'Single bond between I atoms' },
+            { formula: 'HBr', name: 'Hydrogen Bromide', hint: 'Single bond, 3 lone pairs on Br' },
+            { formula: 'CF\u2084', name: 'Carbon Tetrafluoride', hint: '4 single bonds, no lone pairs' },
+            { formula: 'CBr\u2084', name: 'Carbon Tetrabromide', hint: '4 single bonds' },
+            { formula: 'SiH\u2084', name: 'Silane', hint: '4 single bonds, tetrahedral' },
+            { formula: 'PH\u2083', name: 'Phosphine', hint: '3 bonds, 1 lone pair on P' },
+            { formula: 'CS\u2082', name: 'Carbon Disulfide', hint: 'Double bonds S=C=S linear' },
+            { formula: 'H\u2082O\u2082', name: 'Hydrogen Peroxide', hint: 'O-O bond, bent' },
+            { formula: 'N\u2082H\u2084', name: 'Hydrazine', hint: 'N-N bond, 2 lone pairs' },
+            { formula: 'NO', name: 'Nitric Oxide', hint: 'Odd electron, triple bond' },
+            { formula: 'OF\u2082', name: 'Oxygen Difluoride', hint: '2 bonds, 2 lone pairs on O' },
+            { formula: 'ClO\u2082', name: 'Chlorine Dioxide', hint: 'Odd electron, bent' },
+            { formula: 'IF\u2085', name: 'Iodine Pentafluoride', hint: 'Square pyramidal' },
+            { formula: 'IF\u2087', name: 'Iodine Heptafluoride', hint: 'Pentagonal bipyramidal' },
+            { formula: 'SbCl\u2085', name: 'Antimony Pentachloride', hint: 'Trigonal bipyramidal' },
+            { formula: 'SeF\u2086', name: 'Selenium Hexafluoride', hint: 'Octahedral' },
+            { formula: 'TeF\u2086', name: 'Tellurium Hexafluoride', hint: 'Octahedral' },
+            { formula: 'KrF\u2082', name: 'Krypton Difluoride', hint: 'Linear, noble gas compound' },
+            { formula: 'C\u2084H\u2081\u2080', name: 'Butane', hint: '4 carbons chain' },
+            { formula: 'C\u2082H\u2085OH', name: 'Ethanol', hint: 'O-H, 2 lone pairs on O' },
+            { formula: 'CH\u2083CHO', name: 'Acetaldehyde', hint: 'C=O, C-H bonds' },
+            { formula: 'CH\u2083NH\u2082', name: 'Methylamine', hint: 'N has 1 lone pair' },
+            { formula: 'C\u2082H\u2085Cl', name: 'Chloroethane', hint: 'Cl substituent on C chain' },
+            { formula: 'CH\u2082F\u2082', name: 'Difluoromethane', hint: '2 F, 2 H on C' },
+            { formula: 'CHF\u2083', name: 'Fluoroform', hint: '3 F, 1 H on C' },
+            { formula: 'CH\u2083F', name: 'Methyl Fluoride', hint: '1 F on C' },
+            { formula: 'B\u2082H\u2086', name: 'Diborane', hint: 'Bridged structure, 3c-2e bonds' },
+            { formula: 'HN\u2083', name: 'Hydrazoic Acid', hint: 'N=N=N linear' },
+            { formula: 'C\u2082H\u2083F\u2083', name: 'Trifluoroethane', hint: '3 F on carbons' },
+            { formula: 'H\u2082SO\u2084', name: 'Sulfuric Acid', hint: '2 OH, 2 double-bond O on S' },
+            { formula: 'NOF', name: 'Nitrosyl Fluoride', hint: 'N=O, N-F bond' },
+            { formula: 'ClF', name: 'Chlorine Monofluoride', hint: 'Single bond' },
+            { formula: 'BrF\u2085', name: 'Bromine Pentafluoride', hint: 'Square pyramidal' },
+            { formula: 'ICl\u2083', name: 'Iodine Trichloride', hint: 'T-shaped' },
+            { formula: 'AsF\u2085', name: 'Arsenic Pentafluoride', hint: 'Trigonal bipyramidal' },
+            { formula: 'SbF\u2085', name: 'Antimony Pentafluoride', hint: 'Trigonal bipyramidal' },
+            { formula: 'NCl\u2083', name: 'Nitrogen Trichloride', hint: '3 bonds, 1 lone pair' },
+            { formula: 'Cl\u2082O', name: 'Dichlorine Monoxide', hint: 'O central, bent' },
+            { formula: 'C\u2085H\u2081\u2082', name: 'Pentane', hint: '5 carbons chain' },
+            { formula: 'CH\u2083COCH\u2083', name: 'Acetone', hint: 'C=O between 2 methyl groups' },
+            { formula: 'HCOOH', name: 'Formic Acid', hint: 'C=O, O-H, C-H' },
+            { formula: 'CH\u2083COOH', name: 'Acetic Acid', hint: 'C=O, O-H on carbonyl' },
         ];
 
-        var container = document.createElement('div');
-        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
-        document.body.appendChild(container);
-
-        // Header
-        var header = document.createElement('div');
-        header.style.cssText = 'text-align:center;margin-bottom:4px;';
-        header.innerHTML = '<div style="font-size:22px;font-weight:700;color:#2563eb;">Lewis Structure Practice Worksheet</div>';
-        container.appendChild(header);
-        var subtitle = document.createElement('div');
-        subtitle.style.cssText = 'text-align:center;font-size:12px;color:#64748b;margin-bottom:4px;';
-        subtitle.textContent = '8gwifi.org \u2014 Chemistry Tools';
-        container.appendChild(subtitle);
-
-        // Student info line
-        var studentLine = document.createElement('div');
-        studentLine.style.cssText = 'display:flex;gap:24px;margin-bottom:6px;padding:8px 0;border-bottom:2px solid #2563eb;';
-        studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:#64748b;">Name: ___________________________</div>' +
-            '<div style="font-size:12px;color:#64748b;">Date: ______________</div>' +
-            '<div style="font-size:12px;color:#64748b;">Score: ______ / ' + practiceProblems.length + '</div>';
-        container.appendChild(studentLine);
-
-        // Instructions
-        var instr = document.createElement('div');
-        instr.style.cssText = 'padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.5;';
-        instr.innerHTML = '<strong>Instructions:</strong> For each molecule below, draw the complete Lewis structure in the box provided. ' +
-            'Show all bonding pairs as lines and lone pairs as dots. Then fill in the blanks for valence electrons, molecular geometry, and bond angle.';
-        container.appendChild(instr);
-
-        // Problems grid
-        var grid = document.createElement('div');
-        grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;';
-
-        for (var i = 0; i < practiceProblems.length; i++) {
-            var p = practiceProblems[i];
-            var card = document.createElement('div');
-            card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
-
-            // Problem header
-            var pHeader = document.createElement('div');
-            pHeader.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;';
-            pHeader.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
-                '<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;">' + (i + 1) + '</span>' +
-                '<span style="font-size:15px;font-weight:700;font-family:JetBrains Mono,monospace;">' + p.formula + '</span></div>' +
-                '<span style="font-size:10px;color:#94a3b8;font-style:italic;">' + p.name + '</span>';
-            card.appendChild(pHeader);
-
-            // Drawing box
-            var drawBox = document.createElement('div');
-            drawBox.style.cssText = 'width:100%;height:100px;border:1px dashed #cbd5e1;border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;';
-            drawBox.innerHTML = '<span style="font-size:10px;color:#cbd5e1;">Draw Lewis Structure Here</span>';
-            card.appendChild(drawBox);
-
-            // Answer blanks
-            var blanks = document.createElement('div');
-            blanks.style.cssText = 'font-size:10px;color:#475569;line-height:1.8;';
-            blanks.innerHTML = 'Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________';
-            card.appendChild(blanks);
-
-            // Hint (light, small)
-            var hint = document.createElement('div');
-            hint.style.cssText = 'font-size:9px;color:#94a3b8;font-style:italic;margin-top:2px;';
-            hint.textContent = 'Hint: ' + p.hint;
-            card.appendChild(hint);
-
-            grid.appendChild(card);
+        function shuffleArray(arr) {
+            var a = arr.slice();
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = a[i]; a[i] = a[j]; a[j] = t;
+            }
+            return a;
         }
-        container.appendChild(grid);
+        var practiceProblems = shuffleArray(fullMoleculePool).slice(0, 12);
 
-        // Footer
-        var pFooter = document.createElement('div');
-        pFooter.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;display:flex;justify-content:space-between;';
-        pFooter.innerHTML = '<span>Generated by 8gwifi.org Lewis Structure Generator</span><span>' + new Date().toLocaleDateString() + '</span>';
-        container.appendChild(pFooter);
+        function delay(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
-        // Generate PDF
-        var loadHtml2Canvas = (typeof html2canvas !== 'undefined') ? Promise.resolve() : ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-        loadHtml2Canvas
-            .then(function() { return ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); })
-            .then(function() { return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }); })
-            .then(function(c) {
-                document.body.removeChild(container);
-                var imgData = c.toDataURL('image/png');
-                var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-                var pw = pdf.internal.pageSize.getWidth(), margin = 8, uw = pw - margin * 2;
-                var iw = uw, ih = (c.height * uw) / c.width;
-                var uh = pdf.internal.pageSize.getHeight() - margin * 2;
-                if (ih > uh) { ih = uh; iw = (c.width * uh) / c.height; }
-                pdf.addImage(imgData, 'PNG', (pw - iw) / 2, margin, iw, ih);
-                pdf.save('lewis-structure-practice-sheet.pdf');
-                ToolUtils.showToast('Practice sheet downloaded!', 2000, 'success');
-                setTimeout(function() { ToolUtils.showSupportPopup(TOOL_NAME, 'Downloaded practice worksheet'); }, 500);
-            })
-            .catch(function(err) {
-                if (container.parentNode) document.body.removeChild(container);
-                ToolUtils.showToast('Practice sheet generation failed: ' + (err.message || ''), 3000, 'error');
-            });
+        function generateLewisImagesAsync() {
+            var lewisImages = [];
+            var idx = 0;
+            function next() {
+                if (idx >= practiceProblems.length) return Promise.resolve(lewisImages);
+                var dataUrl = renderLewisToImage(practiceProblems[idx].formula);
+                lewisImages.push(dataUrl);
+                idx++;
+                return delay(350).then(next);
+            }
+            return next();
+        }
+
+        generateLewisImagesAsync().then(function(lewisImages) {
+            var molInput = document.getElementById('molecularFormula');
+            var chargeInput = document.getElementById('molecularCharge');
+            if (molInput) molInput.value = savedFormula;
+            if (chargeInput) chargeInput.value = savedCharge;
+            if (savedFormula) try { generateLewis(); } catch (e) {}
+
+            var baseStyle = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+
+            // Page 1: Problems only
+            var page1 = document.createElement('div');
+            page1.style.cssText = baseStyle;
+            document.body.appendChild(page1);
+
+            var header = document.createElement('div');
+            header.style.cssText = 'text-align:center;margin-bottom:4px;';
+            header.innerHTML = '<div style="font-size:22px;font-weight:700;color:#2563eb;">Lewis Structure Practice Worksheet</div>';
+            page1.appendChild(header);
+            var subtitle = document.createElement('div');
+            subtitle.style.cssText = 'text-align:center;font-size:12px;color:#64748b;margin-bottom:4px;';
+            subtitle.textContent = '8gwifi.org \u2014 Chemistry Tools';
+            page1.appendChild(subtitle);
+            var studentLine = document.createElement('div');
+            studentLine.style.cssText = 'display:flex;gap:24px;margin-bottom:6px;padding:8px 0;border-bottom:2px solid #2563eb;';
+            studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:#64748b;">Name: ___________________________</div>' +
+                '<div style="font-size:12px;color:#64748b;">Date: ______________</div>' +
+                '<div style="font-size:12px;color:#64748b;">Score: ______ / ' + practiceProblems.length + '</div>';
+            page1.appendChild(studentLine);
+            var instr = document.createElement('div');
+            instr.style.cssText = 'padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.5;';
+            instr.innerHTML = '<strong>Instructions:</strong> For each molecule below, draw the complete Lewis structure in the box provided. ' +
+                'Show all bonding pairs as lines and lone pairs as dots. Then fill in the blanks for valence electrons, molecular geometry, and bond angle.';
+            page1.appendChild(instr);
+            var grid = document.createElement('div');
+            grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;';
+            for (var i = 0; i < practiceProblems.length; i++) {
+                var p = practiceProblems[i];
+                var card = document.createElement('div');
+                card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
+                card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
+                    '<div style="display:flex;align-items:center;gap:6px;">' +
+                    '<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;">' + (i + 1) + '</span>' +
+                    '<span style="font-size:15px;font-weight:700;font-family:JetBrains Mono,monospace;">' + p.formula + '</span></div>' +
+                    '<span style="font-size:10px;color:#94a3b8;font-style:italic;">' + p.name + '</span></div>' +
+                    '<div style="width:100%;height:100px;border:1px dashed #cbd5e1;border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">' +
+                    '<span style="font-size:10px;color:#cbd5e1;">Draw Lewis Structure Here</span></div>' +
+                    '<div style="font-size:10px;color:#475569;line-height:1.8;">Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________</div>' +
+                    '<div style="font-size:9px;color:#94a3b8;font-style:italic;margin-top:2px;">Hint: ' + p.hint + '</div>';
+                grid.appendChild(card);
+            }
+            page1.appendChild(grid);
+            var footer1 = document.createElement('div');
+            footer1.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
+            footer1.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
+            page1.appendChild(footer1);
+
+            // Page 2: Answer Key with Lewis diagrams
+            var page2 = document.createElement('div');
+            page2.style.cssText = baseStyle;
+            document.body.appendChild(page2);
+            var akHeader = document.createElement('div');
+            akHeader.style.cssText = 'font-size:18px;font-weight:700;color:#2563eb;margin-bottom:4px;';
+            akHeader.textContent = 'Answer Key (Teacher Use)';
+            page2.appendChild(akHeader);
+            var akNote = document.createElement('div');
+            akNote.style.cssText = 'font-size:10px;color:#64748b;margin-bottom:12px;';
+            akNote.textContent = 'Computed by same logic as the Lewis Structure Generator. Valence e\u207b = total valence electrons; Geometry = molecular geometry; Angle = bond angle around central atom.';
+            page2.appendChild(akNote);
+            var akGrid = document.createElement('div');
+            akGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;';
+            for (var k = 0; k < practiceProblems.length; k++) {
+                var pk = practiceProblems[k];
+                var ans = computeWorksheetAnswer(pk.formula);
+                var v = (ans && ans.valence != null) ? ans.valence : '?';
+                var g = (ans && ans.geometry) ? ans.geometry : '?';
+                var a = (ans && ans.angle) ? ans.angle : '?';
+                var cell = document.createElement('div');
+                cell.style.cssText = 'border:1px solid #e2e8f0;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;';
+                var imgSrc = lewisImages[k];
+                if (imgSrc) {
+                    var img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.style.cssText = 'max-width:120px;max-height:80px;object-fit:contain;';
+                    img.alt = 'Lewis structure for ' + pk.formula;
+                    cell.appendChild(img);
+                } else {
+                    var plc = document.createElement('span');
+                    plc.style.cssText = 'font-size:10px;color:#94a3b8;';
+                    plc.textContent = '[Structure]';
+                    cell.appendChild(plc);
+                }
+                var txt = document.createElement('div');
+                txt.style.cssText = 'font-size:11px;font-family:JetBrains Mono,monospace;text-align:center;';
+                txt.innerHTML = '<span style="font-weight:700;">' + (k + 1) + '. ' + pk.formula + '</span> &mdash; Valence: ' + v + ', ' + g + ', ' + a;
+                cell.appendChild(txt);
+                akGrid.appendChild(cell);
+            }
+            page2.appendChild(akGrid);
+            var footer2 = document.createElement('div');
+            footer2.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
+            footer2.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
+            page2.appendChild(footer2);
+
+            var loadHtml2Canvas = (typeof html2canvas !== 'undefined') ? Promise.resolve() : ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+            var opts = { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false };
+            loadHtml2Canvas
+                .then(function() { return ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); })
+                .then(function() { return html2canvas(page1, opts); })
+                .then(function(c1) {
+                    var img1 = c1.toDataURL('image/png');
+                    return html2canvas(page2, opts).then(function(c2) {
+                        return { img1: img1, c1: c1, img2: c2.toDataURL('image/png'), c2: c2 };
+                    });
+                })
+                .then(function(data) {
+                    document.body.removeChild(page1);
+                    document.body.removeChild(page2);
+                    var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                    var pw = pdf.internal.pageSize.getWidth();
+                    var ph = pdf.internal.pageSize.getHeight();
+                    var margin = 8, uw = pw - margin * 2, uh = ph - margin * 2;
+
+                    function addPageImage(imgData, canvas, isFirst) {
+                        var iw = uw, ih = (canvas.height * uw) / canvas.width;
+                        if (ih > uh) { ih = uh; iw = (canvas.width * uh) / canvas.height; }
+                        var x = (pw - iw) / 2, y = margin;
+                        pdf.addImage(imgData, 'PNG', x, y, iw, ih);
+                    }
+                    addPageImage(data.img1, data.c1, true);
+                    pdf.addPage();
+                    addPageImage(data.img2, data.c2, false);
+                    pdf.save('lewis-structure-practice-sheet.pdf');
+                    ToolUtils.showToast('Practice sheet downloaded!', 2000, 'success');
+                    setTimeout(function() { ToolUtils.showSupportPopup(TOOL_NAME, 'Downloaded practice worksheet'); }, 500);
+                })
+                .catch(function(err) {
+                    if (page1.parentNode) document.body.removeChild(page1);
+                    if (page2.parentNode) document.body.removeChild(page2);
+                    ToolUtils.showToast('Practice sheet generation failed: ' + (err.message || ''), 3000, 'error');
+                });
+        });
     });
 
     // ========== URL PARAMETER LOADING ==========
@@ -4106,89 +4387,6 @@
             }, 100);
         }
     });
-</script>
-
-<!-- E-E-A-T JSON-LD Schemas -->
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Lewis Structure Generator & VSEPR Calculator | 8gwifi.org",
-        "url": "https://8gwifi.org/lewis-structure-generator.jsp",
-        "description": "Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions.",
-        "author": {
-            "@type": "Person",
-            "name": "Anish Nath",
-            "url": "https://x.com/anish2good"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "8gwifi.org",
-            "url": "https://8gwifi.org"
-        }
-    }
-</script>
-
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org/"},
-            {"@type": "ListItem", "position": 2, "name": "Chemistry Tools", "item": "https://8gwifi.org/chemical-equation-balancer.jsp"},
-            {"@type": "ListItem", "position": 3, "name": "Lewis Structure Generator", "item": "https://8gwifi.org/lewis-structure-generator.jsp"}
-        ]
-    }
-</script>
-
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "How to Draw a Lewis Structure",
-        "description": "Step-by-step guide to drawing Lewis dot structures for molecules",
-        "step": [
-            {"@type": "HowToStep", "position": 1, "name": "Count valence electrons", "text": "Add up all valence electrons from each atom. For ions, add electrons for negative charge or subtract for positive charge."},
-            {"@type": "HowToStep", "position": 2, "name": "Arrange atoms", "text": "Place the least electronegative atom in the center (usually the unique atom). Hydrogen is always terminal."},
-            {"@type": "HowToStep", "position": 3, "name": "Draw single bonds", "text": "Connect atoms with single bonds. Each bond uses 2 electrons."},
-            {"@type": "HowToStep", "position": 4, "name": "Complete octets", "text": "Distribute remaining electrons as lone pairs to satisfy the octet rule (8 electrons for most atoms, 2 for hydrogen)."},
-            {"@type": "HowToStep", "position": 5, "name": "Form multiple bonds", "text": "If central atom doesn't have an octet, form double or triple bonds by converting lone pairs from outer atoms."},
-            {"@type": "HowToStep", "position": 6, "name": "Check formal charges", "text": "Calculate formal charges. The best structure has formal charges closest to zero."}
-        ]
-    }
-</script>
-
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is a Lewis structure?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is VSEPR theory?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do you calculate formal charge?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms."
-                }
-            }
-        ]
-    }
 </script>
 </body>
 </html>
