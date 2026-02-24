@@ -1365,6 +1365,14 @@
       "isNew": true
     },
     {
+      "name": "PDE Solver Calculator",
+      "url": "pde-solver-calculator.jsp",
+      "category": "Mathematics",
+      "keywords": "PDE solver partial differential equation heat equation wave equation Laplace equation diffusion finite difference numerical",
+      "description": "PDE Solver Calculator - Solve heat equation, wave equation, and Laplace equation numerically with finite difference and 3D surface plots",
+      "isNew": true
+    },
+    {
       "name": "Language Detector",
       "url": "language-detector.jsp",
       "category": "Mathematics",

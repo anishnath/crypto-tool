@@ -1029,6 +1029,22 @@
                     </div>
                 </a>
 
+                <a href="<%=request.getContextPath()%>/pde-solver-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0891b2;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4); font-size: 0.85rem; font-weight: 700;">&#8706;&#178;</div>
+                        <div>
+                            <h3>PDE Solver Calculator</h3>
+                            <div class="tool-formula">u_t = k u_xx, u_tt = c&#178;u_xx, &#8711;&#178;u = 0</div>
+                        </div>
+                    </div>
+                    <p>Solve heat equation, wave equation, and Laplace equation numerically with finite difference and 3D surface plots.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-graph">3D Plot</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&Sigma;</div>
