@@ -1,910 +1,534 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java KeyStore (JKS) Viewer Online – Free | 8gwifi.org</title>
-    <meta name="description" content="Free online Java KeyStore (JKS), PKCS12, and JCEKS viewer. View certificates, export to PEM, import certificates, fetch remote SSL certs, security audit with expiry timeline. No installation required.">
-    <meta name="keywords" content="jks viewer online, keystore viewer, java keystore, pkcs12 viewer, keytool online, certificate viewer, truststore viewer, export jks to pem, keystore manager, jks file viewer, p12 viewer, pfx viewer, jceks viewer, ssl certificate viewer, certificate expiry checker">
     <meta name="robots" content="index,follow">
-    <link rel="canonical" href="https://8gwifi.org/jks.jsp">
+    <meta name="googlebot" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Java KeyStore (JKS) Viewer Online",
-        "alternateName": "JKS Viewer, PKCS12 Viewer, Keystore Manager, Certificate Viewer",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Any",
-        "description": "Free online tool to view and manage Java KeyStore (JKS), PKCS12, and JCEKS files. View certificates, export to PEM, import certificates, fetch remote SSL certificates, security audit, and expiry timeline visualization.",
-        "url": "https://8gwifi.org/jks.jsp",
-        "author": {
-            "@type": "Person",
-            "name": "Anish Nath",
-            "url": "https://8gwifi.org",
-            "sameAs": [
-                "https://twitter.com/anish2good",
-                "https://x.com/anish2good"
-            ],
-            "jobTitle": "Security Engineer",
-            "description": "Security engineer with expertise in cryptography, PKI, and Java security"
-        },
-        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-        "featureList": [
-            "View JKS, PKCS12, JCEKS keystores",
-            "Export certificates to PEM format",
-            "Import PEM certificates to keystore",
-            "Delete aliases from keystore",
-            "Download modified keystore",
-            "Fetch remote SSL certificates from any URL",
-            "Certificate health dashboard",
-            "Security audit (weak keys, SHA-1, self-signed detection)",
-            "Certificate expiry timeline visualization",
-            "Auto-detect keystore type",
-            "View certificate chain",
-            "Parse full certificate details"
-        ]
-    }
-    </script>
-
-    <%@ include file="header-script.jsp"%>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
     <style>
-        /* Sticky Header */
-        .sticky-upload { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #dee2e6; padding: 15px; margin: -15px -15px 20px -15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .upload-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .upload-row .file-input-wrapper { flex: 1; min-width: 200px; }
-        .upload-row .password-wrapper { width: 200px; }
-        .keystore-badge { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; }
-        .keystore-badge .badge { background: rgba(255,255,255,0.2); }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
+        *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-        /* Health Dashboard */
-        .health-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .health-card { text-align: center; padding: 20px 15px; border-radius: 12px; color: white; }
-        .health-card .count { font-size: 2.5rem; font-weight: 700; line-height: 1; }
-        .health-card .label { font-size: 0.85rem; opacity: 0.9; margin-top: 5px; }
-        .health-valid { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
-        .health-expiring { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); }
-        .health-expired { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
-        .health-weak { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); }
-
-        /* Timeline */
-        .timeline-container { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
-        .timeline-bar { height: 30px; background: #e9ecef; border-radius: 15px; position: relative; overflow: hidden; margin: 10px 0; }
-        .timeline-segment { position: absolute; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
-        .timeline-segment:hover { opacity: 0.8; }
-        .timeline-legend { display: flex; gap: 20px; font-size: 0.8rem; margin-top: 10px; }
-        .timeline-legend span { display: flex; align-items: center; gap: 5px; }
-        .timeline-legend .dot { width: 12px; height: 12px; border-radius: 50%; }
-
-        /* Master-Detail Layout */
-        .master-detail { display: flex; gap: 20px; min-height: 500px; }
-        .master-panel { width: 350px; flex-shrink: 0; display: flex; flex-direction: column; }
-        .detail-panel { flex: 1; min-width: 0; }
-
-        /* Alias List */
-        .alias-search { margin-bottom: 10px; }
-        .alias-search input { border-radius: 20px; padding-left: 35px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") 12px center no-repeat; }
-        .alias-list { flex: 1; overflow-y: auto; max-height: 350px; }
-        .alias-item { padding: 12px; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; background: #fff; }
-        .alias-item:hover { border-color: #007bff; box-shadow: 0 2px 8px rgba(0,123,255,0.15); }
-        .alias-item.selected { border-color: #007bff; background: #f0f7ff; }
-        .alias-item .alias-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .alias-item .alias-name { font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .alias-item .alias-subject { font-size: 0.8rem; color: #6c757d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .alias-item .alias-actions { display: none; gap: 5px; margin-top: 8px; }
-        .alias-item:hover .alias-actions, .alias-item.selected .alias-actions { display: flex; }
-        .alias-item .btn-sm { padding: 2px 8px; font-size: 0.75rem; }
-
-        /* Status */
-        .status-valid { color: #28a745; }
-        .status-expiring { color: #856404; }
-        .status-expired { color: #dc3545; }
-        .badge-valid { background: #d4edda; color: #155724; }
-        .badge-expiring { background: #fff3cd; color: #856404; }
-        .badge-expired { background: #f8d7da; color: #721c24; }
-
-        /* Detail Panel */
-        .detail-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #6c757d; text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6; }
-        .detail-content { background: #fff; border-radius: 8px; border: 1px solid #dee2e6; }
-        .detail-header { padding: 15px 20px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
-        .detail-header.expired { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
-        .detail-header.expiring { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: #212529; }
-        .detail-header h5 { margin: 0; }
-        .detail-body { padding: 20px; }
-        .status-banner { padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; }
-        .status-banner.valid { background: #d4edda; color: #155724; }
-        .status-banner.expiring { background: #fff3cd; color: #856404; }
-        .status-banner.expired { background: #f8d7da; color: #721c24; }
-
-        /* Security Warnings */
-        .security-warnings { background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 12px; margin-bottom: 15px; }
-        .security-warnings h6 { color: #856404; margin-bottom: 8px; }
-        .security-warnings ul { margin: 0; padding-left: 20px; }
-        .security-warnings li { color: #856404; font-size: 0.9rem; }
-        .security-ok { background: #d4edda; border-color: #28a745; }
-        .security-ok h6, .security-ok li { color: #155724; }
-
-        /* Detail Table */
-        .detail-table { width: 100%; margin-bottom: 15px; }
-        .detail-table td { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-        .detail-table .label { width: 130px; font-weight: 600; color: #495057; }
-        .detail-table .value { word-break: break-all; }
-
-        /* Collapsible */
-        .collapsible-section { border: 1px solid #e9ecef; border-radius: 6px; margin-bottom: 10px; }
-        .collapsible-header { padding: 10px 15px; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; font-weight: 500; }
-        .collapsible-header:hover { background: #e9ecef; }
-        .collapsible-body { padding: 15px; display: none; border-top: 1px solid #e9ecef; }
-        .collapsible-body.open { display: block; }
-        .hex-display, .pem-display { font-family: monospace; font-size: 0.75rem; background: #f8f9fa; padding: 10px; border-radius: 4px; max-height: 120px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
-
-        /* Modal */
-        .modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; }
-        .modal-backdrop.show { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
-        .modal-header { padding: 15px 20px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h5 { margin: 0; }
-        .modal-body { padding: 20px; }
-        .modal-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; display: flex; gap: 10px; justify-content: flex-end; }
-
-        /* Remote Cert List */
-        .remote-cert-item { border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-        .remote-cert-item .cert-type { font-size: 0.75rem; background: #e9ecef; padding: 2px 8px; border-radius: 10px; }
-
-        /* Loading & Toast */
-        .loading-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 10; border-radius: 8px; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1050; }
-        .toast { padding: 12px 20px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; }
-        .toast.success { background: #28a745; color: white; }
-        .toast.error { background: #dc3545; color: white; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        /* Tabs */
-        .feature-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .feature-tabs .tab-btn { padding: 8px 16px; border: 1px solid #dee2e6; border-radius: 20px; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
-        .feature-tabs .tab-btn:hover { border-color: #007bff; }
-        .feature-tabs .tab-btn.active { background: #007bff; color: white; border-color: #007bff; }
-
-        @media (max-width: 768px) {
-            .master-detail { flex-direction: column; }
-            .master-panel { width: 100%; }
-            .health-dashboard { grid-template-columns: repeat(2, 1fr); }
-            .upload-row { flex-direction: column; align-items: stretch; }
-            .upload-row .password-wrapper { width: 100%; }
+        :root,:root[data-theme="light"]{
+            --primary:#6366f1;--primary-dark:#4f46e5;--primary-light:#818cf8;--primary-50:#eef2ff;--primary-100:#e0e7ff;
+            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;--bg-hover:#f8fafc;
+            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--text-inverse:#fff;
+            --border:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;
+            --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#3b82f6;
+            --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            --font-mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
+            --text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;
+            --leading-tight:1.25;--leading-normal:1.5;
+            --font-normal:400;--font-medium:500;--font-semibold:600;--font-bold:700;
+            --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+            --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+            --z-dropdown:1000;--z-sticky:1020;--z-fixed:1030;--z-modal-backdrop:1040;--z-modal:1050;
+            --transition-fast:150ms ease-in-out;--transition-base:200ms ease-in-out;--transition-slow:300ms ease-in-out;
+            --header-height-mobile:64px;--header-height-desktop:72px;--container-max-width:1280px;
+            --tool-primary:#2563eb;--tool-primary-dark:#1d4ed8;--tool-gradient:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);--tool-light:#eff6ff
         }
+        @media(prefers-color-scheme:dark){
+            :root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b}
+        }
+        [data-theme="dark"]{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b;--tool-light:rgba(37,99,235,0.15)}
+        [data-theme="dark"] body{background-color:var(--bg-primary);color:var(--text-primary)}
+        @media(min-width:768px){:root{--header-height-mobile:72px}}
+
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
+        .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}
+        .nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}
+        .nav-logo span{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
+        [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,#818cf8 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}
+        .nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}
+        .btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}
+        .btn-nav-primary{background:var(--primary,#6366f1);color:#fff}
+        .btn-nav-secondary{background:var(--bg-secondary,#f8fafc);color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}
+        .mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
+        .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}
+        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,#f8fafc);font-family:var(--font-sans)}
+        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
+        @media(max-width:991px){
+            .modern-nav{height:var(--header-height-mobile,64px)}
+            .nav-container{padding:0 var(--space-3,0.75rem)}
+            .nav-search,.nav-items{display:none}
+            .nav-actions{gap:var(--space-2,0.5rem)}
+            .btn-nav{padding:var(--space-2,0.5rem) var(--space-3,0.75rem);font-size:var(--text-xs,0.75rem)}
+            .mobile-menu-toggle,.mobile-search-toggle{display:flex}
+            .btn-nav .nav-text{display:none}
+        }
+
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
+        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}
+        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+        .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
+        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
+        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
+        .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
+        .tool-description-content{flex:1}
+        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
+        @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
+
+        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
+        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}
+        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{min-width:0;display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
+        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
+        .tool-output-column{min-width:0;display:flex;flex-direction:column;gap:1rem}
+        .tool-ads-column{height:fit-content}
+
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}
+        .tool-card-body{padding:1rem}
+        .tool-form-group{margin-bottom:0.875rem}
+        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#0f172a);font-size:0.8125rem}
+        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
+        .tool-input{width:100%;padding:0.5rem 0.75rem;border:1px solid var(--border,#e2e8f0);border-radius:0.375rem;font-size:0.875rem;background:var(--bg-primary,#fff);color:var(--text-primary,#0f172a);font-family:var(--font-sans,inherit)}
+        .tool-input:focus{outline:none;border-color:var(--tool-primary);box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:0.75rem;transition:opacity .15s,transform .15s;font-family:var(--font-sans,inherit)}
+        .tool-action-btn:hover{opacity:0.9}
+
+        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted,#94a3b8)}
+        .tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary,#475569)}
+        .tool-empty-state p{font-size:0.875rem;max-width:280px}
+
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-page-title{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,#94a3b8)}
+        [data-theme="dark"] .tool-badge{background:var(--tool-light);color:var(--tool-primary)}
+        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,#cbd5e1)}
+        [data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(37,99,235,0.3)}
+        [data-theme="dark"] .tool-input{background:var(--bg-tertiary,#334155);border-color:var(--border,#475569);color:var(--text-primary,#f1f5f9)}
+
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+
+        /* Educational sections */
+        .jks-educational{max-width:1600px;margin:0 auto;padding:0 1.5rem}
+        .jks-section{margin-bottom:2.5rem}
+        .jks-section h2{font-size:1.25rem;font-weight:700;color:var(--text-primary,#0f172a);margin-bottom:1rem}
     </style>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+
+    <!-- CSS framework (async, critical styles inlined above) -->
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+
+    <!-- Tool-specific CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/jks.css?v=<%=cacheVersion%>">
+
+    <!-- SEO -->
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="JKS Viewer &amp; KeyStore Manager Online - Free" />
+        <jsp:param name="toolDescription" value="View, create, and manage JKS, PKCS12, JCEKS keystores online. Generate key pairs, validate chains, security audit, expiry dashboard. No install needed." />
+        <jsp:param name="toolCategory" value="Developer Tools" />
+        <jsp:param name="toolUrl" value="jks.jsp" />
+        <jsp:param name="toolKeywords" value="jks viewer online, keystore viewer, java keystore viewer, pkcs12 viewer, p12 viewer online, pfx viewer, jceks viewer, keytool online, keystore manager online, create keystore online, generate key pair online, certificate chain viewer, ssl certificate viewer, certificate expiry checker, export jks to pem, truststore viewer, keystore security audit, validate key pair, order certificate chain, import pem certificate" />
+        <jsp:param name="toolImage" value="images/jks-tool-icon.svg" />
+        <jsp:param name="toolFeatures" value="View JKS PKCS12 JCEKS keystores,Create new JKS/PKCS12/JCEKS keystores,Generate RSA/EC/DSA key pairs,Validate key pair integrity,Order certificate chains,Export certificates to PEM/DER/Base64,Import PEM certificates,Fetch remote SSL certificates,Certificate health dashboard with expiry timeline,Security audit detecting weak keys and SHA-1,Rename duplicate and delete aliases,Download modified keystores" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Upload or Create KeyStore|Upload a JKS PKCS12 or JCEKS file with password or create a new empty keystore from the Create New tab,Browse Aliases and Health Dashboard|View all certificate and key entries with color-coded health status showing valid expiring and expired counts plus expiry timeline,Inspect Certificate Details|Click any alias to view full details including subject issuer validity key algorithm extensions fingerprints and security analysis,Manage Entries|Generate new RSA EC or DSA key pairs and import PEM certificates. Validate key pairs and order certificate chains for correct TLS handshake order,Export and Download|Export individual certificates as PEM or DER and download the complete modified keystore file" />
+        <jsp:param name="faq1q" value="What is a Java KeyStore (JKS) file?" />
+        <jsp:param name="faq1a" value="A Java KeyStore (JKS) is a password-protected file that stores cryptographic keys and X.509 certificates for SSL/TLS. It holds private keys, public key certificates, and trusted CA certificates. Since Java 9, the default keystore type changed from JKS to PKCS12 for stronger encryption." />
+        <jsp:param name="faq2q" value="What is the difference between JKS, PKCS12, and JCEKS formats?" />
+        <jsp:param name="faq2a" value="JKS is Java-proprietary with weaker encryption. PKCS12 (.p12, .pfx) is the cross-platform industry standard with strong encryption, recommended for all new projects. JCEKS offers stronger encryption than JKS but remains Java-proprietary. This tool supports viewing, creating, and managing all three formats." />
+        <jsp:param name="faq3q" value="Can I create a new keystore and generate key pairs online?" />
+        <jsp:param name="faq3a" value="Yes. Use the Create New tab to create an empty JKS, PKCS12, or JCEKS keystore, then click Generate Key Pair to add RSA (2048-4096 bit), EC (P-256/384/521), or DSA key pairs with self-signed certificates. Set alias, Common Name, and validity period — all in your browser." />
+        <jsp:param name="faq4q" value="How do I check certificate expiry dates in a keystore?" />
+        <jsp:param name="faq4a" value="Upload your keystore to see the health dashboard showing valid, expiring (within 30 days), and expired certificate counts. The visual expiry timeline displays each certificate as a color-coded bar. Click any alias for exact Not Before and Not After dates." />
+        <jsp:param name="faq5q" value="How do I fetch and inspect SSL certificates from a website?" />
+        <jsp:param name="faq5a" value="Switch to the Fetch URL tab, enter any hostname (e.g. google.com), and click Fetch. The tool retrieves the full certificate chain showing subject, issuer, validity, and fingerprints. You can copy the PEM, parse full details, or add certificates directly to your keystore." />
+        <jsp:param name="faq6q" value="Is it safe to upload my keystore file?" />
+        <jsp:param name="faq6a" value="Your keystore is uploaded over HTTPS for server-side parsing and is not stored permanently. No keystore data is persisted after your session. For production keystores containing sensitive private keys, consider using offline tools like keytool or KeyStore Explorer." />
+        <jsp:param name="faq7q" value="How do I validate a key pair and order the certificate chain?" />
+        <jsp:param name="faq7a" value="Select a key entry alias and click Validate Key Pair to verify the private key matches its certificate. For certificate chains, click Order Chain to automatically arrange certificates from end-entity to root CA in the correct order for TLS handshakes." />
+        <jsp:param name="faq8q" value="How do I convert JKS to PKCS12?" />
+        <jsp:param name="faq8a" value="Use keytool: keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -deststoretype PKCS12. You will be prompted for source and destination passwords. Alternatively, upload your JKS file here, then export individual certificates as PEM or DER for import into any format." />
+    </jsp:include>
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
+<body>
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-
-<h1 class="mb-2">Java KeyStore (JKS) Viewer Online</h1>
-<p class="text-muted mb-3">View, analyze, and manage Java KeyStore files with security audit and remote certificate fetching.</p>
-
-<noscript><div class="alert alert-danger">JavaScript is required.</div></noscript>
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- Feature Tabs -->
-<div class="feature-tabs">
-    <button class="tab-btn active" onclick="showTab('upload', this)">Upload KeyStore</button>
-    <button class="tab-btn" onclick="showTab('fetch', this)">Fetch Remote Cert</button>
-    <button class="tab-btn" onclick="showTab('import', this)" id="tabImport" disabled>Import Certificate</button>
-</div>
-
-<!-- Tab: Upload -->
-<div id="tabUpload" class="tab-content">
-    <div class="sticky-upload" id="stickyUpload">
-        <form id="uploadForm" onsubmit="return handleFormSubmit(event)">
-            <div class="upload-row">
-                <div class="file-input-wrapper">
-                    <input type="file" class="form-control" id="upfile" name="upfile" accept=".jks,.p12,.pfx,.keystore,.jceks">
-                </div>
-                <div class="password-wrapper">
-                    <input type="password" class="form-control" id="storepassword" name="storepassword" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-primary">Upload &amp; Analyze</button>
-                <div id="keystoreInfo" class="d-none">
-                    <span class="keystore-badge">
-                        <span id="infoFileName">-</span>
-                        <span class="badge" id="infoType">JKS</span>
-                        <span class="badge" id="infoCount">0</span>
-                        <button type="button" class="btn btn-sm btn-light" onclick="clearKeystore()">&times;</button>
-                    </span>
-                </div>
+    <!-- Page Header -->
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">JKS Viewer &amp; KeyStore Manager Online</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#developer-tools">Developer Tools</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
+                    KeyStore Manager
+                </nav>
             </div>
-        </form>
-    </div>
-</div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">JKS</span>
+                <span class="tool-badge">PKCS12</span>
+                <span class="tool-badge">JCEKS</span>
+                <span class="tool-badge">Generate Keys</span>
+                <span class="tool-badge">Security Audit</span>
+                <span class="tool-badge">Free</span>
+            </div>
+        </div>
+    </header>
 
-<!-- Tab: Fetch Remote -->
-<div id="tabFetch" class="tab-content d-none">
-    <div class="card mb-4">
-        <div class="card-header">Fetch SSL Certificate from URL</div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Enter URL or hostname</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="remoteUrl" placeholder="https://example.com or example.com:443">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" onclick="fetchRemoteCert()">Fetch Certificates</button>
+    <!-- Description -->
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>View, create, and manage Java KeyStore files online. Upload JKS, PKCS12, or JCEKS files to inspect certificates, run security audits, and track expiry dates with a visual timeline. Create new keystores, generate RSA/EC/DSA key pairs, fetch remote SSL certificates, validate key pairs, and order certificate chains &mdash; all from your browser.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Container -->
+    <div id="jksToastContainer" class="jks-toast-container"></div>
+
+    <!-- ==================== MAIN THREE-COLUMN LAYOUT ==================== -->
+    <main class="tool-page-container jks-page">
+
+        <!-- ========== INPUT COLUMN ========== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    KeyStore Manager
+                </div>
+                <div class="tool-card-body">
+                    <!-- Mode Toggle -->
+                    <div class="jks-mode-toggle" id="jksModeToggle">
+                        <button class="jks-mode-btn active" data-mode="upload">
+                            <span class="jks-mode-label">Upload</span>
+                            <span class="jks-mode-desc">Open existing file</span>
+                        </button>
+                        <button class="jks-mode-btn" data-mode="fetch">
+                            <span class="jks-mode-label">Fetch URL</span>
+                            <span class="jks-mode-desc">Inspect SSL certs</span>
+                        </button>
+                        <button class="jks-mode-btn" data-mode="create">
+                            <span class="jks-mode-label">Create New</span>
+                            <span class="jks-mode-desc">Start from scratch</span>
+                        </button>
+                    </div>
+
+                    <!-- Upload Mode (default) -->
+                    <div id="modeUpload" class="jks-mode-content">
+                        <div class="jks-dropzone" id="jksDropzone">
+                            <div class="jks-dropzone-icon">&#128274;</div>
+                            <div class="jks-dropzone-text">Drop keystore file here or click to browse</div>
+                            <div class="jks-dropzone-hint">.jks, .p12, .pfx, .keystore, .jceks</div>
+                            <input type="file" id="jksFileInput" accept=".jks,.p12,.pfx,.keystore,.jceks">
+                        </div>
+                        <div id="jksDetectedType"></div>
+
+                        <div class="tool-form-group" style="margin-top:0.75rem">
+                            <label class="tool-form-label" for="jksPassword">Keystore Password</label>
+                            <input type="password" class="tool-input" id="jksPassword" placeholder="Enter password">
+                        </div>
+                        <button class="tool-action-btn" id="jksUploadBtn">Upload &amp; Analyze</button>
+                    </div>
+
+                    <!-- Fetch URL Mode -->
+                    <div id="modeFetch" class="jks-mode-content" style="display:none">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="jksRemoteUrl">URL or Hostname</label>
+                            <input type="text" class="tool-input" id="jksRemoteUrl" placeholder="https://example.com or example.com:443">
+                            <div class="tool-form-hint">Fetches the SSL certificate chain from the remote server</div>
+                        </div>
+                        <button class="tool-action-btn" id="jksFetchBtn">Fetch Certificates</button>
+                    </div>
+
+                    <!-- Create New Mode -->
+                    <div id="modeCreate" class="jks-mode-content" style="display:none">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label">Keystore Type</label>
+                            <div class="jks-alg-toggle" id="jksCreateTypeToggle">
+                                <button class="jks-alg-btn active" data-type="JKS">JKS</button>
+                                <button class="jks-alg-btn" data-type="PKCS12">PKCS12</button>
+                                <button class="jks-alg-btn" data-type="JCEKS">JCEKS</button>
+                            </div>
+                        </div>
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="jksCreatePassword">Password</label>
+                            <input type="password" class="tool-input" id="jksCreatePassword" placeholder="Enter password for new keystore">
+                        </div>
+                        <button class="tool-action-btn" id="jksCreateBtn">Create Empty Keystore</button>
+                    </div>
+
+                    <!-- Keystore Info Bar (shown after load) -->
+                    <div class="jks-keystore-info" id="jksKeystoreInfo">
+                        <span class="jks-info-name" id="jksInfoName">-</span>
+                        <span class="jks-info-badge" id="jksInfoType">JKS</span>
+                        <span class="jks-info-badge" style="background:var(--jks-valid)"><span id="jksInfoCount">0</span> entries</span>
+                        <button class="jks-info-change" id="jksChangeInputBtn" title="Load a different keystore">Change</button>
+                        <button class="jks-info-clear" id="jksClearBtn" title="Clear keystore">&times;</button>
+                    </div>
+
+                    <!-- Prominent Download Bar (shown after load) -->
+                    <div class="jks-download-bar" id="jksDownloadBar">
+                        <button class="jks-download-btn-large" id="jksDownloadBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download Keystore
+                        </button>
                     </div>
                 </div>
             </div>
-            <div id="remoteCertResults"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Tab: Import -->
-<div id="tabImportContent" class="tab-content d-none">
-    <div class="card mb-4">
-        <div class="card-header">Import Certificate to KeyStore</div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Alias Name</label>
-                <input type="text" class="form-control" id="importAlias" placeholder="my-certificate">
-            </div>
-            <div class="form-group">
-                <label>PEM Certificate</label>
-                <textarea class="form-control" id="importPem" rows="8" placeholder="-----BEGIN CERTIFICATE-----&#10;...&#10;-----END CERTIFICATE-----"></textarea>
-            </div>
-            <button class="btn btn-primary" onclick="importCertificate()">Import to KeyStore</button>
-        </div>
-    </div>
-</div>
-
-<!-- Health Dashboard (shown after upload) -->
-<div id="healthDashboard" class="d-none">
-    <div class="health-dashboard">
-        <div class="health-card health-valid">
-            <div class="count" id="healthValid">0</div>
-            <div class="label">Valid</div>
-        </div>
-        <div class="health-card health-expiring">
-            <div class="count" id="healthExpiring">0</div>
-            <div class="label">Expiring Soon</div>
-        </div>
-        <div class="health-card health-expired">
-            <div class="count" id="healthExpired">0</div>
-            <div class="label">Expired</div>
-        </div>
-        <div class="health-card health-weak">
-            <div class="count" id="healthWeak">0</div>
-            <div class="label">Security Issues</div>
-        </div>
-    </div>
-
-    <!-- Expiry Timeline -->
-    <div class="timeline-container">
-        <strong>Certificate Expiry Timeline</strong>
-        <div class="timeline-bar" id="timelineBar"></div>
-        <div class="timeline-legend">
-            <span><span class="dot" style="background:#28a745"></span> Valid</span>
-            <span><span class="dot" style="background:#ffc107"></span> Expiring (&lt;30d)</span>
-            <span><span class="dot" style="background:#dc3545"></span> Expired</span>
-        </div>
-    </div>
-</div>
-
-<!-- Master-Detail Layout -->
-<div class="master-detail" id="mainContent">
-    <div class="master-panel">
-        <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Aliases <span class="badge badge-secondary" id="aliasCountBadge">0</span></span>
-                <button class="btn btn-sm btn-outline-secondary" onclick="exportKeyStore()" id="btnExportJks" disabled>Export JKS</button>
-            </div>
-            <div class="card-body p-2">
-                <div class="alias-search">
-                    <input type="text" class="form-control form-control-sm" id="aliasSearch" placeholder="Search aliases..." onkeyup="filterAliases(this.value)">
-                </div>
-                <div class="alias-list" id="aliasList">
-                    <div class="text-center text-muted py-4">
-                        <div style="font-size: 2rem; opacity: 0.3;">📁</div>
-                        <p class="mb-0">Upload a keystore to view aliases</p>
+            <!-- Alias List Card (shown after load) -->
+            <div class="jks-alias-card" id="jksAliasCard">
+                <div class="tool-card">
+                    <div class="tool-card-body">
+                        <div class="jks-alias-header">
+                            <h4>Aliases <span class="jks-alias-count" id="jksAliasCount">0</span></h4>
+                            <div style="display:flex;gap:0.375rem">
+                                <button class="jks-gen-btn" id="jksGenKeyPairBtn">+ Generate</button>
+                                <button class="jks-gen-btn" id="jksImportCertBtn">Import PEM</button>
+                                <button class="jks-gen-btn" id="jksExportKsBtn">Export</button>
+                            </div>
+                        </div>
+                        <div class="jks-alias-search">
+                            <input type="text" id="jksAliasSearch" placeholder="Search aliases...">
+                        </div>
+                        <div class="jks-alias-list" id="jksAliasList">
+                            <!-- Rendered by JS -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="detail-panel">
-        <div id="detailPlaceholder" class="detail-placeholder">
-            <div style="font-size: 3rem; opacity: 0.5;">🔐</div>
-            <h5>No Certificate Selected</h5>
-            <p>Upload a keystore and click on an alias to view details</p>
+        <!-- ========== OUTPUT COLUMN ========== -->
+        <div class="tool-output-column">
+            <!-- Health Dashboard -->
+            <div class="jks-health" id="jksHealth">
+                <div class="jks-health-grid">
+                    <div class="jks-health-card jks-health-valid">
+                        <div class="count" id="jksHealthValid">0</div>
+                        <div class="label">Valid</div>
+                    </div>
+                    <div class="jks-health-card jks-health-expiring">
+                        <div class="count" id="jksHealthExpiring">0</div>
+                        <div class="label">Expiring</div>
+                    </div>
+                    <div class="jks-health-card jks-health-expired">
+                        <div class="count" id="jksHealthExpired">0</div>
+                        <div class="label">Expired</div>
+                    </div>
+                    <div class="jks-health-card jks-health-weak">
+                        <div class="count" id="jksHealthWeak">0</div>
+                        <div class="label">Security</div>
+                    </div>
+                </div>
+                <div class="jks-timeline">
+                    <div class="jks-timeline-title">Certificate Expiry Timeline</div>
+                    <div class="jks-timeline-bar" id="jksTimelineBar"></div>
+                    <div class="jks-timeline-legend">
+                        <span><span class="jks-timeline-dot" style="background:#10b981"></span> Valid</span>
+                        <span><span class="jks-timeline-dot" style="background:#f59e0b"></span> Expiring (&lt;30d)</span>
+                        <span><span class="jks-timeline-dot" style="background:#ef4444"></span> Expired</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onboarding / Empty State -->
+            <div id="jksOnboarding" class="jks-onboarding">
+                <div class="jks-onboarding-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;opacity:0.4">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <h3>Java KeyStore Manager</h3>
+                <p class="jks-onboarding-subtitle">View, create, and manage keystores with security analysis</p>
+
+                <div class="jks-onboarding-cards">
+                    <div class="jks-onboarding-card" data-switch-mode="upload">
+                        <div class="jks-onboarding-card-icon">&#128194;</div>
+                        <div class="jks-onboarding-card-title">Upload Keystore</div>
+                        <div class="jks-onboarding-card-desc">Open an existing .jks, .p12, or .pfx file to view and manage certificates</div>
+                    </div>
+                    <div class="jks-onboarding-card" data-switch-mode="fetch">
+                        <div class="jks-onboarding-card-icon">&#127760;</div>
+                        <div class="jks-onboarding-card-title">Fetch SSL Certificate</div>
+                        <div class="jks-onboarding-card-desc">Inspect any website's SSL certificate chain and add certs to a keystore</div>
+                    </div>
+                    <div class="jks-onboarding-card" data-switch-mode="create">
+                        <div class="jks-onboarding-card-icon">&#10024;</div>
+                        <div class="jks-onboarding-card-title">Create New Keystore</div>
+                        <div class="jks-onboarding-card-desc">Start with an empty keystore and generate key pairs or import certificates</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post-Create / Post-Load Guidance (hidden initially) -->
+            <div id="jksGuidance" class="jks-guidance" style="display:none">
+                <div class="jks-guidance-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--jks-valid)">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span id="jksGuidanceTitle">Keystore Ready</span>
+                </div>
+                <p id="jksGuidanceText" class="jks-guidance-text">Your keystore is loaded. Select an alias from the left to view details, or use the actions below.</p>
+                <div class="jks-guidance-actions">
+                    <button class="jks-guidance-btn" id="jksGuideGenBtn">
+                        <span class="jks-guidance-btn-icon">&#128273;</span>
+                        <span class="jks-guidance-btn-label">Generate Key Pair</span>
+                    </button>
+                    <button class="jks-guidance-btn" id="jksGuideImportBtn">
+                        <span class="jks-guidance-btn-icon">&#128196;</span>
+                        <span class="jks-guidance-btn-label">Import PEM Certificate</span>
+                    </button>
+                    <button class="jks-guidance-btn" id="jksGuideFetchBtn">
+                        <span class="jks-guidance-btn-icon">&#127760;</span>
+                        <span class="jks-guidance-btn-label">Fetch &amp; Add SSL Cert</span>
+                    </button>
+                    <button class="jks-guidance-btn" id="jksGuideDownloadBtn">
+                        <span class="jks-guidance-btn-icon">&#11015;</span>
+                        <span class="jks-guidance-btn-label">Download Keystore</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detail Card (shown when alias selected) -->
+            <div class="tool-card" style="flex:1;min-height:300px;">
+                <div id="jksDetailEmpty" class="jks-detail-empty" style="display:none">
+                    <div class="jks-detail-empty-icon">&#128270;</div>
+                    <h3>Select an Alias</h3>
+                    <p>Click on an alias in the left panel to view certificate details and security analysis</p>
+                </div>
+                <div id="jksDetailCard" class="jks-detail-card" style="position:relative">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Fetch Remote Results -->
+            <div class="jks-remote-results" id="jksRemoteResults">
+                <div class="tool-card">
+                    <div class="tool-card-header">Remote Certificates</div>
+                    <div class="tool-card-body" id="jksRemoteResultsBody">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="detailContent" class="detail-content d-none" style="position: relative;"></div>
+
+        <!-- ========== ADS COLUMN ========== -->
+        <div class="tool-ads-column">
+            <%@ include file="modern/ads/ad-three-column.jsp" %>
+        </div>
+    </main>
+
+    <!-- Mobile Ad Fallback -->
+    <div style="display:none" class="mobile-ad-container">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
     </div>
-</div>
 
-<script>
-var state = { keystoreData: null, fileName: null, selectedAlias: null, aliases: [], allAliases: [] };
-var API_URL = 'JKSManagementFunctionality';
-
-function handleFormSubmit(e) { e.preventDefault(); uploadKeystore(); return false; }
-
-function showTab(tab, clickedBtn) {
-    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.add('d-none'); });
-    document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
-    if (tab === 'upload') { document.getElementById('tabUpload').classList.remove('d-none'); }
-    else if (tab === 'fetch') { document.getElementById('tabFetch').classList.remove('d-none'); }
-    else if (tab === 'import') { document.getElementById('tabImportContent').classList.remove('d-none'); }
-
-    // Handle active class - either use passed button or find by tab name
-    if (clickedBtn) {
-        clickedBtn.classList.add('active');
-    } else {
-        var btns = document.querySelectorAll('.tab-btn');
-        var idx = tab === 'upload' ? 0 : (tab === 'fetch' ? 1 : 2);
-        if (btns[idx]) btns[idx].classList.add('active');
-    }
-}
-
-function showToast(msg, type) {
-    var toast = document.createElement('div');
-    toast.className = 'toast ' + type;
-    toast.textContent = msg;
-    document.getElementById('toastContainer').appendChild(toast);
-    setTimeout(function() { toast.remove(); }, 3000);
-}
-
-function showLoading(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    var ov = document.createElement('div');
-    ov.className = 'loading-overlay';
-    ov.id = id + 'Loading';
-    ov.innerHTML = '<div class="spinner"></div>';
-    el.style.position = 'relative';
-    el.appendChild(ov);
-}
-function hideLoading(id) { var ov = document.getElementById(id + 'Loading'); if (ov) ov.remove(); }
-
-function uploadKeystore() {
-    var fileInput = document.getElementById('upfile');
-    var pwd = document.getElementById('storepassword').value;
-    if (!fileInput.files || !fileInput.files.length) { showToast('Select a keystore file', 'error'); return; }
-
-    var file = fileInput.files[0];
-    showLoading('aliasList');
-
-    // Read file as base64 on client side
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        var base64Data = e.target.result.split(',')[1]; // Remove data:...;base64, prefix
-
-        // Store in client-side state
-        state.keystoreData = base64Data;
-        state.fileName = file.name;
-
-        // Send to server for parsing
-        var fd = new FormData();
-        fd.append('keystoreData', base64Data);
-        fd.append('fileName', file.name);
-        fd.append('storepassword', pwd);
-        fd.append('action', 'upload');
-
-        fetch(API_URL, { method: 'POST', body: fd })
-        .then(function(r) { return r.json(); })
-        .then(function(d) {
-            hideLoading('aliasList');
-            if (!d.success) { showToast(d.error, 'error'); state.keystoreData = null; return; }
-
-            state.aliases = d.aliases;
-            state.allAliases = d.aliases;
-
-            document.getElementById('infoFileName').textContent = file.name;
-            document.getElementById('infoType').textContent = d.keystoreType;
-            document.getElementById('infoCount').textContent = d.aliasCount;
-            document.getElementById('keystoreInfo').classList.remove('d-none');
-            document.getElementById('aliasCountBadge').textContent = d.aliasCount;
-            document.getElementById('btnExportJks').disabled = false;
-            document.getElementById('tabImport').disabled = false;
-
-            renderAliasesList(d.aliases);
-            loadHealthDashboard();
-            showToast('Loaded ' + d.aliasCount + ' entries', 'success');
-
-            if (d.aliases.length > 0) selectAlias(d.aliases[0].name);
-        })
-        .catch(function(e) { hideLoading('aliasList'); showToast('Error: ' + e.message, 'error'); });
-    };
-    reader.onerror = function() {
-        hideLoading('aliasList');
-        showToast('Error reading file', 'error');
-    };
-    reader.readAsDataURL(file);
-}
-
-function loadHealthDashboard() {
-    var fd = new FormData();
-    fd.append('action', 'getHealth');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('storepassword', document.getElementById('storepassword').value);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        if (!d.success) return;
-        var h = d.health;
-        document.getElementById('healthValid').textContent = h.valid;
-        document.getElementById('healthExpiring').textContent = h.expiring;
-        document.getElementById('healthExpired').textContent = h.expired;
-        document.getElementById('healthWeak').textContent = h.weak;
-        document.getElementById('healthDashboard').classList.remove('d-none');
-        loadTimeline();
-    });
-}
-
-function loadTimeline() {
-    var fd = new FormData();
-    fd.append('action', 'getTimeline');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('storepassword', document.getElementById('storepassword').value);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        if (!d.success) return;
-        renderTimeline(d.timeline);
-    });
-}
-
-function renderTimeline(timeline) {
-    var bar = document.getElementById('timelineBar');
-    if (!timeline || !timeline.length) { bar.innerHTML = '<div style="text-align:center;line-height:30px;color:#666">No certificates</div>'; return; }
-
-    var now = Date.now();
-    var maxDays = 365;
-    var html = '';
-    var width = 100 / timeline.length;
-
-    timeline.forEach(function(t, i) {
-        var days = t.daysUntilExpiry;
-        var color = days < 0 ? '#dc3545' : (days < 30 ? '#ffc107' : '#28a745');
-        var left = i * width;
-        html += '<div class="timeline-segment" style="left:' + left + '%;width:' + width + '%;background:' + color + '" title="' + t.alias + ': ' + days + ' days" onclick="selectAlias(\'' + t.alias + '\')">' + t.alias.substring(0, 8) + '</div>';
-    });
-    bar.innerHTML = html;
-}
-
-function renderAliasesList(aliases) {
-    var c = document.getElementById('aliasList');
-    if (!aliases || !aliases.length) { c.innerHTML = '<div class="text-center text-muted py-4">No aliases</div>'; return; }
-
-    var html = '';
-    aliases.forEach(function(a) {
-        var sc = a.status === 'expired' ? 'status-expired' : (a.status === 'expiring' ? 'status-expiring' : 'status-valid');
-        var bc = a.status === 'expired' ? 'badge-expired' : (a.status === 'expiring' ? 'badge-expiring' : 'badge-valid');
-        var icon = a.status === 'expired' ? '❌' : (a.status === 'expiring' ? '⚠️' : '✅');
-        var ti = a.isKeyEntry ? '🔐' : '📜';
-        var sel = state.selectedAlias === a.name;
-        var days = a.daysUntilExpiry !== undefined ? (a.daysUntilExpiry < 0 ? Math.abs(a.daysUntilExpiry) + 'd ago' : a.daysUntilExpiry + 'd') : '';
-
-        html += '<div class="alias-item ' + (sel ? 'selected' : '') + '" onclick="selectAlias(\'' + a.name + '\')" data-alias="' + a.name + '">' +
-            '<div class="alias-header"><span class="alias-name">' + ti + ' ' + a.name + '</span><span class="badge ' + bc + '">' + icon + ' ' + days + '</span></div>' +
-            '<div class="alias-subject">' + (a.subject || '') + '</div>' +
-            '<div class="alias-actions">' +
-            '<button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation();exportPEM(\'' + a.name + '\')">PEM</button>' +
-            '<button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation();deleteAlias(\'' + a.name + '\')">Del</button></div></div>';
-    });
-    c.innerHTML = html;
-}
-
-function filterAliases(q) {
-    q = q.toLowerCase();
-    var f = state.allAliases.filter(function(a) { return a.name.toLowerCase().indexOf(q) !== -1 || (a.subject && a.subject.toLowerCase().indexOf(q) !== -1); });
-    state.aliases = f;
-    renderAliasesList(f);
-}
-
-function selectAlias(name) {
-    state.selectedAlias = name;
-    document.querySelectorAll('.alias-item').forEach(function(el) {
-        el.classList.toggle('selected', el.getAttribute('data-alias') === name);
-    });
-    loadAliasDetails(name);
-}
-
-function loadAliasDetails(name) {
-    var fd = new FormData();
-    fd.append('action', 'getDetails');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('alias', name);
-    fd.append('storepassword', document.getElementById('storepassword').value);
-
-    showLoading('detailContent');
-    document.getElementById('detailPlaceholder').classList.add('d-none');
-    document.getElementById('detailContent').classList.remove('d-none');
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        hideLoading('detailContent');
-        if (!d.success) { showToast(d.error, 'error'); return; }
-        loadSecurityAnalysis(name, d.details);
-    })
-    .catch(function(e) { hideLoading('detailContent'); showToast(e.message, 'error'); });
-}
-
-function loadSecurityAnalysis(alias, details) {
-    var fd = new FormData();
-    fd.append('action', 'getSecurityAnalysis');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('alias', alias);
-    fd.append('storepassword', document.getElementById('storepassword').value);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        var analysis = d.success ? d.analysis : { warnings: [] };
-        renderCertDetails(alias, details, analysis);
-    })
-    .catch(function() { renderCertDetails(alias, details, { warnings: [] }); });
-}
-
-function renderCertDetails(alias, d, analysis) {
-    var c = document.getElementById('detailContent');
-    var now = Date.now();
-    var days = d.notAfterTimestamp ? Math.floor((d.notAfterTimestamp - now) / 86400000) : null;
-
-    var hc = '', sc = 'valid', st = 'Valid';
-    if (days !== null) {
-        if (days < 0) { hc = 'expired'; sc = 'expired'; st = 'Expired ' + Math.abs(days) + 'd ago'; }
-        else if (days < 30) { hc = 'expiring'; sc = 'expiring'; st = 'Expires in ' + days + 'd'; }
-        else { st = days + ' days remaining'; }
-    }
-
-    var html = '<div class="detail-header ' + hc + '"><h5>' + alias + '</h5><div>' +
-        '<button class="btn btn-sm btn-light mr-1" onclick="exportPEM(\'' + alias + '\')">Export</button>' +
-        '<button class="btn btn-sm btn-light" onclick="deleteAlias(\'' + alias + '\')">Delete</button></div></div>';
-
-    html += '<div class="detail-body">';
-    html += '<div class="status-banner ' + sc + '"><strong>Status:</strong> ' + st + '</div>';
-
-    // Security Warnings
-    if (analysis.warnings && analysis.warnings.length > 0) {
-        html += '<div class="security-warnings"><h6>⚠️ Security Warnings</h6><ul>';
-        analysis.warnings.forEach(function(w) { html += '<li>' + w + '</li>'; });
-        html += '</ul></div>';
-    } else {
-        html += '<div class="security-warnings security-ok"><h6>✅ Security Check Passed</h6><ul><li>No security issues detected</li></ul></div>';
-    }
-
-    // Key strength
-    if (analysis.keySize) {
-        var ks = analysis.keyStrength === 'strong' ? '✅' : '⚠️';
-        html += '<div class="mb-2"><strong>Key:</strong> ' + analysis.keyAlgorithm + ' ' + analysis.keySize + '-bit ' + ks + '</div>';
-    }
-
-    html += '<table class="detail-table">' +
-        '<tr><td class="label">Subject</td><td class="value">' + d.subject + '</td></tr>' +
-        '<tr><td class="label">Issuer</td><td class="value">' + d.issuer + '</td></tr>' +
-        '<tr><td class="label">Serial</td><td class="value">' + d.serialNumber + '</td></tr>' +
-        '<tr><td class="label">Algorithm</td><td class="value">' + d.signatureAlgorithm + '</td></tr>' +
-        '<tr><td class="label">Valid From</td><td class="value">' + d.notBefore + '</td></tr>' +
-        '<tr><td class="label">Valid Until</td><td class="value ' + sc + '">' + d.notAfter + '</td></tr>' +
-        '<tr><td class="label">Self-Signed</td><td class="value">' + (d.selfSigned ? 'Yes' : 'No') + '</td></tr>' +
-        '</table>';
-
-    if (d.pemExport) {
-        html += '<div class="collapsible-section"><div class="collapsible-header" onclick="this.nextElementSibling.classList.toggle(\'open\')">PEM Certificate</div>' +
-            '<div class="collapsible-body">' +
-            '<button class="btn btn-sm btn-outline-primary mb-2" onclick="copyText(\'' + btoa(d.pemExport) + '\')">Copy</button> ' +
-            '<button class="btn btn-sm btn-outline-info mb-2" onclick="parsePemCert(\'' + btoa(d.pemExport) + '\')">🔍 Parse Full Details</button>' +
-            '<div class="pem-display">' + d.pemExport + '</div></div></div>';
-    }
-    html += '</div>';
-    c.innerHTML = html;
-}
-
-function copyText(b64) {
-    navigator.clipboard.writeText(atob(b64)).then(function() { showToast('Copied!', 'success'); });
-}
-
-function parsePemCert(b64) {
-    var pem = atob(b64);
-    // Store PEM in localStorage and open parser page
-    localStorage.setItem('jks_pem_to_parse', pem);
-    window.open('PemParserFunctions.jsp?fromJks=1', '_blank');
-}
-
-function deleteAlias(name) {
-    if (!confirm('Delete "' + name + '"?')) return;
-    var pwd = document.getElementById('storepassword').value;
-    if (!pwd) { showToast('Password required', 'error'); return; }
-
-    var fd = new FormData();
-    fd.append('action', 'deleteAlias');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('alias', name);
-    fd.append('storepassword', pwd);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        if (!d.success) { showToast(d.error, 'error'); return; }
-        showToast('Deleted', 'success');
-        // Update client-side keystore data
-        if (d.keystoreData) state.keystoreData = d.keystoreData;
-        state.aliases = d.aliases;
-        state.allAliases = d.aliases;
-        document.getElementById('infoCount').textContent = d.aliasCount;
-        document.getElementById('aliasCountBadge').textContent = d.aliasCount;
-        renderAliasesList(d.aliases);
-        loadHealthDashboard();
-        document.getElementById('detailPlaceholder').classList.remove('d-none');
-        document.getElementById('detailContent').classList.add('d-none');
-        if (d.aliases.length) selectAlias(d.aliases[0].name);
-    });
-}
-
-function exportPEM(name) {
-    var form = document.createElement('form');
-    form.method = 'POST'; form.action = API_URL;
-    form.innerHTML = '<input type="hidden" name="action" value="exportPEM"><input type="hidden" name="keystoreData" value="' + state.keystoreData + '"><input type="hidden" name="alias" value="' + name + '"><input type="hidden" name="storepassword" value="' + document.getElementById('storepassword').value + '">';
-    document.body.appendChild(form); form.submit(); document.body.removeChild(form);
-}
-
-function exportKeyStore() {
-    var pwd = document.getElementById('storepassword').value;
-    if (!pwd) { showToast('Password required', 'error'); return; }
-    var form = document.createElement('form');
-    form.method = 'POST'; form.action = API_URL;
-    form.innerHTML = '<input type="hidden" name="action" value="exportKeyStore"><input type="hidden" name="keystoreData" value="' + state.keystoreData + '"><input type="hidden" name="storepassword" value="' + pwd + '">';
-    document.body.appendChild(form); form.submit(); document.body.removeChild(form);
-}
-
-function fetchRemoteCert() {
-    var url = document.getElementById('remoteUrl').value;
-    if (!url) { showToast('Enter a URL', 'error'); return; }
-
-    var results = document.getElementById('remoteCertResults');
-    results.innerHTML = '<div class="text-center py-3"><div class="spinner" style="margin:auto"></div><p>Fetching certificates...</p></div>';
-
-    var fd = new FormData();
-    fd.append('action', 'fetchRemote');
-    fd.append('url', url);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        if (!d.success) { results.innerHTML = '<div class="alert alert-danger">' + d.error + '</div>'; return; }
-
-        var html = '<div class="alert alert-success">Found ' + d.count + ' certificate(s) from ' + d.host + ':' + d.port + '</div>';
-        d.certificates.forEach(function(cert, i) {
-            var sc = cert.status === 'expired' ? 'status-expired' : (cert.status === 'expiring' ? 'status-expiring' : 'status-valid');
-            html += '<div class="remote-cert-item">' +
-                '<div class="d-flex justify-content-between align-items-center mb-2">' +
-                '<strong>' + (i + 1) + '. ' + cert.subject.substring(0, 50) + '</strong>' +
-                '<span class="cert-type">' + cert.type + '</span></div>' +
-                '<div class="small text-muted">Issuer: ' + cert.issuer.substring(0, 50) + '</div>' +
-                '<div class="small ' + sc + '">Expires: ' + cert.notAfter + ' (' + cert.daysUntilExpiry + ' days)</div>' +
-                '<div class="mt-2">' +
-                '<button class="btn btn-sm btn-outline-primary" onclick="copyRemotePem(' + i + ')">Copy PEM</button> ' +
-                '<button class="btn btn-sm btn-outline-success" onclick="addRemoteCertToKeystore(' + i + ', this)">Add to KeyStore</button>' +
-                '</div>' +
-                '<textarea class="d-none" id="remotePem' + i + '">' + cert.pem + '</textarea>' +
-                '<input type="hidden" id="remoteSubject' + i + '" value="' + cert.subject.replace(/"/g, '&quot;') + '">' +
-                '</div>';
-        });
-        results.innerHTML = html;
-    })
-    .catch(function(e) { results.innerHTML = '<div class="alert alert-danger">Error: ' + e.message + '</div>'; });
-}
-
-function copyRemotePem(i) {
-    var pem = document.getElementById('remotePem' + i).value;
-    navigator.clipboard.writeText(pem).then(function() { showToast('PEM copied!', 'success'); });
-}
-
-function importRemoteCert(i) {
-    var pem = document.getElementById('remotePem' + i).value;
-    var alias = prompt('Enter alias name for this certificate:');
-    if (!alias) return;
-    document.getElementById('importAlias').value = alias;
-    document.getElementById('importPem').value = pem;
-    showTab('import'); // showTab now handles the active class automatically
-}
-
-function addRemoteCertToKeystore(i, btn) {
-    var pem = document.getElementById('remotePem' + i).value;
-    var pwd = document.getElementById('storepassword').value;
-    var subjectEl = document.getElementById('remoteSubject' + i);
-    var subject = subjectEl ? subjectEl.value : '';
-
-    if (!state.keystoreData) {
-        showToast('Please upload a keystore first (Upload KeyStore tab)', 'error');
-        showTab('upload');
-        return;
-    }
-    if (!pwd) {
-        showToast('Password required - enter it in the Upload KeyStore tab', 'error');
-        showTab('upload');
-        return;
-    }
-
-    // Extract CN from subject for default alias (e.g., "CN=example.com, O=..." -> "example.com")
-    var defaultAlias = 'remote-cert-' + i;
-    var cnMatch = subject.match(/CN=([^,]+)/i);
-    if (cnMatch) {
-        defaultAlias = cnMatch[1].trim().toLowerCase().replace(/[^a-z0-9.-]/g, '-');
-    }
-
-    var alias = prompt('Enter alias name for this certificate:', defaultAlias);
-    if (!alias) return;
-
-    var fd = new FormData();
-    fd.append('action', 'importCert');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('alias', alias);
-    fd.append('pemCert', pem);
-    fd.append('storepassword', pwd);
-
-    // Show loading on the button
-    var origText = btn.textContent;
-    btn.textContent = 'Adding...';
-    btn.disabled = true;
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        btn.textContent = origText;
-        btn.disabled = false;
-
-        if (!d.success) { showToast(d.error, 'error'); return; }
-
-        showToast('Certificate "' + alias + '" added to keystore!', 'success');
-        // Update client-side keystore data
-        if (d.keystoreData) state.keystoreData = d.keystoreData;
-        state.aliases = d.aliases;
-        state.allAliases = d.aliases;
-        document.getElementById('infoCount').textContent = d.aliasCount;
-        document.getElementById('aliasCountBadge').textContent = d.aliasCount;
-        renderAliasesList(d.aliases);
-        loadHealthDashboard();
-
-        // Mark this cert as added
-        btn.textContent = '✓ Added';
-        btn.classList.remove('btn-outline-success');
-        btn.classList.add('btn-success');
-        btn.disabled = true;
-    })
-    .catch(function(e) {
-        btn.textContent = origText;
-        btn.disabled = false;
-        showToast('Error: ' + e.message, 'error');
-    });
-}
-
-function importCertificate() {
-    var alias = document.getElementById('importAlias').value;
-    var pem = document.getElementById('importPem').value;
-    var pwd = document.getElementById('storepassword').value;
-
-    if (!alias || !pem) { showToast('Enter alias and PEM', 'error'); return; }
-    if (!pwd) { showToast('Password required', 'error'); return; }
-    if (!state.keystoreData) {
-        showToast('Please upload a keystore first', 'error');
-        showTab('upload');
-        return;
-    }
-
-    var fd = new FormData();
-    fd.append('action', 'importCert');
-    fd.append('keystoreData', state.keystoreData);
-    fd.append('alias', alias);
-    fd.append('pemCert', pem);
-    fd.append('storepassword', pwd);
-
-    fetch(API_URL, { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        if (!d.success) { showToast(d.error, 'error'); return; }
-        showToast(d.message, 'success');
-        // Update client-side keystore data
-        if (d.keystoreData) state.keystoreData = d.keystoreData;
-        state.aliases = d.aliases;
-        state.allAliases = d.aliases;
-        document.getElementById('infoCount').textContent = d.aliasCount;
-        document.getElementById('aliasCountBadge').textContent = d.aliasCount;
-        renderAliasesList(d.aliases);
-        loadHealthDashboard();
-        document.getElementById('importAlias').value = '';
-        document.getElementById('importPem').value = '';
-        showTab('upload');
-        selectAlias(alias);
-    });
-}
-
-function clearKeystore() {
-    state = { keystoreData: null, fileName: null, selectedAlias: null, aliases: [], allAliases: [] };
-    document.getElementById('upfile').value = '';
-    document.getElementById('keystoreInfo').classList.add('d-none');
-    document.getElementById('healthDashboard').classList.add('d-none');
-    document.getElementById('aliasCountBadge').textContent = '0';
-    document.getElementById('btnExportJks').disabled = true;
-    document.getElementById('tabImport').disabled = true;
-    document.getElementById('aliasList').innerHTML = '<div class="text-center text-muted py-4"><div style="font-size:2rem;opacity:0.3">📁</div><p class="mb-0">Upload a keystore</p></div>';
-    document.getElementById('detailPlaceholder').classList.remove('d-none');
-    document.getElementById('detailContent').classList.add('d-none');
-}
-
-// Drag & drop
-var uz = document.getElementById('stickyUpload');
-['dragenter','dragover','dragleave','drop'].forEach(function(e){uz.addEventListener(e,function(ev){ev.preventDefault();ev.stopPropagation();});});
-['dragenter','dragover'].forEach(function(e){uz.addEventListener(e,function(){uz.style.background='#e8f4ff';});});
-['dragleave','drop'].forEach(function(e){uz.addEventListener(e,function(){uz.style.background='#fff';});});
-uz.addEventListener('drop',function(e){document.getElementById('upfile').files=e.dataTransfer.files;uploadKeystore();});
-</script>
-
-<hr class="mt-5">
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-
-<!-- Features Section -->
-<section class="mt-5">
-    <h2>Features</h2>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5>View & Manage</h5>
-                    <ul class="mb-0">
+    <!-- Related Tools -->
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="jks.jsp" />
+        <jsp:param name="category" value="Cryptography" />
+    </jsp:include>
+
+    <!-- ==================== EDUCATIONAL CONTENT ==================== -->
+    <div class="jks-educational">
+
+        <!-- Features Section -->
+        <section class="jks-section">
+            <h2>Features</h2>
+            <div class="jks-features-grid">
+                <div class="jks-feature-card">
+                    <h4>View &amp; Manage</h4>
+                    <ul>
                         <li>View JKS, PKCS12, JCEKS files</li>
                         <li>Auto-detect keystore type</li>
                         <li>View certificate details</li>
-                        <li>Delete aliases</li>
+                        <li>Delete and rename aliases</li>
                         <li>Export modified keystore</li>
+                        <li>Create empty keystores</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5>Import & Export</h5>
-                    <ul class="mb-0">
-                        <li>Export certificates to PEM</li>
+                <div class="jks-feature-card">
+                    <h4>Import &amp; Export</h4>
+                    <ul>
+                        <li>Export certificates to PEM/DER</li>
                         <li>Import PEM certificates</li>
                         <li>Fetch remote SSL certificates</li>
                         <li>Add fetched certs to keystore</li>
+                        <li>Generate new key pairs</li>
                         <li>Parse full certificate details</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5>Security & Monitoring</h5>
-                    <ul class="mb-0">
+                <div class="jks-feature-card">
+                    <h4>Security &amp; Monitoring</h4>
+                    <ul>
                         <li>Certificate health dashboard</li>
                         <li>Expiry timeline visualization</li>
                         <li>Weak key detection (&lt;2048 bit)</li>
                         <li>SHA-1 signature warnings</li>
                         <li>Self-signed certificate detection</li>
+                        <li>Key pair validation</li>
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- Java Keytool Commands -->
-<section class="mt-5">
-    <h2>Java Keytool Commands Reference</h2>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header"><strong>Generate Keys & Certificates</strong></div>
-                <div class="card-body">
+        <!-- Java Keytool Commands -->
+        <section class="jks-section">
+            <h2>Java Keytool Commands Reference</h2>
+            <div class="jks-commands-grid">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Generate Keys &amp; Certificates</div>
                     <pre><code># Generate a new key pair and self-signed certificate
 keytool -genkeypair -alias mydomain -keyalg RSA -keysize 2048 \
   -validity 365 -keystore keystore.jks
@@ -918,41 +542,8 @@ keytool -genkeypair -alias server -keyalg RSA -keysize 2048 \
 keytool -genkeypair -alias eckey -keyalg EC -keysize 256 \
   -keystore keystore.jks</code></pre>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Import Certificates</strong></div>
-                <div class="card-body">
-                    <pre><code># Import a trusted CA certificate
-keytool -importcert -trustcacerts -alias rootca \
-  -file ca-cert.pem -keystore keystore.jks
-
-# Import a certificate chain
-keytool -importcert -alias myserver -file server.crt \
-  -keystore keystore.jks
-
-# Import PKCS12 into JKS
-keytool -importkeystore -srckeystore cert.p12 \
-  -srcstoretype PKCS12 -destkeystore keystore.jks</code></pre>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Generate CSR</strong></div>
-                <div class="card-body">
-                    <pre><code># Generate Certificate Signing Request
-keytool -certreq -alias mydomain -keystore keystore.jks \
-  -file mydomain.csr
-
-# Generate CSR with SAN (Subject Alternative Names)
-keytool -certreq -alias mydomain -keystore keystore.jks \
-  -ext san=dns:www.example.com,dns:example.com \
-  -file mydomain.csr</code></pre>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header"><strong>View & List</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">View &amp; List</div>
                     <pre><code># List all entries in keystore
 keytool -list -keystore keystore.jks
 
@@ -965,10 +556,22 @@ keytool -list -v -alias mydomain -keystore keystore.jks
 # Print certificate in RFC format
 keytool -list -rfc -alias mydomain -keystore keystore.jks</code></pre>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Export Certificates</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Import Certificates</div>
+                    <pre><code># Import a trusted CA certificate
+keytool -importcert -trustcacerts -alias rootca \
+  -file ca-cert.pem -keystore keystore.jks
+
+# Import a certificate chain
+keytool -importcert -alias myserver -file server.crt \
+  -keystore keystore.jks
+
+# Import PKCS12 into JKS
+keytool -importkeystore -srckeystore cert.p12 \
+  -srcstoretype PKCS12 -destkeystore keystore.jks</code></pre>
+                </div>
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Export Certificates</div>
                     <pre><code># Export certificate to file (DER format)
 keytool -exportcert -alias mydomain -keystore keystore.jks \
   -file cert.der
@@ -981,10 +584,19 @@ keytool -exportcert -alias mydomain -keystore keystore.jks \
 keytool -importkeystore -srckeystore keystore.jks \
   -destkeystore keystore.p12 -deststoretype PKCS12</code></pre>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Delete & Modify</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Generate CSR</div>
+                    <pre><code># Generate Certificate Signing Request
+keytool -certreq -alias mydomain -keystore keystore.jks \
+  -file mydomain.csr
+
+# Generate CSR with SAN (Subject Alternative Names)
+keytool -certreq -alias mydomain -keystore keystore.jks \
+  -ext san=dns:www.example.com,dns:example.com \
+  -file mydomain.csr</code></pre>
+                </div>
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Delete &amp; Modify</div>
                     <pre><code># Delete an alias
 keytool -delete -alias oldcert -keystore keystore.jks
 
@@ -999,18 +611,14 @@ keytool -storepasswd -keystore keystore.jks
 keytool -keypasswd -alias mydomain -keystore keystore.jks</code></pre>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- OpenSSL Commands -->
-<section class="mt-5">
-    <h2>OpenSSL Commands for Keystore Operations</h2>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header"><strong>View & Convert</strong></div>
-                <div class="card-body">
+        <!-- OpenSSL Commands -->
+        <section class="jks-section">
+            <h2>OpenSSL Commands for Keystore Operations</h2>
+            <div class="jks-commands-grid">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">View &amp; Convert</div>
                     <pre><code># View PKCS12 contents
 openssl pkcs12 -info -in keystore.p12
 
@@ -1026,10 +634,8 @@ openssl pkcs12 -in keystore.p12 -nocerts -nodes \
 openssl pkcs12 -in keystore.p12 -cacerts -nokeys \
   -out ca-certs.pem</code></pre>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Create PKCS12</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Create PKCS12</div>
                     <pre><code># Create PKCS12 from cert and key
 openssl pkcs12 -export -in cert.pem -inkey key.pem \
   -out keystore.p12 -name "myalias"
@@ -1042,12 +648,8 @@ openssl pkcs12 -export -in cert.pem -inkey key.pem \
 openssl pkcs12 -export -in cert.pem -inkey key.pem \
   -out keystore.p12 -legacy</code></pre>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header"><strong>Certificate Operations</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Certificate Operations</div>
                     <pre><code># View certificate details
 openssl x509 -in cert.pem -text -noout
 
@@ -1059,13 +661,11 @@ openssl verify -CAfile ca-chain.pem cert.pem
 
 # Get certificate from server
 openssl s_client -connect example.com:443 \
-  -showcerts </dev/null 2>/dev/null | \
-  openssl x509 -outform PEM > server.pem</code></pre>
+  -showcerts &lt;/dev/null 2&gt;/dev/null | \
+  openssl x509 -outform PEM &gt; server.pem</code></pre>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header"><strong>Convert Formats</strong></div>
-                <div class="card-body">
+                <div class="jks-command-card">
+                    <div class="jks-command-card-header">Convert Formats</div>
                     <pre><code># DER to PEM
 openssl x509 -inform DER -in cert.der \
   -outform PEM -out cert.pem
@@ -1079,160 +679,274 @@ openssl pkcs7 -print_certs -in cert.p7b \
   -out cert.pem
 
 # Extract public key from certificate
-openssl x509 -in cert.pem -pubkey -noout > pubkey.pem</code></pre>
+openssl x509 -in cert.pem -pubkey -noout &gt; pubkey.pem</code></pre>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- FAQ Section -->
-<section class="mt-5">
-    <h2>Frequently Asked Questions</h2>
+        <!-- FAQ Section -->
+        <section class="jks-section">
+            <h2>Frequently Asked Questions</h2>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq1">What is a Java KeyStore (JKS)?</button></div>
-        <div id="faq1" class="collapse"><div class="card-body">
-            A Java KeyStore (JKS) is a repository for cryptographic keys and certificates. It's commonly used to store:
-            <ul>
-                <li><strong>Private keys</strong> - Used for SSL/TLS server authentication</li>
-                <li><strong>Public key certificates</strong> - X.509 certificates</li>
-                <li><strong>Trusted CA certificates</strong> - For certificate chain validation</li>
-            </ul>
-            JKS files are protected by a password and use proprietary Java format. The default keystore type changed to PKCS12 in Java 9.
-        </div></div>
-    </div>
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    What is a Java KeyStore (JKS)?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    A Java KeyStore (JKS) is a repository for cryptographic keys and certificates. It's commonly used to store:
+                    <ul>
+                        <li><strong>Private keys</strong> - Used for SSL/TLS server authentication</li>
+                        <li><strong>Public key certificates</strong> - X.509 certificates</li>
+                        <li><strong>Trusted CA certificates</strong> - For certificate chain validation</li>
+                    </ul>
+                    JKS files are protected by a password and use proprietary Java format. The default keystore type changed to PKCS12 in Java 9.
+                </div>
+            </div>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq2">What's the difference between JKS, PKCS12, and JCEKS?</button></div>
-        <div id="faq2" class="collapse"><div class="card-body">
-            <table class="table table-sm">
-                <thead><tr><th>Format</th><th>Extension</th><th>Description</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>JKS</strong></td><td>.jks, .keystore</td><td>Java-proprietary format. Uses weak encryption (SHA1). Not recommended for new projects.</td></tr>
-                    <tr><td><strong>PKCS12</strong></td><td>.p12, .pfx</td><td>Industry standard, cross-platform. Supports stronger encryption. Default since Java 9.</td></tr>
-                    <tr><td><strong>JCEKS</strong></td><td>.jceks</td><td>Java Cryptography Extension KeyStore. Stronger encryption than JKS, but still Java-proprietary.</td></tr>
-                </tbody>
-            </table>
-            <strong>Recommendation:</strong> Use PKCS12 for new projects for better compatibility and security.
-        </div></div>
-    </div>
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    What's the difference between JKS, PKCS12, and JCEKS?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <table>
+                        <thead><tr><th>Format</th><th>Extension</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>JKS</strong></td><td>.jks, .keystore</td><td>Java-proprietary format. Uses weak encryption (SHA1). Not recommended for new projects.</td></tr>
+                            <tr><td><strong>PKCS12</strong></td><td>.p12, .pfx</td><td>Industry standard, cross-platform. Supports stronger encryption. Default since Java 9.</td></tr>
+                            <tr><td><strong>JCEKS</strong></td><td>.jceks</td><td>Java Cryptography Extension KeyStore. Stronger encryption than JKS, but still Java-proprietary.</td></tr>
+                        </tbody>
+                    </table>
+                    <strong>Recommendation:</strong> Use PKCS12 for new projects for better compatibility and security.
+                </div>
+            </div>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq3">How do I convert JKS to PKCS12?</button></div>
-        <div id="faq3" class="collapse"><div class="card-body">
-            Use the keytool command to convert:
-            <pre><code>keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -deststoretype PKCS12</code></pre>
-            You'll be prompted for both the source and destination keystore passwords.
-        </div></div>
-    </div>
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    How do I convert JKS to PKCS12?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    Use the keytool command to convert:
+                    <pre><code>keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -deststoretype PKCS12</code></pre>
+                    You'll be prompted for both the source and destination keystore passwords.
+                </div>
+            </div>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq4">How do I view the contents of a keystore?</button></div>
-        <div id="faq4" class="collapse"><div class="card-body">
-            <strong>Using keytool:</strong>
-            <pre><code>keytool -list -v -keystore keystore.jks</code></pre>
-            <strong>Using this online tool:</strong> Simply upload your keystore file and enter the password. The tool will display all aliases, certificates, and their details including expiry dates and security information.
-        </div></div>
-    </div>
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    How do I view the contents of a keystore?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <strong>Using keytool:</strong>
+                    <pre><code>keytool -list -v -keystore keystore.jks</code></pre>
+                    <strong>Using this online tool:</strong> Simply upload your keystore file and enter the password. The tool will display all aliases, certificates, and their details including expiry dates and security information.
+                </div>
+            </div>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq5">What is a truststore vs keystore?</button></div>
-        <div id="faq5" class="collapse"><div class="card-body">
-            Both are technically the same file format, but they serve different purposes:
-            <ul>
-                <li><strong>Keystore:</strong> Contains your private keys and certificates. Used for server authentication (proving your identity).</li>
-                <li><strong>Truststore:</strong> Contains trusted CA certificates. Used to verify certificates from others (validating their identity).</li>
-            </ul>
-            In Java, the default truststore is <code>$JAVA_HOME/lib/security/cacerts</code> with default password "changeit".
-        </div></div>
-    </div>
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    What is a truststore vs keystore?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    Both are technically the same file format, but they serve different purposes:
+                    <ul>
+                        <li><strong>Keystore:</strong> Contains your private keys and certificates. Used for server authentication (proving your identity).</li>
+                        <li><strong>Truststore:</strong> Contains trusted CA certificates. Used to verify certificates from others (validating their identity).</li>
+                    </ul>
+                    In Java, the default truststore is <code>$JAVA_HOME/lib/security/cacerts</code> with default password "changeit".
+                </div>
+            </div>
 
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq6">How do I add a certificate to Java's truststore?</button></div>
-        <div id="faq6" class="collapse"><div class="card-body">
-            <pre><code>keytool -importcert -trustcacerts -alias myca \
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    How do I add a certificate to Java's truststore?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <pre><code>keytool -importcert -trustcacerts -alias myca \
   -file ca-cert.pem \
   -keystore $JAVA_HOME/lib/security/cacerts \
   -storepass changeit</code></pre>
-            <strong>Note:</strong> You may need administrator/root privileges to modify the system cacerts file.
-        </div></div>
-    </div>
-
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq7">How do I check certificate expiry dates?</button></div>
-        <div id="faq7" class="collapse"><div class="card-body">
-            <strong>Using keytool:</strong>
-            <pre><code>keytool -list -v -keystore keystore.jks | grep -A2 "Valid from"</code></pre>
-            <strong>Using OpenSSL:</strong>
-            <pre><code>openssl x509 -in cert.pem -noout -dates</code></pre>
-            <strong>Using this tool:</strong> Upload your keystore to see the health dashboard with expiring/expired certificate counts and a visual expiry timeline.
-        </div></div>
-    </div>
-
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq8">What key size should I use?</button></div>
-        <div id="faq8" class="collapse"><div class="card-body">
-            <strong>Recommended minimum key sizes (2024):</strong>
-            <ul>
-                <li><strong>RSA:</strong> 2048 bits minimum, 4096 bits for high security</li>
-                <li><strong>ECDSA:</strong> 256 bits (P-256 curve) or 384 bits (P-384)</li>
-                <li><strong>DSA:</strong> 2048 bits (deprecated, prefer RSA or ECDSA)</li>
-            </ul>
-            This tool's security audit will warn you about keys smaller than 2048 bits.
-        </div></div>
-    </div>
-
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq9">Is it safe to upload my keystore to this tool?</button></div>
-        <div id="faq9" class="collapse"><div class="card-body">
-            <strong>Privacy considerations:</strong>
-            <ul>
-                <li>Your keystore is processed client-side in your browser</li>
-                <li>The keystore data is stored in browser memory, not on our servers</li>
-                <li>All operations happen locally with AJAX calls</li>
-                <li>No keystore data is persisted after you close the page</li>
-            </ul>
-            <strong>Best practice:</strong> For production keystores containing private keys, consider using offline tools like keytool or OpenSSL.
-        </div></div>
-    </div>
-
-    <div class="card mb-2">
-        <div class="card-header"><button class="btn btn-link" data-toggle="collapse" data-target="#faq10">How do I fetch SSL certificates from a website?</button></div>
-        <div id="faq10" class="collapse"><div class="card-body">
-            <strong>Using this tool:</strong> Go to "Fetch Remote Cert" tab, enter the URL (e.g., google.com), and click "Fetch Certificates". You can then copy the PEM or add it directly to your keystore.
-            <br><br>
-            <strong>Using OpenSSL:</strong>
-            <pre><code>openssl s_client -connect example.com:443 -showcerts </dev/null 2>/dev/null | \
-  openssl x509 -outform PEM > cert.pem</code></pre>
-        </div></div>
-    </div>
-</section>
-
-<!-- Author / EEAT Section -->
-<section class="mt-5">
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex align-items-center">
-                <div class="mr-3">
-                    <div style="width:60px;height:60px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:bold;">AN</div>
+                    <strong>Note:</strong> You may need administrator/root privileges to modify the system cacerts file.
                 </div>
-                <div>
-                    <h5 class="mb-1">Created by Anish Nath</h5>
-                    <p class="text-muted mb-2">Security Engineer | Cryptography & PKI Expert</p>
-                    <p class="small mb-2">Building security tools for developers since 2015. Expertise in Java KeyStore management, SSL/TLS certificates, and public key infrastructure.</p>
-                    <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px">
-                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-                        </svg>
-                        @anish2good
-                    </a>
+            </div>
+
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    How do I check certificate expiry dates?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
                 </div>
+                <div class="jks-faq-answer">
+                    <strong>Using keytool:</strong>
+                    <pre><code>keytool -list -v -keystore keystore.jks | grep -A2 "Valid from"</code></pre>
+                    <strong>Using OpenSSL:</strong>
+                    <pre><code>openssl x509 -in cert.pem -noout -dates</code></pre>
+                    <strong>Using this tool:</strong> Upload your keystore to see the health dashboard with expiring/expired certificate counts and a visual expiry timeline.
+                </div>
+            </div>
+
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    What key size should I use?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <strong>Recommended minimum key sizes:</strong>
+                    <ul>
+                        <li><strong>RSA:</strong> 2048 bits minimum, 4096 bits for high security</li>
+                        <li><strong>ECDSA:</strong> 256 bits (P-256 curve) or 384 bits (P-384)</li>
+                        <li><strong>DSA:</strong> 2048 bits (deprecated, prefer RSA or ECDSA)</li>
+                    </ul>
+                    This tool's security audit will warn you about keys smaller than 2048 bits.
+                </div>
+            </div>
+
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    Is it safe to upload my keystore to this tool?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <strong>Privacy considerations:</strong>
+                    <ul>
+                        <li>Your keystore is read client-side in your browser</li>
+                        <li>The keystore data is stored in browser memory, not on our servers</li>
+                        <li>All operations happen locally with AJAX calls</li>
+                        <li>No keystore data is persisted after you close the page</li>
+                    </ul>
+                    <strong>Best practice:</strong> For production keystores containing private keys, consider using offline tools like keytool or OpenSSL.
+                </div>
+            </div>
+
+            <div class="jks-faq-item">
+                <div class="jks-faq-question" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.jks-collapsible-chevron').classList.toggle('open')">
+                    How do I fetch SSL certificates from a website?
+                    <span class="jks-collapsible-chevron">&#9660;</span>
+                </div>
+                <div class="jks-faq-answer">
+                    <strong>Using this tool:</strong> Switch to "Fetch URL" mode, enter the URL (e.g., google.com), and click "Fetch Certificates". You can then copy the PEM or add it directly to your keystore.
+                    <br><br>
+                    <strong>Using OpenSSL:</strong>
+                    <pre><code>openssl s_client -connect example.com:443 -showcerts &lt;/dev/null 2&gt;/dev/null | \
+  openssl x509 -outform PEM &gt; cert.pem</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section class="jks-section">
+            <div class="tool-card" style="padding:2rem;">
+                <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">About This Tool</h2>
+                <p style="color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.7;">This Java KeyStore viewer is maintained by <strong>Anish Nath</strong>, a security engineer with expertise in cryptography, PKI, and Java security. Building security tools for developers since 2015.</p>
+                <p style="color:var(--text-secondary);margin-bottom:0;line-height:1.7;">The tool supports viewing and managing JKS, PKCS12, and JCEKS keystores, with security audit capabilities including weak key detection, SHA-1 warnings, and certificate expiry monitoring.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Support Section -->
+    <%@ include file="modern/components/support-section.jsp" %>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+            <div class="footer-links">
+                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== GENERATE KEY PAIR MODAL ==================== -->
+    <div class="jks-modal-backdrop" id="jksGenModal">
+        <div class="jks-modal">
+            <div class="jks-modal-header">
+                <h4>Generate Key Pair</h4>
+                <button class="jks-modal-close" id="jksGenModalClose">&times;</button>
+            </div>
+            <div class="jks-modal-body">
+                <div class="jks-modal-form-group">
+                    <label for="genAlias">Alias Name *</label>
+                    <input type="text" id="genAlias" placeholder="my-server-key">
+                </div>
+                <div class="jks-modal-form-group">
+                    <label>Algorithm</label>
+                    <div class="jks-alg-toggle" id="genAlgToggle">
+                        <button class="jks-alg-btn active" data-alg="RSA">RSA</button>
+                        <button class="jks-alg-btn" data-alg="EC">EC</button>
+                        <button class="jks-alg-btn" data-alg="DSA">DSA</button>
+                    </div>
+                </div>
+                <div class="jks-modal-form-group">
+                    <label for="genKeySize">Key Size</label>
+                    <select id="genKeySize">
+                        <option value="2048">2048 bits</option>
+                        <option value="3072">3072 bits</option>
+                        <option value="4096">4096 bits</option>
+                    </select>
+                </div>
+                <div class="jks-modal-form-group">
+                    <label for="genCN">Common Name (CN)</label>
+                    <input type="text" id="genCN" placeholder="example.com">
+                </div>
+                <div class="jks-modal-form-group">
+                    <label for="genValidity">Validity (days)</label>
+                    <input type="number" id="genValidity" value="365" min="1" max="7300">
+                </div>
+                <div class="jks-modal-form-group">
+                    <label for="genKeyPassword">Key Password (optional)</label>
+                    <input type="password" id="genKeyPassword" placeholder="Defaults to store password">
+                </div>
+                <div class="jks-gen-preview" id="genPreview">
+                    Will generate: RSA 2048-bit key pair with self-signed certificate, valid for 365 days
+                </div>
+            </div>
+            <div class="jks-modal-footer">
+                <button class="jks-btn" id="jksGenCancelBtn">Cancel</button>
+                <button class="jks-btn jks-btn-primary" id="jksGenSubmitBtn">Generate</button>
             </div>
         </div>
     </div>
-</section>
 
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="body-close.jsp"%>
+    <!-- ==================== IMPORT PEM MODAL ==================== -->
+    <div class="jks-modal-backdrop" id="jksImportModal">
+        <div class="jks-modal">
+            <div class="jks-modal-header">
+                <h4>Import PEM Certificate</h4>
+                <button class="jks-modal-close" id="jksImportModalClose">&times;</button>
+            </div>
+            <div class="jks-modal-body">
+                <div class="jks-modal-form-group">
+                    <label for="importAlias">Alias Name *</label>
+                    <input type="text" id="importAlias" placeholder="my-trusted-ca">
+                </div>
+                <div class="jks-modal-form-group">
+                    <label for="importPem">PEM Certificate *</label>
+                    <textarea id="importPem" class="jks-import-textarea" rows="10" placeholder="-----BEGIN CERTIFICATE-----
+MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkq...
+-----END CERTIFICATE-----"></textarea>
+                </div>
+                <div class="jks-import-hint">Paste the full PEM including BEGIN/END markers. Supports single certificates and certificate chains.</div>
+            </div>
+            <div class="jks-modal-footer">
+                <button class="jks-btn" id="jksImportCancelBtn">Cancel</button>
+                <button class="jks-btn jks-btn-primary" id="jksImportSubmitBtn">Import Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
+
+    <!-- Scripts -->
+    <script src="<%=request.getContextPath()%>/js/jks-render.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/jks-core.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+</body>
+</html>

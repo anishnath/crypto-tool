@@ -104,6 +104,63 @@ public class JKSManagementFunctionality extends HttpServlet {
                 case "getSecurityAnalysis":
                     handleGetSecurityAnalysis(params, response);
                     break;
+                case "renameAlias":
+                    handleRenameAlias(params, response);
+                    break;
+                case "exportDER":
+                    handleExportDER(params, response);
+                    break;
+                case "exportBase64":
+                    handleExportBase64(params, response);
+                    break;
+                case "convertKeystore":
+                    handleConvertKeystore(params, response);
+                    break;
+                case "changeStorePassword":
+                    handleChangeStorePassword(params, response);
+                    break;
+                case "appendToChain":
+                    handleAppendToChain(params, response);
+                    break;
+                case "detectPastedFormat":
+                    handleDetectPastedFormat(params, response);
+                    break;
+                case "changeKeyPassword":
+                    handleChangeKeyPassword(params, response);
+                    break;
+                case "duplicateAlias":
+                    handleDuplicateAlias(params, response);
+                    break;
+                case "importCertFromDer":
+                    handleImportCertFromDer(params, response);
+                    break;
+                case "importKeyPair":
+                    handleImportKeyPair(params, response);
+                    break;
+                case "verifyChain":
+                    handleVerifyChain(params, response);
+                    break;
+                case "removeFromChain":
+                    handleRemoveFromChain(params, response);
+                    break;
+                case "compareCertificates":
+                    handleCompareCertificates(params, response);
+                    break;
+                case "createKeystore":
+                    handleCreateKeystore(params, response);
+                    break;
+                case "detectType":
+                    handleDetectType(params, response);
+                    break;
+                case "validateKeyPair":
+                    handleValidateKeyPair(params, response);
+                    break;
+                case "orderChain":
+                    handleOrderChain(params, response);
+                    break;
+                case "generateKeyPair":
+                    handleGenerateKeyPair(params, response);
+                    break;
                 default:
                     sendJsonResponse(response, createErrorResponse("Unknown action: " + action));
             }
@@ -159,6 +216,13 @@ public class JKSManagementFunctionality extends HttpServlet {
             details.put("pemExport", jksService.exportCertificateAsPEM(alias));
         } catch (Exception e) {
             details.put("pemExport", null);
+        }
+
+        // Add certificate fingerprints
+        try {
+            details.put("fingerprints", jksService.getCertificateFingerprints(alias));
+        } catch (Exception e) {
+            details.put("fingerprints", new HashMap<String, String>());
         }
 
         // Convert X509Certificate to serializable format
@@ -246,11 +310,15 @@ public class JKSManagementFunctionality extends HttpServlet {
             return;
         }
 
+        String fileName = (String) params.get("fileName");
+        if (fileName == null || fileName.trim().isEmpty()) fileName = alias + ".pem";
+        else if (!fileName.contains(".")) fileName += ".pem";
+
         JKSService jksService = new JKSService(keystoreBytes, password);
         String pemContent = jksService.exportCertificateChainAsPEM(alias);
 
         response.setContentType("application/x-pem-file");
-        response.addHeader("Content-Disposition", "attachment; filename=" + alias + ".pem");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace("\"", "_") + "\"");
         ServletOutputStream os = response.getOutputStream();
         os.write(pemContent.getBytes(StandardCharsets.UTF_8));
         os.flush();
@@ -270,11 +338,15 @@ public class JKSManagementFunctionality extends HttpServlet {
             return;
         }
 
+        String fileName = (String) params.get("fileName");
+        if (fileName == null || fileName.trim().isEmpty()) fileName = "keystore-export.jks";
+        if (!fileName.contains(".")) fileName += ".jks";
+
         JKSService jksService = new JKSService(keystoreBytes, password);
         byte[] exportBytes = jksService.exportKeyStore();
 
         response.setContentType("application/octet-stream");
-        response.addHeader("Content-Disposition", "attachment; filename=keystore-export.jks");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace("\"", "_") + "\"");
         response.addHeader("Content-Length", String.valueOf(exportBytes.length));
         ServletOutputStream os = response.getOutputStream();
         os.write(exportBytes);
@@ -498,8 +570,9 @@ public class JKSManagementFunctionality extends HttpServlet {
             return;
         }
 
+        boolean overwrite = "true".equalsIgnoreCase((String) params.get("overwrite"));
         JKSService jksService = new JKSService(keystoreBytes, password);
-        byte[] updatedBytes = jksService.importCertificate(pemCert, alias);
+        byte[] updatedBytes = jksService.importCertificate(pemCert, alias, overwrite);
 
         // Return updated keystore data to client (client-side storage)
         jksService = new JKSService(updatedBytes, password);
@@ -538,6 +611,519 @@ public class JKSManagementFunctionality extends HttpServlet {
         result.put("alias", alias);
         result.put("analysis", analysis);
 
+        sendJsonResponse(response, result);
+    }
+
+    private void handleRenameAlias(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String oldAlias = (String) params.get("oldAlias");
+        String newAlias = (String) params.get("newAlias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (oldAlias == null || oldAlias.isEmpty() || newAlias == null || newAlias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Please provide old and new alias names"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.renameAlias(oldAlias, newAlias);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Alias renamed to '" + newAlias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleExportDER(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null || alias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore data and alias required"));
+            return;
+        }
+
+        String fileName = (String) params.get("fileName");
+        if (fileName == null || fileName.trim().isEmpty()) fileName = alias + ".der";
+        else if (!fileName.contains(".")) fileName += ".der";
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] derBytes = jksService.exportCertificateAsDER(alias);
+
+        response.setContentType("application/x-x509-ca-cert");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace("\"", "_") + "\"");
+        response.addHeader("Content-Length", String.valueOf(derBytes.length));
+        ServletOutputStream os = response.getOutputStream();
+        os.write(derBytes);
+        os.flush();
+    }
+
+    private void handleExportBase64(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null || alias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore data and alias required"));
+            return;
+        }
+
+        String fileName = (String) params.get("fileName");
+        if (fileName == null || fileName.trim().isEmpty()) fileName = alias + ".b64";
+        else if (!fileName.contains(".")) fileName += ".b64";
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        String base64 = jksService.exportCertificateAsBase64(alias);
+
+        response.setContentType("text/plain");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace("\"", "_") + "\"");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(base64);
+    }
+
+    private void handleConvertKeystore(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String password = (String) params.get("storepassword");
+        String newPassword = (String) params.get("newPassword");
+        String targetType = (String) params.get("targetType");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+        if (targetType == null || targetType.isEmpty()) targetType = "PKCS12";
+        if (newPassword == null) newPassword = password;
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] converted = jksService.convertKeystoreType(targetType, newPassword);
+
+        String ext = "PKCS12".equalsIgnoreCase(targetType) ? "p12" : ("JCEKS".equalsIgnoreCase(targetType) ? "jceks" : "jks");
+        String fileName = (String) params.get("fileName");
+        if (fileName == null || fileName.trim().isEmpty()) fileName = "keystore." + ext;
+        else if (!fileName.contains(".")) fileName += "." + ext;
+
+        response.setContentType("application/octet-stream");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace("\"", "_") + "\"");
+        response.addHeader("Content-Length", String.valueOf(converted.length));
+        ServletOutputStream os = response.getOutputStream();
+        os.write(converted);
+        os.flush();
+    }
+
+    private void handleChangeStorePassword(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String password = (String) params.get("storepassword");
+        String newPassword = (String) params.get("newPassword");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Current password is required"));
+            return;
+        }
+        if (newPassword == null || newPassword.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("New password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.changeStorePassword(newPassword);
+        jksService = new JKSService(updatedBytes, newPassword);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Password changed successfully");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleAppendToChain(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String pemCert = (String) params.get("pemCert");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null || pemCert == null || pemCert.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore, alias, and PEM certificate required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.appendCertificateToChain(alias, pemCert);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Certificate appended to chain for '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleDetectPastedFormat(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        String pasted = (String) params.get("pasted");
+        if (pasted == null || pasted.trim().isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("No content to detect"));
+            return;
+        }
+
+        Map<String, Object> result = JKSService.detectPastedFormat(pasted);
+        result.put("success", true);
+        sendJsonResponse(response, result);
+    }
+
+    private void handleChangeKeyPassword(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String newKeyPassword = (String) params.get("newKeyPassword");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null || newKeyPassword == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore, alias, and new key password required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.changeKeyPassword(alias, newKeyPassword);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Key password changed for '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleDuplicateAlias(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String sourceAlias = (String) params.get("sourceAlias");
+        String newAlias = (String) params.get("newAlias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || sourceAlias == null || newAlias == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore, source alias, and new alias required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.duplicateAlias(sourceAlias, newAlias);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Duplicated '" + sourceAlias + "' as '" + newAlias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleImportCertFromDer(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String derOrBase64 = (String) params.get("derOrBase64");
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+        boolean overwrite = "true".equalsIgnoreCase((String) params.get("overwrite"));
+
+        if (keystoreBytes == null || derOrBase64 == null || alias == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore, DER/Base64 data, and alias required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.importCertificateFromDer(derOrBase64, alias, overwrite);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Certificate imported as '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleImportKeyPair(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String pemPrivateKey = (String) params.get("pemPrivateKey");
+        String pemCertChain = (String) params.get("pemCertChain");
+        String alias = (String) params.get("alias");
+        String keyPassword = (String) params.get("keyPassword");
+        String password = (String) params.get("storepassword");
+
+        if (keyPassword == null || keyPassword.isEmpty()) keyPassword = password;
+
+        if (keystoreBytes == null || pemPrivateKey == null || pemCertChain == null || alias == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore, private key (PKCS#8 PEM), certificate(s), and alias required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.importKeyPair(pemPrivateKey, pemCertChain, alias, keyPassword);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Key pair imported as '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleVerifyChain(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore and alias required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        Map<String, Object> verification = jksService.verifyCertificateChain(alias);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("verification", verification);
+        sendJsonResponse(response, result);
+    }
+
+    private void handleRemoveFromChain(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String indexStr = (String) params.get("index");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias == null || indexStr == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore, alias, and index required"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+        int index;
+        try {
+            index = Integer.parseInt(indexStr);
+        } catch (NumberFormatException e) {
+            sendJsonResponse(response, createErrorResponse("Index must be a number"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.removeFromChain(alias, index);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Certificate removed from chain for '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleCompareCertificates(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias1 = (String) params.get("alias1");
+        String alias2 = (String) params.get("alias2");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null || alias1 == null || alias2 == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore and both aliases required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        Map<String, Object> comparison = jksService.compareCertificates(alias1, alias2);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("comparison", comparison);
+        sendJsonResponse(response, result);
+    }
+
+    private void handleCreateKeystore(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        String keystoreType = (String) params.get("keystoreType");
+        String password = (String) params.get("storepassword");
+
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required to create a keystore"));
+            return;
+        }
+        if (keystoreType == null || keystoreType.isEmpty()) keystoreType = "JKS";
+
+        byte[] keystoreBytes = JKSService.createEmptyKeystore(keystoreType, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Empty " + keystoreType.toUpperCase() + " keystore created");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(keystoreBytes));
+        result.put("keystoreType", keystoreType.toUpperCase());
+        result.put("aliasCount", 0);
+        result.put("aliases", new ArrayList<>());
+        sendJsonResponse(response, result);
+    }
+
+    private void handleDetectType(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+
+        if (keystoreBytes == null || keystoreBytes.length == 0) {
+            sendJsonResponse(response, createErrorResponse("No keystore data provided"));
+            return;
+        }
+
+        Map<String, Object> detection = JKSService.detectKeystoreType(keystoreBytes);
+        detection.put("success", true);
+        detection.put("fileSize", keystoreBytes.length);
+        sendJsonResponse(response, detection);
+    }
+
+    private void handleValidateKeyPair(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (alias == null || alias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Please select an alias to validate"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        Map<String, Object> validation = jksService.validateKeyPair(alias);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("alias", alias);
+        result.put("validation", validation);
+        sendJsonResponse(response, result);
+    }
+
+    private void handleOrderChain(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (alias == null || alias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Please select an alias"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Password is required"));
+            return;
+        }
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.orderCertificateChain(alias);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Certificate chain reordered for '" + alias + "' (leaf first, root last)");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
+        sendJsonResponse(response, result);
+    }
+
+    private void handleGenerateKeyPair(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        byte[] keystoreBytes = getKeystoreBytes(params);
+        String alias = (String) params.get("alias");
+        String keyAlg = (String) params.get("keyAlg");
+        String keySizeStr = (String) params.get("keySize");
+        String cn = (String) params.get("cn");
+        String validityStr = (String) params.get("validityDays");
+        String keyPassword = (String) params.get("keyPassword");
+        String password = (String) params.get("storepassword");
+
+        if (keystoreBytes == null) {
+            sendJsonResponse(response, createErrorResponse("Keystore data not found. Please re-upload."));
+            return;
+        }
+        if (alias == null || alias.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Please provide an alias for the key pair"));
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            sendJsonResponse(response, createErrorResponse("Keystore password is required"));
+            return;
+        }
+
+        if (keyAlg == null || keyAlg.isEmpty()) keyAlg = "RSA";
+        int keySize = 2048;
+        if (keySizeStr != null && !keySizeStr.isEmpty()) {
+            try { keySize = Integer.parseInt(keySizeStr); } catch (NumberFormatException e) { /* use default */ }
+        }
+        int validityDays = 365;
+        if (validityStr != null && !validityStr.isEmpty()) {
+            try { validityDays = Integer.parseInt(validityStr); } catch (NumberFormatException e) { /* use default */ }
+        }
+        if (keyPassword == null || keyPassword.isEmpty()) keyPassword = password;
+
+        JKSService jksService = new JKSService(keystoreBytes, password);
+        byte[] updatedBytes = jksService.generateKeyPair(alias, keyAlg, keySize, cn, validityDays, keyPassword);
+        jksService = new JKSService(updatedBytes, password);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("message", "Generated " + keyAlg.toUpperCase() + " key pair with self-signed certificate as '" + alias + "'");
+        result.put("keystoreData", Base64.getEncoder().encodeToString(updatedBytes));
+        result.put("aliasCount", jksService.getEntryCount());
+        result.put("aliases", buildAliasesList(jksService));
         sendJsonResponse(response, result);
     }
 }
