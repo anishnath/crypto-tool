@@ -345,7 +345,7 @@
             <div class="category-header">
                 <span class="category-icon">&#128200;</span>
                 <h2>Algebra</h2>
-                <span class="category-count">10 tools</span>
+                <span class="category-count">11 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #d97706;">
@@ -421,6 +421,23 @@
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/diophantine-solver.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">ax+by</div>
+                        <div>
+                            <h3>Diophantine Equation Solver</h3>
+                            <div class="tool-formula">Integer solutions, Pell, CRT</div>
+                        </div>
+                    </div>
+                    <p>Solve linear, quadratic, and modular Diophantine equations with extended Euclidean algorithm steps and lattice graphs.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-python">Python</span>
+                        <span class="badge badge-new">New</span>
                     </div>
                 </a>
 

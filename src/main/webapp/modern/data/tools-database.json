@@ -1373,6 +1373,14 @@
       "isNew": true
     },
     {
+      "name": "Diophantine Equation Solver",
+      "url": "diophantine-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "diophantine equation solver linear diophantine integer solutions gcd extended euclidean algorithm bezout identity parametric solution pell equation sum of squares modular congruence chinese remainder theorem modular inverse number theory ax+by=c",
+      "description": "Diophantine Equation Solver - Solve linear (ax+by=c), quadratic (Pell, sums of squares), and modular congruences with step-by-step extended Euclidean algorithm and integer lattice graphs",
+      "isNew": true
+    },
+    {
       "name": "Language Detector",
       "url": "language-detector.jsp",
       "category": "Mathematics",
