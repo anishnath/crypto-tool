@@ -584,6 +584,12 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://8gwifi.org/lagrangian-calculator.jsp</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/z-transform-calculator.jsp</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>monthly</changefreq>

@@ -1314,6 +1314,13 @@
       "description": "Laplace Transform Calculator - Compute forward and inverse Laplace transforms with step-by-step solutions, partial fractions, and graphs"
     },
     {
+      "name": "Lagrangian Mechanics Calculator",
+      "url": "lagrangian-calculator.jsp",
+      "category": "Physics",
+      "keywords": "lagrangian mechanics calculator euler-lagrange equation hamiltonian mechanics classical mechanics generalized coordinates noether theorem conservation laws phase portrait double pendulum step by step",
+      "description": "Lagrangian Mechanics Calculator - Derive Euler-Lagrange equations, Hamiltonian, conservation laws, and numerical solutions with D3.js animations"
+    },
+    {
       "name": "Fourier Transform Calculator (Forward & Inverse)",
       "url": "fourier-transform-calculator.jsp",
       "category": "Mathematics",

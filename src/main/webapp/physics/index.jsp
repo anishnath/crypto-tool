@@ -954,6 +954,21 @@
                     </div>
                 </a>
 
+                <a href="<%=request.getContextPath()%>/lagrangian-calculator.jsp" class="tool-card" style="--card-accent: #7c3aed;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">&#8466;</div>
+                        <div>
+                            <h3>Lagrangian Mechanics Calculator</h3>
+                            <div class="tool-formula">L = T &minus; V, Euler-Lagrange &amp; Hamiltonian</div>
+                        </div>
+                    </div>
+                    <p>Derive Euler-Lagrange equations, Hamiltonian, conservation laws, and numerical solutions with step-by-step derivations and D3.js animations.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-essential">Step-by-Step</span>
+                        <span class="badge badge-interactive">Animations</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/fourier-transform-calculator.jsp" class="tool-card" style="--card-accent: #7c3aed;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">&#8497;</div>
