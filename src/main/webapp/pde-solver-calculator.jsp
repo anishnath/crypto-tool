@@ -535,13 +535,131 @@
         <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">PDEs in Physics: Applications</h2>
         <p style="color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.7;">PDEs are fundamental in physics. The <strong>heat equation</strong> models thermal conduction in solids and diffusion of chemicals. The <strong>wave equation</strong> describes vibrating strings, sound waves, electromagnetic radiation, and seismic waves. The <strong>Laplace/Poisson equation</strong> governs electrostatic potential, gravitational fields, and steady-state fluid flow. The <strong>Schr&ouml;dinger equation</strong> is the foundation of quantum mechanics, determining wavefunctions and energy levels of particles. The <strong>transport equation</strong> models advection of pollutants, tracer particles, and population migration.</p>
     </div>
+
+    <!-- Visible FAQ Accordion (matches JSON-LD FAQPage schema for CTR) -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is a partial differential equation (PDE)?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">A PDE is an equation involving a function of several variables and its partial derivatives. Unlike ODEs (one independent variable), PDEs involve multiple variables. The three classic types: <strong>heat equation</strong> (diffusion), <strong>wave equation</strong> (propagation), and <strong>Laplace equation</strong> (steady-state). PDEs model phenomena in physics, engineering, and finance &mdash; from heat conduction in metals to electromagnetic wave propagation and option pricing in quantitative finance.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What are Dirichlet, Neumann, and Robin boundary conditions?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><strong>Dirichlet BCs</strong> specify the function value on the boundary (u=g), for example fixing the temperature at the ends of a rod. <strong>Neumann BCs</strong> specify the derivative (du/dn=g), modeling insulated or flux boundaries where no heat flows out. <strong>Robin (mixed) BCs</strong> combine both (a&middot;u + b&middot;du/dn = g), modeling convective heat transfer where heat loss is proportional to the temperature difference. The choice of BC type determines the physical problem being modeled and the uniqueness of the solution.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the CFL condition and numerical stability?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The CFL (Courant-Friedrichs-Lewy) condition ensures numerical stability in finite difference methods. For the <strong>heat equation</strong>, stability requires r = k&middot;&Delta;t/&Delta;x&sup2; &le; 0.5. For the <strong>wave equation</strong>, the Courant number C = c&middot;&Delta;t/&Delta;x &le; 1. Violating these conditions causes numerical solutions to blow up with exponentially growing errors. This calculator automatically computes stable parameters and reports the stability ratio in the step-by-step breakdown so you can verify the solution is trustworthy.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is separation of variables for PDEs?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><strong>Separation of variables</strong> assumes the solution is a product of single-variable functions: u(x,t) = X(x)&middot;T(t). Substituting into the PDE separates it into independent ODEs. Combined with boundary conditions, this yields eigenvalues and eigenfunctions, producing <strong>Fourier series</strong> solutions. For the heat equation on [0,L] with u=0 at both ends, the solution is u(x,t) = &sum; B<sub>n</sub> sin(n&pi;x/L) e<sup>-n&sup2;&pi;&sup2;kt/L&sup2;</sup>. It works for linear PDEs on simple domains like rectangles, circles, and spheres.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the heat equation and where is it used?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The heat equation &part;u/&part;t = k&middot;&part;&sup2;u/&part;x&sup2; models <strong>heat diffusion</strong>, chemical concentration spread, and financial option pricing (Black-Scholes). The parameter k is thermal diffusivity. Solutions decay toward equilibrium over time. In physics: heat conduction in rods, plates, and 3D bodies. In biology: population diffusion. In finance: the Black-Scholes equation for options pricing is a transformed heat equation. The equation is classified as <strong>parabolic</strong>.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the wave equation and where is it used?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The wave equation &part;&sup2;u/&part;t&sup2; = c&sup2;&middot;&part;&sup2;u/&part;x&sup2; models <strong>vibrating strings</strong>, sound waves, electromagnetic waves, and seismic waves. The parameter c is the wave speed. Solutions preserve shape and propagate without decay. D'Alembert's formula gives u(x,t) = f(x-ct) + g(x+ct), representing left- and right-traveling waves. The equation is classified as <strong>hyperbolic</strong>. Applications include musical acoustics, antenna design, earthquake engineering, and fiber optics.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the Poisson equation?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The <strong>Poisson equation</strong> &nabla;&sup2;u = f(x,y) generalizes the Laplace equation by adding a source term. It models gravitational potential with mass distribution, electrostatic potential with charge density, steady-state heat with internal generation, and pressure in incompressible fluid mechanics. When f=0, it reduces to the Laplace equation (&nabla;&sup2;u = 0). The solver uses the <strong>Jacobi iterative method</strong> on a 2D grid with configurable Dirichlet, Neumann, or mixed boundary conditions.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this PDE solver calculator free?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes, <strong>completely free</strong> with no registration or signup required. Features include: step-by-step solution breakdowns, numerical stability analysis (CFL/r parameter), interactive 3D surface plots, contour/heatmap visualization, time evolution animation, Dirichlet/Neumann/Robin/Periodic boundary conditions, LaTeX export, PDF download, practice worksheets, shareable URLs, and a built-in Python compiler with NumPy and SymPy. All 7 PDE types are available without any paywall or usage limits.</div>
+        </div>
+    </div>
+
+    <!-- Explore More Math (Internal Linking for CTR) -->
+    <div class="tool-card" style="padding: 1.5rem 2rem; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 600; margin: 0 0 1rem; color: var(--text-primary);">Explore More Math &amp; Science Tools</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            <a href="<%=request.getContextPath()%>/ode-solver-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #db2777, #f472b6); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.75rem; flex-shrink: 0;">ODE</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">ODE Solver Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">1st &amp; 2nd order, direction fields, steps</div>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #7c3aed, #a78bfa); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.875rem; flex-shrink: 0;">d/dx</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Derivative Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">Symbolic derivatives with steps</div>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/integral-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #059669, #34d399); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1rem; flex-shrink: 0;">&int;</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Integral Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">Definite &amp; indefinite integrals with steps</div>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/lagrangian-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #d97706, #fbbf24); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.8rem; flex-shrink: 0;">L</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Lagrangian Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">Euler-Lagrange, equations of motion</div>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/vector-calculus-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #2563eb, #60a5fa); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.8rem; flex-shrink: 0;">&nabla;</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Vector Calculus Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">Gradient, divergence, curl, line integrals</div>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/matrix-calculator.jsp" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.75rem; text-decoration: none; transition: border-color 0.15s;">
+                <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #dc2626, #f87171); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.75rem; flex-shrink: 0;">[A]</div>
+                <div>
+                    <div style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Matrix Calculator</div>
+                    <div style="font-size: 0.8125rem; color: var(--text-secondary);">Eigenvalues, inverse, determinant, SVD</div>
+                </div>
+            </a>
+        </div>
+    </div>
 </section>
 
 <%@ include file="modern/components/support-section.jsp" %>
 
 <footer class="page-footer">
     <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
         <div class="footer-links">
             <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
             <a href="<%=request.getContextPath()%>/math/" class="footer-link">Math Tools</a>
