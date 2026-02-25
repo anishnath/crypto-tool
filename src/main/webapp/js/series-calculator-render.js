@@ -47,7 +47,24 @@ function buildStepDOM(number, description, latex, extraLatex) {
 
     var math = document.createElement('div');
     math.className = 'sc-step-math';
-    renderKaTeX(math, latex, true);
+    // For multi-line aligned blocks, fall back to line-by-line rendering if aligned fails
+    try {
+        renderKaTeX(math, latex, true);
+        // Check if rendering produced an error node
+        if (math.querySelector('.katex-error')) throw new Error('fallback');
+    } catch (e) {
+        // Fall back: split on \\[Xpt] and render line by line
+        math.innerHTML = '';
+        var lines = latex.replace(/\\begin\{aligned\}&?/g, '').replace(/\\end\{aligned\}/g, '').split(/\\\\\[\d+pt\]&?/);
+        for (var li = 0; li < lines.length; li++) {
+            var line = lines[li].trim();
+            if (!line) continue;
+            var lineDiv = document.createElement('div');
+            lineDiv.style.cssText = 'margin-bottom:0.25rem;';
+            renderKaTeX(lineDiv, line, true);
+            math.appendChild(lineDiv);
+        }
+    }
 
     content.appendChild(desc);
     content.appendChild(math);
@@ -57,6 +74,35 @@ function buildStepDOM(number, description, latex, extraLatex) {
         extra.className = 'sc-step-derivative';
         renderKaTeX(extra, extraLatex, true);
         content.appendChild(extra);
+    }
+
+    step.appendChild(numEl);
+    step.appendChild(content);
+    return step;
+}
+
+function buildStepDOMMulti(number, description, latexLines) {
+    var step = document.createElement('div');
+    step.className = 'sc-step';
+
+    var numEl = document.createElement('div');
+    numEl.className = 'sc-step-number';
+    numEl.textContent = number;
+
+    var content = document.createElement('div');
+    content.className = 'sc-step-content';
+
+    var desc = document.createElement('div');
+    desc.className = 'sc-step-desc';
+    desc.innerHTML = description;
+    content.appendChild(desc);
+
+    for (var i = 0; i < latexLines.length; i++) {
+        var lineDiv = document.createElement('div');
+        lineDiv.className = 'sc-step-math';
+        if (i < latexLines.length - 1) lineDiv.style.marginBottom = '0.375rem';
+        renderKaTeX(lineDiv, latexLines[i], true);
+        content.appendChild(lineDiv);
     }
 
     step.appendChild(numEl);
@@ -84,7 +130,7 @@ function buildSeriesLatex(derivs, numTerms, center) {
         } else {
             var absCoeff = Math.abs(coeff);
             var coeffStr = absCoeff === 1 ? (coeff < 0 ? '-' : '') : fmt(coeff);
-            var xTerm = center === 0 ? 'x' : '(x - ' + fmt(center) + ')';
+            var xTerm = center === 0 ? 'x' : (center < 0 ? '(x + ' + fmt(Math.abs(center)) + ')' : '(x - ' + fmt(center) + ')');
             var power = n === 1 ? '' : '^{' + n + '}';
             latex += coeffStr + xTerm + power;
         }
@@ -120,11 +166,36 @@ function renderResult(container, funcLatex, derivs, numTerms, center, seriesType
     container.appendChild(seriesDiv);
 }
 
-function renderSteps(container, derivs, numTerms, center, derivativeLatexes) {
+function renderSteps(container, derivs, numTerms, center, derivativeLatexes, derivativeTexts) {
     if (!container) return;
     container.innerHTML = '';
 
+    var seriesName = center === 0 ? 'Maclaurin' : 'Taylor';
+    var stepNum = 0;
+
+    // Steps header
+    var header = document.createElement('div');
+    header.className = 'sc-steps-header';
+    header.innerHTML = '<h4>Step-by-Step Solution</h4><p>' + seriesName + ' series expansion with ' + numTerms + ' terms centered at a = ' + fmt(center) + '</p>';
+    container.appendChild(header);
+
+    // ===== Step 1: Recall the formula =====
+    stepNum++;
+    var centerLatex = fmt(center);
+    var shiftLatex = center === 0 ? 'x' : (center < 0 ? '(x + ' + fmt(Math.abs(center)) + ')' : '(x - ' + fmt(center) + ')');
+    var formulaLatex = center === 0
+        ? 'f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(0)}{n!}\\,x^n = f(0) + f\'(0)\\,x + \\frac{f\'\'(0)}{2!}x^2 + \\cdots'
+        : 'f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(' + centerLatex + ')}{n!}' + shiftLatex + '^n';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Recall the <strong>' + seriesName + ' series formula</strong>',
+        formulaLatex,
+        null
+    ));
+
+    // ===== Steps 2..N+1: Each derivative =====
     for (var n = 0; n < numTerms; n++) {
+        stepNum++;
         var value = derivs[n];
         var fNotation = n === 0 ? 'f' :
                         n === 1 ? "f'" :
@@ -132,27 +203,116 @@ function renderSteps(container, derivs, numTerms, center, derivativeLatexes) {
                         n === 3 ? "f'''" :
                         'f^{(' + n + ')}';
 
-        var desc = n === 0 ?
-            'Evaluate function at x = ' + fmt(center) + '<span class="sc-term-badge">Term ' + (n + 1) + '</span>' :
-            'Calculate ' + getOrdinal(n) + ' derivative at x = ' + fmt(center) + '<span class="sc-term-badge">Term ' + (n + 1) + '</span>';
-
-        var stepLatex = fNotation + '(' + fmt(center) + ') = ' + fmt(value);
-
-        // Show the term contribution
-        var factN = factorial(n);
-        var termLatex = '\\text{Term: } \\frac{' + fmt(value) + '}{' + factN + '}';
+        // Description
+        var desc;
         if (n === 0) {
-            // no x term
-        } else if (n === 1) {
-            termLatex += center === 0 ? 'x' : '(x - ' + fmt(center) + ')';
+            desc = 'Evaluate the original function at <strong>x = ' + fmt(center) + '</strong>' +
+                   '<span class="sc-term-badge">n = 0</span>';
         } else {
-            termLatex += center === 0 ? 'x^{' + n + '}' : '(x - ' + fmt(center) + ')^{' + n + '}';
+            desc = 'Compute the <strong>' + getOrdinal(n) + ' derivative</strong> and evaluate at <strong>x = ' + fmt(center) + '</strong>' +
+                   '<span class="sc-term-badge">n = ' + n + '</span>';
         }
 
-        var derivLatex = derivativeLatexes && derivativeLatexes[n] ? derivativeLatexes[n] : null;
+        // Show derivative expression if available
+        var derivExprLatex = '';
+        if (derivativeLatexes && derivativeLatexes[n]) {
+            if (n === 0) {
+                derivExprLatex = 'f(x) = ' + derivativeLatexes[n];
+            } else {
+                derivExprLatex = fNotation + '(x) = ' + derivativeLatexes[n];
+            }
+        }
 
-        container.appendChild(buildStepDOM(n + 1, desc, stepLatex, derivLatex));
+        // Show evaluation
+        var evalLatex = fNotation + '(' + fmt(center) + ') = ' + fmt(value);
+
+        // Show coefficient = f^(n)(a) / n! with symbolic fraction from nerdamer
+        var factN = factorial(n);
+        var coeff = value / factN;
+        var coeffTex = fmt(coeff);
+
+        // Try to get symbolic fraction using nerdamer
+        if (window.nerdamer && derivativeTexts && derivativeTexts[n]) {
+            try {
+                var symbolicCoeff = nerdamer('(' + derivativeTexts[n] + ')/' + factN).evaluate({ x: center });
+                coeffTex = symbolicCoeff.toTeX();
+            } catch (e) {
+                // fallback to decimal
+            }
+        }
+
+        var coeffLatex = '\\frac{' + fNotation + '(' + fmt(center) + ')}{' + n + '!} = \\frac{' + fmt(value) + '}{' + factN + '} = ' + coeffTex;
+
+        // Show the resulting term
+        var xPart = '';
+        var centerTerm = center === 0 ? 'x' : (center < 0 ? '(x + ' + fmt(Math.abs(center)) + ')' : '(x - ' + fmt(center) + ')');
+        if (n === 0) {
+            xPart = '';
+        } else if (n === 1) {
+            xPart = '\\,' + centerTerm;
+        } else {
+            xPart = '\\,' + centerTerm + '^{' + n + '}';
+        }
+        var termResultLatex = '\\text{Term } ' + n + ' = ' + coeffTex + xPart;
+
+        // Build array of LaTeX lines to render separately
+        var latexLines = [];
+        if (derivExprLatex) {
+            latexLines.push(derivExprLatex);
+        }
+        latexLines.push(evalLatex);
+        latexLines.push(coeffLatex);
+        latexLines.push('\\boxed{' + termResultLatex + '}');
+
+        container.appendChild(buildStepDOMMulti(stepNum, desc, latexLines));
     }
+
+    // ===== Final Step: Assemble the series =====
+    stepNum++;
+    var assemblyParts = [];
+    var asmCenterTerm = center === 0 ? 'x' : (center < 0 ? '(x + ' + fmt(Math.abs(center)) + ')' : '(x - ' + fmt(center) + ')');
+    for (var i = 0; i < numTerms; i++) {
+        var c = derivs[i] / factorial(i);
+        // Skip zero-coefficient terms (except the constant term if it's the only one so far)
+        if (Math.abs(c) < 1e-12 && (assemblyParts.length > 0 || i < numTerms - 1)) continue;
+
+        // Try symbolic coefficient for assembly
+        var symCoeffTex = '';
+        if (window.nerdamer && derivativeTexts && derivativeTexts[i]) {
+            try {
+                var sc = nerdamer('(' + derivativeTexts[i] + ')/' + factorial(i)).evaluate({ x: center });
+                symCoeffTex = sc.toTeX();
+            } catch (e) {}
+        }
+        if (!symCoeffTex) symCoeffTex = fmt(c);
+
+        var termStr;
+        if (i === 0) {
+            termStr = symCoeffTex;
+        } else {
+            var power = i === 1 ? '' : '^{' + i + '}';
+            var absC = Math.abs(c);
+            if (Math.abs(absC - 1) < 1e-12) {
+                termStr = (c < 0 ? '-' : '') + asmCenterTerm + power;
+            } else {
+                termStr = symCoeffTex + '\\,' + asmCenterTerm + power;
+            }
+        }
+        if (assemblyParts.length > 0 && c >= 0) {
+            assemblyParts.push(' + ' + termStr);
+        } else {
+            assemblyParts.push(termStr);
+        }
+    }
+    if (assemblyParts.length === 0) assemblyParts.push('0');
+    var finalLatex = 'f(x) \\approx ' + assemblyParts.join('') + ' + \\cdots';
+
+    container.appendChild(buildStepDOM(
+        stepNum,
+        '<strong>Combine all terms</strong> to get the ' + seriesName + ' series expansion',
+        finalLatex,
+        null
+    ));
 }
 
 function renderConvergence(container, funcStr) {
@@ -195,6 +355,7 @@ window.SeriesCalcRender = {
     factorial: factorial,
     renderKaTeX: renderKaTeX,
     buildStepDOM: buildStepDOM,
+    buildStepDOMMulti: buildStepDOMMulti,
     buildSeriesLatex: buildSeriesLatex,
     renderResult: renderResult,
     renderSteps: renderSteps,

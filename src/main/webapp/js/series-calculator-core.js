@@ -1,6 +1,7 @@
 /**
  * Series Calculator - Core Orchestration
  * State management, events, integration with Render/Graph/Export modules
+ * Uses Nerdamer for symbolic differentiation (exact fractions, clean LaTeX)
  */
 (function() {
 'use strict';
@@ -16,9 +17,10 @@ var state = {
     seriesType: 'maclaurin',
     center: 0,
     numTerms: 5,
-    currentFunction: null,  // math.js parsed
+    currentFunction: null,  // preprocessed string for nerdamer
     derivativesAtCenter: [],
-    derivativeExprs: [],    // math.js expression objects for display
+    derivativeExprs: [],    // LaTeX strings for step display
+    derivativeTexts: [],    // raw nerdamer text strings for symbolic coefficients
     compilerLoaded: false,
     pendingGraph: false
 };
@@ -27,17 +29,192 @@ var state = {
 
 function $(id) { return document.getElementById(id); }
 
-function toLatex(expr) {
+function toLatex(exprStr) {
     try {
-        var latex = expr.toTex ? expr.toTex() : expr.toString();
-        latex = latex.replace(/\\cdot/g, '\\,');
-        latex = latex.replace(/\*\*/g, '^');
-        latex = latex.replace(/\\log/g, '\\ln');
-        latex = latex.replace(/\blog\(/g, 'ln(');
-        return latex;
+        return nerdamer(exprStr).toTeX();
     } catch (e) {
-        return expr.toString();
+        return exprStr;
     }
+}
+
+function detectPolynomialDegree(expr) {
+    var match = expr.match(/x\^(\d+)/g);
+    if (!match) return 0;
+    var maxDeg = 0;
+    for (var i = 0; i < match.length; i++) {
+        var d = parseInt(match[i].replace('x^', ''));
+        if (d > maxDeg) maxDeg = d;
+    }
+    return maxDeg;
+}
+
+// ==================== Autocomplete ====================
+
+var acSuggestions = [
+    { expr: 'e^x', display: 'e^x', cat: 'Exponential' },
+    { expr: 'e^(-x)', display: 'e^(-x)', cat: 'Exponential' },
+    { expr: 'e^(2*x)', display: 'e^(2*x)', cat: 'Exponential' },
+    { expr: 'x*e^x', display: 'x*e^x', cat: 'Exponential' },
+    { expr: 'sin(x)', display: 'sin(x)', cat: 'Trig' },
+    { expr: 'cos(x)', display: 'cos(x)', cat: 'Trig' },
+    { expr: 'tan(x)', display: 'tan(x)', cat: 'Trig' },
+    { expr: 'sin(2*x)', display: 'sin(2*x)', cat: 'Trig' },
+    { expr: 'cos(2*x)', display: 'cos(2*x)', cat: 'Trig' },
+    { expr: 'sin(x)^2', display: 'sin(x)^2', cat: 'Trig' },
+    { expr: 'cos(x)^2', display: 'cos(x)^2', cat: 'Trig' },
+    { expr: 'ln(1+x)', display: 'ln(1+x)', cat: 'Logarithmic' },
+    { expr: 'ln(x)', display: 'ln(x)', cat: 'Logarithmic' },
+    { expr: 'ln(1-x)', display: 'ln(1-x)', cat: 'Logarithmic' },
+    { expr: 'sqrt(1+x)', display: 'sqrt(1+x)', cat: 'Power/Root' },
+    { expr: '(1+x)^n', display: '(1+x)^n', cat: 'Power/Root' },
+    { expr: 'x^2', display: 'x^2', cat: 'Power/Root' },
+    { expr: 'x^3', display: 'x^3', cat: 'Power/Root' },
+    { expr: '1/(1-x)', display: '1/(1-x)', cat: 'Geometric' },
+    { expr: '1/(1+x)', display: '1/(1+x)', cat: 'Geometric' },
+    { expr: '1/(1-x)^2', display: '1/(1-x)^2', cat: 'Geometric' },
+    { expr: 'x/(1-x)', display: 'x/(1-x)', cat: 'Geometric' },
+    { expr: 'asin(x)', display: 'asin(x)', cat: 'Inverse Trig' },
+    { expr: 'atan(x)', display: 'atan(x)', cat: 'Inverse Trig' },
+    { expr: 'acos(x)', display: 'acos(x)', cat: 'Inverse Trig' },
+    { expr: 'sinh(x)', display: 'sinh(x)', cat: 'Hyperbolic' },
+    { expr: 'cosh(x)', display: 'cosh(x)', cat: 'Hyperbolic' },
+    { expr: 'tanh(x)', display: 'tanh(x)', cat: 'Hyperbolic' },
+    { expr: 'e^x*sin(x)', display: 'e^x*sin(x)', cat: 'Combined' },
+    { expr: 'e^x*cos(x)', display: 'e^x*cos(x)', cat: 'Combined' },
+    { expr: 'x*sin(x)', display: 'x*sin(x)', cat: 'Combined' },
+    { expr: 'x*cos(x)', display: 'x*cos(x)', cat: 'Combined' },
+    { expr: 'sin(x)/x', display: 'sin(x)/x', cat: 'Combined' }
+];
+
+var acSelectedIndex = -1;
+var acVisible = false;
+var acBlurTimer = null;
+
+function acFilter(query) {
+    if (!query) return [];
+    var q = query.toLowerCase();
+    var matches = [];
+    for (var i = 0; i < acSuggestions.length; i++) {
+        var s = acSuggestions[i];
+        if (s.expr.toLowerCase().indexOf(q) !== -1 || s.display.toLowerCase().indexOf(q) !== -1) {
+            matches.push(s);
+            if (matches.length >= 8) break;
+        }
+    }
+    return matches;
+}
+
+function acRender(matches) {
+    var dropdown = $('sc-func-autocomplete');
+    if (!dropdown) return;
+    if (matches.length === 0) {
+        dropdown.classList.remove('active');
+        acVisible = false;
+        acSelectedIndex = -1;
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < matches.length; i++) {
+        html += '<div class="sc-func-ac-item" data-index="' + i + '" data-expr="' + matches[i].expr + '">'
+            + '<span>' + matches[i].display + '</span>'
+            + '<span class="sc-func-ac-cat">' + matches[i].cat + '</span>'
+            + '</div>';
+    }
+    dropdown.innerHTML = html;
+    dropdown.classList.add('active');
+    acVisible = true;
+    acSelectedIndex = -1;
+}
+
+function acSelect(expr) {
+    var input = $('sc-func-input');
+    if (input) {
+        input.value = expr;
+        input.focus();
+    }
+    acClose();
+    updatePreview();
+}
+
+function acClose() {
+    var dropdown = $('sc-func-autocomplete');
+    if (dropdown) dropdown.classList.remove('active');
+    acVisible = false;
+    acSelectedIndex = -1;
+}
+
+function acHighlight(index) {
+    var dropdown = $('sc-func-autocomplete');
+    if (!dropdown) return;
+    var items = dropdown.querySelectorAll('.sc-func-ac-item');
+    for (var i = 0; i < items.length; i++) {
+        items[i].classList.toggle('selected', i === index);
+    }
+    if (items[index]) {
+        items[index].scrollIntoView({ block: 'nearest' });
+    }
+    acSelectedIndex = index;
+}
+
+function initAutocomplete() {
+    var input = $('sc-func-input');
+    var dropdown = $('sc-func-autocomplete');
+    if (!input || !dropdown) return;
+
+    input.addEventListener('input', function() {
+        var val = this.value.trim();
+        var matches = acFilter(val);
+        acRender(matches);
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (!acVisible) return;
+        var dropdown = $('sc-func-autocomplete');
+        var items = dropdown ? dropdown.querySelectorAll('.sc-func-ac-item') : [];
+        var count = items.length;
+        if (count === 0) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            var next = acSelectedIndex < count - 1 ? acSelectedIndex + 1 : 0;
+            acHighlight(next);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            var prev = acSelectedIndex > 0 ? acSelectedIndex - 1 : count - 1;
+            acHighlight(prev);
+        } else if (e.key === 'Enter') {
+            if (acSelectedIndex >= 0 && acSelectedIndex < count) {
+                e.preventDefault();
+                e.stopPropagation();
+                var expr = items[acSelectedIndex].getAttribute('data-expr');
+                acSelect(expr);
+            }
+        } else if (e.key === 'Escape') {
+            e.preventDefault();
+            acClose();
+        }
+    });
+
+    input.addEventListener('blur', function() {
+        acBlurTimer = setTimeout(function() { acClose(); }, 150);
+    });
+
+    input.addEventListener('focus', function() {
+        var val = this.value.trim();
+        if (val) {
+            var matches = acFilter(val);
+            acRender(matches);
+        }
+    });
+
+    dropdown.addEventListener('mousedown', function(e) {
+        e.preventDefault(); // prevent blur
+        var item = e.target.closest('.sc-func-ac-item');
+        if (item) {
+            var expr = item.getAttribute('data-expr');
+            acSelect(expr);
+        }
+    });
 }
 
 // ==================== Core Computation ====================
@@ -52,7 +229,7 @@ function calculateSeries() {
         return;
     }
 
-    if (!window.math) {
+    if (!window.nerdamer) {
         R.showError($('sc-result-content'), 'Math library not loaded. Please refresh the page.');
         return;
     }
@@ -61,34 +238,49 @@ function calculateSeries() {
 
     try {
         // Parse center point
-        state.center = math.evaluate(centerStr.replace(/\bpi\b/g, 'pi'));
+        state.center = parseFloat(nerdamer(centerStr).evaluate().text());
         state.funcInput = funcInput;
         state.numTerms = numTerms;
 
-        // Preprocess function input
+        // Preprocess function input for nerdamer
         var processedInput = funcInput
+            .replace(/\be\^x\b/g, 'exp(x)')
+            .replace(/\be\^\(/g, 'exp(')
             .replace(/\bln\(/g, 'log(')
             .replace(/\bpi\b/g, 'pi');
 
-        // Parse function
-        state.currentFunction = math.parse(processedInput);
+        // Store function as string (nerdamer works with strings)
+        state.currentFunction = processedInput;
 
-        // Calculate derivatives
+        // For polynomials, auto-detect degree and ensure enough terms
+        var detectedDegree = detectPolynomialDegree(processedInput);
+        if (detectedDegree > 0 && numTerms <= detectedDegree) {
+            numTerms = detectedDegree + 1;
+            state.numTerms = numTerms;
+            var numTermsInput = $('sc-num-terms');
+            if (numTermsInput) numTermsInput.value = numTerms;
+        }
+
+        // Calculate derivatives using nerdamer
         state.derivativesAtCenter = [];
         state.derivativeExprs = [];
-        var derivative = state.currentFunction;
+        state.derivativeTexts = [];
+        var derivStr = processedInput;
 
         for (var n = 0; n < numTerms; n++) {
-            var compiled = derivative.compile();
-            var scope = { x: state.center };
-            var value = compiled.evaluate(scope);
+            // Evaluate derivative at center
+            var value = parseFloat(nerdamer(derivStr).evaluate({ x: state.center }).text());
             state.derivativesAtCenter.push(value);
 
-            // Store derivative expression for step display
-            state.derivativeExprs.push(toLatex(derivative));
+            // Store LaTeX derivative expression for step display
+            state.derivativeExprs.push(toLatex(derivStr));
 
+            // Store raw nerdamer text for symbolic coefficient rendering
+            state.derivativeTexts.push(derivStr);
+
+            // Differentiate for next iteration
             if (n < numTerms - 1) {
-                derivative = math.derivative(derivative, 'x');
+                derivStr = nerdamer.diff(derivStr, 'x').text();
             }
         }
 
@@ -103,13 +295,14 @@ function calculateSeries() {
             state.seriesType
         );
 
-        // Render steps
+        // Render steps (pass derivativeTexts for symbolic fractions)
         R.renderSteps(
             $('sc-steps-area'),
             state.derivativesAtCenter,
             numTerms,
             state.center,
-            state.derivativeExprs
+            state.derivativeExprs,
+            state.derivativeTexts
         );
 
         // Render convergence analysis
@@ -164,10 +357,16 @@ function updateGraph() {
 }
 
 function doRenderGraph() {
+    var funcStr = state.currentFunction;
+    var evalFn = function(xVal) {
+        try {
+            return parseFloat(nerdamer(funcStr).evaluate({ x: xVal }).text());
+        } catch(e) { return NaN; }
+    };
     var sliderVal = parseInt(($('sc-term-slider') || {}).value) || state.numTerms;
     G.renderGraph(
         'sc-graph-container',
-        state.currentFunction.compile(),
+        evalFn,
         'x',
         state.derivativesAtCenter,
         state.center,
@@ -301,6 +500,7 @@ function clearAll() {
 
     state.derivativesAtCenter = [];
     state.derivativeExprs = [];
+    state.derivativeTexts = [];
     state.currentFunction = null;
 
     var content = $('sc-result-content');
@@ -408,9 +608,9 @@ function init() {
     if (numTerms) numTerms.addEventListener('input', updatePreview);
     if (centerInput) centerInput.addEventListener('input', updatePreview);
 
-    // Enter key to solve
+    // Enter key to solve (only when autocomplete is not active with a selection)
     if (funcInput) funcInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') calculateSeries();
+        if (e.key === 'Enter' && !(acVisible && acSelectedIndex >= 0)) calculateSeries();
     });
 
     // Term slider
@@ -448,6 +648,37 @@ function init() {
         });
     }
 
+    var copySeriesBtn = $('sc-copy-series-btn');
+    if (copySeriesBtn) {
+        copySeriesBtn.addEventListener('click', function() {
+            if (!state.currentFunction || state.derivativesAtCenter.length === 0) return;
+            var text = 'f(x) = ' + state.funcInput + '\n';
+            text += (state.center === 0 ? 'Maclaurin' : 'Taylor') + ' series around x = ' + state.center + '\n';
+            text += 'f(x) ≈ ';
+            var parts = [];
+            for (var i = 0; i < state.numTerms; i++) {
+                var c = state.derivativesAtCenter[i] / R.factorial(i);
+                if (Math.abs(c) < 1e-12) continue;
+                var term = '';
+                if (i === 0) {
+                    term = R.fmt(c);
+                } else {
+                    var xp = state.center === 0 ? 'x' : '(x - ' + R.fmt(state.center) + ')';
+                    if (i > 1) xp += '^' + i;
+                    term = R.fmt(c) + '*' + xp;
+                }
+                if (parts.length > 0 && c > 0) term = '+ ' + term;
+                parts.push(term);
+            }
+            text += parts.join(' ') + ' + ...';
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.copyToClipboard(text, { toastMessage: 'Series copied!' });
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            }
+        });
+    }
+
     // Compiler template change
     var compilerTemplate = $('sc-compiler-template');
     if (compilerTemplate) {
@@ -474,6 +705,9 @@ function init() {
             if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
         };
     }
+
+    // Initialize autocomplete
+    initAutocomplete();
 
     // Initialize preview
     updatePreview();

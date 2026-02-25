@@ -22,6 +22,7 @@
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Built-in Python SymPy compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter your function|Type a function like e^x or sin(x) into the input field or select from autocomplete suggestions,Choose series type and terms|Select Maclaurin (a=0) or Taylor (custom center) and set the number of terms,Click Calculate Series|Press the Calculate button or hit Enter to compute the expansion,Review step-by-step solution|See each derivative evaluated at the center point with full LaTeX rendering,Explore the convergence graph|Switch to the Graph tab and use the term slider to see how the approximation improves" />
         <jsp:param name="faq1q" value="What is a Taylor series in simple terms?" />
         <jsp:param name="faq1a" value="A Taylor series rewrites any smooth function as an infinite polynomial by using the function's derivatives at a single point. The formula is f(x) = sum of f^(n)(a)/n! times (x-a)^n. When the center is a=0 it is called a Maclaurin series. This calculator computes each derivative step by step and assembles the polynomial automatically." />
         <jsp:param name="faq2q" value="What is the Taylor series of e^x, sin(x), and cos(x)?" />
@@ -107,7 +108,10 @@
                 <!-- Function Input -->
                 <div class="tool-form-group">
                     <label class="tool-form-label" for="sc-func-input">Function f(x)</label>
-                    <input type="text" class="sc-func-input" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x">
+                    <div class="sc-func-input-wrap">
+                        <input type="text" class="sc-func-input" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x" autocomplete="off" spellcheck="false">
+                        <div class="sc-func-autocomplete" id="sc-func-autocomplete"></div>
+                    </div>
                     <!-- Function Palette -->
                     <div class="sc-func-palette" id="sc-func-palette">
                         <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
@@ -181,28 +185,47 @@
 
         <!-- Result Panel -->
         <div class="sc-panel active" id="sc-panel-result">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
-                    <h4>Series Expansion</h4>
-                </div>
-                <div class="tool-result-content" id="sc-result-content">
-                    <div class="tool-empty-state" id="sc-empty-state">
-                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
-                        <h3>Enter a function</h3>
-                        <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
+            <div class="sc-result-scroll-container">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                        <h4>Series Expansion</h4>
+                    </div>
+                    <div class="tool-result-content" id="sc-result-content">
+                        <div class="tool-empty-state" id="sc-empty-state">
+                            <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
+                            <h3>Enter a function</h3>
+                            <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="tool-result-actions" id="sc-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
-                    <button type="button" class="tool-action-btn" id="sc-copy-latex-btn">Copy LaTeX</button>
-                    <button type="button" class="tool-action-btn" id="sc-share-btn">Share</button>
-                </div>
+
+                <div id="sc-steps-area" style="margin-top:1rem"></div>
+                <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
             </div>
 
-            <div id="sc-steps-area" style="margin-top:1rem"></div>
-            <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
+            <!-- Sticky action toolbar -->
+            <div class="sc-result-toolbar" id="sc-result-actions" style="display:none">
+                <div class="sc-toolbar-group">
+                    <button type="button" class="sc-toolbar-btn" id="sc-copy-latex-btn" title="Copy LaTeX">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        LaTeX
+                    </button>
+                    <button type="button" class="sc-toolbar-btn" id="sc-copy-series-btn" title="Copy series text">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+                        Copy
+                    </button>
+                </div>
+                <div class="sc-toolbar-sep"></div>
+                <div class="sc-toolbar-group">
+                    <button type="button" class="sc-toolbar-btn" id="sc-share-btn" title="Copy share link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        Share
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Graph Panel -->
@@ -444,7 +467,7 @@
                 What functions can I expand?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Any function built from supported operations: arithmetic (+, -, *, /, ^), trigonometric (sin, cos, tan), exponential (exp, e^x), logarithmic (ln, log), and square root (sqrt). You can compose them freely, e.g., sin(x)*e^x or ln(1+x^2). The calculator uses math.js for symbolic differentiation.</div>
+            <div class="faq-answer">Any function built from supported operations: arithmetic (+, -, *, /, ^), trigonometric (sin, cos, tan), exponential (exp, e^x), logarithmic (ln, log), and square root (sqrt). You can compose them freely, e.g., sin(x)*e^x or ln(1+x^2). The calculator uses Nerdamer for symbolic differentiation with exact fraction output.</div>
         </div>
 
         <div class="faq-item">
@@ -531,7 +554,9 @@
 
 <!-- Core Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.0/lib/browser/math.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
 <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/series-calculator-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/series-calculator-graph.js?v=<%=cacheVersion%>"></script>

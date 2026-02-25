@@ -64,9 +64,7 @@ function renderGraph(containerId, compiledFunc, variable, derivs, center, numTer
     for (var i = 0; i <= nPts; i++) {
         var x = xMin + step * i;
         try {
-            var scope = {};
-            scope[variable] = x;
-            var y = compiledFunc.evaluate(scope);
+            var y = compiledFunc(x);
             if (isFinite(y) && Math.abs(y) < 1000) {
                 origXs.push(x);
                 origYs.push(y);
