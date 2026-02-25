@@ -149,6 +149,17 @@
                         <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
                     </div>
                     <div class="tool-form-hint">Click buttons above or type directly. Use ^ for powers, e.g. x^2</div>
+                    <!-- Quick Examples (contextual to function input) -->
+                    <div class="sc-examples" style="margin-top:0.375rem;">
+                        <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
+                        <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
+                        <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
+                        <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
+                        <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
+                        <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
+                    </div>
                 </div>
 
                 <!-- Parameters -->
@@ -214,23 +225,6 @@
                 <div style="display:flex;gap:0.5rem;">
                     <button type="button" class="tool-action-btn" id="sc-solve-btn" style="flex:1">Calculate Series</button>
                     <button type="button" class="tool-action-btn" id="sc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
-                </div>
-
-                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
-
-                <!-- Quick Examples -->
-                <div class="tool-form-group">
-                    <label class="tool-form-label">Quick Examples</label>
-                    <div class="sc-examples">
-                        <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
-                        <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
-                        <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
-                        <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
-                        <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
-                    </div>
                 </div>
 
                 <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
@@ -303,6 +297,13 @@
                     <button type="button" class="sc-toolbar-btn" id="sc-share-btn" title="Copy share link">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                         Share
+                    </button>
+                </div>
+                <div class="sc-toolbar-sep"></div>
+                <div class="sc-toolbar-group">
+                    <button type="button" class="sc-toolbar-btn" id="sc-toolbar-worksheet-btn" title="Generate practice worksheet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        Worksheet
                     </button>
                 </div>
             </div>

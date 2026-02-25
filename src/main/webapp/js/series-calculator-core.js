@@ -1477,21 +1477,22 @@ function init() {
         pdfBtn.addEventListener('click', downloadResultPdf);
     }
 
-    // Worksheet button
-    var worksheetBtn = $('sc-worksheet-btn');
-    if (worksheetBtn) {
-        worksheetBtn.addEventListener('click', function() {
-            if (typeof WorksheetEngine !== 'undefined') {
-                WorksheetEngine.open({
-                    jsonUrl: getContextPath() + '/worksheet/math/calculus/taylor_series.json',
-                    title: 'Taylor & Maclaurin Series',
-                    accentColor: '#2563eb',
-                    branding: '8gwifi.org',
-                    defaultCount: 20
-                });
-            }
-        });
+    // Worksheet buttons (input panel + toolbar)
+    function openWorksheet() {
+        if (typeof WorksheetEngine !== 'undefined') {
+            WorksheetEngine.open({
+                jsonUrl: getContextPath() + '/worksheet/math/calculus/taylor_series.json',
+                title: 'Taylor & Maclaurin Series',
+                accentColor: '#2563eb',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
     }
+    var worksheetBtn = $('sc-worksheet-btn');
+    if (worksheetBtn) worksheetBtn.addEventListener('click', openWorksheet);
+    var toolbarWorksheetBtn = $('sc-toolbar-worksheet-btn');
+    if (toolbarWorksheetBtn) toolbarWorksheetBtn.addEventListener('click', openWorksheet);
 
     // Compiler template change
     var compilerTemplate = $('sc-compiler-template');
