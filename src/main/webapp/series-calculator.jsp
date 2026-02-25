@@ -7,32 +7,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index,follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index,follow">
     <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
     <meta name="language" content="en">
     <meta name="author" content="Anish Nath">
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Taylor & Maclaurin Series Calculator - Free with Steps" />
-        <jsp:param name="toolDescription" value="Free Taylor series calculator with step-by-step derivatives. Expand any function as a Maclaurin or Taylor series. Interactive graph shows convergence in real time." />
+        <jsp:param name="toolName" value="Taylor Series Calculator &bull; Steps" />
+        <jsp:param name="toolDescription" value="Free Taylor and Maclaurin series calculator with step-by-step derivatives, interactive convergence graph, and printable practice worksheets with 1000+ problems and answer keys." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="series-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, maclaurin series formula, series approximation calculator, step by step taylor series, function series expansion online free, taylor remainder theorem calculator, lagrange error bound, approximate integral taylor series, evaluate limits taylor series" />
+        <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, interval of convergence calculator, maclaurin series formula, taylor series formula, series approximation calculator, step by step taylor series, taylor series examples, taylor series worksheet, taylor series practice problems, taylor series practice problems with answers, maclaurin series worksheet, maclaurin series practice problems, taylor polynomial practice problems, calculus series worksheet with answer key, taylor series exam questions, AP calculus taylor series practice, infinite series calculator, convergence test calculator, taylor remainder theorem calculator, lagrange error bound, approximate integral taylor series, evaluate limits taylor series, maclaurin series e^x, taylor series sin x" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Lagrange remainder error bound calculator,Definite integral approximation via Taylor polynomials,Limit evaluation using Taylor series substitution,Built-in Python compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Lagrange remainder error bound calculator,Definite integral approximation via Taylor polynomials,Limit evaluation using Taylor series substitution,Printable worksheet generator with 1000+ practice problems,Filter by question type and difficulty level,Answer key with KaTeX-rendered solutions,Built-in Python compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Enter your function|Type a function like e^x or sin(x) into the input field or select from autocomplete suggestions,Choose series type and terms|Select Maclaurin (a=0) or Taylor (custom center) and set the number of terms,Click Calculate Series|Press the Calculate button or hit Enter to compute the expansion,Review step-by-step solution|See each derivative evaluated at the center point with full LaTeX rendering,Explore the convergence graph|Switch to the Graph tab and use the term slider to see how the approximation improves" />
-        <jsp:param name="faq1q" value="What is a Taylor series in simple terms?" />
-        <jsp:param name="faq1a" value="A Taylor series rewrites any smooth function as an infinite polynomial by using the function's derivatives at a single point. The formula is f(x) = sum of f^(n)(a)/n! times (x-a)^n. When the center is a=0 it is called a Maclaurin series. This calculator computes each derivative step by step and assembles the polynomial automatically." />
-        <jsp:param name="faq2q" value="What is the Taylor series of e^x, sin(x), and cos(x)?" />
-        <jsp:param name="faq2a" value="The three most important Maclaurin series are: e^x = 1 + x + x^2/2! + x^3/3! + ..., sin(x) = x - x^3/3! + x^5/5! - ..., and cos(x) = 1 - x^2/2! + x^4/4! - ... All three converge for every real number (radius of convergence R = infinity). Enter any of these functions and click Calculate to see the full derivation." />
-        <jsp:param name="faq3q" value="How do you find the radius of convergence of a Taylor series?" />
-        <jsp:param name="faq3a" value="Use the ratio test: R = lim |a_n / a_(n+1)| as n approaches infinity. The series converges for |x-a| less than R and diverges beyond. Common results: e^x and trig functions have R = infinity, ln(1+x) has R = 1, 1/(1-x) has R = 1. This calculator shows the convergence interval for every function." />
-        <jsp:param name="faq4q" value="How many terms do you need for a good Taylor approximation?" />
-        <jsp:param name="faq4a" value="It depends on the function and distance from the center point. Near the center, 5 to 7 terms often give 6+ digits of accuracy. Farther away or for functions with small convergence radius you may need 15 to 20 terms. Use the interactive graph with the term slider to see exactly how the approximation improves." />
-        <jsp:param name="faq5q" value="Is this Taylor series calculator really free?" />
-        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup or limits. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, a Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls." />
+        <jsp:param name="educationalLevel" value="College, AP Calculus, University" />
+        <jsp:param name="teaches" value="Calculus, Taylor series, Maclaurin series, power series expansion, radius of convergence, Lagrange error bound, series approximation" />
+        <jsp:param name="howToSteps" value="Enter your function|Type a function like e^x or sin(x) into the input field or select from autocomplete suggestions,Choose series type and terms|Select Maclaurin (a=0) or Taylor (custom center) and set the number of terms,Click Calculate Series|Press the Calculate button or hit Enter to compute the expansion,Review step-by-step solution|See each derivative evaluated at the center point with full LaTeX rendering,Explore the convergence graph|Switch to the Graph tab and use the term slider to see how the approximation improves,Generate a practice worksheet|Click Print Worksheet to create a randomized problem set with answer key filtered by type and difficulty" />
+        <jsp:param name="faq1q" value="What is the difference between Taylor and Maclaurin series?" />
+        <jsp:param name="faq1a" value="A Taylor series expands a function f(x) around any point a using the formula f(x) = sum of f^(n)(a)/n! times (x-a)^n. A Maclaurin series is the special case where a = 0, so f(x) = sum of f^(n)(0)/n! times x^n. Both represent functions as infinite polynomial sums. This calculator supports both types." />
+        <jsp:param name="faq2q" value="How many terms do I need for a good approximation?" />
+        <jsp:param name="faq2a" value="It depends on the function and how far from the center you evaluate. Near the center, 5 to 7 terms often give excellent accuracy. For points farther away, or for functions with small convergence radii, you may need 15 to 20 terms. Use the interactive graph with the term slider to see convergence in real time." />
+        <jsp:param name="faq3q" value="What is the radius of convergence?" />
+        <jsp:param name="faq3a" value="The radius of convergence R is the distance from the center point within which the series converges to the actual function. For |x-a| less than R, adding more terms gets closer to the true value. For |x-a| greater than R, the series diverges. Common values: e^x has R = infinity, ln(1+x) has R = 1, tan(x) has R = pi/2." />
+        <jsp:param name="faq4q" value="How do you use Taylor series to approximate definite integrals?" />
+        <jsp:param name="faq4a" value="Replace the integrand with its Taylor polynomial, then integrate term-by-term. For example, to approximate the integral from 0 to 1 of e^(-x^2) dx, expand e^(-x^2) as 1 - x^2 + x^4/2! - ... and integrate each power of x. This gives 1 - 1/3 + 1/10 - ... which is approximately 0.7468. Use the Integral Approx mode to compute this automatically with error comparison." />
+        <jsp:param name="faq5q" value="What is the Lagrange remainder (error bound) for a Taylor polynomial?" />
+        <jsp:param name="faq5a" value="The Lagrange remainder Rn(x) = f^(n+1)(c)/(n+1)! times (x-a)^(n+1) bounds the error between f(x) and its nth-degree Taylor polynomial, where c is some value between a and x. To get an upper bound, find the maximum of |f^(n+1)| on the interval. Use the Error Bound mode in this calculator to compute the bound automatically." />
+        <jsp:param name="faq6q" value="Does this calculator generate practice worksheets?" />
+        <jsp:param name="faq6a" value="Yes. Click the Print Worksheet button to access 1000+ practice problems covering 6 question types: expansion, binomial series, nth derivative, limits, integral approximation, and error bounds. Filter by type and difficulty (basic, medium, hard, scholar), choose how many questions you want, and generate a randomized worksheet with a full answer key. Perfect for exam prep and classroom use." />
+        <jsp:param name="faq7q" value="What types of practice problems are included in the worksheet?" />
+        <jsp:param name="faq7a" value="The worksheet bank contains 1000+ problems in 6 categories: series expansion (find the Taylor or Maclaurin polynomial), binomial series, nth derivative via series, limit evaluation using series substitution, definite integral approximation, and Lagrange error bound calculations. Each problem has 4 difficulty levels from basic to scholar-level, with full LaTeX-rendered answers." />
+        <jsp:param name="faq8q" value="Is this Taylor series calculator really free?" />
+        <jsp:param name="faq8a" value="Yes, 100 percent free with no signup or limits. Features include step-by-step derivative calculations, interactive convergence graph with term slider, radius of convergence analysis, printable practice worksheets with answer keys, a Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,7 +86,7 @@
         <div class="tool-page-badges">
             <span class="tool-badge">Free Online</span>
             <span class="tool-badge">Step-by-Step</span>
-            <span class="tool-badge">Up to 20 Terms</span>
+            <span class="tool-badge">1000+ Practice Problems</span>
         </div>
     </div>
 </header>
@@ -84,7 +94,7 @@
 <section class="tool-description-section" style="background:var(--sc-light);">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Free <strong>Taylor and Maclaurin series calculator</strong> with <strong>step-by-step derivative solutions</strong>. Expand any function into a <strong>power series</strong> around any point. Interactive convergence graph, <strong>radius of convergence</strong> analysis, and built-in Python compiler.</p>
+            <p>Free <strong>Taylor and Maclaurin series calculator</strong> with <strong>step-by-step derivative solutions</strong>. Expand any function into a <strong>power series</strong> around any point. Interactive convergence graph, <strong>radius of convergence</strong> analysis, and <strong>printable practice worksheets</strong> with 1,000+ problems and answer keys.</p>
         </div>
     </div>
 </section>
@@ -221,6 +231,19 @@
                         <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
                         <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
                     </div>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Worksheet Generator -->
+                <div>
+                    <label class="tool-form-label">Worksheet Generator</label>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
+                        Generate a printable practice worksheet with random questions and answer key.
+                    </p>
+                    <button type="button" class="sc-worksheet-btn" id="sc-worksheet-btn">
+                        Print Worksheet
+                    </button>
                 </div>
             </div>
         </div>
@@ -491,7 +514,37 @@
         </div>
     </div>
 
-    <!-- FAQ Section -->
+    <!-- ===== 5. PRACTICE WORKSHEET ===== -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Taylor Series Practice Worksheet Generator</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+            Prepare for your calculus exam with our <strong>free printable Taylor series worksheet</strong> containing <strong>1,000+ practice problems with answers</strong>. Each worksheet is randomly generated so you get a fresh set every time &mdash; perfect for AP Calculus, college courses, or self-study.
+        </p>
+
+        <div class="sc-edu-grid">
+            <div class="sc-edu-card" style="border-left:3px solid #2563eb;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#2563eb;">&#9679;</span> 6 Question Types</h4>
+                <p>Series expansion, binomial series, nth derivative via Maclaurin, limit evaluation, definite integral approximation, and Lagrange error bound problems.</p>
+            </div>
+            <div class="sc-edu-card" style="border-left:3px solid #7c3aed;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#7c3aed;">&#9679;</span> 4 Difficulty Levels</h4>
+                <p>From basic polynomial expansions to scholar-level problems involving composite functions, inverse trig, and error analysis. Filter to match your course level.</p>
+            </div>
+            <div class="sc-edu-card" style="border-left:3px solid #059669;">
+                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#059669;">&#9679;</span> Full Answer Key</h4>
+                <p>Every worksheet includes a complete answer key with LaTeX-rendered solutions. Teachers can toggle the answer key on or off before printing.</p>
+            </div>
+        </div>
+
+        <div class="sc-callout sc-callout-tip" style="margin-top:1rem;">
+            <span class="sc-callout-icon">&#128073;</span>
+            <div class="sc-callout-text">
+                <strong>Try it!</strong> Click the <strong>Print Worksheet</strong> button in the input panel above. Select your desired question types and difficulty, then generate a unique practice set instantly.
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section — matches faq1q-faq8q schema params exactly -->
     <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
         <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
 
@@ -500,7 +553,7 @@
                 What is the difference between Taylor and Maclaurin series?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">A Taylor series expands a function f(x) around any point a: f(x) = &Sigma; f<sup>(n)</sup>(a)/n! &middot; (x&minus;a)<sup>n</sup>. A Maclaurin series is the special case where a = 0: f(x) = &Sigma; f<sup>(n)</sup>(0)/n! &middot; x<sup>n</sup>. Both represent functions as infinite polynomial sums.</div>
+            <div class="faq-answer">A Taylor series expands a function f(x) around any point a using the formula f(x) = &Sigma; f<sup>(n)</sup>(a)/n! &middot; (x&minus;a)<sup>n</sup>. A Maclaurin series is the special case where a = 0, so f(x) = &Sigma; f<sup>(n)</sup>(0)/n! &middot; x<sup>n</sup>. Both represent functions as infinite polynomial sums. This calculator supports both types.</div>
         </div>
 
         <div class="faq-item">
@@ -533,6 +586,30 @@
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">The Lagrange remainder R<sub>n</sub>(x) = f<sup>(n+1)</sup>(c)/(n+1)! &middot; (x&minus;a)<sup>n+1</sup> bounds the error between f(x) and its nth-degree Taylor polynomial, where c is some value between a and x. To get an upper bound, find the maximum of |f<sup>(n+1)</sup>| on the interval. Use the Error Bound mode in this calculator to compute the bound automatically.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Does this calculator generate practice worksheets?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes. Click the Print Worksheet button to access 1,000+ practice problems covering 6 question types: expansion, binomial series, nth derivative, limits, integral approximation, and error bounds. Filter by type and difficulty (basic, medium, hard, scholar), choose how many questions you want, and generate a randomized worksheet with a full answer key. Perfect for exam prep and classroom use.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What types of practice problems are included in the worksheet?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The worksheet bank contains 1,000+ problems in 6 categories: series expansion (find the Taylor or Maclaurin polynomial), binomial series, nth derivative via series, limit evaluation using series substitution, definite integral approximation, and Lagrange error bound calculations. Each problem has 4 difficulty levels from basic to scholar-level, with full LaTeX-rendered answers.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this Taylor series calculator really free?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes, 100% free with no signup or limits. Features include step-by-step derivative calculations, interactive convergence graph with term slider, radius of convergence analysis, printable practice worksheets with answer keys, a Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls.</div>
         </div>
     </div>
 </section>
@@ -575,7 +652,7 @@
 <!-- Footer -->
 <footer class="page-footer">
     <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
         <div class="footer-links">
             <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
             <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
@@ -618,6 +695,7 @@
 <script src="<%=request.getContextPath()%>/js/series-calculator-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/series-calculator-graph.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/series-calculator-export.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/series-calculator-core.js?v=<%=cacheVersion%>"></script>
 
 <%@ include file="modern/components/analytics.jsp" %>

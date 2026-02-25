@@ -1071,6 +1071,24 @@
     }
 }
 
+/* ===== Worksheet Button ===== */
+.sc-worksheet-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1.5px solid var(--sc-tool);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--sc-tool);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.sc-worksheet-btn:hover {
+    background: var(--sc-tool);
+    color: #fff;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
     .sc-mode-toggle { grid-template-columns: repeat(2, 1fr); }
