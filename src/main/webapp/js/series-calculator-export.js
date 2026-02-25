@@ -188,11 +188,97 @@ function convertToNumpy(funcStr) {
         .replace(/\^/g, '**');
 }
 
-function getCompilerUrl(template, funcStr, center, numTerms, contextPath) {
+function buildSympyRemainderCode(funcStr, center, numTerms, evalPoint) {
+    evalPoint = evalPoint || (center === 0 ? '0.5' : String(parseFloat(center) + 0.5));
+    return 'from sympy import *\n\n' +
+        'x = symbols("x")\n\n' +
+        '# Define the function\n' +
+        'f = ' + convertToSympy(funcStr) + '\n' +
+        'a = ' + center + '  # center point\n' +
+        'n = ' + numTerms + '  # number of terms\n' +
+        'eval_x = ' + evalPoint + '  # evaluation point\n\n' +
+        '# Taylor polynomial\n' +
+        's = series(f, x, a, n=n)\n' +
+        'poly = s.removeO()\n' +
+        'print("Taylor polynomial:")\n' +
+        'pprint(poly)\n\n' +
+        '# (n+1)th derivative for Lagrange remainder\n' +
+        'd = f\n' +
+        'for i in range(n):\n' +
+        '    d = diff(d, x)\n' +
+        'print(f"\\nf^({n})(x) = {d}")\n\n' +
+        '# Lagrange remainder bound\n' +
+        'lo = Min(a, eval_x)\n' +
+        'hi = Max(a, eval_x)\n' +
+        'try:\n' +
+        '    M = maximum(Abs(d), x, Interval(lo, hi))\n' +
+        'except:\n' +
+        '    pts = [lo, hi, (lo+hi)/2]\n' +
+        '    M = max(abs(float(d.subs(x, p))) for p in pts)\n\n' +
+        'bound = M / factorial(n) * abs(eval_x - a)**n\n' +
+        'actual_err = abs(float(f.subs(x, eval_x)) - float(poly.subs(x, eval_x)))\n\n' +
+        'print(f"\\nMax |f^({n})| on [{float(lo)}, {float(hi)}]: {float(M)}")\n' +
+        'print(f"Lagrange bound: |R_n(x)| <= {float(bound):.10f}")\n' +
+        'print(f"Actual error:   |f(x)-P(x)| = {actual_err:.10f}")\n' +
+        'print(f"\\nBound holds: {actual_err <= float(bound)}")\n';
+}
+
+function buildSympyIntegralCode(funcStr, center, numTerms, lower, upper) {
+    lower = lower || '0';
+    upper = upper || '1';
+    return 'from sympy import *\n\n' +
+        'x = symbols("x")\n\n' +
+        '# Define the function\n' +
+        'f = ' + convertToSympy(funcStr) + '\n' +
+        'a = ' + center + '  # center point\n' +
+        'n = ' + numTerms + '  # number of terms\n' +
+        'lo, hi = ' + lower + ', ' + upper + '  # integration bounds\n\n' +
+        '# Taylor polynomial\n' +
+        's = series(f, x, a, n=n)\n' +
+        'poly = s.removeO()\n' +
+        'print("Taylor polynomial:")\n' +
+        'pprint(poly)\n\n' +
+        '# Integrate term-by-term\n' +
+        'approx = integrate(poly, (x, lo, hi))\n' +
+        'exact = integrate(f, (x, lo, hi))\n\n' +
+        'print(f"\\nApproximate integral: {float(approx):.10f}")\n' +
+        'print(f"Exact integral:       {float(exact):.10f}")\n' +
+        'print(f"Error:                {abs(float(exact) - float(approx)):.2e}")\n\n' +
+        '# Convergence with increasing terms\n' +
+        'print("\\n--- Convergence ---")\n' +
+        'for k in [3, 5, 8, 10, 15]:\n' +
+        '    sk = series(f, x, a, n=k).removeO()\n' +
+        '    val = float(integrate(sk, (x, lo, hi)))\n' +
+        '    err = abs(float(exact) - val)\n' +
+        '    print(f"{k:2d} terms: {val:.10f}  error: {err:.2e}")\n';
+}
+
+function buildSympyLimitCode(funcStr, center, numTerms) {
+    return 'from sympy import *\n\n' +
+        'x = symbols("x")\n\n' +
+        '# Define the expression\n' +
+        'expr = ' + convertToSympy(funcStr) + '\n' +
+        'pt = ' + center + '  # limit point\n\n' +
+        '# Compute the limit directly\n' +
+        'lim_val = limit(expr, x, pt)\n' +
+        'print(f"lim(x->{pt}) {expr} = {lim_val}")\n\n' +
+        '# Show via series expansion\n' +
+        'print("\\n--- Series expansion approach ---")\n' +
+        's = series(expr, x, pt, n=' + numTerms + ')\n' +
+        'print(f"Series: {s}")\n' +
+        'simplified = s.removeO()\n' +
+        'print(f"Simplified: {simplified}")\n' +
+        'print(f"\\nLimit = {lim_val}")\n';
+}
+
+function getCompilerUrl(template, funcStr, center, numTerms, contextPath, extraParams) {
     var code;
     switch (template) {
         case 'numpy-approx': code = buildNumpyApproxCode(funcStr, center, numTerms); break;
         case 'sympy-convergence': code = buildSympyConvergenceCode(funcStr, center, numTerms); break;
+        case 'sympy-remainder': code = buildSympyRemainderCode(funcStr, center, numTerms, extraParams && extraParams.evalPoint); break;
+        case 'sympy-integral': code = buildSympyIntegralCode(funcStr, center, numTerms, extraParams && extraParams.lower, extraParams && extraParams.upper); break;
+        case 'sympy-limit': code = buildSympyLimitCode(funcStr || 'sin(x)/x', center || 0, numTerms); break;
         default: code = buildSympySeriesCode(funcStr, center, numTerms);
     }
     var b64Code = btoa(unescape(encodeURIComponent(code)));

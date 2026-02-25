@@ -359,7 +359,7 @@ function renderSteps(container, derivs, numTerms, center, derivativeLatexes, der
     var eq = terminates ? '=' : '\\approx';
     var simplifiedLatex = '\\boxed{f(x) ' + eq + ' ' + simplifiedParts.join('') + (terminates ? '' : ' + \\cdots') + '}';
 
-    // Build the step with a SymPy target area
+    // Build the final simplified solution step
     var step = document.createElement('div');
     step.className = 'sc-step';
 
@@ -379,7 +379,7 @@ function renderSteps(container, derivs, numTerms, center, derivativeLatexes, der
     nerdamerResult.className = 'sc-step-math';
     renderKaTeX(nerdamerResult, simplifiedLatex, true);
 
-    // SymPy result placeholder (will be filled async, replaces Nerdamer result)
+    // Exact result placeholder (will be filled async)
     var sympyTarget = document.createElement('div');
     sympyTarget.id = 'sc-sympy-simplified';
 
@@ -424,6 +424,496 @@ function showError(container, message) {
     container.innerHTML = '<div style="padding:1rem;background:#fef2f2;border-left:3px solid #ef4444;border-radius:0.5rem;color:#dc2626;font-size:0.8125rem;">' + message + '</div>';
 }
 
+// ==================== Remainder Result ====================
+
+function renderRemainderResult(data, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Hide empty state
+    var empty = document.getElementById('sc-empty-state');
+    if (empty) empty.style.display = 'none';
+
+    // Title
+    var title = document.createElement('div');
+    title.className = 'sc-formula-box';
+    title.innerHTML = '<strong>Lagrange Remainder / Error Bound</strong>';
+    container.appendChild(title);
+
+    // Remainder formula box
+    var box = document.createElement('div');
+    box.className = 'sc-remainder-box';
+
+    var h4 = document.createElement('h4');
+    h4.textContent = 'Remainder Formula';
+    box.appendChild(h4);
+
+    if (data.latexRemainder) {
+        var mathDiv = document.createElement('div');
+        mathDiv.className = 'sc-step-math';
+        renderKaTeX(mathDiv, data.latexRemainder, true);
+        box.appendChild(mathDiv);
+    }
+
+    // Upper bound
+    if (data.bound !== undefined) {
+        var boundRow = document.createElement('div');
+        boundRow.className = 'sc-result-row';
+        boundRow.innerHTML = '<span>Upper bound |R<sub>n</sub>(x)| &le;</span> <strong>' + data.bound + '</strong>';
+        box.appendChild(boundRow);
+    }
+
+    // Actual error
+    if (data.actualError !== undefined) {
+        var errRow = document.createElement('div');
+        errRow.className = 'sc-result-row';
+        errRow.innerHTML = '<span>Actual error |f(x) &minus; P<sub>n</sub>(x)| =</span> <strong>' + data.actualError + '</strong>';
+        box.appendChild(errRow);
+    }
+
+    // Comparison
+    if (data.bound !== undefined && data.actualError !== undefined) {
+        var cmp = document.createElement('div');
+        cmp.style.cssText = 'margin-top:0.5rem;font-size:0.8125rem;padding:0.5rem;background:var(--bg-secondary);border-radius:0.375rem;';
+        var actualNum = parseFloat(data.actualError);
+        var boundNum = parseFloat(data.bound);
+        if (!isNaN(actualNum) && !isNaN(boundNum) && actualNum <= boundNum) {
+            cmp.innerHTML = '<span style="color:#059669;">&#10003;</span> Actual error is within the Lagrange bound, as expected.';
+        } else {
+            cmp.innerHTML = '<span style="color:#d97706;">&#9888;</span> Bound verification — check interval for max derivative.';
+        }
+        box.appendChild(cmp);
+    }
+
+    container.appendChild(box);
+
+    // Taylor polynomial
+    if (data.latexPoly) {
+        var polyBox = document.createElement('div');
+        polyBox.style.cssText = 'margin-top:0.75rem;';
+        var polyLabel = document.createElement('div');
+        polyLabel.style.cssText = 'font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem;';
+        polyLabel.textContent = 'Taylor Polynomial Used';
+        polyBox.appendChild(polyLabel);
+        var polyMath = document.createElement('div');
+        polyMath.className = 'sc-step-math';
+        renderKaTeX(polyMath, data.latexPoly, true);
+        polyBox.appendChild(polyMath);
+        container.appendChild(polyBox);
+    }
+}
+
+// ==================== Integral Result ====================
+
+function renderIntegralResult(data, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    var empty = document.getElementById('sc-empty-state');
+    if (empty) empty.style.display = 'none';
+
+    // Title
+    var title = document.createElement('div');
+    title.className = 'sc-formula-box';
+    title.innerHTML = '<strong>Definite Integral Approximation via Taylor Series</strong>';
+    container.appendChild(title);
+
+    // Integral result box
+    var box = document.createElement('div');
+    box.className = 'sc-integral-box';
+
+    var h4 = document.createElement('h4');
+    h4.textContent = 'Integration Result';
+    box.appendChild(h4);
+
+    // Integrated polynomial display
+    if (data.latexIntegral) {
+        var mathDiv = document.createElement('div');
+        mathDiv.className = 'sc-step-math';
+        renderKaTeX(mathDiv, data.latexIntegral, true);
+        box.appendChild(mathDiv);
+    }
+
+    // Approximate value
+    if (data.approx !== undefined) {
+        var approxRow = document.createElement('div');
+        approxRow.className = 'sc-result-row';
+        approxRow.innerHTML = '<span>Approximate value:</span> <strong>' + data.approx + '</strong>';
+        box.appendChild(approxRow);
+    }
+
+    // Exact value
+    if (data.exact !== undefined) {
+        var exactRow = document.createElement('div');
+        exactRow.className = 'sc-result-row';
+        exactRow.innerHTML = '<span>Exact value:</span> <strong>' + data.exact + '</strong>';
+        box.appendChild(exactRow);
+    }
+
+    // Error
+    if (data.error !== undefined) {
+        var errRow = document.createElement('div');
+        errRow.className = 'sc-result-row';
+        errRow.innerHTML = '<span>Approximation error:</span> <strong>' + data.error + '</strong>';
+        box.appendChild(errRow);
+    }
+
+    container.appendChild(box);
+
+    // Show the Taylor polynomial used
+    if (data.latexPoly) {
+        var polyBox = document.createElement('div');
+        polyBox.style.cssText = 'margin-top:0.75rem;';
+        var polyLabel = document.createElement('div');
+        polyLabel.style.cssText = 'font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem;';
+        polyLabel.textContent = 'Taylor Polynomial Used';
+        polyBox.appendChild(polyLabel);
+        var polyMath = document.createElement('div');
+        polyMath.className = 'sc-step-math';
+        renderKaTeX(polyMath, data.latexPoly, true);
+        polyBox.appendChild(polyMath);
+        container.appendChild(polyBox);
+    }
+
+    // Exact integral LaTeX
+    if (data.latexExact) {
+        var exactBox = document.createElement('div');
+        exactBox.style.cssText = 'margin-top:0.5rem;';
+        var exactLabel = document.createElement('div');
+        exactLabel.style.cssText = 'font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem;';
+        exactLabel.textContent = 'Exact Integral';
+        exactBox.appendChild(exactLabel);
+        var exactMath = document.createElement('div');
+        exactMath.className = 'sc-step-math';
+        renderKaTeX(exactMath, data.latexExact, true);
+        exactBox.appendChild(exactMath);
+        container.appendChild(exactBox);
+    }
+}
+
+// ==================== Limit Result ====================
+
+function renderLimitResult(data, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    var empty = document.getElementById('sc-empty-state');
+    if (empty) empty.style.display = 'none';
+
+    // Title
+    var title = document.createElement('div');
+    title.className = 'sc-formula-box';
+    title.innerHTML = '<strong>Limit Evaluation via Taylor Series</strong>';
+    container.appendChild(title);
+
+    // Limit result box
+    var box = document.createElement('div');
+    box.className = 'sc-limit-box';
+
+    var h4 = document.createElement('h4');
+    h4.textContent = 'Limit Result';
+    box.appendChild(h4);
+
+    // Series expansion step
+    if (data.latexExpansion) {
+        var expLabel = document.createElement('div');
+        expLabel.style.cssText = 'font-size:0.75rem;font-weight:500;color:var(--text-secondary);margin-bottom:0.25rem;';
+        expLabel.textContent = 'Series substitution:';
+        box.appendChild(expLabel);
+        var expMath = document.createElement('div');
+        expMath.className = 'sc-step-math';
+        renderKaTeX(expMath, data.latexExpansion, true);
+        box.appendChild(expMath);
+    }
+
+    // Simplified expression
+    if (data.latexSimplified) {
+        var simpLabel = document.createElement('div');
+        simpLabel.style.cssText = 'font-size:0.75rem;font-weight:500;color:var(--text-secondary);margin-top:0.5rem;margin-bottom:0.25rem;';
+        simpLabel.textContent = 'Simplified:';
+        box.appendChild(simpLabel);
+        var simpMath = document.createElement('div');
+        simpMath.className = 'sc-step-math';
+        renderKaTeX(simpMath, data.latexSimplified, true);
+        box.appendChild(simpMath);
+    }
+
+    // Final limit value (boxed)
+    if (data.latexLimit) {
+        var limitMath = document.createElement('div');
+        limitMath.className = 'sc-step-math';
+        limitMath.style.marginTop = '0.75rem';
+        renderKaTeX(limitMath, data.latexLimit, true);
+        box.appendChild(limitMath);
+    } else if (data.limit !== undefined) {
+        var limitRow = document.createElement('div');
+        limitRow.className = 'sc-result-row';
+        limitRow.style.cssText = 'font-size:1rem;margin-top:0.5rem;';
+        limitRow.innerHTML = '<span>Limit =</span> <strong>' + data.limit + '</strong>';
+        box.appendChild(limitRow);
+    }
+
+    container.appendChild(box);
+}
+
+// ==================== Remainder Steps ====================
+
+function renderRemainderSteps(container, data) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Header with amber accent
+    var header = document.createElement('div');
+    header.className = 'sc-steps-header sc-steps-header--remainder';
+    header.innerHTML = '<h4>Step-by-Step: Error Bound</h4><p>Lagrange remainder analysis</p>';
+    container.appendChild(header);
+
+    var stepNum = 0;
+
+    // Step 1: Recall the Lagrange Remainder formula
+    stepNum++;
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Recall the <strong>Lagrange Remainder formula</strong>',
+        'R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!} \\cdot (x - a)^{n+1}',
+        '\\text{where } c \\text{ is between } a \\text{ and } x'
+    ));
+
+    // Step 2: Build the Taylor polynomial
+    stepNum++;
+    var polyLatex = data['LATEX_POLY'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Build the <strong>Taylor polynomial</strong>',
+        'P_n(x) = ' + polyLatex,
+        null
+    ));
+
+    // Step 3: Compute the (n+1)th derivative
+    stepNum++;
+    var derivExpr = data['STEP_DERIV_EXPR'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Compute the <strong>(n+1)th derivative</strong>',
+        'f^{(n+1)}(x) = ' + derivExpr,
+        null
+    ));
+
+    // Step 4: Find M = max|f^(n+1)| on interval
+    stepNum++;
+    var maxDeriv = data['STEP_MAX_DERIV'] || '?';
+    var interval = data['STEP_INTERVAL'] || '?,?';
+    var parts = interval.split(',');
+    var lo = parts[0] || '?';
+    var hi = parts[1] || '?';
+    container.appendChild(buildStepDOMMulti(
+        stepNum,
+        'Find <strong>M = max|f<sup>(n+1)</sup>|</strong> on the interval',
+        [
+            '\\text{Interval: } [' + lo + ',\\, ' + hi + ']',
+            'M = \\max_{c \\in [' + lo + ',\\,' + hi + ']} \\left|f^{(n+1)}(c)\\right| = ' + maxDeriv
+        ]
+    ));
+
+    // Step 5: Apply the bound and compare
+    stepNum++;
+    var bound = data['BOUND'] || '?';
+    var actualErr = data['ACTUAL_ERROR'] || '?';
+    var evalExact = data['STEP_EVAL_EXACT'] || '?';
+    var evalPoly = data['STEP_EVAL_POLY'] || '?';
+    var boundNum = parseFloat(bound);
+    var actualNum = parseFloat(actualErr);
+    var checkmark = (!isNaN(boundNum) && !isNaN(actualNum) && actualNum <= boundNum)
+        ? '\\;\\color{green}{\\checkmark}'
+        : '';
+    container.appendChild(buildStepDOMMulti(
+        stepNum,
+        '<strong>Apply the bound and compare</strong>',
+        [
+            'f(x_0) = ' + evalExact + ', \\quad P_n(x_0) = ' + evalPoly,
+            '\\text{Actual error } = |f(x_0) - P_n(x_0)| = ' + actualErr,
+            '\\boxed{\\text{Bound } = ' + bound + '}' + checkmark
+        ]
+    ));
+}
+
+// ==================== Integral Steps ====================
+
+function renderIntegralSteps(container, data) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Header with purple accent
+    var header = document.createElement('div');
+    header.className = 'sc-steps-header sc-steps-header--integral';
+    header.innerHTML = '<h4>Step-by-Step: Integral Approximation</h4><p>Definite integral via Taylor polynomial</p>';
+    container.appendChild(header);
+
+    var stepNum = 0;
+
+    // Step 1: Replace f(x) with its Taylor polynomial
+    stepNum++;
+    var polyLatex = data['LATEX_POLY'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Replace <strong>f(x)</strong> with its Taylor polynomial',
+        'f(x) \\approx P_n(x) = ' + polyLatex,
+        null
+    ));
+
+    // Step 2: Set up the definite integral
+    stepNum++;
+    var setupLatex = data['STEP_SETUP'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Set up the <strong>definite integral</strong>',
+        setupLatex,
+        null
+    ));
+
+    // Step 3: Integrate term-by-term
+    stepNum++;
+    var antideriv = data['STEP_ANTIDERIV'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        '<strong>Integrate term-by-term</strong>',
+        'F(x) = \\int P_n(x)\\,dx = ' + antideriv,
+        null
+    ));
+
+    // Step 4: Evaluate at bounds: F(b) - F(a)
+    stepNum++;
+    var upperVal = data['STEP_UPPER_VAL'] || '?';
+    var lowerVal = data['STEP_LOWER_VAL'] || '?';
+    container.appendChild(buildStepDOMMulti(
+        stepNum,
+        'Evaluate at bounds: <strong>F(b) &minus; F(a)</strong>',
+        [
+            'F(b) = ' + upperVal,
+            'F(a) = ' + lowerVal,
+            'F(b) - F(a) = ' + upperVal + ' - ' + lowerVal + ' = ' + (data['APPROX'] || '?')
+        ]
+    ));
+
+    // Step 5: Compare approximate vs exact
+    stepNum++;
+    var approx = data['APPROX'] || '?';
+    var exact = data['EXACT'] || '?';
+    var err = data['ABSERROR'] || '?';
+    container.appendChild(buildStepDOMMulti(
+        stepNum,
+        '<strong>Compare approximate vs exact</strong>',
+        [
+            '\\text{Approximate: } ' + approx,
+            '\\text{Exact: } ' + exact,
+            '\\boxed{\\text{Error } = ' + err + '}'
+        ]
+    ));
+}
+
+// ==================== Limit Steps ====================
+
+function renderLimitSteps(container, data) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Header with rose accent
+    var header = document.createElement('div');
+    header.className = 'sc-steps-header sc-steps-header--limit';
+    header.innerHTML = '<h4>Step-by-Step: Limit Evaluation</h4><p>Limit via Taylor series expansion</p>';
+    container.appendChild(header);
+
+    var stepNum = 0;
+    var isInfinite = !data['STEP_ORIGINAL'];
+
+    if (isInfinite) {
+        // Infinite limit — fewer steps
+        stepNum++;
+        container.appendChild(buildStepDOM(
+            stepNum,
+            'Identify the <strong>limit expression</strong>',
+            '\\text{Evaluate } \\lim_{x \\to \\pm\\infty}',
+            null
+        ));
+
+        stepNum++;
+        var limitLatex = data['LATEX_LIMIT'] || '\\text{(not available)}';
+        container.appendChild(buildStepDOM(
+            stepNum,
+            '<strong>Evaluate the limit</strong> directly',
+            '\\boxed{' + limitLatex + '}',
+            null
+        ));
+        return;
+    }
+
+    // Step 1: Identify the limit expression
+    stepNum++;
+    var origLatex = data['STEP_ORIGINAL'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        'Identify the <strong>limit expression</strong>',
+        '\\lim_{x \\to \\text{pt}} \\left(' + origLatex + '\\right)',
+        null
+    ));
+
+    // Step 2: Check for indeterminate form
+    stepNum++;
+    var directVal = data['STEP_DIRECT'] || '?';
+    var isIndeterminate = directVal === 'nan' || directVal === 'indeterminate' || directVal === 'zoo' || directVal === 'oo' || directVal === 'NaN';
+    var desc2 = isIndeterminate
+        ? 'Check for <strong>indeterminate form</strong> — direct substitution gives <code>' + directVal + '</code>'
+        : 'Check for <strong>indeterminate form</strong> — direct substitution gives <code>' + directVal + '</code>';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        desc2,
+        '\\text{Direct substitution} \\to ' + directVal,
+        isIndeterminate ? '\\text{Indeterminate form — use series expansion}' : null
+    ));
+
+    // Step 3: Expand using Taylor series
+    stepNum++;
+    var hasNumerDenom = data['STEP_NUMER_EXPAND'] && data['STEP_DENOM_EXPAND'];
+    if (hasNumerDenom) {
+        container.appendChild(buildStepDOMMulti(
+            stepNum,
+            '<strong>Expand numerator and denominator</strong> using Taylor series',
+            [
+                '\\text{Numerator: } ' + data['STEP_NUMER_EXPAND'],
+                '\\text{Denominator: } ' + data['STEP_DENOM_EXPAND']
+            ]
+        ));
+    } else {
+        var expansion = data['LATEX_EXPANSION'] || '\\text{(not available)}';
+        container.appendChild(buildStepDOM(
+            stepNum,
+            '<strong>Expand using Taylor series</strong>',
+            expansion,
+            null
+        ));
+    }
+
+    // Step 4: Simplify the expression
+    stepNum++;
+    var simplified = data['LATEX_SIMPLIFIED'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        '<strong>Simplify</strong> the expression',
+        simplified,
+        null
+    ));
+
+    // Step 5: Evaluate the limit
+    stepNum++;
+    var limitLatex = data['LATEX_LIMIT'] || '\\text{(not available)}';
+    container.appendChild(buildStepDOM(
+        stepNum,
+        '<strong>Evaluate the limit</strong>',
+        '\\boxed{' + limitLatex + '}',
+        null
+    ));
+}
+
 // ==================== Exports ====================
 
 window.SeriesCalcRender = {
@@ -437,7 +927,13 @@ window.SeriesCalcRender = {
     renderResult: renderResult,
     renderSteps: renderSteps,
     renderConvergence: renderConvergence,
-    showError: showError
+    showError: showError,
+    renderRemainderResult: renderRemainderResult,
+    renderIntegralResult: renderIntegralResult,
+    renderLimitResult: renderLimitResult,
+    renderRemainderSteps: renderRemainderSteps,
+    renderIntegralSteps: renderIntegralSteps,
+    renderLimitSteps: renderLimitSteps
 };
 
 })();

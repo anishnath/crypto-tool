@@ -18,9 +18,9 @@
         <jsp:param name="toolDescription" value="Free Taylor series calculator with step-by-step derivatives. Expand any function as a Maclaurin or Taylor series. Interactive graph shows convergence in real time." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="series-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, maclaurin series formula, series approximation calculator, step by step taylor series, function series expansion online free" />
+        <jsp:param name="toolKeywords" value="taylor series calculator, maclaurin series calculator, taylor series expansion calculator, power series calculator, taylor polynomial calculator, radius of convergence calculator, maclaurin series formula, series approximation calculator, step by step taylor series, function series expansion online free, taylor remainder theorem calculator, lagrange error bound, approximate integral taylor series, evaluate limits taylor series" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Built-in Python SymPy compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Taylor series expansion around any point,Maclaurin series centered at zero,Step-by-step derivative calculations with KaTeX,Interactive Plotly convergence graph,Term slider for real-time approximation,Radius of convergence analysis,Lagrange remainder error bound calculator,Definite integral approximation via Taylor polynomials,Limit evaluation using Taylor series substitution,Built-in Python compiler,LaTeX export and shareable URLs,7 common function presets,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Enter your function|Type a function like e^x or sin(x) into the input field or select from autocomplete suggestions,Choose series type and terms|Select Maclaurin (a=0) or Taylor (custom center) and set the number of terms,Click Calculate Series|Press the Calculate button or hit Enter to compute the expansion,Review step-by-step solution|See each derivative evaluated at the center point with full LaTeX rendering,Explore the convergence graph|Switch to the Graph tab and use the term slider to see how the approximation improves" />
         <jsp:param name="faq1q" value="What is a Taylor series in simple terms?" />
@@ -32,7 +32,7 @@
         <jsp:param name="faq4q" value="How many terms do you need for a good Taylor approximation?" />
         <jsp:param name="faq4a" value="It depends on the function and distance from the center point. Near the center, 5 to 7 terms often give 6+ digits of accuracy. Farther away or for functions with small convergence radius you may need 15 to 20 terms. Use the interactive graph with the term slider to see exactly how the approximation improves." />
         <jsp:param name="faq5q" value="Is this Taylor series calculator really free?" />
-        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup or limits. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, a Python SymPy compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls." />
+        <jsp:param name="faq5a" value="Yes, 100 percent free with no signup or limits. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, a Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,8 +96,19 @@
             <div class="tool-card-header" style="background:var(--sc-gradient);">Series Expansion</div>
             <div class="tool-card-body">
 
+                <!-- Mode Toggle -->
+                <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                    <label class="tool-form-label">Mode</label>
+                    <div class="sc-mode-toggle" id="sc-mode-toggle">
+                        <button type="button" class="sc-mode-btn active" data-mode="expansion">Series Expansion</button>
+                        <button type="button" class="sc-mode-btn" data-mode="remainder">Error Bound</button>
+                        <button type="button" class="sc-mode-btn" data-mode="integral">Integral Approx</button>
+                        <button type="button" class="sc-mode-btn" data-mode="limit">Limit Eval</button>
+                    </div>
+                </div>
+
                 <!-- Series Type Toggle -->
-                <div class="tool-form-group" style="margin-bottom:0.5rem;">
+                <div class="tool-form-group" style="margin-bottom:0.5rem;" id="sc-type-toggle-group">
                     <label class="tool-form-label">Series Type</label>
                     <div class="sc-type-toggle">
                         <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
@@ -140,6 +151,47 @@
                         <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
                         <input type="number" class="sc-param-input" id="sc-num-terms" min="1" max="20" value="5">
                     </div>
+                </div>
+
+                <!-- Remainder Mode Inputs -->
+                <div class="sc-mode-inputs" id="sc-remainder-inputs" style="display:none">
+                    <div class="sc-param-row">
+                        <div class="sc-param-group">
+                            <label class="sc-param-label" for="sc-eval-point">Evaluate at x =</label>
+                            <input type="text" class="sc-param-input" id="sc-eval-point" placeholder="e.g., 0.5, 1, pi/4" value="0.5">
+                        </div>
+                    </div>
+                    <div class="tool-form-hint">Computes the Lagrange remainder bound |R<sub>n</sub>(x)| for the Taylor polynomial.</div>
+                </div>
+
+                <!-- Integral Mode Inputs -->
+                <div class="sc-mode-inputs" id="sc-integral-inputs" style="display:none">
+                    <div class="sc-param-row">
+                        <div class="sc-param-group">
+                            <label class="sc-param-label" for="sc-int-lower">Lower bound</label>
+                            <input type="text" class="sc-param-input" id="sc-int-lower" placeholder="e.g., 0" value="0">
+                        </div>
+                        <div class="sc-param-group">
+                            <label class="sc-param-label" for="sc-int-upper">Upper bound</label>
+                            <input type="text" class="sc-param-input" id="sc-int-upper" placeholder="e.g., 1" value="1">
+                        </div>
+                    </div>
+                    <div class="tool-form-hint">Approximates &int;f(x)dx by integrating the Taylor polynomial term-by-term.</div>
+                </div>
+
+                <!-- Limit Mode Inputs -->
+                <div class="sc-mode-inputs" id="sc-limit-inputs" style="display:none">
+                    <div class="sc-param-row">
+                        <div class="sc-param-group">
+                            <label class="sc-param-label" for="sc-limit-expr">Full expression</label>
+                            <input type="text" class="sc-func-input" id="sc-limit-expr" placeholder="e.g., sin(x)/x, (e^x-1)/x" value="sin(x)/x" autocomplete="off" spellcheck="false">
+                        </div>
+                        <div class="sc-param-group">
+                            <label class="sc-param-label" for="sc-limit-point">x &rarr;</label>
+                            <input type="text" class="sc-param-input" id="sc-limit-point" placeholder="e.g., 0, inf" value="0">
+                        </div>
+                    </div>
+                    <div class="tool-form-hint">Evaluates limits by substituting Taylor expansions and simplifying.</div>
                 </div>
 
                 <!-- Live Preview -->
@@ -218,13 +270,9 @@
             <!-- Sticky action toolbar -->
             <div class="sc-result-toolbar" id="sc-result-actions" style="display:none">
                 <div class="sc-toolbar-group">
-                    <button type="button" class="sc-toolbar-btn" id="sc-copy-latex-btn" title="Copy LaTeX">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                        LaTeX
-                    </button>
-                    <button type="button" class="sc-toolbar-btn" id="sc-copy-series-btn" title="Copy series text">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
-                        Copy
+                    <button type="button" class="sc-toolbar-btn" id="sc-download-pdf-btn" title="Download as PDF">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        PDF
                     </button>
                 </div>
                 <div class="sc-toolbar-sep"></div>
@@ -269,9 +317,9 @@
                     </svg>
                     <h4>Python Compiler</h4>
                     <select id="sc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
-                        <option value="sympy-series">SymPy (Series Expansion)</option>
-                        <option value="numpy-approx">NumPy (Numeric Approx)</option>
-                        <option value="sympy-convergence">SymPy (Convergence)</option>
+                        <option value="sympy-series">Series Expansion</option>
+                        <option value="numpy-approx">Numeric Approximation</option>
+                        <option value="sympy-convergence">Convergence Analysis</option>
                     </select>
                 </div>
                 <div style="flex:1;min-height:0;">
@@ -473,18 +521,18 @@
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What functions can I expand?
+                How do you use Taylor series to approximate definite integrals?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Any function built from supported operations: arithmetic (+, -, *, /, ^), trigonometric (sin, cos, tan), exponential (exp, e^x), logarithmic (ln, log), and square root (sqrt). You can compose them freely, e.g., sin(x)*e^x or ln(1+x^2). The calculator uses Nerdamer for symbolic differentiation with exact fraction output.</div>
+            <div class="faq-answer">Replace the integrand with its Taylor polynomial, then integrate term-by-term. For example, to approximate &int;<sub>0</sub><sup>1</sup> e<sup>&minus;x&sup2;</sup> dx, expand e<sup>&minus;x&sup2;</sup> as 1 &minus; x&sup2; + x<sup>4</sup>/2! &minus; &hellip; and integrate each power of x. This gives 1 &minus; 1/3 + 1/10 &minus; &hellip; &approx; 0.7468. Use the Integral Approx mode to compute this automatically with error comparison.</div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Is this series calculator free?
+                What is the Lagrange remainder (error bound) for a Taylor polynomial?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes, 100% free with no signup. Features include step-by-step derivative calculations, interactive Plotly convergence graph with term slider, radius of convergence analysis, Python SymPy compiler, LaTeX export, and shareable URLs. All computation runs in your browser.</div>
+            <div class="faq-answer">The Lagrange remainder R<sub>n</sub>(x) = f<sup>(n+1)</sup>(c)/(n+1)! &middot; (x&minus;a)<sup>n+1</sup> bounds the error between f(x) and its nth-degree Taylor polynomial, where c is some value between a and x. To get an upper bound, find the maximum of |f<sup>(n+1)</sup>| on the interval. Use the Error Bound mode in this calculator to compute the bound automatically.</div>
         </div>
     </div>
 </section>

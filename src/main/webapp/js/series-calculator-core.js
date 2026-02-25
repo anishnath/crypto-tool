@@ -17,6 +17,7 @@ var state = {
     seriesType: 'maclaurin',
     center: 0,
     numTerms: 5,
+    mode: 'expansion',      // expansion | remainder | integral | limit
     currentFunction: null,  // preprocessed string for nerdamer
     derivativesAtCenter: [],
     derivativeExprs: [],    // LaTeX strings for step display
@@ -351,9 +352,602 @@ function sympySimplify(funcInput, center, numTerms) {
     });
 }
 
+// ==================== Mode Switching ====================
+
+function switchMode(mode) {
+    state.mode = mode;
+    var btns = document.querySelectorAll('.sc-mode-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle('active', btns[i].getAttribute('data-mode') === mode);
+    }
+
+    // Show/hide mode-specific inputs
+    var ids = ['sc-remainder-inputs', 'sc-integral-inputs', 'sc-limit-inputs'];
+    for (var j = 0; j < ids.length; j++) {
+        var el = $(ids[j]);
+        if (el) el.style.display = 'none';
+    }
+    if (mode === 'remainder') { var r = $('sc-remainder-inputs'); if (r) r.style.display = 'block'; }
+    if (mode === 'integral') { var ig = $('sc-integral-inputs'); if (ig) ig.style.display = 'block'; }
+    if (mode === 'limit') { var l = $('sc-limit-inputs'); if (l) l.style.display = 'block'; }
+
+    // Show/hide expansion-only UI
+    var typeToggle = $('sc-type-toggle-group');
+    if (typeToggle) typeToggle.style.display = (mode === 'limit') ? 'none' : '';
+
+    // Hide main function input in limit mode (it has its own expression input)
+    var funcInputEl = $('sc-func-input');
+    var funcInputGroup = funcInputEl ? funcInputEl.closest('.tool-form-group') : null;
+    if (funcInputGroup) funcInputGroup.style.display = (mode === 'limit') ? 'none' : '';
+
+    // Update button text
+    var solveBtn = $('sc-solve-btn');
+    if (solveBtn) {
+        var labels = { expansion: 'Calculate Series', remainder: 'Calculate Error Bound', integral: 'Approximate Integral', limit: 'Evaluate Limit' };
+        solveBtn.textContent = labels[mode] || 'Calculate';
+    }
+
+    // Update card header
+    var cardHeader = document.querySelector('.tool-card-header');
+    if (cardHeader) {
+        var headers = { expansion: 'Series Expansion', remainder: 'Error Bound', integral: 'Integral Approximation', limit: 'Limit Evaluation' };
+        cardHeader.textContent = headers[mode] || 'Series Expansion';
+    }
+
+    // Update compiler dropdown based on mode
+    updateCompilerDropdown();
+    updatePreview();
+}
+
+function updateCompilerDropdown() {
+    var sel = $('sc-compiler-template');
+    if (!sel) return;
+    // Reset to standard options for expansion, show mode-specific for others
+    var opts;
+    switch (state.mode) {
+        case 'remainder':
+            opts = [{ v: 'sympy-remainder', t: 'Error Bound' }, { v: 'sympy-series', t: 'Series Expansion' }];
+            break;
+        case 'integral':
+            opts = [{ v: 'sympy-integral', t: 'Integral Approximation' }, { v: 'sympy-series', t: 'Series Expansion' }];
+            break;
+        case 'limit':
+            opts = [{ v: 'sympy-limit', t: 'Limit via Series' }, { v: 'sympy-series', t: 'Series Expansion' }];
+            break;
+        default:
+            opts = [
+                { v: 'sympy-series', t: 'Series Expansion' },
+                { v: 'numpy-approx', t: 'Numeric Approximation' },
+                { v: 'sympy-convergence', t: 'Convergence Analysis' }
+            ];
+    }
+    sel.innerHTML = '';
+    for (var i = 0; i < opts.length; i++) {
+        var o = document.createElement('option');
+        o.value = opts[i].v;
+        o.textContent = opts[i].t;
+        sel.appendChild(o);
+    }
+}
+
+// ==================== SymPy-based Mode Calculations ====================
+
+function getContextPath() {
+    var meta = document.querySelector('meta[name="context-path"]');
+    return meta ? (meta.getAttribute('content') || '') : '';
+}
+
+function setSolveButtonBusy(busy) {
+    var btn = $('sc-solve-btn');
+    if (!btn) return;
+    btn.disabled = busy;
+    if (busy) {
+        btn.setAttribute('data-original-text', btn.textContent);
+        btn.textContent = 'Computing\u2026';
+    } else {
+        var orig = btn.getAttribute('data-original-text');
+        if (orig) btn.textContent = orig;
+    }
+}
+
+function callSymPy(code, callback) {
+    if (sympyController) { try { sympyController.abort(); } catch(e) {} }
+    sympyController = new AbortController();
+    var timeoutId = setTimeout(function() { sympyController.abort(); }, 30000);
+
+    setSolveButtonBusy(true);
+
+    // Show loading spinner in result
+    var content = $('sc-result-content');
+    if (content) {
+        var empty = $('sc-empty-state');
+        if (empty) empty.style.display = 'none';
+        content.innerHTML = '<div style="text-align:center;padding:2rem;"><div class="sc-sympy-spinner"></div><p style="margin-top:0.75rem;font-size:0.8125rem;color:var(--text-muted);">Computing...</p></div>';
+    }
+
+    fetch(getContextPath() + '/OneCompilerFunctionality?action=execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
+        signal: sympyController.signal
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        clearTimeout(timeoutId);
+        setSolveButtonBusy(false);
+        var stdout = (data.Stdout || data.stdout || '').trim();
+        var stderr = (data.Stderr || data.stderr || '').trim();
+        callback(stdout, stderr);
+    })
+    .catch(function(err) {
+        clearTimeout(timeoutId);
+        setSolveButtonBusy(false);
+        if (content) {
+            R.showError(content, 'Computation failed. Check your inputs and try again.');
+        }
+    });
+}
+
+// ==================== PDF Download ====================
+
+/**
+ * Re-render all KaTeX inside a container so html2canvas can capture them.
+ * Cloned KaTeX nodes lose font metrics; fresh katex.render() fixes that.
+ * Also forces light-mode colours on every element for white-background PDF.
+ */
+function prepareContainerForCapture(root) {
+    // Re-render every KaTeX block from its LaTeX source annotation
+    var katexEls = root.querySelectorAll('.katex');
+    for (var i = 0; i < katexEls.length; i++) {
+        var ann = katexEls[i].querySelector('annotation');
+        if (ann && ann.textContent && window.katex) {
+            var parent = katexEls[i].parentNode;
+            var isDisplay = !!(parent && parent.classList && parent.classList.contains('sc-step-math'));
+            var wrapper = document.createElement('div');
+            try {
+                katex.render(ann.textContent, wrapper, { displayMode: isDisplay, throwOnError: false });
+                parent.replaceChild(wrapper, katexEls[i]);
+            } catch (e) { /* keep original on error */ }
+        }
+    }
+    // Force all text/bg to light-mode colours
+    var allEls = root.querySelectorAll('*');
+    for (var j = 0; j < allEls.length; j++) {
+        var el = allEls[j];
+        var cs = window.getComputedStyle(el);
+        var rgb = cs.color.match(/\d+/g);
+        if (rgb && parseInt(rgb[0]) > 180 && parseInt(rgb[1]) > 180 && parseInt(rgb[2]) > 180) {
+            el.style.color = '#0f172a';
+        }
+        var bgRgb = cs.backgroundColor.match(/\d+/g);
+        if (bgRgb && parseInt(bgRgb[0]) < 60 && parseInt(bgRgb[1]) < 60 && parseInt(bgRgb[2]) < 60) {
+            el.style.backgroundColor = '#ffffff';
+        }
+    }
+}
+
+function buildPdfSteps(container) {
+    var stepsArea = $('sc-steps-area');
+    if (!stepsArea || stepsArea.children.length === 0) return;
+
+    var stepsLabel = document.createElement('div');
+    stepsLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin:24px 0 12px;border-top:1px solid #e2e8f0;padding-top:16px;';
+    stepsLabel.textContent = 'Step-by-Step Solution';
+    container.appendChild(stepsLabel);
+
+    // Mode accent colours for step numbers
+    var accentColors = { expansion: '#2563eb', remainder: '#d97706', integral: '#7c3aed', limit: '#e11d48' };
+    var accent = accentColors[state.mode] || '#2563eb';
+
+    var stepEls = stepsArea.querySelectorAll('.sc-step');
+    for (var i = 0; i < stepEls.length; i++) {
+        var stepRow = document.createElement('div');
+        stepRow.style.cssText = 'display:flex;gap:12px;margin-bottom:14px;';
+
+        // Numbered circle
+        var numDiv = document.createElement('div');
+        numDiv.style.cssText = 'width:24px;height:24px;background:' + accent + ';color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
+        numDiv.textContent = (i + 1);
+        stepRow.appendChild(numDiv);
+
+        var body = document.createElement('div');
+        body.style.cssText = 'flex:1;min-width:0;';
+
+        // Description text
+        var descEl = stepEls[i].querySelector('.sc-step-desc');
+        if (descEl) {
+            var descDiv = document.createElement('div');
+            descDiv.style.cssText = 'font-size:13px;font-weight:600;color:#334155;margin-bottom:6px;';
+            descDiv.textContent = descEl.textContent;
+            body.appendChild(descDiv);
+        }
+
+        // Re-render each math block from annotation source
+        var mathEls = stepEls[i].querySelectorAll('.sc-step-math, .sc-step-derivative');
+        for (var m = 0; m < mathEls.length; m++) {
+            var ann = mathEls[m].querySelector('annotation');
+            if (ann && ann.textContent && window.katex) {
+                var mathDiv = document.createElement('div');
+                mathDiv.style.cssText = 'font-size:16px;margin-bottom:4px;overflow-x:hidden;';
+                try {
+                    katex.render(ann.textContent, mathDiv, { displayMode: true, throwOnError: false });
+                } catch (e) {
+                    mathDiv.textContent = ann.textContent;
+                }
+                body.appendChild(mathDiv);
+            }
+        }
+
+        stepRow.appendChild(body);
+        container.appendChild(stepRow);
+    }
+}
+
+function downloadResultPdf() {
+    var resultContent = $('sc-result-content');
+    if (!resultContent || !resultContent.innerHTML.trim()) {
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('No result to download', 2000, 'warning');
+        return;
+    }
+
+    if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Generating PDF...', 1500, 'info');
+
+    // Build an off-screen container with white background for capture
+    var container = document.createElement('div');
+    container.style.cssText = 'position:absolute;left:-9999px;top:0;width:700px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+    document.body.appendChild(container);
+
+    // Title
+    var modeTitles = { expansion: 'Series Expansion', remainder: 'Error Bound', integral: 'Integral Approximation', limit: 'Limit Evaluation' };
+    var modeColors = { expansion: '#2563eb', remainder: '#d97706', integral: '#7c3aed', limit: '#e11d48' };
+    var modeColor = modeColors[state.mode] || '#2563eb';
+
+    var title = document.createElement('div');
+    title.style.cssText = 'font-size:22px;font-weight:700;margin-bottom:8px;color:' + modeColor + ';';
+    title.textContent = (modeTitles[state.mode] || 'Series Calculator') + ' \u2014 8gwifi.org';
+    container.appendChild(title);
+
+    var divider = document.createElement('div');
+    divider.style.cssText = 'height:2px;background:linear-gradient(90deg,' + modeColor + ',transparent);margin-bottom:24px;';
+    container.appendChild(divider);
+
+    // Clone result content and re-render all KaTeX fresh
+    var resultClone = resultContent.cloneNode(true);
+    resultClone.style.cssText = 'font-size:16px;';
+    container.appendChild(resultClone);
+    prepareContainerForCapture(container);
+
+    // Build steps by re-rendering math from annotation sources
+    buildPdfSteps(container);
+
+    // Footer
+    var footer = document.createElement('div');
+    footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
+    footer.innerHTML = '<span>Generated by 8gwifi.org Series Calculator</span><span>' + new Date().toLocaleDateString() + '</span>';
+    container.appendChild(footer);
+
+    // Load libraries and generate
+    var loadHtml2Canvas = (typeof html2canvas !== 'undefined') ? Promise.resolve()
+        : (typeof ToolUtils !== 'undefined' && ToolUtils._loadScript ? ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js') : Promise.reject('No loader'));
+
+    loadHtml2Canvas
+        .then(function() {
+            return (typeof window.jspdf !== 'undefined') ? Promise.resolve()
+                : (typeof ToolUtils !== 'undefined' && ToolUtils._loadScript ? ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js') : Promise.reject('No loader'));
+        })
+        .then(function() {
+            return html2canvas(container, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+        })
+        .then(function(canvas) {
+            document.body.removeChild(container);
+            var imgData = canvas.toDataURL('image/png');
+            var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            var pageWidth = pdf.internal.pageSize.getWidth();
+            var margin = 10;
+            var usableWidth = pageWidth - margin * 2;
+            var imgWidth = usableWidth;
+            var imgHeight = (canvas.height * usableWidth) / canvas.width;
+            var usableHeight = pdf.internal.pageSize.getHeight() - margin * 2;
+            if (imgHeight > usableHeight) { imgHeight = usableHeight; imgWidth = (canvas.width * usableHeight) / canvas.height; }
+            var x = (pageWidth - imgWidth) / 2;
+            pdf.addImage(imgData, 'PNG', x, margin, imgWidth, imgHeight);
+
+            var filename = 'series-' + (state.mode || 'expansion') + '-' + (state.funcInput || 'result').replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.pdf';
+            pdf.save(filename);
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast('PDF downloaded!', 2000, 'success');
+                if (ToolUtils.showSupportPopup) ToolUtils.showSupportPopup('Series Calculator', 'Downloaded: ' + filename);
+            }
+        })
+        .catch(function(err) {
+            console.error('PDF generation failed:', err);
+            if (container.parentNode) document.body.removeChild(container);
+            if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('PDF generation failed: ' + (err.message || err), 3000, 'error');
+        });
+}
+
+function parseTags(stdout) {
+    var result = {};
+    var lines = stdout.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+        var idx = lines[i].indexOf(':');
+        if (idx > 0) {
+            var key = lines[i].substring(0, idx).trim();
+            var val = lines[i].substring(idx + 1).trim();
+            result[key] = val;
+        }
+    }
+    return result;
+}
+
+function calculateRemainder() {
+    var funcInput = $('sc-func-input').value.trim();
+    var numTerms = parseInt($('sc-num-terms').value) || 5;
+    var centerStr = $('sc-center-point').value.trim() || '0';
+    var evalPoint = ($('sc-eval-point') || {}).value || '0.5';
+
+    if (!funcInput) { R.showError($('sc-result-content'), 'Please enter a function.'); return; }
+
+    var pyExpr = toPython(funcInput);
+    var extra = getExtraSymbols(pyExpr);
+    var allSyms = extra.concat(['x']);
+    var opts = extra.length > 0 ? ', positive=True' : '';
+    var symDecl = allSyms.join(', ') + " = symbols('" + allSyms.join(' ') + "'" + opts + ')';
+
+    var code = 'from sympy import *\n' +
+        symDecl + '\n' +
+        'f = ' + pyExpr + '\n' +
+        'a = ' + toPython(centerStr) + '\n' +
+        'n_terms = ' + numTerms + '\n' +
+        'eval_x = ' + toPython(evalPoint) + '\n' +
+        'try:\n' +
+        '    # Taylor polynomial\n' +
+        '    s = series(f, x, a, n=n_terms)\n' +
+        '    poly = s.removeO()\n' +
+        '    # (n+1)th derivative\n' +
+        '    d = f\n' +
+        '    for i in range(n_terms):\n' +
+        '        d = diff(d, x)\n' +
+        '    # Lagrange remainder: |f^(n+1)(c)| / (n+1)! * |x-a|^(n+1)\n' +
+        '    # Find max of |f^(n+1)| on interval [a, eval_x]\n' +
+        '    lo = Min(a, eval_x)\n' +
+        '    hi = Max(a, eval_x)\n' +
+        '    try:\n' +
+        '        M = maximum(Abs(d), x, Interval(lo, hi))\n' +
+        '    except:\n' +
+        '        # fallback: evaluate at endpoints and midpoint\n' +
+        '        pts = [lo, hi, (lo+hi)/2]\n' +
+        '        M = max(abs(float(d.subs(x, p))) for p in pts)\n' +
+        '        M = Float(M)\n' +
+        '    bound = M / factorial(n_terms) * Abs(eval_x - a)**n_terms\n' +
+        '    actual_err = Abs(f.subs(x, eval_x) - poly.subs(x, eval_x))\n' +
+        '    Rn = Function("R_n")\n' +
+        '    print("FORMULA:" + latex(Eq(Rn(x), d / factorial(n_terms) * (x - a)**n_terms)))\n' +
+        '    print("BOUND:" + str(float(bound)))\n' +
+        '    print("ACTUAL_ERROR:" + str(float(actual_err)))\n' +
+        '    print("LATEX_POLY:" + latex(poly))\n' +
+        '    print("LATEX_REMAINDER:" + latex(Eq(Symbol("B"), bound)) + r" \\quad \\text{(upper bound)}")\n' +
+        '    print("STEP_DERIV_EXPR:" + latex(d))\n' +
+        '    print("STEP_MAX_DERIV:" + str(float(M)))\n' +
+        '    print("STEP_INTERVAL:" + str(float(lo)) + "," + str(float(hi)))\n' +
+        '    print("STEP_EVAL_EXACT:" + str(float(f.subs(x, eval_x))))\n' +
+        '    print("STEP_EVAL_POLY:" + str(float(poly.subs(x, eval_x))))\n' +
+        'except Exception as e:\n' +
+        '    print("CALCERROR:" + str(e))\n';
+
+    callSymPy(code, function(stdout, stderr) {
+        var content = $('sc-result-content');
+        if (!stdout || stdout.indexOf('CALCERROR:') === 0) {
+            R.showError(content, 'Error computing remainder: ' + (stdout.replace('CALCERROR:', '') || stderr || 'unknown error'));
+            return;
+        }
+        var tags = parseTags(stdout);
+        if (tags['CALCERROR']) { R.showError(content, 'Error computing remainder: ' + tags['CALCERROR']); return; }
+        R.renderRemainderResult({
+            latexRemainder: tags['LATEX_REMAINDER'] || tags['FORMULA'] || '',
+            bound: tags['BOUND'] || '',
+            actualError: tags['ACTUAL_ERROR'] || '',
+            latexPoly: tags['LATEX_POLY'] || ''
+        }, content);
+
+        var actions = $('sc-result-actions');
+        if (actions) actions.style.display = 'flex';
+
+        var stepsArea = $('sc-steps-area');
+        R.renderRemainderSteps(stepsArea, tags);
+        var stepsCta = $('sc-steps-cta');
+        var stepsBtn = $('sc-steps-toggle-btn');
+        if (stepsCta) stepsCta.style.display = 'block';
+        if (stepsArea) stepsArea.style.display = 'none';
+        if (stepsBtn) {
+            stepsBtn.classList.remove('open');
+            stepsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Show Step-by-Step Solution';
+        }
+        var convergenceArea = $('sc-convergence-area');
+        if (convergenceArea) convergenceArea.innerHTML = '';
+
+        updateCompiler();
+    });
+}
+
+function calculateIntegral() {
+    var funcInput = $('sc-func-input').value.trim();
+    var numTerms = parseInt($('sc-num-terms').value) || 5;
+    var centerStr = $('sc-center-point').value.trim() || '0';
+    var lower = ($('sc-int-lower') || {}).value || '0';
+    var upper = ($('sc-int-upper') || {}).value || '1';
+
+    if (!funcInput) { R.showError($('sc-result-content'), 'Please enter a function.'); return; }
+
+    var pyExpr = toPython(funcInput);
+    var extra = getExtraSymbols(pyExpr);
+    var allSyms = extra.concat(['x']);
+    var opts = extra.length > 0 ? ', positive=True' : '';
+    var symDecl = allSyms.join(', ') + " = symbols('" + allSyms.join(' ') + "'" + opts + ')';
+
+    var code = 'from sympy import *\n' +
+        symDecl + '\n' +
+        'f = ' + pyExpr + '\n' +
+        'a = ' + toPython(centerStr) + '\n' +
+        'n_terms = ' + numTerms + '\n' +
+        'lo = ' + toPython(lower) + '\n' +
+        'hi = ' + toPython(upper) + '\n' +
+        'try:\n' +
+        '    s = series(f, x, a, n=n_terms)\n' +
+        '    poly = s.removeO()\n' +
+        '    # Integrate the Taylor polynomial term-by-term\n' +
+        '    approx_integral = integrate(poly, (x, lo, hi))\n' +
+        '    # Exact integral\n' +
+        '    exact_integral = integrate(f, (x, lo, hi))\n' +
+        '    err = Abs(exact_integral - approx_integral)\n' +
+        '    print("APPROX:" + str(float(approx_integral)))\n' +
+        '    print("EXACT:" + str(float(exact_integral)))\n' +
+        '    print("ABSERROR:" + str(float(err)))\n' +
+        '    print("LATEX_POLY:" + latex(poly))\n' +
+        '    print("LATEX_INTEGRAL:" + latex(Eq(Symbol("I_{approx}"), approx_integral)))\n' +
+        '    print("LATEX_EXACT:" + latex(Eq(Symbol("I_{exact}"), exact_integral)))\n' +
+        '    antideriv = integrate(poly, x)\n' +
+        '    print("STEP_ANTIDERIV:" + latex(antideriv))\n' +
+        '    print("STEP_SETUP:" + latex(Integral(poly, (x, lo, hi))))\n' +
+        '    print("STEP_UPPER_VAL:" + str(float(antideriv.subs(x, hi))))\n' +
+        '    print("STEP_LOWER_VAL:" + str(float(antideriv.subs(x, lo))))\n' +
+        'except Exception as e:\n' +
+        '    print("CALCERROR:" + str(e))\n';
+
+    callSymPy(code, function(stdout, stderr) {
+        var content = $('sc-result-content');
+        if (!stdout || stdout.indexOf('CALCERROR:') === 0) {
+            R.showError(content, 'Error computing integral: ' + (stdout.replace('CALCERROR:', '') || stderr || 'unknown error'));
+            return;
+        }
+        var tags = parseTags(stdout);
+        if (tags['CALCERROR']) {
+            R.showError(content, 'Error computing integral: ' + tags['CALCERROR']);
+            return;
+        }
+        R.renderIntegralResult({
+            approx: tags['APPROX'] || '',
+            exact: tags['EXACT'] || '',
+            error: tags['ABSERROR'] || '',
+            latexPoly: tags['LATEX_POLY'] || '',
+            latexIntegral: tags['LATEX_INTEGRAL'] || '',
+            latexExact: tags['LATEX_EXACT'] || ''
+        }, content);
+
+        var actions = $('sc-result-actions');
+        if (actions) actions.style.display = 'flex';
+
+        var stepsArea = $('sc-steps-area');
+        R.renderIntegralSteps(stepsArea, tags);
+        var stepsCta = $('sc-steps-cta');
+        var stepsBtn = $('sc-steps-toggle-btn');
+        if (stepsCta) stepsCta.style.display = 'block';
+        if (stepsArea) stepsArea.style.display = 'none';
+        if (stepsBtn) {
+            stepsBtn.classList.remove('open');
+            stepsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Show Step-by-Step Solution';
+        }
+        var convergenceArea = $('sc-convergence-area');
+        if (convergenceArea) convergenceArea.innerHTML = '';
+
+        updateCompiler();
+    });
+}
+
+function calculateLimit() {
+    var limitExpr = ($('sc-limit-expr') || {}).value || 'sin(x)/x';
+    var limitPoint = ($('sc-limit-point') || {}).value || '0';
+    var numTerms = parseInt($('sc-num-terms').value) || 5;
+
+    if (!limitExpr) { R.showError($('sc-result-content'), 'Please enter an expression.'); return; }
+
+    var pyExpr = toPython(limitExpr);
+    var pyPoint = toPython(limitPoint);
+    // Map 'inf' to SymPy oo
+    if (pyPoint === 'inf' || pyPoint === 'infinity') pyPoint = 'oo';
+    if (pyPoint === '-inf' || pyPoint === '-infinity') pyPoint = '-oo';
+
+    var extra = getExtraSymbols(pyExpr);
+    var allSyms = extra.concat(['x']);
+    var opts = extra.length > 0 ? ', positive=True' : '';
+    var symDecl = allSyms.join(', ') + " = symbols('" + allSyms.join(' ') + "'" + opts + ')';
+
+    var code = 'from sympy import *\n' +
+        symDecl + '\n' +
+        'expr = ' + pyExpr + '\n' +
+        'pt = ' + pyPoint + '\n' +
+        'try:\n' +
+        '    lim_val = limit(expr, x, pt)\n' +
+        '    if pt == oo or pt == -oo:\n' +
+        '        # For infinite limits, series expansion is not useful\n' +
+        '        print("LIMIT:" + str(lim_val))\n' +
+        '        print("LATEX_EXPANSION:")\n' +
+        '        print("LATEX_SIMPLIFIED:")\n' +
+        '        print("LATEX_LIMIT:" + latex(Eq(Symbol("L"), lim_val)))\n' +
+        '    else:\n' +
+        '        expanded = series(expr, x, pt, n=' + numTerms + ')\n' +
+        '        simplified = expanded.removeO()\n' +
+        '        print("LIMIT:" + str(lim_val))\n' +
+        '        print("LATEX_EXPANSION:" + latex(expanded))\n' +
+        '        print("LATEX_SIMPLIFIED:" + latex(simplified))\n' +
+        '        print("LATEX_LIMIT:" + latex(Eq(Symbol("L"), lim_val)))\n' +
+        '        print("STEP_ORIGINAL:" + latex(expr))\n' +
+        '        try:\n' +
+        '            direct = expr.subs(x, pt)\n' +
+        '            print("STEP_DIRECT:" + str(direct))\n' +
+        '        except:\n' +
+        '            print("STEP_DIRECT:indeterminate")\n' +
+        '        try:\n' +
+        '            print("STEP_NUMER_EXPAND:" + latex(series(numer(expr), x, pt, n=' + numTerms + ')))\n' +
+        '            print("STEP_DENOM_EXPAND:" + latex(series(denom(expr), x, pt, n=' + numTerms + ')))\n' +
+        '        except:\n' +
+        '            pass\n' +
+        'except Exception as e:\n' +
+        '    print("CALCERROR:" + str(e))\n';
+
+    callSymPy(code, function(stdout, stderr) {
+        var content = $('sc-result-content');
+        if (!stdout || stdout.indexOf('CALCERROR:') === 0) {
+            R.showError(content, 'Error computing limit: ' + (stdout.replace('CALCERROR:', '') || stderr || 'unknown error'));
+            return;
+        }
+        var tags = parseTags(stdout);
+        if (tags['CALCERROR']) { R.showError(content, 'Error computing limit: ' + tags['CALCERROR']); return; }
+        R.renderLimitResult({
+            limit: tags['LIMIT'] || '',
+            latexExpansion: tags['LATEX_EXPANSION'] || '',
+            latexSimplified: tags['LATEX_SIMPLIFIED'] || '',
+            latexLimit: tags['LATEX_LIMIT'] ? '\\boxed{' + tags['LATEX_LIMIT'] + '}' : ''
+        }, content);
+
+        var actions = $('sc-result-actions');
+        if (actions) actions.style.display = 'flex';
+
+        var stepsArea = $('sc-steps-area');
+        R.renderLimitSteps(stepsArea, tags);
+        var stepsCta = $('sc-steps-cta');
+        var stepsBtn = $('sc-steps-toggle-btn');
+        if (stepsCta) stepsCta.style.display = 'block';
+        if (stepsArea) stepsArea.style.display = 'none';
+        if (stepsBtn) {
+            stepsBtn.classList.remove('open');
+            stepsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Show Step-by-Step Solution';
+        }
+        var convergenceArea = $('sc-convergence-area');
+        if (convergenceArea) convergenceArea.innerHTML = '';
+
+        updateCompiler();
+    });
+}
+
 // ==================== Core Computation ====================
 
 function calculateSeries() {
+    // Dispatch to mode-specific handler
+    if (state.mode === 'remainder') { calculateRemainder(); return; }
+    if (state.mode === 'integral') { calculateIntegral(); return; }
+    if (state.mode === 'limit') { calculateLimit(); return; }
+
     state.sympyCalled = false;
 
     var funcInput = $('sc-func-input').value.trim();
@@ -531,12 +1125,29 @@ function updateCompiler() {
     var meta = document.querySelector('meta[name="context-path"]');
     if (meta) contextPath = meta.getAttribute('content') || '';
 
+    // Pass mode-specific params for compiler templates
+    var funcForCompiler = state.funcInput;
+    var centerForCompiler = state.center;
+    var extra = {};
+    if (state.mode === 'limit') {
+        funcForCompiler = ($('sc-limit-expr') || {}).value || 'sin(x)/x';
+        centerForCompiler = ($('sc-limit-point') || {}).value || '0';
+    }
+    if (state.mode === 'remainder') {
+        extra.evalPoint = ($('sc-eval-point') || {}).value || '0.5';
+    }
+    if (state.mode === 'integral') {
+        extra.lower = ($('sc-int-lower') || {}).value || '0';
+        extra.upper = ($('sc-int-upper') || {}).value || '1';
+    }
+
     var url = E.getCompilerUrl(
         templateSelect.value,
-        state.funcInput,
-        state.center,
+        funcForCompiler,
+        centerForCompiler,
         state.numTerms,
-        contextPath
+        contextPath,
+        extra
     );
     iframe.src = url;
 }
@@ -585,6 +1196,42 @@ function switchSeriesType(type) {
     updatePreview();
 }
 
+/**
+ * Build the live-preview LaTeX string for the current mode.
+ * Returns {latex: string} or {empty: string} when input is missing.
+ */
+function buildPreviewLatex(opts) {
+    var mode = opts.mode || 'expansion';
+    var funcInput = opts.funcInput || '';
+    var center = opts.center || 0;
+    var numTerms = opts.numTerms || 5;
+    var a = R.fmt(center);
+
+    if (mode === 'expansion') {
+        if (!funcInput) return { empty: 'Enter a function to see preview' };
+        var centerStr = center === 0 ? '' : ' - ' + center;
+        return { latex: 'f(x) = \\sum_{n=0}^{' + numTerms + '} \\frac{f^{(n)}(' + a + ')}{n!}(x' + centerStr + ')^n' };
+    }
+    if (mode === 'remainder') {
+        if (!funcInput) return { empty: 'Enter a function to see preview' };
+        var evalPt = opts.evalPoint || 'x';
+        return { latex: '\\left|R_{' + numTerms + '}(' + evalPt + ')\\right| \\leq \\frac{M}{(' + numTerms + '+1)!}\\left|' + evalPt + ' - ' + a + '\\right|^{' + numTerms + '+1}' };
+    }
+    if (mode === 'integral') {
+        if (!funcInput) return { empty: 'Enter a function to see preview' };
+        var lo = opts.lower || 'a';
+        var hi = opts.upper || 'b';
+        return { latex: '\\int_{' + lo + '}^{' + hi + '} f(x)\\,dx \\approx \\int_{' + lo + '}^{' + hi + '} P_{' + numTerms + '}(x)\\,dx' };
+    }
+    if (mode === 'limit') {
+        var limitExpr = opts.limitExpr || '';
+        var limitPt = opts.limitPoint || '0';
+        if (!limitExpr) return { empty: 'Enter an expression to see preview' };
+        return { latex: '\\lim_{x \\to ' + limitPt + '} \\left(' + limitExpr + '\\right)' };
+    }
+    return { empty: 'Unknown mode' };
+}
+
 var previewTimer = null;
 function updatePreview() {
     clearTimeout(previewTimer);
@@ -592,19 +1239,23 @@ function updatePreview() {
         var preview = $('sc-preview');
         if (!preview || !window.katex) return;
 
-        var funcInput = ($('sc-func-input') || {}).value || '';
-        var center = state.seriesType === 'maclaurin' ? 0 : (parseFloat(($('sc-center-point') || {}).value) || 0);
-        var numTerms = parseInt(($('sc-num-terms') || {}).value) || 5;
+        var result = buildPreviewLatex({
+            mode: state.mode || 'expansion',
+            funcInput: ($('sc-func-input') || {}).value || '',
+            center: state.seriesType === 'maclaurin' ? 0 : (parseFloat(($('sc-center-point') || {}).value) || 0),
+            numTerms: parseInt(($('sc-num-terms') || {}).value) || 5,
+            evalPoint: ($('sc-eval-point') || {}).value || 'x',
+            lower: ($('sc-int-lower') || {}).value || 'a',
+            upper: ($('sc-int-upper') || {}).value || 'b',
+            limitExpr: ($('sc-limit-expr') || {}).value || '',
+            limitPoint: ($('sc-limit-point') || {}).value || '0'
+        });
 
-        if (!funcInput) {
-            preview.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Enter a function to see preview</span>';
-            return;
+        if (result.empty) {
+            preview.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">' + result.empty + '</span>';
+        } else {
+            R.renderKaTeX(preview, result.latex, true);
         }
-
-        var centerStr = center === 0 ? '' : ' - ' + center;
-        var latex = 'f(x) = \\sum_{n=0}^{' + numTerms + '} \\frac{f^{(n)}(' + R.fmt(center) + ')}{n!}(x' + centerStr + ')^n';
-
-        R.renderKaTeX(preview, latex, true);
     }, 100);
 }
 
@@ -698,6 +1349,14 @@ function loadFromURL() {
 // ==================== Initialization ====================
 
 function init() {
+    // Mode toggle
+    var modeBtns = document.querySelectorAll('.sc-mode-btn');
+    for (var m = 0; m < modeBtns.length; m++) {
+        modeBtns[m].addEventListener('click', function() {
+            switchMode(this.getAttribute('data-mode'));
+        });
+    }
+
     // Series type toggle
     var typeBtns = document.querySelectorAll('.sc-type-btn');
     for (var i = 0; i < typeBtns.length; i++) {
@@ -779,6 +1438,13 @@ function init() {
     if (numTerms) numTerms.addEventListener('input', updatePreview);
     if (centerInput) centerInput.addEventListener('input', updatePreview);
 
+    // Mode-specific input listeners for live preview
+    var modeInputIds = ['sc-eval-point', 'sc-int-lower', 'sc-int-upper', 'sc-limit-expr', 'sc-limit-point'];
+    for (var mi = 0; mi < modeInputIds.length; mi++) {
+        var modeEl = $(modeInputIds[mi]);
+        if (modeEl) modeEl.addEventListener('input', updatePreview);
+    }
+
     // Enter key to solve (only when autocomplete is not active with a selection)
     if (funcInput) funcInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !(acVisible && acSelectedIndex >= 0)) calculateSeries();
@@ -798,20 +1464,6 @@ function init() {
     }
 
     // Action buttons
-    var copyLatexBtn = $('sc-copy-latex-btn');
-    if (copyLatexBtn) {
-        copyLatexBtn.addEventListener('click', function() {
-            if (!state.currentFunction) return;
-            E.copyLatex(
-                toLatex(state.currentFunction),
-                state.derivativesAtCenter,
-                state.numTerms,
-                state.center,
-                state.seriesType
-            );
-        });
-    }
-
     var shareBtn = $('sc-share-btn');
     if (shareBtn) {
         shareBtn.addEventListener('click', function() {
@@ -819,35 +1471,10 @@ function init() {
         });
     }
 
-    var copySeriesBtn = $('sc-copy-series-btn');
-    if (copySeriesBtn) {
-        copySeriesBtn.addEventListener('click', function() {
-            if (!state.currentFunction || state.derivativesAtCenter.length === 0) return;
-            var text = 'f(x) = ' + state.funcInput + '\n';
-            text += (state.center === 0 ? 'Maclaurin' : 'Taylor') + ' series around x = ' + state.center + '\n';
-            text += 'f(x) ≈ ';
-            var parts = [];
-            for (var i = 0; i < state.numTerms; i++) {
-                var c = state.derivativesAtCenter[i] / R.factorial(i);
-                if (Math.abs(c) < 1e-12) continue;
-                var term = '';
-                if (i === 0) {
-                    term = R.fmt(c);
-                } else {
-                    var xp = state.center === 0 ? 'x' : '(x - ' + R.fmt(state.center) + ')';
-                    if (i > 1) xp += '^' + i;
-                    term = R.fmt(c) + '*' + xp;
-                }
-                if (parts.length > 0 && c > 0) term = '+ ' + term;
-                parts.push(term);
-            }
-            text += parts.join(' ') + ' + ...';
-            if (typeof ToolUtils !== 'undefined') {
-                ToolUtils.copyToClipboard(text, { toastMessage: 'Series copied!' });
-            } else if (navigator.clipboard) {
-                navigator.clipboard.writeText(text);
-            }
-        });
+    // Download PDF
+    var pdfBtn = $('sc-download-pdf-btn');
+    if (pdfBtn) {
+        pdfBtn.addEventListener('click', downloadResultPdf);
     }
 
     // Compiler template change
