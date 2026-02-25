@@ -215,6 +215,16 @@
     border-color: var(--sc-tool);
 }
 
+/* ===== Result Content Overflow ===== */
+#sc-result-content {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+#sc-result-content .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 /* ===== Live KaTeX Preview ===== */
 .sc-preview {
     min-height: 2.5rem;
@@ -368,6 +378,37 @@
     background: var(--sc-light);
     color: var(--sc-tool);
     border-color: var(--sc-tool);
+}
+
+/* ===== Steps CTA Button ===== */
+.sc-steps-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    color: #fff;
+    background: var(--sc-gradient);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+}
+.sc-steps-toggle-btn:hover {
+    opacity: 0.9;
+}
+.sc-steps-toggle-btn:active {
+    transform: scale(0.98);
+}
+.sc-steps-toggle-btn svg {
+    transition: transform 0.2s;
+}
+.sc-steps-toggle-btn.open svg {
+    transform: rotate(90deg);
 }
 
 /* ===== Steps Header ===== */
@@ -669,6 +710,20 @@
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.6;
+}
+
+/* ===== SymPy Spinner ===== */
+.sc-sympy-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--border);
+    border-top-color: var(--sc-tool);
+    border-radius: 50%;
+    animation: sc-spin 0.6s linear infinite;
+    margin: 0 auto;
+}
+@keyframes sc-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ===== Animations ===== */

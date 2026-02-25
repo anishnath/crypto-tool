@@ -202,7 +202,16 @@
                     </div>
                 </div>
 
-                <div id="sc-steps-area" style="margin-top:1rem"></div>
+                <!-- Step-by-Step CTA Button -->
+                <div id="sc-steps-cta" style="display:none;margin-top:1rem;">
+                    <button type="button" class="sc-steps-toggle-btn" id="sc-steps-toggle-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;">
+                            <path d="M9 5l7 7-7 7"/>
+                        </svg>
+                        Show Step-by-Step Solution
+                    </button>
+                </div>
+                <div id="sc-steps-area" style="margin-top:1rem;display:none;"></div>
                 <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
             </div>
 

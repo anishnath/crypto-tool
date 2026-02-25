@@ -22,7 +22,8 @@ var state = {
     derivativeExprs: [],    // LaTeX strings for step display
     derivativeTexts: [],    // raw nerdamer text strings for symbolic coefficients
     compilerLoaded: false,
-    pendingGraph: false
+    pendingGraph: false,
+    sympyCalled: false
 };
 
 // ==================== Helpers ====================
@@ -217,9 +218,144 @@ function initAutocomplete() {
     });
 }
 
+// ==================== SymPy Helpers ====================
+
+/** Convert user input to Python/SymPy syntax */
+function toPython(expr) {
+    return (expr || '')
+        .replace(/e\^(\([^)]+\))/g, 'exp$1')
+        .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
+        .replace(/\bln\(/g, 'log(')
+        .replace(/\^/g, '**')
+        .replace(/(\d)([a-zA-Z])/g, '$1*$2')
+        .replace(/\)(\()/g, ')*$1')
+        .replace(/\)([a-zA-Z])/g, ')*$1');
+}
+
+/** Get extra symbols beyond x for SymPy declaration */
+function getExtraSymbols(pyExpr) {
+    var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','sqrt','asin','acos','atan','pi','ln'];
+    var seen = {};
+    var re = /\b([a-z][a-z]*)\b/g;
+    var m;
+    while ((m = re.exec(pyExpr)) !== null) {
+        var w = m[1];
+        if (KNOWN.indexOf(w) >= 0 || w === 'x') continue;
+        seen[w] = true;
+    }
+    return Object.keys(seen).sort();
+}
+
+var sympyController = null;
+
+/** Call SymPy via OneCompiler to get exact series expansion */
+function sympySimplify(funcInput, center, numTerms) {
+    // Abort any previous request
+    if (sympyController) { try { sympyController.abort(); } catch(e) {} }
+    sympyController = new AbortController();
+
+    var pyExpr = toPython(funcInput);
+    var extra = getExtraSymbols(pyExpr);
+    var allSyms = extra.concat(['x']);
+    var opts = extra.length > 0 ? ', positive=True' : '';
+    var symDecl = allSyms.join(', ') + " = symbols('" + allSyms.join(' ') + "'" + opts + ')';
+
+    var centerPy = String(center).replace(/pi/g, 'pi');
+
+    var code = 'from sympy import *\n' +
+        symDecl + '\n' +
+        'f = ' + pyExpr + '\n' +
+        'try:\n' +
+        '    s = series(f, x, ' + centerPy + ', n=' + numTerms + ')\n' +
+        '    poly = s.removeO()\n' +
+        '    has_O = s.has(Symbol("O")) or "O(" in str(s)\n' +
+        '    print("LATEX:" + latex(poly))\n' +
+        '    print("TEXT:" + str(poly))\n' +
+        '    print("TERMINATES:" + str(not has_O))\n' +
+        '    print("FULL:" + latex(s))\n' +
+        'except Exception as e:\n' +
+        '    print("ERROR:" + str(e))\n';
+
+    var contextPath = '';
+    var meta = document.querySelector('meta[name="context-path"]');
+    if (meta) contextPath = meta.getAttribute('content') || '';
+
+    var timeoutId = setTimeout(function() { sympyController.abort(); }, 30000);
+
+    // No spinner — Nerdamer result is already visible as fallback.
+    // SymPy will silently upgrade it when the response arrives.
+    var simplifiedEl = document.getElementById('sc-sympy-simplified');
+
+    fetch(contextPath + '/OneCompilerFunctionality?action=execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
+        signal: sympyController.signal
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        clearTimeout(timeoutId);
+        var stdout = (data.Stdout || data.stdout || '').trim();
+        var stderr = (data.Stderr || data.stderr || '').trim();
+
+        if (!stdout || stdout.indexOf('ERROR:') === 0) {
+            // SymPy failed — keep the Nerdamer result as-is
+            if (simplifiedEl) simplifiedEl.innerHTML = '';
+            return;
+        }
+
+        var latexMatch = stdout.match(/LATEX:([^\n]*)/);
+        var fullMatch = stdout.match(/FULL:([^\n]*)/);
+        var termMatch = stdout.match(/TERMINATES:([^\n]*)/);
+
+        if (!latexMatch) {
+            if (simplifiedEl) simplifiedEl.innerHTML = '';
+            return;
+        }
+
+        var resultLatex = latexMatch[1].trim();
+        var fullLatex = fullMatch ? fullMatch[1].trim() : resultLatex;
+        var terminates = termMatch ? termMatch[1].trim() === 'True' : false;
+
+        var eq = terminates ? '=' : '\\approx';
+        var displayLatex = terminates ? resultLatex : fullLatex;
+        var boxedLatex = '\\boxed{f(x) ' + eq + ' ' + displayLatex + '}';
+
+        // Update the simplified solution element — replace Nerdamer result
+        if (simplifiedEl) {
+            // Hide the Nerdamer result (previous sibling)
+            var nerdamerEl = simplifiedEl.previousElementSibling;
+            if (nerdamerEl && nerdamerEl.classList.contains('sc-step-math')) {
+                nerdamerEl.style.display = 'none';
+            }
+
+            simplifiedEl.innerHTML = '';
+
+            var mathDiv = document.createElement('div');
+            mathDiv.className = 'sc-step-math';
+            R.renderKaTeX(mathDiv, boxedLatex, true);
+            simplifiedEl.appendChild(mathDiv);
+
+            if (terminates) {
+                var note = document.createElement('div');
+                note.style.cssText = 'font-size:0.75rem;color:var(--sc-tool);margin-top:0.5rem;font-weight:500;';
+                note.textContent = 'This is a polynomial — the series terminates exactly.';
+                simplifiedEl.appendChild(note);
+            }
+        }
+    })
+    .catch(function() {
+        clearTimeout(timeoutId);
+        // Silently keep Nerdamer result on network error / abort
+        if (simplifiedEl) simplifiedEl.innerHTML = '';
+    });
+}
+
 // ==================== Core Computation ====================
 
 function calculateSeries() {
+    state.sympyCalled = false;
+
     var funcInput = $('sc-func-input').value.trim();
     var numTerms = parseInt($('sc-num-terms').value) || 5;
     var centerStr = $('sc-center-point').value.trim() || '0';
@@ -295,15 +431,26 @@ function calculateSeries() {
             state.seriesType
         );
 
-        // Render steps (pass derivativeTexts for symbolic fractions)
+        // Render steps (hidden until user clicks CTA)
+        var stepsArea = $('sc-steps-area');
         R.renderSteps(
-            $('sc-steps-area'),
+            stepsArea,
             state.derivativesAtCenter,
             numTerms,
             state.center,
             state.derivativeExprs,
             state.derivativeTexts
         );
+
+        // Show steps CTA button, collapse steps
+        var stepsCta = $('sc-steps-cta');
+        var stepsBtn = $('sc-steps-toggle-btn');
+        if (stepsCta) stepsCta.style.display = 'block';
+        if (stepsArea) stepsArea.style.display = 'none';
+        if (stepsBtn) {
+            stepsBtn.classList.remove('open');
+            stepsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Show Step-by-Step Solution';
+        }
 
         // Render convergence analysis
         R.renderConvergence($('sc-convergence-area'), funcInput);
@@ -516,7 +663,10 @@ function clearAll() {
     if (actions) actions.style.display = 'none';
 
     var stepsArea = $('sc-steps-area');
-    if (stepsArea) stepsArea.innerHTML = '';
+    if (stepsArea) { stepsArea.innerHTML = ''; stepsArea.style.display = 'none'; }
+
+    var stepsCta = $('sc-steps-cta');
+    if (stepsCta) stepsCta.style.display = 'none';
 
     var convergenceArea = $('sc-convergence-area');
     if (convergenceArea) convergenceArea.innerHTML = '';
@@ -562,6 +712,27 @@ function init() {
 
     var clearBtn = $('sc-clear-btn');
     if (clearBtn) clearBtn.addEventListener('click', clearAll);
+
+    // Steps toggle CTA
+    var stepsToggle = $('sc-steps-toggle-btn');
+    if (stepsToggle) {
+        stepsToggle.addEventListener('click', function() {
+            var stepsArea = $('sc-steps-area');
+            if (!stepsArea) return;
+            var isOpen = stepsArea.style.display !== 'none';
+            stepsArea.style.display = isOpen ? 'none' : 'block';
+            this.classList.toggle('open', !isOpen);
+            this.innerHTML = (isOpen
+                ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Show Step-by-Step Solution'
+                : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg> Hide Step-by-Step Solution');
+
+            // Trigger SymPy on first open for this calculation
+            if (!isOpen && !state.sympyCalled && state.currentFunction) {
+                state.sympyCalled = true;
+                sympySimplify(state.funcInput, state.center, state.numTerms);
+            }
+        });
+    }
 
     // Output tabs
     var tabs = document.querySelectorAll('.sc-output-tab');
