@@ -115,26 +115,32 @@
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
     </style>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Limit Calculator with Steps | Free Online Limit Solver" />
-        <jsp:param name="toolDescription" value="Free limit calculator with step-by-step solutions. Solve one-sided, two-sided, and infinity limits using L'Hopital's rule, factoring, and squeeze theorem." />
+        <jsp:param name="toolName" value="Limit Calculator with Steps" />
+        <jsp:param name="toolDescription" value="Free limit calculator with step-by-step solutions and 2,000+ practice worksheet problems. Solve one-sided, two-sided, and infinity limits using L'Hopital's rule, factoring, and squeeze theorem. Generate printable limit worksheets with answer keys for exam prep." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="limit-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="limit calculator, limit calculator with steps, limit solver, limit calculator online free, calculus limit calculator, l'hopital rule calculator, evaluate limit calculator, one sided limit calculator, two sided limit calculator, limit at infinity calculator, indeterminate form calculator, find limit calculator, limit finder, squeeze theorem calculator, how to find limit of a function, left hand limit calculator, right hand limit calculator, 0/0 limit" />
+        <jsp:param name="toolKeywords" value="limit calculator, limit calculator with steps, limit solver, limit calculator online free, calculus limit calculator, l'hopital rule calculator, evaluate limit calculator, one sided limit calculator, two sided limit calculator, limit at infinity calculator, indeterminate form calculator, find limit calculator, limit finder, squeeze theorem calculator, how to find limit of a function, left hand limit calculator, right hand limit calculator, 0/0 limit, limit practice problems, limit worksheet, limit worksheet with answers, calculus limits worksheet, limits practice worksheet pdf, limit problems with solutions, l'hopital's rule practice problems, one sided limit practice, limits exam practice, AP calculus limits worksheet, limit quiz generator" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Step-by-step solutions,Direct substitution,L'Hopital's Rule,Factoring and cancellation,One-sided limits (left and right),Two-sided limits,Limits at infinity,Indeterminate form detection (0/0 and infinity/infinity),Numerical approximation table,Squeeze theorem,Live KaTeX math preview,Interactive Plotly graph,Download PDF,Copy LaTeX,Share URL,Python SymPy compiler,Dark mode,Free with no signup" />
+        <jsp:param name="toolFeatures" value="Step-by-step solutions,Direct substitution,L'Hopital's Rule,Factoring and cancellation,One-sided limits (left and right),Two-sided limits,Limits at infinity,Indeterminate form detection (0/0 and infinity/infinity),Numerical approximation table,Squeeze theorem,2000+ practice worksheet problems,Printable worksheet with answer key,11 question types,4 difficulty levels,Live KaTeX math preview,Interactive Plotly graph,Download PDF,Copy LaTeX,Share URL,Python SymPy compiler,Dark mode,Free with no signup" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="educationalLevel" value="College, AP Calculus, University, High School Calculus" />
+        <jsp:param name="teaches" value="Calculus, Limits, L'Hopital's Rule, One-sided limits, Limits at infinity, Indeterminate forms, Squeeze theorem, Continuity, Direct substitution" />
         <jsp:param name="faq1q" value="What is a limit in calculus?" />
-        <jsp:param name="faq1a" value="A limit describes the value a function f(x) approaches as x gets closer to a specific point. Written as lim(x approaches a) f(x) = L, limits are the foundation of calculus used to define derivatives, integrals, and continuity. For example, lim(x approaches 0) sin(x)/x = 1." />
+        <jsp:param name="faq1a" value="A limit describes the value a function f(x) approaches as x gets closer to a specific point. Written as lim(x approaches a) f(x) = L, limits are the foundation of calculus used to define derivatives, integrals, and continuity. For example, lim(x approaches 0) sin(x)/x = 1, even though sin(0)/0 is undefined." />
         <jsp:param name="faq2q" value="How to find the limit of a function step by step?" />
         <jsp:param name="faq2a" value="To find a limit step by step: 1) Try direct substitution by plugging in the value. 2) If you get an indeterminate form like 0/0, try factoring and canceling common factors. 3) If factoring fails, apply L'Hopital's Rule by differentiating the numerator and denominator separately. 4) For limits at infinity, divide by the highest power of x. This calculator automates all these steps." />
         <jsp:param name="faq3q" value="What is L'Hopital's Rule and when do you use it?" />
         <jsp:param name="faq3a" value="L'Hopital's Rule states that for indeterminate forms 0/0 or infinity/infinity, lim f(x)/g(x) = lim f'(x)/g'(x). Use it when direct substitution gives 0/0 or infinity/infinity. Differentiate the numerator and denominator separately (not using the quotient rule), then re-evaluate. You can apply it repeatedly if the result is still indeterminate." />
         <jsp:param name="faq4q" value="What are the seven indeterminate forms?" />
-        <jsp:param name="faq4a" value="The seven indeterminate forms are: 0/0, infinity/infinity, 0 times infinity, infinity minus infinity, 0^0, 1^infinity, and infinity^0. Each requires a special technique to resolve. For 0/0 and infinity/infinity use L'Hopital's Rule or factoring. For 0 times infinity, rewrite as a fraction. For exponential forms (0^0, 1^infinity, infinity^0), take the natural logarithm first." />
+        <jsp:param name="faq4a" value="The seven indeterminate forms are 0/0, infinity/infinity, 0 times infinity, infinity minus infinity, 0^0, 1^infinity, and infinity^0. For 0/0 and infinity/infinity use L'Hopital's Rule or factoring. For 0 times infinity, rewrite as a fraction. For exponential forms (0^0, 1^infinity, infinity^0), take the natural logarithm first, then apply L'Hopital's Rule." />
         <jsp:param name="faq5q" value="How to calculate one-sided limits?" />
         <jsp:param name="faq5a" value="A one-sided limit evaluates a function as x approaches a value from only one direction. The left-hand limit (x approaches a from the left, written a-minus) uses values slightly less than a. The right-hand limit (x approaches a from the right, written a-plus) uses values slightly greater than a. A two-sided limit exists only if both one-sided limits are equal. Use the direction toggle in this calculator to choose left, right, or two-sided." />
         <jsp:param name="faq6q" value="How to evaluate limits at infinity?" />
         <jsp:param name="faq6a" value="To evaluate limits at infinity for rational functions: divide every term by the highest power of x in the denominator. If the degree of the numerator equals the denominator, the limit is the ratio of leading coefficients. If the numerator degree is less, the limit is 0. If greater, the limit is infinity. For exponential functions like e^x, the limit as x approaches infinity is infinity. Type infinity or -infinity as the limit point in this calculator." />
+        <jsp:param name="faq7q" value="Does this limit calculator include practice worksheets?" />
+        <jsp:param name="faq7a" value="Yes. This calculator includes a built-in worksheet generator with over 2,000 limit practice problems. You can filter by 11 question types (standard limits, one-sided, infinity, L'Hopital's Rule, squeeze theorem, continuity, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes." />
+        <jsp:param name="faq8q" value="What types of limit problems are in the worksheet?" />
+        <jsp:param name="faq8a" value="The worksheet covers 11 limit problem types: standard limits (direct substitution, factoring), one-sided limits with asymptotes, limits at infinity, L'Hopital's Rule problems (basic and advanced), difference quotient limits, exponential indeterminate forms (0^0, 1^infinity), continuity problems, DNE with absolute value, and squeeze theorem problems. Problems range from basic textbook style to scholar-level exam questions." />
     </jsp:include>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
@@ -231,6 +237,8 @@
         [data-theme="dark"] .lc-steps-container{border-color:var(--border)}[data-theme="dark"] .lc-steps-header{background:var(--tool-light);border-bottom-color:var(--border)}[data-theme="dark"] .lc-step{border-bottom-color:var(--border)}
         @keyframes lc-spin{to{transform:rotate(360deg)}}
         .lc-spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--tool-primary);border-radius:50%;animation:lc-spin 0.6s linear infinite}
+        .lc-worksheet-btn{padding:0.5rem 1rem;font-size:0.8125rem;font-weight:600;border:1.5px solid var(--tool-primary);border-radius:0.5rem;background:transparent;color:var(--tool-primary);cursor:pointer;transition:all 0.15s;font-family:var(--font-sans)}
+        .lc-worksheet-btn:hover{background:var(--tool-primary);color:#fff}
         .faq-item{border-bottom:1px solid var(--border,#e2e8f0)}.faq-item:last-child{border-bottom:none}
         .faq-question{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0.875rem 0;background:none;border:none;font-size:0.875rem;font-weight:600;color:var(--text-primary,#0f172a);cursor:pointer;text-align:left;font-family:var(--font-sans);gap:0.75rem}
         .faq-answer{display:none;padding:0 0 0.875rem;font-size:0.8125rem;line-height:1.7;color:var(--text-secondary)}
@@ -252,8 +260,8 @@
             </div>
             <div class="tool-page-badges">
                 <span class="tool-badge">Step-by-Step</span>
+                <span class="tool-badge">2000+ Practice Problems</span>
                 <span class="tool-badge">L'H&ocirc;pital's Rule</span>
-                <span class="tool-badge">One-Sided</span>
                 <span class="tool-badge">Free &middot; No Signup</span>
             </div>
         </div>
@@ -261,7 +269,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>Free online <strong>limit calculator</strong> that shows <strong>step-by-step solutions</strong> for every problem. Solve limits using direct substitution, factoring, <strong>L'H&ocirc;pital's Rule</strong>, and the squeeze theorem. Calculate <strong>one-sided limits</strong> (left-hand and right-hand), two-sided limits, and <strong>limits at infinity</strong>. Automatically detects <strong>indeterminate forms</strong> (0/0, &infin;/&infin;). Includes interactive graph, numerical approximation table, PDF download, LaTeX export, and Python SymPy compiler. Free, instant, no signup.</p>
+                <p>Free online <strong>limit calculator</strong> that shows <strong>step-by-step solutions</strong> for every problem, plus a <strong>worksheet generator with 2,000+ practice problems</strong> and answer keys. Solve limits using direct substitution, factoring, <strong>L'H&ocirc;pital's Rule</strong>, and the squeeze theorem. Calculate <strong>one-sided limits</strong> (left-hand and right-hand), two-sided limits, and <strong>limits at infinity</strong>. Automatically detects <strong>indeterminate forms</strong> (0/0, &infin;/&infin;). Generate printable <strong>limit worksheets</strong> filtered by 11 question types and 4 difficulty levels. Includes interactive graph, numerical approximation table, PDF download, LaTeX export, and Python SymPy compiler. Free, instant, no signup.</p>
             </div>
         </div>
     </section>
@@ -319,6 +327,16 @@
                         </div>
                     </div>
                     <hr class="lc-sep">
+                    <div>
+                        <label class="tool-form-label">Worksheet Generator</label>
+                        <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
+                            Generate a printable practice worksheet with random questions and answer key.
+                        </p>
+                        <button type="button" class="lc-worksheet-btn" id="lc-worksheet-btn">
+                            &#128196; Print Worksheet
+                        </button>
+                    </div>
+                    <hr class="lc-sep">
                     <div id="lc-syntax-wrap">
                         <button type="button" class="lc-syntax-toggle" id="lc-syntax-btn">Syntax Help <svg class="lc-syntax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
                         <div class="lc-syntax-content" id="lc-syntax-content">
@@ -357,6 +375,7 @@
                         <button type="button" class="tool-action-btn" id="lc-copy-text-btn">&#128196; Copy Text</button>
                         <button type="button" class="tool-action-btn" id="lc-share-btn">&#128279; Share</button>
                         <button type="button" class="tool-action-btn" id="lc-download-pdf-btn">&#128196; Download PDF</button>
+                        <button type="button" class="tool-action-btn" id="lc-toolbar-worksheet-btn" title="Print Worksheet">&#128209; Worksheet</button>
                     </div>
                 </div>
             </div>
@@ -507,7 +526,33 @@
             <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What is L'H&ocirc;pital's Rule and when do you use it?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">L'H&ocirc;pital's Rule states that for indeterminate forms 0/0 or &infin;/&infin;, lim f(x)/g(x) = lim f'(x)/g'(x). Use it when direct substitution gives 0/0 or &infin;/&infin;. Differentiate the numerator and denominator separately (not using the quotient rule), then re-evaluate. You can apply it repeatedly if the result is still indeterminate.</div></div>
             <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What are the seven indeterminate forms?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The seven indeterminate forms are 0/0, &infin;/&infin;, 0&middot;&infin;, &infin;-&infin;, 0^0, 1^&infin;, and &infin;^0. For 0/0 and &infin;/&infin; use L'H&ocirc;pital's Rule or factoring. For 0&middot;&infin;, rewrite as a fraction. For exponential forms (0^0, 1^&infin;, &infin;^0), take the natural logarithm first, then apply L'H&ocirc;pital's Rule.</div></div>
             <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How to calculate one-sided limits?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">A one-sided limit evaluates a function as x approaches a value from only one direction. The left-hand limit (x&rarr;a&supmin;) uses values slightly less than a. The right-hand limit (x&rarr;a&supplus;) uses values slightly greater than a. A two-sided limit exists only if both one-sided limits are equal. Use the direction toggle in this calculator to choose left, right, or two-sided.</div></div>
-            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How to evaluate limits at infinity?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To evaluate limits at infinity for rational functions: divide every term by the highest power of x in the denominator. If the degree of the numerator equals the denominator, the limit is the ratio of leading coefficients. If the numerator degree is less, the limit is 0. If greater, the limit is infinity. Type &ldquo;infinity&rdquo; or &ldquo;-infinity&rdquo; as the limit point in this calculator.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How to evaluate limits at infinity?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">To evaluate limits at infinity for rational functions: divide every term by the highest power of x in the denominator. If the degree of the numerator equals the denominator, the limit is the ratio of leading coefficients. If the numerator degree is less, the limit is 0. If greater, the limit is infinity. For exponential functions like e^x, the limit as x approaches infinity is infinity. Type &ldquo;infinity&rdquo; or &ldquo;-infinity&rdquo; as the limit point in this calculator.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Does this limit calculator include practice worksheets?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">Yes. This calculator includes a built-in worksheet generator with over 2,000 limit practice problems. You can filter by 11 question types (standard limits, one-sided, infinity, L'H&ocirc;pital's Rule, squeeze theorem, continuity, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes.</div></div>
+            <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What types of limit problems are in the worksheet?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer">The worksheet covers 11 limit problem types: standard limits (direct substitution, factoring), one-sided limits with asymptotes, limits at infinity, L'H&ocirc;pital's Rule problems (basic and advanced), difference quotient limits, exponential indeterminate forms (0^0, 1^&infin;), continuity problems, DNE with absolute value, and squeeze theorem problems. Problems range from basic textbook style to scholar-level exam questions.</div></div>
+        </div>
+    </section>
+    <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+        <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+            <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Limits Practice Worksheet Generator</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">This calculator includes a <strong>built-in worksheet generator</strong> with over <strong>2,000 limit practice problems</strong> and full answer keys. Click the <strong>Print Worksheet</strong> button to generate a randomly shuffled practice set you can use for exam prep, homework review, or classroom quizzes.</p>
+            <div class="lc-edu-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+                <div class="lc-edu-card" style="text-align:center;border-left:3px solid #8b5cf6;">
+                    <h4>11 Question Types</h4>
+                    <p>Standard limits, one-sided, infinity, L'H&ocirc;pital's Rule, difference quotient, squeeze theorem, continuity, and more.</p>
+                </div>
+                <div class="lc-edu-card" style="text-align:center;border-left:3px solid #a78bfa;">
+                    <h4>4 Difficulty Levels</h4>
+                    <p>Basic, medium, hard, and scholar. Filter to match your course level &mdash; from introductory calculus to advanced exam practice.</p>
+                </div>
+                <div class="lc-edu-card" style="text-align:center;border-left:3px solid #7c3aed;">
+                    <h4>Full Answer Key</h4>
+                    <p>Every worksheet comes with a complete answer key rendered in clean math notation. Toggle it on or off before generating.</p>
+                </div>
+                <div class="lc-edu-card" style="text-align:center;border-left:3px solid #6d28d9;">
+                    <h4>Randomised Every Time</h4>
+                    <p>Each worksheet is randomly shuffled from the 2,000+ question bank, so you get fresh practice every time you generate.</p>
+                </div>
+            </div>
         </div>
     </section>
     <section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
@@ -530,7 +575,7 @@
         </div>
     </section>
     <%@ include file="modern/components/support-section.jsp" %>
-    <footer class="page-footer"><div class="footer-content"><p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p><div class="footer-links"><a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a><a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a><a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a></div></div></footer>
+    <footer class="page-footer"><div class="footer-content"><p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p><div class="footer-links"><a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a><a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a><a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a></div></div></footer>
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -546,6 +591,7 @@
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
     <script>window.__LC_CTX='<%=request.getContextPath()%>';</script>
     <script src="<%=request.getContextPath()%>/js/limit-calculator.js?v=<%=cacheVersion%>"></script>
 </body>

@@ -711,5 +711,22 @@ function loadFromUrl(){
 
 function escapeHtml(str){var div=document.createElement('div');div.appendChild(document.createTextNode(str));return div.innerHTML;}
 
+// Worksheet button wiring
+function openWorksheet() {
+    if (typeof WorksheetEngine !== 'undefined') {
+        WorksheetEngine.open({
+            jsonUrl: 'https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/worksheet/math/calculus/limits.json',
+            title: 'Limits',
+            accentColor: '#8b5cf6',
+            branding: '8gwifi.org',
+            defaultCount: 20
+        });
+    }
+}
+var wsBtn = document.getElementById('lc-worksheet-btn');
+if (wsBtn) wsBtn.addEventListener('click', openWorksheet);
+var wsTbBtn = document.getElementById('lc-toolbar-worksheet-btn');
+if (wsTbBtn) wsTbBtn.addEventListener('click', openWorksheet);
+
 loadFromUrl();
 })();
