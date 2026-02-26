@@ -271,6 +271,9 @@ function buildConfigModal(data, opts) {
         + '<option value="15">15 questions</option>'
         + '<option value="20"' + (opts.defaultCount === 20 ? ' selected' : '') + '>20 questions</option>'
         + '<option value="30">30 questions</option>'
+        + '<option value="50">50 questions</option>'
+        + '<option value="75">75 questions</option>'
+        + '<option value="100">100 questions</option>'
         + '</select>';
     body.appendChild(countSection);
 
