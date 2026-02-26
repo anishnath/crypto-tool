@@ -23,16 +23,16 @@
     <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pde-solver-calculator.css?v=<%=cacheVersion%>"></noscript>
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="PDE Solver Calculator &bull; With Steps &amp; 3D Graphs" />
-        <jsp:param name="toolDescription" value="Free PDE solver with step-by-step solutions. Solve heat, wave, Laplace, Poisson, transport, and Schr&ouml;dinger equations. Dirichlet, Neumann, Robin boundary conditions. Contour plots, time animation, 3D surfaces. No signup." />
+        <jsp:param name="toolName" value="PDE Solver Calculator - Solve Partial Differential Equations with Steps" />
+        <jsp:param name="toolDescription" value="Free PDE solver with step-by-step solutions. Solve heat, wave, Laplace, Poisson, transport, and Schr&ouml;dinger equations. Dirichlet, Neumann, Robin boundary conditions. 3D surface plots, contour maps, time animation. 2,000+ practice worksheet problems with answer keys. No signup." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="pde-solver-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="PDE solver, partial differential equation calculator, PDE solver with steps, heat equation solver, wave equation solver, Laplace equation solver, Poisson equation solver, transport equation, advection equation, Schrodinger equation solver, diffusion equation, finite difference PDE, numerical PDE solver, boundary value problem, Dirichlet boundary condition, Neumann boundary condition, Robin boundary condition, separation of variables, Fourier series PDE, 2D PDE solver, 3D PDE solver" />
-        <jsp:param name="educationalLevel" value="High School, College" />
-        <jsp:param name="teaches" value="Partial differential equations, heat equation, wave equation, Laplace equation, Poisson equation, transport equation, Schrodinger equation, finite difference methods, boundary conditions, separation of variables, Fourier series, numerical stability, CFL condition" />
+        <jsp:param name="toolKeywords" value="PDE solver, partial differential equation calculator, PDE solver with steps, heat equation solver, wave equation solver, Laplace equation solver, Poisson equation solver, transport equation solver, advection equation, Schrodinger equation solver, diffusion equation calculator, finite difference PDE, numerical PDE solver, boundary value problem solver, Dirichlet boundary condition, Neumann boundary condition, Robin boundary condition, separation of variables PDE, Fourier series PDE, 2D PDE solver, 3D PDE solver, PDE worksheet, PDE practice problems, PDE practice problems with solutions, PDE worksheet with answers, heat equation practice, wave equation worksheet, Laplace equation practice, Fourier series worksheet, separation of variables practice, PDE quiz generator, AP math PDE practice" />
+        <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
+        <jsp:param name="teaches" value="Partial differential equations, heat equation, wave equation, Laplace equation, Poisson equation, transport equation, Schrodinger equation, finite difference methods, boundary conditions, separation of variables, Fourier series, numerical stability, CFL condition, eigenvalue problems, Sturm-Liouville theory, d Alembert formula, Duhamel principle, Green functions" />
         <jsp:param name="howToSteps" value="Select PDE type|Choose Heat, Wave, Laplace, Poisson, Transport, or Schrodinger equation,Set parameters &amp; BCs|Enter coefficients, domain size, initial/boundary conditions (Dirichlet, Neumann, Robin),Click Solve|Compute numerical solution with finite difference methods and view step-by-step breakdown,View result &amp; graph|See 3D surface, contour plot, time animation, stability info, and export options" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Heat equation (1D/2D diffusion) solver with steps,Wave equation solver with steps,Laplace equation (2D steady-state) solver,Poisson equation solver,Transport/advection equation solver,Time-independent Schrodinger equation solver,1st-order linear PDE (SymPy pdsolve),Dirichlet Neumann Robin boundary conditions,Step-by-step solution breakdown,Stability analysis (CFL Courant number),Interactive 3D surface plots,Contour/heatmap visualization,Time evolution animation,Copy LaTeX and Download PDF,Practice worksheet generator,Built-in Python compiler,Quick presets for classic problems,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolFeatures" value="Heat equation (1D/2D diffusion) solver with steps,Wave equation solver with steps,Laplace equation (2D steady-state) solver,Poisson equation solver,Transport/advection equation solver,Time-independent Schrodinger equation solver,1st-order linear PDE analytical solver,Dirichlet Neumann Robin boundary conditions,Step-by-step solution breakdown,Stability analysis (CFL Courant number),Interactive 3D surface plots,Contour/heatmap visualization,Time evolution animation,Copy LaTeX and Download PDF,2000+ PDE practice worksheet problems,Practice worksheet with answer keys,Filter by 48 question types and 4 difficulty levels,Built-in Python compiler,Quick presets for classic problems,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is a partial differential equation (PDE)?" />
         <jsp:param name="faq1a" value="A PDE is an equation involving a function of several variables and its partial derivatives. Unlike ODEs (one independent variable), PDEs involve multiple variables. The three classic types: heat equation (diffusion), wave equation (propagation), and Laplace equation (steady-state). PDEs model phenomena in physics, engineering, and finance." />
@@ -46,10 +46,10 @@
         <jsp:param name="faq5a" value="The heat equation du/dt = k*d2u/dx2 models heat diffusion, chemical concentration spread, and financial option pricing (Black-Scholes). k is thermal diffusivity. Solutions decay toward equilibrium. In physics: heat conduction in rods, plates, and 3D bodies. In biology: population diffusion. The equation is parabolic." />
         <jsp:param name="faq6q" value="What is the wave equation and where is it used?" />
         <jsp:param name="faq6a" value="The wave equation d2u/dt2 = c2*d2u/dx2 models vibrating strings, sound waves, electromagnetic waves, and seismic waves. c is the wave speed. Solutions preserve shape and propagate. D'Alembert's formula gives u(x,t) = f(x-ct) + g(x+ct). The equation is hyperbolic." />
-        <jsp:param name="faq7q" value="What is the Poisson equation?" />
-        <jsp:param name="faq7a" value="The Poisson equation nabla2(u) = f(x,y) generalizes the Laplace equation with a source term. It models gravitational potential, electrostatic potential with charge density, steady-state heat with internal generation, and pressure in fluid mechanics. When f=0, it reduces to the Laplace equation." />
-        <jsp:param name="faq8q" value="Is this PDE solver calculator free?" />
-        <jsp:param name="faq8a" value="Yes, completely free with no registration. Includes step-by-step solutions, stability analysis, 3D surface plots, contour plots, time animation, Dirichlet/Neumann/Robin BCs, LaTeX export, PDF download, practice worksheets, and a built-in Python compiler with NumPy and SymPy." />
+        <jsp:param name="faq7q" value="Does this PDE solver include practice worksheets?" />
+        <jsp:param name="faq7a" value="Yes. This calculator includes a built-in worksheet generator with over 2,000 PDE practice problems. Filter by 48 question types (heat equation, wave equation, Laplace, Poisson, Fourier series, separation of variables, eigenvalue problems, Sturm-Liouville, d Alembert, Duhamel principle, Green functions, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key." />
+        <jsp:param name="faq8q" value="What types of PDE problems are in the worksheet?" />
+        <jsp:param name="faq8a" value="The worksheet covers 48 PDE problem types across 4 difficulty levels: classification and identification (basic), separation of variables and Fourier coefficients (medium), full Fourier series solutions and polar coordinates (hard), and Sturm-Liouville eigenvalue problems, Green functions, Duhamel principle, and biharmonic equations (scholar). All answers are verified and rendered in LaTeX notation." />
     </jsp:include>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -82,7 +82,7 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">PDE Solver Calculator</h1>
+            <h1 class="tool-page-title">PDE Solver Calculator - Solve Partial Differential Equations with Steps</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/math">Math Tools</a> /
@@ -90,9 +90,9 @@
             </nav>
         </div>
         <div class="tool-page-badges">
-            <span class="tool-badge">7 PDE Types</span>
             <span class="tool-badge">Step-by-Step</span>
             <span class="tool-badge">3D &amp; Animation</span>
+            <span class="tool-badge">2000+ Problems</span>
             <span class="tool-badge">Free &middot; No Signup</span>
         </div>
     </div>
@@ -300,7 +300,7 @@
 
                 <!-- 1st Order Linear PDE -->
                 <div id="pde-linear1-wrap" style="display:none;">
-                    <p class="tool-form-hint" style="margin-bottom:0.75rem;">a u<sub>x</sub> + b u<sub>y</sub> + c u = G(x,y). SymPy pdsolve for analytical solution.</p>
+                    <p class="tool-form-hint" style="margin-bottom:0.75rem;">a u<sub>x</sub> + b u<sub>y</sub> + c u = G(x,y). Analytical symbolic solution with steps.</p>
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;">
                         <div class="tool-form-group">
                             <label class="tool-form-label" for="pde-linear1-a">a (coeff of u<sub>x</sub>)</label>
@@ -331,7 +331,15 @@
                     <button type="button" class="pde-random-btn" id="pde-random-btn" title="Random preset">&#127922; Random</button>
                 </div>
 
-                <!-- Export Buttons -->
+                <!-- Worksheet Button (always visible) -->
+                <div class="pde-export-row" style="margin-top:0.5rem;">
+                    <button type="button" class="pde-export-btn" id="pde-worksheet-btn" title="Practice Worksheet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        Worksheet
+                    </button>
+                </div>
+
+                <!-- Export Buttons (shown after solve) -->
                 <div class="pde-export-row" id="pde-export-row" style="display:none;">
                     <button type="button" class="pde-export-btn" id="pde-copy-latex-btn" title="Copy LaTeX">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
@@ -340,10 +348,6 @@
                     <button type="button" class="pde-export-btn" id="pde-download-pdf-btn" title="Download PDF">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         PDF
-                    </button>
-                    <button type="button" class="pde-export-btn" id="pde-worksheet-btn" title="Practice Worksheet">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        Worksheet
                     </button>
                     <button type="button" class="pde-export-btn" id="pde-share-btn" title="Share URL">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -536,6 +540,33 @@
         <p style="color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.7;">PDEs are fundamental in physics. The <strong>heat equation</strong> models thermal conduction in solids and diffusion of chemicals. The <strong>wave equation</strong> describes vibrating strings, sound waves, electromagnetic radiation, and seismic waves. The <strong>Laplace/Poisson equation</strong> governs electrostatic potential, gravitational fields, and steady-state fluid flow. The <strong>Schr&ouml;dinger equation</strong> is the foundation of quantum mechanics, determining wavefunctions and energy levels of particles. The <strong>transport equation</strong> models advection of pollutants, tracer particles, and population migration.</p>
     </div>
 
+    <!-- 5-Step Process: How to Solve a PDE -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">How to Solve a Partial Differential Equation (5-Step Process)</h2>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #0891b2, #22d3ee); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
+                <div><strong style="color: var(--text-primary);">Classify the PDE</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Determine the type (parabolic, hyperbolic, elliptic), order, linearity, and whether it is homogeneous. The classification dictates which solution method to use.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #0891b2, #22d3ee); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
+                <div><strong style="color: var(--text-primary);">Set Up Boundary &amp; Initial Conditions</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Identify the domain and specify conditions: Dirichlet (value), Neumann (derivative), or Robin (mixed). For time-dependent PDEs, also specify the initial condition u(x,0).</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #0891b2, #22d3ee); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">3</span>
+                <div><strong style="color: var(--text-primary);">Apply Separation of Variables</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Assume u(x,t)=X(x)T(t), substitute into the PDE, and separate into independent ODEs. Solve the spatial ODE with BCs to find eigenvalues and eigenfunctions.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #0891b2, #22d3ee); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">4</span>
+                <div><strong style="color: var(--text-primary);">Build the Fourier Series Solution</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Superpose all eigenfunctions into a Fourier series. Compute the coefficients using the initial condition and orthogonality of sine/cosine functions.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #0891b2, #22d3ee); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">5</span>
+                <div><strong style="color: var(--text-primary);">Verify &amp; Visualize</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Check that the solution satisfies the PDE, boundary conditions, and initial conditions. Use 3D plots and animations to understand the solution behavior over time.</p></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Visible FAQ Accordion (matches JSON-LD FAQPage schema for CTR) -->
     <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
         <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);" id="faqs">Frequently Asked Questions</h2>
@@ -590,18 +621,50 @@
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What is the Poisson equation?
+                Is this PDE solver calculator free?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">The <strong>Poisson equation</strong> &nabla;&sup2;u = f(x,y) generalizes the Laplace equation by adding a source term. It models gravitational potential with mass distribution, electrostatic potential with charge density, steady-state heat with internal generation, and pressure in incompressible fluid mechanics. When f=0, it reduces to the Laplace equation (&nabla;&sup2;u = 0). The solver uses the <strong>Jacobi iterative method</strong> on a 2D grid with configurable Dirichlet, Neumann, or mixed boundary conditions.</div>
+            <div class="faq-answer">Yes, <strong>completely free</strong> with no registration or signup required. Features include: step-by-step solution breakdowns, numerical stability analysis, interactive 3D surface plots, contour/heatmap visualization, time evolution animation, Dirichlet/Neumann/Robin boundary conditions, LaTeX export, PDF download, 2,000+ practice worksheet problems with answer keys, and a built-in Python compiler. All PDE types are available without any paywall or usage limits.</div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Is this PDE solver calculator free?
+                Does this PDE solver include practice worksheets?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes, <strong>completely free</strong> with no registration or signup required. Features include: step-by-step solution breakdowns, numerical stability analysis (CFL/r parameter), interactive 3D surface plots, contour/heatmap visualization, time evolution animation, Dirichlet/Neumann/Robin/Periodic boundary conditions, LaTeX export, PDF download, practice worksheets, shareable URLs, and a built-in Python compiler with NumPy and SymPy. All 7 PDE types are available without any paywall or usage limits.</div>
+            <div class="faq-answer">Yes. This calculator includes a built-in worksheet generator with over <strong>2,000 PDE practice problems</strong>. You can filter by 48 question types (heat equation, wave equation, Laplace, Poisson, Fourier series, separation of variables, eigenvalue problems, Sturm-Liouville, d'Alembert, Duhamel principle, Green's functions, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What types of PDE problems are in the worksheet?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The worksheet covers <strong>48 PDE problem types</strong> across 4 difficulty levels: classification and identification (basic), separation of variables and Fourier coefficients (medium), full Fourier series solutions and polar/annular coordinates (hard), and Sturm-Liouville eigenvalue problems, Green's functions, Duhamel's principle, and biharmonic equations (scholar). All answers are verified and rendered in LaTeX notation with full worked solutions.</div>
+        </div>
+    </div>
+
+    <!-- PDE Practice Worksheet Generator Section -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">PDE Practice Worksheet Generator</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7;">This calculator includes a <strong>built-in worksheet generator</strong> with over <strong>2,000 PDE practice problems</strong> and full answer keys. Click the <strong>Worksheet</strong> button to generate a randomly shuffled practice set you can use for exam prep, homework review, or classroom quizzes.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #0891b2;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">48 Question Types</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Heat, wave, Laplace, Poisson, Fourier series, separation of variables, eigenvalues, Sturm-Liouville, Green's functions, and more.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #22d3ee;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">4 Difficulty Levels</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Basic, medium, hard, and scholar. Filter to match your course level &mdash; from intro PDEs to graduate-level exam practice.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #0e7490;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">Full Answer Key</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Every worksheet comes with a complete answer key rendered in clean LaTeX notation. Toggle it on or off before generating.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #67e8f9;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">Randomised Every Time</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Each worksheet is randomly shuffled from the 2,000+ question bank with stratified sampling, so you get balanced practice every time.</p>
+            </div>
         </div>
     </div>
 
@@ -688,6 +751,7 @@
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
 <script>window.PDE_CALC_CTX = "<%=request.getContextPath()%>";</script>
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/pde-solver-calculator.js?v=<%=cacheVersion%>"></script>
 </body>
 </html>
