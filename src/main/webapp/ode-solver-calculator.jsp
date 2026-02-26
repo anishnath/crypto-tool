@@ -26,33 +26,33 @@
 
     <!-- SEO (competitive targeting: Symbolab, mathdf, eMathHelp) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="ODE Solver Calculator • With Steps!" />
-        <jsp:param name="toolDescription" value="Free ODE solver with step-by-step solutions. Solve first-order and higher-order ODEs. Separable, linear, Bernoulli, exact. IVP with initial conditions, direction field. No signup." />
+        <jsp:param name="toolName" value="ODE Solver Calculator - Differential Equations with Steps" />
+        <jsp:param name="toolDescription" value="Free ODE solver with step-by-step solutions and 1,000+ practice worksheet problems. Solve first-order, second-order, and higher-order differential equations with initial conditions. Separable, linear, Bernoulli, exact, Cauchy-Euler, Laplace transforms. Generate printable ODE worksheets with answer keys for exam prep." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="ode-solver-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="differential equation calculator, ODE solver, ODE solver with steps, differential equation calculator with steps, ordinary differential equation solver, first order differential equation calculator, 2nd order ODE solver, differential equation solver with initial conditions, initial value problem solver, homogeneous differential equation calculator, direction field calculator, separable ODE, Bernoulli equation, exact equation, IVP solver" />
-        <jsp:param name="educationalLevel" value="High School, College" />
-        <jsp:param name="teaches" value="Ordinary differential equations, ODEs, initial value problems, separable equations" />
+        <jsp:param name="toolKeywords" value="differential equation calculator, ODE solver, ODE solver with steps, differential equation calculator with steps, ordinary differential equation solver, first order differential equation calculator, 2nd order ODE solver, differential equation solver with initial conditions, initial value problem solver, homogeneous differential equation calculator, direction field calculator, separable ODE, Bernoulli equation, exact equation, IVP solver, Cauchy-Euler equation solver, Laplace transform ODE solver, characteristic equation calculator, differential equation worksheet, ODE practice problems, ODE worksheet with answers, differential equation practice worksheet, first order ODE worksheet, second order ODE practice, ODE practice problems with solutions, differential equations homework help, Bernoulli equation practice, separable differential equation problems, exact equation worksheet, AP differential equations practice, ODE quiz generator" />
+        <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
+        <jsp:param name="teaches" value="Ordinary differential equations, ODEs, initial value problems, separable equations, linear ODEs, Bernoulli equations, exact equations, homogeneous equations, higher-order differential equations, characteristic equations, direction fields, slope fields, solution verification, integrating factors, Cauchy-Euler equations, Laplace transform methods, power series solutions, Euler method" />
         <jsp:param name="howToSteps" value="Select ODE mode|Choose first-order, higher-order, or direction field mode,Enter your ODE|Type your differential equation (e.g. y'=x*y, y''+y=0) with optional initial conditions,Click Solve|Click Solve to compute the step-by-step solution,View result &amp; graph|See the solution, method used, verification, and interactive graph" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="First-order ODE solver with steps,Second-order ODE solver with steps,Higher-order ODE solver (3rd 4th 5th order),Direction field (slope field) plotter,ODE classification (separable linear Bernoulli exact),Initial value problem (IVP) support,Solution verification with checkodesol,Interactive solution curve graphs,Live KaTeX math preview with Leibniz notation,Copy LaTeX output,Built-in Python compiler with SymPy,Quick examples for each mode,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolFeatures" value="First-order ODE solver with steps,Second-order ODE solver with steps,Higher-order ODE solver (3rd 4th 5th order),Direction field (slope field) plotter,ODE classification (separable linear Bernoulli exact),Initial value problem (IVP) support,Automatic solution verification,Interactive solution curve graphs,Live KaTeX math preview with Leibniz notation,Copy LaTeX output,Built-in Python compiler,Quick examples for each mode,1000+ ODE practice worksheet problems,Printable worksheet with answer key,8+ question types (exact Laplace Euler-Cauchy Bernoulli systems),4 difficulty levels (basic medium hard scholar),Download PDF,Share URL,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="How do you solve a first-order ODE?" />
-        <jsp:param name="faq1a" value="First identify the ODE type: separable, linear, Bernoulli, exact, or homogeneous. Then apply the appropriate method. For separable ODEs, separate variables and integrate both sides. For linear ODEs y'+P(x)y=Q(x), multiply by the integrating factor mu=e^(integral P dx). This calculator automatically classifies and solves first-order ODEs using SymPy dsolve." />
+        <jsp:param name="faq1a" value="First identify the ODE type: separable, linear, Bernoulli, exact, or homogeneous. Then apply the appropriate method. For separable ODEs, separate variables and integrate both sides. For linear ODEs y'+P(x)y=Q(x), multiply by the integrating factor mu=e^(integral P dx). This calculator automatically classifies and solves first-order ODEs with full step-by-step working." />
         <jsp:param name="faq2q" value="Does this ODE solver support initial conditions (IVP)?" />
         <jsp:param name="faq2a" value="Yes. This calculator solves initial value problems (IVPs)—ODEs with initial conditions at a specific point. For first-order: y(x0)=y0. For second-order: y(x0)=y0 and y'(x0)=dy0. Initial conditions determine the unique particular solution from the general solution family." />
         <jsp:param name="faq3q" value="What is a direction field (slope field)?" />
         <jsp:param name="faq3a" value="A direction field is a graphical representation of a first-order ODE dy/dx=f(x,y). At each point (x,y) in the plane, a short line segment shows the slope f(x,y). The pattern of these segments reveals the qualitative behavior of solutions without solving the equation analytically." />
         <jsp:param name="faq4q" value="What ODE types can this calculator solve?" />
-        <jsp:param name="faq4a" value="This calculator solves: separable, first-order linear, Bernoulli, exact, homogeneous, second-order constant coefficient (homogeneous and non-homogeneous), Cauchy-Euler, and many other types that SymPy dsolve supports. It automatically classifies the ODE type and applies the appropriate solution method." />
+        <jsp:param name="faq4a" value="This calculator solves: separable, first-order linear, Bernoulli, exact, homogeneous, second-order constant coefficient (homogeneous and non-homogeneous), Cauchy-Euler, and many more. It automatically classifies the ODE type and applies the appropriate solution method." />
         <jsp:param name="faq5q" value="What is the difference between general and particular solutions?" />
         <jsp:param name="faq5a" value="A general solution contains arbitrary constants (C1, C2, etc.) and represents all possible solutions. A particular solution is obtained by applying initial conditions to determine specific values of these constants. First-order ODEs have one constant (C1), second-order have two (C1, C2)." />
         <jsp:param name="faq6q" value="Is this ODE solver calculator free?" />
-        <jsp:param name="faq6a" value="Yes, completely free with no registration required. Includes step-by-step solutions, ODE classification, solution verification, interactive graphs, direction field plots, exportable Python code, and a built-in SymPy compiler." />
-        <jsp:param name="faq7q" value="What is a separable differential equation?" />
-        <jsp:param name="faq7a" value="A separable ODE has the form dy/dx = g(x)h(y), where the right-hand side factors into a function of x times a function of y. To solve, rewrite as dy/h(y) = g(x)dx and integrate both sides. Examples include y'=xy, y'=y/x, and logistic growth dy/dt=ry(1-y/K). This calculator automatically detects separable ODEs and applies separation of variables with full steps." />
-        <jsp:param name="faq8q" value="What is a homogeneous differential equation?" />
-        <jsp:param name="faq8a" value="A homogeneous ODE has every term of the same degree in y and its derivatives. For first-order: M(x,y)dx + N(x,y)dy = 0 where M and N are homogeneous of the same degree. For second-order constant-coefficient: ay''+by'+cy=0 with no forcing term. This calculator solves homogeneous ODEs (and non-homogeneous with undetermined coefficients) and shows the characteristic equation and solution form in the steps." />
+        <jsp:param name="faq6a" value="Yes, completely free with no registration required. Includes step-by-step solutions, ODE classification, solution verification, interactive graphs, direction field plots, 1,000+ practice worksheet problems with answer keys, and a built-in Python compiler." />
+        <jsp:param name="faq7q" value="Does this ODE solver include practice worksheets?" />
+        <jsp:param name="faq7a" value="Yes. This calculator includes a built-in worksheet generator with over 1,000 ODE practice problems. You can filter by 8+ question types (exact equations, Laplace transforms, Euler method, power series, Euler-Cauchy, Bernoulli, homogeneous substitutions, and systems of ODEs) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes." />
+        <jsp:param name="faq8q" value="What types of ODE problems are in the worksheet?" />
+        <jsp:param name="faq8a" value="The worksheet covers 8+ ODE problem types: exact differential equations, Euler method numerical approximations, power series solutions (Maclaurin), Laplace transforms (forward and inverse), Euler-Cauchy equations, Bernoulli equations, homogeneous substitution ODEs, and systems of linear ODEs. Problems range from basic textbook style to scholar-level exam questions with full worked answer keys." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -91,7 +91,7 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">ODE Solver Calculator</h1>
+            <h1 class="tool-page-title">ODE Solver Calculator - Solve Differential Equations with Steps</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/math">Math Tools</a> /
@@ -101,7 +101,7 @@
         <div class="tool-page-badges">
             <span class="tool-badge">Step-by-Step</span>
             <span class="tool-badge">3 Modes</span>
-            <span class="tool-badge">SymPy CAS</span>
+            <span class="tool-badge">1000+ Problems</span>
             <span class="tool-badge">Free &middot; No Signup</span>
         </div>
     </div>
@@ -111,7 +111,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Solve <strong>ordinary differential equations</strong> with <strong>step-by-step solutions</strong>. Three modes: <strong>first-order ODE</strong> solver (separable, linear, Bernoulli, exact), <strong>higher-order ODE</strong> solver (2nd through 5th order, constant coefficient, non-homogeneous), and <strong>direction field</strong> (slope field) plotter. Powered by SymPy with solution verification, interactive graphs, and a built-in Python compiler.</p>
+            <p>Solve <strong>ordinary differential equations</strong> with <strong>step-by-step solutions</strong>. Three modes: <strong>first-order ODE</strong> solver (separable, linear, Bernoulli, exact), <strong>higher-order ODE</strong> solver (2nd through 5th order, constant coefficient, non-homogeneous), and <strong>direction field</strong> (slope field) plotter. Includes automatic solution verification, interactive graphs, and 1,000+ practice worksheet problems with answer keys.</p>
         </div>
     </div>
 </section>
@@ -457,6 +457,60 @@
         </div>
     </div>
 
+    <!-- Common ODE Types Reference Table -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-primary);">Common ODE Types Every Student Should Know</h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.875rem;">
+                <thead>
+                    <tr>
+                        <th style="width: 22%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--text-primary);">ODE Type</th>
+                        <th style="width: 33%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--text-primary);">Example</th>
+                        <th style="width: 25%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--text-primary);">Solution Method</th>
+                        <th style="width: 20%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--text-primary);">Order</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--text-secondary);">
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Separable</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y' = xy</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Separate &amp; integrate</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1st</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Linear (1st order)</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y' + 2y = e<sup>x</sup></td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Integrating factor &mu;</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1st</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Bernoulli</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y' + y = y<sup>3</sup></td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Substitution v = y<sup>1-n</sup></td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1st</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Exact</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">(2xy)dx + (x&sup2;)dy = 0</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Find potential F(x,y)</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1st</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Homogeneous</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y' = (x+y)/x</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Substitution v = y/x</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1st</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Constant Coefficient</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y'' + 3y' + 2y = 0</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Characteristic equation</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">2nd</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Cauchy-Euler</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">x&sup2;y'' + xy' - y = 0</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Substitution y = x<sup>r</sup></td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">2nd</td></tr>
+                    <tr><td style="padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text-primary);">Non-homogeneous</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">y'' + y = sin(x)</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Undetermined coefficients</td><td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">2nd</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5-Step Process: How to Solve a Differential Equation -->
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">How to Solve a Differential Equation (5-Step Process)</h2>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #db2777, #f472b6); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
+                <div><strong style="color: var(--text-primary);">Identify the ODE Type</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Determine the order (1st, 2nd, higher) and classify: separable, linear, Bernoulli, exact, homogeneous, or constant-coefficient.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #db2777, #f472b6); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
+                <div><strong style="color: var(--text-primary);">Apply the Matching Method</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Use the appropriate technique: separation of variables, integrating factor, characteristic equation, substitution, or variation of parameters.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #db2777, #f472b6); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">3</span>
+                <div><strong style="color: var(--text-primary);">Find the General Solution</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Integrate and simplify to obtain the general solution containing arbitrary constants (C1, C2, etc.).</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #db2777, #f472b6); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">4</span>
+                <div><strong style="color: var(--text-primary);">Apply Initial Conditions (if IVP)</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Substitute the initial values y(x&#8320;)=y&#8320; to solve for the constants and obtain the particular solution.</p></div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="flex-shrink: 0; width: 28px; height: 28px; background: linear-gradient(135deg, #db2777, #f472b6); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">5</span>
+                <div><strong style="color: var(--text-primary);">Verify the Solution</strong><p style="color: var(--text-secondary); margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.6;">Substitute your solution back into the original ODE to confirm it satisfies the equation. This calculator verifies your solution automatically.</p></div>
+            </div>
+        </div>
+    </div>
+
     <!-- FAQ Section -->
     <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
         <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
@@ -466,7 +520,7 @@
                 How do you solve a first-order ODE?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">First identify the ODE type: separable, linear, Bernoulli, exact, or homogeneous. Then apply the appropriate method. For separable ODEs, separate variables and integrate both sides. For linear ODEs y'+P(x)y=Q(x), multiply by the integrating factor &mu;=e<sup>&int;P dx</sup>. This calculator automatically classifies and solves first-order ODEs using SymPy's dsolve.</div>
+            <div class="faq-answer">First identify the ODE type: separable, linear, Bernoulli, exact, or homogeneous. Then apply the appropriate method. For separable ODEs, separate variables and integrate both sides. For linear ODEs y'+P(x)y=Q(x), multiply by the integrating factor &mu;=e<sup>&int;P dx</sup>. This calculator automatically classifies and solves first-order ODEs with full step-by-step working.</div>
         </div>
 
         <div class="faq-item">
@@ -474,7 +528,7 @@
                 Does this ODE solver support initial conditions (IVP)?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes. This calculator solves initial value problems (IVPs)—ODEs with initial conditions at a specific point. For first-order: y(x&#8320;)=y&#8320;. For second-order: y(x&#8320;)=y&#8320; and y'(x&#8320;)=y'&#8320;. Initial conditions determine the unique particular solution from the general solution family.</div>
+            <div class="faq-answer">Yes. This calculator solves initial value problems (IVPs)&mdash;ODEs with initial conditions at a specific point. For first-order: y(x&#8320;)=y&#8320;. For second-order: y(x&#8320;)=y&#8320; and y'(x&#8320;)=y'&#8320;. Initial conditions determine the unique particular solution from the general solution family.</div>
         </div>
 
         <div class="faq-item">
@@ -490,7 +544,7 @@
                 What ODE types can this calculator solve?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">This calculator solves: separable, first-order linear, Bernoulli, exact, homogeneous, second-order constant coefficient (homogeneous and non-homogeneous), Cauchy-Euler, and many other types that SymPy's dsolve supports. It automatically classifies the ODE type and applies the appropriate solution method.</div>
+            <div class="faq-answer">This calculator solves: separable, first-order linear, Bernoulli, exact, homogeneous, second-order constant coefficient (homogeneous and non-homogeneous), Cauchy-Euler, and many more. It automatically classifies the ODE type and applies the appropriate solution method.</div>
         </div>
 
         <div class="faq-item">
@@ -506,23 +560,49 @@
                 Is this ODE solver calculator free?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes, completely free with no registration required. Includes step-by-step solutions, ODE classification, solution verification, interactive graphs, direction field plots, exportable Python code, and a built-in SymPy compiler.</div>
+            <div class="faq-answer">Yes, completely free with no registration required. Includes step-by-step solutions, ODE classification, solution verification, interactive graphs, direction field plots, 1,000+ practice worksheet problems with answer keys, and a built-in Python compiler.</div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What is a separable differential equation?
+                Does this ODE solver include practice worksheets?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">A separable ODE has the form dy/dx = g(x)h(y), where the right-hand side factors into a function of x times a function of y. To solve, rewrite as dy/h(y) = g(x)dx and integrate both sides. Examples include y'=xy, y'=y/x, and logistic growth dy/dt=ry(1-y/K). This calculator automatically detects separable ODEs and applies separation of variables with full steps.</div>
+            <div class="faq-answer">Yes. This calculator includes a built-in worksheet generator with over 1,000 ODE practice problems. You can filter by 8+ question types (exact equations, Laplace transforms, Euler method, power series, Euler-Cauchy, Bernoulli, homogeneous substitutions, and systems of ODEs) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes.</div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What is a homogeneous differential equation?
+                What types of ODE problems are in the worksheet?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">A homogeneous ODE has every term of the same degree in y and its derivatives. For first-order: M(x,y)dx + N(x,y)dy = 0 where M and N are homogeneous of the same degree. For second-order constant-coefficient: ay''+by'+cy=0 with no forcing term. This calculator solves homogeneous ODEs (and non-homogeneous with undetermined coefficients) and shows the characteristic equation and solution form in the steps.</div>
+            <div class="faq-answer">The worksheet covers 8+ ODE problem types: exact differential equations, Euler method numerical approximations, power series solutions (Maclaurin), Laplace transforms (forward and inverse), Euler-Cauchy equations, Bernoulli equations, homogeneous substitution ODEs, and systems of linear ODEs. Problems range from basic textbook style to scholar-level exam questions with full worked answer keys.</div>
+        </div>
+    </div>
+</section>
+
+<!-- ODE Practice Worksheet Generator Section -->
+<section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">ODE Practice Worksheet Generator</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7;">This calculator includes a <strong>built-in worksheet generator</strong> with over <strong>1,000 ODE practice problems</strong> and full answer keys. Click the <strong>Print Worksheet</strong> button to generate a randomly shuffled practice set you can use for exam prep, homework review, or classroom quizzes.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #db2777;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">8+ Question Types</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Exact equations, Laplace transforms, Euler method, power series, Euler-Cauchy, Bernoulli, homogeneous, and systems of ODEs.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #f472b6;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">4 Difficulty Levels</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Basic, medium, hard, and scholar. Filter to match your course level &mdash; from introductory ODEs to advanced exam practice.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #be185d;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">Full Answer Key</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Every worksheet comes with a complete answer key rendered in clean LaTeX notation. Toggle it on or off before generating.</p>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem; text-align: center; border-left: 3px solid #fda4af;">
+                <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;">Randomised Every Time</h4>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">Each worksheet is randomly shuffled from the 1,000+ question bank, so you get fresh practice every time you generate.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -603,6 +683,7 @@
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script>window.ODE_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/ode-solver-calculator.js?v=<%=cacheVersion%>"></script>
 

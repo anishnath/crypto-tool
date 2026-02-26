@@ -1658,150 +1658,19 @@
     }
 
     // ========== Print Worksheet ==========
-    document.getElementById('ode-worksheet-btn').addEventListener('click', function() {
-        generateWorksheet();
-    });
-
-    function shuffleArray(arr) {
-        var a = arr.slice();
-        for (var i = a.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    function openOdeWorksheet() {
+        if (typeof WorksheetEngine !== 'undefined') {
+            WorksheetEngine.open({
+                jsonUrl: 'worksheet/math/calculus/ode.json',
+                title: 'Ordinary Differential Equations',
+                accentColor: '#db2777',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
         }
-        return a;
     }
-
-    function generateWorksheet() {
-        var firstProblems = shuffleArray(randomFirst).slice(0, 4);
-        var secondProblems = shuffleArray(randomSecond).slice(0, 3);
-        var higherProblems = shuffleArray(randomThird.concat(randomFourth)).slice(0, 2);
-        var fieldProblems = shuffleArray(randomField).slice(0, 3);
-
-        var win = window.open('', '_blank');
-        if (!win) {
-            if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please allow pop-ups to print worksheet', 3000, 'warning');
-            return;
-        }
-
-        var katexCSS = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
-
-        var html = '<!DOCTYPE html><html><head><meta charset="utf-8">';
-        html += '<title>ODE Solver Worksheet</title>';
-        html += '<link rel="stylesheet" href="' + katexCSS + '">';
-        html += '<style>';
-        html += 'body { font-family: "Times New Roman", Georgia, serif; max-width: 750px; margin: 0 auto; padding: 24px 32px; color: #111; line-height: 1.5; }';
-        html += '.ws-header { text-align: center; border-bottom: 3px double #333; padding-bottom: 12px; margin-bottom: 8px; }';
-        html += '.ws-title { font-size: 22px; font-weight: bold; margin: 0 0 4px 0; }';
-        html += '.ws-subtitle { font-size: 13px; color: #555; margin: 0; }';
-        html += '.ws-meta { display: flex; justify-content: space-between; font-size: 13px; margin: 12px 0 20px 0; border-bottom: 1px solid #ccc; padding-bottom: 8px; }';
-        html += '.ws-meta-field { border-bottom: 1px solid #333; min-width: 160px; display: inline-block; margin-left: 4px; }';
-        html += '.ws-section { margin-bottom: 24px; }';
-        html += '.ws-section-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; padding: 4px 8px; background: #f0f0f0; border: 1px solid #ddd; }';
-        html += '.ws-section-number { display: inline-block; width: 28px; height: 28px; background: #db2777; color: #fff; text-align: center; line-height: 28px; font-size: 14px; font-weight: bold; margin-right: 8px; }';
-        html += '.ws-problem { margin-bottom: 6px; page-break-inside: avoid; }';
-        html += '.ws-problem-num { font-weight: bold; margin-right: 6px; }';
-        html += '.ws-workspace { border: 1px dashed #ccc; min-height: 100px; margin: 8px 0; padding: 6px; position: relative; }';
-        html += '.ws-workspace::after { content: "Show your work here"; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #ddd; font-size: 12px; font-style: italic; }';
-        html += '.ws-answer-line { border-bottom: 1px solid #333; height: 28px; margin: 4px 0 16px 0; font-size: 13px; color: #888; padding-top: 8px; }';
-        html += '.ws-footer { text-align: center; font-size: 10px; color: #999; margin-top: 24px; border-top: 1px solid #ddd; padding-top: 8px; }';
-        html += '.ws-no-print { text-align: center; margin-bottom: 16px; }';
-        html += '@media print { .ws-no-print { display: none; } .ws-workspace { min-height: 110px; } }';
-        html += '</style></head><body>';
-
-        html += '<div class="ws-no-print">';
-        html += '<button onclick="window.print()" style="padding:10px 28px;font-size:15px;font-weight:600;background:#db2777;color:#fff;border:none;border-radius:6px;cursor:pointer;">Print Worksheet</button>';
-        html += '</div>';
-
-        html += '<div class="ws-header">';
-        html += '<div class="ws-title">ODE Solver Worksheet</div>';
-        html += '<div class="ws-subtitle">First-Order, Second-Order, Higher-Order &amp; Direction Fields</div>';
-        html += '</div>';
-
-        html += '<div class="ws-meta">';
-        html += '<span>Name: <span class="ws-meta-field">&nbsp;</span></span>';
-        html += '<span>Date: <span class="ws-meta-field">&nbsp;</span></span>';
-        html += '<span>Score: <span class="ws-meta-field">&nbsp; / ' + (firstProblems.length + secondProblems.length + higherProblems.length + fieldProblems.length) + '</span></span>';
-        html += '</div>';
-
-        var problemNum = 1;
-
-        // First-order
-        html += '<div class="ws-section">';
-        html += '<div class="ws-section-title"><span class="ws-section-number">I</span>First-Order ODEs</div>';
-        for (var i = 0; i < firstProblems.length; i++) {
-            var p = firstProblems[i];
-            var rhsDisplay = p.rhs.replace(/\*\*/g, '^').replace(/\*/g, '\u00B7');
-            html += '<div class="ws-problem">';
-            html += '<span class="ws-problem-num">' + problemNum + '.</span>';
-            html += 'Solve the ODE: <strong>y\' = ' + escapeHtml(rhsDisplay) + '</strong>';
-            if (p.ic) html += ' with y(' + p.x0 + ') = ' + p.y0;
-            else html += ' (find the general solution)';
-            html += '<div class="ws-workspace"></div>';
-            html += '<div class="ws-answer-line">Answer: </div>';
-            html += '</div>';
-            problemNum++;
-        }
-        html += '</div>';
-
-        // Second-order
-        html += '<div class="ws-section">';
-        html += '<div class="ws-section-title"><span class="ws-section-number">II</span>Second-Order ODEs</div>';
-        for (var i = 0; i < secondProblems.length; i++) {
-            var p = secondProblems[i];
-            var rhsDisplay = p.rhs.replace(/\*\*/g, '^').replace(/\*/g, '\u00B7').replace(/yp/g, "y'");
-            html += '<div class="ws-problem">';
-            html += '<span class="ws-problem-num">' + problemNum + '.</span>';
-            html += 'Solve the ODE: <strong>y\'\' = ' + escapeHtml(rhsDisplay) + '</strong>';
-            if (p.ic) html += ' with y(' + p.x0 + ') = ' + p.y0 + ', y\'(' + p.x0 + ') = ' + p.dy0;
-            else html += ' (find the general solution)';
-            html += '<div class="ws-workspace"></div>';
-            html += '<div class="ws-answer-line">Answer: </div>';
-            html += '</div>';
-            problemNum++;
-        }
-        html += '</div>';
-
-        // Higher-order
-        html += '<div class="ws-section">';
-        html += '<div class="ws-section-title"><span class="ws-section-number">III</span>Higher-Order ODEs</div>';
-        for (var i = 0; i < higherProblems.length; i++) {
-            var p = higherProblems[i];
-            var rhsDisplay = p.rhs.replace(/\*\*/g, '^').replace(/\*/g, '\u00B7').replace(/yppp/g, "y'''").replace(/ypp/g, "y''").replace(/yp/g, "y'");
-            html += '<div class="ws-problem">';
-            html += '<span class="ws-problem-num">' + problemNum + '.</span>';
-            html += 'Solve the ODE: <strong>y\'\'\' = ' + escapeHtml(rhsDisplay) + '</strong>';
-            html += ' (find the general solution)';
-            html += '<div class="ws-workspace"></div>';
-            html += '<div class="ws-answer-line">Answer: </div>';
-            html += '</div>';
-            problemNum++;
-        }
-        html += '</div>';
-
-        // Direction fields
-        html += '<div class="ws-section">';
-        html += '<div class="ws-section-title"><span class="ws-section-number">IV</span>Direction Fields</div>';
-        for (var i = 0; i < fieldProblems.length; i++) {
-            var p = fieldProblems[i];
-            var rhsDisplay = p.rhs.replace(/\*\*/g, '^').replace(/\*/g, '\u00B7');
-            html += '<div class="ws-problem">';
-            html += '<span class="ws-problem-num">' + problemNum + '.</span>';
-            html += 'Sketch the direction field for <strong>dy/dx = ' + escapeHtml(rhsDisplay) + '</strong>. Identify any equilibrium solutions and describe the long-term behavior.';
-            html += '<div class="ws-workspace" style="min-height:140px;"></div>';
-            html += '<div class="ws-answer-line">Equilibria / Behavior: </div>';
-            html += '</div>';
-            problemNum++;
-        }
-        html += '</div>';
-
-        html += '<div class="ws-footer">Generated by 8gwifi.org ODE Solver Calculator &mdash; ' + new Date().toLocaleDateString() + '</div>';
-        html += '</body></html>';
-
-        win.document.write(html);
-        win.document.close();
-
-        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Worksheet opened! Use Print or Save as PDF.', 2500, 'success');
-    }
+    var odeWsBtn = document.getElementById('ode-worksheet-btn');
+    if (odeWsBtn) odeWsBtn.addEventListener('click', openOdeWorksheet);
 
     document.getElementById('ode-share-btn').addEventListener('click', function() {
         var params = { mode: currentMode };

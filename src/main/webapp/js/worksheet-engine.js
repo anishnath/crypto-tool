@@ -366,7 +366,43 @@ function buildConfigModal(data, opts) {
             return;
         }
 
-        var picked = shuffle(filtered).slice(0, count);
+        // Stratified sampling: pick evenly across types, then fill remainder
+        var buckets = {};
+        for (var bi = 0; bi < filtered.length; bi++) {
+            var bt = filtered[bi].type;
+            if (!buckets[bt]) buckets[bt] = [];
+            buckets[bt].push(filtered[bi]);
+        }
+        var bucketKeys = shuffle(Object.keys(buckets));
+        for (var bk = 0; bk < bucketKeys.length; bk++) {
+            buckets[bucketKeys[bk]] = shuffle(buckets[bucketKeys[bk]]);
+        }
+        var picked = [];
+        if (bucketKeys.length > 1) {
+            var perType = Math.max(1, Math.floor(count / bucketKeys.length));
+            var usedIds = {};
+            // Round 1: take perType from each bucket (1 guaranteed per type)
+            for (var ri = 0; ri < bucketKeys.length && picked.length < count; ri++) {
+                var take = Math.min(perType, buckets[bucketKeys[ri]].length);
+                for (var ti = 0; ti < take && picked.length < count; ti++) {
+                    picked.push(buckets[bucketKeys[ri]][ti]);
+                    usedIds[buckets[bucketKeys[ri]][ti].id] = true;
+                }
+            }
+            // Round 2: fill remainder from all filtered, skipping already picked
+            if (picked.length < count) {
+                var leftover = shuffle(filtered);
+                for (var li = 0; li < leftover.length && picked.length < count; li++) {
+                    if (!usedIds[leftover[li].id]) {
+                        picked.push(leftover[li]);
+                        usedIds[leftover[li].id] = true;
+                    }
+                }
+            }
+            picked = shuffle(picked);
+        } else {
+            picked = shuffle(filtered).slice(0, count);
+        }
         close();
         showWorksheet(picked, opts, akOn);
     });
