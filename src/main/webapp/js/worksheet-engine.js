@@ -122,6 +122,8 @@ function injectStyles() {
         '.we-ws-q-type{background:var(--we-accent-light,#eff6ff);color:var(--we-accent,#2563eb)}',
         '.we-ws-q-text{font-size:0.9375rem;color:var(--text-primary,#111);line-height:1.7;margin-bottom:0.75rem}',
         '.we-ws-q-text .katex{font-size:1em}',
+        '.we-ws-q-figure{text-align:center;margin:0.5rem 0 0.75rem;break-inside:avoid}',
+        '.we-ws-q-figure-img{max-width:100%;height:auto;max-height:220px;border-radius:0.375rem}',
         '.we-ws-answer-space{min-height:4rem;border:1.5px dashed var(--border,#e5e7eb);border-radius:0.5rem;background:var(--bg-secondary,#f9fafb);display:flex;align-items:center;justify-content:center}',
         '.we-ws-answer-space span{font-size:0.6875rem;color:var(--text-muted,#d1d5db);font-style:italic}',
 
@@ -153,12 +155,14 @@ function injectStyles() {
         '  .we-ws-divider{break-before:page}',
         '  .we-ws-header{border-bottom-color:#333}',
         '  .we-ws-ak-item{break-inside:avoid}',
+        '  .we-ws-q-figure-img{max-height:180px;max-width:280px}',
         '}',
 
         /* Dark theme */
         '[data-theme="dark"] .we-card{background:var(--bg-primary);border:1px solid var(--border)}',
         '[data-theme="dark"] .we-ws-backdrop{background:var(--bg-primary)}',
         '[data-theme="dark"] .we-ws-topbar{background:var(--bg-primary);border-bottom-color:var(--border)}',
+        '[data-theme="dark"] .we-ws-q-figure-img{filter:invert(0.88) hue-rotate(180deg)}',
 
         /* Responsive */
         '@media(max-width:640px){',
@@ -537,6 +541,19 @@ function showWorksheet(questions, opts, showAnswers) {
         qText.className = 'we-ws-q-text';
         qText.innerHTML = renderInlineLatex(q.question_text);
         qDiv.appendChild(qText);
+
+        // Optional figure
+        if (q.figure_svg) {
+            var figDiv = document.createElement('div');
+            figDiv.className = 'we-ws-q-figure';
+            var figImg = document.createElement('img');
+            figImg.className = 'we-ws-q-figure-img';
+            figImg.src = q.figure_svg;
+            figImg.alt = 'Figure for question ' + (i + 1);
+            figImg.loading = 'lazy';
+            figDiv.appendChild(figImg);
+            qDiv.appendChild(figDiv);
+        }
 
         // Answer space
         var ansSpace = document.createElement('div');

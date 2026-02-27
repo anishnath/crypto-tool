@@ -27,32 +27,32 @@
     <!-- SEO (competitive targeting: integral-calculator.com #1, Symbolab, Wolfram, Mathway) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Integral Calculator • With Steps!" />
-        <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions. Solve indefinite &amp; definite integrals instantly. AI explanations, interactive graph, PDF &amp; LaTeX export. No signup required." />
+        <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions and 1,000+ practice worksheet problems. Solve indefinite &amp; definite integrals instantly. Power rule, u-substitution, integration by parts, partial fractions, trig substitution. AI explanations, interactive graph, PDF &amp; LaTeX export. Generate printable integration worksheets with answer keys for exam prep. No signup." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="integral-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="integral calculator, integral calculator with steps, definite integral calculator, antiderivative calculator, indefinite integral calculator, integration by parts calculator, symbolic integration, solve integrals online free, calculus calculator with steps, u substitution calculator, trig integral calculator, download integral solution pdf" />
-        <jsp:param name="educationalLevel" value="High School, College" />
-        <jsp:param name="teaches" value="Calculus, integration, antiderivatives, definite integrals" />
+        <jsp:param name="toolKeywords" value="integral calculator, integral calculator with steps, definite integral calculator, antiderivative calculator, indefinite integral calculator, integration by parts calculator, symbolic integration, solve integrals online free, calculus calculator with steps, u substitution calculator, trig integral calculator, download integral solution pdf, integral worksheet, integration practice problems, integral practice problems with solutions, integration worksheet with answers, calculus integration worksheet, u-substitution practice, integration by parts worksheet, partial fractions practice, trig substitution worksheet, AP calculus integral practice, integral quiz generator, definite integral practice, indefinite integral worksheet, power rule integration practice, improper integral calculator, double integral calculator, area under curve calculator, fundamental theorem of calculus calculator" />
+        <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
+        <jsp:param name="teaches" value="Calculus, integration, antiderivatives, definite integrals, indefinite integrals, power rule, u-substitution, integration by parts, partial fractions, trigonometric substitution, improper integrals, area under curves, Fundamental Theorem of Calculus, numerical integration, Riemann sums, exponential integrals, logarithmic integrals, hyperbolic integrals" />
         <jsp:param name="howToSteps" value="Enter your function|Type your integral using math notation (e.g. sin(x), x^2, e^x) in the function input field,Select indefinite or definite mode|Toggle between indefinite (antiderivative) and definite (with bounds) integral,Click Integrate|Click the Integrate button to compute the result,View steps &amp; result|See the symbolic answer, step-by-step solution with AI explanations, and interactive graph" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Step-by-step solutions with AI explanations,Indefinite and definite integral evaluation,Live LaTeX math preview as you type,Interactive Plotly graph with shaded area,AI-powered detailed solution steps,Download result as PDF,Polynomials and rational functions,Trigonometric and hyperbolic integration,Exponential and logarithmic functions,Integration by parts and substitution,Copy LaTeX or plain text output,Share results via URL,Built-in Python compiler,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Step-by-step solutions with AI explanations,Indefinite and definite integral evaluation,Live LaTeX math preview as you type,Interactive Plotly graph with shaded area,AI-powered detailed solution steps,Download result as PDF,Polynomials and rational functions,Trigonometric and hyperbolic integration,Exponential and logarithmic functions,Integration by parts and substitution,U-substitution with automatic detection,Partial fractions decomposition,Trig substitution solver,Copy LaTeX or plain text output,Share results via URL,Built-in Python compiler,1000+ integration practice worksheet problems,Printable worksheet with answer key,Filter by question type and 4 difficulty levels,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="What types of integrals can this calculator solve?" />
-        <jsp:param name="faq1a" value="This calculator solves indefinite integrals (antiderivatives) and definite integrals for polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x), rational functions, hyperbolic functions (sinh, cosh, tanh), inverse trig (arctan, arcsin), and products solved by integration by parts. It handles power rule, u-substitution, partial fractions, and more." />
-        <jsp:param name="faq2q" value="Does this integral calculator show step-by-step solutions for integration by parts?" />
-        <jsp:param name="faq2a" value="Yes. After computing a result, click the Show Steps button to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly. For complex integrals like integration by parts or partial fractions, AI-powered steps explain each algebraic manipulation, substitution, and simplification in 5-8 clear steps with full LaTeX math rendering." />
-        <jsp:param name="faq3q" value="Can I download or share my integral solution?" />
-        <jsp:param name="faq3a" value="Yes. After computing a result you can: (1) Download as PDF with the question, answer, method, and step-by-step solution beautifully formatted, (2) Copy the result as LaTeX for use in papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL that loads your exact integral with one click. The PDF includes the 8gwifi.org watermark and current date." />
-        <jsp:param name="faq4q" value="What is the difference between indefinite and definite integrals?" />
-        <jsp:param name="faq4a" value="An indefinite integral finds the antiderivative F(x) + C, a family of functions whose derivative equals f(x). A definite integral evaluates the net signed area under the curve between bounds [a, b] using the Fundamental Theorem of Calculus: F(b) - F(a). This calculator supports both modes with a simple toggle, and the interactive graph shows the shaded area for definite integrals." />
-        <jsp:param name="faq5q" value="How do I enter my function into the calculator?" />
-        <jsp:param name="faq5a" value="Use standard math notation: x^2 for x squared, sin(x) for sine, e^x for exponential, ln(x) for natural log, sqrt(x) for square root, 1/x for reciprocal, sec(x)^2 for secant squared. Multiplication can be explicit (2*x) or implicit. A live KaTeX preview shows your expression in rendered math notation as you type, so you can verify the input before integrating." />
-        <jsp:param name="faq6q" value="Is this integral calculator free? Do I need to sign up?" />
-        <jsp:param name="faq6a" value="This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a built-in Python compiler. All computation runs in your browser for instant results." />
-        <jsp:param name="faq7q" value="How does u-substitution work in this integral calculator?" />
-        <jsp:param name="faq7a" value="U-substitution (or change of variables) rewrites an integral of the form integral f(g(x))g'(x)dx as integral f(u)du by letting u=g(x). This calculator automatically detects when u-substitution applies and shows the substitution step. For example, integral 2x*cos(x^2)dx becomes integral cos(u)du with u=x^2. Click Show Steps after integrating to see the full u-sub workflow." />
-        <jsp:param name="faq8q" value="What is the power rule for integrals?" />
-        <jsp:param name="faq8a" value="The power rule states that integral x^n dx = x^(n+1)/(n+1) + C for any n not equal to -1. For n=-1, integral 1/x dx = ln|x| + C. This calculator applies the power rule automatically for polynomial terms and shows it in the step-by-step solution. Try x^3 or x^(-2) to see it in action." />
+        <jsp:param name="faq1q" value="Does this integral calculator have a printable practice worksheet?" />
+        <jsp:param name="faq1a" value="Yes. Click the Print Worksheet button to open a bank of 1,000+ integration practice problems with full answer keys. Problems are organized by type (power rule, u-substitution, integration by parts, partial fractions, trig substitution, definite integrals) and four difficulty levels (basic, medium, hard, scholar). You can filter, print, or work through them on screen. New problems are generated with step-by-step solutions, perfect for AP Calculus, college calculus, or self-study." />
+        <jsp:param name="faq2q" value="What types of integrals can this calculator solve?" />
+        <jsp:param name="faq2a" value="This calculator solves indefinite integrals (antiderivatives) and definite integrals for polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x), rational functions, hyperbolic functions (sinh, cosh, tanh), inverse trig (arctan, arcsin), and products solved by integration by parts. It handles power rule, u-substitution, partial fractions, and more." />
+        <jsp:param name="faq3q" value="Does this integral calculator show step-by-step solutions?" />
+        <jsp:param name="faq3a" value="Yes. After computing a result, click Show Steps to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly in your browser. For complex integrals like integration by parts or partial fractions, the advanced solver explains each algebraic manipulation, substitution, and simplification in 5-8 clear steps with full LaTeX math rendering." />
+        <jsp:param name="faq4q" value="Can I use this for AP Calculus or college exam prep?" />
+        <jsp:param name="faq4a" value="Absolutely. The built-in worksheet has 1,000+ curated problems covering every integration topic on the AP Calculus AB/BC exam and standard college Calculus II courses: power rule, u-substitution, integration by parts, partial fractions, trig substitution, improper integrals, and area/volume applications. Each problem includes a verified answer. Use the difficulty filter to start easy and work up to exam-level questions." />
+        <jsp:param name="faq5q" value="Can I download or share my integral solution?" />
+        <jsp:param name="faq5a" value="Yes. After computing a result you can: (1) Download as PDF with the question, answer, method, and step-by-step solution beautifully formatted, (2) Copy the result as LaTeX for use in papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL that loads your exact integral with one click." />
+        <jsp:param name="faq6q" value="What is the difference between indefinite and definite integrals?" />
+        <jsp:param name="faq6a" value="An indefinite integral finds the antiderivative F(x) + C, a family of functions whose derivative equals f(x). A definite integral evaluates the net signed area under the curve between bounds [a, b] using the Fundamental Theorem of Calculus: F(b) - F(a). This calculator supports both modes with a simple toggle, and the interactive graph shows the shaded area for definite integrals." />
+        <jsp:param name="faq7q" value="Is this integral calculator free? Do I need to sign up?" />
+        <jsp:param name="faq7a" value="This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, a 1,000+ problem practice worksheet, and a built-in Python compiler. All computation runs in your browser for instant results." />
+        <jsp:param name="faq8q" value="How does u-substitution work in this integral calculator?" />
+        <jsp:param name="faq8a" value="U-substitution (or change of variables) rewrites an integral of the form integral f(g(x))g'(x)dx as integral f(u)du by letting u=g(x). This calculator automatically detects when u-substitution applies and shows the substitution step. For example, integral 2x*cos(x^2)dx becomes integral cos(u)du with u=x^2. Click Show Steps after integrating to see the full u-sub workflow." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -268,6 +268,12 @@
                         <span>&#128196;</span> Download PDF
                     </button>
                 </div>
+                <!-- Print Worksheet — always visible, not gated on result -->
+                <div style="padding:0.75rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;">
+                    <button type="button" class="tool-action-btn" id="ic-worksheet-btn" style="width:100%;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border:none;font-weight:600;padding:0.625rem 1rem;font-size:0.875rem;">
+                        <span>&#128218;</span> Practice Integration Worksheet (1000+ Problems)
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -296,8 +302,8 @@
                     </svg>
                     <h4>Python Compiler</h4>
                     <select id="ic-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
-                        <option value="sympy-indef">Symbolic Indefinite</option>
-                        <option value="sympy-def">Symbolic Definite</option>
+                        <option value="symbolic-indef">Symbolic Indefinite</option>
+                        <option value="symbolic-def">Symbolic Definite</option>
                         <option value="scipy-numerical">Numerical</option>
                     </select>
                 </div>
@@ -473,23 +479,39 @@
     </div>
 
     <!-- FAQ Section -->
-    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
+    <div class="tool-card" id="faqs" style="padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">Frequently Asked Questions</h2>
+
+        <div class="faq-item open">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Does this integral calculator have a printable practice worksheet?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer" style="display:block;">Yes. Click the <strong>Print Worksheet</strong> button to open a bank of <strong>1,000+ integration practice problems</strong> with full answer keys. Problems are organized by type (power rule, u-substitution, integration by parts, partial fractions, trig substitution, definite integrals) and four difficulty levels (basic, medium, hard, scholar). You can filter, print, or work through them on screen. New problems are generated with step-by-step solutions &mdash; perfect for AP Calculus, college calculus, or self-study.</div>
+        </div>
+
+        <div class="faq-item open">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Can I use this for AP Calculus or college exam prep?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer" style="display:block;">Absolutely. The built-in worksheet has <strong>1,000+ curated problems</strong> covering every integration topic on the AP Calculus AB/BC exam and standard college Calculus&nbsp;II courses: power rule, u-substitution, integration by parts, partial fractions, trig substitution, improper integrals, and area/volume applications. Each problem includes a verified answer. Use the difficulty filter to start easy and work up to exam-level questions.</div>
+        </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
                 What types of integrals can this calculator solve?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">This calculator solves indefinite integrals (antiderivatives) and definite integrals for polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln x), rational functions, hyperbolic functions (sinh, cosh, tanh), inverse trig (arctan, arcsin), and products solved by integration by parts. It handles power rule, u-substitution, partial fractions, and more.</div>
+            <div class="faq-answer">This calculator solves indefinite integrals (antiderivatives) and definite integrals for polynomials, trigonometric functions (sin, cos, tan, sec, csc, cot), exponential functions (e^x), logarithmic functions (ln&nbsp;x), rational functions, hyperbolic functions (sinh, cosh, tanh), inverse trig (arctan, arcsin), and products solved by integration by parts. It handles power rule, u-substitution, partial fractions, and more.</div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Does this integral calculator show step-by-step solutions for integration by parts?
+                Does this integral calculator show step-by-step solutions?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes. After computing a result, click the Show Steps button to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly. For complex integrals like integration by parts or partial fractions, AI-powered steps explain each algebraic manipulation, substitution, and simplification in 5-8 clear steps with full LaTeX math rendering.</div>
+            <div class="faq-answer">Yes. After computing a result, click the <strong>Show Steps</strong> button to see a detailed step-by-step solution. For common integrals (power rule, basic trig, exponential), steps are generated instantly in your browser. For complex integrals like integration by parts or partial fractions, the advanced solver explains each algebraic manipulation, substitution, and simplification in 5&ndash;8 clear steps with full LaTeX math rendering.</div>
         </div>
 
         <div class="faq-item">
@@ -497,7 +519,7 @@
                 Can I download or share my integral solution?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Yes. After computing a result you can: (1) Download as PDF with the question, answer, method, and step-by-step solution beautifully formatted, (2) Copy the result as LaTeX for use in papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL that loads your exact integral with one click. The PDF includes the 8gwifi.org watermark and current date.</div>
+            <div class="faq-answer">Yes. After computing a result you can: (1) Download as PDF with the question, answer, method, and step-by-step solution beautifully formatted, (2) Copy the result as LaTeX for use in papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL that loads your exact integral with one click.</div>
         </div>
 
         <div class="faq-item">
@@ -505,15 +527,7 @@
                 What is the difference between indefinite and definite integrals?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">An indefinite integral finds the antiderivative F(x) + C, a family of functions whose derivative equals f(x). A definite integral evaluates the net signed area under the curve between bounds [a, b] using the Fundamental Theorem of Calculus: F(b) - F(a). This calculator supports both modes with a simple toggle, and the interactive graph shows the shaded area for definite integrals.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do I enter my function into the calculator?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Use standard math notation: x^2 for x squared, sin(x) for sine, e^x for exponential, ln(x) for natural log, sqrt(x) for square root, 1/x for reciprocal, sec(x)^2 for secant squared. Multiplication can be explicit (2*x) or implicit. A live KaTeX preview shows your expression in rendered math notation as you type, so you can verify the input before integrating.</div>
+            <div class="faq-answer">An indefinite integral finds the antiderivative F(x)&nbsp;+&nbsp;C, a family of functions whose derivative equals f(x). A definite integral evaluates the net signed area under the curve between bounds [a,&nbsp;b] using the Fundamental Theorem of Calculus: F(b)&nbsp;&minus;&nbsp;F(a). This calculator supports both modes with a simple toggle, and the interactive graph shows the shaded area for definite integrals.</div>
         </div>
 
         <div class="faq-item">
@@ -521,7 +535,7 @@
                 Is this integral calculator free? Do I need to sign up?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, and a built-in Python compiler. All computation runs in your browser for instant results.</div>
+            <div class="faq-answer">This integral calculator is completely free with no signup, no account, and no limits. You get symbolic integration, step-by-step solutions, interactive graphs, PDF download, LaTeX export, a 1,000+ problem practice worksheet, and a built-in Python compiler. All computation runs in your browser for instant results.</div>
         </div>
 
         <div class="faq-item">
@@ -530,14 +544,6 @@
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">U-substitution (or change of variables) rewrites an integral of the form &#8747;f(g(x))g'(x)dx as &#8747;f(u)du by letting u=g(x). This calculator automatically detects when u-substitution applies and shows the substitution step. For example, &#8747;2x&#183;cos(x&#178;)dx becomes &#8747;cos(u)du with u=x&#178;. Click Show Steps after integrating to see the full u-sub workflow.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is the power rule for integrals?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">The power rule states that &#8747;x<sup>n</sup> dx = x<sup>n+1</sup>/(n+1) + C for any n not equal to -1. For n=-1, &#8747;1/x dx = ln|x| + C. This calculator applies the power rule automatically for polynomial terms and shows it in the step-by-step solution. Try x&#179; or x<sup>-2</sup> to see it in action.</div>
         </div>
     </div>
 </section>
@@ -617,6 +623,7 @@
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script>window.INTEGRAL_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/integral-calculator.js?v=<%=cacheVersion%>"></script>
 

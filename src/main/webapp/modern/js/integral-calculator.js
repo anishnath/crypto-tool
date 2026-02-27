@@ -1333,7 +1333,7 @@
             html += '<div class="ic-steps-header">';
             html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>';
             html += 'Solution Steps <span style="font-weight:400;color:var(--text-muted);margin-left:0.25rem;">(' + totalSteps + ')</span>';
-            html += '<span class="ic-steps-sympy-badge">CAS</span>';
+            html += '<span class="ic-steps-cas-badge">CAS</span>';
             html += '</div>';
 
             var hasMultiplePaths = paths.length > 1;
@@ -1568,10 +1568,9 @@
             var b = upperInput.value.trim() || '1';
 
             var symDecl = buildSympySymbolsDecl(v, pyExpr);
-            if (template === 'sympy-indef') {
-                // SymPy: exp, sin, cos, log (=ln), sec, csc, cot all available via 'from sympy import *'
+            if (template === 'symbolic-indef') {
                 return 'from sympy import *\n\n' + symDecl + '\nexpr = ' + pyExpr + '\n\nresult = integrate(expr, ' + v + ')\nprint("Integral:")\npprint(result)\nprint("\\nLaTeX:", latex(result))';
-            } else if (template === 'sympy-def') {
+            } else if (template === 'symbolic-def') {
                 return 'from sympy import *\n\n' + symDecl + '\nexpr = ' + pyExpr + '\n\nresult = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\nprint("Definite integral from ' + a + ' to ' + b + ':")\npprint(result)\nprint("\\nNumeric:", float(result))';
             } else {
                 // SciPy: needs math.* prefixes; sec/csc/cot must be expanded
@@ -1844,6 +1843,21 @@
             div.appendChild(document.createTextNode(str));
             return div.innerHTML;
         }
+
+        // ========== Print Worksheet ==========
+        function openIntegralWorksheet() {
+            if (typeof WorksheetEngine !== 'undefined') {
+                WorksheetEngine.open({
+                    jsonUrl: 'worksheet/math/calculus/integrals.json',
+                    title: 'Integrals',
+                    accentColor: '#4f46e5',
+                    branding: '8gwifi.org',
+                    defaultCount: 20
+                });
+            }
+        }
+        var icWsBtn = document.getElementById('ic-worksheet-btn');
+        if (icWsBtn) icWsBtn.addEventListener('click', openIntegralWorksheet);
 
         // ========== Init ==========
         window.showSteps = doShowSteps;

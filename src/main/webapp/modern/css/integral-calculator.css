@@ -626,7 +626,7 @@ min-width: min-content;
 [data-theme="dark"] .ic-steps-container { border-color: var(--border); }
 [data-theme="dark"] .ic-steps-header { background: var(--tool-light); border-bottom-color: var(--border); }
 [data-theme="dark"] .ic-step { border-bottom-color: var(--border); }
-.ic-steps-ai-badge, .ic-steps-sympy-badge {
+.ic-steps-ai-badge, .ic-steps-cas-badge {
 font-size: 0.625rem;
 font-weight: 500;
 padding: 0.125rem 0.5rem;

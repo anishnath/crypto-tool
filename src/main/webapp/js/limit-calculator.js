@@ -715,7 +715,7 @@ function escapeHtml(str){var div=document.createElement('div');div.appendChild(d
 function openWorksheet() {
     if (typeof WorksheetEngine !== 'undefined') {
         WorksheetEngine.open({
-            jsonUrl: 'https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/worksheet/math/calculus/limits.json',
+            jsonUrl: 'worksheet/math/calculus/limits.json',
             title: 'Limits',
             accentColor: '#8b5cf6',
             branding: '8gwifi.org',
