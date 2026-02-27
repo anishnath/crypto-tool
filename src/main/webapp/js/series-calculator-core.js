@@ -1481,8 +1481,8 @@ function init() {
     function openWorksheet() {
         if (typeof WorksheetEngine !== 'undefined') {
             WorksheetEngine.open({
-                jsonUrl: 'https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/worksheet/math/calculus/taylor_series.json',
-                title: 'Taylor & Maclaurin Series',
+                jsonUrl: 'worksheet/math/calculus/series.json',
+                title: 'Series & Sequences',
                 accentColor: '#2563eb',
                 branding: '8gwifi.org',
                 defaultCount: 20

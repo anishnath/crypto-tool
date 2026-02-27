@@ -65,6 +65,9 @@ def _safe_eval(expr, var, x_arr):
     f_np = sp.lambdify(var, expr, modules=['numpy'])
     with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
         y = np.array(f_np(x_arr), dtype=float)
+    # Broadcast scalar/0-d results to match input shape
+    if y.ndim == 0:
+        y = np.full_like(x_arr, float(y), dtype=float)
     # Replace inf/nan with nan for clean plotting
     y[~np.isfinite(y)] = np.nan
     return y
@@ -595,6 +598,10 @@ FIGURE_TYPES_INTEGRALS = {
     'area_between_curves', 'riemann_sum', 'definite_standard',
 }
 
+FIGURE_TYPES_DERIVATIVES = {
+    'tangent_line_eq', 'critical_points',
+}
+
 
 def generate_figure_for_limit(q_type, rec, entry_id, out_dir):
     """
@@ -672,7 +679,81 @@ def generate_figure_for_integral(q_type, rec, entry_id, out_dir):
             return fig_area_under_curve(expr, var, lo, hi, out_dir, entry_id)
 
         elif q_type == 'area_between_curves':
-            return fig_area_under_curve(expr, var, lo, hi, out_dir, entry_id)
+            expr2 = rec.get("integrand_g")
+            expr_f = rec.get("integrand_f", expr)
+            return fig_area_under_curve(expr_f, var, lo, hi, out_dir, entry_id,
+                                        expr2=expr2)
+
+    except Exception:
+        return None
+
+    return None
+
+
+def fig_critical_points(expr, var, out_dir, qid):
+    """
+    Plot f(x) and mark its critical points (where f'(x) = 0) with dots.
+    """
+    fig, ax = _create_fig()
+
+    deriv = sp.diff(expr, var)
+    try:
+        crits = sp.solve(deriv, var)
+        crits = [float(c) for c in crits if c.is_real]
+    except Exception:
+        crits = []
+
+    if crits:
+        lo = min(crits) - 3
+        hi = max(crits) + 3
+    else:
+        lo, hi = -5, 5
+
+    xs = np.linspace(lo, hi, N_POINTS)
+    ys = _safe_eval(expr, var, xs)
+
+    ylim = _auto_ylim(ys)
+    ax.set_ylim(ylim)
+
+    ax.plot(xs, ys, color=C_CURVE, linewidth=1.5, label='f(x)')
+
+    # Mark critical points
+    for c in crits:
+        try:
+            y_c = float(expr.subs(var, c))
+            if ylim[0] <= y_c <= ylim[1]:
+                ax.plot(c, y_c, 'o', color=C_POINT, markersize=5, zorder=5)
+                ax.annotate(f'({c:.2g}, {y_c:.2g})', (c, y_c),
+                            textcoords="offset points", xytext=(5, 8),
+                            fontsize=5.5, color=C_POINT)
+        except Exception:
+            pass
+
+    ax.set_xlabel('x', fontsize=7, color=C_AXIS)
+    ax.set_ylabel('y', fontsize=7, color=C_AXIS)
+
+    fname = f'critical_points_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+def generate_figure_for_derivative(q_type, rec, entry_id, out_dir):
+    """
+    Generate a figure for a derivatives question if applicable.
+    Returns the relative SVG path, or None.
+    """
+    if q_type not in FIGURE_TYPES_DERIVATIVES:
+        return None
+
+    var = rec.get("var", sp.Symbol('x'))
+    expr = rec.get("f")
+    a_val = rec.get("a")
+
+    try:
+        if q_type == 'tangent_line_eq':
+            return fig_tangent_line(expr, var, a_val, out_dir, entry_id)
+
+        elif q_type == 'critical_points':
+            return fig_critical_points(expr, var, out_dir, entry_id)
 
     except Exception:
         return None

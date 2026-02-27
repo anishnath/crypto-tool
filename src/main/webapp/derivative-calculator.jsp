@@ -251,7 +251,7 @@
                 <h1 class="tool-page-title">Derivative Calculator - Find Derivatives with Steps</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/index.jsp#math-tools">Math Tools</a> /
+                    <a href="<%=request.getContextPath()%>/math/index.jsp">Math Tools</a> /
                     Derivative Calculator
                 </nav>
             </div>
@@ -364,6 +364,12 @@
                         <button type="button" class="tool-action-btn" id="dc-copy-text-btn">&#128196; Copy Text</button>
                         <button type="button" class="tool-action-btn" id="dc-share-btn">&#128279; Share</button>
                         <button type="button" class="tool-action-btn" id="dc-download-pdf-btn">&#128196; Download PDF</button>
+                    </div>
+                    <!-- Print Worksheet — always visible, not gated on result -->
+                    <div style="padding:0.75rem 1.25rem;border-top:1px solid var(--border,#e2e8f0);background:var(--bg-secondary,#f8fafc);border-radius:0 0 0.75rem 0.75rem;">
+                        <button type="button" class="tool-action-btn" id="dc-worksheet-btn" style="width:100%;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border:none;font-weight:600;padding:0.625rem 1rem;font-size:0.875rem;">
+                            &#128218; Practice Derivatives Worksheet (1000+ Problems)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -535,6 +541,7 @@
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
     <script>
     (function(){
     'use strict';
@@ -1198,6 +1205,21 @@
     }
 
     function escapeHtml(str){var div=document.createElement('div');div.appendChild(document.createTextNode(str));return div.innerHTML;}
+
+    // ========== Print Worksheet ==========
+    function openDerivativeWorksheet() {
+        if (typeof WorksheetEngine !== 'undefined') {
+            WorksheetEngine.open({
+                jsonUrl: 'worksheet/math/calculus/derivatives.json',
+                title: 'Derivatives Practice Worksheet',
+                accentColor: '#2563eb',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+    }
+    var dcWsBtn = document.getElementById('dc-worksheet-btn');
+    if (dcWsBtn) dcWsBtn.addEventListener('click', openDerivativeWorksheet);
 
     loadFromUrl();
     })();

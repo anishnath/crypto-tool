@@ -27,12 +27,12 @@
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Vector Calculus Calculator - Gradient, Divergence, Curl with Steps" />
-        <jsp:param name="toolDescription" value="Free online vector calculus calculator. Compute gradient, divergence, and curl of scalar and vector fields with detailed step-by-step solutions. Features 3D vector field visualization, LaTeX output, and built-in Python compiler. Supports polynomials, trigonometric, exponential, and logarithmic functions. No signup required." />
+        <jsp:param name="toolDescription" value="Free online vector calculus calculator. Compute gradient, divergence, and curl of scalar and vector fields with detailed step-by-step solutions. Features 3D vector field visualization, LaTeX output, built-in Python compiler, and 1500+ printable practice problems covering vectors, dot product, cross product, vector functions, derivatives, and integrals. No signup required." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="vector-calculus-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="vector calculus calculator, gradient calculator, divergence calculator, curl calculator, nabla operator, del operator, vector field calculator, partial derivatives, multivariable calculus, electromagnetic fields, fluid dynamics, step by step vector calculus, 3D vector visualization" />
+        <jsp:param name="toolKeywords" value="vector calculus calculator, gradient calculator, divergence calculator, curl calculator, nabla operator, del operator, vector field calculator, partial derivatives, multivariable calculus, vector calculus practice problems, dot product worksheet, cross product practice, vector calculus worksheet, step by step vector calculus, 3D vector visualization" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Gradient of scalar fields with steps,Divergence of vector fields with steps,Curl of vector fields with steps,3D cone plot visualization,Live KaTeX math preview,Copy LaTeX output,Built-in Python compiler with SymPy,Quick examples for each mode,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolFeatures" value="Gradient of scalar fields with steps,Divergence of vector fields with steps,Curl of vector fields with steps,1500+ printable practice problems (18 types),3D cone plot visualization,Live KaTeX math preview,Copy LaTeX output,Built-in Python compiler with SymPy,Quick examples for each mode,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is the gradient of a scalar field?" />
         <jsp:param name="faq1a" value="The gradient of a scalar field f(x,y,z) is a vector field that points in the direction of the greatest rate of increase of f. It is computed as nabla f = (df/dx, df/dy, df/dz). For example, the gradient of f = x^2 + y^2 + z^2 is (2x, 2y, 2z)." />
@@ -44,8 +44,8 @@
         <jsp:param name="faq4a" value="Use standard math notation: x^2 for x squared, sin(x) for sine, e^z for exponential, sqrt(x) for square root, x*y for multiplication. The calculator supports polynomials, trigonometric, exponential, logarithmic, and hyperbolic functions. A live KaTeX preview shows your expression as rendered math." />
         <jsp:param name="faq5q" value="Does this calculator show step-by-step solutions?" />
         <jsp:param name="faq5a" value="Yes. After computing a result, click Show Steps to see a detailed solution showing each partial derivative computation, simplification, and final assembly of the result vector. Steps are rendered with full LaTeX math notation." />
-        <jsp:param name="faq6q" value="Is this vector calculus calculator free?" />
-        <jsp:param name="faq6a" value="Yes, this calculator is completely free with no signup required. You get symbolic computation via SymPy, step-by-step solutions, 3D visualizations, LaTeX export, and a built-in Python compiler." />
+        <jsp:param name="faq6q" value="Does this tool have practice worksheets?" />
+        <jsp:param name="faq6a" value="Yes. Click Print Worksheet to generate a printable practice sheet from a bank of 1500+ problems across 18 types: vectors from points, dot product, cross product, unit vectors, vector projections, direction cosines, angle between vectors, vector function derivatives, integrals, limits, and more. Each worksheet includes an answer key." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -493,6 +493,7 @@
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script>window.VC_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/vector-calculus-calculator.js?v=<%=cacheVersion%>"></script>
 
