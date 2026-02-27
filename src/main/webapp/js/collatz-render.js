@@ -1,48 +1,120 @@
 /**
  * Collatz Conjecture - Render Module
- * DOM element creation for sequence numbers, stats, and educational content
+ * Compact step-list display with operation badges and magnitude bars
  */
 (function() {
 'use strict';
 
-function renderSequenceNumber(num, index, isPeak, isOne) {
-    var el = document.createElement('div');
-    el.className = 'cc-sequence-number';
-    if (isPeak) el.className += ' cc-peak';
-    if (isOne) el.className += ' cc-one';
-    if (!isPeak && !isOne) {
-        el.className += num % 2 === 0 ? ' cc-even' : ' cc-odd';
+/**
+ * Create a single step row for the sequence list.
+ * Shows: step# | operation badge | value | magnitude bar
+ */
+function renderStepRow(num, index, prevNum, isPeak, isOne, peakValue) {
+    var row = document.createElement('div');
+    row.className = 'cc-step-row';
+    if (isPeak) row.className += ' cc-step-peak';
+    if (isOne) row.className += ' cc-step-done';
+
+    // Step number
+    var stepNum = document.createElement('span');
+    stepNum.className = 'cc-step-num';
+    stepNum.textContent = index;
+
+    // Operation badge
+    var op = document.createElement('span');
+    op.className = 'cc-step-op';
+    if (index === 0) {
+        op.className += ' cc-op-start';
+        op.textContent = 'START';
+    } else if (prevNum % 2 === 0) {
+        op.className += ' cc-op-even';
+        op.innerHTML = '&#xF7;2';
+    } else {
+        op.className += ' cc-op-odd';
+        op.innerHTML = '3n+1';
     }
-    el.textContent = num.toLocaleString();
-    el.title = 'Step ' + index + ': ' + num.toLocaleString() + (num % 2 === 0 ? ' (even, divide by 2)' : ' (odd, 3n+1)');
-    return el;
+
+    // Value
+    var val = document.createElement('span');
+    val.className = 'cc-step-val';
+    if (isPeak) val.className += ' cc-val-peak';
+    if (isOne) val.className += ' cc-val-done';
+    val.textContent = num.toLocaleString();
+
+    // Magnitude bar (proportional to peak)
+    var barWrap = document.createElement('span');
+    barWrap.className = 'cc-step-bar-wrap';
+    var bar = document.createElement('span');
+    bar.className = 'cc-step-bar';
+    if (isPeak) bar.className += ' cc-bar-peak';
+    if (isOne) bar.className += ' cc-bar-done';
+    // Use log scale for bar width to handle huge peaks
+    var pct = peakValue > 1
+        ? (Math.log(num + 1) / Math.log(peakValue + 1)) * 100
+        : 100;
+    bar.style.width = Math.max(2, Math.min(100, pct)) + '%';
+    barWrap.appendChild(bar);
+
+    row.appendChild(stepNum);
+    row.appendChild(op);
+    row.appendChild(val);
+    row.appendChild(barWrap);
+
+    return row;
 }
 
-function renderArrow() {
-    var el = document.createElement('div');
-    el.className = 'cc-sequence-arrow';
-    el.innerHTML = '&#8594;';
-    return el;
+/**
+ * Create the scrollable sequence container (header + list body).
+ */
+function createSequenceContainer() {
+    var wrap = document.createElement('div');
+    wrap.className = 'cc-step-list';
+
+    // Header row
+    var header = document.createElement('div');
+    header.className = 'cc-step-header';
+    header.innerHTML =
+        '<span class="cc-step-num">Step</span>' +
+        '<span class="cc-step-op">Rule</span>' +
+        '<span class="cc-step-val">Value</span>' +
+        '<span class="cc-step-bar-wrap">Magnitude</span>';
+    wrap.appendChild(header);
+
+    // Scrollable body
+    var body = document.createElement('div');
+    body.className = 'cc-step-body';
+    body.id = 'cc-step-body';
+    wrap.appendChild(body);
+
+    return wrap;
 }
 
-function renderStats(startValue, steps, peak, seqLength) {
+/**
+ * Render stats HTML with live/final labels.
+ */
+function renderStats(startValue, currentStep, currentPeak, totalSteps, isComplete) {
     var html = '<div class="cc-stats-grid">';
+
     html += '<div class="cc-stat-card">';
     html += '<div class="cc-stat-label">Starting Number</div>';
     html += '<div class="cc-stat-value">' + startValue.toLocaleString() + '</div>';
     html += '</div>';
+
     html += '<div class="cc-stat-card">';
-    html += '<div class="cc-stat-label">Steps to Reach 1</div>';
-    html += '<div class="cc-stat-value">' + steps.toLocaleString() + '</div>';
+    html += '<div class="cc-stat-label">' + (isComplete ? 'Total Steps' : 'Current Step') + '</div>';
+    html += '<div class="cc-stat-value">' + currentStep.toLocaleString() + '</div>';
     html += '</div>';
+
     html += '<div class="cc-stat-card">';
-    html += '<div class="cc-stat-label">Peak Value</div>';
-    html += '<div class="cc-stat-value">' + peak.toLocaleString() + '</div>';
+    html += '<div class="cc-stat-label">' + (isComplete ? 'Peak Value' : 'Peak So Far') + '</div>';
+    html += '<div class="cc-stat-value">' + currentPeak.toLocaleString() + '</div>';
     html += '</div>';
+
     html += '<div class="cc-stat-card">';
-    html += '<div class="cc-stat-label">Sequence Length</div>';
-    html += '<div class="cc-stat-value">' + seqLength.toLocaleString() + '</div>';
+    html += '<div class="cc-stat-label">' + (isComplete ? 'Sequence Length' : 'Total Steps') + '</div>';
+    html += '<div class="cc-stat-value">' + totalSteps.toLocaleString() + '</div>';
     html += '</div>';
+
     html += '</div>';
     return html;
 }
@@ -79,8 +151,8 @@ function showStatus(container, text, running) {
 }
 
 window.CollatzRender = {
-    renderSequenceNumber: renderSequenceNumber,
-    renderArrow: renderArrow,
+    renderStepRow: renderStepRow,
+    createSequenceContainer: createSequenceContainer,
     renderStats: renderStats,
     showError: showError,
     showEmpty: showEmpty,

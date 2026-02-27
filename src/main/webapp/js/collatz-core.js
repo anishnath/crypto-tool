@@ -1,6 +1,6 @@
 /**
  * Collatz Conjecture - Core Orchestration
- * State management, events, animation, integration with Render/Graph/Export
+ * State management, events, live animation with real-time graph + stats
  */
 (function() {
 'use strict';
@@ -17,8 +17,8 @@ var state = {
     animationInterval: null,
     currentIndex: 0,
     peakValue: 0,
-    stoppingTime: 0,
-    pendingGraph: false
+    peakSoFar: 0,
+    stoppingTime: 0
 };
 
 // ==================== Helpers ====================
@@ -58,31 +58,46 @@ function displayNextNumber(speed) {
     var container = $('cc-sequence-area');
     if (!container) return;
 
-    var seqContainer = container.querySelector('.cc-sequence-container');
-    if (!seqContainer) {
-        seqContainer = document.createElement('div');
-        seqContainer.className = 'cc-sequence-container';
+    // Create step-list container on first call
+    var stepBody = container.querySelector('#cc-step-body');
+    if (!stepBody) {
         container.innerHTML = '';
-        container.appendChild(seqContainer);
+        container.appendChild(R.createSequenceContainer());
+        stepBody = container.querySelector('#cc-step-body');
     }
 
     var num = state.sequence[state.currentIndex];
+    var prevNum = state.currentIndex > 0 ? state.sequence[state.currentIndex - 1] : 0;
     var isPeak = (num === state.peakValue && num > state.sequence[0]);
     var isOne = (num === 1);
 
-    if (state.currentIndex > 0) {
-        seqContainer.appendChild(R.renderArrow());
+    // Track running peak
+    if (num > state.peakSoFar) state.peakSoFar = num;
+
+    stepBody.appendChild(R.renderStepRow(num, state.currentIndex, prevNum, isPeak, isOne, state.peakValue));
+
+    // Auto-scroll step body
+    stepBody.scrollTop = stepBody.scrollHeight;
+
+    // Live graph: add point
+    G.addPoint(state.currentIndex, num, state.sequence.length);
+
+    // Live stats
+    var statsEl = $('cc-stats-area');
+    if (statsEl) {
+        statsEl.innerHTML = R.renderStats(
+            state.sequence[0],
+            state.currentIndex,
+            state.peakSoFar,
+            state.stoppingTime,
+            false
+        );
     }
-
-    seqContainer.appendChild(R.renderSequenceNumber(num, state.currentIndex, isPeak, isOne));
-
-    // Auto-scroll within container
-    seqContainer.scrollTop = seqContainer.scrollHeight;
 
     // Update status
     var statusEl = $('cc-status-area');
     if (statusEl) {
-        R.showStatus(statusEl, 'Step ' + state.currentIndex + ' of ' + (state.sequence.length - 1) + ' \u2014 Current: ' + num.toLocaleString(), true);
+        R.showStatus(statusEl, 'Step ' + state.currentIndex + ' of ' + state.stoppingTime + ' \u2014 Current: ' + num.toLocaleString(), true);
     }
 
     state.currentIndex++;
@@ -92,10 +107,16 @@ function displayNextNumber(speed) {
 function finishSequence() {
     stopAnimation();
 
-    // Show stats
+    // Final stats
     var statsEl = $('cc-stats-area');
     if (statsEl) {
-        statsEl.innerHTML = R.renderStats(state.sequence[0], state.stoppingTime, state.peakValue, state.sequence.length);
+        statsEl.innerHTML = R.renderStats(
+            state.sequence[0],
+            state.stoppingTime,
+            state.peakValue,
+            state.sequence.length,
+            true
+        );
     }
 
     // Update status
@@ -106,8 +127,8 @@ function finishSequence() {
         if (dot) dot.className = 'cc-status-dot cc-done';
     }
 
-    // Render graph inline
-    G.renderSequenceChart('cc-graph-area', state.sequence);
+    // Finalise graph with peak + end markers
+    G.finaliseChart(state.sequence);
 }
 
 // ==================== Actions ====================
@@ -132,7 +153,11 @@ function startSequence() {
     state.sequence = result.sequence;
     state.stoppingTime = result.steps;
     state.peakValue = result.peak;
+    state.peakSoFar = 0;
     state.currentIndex = 0;
+
+    // Initialise live graph (empty, ready for points)
+    G.initLiveChart('cc-graph-area', startNum, result.steps, result.peak);
 
     var speedInput = $('cc-speed-slider');
     var speed = speedInput ? parseInt(speedInput.value, 10) : 300;
@@ -150,7 +175,7 @@ function stopAnimation() {
     if (state.currentIndex > 0 && state.currentIndex < state.sequence.length) {
         var statusEl = $('cc-status-area');
         if (statusEl) {
-            R.showStatus(statusEl, 'Paused at step ' + state.currentIndex + ' of ' + (state.sequence.length - 1), false);
+            R.showStatus(statusEl, 'Paused at step ' + state.currentIndex + ' of ' + state.stoppingTime, false);
         }
     }
 }
@@ -176,6 +201,7 @@ function resetVisualization() {
     state.currentIndex = 0;
     state.stoppingTime = 0;
     state.peakValue = 0;
+    state.peakSoFar = 0;
     resetDisplay();
 }
 
@@ -223,6 +249,9 @@ function toggleFaq(btn) {
 // ==================== Init ====================
 
 function init() {
+    // Preload Plotly so graph is ready instantly when Start is clicked
+    G.loadPlotly();
+
     // Event bindings
     var startBtn = $('cc-start-btn');
     if (startBtn) startBtn.addEventListener('click', startSequence);

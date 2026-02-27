@@ -1,11 +1,13 @@
 /**
  * Collatz Conjecture - Plotly Graph Module
- * Lazy-loaded line chart of sequence values vs step number
+ * Live-updating line chart that grows as each number is added
  */
 (function() {
 'use strict';
 
 var __plotlyLoaded = false;
+var __initDone = false;   // has Plotly.newPlot been called for current run?
+var __containerId = '';
 
 function loadPlotly(cb) {
     if (__plotlyLoaded) { if (cb) cb(); return; }
@@ -34,7 +36,16 @@ function getPlotColors() {
     };
 }
 
-function renderSequenceChart(containerId, sequence) {
+// ==================== Live chart API ====================
+
+/**
+ * Initialise an empty Plotly chart, ready for live data.
+ * Call once when animation starts.
+ */
+function initLiveChart(containerId, startNumber, totalSteps, peakValue) {
+    __containerId = containerId;
+    __initDone = false;
+
     var container = document.getElementById(containerId);
     if (!container) return;
 
@@ -42,71 +53,44 @@ function renderSequenceChart(containerId, sequence) {
         if (!window.Plotly) return;
 
         var colors = getPlotColors();
+        var useLog = peakValue > 1000;
 
-        var steps = [];
-        var values = [];
-        for (var i = 0; i < sequence.length; i++) {
-            steps.push(i);
-            values.push(sequence[i]);
-        }
-
-        // Find peak for annotation
-        var peakVal = 0;
-        var peakIdx = 0;
-        for (var j = 0; j < sequence.length; j++) {
-            if (sequence[j] > peakVal) {
-                peakVal = sequence[j];
-                peakIdx = j;
-            }
-        }
-
-        // Use log scale for large peak values
-        var useLog = peakVal > 1000;
-
+        // Main line trace (starts empty, will grow)
         var trace = {
-            x: steps,
-            y: values,
+            x: [],
+            y: [],
             type: 'scatter',
             mode: 'lines',
-            line: { color: colors.lineColor, width: 2 },
+            line: { color: colors.lineColor, width: 2, shape: 'linear' },
             fill: 'tozeroy',
             fillcolor: colors.fillColor,
             name: 'Sequence',
             hovertemplate: 'Step %{x}<br>Value: %{y:,.0f}<extra></extra>'
         };
 
-        // Peak marker
-        var peakMarker = {
-            x: [peakIdx],
-            y: [peakVal],
+        // Current-point marker (will be updated each step)
+        var cursorTrace = {
+            x: [],
+            y: [],
             type: 'scatter',
             mode: 'markers',
-            marker: { color: colors.peakColor, size: 10, symbol: 'diamond' },
-            name: 'Peak (' + peakVal.toLocaleString() + ')',
-            hovertemplate: 'Peak at step %{x}<br>Value: %{y:,.0f}<extra></extra>'
-        };
-
-        // End marker (1)
-        var endMarker = {
-            x: [sequence.length - 1],
-            y: [1],
-            type: 'scatter',
-            mode: 'markers',
-            marker: { color: colors.endColor, size: 10, symbol: 'circle' },
-            name: 'Reached 1',
-            hovertemplate: 'Reached 1 at step %{x}<extra></extra>'
+            marker: { color: colors.lineColor, size: 8 },
+            name: 'Current',
+            showlegend: false,
+            hoverinfo: 'skip'
         };
 
         var layout = {
             title: {
-                text: 'Collatz Sequence: ' + sequence[0].toLocaleString() + ' to 1',
+                text: 'Collatz Sequence: ' + startNumber.toLocaleString(),
                 font: { size: 14, color: colors.textColor }
             },
             xaxis: {
-                title: { text: 'Step Number', font: { size: 12 } },
+                title: { text: 'Step', font: { size: 12 } },
                 gridcolor: colors.gridColor,
                 color: colors.textColor,
-                zeroline: false
+                zeroline: false,
+                range: [0, Math.min(totalSteps, 50)]   // start with visible window
             },
             yaxis: {
                 title: { text: 'Value', font: { size: 12 } },
@@ -119,14 +103,7 @@ function renderSequenceChart(containerId, sequence) {
             paper_bgcolor: colors.paper,
             font: { color: colors.textColor },
             margin: { t: 40, r: 20, b: 50, l: 60 },
-            showlegend: true,
-            legend: {
-                x: 1,
-                xanchor: 'right',
-                y: 1,
-                bgcolor: 'rgba(0,0,0,0)',
-                font: { size: 11 }
-            },
+            showlegend: false,
             hovermode: 'x unified'
         };
 
@@ -136,11 +113,87 @@ function renderSequenceChart(containerId, sequence) {
             staticPlot: false
         };
 
-        Plotly.newPlot(container, [trace, peakMarker, endMarker], layout, config);
+        Plotly.newPlot(container, [trace, cursorTrace], layout, config);
+        __initDone = true;
+    });
+}
+
+/**
+ * Add one data point to the live chart.
+ * Called on each animation step.
+ */
+function addPoint(step, value, totalSteps) {
+    if (!__initDone || !window.Plotly) return;
+    var container = document.getElementById(__containerId);
+    if (!container) return;
+
+    // Extend main trace
+    Plotly.extendTraces(container, { x: [[step]], y: [[value]] }, [0]);
+
+    // Move cursor marker
+    Plotly.restyle(container, { x: [[step]], y: [[value]] }, [1]);
+
+    // Auto-scroll x-axis if we passed the initial window
+    var xEnd = container.layout && container.layout.xaxis && container.layout.xaxis.range
+        ? container.layout.xaxis.range[1] : 50;
+    if (step > xEnd - 5) {
+        var newEnd = Math.min(step + 20, totalSteps + 5);
+        Plotly.relayout(container, { 'xaxis.range': [0, newEnd] });
+    }
+}
+
+/**
+ * Finalise chart after animation: add peak diamond + end circle markers,
+ * set full x-axis range, update title.
+ */
+function finaliseChart(sequence) {
+    if (!__initDone || !window.Plotly) return;
+    var container = document.getElementById(__containerId);
+    if (!container) return;
+
+    var colors = getPlotColors();
+
+    // Find peak
+    var peakVal = 0, peakIdx = 0;
+    for (var j = 0; j < sequence.length; j++) {
+        if (sequence[j] > peakVal) { peakVal = sequence[j]; peakIdx = j; }
+    }
+
+    // Remove cursor trace, add peak + end markers
+    var peakMarker = {
+        x: [peakIdx],
+        y: [peakVal],
+        type: 'scatter',
+        mode: 'markers',
+        marker: { color: colors.peakColor, size: 10, symbol: 'diamond' },
+        name: 'Peak (' + peakVal.toLocaleString() + ')',
+        hovertemplate: 'Peak at step %{x}<br>Value: %{y:,.0f}<extra></extra>'
+    };
+
+    var endMarker = {
+        x: [sequence.length - 1],
+        y: [1],
+        type: 'scatter',
+        mode: 'markers',
+        marker: { color: colors.endColor, size: 10, symbol: 'circle' },
+        name: 'Reached 1',
+        hovertemplate: 'Reached 1 at step %{x}<extra></extra>'
+    };
+
+    // Delete cursor trace (index 1), then add the two markers
+    Plotly.deleteTraces(container, 1);
+    Plotly.addTraces(container, [peakMarker, endMarker]);
+
+    // Show full range + legend + update title
+    Plotly.relayout(container, {
+        'xaxis.range': [0, sequence.length + 2],
+        'title.text': 'Collatz Sequence: ' + sequence[0].toLocaleString() + ' \u2192 1 (' + (sequence.length - 1) + ' steps)',
+        showlegend: true
     });
 }
 
 function destroyChart(containerId) {
+    __initDone = false;
     var container = document.getElementById(containerId);
     if (container && window.Plotly) {
         try { Plotly.purge(container); } catch (e) {}
@@ -149,7 +202,9 @@ function destroyChart(containerId) {
 
 window.CollatzGraph = {
     loadPlotly: loadPlotly,
-    renderSequenceChart: renderSequenceChart,
+    initLiveChart: initLiveChart,
+    addPoint: addPoint,
+    finaliseChart: finaliseChart,
     destroyChart: destroyChart,
     isDarkMode: isDarkMode
 };
