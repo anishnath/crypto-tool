@@ -503,11 +503,10 @@ def gen_integral_test():
         ap = "Diverges by the Integral Test"
 
     if note:
-        al += f" \\;\\text{{({note})}}"
         ap += f" ({note})"
 
     if integ is not None and not integ.has(sp.zoo, sp.nan) and conv:
-        al += f" \\;(\\int_{{{lo}}}^{{\\infty}} {sp.latex(f_t)} \\, dt = {sp.latex(integ)})"
+        al += f" \\;\\left(\\int_{{{lo}}}^{{\\infty}} {sp.latex(f_t)} \\, dt = {sp.latex(integ)}\\right)"
 
     q = (f"Use the Integral Test to determine whether "
          f"\\( \\displaystyle\\sum_{{n={lo}}}^{{\\infty}} {sp.latex(a_n)} \\) converges or diverges.")
