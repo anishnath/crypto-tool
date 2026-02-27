@@ -853,30 +853,123 @@ def gen_ftc_differentiation():
 # ── Hard – Area & Volume ────────────────────────────────────────────────────
 
 def gen_area_between_curves():
-    a_, b_ = rc(POS), rc([1,2])
-    v = rc(["poly_poly","trig_zero","sqrt_quadratic"])
+    """Area between two curves — Dawkins Ch 6.2 style (~12 variants)."""
+    variants = [
+        "poly_poly", "trig_zero", "sqrt_quadratic",
+        "poly_above_xaxis", "linear_vs_quadratic", "rational_linear",
+        "exp_with_bounds", "two_parabolas", "sqrt_vs_poly",
+        "parabola_line", "trig_poly", "two_trig",
+    ]
+    v = rc(variants)
+    a_, b_ = rc(POS), rc([1, 2])
+
     if v == "poly_poly":
         f1 = a_*x - x**2
         f2 = b_*x**2 - a_*x
-        ints = sorted([p for p in sp.solve(f1-f2, x) if p.is_real])
+        ints = sorted([p for p in sp.solve(f1 - f2, x) if p.is_real])
         if len(ints) < 2: return None
         lo, hi = ints[0], ints[-1]
+
     elif v == "trig_zero":
         f1, f2 = sp.sin(x), sp.Integer(0)
-        lo, hi = 0, sp.pi
-    else:
+        lo, hi = sp.Integer(0), sp.pi
+
+    elif v == "sqrt_quadratic":
         f1, f2 = sp.sqrt(x), x**2
         lo, hi = sp.Integer(0), sp.Integer(1)
-    r = safe_definite(sp.Abs(f1-f2), x, lo, hi)
+
+    elif v == "poly_above_xaxis":
+        # Area below f(x) = c + bx - ax^2 and above x-axis (roots as bounds)
+        c_ = rc([1, 2, 3])
+        f1 = c_ + a_*x - x**2
+        f2 = sp.Integer(0)
+        roots = sorted([r for r in sp.solve(f1, x) if r.is_real])
+        if len(roots) < 2: return None
+        lo, hi = roots[0], roots[-1]
+
+    elif v == "linear_vs_quadratic":
+        # y = mx + b  vs  y = ax^2, given intersection bounds
+        m_ = rc([1, 2, 3])
+        f1 = m_*x + rc([0, 1])
+        f2 = rc([1, 2])*x**2
+        ints = sorted([p for p in sp.solve(f1 - f2, x) if p.is_real])
+        if len(ints) < 2: return None
+        lo, hi = ints[0], ints[-1]
+
+    elif v == "rational_linear":
+        # y = k/x  vs  y = 0  on [1, c]
+        k_ = rc([1, 2, 3, 4])
+        c_ = rc([2, 3, 4, 5])
+        f1 = sp.Rational(k_) / x
+        f2 = sp.Integer(0)
+        lo, hi = sp.Integer(1), sp.Integer(c_)
+
+    elif v == "exp_with_bounds":
+        # y = e^(-kx)  vs y = 0  on [0, b]
+        k_ = rc([1, 2])
+        b_val = rc([1, 2, 3])
+        f1 = sp.exp(-k_*x)
+        f2 = sp.Integer(0)
+        lo, hi = sp.Integer(0), sp.Integer(b_val)
+
+    elif v == "two_parabolas":
+        # y = a - x^2  vs  y = x^2 - b  (symmetric about y-axis)
+        a2 = rc([1, 2, 3, 4])
+        b2 = rc([0, 1, 2])
+        f1 = a2 - x**2
+        f2 = x**2 - b2
+        ints = sorted([p for p in sp.solve(f1 - f2, x) if p.is_real])
+        if len(ints) < 2: return None
+        lo, hi = ints[0], ints[-1]
+
+    elif v == "sqrt_vs_poly":
+        # y = sqrt(a*x)  vs  y = b*x^2  (generalized coefficients)
+        a2 = rc([1, 2, 4])
+        b2 = rc([1, 2])
+        f1 = sp.sqrt(a2*x)
+        f2 = b2*x**2
+        ints = sorted([p for p in sp.solve(f1 - f2, x) if p.is_real and p >= 0])
+        if len(ints) < 2: return None
+        lo, hi = ints[0], ints[-1]
+
+    elif v == "parabola_line":
+        # y = x^2 + c  vs  y = mx + d
+        c_ = rc([-2, -1, 0, 1, 2])
+        m_ = rc([1, 2, 3])
+        d_ = rc([0, 1, 2, 3])
+        f1 = m_*x + d_
+        f2 = x**2 + c_
+        ints = sorted([p for p in sp.solve(f1 - f2, x) if p.is_real])
+        if len(ints) < 2: return None
+        lo, hi = ints[0], ints[-1]
+
+    elif v == "trig_poly":
+        # y = sin(x)  vs  y = x(pi - x) scaled — on [0, pi]
+        # Actually: y = cos(x) vs y = 0 on [-pi/2, pi/2] (simpler)
+        f1 = sp.cos(x)
+        f2 = sp.Integer(0)
+        lo, hi = -sp.pi/2, sp.pi/2
+
+    elif v == "two_trig":
+        # y = sin(x) vs y = cos(x) on [0, pi/2] — classic
+        f1 = sp.sin(x)
+        f2 = sp.cos(x)
+        lo, hi = sp.Integer(0), sp.pi / 2
+
+    else:
+        return None
+
+    # Compute the area
+    r = safe_definite(sp.Abs(f1 - f2), x, lo, hi)
     if r is None:
-        r = safe_definite(f1-f2, x, lo, hi)
+        r = safe_definite(f1 - f2, x, lo, hi)
         if r is None: return None
         r = sp.Abs(r)
     q = (f"Find the area of the region enclosed between "
          f"\\( f(x)={sp.latex(f1)} \\) and \\( g(x)={sp.latex(f2)} \\) "
          f"on \\( [{sp.latex(lo)},\\, {sp.latex(hi)}] \\).")
     al, ap = fmt_def(sp.simplify(r))
-    return q, f1-f2, al, ap, lo, hi
+    return q, f1 - f2, al, ap, lo, hi, f1, f2
 
 def gen_volume_disk_washer():
     """Volume using disk or washer method (§6.3 style)."""
@@ -1294,10 +1387,17 @@ def call_generator(q_type):
                 "is_definite": False, "lo": None, "hi": None}
 
     # ── Definite ──
+    integrand_f = None
+    integrand_g = None
+
     def _pack(res):
         nonlocal q_text, integrand_expr, ans_latex, ans_plain, lo, hi, is_definite
+        nonlocal integrand_f, integrand_g
         if res is None: return False
-        q_text, integrand_expr, ans_latex, ans_plain, lo, hi = res
+        if len(res) == 8:
+            q_text, integrand_expr, ans_latex, ans_plain, lo, hi, integrand_f, integrand_g = res
+        else:
+            q_text, integrand_expr, ans_latex, ans_plain, lo, hi = res
         is_definite = True
         return True
 
@@ -1335,9 +1435,14 @@ def call_generator(q_type):
     if not q_text or not ans_latex or not ans_plain:
         return None
 
-    return {"q_text": q_text, "integrand_expr": integrand_expr,
-            "ans_latex": ans_latex, "ans_plain": ans_plain,
-            "is_definite": is_definite, "lo": lo, "hi": hi}
+    rec = {"q_text": q_text, "integrand_expr": integrand_expr,
+           "ans_latex": ans_latex, "ans_plain": ans_plain,
+           "is_definite": is_definite, "lo": lo, "hi": hi}
+    if integrand_f is not None:
+        rec["integrand_f"] = integrand_f
+    if integrand_g is not None:
+        rec["integrand_g"] = integrand_g
+    return rec
 
 # ===========================================================================
 # Main generation loop
