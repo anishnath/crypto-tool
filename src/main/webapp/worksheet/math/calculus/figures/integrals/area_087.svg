@@ -23,116 +23,121 @@ z
 " style="fill: none"/>
  </g>
  <g>
- <path d="M 50.85 146.47 
-L 50.85 -57.39 
-L 53.64 -57.39 
-L 56.42 -57.39 
-L 59.21 -57.39 
-L 62.00 -57.39 
-L 64.79 -57.39 
-L 67.57 -57.39 
-L 70.36 -57.39 
-L 73.15 -57.39 
-L 75.93 -57.39 
-L 78.72 -57.39 
-L 81.51 -57.39 
-L 84.30 -57.39 
-L 87.08 -57.39 
-L 89.87 -57.39 
-L 92.66 -57.39 
-L 95.45 -57.39 
-L 98.23 -57.39 
-L 101.02 -57.39 
-L 103.81 -57.39 
-L 106.59 -57.39 
-L 109.38 -57.39 
-L 112.17 -57.39 
-L 114.96 -57.39 
-L 117.74 -57.39 
-L 120.53 -57.39 
-L 123.32 -57.39 
-L 126.10 -57.39 
-L 128.89 -57.39 
-L 131.68 -57.39 
-L 134.47 -57.39 
-L 137.25 -57.39 
-L 140.04 -57.39 
-L 142.83 -57.39 
-L 145.62 -57.39 
-L 148.40 -57.39 
-L 151.19 -57.39 
-L 153.98 -57.39 
-L 156.76 -57.39 
-L 159.55 -57.39 
-L 162.34 -57.39 
-L 165.13 -57.39 
-L 167.91 -57.39 
-L 170.70 -57.39 
-L 173.49 -57.39 
-L 176.27 -57.39 
-L 179.06 -57.39 
-L 181.85 -57.39 
-L 184.64 -57.39 
-L 187.42 -57.39 
-L 187.42 44.54 
-L 187.42 44.54 
-L 184.64 45.59 
-L 181.85 46.64 
-L 179.06 47.71 
-L 176.27 48.79 
-L 173.49 49.88 
-L 170.70 50.98 
-L 167.91 52.10 
-L 165.13 53.23 
-L 162.34 54.38 
-L 159.55 55.53 
-L 156.76 56.71 
-L 153.98 57.90 
-L 151.19 59.10 
-L 148.40 60.32 
-L 145.62 61.56 
-L 142.83 62.82 
-L 140.04 64.10 
-L 137.25 65.40 
-L 134.47 66.71 
-L 131.68 68.05 
-L 128.89 69.42 
-L 126.10 70.81 
-L 123.32 72.22 
-L 120.53 73.66 
-L 117.74 75.13 
-L 114.96 76.64 
-L 112.17 78.17 
-L 109.38 79.74 
-L 106.59 81.35 
-L 103.81 83.00 
-L 101.02 84.69 
-L 98.23 86.43 
-L 95.45 88.22 
-L 92.66 90.07 
-L 89.87 91.99 
-L 87.08 93.97 
-L 84.30 96.03 
-L 81.51 98.17 
-L 78.72 100.42 
-L 75.93 102.78 
-L 73.15 105.28 
-L 70.36 107.94 
-L 67.57 110.80 
-L 64.79 113.91 
-L 62.00 117.35 
-L 59.21 121.25 
-L 56.42 125.87 
-L 53.64 131.91 
-L 50.85 146.47 
+ <defs>
+ <path d="M 84.14 -136.55 
+L 84.14 -84.47 
+L 86.40 -84.47 
+L 88.67 -84.47 
+L 90.93 -84.47 
+L 93.20 -84.47 
+L 95.46 -84.47 
+L 97.73 -84.47 
+L 99.99 -84.47 
+L 102.26 -84.47 
+L 104.52 -84.47 
+L 106.79 -84.47 
+L 109.05 -84.47 
+L 111.32 -84.47 
+L 113.58 -84.47 
+L 115.84 -84.47 
+L 118.11 -84.47 
+L 120.37 -84.47 
+L 122.64 -84.47 
+L 124.90 -84.47 
+L 127.17 -84.47 
+L 129.43 -84.47 
+L 131.70 -84.47 
+L 133.96 -84.47 
+L 136.23 -84.47 
+L 138.49 -84.47 
+L 140.75 -84.47 
+L 143.02 -84.47 
+L 145.28 -84.47 
+L 147.55 -84.47 
+L 149.81 -84.47 
+L 152.08 -84.47 
+L 154.34 -84.47 
+L 156.61 -84.47 
+L 158.87 -84.47 
+L 161.14 -84.47 
+L 163.40 -84.47 
+L 165.67 -84.47 
+L 167.93 -84.47 
+L 170.19 -84.47 
+L 172.46 -84.47 
+L 174.72 -84.47 
+L 176.99 -84.47 
+L 179.25 -84.47 
+L 181.52 -84.47 
+L 183.78 -84.47 
+L 186.05 -84.47 
+L 188.31 -84.47 
+L 190.58 -84.47 
+L 192.84 -84.47 
+L 195.11 -84.47 
+L 195.11 -84.47 
+L 195.11 -84.47 
+L 192.84 -87.04 
+L 190.58 -89.61 
+L 188.31 -92.16 
+L 186.05 -94.71 
+L 183.78 -97.23 
+L 181.52 -99.73 
+L 179.25 -102.20 
+L 176.99 -104.64 
+L 174.72 -107.04 
+L 172.46 -109.40 
+L 170.19 -111.72 
+L 167.93 -113.98 
+L 165.67 -116.20 
+L 163.40 -118.35 
+L 161.14 -120.44 
+L 158.87 -122.47 
+L 156.61 -124.43 
+L 154.34 -126.31 
+L 152.08 -128.12 
+L 149.81 -129.85 
+L 147.55 -131.49 
+L 145.28 -133.05 
+L 143.02 -134.52 
+L 140.75 -135.90 
+L 138.49 -137.18 
+L 136.23 -138.37 
+L 133.96 -139.46 
+L 131.70 -140.45 
+L 129.43 -141.34 
+L 127.17 -142.12 
+L 124.90 -142.80 
+L 122.64 -143.37 
+L 120.37 -143.84 
+L 118.11 -144.19 
+L 115.84 -144.44 
+L 113.58 -144.58 
+L 111.32 -144.61 
+L 109.05 -144.52 
+L 106.79 -144.33 
+L 104.52 -144.03 
+L 102.26 -143.62 
+L 99.99 -143.10 
+L 97.73 -142.48 
+L 95.46 -141.75 
+L 93.20 -140.91 
+L 90.93 -139.97 
+L 88.67 -138.93 
+L 86.40 -137.79 
+L 84.14 -136.55 
 z
-" style="fill: #2563eb; fill-opacity: 0.15; stroke: #2563eb; stroke-opacity: 0.15"/>
+" style="stroke: #2563eb; stroke-opacity: 0.15"/>
+ </defs>
+ <g>
+ <use xlink:href="#mca6a914c65" x="0" y="177.55" style="fill: #2563eb; fill-opacity: 0.15; stroke: #2563eb; stroke-opacity: 0.15"/>
+ </g>
  </g>
  <g>
  <g>
  <g>
- <path d="M 50.85 145.8 
-L 50.85 7.2 
+ <path d="M 81.64 145.8 
+L 81.64 7.2 
 " style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
  </g>
  <g>
@@ -142,41 +147,41 @@ L 0 3.5
 " style="stroke: #9ca3af; stroke-width: 0.8"/>
  </defs>
  <g>
- <use xlink:href="#mf0847c8c67" x="50.85" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ <use xlink:href="#ma27712688e" x="81.64" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
  </g>
  </g>
  <g>
- <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="50.85" y="158.12" transform="rotate(-0 50.85 158.12)">0.0</text>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="81.64" y="158.12" transform="rotate(-0 81.64 158.12)">1</text>
  </g>
  </g>
  <g>
  <g>
- <path d="M 119.14 145.8 
-L 119.14 7.2 
+ <path d="M 134.62 145.8 
+L 134.62 7.2 
 " style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
  </g>
  <g>
  <g>
- <use xlink:href="#mf0847c8c67" x="119.14" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ <use xlink:href="#ma27712688e" x="134.62" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
  </g>
  </g>
  <g>
- <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="119.14" y="158.12" transform="rotate(-0 119.14 158.12)">0.5</text>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="134.62" y="158.12" transform="rotate(-0 134.62 158.12)">2</text>
  </g>
  </g>
  <g>
  <g>
- <path d="M 187.42 145.8 
-L 187.42 7.2 
+ <path d="M 187.60 145.8 
+L 187.60 7.2 
 " style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
  </g>
  <g>
  <g>
- <use xlink:href="#mf0847c8c67" x="187.42" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ <use xlink:href="#ma27712688e" x="187.60" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
  </g>
  </g>
  <g>
- <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="187.42" y="158.12" transform="rotate(-0 187.42 158.12)">1.0</text>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="187.60" y="158.12" transform="rotate(-0 187.60 158.12)">3</text>
  </g>
  </g>
  <g>
@@ -186,8 +191,8 @@ L 187.42 7.2
  <g>
  <g>
  <g>
- <path d="M 41.97 95.50 
-L 237.27 95.50 
+ <path d="M 41.97 123.14 
+L 237.27 123.14 
 " style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
  </g>
  <g>
@@ -197,26 +202,56 @@ L -3.5 0
 " style="stroke: #9ca3af; stroke-width: 0.8"/>
  </defs>
  <g>
- <use xlink:href="#m4fda8f9183" x="41.97" y="95.50" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ <use xlink:href="#md31777b3a9" x="41.97" y="123.14" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
  </g>
  </g>
  <g>
- <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="98.16" transform="rotate(-0 34.97 98.16)">−1.5</text>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="125.80" transform="rotate(-0 34.97 125.80)">−0.5</text>
  </g>
  </g>
  <g>
  <g>
- <path d="M 41.97 44.54 
-L 237.27 44.54 
+ <path d="M 41.97 93.08 
+L 237.27 93.08 
 " style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
  </g>
  <g>
  <g>
- <use xlink:href="#m4fda8f9183" x="41.97" y="44.54" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ <use xlink:href="#md31777b3a9" x="41.97" y="93.08" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
  </g>
  </g>
  <g>
- <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="47.20" transform="rotate(-0 34.97 47.20)">−1.0</text>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="95.73" transform="rotate(-0 34.97 95.73)">0.0</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 41.97 63.01 
+L 237.27 63.01 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#md31777b3a9" x="41.97" y="63.01" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="65.67" transform="rotate(-0 34.97 65.67)">0.5</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 41.97 32.94 
+L 237.27 32.94 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#md31777b3a9" x="41.97" y="32.94" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="34.97" y="35.60" transform="rotate(-0 34.97 35.60)">1.0</text>
  </g>
  </g>
  <g>
@@ -224,84 +259,101 @@ L 237.27 44.54
  </g>
  </g>
  <g>
- <path d="M 51.37 140.19 
-L 54.13 130.66 
-L 56.90 125.01 
-L 59.67 120.57 
-L 62.43 116.78 
-L 65.20 113.43 
-L 67.96 110.39 
-L 70.73 107.58 
-L 73.50 104.96 
-L 76.26 102.50 
-L 79.03 100.17 
-L 81.80 97.95 
-L 84.56 95.83 
-L 87.33 93.79 
-L 90.09 91.83 
-L 92.86 89.94 
-L 95.63 88.11 
-L 98.39 86.33 
-L 101.16 84.61 
-L 103.92 82.93 
-L 106.69 81.29 
-L 109.46 79.70 
-L 112.22 78.14 
-L 114.99 76.62 
-L 117.75 75.13 
-L 120.52 73.67 
-L 123.29 72.24 
-L 126.05 70.83 
-L 128.82 69.45 
-L 131.58 68.10 
-L 134.35 66.77 
-L 137.12 65.46 
-L 139.88 64.17 
-L 142.65 62.90 
-L 145.41 61.65 
-L 148.18 60.42 
-L 150.95 59.21 
-L 153.71 58.01 
-L 156.48 56.83 
-L 159.24 55.66 
-L 162.01 54.51 
-L 164.78 53.37 
-L 167.54 52.25 
-L 170.31 51.14 
-L 173.07 50.04 
-L 175.84 48.96 
-L 178.61 47.89 
-L 181.37 46.82 
-L 184.14 45.77 
-L 186.90 44.73 
-L 189.67 43.71 
-L 192.44 42.69 
-L 195.20 41.68 
-L 197.97 40.68 
-L 200.73 39.69 
-L 203.50 38.71 
-L 206.27 37.74 
-L 209.03 36.77 
-L 211.80 35.82 
-L 214.57 34.87 
-L 217.33 33.93 
-L 220.10 33.00 
-L 222.86 32.08 
-L 225.63 31.16 
-L 228.40 30.25 
+ <path d="M 50.85 68.62 
+L 53.10 66.31 
+L 55.34 64.05 
+L 57.59 61.84 
+L 59.84 59.69 
+L 62.09 57.60 
+L 64.33 55.57 
+L 66.58 53.61 
+L 68.83 51.72 
+L 71.08 49.91 
+L 73.32 48.17 
+L 75.57 46.52 
+L 77.82 44.94 
+L 80.07 43.46 
+L 82.31 42.06 
+L 84.56 40.76 
+L 86.81 39.55 
+L 89.06 38.43 
+L 91.30 37.42 
+L 93.55 36.50 
+L 95.80 35.69 
+L 98.05 34.98 
+L 100.29 34.37 
+L 102.54 33.87 
+L 104.79 33.48 
+L 107.04 33.19 
+L 109.28 33.01 
+L 111.53 32.94 
+L 113.78 32.98 
+L 116.02 33.12 
+L 118.27 33.38 
+L 120.52 33.74 
+L 122.77 34.20 
+L 125.01 34.78 
+L 127.26 35.46 
+L 129.51 36.24 
+L 131.76 37.12 
+L 134.00 38.11 
+L 136.25 39.19 
+L 138.50 40.37 
+L 140.75 41.65 
+L 142.99 43.01 
+L 145.24 44.47 
+L 147.49 46.02 
+L 149.74 47.65 
+L 151.98 49.36 
+L 154.23 51.15 
+L 156.48 53.01 
+L 158.73 54.95 
+L 160.97 56.96 
+L 163.22 59.03 
+L 165.47 61.16 
+L 167.72 63.35 
+L 169.96 65.60 
+L 172.21 67.89 
+L 174.46 70.23 
+L 176.70 72.61 
+L 178.95 75.02 
+L 181.20 77.47 
+L 183.45 79.95 
+L 185.69 82.45 
+L 187.94 84.97 
+L 190.19 87.50 
+L 192.44 90.05 
+L 194.68 92.60 
+L 196.93 95.15 
+L 199.18 97.69 
+L 201.43 100.23 
+L 203.67 102.76 
+L 205.92 105.27 
+L 208.17 107.75 
+L 210.42 110.21 
+L 212.66 112.64 
+L 214.91 115.03 
+L 217.16 117.39 
+L 219.41 119.70 
+L 221.65 121.96 
+L 223.90 124.17 
+L 226.15 126.33 
+L 228.40 128.42 
 " style="fill: none; stroke: #2563eb; stroke-width: 1.5; stroke-linecap: square"/>
  </g>
  <g>
- <path style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linecap: square"/>
+ <path d="M 41.97 93.08 
+L 237.27 93.08 
+" style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linecap: square"/>
  </g>
  <g>
- <path d="M 50.85 145.8 
-L 50.85 7.2 
+ <path d="M 84.14 145.8 
+L 84.14 7.2 
 " style="fill: none; stroke-dasharray: 0.6,0.99; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 0.6"/>
  </g>
  <g>
- <path d="M 187.42 145.8 
-L 187.42 7.2 
+ <path d="M 195.11 145.8 
+L 195.11 7.2 
 " style="fill: none; stroke-dasharray: 0.6,0.99; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 0.6"/>
  </g>
  <g>
