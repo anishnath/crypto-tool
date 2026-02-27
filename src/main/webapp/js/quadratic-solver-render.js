@@ -123,6 +123,28 @@ function renderSolution(result) {
     html += '<strong>Opens:</strong> ' + (result.a > 0 ? 'Upward' : 'Downward');
     html += '</div>';
 
+    // X-intercept & midpoint info
+    if (result.roots.type === 'real' && result.disc > 0) {
+        var r1 = Math.min(result.roots.x1, result.roots.x2);
+        var r2 = Math.max(result.roots.x1, result.roots.x2);
+        var mid = (r1 + r2) / 2;
+        html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+        html += '<strong>X-intercepts:</strong> (' + fmt(r1) + ', 0) and (' + fmt(r2) + ', 0) &nbsp; ';
+        html += '<strong>Midpoint:</strong> x = ' + fmt(mid);
+        html += ' &nbsp; <span style="color:var(--text-muted);font-size:0.85em;">(equals vertex x-coordinate)</span>';
+        html += '</div>';
+    } else if (result.roots.type === 'real' && result.disc === 0) {
+        html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+        html += '<strong>X-intercept:</strong> (' + fmt(result.roots.x1) + ', 0) &mdash; parabola touches the x-axis at the vertex';
+        html += '</div>';
+    } else {
+        html += '<div class="qs-result-detail qs-no-intercept-box" style="margin-top:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary);border-left:3px solid var(--qs-tool);border-radius:4px;">';
+        html += '<strong>No x-intercepts</strong> &mdash; the parabola does not cross the x-axis. ';
+        html += 'The entire curve lies ' + (result.a > 0 ? 'above' : 'below') + ' the x-axis.';
+        html += ' The vertex (' + fmt(h) + ', ' + fmt(k) + ') is the ' + (result.a > 0 ? 'minimum' : 'maximum') + ' point.';
+        html += '</div>';
+    }
+
     // Area under parabola between roots (when two distinct real roots)
     if (result.areaBetweenRoots !== undefined) {
         html += '<div class="qs-result-detail qs-area-box" style="margin-top:0.75rem;">';

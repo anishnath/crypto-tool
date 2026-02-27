@@ -447,6 +447,7 @@ var examples = {
     'vertex-form': { type: 'vertex', a: 2, h: 3, k: -8 },
     'inequality': { type: 'inequality', a: 1, b: -5, c: 6, op: '<' },
     'horizontal': { type: 'horizontal', a: 1, b: -4, c: 2 },
+    'no-x-intercept': { type: 'standard', a: 2, b: -4, c: 5 },
     'random': null
 };
 

@@ -254,6 +254,7 @@
                         <button type="button" class="qs-example-chip" data-example="vertex-form">Vertex Form</button>
                         <button type="button" class="qs-example-chip" data-example="inequality">Inequality</button>
                         <button type="button" class="qs-example-chip" data-example="horizontal">Horizontal</button>
+                        <button type="button" class="qs-example-chip" data-example="no-x-intercept">No X-Intercept</button>
                         <button type="button" class="qs-example-chip" data-example="random">Random</button>
                     </div>
                 </div>
