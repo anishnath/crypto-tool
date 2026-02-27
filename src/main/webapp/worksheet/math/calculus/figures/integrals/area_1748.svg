@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="238.61pt" height="177.55pt" viewBox="0 0 238.61 177.55" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 177.55 
+L 238.61 177.55 
+L 238.61 0 
+L 0 0 
+L 0 177.55 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 36.11 145.8 
+L 231.41 145.8 
+L 231.41 7.2 
+L 36.11 7.2 
+L 36.11 145.8 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <defs>
+ <path d="M 78.27 -95.98 
+L 78.27 21.62 
+L 80.54 21.62 
+L 82.80 21.62 
+L 85.07 21.62 
+L 87.33 21.62 
+L 89.60 21.62 
+L 91.86 21.62 
+L 94.13 21.62 
+L 96.39 21.62 
+L 98.66 21.62 
+L 100.92 21.62 
+L 103.18 21.62 
+L 105.45 21.62 
+L 107.71 21.62 
+L 109.98 21.62 
+L 112.24 21.62 
+L 114.51 21.62 
+L 116.77 21.62 
+L 119.04 21.62 
+L 121.30 21.62 
+L 123.57 21.62 
+L 125.83 21.62 
+L 128.10 21.62 
+L 130.36 21.62 
+L 132.62 21.62 
+L 134.89 21.62 
+L 137.15 21.62 
+L 139.42 21.62 
+L 141.68 21.62 
+L 143.95 21.62 
+L 146.21 21.62 
+L 148.48 21.62 
+L 150.74 21.62 
+L 153.01 21.62 
+L 155.27 21.62 
+L 157.54 21.62 
+L 159.80 21.62 
+L 162.06 21.62 
+L 164.33 21.62 
+L 166.59 21.62 
+L 168.86 21.62 
+L 171.12 21.62 
+L 173.39 21.62 
+L 175.65 21.62 
+L 177.92 21.62 
+L 180.18 21.62 
+L 182.45 21.62 
+L 184.71 21.62 
+L 186.98 21.62 
+L 189.24 21.62 
+L 189.24 -122.42 
+L 189.24 -122.42 
+L 186.98 -124.59 
+L 184.71 -126.65 
+L 182.45 -128.61 
+L 180.18 -130.46 
+L 177.92 -132.21 
+L 175.65 -133.84 
+L 173.39 -135.37 
+L 171.12 -136.78 
+L 168.86 -138.07 
+L 166.59 -139.26 
+L 164.33 -140.33 
+L 162.06 -141.28 
+L 159.80 -142.12 
+L 157.54 -142.84 
+L 155.27 -143.44 
+L 153.01 -143.93 
+L 150.74 -144.30 
+L 148.48 -144.55 
+L 146.21 -144.68 
+L 143.95 -144.69 
+L 141.68 -144.58 
+L 139.42 -144.36 
+L 137.15 -144.01 
+L 134.89 -143.55 
+L 132.62 -142.97 
+L 130.36 -142.27 
+L 128.10 -141.46 
+L 125.83 -140.53 
+L 123.57 -139.48 
+L 121.30 -138.32 
+L 119.04 -137.05 
+L 116.77 -135.66 
+L 114.51 -134.16 
+L 112.24 -132.54 
+L 109.98 -130.82 
+L 107.71 -128.99 
+L 105.45 -127.05 
+L 103.18 -125.01 
+L 100.92 -122.86 
+L 98.66 -120.61 
+L 96.39 -118.25 
+L 94.13 -115.80 
+L 91.86 -113.25 
+L 89.60 -110.60 
+L 87.33 -107.86 
+L 85.07 -105.02 
+L 82.80 -102.10 
+L 80.54 -99.08 
+L 78.27 -95.98 
+z
+" style="stroke: #2563eb; stroke-opacity: 0.15"/>
+ </defs>
+ <g>
+ <use xlink:href="#mb064da2778" x="0" y="177.55" style="fill: #2563eb; fill-opacity: 0.15; stroke: #2563eb; stroke-opacity: 0.15"/>
+ </g>
+ </g>
+ <g>
+ <g>
+ <g>
+ <path d="M 54.08 145.8 
+L 54.08 7.2 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <defs>
+ <path d="M 0 0 
+L 0 3.5 
+" style="stroke: #9ca3af; stroke-width: 0.8"/>
+ </defs>
+ <g>
+ <use xlink:href="#m97f116f250" x="54.08" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="54.08" y="158.12" transform="rotate(-0 54.08 158.12)">0.5</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 96.47 145.8 
+L 96.47 7.2 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m97f116f250" x="96.47" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="96.47" y="158.12" transform="rotate(-0 96.47 158.12)">1.0</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 138.85 145.8 
+L 138.85 7.2 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m97f116f250" x="138.85" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="138.85" y="158.12" transform="rotate(-0 138.85 158.12)">1.5</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 181.24 145.8 
+L 181.24 7.2 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m97f116f250" x="181.24" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="181.24" y="158.12" transform="rotate(-0 181.24 158.12)">2.0</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 223.62 145.8 
+L 223.62 7.2 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m97f116f250" x="223.62" y="145.8" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="223.62" y="158.12" transform="rotate(-0 223.62 158.12)">2.5</text>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="133.76" y="168.89" transform="rotate(-0 133.76 168.89)">x</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <g>
+ <path d="M 36.11 116.01 
+L 231.41 116.01 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <defs>
+ <path d="M 0 0 
+L -3.5 0 
+" style="stroke: #9ca3af; stroke-width: 0.8"/>
+ </defs>
+ <g>
+ <use xlink:href="#m4d0774c80b" x="36.11" y="116.01" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="29.11" y="118.67" transform="rotate(-0 29.11 118.67)">1.0</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 36.11 74.43 
+L 231.41 74.43 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m4d0774c80b" x="36.11" y="74.43" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="29.11" y="77.09" transform="rotate(-0 29.11 77.09)">1.5</text>
+ </g>
+ </g>
+ <g>
+ <g>
+ <path d="M 36.11 32.85 
+L 231.41 32.85 
+" style="fill: none; stroke: #e5e7eb; stroke-opacity: 0.6; stroke-width: 0.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <g>
+ <use xlink:href="#m4d0774c80b" x="36.11" y="32.85" style="fill: #9ca3af; stroke: #9ca3af; stroke-width: 0.8"/>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="29.11" y="35.51" transform="rotate(-0 29.11 35.51)">2.0</text>
+ </g>
+ </g>
+ <g>
+ <text style="fill: #9ca3af; font: 7px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="12.52" y="76.5" transform="rotate(-90 12.52 76.5)">y</text>
+ </g>
+ </g>
+ <g>
+ <path d="M 44.98 135.52 
+L 47.23 131.47 
+L 49.48 127.47 
+L 51.73 123.52 
+L 53.97 119.62 
+L 56.22 115.77 
+L 58.47 111.99 
+L 60.72 108.26 
+L 62.96 104.60 
+L 65.21 101.01 
+L 67.46 97.49 
+L 69.71 94.03 
+L 71.95 90.65 
+L 74.20 87.35 
+L 76.45 84.13 
+L 78.70 80.98 
+L 80.94 77.92 
+L 83.19 74.95 
+L 85.44 72.06 
+L 87.68 69.26 
+L 89.93 66.55 
+L 92.18 63.94 
+L 94.43 61.42 
+L 96.67 59.00 
+L 98.92 56.67 
+L 101.17 54.45 
+L 103.42 52.33 
+L 105.66 50.31 
+L 107.91 48.39 
+L 110.16 46.59 
+L 112.41 44.89 
+L 114.65 43.29 
+L 116.90 41.81 
+L 119.15 40.44 
+L 121.40 39.18 
+L 123.64 38.03 
+L 125.89 36.99 
+L 128.14 36.07 
+L 130.39 35.27 
+L 132.63 34.58 
+L 134.88 34.00 
+L 137.13 33.54 
+L 139.38 33.20 
+L 141.62 32.97 
+L 143.87 32.86 
+L 146.12 32.87 
+L 148.37 32.99 
+L 150.61 33.23 
+L 152.86 33.59 
+L 155.11 34.07 
+L 157.35 34.66 
+L 159.60 35.36 
+L 161.85 36.18 
+L 164.10 37.12 
+L 166.34 38.17 
+L 168.59 39.33 
+L 170.84 40.60 
+L 173.09 41.99 
+L 175.33 43.49 
+L 177.58 45.09 
+L 179.83 46.81 
+L 182.08 48.63 
+L 184.32 50.56 
+L 186.57 52.59 
+L 188.82 54.72 
+L 191.07 56.96 
+L 193.31 59.29 
+L 195.56 61.73 
+L 197.81 64.26 
+L 200.06 66.89 
+L 202.30 69.60 
+L 204.55 72.41 
+L 206.80 75.31 
+L 209.05 78.30 
+L 211.29 81.37 
+L 213.54 84.52 
+L 215.79 87.76 
+L 218.03 91.07 
+L 220.28 94.46 
+L 222.53 97.92 
+" style="fill: none; stroke: #2563eb; stroke-width: 1.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 78.27 145.8 
+L 78.27 7.2 
+" style="fill: none; stroke-dasharray: 0.6,0.99; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 0.6"/>
+ </g>
+ <g>
+ <path d="M 189.24 145.8 
+L 189.24 7.2 
+" style="fill: none; stroke-dasharray: 0.6,0.99; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 0.6"/>
+ </g>
+ <g>
+ <path d="M 36.11 145.8 
+L 36.11 7.2 
+" style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 231.41 145.8 
+L 231.41 7.2 
+" style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 36.11 145.8 
+L 231.41 145.8 
+" style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 36.11 7.2 
+L 231.41 7.2 
+" style="fill: none; stroke: #9ca3af; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>
