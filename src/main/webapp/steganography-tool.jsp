@@ -238,7 +238,7 @@
 
                     <!-- Source: Upload + Generator (hidden after image loaded) -->
                     <div class="sg-source-container" id="sg-encode-source">
-                        <input type="file" id="sg-encode-file" accept="image/png,image/jpeg,image/bmp" style="display:none;">
+                        <input type="file" id="sg-encode-file" accept="image/png,image/jpeg,image/bmp,image/webp" style="display:none;">
                         <div class="sg-upload-zone" id="sg-encode-upload-zone">
                             <svg class="sg-upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -246,7 +246,7 @@
                                 <line x1="12" y1="3" x2="12" y2="15"/>
                             </svg>
                             <p class="sg-upload-title">Upload an image</p>
-                            <p class="sg-upload-hint">PNG, JPEG, or BMP - Click or drag and drop</p>
+                            <p class="sg-upload-hint">PNG, JPEG, BMP, or WebP - Click or drag and drop</p>
                         </div>
 
                         <div class="sg-divider">or paste image URL</div>
@@ -371,7 +371,7 @@
                 <div class="tool-card-body">
 
                     <div class="sg-source-container" id="sg-decode-source">
-                        <input type="file" id="sg-decode-file" accept="image/png,image/jpeg,image/bmp" style="display:none;">
+                        <input type="file" id="sg-decode-file" accept="image/png,image/jpeg,image/bmp,image/webp" style="display:none;">
                         <div class="sg-upload-zone" id="sg-decode-upload-zone">
                             <svg class="sg-upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -431,7 +431,7 @@
                 <div class="tool-card-header" style="background:var(--sg-gradient);">Image to Analyze</div>
                 <div class="tool-card-body">
                     <div class="sg-source-container" id="sg-analyze-source">
-                        <input type="file" id="sg-analyze-file" accept="image/png,image/jpeg,image/bmp" style="display:none;">
+                        <input type="file" id="sg-analyze-file" accept="image/png,image/jpeg,image/bmp,image/webp" style="display:none;">
                         <div class="sg-upload-zone" id="sg-analyze-upload-zone">
                             <svg class="sg-upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>

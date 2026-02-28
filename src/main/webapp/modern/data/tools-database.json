@@ -1,7 +1,7 @@
 {
   "version": "1.3",
-  "lastUpdated": "2026-02-18T00:00:00.000Z",
-  "totalTools": 398,
+  "lastUpdated": "2026-02-28T00:00:00.000Z",
+  "totalTools": 400,
   "categories": [
     "Blockchain & Crypto",
     "Chemistry",
@@ -25,6 +25,20 @@
     "Security & PKI"
   ],
   "tools": [
+    {
+      "name": "Multi-Chain Blockchain Tools",
+      "url": "ethfunctions.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "ethereum address generator bitcoin solana tron validator rpc client abi encoder unit converter multi-chain blockchain",
+      "description": "Generate & validate addresses, query RPC nodes, convert units, and encode ABI calldata for ETH, BTC, SOL, TRON — 100% client-side"
+    },
+    {
+      "name": "Blockchain Message Signer",
+      "url": "blockchain-sign.jsp",
+      "category": "Blockchain & Crypto",
+      "keywords": "blockchain sign message ethereum solana verify signature eip-191 eip-712",
+      "description": "Sign and verify messages on Ethereum and Solana — EIP-191, EIP-712 typed data, and Ed25519 signatures"
+    },
     {
       "name": "BIP39 Mnemonic Generator",
       "url": "bip39-mnemonic.jsp",

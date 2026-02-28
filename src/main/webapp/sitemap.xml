@@ -1723,6 +1723,18 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://8gwifi.org/ethfunctions.jsp</loc>
+    <lastmod>2026-02-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://8gwifi.org/blockchain-sign.jsp</loc>
+    <lastmod>2026-02-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://8gwifi.org/emi.jsp</loc>
   </url>
   <url>
