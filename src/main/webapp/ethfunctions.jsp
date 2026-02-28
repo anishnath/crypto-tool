@@ -1407,9 +1407,10 @@ var EthFunctions = (function() {
                 return;
             }
 
-            // Parse values - convert numeric strings for uint/int types
+            // Parse values - convert numeric strings for uint/int types, normalize addresses
             var values = params.map(function(p, i) {
                 var t = parsed.types[i];
+                if (t === 'address') return ethers.getAddress(p.toLowerCase());
                 if (/^u?int/.test(t) && /^\d+$/.test(p)) return BigInt(p);
                 if (t === 'bool') return p === 'true' || p === '1';
                 return p;
