@@ -21,6 +21,17 @@ Definite:    Standard, U-Sub with bound transform, Integration by Parts,
              Integral Properties (linearity & additivity),
              FTC Differentiation (basic + chain rule + reverse bounds),
              Scholar Special (Wallis / Gaussian / p-series)
+
+Ch 8 — More Applications of Integrals:
+             Arc Length (Cartesian), Surface Area of Revolution,
+             Center of Mass / Centroid, Hydrostatic Pressure & Force,
+             Probability (PDF), Work (springs / cables / pumping)
+
+Ch 9 — Parametric Equations & Polar Coordinates:
+             Parametric Eliminate Parameter, Parametric Tangent,
+             Parametric Area, Parametric Arc Length, Parametric Surface Area,
+             Polar Conversion, Polar Tangent, Polar Area,
+             Polar Arc Length, Polar Surface Area
 """
 
 import sympy as sp
@@ -47,7 +58,7 @@ try:
 except ImportError:
     print("worksheet_figure_gen not available — skipping figure generation.")
 
-x, t = sp.symbols('x t')
+x, t, theta = sp.symbols('x t theta')
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -1314,6 +1325,971 @@ def gen_scholar_special():
         return q, expr, al, ap, lo, hi
 
 # ===========================================================================
+# Ch 8 — MORE APPLICATIONS OF INTEGRALS
+# ===========================================================================
+
+# ── §8.1 Arc Length (Cartesian) ───────────────────────────────────────────
+
+def gen_arc_length():
+    """Arc length L = ∫ √(1 + (dy/dx)²) dx on known-closed-form curves."""
+    v = rc(["x32", "catenary", "cubic_inv", "poly_ln", "setup_only"])
+
+    if v == "x32":
+        # y = a·x^(3/2), dy/dx = (3a/2)√x
+        a = rc([1, 2, sp.Rational(2,3)])
+        f = a * x**sp.Rational(3,2)
+        lo_val, hi_val = 0, rc([1, 4])
+    elif v == "catenary":
+        # y = cosh(x)
+        f = sp.cosh(x)
+        lo_val, hi_val = 0, rc([1, 2])
+    elif v == "cubic_inv":
+        # y = x³/6 + 1/(2x) — classic Dawkins
+        f = x**3/6 + 1/(2*x)
+        lo_val, hi_val = 1, rc([2, 3])
+    elif v == "poly_ln":
+        # y = x²/4 - ln(x)/2
+        f = x**2/4 - sp.ln(x)/2
+        lo_val, hi_val = 1, rc([2, 3, sp.E])
+    else:
+        # "Set up but do not evaluate"
+        a = rc([1, 2, 3])
+        f = rc([sp.sin(a*x), sp.exp(a*x), a*x**4 + x])
+        lo_val, hi_val = 0, rc([1, 2])
+        fp = sp.diff(f, x)
+        integrand_disp = sp.sqrt(1 + fp**2)
+        q = (f"Set up (but do not evaluate) the integral for the arc length of "
+             f"\\( y = {sp.latex(f)} \\) on \\( [{sp.latex(lo_val)},\\, {sp.latex(hi_val)}] \\).")
+        al = f"L = \\int_{{{sp.latex(lo_val)}}}^{{{sp.latex(hi_val)}}} \\sqrt{{1 + \\left({sp.latex(fp)}\\right)^2}} \\, dx"
+        ap = f"L = integrate(sqrt(1 + ({str(fp)})^2), (x, {lo_val}, {hi_val}))"
+        return q, integrand_disp, al, ap, lo_val, hi_val
+
+    fp = sp.diff(f, x)
+    integrand = sp.sqrt(1 + fp**2)
+    simplified = sp.simplify(integrand)
+    r = safe_definite(simplified, x, lo_val, hi_val)
+    if r is None:
+        # Fall back to setup
+        q = (f"Set up the integral for the arc length of "
+             f"\\( y = {sp.latex(f)} \\) on \\( [{sp.latex(lo_val)},\\, {sp.latex(hi_val)}] \\).")
+        al = f"L = \\int_{{{sp.latex(lo_val)}}}^{{{sp.latex(hi_val)}}} {sp.latex(simplified)} \\, dx"
+        ap = f"L = integrate({str(simplified)}, (x, {lo_val}, {hi_val}))"
+        return q, simplified, al, ap, lo_val, hi_val
+    q = (f"Find the arc length of \\( y = {sp.latex(f)} \\) on "
+         f"\\( [{sp.latex(lo_val)},\\, {sp.latex(hi_val)}] \\).")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, lo_val, hi_val
+
+# ── §8.2 Surface Area of Revolution ──────────────────────────────────────
+
+def gen_surface_area():
+    """Surface area S = 2π ∫ r·√(1 + (dy/dx)²) dx."""
+    v = rc(["sqrt_x", "x_power", "setup_trig", "setup_exp"])
+
+    if v == "sqrt_x":
+        # y = √x rotated about x-axis
+        hi_val = rc([1, 4, 9])
+        f = sp.sqrt(x)
+        lo_val = 0
+        axis = "x"
+    elif v == "x_power":
+        n = rc([2, 3])
+        f = x**n
+        lo_val, hi_val = 0, rc([1, 2])
+        axis = rc(["x", "y"])
+    elif v == "setup_trig":
+        a = rc([1, 2])
+        f = sp.sin(a*x)
+        lo_val, hi_val = 0, sp.pi
+        axis = "x"
+    else:
+        f = sp.exp(x)
+        lo_val, hi_val = 0, rc([1, 2])
+        axis = "x"
+
+    fp = sp.diff(f, x)
+    ds = sp.sqrt(1 + fp**2)
+    r_func = f if axis == "x" else x
+    integrand = 2 * sp.pi * r_func * ds
+    simplified = sp.simplify(integrand)
+
+    r = safe_definite(simplified, x, lo_val, hi_val)
+    axis_name = "x" if axis == "x" else "y"
+    if r is None:
+        q = (f"Set up the integral for the surface area obtained by rotating "
+             f"\\( y = {sp.latex(f)} \\) on \\( [{sp.latex(lo_val)},\\, {sp.latex(hi_val)}] \\) "
+             f"about the \\( {axis_name} \\)-axis.")
+        al = f"S = \\int_{{{sp.latex(lo_val)}}}^{{{sp.latex(hi_val)}}} {sp.latex(simplified)} \\, dx"
+        ap = f"S = integrate({str(simplified)}, (x, {lo_val}, {hi_val}))"
+        return q, simplified, al, ap, lo_val, hi_val
+    q = (f"Find the surface area obtained by rotating "
+         f"\\( y = {sp.latex(f)} \\) on \\( [{sp.latex(lo_val)},\\, {sp.latex(hi_val)}] \\) "
+         f"about the \\( {axis_name} \\)-axis.")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, lo_val, hi_val
+
+# ── §8.3 Center of Mass / Centroid ───────────────────────────────────────
+
+def gen_center_of_mass():
+    """Centroid (x̄, ȳ) of region under y = f(x) on [a,b]."""
+    v = rc(["parabola", "sqrt", "linear", "cubic"])
+
+    if v == "parabola":
+        a = rc([1, 2, 3])
+        f = a*x - x**2
+        roots = sp.solve(f, x)
+        roots = [r for r in roots if r.is_real]
+        if len(roots) < 2: return None
+        lo_val, hi_val = min(roots), max(roots)
+    elif v == "sqrt":
+        f = sp.sqrt(x)
+        lo_val, hi_val = 0, rc([1, 4, 9])
+    elif v == "linear":
+        m = rc([1, 2, 3])
+        f = m * x
+        lo_val, hi_val = 0, rc([1, 2, 3])
+    else:
+        f = x**3
+        lo_val, hi_val = 0, rc([1, 2])
+
+    area = safe_definite(f, x, lo_val, hi_val)
+    if area is None or area == 0: return None
+    mx = safe_definite(x * f, x, lo_val, hi_val)
+    my = safe_definite(f**2 / 2, x, lo_val, hi_val)
+    if mx is None or my is None: return None
+
+    x_bar = sp.simplify(mx / area)
+    y_bar = sp.simplify(my / area)
+    q = (f"Find the centroid \\( (\\bar{{x}}, \\bar{{y}}) \\) of the region bounded by "
+         f"\\( y = {sp.latex(f)} \\), \\( y = 0 \\), "
+         f"\\( x = {sp.latex(lo_val)} \\), and \\( x = {sp.latex(hi_val)} \\).")
+    al = f"\\left({sp.latex(x_bar)},\\, {sp.latex(y_bar)}\\right)"
+    ap = f"({str(x_bar)}, {str(y_bar)})"
+    return q, f, al, ap, lo_val, hi_val
+
+# ── §8.4 Hydrostatic Pressure and Force ──────────────────────────────────
+
+def gen_hydrostatic_force():
+    """Hydrostatic force on a submerged plate. F = ρg ∫ (depth)·(width) dy."""
+    rho_g = sp.Rational(9800)  # ρg = 1000 * 9.8 = 9800 N/m³
+    v = rc(["rectangle", "triangle_down", "triangle_up", "semicircle"])
+
+    if v == "rectangle":
+        W = rc([2, 3, 4, 5])        # width in m
+        H = rc([2, 3, 4])           # height in m
+        d_top = rc([0, 1, 2, 3])    # depth of top edge below surface
+        # integrate from 0 to H: ρg (d_top + y) W dy  (y measured from top)
+        y = sp.Symbol('y')
+        integrand = rho_g * (d_top + y) * W
+        r = safe_definite(integrand, y, 0, H)
+        if r is None: return None
+        q = (f"A rectangular plate {W} m wide and {H} m tall is submerged vertically "
+             f"with its top edge {d_top} m below the surface. "
+             f"Find the hydrostatic force on the plate. "
+             f"Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ N}"
+        ap += " N"
+        return q, integrand, al, ap, 0, H
+
+    elif v == "triangle_down":
+        b = rc([2, 3, 4])     # base width at top
+        H = rc([2, 3])        # height
+        d_top = rc([0, 1, 2]) # depth of top below surface
+        y = sp.Symbol('y')
+        width_at_y = b * (1 - y / H)
+        integrand = rho_g * (d_top + y) * width_at_y
+        r = safe_definite(integrand, y, 0, H)
+        if r is None: return None
+        q = (f"A triangular plate with base {b} m at the top and vertex pointing "
+             f"downward, {H} m tall, is submerged with its top {d_top} m below the surface. "
+             f"Find the hydrostatic force. Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ N}"
+        ap += " N"
+        return q, integrand, al, ap, 0, H
+
+    elif v == "triangle_up":
+        b = rc([2, 3, 4])
+        H = rc([2, 3])
+        d_top = rc([0, 1, 2])
+        y = sp.Symbol('y')
+        width_at_y = b * y / H
+        integrand = rho_g * (d_top + y) * width_at_y
+        r = safe_definite(integrand, y, 0, H)
+        if r is None: return None
+        q = (f"A triangular plate with vertex at the top and base {b} m at the bottom, "
+             f"{H} m tall, is submerged with its top {d_top} m below the surface. "
+             f"Find the hydrostatic force. Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ N}"
+        ap += " N"
+        return q, integrand, al, ap, 0, H
+
+    else:  # semicircle
+        R = rc([1, 2, 3])
+        d_top = rc([0, 1, 2])
+        y = sp.Symbol('y')
+        width_at_y = 2 * sp.sqrt(R**2 - y**2)
+        integrand = rho_g * (d_top + R - y) * width_at_y  # measure from bottom up, top at y=R
+        r = safe_definite(integrand, y, -R, R)
+        if r is None:
+            # Try numeric
+            return None
+        q = (f"A semicircular plate of radius {R} m is submerged vertically "
+             f"with its diameter at the surface (top edge {d_top} m below surface). "
+             f"Find the hydrostatic force. Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ N}"
+        ap += " N"
+        return q, integrand, al, ap, -R, R
+
+# ── §8.5 Probability ─────────────────────────────────────────────────────
+
+def gen_probability():
+    """PDF problems: verify PDF, compute P(a ≤ X ≤ b), find mean."""
+    v = rc(["verify_pdf", "compute_prob", "find_mean", "exponential_pdf"])
+
+    if v == "verify_pdf":
+        # f(x) = c·x^n on [0, b]  — find c so ∫=1
+        n = rc([1, 2, 3])
+        b_val = rc([1, 2, 3])
+        c = sp.Symbol('c', positive=True)
+        pdf = c * x**n
+        integral = safe_definite(pdf, x, 0, b_val)
+        if integral is None: return None
+        c_sol = sp.solve(integral - 1, c)
+        if not c_sol: return None
+        c_val = c_sol[0]
+        q = (f"Find the value of \\( c \\) so that \\( f(x) = c x^{{{n}}} \\) "
+             f"is a valid probability density function on \\( [0,\\, {b_val}] \\).")
+        al = f"c = {sp.latex(c_val)}"
+        ap = f"c = {str(c_val)}"
+        return q, pdf, al, ap, 0, b_val
+
+    elif v == "compute_prob":
+        # PDF = (n+1)x^n on [0,1], find P(a ≤ X ≤ b)
+        n = rc([1, 2, 3])
+        pdf = (n + 1) * x**n
+        a_val = sp.Rational(rc([0, 1]), rc([2, 3, 4]))
+        b_val = sp.Rational(rc([1, 2, 3]), rc([2, 3, 4]))
+        if a_val >= b_val:
+            a_val, b_val = sp.Rational(1, 4), sp.Rational(3, 4)
+        r = safe_definite(pdf, x, a_val, b_val)
+        if r is None: return None
+        q = (f"Given the PDF \\( f(x) = {sp.latex(pdf)} \\) on \\( [0, 1] \\), "
+             f"find \\( P\\left({sp.latex(a_val)} \\le X \\le {sp.latex(b_val)}\\right) \\).")
+        al, ap = fmt_def(sp.simplify(r))
+        return q, pdf, al, ap, a_val, b_val
+
+    elif v == "find_mean":
+        # PDF = (n+1)x^n on [0,1], E[X] = ∫ x·f(x) dx
+        n = rc([1, 2, 3, 4])
+        pdf = (n + 1) * x**n
+        r = safe_definite(x * pdf, x, 0, 1)
+        if r is None: return None
+        q = (f"Given the PDF \\( f(x) = {sp.latex(pdf)} \\) on \\( [0, 1] \\), "
+             f"find the expected value \\( E[X] \\).")
+        al = f"E[X] = {sp.latex(sp.simplify(r))}"
+        ap = f"E[X] = {str(sp.simplify(r))}"
+        return q, pdf, al, ap, 0, 1
+
+    else:
+        # Exponential PDF: f(x) = λe^{-λx} on [0, ∞)
+        lam = rc([1, 2, 3])
+        pdf = lam * sp.exp(-lam * x)
+        a_val = rc([0, 1, 2])
+        b_val = rc([3, 5, 10])
+        r = safe_definite(pdf, x, a_val, b_val)
+        if r is None: return None
+        q = (f"Given the exponential PDF \\( f(x) = {sp.latex(pdf)} \\) for \\( x \\ge 0 \\), "
+             f"find \\( P({a_val} \\le X \\le {b_val}) \\).")
+        al, ap = fmt_def(sp.simplify(r))
+        return q, pdf, al, ap, a_val, b_val
+
+# ── §8.x Work (springs, cables, pumping) ─────────────────────────────────
+
+def gen_work():
+    """Work problems: springs (Hooke's law), cables, pumping."""
+    v = rc(["spring", "cable", "pump_cylinder", "pump_cone"])
+
+    if v == "spring":
+        # W = ∫ kx dx, given that F(x₀) = F₀ to find k
+        k = rc([10, 20, 25, 40, 50, 100])
+        x1 = sp.Rational(rc([1, 2, 3]), rc([1, 2, 4, 10]))
+        x2 = sp.Rational(rc([2, 3, 4, 5]), rc([1, 2, 4, 10]))
+        if x1 >= x2:
+            x1, x2 = sp.Rational(1, 10), sp.Rational(3, 10)
+        integrand = k * x
+        r = safe_definite(integrand, x, x1, x2)
+        if r is None: return None
+        q = (f"A spring has spring constant \\( k = {k} \\) N/m. "
+             f"Find the work done in stretching the spring from "
+             f"\\( x = {sp.latex(x1)} \\) m to \\( x = {sp.latex(x2)} \\) m.")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ J}"
+        ap += " J"
+        return q, integrand, al, ap, x1, x2
+
+    elif v == "cable":
+        # Lifting a hanging cable: W = ∫₀^L ρ(L-y)dy
+        L = rc([10, 20, 30, 50])
+        rho = rc([2, 5, 10])  # kg/m
+        g = sp.Rational(98, 10)
+        y = sp.Symbol('y')
+        integrand = rho * g * (L - y)
+        r = safe_definite(integrand, y, 0, L)
+        if r is None: return None
+        q = (f"A {L} m cable weighing {rho} kg/m hangs from a winch. "
+             f"Find the work done in winding up the entire cable. "
+             f"Use \\( g = 9.8 \\) m/s\\(^2\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ J}"
+        ap += " J"
+        return q, integrand, al, ap, 0, L
+
+    elif v == "pump_cylinder":
+        # Pumping water from a cylindrical tank
+        R = rc([1, 2, 3])
+        H = rc([3, 4, 5, 6])
+        d = rc([0, 1, 2])  # distance above top to pump to
+        rho_g = sp.Rational(9800)
+        y = sp.Symbol('y')
+        integrand = rho_g * sp.pi * R**2 * (H + d - y)
+        r = safe_definite(integrand, y, 0, H)
+        if r is None: return None
+        pump_to = f"{d} m above the top" if d > 0 else "the top"
+        q = (f"A cylindrical tank of radius {R} m and height {H} m is full of water. "
+             f"Find the work required to pump all the water to {pump_to} of the tank. "
+             f"Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ J}"
+        ap += " J"
+        return q, integrand, al, ap, 0, H
+
+    else:
+        # Pumping water from a conical tank
+        R = rc([2, 3, 4])
+        H = rc([4, 5, 6])
+        rho_g = sp.Rational(9800)
+        y = sp.Symbol('y')
+        r_at_y = R * y / H  # cone: radius proportional to height
+        integrand = rho_g * sp.pi * r_at_y**2 * (H - y)
+        r = safe_definite(integrand, y, 0, H)
+        if r is None: return None
+        q = (f"A conical tank with radius {R} m at the top and height {H} m "
+             f"(vertex at the bottom) is full of water. "
+             f"Find the work required to pump all the water to the top of the tank. "
+             f"Use \\( \\rho g = 9800 \\) N/m\\(^3\\).")
+        al, ap = fmt_def(sp.simplify(r))
+        al += " \\text{ J}"
+        ap += " J"
+        return q, integrand, al, ap, 0, H
+
+# ===========================================================================
+# Ch 9 — PARAMETRIC EQUATIONS & POLAR COORDINATES
+# ===========================================================================
+
+# ── §9.1 Parametric Eliminate Parameter ───────────────────────────────────
+
+def gen_parametric_eliminate():
+    """Given x(t), y(t), eliminate parameter to find Cartesian equation."""
+    v = rc(["linear", "trig_circle", "trig_ellipse", "quadratic", "exponential"])
+
+    if v == "linear":
+        a, b, c_, d_ = rc(NZ), rc(NZ), rc(NZ), rc(NZ)
+        x_t = a*t + b
+        y_t = c_*t + d_
+        # t = (x-b)/a, y = c*(x-b)/a + d
+        if a == 0: return None
+        cart = sp.simplify(c_ * (x - b) / a + d_)
+        q = (f"Eliminate the parameter \\( t \\) from "
+             f"\\( x = {sp.latex(x_t)} \\), \\( y = {sp.latex(y_t)} \\). "
+             f"Write the Cartesian equation.")
+        al = f"y = {sp.latex(cart)}"
+        ap = f"y = {str(cart)}"
+        return q, None, al, ap
+
+    elif v == "trig_circle":
+        r_val = rc([1, 2, 3, 4, 5])
+        h, k = rc([-3,-2,-1,0,1,2,3]), rc([-3,-2,-1,0,1,2,3])
+        x_t = h + r_val * sp.cos(t)
+        y_t = k + r_val * sp.sin(t)
+        q = (f"Eliminate the parameter \\( t \\) from "
+             f"\\( x = {sp.latex(x_t)} \\), \\( y = {sp.latex(y_t)} \\). "
+             f"Write the Cartesian equation.")
+        al = f"(x - {sp.latex(sp.Integer(h))})^2 + (y - {sp.latex(sp.Integer(k))})^2 = {r_val**2}"
+        if h == 0 and k == 0:
+            al = f"x^2 + y^2 = {r_val**2}"
+        ap = f"(x-{h})^2 + (y-{k})^2 = {r_val**2}"
+        return q, None, al, ap
+
+    elif v == "trig_ellipse":
+        a_val, b_val = rc([2, 3, 4, 5]), rc([1, 2, 3])
+        if a_val == b_val: b_val = a_val + 1
+        x_t = a_val * sp.cos(t)
+        y_t = b_val * sp.sin(t)
+        q = (f"Eliminate the parameter \\( t \\) from "
+             f"\\( x = {sp.latex(x_t)} \\), \\( y = {sp.latex(y_t)} \\). "
+             f"Write the Cartesian equation.")
+        al = f"\\frac{{x^2}}{{{a_val**2}}} + \\frac{{y^2}}{{{b_val**2}}} = 1"
+        ap = f"x^2/{a_val**2} + y^2/{b_val**2} = 1"
+        return q, None, al, ap
+
+    elif v == "quadratic":
+        a = rc([1, 2])
+        x_t = t**2
+        y_t = a*t**3
+        q = (f"Eliminate the parameter \\( t \\) from "
+             f"\\( x = {sp.latex(x_t)} \\), \\( y = {sp.latex(y_t)} \\). "
+             f"Write the Cartesian equation.")
+        # t = ±√x, y = a(±√x)³ = ±a·x^{3/2}
+        al = f"y^2 = {a**2} x^3"
+        ap = f"y^2 = {a**2}*x^3"
+        return q, None, al, ap
+
+    else:
+        # x = e^t, y = e^(2t) + 1  →  y = x² + 1
+        a = rc([1, 2])
+        x_t = sp.exp(a*t)
+        y_t = sp.exp(2*a*t) + rc([0, 1, -1])
+        c_ = y_t.subs(t, sp.ln(x)/a)
+        cart = sp.simplify(c_)
+        q = (f"Eliminate the parameter \\( t \\) from "
+             f"\\( x = {sp.latex(x_t)} \\), \\( y = {sp.latex(y_t)} \\). "
+             f"Write the Cartesian equation (for \\( x > 0 \\)).")
+        al = f"y = {sp.latex(cart)}"
+        ap = f"y = {str(cart)}"
+        return q, None, al, ap
+
+# ── §9.2 Tangents with Parametric Equations ───────────────────────────────
+
+def gen_parametric_tangent():
+    """dy/dx = (dy/dt)/(dx/dt) for parametric curves; tangent line at given t."""
+    v = rc(["tangent_line", "horiz_vert", "second_deriv"])
+
+    if v == "tangent_line":
+        configs = [
+            (t**2 + rc(NZ), t**3 + rc(NZ)*t),
+            (rc([2,3])*sp.cos(t), rc([2,3])*sp.sin(t)),
+            (t - sp.sin(t), 1 - sp.cos(t)),
+            (sp.exp(t), t**2),
+        ]
+        x_t, y_t = rc(configs)
+        t0 = rc([1, -1, sp.pi/4, sp.pi/3, sp.pi/6, sp.Rational(1,2)])
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        dx_val = dx_dt.subs(t, t0)
+        dy_val = dy_dt.subs(t, t0)
+        if dx_val == 0: return None
+        slope = sp.simplify(dy_val / dx_val)
+        x0 = sp.simplify(x_t.subs(t, t0))
+        y0 = sp.simplify(y_t.subs(t, t0))
+        q = (f"Find the equation of the tangent line to the parametric curve "
+             f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) at \\( t = {sp.latex(t0)} \\).")
+        tangent_eq = sp.simplify(slope * (x - x0) + y0)
+        al = f"y = {sp.latex(tangent_eq)}"
+        ap = f"y = {str(tangent_eq)}"
+        return q, None, al, ap
+
+    elif v == "horiz_vert":
+        configs = [
+            (t**2 - t, t**3 - 3*t),
+            (2*sp.cos(t), 3*sp.sin(t)),
+            (t**3 - 3*t, t**2 - 4),
+        ]
+        x_t, y_t = rc(configs)
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        h_pts = sp.solve(dy_dt, t)
+        v_pts = sp.solve(dx_dt, t)
+        h_pts = [p for p in h_pts if p.is_real]
+        v_pts = [p for p in v_pts if p.is_real]
+        if not h_pts and not v_pts: return None
+        q = (f"Find all values of \\( t \\) where the parametric curve "
+             f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) has "
+             f"horizontal and vertical tangent lines.")
+        h_lat = ",\\, ".join(sp.latex(p) for p in sorted(h_pts)) if h_pts else "\\text{none}"
+        v_lat = ",\\, ".join(sp.latex(p) for p in sorted(v_pts, key=lambda s: float(s) if s.is_number else 0)) if v_pts else "\\text{none}"
+        al = f"\\text{{Horizontal: }} t = {h_lat}; \\quad \\text{{Vertical: }} t = {v_lat}"
+        ap = f"Horizontal: t = {h_pts}; Vertical: t = {v_pts}"
+        return q, None, al, ap
+
+    else:
+        # Second derivative d²y/dx²
+        configs = [
+            (t**2, t**3),
+            (sp.cos(t), sp.sin(t)),
+            (t + sp.sin(t), 1 + sp.cos(t)),
+        ]
+        x_t, y_t = rc(configs)
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        first = dy_dt / dx_dt
+        d2y_dx2 = sp.simplify(sp.diff(first, t) / dx_dt)
+        q = (f"Find \\( \\frac{{d^2y}}{{dx^2}} \\) for the parametric curve "
+             f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\).")
+        al = f"\\frac{{d^2y}}{{dx^2}} = {sp.latex(d2y_dx2)}"
+        ap = f"d2y/dx2 = {str(d2y_dx2)}"
+        return q, None, al, ap
+
+# ── §9.3 Area with Parametric Equations ───────────────────────────────────
+
+def gen_parametric_area():
+    """Area A = ∫ y(t)·x'(t) dt under a parametric curve."""
+    v = rc(["poly", "trig", "cycloid"])
+
+    if v == "poly":
+        a, b = rc([1, 2]), rc([1, 2])
+        x_t = a*t**2
+        y_t = b*t**3
+        t1, t2 = 0, rc([1, 2])
+        dx_dt = sp.diff(x_t, t)
+        integrand = y_t * dx_dt
+        r = safe_definite(integrand, t, t1, t2)
+        if r is None: return None
+    elif v == "trig":
+        a_val, b_val = rc([2, 3, 4]), rc([1, 2, 3])
+        x_t = a_val * sp.cos(t)
+        y_t = b_val * sp.sin(t)
+        t1, t2 = 0, 2*sp.pi
+        dx_dt = sp.diff(x_t, t)
+        integrand = y_t * dx_dt
+        r = safe_definite(integrand, t, t1, t2)
+        if r is None: return None
+        r = sp.Abs(r)
+    else:
+        # Cycloid: x = t - sin(t), y = 1 - cos(t), one arch t in [0, 2π]
+        x_t = t - sp.sin(t)
+        y_t = 1 - sp.cos(t)
+        t1, t2 = 0, 2*sp.pi
+        dx_dt = sp.diff(x_t, t)
+        integrand = y_t * dx_dt
+        r = safe_definite(integrand, t, t1, t2)
+        if r is None: return None
+
+    q = (f"Find the area enclosed by (or under) the parametric curve "
+         f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+         f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+    al, ap = fmt_def(sp.simplify(sp.Abs(r)))
+    return q, integrand, al, ap, t1, t2
+
+# ── §9.4 Arc Length with Parametric Equations ─────────────────────────────
+
+def gen_parametric_arc_length():
+    """L = ∫ √((dx/dt)² + (dy/dt)²) dt."""
+    v = rc(["line", "circle", "power", "setup"])
+
+    if v == "line":
+        a, b, c_, d_ = rc(NZ), rc(NZ), rc(NZ), rc(NZ)
+        x_t = a*t + b
+        y_t = c_*t + d_
+        t1, t2 = 0, rc([1, 2, 3])
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        speed = sp.sqrt(dx_dt**2 + dy_dt**2)
+        r = safe_definite(speed, t, t1, t2)
+        if r is None: return None
+    elif v == "circle":
+        R = rc([1, 2, 3, 5])
+        x_t = R * sp.cos(t)
+        y_t = R * sp.sin(t)
+        t1 = 0
+        t2 = rc([sp.pi/2, sp.pi, 2*sp.pi])
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        speed = sp.sqrt(dx_dt**2 + dy_dt**2)
+        r = safe_definite(speed, t, t1, t2)
+        if r is None: return None
+    elif v == "power":
+        # x = t², y = t³  or similar
+        n1, n2 = rc([2, 3]), rc([2, 3])
+        if n1 == n2: n2 = n1 + 1
+        x_t = t**n1
+        y_t = t**n2
+        t1, t2 = 0, rc([1, 2])
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        speed = sp.sqrt(dx_dt**2 + dy_dt**2)
+        simplified = sp.simplify(speed)
+        r = safe_definite(simplified, t, t1, t2)
+        if r is None:
+            # Set up variant
+            q = (f"Set up the integral for the arc length of the parametric curve "
+                 f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+                 f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+            al = f"L = \\int_{{{sp.latex(t1)}}}^{{{sp.latex(t2)}}} {sp.latex(simplified)} \\, dt"
+            ap = f"L = integrate({str(simplified)}, (t, {t1}, {t2}))"
+            return q, simplified, al, ap, t1, t2
+    else:
+        # Set up but do not evaluate
+        a = rc([1, 2])
+        x_t = t + a*sp.sin(t)
+        y_t = 1 + a*sp.cos(t)
+        t1, t2 = 0, 2*sp.pi
+        dx_dt = sp.diff(x_t, t)
+        dy_dt = sp.diff(y_t, t)
+        speed = sp.simplify(sp.sqrt(dx_dt**2 + dy_dt**2))
+        q = (f"Set up (but do not evaluate) the arc length integral for "
+             f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+             f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+        al = f"L = \\int_{{{sp.latex(t1)}}}^{{{sp.latex(t2)}}} {sp.latex(speed)} \\, dt"
+        ap = f"L = integrate({str(speed)}, (t, {t1}, {t2}))"
+        return q, speed, al, ap, t1, t2
+
+    q = (f"Find the arc length of the parametric curve "
+         f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+         f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, speed, al, ap, t1, t2
+
+# ── §9.5 Surface Area with Parametric Equations ──────────────────────────
+
+def gen_parametric_surface_area():
+    """S = 2π ∫ r·√((dx/dt)² + (dy/dt)²) dt."""
+    v = rc(["circle_x", "poly", "setup"])
+
+    if v == "circle_x":
+        R = rc([1, 2, 3])
+        x_t = R * sp.cos(t)
+        y_t = R * sp.sin(t)
+        t1, t2 = 0, sp.pi
+        axis = "x"
+    elif v == "poly":
+        x_t = t**2
+        y_t = t**rc([2, 3])
+        t1, t2 = 0, rc([1, 2])
+        axis = rc(["x", "y"])
+    else:
+        a = rc([1, 2])
+        x_t = t - sp.sin(t)
+        y_t = 1 - sp.cos(t)
+        t1, t2 = 0, 2*sp.pi
+        axis = "x"
+
+    dx_dt = sp.diff(x_t, t)
+    dy_dt = sp.diff(y_t, t)
+    speed = sp.sqrt(dx_dt**2 + dy_dt**2)
+    r_func = y_t if axis == "x" else x_t
+    integrand = 2 * sp.pi * r_func * speed
+    simplified = sp.simplify(integrand)
+
+    r = safe_definite(simplified, t, t1, t2)
+    axis_name = axis
+    if r is None:
+        q = (f"Set up the integral for the surface area obtained by rotating the "
+             f"parametric curve \\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+             f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\) "
+             f"about the \\( {axis_name} \\)-axis.")
+        al = f"S = \\int_{{{sp.latex(t1)}}}^{{{sp.latex(t2)}}} {sp.latex(simplified)} \\, dt"
+        ap = f"S = integrate({str(simplified)}, (t, {t1}, {t2}))"
+        return q, simplified, al, ap, t1, t2
+
+    q = (f"Find the surface area obtained by rotating the parametric curve "
+         f"\\( x = {sp.latex(x_t)},\\; y = {sp.latex(y_t)} \\) "
+         f"for \\( t \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\) "
+         f"about the \\( {axis_name} \\)-axis.")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, t1, t2
+
+# ── §9.6 Polar Conversion ────────────────────────────────────────────────
+
+def gen_polar_conversion():
+    """Convert between polar and Cartesian coordinates/equations."""
+    v = rc(["point_to_cart", "point_to_polar", "eq_to_cart", "eq_to_polar"])
+
+    if v == "point_to_cart":
+        r_val = rc([1, 2, 3, 4, 5])
+        theta_val = rc([sp.pi/6, sp.pi/4, sp.pi/3, sp.pi/2, 2*sp.pi/3,
+                        3*sp.pi/4, 5*sp.pi/6, sp.pi, 5*sp.pi/4, 4*sp.pi/3])
+        x_val = sp.simplify(r_val * sp.cos(theta_val))
+        y_val = sp.simplify(r_val * sp.sin(theta_val))
+        q = (f"Convert the polar point \\( (r, \\theta) = ({r_val},\\, {sp.latex(theta_val)}) \\) "
+             f"to Cartesian coordinates.")
+        al = f"\\left({sp.latex(x_val)},\\, {sp.latex(y_val)}\\right)"
+        ap = f"({str(x_val)}, {str(y_val)})"
+        return q, None, al, ap
+
+    elif v == "point_to_polar":
+        x_val = rc([-3, -2, -1, 0, 1, 2, 3])
+        y_val = rc([-3, -2, -1, 0, 1, 2, 3])
+        if x_val == 0 and y_val == 0: x_val = 1
+        r_val = sp.sqrt(x_val**2 + y_val**2)
+        theta_val = sp.atan2(y_val, x_val)
+        q = (f"Convert the Cartesian point \\( ({x_val},\\, {y_val}) \\) "
+             f"to polar coordinates with \\( r \\ge 0 \\) and \\( 0 \\le \\theta < 2\\pi \\).")
+        al = f"\\left({sp.latex(sp.simplify(r_val))},\\, {sp.latex(sp.simplify(theta_val))}\\right)"
+        ap = f"({str(sp.simplify(r_val))}, {str(sp.simplify(theta_val))})"
+        return q, None, al, ap
+
+    elif v == "eq_to_cart":
+        configs = [
+            ("r = %d" % rc([1,2,3,4,5]), lambda rv: f"x^2 + y^2 = {rv**2}"),
+            ("r = %d\\cos\\theta" % rc([2,4,6]), lambda rv: f"(x - {rv//2})^2 + y^2 = {(rv//2)**2}"),
+            ("r = %d\\sin\\theta" % rc([2,4,6]), lambda rv: f"x^2 + (y - {rv//2})^2 = {(rv//2)**2}"),
+        ]
+        # Simple approach: pick a known form
+        form = rc(["r_const", "r_cos", "r_sin", "r2_cos2"])
+        if form == "r_const":
+            a = rc([1, 2, 3, 4, 5])
+            q = f"Convert the polar equation \\( r = {a} \\) to Cartesian form."
+            al = f"x^2 + y^2 = {a**2}"
+            ap = f"x^2 + y^2 = {a**2}"
+        elif form == "r_cos":
+            a = rc([2, 4, 6])
+            q = f"Convert the polar equation \\( r = {a}\\cos\\theta \\) to Cartesian form."
+            al = f"\\left(x - {a//2}\\right)^2 + y^2 = {(a//2)**2}"
+            ap = f"(x - {a//2})^2 + y^2 = {(a//2)**2}"
+        elif form == "r_sin":
+            a = rc([2, 4, 6])
+            q = f"Convert the polar equation \\( r = {a}\\sin\\theta \\) to Cartesian form."
+            al = f"x^2 + \\left(y - {a//2}\\right)^2 = {(a//2)**2}"
+            ap = f"x^2 + (y - {a//2})^2 = {(a//2)**2}"
+        else:
+            q = f"Convert the polar equation \\( r^2 = \\cos 2\\theta \\) to Cartesian form."
+            al = f"(x^2 + y^2)^2 = x^2 - y^2"
+            ap = f"(x^2 + y^2)^2 = x^2 - y^2"
+        return q, None, al, ap
+
+    else:
+        # Cartesian to polar
+        form = rc(["circle_origin", "line", "parabola"])
+        if form == "circle_origin":
+            R = rc([1, 2, 3, 4, 5])
+            q = f"Convert the Cartesian equation \\( x^2 + y^2 = {R**2} \\) to polar form."
+            al = f"r = {R}"
+            ap = f"r = {R}"
+        elif form == "line":
+            a = rc(NZ)
+            q = f"Convert the Cartesian equation \\( y = {a}x \\) to polar form."
+            al = f"\\theta = \\arctan({a})"
+            ap = f"theta = atan({a})"
+        else:
+            a = rc([1, 2, 4])
+            q = f"Convert the Cartesian equation \\( y = {a}x^2 \\) to polar form."
+            al = f"r = \\frac{{\\sin\\theta}}{{{a}\\cos^2\\theta}}"
+            ap = f"r = sin(theta)/({a}*cos(theta)^2)"
+        return q, None, al, ap
+
+# ── §9.7 Tangents with Polar Coordinates ──────────────────────────────────
+
+def gen_polar_tangent():
+    """dy/dx for polar curves: r = f(θ), tangent at given θ."""
+    v = rc(["cardioid", "rose", "circle", "spiral"])
+
+    if v == "cardioid":
+        a = rc([1, 2, 3])
+        sign = rc([1, -1])
+        trig_fn = rc(["cos", "sin"])
+        if trig_fn == "cos":
+            r_expr = a * (1 + sign * sp.cos(theta))
+        else:
+            r_expr = a * (1 + sign * sp.sin(theta))
+        theta_val = rc([0, sp.pi/4, sp.pi/3, sp.pi/2, sp.pi])
+    elif v == "rose":
+        a = rc([1, 2, 3])
+        n = rc([2, 3, 4])
+        r_expr = a * sp.cos(n * theta)
+        theta_val = rc([0, sp.pi/(4*n), sp.pi/(2*n)])
+    elif v == "circle":
+        a = rc([1, 2, 3, 4])
+        r_expr = a * sp.cos(theta)
+        theta_val = rc([0, sp.pi/6, sp.pi/4, sp.pi/3])
+    else:
+        r_expr = theta
+        theta_val = rc([sp.pi/2, sp.pi, 2*sp.pi])
+
+    dr = sp.diff(r_expr, theta)
+    r_val = r_expr.subs(theta, theta_val)
+    dr_val = dr.subs(theta, theta_val)
+
+    # dy/dx = (dr·sinθ + r·cosθ) / (dr·cosθ - r·sinθ)
+    num = dr_val * sp.sin(theta_val) + r_val * sp.cos(theta_val)
+    den = dr_val * sp.cos(theta_val) - r_val * sp.sin(theta_val)
+    if den == 0: return None
+    slope = sp.simplify(num / den)
+
+    q = (f"Find the slope of the tangent line to the polar curve "
+         f"\\( r = {sp.latex(r_expr)} \\) at \\( \\theta = {sp.latex(theta_val)} \\).")
+    al = f"\\frac{{dy}}{{dx}} = {sp.latex(slope)}"
+    ap = f"dy/dx = {str(slope)}"
+    return q, None, al, ap
+
+# ── §9.8 Area with Polar Coordinates ─────────────────────────────────────
+
+def gen_polar_area():
+    """A = (1/2) ∫ r² dθ for polar curves."""
+    v = rc(["cardioid", "rose", "circle", "limacon", "between_curves"])
+
+    if v == "cardioid":
+        a = rc([1, 2, 3])
+        trig_fn = rc(["cos", "sin"])
+        if trig_fn == "cos":
+            r_expr = a * (1 + sp.cos(theta))
+        else:
+            r_expr = a * (1 + sp.sin(theta))
+        t1, t2 = 0, 2*sp.pi
+        integrand = sp.Rational(1, 2) * r_expr**2
+        r = safe_definite(integrand, theta, t1, t2)
+        if r is None: return None
+        q = (f"Find the area enclosed by the cardioid "
+             f"\\( r = {sp.latex(r_expr)} \\).")
+
+    elif v == "rose":
+        a = rc([1, 2, 3])
+        n = rc([2, 3, 4])
+        r_expr = a * sp.cos(n * theta)
+        # Area of one petal: integrate from -π/(2n) to π/(2n)
+        t1, t2 = -sp.pi/(2*n), sp.pi/(2*n)
+        integrand = sp.Rational(1, 2) * r_expr**2
+        r = safe_definite(integrand, theta, t1, t2)
+        if r is None: return None
+        q = (f"Find the area of one petal of the rose curve "
+             f"\\( r = {sp.latex(r_expr)} \\).")
+
+    elif v == "circle":
+        a = rc([1, 2, 3, 4])
+        form = rc(["cos", "sin"])
+        if form == "cos":
+            r_expr = a * sp.cos(theta)
+            t1, t2 = -sp.pi/2, sp.pi/2
+        else:
+            r_expr = a * sp.sin(theta)
+            t1, t2 = 0, sp.pi
+        integrand = sp.Rational(1, 2) * r_expr**2
+        r = safe_definite(integrand, theta, t1, t2)
+        if r is None: return None
+        q = (f"Find the area enclosed by the polar circle "
+             f"\\( r = {sp.latex(r_expr)} \\).")
+
+    elif v == "limacon":
+        a = rc([2, 3, 4])
+        b = rc([1, 2])
+        if a <= b: a = b + 1  # no inner loop
+        r_expr = a + b * sp.cos(theta)
+        t1, t2 = 0, 2*sp.pi
+        integrand = sp.Rational(1, 2) * r_expr**2
+        r = safe_definite(integrand, theta, t1, t2)
+        if r is None: return None
+        q = (f"Find the area enclosed by the limaçon "
+             f"\\( r = {sp.latex(r_expr)} \\).")
+
+    else:
+        # Between two curves: e.g., inside r = a, outside r = b·cos(θ)
+        a = rc([2, 3, 4])
+        r1 = sp.Integer(a)
+        r2 = 2*a * sp.cos(theta)  # r2 = 2a cos θ has radius a centered at (a,0)
+        # Area inside r1 and outside r2 in first quadrant
+        t1, t2 = 0, sp.pi/3
+        integrand = sp.Rational(1, 2) * (r1**2 - r2**2)
+        r = safe_definite(integrand, theta, t1, t2)
+        if r is None: return None
+        q = (f"Find the area inside \\( r = {a} \\) and outside "
+             f"\\( r = {sp.latex(r2)} \\) in the region \\( 0 \\le \\theta \\le \\pi/3 \\).")
+
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, t1, t2
+
+# ── §9.9 Arc Length with Polar Coordinates ────────────────────────────────
+
+def gen_polar_arc_length():
+    """L = ∫ √(r² + (dr/dθ)²) dθ."""
+    v = rc(["circle", "cardioid", "spiral", "setup"])
+
+    if v == "circle":
+        a = rc([1, 2, 3, 4])
+        r_expr = a * sp.sin(theta)
+        t1, t2 = 0, sp.pi
+        dr = sp.diff(r_expr, theta)
+        integrand = sp.sqrt(r_expr**2 + dr**2)
+        simplified = sp.simplify(integrand)
+        r = safe_definite(simplified, theta, t1, t2)
+        if r is None: return None
+    elif v == "cardioid":
+        a = rc([1, 2])
+        r_expr = a * (1 + sp.cos(theta))
+        t1, t2 = 0, 2*sp.pi
+        dr = sp.diff(r_expr, theta)
+        integrand = sp.sqrt(r_expr**2 + dr**2)
+        simplified = sp.simplify(integrand)
+        r = safe_definite(simplified, theta, t1, t2)
+        if r is None: return None
+    elif v == "spiral":
+        r_expr = sp.exp(theta)
+        t1, t2 = 0, rc([sp.pi, 2*sp.pi])
+        dr = sp.diff(r_expr, theta)
+        integrand = sp.sqrt(r_expr**2 + dr**2)
+        simplified = sp.simplify(integrand)
+        r = safe_definite(simplified, theta, t1, t2)
+        if r is None: return None
+    else:
+        # Set up only
+        a = rc([1, 2, 3])
+        n = rc([2, 3])
+        r_expr = a * sp.cos(n * theta)
+        t1, t2 = 0, sp.pi / (2*n)
+        dr = sp.diff(r_expr, theta)
+        integrand = sp.sqrt(r_expr**2 + dr**2)
+        simplified = sp.simplify(integrand)
+        q = (f"Set up (but do not evaluate) the arc length integral for "
+             f"\\( r = {sp.latex(r_expr)} \\) on "
+             f"\\( \\theta \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+        al = f"L = \\int_{{{sp.latex(t1)}}}^{{{sp.latex(t2)}}} {sp.latex(simplified)} \\, d\\theta"
+        ap = f"L = integrate({str(simplified)}, (theta, {t1}, {t2}))"
+        return q, simplified, al, ap, t1, t2
+
+    q = (f"Find the arc length of the polar curve \\( r = {sp.latex(r_expr)} \\) "
+         f"for \\( \\theta \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\).")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, t1, t2
+
+# ── §9.10 Surface Area with Polar Coordinates ────────────────────────────
+
+def gen_polar_surface_area():
+    """S = 2π ∫ r·sinθ · √(r² + (dr/dθ)²) dθ (about x-axis)."""
+    v = rc(["circle", "cardioid", "setup"])
+
+    if v == "circle":
+        a = rc([1, 2, 3])
+        r_expr = a * sp.cos(theta)
+        t1, t2 = 0, sp.pi/2
+        axis = "x"
+    elif v == "cardioid":
+        a = rc([1, 2])
+        r_expr = a * (1 + sp.cos(theta))
+        t1, t2 = 0, sp.pi
+        axis = "x"
+    else:
+        a = rc([1, 2, 3])
+        r_expr = a * sp.sin(theta)
+        t1, t2 = 0, sp.pi
+        axis = "x"
+
+    dr = sp.diff(r_expr, theta)
+    ds = sp.sqrt(r_expr**2 + dr**2)
+    # About x-axis: y = r sinθ
+    r_func = r_expr * sp.sin(theta)
+    integrand = 2 * sp.pi * r_func * ds
+    simplified = sp.simplify(integrand)
+    r = safe_definite(simplified, theta, t1, t2)
+
+    if r is None:
+        q = (f"Set up the integral for the surface area obtained by rotating "
+             f"\\( r = {sp.latex(r_expr)} \\) "
+             f"(\\( \\theta \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\)) "
+             f"about the \\( x \\)-axis.")
+        al = f"S = \\int_{{{sp.latex(t1)}}}^{{{sp.latex(t2)}}} {sp.latex(simplified)} \\, d\\theta"
+        ap = f"S = integrate({str(simplified)}, (theta, {t1}, {t2}))"
+        return q, simplified, al, ap, t1, t2
+
+    q = (f"Find the surface area obtained by rotating the polar curve "
+         f"\\( r = {sp.latex(r_expr)} \\) "
+         f"(\\( \\theta \\in [{sp.latex(t1)},\\, {sp.latex(t2)}] \\)) "
+         f"about the \\( x \\)-axis.")
+    al, ap = fmt_def(sp.simplify(r))
+    return q, integrand, al, ap, t1, t2
+
+# ===========================================================================
 # Difficulty → Type mapping
 # ===========================================================================
 
@@ -1328,6 +2304,7 @@ DIFFICULTY_TYPES = {
         "definite_u_sub", "antiderivative_ivp",
         "ftc_differentiation", "integral_properties",
         "average_value", "riemann_sum",
+        "parametric_eliminate", "polar_conversion",
     ],
     "hard": [
         "trig_integral", "advanced_trig_combo",
@@ -1337,11 +2314,17 @@ DIFFICULTY_TYPES = {
         "absolute_value_definite", "area_between_curves",
         "root_substitution", "second_antideriv_ivp",
         "mvt_integral", "volume_disk_washer",
+        "arc_length", "surface_area", "center_of_mass", "work",
+        "probability", "parametric_tangent", "parametric_area",
+        "parametric_arc_length", "polar_tangent", "polar_area",
+        "polar_arc_length",
     ],
     "scholar": [
         "reduction_formula", "improper_integral",
         "comparison_test", "numerical_approx",
         "volume_shell", "scholar_special",
+        "hydrostatic_force", "parametric_surface_area",
+        "polar_surface_area",
     ],
 }
 
@@ -1377,6 +2360,10 @@ def call_generator(q_type):
         "completing_square":    gen_completing_square,
         "root_substitution":    gen_root_substitution,
         "ftc_differentiation":  gen_ftc_differentiation,   # returns (q,expr,al,ap)
+        "parametric_eliminate": gen_parametric_eliminate,
+        "parametric_tangent":   gen_parametric_tangent,
+        "polar_conversion":     gen_polar_conversion,
+        "polar_tangent":        gen_polar_tangent,
     }
     if q_type in simple_indef:
         res = simple_indef[q_type]()
@@ -1422,6 +2409,22 @@ def call_generator(q_type):
     elif q_type == "improper_integral":    _pack(gen_improper_integral())
     elif q_type == "comparison_test":      _pack(gen_comparison_test())
     elif q_type == "scholar_special":      _pack(gen_scholar_special())
+
+    # ── Ch 8: More Applications ──
+    elif q_type == "arc_length":           _pack(gen_arc_length())
+    elif q_type == "surface_area":         _pack(gen_surface_area())
+    elif q_type == "center_of_mass":       _pack(gen_center_of_mass())
+    elif q_type == "hydrostatic_force":    _pack(gen_hydrostatic_force())
+    elif q_type == "probability":          _pack(gen_probability())
+    elif q_type == "work":                 _pack(gen_work())
+
+    # ── Ch 9: Parametric & Polar ──
+    elif q_type == "parametric_area":          _pack(gen_parametric_area())
+    elif q_type == "parametric_arc_length":    _pack(gen_parametric_arc_length())
+    elif q_type == "parametric_surface_area":  _pack(gen_parametric_surface_area())
+    elif q_type == "polar_area":               _pack(gen_polar_area())
+    elif q_type == "polar_arc_length":         _pack(gen_polar_arc_length())
+    elif q_type == "polar_surface_area":       _pack(gen_polar_surface_area())
 
     elif q_type == "reduction_formula":
         res, kind = gen_reduction_formula()

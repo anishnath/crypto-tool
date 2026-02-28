@@ -257,6 +257,8 @@
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     </noscript>
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
 <body>
 
