@@ -29,8 +29,8 @@
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Online PGP Key Generator - RSA Key Pairs | 8gwifi.org" />
-        <jsp:param name="toolDescription" value="Free online PGP key pair generator with built-in Python compiler. Generate RSA public/private keys with AES-256, TWOFISH, or BLOWFISH encryption. OpenPGP standard (RFC 4880) compliant. Choose 2048 or 4096-bit key sizes. No data retention." />
+        <jsp:param name="toolName" value="PGP Key Generator Online - Free RSA 2048 & 4096-bit Keys" />
+        <jsp:param name="toolDescription" value="Generate PGP key pairs online free. RSA 2048 or 4096-bit with AES-256 encryption. OpenPGP RFC 4880 compliant. No data stored. Compatible with GnuPG." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="pgpkeyfunction.jsp" />
         <jsp:param name="toolKeywords" value="pgp key generator, pgp key generation online, generate pgp keys, rsa key pair generator, pgp public key, pgp private key, openpgp key generator, free pgp key generator, aes-256, twofish, blowfish, rfc 4880, pgp python keygen, pgp key pair online, gpg key generator" />
