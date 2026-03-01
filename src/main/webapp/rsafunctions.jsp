@@ -294,6 +294,93 @@
             .tool-page-container { grid-template-columns: 1fr; }
             .rsa-sticky-actions { position: static; margin: 0.5rem 0 0; border-top: none; padding: 0; }
         }
+
+        /* ========== RSA Animation (empty state) ========== */
+        .rsa-anim { padding: 1.5rem 1rem 1.25rem; text-align: center; }
+        .rsa-anim-title {
+            font-size: 0.9375rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 1.25rem; letter-spacing: -0.01em;
+        }
+
+        /* Flow container */
+        .rsa-anim-flow {
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.25rem; flex-wrap: nowrap; overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        /* Person nodes */
+        .rsa-anim-node { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+        .rsa-anim-icon {
+            width: 2.25rem; height: 2.25rem; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .rsa-anim-icon-sender { background: #dbeafe; color: #2563eb; }
+        .rsa-anim-icon-receiver { background: #dcfce7; color: #16a34a; }
+        [data-theme="dark"] .rsa-anim-icon-sender { background: rgba(37,99,235,0.2); color: #60a5fa; }
+        [data-theme="dark"] .rsa-anim-icon-receiver { background: rgba(22,163,74,0.2); color: #4ade80; }
+        .rsa-anim-label { font-size: 0.625rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Arrows */
+        .rsa-anim-arrow {
+            display: flex; flex-direction: column; align-items: center; gap: 0.125rem;
+            min-width: 3.5rem;
+        }
+        .rsa-anim-msg {
+            font-size: 0.625rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+            color: #059669; background: #ecfdf5; padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem; white-space: nowrap;
+        }
+        .rsa-anim-msg-cipher { color: #dc2626; background: #fef2f2; font-size: 0.5625rem; }
+        [data-theme="dark"] .rsa-anim-msg { background: rgba(5,150,105,0.15); color: #6ee7b7; }
+        [data-theme="dark"] .rsa-anim-msg-cipher { background: rgba(220,38,38,0.15); color: #fca5a5; }
+
+        /* Encrypt/Decrypt boxes */
+        .rsa-anim-box {
+            display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+            padding: 0.5rem 0.625rem; border-radius: 0.5rem; position: relative;
+            font-size: 0.6875rem; font-weight: 700; min-width: 4rem;
+        }
+        .rsa-anim-box-encrypt { background: rgba(5,150,105,0.08); border: 1.5px solid rgba(5,150,105,0.25); color: #059669; }
+        .rsa-anim-box-decrypt { background: rgba(217,119,6,0.08); border: 1.5px solid rgba(217,119,6,0.25); color: #d97706; }
+        [data-theme="dark"] .rsa-anim-box-encrypt { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.3); color: #6ee7b7; }
+        [data-theme="dark"] .rsa-anim-box-decrypt { background: rgba(217,119,6,0.12); border-color: rgba(217,119,6,0.3); color: #fbbf24; }
+
+        /* Key badges */
+        .rsa-anim-key-badge {
+            display: flex; align-items: center; gap: 0.1875rem;
+            font-size: 0.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+            padding: 0.0625rem 0.3125rem; border-radius: 1rem; white-space: nowrap;
+        }
+        .rsa-anim-key-pub { background: #dbeafe; color: #1d4ed8; }
+        .rsa-anim-key-priv { background: #fef3c7; color: #92400e; }
+        [data-theme="dark"] .rsa-anim-key-pub { background: rgba(59,130,246,0.2); color: #93c5fd; }
+        [data-theme="dark"] .rsa-anim-key-priv { background: rgba(245,158,11,0.2); color: #fcd34d; }
+
+        /* Hint */
+        .rsa-anim-hint {
+            margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes rsaFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes rsaSlide { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes rsaPop { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+
+        .rsa-anim-fade { opacity: 0; animation: rsaFadeIn 0.4s ease forwards; }
+        .rsa-anim-slide { opacity: 0; animation: rsaSlide 0.35s ease forwards; }
+        .rsa-anim-pop { opacity: 0; animation: rsaPop 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .rsa-anim-fade, .rsa-anim-slide, .rsa-anim-pop { animation: none; opacity: 1; transform: none; }
+        }
+
+        /* Responsive: stack vertically on very small */
+        @media (max-width: 520px) {
+            .rsa-anim-flow { flex-direction: column; gap: 0.125rem; }
+            .rsa-anim-arrow svg { transform: rotate(90deg); }
+        }
     </style>
 </head>
 <body>
@@ -448,11 +535,70 @@
                         <h4>Result</h4>
                     </div>
                     <div class="tool-result-content" id="output">
-                        <div class="tool-empty-state">
-                            <div style="text-align:center;padding:2rem 1rem;">
-                                <div style="font-size:2.5rem;margin-bottom:0.75rem;">&#128274;</div>
-                                <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.5rem;">RSA Encryption Tool</div>
-                                <p style="font-size:0.8125rem;color:var(--text-secondary);max-width:320px;margin:0 auto;">Enter a message, choose Encrypt or Decrypt, select cipher mode, then click the action button.</p>
+                        <div class="rsa-anim">
+                            <!-- Title -->
+                            <div class="rsa-anim-title">How RSA Works</div>
+
+                            <!-- Flow diagram -->
+                            <div class="rsa-anim-flow">
+                                <!-- Sender -->
+                                <div class="rsa-anim-node rsa-anim-fade" style="animation-delay:0.2s">
+                                    <div class="rsa-anim-icon rsa-anim-icon-sender">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    </div>
+                                    <span class="rsa-anim-label">Sender</span>
+                                </div>
+
+                                <!-- Arrow 1: plaintext -->
+                                <div class="rsa-anim-arrow rsa-anim-fade" style="animation-delay:0.5s">
+                                    <div class="rsa-anim-msg rsa-anim-slide">"Hello"</div>
+                                    <svg width="24" height="12" viewBox="0 0 24 12"><path d="M0 6h20m0 0l-4-4m4 4l-4 4" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/></svg>
+                                </div>
+
+                                <!-- Encrypt box -->
+                                <div class="rsa-anim-box rsa-anim-fade rsa-anim-box-encrypt" style="animation-delay:0.9s">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                    <span>Encrypt</span>
+                                    <div class="rsa-anim-key-badge rsa-anim-key-pub rsa-anim-pop" style="animation-delay:1.2s">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                                        Public Key
+                                    </div>
+                                </div>
+
+                                <!-- Arrow 2: ciphertext -->
+                                <div class="rsa-anim-arrow rsa-anim-fade" style="animation-delay:1.5s">
+                                    <div class="rsa-anim-msg rsa-anim-msg-cipher rsa-anim-slide" style="animation-delay:1.6s">a3f9...x7b2</div>
+                                    <svg width="24" height="12" viewBox="0 0 24 12"><path d="M0 6h20m0 0l-4-4m4 4l-4 4" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/></svg>
+                                </div>
+
+                                <!-- Decrypt box -->
+                                <div class="rsa-anim-box rsa-anim-fade rsa-anim-box-decrypt" style="animation-delay:1.9s">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg>
+                                    <span>Decrypt</span>
+                                    <div class="rsa-anim-key-badge rsa-anim-key-priv rsa-anim-pop" style="animation-delay:2.2s">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                                        Private Key
+                                    </div>
+                                </div>
+
+                                <!-- Arrow 3: plaintext out -->
+                                <div class="rsa-anim-arrow rsa-anim-fade" style="animation-delay:2.5s">
+                                    <div class="rsa-anim-msg rsa-anim-slide" style="animation-delay:2.6s">"Hello"</div>
+                                    <svg width="24" height="12" viewBox="0 0 24 12"><path d="M0 6h20m0 0l-4-4m4 4l-4 4" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/></svg>
+                                </div>
+
+                                <!-- Receiver -->
+                                <div class="rsa-anim-node rsa-anim-fade" style="animation-delay:2.9s">
+                                    <div class="rsa-anim-icon rsa-anim-icon-receiver">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    </div>
+                                    <span class="rsa-anim-label">Receiver</span>
+                                </div>
+                            </div>
+
+                            <!-- Hint -->
+                            <div class="rsa-anim-hint rsa-anim-fade" style="animation-delay:3.2s">
+                                Enter a message and click <strong>Encrypt</strong> or <strong>Decrypt</strong> to try it.
                             </div>
                         </div>
                     </div>
@@ -501,7 +647,7 @@
 
     <jsp:include page="modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="rsafunctions.jsp"/>
-        <jsp:param name="keyword" value="rsa"/>
+        <jsp:param name="category" value="Cryptography"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 
