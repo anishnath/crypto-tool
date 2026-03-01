@@ -291,6 +291,44 @@ function renderBitPlaneResult(channel, plane, width, height) {
     '<canvas id="sg-bitplane-canvas" class="sg-image-preview" style="max-height:none;image-rendering:pixelated;"></canvas>';
 }
 
+/**
+ * Render audio file info.
+ */
+function renderAudioInfo(filename, sampleRate, bitsPerSample, channels, duration, capacity) {
+    var E = window.StegoEngine;
+    var html =
+        '<div class="sg-image-info">' +
+            '<div class="sg-image-info-row"><span>Filename</span><span>' + E.escapeHtml(filename) + '</span></div>' +
+            '<div class="sg-image-info-row"><span>Format</span><span>WAV PCM ' + bitsPerSample + '-bit</span></div>' +
+            '<div class="sg-image-info-row"><span>Sample Rate</span><span>' + sampleRate + ' Hz</span></div>' +
+            '<div class="sg-image-info-row"><span>Channels</span><span>' + channels + '</span></div>' +
+            '<div class="sg-image-info-row"><span>Duration</span><span>' + duration.toFixed(1) + 's</span></div>';
+    if (typeof capacity === 'number') {
+        html += '<div class="sg-image-info-row"><span>Max capacity</span><span>' + E.formatBytes(capacity) + '</span></div>';
+    }
+    html += '</div>';
+    return html;
+}
+
+/**
+ * Render audio encode success.
+ */
+function renderAudioEncodeSuccess(blobUrl, filename) {
+    return '<div class="sg-result-message sg-success sg-fade-in">' +
+        '<h5>Message Hidden in Audio</h5>' +
+        '<p>Your secret message has been embedded in the WAV file using LSB encoding.</p>' +
+    '</div>' +
+    '<div class="sg-result-actions">' +
+        '<a href="' + blobUrl + '" download="' + filename + '" class="sg-result-btn sg-btn-primary">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+            'Download WAV' +
+        '</a>' +
+        '<button type="button" class="sg-result-btn sg-btn-secondary" onclick="StegoCore.resetEncode()">' +
+            'New Encode' +
+        '</button>' +
+    '</div>';
+}
+
 // Export
 window.StegoRender = {
     renderImageInfo: renderImageInfo,
@@ -304,7 +342,9 @@ window.StegoRender = {
     showLoading: showLoading,
     hideLoading: hideLoading,
     renderForensicProgress: renderForensicProgress,
-    renderForensicResults: renderForensicResults
+    renderForensicResults: renderForensicResults,
+    renderAudioInfo: renderAudioInfo,
+    renderAudioEncodeSuccess: renderAudioEncodeSuccess
 };
 
 })();

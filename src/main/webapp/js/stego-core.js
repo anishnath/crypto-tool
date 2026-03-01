@@ -27,7 +27,22 @@ var state = {
     lastBlobUrl: null,
     lastFileBlobUrl: null,
     extractedMessage: '',
-    forensicResults: []
+    forensicResults: [],
+    // Batch 1: Variable bit depth
+    bitDepthMode: 'at',  // 'at' or 'with'
+    bitDepth: 0,         // 0-7
+    decodeBitDepthMode: 'at',
+    decodeBitDepth: 0,
+    // Batch 2: Compression is already handled via checkbox
+    // Batch 3: Audio steganography
+    medium: 'image',     // 'image' or 'audio'
+    audioBuffer: null,
+    audioFileName: null,
+    decodeAudioBuffer: null,
+    decodeAudioFileName: null,
+    // Batch 4: Reed-Solomon
+    rsEnabled: false,
+    rsParityLevel: 1     // 1=low(16), 2=medium(32), 3=high(48)
 };
 
 /* ===== DOM Helpers ===== */
@@ -104,7 +119,7 @@ function processUploadedImage(file, target) {
                 state.encodeCanvas = canvas;
                 state.encodeImageData = imageData;
                 state.currentFile = file;
-                state.maxCapacity = Math.floor((img.width * img.height * 3) / 8) - 4;
+                state.maxCapacity = E.calculateCapacity(img.width * img.height, state.bitDepthMode, state.bitDepth);
                 showEncodePreview(file.name, img.width, img.height, canvas.toDataURL());
             } else if (target === 'analyze') {
                 state.analyzeCanvas = canvas;
@@ -216,7 +231,7 @@ function loadImageFromUrl(url, target) {
             state.encodeCanvas = canvas;
             state.encodeImageData = imageData;
             state.currentFile = null;
-            state.maxCapacity = Math.floor((img.width * img.height * 3) / 8) - 4;
+            state.maxCapacity = E.calculateCapacity(img.width * img.height, state.bitDepthMode, state.bitDepth);
             showEncodePreview(filename, img.width, img.height, canvas.toDataURL());
         } else {
             state.decodeCanvas = canvas;
@@ -243,7 +258,7 @@ function generateCoverImage(type) {
     var result = IG.generate(type, 800, 600);
     state.encodeCanvas = result.canvas;
     state.encodeImageData = result.imageData;
-    state.maxCapacity = Math.floor((800 * 600 * 3) / 8) - 4;
+    state.maxCapacity = E.calculateCapacity(800 * 600, state.bitDepthMode, state.bitDepth);
     state.currentFile = null;
 
     // Highlight active card
@@ -273,12 +288,104 @@ function upscaleCanvas(requiredBytes) {
     var newImageData = ctx.getImageData(0, 0, dims.width, dims.height);
     state.encodeCanvas = newCanvas;
     state.encodeImageData = newImageData;
-    state.maxCapacity = Math.floor((dims.width * dims.height * 3) / 8) - 4;
+    state.maxCapacity = E.calculateCapacity(dims.width * dims.height, state.bitDepthMode, state.bitDepth);
     ToolUtils.showToast('Cover image auto-scaled to ' + dims.width + 'x' + dims.height + ' to fit payload', 3000);
+}
+
+/* ===== Medium Switching ===== */
+function switchMedium(medium) {
+    state.medium = medium;
+    var imgBtn = $('sg-medium-image');
+    var audBtn = $('sg-medium-audio');
+    if (imgBtn) imgBtn.classList.toggle('sg-active', medium === 'image');
+    if (audBtn) audBtn.classList.toggle('sg-active', medium === 'audio');
+
+    // Toggle image/audio panels visibility
+    var imgPanels = document.querySelectorAll('.sg-image-only');
+    var audPanels = document.querySelectorAll('.sg-audio-only');
+    for (var i = 0; i < imgPanels.length; i++) imgPanels[i].style.display = medium === 'image' ? '' : 'none';
+    for (var j = 0; j < audPanels.length; j++) audPanels[j].style.display = medium === 'audio' ? '' : 'none';
+}
+
+/* ===== Audio Processing ===== */
+function processUploadedAudio(file, target) {
+    if (!file) return;
+    var A = window.StegoAudio;
+    if (!A) { ToolUtils.showToast('Audio steganography module not loaded', 2500); return; }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var buffer = e.target.result;
+        try {
+            var info = A.parseWAV(buffer);
+        } catch (err) {
+            ToolUtils.showToast('Invalid WAV file: ' + err.message, 3000);
+            return;
+        }
+        var capacity = A.getWAVCapacity(buffer, state.bitDepth, state.bitDepthMode);
+        if (target === 'encode') {
+            state.audioBuffer = buffer;
+            state.audioFileName = file.name;
+            state.maxCapacity = capacity;
+            var infoEl = $('sg-encode-audio-info');
+            if (infoEl) infoEl.innerHTML = R.renderAudioInfo(file.name, info.sampleRate, info.bitsPerSample, info.numChannels, info.duration, capacity);
+            var previewEl = $('sg-encode-audio-preview');
+            if (previewEl) previewEl.classList.add('sg-visible');
+            var sourceEl = $('sg-encode-audio-source');
+            if (sourceEl) sourceEl.classList.add('sg-hidden');
+            $('sg-encode-btn').disabled = false;
+            var meter = $('sg-capacity-container');
+            if (meter) meter.classList.add('sg-visible');
+            updateCapacity();
+        } else {
+            state.decodeAudioBuffer = buffer;
+            state.decodeAudioFileName = file.name;
+            var dinfoEl = $('sg-decode-audio-info');
+            if (dinfoEl) dinfoEl.innerHTML = R.renderAudioInfo(file.name, info.sampleRate, info.bitsPerSample, info.numChannels, info.duration, capacity);
+            var dpreviewEl = $('sg-decode-audio-preview');
+            if (dpreviewEl) dpreviewEl.classList.add('sg-visible');
+            var dsourceEl = $('sg-decode-audio-source');
+            if (dsourceEl) dsourceEl.classList.add('sg-hidden');
+            $('sg-decode-btn').disabled = false;
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+/* ===== Recalculate capacity when depth changes ===== */
+function recalcCapacity() {
+    if (state.medium === 'audio' && state.audioBuffer) {
+        var A = window.StegoAudio;
+        if (A) state.maxCapacity = A.getWAVCapacity(state.audioBuffer, state.bitDepth, state.bitDepthMode);
+    } else if (state.encodeImageData) {
+        state.maxCapacity = E.calculateCapacity(state.encodeImageData.width * state.encodeImageData.height, state.bitDepthMode, state.bitDepth);
+    }
+    var infoEl = $('sg-encode-image-info');
+    if (infoEl && state.encodeImageData) {
+        infoEl.innerHTML = R.renderImageInfo(
+            state.currentFile ? state.currentFile.name : 'Generated',
+            state.encodeImageData.width,
+            state.encodeImageData.height,
+            state.maxCapacity
+        );
+    }
+    updateCapacity();
+}
+
+/* ===== RS Parity Bytes ===== */
+function getRSParityBytes() {
+    var levels = [16, 32, 48];
+    return levels[state.rsParityLevel - 1] || 32;
 }
 
 /* ===== Encode ===== */
 function encodeMessage() {
+    // Audio encode path
+    if (state.medium === 'audio') {
+        encodeAudioMessage();
+        return;
+    }
+
     var message = $('sg-message-input').value;
     if (!message) { ToolUtils.showToast('Please enter a message to hide', 2500); return; }
     if (!state.encodeImageData) { ToolUtils.showToast('Please upload or generate an image first', 2500); return; }
@@ -294,19 +401,50 @@ function encodeMessage() {
 
     var password = $('sg-encode-password').value;
     var useCompression = $('sg-encode-compression').checked;
+    var depth = state.bitDepth;
+    var depthMode = state.bitDepthMode;
 
     var processPromise;
     if (password) {
-        // Use AES-256-GCM encryption
         processPromise = E.encryptAES(message, password);
     } else {
-        var processed = message;
-        if (useCompression) processed = btoa(processed);
-        processPromise = Promise.resolve(processed);
+        if (useCompression) {
+            processPromise = E.compressDeflate(message).then(function(compressed) {
+                // Convert Uint8Array to Latin-1 string for LSB embedding
+                var str = '';
+                for (var i = 0; i < compressed.length; i++) str += String.fromCharCode(compressed[i]);
+                return btoa(str);
+            });
+        } else {
+            processPromise = Promise.resolve(message);
+        }
     }
 
     processPromise.then(function(processedMessage) {
-        var encodedData = E.encodeLSB(state.encodeImageData, processedMessage);
+        // Apply RS if enabled
+        var RS = window.StegoRS;
+        if (state.rsEnabled && RS) {
+            var msgBytes = new TextEncoder().encode(processedMessage);
+            var protected_ = RS.rsProtect(msgBytes, getRSParityBytes());
+            // Prefix with RS flag byte 0x03 + 1 byte parity level
+            var flagged = new Uint8Array(2 + protected_.length);
+            flagged[0] = 0x03; // RS flag
+            flagged[1] = state.rsParityLevel;
+            flagged.set(protected_, 2);
+            // btoa-encode to make binary data ASCII-safe for TextEncoder
+            var latin1 = '';
+            for (var i = 0; i < flagged.length; i++) latin1 += String.fromCharCode(flagged[i]);
+            processedMessage = 'RS:' + btoa(latin1);
+        }
+
+        var encodedData;
+        if (depth === 0 && depthMode === 'at') {
+            encodedData = E.encodeLSB(state.encodeImageData, processedMessage);
+        } else if (depthMode === 'at') {
+            encodedData = E.encodeLSBAtDepth(state.encodeImageData, processedMessage, depth);
+        } else {
+            encodedData = E.encodeLSBWithDepth(state.encodeImageData, processedMessage, depth);
+        }
         var tempCanvas = document.createElement('canvas');
         tempCanvas.width = state.encodeCanvas.width;
         tempCanvas.height = state.encodeCanvas.height;
@@ -340,6 +478,63 @@ function encodeMessage() {
     });
 }
 
+/* ===== Audio Encode ===== */
+function encodeAudioMessage() {
+    var A = window.StegoAudio;
+    if (!A) { ToolUtils.showToast('Audio module not loaded', 2500); return; }
+    var message = $('sg-message-input').value;
+    if (!message) { ToolUtils.showToast('Please enter a message', 2500); return; }
+    if (!state.audioBuffer) { ToolUtils.showToast('Please upload a WAV file', 2500); return; }
+
+    var resultContent = $('sg-result-content');
+    R.showLoading(resultContent);
+    $('sg-encode-btn').disabled = true;
+
+    setTimeout(function() {
+        try {
+            var encodedBuffer = A.encodeWAV(state.audioBuffer, message, state.bitDepth, state.bitDepthMode);
+            var blob = new Blob([encodedBuffer], { type: 'audio/wav' });
+            if (state.lastBlobUrl) URL.revokeObjectURL(state.lastBlobUrl);
+            var url = URL.createObjectURL(blob);
+            state.lastBlobUrl = url;
+            var filename = 'stego-' + Date.now() + '.wav';
+            resultContent.innerHTML = R.renderAudioEncodeSuccess(url, filename);
+            updateToolbar();
+            ToolUtils.showToast('Message hidden in audio!', 2500);
+        } catch (err) {
+            resultContent.innerHTML = R.renderError('Audio Encoding Failed', err.message, [
+                'Message may be too large for this WAV file',
+                'Ensure the file is a valid PCM WAV'
+            ]);
+        }
+        $('sg-encode-btn').disabled = false;
+    }, 100);
+}
+
+/* ===== Audio Decode ===== */
+function decodeAudioMessage() {
+    var A = window.StegoAudio;
+    if (!A) { ToolUtils.showToast('Audio module not loaded', 2500); return; }
+    if (!state.decodeAudioBuffer) { ToolUtils.showToast('Please upload a WAV file', 2500); return; }
+
+    var resultContent = $('sg-result-content');
+    R.showLoading(resultContent);
+    $('sg-decode-btn').disabled = true;
+
+    setTimeout(function() {
+        try {
+            var decoded = A.decodeWAV(state.decodeAudioBuffer, state.decodeBitDepth, state.decodeBitDepthMode);
+            showDecodedText(decoded, resultContent);
+        } catch (err) {
+            resultContent.innerHTML = R.renderError('Audio Decoding Failed', err.message, [
+                'No hidden message found in this WAV file',
+                'Check bit depth settings match encoding'
+            ]);
+        }
+        $('sg-decode-btn').disabled = false;
+    }, 100);
+}
+
 /* ===== Encode File ===== */
 function encodeFile() {
     if (!state.encodeImageData) { ToolUtils.showToast('Please upload or generate an image first', 2500); return; }
@@ -360,27 +555,40 @@ function encodeFile() {
         upscaleCanvas(neededBytes);
     }
 
+    var depth = state.bitDepth;
+    var depthMode = state.bitDepthMode;
+
     setTimeout(function() {
         try {
             var encodedData;
             if (password) {
-                // For file+password: AES encrypt the file bytes as base64, then embed as text
-                // Convert file bytes to base64 string, then encrypt
                 var binary = '';
                 for (var i = 0; i < fileBytes.length; i++) binary += String.fromCharCode(fileBytes[i]);
                 var fileB64 = btoa(binary);
                 E.encryptAES(fileB64, password).then(function(encrypted) {
-                    // Store filename in the encrypted payload prefix
                     var payload = filename + '\x00' + encrypted;
-                    var encodedData = E.encodeLSB(state.encodeImageData, '\x02' + payload);
-                    finishEncode(encodedData, resultContent);
+                    var edata;
+                    if (depth === 0 && depthMode === 'at') {
+                        edata = E.encodeLSB(state.encodeImageData, '\x02' + payload);
+                    } else if (depthMode === 'at') {
+                        edata = E.encodeLSBAtDepth(state.encodeImageData, '\x02' + payload, depth);
+                    } else {
+                        edata = E.encodeLSBWithDepth(state.encodeImageData, '\x02' + payload, depth);
+                    }
+                    finishEncode(edata, resultContent);
                 }).catch(function(err) {
                     resultContent.innerHTML = R.renderError('Encoding Failed', err.message, ['Encryption error']);
                     $('sg-encode-btn').disabled = false;
                 });
                 return;
             }
-            encodedData = E.encodeLSBFile(state.encodeImageData, fileBytes, filename);
+            if (depth === 0 && depthMode === 'at') {
+                encodedData = E.encodeLSBFile(state.encodeImageData, fileBytes, filename);
+            } else if (depthMode === 'at') {
+                encodedData = E.encodeLSBFileAtDepth(state.encodeImageData, fileBytes, filename, depth);
+            } else {
+                encodedData = E.encodeLSBFileWithDepth(state.encodeImageData, fileBytes, filename, depth);
+            }
             finishEncode(encodedData, resultContent);
         } catch (err) {
             resultContent.innerHTML = R.renderError('Encoding Failed', err.message, [
@@ -444,20 +652,36 @@ function tryDecodeStrategy(raw, useAtob, password, useByteXor) {
 }
 
 function decodeMessage() {
+    // Audio decode path
+    if (state.medium === 'audio') {
+        decodeAudioMessage();
+        return;
+    }
+
     if (!state.decodeImageData) { ToolUtils.showToast('Please upload an image to decode', 2500); return; }
 
     var resultContent = $('sg-result-content');
     R.showLoading(resultContent);
     $('sg-decode-btn').disabled = true;
 
+    var depth = state.decodeBitDepth;
+    var depthMode = state.decodeBitDepthMode;
+
     setTimeout(function() {
         try {
             // First try new payload format (file detection)
             var payload = null;
-            try { payload = E.decodeLSBPayload(state.decodeImageData); } catch(e) {}
+            try {
+                if (depth === 0 && depthMode === 'at') {
+                    payload = E.decodeLSBPayload(state.decodeImageData);
+                } else if (depthMode === 'at') {
+                    payload = E.decodeLSBPayloadAtDepth(state.decodeImageData, depth);
+                } else {
+                    payload = E.decodeLSBPayloadWithDepth(state.decodeImageData, depth);
+                }
+            } catch(e) {}
 
             if (payload && payload.type === 'file') {
-                // File was embedded - offer download
                 var blob = new Blob([payload.data]);
                 if (state.lastFileBlobUrl) URL.revokeObjectURL(state.lastFileBlobUrl);
                 var blobUrl = URL.createObjectURL(blob);
@@ -468,23 +692,69 @@ function decodeMessage() {
                 return;
             }
 
-            var raw = E.decodeLSB(state.decodeImageData);
+            var raw;
+            if (depth === 0 && depthMode === 'at') {
+                raw = E.decodeLSB(state.decodeImageData);
+            } else if (depthMode === 'at') {
+                raw = E.decodeLSBAtDepth(state.decodeImageData, depth);
+            } else {
+                raw = E.decodeLSBWithDepth(state.decodeImageData, depth);
+            }
             if (!raw) throw new Error('No hidden message found');
+
+            // Check for RS prefix
+            var RS = window.StegoRS;
+            if (RS && raw.indexOf('RS:') === 0) {
+                var b64 = raw.substring(3);
+                var latin1 = atob(b64);
+                var flagged = new Uint8Array(latin1.length);
+                for (var ri = 0; ri < latin1.length; ri++) flagged[ri] = latin1.charCodeAt(ri);
+                if (flagged[0] === 0x03 && flagged.length > 2) {
+                    var parityLevel = flagged[1];
+                    var parityBytes = [16, 32, 48][parityLevel - 1] || 32;
+                    var rsData = flagged.slice(2);
+                    var recovered = RS.rsUnprotect(rsData, parityBytes);
+                    raw = new TextDecoder().decode(recovered);
+                }
+            }
 
             var password = $('sg-decode-password').value;
 
-            // If password provided, try AES decrypt first
             if (password) {
                 E.decryptAES(raw, password).then(function(decrypted) {
                     showDecodedText(decrypted, resultContent);
                 }).catch(function() {
-                    // AES failed, fall back to XOR strategies
                     fallbackXorDecode(raw, password, resultContent);
                 });
                 return;
             }
 
-            // No password: try standard strategies
+            // Try deflate decompression first (compressed messages are btoa-encoded)
+            try {
+                var decoded64 = atob(raw);
+                var deflateBytes = new Uint8Array(decoded64.length);
+                for (var di = 0; di < decoded64.length; di++) deflateBytes[di] = decoded64.charCodeAt(di);
+                if (deflateBytes[0] === 0x00 || deflateBytes[0] === 0x01) {
+                    E.decompressDeflate(deflateBytes).then(function(decompressed) {
+                        if (E.printableRatio(decompressed) > 0.7) {
+                            showDecodedText(decompressed, resultContent);
+                        } else {
+                            fallbackXorDecode(raw, '', resultContent);
+                        }
+                    }).catch(function() {
+                        fallbackXorDecode(raw, '', resultContent);
+                    });
+                    return;
+                }
+            } catch(e) {}
+
+            // Plain text: check if readable directly
+            if (E.printableRatio(raw) >= 0.7) {
+                showDecodedText(raw, resultContent);
+                return;
+            }
+
+            // Legacy fallback for old btoa/xor formats
             fallbackXorDecode(raw, '', resultContent);
 
         } catch (err) {
@@ -492,7 +762,7 @@ function decodeMessage() {
                 'No hidden message was found in this image',
                 'The image may have been modified or compressed after encoding',
                 'Try entering the correct password if one was used',
-                'The encoding format may not be compatible'
+                'Check bit depth settings match the encoding'
             ]);
             $('sg-decode-btn').disabled = false;
         }
@@ -518,6 +788,30 @@ function fallbackXorDecode(raw, password, resultContent) {
     r = tryDecodeStrategy(raw, false, '', false);
     if (r) candidates.push(r);
 
+    // Also try deflate decompression if the raw looks like base64
+    try {
+        var decoded64 = atob(raw);
+        var bytes = new Uint8Array(decoded64.length);
+        for (var k = 0; k < decoded64.length; k++) bytes[k] = decoded64.charCodeAt(k);
+        if (bytes[0] === 0x00 || bytes[0] === 0x01) {
+            E.decompressDeflate(bytes).then(function(decompressed) {
+                var ratio = E.printableRatio(decompressed);
+                if (ratio > 0.7) {
+                    showDecodedText(decompressed, resultContent);
+                    return;
+                }
+                finishFallback(candidates, resultContent);
+            }).catch(function() {
+                finishFallback(candidates, resultContent);
+            });
+            return;
+        }
+    } catch(e) {}
+
+    finishFallback(candidates, resultContent);
+}
+
+function finishFallback(candidates, resultContent) {
     var best = null;
     for (var i = 0; i < candidates.length; i++) {
         if (!best || candidates[i].ratio > best.ratio) {
@@ -698,17 +992,32 @@ function resetEncode() {
     state.currentFile = null;
     state.embedFile = null;
     state.embedFileBytes = null;
+    state.audioBuffer = null;
+    state.audioFileName = null;
     if (state.lastBlobUrl) { URL.revokeObjectURL(state.lastBlobUrl); state.lastBlobUrl = null; }
 
-    $('sg-encode-file').value = '';
-    $('sg-message-input').value = '';
-    $('sg-encode-password').value = '';
+    var encFile = $('sg-encode-file');
+    if (encFile) encFile.value = '';
+    var msgInput = $('sg-message-input');
+    if (msgInput) msgInput.value = '';
+    var encPwd = $('sg-encode-password');
+    if (encPwd) encPwd.value = '';
     var compressionEl = $('sg-encode-compression');
     if (compressionEl) compressionEl.checked = true;
-    $('sg-encode-source').classList.remove('sg-hidden');
-    $('sg-encode-preview').classList.remove('sg-visible');
-    $('sg-capacity-container').classList.remove('sg-visible');
-    $('sg-encode-btn').disabled = true;
+    var encSource = $('sg-encode-source');
+    if (encSource) encSource.classList.remove('sg-hidden');
+    var encPreview = $('sg-encode-preview');
+    if (encPreview) encPreview.classList.remove('sg-visible');
+    var capContainer = $('sg-capacity-container');
+    if (capContainer) capContainer.classList.remove('sg-visible');
+    var encBtn = $('sg-encode-btn');
+    if (encBtn) encBtn.disabled = true;
+
+    // Reset audio preview
+    var audSource = $('sg-encode-audio-source');
+    if (audSource) audSource.classList.remove('sg-hidden');
+    var audPreview = $('sg-encode-audio-preview');
+    if (audPreview) audPreview.classList.remove('sg-visible');
 
     var embedFileInput = $('sg-embed-file-input');
     if (embedFileInput) embedFileInput.value = '';
@@ -885,6 +1194,78 @@ function init() {
         });
     }
 
+    // Medium toggle
+    var medImgBtn = $('sg-medium-image');
+    if (medImgBtn) medImgBtn.addEventListener('click', function() { switchMedium('image'); });
+    var medAudBtn = $('sg-medium-audio');
+    if (medAudBtn) medAudBtn.addEventListener('click', function() { switchMedium('audio'); });
+
+    // Audio upload zones
+    var encAudZone = $('sg-encode-audio-zone');
+    var encAudInput = $('sg-encode-audio-file');
+    if (encAudZone && encAudInput) {
+        encAudZone.addEventListener('click', function() { encAudInput.click(); });
+        encAudInput.addEventListener('change', function() {
+            if (encAudInput.files && encAudInput.files[0]) processUploadedAudio(encAudInput.files[0], 'encode');
+        });
+        encAudZone.addEventListener('dragover', function(e) { e.preventDefault(); encAudZone.classList.add('sg-drag-over'); });
+        encAudZone.addEventListener('dragleave', function() { encAudZone.classList.remove('sg-drag-over'); });
+        encAudZone.addEventListener('drop', function(e) {
+            e.preventDefault(); encAudZone.classList.remove('sg-drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) processUploadedAudio(e.dataTransfer.files[0], 'encode');
+        });
+    }
+    var decAudZone = $('sg-decode-audio-zone');
+    var decAudInput = $('sg-decode-audio-file');
+    if (decAudZone && decAudInput) {
+        decAudZone.addEventListener('click', function() { decAudInput.click(); });
+        decAudInput.addEventListener('change', function() {
+            if (decAudInput.files && decAudInput.files[0]) processUploadedAudio(decAudInput.files[0], 'decode');
+        });
+        decAudZone.addEventListener('dragover', function(e) { e.preventDefault(); decAudZone.classList.add('sg-drag-over'); });
+        decAudZone.addEventListener('dragleave', function() { decAudZone.classList.remove('sg-drag-over'); });
+        decAudZone.addEventListener('drop', function(e) {
+            e.preventDefault(); decAudZone.classList.remove('sg-drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) processUploadedAudio(e.dataTransfer.files[0], 'decode');
+        });
+    }
+
+    // Bit depth controls (encode)
+    var encDepthMode = $('sg-encode-depth-mode');
+    if (encDepthMode) encDepthMode.addEventListener('change', function() {
+        state.bitDepthMode = this.value;
+        recalcCapacity();
+    });
+    var encDepthVal = $('sg-encode-depth-value');
+    if (encDepthVal) encDepthVal.addEventListener('change', function() {
+        state.bitDepth = parseInt(this.value, 10);
+        recalcCapacity();
+    });
+
+    // Bit depth controls (decode)
+    var decDepthMode = $('sg-decode-depth-mode');
+    if (decDepthMode) decDepthMode.addEventListener('change', function() {
+        state.decodeBitDepthMode = this.value;
+    });
+    var decDepthVal = $('sg-decode-depth-value');
+    if (decDepthVal) decDepthVal.addEventListener('change', function() {
+        state.decodeBitDepth = parseInt(this.value, 10);
+    });
+
+    // RS controls
+    var rsCheckbox = $('sg-encode-rs');
+    if (rsCheckbox) rsCheckbox.addEventListener('change', function() {
+        state.rsEnabled = this.checked;
+        var rsOpts = $('sg-rs-options');
+        if (rsOpts) rsOpts.style.display = this.checked ? 'block' : 'none';
+        recalcCapacity();
+    });
+    var rsLevel = $('sg-encode-rs-level');
+    if (rsLevel) rsLevel.addEventListener('change', function() {
+        state.rsParityLevel = parseInt(this.value, 10);
+        recalcCapacity();
+    });
+
     // Message input - live capacity
     var msgInput = $('sg-message-input');
     if (msgInput) {
@@ -960,9 +1341,12 @@ if (document.readyState === 'loading') {
 window.StegoCore = {
     switchMode: switchMode,
     switchEncodeSubTab: switchEncodeSubTab,
+    switchMedium: switchMedium,
     encodeMessage: encodeMessage,
     encodeFile: encodeFile,
     decodeMessage: decodeMessage,
+    encodeAudioMessage: encodeAudioMessage,
+    decodeAudioMessage: decodeAudioMessage,
     resetEncode: resetEncode,
     resetDecode: resetDecode,
     resetAnalyze: resetAnalyze,

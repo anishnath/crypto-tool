@@ -16,33 +16,33 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Steganography Tool - Hide Messages & Files in Images" />
-        <jsp:param name="toolDescription" value="Advanced online steganography tool with AES-256 encryption, file embedding, LSB bit plane analysis, and forensic scanner. Hide text or files in images with military-grade encryption, 100% client-side." />
+        <jsp:param name="toolName" value="Steganography Tool - Hide Data in Images & Audio" />
+        <jsp:param name="toolDescription" value="Free online steganography tool: hide messages and files in images or WAV audio. Variable bit depth (0-7), AES-256 encryption, deflate compression, Reed-Solomon error correction, forensic scanner with 18+ methods. 100% client-side." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="steganography-tool.jsp" />
-        <jsp:param name="toolKeywords" value="steganography tool, hide message in image, LSB encoding, image steganography, AES-256 encryption, hide file in image, bit plane viewer, forensic steganalysis, steganography online, encode decode image, steganography analyzer, file embedding steganography, PBKDF2, AES-GCM encryption, digital steganography, LSB bit plane analysis" />
+        <jsp:param name="toolKeywords" value="steganography tool, hide message in image, audio steganography, WAV steganography, LSB encoding, variable bit depth, Reed-Solomon error correction, image steganography, AES-256 encryption, hide file in image, bit plane viewer, forensic steganalysis, steganography online, encode decode image, deflate compression, CTF steganography, steganography analyzer, file embedding steganography, digital steganography, LSB bit plane analysis" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="LSB steganography encoding and decoding,Hide arbitrary files (PDF ZIP TXT) inside images,AES-256-GCM encryption with PBKDF2 key derivation,Visual LSB bit plane analyzer per channel and plane,Forensic scanner with 18+ extraction methods,Auto-generate cover images with 4 pattern styles,Real-time capacity meter,100% client-side processing - zero server uploads,Backward-compatible XOR decryption for legacy images,PNG JPEG BMP format support,Three-mode interface: Encode Decode and Analyze,Dark mode support" />
+        <jsp:param name="toolFeatures" value="LSB steganography encoding and decoding,Variable bit depth 0-7 for up to 8x capacity,Audio WAV steganography with PCM sample embedding,Reed-Solomon error correction survives image edits,Deflate compression for 2-5x smaller payloads,Hide arbitrary files (PDF ZIP TXT) inside images or audio,AES-256-GCM encryption with PBKDF2 key derivation,Visual LSB bit plane analyzer per channel and plane,Forensic scanner with 18+ extraction methods,Auto-generate cover images with 4 pattern styles,Real-time capacity meter with depth-aware calculation,100% client-side processing - zero server uploads,Supports 8-bit 16-bit 24-bit and 32-bit WAV files,Three-mode interface: Encode Decode and Analyze,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, College, Professional" />
-        <jsp:param name="teaches" value="Steganography, LSB encoding, AES-256 encryption, PBKDF2 key derivation, bit plane analysis, steganalysis, data hiding, digital forensics, image manipulation, cryptography" />
-        <jsp:param name="howToSteps" value="Choose or generate a cover image|Upload a PNG JPEG or BMP image or click one of the 4 auto-generated pattern styles like Gradient Mesh or Geometric Shapes,Select Message or File mode|Switch between the Message sub-tab to hide text or the File sub-tab to embed any file type such as PDF ZIP or TXT,Enter your payload|Type your secret message in the text area or drag-and-drop a file into the file upload zone and watch the capacity meter,Set AES-256 password (optional)|Add a password for AES-256-GCM authenticated encryption using PBKDF2 with 100000 iterations of SHA-256,Click Hide Message|Press the Hide Message button to embed your data into the image using LSB encoding,Download the stego image|Save the resulting PNG file which looks identical to the original but contains your hidden data,Analyze with bit plane viewer|Switch to Analyze mode to inspect individual bit planes per RGB channel and visually detect hidden data patterns" />
+        <jsp:param name="teaches" value="Steganography, LSB encoding, audio steganography, variable bit depth, Reed-Solomon codes, AES-256 encryption, PBKDF2 key derivation, bit plane analysis, steganalysis, data hiding, digital forensics, Galois field arithmetic, error correction" />
+        <jsp:param name="howToSteps" value="Choose Image or Audio medium|Select Image to hide data in PNG/JPEG/BMP images or Audio WAV to hide data in WAV audio files,Upload or generate a cover file|Upload an image or WAV file or click an auto-generated pattern style like Gradient Mesh or Geometric Shapes,Select Message or File mode|Switch between the Message sub-tab to hide text or the File sub-tab to embed any file type such as PDF ZIP or TXT,Configure encoding options|Set bit depth (0-7) and mode (At bit N or Bits 0..N) to control capacity. Enable Deflate compression for smaller payloads or Reed-Solomon for error resilience,Set AES-256 password (optional)|Add a password for AES-256-GCM authenticated encryption using PBKDF2 with 100000 iterations of SHA-256,Click Hide Message and download|Press Hide Message to embed your data then download the resulting PNG or WAV file which looks or sounds identical to the original,Decode with matching settings|To extract upload the stego file and set the same bit depth and mode used during encoding. RS-protected messages auto-detect and self-correct errors,Analyze with forensic tools|Switch to Analyze mode to inspect bit planes per RGB channel or run the forensic scanner with 18+ extraction methods" />
         <jsp:param name="faq1q" value="What is steganography and how does it work?" />
-        <jsp:param name="faq1a" value="Steganography is the practice of hiding secret information within ordinary data such as images so that no one apart from the sender and recipient knows of its existence. This tool uses Least Significant Bit (LSB) encoding which modifies the least important bit of each color channel in image pixels. Since these tiny changes are invisible to the human eye the image looks identical but carries a hidden message. Unlike encryption which makes data unreadable steganography hides the very existence of the data." />
-        <jsp:param name="faq2q" value="Is my data safe? Does this tool upload my images?" />
-        <jsp:param name="faq2a" value="Yes your data is completely safe. This tool processes everything 100% client-side in your browser using the HTML5 Canvas API, Web Crypto API, and JavaScript. No images messages files or passwords are ever uploaded to any server. All encoding decoding encryption and analysis happens locally on your device. You can verify this by disconnecting from the internet and confirming the tool still works." />
-        <jsp:param name="faq3q" value="What image formats work best for steganography?" />
-        <jsp:param name="faq3a" value="PNG is the best format for steganography because it uses lossless compression which preserves every pixel value exactly. JPEG uses lossy compression which can destroy the hidden data during re-encoding. BMP files work well since they are uncompressed but result in large file sizes. This tool always outputs PNG files to ensure your hidden data is preserved perfectly. For best results use PNG images as input or use the built-in image generator." />
-        <jsp:param name="faq4q" value="How much data can I hide in an image?" />
-        <jsp:param name="faq4a" value="The capacity depends on the image dimensions. Each pixel provides 3 bits of storage (one per RGB channel) so the formula is (width x height x 3) / 8 bytes minus a small header. An 800x600 image can store approximately 180KB which is enough for text documents small PDFs or ZIP files. The real-time capacity meter shows exactly how much space is available. You can hide both text messages and arbitrary files such as PDFs ZIPs or documents." />
-        <jsp:param name="faq5q" value="How does the AES-256 password encryption work?" />
-        <jsp:param name="faq5a" value="When you set a password this tool uses AES-256-GCM authenticated encryption via the Web Crypto API. Your password is derived into a 256-bit cryptographic key using PBKDF2 with 100000 iterations of SHA-256 and a random 16-byte salt. The message is then encrypted with a random 12-byte IV producing authenticated ciphertext that detects any tampering. This is the same encryption standard used by governments and financial institutions. Without the correct password the data is computationally impossible to recover." />
-        <jsp:param name="faq6q" value="Can I hide files like PDFs or ZIPs inside images?" />
-        <jsp:param name="faq6a" value="Yes this tool supports embedding arbitrary files inside images not just text messages. Switch to the File sub-tab in Encode mode and drag-and-drop any file type including PDF ZIP TXT documents or other formats. The file is embedded with its original filename preserved. When decoding the tool auto-detects whether the hidden data is text or a file and offers a direct download with the original filename intact." />
-        <jsp:param name="faq7q" value="What is the bit plane analyzer and how do I use it?" />
-        <jsp:param name="faq7a" value="The bit plane analyzer is a visual forensic tool that lets you inspect individual bit planes of each color channel in an image. Switch to Analyze mode and upload any image then select a channel (Red Green Blue or All) and a bit plane (0 for LSB through 7 for MSB). Hidden steganographic data typically appears as noise or irregular patterns in the LSB plane of encoded regions while clean areas show uniform patterns. This is the classic technique used in digital forensics and steganalysis to detect hidden data." />
+        <jsp:param name="faq1a" value="Steganography is the practice of hiding secret information within ordinary data such as images or audio so that no one apart from the sender and recipient knows of its existence. This tool uses Least Significant Bit (LSB) encoding which modifies the least important bits of pixel color channels or audio samples. Since these tiny changes are invisible to the human eye and inaudible to the ear the carrier file looks and sounds identical but carries a hidden message." />
+        <jsp:param name="faq2q" value="What is variable bit depth and how does it increase capacity?" />
+        <jsp:param name="faq2a" value="Variable bit depth lets you embed data in bit positions 0 through 7 of each color channel instead of just the LSB. In At bit N mode you use a single bit position for stealth while in Bits 0..N mode you use multiple bits per channel for up to 8x the standard capacity. Higher bit depths modify more significant bits so there is a tradeoff between capacity and visual quality. Bit depth 0-2 is virtually undetectable while depth 3-7 gives maximum capacity for CTF challenges or large payloads." />
+        <jsp:param name="faq3q" value="Can I hide data in audio WAV files?" />
+        <jsp:param name="faq3a" value="Yes this tool supports audio WAV steganography. Switch to the Audio WAV medium then upload any PCM WAV file as a cover. The tool embeds data in the least significant bits of audio samples supporting 8-bit 16-bit 24-bit and 32-bit sample formats in mono or stereo. Audio steganography works just like image steganography with variable bit depth support. The output WAV sounds identical to the original but contains your hidden message or file." />
+        <jsp:param name="faq4q" value="What is Reed-Solomon error correction and why use it?" />
+        <jsp:param name="faq4a" value="Reed-Solomon is an error-correcting code that adds redundant parity bytes to your data so it can survive corruption. When enabled your message can be recovered even after minor image edits JPEG recompression screenshots or social media processing. Choose Low (16 bytes) Medium (32 bytes) or High (48 bytes) parity. RS uses GF(2^8) Galois field arithmetic with Berlekamp-Massey decoding to automatically detect and correct errors during extraction." />
+        <jsp:param name="faq5q" value="How does the Deflate compression work?" />
+        <jsp:param name="faq5a" value="Enabling Compress (Deflate) applies real deflate compression to your message before embedding reducing payload size by 2-5x for typical text. This means you can fit longer messages into smaller images. The tool uses the browser native CompressionStream API for fast compression. On decoding the tool auto-detects compressed data and decompresses transparently." />
+        <jsp:param name="faq6q" value="Is my data safe? Does this tool upload anything?" />
+        <jsp:param name="faq6a" value="Your data is completely safe. This tool processes everything 100% client-side in your browser using the HTML5 Canvas API Web Crypto API and JavaScript. No images audio files messages or passwords are ever uploaded to any server. All encoding decoding encryption compression and analysis happens locally on your device. You can verify this by disconnecting from the internet and confirming the tool still works." />
+        <jsp:param name="faq7q" value="How much data can I hide in an image or audio file?" />
+        <jsp:param name="faq7a" value="For images at the default LSB depth the capacity is (width x height x 3) / 8 bytes. An 800x600 image stores about 180 KB. Using variable bit depth in Bits 0..N mode multiplies capacity by up to 8x. For WAV audio the capacity depends on the number of samples and bit depth. A 10-second 44100 Hz mono WAV at LSB depth stores about 55 KB. The real-time capacity meter updates as you change depth settings." />
         <jsp:param name="faq8q" value="What is the forensic scanner and how many formats does it support?" />
-        <jsp:param name="faq8a" value="The forensic scanner is a universal decoder that automatically tries 18 or more extraction methods to find hidden messages regardless of which steganography tool was used to encode them. It supports formats from OpenStego Python steganography libraries JavaScript tools and various LSB encoding configurations including different channel orders (RGB BGR) bit orders (MSB LSB) length header formats (BE32 LE32 LE16) and terminators. Results are ranked by confidence score and deduplicated." />
+        <jsp:param name="faq8a" value="The forensic scanner is a universal decoder that automatically tries 18 or more extraction methods to find hidden messages regardless of which steganography tool was used to encode them. It supports formats from OpenStego Python steganography libraries JavaScript tools and various LSB encoding configurations including different channel orders (RGB BGR) bit orders (MSB LSB) length header formats (BE32 LE32 LE16) and terminators. Results are ranked by confidence score." />
     </jsp:include>
 
     <!-- Supplementary Schema: Steganography concept entity (E-E-A-T) -->
@@ -54,18 +54,25 @@
         "@type": "WebPage",
         "@id": "https://8gwifi.org/steganography-tool.jsp"
       },
-      "headline": "Steganography Tool with AES-256 Encryption, File Embedding & Bit Plane Analysis",
-      "description": "Advanced online steganography suite: hide text or files in images with AES-256-GCM encryption, analyze bit planes per RGB channel, and scan with 18+ forensic extraction methods. 100% client-side.",
+      "headline": "Steganography Tool: Hide Data in Images & Audio with Error Correction",
+      "description": "Free online steganography suite: hide text or files in images and WAV audio with variable bit depth (0-7), AES-256 encryption, deflate compression, and Reed-Solomon error correction. 18+ forensic extraction methods. 100% client-side.",
       "about": [
         {
           "@type": "Thing",
           "name": "Steganography",
-          "alternateName": ["Image steganography", "LSB steganography", "Data hiding", "Digital steganography"],
-          "description": "The practice of concealing messages, files, or information within other non-secret data such as images to avoid detection. Digital image steganography modifies the least significant bits of pixel color channels.",
+          "alternateName": ["Image steganography", "Audio steganography", "LSB steganography", "Data hiding", "WAV steganography"],
+          "description": "The practice of concealing messages, files, or information within other non-secret data such as images or audio to avoid detection. Digital steganography modifies the least significant bits of pixel color channels or audio samples.",
           "sameAs": [
             "https://en.wikipedia.org/wiki/Steganography",
             "https://en.wikipedia.org/wiki/Least_significant_bit"
           ]
+        },
+        {
+          "@type": "Thing",
+          "name": "Reed-Solomon Error Correction",
+          "alternateName": ["RS codes", "Reed-Solomon codes"],
+          "description": "An error-correcting code that adds redundant parity bytes using GF(2^8) Galois field arithmetic, allowing hidden data to survive minor image edits, JPEG recompression, or social media processing. Uses Berlekamp-Massey decoding algorithm.",
+          "sameAs": "https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction"
         },
         {
           "@type": "Thing",
@@ -100,9 +107,9 @@
         }
       },
       "datePublished": "2025-01-20",
-      "dateModified": "2026-02-28",
+      "dateModified": "2026-03-01",
       "inLanguage": "en-US",
-      "keywords": "steganography, LSB encoding, AES-256 encryption, hide file in image, bit plane analysis, steganalysis, forensic scanner, PBKDF2, data hiding, image steganography, digital forensics, Web Crypto API"
+      "keywords": "steganography, LSB encoding, audio steganography, WAV steganography, variable bit depth, Reed-Solomon error correction, AES-256 encryption, hide file in image, bit plane analysis, steganalysis, forensic scanner, deflate compression, CTF steganography, PBKDF2, data hiding, Galois field arithmetic"
     }
     </script>
 
@@ -200,10 +207,11 @@
             </nav>
         </div>
         <div class="tool-page-badges">
+            <span class="tool-badge">Image & Audio WAV</span>
+            <span class="tool-badge">Variable Bit Depth</span>
+            <span class="tool-badge">Reed-Solomon ECC</span>
             <span class="tool-badge">AES-256 Encryption</span>
-            <span class="tool-badge">File Embedding</span>
-            <span class="tool-badge">Bit Plane Analyzer</span>
-            <span class="tool-badge">Forensic Scanner</span>
+            <span class="tool-badge">Deflate Compression</span>
             <span class="tool-badge">100% Client-Side</span>
         </div>
     </div>
@@ -212,7 +220,7 @@
 <section class="tool-description-section" style="background:var(--sg-light);">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Advanced <strong>steganography tool</strong> to <strong>hide messages and files inside images</strong> using LSB encoding with <strong>AES-256-GCM encryption</strong>. Embed text or arbitrary files (PDF, ZIP, TXT), analyze bit planes per RGB channel, and scan with 18+ forensic extraction methods. Auto-generate cover images, PBKDF2 key derivation, and <strong>100% client-side processing</strong> with zero server uploads.</p>
+            <p>Advanced <strong>steganography tool</strong> to <strong>hide messages and files inside images and WAV audio</strong> using LSB encoding with <strong>variable bit depth (0-7)</strong> for up to 8x capacity. Features <strong>AES-256-GCM encryption</strong>, <strong>deflate compression</strong>, and <strong>Reed-Solomon error correction</strong> so hidden data survives image edits. Embed text or files (PDF, ZIP, TXT), analyze bit planes per RGB channel, and scan with 18+ forensic methods. <strong>100% client-side</strong> &mdash; zero server uploads.</p>
         </div>
     </div>
 </section>
@@ -220,6 +228,12 @@
 <main class="tool-page-container sg-layout">
     <!-- ==================== INPUT COLUMN ==================== -->
     <div class="tool-input-column">
+
+        <!-- Medium Toggle -->
+        <div class="sg-medium-toggle">
+            <button type="button" class="sg-medium-btn sg-active" id="sg-medium-image">Image</button>
+            <button type="button" class="sg-medium-btn" id="sg-medium-audio">Audio WAV</button>
+        </div>
 
         <!-- Mode Toggle -->
         <div class="sg-mode-toggle">
@@ -306,6 +320,26 @@
                 </div>
             </div>
 
+            <!-- Audio Cover Card (shown when medium=audio) -->
+            <div class="tool-card sg-audio-only" style="margin-bottom:0.625rem;display:none;">
+                <div class="tool-card-header" style="background:var(--sg-gradient);">Cover Audio (WAV)</div>
+                <div class="tool-card-body">
+                    <div class="sg-source-container" id="sg-encode-audio-source">
+                        <input type="file" id="sg-encode-audio-file" accept="audio/wav,audio/wave,.wav" style="display:none;">
+                        <div class="sg-upload-zone" id="sg-encode-audio-zone">
+                            <svg class="sg-upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                            </svg>
+                            <p class="sg-upload-title">Upload a WAV file</p>
+                            <p class="sg-upload-hint">PCM WAV format (8/16/24/32 bit)</p>
+                        </div>
+                    </div>
+                    <div class="sg-preview-container" id="sg-encode-audio-preview">
+                        <div id="sg-encode-audio-info"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Payload + Options Card -->
             <div class="tool-card" style="margin-bottom:0.625rem;">
                 <div class="tool-card-header" style="background:var(--sg-gradient);">Payload &amp; Options</div>
@@ -352,8 +386,47 @@
                         </div>
                         <label class="sg-checkbox-label" style="padding-bottom:0.375rem;" id="sg-compression-label">
                             <input type="checkbox" id="sg-encode-compression" checked>
-                            Compress
+                            Compress (Deflate)
                         </label>
+                    </div>
+
+                    <!-- Bit Depth Controls -->
+                    <div class="sg-depth-group" style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);">
+                        <label class="tool-form-label">Bit Depth</label>
+                        <div class="sg-depth-controls">
+                            <select class="tool-form-input" id="sg-encode-depth-mode" style="font-family:var(--font-sans);width:auto;flex:1;">
+                                <option value="at" selected>At bit N</option>
+                                <option value="with">Bits 0..N</option>
+                            </select>
+                            <select class="tool-form-input" id="sg-encode-depth-value" style="font-family:var(--font-sans);width:auto;flex:1;">
+                                <option value="0" selected>0 (LSB)</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7 (MSB)</option>
+                            </select>
+                        </div>
+                        <p class="sg-depth-hint">Higher bits = more capacity but more visible artifacts. "Bits 0..N" uses multiple bit planes for up to 8x capacity.</p>
+                    </div>
+
+                    <!-- Reed-Solomon Error Correction -->
+                    <div class="sg-rs-group" style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);">
+                        <label class="sg-checkbox-label">
+                            <input type="checkbox" id="sg-encode-rs">
+                            Reed-Solomon Error Correction
+                        </label>
+                        <div id="sg-rs-options" style="display:none;margin-top:0.375rem;">
+                            <label class="tool-form-label" style="font-size:0.625rem;">Parity Level</label>
+                            <select class="tool-form-input" id="sg-encode-rs-level" style="font-family:var(--font-sans);">
+                                <option value="1">Low (16 bytes, ~7% overhead)</option>
+                                <option value="2" selected>Medium (32 bytes, ~14% overhead)</option>
+                                <option value="3">High (48 bytes, ~21% overhead)</option>
+                            </select>
+                            <p class="sg-rs-hint">Adds redundancy so hidden data can survive minor image edits. Higher parity = more resilience but uses more capacity.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -415,10 +488,55 @@
                 </div>
             </div>
 
+            <!-- Audio Decode Upload (shown when medium=audio) -->
+            <div class="tool-card sg-audio-only" style="margin-bottom:0.625rem;display:none;">
+                <div class="tool-card-header" style="background:var(--sg-gradient);">Stego Audio (WAV)</div>
+                <div class="tool-card-body">
+                    <div class="sg-source-container" id="sg-decode-audio-source">
+                        <input type="file" id="sg-decode-audio-file" accept="audio/wav,audio/wave,.wav" style="display:none;">
+                        <div class="sg-upload-zone" id="sg-decode-audio-zone">
+                            <svg class="sg-upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                            </svg>
+                            <p class="sg-upload-title">Upload stego WAV</p>
+                            <p class="sg-upload-hint">Upload the WAV containing hidden data</p>
+                        </div>
+                    </div>
+                    <div class="sg-preview-container" id="sg-decode-audio-preview">
+                        <div id="sg-decode-audio-info"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Decode Button -->
             <button type="button" class="tool-action-btn" id="sg-decode-btn" disabled>Extract Message</button>
 
             <div class="sg-divider">Advanced</div>
+
+            <!-- Decode Bit Depth -->
+            <div class="tool-card" style="margin-bottom:0.625rem;">
+                <div class="tool-card-body" style="padding:0.5rem 0.75rem;">
+                    <label class="tool-form-label" style="font-size:0.6875rem;">Decode Bit Depth</label>
+                    <div class="sg-depth-controls">
+                        <select class="tool-form-input" id="sg-decode-depth-mode" style="font-family:var(--font-sans);width:auto;flex:1;">
+                            <option value="at" selected>At bit N</option>
+                            <option value="with">Bits 0..N</option>
+                        </select>
+                        <select class="tool-form-input" id="sg-decode-depth-value" style="font-family:var(--font-sans);width:auto;flex:1;">
+                            <option value="0" selected>0 (LSB)</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7 (MSB)</option>
+                        </select>
+                    </div>
+                    <p class="sg-depth-hint">Match the depth settings used during encoding</p>
+                </div>
+            </div>
+
             <button type="button" class="tool-action-btn sg-forensic-btn" id="sg-forensic-btn" disabled>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Universal Decode (Forensic Scanner)
             </button>
@@ -588,6 +706,84 @@
     </div>
 </section>
 
+<!-- How to Use This Tool -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;" class="sg-anim sg-anim-d2">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h2 style="font-size:1.25rem;font-weight:700;margin:0 0 1.25rem;color:var(--text-primary);">How to Use This Steganography Tool</h2>
+
+        <!-- Encode a Message -->
+        <div style="margin-bottom:1.75rem;">
+            <h3 style="font-size:1rem;font-weight:600;color:var(--sg-tool);margin:0 0 0.75rem;display:flex;align-items:center;gap:0.5rem;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;background:var(--sg-gradient);color:#fff;border-radius:50%;font-size:0.75rem;font-weight:700;flex-shrink:0;">1</span>
+                Hide a Message in an Image
+            </h3>
+            <ol style="margin:0;padding-left:1.5rem;color:var(--text-secondary);font-size:0.875rem;line-height:1.8;">
+                <li>Make sure <strong>Image</strong> is selected at the top and you are in <strong>Encode</strong> mode.</li>
+                <li><strong>Upload a cover image</strong> (PNG, JPEG, or BMP) or click one of the auto-generated patterns (Gradient, Mesh, Geometric, Noise).</li>
+                <li>Type your secret message in the text area. The capacity meter shows how much space is available.</li>
+                <li><em>Optional:</em> Set a <strong>password</strong> for AES-256 encryption, enable <strong>Compress (Deflate)</strong> to shrink the payload, or enable <strong>Reed-Solomon</strong> error correction.</li>
+                <li><em>Optional:</em> Adjust <strong>Bit Depth</strong> &mdash; use <em>At bit N</em> (single bit) for stealth or <em>Bits 0..N</em> (multi-bit) for more capacity.</li>
+                <li>Click <strong>Hide Message</strong> and download the resulting PNG. It looks identical to the original.</li>
+            </ol>
+        </div>
+
+        <!-- Decode a Message -->
+        <div style="margin-bottom:1.75rem;">
+            <h3 style="font-size:1rem;font-weight:600;color:var(--sg-tool);margin:0 0 0.75rem;display:flex;align-items:center;gap:0.5rem;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;background:var(--sg-gradient);color:#fff;border-radius:50%;font-size:0.75rem;font-weight:700;flex-shrink:0;">2</span>
+                Extract a Hidden Message
+            </h3>
+            <ol style="margin:0;padding-left:1.5rem;color:var(--text-secondary);font-size:0.875rem;line-height:1.8;">
+                <li>Switch to <strong>Decode</strong> mode and upload the stego image.</li>
+                <li>If the message was encoded with a non-default bit depth, expand the <strong>Advanced</strong> section and set the <strong>Decode Bit Depth</strong> to match the encoding settings.</li>
+                <li>Enter the <strong>password</strong> if one was used during encoding.</li>
+                <li>Click <strong>Extract Message</strong>. RS-protected messages are auto-detected and errors are corrected automatically.</li>
+                <li>If a file was embedded, you will see a download link with the original filename.</li>
+            </ol>
+        </div>
+
+        <!-- Hide a File -->
+        <div style="margin-bottom:1.75rem;">
+            <h3 style="font-size:1rem;font-weight:600;color:var(--sg-tool);margin:0 0 0.75rem;display:flex;align-items:center;gap:0.5rem;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;background:var(--sg-gradient);color:#fff;border-radius:50%;font-size:0.75rem;font-weight:700;flex-shrink:0;">3</span>
+                Embed a File (PDF, ZIP, TXT)
+            </h3>
+            <ol style="margin:0;padding-left:1.5rem;color:var(--text-secondary);font-size:0.875rem;line-height:1.8;">
+                <li>In Encode mode, switch to the <strong>File</strong> sub-tab.</li>
+                <li>Drag-and-drop any file or click to browse. The tool auto-upscales the cover image if needed.</li>
+                <li>Click <strong>Hide File</strong>. The file and its original filename are embedded in the image.</li>
+            </ol>
+        </div>
+
+        <!-- Audio Steganography -->
+        <div style="margin-bottom:1.75rem;">
+            <h3 style="font-size:1rem;font-weight:600;color:var(--sg-tool);margin:0 0 0.75rem;display:flex;align-items:center;gap:0.5rem;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;background:var(--sg-gradient);color:#fff;border-radius:50%;font-size:0.75rem;font-weight:700;flex-shrink:0;">4</span>
+                Audio WAV Steganography
+            </h3>
+            <ol style="margin:0;padding-left:1.5rem;color:var(--text-secondary);font-size:0.875rem;line-height:1.8;">
+                <li>Click <strong>Audio WAV</strong> at the top to switch from Image mode.</li>
+                <li>Upload a PCM WAV file (8/16/24/32-bit, mono or stereo).</li>
+                <li>Type your message or select a file to embed, set bit depth, then click <strong>Hide Message</strong>.</li>
+                <li>Download the output WAV &mdash; it sounds identical to the original but carries your hidden data.</li>
+            </ol>
+        </div>
+
+        <!-- Feature Tips -->
+        <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.625rem;padding:1rem 1.25rem;">
+            <h3 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.625rem;">Feature Quick Reference</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;font-size:0.8125rem;color:var(--text-secondary);line-height:1.6;">
+                <div><strong style="color:var(--text-primary);">Bit Depth 0 (LSB)</strong> &mdash; Default, virtually undetectable. Best for covert use.</div>
+                <div><strong style="color:var(--text-primary);">Bits 0..3</strong> &mdash; 4x capacity with minimal visible artifacts. Good balance.</div>
+                <div><strong style="color:var(--text-primary);">Deflate Compression</strong> &mdash; Reduces payload 2-5x. Enable for long text messages.</div>
+                <div><strong style="color:var(--text-primary);">Reed-Solomon ECC</strong> &mdash; Protects data from corruption. Use when sharing via social media or messaging apps.</div>
+                <div><strong style="color:var(--text-primary);">AES-256 Password</strong> &mdash; Military-grade encryption. Data is unrecoverable without the password.</div>
+                <div><strong style="color:var(--text-primary);">Forensic Scanner</strong> &mdash; Auto-detects 18+ stego formats. Use in Analyze mode for CTF challenges.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- FAQ Section -->
 <section style="max-width:1200px;margin:2rem auto;padding:0 1rem;" class="sg-anim sg-anim-d3">
     <div class="tool-card" style="padding:1.5rem 2rem;">
@@ -598,56 +794,56 @@
                     What is steganography and how does it work?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Steganography is the practice of hiding secret information within ordinary data such as images so that no one apart from the sender and recipient knows of its existence. This tool uses Least Significant Bit (LSB) encoding which modifies the least important bit of each color channel in image pixels. Since these tiny changes are invisible to the human eye the image looks identical but carries a hidden message. Unlike encryption which makes data unreadable steganography hides the very existence of the data.</div>
+                <div class="faq-answer">Steganography is the practice of hiding secret information within ordinary data such as images or audio so that no one apart from the sender and recipient knows of its existence. This tool uses Least Significant Bit (LSB) encoding which modifies the least important bits of each color channel in image pixels or audio samples. Since these tiny changes are invisible to the human eye and inaudible to the ear, the carrier file looks and sounds identical but carries a hidden message.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    Is my data safe? Does this tool upload my images?
+                    What is variable bit depth and how does it increase capacity?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes, your data is completely safe. This tool processes everything 100% client-side in your browser using the HTML5 Canvas API, Web Crypto API, and JavaScript. No images, messages, files, or passwords are ever uploaded to any server. All encoding, decoding, encryption, and analysis happens locally on your device, which means your private data never leaves your computer. You can verify this by disconnecting from the internet and confirming the tool still works.</div>
+                <div class="faq-answer">Variable bit depth lets you embed data in bit positions 0 through 7 of each color channel instead of just the LSB. In <strong>At bit N</strong> mode you use a single bit position for stealth, while in <strong>Bits 0..N</strong> mode you use multiple bits per channel for up to 8x the standard capacity. Bit depth 0-2 is virtually undetectable, while depth 3-7 gives maximum capacity for CTF challenges or large payloads. The decode panel must use the same depth settings as encoding.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    What image formats work best for steganography?
+                    Can I hide data in audio WAV files?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">PNG is the best format for steganography because it uses lossless compression which preserves every pixel value exactly. JPEG uses lossy compression which can destroy the hidden data during re-encoding. BMP files work well since they are uncompressed but result in large file sizes. This tool always outputs PNG files to ensure your hidden message is preserved perfectly. For best results use PNG images as input or use the built-in image generator.</div>
+                <div class="faq-answer">Yes! Switch to the <strong>Audio WAV</strong> medium at the top, then upload any PCM WAV file as a cover. The tool embeds data in the least significant bits of audio samples, supporting 8-bit, 16-bit, 24-bit, and 32-bit sample formats in mono or stereo. Variable bit depth works with audio too. The output WAV sounds identical to the original but contains your hidden message or file.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    How much data can I hide in an image?
+                    What is Reed-Solomon error correction and why use it?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">The capacity depends on the image dimensions. Each pixel provides 3 bits of storage (one per RGB channel) so the formula is (width x height x 3) / 8 bytes minus a small header. An 800x600 image can store approximately 180KB, which is enough for text documents, small PDFs, or ZIP files. The real-time capacity meter shows exactly how much space is available. You can hide both text messages and arbitrary files such as PDFs, ZIPs, or documents.</div>
+                <div class="faq-answer">Reed-Solomon (RS) is an error-correcting code that adds redundant parity bytes so your hidden data can survive corruption. Enable it when sharing stego images via social media, messaging apps, or any platform that may recompress images. Choose Low (16B), Medium (32B), or High (48B) parity. RS uses GF(2^8) Galois field arithmetic with Berlekamp-Massey decoding to automatically detect and correct errors during extraction &mdash; no user intervention needed.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    How does the AES-256 password encryption work?
+                    How does the Deflate compression work?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">When you set a password, this tool uses AES-256-GCM authenticated encryption via the Web Crypto API. Your password is derived into a 256-bit cryptographic key using PBKDF2 with 100,000 iterations of SHA-256 and a random 16-byte salt. The message is then encrypted with a random 12-byte IV, producing authenticated ciphertext that detects any tampering. This is the same encryption standard used by governments and financial institutions. Without the correct password, the data is computationally impossible to recover. Older images encoded with XOR encryption are still supported for backward compatibility.</div>
+                <div class="faq-answer">Enabling <strong>Compress (Deflate)</strong> applies real deflate compression to your message before embedding, reducing payload size by 2-5x for typical text. This means you can fit longer messages into smaller images or audio files. The tool uses the browser-native CompressionStream API for fast compression. On decoding, compressed data is auto-detected and decompressed transparently.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    Can I hide files like PDFs or ZIPs inside images?
+                    Is my data safe? Does this tool upload anything?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Yes, this tool supports embedding arbitrary files inside images, not just text messages. Switch to the File sub-tab in Encode mode and drag-and-drop any file type including PDF, ZIP, TXT, documents, or other formats. The file is embedded with its original filename preserved. When decoding, the tool auto-detects whether the hidden data is text or a file and offers a direct download with the original filename intact.</div>
+                <div class="faq-answer">Your data is completely safe. This tool processes everything 100% client-side in your browser using the HTML5 Canvas API, Web Crypto API, and JavaScript. No images, audio files, messages, or passwords are ever uploaded to any server. All encoding, decoding, encryption, compression, and analysis happens locally on your device. You can verify this by disconnecting from the internet and confirming the tool still works.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
-                    What is the bit plane analyzer?
+                    How much data can I hide in an image or audio file?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">The bit plane analyzer is a visual forensic tool that lets you inspect individual bit planes of each color channel in an image. Switch to Analyze mode, upload any image, then select a channel (Red, Green, Blue, or All) and a bit plane (0 for LSB through 7 for MSB). Hidden steganographic data typically appears as noise or irregular patterns in the LSB plane of encoded regions, while clean areas show uniform patterns. This is the classic technique used in digital forensics and steganalysis to detect hidden data.</div>
+                <div class="faq-answer">For images at the default LSB depth, the capacity is (width &times; height &times; 3) / 8 bytes. An 800&times;600 image stores about 180 KB. Using <strong>Bits 0..N</strong> mode with higher depth multiplies capacity by up to 8x. For WAV audio, capacity depends on the number of samples and bit depth &mdash; a 10-second 44100 Hz mono WAV at LSB stores about 55 KB. The real-time capacity meter updates as you change depth settings. Enabling Deflate compression further increases effective capacity by 2-5x.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="StegoCore.toggleFaq(this)">
                     What is the forensic scanner and how many formats does it support?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">The forensic scanner is a universal decoder that automatically tries 18+ extraction methods to find hidden messages regardless of which steganography tool was used to encode them. It supports formats from OpenStego, Python steganography libraries, JavaScript tools, and various LSB encoding configurations including different channel orders (RGB, BGR), bit orders (MSB, LSB), length header formats (BE32, LE32, LE16), and terminators. Results are ranked by confidence score and deduplicated.</div>
+                <div class="faq-answer">The forensic scanner is a universal decoder that automatically tries 18+ extraction methods to find hidden messages regardless of which steganography tool was used to encode them. It supports formats from OpenStego, Python steganography libraries, JavaScript tools, and various LSB encoding configurations including different channel orders (RGB, BGR), bit orders (MSB, LSB), length header formats (BE32, LE32, LE16), and terminators. Results are ranked by confidence score &mdash; ideal for CTF challenges and digital forensics.</div>
             </div>
         </div>
     </div>
@@ -755,6 +951,8 @@
 <script src="<%=request.getContextPath()%>/js/stego-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/stego-engine.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/stego-imagegen.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/stego-audio.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/stego-rs.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/stego-forensic.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/stego-core.js?v=<%=cacheVersion%>"></script>
 

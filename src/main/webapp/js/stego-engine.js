@@ -471,6 +471,455 @@ function extractBitPlane(imageData, channel, plane) {
 }
 
 /**
+ * Calculate capacity in bytes for given pixel count and depth settings.
+ * depthMode: 'at' = single bit N, 'with' = bits 0..depth
+ * depth: 0-7
+ */
+function calculateCapacity(pixelCount, depthMode, depth) {
+    var bitsPerPixel = (depthMode === 'with') ? 3 * (depth + 1) : 3;
+    return Math.floor((pixelCount * bitsPerPixel) / 8) - 4;
+}
+
+/**
+ * LSB encoding at a specific bit depth (single bit N).
+ * Embeds message into bit position 'depth' of RGB channels.
+ */
+function encodeLSBAtDepth(imageData, message, depth) {
+    var data = new Uint8ClampedArray(imageData.data);
+    var encoded = new TextEncoder().encode(message);
+    var msgLength = encoded.length;
+    var maxCapacity = calculateCapacity(imageData.width * imageData.height, 'at', depth);
+    if (msgLength > maxCapacity) {
+        throw new Error('Message too large: ' + msgLength + ' bytes exceeds capacity of ' + maxCapacity + ' bytes');
+    }
+    var header = [
+        (msgLength >>> 24) & 0xFF,
+        (msgLength >>> 16) & 0xFF,
+        (msgLength >>> 8) & 0xFF,
+        msgLength & 0xFF
+    ];
+    var fullMessage = [];
+    var i, bit, byte, bitValue, pixelIndex, bitIndex;
+    for (i = 0; i < header.length; i++) fullMessage.push(header[i]);
+    for (i = 0; i < encoded.length; i++) fullMessage.push(encoded[i]);
+
+    var mask = ~(1 << depth) & 0xFF;
+    bitIndex = 0;
+    for (i = 0; i < fullMessage.length; i++) {
+        byte = fullMessage[i];
+        for (bit = 7; bit >= 0; bit--) {
+            bitValue = (byte >> bit) & 1;
+            pixelIndex = Math.floor(bitIndex / 3) * 4 + (bitIndex % 3);
+            data[pixelIndex] = (data[pixelIndex] & mask) | (bitValue << depth);
+            bitIndex++;
+        }
+    }
+    return new ImageData(data, imageData.width, imageData.height);
+}
+
+/**
+ * LSB decoding at a specific bit depth (single bit N).
+ */
+function decodeLSBAtDepth(imageData, depth) {
+    var data = imageData.data;
+    var bitIndex = 0;
+    var i, bit, byte, pixelIndex;
+
+    function readByte() {
+        byte = 0;
+        for (bit = 7; bit >= 0; bit--) {
+            pixelIndex = Math.floor(bitIndex / 3) * 4 + (bitIndex % 3);
+            if (pixelIndex >= data.length) throw new Error('Data truncated');
+            byte = (byte << 1) | ((data[pixelIndex] >> depth) & 1);
+            bitIndex++;
+        }
+        return byte;
+    }
+
+    var headerBytes = [];
+    for (i = 0; i < 4; i++) headerBytes.push(readByte());
+    var msgLength = ((headerBytes[0] << 24) | (headerBytes[1] << 16) | (headerBytes[2] << 8) | headerBytes[3]) >>> 0;
+
+    var maxCapacity = calculateCapacity(imageData.width * imageData.height, 'at', depth);
+    if (msgLength === 0 || msgLength > maxCapacity || msgLength > 500000) {
+        throw new Error('Invalid length: ' + msgLength);
+    }
+
+    var bytes = [];
+    for (i = 0; i < msgLength; i++) bytes.push(readByte());
+    return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
+}
+
+/**
+ * LSB encoding using bits 0..depth (multi-bit, capacity = standard x (depth+1)).
+ * Per pixel, iterate from curbit=depth down to 0 across R,G,B channels.
+ */
+function encodeLSBWithDepth(imageData, message, depth) {
+    var data = new Uint8ClampedArray(imageData.data);
+    var encoded = new TextEncoder().encode(message);
+    var msgLength = encoded.length;
+    var pixelCount = imageData.width * imageData.height;
+    var maxCapacity = calculateCapacity(pixelCount, 'with', depth);
+    if (msgLength > maxCapacity) {
+        throw new Error('Message too large: ' + msgLength + ' bytes exceeds capacity of ' + maxCapacity + ' bytes');
+    }
+    var header = [
+        (msgLength >>> 24) & 0xFF,
+        (msgLength >>> 16) & 0xFF,
+        (msgLength >>> 8) & 0xFF,
+        msgLength & 0xFF
+    ];
+    var fullMessage = [];
+    var i;
+    for (i = 0; i < header.length; i++) fullMessage.push(header[i]);
+    for (i = 0; i < encoded.length; i++) fullMessage.push(encoded[i]);
+
+    // Flatten all bits
+    var bits = [];
+    for (i = 0; i < fullMessage.length; i++) {
+        for (var b = 7; b >= 0; b--) {
+            bits.push((fullMessage[i] >> b) & 1);
+        }
+    }
+
+    // Embed: for each pixel, iterate curbit from depth down to 0, across R,G,B
+    var bitPos = 0;
+    for (var px = 0; px < pixelCount && bitPos < bits.length; px++) {
+        var base = px * 4;
+        for (var curbit = depth; curbit >= 0 && bitPos < bits.length; curbit--) {
+            for (var ch = 0; ch < 3 && bitPos < bits.length; ch++) {
+                var mask = ~(1 << curbit) & 0xFF;
+                data[base + ch] = (data[base + ch] & mask) | (bits[bitPos] << curbit);
+                bitPos++;
+            }
+        }
+    }
+    return new ImageData(data, imageData.width, imageData.height);
+}
+
+/**
+ * LSB decoding using bits 0..depth (multi-bit).
+ */
+function decodeLSBWithDepth(imageData, depth) {
+    var data = imageData.data;
+    var pixelCount = imageData.width * imageData.height;
+
+    // Extract bits: per pixel, iterate curbit from depth down to 0 across R,G,B
+    var bits = [];
+    var maxBits = (4 + 500000) * 8; // cap to prevent runaway
+    for (var px = 0; px < pixelCount && bits.length < maxBits; px++) {
+        var base = px * 4;
+        for (var curbit = depth; curbit >= 0 && bits.length < maxBits; curbit--) {
+            for (var ch = 0; ch < 3 && bits.length < maxBits; ch++) {
+                bits.push((data[base + ch] >> curbit) & 1);
+            }
+        }
+    }
+
+    function readByteAt(startBit) {
+        var byte = 0;
+        for (var b = 0; b < 8; b++) {
+            byte = (byte << 1) | (bits[startBit + b] || 0);
+        }
+        return byte;
+    }
+
+    // Read 4-byte header
+    var headerBytes = [];
+    for (var i = 0; i < 4; i++) headerBytes.push(readByteAt(i * 8));
+    var msgLength = ((headerBytes[0] << 24) | (headerBytes[1] << 16) | (headerBytes[2] << 8) | headerBytes[3]) >>> 0;
+
+    var maxCapacity = calculateCapacity(pixelCount, 'with', depth);
+    if (msgLength === 0 || msgLength > maxCapacity || msgLength > 500000) {
+        throw new Error('Invalid length: ' + msgLength);
+    }
+
+    var bytes = [];
+    for (var j = 0; j < msgLength; j++) {
+        bytes.push(readByteAt((4 + j) * 8));
+    }
+    return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
+}
+
+/**
+ * File embedding at a specific bit depth (single bit N).
+ */
+function encodeLSBFileAtDepth(imageData, fileBytes, filename, depth) {
+    var filenameBytes = new TextEncoder().encode(filename);
+    if (filenameBytes.length > 255) filenameBytes = filenameBytes.slice(0, 255);
+    var payloadLength = 1 + 1 + filenameBytes.length + fileBytes.length;
+    var maxCapacity = calculateCapacity(imageData.width * imageData.height, 'at', depth);
+    if (payloadLength > maxCapacity) {
+        throw new Error('File too large: ' + formatBytes(fileBytes.length) + ' exceeds capacity of ' + formatBytes(maxCapacity));
+    }
+    var header = [
+        (payloadLength >>> 24) & 0xFF,
+        (payloadLength >>> 16) & 0xFF,
+        (payloadLength >>> 8) & 0xFF,
+        payloadLength & 0xFF
+    ];
+    var fullMessage = [];
+    var i;
+    for (i = 0; i < header.length; i++) fullMessage.push(header[i]);
+    fullMessage.push(0x01);
+    fullMessage.push(filenameBytes.length);
+    for (i = 0; i < filenameBytes.length; i++) fullMessage.push(filenameBytes[i]);
+    for (i = 0; i < fileBytes.length; i++) fullMessage.push(fileBytes[i]);
+
+    var data = new Uint8ClampedArray(imageData.data);
+    var mask = ~(1 << depth) & 0xFF;
+    var bitIndex = 0;
+    for (i = 0; i < fullMessage.length; i++) {
+        var byte = fullMessage[i];
+        for (var bit = 7; bit >= 0; bit--) {
+            var bitValue = (byte >> bit) & 1;
+            var pixelIndex = Math.floor(bitIndex / 3) * 4 + (bitIndex % 3);
+            data[pixelIndex] = (data[pixelIndex] & mask) | (bitValue << depth);
+            bitIndex++;
+        }
+    }
+    return new ImageData(data, imageData.width, imageData.height);
+}
+
+/**
+ * File embedding using bits 0..depth (multi-bit).
+ */
+function encodeLSBFileWithDepth(imageData, fileBytes, filename, depth) {
+    var filenameBytes = new TextEncoder().encode(filename);
+    if (filenameBytes.length > 255) filenameBytes = filenameBytes.slice(0, 255);
+    var payloadLength = 1 + 1 + filenameBytes.length + fileBytes.length;
+    var pixelCount = imageData.width * imageData.height;
+    var maxCapacity = calculateCapacity(pixelCount, 'with', depth);
+    if (payloadLength > maxCapacity) {
+        throw new Error('File too large: ' + formatBytes(fileBytes.length) + ' exceeds capacity of ' + formatBytes(maxCapacity));
+    }
+    var header = [
+        (payloadLength >>> 24) & 0xFF,
+        (payloadLength >>> 16) & 0xFF,
+        (payloadLength >>> 8) & 0xFF,
+        payloadLength & 0xFF
+    ];
+    var fullMessage = [];
+    var i;
+    for (i = 0; i < header.length; i++) fullMessage.push(header[i]);
+    fullMessage.push(0x01);
+    fullMessage.push(filenameBytes.length);
+    for (i = 0; i < filenameBytes.length; i++) fullMessage.push(filenameBytes[i]);
+    for (i = 0; i < fileBytes.length; i++) fullMessage.push(fileBytes[i]);
+
+    var bits = [];
+    for (i = 0; i < fullMessage.length; i++) {
+        for (var b = 7; b >= 0; b--) {
+            bits.push((fullMessage[i] >> b) & 1);
+        }
+    }
+
+    var data = new Uint8ClampedArray(imageData.data);
+    var bitPos = 0;
+    for (var px = 0; px < pixelCount && bitPos < bits.length; px++) {
+        var base = px * 4;
+        for (var curbit = depth; curbit >= 0 && bitPos < bits.length; curbit--) {
+            for (var ch = 0; ch < 3 && bitPos < bits.length; ch++) {
+                var mask = ~(1 << curbit) & 0xFF;
+                data[base + ch] = (data[base + ch] & mask) | (bits[bitPos] << curbit);
+                bitPos++;
+            }
+        }
+    }
+    return new ImageData(data, imageData.width, imageData.height);
+}
+
+/**
+ * Decode payload with type detection at a specific bit depth.
+ */
+function decodeLSBPayloadAtDepth(imageData, depth) {
+    var data = imageData.data;
+    var bitIndex = 0;
+    var i, bit, byte, pixelIndex;
+
+    function readByte() {
+        byte = 0;
+        for (bit = 7; bit >= 0; bit--) {
+            pixelIndex = Math.floor(bitIndex / 3) * 4 + (bitIndex % 3);
+            if (pixelIndex >= data.length) throw new Error('Data truncated');
+            byte = (byte << 1) | ((data[pixelIndex] >> depth) & 1);
+            bitIndex++;
+        }
+        return byte;
+    }
+
+    var headerBytes = [];
+    for (i = 0; i < 4; i++) headerBytes.push(readByte());
+    var payloadLength = ((headerBytes[0] << 24) | (headerBytes[1] << 16) | (headerBytes[2] << 8) | headerBytes[3]) >>> 0;
+
+    var maxCapacity = calculateCapacity(imageData.width * imageData.height, 'at', depth);
+    if (payloadLength === 0 || payloadLength > maxCapacity || payloadLength > 5000000) {
+        throw new Error('Invalid length: ' + payloadLength);
+    }
+
+    var payload = new Uint8Array(payloadLength);
+    for (i = 0; i < payloadLength; i++) payload[i] = readByte();
+
+    var typeByte = payload[0];
+    if (typeByte === 0x01 && payloadLength >= 3) {
+        var filenameLen = payload[1];
+        if (filenameLen + 2 > payloadLength) throw new Error('Invalid filename length');
+        var filenameBytes = payload.slice(2, 2 + filenameLen);
+        var filename = new TextDecoder().decode(filenameBytes);
+        var fileData = payload.slice(2 + filenameLen);
+        return { type: 'file', data: fileData, filename: filename };
+    }
+    if (typeByte === 0x00 && payloadLength >= 2) {
+        return { type: 'text', data: new TextDecoder('utf-8', { fatal: false }).decode(payload.slice(1)), filename: null };
+    }
+    return { type: 'text', data: new TextDecoder('utf-8', { fatal: false }).decode(payload), filename: null };
+}
+
+/**
+ * Decode payload with type detection using bits 0..depth.
+ */
+function decodeLSBPayloadWithDepth(imageData, depth) {
+    var data = imageData.data;
+    var pixelCount = imageData.width * imageData.height;
+
+    var bits = [];
+    var maxBits = (4 + 5000000) * 8;
+    for (var px = 0; px < pixelCount && bits.length < maxBits; px++) {
+        var base = px * 4;
+        for (var curbit = depth; curbit >= 0 && bits.length < maxBits; curbit--) {
+            for (var ch = 0; ch < 3 && bits.length < maxBits; ch++) {
+                bits.push((data[base + ch] >> curbit) & 1);
+            }
+        }
+    }
+
+    function readByteAt(startBit) {
+        var byte = 0;
+        for (var b = 0; b < 8; b++) {
+            byte = (byte << 1) | (bits[startBit + b] || 0);
+        }
+        return byte;
+    }
+
+    var headerBytes = [];
+    for (var i = 0; i < 4; i++) headerBytes.push(readByteAt(i * 8));
+    var payloadLength = ((headerBytes[0] << 24) | (headerBytes[1] << 16) | (headerBytes[2] << 8) | headerBytes[3]) >>> 0;
+
+    var maxCapacity = calculateCapacity(pixelCount, 'with', depth);
+    if (payloadLength === 0 || payloadLength > maxCapacity || payloadLength > 5000000) {
+        throw new Error('Invalid length: ' + payloadLength);
+    }
+
+    var payload = new Uint8Array(payloadLength);
+    for (var j = 0; j < payloadLength; j++) payload[j] = readByteAt((4 + j) * 8);
+
+    var typeByte = payload[0];
+    if (typeByte === 0x01 && payloadLength >= 3) {
+        var filenameLen = payload[1];
+        if (filenameLen + 2 > payloadLength) throw new Error('Invalid filename length');
+        var filenameBytes = payload.slice(2, 2 + filenameLen);
+        var filename = new TextDecoder().decode(filenameBytes);
+        var fileData = payload.slice(2 + filenameLen);
+        return { type: 'file', data: fileData, filename: filename };
+    }
+    if (typeByte === 0x00 && payloadLength >= 2) {
+        return { type: 'text', data: new TextDecoder('utf-8', { fatal: false }).decode(payload.slice(1)), filename: null };
+    }
+    return { type: 'text', data: new TextDecoder('utf-8', { fatal: false }).decode(payload), filename: null };
+}
+
+/**
+ * Compress text using native CompressionStream (deflate) with marker byte.
+ * Returns Promise<Uint8Array> with 0x01 prefix for deflate, 0x00 for btoa fallback.
+ */
+function compressDeflate(text) {
+    var encoded = new TextEncoder().encode(text);
+    if (typeof CompressionStream === 'function') {
+        var cs = new CompressionStream('deflate');
+        var writer = cs.writable.getWriter();
+        var reader = cs.readable.getReader();
+        writer.write(encoded);
+        writer.close();
+        var chunks = [];
+        return (function pump() {
+            return reader.read().then(function(result) {
+                if (result.done) {
+                    var totalLen = 0;
+                    for (var i = 0; i < chunks.length; i++) totalLen += chunks[i].length;
+                    var out = new Uint8Array(1 + totalLen);
+                    out[0] = 0x01; // deflate marker
+                    var offset = 1;
+                    for (var j = 0; j < chunks.length; j++) {
+                        out.set(chunks[j], offset);
+                        offset += chunks[j].length;
+                    }
+                    return out;
+                }
+                chunks.push(new Uint8Array(result.value));
+                return pump();
+            });
+        })();
+    }
+    // Fallback: btoa with 0x00 marker
+    var binary = '';
+    for (var i = 0; i < encoded.length; i++) binary += String.fromCharCode(encoded[i]);
+    var b64 = btoa(binary);
+    var b64bytes = new TextEncoder().encode(b64);
+    var out = new Uint8Array(1 + b64bytes.length);
+    out[0] = 0x00; // btoa marker
+    out.set(b64bytes, 1);
+    return Promise.resolve(out);
+}
+
+/**
+ * Decompress bytes produced by compressDeflate.
+ * Returns Promise<string>.
+ */
+function decompressDeflate(bytes) {
+    if (!(bytes instanceof Uint8Array)) bytes = new Uint8Array(bytes);
+    var marker = bytes[0];
+    var payload = bytes.slice(1);
+    if (marker === 0x01 && typeof DecompressionStream === 'function') {
+        var ds = new DecompressionStream('deflate');
+        var writer = ds.writable.getWriter();
+        var reader = ds.readable.getReader();
+        writer.write(payload);
+        writer.close();
+        var chunks = [];
+        return (function pump() {
+            return reader.read().then(function(result) {
+                if (result.done) {
+                    var totalLen = 0;
+                    for (var i = 0; i < chunks.length; i++) totalLen += chunks[i].length;
+                    var combined = new Uint8Array(totalLen);
+                    var offset = 0;
+                    for (var j = 0; j < chunks.length; j++) {
+                        combined.set(chunks[j], offset);
+                        offset += chunks[j].length;
+                    }
+                    return new TextDecoder().decode(combined);
+                }
+                chunks.push(new Uint8Array(result.value));
+                return pump();
+            });
+        })();
+    }
+    // btoa fallback
+    var b64str = new TextDecoder().decode(payload);
+    var raw = atob(b64str);
+    var decoded = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) decoded[i] = raw.charCodeAt(i);
+    return Promise.resolve(new TextDecoder().decode(decoded));
+}
+
+/**
+ * Check if native CompressionStream is available.
+ */
+function hasNativeCompression() {
+    return typeof CompressionStream === 'function';
+}
+
+/**
  * Calculate required dimensions to hold a payload of given byte size.
  * Returns {width, height} maintaining original aspect ratio.
  * If the current dimensions already have enough capacity, returns them unchanged.
@@ -509,7 +958,21 @@ window.StegoEngine = {
     printableRatio: printableRatio,
     formatBytes: formatBytes,
     escapeHtml: escapeHtml,
-    calculateRequiredDimensions: calculateRequiredDimensions
+    calculateRequiredDimensions: calculateRequiredDimensions,
+    // Batch 1: Variable bit depth
+    calculateCapacity: calculateCapacity,
+    encodeLSBAtDepth: encodeLSBAtDepth,
+    decodeLSBAtDepth: decodeLSBAtDepth,
+    encodeLSBWithDepth: encodeLSBWithDepth,
+    decodeLSBWithDepth: decodeLSBWithDepth,
+    encodeLSBFileAtDepth: encodeLSBFileAtDepth,
+    encodeLSBFileWithDepth: encodeLSBFileWithDepth,
+    decodeLSBPayloadAtDepth: decodeLSBPayloadAtDepth,
+    decodeLSBPayloadWithDepth: decodeLSBPayloadWithDepth,
+    // Batch 2: Compression
+    compressDeflate: compressDeflate,
+    decompressDeflate: decompressDeflate,
+    hasNativeCompression: hasNativeCompression
 };
 
 })();
