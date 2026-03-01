@@ -1517,7 +1517,13 @@ var EthFunctions = (function() {
             if (tx.chainId !== undefined && tx.chainId !== null) fields.push({ label: 'Chain ID', value: tx.chainId.toString(), id: 'mc-tx-chainid' });
             fields.push({ label: 'Nonce', value: tx.nonce.toString(), id: 'mc-tx-nonce' });
 
-            if (tx.from) fields.push({ label: 'From (recovered)', value: tx.from, id: 'mc-tx-from', highlight: true });
+            var fromAddr = null;
+            try { fromAddr = tx.from; } catch (sigErr) { /* unsigned or malformed signature */ }
+            if (fromAddr) {
+                fields.push({ label: 'From (recovered)', value: fromAddr, id: 'mc-tx-from', highlight: true });
+            } else {
+                fields.push({ label: 'From', value: '(unsigned or unrecoverable)', id: 'mc-tx-from' });
+            }
             fields.push({ label: 'To', value: tx.to || '(Contract Creation)', id: 'mc-tx-to', highlight: true });
 
             fields.push({ label: 'Value (Wei)', value: valueWei, id: 'mc-tx-value-wei' });
@@ -1563,7 +1569,7 @@ var EthFunctions = (function() {
             }
 
             content.innerHTML = html;
-            lastResult = { type: 'tx-decode', txType: typeLabel, from: tx.from, to: tx.to, value: valueEth, nonce: tx.nonce.toString() };
+            lastResult = { type: 'tx-decode', txType: typeLabel, from: fromAddr || 'N/A', to: tx.to, value: valueEth, nonce: tx.nonce.toString() };
             showResultActions();
             showToast('Transaction decoded successfully', 'success');
         } catch(e) {

@@ -258,6 +258,25 @@ function generateCoverImage(type) {
     showEncodePreview('Generated (' + type + ')', 800, 600, result.dataUrl);
 }
 
+/* ===== Auto-Upscale Canvas ===== */
+function upscaleCanvas(requiredBytes) {
+    var dims = E.calculateRequiredDimensions(requiredBytes, state.encodeCanvas.width, state.encodeCanvas.height);
+    if (dims.width === state.encodeCanvas.width && dims.height === state.encodeCanvas.height) {
+        return; // already sufficient
+    }
+    var newCanvas = document.createElement('canvas');
+    newCanvas.width = dims.width;
+    newCanvas.height = dims.height;
+    var ctx = newCanvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(state.encodeCanvas, 0, 0, dims.width, dims.height);
+    var newImageData = ctx.getImageData(0, 0, dims.width, dims.height);
+    state.encodeCanvas = newCanvas;
+    state.encodeImageData = newImageData;
+    state.maxCapacity = Math.floor((dims.width * dims.height * 3) / 8) - 4;
+    ToolUtils.showToast('Cover image auto-scaled to ' + dims.width + 'x' + dims.height + ' to fit payload', 3000);
+}
+
 /* ===== Encode ===== */
 function encodeMessage() {
     var message = $('sg-message-input').value;
@@ -266,8 +285,7 @@ function encodeMessage() {
 
     var messageLength = new Blob([message]).size;
     if (messageLength > state.maxCapacity) {
-        ToolUtils.showToast('Message too large for this image', 2500);
-        return;
+        upscaleCanvas(messageLength);
     }
 
     var resultContent = $('sg-result-content');
@@ -334,6 +352,13 @@ function encodeFile() {
     var password = $('sg-encode-password').value;
     var fileBytes = new Uint8Array(state.embedFileBytes);
     var filename = state.embedFile.name;
+
+    // Auto-upscale if file won't fit
+    var filenameByteLen = new TextEncoder().encode(filename).length;
+    var neededBytes = 1 + 1 + filenameByteLen + fileBytes.length;
+    if (neededBytes > state.maxCapacity) {
+        upscaleCanvas(neededBytes);
+    }
 
     setTimeout(function() {
         try {
@@ -649,12 +674,7 @@ function handleEmbedFile(file) {
             infoEl.innerHTML = '<strong>' + E.escapeHtml(file.name) + '</strong> (' + E.formatBytes(file.size) + ')';
             infoEl.style.display = 'block';
         }
-        // Check capacity
-        var filenameBytes = new TextEncoder().encode(file.name).length;
-        var needed = 1 + 1 + filenameBytes + file.size; // type + filenameLen + filename + data
-        if (state.maxCapacity > 0 && needed > state.maxCapacity) {
-            ToolUtils.showToast('File too large for this image (' + E.formatBytes(file.size) + ' > ' + E.formatBytes(state.maxCapacity) + ')', 3000);
-        }
+        // Capacity check removed — encodeFile() will auto-upscale if needed
     };
     reader.readAsArrayBuffer(file);
 }

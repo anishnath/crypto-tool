@@ -470,6 +470,26 @@ function extractBitPlane(imageData, channel, plane) {
     return new ImageData(out, w, h);
 }
 
+/**
+ * Calculate required dimensions to hold a payload of given byte size.
+ * Returns {width, height} maintaining original aspect ratio.
+ * If the current dimensions already have enough capacity, returns them unchanged.
+ */
+function calculateRequiredDimensions(payloadBytes, currentWidth, currentHeight) {
+    var currentPixels = currentWidth * currentHeight;
+    var currentCapacity = Math.floor((currentPixels * 3) / 8) - 4;
+    if (payloadBytes <= currentCapacity) {
+        return { width: currentWidth, height: currentHeight };
+    }
+    // Need (payloadBytes + 4) * 8 bits, each bit uses one RGB channel, 3 channels per pixel
+    var requiredPixels = Math.ceil((payloadBytes + 4) * 8 / 3);
+    var scaleFactor = Math.ceil(Math.sqrt(requiredPixels / currentPixels));
+    return {
+        width: currentWidth * scaleFactor,
+        height: currentHeight * scaleFactor
+    };
+}
+
 // Export
 window.StegoEngine = {
     encodeLSB: encodeLSB,
@@ -488,7 +508,8 @@ window.StegoEngine = {
     extractBitPlane: extractBitPlane,
     printableRatio: printableRatio,
     formatBytes: formatBytes,
-    escapeHtml: escapeHtml
+    escapeHtml: escapeHtml,
+    calculateRequiredDimensions: calculateRequiredDimensions
 };
 
 })();
