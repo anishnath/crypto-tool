@@ -1,1140 +1,1348 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>PGP Key Generator Online – Free | 8gwifi.org</title>
-	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-	<meta name="description" content="Free online PGP key pair generator. Create RSA public/private keys with AES-256, TWOFISH, or BLOWFISH encryption. OpenPGP standard (RFC 4880) compliant. Choose 2048 or 4096-bit key sizes. No data retention.">
-	<meta name="keywords"  content="pgp key generation, pgp key generator, openPGP keys, RSA key pair, public private key, AES-256, TWOFISH, BLOWFISH, CAST5, encryption keys, GPG keys">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="classification" content="tools">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
 
-	<!-- Open Graph / Facebook -->
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://8gwifi.org/pgpkeyfunction.jsp">
-	<meta property="og:title" content="PGP Key Generator Online – Free | 8gwifi.org">
-	<meta property="og:description" content="Free online PGP key pair generator. Create RSA public/private keys with AES-256, TWOFISH, or BLOWFISH encryption. OpenPGP standard (RFC 4880) compliant. No data retention.">
-	<meta property="og:image" content="https://8gwifi.org/images/site/gpg.png">
-	<meta property="og:site_name" content="8gwifi.org">
-	<meta property="og:locale" content="en_US">
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://code.jquery.com">
 
-	<!-- Twitter -->
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:url" content="https://8gwifi.org/pgpkeyfunction.jsp">
-	<meta name="twitter:title" content="PGP Key Generator Online – Free | 8gwifi.org">
-	<meta name="twitter:description" content="Free online PGP key pair generator. Create RSA public/private keys with AES-256, TWOFISH, or BLOWFISH encryption. OpenPGP compliant.">
-	<meta name="twitter:image" content="https://8gwifi.org/images/site/gpg.png">
-	<meta name="twitter:creator" content="@anish2good">
+    <!-- Critical CSS -->
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
+        :root{--primary:#667eea;--primary-dark:#5a67d8;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
+    </style>
 
-	<%@ include file="header-script.jsp"%>
+    <!-- SEO -->
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Free Online PGP Key Generator - RSA Key Pairs | 8gwifi.org" />
+        <jsp:param name="toolDescription" value="Free online PGP key pair generator with built-in Python compiler. Generate RSA public/private keys with AES-256, TWOFISH, or BLOWFISH encryption. OpenPGP standard (RFC 4880) compliant. Choose 2048 or 4096-bit key sizes. No data retention." />
+        <jsp:param name="toolCategory" value="Cryptography" />
+        <jsp:param name="toolUrl" value="pgpkeyfunction.jsp" />
+        <jsp:param name="toolKeywords" value="pgp key generator, pgp key generation online, generate pgp keys, rsa key pair generator, pgp public key, pgp private key, openpgp key generator, free pgp key generator, aes-256, twofish, blowfish, rfc 4880, pgp python keygen, pgp key pair online, gpg key generator" />
+        <jsp:param name="toolImage" value="pgp.png" />
+        <jsp:param name="toolFeatures" value="Generate RSA public/private key pairs (2048-4096 bit),Multiple cipher algorithms: AES-256 TWOFISH BLOWFISH CAST5 TRIPLE_DES,OpenPGP standard (RFC 4880) compliant,Built-in Python compiler for PGP key generation code,Email key pair delivery option,Custom identity and passphrase support,Passphrase strength indicator,Secure passphrase generator,No data retention - keys generated in memory,No software to install - browser-based tool,HTTPS/TLS encryption for data transmission,Compatible with GnuPG and all OpenPGP software" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="faq1q" value="What is the difference between RSA key sizes (1024, 2048, 4096)?" />
+        <jsp:param name="faq1a" value="RSA key size determines security strength. 1024-bit is weak and not recommended. 2048-bit is the current standard with strong security. 4096-bit offers maximum security for long-term protection but slower performance. Use 2048-bit minimum for new keys." />
+        <jsp:param name="faq2q" value="Which cipher algorithm should I choose for PGP key generation?" />
+        <jsp:param name="faq2a" value="Choose AES-256 for maximum security (256-bit key). TWOFISH is a good alternative. BLOWFISH, CAST5, and TRIPLE_DES are legacy algorithms - use only for compatibility with older systems." />
+        <jsp:param name="faq3q" value="Is it safe to generate PGP keys online?" />
+        <jsp:param name="faq3a" value="This tool implements zero data retention - keys are never stored or logged. All processing is in-memory with HTTPS encryption. For maximum security with highly sensitive applications, use offline tools like GnuPG." />
+        <jsp:param name="faq4q" value="What should I do with my PGP keys after generation?" />
+        <jsp:param name="faq4a" value="Save your private key securely and never share it. Share your public key freely via keyservers. Test your keys using the PGP Encrypt/Decrypt tool. Generate a revocation certificate immediately." />
+        <jsp:param name="faq5q" value="Can I use the generated keys with GPG/GnuPG?" />
+        <jsp:param name="faq5a" value="Yes, generated keys follow OpenPGP standard (RFC 4880) and are compatible with GnuPG, PGP Desktop, OpenKeychain, Mailvelope, and Thunderbird/Enigmail. Keys are in ASCII-armored format." />
+        <jsp:param name="faq6q" value="How do I generate PGP keys in Python?" />
+        <jsp:param name="faq6a" value="Use the pgpy library. This tool includes a built-in Python compiler with ready-to-run PGP key generation templates. Click Try It Live in the output panel to generate keys with Python code instantly." />
+        <jsp:param name="faq7q" value="How strong should my passphrase be?" />
+        <jsp:param name="faq7a" value="Use at least 16 characters combining uppercase, lowercase, numbers, and symbols. A strong passphrase is critical because if you forget it, encrypted data cannot be recovered. Use the built-in passphrase generator for secure random passphrases." />
+        <jsp:param name="faq8q" value="What is the identity field and what should I enter?" />
+        <jsp:param name="faq8a" value="The identity associates your PGP key with your name or email. Use formats like 'John Doe' or 'john@example.com'. This appears in key metadata and helps others verify they are using the correct public key." />
+    </jsp:include>
 
-	<!-- WebApplication Schema -->
-	<script type="application/ld+json">
-{
-  "@context" : "https://schema.org",
-  "@type" : "WebApplication",
-  "name" : "PGP Key Generator Online – Free",
-  "description" : "Free online PGP key pair generator implementing OpenPGP standard (RFC 4880). Generate RSA public/private keys with multiple cipher options (AES-256, TWOFISH, BLOWFISH, CAST5). Choose 1024, 2048, or 4096-bit key sizes. No data retention, secure key generation.",
-  "url" : "https://8gwifi.org/pgpkeyfunction.jsp",
-  "image" : "https://8gwifi.org/images/site/gpg.png",
-  "screenshot" : "https://8gwifi.org/images/site/gpg.png",
-  "applicationCategory" : ["SecurityApplication", "CryptographyApplication", "UtilitiesApplication"],
-  "applicationSubCategory" : "PGP Key Generator",
-  "browserRequirements" : "Requires JavaScript. Works with Chrome, Firefox, Safari, Edge.",
-  "author" : {
-    "@type" : "Person",
-    "name" : "Anish Nath",
-    "url" : "https://x.com/anish2good",
-    "jobTitle" : "Security Engineer"
-  },
-  "datePublished" : "2018-11-30",
-  "dateModified" : "2025-11-20",
-  "offers" : {
-    "@type" : "Offer",
-    "price" : "0",
-    "priceCurrency" : "USD"
-  },
-  "featureList" : [
-    "Generate RSA public/private key pairs (1024-4096 bit)",
-    "Multiple cipher options: AES-256, TWOFISH, BLOWFISH, CAST5, TRIPLE_DES, AES-192, AES-128",
-    "OpenPGP standard (RFC 4880) compliant",
-    "Email key pair delivery option",
-    "No data retention - keys generated in browser",
-    "Custom identity and passphrase support"
-  ]
-}
-</script>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
-	<!-- WebPage with Breadcrumb Schema -->
-	<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "PGP Key Generator Online – Free",
-  "description": "Generate PGP/OpenPGP key pairs online with RSA encryption and multiple cipher algorithms.",
-  "url": "https://8gwifi.org/pgpkeyfunction.jsp",
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://8gwifi.org/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "PGP Tools",
-        "item": "https://8gwifi.org/pgpencdec.jsp"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "PGP Key Generator",
-        "item": "https://8gwifi.org/pgpkeyfunction.jsp"
-      }
-    ]
-  }
-}
-</script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
 
-	<!-- HowTo Schema -->
-	<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Generate PGP Key Pairs Online",
-  "description": "Step-by-step guide to generating PGP/OpenPGP public and private key pairs using RSA encryption.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "name": "Enter Identity",
-      "text": "Enter your identity (name or email address) that will be associated with the PGP key pair.",
-      "position": 1
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Set Passphrase",
-      "text": "Create a strong passphrase to protect your private key. This passphrase will be required to use the private key for decryption.",
-      "position": 2
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Choose Cipher Algorithm",
-      "text": "Select a cipher algorithm: BLOWFISH, TWOFISH, AES_256, AES_192, AES_128, CAST5, or TRIPLE_DES. AES_256 is recommended for maximum security.",
-      "position": 3
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Select Key Size",
-      "text": "Choose RSA key size: 1024-bit (legacy), 2048-bit (recommended), or 4096-bit (maximum security but slower performance).",
-      "position": 4
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Generate Keys",
-      "text": "Click 'Generate Keypair' to create your PGP keys. Optionally, use 'Email Key Pair' to receive the keys via email.",
-      "position": 5
-    }
-  ]
-}
-</script>
+    <%@ include file="modern/ads/ad-init.jsp" %>
 
-	<style>
-		/* UX Improvements */
-		.cipher-option, .keysize-option {
-			display: inline-block;
-			margin: 5px;
-		}
-		.cipher-option label, .keysize-option label {
-			display: inline-flex;
-			align-items: center;
-			padding: 8px 16px;
-			border: 2px solid #ddd;
-			border-radius: 6px;
-			cursor: pointer;
-			transition: all 0.2s;
-			font-weight: 500;
-			background: #fff;
-		}
-		.cipher-option input[type="radio"], .keysize-option input[type="radio"] {
-			margin-right: 8px;
-		}
-		.cipher-option label:hover, .keysize-option label:hover {
-			border-color: #007bff;
-			background: #f8f9fa;
-		}
-		.cipher-option input[type="radio"]:checked + label,
-		.keysize-option input[type="radio"]:checked + label {
-			border-color: #007bff;
-			background: #007bff;
-			color: white;
-		}
-		/* Updated selector for new structure */
-		.cipher-option label.active, .keysize-option label.active {
-			border-color: #007bff;
-			background: #007bff;
-			color: white;
-		}
-		.recommended-badge {
-			background: #28a745;
-			color: white;
-			padding: 2px 8px;
-			border-radius: 10px;
-			font-size: 11px;
-			margin-left: 5px;
-			font-weight: bold;
-		}
-		.legacy-badge {
-			background: #ffc107;
-			color: #000;
-			padding: 2px 8px;
-			border-radius: 10px;
-			font-size: 11px;
-			margin-left: 5px;
-			font-weight: bold;
-		}
-		.passphrase-strength {
-			margin-top: 5px;
-			height: 4px;
-			border-radius: 2px;
-			background: #ddd;
-			overflow: hidden;
-		}
-		.passphrase-strength-bar {
-			height: 100%;
-			width: 0%;
-			transition: all 0.3s;
-		}
-		.strength-weak { background: #dc3545; width: 25%; }
-		.strength-fair { background: #ffc107; width: 50%; }
-		.strength-good { background: #17a2b8; width: 75%; }
-		.strength-strong { background: #28a745; width: 100%; }
-		.strength-text {
-			font-size: 12px;
-			margin-top: 3px;
-			font-weight: 500;
-		}
-		.input-group-append-password {
-			cursor: pointer;
-		}
-		.help-icon {
-			cursor: help;
-			color: #6c757d;
-			margin-left: 5px;
-			font-size: 14px;
-		}
-		#output textarea {
-			font-family: 'Courier New', monospace;
-			font-size: 12px;
-		}
-		.key-actions {
-			margin-top: 10px;
-			display: flex;
-			gap: 10px;
-		}
-		/* CLS prevention - reserve space for output */
-		#output {
-			min-height: 100px;
-			transition: min-height 0.3s ease;
-		}
-		#output:empty {
-			min-height: 0;
-		}
-		/* Smooth animations for content loading */
-		#output > * {
-			animation: fadeIn 0.3s ease-in;
-		}
-		@keyframes fadeIn {
-			from { opacity: 0; transform: translateY(10px); }
-			to { opacity: 1; transform: translateY(0); }
-		}
-		/* Single page view optimization */
-		.form-container {
-			transition: all 0.4s ease;
-		}
-		.form-container.minimized {
-			max-height: 80px;
-			overflow: hidden;
-		}
-		.form-summary {
-			display: none;
-			padding: 15px;
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-			color: white;
-			border-radius: 8px;
-			margin-bottom: 20px;
-			cursor: pointer;
-			transition: all 0.3s;
-		}
-		.form-summary:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-		}
-		.form-summary.show {
-			display: block;
-		}
-		.compact-output .card {
-			margin-bottom: 12px;
-		}
-		.compact-output textarea {
-			height: 180px !important;
-			max-height: 180px;
-			overflow-y: auto;
-			resize: none;
-		}
-		.compact-output .alert {
-			padding: 10px 15px;
-			margin-bottom: 12px;
-		}
-		.compact-output .alert-heading {
-			font-size: 1rem;
-			margin-bottom: 5px;
-		}
-		.compact-output .card-header {
-			padding: 8px 15px;
-		}
-		.expand-form-btn {
-			background: white;
-			color: #667eea;
-			border: none;
-			padding: 5px 15px;
-			border-radius: 20px;
-			font-weight: 600;
-			transition: all 0.2s;
-		}
-		.expand-form-btn:hover {
-			background: #f0f0f0;
-		}
-	</style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
+    <style>
+        /* PGP Key Generator - Compact input, spacious output */
 
-			// Passphrase strength indicator
-			$('#p_passpharse').on('input', function() {
-				const pass = $(this).val();
-				let strength = 0;
-				let strengthText = '';
-				let strengthClass = '';
+        /* Override grid: narrower input column, more output space */
+        .tool-page-container {
+            grid-template-columns: minmax(280px, 320px) 1fr 300px;
+        }
+        @media (max-width: 1024px) {
+            .tool-page-container { grid-template-columns: minmax(270px, 310px) 1fr; }
+        }
 
-				if (pass.length >= 8) strength++;
-				if (pass.length >= 12) strength++;
-				if (/[a-z]/.test(pass) && /[A-Z]/.test(pass)) strength++;
-				if (/\d/.test(pass)) strength++;
-				if (/[^a-zA-Z0-9]/.test(pass)) strength++;
+        /* Compact form padding */
+        .tool-form-section { padding: 0.875rem; }
 
-				if (strength <= 2) {
-					strengthText = 'Weak';
-					strengthClass = 'strength-weak';
-				} else if (strength === 3) {
-					strengthText = 'Fair';
-					strengthClass = 'strength-fair';
-				} else if (strength === 4) {
-					strengthText = 'Good';
-					strengthClass = 'strength-good';
-				} else {
-					strengthText = 'Strong';
-					strengthClass = 'strength-strong';
-				}
+        /* Section labels - no card wrappers, just clean dividers */
+        .pgk-section-label {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            color: var(--text-secondary, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin: 0.75rem 0 0.5rem 0;
+            padding-bottom: 0.375rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+        .pgk-section-label:first-child { margin-top: 0; }
 
-				$('.passphrase-strength-bar').attr('class', 'passphrase-strength-bar ' + strengthClass);
-				$('.strength-text').text(strengthText).css('color',
-					strengthClass === 'strength-weak' ? '#dc3545' :
-					strengthClass === 'strength-fair' ? '#ffc107' :
-					strengthClass === 'strength-good' ? '#17a2b8' : '#28a745'
-				);
-			});
+        /* Label and hint - tighter */
+        .tool-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 0.25rem;
+        }
 
-			// Toggle passphrase visibility
-			$('#togglePassphrase').click(function() {
-				const input = $('#p_passpharse');
-				const icon = $(this).find('i');
-				if (input.attr('type') === 'password') {
-					input.attr('type', 'text');
-					icon.removeClass('fa-eye').addClass('fa-eye-slash');
-				} else {
-					input.attr('type', 'password');
-					icon.removeClass('fa-eye-slash').addClass('fa-eye');
-				}
-			});
+        .tool-hint {
+            font-size: 0.6875rem;
+            color: var(--text-secondary, #64748b);
+            margin: 0 0 0.375rem 0;
+        }
 
-			// Generate secure passphrase
-			$('#generatePassphrase').click(function() {
-				const length = parseInt($('#passphraseLength').val());
-				const includeSymbols = $('#includeSymbols').is(':checked');
-				const includeNumbers = $('#includeNumbers').is(':checked');
-				const includeUppercase = $('#includeUppercase').is(':checked');
-				const includeLowercase = $('#includeLowercase').is(':checked');
+        .tool-badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.0625rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.5625rem;
+            font-weight: 600;
+            margin-left: 0.125rem;
+            vertical-align: middle;
+        }
 
-				// Build character set
-				let charset = '';
-				if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-				if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-				if (includeNumbers) charset += '0123456789';
-				if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        [data-theme="dark"] .tool-badge-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
 
-				// Ensure at least one character set is selected
-				if (charset.length === 0) {
-					alert('Please select at least one character type for passphrase generation.');
-					return;
-				}
+        /* Form groups - tight spacing */
+        .pgk-form-group { margin-bottom: 0.625rem; }
+        .pgk-form-group:last-child { margin-bottom: 0; }
 
-				// Generate cryptographically secure random passphrase
-				let passphrase = '';
-				const values = new Uint32Array(length);
-				window.crypto.getRandomValues(values);
+        /* Sticky action buttons at bottom of input column */
+        .pgk-sticky-actions {
+            position: sticky;
+            bottom: 0;
+            background: var(--bg-primary, #fff);
+            padding: 0.75rem 0.875rem;
+            border-top: 1px solid var(--border, #e2e8f0);
+            margin: 0 -0.875rem -0.875rem;
+            border-radius: 0 0 0.75rem 0.75rem;
+            display: flex;
+            gap: 0.375rem;
+            z-index: 5;
+        }
 
-				for (let i = 0; i < length; i++) {
-					passphrase += charset[values[i] % charset.length];
-				}
+        .pgk-sticky-actions .tool-action-btn {
+            flex: 1;
+            padding: 0.625rem 0.5rem;
+            font-size: 0.8125rem;
+        }
 
-				// Ensure passphrase meets minimum requirements (at least one from each selected type)
-				let valid = true;
-				if (includeLowercase && !/[a-z]/.test(passphrase)) valid = false;
-				if (includeUppercase && !/[A-Z]/.test(passphrase)) valid = false;
-				if (includeNumbers && !/[0-9]/.test(passphrase)) valid = false;
-				if (includeSymbols && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(passphrase)) valid = false;
+        /* Cipher & key size options - compact chips */
+        .pgk-options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-top: 0.25rem;
+        }
 
-				// If not valid, regenerate (recursive call - will eventually get valid)
-				if (!valid) {
-					$('#generatePassphrase').click();
-					return;
-				}
+        .pgk-option-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.3125rem 0.625rem;
+            border: 1.5px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-primary, #0f172a);
+            background: var(--bg-primary, #ffffff);
+            transition: all 0.15s;
+        }
 
-				// Set passphrase and show it temporarily
-				$('#p_passpharse').val(passphrase);
-				$('#p_passpharse').attr('type', 'text');
-				$('#togglePassphrase').find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+        .pgk-option-label:hover {
+            border-color: var(--primary, #667eea);
+            background: rgba(102, 126, 234, 0.05);
+        }
 
-				// Trigger strength indicator update
-				$('#p_passpharse').trigger('input');
+        .pgk-option-label input[type="radio"] { display: none; }
 
-				// Visual feedback
-				const originalHtml = $('#generatePassphrase').html();
-				$('#generatePassphrase').html('<i class="fas fa-check"></i> Generated!');
-				setTimeout(function() {
-					$('#generatePassphrase').html(originalHtml);
-				}, 2000);
-			});
+        .pgk-option-label:has(input:checked) {
+            border-color: var(--primary, #667eea);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        .pgk-option-label.selected {
+            border-color: var(--primary, #667eea);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
 
-			// Show/hide passphrase options
-			$('#showPassphraseOptions').click(function(e) {
-				e.preventDefault();
-				$('#passphraseOptions').collapse('toggle');
-				const text = $('#passphraseOptions').hasClass('show') ? 'Hide options' : 'Customize generation';
-				$(this).text(text);
-			});
+        .pgk-option-label.selected .pgk-badge-rec,
+        .pgk-option-label:has(input:checked) .pgk-badge-rec {
+            background: rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
 
-			// Update length value display
-			$('#passphraseLength').on('input', function() {
-				$('#lengthValue').text($(this).val());
-			});
+        .pgk-option-label.selected .pgk-badge-legacy,
+        .pgk-option-label:has(input:checked) .pgk-badge-legacy,
+        .pgk-option-label.selected .pgk-badge-weak,
+        .pgk-option-label:has(input:checked) .pgk-badge-weak {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
 
-			// Visual feedback for radio selection
-			$('input[type="radio"]').change(function() {
-				const name = $(this).attr('name');
-				$('input[name="' + name + '"]').siblings('label').removeClass('active');
-				$(this).siblings('label').addClass('active');
-			});
+        .pgk-badge-rec {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0rem 0.3125rem;
+            border-radius: 0.5rem;
+            font-size: 0.5625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
 
-			// Form validation
-			function validateForm() {
-				let isValid = true;
-				const identity = $('#p_identity').val().trim();
-				const passphrase = $('#p_passpharse').val().trim();
+        .pgk-badge-legacy {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0rem 0.3125rem;
+            border-radius: 0.5rem;
+            font-size: 0.5625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
 
-				// Clear previous errors
-				$('.is-invalid').removeClass('is-invalid');
-				$('.invalid-feedback').remove();
+        .pgk-badge-weak {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0rem 0.3125rem;
+            border-radius: 0.5rem;
+            font-size: 0.5625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
 
-				if (!identity) {
-					$('#p_identity').addClass('is-invalid');
-					$('#p_identity').after('<div class="invalid-feedback">Identity is required (e.g., your name or email)</div>');
-					isValid = false;
-				}
+        [data-theme="dark"] .pgk-badge-rec { background: rgba(22, 163, 74, 0.2); color: #86efac; }
+        [data-theme="dark"] .pgk-badge-legacy { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
+        [data-theme="dark"] .pgk-badge-weak { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+        [data-theme="dark"] .pgk-option-label { background: var(--bg-primary); color: var(--text-primary); border-color: var(--border); }
 
-				if (!passphrase) {
-					$('#p_passpharse').addClass('is-invalid');
-					$('#p_passpharse').parent().after('<div class="invalid-feedback">Passphrase is required</div>');
-					isValid = false;
-				} else if (passphrase.length < 8) {
-					$('#p_passpharse').addClass('is-invalid');
-					$('#p_passpharse').parent().after('<div class="invalid-feedback">Passphrase must be at least 8 characters</div>');
-					isValid = false;
-				}
+        /* Passphrase - inline buttons */
+        .pgk-passphrase-row {
+            display: flex;
+            gap: 0.375rem;
+            align-items: center;
+        }
+        .pgk-passphrase-row .tool-input { flex: 1; font-size: 0.8125rem; padding: 0.4375rem 0.625rem; }
 
-				return isValid;
-			}
+        .pgk-passphrase-btn {
+            padding: 0.4375rem 0.5rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            background: var(--bg-secondary, #f8fafc);
+            color: var(--text-secondary, #475569);
+            cursor: pointer;
+            font-size: 0.8125rem;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .pgk-passphrase-btn:hover { background: var(--border); color: var(--text-primary); }
 
-			$('#genkeypair').click(function (event) {
-				if (!validateForm()) {
-					return;
-				}
-				$("#email").val('');
-				$('#form').delay(200).submit();
-			});
+        .pgk-strength-bar {
+            height: 3px;
+            border-radius: 1.5px;
+            background: var(--border, #e2e8f0);
+            margin-top: 0.375rem;
+            overflow: hidden;
+        }
 
-			$('#genkeypairemail').click(function (event) {
-				if (!validateForm()) {
-					return;
-				}
+        .pgk-strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 1.5px;
+        }
+        .pgk-strength-fill.weak { background: #ef4444; width: 25%; }
+        .pgk-strength-fill.fair { background: #f59e0b; width: 50%; }
+        .pgk-strength-fill.good { background: #06b6d4; width: 75%; }
+        .pgk-strength-fill.strong { background: #22c55e; width: 100%; }
 
-				// Show Bootstrap modal instead of prompt
-				$('#emailModal').modal('show');
-			});
+        .pgk-strength-text {
+            font-size: 0.625rem;
+            margin-top: 0.125rem;
+            font-weight: 600;
+        }
 
-			// Handle email modal submission
-			$('#sendEmailBtn').click(function() {
-				const email = $('#emailInput').val().trim();
-				const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        /* Info box - compact */
+        .tool-info-box {
+            margin-top: 0.5rem;
+            padding: 0.375rem 0.625rem;
+            background: #fef3c7;
+            border-radius: 0.3125rem;
+            font-size: 0.6875rem;
+            color: #92400e;
+        }
+        [data-theme="dark"] .tool-info-box { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
 
-				if (email.match(validRegex)) {
-					$('#emailModal').modal('hide');
-					$("#email").val(email);
-					$('#form').delay(200).submit();
+        /* ========== OUTPUT COLUMN STYLES ========== */
+        .tool-result-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
 
-					// Show success toast
-					$('#output').prepend('<div class="alert alert-success alert-dismissible fade show" role="alert">PGP key pair will be delivered to your email...<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-					$("#emailInput").val('');
-				} else {
-					$('#emailInput').addClass('is-invalid');
-					if (!$('#emailInput').next('.invalid-feedback').length) {
-						$('#emailInput').after('<div class="invalid-feedback">Please enter a valid email address</div>');
-					}
-				}
-			});
+        .tool-result-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary, #f8fafc);
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
 
-			// Clear email validation on input
-			$('#emailInput').on('input', function() {
-				$(this).removeClass('is-invalid');
-				$(this).next('.invalid-feedback').remove();
-			});
+        .tool-result-header h4 {
+            margin: 0;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-primary, #0f172a);
+        }
 
-			$('#form').submit(function (event) {
-				event.preventDefault();
+        .tool-result-content {
+            flex: 1;
+            padding: 1.25rem;
+            min-height: 400px;
+            overflow-y: auto;
+        }
 
-				// Show loading
-				$('#output').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Generating keys...</span></div><p class="mt-3">Generating secure PGP keys... This may take a moment.</p></div>');
+        #output textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 0.875rem;
+            border: 2px solid var(--border, #e2e8f0);
+            border-radius: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: var(--bg-secondary, #f8fafc);
+            color: var(--text-primary, #0f172a);
+            resize: vertical;
+        }
 
-				// Store form values for summary
-				const identity = $('#p_identity').val();
-				const cipher = $('input[name="cipherparameter"]:checked').val();
-				const keysize = $('input[name="p_keysize"]:checked').val();
+        .tool-output-wrapper { position: relative; }
 
-				$.ajax({
-					type: "POST",
-					url: "PGPFunctionality",
-					data: $("#form").serialize(),
-					success: function(msg){
-						// Minimize form and show summary
-						$('#form-container').addClass('minimized');
-						$('#form-summary').addClass('show');
-						$('#summary-identity').text(identity);
-						$('#summary-cipher').text(cipher);
-						$('#summary-keysize').text(keysize);
+        .tool-copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            background: var(--tool-primary, var(--primary));
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .tool-copy-btn:hover { transform: translateY(-1px); }
 
-						// Add compact class to output
-						$('#output').addClass('compact-output');
-						$('#output').empty();
-						$('#output').append(msg);
+        .pgk-key-card-actions {
+            display: flex;
+            gap: 0.375rem;
+        }
 
-						// Add copy and download buttons to textareas
-						$('#output textarea').each(function(index) {
-							const textarea = $(this);
-							const textareaId = 'textarea_' + index;
-							textarea.attr('id', textareaId);
+        .pgk-key-action-btn {
+            padding: 0.25rem 0.625rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .pgk-key-action-btn:hover {
+            background: var(--primary, #667eea);
+            color: #fff;
+            border-color: var(--primary, #667eea);
+        }
 
-							const actions = $('<div class="key-actions"></div>');
-							const copyBtn = $('<button class="btn btn-sm btn-outline-primary copy-btn" data-target="' + textareaId + '"><i class="fas fa-copy"></i> Copy</button>');
-							const downloadBtn = $('<button class="btn btn-sm btn-outline-secondary download-btn" data-target="' + textareaId + '"><i class="fas fa-download"></i> Download</button>');
+        /* Result actions row */
+        .tool-result-actions {
+            display: none;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, #f8fafc);
+            border-radius: 0 0 0.75rem 0.75rem;
+            flex-wrap: wrap;
+        }
+        .tool-result-actions.visible { display: flex; }
+        .tool-result-actions .tool-action-btn { flex: 1; min-width: 100px; margin-top: 0; }
 
-							actions.append(copyBtn).append(downloadBtn);
-							textarea.after(actions);
-						});
+        .tool-action-btn-secondary { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); }
+        .tool-action-btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
 
-						// Smooth scroll to top to show everything
-						$('html, body').animate({ scrollTop: 0 }, 400);
-					},
-					error: function(xhr, status, error) {
-						$('#output').html('<div class="alert alert-danger"><strong>Error:</strong> Unable to generate keys. Please try again.</div>');
-					}
-				});
-			});
+        /* Dark mode overrides */
+        [data-theme="dark"] .tool-alert-success { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+        [data-theme="dark"] .tool-alert-error { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; }
+        [data-theme="dark"] .tool-alert-info { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3); color: #93c5fd; }
 
-			// Toggle form visibility
-			$(document).on('click', '#form-summary, #expand-form-link', function(e) {
-				e.preventDefault();
-				e.stopPropagation();
+        /* Key generation animation - compact */
+        .pgk-keygen-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            gap: 0.875rem;
+        }
 
-				$('#form-container').removeClass('minimized');
-				$('#form-summary').removeClass('show');
-				$('#output').removeClass('compact-output').empty();
+        .pgk-flow-step {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            width: 100%;
+            max-width: 360px;
+            animation: pgkFadeIn 0.6s ease both;
+        }
 
-				// Smooth scroll to form
-				$('html, body').animate({
-					scrollTop: $('#form-container').offset().top - 20
-				}, 400);
+        .pgk-flow-step:nth-child(2) { animation-delay: 0.2s; }
+        .pgk-flow-step:nth-child(3) { animation-delay: 0.4s; }
+        .pgk-flow-step:nth-child(4) { animation-delay: 0.6s; }
+        .pgk-flow-step:nth-child(5) { animation-delay: 0.8s; }
 
-				// Reset form fields (optional)
-				$('#p_identity').val('');
-				$('#p_passpharse').val('');
-				$('.passphrase-strength-bar').removeClass('strength-weak strength-fair strength-good strength-strong');
-				$('.strength-text').text('');
+        .pgk-flow-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
-				// Clear any validation errors
-				$('.is-invalid').removeClass('is-invalid');
-				$('.invalid-feedback').remove();
-			});
+        .pgk-flow-text {
+            font-size: 0.8125rem;
+            color: var(--text-secondary, #475569);
+        }
+        .pgk-flow-text strong { color: var(--text-primary, #0f172a); }
 
-			// Copy button handler (delegated)
-			$(document).on('click', '.copy-btn', function() {
-				const targetId = $(this).data('target');
-				const textarea = $('#' + targetId);
-				textarea.select();
-				document.execCommand('copy');
+        @keyframes pgkFadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-				// Visual feedback
-				$(this).html('<i class="fas fa-check"></i> Copied!');
-				const btn = $(this);
-				setTimeout(function() {
-					btn.html('<i class="fas fa-copy"></i> Copy');
-				}, 2000);
-			});
+        .pgk-flow-caption {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.5rem;
+        }
 
-			// Download button handler (delegated)
-			$(document).on('click', '.download-btn', function() {
-				const targetId = $(this).data('target');
-				const content = $('#' + targetId).val();
-				const filename = targetId.includes('0') ? 'pgp_private_key.asc' : 'pgp_public_key.asc';
+        /* Output tabs */
+        .pgp-output-tabs{display:flex;gap:0;border:1.5px solid var(--border);border-radius:0.5rem;overflow:hidden;margin-bottom:0.75rem}
+        .pgp-output-tab{flex:1;padding:0.5rem;font-weight:600;font-size:0.8125rem;border:none;cursor:pointer;background:var(--bg-secondary);color:var(--text-secondary);transition:all .15s;font-family:inherit;text-align:center}
+        .pgp-output-tab.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+        .pgp-output-tab:hover:not(.active){background:var(--border)}
+        [data-theme="dark"] .pgp-output-tab{background:rgba(255,255,255,0.05)}
+        [data-theme="dark"] .pgp-output-tab.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+        .pgp-panel{display:none;flex:1;min-height:0}.pgp-panel.active{display:flex;flex-direction:column}
+        #pgk-panel-output .tool-result-card{flex:1}
+        #pgk-panel-python{min-height:540px}
 
-				const blob = new Blob([content], { type: 'text/plain' });
-				const url = window.URL.createObjectURL(blob);
-				const a = document.createElement('a');
-				a.href = url;
-				a.download = filename;
-				a.click();
-				window.URL.revokeObjectURL(url);
-			});
+        /* FAQ accordion */
+        .faq-item{border:1px solid var(--border,#e2e8f0);border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
+        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,#0f172a);background:var(--bg-secondary,#f8fafc);border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
+        .faq-question:hover{background:var(--border,#f1f5f9)}
+        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.8125rem;line-height:1.6;color:var(--text-secondary,#475569);border-top:1px solid var(--border,#e2e8f0)}
+        .faq-item.open .faq-answer{display:block}
+        .faq-item.open .faq-chevron{transform:rotate(180deg)}
+        .faq-chevron{transition:transform .2s;flex-shrink:0}
+        [data-theme="dark"] .faq-question{background:rgba(255,255,255,0.05);color:var(--text-primary,#f1f5f9)}
+        [data-theme="dark"] .faq-question:hover{background:rgba(255,255,255,0.08)}
+        [data-theme="dark"] .faq-answer{color:var(--text-secondary,#cbd5e1);border-top-color:var(--border,#475569)}
+        [data-theme="dark"] .faq-item{border-color:var(--border,#334155)}
 
-			// Tooltips
-			$('[data-toggle="tooltip"]').tooltip();
-		});
+        /* Email modal */
+        .pgk-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .pgk-modal-overlay.active { display: flex; }
 
-	</script>
+        .pgk-modal {
+            background: var(--bg-primary, #fff);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .pgk-modal h3 { margin: 0 0 1rem 0; font-size: 1.125rem; color: var(--text-primary); }
+
+        .pgk-modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+
+        .pgk-modal-cancel {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .tool-page-container { grid-template-columns: 1fr; }
+            .pgk-sticky-actions { position: static; margin: 0.5rem 0 0; border-top: none; padding: 0; }
+        }
+        @media (max-width: 768px) {
+            .tool-result-actions { flex-direction: column; }
+            .tool-result-actions .tool-action-btn { width: 100%; }
+            .pgk-passphrase-row { flex-wrap: wrap; }
+        }
+    </style>
 </head>
+<body>
+    <!-- Navigation -->
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="pgp-menu-nav.jsp"%>
+    <!-- Page Header -->
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">PGP Key Generator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
+                    <a href="<%=request.getContextPath()%>/pgpencdec.jsp">PGP Tools</a> /
+                    Key Generator
+                </nav>
+            </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">OpenPGP RFC 4880</span>
+                <span class="tool-badge">RSA 2048-4096 bit</span>
+                <span class="tool-badge">Python Compiler</span>
+                <span class="tool-badge">No Data Stored</span>
+            </div>
+        </div>
+    </header>
 
-<h1 class="mt-4">PGP Key Generator</h1>
-<p class="lead text-muted">Generate secure RSA public/private key pairs with OpenPGP standard (RFC 4880)</p>
-<hr>
+    <!-- Tool Description -->
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Free online PGP key pair generator implementing OpenPGP standard (RFC 4880). Generate RSA public/private keys with multiple cipher options (AES-256, TWOFISH, BLOWFISH). Choose 2048 or 4096-bit key sizes. Run PGP key generation Python code in your browser. No data retained.</p>
+            </div>
+        </div>
+    </section>
 
-<!-- Form Summary (shown after generation) -->
-<div id="form-summary" class="form-summary">
-	<div class="d-flex justify-content-between align-items-center">
-		<div>
-			<h5 class="mb-1"><i class="fas fa-key"></i> Generated Keys</h5>
-			<small>
-				Identity: <strong id="summary-identity"></strong> |
-				Cipher: <strong id="summary-cipher"></strong> |
-				Key Size: <strong id="summary-keysize"></strong>-bit
-			</small>
-		</div>
-		<button type="button" class="expand-form-btn" id="expand-form-link">
-			<i class="fas fa-edit"></i> Generate New Keys
-		</button>
-	</div>
-</div>
+    <!-- Main Content -->
+    <main class="tool-page-container">
+        <!-- ========== INPUT COLUMN (Compact) ========== -->
+        <div class="tool-input-column">
+            <div class="tool-card">
+                <form id="pgkForm" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="methodName" id="methodName" value="GENERATE_PGEP_KEY">
+                    <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>">
+                    <input type="hidden" id="email" name="email" value="">
 
-<!-- Form Container (collapsible) -->
-<div id="form-container" class="form-container">
-<form id="form" method="POST" enctype="application/x-www-form-urlencoded">
-	<input type="hidden" name="methodName" id="methodName" value="GENERATE_PGEP_KEY">
-	<input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>" >
-	<input type="hidden" id="email" name="email" value="">
+                    <div class="tool-form-section">
+                        <!-- Identity -->
+                        <div class="pgk-form-group">
+                            <label class="tool-label">Identity <span class="tool-badge-info">Required</span></label>
+                            <input type="text" class="tool-input" id="p_identity" name="p_identity" placeholder="john@example.com" style="font-size:0.8125rem;padding:0.4375rem 0.625rem;">
+                        </div>
 
-	<div class="form-row">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="p_identity">
-					Identity <span class="text-danger">*</span>
-					<i class="fas fa-info-circle help-icon" data-toggle="tooltip" title="Enter your name or email address"></i>
-				</label>
-				<input class="form-control" id="p_identity" type="text" name="p_identity" value=""
-					placeholder="john@example.com"
-					aria-describedby="identityHelp">
-				<small id="identityHelp" class="form-text text-muted">Your name or email for the key</small>
-			</div>
-		</div>
+                        <!-- Passphrase -->
+                        <div class="pgk-form-group">
+                            <label class="tool-label">Passphrase <span class="tool-badge-info">Required</span></label>
+                            <div class="pgk-passphrase-row">
+                                <input type="password" class="tool-input" id="p_passpharse" name="p_passpharse" placeholder="Min 8 characters">
+                                <button type="button" class="pgk-passphrase-btn" id="togglePassphrase" title="Show/hide">&#128065;</button>
+                                <button type="button" class="pgk-passphrase-btn" id="generatePassphrase" title="Generate secure passphrase">&#127922;</button>
+                            </div>
+                            <div class="pgk-strength-bar">
+                                <div class="pgk-strength-fill" id="strengthFill"></div>
+                            </div>
+                            <div class="pgk-strength-text" id="strengthText"></div>
+                        </div>
 
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="p_passpharse">
-					Passphrase <span class="text-danger">*</span>
-					<i class="fas fa-info-circle help-icon" data-toggle="tooltip" title="Use at least 12 characters with mixed case, numbers, and symbols"></i>
-				</label>
-				<div class="input-group">
-					<input class="form-control" id="p_passpharse" type="password" name="p_passpharse" value=""
-						placeholder="Enter passphrase (min 8 chars)"
-						aria-describedby="passphraseHelp">
-					<div class="input-group-append">
-						<button class="btn btn-outline-success" type="button" id="generatePassphrase" data-toggle="tooltip" title="Generate secure passphrase">
-							<i class="fas fa-dice"></i>
-						</button>
-						<button class="btn btn-outline-secondary" type="button" id="togglePassphrase" data-toggle="tooltip" title="Show/hide">
-							<i class="fas fa-eye"></i>
-						</button>
-					</div>
-				</div>
-				<div class="passphrase-strength">
-					<div class="passphrase-strength-bar"></div>
-				</div>
-				<div class="strength-text"></div>
-				<small id="passphraseHelp" class="form-text text-muted">Protects your private key. <a href="#" id="showPassphraseOptions" class="text-primary">Customize</a></small>
-			</div>
-		</div>
-	</div>
+                        <!-- Cipher Algorithm -->
+                        <div class="pgk-section-label">&#128274; Cipher</div>
+                        <div class="pgk-options-grid">
+                            <label class="pgk-option-label selected">
+                                <input type="radio" name="cipherparameter" value="AES_256" checked>
+                                <span>AES-256</span>
+                                <span class="pgk-badge-rec">REC</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="AES_192">
+                                <span>AES-192</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="AES_128">
+                                <span>AES-128</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="TWOFISH">
+                                <span>TWOFISH</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="BLOWFISH">
+                                <span>BLOWFISH</span>
+                                <span class="pgk-badge-legacy">Legacy</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="CAST5">
+                                <span>CAST5</span>
+                                <span class="pgk-badge-legacy">Legacy</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="cipherparameter" value="TRIPLE_DES">
+                                <span>3DES</span>
+                                <span class="pgk-badge-legacy">Legacy</span>
+                            </label>
+                        </div>
 
-	<!-- Passphrase Generation Options (collapsible) -->
-	<div class="collapse" id="passphraseOptions">
-		<div class="card card-body bg-light mb-3">
-			<h6>Passphrase Generation Options</h6>
-			<div class="form-row">
-				<div class="col-md-6">
-					<label for="passphraseLength">Length: <span id="lengthValue">16</span> characters</label>
-					<input type="range" class="custom-range" id="passphraseLength" min="12" max="32" value="16">
-				</div>
-				<div class="col-md-6">
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="includeSymbols" checked>
-						<label class="custom-control-label" for="includeSymbols">Include symbols (!@#$%^&*)</label>
-					</div>
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="includeNumbers" checked>
-						<label class="custom-control-label" for="includeNumbers">Include numbers (0-9)</label>
-					</div>
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="includeUppercase" checked>
-						<label class="custom-control-label" for="includeUppercase">Include uppercase (A-Z)</label>
-					</div>
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="includeLowercase" checked>
-						<label class="custom-control-label" for="includeLowercase">Include lowercase (a-z)</label>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <!-- Key Size -->
+                        <div class="pgk-section-label">&#128207; RSA Key Size</div>
+                        <div class="pgk-options-grid">
+                            <label class="pgk-option-label selected">
+                                <input type="radio" name="p_keysize" value="2048" checked>
+                                <span>2048-bit</span>
+                                <span class="pgk-badge-rec">REC</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="p_keysize" value="4096">
+                                <span>4096-bit</span>
+                            </label>
+                            <label class="pgk-option-label">
+                                <input type="radio" name="p_keysize" value="1024">
+                                <span>1024-bit</span>
+                                <span class="pgk-badge-weak">Weak</span>
+                            </label>
+                        </div>
 
-	<div class="form-group">
-		<label>
-			Cipher Algorithm <span class="text-danger">*</span>
-			<i class="fas fa-info-circle help-icon" data-toggle="tooltip" title="AES-256 provides the highest security and is recommended for all new keys"></i>
-		</label>
-		<div>
-			<div class="cipher-option">
-				<input id="cipherparameter12" type="radio" name="cipherparameter" value="AES_256" checked="checked">
-				<label for="cipherparameter12">AES-256 <span class="recommended-badge">RECOMMENDED</span></label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter13" type="radio" name="cipherparameter" value="AES_192">
-				<label for="cipherparameter13">AES-192</label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter14" type="radio" name="cipherparameter" value="AES_128">
-				<label for="cipherparameter14">AES-128</label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter16" type="radio" name="cipherparameter" value="TWOFISH">
-				<label for="cipherparameter16">TWOFISH</label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter11" type="radio" name="cipherparameter" value="BLOWFISH">
-				<label for="cipherparameter11">BLOWFISH <span class="legacy-badge">LEGACY</span></label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter15" type="radio" name="cipherparameter" value="CAST5">
-				<label for="cipherparameter15">CAST5 <span class="legacy-badge">LEGACY</span></label>
-			</div>
-			<div class="cipher-option">
-				<input id="cipherparameter17" type="radio" name="cipherparameter" value="TRIPLE_DES">
-				<label for="cipherparameter17">TRIPLE_DES <span class="legacy-badge">LEGACY</span></label>
-			</div>
-		</div>
-		<small class="form-text text-muted">AES-256 offers maximum security with 256-bit encryption. Legacy algorithms provided for compatibility only.</small>
-	</div>
+                        <div class="tool-info-box">&#128161; No data retained. Keys generated with CSRNG.</div>
+                    </div>
 
-	<div class="form-group">
-		<label>
-			RSA Key Size <span class="text-danger">*</span>
-			<i class="fas fa-info-circle help-icon" data-toggle="tooltip" title="2048-bit is standard. 4096-bit offers maximum security but slower performance."></i>
-		</label>
-		<div>
-			<div class="keysize-option">
-				<input id="keysize2" type="radio" name="p_keysize" value="2048" checked="checked">
-				<label for="keysize2">2048-bit <span class="recommended-badge">RECOMMENDED</span></label>
-			</div>
-			<div class="keysize-option">
-				<input id="keysize3" type="radio" name="p_keysize" value="4096">
-				<label for="keysize3">4096-bit <small>(Max Security)</small></label>
-			</div>
-			<div class="keysize-option">
-				<input id="keysize1" type="radio" name="p_keysize" value="1024">
-				<label for="keysize1">1024-bit <span class="legacy-badge">WEAK</span></label>
-			</div>
-		</div>
-		<small class="form-text text-muted">2048-bit provides strong security with good performance. 1024-bit is weak and not recommended.</small>
-	</div>
+                    <!-- Sticky Action Buttons -->
+                    <div class="pgk-sticky-actions">
+                        <button type="button" class="tool-action-btn" id="genkeypair">
+                            &#128273; Generate
+                        </button>
+                        <button type="button" class="tool-action-btn tool-action-btn-success" id="genkeypairemail">
+                            &#128231; Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-	<div class="form-group">
-		<button class="btn btn-primary btn-lg" type="button" id="genkeypair">
-			<i class="fas fa-key"></i> Generate Key Pair
-		</button>
-		<button class="btn btn-outline-primary btn-lg ml-2" type="button" id="genkeypairemail">
-			<i class="fas fa-envelope"></i> Email Key Pair
-		</button>
-	</div>
-</form>
+        <!-- ========== OUTPUT COLUMN ========== -->
+        <div class="tool-output-column">
+            <!-- Tab bar -->
+            <div class="pgp-output-tabs">
+                <button type="button" class="pgp-output-tab active" data-panel="output">Output</button>
+                <button type="button" class="pgp-output-tab" data-panel="python">&#9654; Try It Live</button>
+            </div>
 
-<!-- Email Modal -->
-<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="emailModalLabel">Email PGP Key Pair</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label for="emailInput">Email Address</label>
-					<input type="email" class="form-control" id="emailInput" placeholder="Enter your email address">
-					<small class="form-text text-muted">Your PGP keys will be sent to this email address.</small>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="sendEmailBtn">
-					<i class="fas fa-paper-plane"></i> Send Keys
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-</div><!-- End form-container -->
+            <!-- Output Panel -->
+            <div class="pgp-panel active" id="pgk-panel-output">
+                <div class="tool-card tool-result-card">
+                    <div class="tool-result-header">
+                        <span>&#128273;</span>
+                        <h4>Generated Keys</h4>
+                    </div>
+                    <div class="tool-result-content" id="output">
+                        <div class="tool-empty-state" id="pgkEmptyState">
+                            <div class="pgk-keygen-flow">
+                                <div style="font-size:0.8125rem;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.08em;">RSA Key Generation</div>
 
-<hr>
+                                <div class="pgk-flow-step">
+                                    <div class="pgk-flow-num">1</div>
+                                    <div class="pgk-flow-text"><strong>Prime Generation</strong> - Two large random primes (p, q)</div>
+                                </div>
+                                <div class="pgk-flow-step">
+                                    <div class="pgk-flow-num">2</div>
+                                    <div class="pgk-flow-text"><strong>Modulus</strong> - Compute n = p &times; q</div>
+                                </div>
+                                <div class="pgk-flow-step">
+                                    <div class="pgk-flow-num">3</div>
+                                    <div class="pgk-flow-text"><strong>Key Pair</strong> - Public (e, n) + Private (d, n)</div>
+                                </div>
+                                <div class="pgk-flow-step">
+                                    <div class="pgk-flow-num">4</div>
+                                    <div class="pgk-flow-text"><strong>OpenPGP Wrap</strong> - RFC 4880 armored format</div>
+                                </div>
+                                <div class="pgk-flow-step">
+                                    <div class="pgk-flow-num">5</div>
+                                    <div class="pgk-flow-text"><strong>Passphrase Lock</strong> - Private key encrypted with S2K</div>
+                                </div>
 
-<div id="output"></div>
+                                <p class="pgk-flow-caption">Enter identity, passphrase, select options, and click Generate.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-result-actions" id="resultActions">
+                        <button type="button" class="tool-action-btn" id="downloadKeys">
+                            <span>&#8681;</span> Download Keys
+                        </button>
+                        <button type="button" class="tool-action-btn tool-action-btn-success" id="testKeys">
+                            <span>&#128274;</span> Test Encrypt/Decrypt
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-<hr>
+            <!-- Python Compiler Panel -->
+            <div class="pgp-panel" id="pgk-panel-python">
+                <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                    <div class="tool-result-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--primary);">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <h4>Python Compiler</h4>
+                        <select id="pgkCompilerTemplate" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:inherit;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
+                            <option value="keygen">Generate PGP Keys</option>
+                            <option value="keygen-advanced">Advanced Key Generation</option>
+                            <option value="encrypt">PGP Encrypt</option>
+                            <option value="decrypt">PGP Decrypt</option>
+                            <option value="sign">PGP Sign Message</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;min-height:0;">
+                        <iframe id="pgkCompilerIframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- ========== ADS COLUMN ========== -->
+        <div class="tool-ads-column">
+            <%@ include file="modern/ads/ad-three-column.jsp" %>
+        </div>
+    </main>
 
-
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-
-<hr>
-
-
-<%@ include file="footer_adsense.jsp"%>
-
-<!-- E-E-A-T Content for SEO -->
-<div class="card my-4 border-info">
-  <div class="card-header bg-info text-white">
-    <h3 class="mb-0">Cryptographic Key Generation Methodology</h3>
-  </div>
-  <div class="card-body">
-    <h4>RSA Key Pair Generation Process</h4>
-    <p>This tool generates PGP key pairs using the RSA (Rivest-Shamir-Adleman) public-key cryptosystem. The generation process follows these cryptographic steps:</p>
-    <ol>
-      <li><strong>Prime Number Generation:</strong> Generate two large random prime numbers (p and q)</li>
-      <li><strong>Modulus Calculation:</strong> Compute n = p × q (the key size determines the bit length of n)</li>
-      <li><strong>Totient Function:</strong> Calculate φ(n) = (p-1)(q-1)</li>
-      <li><strong>Public Exponent:</strong> Choose public exponent e (commonly 65537) where 1 &lt; e &lt; φ(n) and gcd(e, φ(n)) = 1</li>
-      <li><strong>Private Exponent:</strong> Compute private exponent d where d ≡ e⁻¹ (mod φ(n))</li>
-      <li><strong>Key Packaging:</strong> Format keys according to OpenPGP standard (RFC 4880)</li>
-    </ol>
-
-    <h4>Cipher Algorithm Options</h4>
-    <table class="table table-sm table-bordered mt-3">
-      <thead class="thead-light">
-        <tr>
-          <th>Algorithm</th>
-          <th>Block Size</th>
-          <th>Key Size</th>
-          <th>Security Level</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>AES-256</strong></td>
-          <td>128 bits</td>
-          <td>256 bits</td>
-          <td>Highest (recommended)</td>
-        </tr>
-        <tr>
-          <td><strong>AES-192</strong></td>
-          <td>128 bits</td>
-          <td>192 bits</td>
-          <td>High</td>
-        </tr>
-        <tr>
-          <td><strong>AES-128</strong></td>
-          <td>128 bits</td>
-          <td>128 bits</td>
-          <td>High</td>
-        </tr>
-        <tr>
-          <td><strong>TWOFISH</strong></td>
-          <td>128 bits</td>
-          <td>256 bits</td>
-          <td>High</td>
-        </tr>
-        <tr>
-          <td><strong>BLOWFISH</strong></td>
-          <td>64 bits</td>
-          <td>32-448 bits</td>
-          <td>Medium (legacy)</td>
-        </tr>
-        <tr>
-          <td><strong>CAST5</strong></td>
-          <td>64 bits</td>
-          <td>128 bits</td>
-          <td>Medium</td>
-        </tr>
-        <tr>
-          <td><strong>TRIPLE_DES</strong></td>
-          <td>64 bits</td>
-          <td>168 bits (effective 112)</td>
-          <td>Medium (legacy)</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h4>Key Size Selection Guide</h4>
-    <ul>
-      <li><strong>1024-bit:</strong> Legacy support only. No longer recommended for new keys (vulnerable to advanced attacks).</li>
-      <li><strong>2048-bit:</strong> Current standard recommendation. Provides strong security with good performance balance.</li>
-      <li><strong>4096-bit:</strong> Maximum security for long-term protection. Slower performance but resistant to future computational advances.</li>
-    </ul>
-
-    <div class="alert alert-warning mt-3">
-      <strong>Best Practice:</strong> Use 2048-bit or 4096-bit keys with AES-256 cipher for new key generation. Avoid 1024-bit keys unless required for legacy system compatibility.
+    <!-- In-Content Ad (Mobile Fallback) -->
+    <div class="tool-mobile-ad-container">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
     </div>
-  </div>
-</div>
 
-<div class="card my-4 border-success">
-  <div class="card-header bg-success text-white">
-    <h3 class="mb-0">Author Credentials & Expertise</h3>
-  </div>
-  <div class="card-body">
-    <p><strong>Created by Anish Nath</strong> - Security Engineer specializing in cryptography and network security.</p>
-    <ul>
-      <li><strong>Experience:</strong> 15+ years in cybersecurity, cryptographic implementations, and secure system design</li>
-      <li><strong>Expertise:</strong> OpenPGP/GPG implementations, public-key infrastructure (PKI), symmetric/asymmetric encryption algorithms</li>
-      <li><strong>Standards Knowledge:</strong> Deep understanding of RFC 4880 (OpenPGP), NIST cryptographic guidelines, FIPS 140-2 requirements</li>
-      <li><strong>Contact:</strong> <a href="https://x.com/anish2good" target="_blank">@anish2good on X (Twitter)</a></li>
-    </ul>
+    <!-- Related PGP Tools -->
+    <jsp:include page="modern/components/related-tools.jsp">
+        <jsp:param name="currentToolUrl" value="pgpkeyfunction.jsp"/>
+        <jsp:param name="keyword" value="pgp"/>
+        <jsp:param name="limit" value="6"/>
+    </jsp:include>
 
-    <div class="alert alert-info mt-3">
-      <strong>Implementation Note:</strong> This tool uses the Bouncy Castle cryptographic library, a widely-trusted and FIPS-certified implementation used by enterprises worldwide. Key generation occurs server-side with cryptographically secure random number generation (CSRNG).
+    <!-- E-E-A-T: Cryptographic Methodology -->
+    <section style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">Cryptographic Key Generation Methodology</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">This tool generates PGP key pairs using the RSA (Rivest-Shamir-Adleman) public-key cryptosystem following the OpenPGP standard (RFC 4880) with Bouncy Castle cryptographic library.</p>
+
+            <h3 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">RSA Key Generation Steps:</h3>
+            <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
+                <li style="margin-bottom: 0.5rem;"><strong>Prime Generation:</strong> Two large random primes (p and q) generated using CSRNG</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Modulus Calculation:</strong> n = p &times; q (key size determines bit length)</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Totient Function:</strong> &phi;(n) = (p-1)(q-1)</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Public Exponent:</strong> e = 65537, where gcd(e, &phi;(n)) = 1</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Private Exponent:</strong> d &equiv; e&sup1; (mod &phi;(n))</li>
+                <li><strong>Key Packaging:</strong> Formatted per OpenPGP standard (RFC 4880) in ASCII-armored output</li>
+            </ol>
+
+            <h3 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">Cipher Algorithm Comparison:</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+                            <th style="padding: 0.625rem 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary);">Algorithm</th>
+                            <th style="padding: 0.625rem 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary);">Block Size</th>
+                            <th style="padding: 0.625rem 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary);">Key Size</th>
+                            <th style="padding: 0.625rem 0.75rem; text-align: left; font-weight: 600; color: var(--text-primary);">Security</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color: var(--text-secondary);">
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>AES-256</strong></td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">256 bits</td><td style="padding: 0.5rem 0.75rem;">Highest (recommended)</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>AES-192</strong></td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">192 bits</td><td style="padding: 0.5rem 0.75rem;">High</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>AES-128</strong></td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">High</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>TWOFISH</strong></td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">256 bits</td><td style="padding: 0.5rem 0.75rem;">High</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>BLOWFISH</strong></td><td style="padding: 0.5rem 0.75rem;">64 bits</td><td style="padding: 0.5rem 0.75rem;">32-448 bits</td><td style="padding: 0.5rem 0.75rem;">Medium (legacy)</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 0.5rem 0.75rem;"><strong>CAST5</strong></td><td style="padding: 0.5rem 0.75rem;">64 bits</td><td style="padding: 0.5rem 0.75rem;">128 bits</td><td style="padding: 0.5rem 0.75rem;">Medium</td></tr>
+                        <tr><td style="padding: 0.5rem 0.75rem;"><strong>TRIPLE_DES</strong></td><td style="padding: 0.5rem 0.75rem;">64 bits</td><td style="padding: 0.5rem 0.75rem;">168 bits</td><td style="padding: 0.5rem 0.75rem;">Medium (legacy)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <div>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Authorship & Expertise</h3>
+                    <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--primary);">Anish Nath</a></li>
+                        <li><strong>Background:</strong> Security engineer, 15+ years in cryptographic implementations</li>
+                        <li><strong>Standards:</strong> RFC 4880, NIST SP 800-57, FIPS 140-2</li>
+                        <li><strong>Library:</strong> Bouncy Castle - peer-reviewed Java crypto provider</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Trust & Privacy</h3>
+                    <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        <li><strong>No Data Retention:</strong> Keys never stored or logged</li>
+                        <li><strong>HTTPS Only:</strong> TLS 1.2+ encryption</li>
+                        <li><strong>CSRNG:</strong> /dev/urandom with hardware RNG support</li>
+                        <li><strong>Compatibility:</strong> GnuPG, OpenKeychain, Mailvelope, Thunderbird</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-alert tool-alert-info" style="margin-top: 1.5rem;">
+                <strong>Security Disclaimer:</strong> For maximum security with highly sensitive applications, consider using offline tools like GnuPG on air-gapped systems. Never share your private key or forget your passphrase - encrypted data cannot be recovered.
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+        <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    What is the difference between RSA key sizes (1024, 2048, 4096)?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">RSA key size determines security strength and computational cost. 1024-bit keys are weak and vulnerable to modern attacks. 2048-bit keys are the current standard, providing strong security with reasonable performance. 4096-bit keys offer maximum security and future-proofing but require more resources. For new keys, use 2048-bit minimum, 4096-bit for long-term sensitive data.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Which cipher algorithm should I choose?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">Choose AES-256 for maximum security (256-bit key). AES-192 and AES-128 are also strong. TWOFISH is a good alternative with 256-bit security. BLOWFISH, CAST5, and TRIPLE_DES are legacy - use only for compatibility with older systems.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Is it safe to generate PGP keys online?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">This tool has zero data retention - keys are never logged or stored. Generation uses CSRNG over HTTPS. For highly sensitive applications, consider offline tools like GnuPG on air-gapped computers.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    What should I do after generating keys?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">Save your private key securely (never share it). Share your public key via keyservers (keys.openpgp.org). Test keys using the <a href="pgpencdec.jsp" style="color: var(--primary);">PGP Encrypt/Decrypt tool</a>. Generate and store a revocation certificate. Verify fingerprints when exchanging keys.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Can I use these keys with GPG/GnuPG?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">Yes. Keys follow OpenPGP standard (RFC 4880) and are compatible with GnuPG, PGP Desktop, OpenKeychain, Mailvelope, and Thunderbird/Enigmail. Keys are in ASCII-armored format, universally supported.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    How do I generate PGP keys in Python?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">Use the <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">pgpy</code> library. This tool includes a built-in Python compiler with key generation templates. Click <strong>Try It Live</strong> in the output panel to generate PGP keys with Python code directly in your browser.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    How strong should my passphrase be?
+                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="faq-answer">Use at least 16 characters with mixed case, numbers, and symbols. If you forget your passphrase, encrypted data cannot be recovered - there is no backdoor or reset mechanism. Use the built-in passphrase generator for cryptographically secure random passphrases.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <%@ include file="modern/components/support-section.jsp" %>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+            <div class="footer-links">
+                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
+
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+    <!-- Email Modal -->
+    <div class="pgk-modal-overlay" id="emailModal">
+        <div class="pgk-modal">
+            <h3>&#128231; Email PGP Key Pair</h3>
+            <div class="tool-form-group">
+                <label class="tool-label">Email Address</label>
+                <input type="email" class="tool-input" id="emailInput" placeholder="Enter your email address">
+                <p class="tool-hint" style="margin-top: 0.375rem;">Your PGP keys will be sent to this email address.</p>
+            </div>
+            <div class="pgk-modal-actions">
+                <button type="button" class="pgk-modal-cancel" id="emailModalCancel">Cancel</button>
+                <button type="button" class="tool-action-btn" id="sendEmailBtn">&#128228; Send Keys</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="card my-4 border-primary">
-  <div class="card-header bg-primary text-white">
-    <h3 class="mb-0">Trust & Privacy Guarantees</h3>
-  </div>
-  <div class="card-body">
-    <h4>Zero Data Retention Policy</h4>
-    <ul>
-      <li>Generated keys are <strong>never stored</strong> on our servers</li>
-      <li>Keys are generated, displayed once, and immediately discarded from server memory</li>
-      <li>No logging of identity, passphrase, or generated key material</li>
-      <li>Optional email delivery uses temporary storage (deleted after sending)</li>
-      <li>No tracking cookies or analytics on this tool page</li>
-    </ul>
+    <script>
+    $(document).ready(function() {
+        var TOOL_NAME = 'PGP Key Generator';
 
-    <h4>Security Recommendations</h4>
-    <ol>
-      <li><strong>Passphrase Strength:</strong> Use a passphrase with at least 16 characters, combining uppercase, lowercase, numbers, and symbols.</li>
-      <li><strong>Private Key Protection:</strong> Store your private key securely offline. Never share it or upload it to cloud services.</li>
-      <li><strong>Key Backup:</strong> Maintain encrypted backups of your private key in multiple secure locations.</li>
-      <li><strong>Key Expiration:</strong> Consider setting expiration dates for keys (managed in GPG client software after generation).</li>
-      <li><strong>Key Revocation:</strong> Generate and store a revocation certificate immediately after key creation.</li>
-    </ol>
+        // ========== RADIO OPTION SELECTION ==========
+        $('.pgk-option-label').on('click', function() {
+            var name = $(this).find('input[type="radio"]').attr('name');
+            $('input[name="' + name + '"]').closest('.pgk-option-label').removeClass('selected');
+            $(this).addClass('selected');
+        });
 
-    <div class="alert alert-danger mt-3">
-      <strong>Critical Warning:</strong> If you lose your private key or forget your passphrase, encrypted data cannot be recovered. There is no backdoor or password reset mechanism in PGP encryption.
-    </div>
-  </div>
-</div>
+        // ========== PASSPHRASE STRENGTH ==========
+        $('#p_passpharse').on('input', function() {
+            var pass = $(this).val();
+            var strength = 0;
+            var text = '';
+            var cls = '';
 
-<div class="card my-4 border-secondary">
-  <div class="card-header bg-secondary text-white">
-    <h3 class="mb-0">Technical Implementation Details</h3>
-  </div>
-  <div class="card-body">
-    <h4>OpenPGP Standard Compliance</h4>
-    <p>This tool strictly adheres to <strong>RFC 4880</strong> (OpenPGP Message Format) and generates keys compatible with:</p>
-    <ul>
-      <li><strong>GnuPG (GPG):</strong> The GNU Privacy Guard implementation</li>
-      <li><strong>PGP Desktop:</strong> Symantec PGP Desktop and similar commercial implementations</li>
-      <li><strong>OpenKeychain:</strong> Android OpenPGP implementation</li>
-      <li><strong>Mailvelope:</strong> Browser extension for webmail encryption</li>
-      <li><strong>Thunderbird/Enigmail:</strong> Email client PGP integration</li>
-    </ul>
+            if (pass.length >= 8) strength++;
+            if (pass.length >= 12) strength++;
+            if (/[a-z]/.test(pass) && /[A-Z]/.test(pass)) strength++;
+            if (/\d/.test(pass)) strength++;
+            if (/[^a-zA-Z0-9]/.test(pass)) strength++;
 
-    <h4>Key Format Details</h4>
-    <p>Generated keys use the following specifications:</p>
-    <ul>
-      <li><strong>Key Type:</strong> RSA (Sign + Encrypt)</li>
-      <li><strong>Key Format:</strong> ASCII-armored PGP format</li>
-      <li><strong>Private Key Protection:</strong> Encrypted with user-provided passphrase using String-to-Key (S2K) convention</li>
-      <li><strong>Hash Algorithm:</strong> SHA-256 for signatures</li>
-      <li><strong>Compression:</strong> ZLIB compression enabled</li>
-    </ul>
+            if (pass.length === 0) {
+                text = '';
+                cls = '';
+            } else if (strength <= 2) {
+                text = 'Weak';
+                cls = 'weak';
+            } else if (strength === 3) {
+                text = 'Fair';
+                cls = 'fair';
+            } else if (strength === 4) {
+                text = 'Good';
+                cls = 'good';
+            } else {
+                text = 'Strong';
+                cls = 'strong';
+            }
 
-    <h4>Random Number Generation</h4>
-    <p>Security of RSA keys depends critically on unpredictable prime number generation. This implementation uses:</p>
-    <ul>
-      <li><strong>CSRNG Source:</strong> /dev/urandom on Linux (cryptographically secure)</li>
-      <li><strong>Entropy Pool:</strong> System entropy pool with hardware RNG support when available</li>
-      <li><strong>Primality Testing:</strong> Miller-Rabin primality test with multiple rounds</li>
-    </ul>
-  </div>
-</div>
+            $('#strengthFill').attr('class', 'pgk-strength-fill ' + cls);
+            $('#strengthText').text(text).css('color',
+                cls === 'weak' ? '#ef4444' :
+                cls === 'fair' ? '#f59e0b' :
+                cls === 'good' ? '#06b6d4' :
+                cls === 'strong' ? '#22c55e' : ''
+            );
+        });
 
-<div class="card my-4 border-dark">
-  <div class="card-header bg-dark text-white">
-    <h3 class="mb-0">Common Use Cases & Best Practices</h3>
-  </div>
-  <div class="card-body">
-    <h4>When to Use This Tool</h4>
-    <ul>
-      <li><strong>Email Encryption:</strong> Generate keys for encrypting sensitive emails</li>
-      <li><strong>File Encryption:</strong> Create keys for encrypting confidential documents</li>
-      <li><strong>Code Signing:</strong> Generate keys for signing software releases or Git commits</li>
-      <li><strong>Secure Messaging:</strong> Create keys for encrypted chat applications</li>
-      <li><strong>Password Manager:</strong> Generate keys for GPG-encrypted password stores</li>
-    </ul>
+        // ========== TOGGLE PASSPHRASE VISIBILITY ==========
+        $('#togglePassphrase').on('click', function() {
+            var input = $('#p_passpharse');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                $(this).html('&#128064;');
+            } else {
+                input.attr('type', 'password');
+                $(this).html('&#128065;');
+            }
+        });
 
-    <h4>After Key Generation</h4>
-    <ol>
-      <li><strong>Test Your Keys:</strong> Use the <a href="pgpencdec.jsp">PGP Encryption/Decryption tool</a> to verify your keys work correctly</li>
-      <li><strong>Publish Public Key:</strong> Upload your public key to keyservers (keys.openpgp.org, keyserver.ubuntu.com)</li>
-      <li><strong>Key Fingerprint:</strong> Verify key fingerprints when exchanging keys with others</li>
-      <li><strong>Web of Trust:</strong> Have your key signed by trusted parties to build trust relationships</li>
-      <li><strong>Regular Testing:</strong> Periodically test decryption to ensure you haven't lost access to your private key</li>
-    </ol>
+        // ========== GENERATE SECURE PASSPHRASE ==========
+        $('#generatePassphrase').on('click', function() {
+            var length = 20;
+            var charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+            var passphrase = '';
+            var values = new Uint32Array(length);
+            window.crypto.getRandomValues(values);
 
-    <h4>Authoritative Sources</h4>
-    <ul>
-      <li><a href="https://tools.ietf.org/html/rfc4880" target="_blank" rel="noopener">RFC 4880 - OpenPGP Message Format</a> (IETF Standard)</li>
-      <li><a href="https://www.openpgp.org/" target="_blank" rel="noopener">OpenPGP.org</a> - Official OpenPGP Working Group</li>
-      <li><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf" target="_blank" rel="noopener">NIST SP 800-57</a> - Key Management Guidelines</li>
-      <li><a href="https://www.gnupg.org/documentation/" target="_blank" rel="noopener">GnuPG Documentation</a> - GNU Privacy Guard Official Docs</li>
-      <li><a href="https://www.bouncycastle.org/" target="_blank" rel="noopener">Bouncy Castle</a> - Cryptographic Library Used</li>
-    </ul>
-  </div>
-</div>
+            for (var i = 0; i < length; i++) {
+                passphrase += charset[values[i] % charset.length];
+            }
 
-<%@ include file="addcomments.jsp"%>
+            // Ensure minimum requirements
+            if (!/[a-z]/.test(passphrase) || !/[A-Z]/.test(passphrase) || !/[0-9]/.test(passphrase) || !/[^a-zA-Z0-9]/.test(passphrase)) {
+                $('#generatePassphrase').click();
+                return;
+            }
 
-<!-- FAQ Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is the difference between RSA key sizes (1024, 2048, 4096)?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "RSA key size determines the security strength and computational cost. 1024-bit keys are considered weak and vulnerable to modern attacks - they should only be used for legacy compatibility. 2048-bit keys are the current standard, providing strong security with reasonable performance for most use cases. 4096-bit keys offer maximum security and future-proofing against quantum computing advances, but require more computational resources for key generation and cryptographic operations. For new keys, we recommend 2048-bit minimum, with 4096-bit for long-term sensitive data."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Which cipher algorithm should I choose for PGP key generation?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "For maximum security, choose AES-256, which offers the highest encryption strength (256-bit key) and is widely supported. AES-192 and AES-128 are also strong choices with slightly faster performance. TWOFISH is a good alternative with 256-bit security, particularly if you prefer non-NSA algorithms. BLOWFISH, CAST5, and TRIPLE_DES are legacy algorithms - use them only if required for compatibility with older systems. AES-256 is recommended for all new key generation."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is it safe to generate PGP keys online? What about privacy?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This tool generates keys server-side but implements a zero data retention policy - generated keys are never logged or stored permanently. Keys are created, displayed once, and immediately deleted from server memory. However, for maximum security with highly sensitive applications, consider using offline tools like GnuPG on an air-gapped computer. For most business and personal use cases, this online generator provides adequate security when used over HTTPS. Never use untrusted key generators, as compromised keys can decrypt all your encrypted data."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What should I do with my PGP keys after generation?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "After generation: (1) Save both keys securely - the private key must be kept secret and backed up in encrypted storage. (2) Share your public key freely - upload it to keyservers like keys.openpgp.org or share it with communication partners. (3) Test your keys using the encryption/decryption tool to verify they work correctly. (4) Generate and store a revocation certificate in case you need to invalidate the keys later. (5) Never lose or share your private key - encrypted data cannot be recovered without it."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the identity field and what should I enter?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The identity field associates your PGP key with your name, email address, or organization. Common formats include 'John Doe <john@example.com>' or just 'john@example.com'. This identity appears in the key metadata and helps others verify they're using the correct public key when encrypting messages for you. Use your real email address if you plan to use the key for email encryption, or use a descriptive name for file encryption keys. Avoid special characters except @ and . to ensure compatibility."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use the generated keys with GPG/GnuPG and other PGP software?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, the generated keys follow the OpenPGP standard (RFC 4880) and are fully compatible with all major PGP implementations including GnuPG (GPG), Symantec PGP Desktop, OpenKeychain for Android, Mailvelope browser extension, and Thunderbird/Enigmail. You can import the keys into any OpenPGP-compatible software using the standard import function. The keys are provided in ASCII-armored format, which is universally supported."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How strong is my passphrase protection and what happens if I forget it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Your private key is encrypted with your passphrase using the String-to-Key (S2K) convention specified in RFC 4880. A strong passphrase (16+ characters with mixed case, numbers, symbols) makes it computationally infeasible to brute-force your private key. However, if you forget your passphrase, there is absolutely no way to recover it or decrypt your private key - this is by design. PGP has no backdoor or password reset mechanism. Write down your passphrase and store it securely, separate from the private key file."
-      }
-    }
-  ]
-}
-</script>
+            $('#p_passpharse').val(passphrase).attr('type', 'text').trigger('input');
+            $('#togglePassphrase').html('&#128064;');
 
-<!-- Organization Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "8gwifi.org",
-  "url": "https://8gwifi.org",
-  "logo": "https://8gwifi.org/images/site/logo.png",
-  "description": "Free online tools for cryptography, networking, development, and security. Created by security engineers for developers and security professionals.",
-  "sameAs": [
-    "https://x.com/anish2good",
-    "https://github.com/anish2good"
-  ],
-  "founder": {
-    "@type": "Person",
-    "name": "Anish Nath",
-    "jobTitle": "Security Engineer"
-  }
-}
-</script>
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast('Secure passphrase generated!', 2000, 'success');
+            }
+        });
 
-</div>
+        // ========== FORM VALIDATION ==========
+        function validateForm() {
+            var errors = [];
+            var identity = $('#p_identity').val().trim();
+            var passphrase = $('#p_passpharse').val().trim();
 
-<%@ include file="body-close.jsp"%>
+            $('input').removeClass('invalid field-invalid');
 
+            if (!identity) {
+                errors.push('Identity is required (e.g., your name or email)');
+                $('#p_identity').addClass('invalid field-invalid');
+            }
+            if (!passphrase) {
+                errors.push('Passphrase is required');
+                $('#p_passpharse').addClass('invalid field-invalid');
+            } else if (passphrase.length < 8) {
+                errors.push('Passphrase must be at least 8 characters');
+                $('#p_passpharse').addClass('invalid field-invalid');
+            }
+
+            if (errors.length > 0) {
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showError('Validation Failed', '#output', errors);
+                }
+                var firstInvalid = $('.invalid, .field-invalid').first();
+                if (firstInvalid.length > 0) {
+                    firstInvalid[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(function() { firstInvalid.focus(); }, 300);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        // Remove invalid class on input
+        $('input').on('input', function() {
+            $(this).removeClass('invalid field-invalid');
+        });
+
+        // ========== GENERATE KEY PAIR ==========
+        $('#genkeypair').on('click', function() {
+            if (!validateForm()) return;
+            $('#email').val('');
+            submitKeyGen();
+        });
+
+        // ========== EMAIL KEY PAIR ==========
+        $('#genkeypairemail').on('click', function() {
+            if (!validateForm()) return;
+            $('#emailModal').addClass('active');
+        });
+
+        $('#emailModalCancel').on('click', function() {
+            $('#emailModal').removeClass('active');
+        });
+
+        $('#emailModal').on('click', function(e) {
+            if (e.target === this) $(this).removeClass('active');
+        });
+
+        $('#sendEmailBtn').on('click', function() {
+            var email = $('#emailInput').val().trim();
+            var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+            if (email.match(validRegex)) {
+                $('#emailModal').removeClass('active');
+                $('#email').val(email);
+                submitKeyGen();
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showToast('Keys will be delivered to ' + email, 3000, 'info');
+                }
+                $('#emailInput').val('');
+            } else {
+                $('#emailInput').addClass('invalid field-invalid');
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showToast('Invalid email address', 3000, 'error');
+                }
+            }
+        });
+
+        // ========== SUBMIT KEY GENERATION ==========
+        function submitKeyGen() {
+            var identity = $('#p_identity').val();
+            var cipher = $('input[name="cipherparameter"]:checked').val();
+            var keysize = $('input[name="p_keysize"]:checked').val();
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showLoading('Generating ' + keysize + '-bit RSA keys with ' + cipher + '...', '#output');
+            } else {
+                $('#output').html('<div style="text-align:center;padding:2rem;"><p>Generating keys... This may take a moment.</p></div>');
+            }
+
+            $('#resultActions').removeClass('visible');
+
+            $.ajax({
+                type: "POST",
+                url: "PGPFunctionality",
+                data: $("#pgkForm").serialize(),
+                success: function(msg) {
+                    // Modernize server response
+                    var modernMsg = msg;
+                    modernMsg = modernMsg.replace(/<font[^>]*color\s*=\s*["']green["'][^>]*>/gi, '<div class="tool-alert tool-alert-success">');
+                    modernMsg = modernMsg.replace(/<font[^>]*color\s*=\s*["']red["'][^>]*>/gi, '<div class="tool-alert tool-alert-error">');
+
+                    var fontCount = (modernMsg.match(/<div class="tool-alert/g) || []).length;
+                    for (var i = 0; i < fontCount; i++) {
+                        modernMsg = modernMsg.replace('</font>', '</div>');
+                    }
+
+                    var hasError = modernMsg.indexOf('tool-alert-error') !== -1 || modernMsg.indexOf('color="red"') !== -1 || modernMsg.indexOf('System Error') !== -1;
+
+                    $('#output').empty().append(modernMsg);
+
+                    // Add copy & download buttons to textareas
+                    $('#output textarea').each(function(index) {
+                        var textarea = $(this);
+                        var textareaId = 'pgk_textarea_' + index;
+                        textarea.attr('id', textareaId);
+
+                        var actions = $('<div class="pgk-key-card-actions" style="margin-top: 0.5rem; margin-bottom: 1rem;"></div>');
+                        var copyBtn = $('<button type="button" class="pgk-key-action-btn pgk-copy-btn" data-target="' + textareaId + '">&#128203; Copy</button>');
+                        var downloadBtn = $('<button type="button" class="pgk-key-action-btn pgk-download-btn" data-target="' + textareaId + '">&#8681; Download</button>');
+                        actions.append(copyBtn).append(downloadBtn);
+                        textarea.after(actions);
+                    });
+
+                    if (!hasError) {
+                        $('#resultActions').addClass('visible');
+                        if (typeof ToolUtils !== 'undefined') {
+                            ToolUtils.showToast('PGP key pair generated! Identity: ' + identity, 3000, 'success');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showError(error || 'Failed to generate keys', '#output', [
+                            'Check your internet connection',
+                            'Try again in a few moments'
+                        ]);
+                    } else {
+                        $('#output').html('<div class="tool-alert tool-alert-error">Error generating keys. Please try again.</div>');
+                    }
+                    $('#resultActions').removeClass('visible');
+                }
+            });
+        }
+
+        // ========== COPY HANDLER (delegated) ==========
+        $(document).on('click', '.pgk-copy-btn', function() {
+            var targetId = $(this).data('target');
+            var text = $('#' + targetId).val();
+            if (text && typeof ToolUtils !== 'undefined') {
+                ToolUtils.copyToClipboard(text, {
+                    showToast: true,
+                    toastMessage: 'Key copied to clipboard!',
+                    showSupportPopup: true,
+                    toolName: TOOL_NAME
+                });
+            } else if (text) {
+                var ta = document.getElementById(targetId);
+                ta.select();
+                document.execCommand('copy');
+            }
+        });
+
+        // ========== DOWNLOAD HANDLER (delegated) ==========
+        $(document).on('click', '.pgk-download-btn', function() {
+            var targetId = $(this).data('target');
+            var content = $('#' + targetId).val();
+            var isPrivate = content && content.indexOf('PRIVATE') !== -1;
+            var filename = isPrivate ? 'pgp_private_key.asc' : 'pgp_public_key.asc';
+
+            if (content && typeof ToolUtils !== 'undefined') {
+                ToolUtils.downloadAsFile(content, filename, {
+                    showToast: true,
+                    toastMessage: filename + ' downloaded!',
+                    showSupportPopup: true,
+                    toolName: TOOL_NAME
+                });
+            } else if (content) {
+                var blob = new Blob([content], { type: 'text/plain' });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        });
+
+        // ========== DOWNLOAD ALL KEYS ==========
+        $('#downloadKeys').on('click', function() {
+            $('#output .pgk-download-btn').each(function() {
+                $(this).click();
+            });
+        });
+
+        // ========== TEST ENCRYPT/DECRYPT ==========
+        $('#testKeys').on('click', function() {
+            window.open('<%=request.getContextPath()%>/pgpencdec.jsp', '_blank');
+        });
+
+        // ========== OUTPUT TABS ==========
+        var pgkCompilerLoaded = false;
+
+        $('.pgp-output-tab').on('click', function() {
+            var panel = $(this).data('panel');
+            $('.pgp-output-tab').removeClass('active');
+            $(this).addClass('active');
+            $('.pgp-panel').removeClass('active');
+            $('#pgk-panel-' + panel).addClass('active');
+
+            if (panel === 'python' && !pgkCompilerLoaded) {
+                loadPgkCompiler();
+                pgkCompilerLoaded = true;
+            }
+        });
+
+        // ========== PYTHON COMPILER ==========
+        function buildPgkCompilerCode(template) {
+            switch (template) {
+                case 'keygen':
+                    return 'import pgpy\nfrom pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm\n\n' +
+                        '# Generate RSA 2048-bit PGP key pair\nkey = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)\n\n' +
+                        '# Add user ID with capabilities\nuid = pgpy.PGPUID.new("Alice", email="alice@example.com")\n' +
+                        'key.add_uid(uid, usage={KeyFlags.Sign, KeyFlags.EncryptCommunications, KeyFlags.EncryptStorage},\n' +
+                        '    hashes=[HashAlgorithm.SHA256],\n' +
+                        '    ciphers=[SymmetricKeyAlgorithm.AES256],\n' +
+                        '    compression=[CompressionAlgorithm.ZIP])\n\n' +
+                        'print("=== PUBLIC KEY ===")\nprint(str(key.pubkey)[:300] + "...")\n' +
+                        'print("\\n=== KEY INFO ===")\nprint("Fingerprint:", key.fingerprint)\n' +
+                        'print("Algorithm:", key.key_algorithm.name)\nprint("Key size:", key.key_size, "bits")';
+
+                case 'keygen-advanced':
+                    return 'import pgpy\nfrom pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm\n\n' +
+                        '# Advanced: Generate key with multiple UIDs and capabilities\nkey = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)\n\n' +
+                        '# Primary UID\nuid1 = pgpy.PGPUID.new("Alice Smith", comment="Primary", email="alice@example.com")\n' +
+                        'key.add_uid(uid1, usage={KeyFlags.Sign, KeyFlags.EncryptCommunications, KeyFlags.EncryptStorage, KeyFlags.Authentication},\n' +
+                        '    hashes=[HashAlgorithm.SHA256, HashAlgorithm.SHA512],\n' +
+                        '    ciphers=[SymmetricKeyAlgorithm.AES256, SymmetricKeyAlgorithm.AES128],\n' +
+                        '    compression=[CompressionAlgorithm.ZIP, CompressionAlgorithm.ZLIB])\n\n' +
+                        '# Protect with passphrase\nkey.protect("my-secure-passphrase", SymmetricKeyAlgorithm.AES256, HashAlgorithm.SHA256)\n\n' +
+                        'print("=== KEY DETAILS ===")\nprint("Fingerprint:", key.fingerprint)\nprint("Algorithm:", key.key_algorithm.name)\n' +
+                        'print("Key size:", key.key_size, "bits")\nprint("Protected:", key.is_protected)\n' +
+                        'print("\\n=== PUBLIC KEY (first 400 chars) ===")\nprint(str(key.pubkey)[:400])';
+
+                case 'encrypt':
+                    return 'import pgpy\nfrom pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm\n\n' +
+                        '# Generate key pair for demo\nkey = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)\n' +
+                        'uid = pgpy.PGPUID.new("Test User", email="test@example.com")\n' +
+                        'key.add_uid(uid, usage={KeyFlags.EncryptCommunications, KeyFlags.EncryptStorage},\n' +
+                        '    hashes=[HashAlgorithm.SHA256], ciphers=[SymmetricKeyAlgorithm.AES256],\n' +
+                        '    compression=[CompressionAlgorithm.ZIP])\n\n' +
+                        '# Encrypt a message\nmessage = pgpy.PGPMessage.new("Hello, this is a secret PGP message!")\n' +
+                        'encrypted = key.pubkey.encrypt(message)\nprint("=== Encrypted ===")\nprint(str(encrypted)[:200] + "...")\n' +
+                        'print("\\n=== Decrypting... ===")\ndecrypted = key.decrypt(encrypted)\nprint("Decrypted:", decrypted.message)';
+
+                case 'decrypt':
+                    return 'import pgpy\nfrom pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm\n\n' +
+                        '# Generate key pair\nkey = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)\n' +
+                        'uid = pgpy.PGPUID.new("Demo User", email="demo@example.com")\n' +
+                        'key.add_uid(uid, usage={KeyFlags.EncryptCommunications},\n' +
+                        '    hashes=[HashAlgorithm.SHA256], ciphers=[SymmetricKeyAlgorithm.AES256],\n' +
+                        '    compression=[CompressionAlgorithm.ZIP])\n\n' +
+                        '# Encrypt then decrypt\noriginal = "Top secret message for decryption demo"\n' +
+                        'msg = pgpy.PGPMessage.new(original)\nenc = key.pubkey.encrypt(msg)\n' +
+                        'print("Encrypted length:", len(str(enc)), "chars")\n\n' +
+                        'dec = key.decrypt(enc)\nprint("Decrypted:", dec.message)\nprint("Match:", dec.message == original)';
+
+                case 'sign':
+                    return 'import pgpy\nfrom pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm\n\n' +
+                        '# Generate signing key\nkey = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)\n' +
+                        'uid = pgpy.PGPUID.new("Signer", email="signer@example.com")\n' +
+                        'key.add_uid(uid, usage={KeyFlags.Sign},\n' +
+                        '    hashes=[HashAlgorithm.SHA256], ciphers=[SymmetricKeyAlgorithm.AES256],\n' +
+                        '    compression=[CompressionAlgorithm.ZIP])\n\n' +
+                        '# Sign a message\nmessage = pgpy.PGPMessage.new("This message is signed with PGP")\n' +
+                        'signature = key.sign(message)\nprint("=== PGP Signature ===")\nprint(str(signature)[:200] + "...")\n' +
+                        'print("\\nSignature type:", signature.type)\nprint("Hash algorithm:", signature.hash_algorithm.name)';
+
+                default: return '';
+            }
+        }
+
+        function loadPgkCompiler() {
+            var template = $('#pgkCompilerTemplate').val();
+            var code = buildPgkCompilerCode(template);
+            var b64Code = btoa(unescape(encodeURIComponent(code)));
+            var config = JSON.stringify({lang: 'python', code: b64Code});
+            $('#pgkCompilerIframe').attr('src', '<%=request.getContextPath()%>/onecompiler-embed.jsp?c=' + encodeURIComponent(config));
+        }
+
+        $('#pgkCompilerTemplate').on('change', function() {
+            pgkCompilerLoaded = false;
+            loadPgkCompiler();
+            pgkCompilerLoaded = true;
+        });
+    });
+
+    // ========== FAQ Toggle ==========
+    window.toggleFaq = function(btn) {
+        btn.parentElement.classList.toggle('open');
+    };
+    </script>
+
+    <!-- All JSON-LD schemas generated by seo-tool-page.jsp -->
+</body>
+</html>
