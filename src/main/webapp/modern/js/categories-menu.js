@@ -55,6 +55,7 @@ async function loadCategoriesData() {
 const categoryIcons = {
     'Security & PKI': '🔒',
     'Cryptography': '🔐',
+    'CTF & Challenges': '🚩',
     'Network Tools': '🌐',
     'Data Converters': '🔄',
     'DevOps & Infrastructure': '🐳',
