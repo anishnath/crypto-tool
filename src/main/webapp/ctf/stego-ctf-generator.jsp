@@ -171,8 +171,7 @@
         .sg-hint-toggle .sg-hint-loading{display:none;margin-top:0.5rem;color:var(--ctf-cyan);font-size:0.75rem}
         .sg-hint-toggle.loading .sg-hint-loading{display:flex;align-items:center;gap:0.5rem}
 
-        .sg-mid-ad{max-width:1200px;margin:1.5rem auto;padding:0 1.5rem}
-        .sg-leaderboard-ad{max-width:1200px;margin:0 auto 1rem;padding:0 1.5rem;text-align:center}
+        
 
         .sg-faq{max-width:1200px;margin:2rem auto;padding:0 1.5rem}
         .sg-faq-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;padding:1.5rem 2rem}
@@ -191,8 +190,6 @@
 <body data-theme="dark">
     <%@ include file="../modern/components/nav-header.jsp" %>
 
-    <%@ include file="../modern/ads/ad-side-rails.jsp" %>
-
     <header class="sg-header">
         <nav class="sg-breadcrumbs">
             <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
@@ -202,8 +199,6 @@
         <h1>Steganography <span>CTF</span> Generator</h1>
         <p>Generate steganography challenges with 34 encoding steps across 7 difficulty levels. Outputs a downloadable file, full JSON solution, and progressive hints for solvers.</p>
     </header>
-
-    <div class="sg-leaderboard-ad"><%@ include file="../modern/ads/ad-leaderboard.jsp" %></div>
 
     <div class="sg-desc-ad">
         <div><p style="color:var(--ctf-text-dim);font-size:0.875rem;line-height:1.7">Enter a flag, pick a difficulty, and hit Generate. The engine selects a random pipeline of transforms (ciphers, encodings, container wrapping) and embeds the result into an image or audio file. The solution tab shows the full pipeline so you can verify or share it.</p></div>
@@ -401,8 +396,6 @@
         <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
     </div>
 
-    <div class="sg-mid-ad"><%@ include file="../modern/ads/ad-hero-banner.jsp" %></div>
-
     <section class="sg-faq">
         <div class="sg-faq-card">
             <h2 class="sg-faq-title">
@@ -485,6 +478,7 @@
     <script src="<%=request.getContextPath()%>/js/stego-audio.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/ctf/js/ctf-steps.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/ctf/js/ctf-engine.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
@@ -779,7 +773,7 @@
 
     function downloadChallenge() {
         if (!currentBundle || !currentBundle.challenge.data) return;
-        var btn = this || event.currentTarget;
+        var btn = event && event.currentTarget;
         if (btn && btn.disabled) return;
         if (btn) btn.disabled = true;
         setStatus('Preparing download...', 'var(--ctf-cyan)', true);
@@ -787,30 +781,43 @@
             var bytes = atob(currentBundle.challenge.data);
             var arr = new Uint8Array(bytes.length);
             for (var i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+            var filename = currentBundle.challenge.filename || 'challenge.bin';
             var blob = new Blob([arr], { type: currentBundle.challenge.mimeType || 'application/octet-stream' });
+            var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = currentBundle.challenge.filename || 'challenge.bin';
+            a.href = url;
+            a.download = filename;
             a.click();
-            URL.revokeObjectURL(a.href);
+            setTimeout(function() { URL.revokeObjectURL(url); }, 100);
             setStatus('Download started.', 'var(--ctf-green)');
+            if (window.ToolUtils) {
+                ToolUtils.showToast('Downloaded ' + filename, 2000, 'success');
+                setTimeout(function() { ToolUtils.showSupportPopup('Steganography CTF Generator'); }, 500);
+            }
             if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
         }, 1500);
     }
 
     function downloadJSON() {
         if (!currentBundle) return;
-        var btn = this || event.currentTarget;
+        var btn = event && event.currentTarget;
         if (btn && btn.disabled) return;
         if (btn) btn.disabled = true;
         setStatus('Preparing JSON...', 'var(--ctf-cyan)', true);
         setTimeout(function() {
-            var blob = new Blob([JSON.stringify(currentBundle, null, 2)], { type: 'application/json' });
-            var a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'challenge-bundle.json';
-            a.click();
-            URL.revokeObjectURL(a.href);
+            if (window.ToolUtils) {
+                ToolUtils.downloadAsFile(JSON.stringify(currentBundle, null, 2), 'challenge-bundle.json', {
+                    mimeType: 'application/json',
+                    toolName: 'Steganography CTF Generator'
+                });
+            } else {
+                var blob = new Blob([JSON.stringify(currentBundle, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'challenge-bundle.json';
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
             setStatus('JSON download started.', 'var(--ctf-green)');
             if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
         }, 1500);
@@ -821,16 +828,24 @@
         setStatus('Copying...', 'var(--ctf-cyan)', true);
         setTimeout(function() {
             var text = JSON.stringify(currentBundle, null, 2);
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(function() { setStatus('JSON copied to clipboard!', 'var(--ctf-green)'); });
-            } else {
-                var ta = document.createElement('textarea');
-                ta.value = text;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
+            if (window.ToolUtils) {
+                ToolUtils.copyToClipboard(text, {
+                    toastMessage: 'Challenge JSON copied!',
+                    toolName: 'Steganography CTF Generator'
+                });
                 setStatus('JSON copied to clipboard!', 'var(--ctf-green)');
+            } else {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function() { setStatus('JSON copied to clipboard!', 'var(--ctf-green)'); });
+                } else {
+                    var ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    setStatus('JSON copied to clipboard!', 'var(--ctf-green)');
+                }
             }
         }, 1000);
     }
