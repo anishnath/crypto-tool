@@ -850,5 +850,7 @@
         }, 1000);
     }
     </script>
+
+    <%@ include file="../modern/components/analytics.jsp" %>
 </body>
 </html>
