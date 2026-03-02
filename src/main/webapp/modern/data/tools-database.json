@@ -4,6 +4,7 @@
   "totalTools": 400,
   "categories": [
     "Blockchain & Crypto",
+    "CTF & Challenges",
     "Chemistry",
     "Cryptography",
     "Data Converters",
@@ -262,6 +263,20 @@
       "category": "Cryptography",
       "keywords": "steganography tool cryptography",
       "description": "Steganography Tool - Free online cryptography tool"
+    },
+    {
+      "name": "CTF Challenge Generator",
+      "url": "ctf/index.jsp",
+      "category": "CTF & Challenges",
+      "keywords": "CTF challenge generator capture the flag tools CTF maker stego crypto forensic",
+      "description": "CTF Challenge Generator - Free online capture the flag challenge suite"
+    },
+    {
+      "name": "Steganography CTF Generator",
+      "url": "ctf/stego-ctf-generator.jsp",
+      "category": "CTF & Challenges",
+      "keywords": "steganography CTF generator stego challenge maker LSB CTF image audio cipher",
+      "description": "Steganography CTF Generator - Create stego CTF challenges online free"
     },
     {
       "name": "TOTP/HOTP Generator",
